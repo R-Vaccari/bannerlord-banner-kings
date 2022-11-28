@@ -178,10 +178,10 @@ namespace BannerKings.UI.Mercenary
                     GameTexts.FindText("str_selection_widget_cancel").ToString(),
                     delegate (string name)
                     {
+                        Career.AddTroop(Career.Kingdom, character);
                         (character as BasicCharacterObject).Level = preset.Level;
                         customTroop.SetName(new TextObject("{=!}" + name));
-
-                        Career.AddTroop(Career.Kingdom, character);
+                       
                         RefreshValues();
                         ShowSkillEditing();
                     },
@@ -208,10 +208,10 @@ namespace BannerKings.UI.Mercenary
                     GameTexts.FindText("str_selection_widget_cancel").ToString(),
                     delegate (string name)
                     {
+                        Career.AddTroop(Career.Kingdom, character, false);
                         (character as BasicCharacterObject).Level = preset.Level;
                         customTroop.SetName(new TextObject("{=!}" + name));
-
-                        Career.AddTroop(Career.Kingdom, character, false);
+                       
                         RefreshValues();
                         ShowSkillEditing(false);
                     },
