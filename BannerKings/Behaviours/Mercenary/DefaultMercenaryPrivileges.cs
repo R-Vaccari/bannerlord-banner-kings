@@ -42,7 +42,7 @@ namespace BannerKings.Behaviours.Mercenary
                 {
                     return true;
                 },
-                null);
+                (MercenaryCareer career) => true);
 
             WorkshopGrant.Initialize(new TextObject("{=!}Workshop Grant"),
                 new TextObject("{=!}Acquire a workshop property. The property will be situated in one of the towns of your contractor."),
@@ -114,7 +114,7 @@ namespace BannerKings.Behaviours.Mercenary
                 {
                     return true;
                 },
-                null);
+                (MercenaryCareer career) => true);
 
             CustomTroop5.Initialize(new TextObject("{=!}Mercenary Professional"),
                 new TextObject("{=!}Stablish a mercenary professional (tier V) troop for your company. A custrom troop is designable and will only be available for your clan, in towns of the kingdom associated with the career they were designed."),
@@ -127,7 +127,7 @@ namespace BannerKings.Behaviours.Mercenary
                 {
                     return true;
                 },
-                null);
+                (MercenaryCareer career) => true);
 
             BaronyGrant.Initialize(new TextObject("Barony Grant"),
                 new TextObject("{=!}Become landed in the fashion of a lord. Request a castle alongside it's barony-level title. The settlement ownership will not undo your mercenary contract."),
@@ -161,7 +161,7 @@ namespace BannerKings.Behaviours.Mercenary
                 {
                     return false;
                 },
-                null);
+                (MercenaryCareer career) => false);
         }
     }
 }

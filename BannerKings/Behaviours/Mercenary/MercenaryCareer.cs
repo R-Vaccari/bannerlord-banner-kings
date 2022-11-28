@@ -192,6 +192,7 @@ namespace BannerKings.Behaviours.Mercenary
             {
                 newPrivilege.IncreaseLevel();
                 KingdomProgress[Kingdom] -= privilege.Points;
+                KingdomPrivileges[Kingdom].Add(newPrivilege);
                 PrivilegeTimes[Kingdom] = CampaignTime.Now;
                 if (Clan == Clan.PlayerClan)
                 {

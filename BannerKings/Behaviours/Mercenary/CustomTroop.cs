@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
@@ -12,7 +13,7 @@ namespace BannerKings.Behaviours.Mercenary
         internal CustomTroop(CharacterObject character)
         {
             Character = character;
-            SetEquipment(character);
+            CreateEquipments();
         }
 
         public void PostInitialize(CultureObject culture)
@@ -23,7 +24,7 @@ namespace BannerKings.Behaviours.Mercenary
             }
             SetName(new TextObject(Name));
             FillCharacter(culture.BasicTroop);
-            SetEquipment(Character, Equipments);
+            SetEquipment(Character);
             SetSkills(Character, Skills);
         }
 
@@ -43,38 +44,12 @@ namespace BannerKings.Behaviours.Mercenary
             AccessTools.Property(reference.GetType(), "UpgradeTargets").SetValue(Character, new CharacterObject[0]);
         }
 
-        public void SetEquipment(CharacterObject character, List<Equipment> equipments = null)
+        public void SetEquipment(CharacterObject characterl)
         {
-            Name = character.Name.ToString();
-            List<Equipment> finalList = equipments;
-            if (equipments == null)
-            {
-                MBEquipmentRoster roster = (MBEquipmentRoster)AccessTools.Field((character as BasicCharacterObject).GetType(), "_equipmentRoster")
-                       .GetValue(character);
-                List<Equipment> currentList = (List<Equipment>)AccessTools.Field(roster.GetType(), "_equipments")
-                    .GetValue(roster);
-                finalList = new List<Equipment>();
-                finalList.AddRange(currentList);
-            }
-
-            if (finalList.Count != 5)
-            {
-                var diff = finalList.Count - 5;
-                if (diff > 0)
-                {
-                    finalList.RemoveRange(0, diff);
-                }
-                else for (int i = 0; i < diff; i++)
-                {
-                    finalList.Add(new Equipment());
-                }
-            }
-
-            Equipments = finalList;
             var newRoster = new MBEquipmentRoster();
             AccessTools.Field(newRoster.GetType(), "_equipments").SetValue(newRoster, Equipments);
-            AccessTools.Field((character as BasicCharacterObject).GetType(), "_equipmentRoster")
-                .SetValue((character as BasicCharacterObject), newRoster);
+            AccessTools.Field((Character as BasicCharacterObject).GetType(), "_equipmentRoster")
+                .SetValue((Character as BasicCharacterObject), newRoster);
         }
 
         public void SetName(TextObject text)
@@ -106,6 +81,26 @@ namespace BannerKings.Behaviours.Mercenary
                         .SetValue(character, skills);
 
                 Skills = preset;
+            }
+        }
+
+        public void CreateEquipments()
+        {
+            var list = new List<Equipment>();
+            list.Add(new Equipment());
+            list.Add(new Equipment());
+            list.Add(new Equipment());
+            list.Add(new Equipment());
+            list.Add(new Equipment());
+
+            var newRoster = new MBEquipmentRoster();
+            AccessTools.Field(newRoster.GetType(), "_equipments").SetValue(newRoster, list);
+            AccessTools.Field((Character as BasicCharacterObject).GetType(), "_equipmentRoster")
+                .SetValue((Character as BasicCharacterObject), newRoster);
+
+            if (Equipments == null)
+            {
+                Equipments = list;
             }
         }
 
