@@ -7,13 +7,13 @@ namespace BannerKings.Behaviours.Mercenary
     internal class MercenaryPrivilege : BannerKingsObject
     {
         private Func<MercenaryCareer, bool> isAvailable;
-        private Action<MercenaryCareer> onAdded;
+        private Func<MercenaryCareer, bool> onAdded;
         public MercenaryPrivilege(string stringId) : base(stringId)
         {
         }
 
         public void Initialize(TextObject name, TextObject description, TextObject unavailableHint,
-            float points, int maxLevel, Func<MercenaryCareer, bool> isAvailable, Action<MercenaryCareer> onAdded)
+            float points, int maxLevel, Func<MercenaryCareer, bool> isAvailable, Func<MercenaryCareer, bool> onAdded)
         {
             Initialize(name, description);
             UnAvailableHint = unavailableHint;
@@ -48,12 +48,13 @@ namespace BannerKings.Behaviours.Mercenary
             return base.Equals(obj);
         }
 
-        internal void OnPrivilegeAdded(MercenaryCareer career)
+        internal bool OnPrivilegeAdded(MercenaryCareer career)
         {
             if (onAdded != null)
             {
-                onAdded(career);
+                return onAdded(career);
             }
+            return false;
         }
     }
 }

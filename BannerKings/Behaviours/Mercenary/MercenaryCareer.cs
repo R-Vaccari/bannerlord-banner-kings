@@ -172,35 +172,39 @@ namespace BannerKings.Behaviours.Mercenary
 
         internal void AddPrivilege(MercenaryPrivilege privilege)
         {
+            MercenaryPrivilege newPrivilege;
             if (KingdomPrivileges[Kingdom].Contains(privilege))
             {
-                KingdomPrivileges[Kingdom].First(x => x.Equals(privilege)).IncreaseLevel();
+                newPrivilege = KingdomPrivileges[Kingdom].First(x => x.Equals(privilege));
             }
             else
             {
-                var copy = new MercenaryPrivilege(privilege.StringId);
-                copy.Initialize(privilege.Name, privilege.Description,
+                newPrivilege = new MercenaryPrivilege(privilege.StringId);
+                newPrivilege.Initialize(privilege.Name, privilege.Description,
                     privilege.UnAvailableHint, privilege.Points,
                     privilege.MaxLevel,
                     privilege.IsAvailable,
                     privilege.OnPrivilegeAdded);
-                copy.IncreaseLevel();
-                KingdomPrivileges[Kingdom].Add(copy);
             }
 
-            privilege.OnPrivilegeAdded(this);
-            PrivilegeTimes[Kingdom] = CampaignTime.Now;
-
-            if (Clan == Clan.PlayerClan)
+            bool granted = privilege.OnPrivilegeAdded(this);
+            if (granted)
             {
-                MBInformationManager.AddQuickInformation(new TextObject("{=!}{CLAN} has acquired the {PRIVILEGE} privilege!")
-                    .SetTextVariable("CLAN", Clan.PlayerClan.Name)
-                    .SetTextVariable("PRIVILEGE", privilege.Name),
-                    0,
-                    null,
-                    Utils.Helpers.GetKingdomDecisionSound());
+                newPrivilege.IncreaseLevel();
+                KingdomProgress[Kingdom] -= privilege.Points;
+                PrivilegeTimes[Kingdom] = CampaignTime.Now;
+                if (Clan == Clan.PlayerClan)
+                {
+                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{CLAN} has acquired the {PRIVILEGE} privilege!")
+                        .SetTextVariable("CLAN", Clan.PlayerClan.Name)
+                        .SetTextVariable("PRIVILEGE", privilege.Name),
+                        0,
+                        null,
+                        Utils.Helpers.GetKingdomDecisionSound());
+                }
             }
         }
+
         internal CustomTroop GetTroop(Kingdom kingdom, bool isLevy = true)
         {
             var culture = kingdom.Culture;

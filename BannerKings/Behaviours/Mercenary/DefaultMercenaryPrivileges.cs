@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Mercenary
@@ -57,8 +59,22 @@ namespace BannerKings.Behaviours.Mercenary
                 (MercenaryCareer career) =>
                 {
                     var workshop = MercenaryCareer.GetWorkshopPrivilege(career);
-                    workshop.SetWorkshop(career.Clan.Leader, workshop.WorkshopType, workshop.Capital, workshop.Upgradable,
-                        workshop.ConstructionTimeRemained, workshop.Level);
+                    if (workshop != null)
+                    {
+                        workshop.SetWorkshop(career.Clan.Leader, workshop.WorkshopType, workshop.Capital, workshop.Upgradable,
+                                                workshop.ConstructionTimeRemained, workshop.Level);
+                        MBInformationManager.AddQuickInformation(new TextObject("{=!}You are now the owner of {WORKSHOP} at {TOWN}!")
+                            .SetTextVariable("WORKSHOP", workshop.Name)
+                            .SetTextVariable("TOWN", workshop.Settlement.Name),
+                            0,
+                            null,
+                            Utils.Helpers.GetRelationDecisionSound());
+                        return true;
+                    }
+
+                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}Your contractor was not able to secure a Workshop.")
+                        .ToString()));
+                    return false;
                 });
 
             EstateGrant.Initialize(new TextObject("{=!}Estate Grant"),
@@ -75,8 +91,16 @@ namespace BannerKings.Behaviours.Mercenary
                 (MercenaryCareer career) =>
                 {
                     var estate = MercenaryCareer.GetEstatePrivilege(career);
-                    var action = BannerKingsConfig.Instance.EstatesModel.GetGrant(estate, estate.Owner, career.Clan.Leader);
-                    action.TakeAction();
+                    if (estate != null)
+                    {
+                        var action = BannerKingsConfig.Instance.EstatesModel.GetGrant(estate, estate.Owner, career.Clan.Leader);
+                        action.TakeAction();
+                        return true;
+                    }
+
+                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}Your contractor was not able to secure an Estate.")
+                        .ToString()));
+                    return false;
                 });
 
             CustomTroop3.Initialize(new TextObject("{=!}Mercenary Levy"),
@@ -123,6 +147,7 @@ namespace BannerKings.Behaviours.Mercenary
                     var action = BannerKingsConfig.Instance.TitleModel.GetAction(Managers.Titles.ActionType.Grant,
                         title, title.deJure, career.Clan.Leader);
                     action.TakeAction(career.Clan.Leader);
+                    return true;
                 });
 
             FullPeerage.Initialize(new TextObject("Full Peerage"),
@@ -136,10 +161,7 @@ namespace BannerKings.Behaviours.Mercenary
                 {
                     return false;
                 },
-                (MercenaryCareer career) =>
-                {
-
-                });
+                null);
         }
     }
 }

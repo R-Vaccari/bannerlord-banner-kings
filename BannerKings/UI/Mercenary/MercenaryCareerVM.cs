@@ -146,7 +146,7 @@ namespace BannerKings.UI.Mercenary
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=!}Select privilege").ToString(),
-                new TextObject("{=!}").ToString(),
+                new TextObject("{=!}Each privilege has a max level and Career Points requirement. Some may be unavailable due to external factors, such as your contractor not having the type of property you'd like to receive.").ToString(),
                 list,
                 true,
                 1,
