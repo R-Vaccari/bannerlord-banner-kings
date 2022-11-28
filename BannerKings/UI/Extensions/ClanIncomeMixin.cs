@@ -112,7 +112,7 @@ namespace BannerKings.UI.Extensions
                     var workshop = viewModel.CurrentSelectedIncome.Workshop;
                     AccessTools.Property(workshop.GetType(), "ConstructionTimeRemained").SetValue(workshop, 3);
                     AccessTools.Property(workshop.GetType(), "Level").SetValue(workshop, workshop.Level + 1);
-                    Hero.MainHero.ChangeHeroGold(cost);
+                    Hero.MainHero.ChangeHeroGold(-cost);
                     OnRefresh();
                 },
                 null));

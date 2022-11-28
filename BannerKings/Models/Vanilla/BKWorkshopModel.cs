@@ -129,7 +129,6 @@ namespace BannerKings.Models.Vanilla
             result.LimitMin(0f);
             result.LimitMax(0.5f);
 
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             var tax = (BKTaxPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tax");
             if (tax.Policy == BKTaxPolicy.TaxType.High)
             {
@@ -159,7 +158,12 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            result.AddFactor(data.EconomicData.Mercantilism.ResultNumber * -0.5f);
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            if (data != null)
+            {
+                result.AddFactor(data.EconomicData.Mercantilism.ResultNumber * -0.5f);
+            }
+            
             return result;
         }
     }

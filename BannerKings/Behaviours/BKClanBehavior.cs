@@ -15,7 +15,7 @@ using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Election;
-using TaleWorlds.CampaignSystem.Extensions;
+using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
@@ -24,7 +24,6 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
-using TaleWorlds.SaveSystem;
 using static TaleWorlds.CampaignSystem.SkillEffect;
 
 namespace BannerKings.Behaviours
@@ -47,10 +46,25 @@ namespace BannerKings.Behaviours
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
+            starter.AddPlayerLine("default_conversation_for_wrongly_created_heroes",
+               "start",
+               "close_window",
+               "{=!}My name is {PLAYER.NAME}, {?PLAYER.GENDER}madam{?}sir{\\?}. I serve the {CONVERSATION_NPC.CLAN.NAME} but alas, I am in your mercy now.",
+               IsCompanionOfAnotherClan,
+               () =>
+               {
+                   TakePrisonerAction.Apply(Campaign.Current.MainParty.Party, CharacterObject.OneToOneConversationCharacter.HeroObject);
+                   if (PlayerEncounter.Current != null)
+                   {
+                       PlayerEncounter.LeaveEncounter = true;
+                   }
+               });
+
+
             starter.AddPlayerLine("meet_wanderer_different_clan", 
                 "wanderer_meet_player_response", 
                 "wanderer_different_clan_response",
-                "{=wFXj0bqj}My name is {PLAYER.NAME}, {?CONVERSATION_NPC.GENDER}madam{?}sir{\\?}. Tell me about yourself.",
+                "{=!}My name is {PLAYER.NAME}, {?PLAYER.GENDER}madam{?}sir{\\?}. Tell me about yourself.",
                 IsCompanionOfAnotherClan,
                 null);
 

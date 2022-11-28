@@ -425,12 +425,12 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("raised_militia_party_follow", "raised_militia_greeting", "raised_militia_order",
                 new TextObject("{=Hvi96rXx}Follow my company.").ToString(),
-                raised_militia_order_on_condition,
+                () => true,
                 raised_militia_follow_on_consequence);
 
             starter.AddPlayerLine("raised_militia_party_retreat", "raised_militia_greeting", "raised_militia_order",
                 new TextObject("{=xPvsVw4b}You may go home.").ToString(),
-                raised_militia_order_on_condition,
+                () => true,
                 raised_militia_retreat_on_consequence);
 
             starter.AddDialogLine("raised_militia_order_response", "raised_militia_order", "close_window",

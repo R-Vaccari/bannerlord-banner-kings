@@ -36,6 +36,14 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
+            if (prisoner.IsHero)
+            {
+                if (prisoner.HeroObject.CompanionOf != null)
+                {
+                    result = (int)(result * 0.3f);
+                }
+            }
+
             return result;
         }
     }
