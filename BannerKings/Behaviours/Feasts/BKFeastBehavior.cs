@@ -110,6 +110,11 @@ namespace BannerKings.Behaviours.Feasts
             }
 
             var clan = party.LeaderHero.Clan;
+            if (clan == null)
+            {
+                return;
+            }
+
             var kingdom = clan.Kingdom;
             if (kingdom == null)
             {

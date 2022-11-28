@@ -28,7 +28,6 @@ namespace BannerKings.Models.BKModels
             }
         }
 
-
         public ExplainedNumber GetConversionInfluenceCost(Hero notable, Hero converter)
         {
             var result = new ExplainedNumber(15f, false);
@@ -78,7 +77,6 @@ namespace BannerKings.Models.BKModels
 
             return result;
         }
-
 
         public ExplainedNumber CalculateTensionTarget(ReligionData data)
         {

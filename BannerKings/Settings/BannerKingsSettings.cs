@@ -4,6 +4,7 @@ using TaleWorlds.Localization;
 using MCM.Abstractions.Attributes.v1;
 using MCM.Common;
 using MCM.Abstractions.Base.Global;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Settings
 {
