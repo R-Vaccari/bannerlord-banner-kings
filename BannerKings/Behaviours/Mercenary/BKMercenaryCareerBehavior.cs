@@ -81,7 +81,7 @@ namespace BannerKings.Behaviours.Mercenary
                     var career = careers[Clan.PlayerClan];
                     var troop = career.GetTroop(Clan.PlayerClan.Kingdom, true);
                     var cost = Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(troop.Character, Hero.MainHero);
-                    GiveGoldAction.ApplyForPartyToSettlement(MobileParty.MainParty.Party, Hero.MainHero.CurrentSettlement, cost);
+                    Hero.MainHero.ChangeHeroGold(cost);
                     MobileParty.MainParty.AddElementToMemberRoster(troop.Character, 1);
                 });
 
@@ -121,7 +121,7 @@ namespace BannerKings.Behaviours.Mercenary
                     var career = careers[Clan.PlayerClan];
                     var troop = career.GetTroop(Clan.PlayerClan.Kingdom);
                     var cost = Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(troop.Character, Hero.MainHero);
-                    GiveGoldAction.ApplyForPartyToSettlement(MobileParty.MainParty.Party, Hero.MainHero.CurrentSettlement, cost);
+                    Hero.MainHero.ChangeHeroGold(cost);
                     MobileParty.MainParty.AddElementToMemberRoster(troop.Character, 1);
                 });
         }
