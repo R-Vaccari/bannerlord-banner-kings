@@ -61,6 +61,7 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber GetSpouseScore(Hero hero, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
+            result.LimitMin(hero.Level * 2f);
 
             var clan = hero.Clan;
             var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
@@ -100,11 +101,15 @@ namespace BannerKings.Models.Vanilla
                 result.AddFactor(-0.5f, new TextObject("{=9RG3GwJD}Common born"));
             }
 
+            if (hero.CompanionOf != null)
+            {
+                result.AddFactor(-0.25f, GameTexts.FindText("str_companion"));
+            }
+
             if (hero.Spouse != null && hero.Spouse.IsDead)
             {
                 result.AddFactor(-0.2f, new TextObject("{=aML45YiV}Widow"));
             }
-
 
             return result;
         }
@@ -112,6 +117,7 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber GetDowryValue(Hero hero, bool arrangedMarriage = false, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
+            result.LimitMin(hero.Level * 250f);
 
             result.Add(GetClanTierDowry(hero.Clan.Tier), hero.Clan.Name);
             result.Add(hero.Level * 2500f, GameTexts.FindText("str_level"));
@@ -132,6 +138,11 @@ namespace BannerKings.Models.Vanilla
             if (hero.IsCommonBorn())
             {
                 result.AddFactor(-0.5f, new TextObject("{=9RG3GwJD}Common born"));
+            }
+
+            if (hero.CompanionOf != null)
+            {
+                result.AddFactor(-0.25f, GameTexts.FindText("str_companion"));
             }
 
             if (hero.IsFemale && !(hero.Age >= 18f && hero.Age <= 45f))
