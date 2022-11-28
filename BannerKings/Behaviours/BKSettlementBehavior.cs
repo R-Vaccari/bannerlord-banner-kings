@@ -217,7 +217,30 @@ namespace BannerKings.Behaviours
                 HandleItemAvailability(town);
                 //HandleExcessWorkforce(data, town);
                 HandleExcessFood(data, town);
+                HandleMarketGold(town);
             }
+        }
+
+        private void HandleMarketGold(Town town)
+        {
+            ExceptionUtils.TryCatch(() =>
+            {
+                if (!town.IsTown)
+                {
+                    return;
+                }
+
+                if (town.Gold < 50000)
+                {
+                    var notable = town.Settlement.Notables.FirstOrDefault(x => x.Gold >= 30000);
+                    if (notable != null)
+                    {
+                        town.ChangeGold(1000);
+                        notable.ChangeHeroGold(-1000);
+                        notable.AddPower(10f);
+                    }
+                }
+            }, GetType().Name);
         }
 
         private void HandleItemAvailability(Town town)
@@ -395,6 +418,15 @@ namespace BannerKings.Behaviours
             }
         }
 
+        private void HandleMarketplace(VillageData villageData)
+        {
+            float marketplace = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Marketplace);
+            if (marketplace > 0)
+            {
+
+            }
+        }
+
         private void BuyOutput(Town town, ItemObject item, int count, int price)
         {
             var itemFinalPrice = (int) (price * (float) count);
@@ -481,7 +513,6 @@ namespace BannerKings.Behaviours
                 settlement.Town.FoodStocks += (int)food;
             }
         }
-
     }
 
     namespace Patches
