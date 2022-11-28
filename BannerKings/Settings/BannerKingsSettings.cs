@@ -4,12 +4,13 @@ using TaleWorlds.Localization;
 using MCM.Abstractions.Attributes.v1;
 using MCM.Common;
 using MCM.Abstractions.Base.Global;
-using MCM.Abstractions.Base.PerCampaign;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Settings
 {
-    public class BannerKingsSettings : AttributePerCampaignSettings<BannerKingsSettings>
+    public class BannerKingsSettings : AttributeGlobalSettings<BannerKingsSettings>
     {
+        [SaveableField(1)]
         private int volunteersLimit = 10;
         public override string Id => "BannerKings";
         public override string DisplayName => new TextObject("Banner Kings").ToString();

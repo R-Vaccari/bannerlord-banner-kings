@@ -14,7 +14,6 @@ namespace BannerKings.UI.Management
         private MBBindingList<InformationElement> religionsList;
         private readonly Settlement settlement;
         private MBBindingList<InformationElement> statsInfo;
-       
 
         public ReligionVM(PopulationData data, Settlement _settlement, bool _isSelected) : base(data, _isSelected)
         {
@@ -28,7 +27,6 @@ namespace BannerKings.UI.Management
 
         [DataSourceProperty]
         public string FaithText => new TextObject("{=OKw2P9m1}Faith").ToString();
-
 
         [DataSourceProperty]
         public MBBindingList<InformationElement> ReligionList
@@ -136,7 +134,6 @@ namespace BannerKings.UI.Management
                     .ToString()));
             }
 
-
             var tension = BannerKingsConfig.Instance.ReligionModel.CalculateTensionTarget(data.ReligionData);
             StatsInfo.Add(new InformationElement(new TextObject("{=QiyEsZ4L}Religious Tension:").ToString(),
                 FormatValue(tension.ResultNumber),
@@ -146,32 +143,33 @@ namespace BannerKings.UI.Management
                     .SetTextVariable("EXPLANATIONS", tension.GetExplanations())
                     .ToString()));
 
-
             var dominant = data.ReligionData.DominantReligion;
             ReligionInfo.Add(new InformationElement(new TextObject("{=ZcGwd8sq}Dominant Faith:").ToString(),
                 dominant.Faith.GetFaithName().ToString(),
                 new TextObject("{=8ootTEcK}The most assimilated culture in this settlement, and considered the legal culture.").ToString()));
 
-
             var playerFaith = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
-            var presence = BannerKingsConfig.Instance.ReligionModel.CalculateReligionWeight(playerFaith, settlement);
-            ReligionInfo.Add(new InformationElement(new TextObject("{=gTzbdsBY}Faith Presence:").ToString(),
-                FormatValue(presence.ResultNumber / totalFaithsWeight),
-                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
-                    .SetTextVariable("TEXT",
-                        new TextObject("{=STxuNCBU}The faith's presence in the settlement. Presence describes how much of the population adheres to the faith. Presence is affected by various factors, such as the faith's fervor, and whether it accepts the culture's settlement or not."))
-                    .SetTextVariable("EXPLANATIONS", presence.GetExplanations())
-                    .ToString()));
+            if (playerFaith != null)
+            {
+                var presence = BannerKingsConfig.Instance.ReligionModel.CalculateReligionWeight(playerFaith, settlement);
+                ReligionInfo.Add(new InformationElement(new TextObject("{=gTzbdsBY}Faith Presence:").ToString(),
+                    FormatValue(presence.ResultNumber / totalFaithsWeight),
+                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                        .SetTextVariable("TEXT",
+                            new TextObject("{=STxuNCBU}The faith's presence in the settlement. Presence describes how much of the population adheres to the faith. Presence is affected by various factors, such as the faith's fervor, and whether it accepts the culture's settlement or not."))
+                        .SetTextVariable("EXPLANATIONS", presence.GetExplanations())
+                        .ToString()));
 
 
-            var fervor = BannerKingsConfig.Instance.ReligionModel.CalculateFervor(playerFaith);
-            ReligionInfo.Add(new InformationElement(new TextObject("{=PUwmzUZy}Fervor:").ToString(),
-                FormatValue(fervor.ResultNumber),
-                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
-                    .SetTextVariable("TEXT",
-                        new TextObject("{=ukxmkmQR}The faith's fervor. Faiths with more fervor naturally grow to a bigger share of the population. Fervor is based on doctrines, settlements and clans that follow the faith."))
-                    .SetTextVariable("EXPLANATIONS", fervor.GetExplanations())
-                    .ToString()));
-        }
+                var fervor = BannerKingsConfig.Instance.ReligionModel.CalculateFervor(playerFaith);
+                ReligionInfo.Add(new InformationElement(new TextObject("{=PUwmzUZy}Fervor:").ToString(),
+                    FormatValue(fervor.ResultNumber),
+                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                        .SetTextVariable("TEXT",
+                            new TextObject("{=ukxmkmQR}The faith's fervor. Faiths with more fervor naturally grow to a bigger share of the population. Fervor is based on doctrines, settlements and clans that follow the faith."))
+                        .SetTextVariable("EXPLANATIONS", fervor.GetExplanations())
+                        .ToString()));
+            }
+        }  
     }
 }
