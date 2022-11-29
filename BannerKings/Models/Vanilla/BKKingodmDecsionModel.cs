@@ -1,5 +1,6 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -18,6 +19,33 @@ namespace BannerKings.Models.Vanilla
             }
 
             return base.IsKingSelectionDecisionAllowed(kingdom);
+        }
+
+        public override bool IsWarDecisionAllowedBetweenKingdoms(Kingdom kingdom1, Kingdom kingdom2, out TextObject reason)
+        {
+            reason = TextObject.Empty;
+            if (kingdom1 == kingdom2)
+            {
+                return false;
+            }
+
+            StanceLink stance = kingdom1.GetStanceWith(kingdom2);
+            if (stance.IsAllied)
+            {
+                reason = new TextObject("{=!}Kingdoms are allies.");
+                return false;
+            }
+
+            var rulingClan1 = kingdom1.RulingClan;
+            var rulingClan2 = kingdom2.RulingClan;
+            StanceLink clanStance = rulingClan1.GetStanceWith(rulingClan2);
+            if (clanStance.IsAllied)
+            {
+                reason = new TextObject("{=!}Ruling clans are allies.");
+                return false;
+            }
+
+            return true;
         }
     }
 }
