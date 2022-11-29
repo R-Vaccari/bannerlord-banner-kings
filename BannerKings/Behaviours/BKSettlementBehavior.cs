@@ -14,6 +14,7 @@ using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -415,15 +416,6 @@ namespace BannerKings.Behaviours
                 retinue ??= RetinueComponent.CreateRetinue(settlement);
 
                 (retinue.PartyComponent as RetinueComponent).DailyTick(manor);
-            }
-        }
-
-        private void HandleMarketplace(VillageData villageData)
-        {
-            float marketplace = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Marketplace);
-            if (marketplace > 0)
-            {
-
             }
         }
 
