@@ -190,10 +190,15 @@ namespace BannerKings.Behaviours
             {
                 return;
             }
-
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target);
-            AddCaravanFees(party, target, data);
+            
             AddRealisticIncome(party, target);
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target);
+            if (data == null)
+            {
+                return;
+            }
+
+            AddCaravanFees(party, target, data);
             AddPopulationPartyBehavior(party, target, data);
         }
 

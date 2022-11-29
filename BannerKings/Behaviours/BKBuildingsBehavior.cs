@@ -7,7 +7,6 @@ using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
@@ -80,7 +79,7 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            //RunMarketplace(settlement.Village, data);
+            RunMarketplace(settlement.Village, data);
         }
 
 
@@ -88,60 +87,41 @@ namespace BannerKings.Behaviours
         {
             ExceptionUtils.TryCatch(() =>
             {
-                if (data.VillageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Marketplace) == 0)
+                var villageData = data.VillageData;
+                float marketplace = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Marketplace);
+                if (marketplace > 0)
                 {
-                    return;
-                }
+                    var town = village.TradeBound.Town;
+                    var marketData = town.MarketData;
+                    var productions = BannerKingsConfig.Instance.PopulationManager.GetProductions(data);
 
-                var supply = new Dictionary<ItemCategory, float>();
-                foreach (var element in village.Owner.ItemRoster)
-                {
-                    var item = element.EquipmentElement.Item;
-                    if (item.ItemCategory != null)
+                    int budget = (int)(village.Gold * 0.05f);
+                    for (int i = town.Owner.ItemRoster.Count - 1; i >= 0; i--)
                     {
-                        if (!supply.ContainsKey(item.ItemCategory))
+                        if (budget <= 10)
                         {
-                            supply.Add(item.ItemCategory, element.Amount);
+                            break;
                         }
-                        else
+
+                        ItemRosterElement elementCopyAtIndex = town.Owner.ItemRoster.GetElementCopyAtIndex(i);
+                        ItemObject item = elementCopyAtIndex.EquipmentElement.Item;
+                        if (productions.Any(x => x.Item1 == item))
                         {
-                            supply[item.ItemCategory] += element.Amount;
+                            continue;
                         }
-                    }
-                }
 
-                int sellQuantity = (int)(village.Hearth / 150f);
-
-                /*var options = new List<(ItemObject, float)>();
-                foreach (ItemCategory category in ItemCategories.All)
-                {
-                    var demand = BannerKingsConfig.Instance.EconomyModel.GetCategoryDemand(village.Settlement, category, 0);
-                    if (supply.ContainsKey(category))
-                    {
-                        demand -= supply[category];
-                    }
-
-                    if (demand > 1f) 
-                    {
-                        var elementToBuy = village.TradeBound.ItemRoster
-                            .GetRandomElementWithPredicate(x => x.EquipmentElement.Item.ItemCategory == category);
-                        if (elementToBuy.EquipmentElement.Item != null)
+                        var itemData = marketData.GetCategoryData(item.ItemCategory);
+                        if (itemData.Supply > itemData.Demand)
                         {
-                            var price = village.TradeBound.Town.GetItemPrice(elementToBuy.EquipmentElement.Item);
-                            if (village.Gold >= price)
+                            int price = marketData.GetPrice(elementCopyAtIndex.EquipmentElement, null, false, null);
+                            if (budget >= price)
                             {
-                                options.Add(new(elementToBuy.EquipmentElement.Item, demand));
+                                village.ChangeGold(-price);
+                                town.ChangeGold(price);
                             }
                         }
                     }
                 }
-
-                var result = MBRandom.ChooseWeighted(options);
-                var resultPrice = village.TradeBound.Town.GetItemPrice(result);
-                village.TradeBound.ItemRoster.AddToCounts(result, -1);
-                village.TradeBound.Town.ChangeGold(resultPrice);
-                village.ChangeGold(-resultPrice);*/
-
             }, GetType().Name);
         }
 
