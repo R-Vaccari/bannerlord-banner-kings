@@ -289,7 +289,7 @@ namespace BannerKings.Managers.Populations.Villages
 
             Marketplace = new BuildingType("bannerkings_marketplace");
             Marketplace.Initialize(new TextObject("{=zLdXCpne}Marketplace"),
-                new TextObject("{=M2u9Qr23}Allow locals to sell off their excess production in the designated marketplace. Travelling merchants and individuals will stop by to trade. Adds village stock consumption (not implemented) and boosts hearth growth."),
+                new TextObject("{=!}Allow locals to sell off their excess production in the designated marketplace. Travelling merchants and individuals will stop by to trade. Adds village consumption of town goods and boosts hearth growth."),
                 new[]
                 {
                     600,
