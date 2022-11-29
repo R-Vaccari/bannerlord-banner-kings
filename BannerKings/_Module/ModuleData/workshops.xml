@@ -11,6 +11,20 @@
 			<Output output="ItemCategory.hardwood" output_count="1" />
 		  </Outputs>
 		</Production>
+		<Production conversion_speed="0.5">
+		  <Inputs>
+		  </Inputs>
+		  <Outputs>
+			<Output output="ItemCategory.hides" output_count="1" />
+		  </Outputs>
+		</Production>
+		<Production conversion_speed="0.5">
+		  <Inputs>
+		  </Inputs>
+		  <Outputs>
+			<Output output="ItemCategory.meat" output_count="1" />
+		  </Outputs>
+		</Production>
 		<Production conversion_speed="1">
 		  <Inputs>
 		  </Inputs>
