@@ -69,6 +69,15 @@ namespace BannerKings.Behaviours.Mercenary
             {
                 AddReputation(0.05f, new TextObject("{=!}A year of service has passed."));
             }
+
+            foreach (MercenaryPrivilege privilege in DefaultMercenaryPrivileges.Instance.All)
+            {
+                var list = KingdomPrivileges[Kingdom].FindAll(x => x.Equals(privilege));
+                if (list.Count > 1)
+                {
+                    list.RemoveAt(0);
+                }
+            }
         }
 
         internal bool HasPrivilegeCurrentKingdom(MercenaryPrivilege privilege) => KingdomPrivileges[Kingdom].Any(x => x.Equals(privilege));
@@ -128,7 +137,7 @@ namespace BannerKings.Behaviours.Mercenary
                     KingdomProgress[Kingdom] > currentPrivilege.Points &&
                     currentPrivilege.IsAvailable(this) && HasTimePassedForPrivilege(Kingdom);
             }
-            return KingdomProgress[Kingdom] > privilege.Points;
+            return KingdomProgress[Kingdom] > privilege.Points && HasTimePassedForPrivilege(Kingdom);
         }
 
         internal void AddKingdom(Kingdom kingdom)
@@ -192,7 +201,16 @@ namespace BannerKings.Behaviours.Mercenary
             {
                 newPrivilege.IncreaseLevel();
                 KingdomProgress[Kingdom] -= privilege.Points;
-                KingdomPrivileges[Kingdom].Add(newPrivilege);
+                if (KingdomPrivileges[Kingdom].Contains(privilege))
+                {
+                    KingdomPrivileges[Kingdom].First(x => x.Equals(privilege)).IncreaseLevel();
+                }
+                else
+                {
+                    KingdomPrivileges[Kingdom].Add(newPrivilege);
+                    newPrivilege.IncreaseLevel();
+                }
+                
                 PrivilegeTimes[Kingdom] = CampaignTime.Now;
                 if (Clan == Clan.PlayerClan)
                 {
