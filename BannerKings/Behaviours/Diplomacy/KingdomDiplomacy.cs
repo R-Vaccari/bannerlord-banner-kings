@@ -5,7 +5,7 @@ namespace BannerKings.Behaviours.Diplomacy
 {
     public class KingdomDiplomacy
     {
-
+        public Kingdom Kingdom { get; }
         public List<Kingdom> TradePacts { get; private set; }
     }
 }

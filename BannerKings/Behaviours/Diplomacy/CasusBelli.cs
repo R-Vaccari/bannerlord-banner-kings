@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace BannerKings.Behaviours.Diplomacy
 {
-    internal class CasusBelli
+    public class CasusBelli
     {
+
+        public enum WarReason
+        {
+            Conquest,
+            Claim,
+            Tributary
+        }
     }
 }
