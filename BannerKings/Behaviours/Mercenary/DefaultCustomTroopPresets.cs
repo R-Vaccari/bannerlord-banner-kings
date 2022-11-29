@@ -8,23 +8,23 @@ namespace BannerKings.Behaviours.Mercenary
     {
         public CustomTroopPreset SargeantLevy { get; } = new CustomTroopPreset("sargeant_levy");
         public CustomTroopPreset LineBreakerLevy { get; } = new CustomTroopPreset("line_breaker_levy");
-        public CustomTroopPreset DefenderLevy { get; } = new CustomTroopPreset("line_breaker_levy");
-        public CustomTroopPreset SkirmisherLevy { get; } = new CustomTroopPreset("line_breaker_levy");
+        public CustomTroopPreset DefenderLevy { get; } = new CustomTroopPreset("defender_levy");
+        public CustomTroopPreset SkirmisherLevy { get; } = new CustomTroopPreset("skirmisher_levy");
         public CustomTroopPreset ArcherLevy { get; } = new CustomTroopPreset("archer_levy");
         public CustomTroopPreset CrossbowmanLevy { get; } = new CustomTroopPreset("crossbowman_levy");
-        public CustomTroopPreset HorsemanLevy { get; } = new CustomTroopPreset("line_breaker_levy");
-        public CustomTroopPreset HorseArcherLevy { get; } = new CustomTroopPreset("line_breaker_levy");
-        public CustomTroopPreset MountedSkirmisherLevy { get; } = new CustomTroopPreset("line_breaker_levy");
+        public CustomTroopPreset HorsemanLevy { get; } = new CustomTroopPreset("horseman_levy");
+        public CustomTroopPreset HorseArcherLevy { get; } = new CustomTroopPreset("horse_archer_levy");
+        public CustomTroopPreset MountedSkirmisherLevy { get; } = new CustomTroopPreset("mounted_skirmisher_levy");
 
         public CustomTroopPreset SargeantProfessional { get; } = new CustomTroopPreset("sargeant_professional");
         public CustomTroopPreset LineBreakerProfessional { get; } = new CustomTroopPreset("line_breaker_professional");
-        public CustomTroopPreset DefenderProfessional { get; } = new CustomTroopPreset("line_breaker_professional");
-        public CustomTroopPreset SkirmisherProfessional { get; } = new CustomTroopPreset("line_breaker_professional");
+        public CustomTroopPreset DefenderProfessional { get; } = new CustomTroopPreset("defender_professional");
+        public CustomTroopPreset SkirmisherProfessional { get; } = new CustomTroopPreset("skirmisher_professional");
         public CustomTroopPreset ArcherProfessional { get; } = new CustomTroopPreset("archer_professional");
         public CustomTroopPreset CrossbowmanProfessional { get; } = new CustomTroopPreset("crossbowman_professional");
-        public CustomTroopPreset HorsemanProfessional { get; } = new CustomTroopPreset("line_breaker_professional");
-        public CustomTroopPreset HorseArcherProfessional { get; } = new CustomTroopPreset("line_breaker_professional");
-        public CustomTroopPreset MountedSkirmisherProfessional { get; } = new CustomTroopPreset("line_breaker_professional");
+        public CustomTroopPreset HorsemanProfessional { get; } = new CustomTroopPreset("horseman_professional");
+        public CustomTroopPreset HorseArcherProfessional { get; } = new CustomTroopPreset("horse_archer_professional");
+        public CustomTroopPreset MountedSkirmisherProfessional { get; } = new CustomTroopPreset("mounted_skirmisher_professional");
         public override IEnumerable<CustomTroopPreset> All
         {
             get
