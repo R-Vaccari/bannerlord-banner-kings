@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Skills;
@@ -9,13 +9,13 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Extensions;
-using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.MountAndBlade;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours
@@ -347,15 +347,67 @@ namespace BannerKings.Behaviours
 
         private void AddDialogue(CampaignGameStarter starter)
         {
-            starter.AddPlayerLine("bk_question_preaching", "hero_main_options", "hero_main_options",
+            starter.AddPlayerLine("bk_question_books", "hero_main_options", "book_seller_buy",
                 "{=yKxDFTQ3}I would like to buy a book.",
                 IsBookSeller,
                 OnBuyBookConsequence);
 
+            starter.AddDialogLine("book_seller_buy",
+                "book_seller_buy",
+                "hero_main_options",
+                "{=!}This is my literature collection, {PLAYER.NAME}. Be sure to not damage them.",
+                null,
+                null);
+
+            starter.AddPlayerLine("bk_question_preaching", "hero_main_options", "book_seller_topics",
+                "{=!}I would like to ask you scholarly questions.",
+                IsBookSeller,
+                null);
+
+            starter.AddDialogLine("book_seller_topics",
+                "book_seller_topics", 
+                "book_seller_scholarly_questions",
+                "{=!}Surely, {PLAYER.NAME}. What would you like to learn about?",
+                IsBookSeller,
+                null);
+
+            starter.AddPlayerLine("book_seller_scholarly_questions", 
+                "book_seller_scholarly_questions", 
+                "book_seller_topic_books",
+                "{=!}How can make use of books?",
+                null,
+                null);
+
+            starter.AddPlayerLine("book_seller_scholarly_questions", 
+                "book_seller_scholarly_questions", 
+                "book_seller_topic_languages",
+                "{=!}How can I make use of languages?",
+                null,
+                null);
+
+            starter.AddPlayerLine("book_seller_scholarly_questions",
+                "book_seller_scholarly_questions",
+                "hero_main_options",
+                "{=G4ALCxaA}Never mind.",
+                null,
+                null);
+
+            starter.AddDialogLine("book_seller_topic_books",
+               "book_seller_topic_books",
+               "book_seller_topics",
+               "{=!}Most books will serve to increase your learning in a certain Skill set. They allow you insight into the many martial arts and competences a noble requires, and may be used with all your family. Spouses our spouse candidates may also be interested in you reciting them poems. All cultures have their own books, so you must usually know the book's language. Alternatively you may use the Dictionarium Calradium, to read anything, although slowly. Of course, you must be Literate first.",
+               null,
+               null);
+
+            starter.AddDialogLine("book_seller_topic_languages",
+               "book_seller_topic_languages",
+               "book_seller_topics",
+               "{=!}{PLAYER.NAME}, languages are key for your scholarly progress. Languages will allow you to read books from foreign cultures. As a lord, they also allow you to better connect with foreign populations. Folks will always mistrust a foreigner, but more so one that takes no interest in their customs. Have a family member or servant that knows a language well and trusts you, and they will be able to instruct you.",
+               null,
+               null);
 
             starter.AddPlayerLine("lord_meet_player_response3", "lord_meet_player_response", "lord_introduction",
-                "{=SY7Aa5Xe}My name is {PLAYER.NAME}, {?CONVERSATION_NPC.GENDER}madam{?}sir{\\?}. May I ask your name?." +
-                " (You ask in {NPC_LANGUAGE})",
+                "{=!}My name is {PLAYER.NAME}, {?CONVERSATION_NPC.GENDER}madam{?}sir{\\?}. May I ask your name?. (You ask in {NPC_LANGUAGE})",
                 OnMeetLanguageCondition,
                 OnMeetLanguageConsequence);
         }
@@ -395,13 +447,50 @@ namespace BannerKings.Behaviours
 
         private void OnBuyBookConsequence()
         {
-            var party = new MobileParty();
-            foreach (var element in bookSellers[Hero.OneToOneConversationHero])
+            var elements = new List<InquiryElement>();
+            var allBooks = DefaultBookTypes.Instance.All;
+            foreach (var element in GetBookRoster(Hero.MainHero.CurrentSettlement))
             {
-                party.ItemRoster.Add(element);
+                var item = element.EquipmentElement.Item;
+                var book = allBooks.FirstOrDefault(x => x.Item == element.EquipmentElement.Item);
+                var price = book.Item.Value * 1000;
+
+                var hint = $"{book.Description}";
+
+                if (book.Skill != null)
+                {
+                    hint += Environment.NewLine + book.Skill.Name.ToString();
+                }
+
+                hint += Environment.NewLine + new TextObject("{=1c9TOPzH}{GOLD_AMOUNT}{GOLD_ICON}")
+                    .SetTextVariable("GOLD_AMOUNT", price)
+                .ToString();
+
+
+                elements.Add(new InquiryElement(book, new TextObject("{=e8KTkKtX}{BOOK} ({LANGUAGE})")
+                    .SetTextVariable("BOOK", item.Name)
+                    .SetTextVariable("LANGUAGE", book.Language.Name).ToString(),
+                    null, Hero.MainHero.Gold >= price,
+                    hint));
             }
 
-            InventoryManager.OpenTradeWithCaravanOrAlleyParty(party, InventoryManager.InventoryCategoryType.Goods);
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                new TextObject("{=DNAVAvqp}Acquire Book").ToString(),
+                new TextObject("{=2sftq1sF}Books can be read by those with the Literate perk. Skill books add xp to a specific skill while Focus books add both xp and a focus point, if possible. Dictionaries are used to help reading other books faster.")
+                .ToString(),
+                elements,
+                true,
+                1,
+                GameTexts.FindText("str_done").ToString(),
+                GameTexts.FindText("str_cancel").ToString(),
+                delegate (List<InquiryElement> selectedOptions)
+                {
+                    var book = (BookType)selectedOptions.First().Identifier;
+                    Hero.MainHero.ChangeHeroGold(-book.Item.Value * 1000);
+                    Hero.MainHero.PartyBelongedTo.ItemRoster.AddToCounts(book.Item, 1);
+                },
+                null,
+                string.Empty));
         }
 
         private bool IsBookSeller()
