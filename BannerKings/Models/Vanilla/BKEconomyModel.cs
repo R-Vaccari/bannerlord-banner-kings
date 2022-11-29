@@ -200,7 +200,7 @@ namespace BannerKings.Models.Vanilla
             {
                 if (settlement.Town.Gold < 50000)
                 {
-                    float factor = MathF.Clamp(-1f + (settlement.Town.Gold * 0.00001f), -1f, -0.5f);
+                    float factor = MathF.Clamp(-1f + (settlement.Town.Gold * 0.00001f), -0.8f, -0.2f);
                     result.AddFactor(factor, new TextObject("{=s2gxPA2Q}Market gold"));
                 }
                 else if (settlement.Town.Gold >= 1000000)

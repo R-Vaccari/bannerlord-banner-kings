@@ -36,6 +36,7 @@ namespace BannerKings.Utils
             }
         }
 
+        internal static string GetRelationDecisionSound() => "event:/ui/notification/relation";
         internal static string GetKingdomDecisionSound() => "event:/ui/notification/kingdom_decision";
 
         public static void AddCharacterToKeep(Hero hero, Settlement settlement)

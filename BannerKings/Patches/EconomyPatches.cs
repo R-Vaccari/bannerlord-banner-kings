@@ -399,7 +399,11 @@ namespace BannerKings.Patches
                     var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                     if (data != null)
                     {
-                        __result *= data.EconomicData.CaravanAttraction.ResultNumber;
+                        if (__result > 0f)
+                        {
+                            __result *= data.EconomicData.CaravanAttraction.ResultNumber;
+                        }
+                        
                         __result -= data.EconomicData.CaravanFee(caravanParty) * 2f;
                     }
                 }

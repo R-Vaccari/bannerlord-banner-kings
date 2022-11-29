@@ -14,6 +14,7 @@ using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -217,7 +218,30 @@ namespace BannerKings.Behaviours
                 HandleItemAvailability(town);
                 //HandleExcessWorkforce(data, town);
                 HandleExcessFood(data, town);
+                HandleMarketGold(town);
             }
+        }
+
+        private void HandleMarketGold(Town town)
+        {
+            ExceptionUtils.TryCatch(() =>
+            {
+                if (!town.IsTown)
+                {
+                    return;
+                }
+
+                if (town.Gold < 50000)
+                {
+                    var notable = town.Settlement.Notables.FirstOrDefault(x => x.Gold >= 30000);
+                    if (notable != null)
+                    {
+                        town.ChangeGold(1000);
+                        notable.ChangeHeroGold(-1000);
+                        notable.AddPower(10f);
+                    }
+                }
+            }, GetType().Name);
         }
 
         private void HandleItemAvailability(Town town)
@@ -481,7 +505,6 @@ namespace BannerKings.Behaviours
                 settlement.Town.FoodStocks += (int)food;
             }
         }
-
     }
 
     namespace Patches
