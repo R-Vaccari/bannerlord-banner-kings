@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using BannerKings.Behaviours.Diplomacy;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -11,72 +12,126 @@ namespace BannerKings.Models.Vanilla
     {
         public override float GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan, out TextObject warReason)
         {
+            warReason = TextObject.Empty;
             float score = 0;
             if (factionDeclaresWar.MapFaction == factionDeclaredWar.MapFaction)
             {
-                return 0f;
+                return -50000f;
             }
 
-            StanceLink stanceWith = factionDeclaresWar.GetStanceWith(factionDeclaredWar);
+            StanceLink stance = factionDeclaresWar.GetStanceWith(factionDeclaredWar);
+            if (stance.IsAllied)
+            {
+                return -50000f;
+            }
+
+            if (factionDeclaredWar.IsKingdomFaction && factionDeclaresWar.IsKingdomFaction)
+            {
+                StanceLink clanStance = (factionDeclaresWar as Kingdom).RulingClan.GetStanceWith((factionDeclaredWar as Kingdom).RulingClan);
+                if (clanStance.IsAllied)
+                {
+                    return -50000f;
+                }
+            }
+
+            WarStats attackerStats = CalculateWarStats(factionDeclaresWar, factionDeclaredWar);
+            WarStats defenderStats = CalculateWarStats(factionDeclaredWar, factionDeclaresWar);
+            float attackerScore = attackerStats.Strength + attackerStats.ValueOfSettlements - (attackerStats.TotalStrengthOfEnemies * 1.5f);
+            float defenderScore = defenderStats.Strength + defenderStats.ValueOfSettlements - (defenderStats.TotalStrengthOfEnemies * 1.5f);
+            float scoreProportion = (attackerScore / defenderScore) -1f;
+            score += scoreProportion * 50000f;
+
+            float relations = attackerStats.RulingClan.GetRelationWithClan(defenderStats.RulingClan);
+            score *= relations * -0.3f;
+
+            return MathF.Clamp(score, -500000f, 50000f);
         }
 
-
-
-        private WarStats CalculateWarStats(IFaction faction, IFaction targetFaction)
+        public ExplainedNumber GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan,
+            bool evaluatingPeace, out TextObject warReason, bool explanations = false)
         {
-            float num = faction.TotalStrength * 0.85f;
-            float num2 = 0f;
-            int num3 = 0;
-            foreach (Town town in faction.Fiefs)
+            warReason = TextObject.Empty;
+            var result = new ExplainedNumber(0f, explanations);
+            result.LimitMin(-50000f);
+            result.LimitMax(50000f);
+
+            if (factionDeclaresWar.MapFaction == factionDeclaredWar.MapFaction)
             {
-                num3 += (town.IsCastle ? 1 : 2);
+                return new ExplainedNumber(-50000f);
             }
-            if (faction.IsKingdomFaction)
+
+            StanceLink stance = factionDeclaresWar.GetStanceWith(factionDeclaredWar);
+            if (stance.IsAllied)
             {
-                foreach (Clan clan in ((Kingdom)faction).Clans)
+                return new ExplainedNumber(-50000f);
+            }
+
+            if (factionDeclaredWar.IsKingdomFaction && factionDeclaresWar.IsKingdomFaction)
+            {
+                StanceLink clanStance = (factionDeclaresWar as Kingdom).RulingClan.GetStanceWith((factionDeclaredWar as Kingdom).RulingClan);
+                if (clanStance.IsAllied)
                 {
-                    if (!clan.IsUnderMercenaryService)
+                    return new ExplainedNumber(-50000f);
+                }
+                var attackerKingdom = (Kingdom)factionDeclaresWar;
+                var defenderKingdom = (Kingdom)factionDeclaredWar;
+                KingdomDiplomacy diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(attackerKingdom);
+                if (diplomacy != null)
+                {
+                    if (diplomacy.HasTradePact(defenderKingdom))
                     {
-                        int partyLimitForTier = Campaign.Current.Models.ClanTierModel.GetPartyLimitForTier(clan, clan.Tier);
-                        num2 += (float)partyLimitForTier * 80f * ((clan.Leader == clan.MapFaction.Leader) ? 1.25f : 1f);
+                        result.AddFactor(-0.25f);
                     }
                 }
             }
-            num += num2;
+
+            if (stance.GetDailyTributePaid(factionDeclaredWar) < 0)
+            {
+                return new ExplainedNumber(-50000f);
+            }
+
+            WarStats attackerStats = CalculateWarStats(factionDeclaresWar, factionDeclaredWar);
+            WarStats defenderStats = CalculateWarStats(factionDeclaredWar, factionDeclaresWar);
+            float attackerScore = attackerStats.Strength + attackerStats.ValueOfSettlements - (attackerStats.TotalStrengthOfEnemies * 1.25f);
+            float defenderScore = defenderStats.Strength + defenderStats.ValueOfSettlements - (defenderStats.TotalStrengthOfEnemies * 1.25f);
+            float scoreProportion = (attackerScore / defenderScore) - 1f;
+            result.Add(scoreProportion * 50000f);
+
+            float relations = attackerStats.RulingClan.GetRelationWithClan(defenderStats.RulingClan);
+            result.AddFactor(relations * -0.3f);
+
+            if (evaluatingPeace)
+            {
+                result.AddFactor(-1f);
+            }
+
+            return result;
+        }
+
+        private WarStats CalculateWarStats(IFaction faction, IFaction targetFaction)
+        {
             Clan rulingClan = faction.IsClan ? (faction as Clan) : (faction as Kingdom).RulingClan;
-            float valueOfSettlements = faction.Fiefs.Sum((Town f) => (float)(f.IsTown ? 2000 : 1000) + f.Prosperity * 0.33f) * DefaultDiplomacyModel.ProsperityValueFactor;
-            float num4 = 0f;
-            float num5 = 0f;
+            float valueOfSettlements = faction.Fiefs.Sum((Town f) => (float)(f.IsTown ? 2000 : 1000) + f.Prosperity * 0.33f) * 50f;
+            float enemyStrength = 0f;
             foreach (StanceLink stanceLink in faction.Stances)
             {
                 if (stanceLink.IsAtWar && stanceLink.Faction1 != targetFaction && stanceLink.Faction2 != targetFaction && (!stanceLink.Faction2.IsMinorFaction || stanceLink.Faction2.Leader == Hero.MainHero))
                 {
                     IFaction faction2 = (stanceLink.Faction1 == faction) ? stanceLink.Faction2 : stanceLink.Faction1;
-                    if (faction2.IsKingdomFaction)
-                    {
-                        foreach (Clan clan2 in ((Kingdom)faction2).Clans)
-                        {
-                            if (!clan2.IsUnderMercenaryService)
-                            {
-                                num4 += (float)clan2.Tier * 80f * ((clan2.Leader == clan2.MapFaction.Leader) ? 1.5f : 1f);
-                            }
-                        }
-                    }
-                    num5 += faction2.TotalStrength;
+                    enemyStrength += faction2.TotalStrength;
                 }
             }
-            num5 += num4;
-            num *= MathF.Sqrt(MathF.Sqrt((float)MathF.Min(num3 + 4, 40))) / 2.5f;
-            return new DefaultDiplomacyModel.WarStats
+
+            return new WarStats
             {
                 RulingClan = rulingClan,
-                Strength = num,
+                Strength = faction.TotalStrength,
                 ValueOfSettlements = valueOfSettlements,
-                TotalStrengthOfEnemies = num5
+                TotalStrengthOfEnemies = enemyStrength
             };
         }
 
-        private struct WarStats
+        public struct WarStats
         {
             public Clan RulingClan;
             public float Strength;
