@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
 
 namespace BannerKings.Behaviours.Diplomacy
 {
@@ -15,5 +10,12 @@ namespace BannerKings.Behaviours.Diplomacy
         public Kingdom Sovereign { get; }
 
         public bool IsInternalWar() => Attacker.IsClan && Defender.IsClan && Sovereign != null;
+        public bool IsMatchingWar(IFaction faction1, IFaction faction2) => (faction1 == Attacker && faction2 == Defender) ||
+            (faction2 == Attacker && faction1 == Defender);
+
+        public void EndWar()
+        {
+
+        }
     }
 }
