@@ -643,25 +643,4 @@ namespace BannerKings.Behaviours
         {
         }
     }
-
-    namespace Patches
-    {
-        [HarmonyPatch(typeof(DestroyPartyAction), "Apply")]
-        internal class ApplyPatch
-        {
-            private static void Postfix(PartyBase destroyerParty, MobileParty destroyedParty)
-            {
-                Console.WriteLine(destroyedParty.Name);
-            }
-        }
-
-        [HarmonyPatch(typeof(DestroyPartyAction), "ApplyForDisbanding")]
-        internal class ApplyForDisbandingPatch
-        {
-            private static void Postfix(MobileParty disbandedParty, Settlement relatedSettlement)
-            {
-                Console.WriteLine(disbandedParty.Name);
-            }
-        }
-    }
 }

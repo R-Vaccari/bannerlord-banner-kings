@@ -25,7 +25,7 @@ namespace BannerKings.Managers.Helpers
                     BannerKingsConfig.Instance.TitleManager.InheritTitle(victim, heir, t);
                 }
 
-                if (heir != mainHeir && pair.Value.Any(x => x.fief != null))
+                if (heir != mainHeir && mainHeir != null && pair.Value.Any(x => x.fief != null))
                 {
                     var newClan = ClanActions.CreateNewClan(pair.Key, pair.Value.First(x => x.fief != null).fief,
                         pair.Key.StringId + "_split_clan");
