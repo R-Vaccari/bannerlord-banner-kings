@@ -190,10 +190,15 @@ namespace BannerKings.Behaviours
             {
                 return;
             }
-
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target);
-            AddCaravanFees(party, target, data);
+            
             AddRealisticIncome(party, target);
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target);
+            if (data == null)
+            {
+                return;
+            }
+
+            AddCaravanFees(party, target, data);
             AddPopulationPartyBehavior(party, target, data);
         }
 
@@ -636,27 +641,6 @@ namespace BannerKings.Behaviours
 
         public override void SyncData(IDataStore dataStore)
         {
-        }
-    }
-
-    namespace Patches
-    {
-        [HarmonyPatch(typeof(DestroyPartyAction), "Apply")]
-        internal class ApplyPatch
-        {
-            private static void Postfix(PartyBase destroyerParty, MobileParty destroyedParty)
-            {
-                Console.WriteLine(destroyedParty.Name);
-            }
-        }
-
-        [HarmonyPatch(typeof(DestroyPartyAction), "ApplyForDisbanding")]
-        internal class ApplyForDisbandingPatch
-        {
-            private static void Postfix(MobileParty disbandedParty, Settlement relatedSettlement)
-            {
-                Console.WriteLine(disbandedParty.Name);
-            }
         }
     }
 }
