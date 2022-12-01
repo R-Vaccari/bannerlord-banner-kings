@@ -46,6 +46,19 @@ namespace BannerKings.Behaviours
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
+            starter.AddDialogLine("default_conversation_for_wrongly_created_heroes", "start", "close_window", 
+                "{=!}TW never gave me lines.", 
+                null,
+                () =>
+                {
+                    TakePrisonerAction.Apply(Campaign.Current.MainParty.Party, CharacterObject.OneToOneConversationCharacter.HeroObject);
+                    if (PlayerEncounter.Current != null)
+                    {
+                        PlayerEncounter.LeaveEncounter = true;
+                    }
+                }, 
+                0, null);
+
             starter.AddDialogLine("companion_captured",
                "companion_captured",
                "close_window",
