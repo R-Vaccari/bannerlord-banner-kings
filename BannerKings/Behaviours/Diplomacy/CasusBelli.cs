@@ -13,7 +13,12 @@ namespace BannerKings.Behaviours.Diplomacy
         {
             Conquest,
             Claim,
-            Tributary
+            Tributary,
+            Liberation,
+            ImperialSupremacy,
+            ImperialReintegration,
+            DeJure,
+            GreatRaid
         }
     }
 }
