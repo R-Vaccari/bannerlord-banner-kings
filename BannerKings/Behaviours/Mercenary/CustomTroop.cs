@@ -98,10 +98,7 @@ namespace BannerKings.Behaviours.Mercenary
             AccessTools.Field((Character as BasicCharacterObject).GetType(), "_equipmentRoster")
                 .SetValue((Character as BasicCharacterObject), newRoster);
 
-            if (Equipments == null)
-            {
-                Equipments = list;
-            }
+            Equipments = list;
         }
 
         public void FeedEquipments(List<ItemObject> items, EquipmentIndex index)

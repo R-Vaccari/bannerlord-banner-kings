@@ -239,6 +239,10 @@ namespace BannerKings.UI.Mercenary
                 GameTexts.FindText("str_equipment").ToString(),
                 null));
 
+            list.Add(new InquiryElement("edit-clear",
+                new TextObject("{=!}Clear all equipments").ToString(),
+                null));
+
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=!}Troop Editing").ToString(),
                 new TextObject("{=!}Edit the {TROOP} to better fit your needs.")
@@ -258,6 +262,14 @@ namespace BannerKings.UI.Mercenary
                     else if (option == "edit-equipment")
                     {
                         ShowEquipmentOptions(levy);
+                    }
+                    else if (option == "edit-clear")
+                    {
+                        var customTroop = Career.GetTroop(Career.Kingdom, false);
+                        customTroop.CreateEquipments();
+                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}All equipments removed for custom troop {NAME}.")
+                            .SetTextVariable("NAME", customTroop.Character.Name)
+                            .ToString()));
                     }
                     else
                     {
@@ -492,7 +504,7 @@ namespace BannerKings.UI.Mercenary
                     continue;
                 }
 
-                if (item.ItemType == option.ItemType)
+                if (item.ItemType == option.ItemType && IsEquipmentAdequate(item.ItemType, item.Tierf, levy))
                 {
                     list.Add(new InquiryElement(item,
                         item.Name.ToString(),
@@ -531,6 +543,36 @@ namespace BannerKings.UI.Mercenary
                     ShowEquipmentOptions(levy);
                 }
                 ));
+        }
+
+        private bool IsEquipmentAdequate(ItemTypeEnum itemType, float tierF, bool levy)
+        {
+            if (levy)
+            {
+                if (itemType == ItemTypeEnum.ChestArmor) return tierF >= 3f && tierF <= 3.9f;
+                else if (itemType == ItemTypeEnum.HandArmor) return tierF <= 3f;
+                else if (itemType == ItemTypeEnum.Cape) return tierF <= 1f;
+                else if (itemType == ItemTypeEnum.HeadArmor) return tierF >= 2.5f && tierF <= 3.9f;
+                else if (itemType == ItemTypeEnum.LegArmor) return tierF <= 2.5f;
+                else if (itemType == ItemTypeEnum.Bow || itemType == ItemTypeEnum.Crossbow ||
+                    itemType == ItemTypeEnum.Thrown) return tierF <= 2.2f;
+                else if (itemType == ItemTypeEnum.Shield) return tierF <= 2.2f;
+                else if (itemType == ItemTypeEnum.Horse || itemType == ItemTypeEnum.HorseHarness) return tierF < 2f;
+                else return tierF <= 3f;
+            }
+            else
+            {
+                if (itemType == ItemTypeEnum.ChestArmor) return tierF >= 4f && tierF <= 5.5f;
+                else if (itemType == ItemTypeEnum.HandArmor) return tierF >= 3f && tierF <= 4f;
+                else if (itemType == ItemTypeEnum.Cape) return tierF <= 2f;
+                else if (itemType == ItemTypeEnum.HeadArmor) return tierF >= 4f && tierF <= 5.5;
+                else if (itemType == ItemTypeEnum.LegArmor) return tierF <= 4f;
+                else if (itemType == ItemTypeEnum.Bow || itemType == ItemTypeEnum.Crossbow ||
+                    itemType == ItemTypeEnum.Thrown) return tierF <= 4.2f;
+                else if (itemType == ItemTypeEnum.Shield) return tierF <= 3.2f;
+                else if (itemType == ItemTypeEnum.Horse || itemType == ItemTypeEnum.HorseHarness) return tierF < 3f;
+                else return tierF <= 5f;
+            }
         }
 
         private int CalculateTroopAmount(CharacterObject character)
