@@ -1,4 +1,5 @@
 ﻿using TaleWorlds.Localization;
+using static TaleWorlds.CampaignSystem.CharacterDevelopment.DefaultPerks;
 
 namespace BannerKings.Behaviours.Mercenary
 {
@@ -31,10 +32,17 @@ namespace BannerKings.Behaviours.Mercenary
                 copy.Riding, copy.Athletics, copy.Throwing, copy.Bow, copy.Crossbow, copy.ItemId);
         }
 
-        public TextObject GetExplanation() => new TextObject("{=!}{DESCRIPTION}\n\nOne-Handed: {1H}\nTwo-Handed: {2H}")
+        public TextObject GetExplanation() => new TextObject("{=!}{DESCRIPTION}\n\nOne-Handed: {1H}\nTwo-Handed: {2H}\nPolearm: {POLEARM}" +
+            "\nRiding: {RIDING}\nAthletics: {ATHLETICS}\nThrowing: {THROWING}\nBow: {BOW}\nCrossbow: {CROSSBOW}\n")
             .SetTextVariable("DESCRIPTION", Description)
             .SetTextVariable("1H", OneHanded)
-            .SetTextVariable("2h", TwoHanded);
+            .SetTextVariable("2h", TwoHanded)
+            .SetTextVariable("POLEARM", Polearm)
+            .SetTextVariable("RIDING", Riding)
+            .SetTextVariable("ATHLETICS", Athletics)
+            .SetTextVariable("THROWING", Throwing)
+            .SetTextVariable("BOW", Bow)
+            .SetTextVariable("CROSSBOW", Crossbow);
 
         public int Level { get; private set; }
         public int OneHanded { get; private set; }

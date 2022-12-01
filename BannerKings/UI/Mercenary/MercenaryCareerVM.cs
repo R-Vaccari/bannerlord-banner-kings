@@ -278,7 +278,7 @@ namespace BannerKings.UI.Mercenary
                     preset.Name.ToString(),
                     new ImageIdentifier(items.First(x => x.StringId == preset.ItemId)),
                     true,
-                    preset.Description.ToString()));
+                    preset.GetExplanation().ToString()));
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
