@@ -18,8 +18,35 @@ namespace BannerKings.Managers.Traits
 
         public override void Initialize()
         {
-            Zealot = Game.Current.ObjectManager.RegisterPresumedObject(new TraitObject("Zealot"));
-            Zealot.Initialize(new TextObject(), new TextObject(), false, -2, 2);
+            Zealous = Game.Current.ObjectManager.RegisterPresumedObject(new TraitObject("Zealot"));
+            Zealous.Initialize(new TextObject("{=}Zealous"), 
+                new TextObject("{=!}Zealotry represents one's religious fervour. Zealous people will care to follow their faith's teachings and support it's expansion."), 
+                false, -2, 2);
+
+            Zealous = Game.Current.ObjectManager.RegisterPresumedObject(new TraitObject("Zealot"));
+            Zealous.Initialize(new TextObject("{=}Zealous"),
+                new TextObject("{=!}Zealotry represents one's religious fervour. Zealous people will care to follow their faith's teachings and support it's expansion."),
+                false, -2, 2);
+
+            Zealous = Game.Current.ObjectManager.RegisterPresumedObject(new TraitObject("Zealot"));
+            Zealous.Initialize(new TextObject("{=}Zealous"),
+                new TextObject("{=!}Zealotry represents one's religious fervour. Zealous people will care to follow their faith's teachings and support it's expansion."),
+                false, -2, 2);
+
+            Zealous = Game.Current.ObjectManager.RegisterPresumedObject(new TraitObject("Zealot"));
+            Zealous.Initialize(new TextObject("{=}Zealous"),
+                new TextObject("{=!}Zealotry represents one's religious fervour. Zealous people will care to follow their faith's teachings and support it's expansion."),
+                false, -2, 2);
+
+            Zealous = Game.Current.ObjectManager.RegisterPresumedObject(new TraitObject("Zealot"));
+            Zealous.Initialize(new TextObject("{=}Zealous"),
+                new TextObject("{=!}Zealotry represents one's religious fervour. Zealous people will care to follow their faith's teachings and support it's expansion."),
+                false, -2, 2);
+
+            Zealous = Game.Current.ObjectManager.RegisterPresumedObject(new TraitObject("Zealot"));
+            Zealous.Initialize(new TextObject("{=}Zealous"),
+                new TextObject("{=!}Zealotry represents one's religious fervour. Zealous people will care to follow their faith's teachings and support it's expansion."),
+                false, -2, 2);
         }
     }
 }
