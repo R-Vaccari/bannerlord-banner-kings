@@ -50,7 +50,7 @@ namespace BannerKings.Models.Vanilla
 
                 result.Add(factor, new TextObject("{=gyHK87NL}Faith differences"));
             } 
-            else
+            else if (proposerReligion != null && proposedReligion != null)
             {
                 result.Add(50f, proposerReligion.Faith.GetFaithName());
             }
