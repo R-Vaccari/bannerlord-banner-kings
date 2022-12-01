@@ -171,6 +171,11 @@ namespace BannerKings.Behaviours.Mercenary
 
         private void AddCareer(Clan clan, Kingdom kingdom)
         {
+            if (kingdom == null)
+            {
+                return;
+            }
+
             if (!careers.ContainsKey(clan))
             {
                 careers.Add(clan, new MercenaryCareer(clan, kingdom));
