@@ -91,7 +91,12 @@ namespace BannerKings.Behaviours
                 float marketplace = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Marketplace);
                 if (marketplace > 0)
                 {
-                    var town = village.TradeBound.Town;
+                    var town = village.Bound?.Town;
+                    if (town == null)
+                    {
+                        return;
+                    }
+
                     var marketData = town.MarketData;
                     var productions = BannerKingsConfig.Instance.PopulationManager.GetProductions(data);
 
