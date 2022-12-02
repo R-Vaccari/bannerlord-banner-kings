@@ -303,7 +303,10 @@ namespace BannerKings.UI.Religion
 
             foreach (var clgm in currentReligion.Clergy.Values)
             {
-                Clergymen.Add(new ReligionMemberVM(clgm, null));
+                if (clgm.Hero != null)
+                {
+                    Clergymen.Add(new ReligionMemberVM(clgm, null));
+                }
             }
 
             foreach (var hero in BannerKingsConfig.Instance.ReligionsManager.GetFaithfulHeroes(currentReligion))
