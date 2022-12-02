@@ -4,7 +4,6 @@ using System.Linq;
 using BannerKings.Components;
 using BannerKings.Managers.Populations;
 using BannerKings.Settings;
-using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -16,6 +15,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
+using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Behaviours
@@ -101,7 +101,6 @@ namespace BannerKings.Behaviours
                 {
                     EnterSettlementAction.ApplyForParty(party, target);
                 }
-
                 else
                 {
                     switch (target.IsVillage)
@@ -165,6 +164,71 @@ namespace BannerKings.Behaviours
                 }
             }
 
+            DecideSendTraders(settlement);
+            DecideSendTravellers(settlement);
+        }
+
+        private void DecideSendTraders(Settlement settlement)
+        {
+            var random = MBRandom.RandomInt(1, 100);
+            if (random > 40)
+            {
+                return;
+            }
+
+            var target = GetTownToTravel(settlement);
+            if (target == null)
+            {
+                return;
+            }
+
+            if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
+               BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            {
+                CharacterObject civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>()
+                            .FirstOrDefault(x => x.StringId == "villager_" + settlement.Culture.StringId);
+                int count = MBRandom.RandomInt(12, 25);
+                var name = "{=!}Traders from {ORIGIN}";
+
+                if (civilian != null)
+                {
+                    MobileParty tradersParty = PopulationPartyComponent.CreateTravellerParty("travellers_", settlement, target,
+                        name, count, PopType.Serfs, civilian, true);
+
+                    int budget = 500 + (int)(settlement.Prosperity / 1000f);
+
+                    var localData = settlement.Town.MarketData;
+                    var targetData = target.Town.MarketData;
+                    var townStock = settlement.Town.Owner.ItemRoster;
+                    foreach (var element in townStock)
+                    {
+                        if (budget <= 5)
+                        {
+                            break;
+                        }
+
+                        EquipmentElement equipment = element.EquipmentElement;
+                        ItemCategory category = equipment.Item.ItemCategory;
+                        if (localData.GetSupply(category) > localData.GetDemand(category) &&
+                            targetData.GetSupply(category) < targetData.GetDemand(category))
+                        {
+                            var price = localData.GetPrice(equipment, null, true);
+                            int totalCount = MBMath.ClampInt((int)(budget / (float)price), 0, element.Amount);
+                            if (totalCount > 1f)
+                            {
+                                townStock.AddToCounts(equipment, -totalCount);
+                                target.Town.ChangeGold((int)(price * (float)totalCount));
+                                tradersParty.ItemRoster.AddToCounts(new EquipmentElement(equipment.Item, equipment.ItemModifier), 
+                                    totalCount);
+                            }
+                        }
+                    }
+                }
+            }  
+        }
+
+        private void DecideSendTravellers(Settlement settlement)
+        {
             var random = MBRandom.RandomInt(1, 100);
             if (random > 5)
             {
@@ -225,6 +289,17 @@ namespace BannerKings.Behaviours
             }
             
             var component = (PopulationPartyComponent)party.PartyComponent;
+            if (component.Trading)
+            {
+                var localData = target.Town.MarketData;
+                foreach (var element in party.ItemRoster)
+                {
+                    float price = localData.GetPrice(element.EquipmentElement);
+                    target.Town.ChangeGold(-(int)(price * element.Amount));
+                    target.Town.Owner.ItemRoster.AddToCounts(element.EquipmentElement, element.Amount);
+                }
+            }
+
             if (component is MilitiaComponent && target.IsVillage)
             {
                 foreach (var element in party.MemberRoster.GetTroopRoster())
@@ -361,7 +436,7 @@ namespace BannerKings.Behaviours
             if (civilian != null)
             {
                 PopulationPartyComponent.CreateTravellerParty("travellers_", origin, target,
-                    name, count, type, civilian);
+                    name, count, type, civilian, false);
             }
         }
 
