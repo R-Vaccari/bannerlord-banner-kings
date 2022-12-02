@@ -18,13 +18,14 @@ namespace BannerKings.Components
     public class PopulationPartyComponent : PartyComponent
     {
         public PopulationPartyComponent(Settlement target, Settlement origin, string name, bool slaveCaravan,
-            PopType popType)
+            PopType popType, bool trading = false)
         {
             Target = target;
             nameString = name;
             Origin = origin;
             SlaveCaravan = slaveCaravan;
             PopulationType = popType;
+            Trading = trading;
         }
 
         [SaveableProperty(1)] protected Settlement Target { get; set; }
@@ -36,6 +37,8 @@ namespace BannerKings.Components
         [SaveableProperty(4)] public bool SlaveCaravan { get; private set; }
 
         [SaveableProperty(5)] public PopType PopulationType { get; private set; }
+
+        [SaveableProperty(6)] public bool Trading { get; private set; }
 
         private static IEnumerable<CraftingMaterials> Materials
         {
@@ -63,10 +66,10 @@ namespace BannerKings.Components
         public Settlement OriginSettlement => Origin;
 
         private static MobileParty CreateParty(string id, Settlement origin, bool slaveCaravan, Settlement target,
-            string name, PopType popType)
+            string name, PopType popType, bool trading = false)
         {
             return MobileParty.CreateParty(id + origin + target.Name,
-                new PopulationPartyComponent(target, origin, name, slaveCaravan, popType),
+                new PopulationPartyComponent(target, origin, name, slaveCaravan, popType, trading),
                 delegate(MobileParty mobileParty)
                 {
                     mobileParty.SetPartyUsedByQuest(true);
@@ -74,6 +77,7 @@ namespace BannerKings.Components
                     mobileParty.SetInitiative(0f, 1f, float.MaxValue);
                     mobileParty.ShouldJoinPlayerBattles = false;
                     mobileParty.Aggressiveness = 0f;
+                    mobileParty.Ai.DisableAi();
                     mobileParty.SetMoveGoToSettlement(target);
                 });
         }
@@ -88,10 +92,10 @@ namespace BannerKings.Components
             BannerKingsConfig.Instance.PopulationManager.AddParty(caravan);
         }
 
-        public static void CreateTravellerParty(string id, Settlement origin, Settlement target, string name, int count,
-            PopType type, CharacterObject civilian)
+        public static MobileParty CreateTravellerParty(string id, Settlement origin, Settlement target, string name, int count,
+            PopType type, CharacterObject civilian, bool trading = false)
         {
-            var party = CreateParty(id, origin, false, target, name, type);
+            var party = CreateParty(id, origin, false, target, name, type, trading);
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(origin);
             data.UpdatePopType(type, count);
             var roster = new TroopRoster(party.Party);
@@ -154,10 +158,15 @@ namespace BannerKings.Components
             }
 
             party.InitializeMobilePartyAroundPosition(roster, new TroopRoster(party.Party), origin.GatePosition, 1f);
-            GivePackAnimals(ref party);
-            GiveFood(ref party);
-            GiveItems(ref party, type);
+            if (!trading)
+            {
+                GivePackAnimals(ref party);
+                GiveFood(ref party);
+                GiveItems(ref party, type);
+            }
+
             BannerKingsConfig.Instance.PopulationManager.AddParty(party);
+            return party;
         }
 
         private static int GetCountToAdd(int partySize, int tier, bool ranged)
@@ -231,6 +240,11 @@ namespace BannerKings.Components
                 var goods = new List<ValueTuple<ItemObject, float>>();
                 foreach (var item in Items.AllTradeGoods)
                 {
+                    if (item.StringId == "stolen_goods")
+                    {
+                        continue;
+                    }
+
                     switch (type)
                     {
                         case PopType.Nobles:

@@ -200,10 +200,10 @@ namespace BannerKings.Patches
     namespace Perks
     {
 
-        [HarmonyPatch(typeof(MapEventParty), "OnTroopKilled")]
-        internal class NameGeneratorPatch
+        [HarmonyPatch(typeof(MapEventParty), "ContributionToBattle", MethodType.Getter)]
+        internal class ContributionToBattlePatch
         {
-            private static void Postfix(MapEventParty __instance, UniqueTroopDescriptor troopSeed)
+            private static void Postfix(MapEventParty __instance, ref int __result)
             {
                 var leader = __instance.Party.LeaderHero;
                 if (leader == null)
@@ -212,11 +212,9 @@ namespace BannerKings.Patches
                 }
 
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
-                if (education.HasPerk(BKPerks.Instance.MercenaryRansacker) && 
-                    MBRandom.RandomFloat < 0.1f)
+                if (education.HasPerk(BKPerks.Instance.MercenaryRansacker))
                 {
-                    var contribution = __instance.ContributionToBattle;
-                    AccessTools.Field(__instance.GetType(), "_contributionToBattle").SetValue(__instance, contribution + 1);
+                    __result = (int)(__result * 1.1f);
                 }
             }
         }

@@ -177,9 +177,12 @@ namespace BannerKings.Models.Vanilla
             if (settlement != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                cost.AddFactor(1f - data.EconomicData.Mercantilism.ResultNumber, new TextObject("{=ciXU8Ews}Mecantilism"));
-                cost.AddFactor(data.EconomicData.CaravanAttraction.ResultNumber - 1f,
-                    new TextObject("{=FK7QzVtM}Caravan attraction"));
+                if (data != null)
+                {
+                    cost.AddFactor(1f - data.EconomicData.Mercantilism.ResultNumber, new TextObject("{=ciXU8Ews}Mecantilism"));
+                    cost.AddFactor(data.EconomicData.CaravanAttraction.ResultNumber - 1f,
+                        new TextObject("{=FK7QzVtM}Caravan attraction"));
+                }
             }
 
             return cost;

@@ -389,7 +389,10 @@ namespace BannerKings.Managers
                 settlement.OwnerClan != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                data.Update(null);
+                if (data != null)
+                {
+                    data.Update(null);
+                }
             }
         }
 

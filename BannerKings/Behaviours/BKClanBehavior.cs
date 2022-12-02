@@ -46,24 +46,29 @@ namespace BannerKings.Behaviours
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
+            starter.AddDialogLine("default_conversation_for_wrongly_created_heroes", "start", "close_window", 
+                "{=!}I am under your mercy.", 
+                null,
+                () =>
+                {
+                    TakePrisonerAction.Apply(Campaign.Current.MainParty.Party, CharacterObject.OneToOneConversationCharacter.HeroObject);
+                }, 
+                0, null);
+
             starter.AddDialogLine("companion_captured",
-               "companion_captured",
-               "close_window",
-               "{=!}As you say.",
-               null,
-               () =>
-               {
-                   TakePrisonerAction.Apply(Campaign.Current.MainParty.Party, CharacterObject.OneToOneConversationCharacter.HeroObject);
-                   if (PlayerEncounter.Current != null)
-                   {
-                       PlayerEncounter.LeaveEncounter = true;
-                   }
-               });
+              "companion_captured",
+              "close_window",
+              "{=!}As you say.",
+              null,
+              () =>
+              {
+                  TakePrisonerAction.Apply(Campaign.Current.MainParty.Party, CharacterObject.OneToOneConversationCharacter.HeroObject);
+              });
 
             starter.AddPlayerLine("default_conversation_for_wrongly_created_heroes",
               "start",
               "companion_captured",
-              "{=!}My name is {PLAYER.NAME}, {?CONVERSATION_NPC.GENDER}madam{?}sir{\\?}. You'll be coming with me now.",
+              "{=!}You'll be coming with me now.",
               () => IsCompanionOfAnotherClan() && Campaign.Current.CurrentConversationContext == ConversationContext.CapturedLord,
               null);
 

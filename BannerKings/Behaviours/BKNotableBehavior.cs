@@ -19,8 +19,6 @@ namespace BannerKings.Behaviours
 {
     public class BKNotableBehavior : CampaignBehaviorBase
     {
-
-
         public override void RegisterEvents()
         {
             CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCreationOver);
@@ -43,7 +41,6 @@ namespace BannerKings.Behaviours
         {
             ExtendVolunteersArray();
         }
-
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
@@ -68,12 +65,37 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            if (settlement.IsCastle)
+            HandleCultureConversions(settlement);
+            HandleCastles(settlement);
+            HandleNotableGovernor(settlement);
+        }
+
+        private void HandleCultureConversions(Settlement settlement)
+        {
+            var owner = settlement.OwnerClan?.Leader;
+            if (owner == null || settlement.Notables == null)
             {
-                SettlementHelper.SpawnNotablesIfNeeded(settlement);
-                UpdateVolunteers(settlement);
+                return;
             }
 
+            var notable = settlement.Notables.FirstOrDefault(x => x.Culture != owner.Culture);
+            if (notable == null)
+            {
+                return;
+            }
+
+            var influence = BannerKingsConfig.Instance.CultureModel.GetConversionCost(notable, owner)
+                .ResultNumber;
+            if (owner.Clan.Influence < influence * 1.5f || notable.IsEnemy(owner))
+            {
+                return;
+            }
+
+            ApplyNotableCultureConversion(notable, owner);
+        }
+
+        private void HandleNotableGovernor(Settlement settlement)
+        {
             var governor = settlement.Town.Governor;
             if (governor == null || !governor.IsNotable)
             {
@@ -83,6 +105,15 @@ namespace BannerKings.Behaviours
             if (MBRandom.RandomInt(1, 100) < 5)
             {
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Town.OwnerClan.Leader, governor, 1);
+            }
+        }
+
+        private void HandleCastles(Settlement settlement)
+        {
+            if (settlement.IsCastle)
+            {
+                SettlementHelper.SpawnNotablesIfNeeded(settlement);
+                UpdateVolunteers(settlement);
             }
         }
 
@@ -191,10 +222,8 @@ namespace BannerKings.Behaviours
             }
         }
 
-
         private void AddDialogue(CampaignGameStarter starter)
         {
-
             starter.AddPlayerLine("bk_question_give_slaves", "hero_main_options", "bk_answer_give_slaves",
                 "{=dyHi9YdS}I would like to offer you slaves.",
                 IsPlayerNotable,
@@ -203,8 +232,6 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("bk_answer_give_slaves", "bk_answer_give_slaves", "hero_main_options",
                 "{=4Ko88Jj8}My suzerain, I would be honored. Extra workforce will benefit our community.",
                  null, null);
-
-
 
             starter.AddPlayerLine("bk_question_convert_culture", "hero_main_options", "bk_answer_convert_culture",
                 "{=HwgaJXYr}{NOTABLE_CONVERT_CULTURE}",
@@ -225,9 +252,6 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_convert_culture_confirm", "bk_convert_culture_confirm", "hero_main_options",
                 "{=G4ALCxaA}Never mind.",
                 null, null);
-
-
-
 
             starter.AddPlayerLine("bk_question_convert_faith", "hero_main_options", "bk_answer_convert_faith",
                 "{=McbnY4Su}{NOTABLE_CONVERT_FAITH}",
@@ -253,8 +277,7 @@ namespace BannerKings.Behaviours
         public void ApplyNotableCultureConversion(Hero notable, Hero converter)
         {
             notable.Culture = converter.Culture;
-            GainKingdomInfluenceAction.ApplyForDefault(converter, -BannerKingsConfig.Instance.CultureModel.GetConversionCost(Hero.OneToOneConversationHero,
-                Hero.MainHero).ResultNumber);
+            GainKingdomInfluenceAction.ApplyForDefault(converter, -BannerKingsConfig.Instance.CultureModel.GetConversionCost(notable, converter).ResultNumber);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(notable, converter, -8);
             if (converter == Hero.MainHero)
             {
@@ -290,7 +313,6 @@ namespace BannerKings.Behaviours
             hintText = new TextObject("{=JBxgr7jN}Conversion is possible.");
             return true;
         }
-
   
         private bool ConvertCultureOnCondition() 
         {
