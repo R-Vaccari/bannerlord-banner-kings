@@ -277,8 +277,7 @@ namespace BannerKings.Behaviours
         public void ApplyNotableCultureConversion(Hero notable, Hero converter)
         {
             notable.Culture = converter.Culture;
-            GainKingdomInfluenceAction.ApplyForDefault(converter, -BannerKingsConfig.Instance.CultureModel.GetConversionCost(Hero.OneToOneConversationHero,
-                Hero.MainHero).ResultNumber);
+            GainKingdomInfluenceAction.ApplyForDefault(converter, -BannerKingsConfig.Instance.CultureModel.GetConversionCost(notable, converter).ResultNumber);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(notable, converter, -8);
             if (converter == Hero.MainHero)
             {
