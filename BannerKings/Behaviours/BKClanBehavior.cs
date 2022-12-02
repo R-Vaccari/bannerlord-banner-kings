@@ -55,6 +55,22 @@ namespace BannerKings.Behaviours
                 }, 
                 0, null);
 
+            starter.AddDialogLine("companion_captured",
+              "companion_captured",
+              "close_window",
+              "{=!}As you say.",
+              null,
+              () =>
+              {
+                  TakePrisonerAction.Apply(Campaign.Current.MainParty.Party, CharacterObject.OneToOneConversationCharacter.HeroObject);
+              });
+
+            starter.AddPlayerLine("default_conversation_for_wrongly_created_heroes",
+              "start",
+              "companion_captured",
+              "{=!}You'll be coming with me now.",
+              () => IsCompanionOfAnotherClan() && Campaign.Current.CurrentConversationContext == ConversationContext.CapturedLord,
+              null);
 
             starter.AddPlayerLine("meet_wanderer_different_clan", 
                 "wanderer_meet_player_response", 
