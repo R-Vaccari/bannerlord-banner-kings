@@ -372,14 +372,14 @@ namespace BannerKings.Managers.Populations
             if (this.data.Settlement.IsVillage)
             {
                 var type = data.VillageData.CurrentDefault.BuildingType;
-                if (type != DefaultVillageBuildings.Instance.DailyProduction)
+                if (type.StringId != DefaultVillageBuildings.Instance.DailyProduction.StringId)
                 {
                     var progress = BannerKingsConfig.Instance.ConstructionModel.CalculateLandExpansion(data, LandExpansionWorkforce).ResultNumber;
-                    if (type == DefaultVillageBuildings.Instance.DailyFarm)
+                    if (type.StringId == DefaultVillageBuildings.Instance.DailyFarm.StringId)
                     {
                         this.farmland += progress;
                     }
-                    else if (type == DefaultVillageBuildings.Instance.DailyPasture)
+                    else if (type.StringId == DefaultVillageBuildings.Instance.DailyPasture.StringId)
                     {
                         pasture += progress;
                     }
@@ -418,7 +418,6 @@ namespace BannerKings.Managers.Populations
                     }
                 }
             }
-
 
             if (IsExcessLaborExpandingAcreage)
             {
