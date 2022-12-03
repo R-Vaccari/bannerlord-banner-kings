@@ -38,7 +38,6 @@ namespace BannerKings.UI.Management
             RefreshValues();
         }
 
-
         [DataSourceProperty]
         public string ProductionText => new TextObject("{=bk_production}Production").ToString();
 
@@ -221,7 +220,6 @@ namespace BannerKings.UI.Management
             SatisfactionInfo.Clear();
             SlaveryInfo.Clear();
 
-
             ProductionInfo.Add(new InformationElement(new TextObject("{=NnOoYOTC}State Slaves:").ToString(),
                 $"{data.EconomicData.StateSlaves:P}",
                 new TextObject("{=yJzJMg5Z}Percentage of slaves in this settlement that are state-owned and therefore used for state purposes such as building projects.")
@@ -246,7 +244,6 @@ namespace BannerKings.UI.Management
                     .SetTextVariable("EXPLANATIONS", efficiency.GetExplanations())
                     .ToString()));
 
-
             if (IsVillage)
             {
                 var villageData = data.VillageData;
@@ -259,7 +256,6 @@ namespace BannerKings.UI.Management
                             new TextObject("{=L3KACGcQ}The village's revenue output. Most of the revenue in villages is generated through production and selling of products by serfs and slaves. They are taxed through their labor rather than in coin. Nobles and craftsmen however may be taxed in coins through construction of tax offices."))
                         .SetTextVariable("EXPLANATIONS", villageRevenue.GetExplanations())
                         .ToString()));
-
 
                 ProductionInfo.Add(new InformationElement(new TextObject("{=KbTvcQko}Construction:").ToString(),
                     new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
@@ -318,7 +314,6 @@ namespace BannerKings.UI.Management
                         .SetTextVariable("EXPLANATIONS", caravanAttractiveness.GetExplanations())
                         .ToString()));
 
-
                 for (var i = 0; i < 4; i++)
                 {
                     var value = data.EconomicData.Satisfactions[i];
@@ -368,8 +363,6 @@ namespace BannerKings.UI.Management
                     }, new TextObject(mercantilismDecision.GetHint()));
             }
 
-
-
             var slavePrice = BannerKingsConfig.Instance.GrowthModel.CalculateSlavePrice(settlement, true);
             SlaveryInfo.Add(new InformationElement(new TextObject("{=CTerwC4b}Slave Price:").ToString(),
                 ((int)slavePrice.ResultNumber).ToString(),
@@ -379,10 +372,6 @@ namespace BannerKings.UI.Management
             SlaveryInfo.Add(new InformationElement(new TextObject("{=KdEiqFm2}Slave Demand:").ToString(),
                 FormatValue(slaveDemand.ResultNumber),
                 slaveDemand.GetExplanations()));
-
-            
-
-
 
             var admCost = data.EconomicData.AdministrativeCost;
             RevenueInfo.Add(new InformationElement(new TextObject("{=MhzdyoWG}Administrative Cost:").ToString(), 
