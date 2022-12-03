@@ -67,7 +67,7 @@ namespace BannerKings.UI
 
         public static List<TooltipProperty> GetPietyTooltip(Managers.Institutions.Religions.Religion rel, Hero hero, int piety)
         {
-            var model = (BKPietyModel) BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKPietyModel));
+            var model = BannerKingsConfig.Instance.PietyModel;
             var tooltipForAccumulatingProperty =
                 CampaignUIHelper.GetTooltipForAccumulatingProperty(new TextObject("{=0EVuzzOU}Piety").ToString(), piety,
                     model.CalculateEffect(hero));
@@ -308,8 +308,7 @@ namespace BannerKings.UI
                 list.AddRange(title.Claims.Select(pair => new TooltipProperty(pair.Key.Name.ToString(), GetClaimText(pair.Value).ToString(), 0)));
             }
 
-
-            var claimants = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel)?.GetClaimants(title);
+            var claimants = BannerKingsConfig.Instance.TitleModel.GetClaimants(title);
             if (claimants is not {Count: > 0})
             {
                 return list;

@@ -22,6 +22,11 @@ namespace BannerKings.Models.Vanilla
                 var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(armyLeader);
                 if (title != null)
                 {
+                    if (title.contract.GenderLaw == GenderLaw.Agnatic && armyLeader.IsFemale)
+                    {
+                        return false;
+                    }
+
                     if (kingdom.ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
                     {
                         var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
@@ -39,7 +44,6 @@ namespace BannerKings.Models.Vanilla
 
             return false;
         }
-
 
         public override float DailyBeingAtArmyInfluenceAward(MobileParty armyMemberParty)
         {

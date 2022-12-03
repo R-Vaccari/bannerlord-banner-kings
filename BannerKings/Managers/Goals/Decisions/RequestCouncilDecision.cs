@@ -49,7 +49,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 TextObject name = null;
                 var hint = new TextObject("{=SXfiwy0X}{DESCRIPTION}\n\n{REASON}");
                 CouncilAction action;
-                var model = (BKCouncilModel)BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
+                var model = BannerKingsConfig.Instance.CouncilModel;
                 if (member.Member == Hero.MainHero)
                 {
                     action = model.GetAction(CouncilActionType.RELINQUISH, council, Hero.MainHero, member);

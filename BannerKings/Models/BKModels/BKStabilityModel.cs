@@ -194,8 +194,7 @@ namespace BannerKings.Models.BKModels
                 }
 
                 var legitimacy = 0f;
-                var legitimacyType = (LegitimacyType) BannerKingsConfig.Instance.Models
-                    .First(x => x.GetType() == typeof(BKLegitimacyModel))
+                var legitimacyType = (LegitimacyType) BannerKingsConfig.Instance.LegitimacyModel
                     .CalculateEffect(settlement).ResultNumber;
                 legitimacy = legitimacyType switch
                 {
