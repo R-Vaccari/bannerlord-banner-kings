@@ -8,8 +8,12 @@ namespace BannerKings.Models.Vanilla
     {
         public override bool DoesPartyConsumeFood(MobileParty mobileParty)
         {
-            var baseResult = base.DoesPartyConsumeFood(mobileParty);
-            return baseResult && mobileParty.PartyComponent is not PopulationPartyComponent;
+            if (mobileParty.PartyComponent is PopulationPartyComponent || mobileParty.PartyComponent is RetinueComponent)
+            {
+                return false;
+            }
+
+            return base.DoesPartyConsumeFood(mobileParty);
         }
     }
 }
