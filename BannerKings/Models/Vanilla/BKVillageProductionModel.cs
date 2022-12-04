@@ -5,16 +5,16 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
+using CalradiaExpandedKingdoms.Models;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKVillageProductionModel : DefaultVillageProductionCalculatorModel
+    public class BKVillageProductionModel : CEKVillageProductionModel
     {
         private static readonly float PRODUCTION = 0.005f;
         private static readonly float BOOSTED_PRODUCTION = 0.008f;

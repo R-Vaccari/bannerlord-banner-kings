@@ -1,14 +1,13 @@
 ﻿using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.GameComponents;
+using CalradiaExpandedKingdoms.Models;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKPriceFactorModel : DefaultTradeItemPriceFactorModel
+    public class BKPriceFactorModel : CEKPriceFactorModel
     {
         public override float GetTradePenalty(ItemObject item, MobileParty clientParty, PartyBase merchant, bool isSelling, float inStore, float supply, float demand)
         {
