@@ -42,12 +42,18 @@ namespace BannerKings.Managers.Helpers
                         }
                     }
 
+                    var heroesToJoin = new List<Hero>();
                     foreach (var h in victim.Clan.Heroes)
                     {
                         if (h != mainHeir && (h == heir.Spouse || h.Children.Contains(h))) 
                         {
-                            ClanActions.JoinClan(h, newClan);
+                            heroesToJoin.Add(h);
                         }
+                    }
+
+                    foreach (var hero in heroesToJoin)
+                    {
+                        ClanActions.JoinClan(h, newClan);
                     }
                         
                     if (victim.Clan.Kingdom != null)
