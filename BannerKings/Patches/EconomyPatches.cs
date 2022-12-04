@@ -32,7 +32,7 @@ namespace BannerKings.Patches
                 MobileParty tradingParty = null, bool isSelling = false, PartyBase merchantParty = null)
             {
                 var item = itemRosterElement.Item;
-                if (item.HasHorseComponent)
+                if (item != null && item.HasHorseComponent)
                 {
                     int minimumPrice = 0;
                     if (item.HorseComponent.MeatCount > 0)
@@ -65,7 +65,7 @@ namespace BannerKings.Patches
                 MobileParty tradingParty, bool isSelling, PartyBase merchantParty)
             {
                 var item = itemRosterElement.Item;
-                if (item.HasHorseComponent)
+                if (item != null && item.HasHorseComponent)
                 {
                     int minimumPrice = 0;
                     if (item.HorseComponent.MeatCount > 0)
