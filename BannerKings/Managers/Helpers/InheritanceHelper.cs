@@ -53,7 +53,7 @@ namespace BannerKings.Managers.Helpers
 
                     foreach (var hero in heroesToJoin)
                     {
-                        ClanActions.JoinClan(h, newClan);
+                        ClanActions.JoinClan(hero, newClan);
                     }
                         
                     if (victim.Clan.Kingdom != null)
