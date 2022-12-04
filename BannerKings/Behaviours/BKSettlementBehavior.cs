@@ -333,6 +333,11 @@ namespace BannerKings.Behaviours
 
                     var foodModel = (BKFoodModel)Campaign.Current.Models.SettlementFoodModel;
                     var popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                    if (popData == null)
+                    {
+                        return;
+                    }
+
                     var excess = foodModel.GetPopulationFoodProduction(popData, town).ResultNumber - 10 - foodModel.GetPopulationFoodConsumption(popData).ResultNumber;
                     //float pasturePorportion = data.Pastureland / data.Acreage;
 
