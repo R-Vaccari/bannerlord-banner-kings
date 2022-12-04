@@ -163,7 +163,6 @@ namespace BannerKings.Models.Vanilla
                 result.Add(craftsmenConsumption, new TextObject("Craftsmen consumption"));
             }
 
-
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(data.Settlement, "decision_ration"))
             {
                 result.AddFactor(-0.4f, new TextObject("{=w6bLP4DB}Enforce rations decision"));

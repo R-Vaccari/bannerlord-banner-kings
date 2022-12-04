@@ -78,7 +78,7 @@ namespace BannerKings.UI.Titles
 
             if (title != null)
             {
-                var model = BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel;
+                var model = BannerKingsConfig.Instance.TitleModel;
                 var characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
                 ImageIdentifier = new ImageIdentifierVM(characterCode);
 

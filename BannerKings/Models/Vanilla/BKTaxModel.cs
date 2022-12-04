@@ -234,6 +234,9 @@ namespace BannerKings.Models.Vanilla
                 {
                     AddVillagePopulationTaxes(ref result, village.Settlement, nobles, craftsmen, taxOffice, taxType);
                 }
+
+                var admCost = BannerKingsConfig.Instance.AdministrativeModel.CalculateEffect(village.Settlement).ResultNumber;
+                result.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
             }
 
             var clan = village.GetActualOwner().Clan;

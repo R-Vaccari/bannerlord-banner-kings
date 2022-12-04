@@ -10,7 +10,7 @@ namespace BannerKings.Models.BKModels
     {
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
-            var baseResult = new ExplainedNumber(0.12f, true);
+            var baseResult = new ExplainedNumber(settlement.IsVillage ? 0.2f : 0.10f, true);
             baseResult.LimitMin(0f);
 
             var governor = settlement.IsVillage ? settlement.Village.Bound.Town.Governor : settlement.Town.Governor;
@@ -25,7 +25,6 @@ namespace BannerKings.Models.BKModels
 
                 baseResult.Add(effect, new TextObject("{=PBzKaQYS}Governor stewardship"));
             }
-
 
             var work = (BKWorkforcePolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "workforce");
             if (work.Policy != BKWorkforcePolicy.WorkforcePolicy.None)

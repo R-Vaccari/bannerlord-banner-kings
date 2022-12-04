@@ -40,9 +40,8 @@ namespace BannerKings.Components
         public static MobileParty CreateRetinue(Settlement origin)
         {
             var retinue = CreateParty($"bk_retinue_{origin.Name}", origin);
-            retinue.InitializeMobilePartyAtPosition(origin.Culture.DefaultPartyTemplate, origin.GatePosition);
+            retinue.InitializeMobilePartyAtPosition(origin.Culture.DefaultPartyTemplate, origin.GatePosition, 4);
             EnterSettlementAction.ApplyForParty(retinue, origin);
-            GiveFood(ref retinue);
             BannerKingsConfig.Instance.PopulationManager.AddParty(retinue);
             return retinue;
         }

@@ -81,7 +81,6 @@ namespace BannerKings.Managers.Populations.Villages
             }
         }
 
-
         public override void Initialize()
         {
             Manor = new BuildingType("bannerkings_manor");

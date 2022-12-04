@@ -224,7 +224,7 @@ namespace BannerKings.Managers.Education
                 hero.AddSkillXp(BKSkills.Instance.Scholarship, 200);
             }
 
-            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 2, 10));
+            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 5, 10));
         }
 
         public void GainBookReading(BookType book, float rate)
@@ -248,7 +248,7 @@ namespace BannerKings.Managers.Education
                 hero.AddSkillXp(BKSkills.Instance.Scholarship, 200);
             }
 
-            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 2, 10));
+            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 5, 10));
         }
 
         internal override void Update(PopulationData data)
@@ -297,7 +297,7 @@ namespace BannerKings.Managers.Education
             if (Lifestyle != null)
             {
                 AddProgress(StandartLifestyleProgress);
-                hero.AddSkillXp(BKSkills.Instance.Scholarship, 1f);
+                hero.AddSkillXp(BKSkills.Instance.Scholarship, 5f);
             }
         }
     }
