@@ -46,6 +46,48 @@ namespace BannerKings.Behaviours
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
+            starter.AddPlayerLine("conversation_prisoner_chat_player", 
+                "prisoner_recruit_start_player",
+                "close_window", 
+                "{=!}Stay there and pray for your masters to ransom you.", 
+                null, 
+                () =>
+                {
+                    if (PlayerEncounter.Current != null)
+                    {
+                        PlayerEncounter.LeaveEncounter = true;
+                    }
+                }, 
+                100, 
+                null, 
+                null);
+
+            starter.AddPlayerLine("conversation_prisoner_chat_player",
+                "prisoner_recruit_start_player",
+                "close_window",
+                "{=!}Stay in your place, {COMPANION_CLAN} mongrel.",
+                () =>
+                {
+                    var clan = Hero.OneToOneConversationHero.Clan;
+                    if (clan != null)
+                    {
+                        MBTextManager.SetTextVariable("COMPANION_CLAN", clan.Name);
+                    }
+                    
+                    return true;
+                },
+                () =>
+                {
+                    ChangeRelationAction.ApplyPlayerRelation(Hero.OneToOneConversationHero, -8);
+                    if (PlayerEncounter.Current != null)
+                    {
+                        PlayerEncounter.LeaveEncounter = true;
+                    }
+                },
+                100,
+                null,
+                null);
+
             starter.AddDialogLine("default_conversation_for_wrongly_created_heroes", "start", "close_window", 
                 "{=!}I am under your mercy.", 
                 null,
