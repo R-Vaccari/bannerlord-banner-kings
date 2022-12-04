@@ -318,13 +318,17 @@ namespace BannerKings.Models.Vanilla
                 explainedNumber.AddFactor(0.2f, lordshipMilitaryAdministration.Name);
             }
 
-            var religionData = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).ReligionData;
-            if (religionData != null)
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            if (data != null)
             {
-                var religion = religionData.DominantReligion;
-                if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Pastoralism))
+                var religionData = data.ReligionData;
+                if (religionData != null)
                 {
-                    explainedNumber.Add(-0.2f, DefaultDoctrines.Instance.Pastoralism.Name);
+                    var religion = religionData.DominantReligion;
+                    if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Pastoralism))
+                    {
+                        explainedNumber.Add(-0.2f, DefaultDoctrines.Instance.Pastoralism.Name);
+                    }
                 }
             }
 
