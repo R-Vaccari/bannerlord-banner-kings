@@ -23,7 +23,6 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKVolunteerModel : DefaultVolunteerModel
     {
-
         public override int MaximumIndexHeroCanRecruitFromHero(Hero buyerHero, Hero sellerHero, int useValueAsRelation = -101)
           => (int)Math.Floor(CalculateMaximumRecruitmentIndex(buyerHero, sellerHero, useValueAsRelation, false).ResultNumber);
 
