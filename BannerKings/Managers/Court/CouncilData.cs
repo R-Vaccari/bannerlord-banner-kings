@@ -45,7 +45,7 @@ namespace BannerKings.Managers.Court
         public void SetPeerage(Peerage peerage)
         {
             Peerage = peerage;
-           
+
         }
 
         public Hero Owner => clan.Leader;
@@ -342,7 +342,7 @@ namespace BannerKings.Managers.Court
             {
                 //case GovernmentType.Imperial:
                 //    positions.Add(new CouncilMember(null, CouncilPosition.Prince, clan));
-                 //   break;
+                //   break;
                 case GovernmentType.Feudal:
                     positions.Add(new CouncilMember(null, CouncilPosition.Constable, clan));
                     break;
@@ -406,7 +406,7 @@ namespace BannerKings.Managers.Court
         {
             var heroes = new List<Hero>();
             var members = clan.Heroes;
-            if (members is {Count: > 0})
+            if (members is { Count: > 0 })
             {
                 foreach (var member in members)
                 {
@@ -418,7 +418,7 @@ namespace BannerKings.Managers.Court
             }
 
             var vassals = BannerKingsConfig.Instance.TitleManager.GetVassals(Owner);
-            if (vassals is {Count: > 0})
+            if (vassals is { Count: > 0 })
             {
                 foreach (var vassal in vassals)
                 {
@@ -430,7 +430,7 @@ namespace BannerKings.Managers.Court
             }
 
             var highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(Owner);
-            if (highest is {IsSovereignLevel: true} && clan.Kingdom != null)
+            if (highest is { IsSovereignLevel: true } && clan.Kingdom != null)
             {
                 foreach (var clan in clan.Kingdom.Clans)
                 {
@@ -469,12 +469,12 @@ namespace BannerKings.Managers.Court
             }
 
             var towns = clan.Fiefs;
-            if (towns is {Count: > 0})
+            if (towns is { Count: > 0 })
             {
                 foreach (var town in towns)
                 {
                     var notables = town.Settlement.Notables;
-                    if (notables is {Count: > 0})
+                    if (notables is { Count: > 0 })
                     {
                         foreach (var notable in notables)
                         {
@@ -488,7 +488,7 @@ namespace BannerKings.Managers.Court
                     foreach (var village in town.Villages)
                     {
                         var villageNotables = village.Settlement.Notables;
-                        if (villageNotables is {Count: > 0} && village.GetActualOwner() == Owner)
+                        if (villageNotables is { Count: > 0 } && village.GetActualOwner() == Owner)
                         {
                             foreach (var notable in villageNotables)
                             {
@@ -606,7 +606,7 @@ namespace BannerKings.Managers.Court
 
         public CouncilMember GetCouncilMember(CouncilPosition position)
         {
-            return  members.FirstOrDefault(x => x.Position == position) ?? royalMembers.FirstOrDefault(x => x.Position == position);
+            return members.FirstOrDefault(x => x.Position == position) ?? royalMembers.FirstOrDefault(x => x.Position == position);
         }
     }
 
@@ -747,13 +747,13 @@ namespace BannerKings.Managers.Court
 
         public bool IsValidCandidate(Hero candidate)
         {
-            if (candidate.Clan is {IsUnderMercenaryService: true})
+            if (candidate.Clan is { IsUnderMercenaryService: true })
             {
                 return false;
             }
 
             var clanReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
-            if (clanReligion != null && clanReligion.HasDoctrine(DefaultDoctrines.Instance.Legalism)) 
+            if (clanReligion != null && clanReligion.HasDoctrine(DefaultDoctrines.Instance.Legalism))
             {
                 var candidateReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(candidate);
                 if (candidateReligion == null || candidateReligion != clanReligion)

@@ -8,13 +8,11 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
-using static BannerKings.Managers.Kingdoms.Contract.BKGenderDecision;
 
 namespace BannerKings.Managers.Kingdoms.Peerage
 {
     public class PeerageKingdomDecision : KingdomDecision
     {
-
         [SaveableProperty(99)] public Clan Peer { get; private set; }
 
         public PeerageKingdomDecision(Clan proposerClan, Clan newPeer) : base(proposerClan)

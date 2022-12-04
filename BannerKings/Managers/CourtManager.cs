@@ -6,7 +6,6 @@ using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
-using TaleWorlds.LinQuick;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -213,7 +212,7 @@ namespace BannerKings.Managers
 
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.ActionTaker,
                 ON_HIRED_RELATION);
-            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, 15);
+            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, 15f);
         }
 
         public void SwapCouncilPositions(CouncilAction action)
@@ -238,7 +237,7 @@ namespace BannerKings.Managers
 
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.TargetPosition.Clan.Leader, action.ActionTaker,
                 ON_HIRED_RELATION);
-            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, 10);
+            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, 10f);
         }
 
         public void RelinquishCouncilPosition(CouncilAction action)

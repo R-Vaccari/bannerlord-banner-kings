@@ -331,7 +331,6 @@ namespace BannerKings.Behaviours.Marriage
                         return false;
                     }
 
-
                     return true;
                 },
                 null);

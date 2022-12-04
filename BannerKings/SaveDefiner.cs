@@ -22,6 +22,7 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Vlandia;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Kingdoms.Contract;
+using BannerKings.Managers.Kingdoms.Peerage;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
@@ -164,6 +165,7 @@ namespace BannerKings
             AddClassDefinition(typeof(Peerage), 108);
             AddClassDefinition(typeof(Feast), 109);
             AddClassDefinition(typeof(MarriageContract), 110);
+            AddClassDefinition(typeof(PeerageKingdomDecision), 111);
         }
 
         protected override void DefineContainerDefinitions()

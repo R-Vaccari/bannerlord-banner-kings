@@ -218,18 +218,25 @@ namespace BannerKings.Models.BKModels
         {
             var result = new ExplainedNumber(0f, true);
             result.Add(religion.Fervor.ResultNumber * 100f, new TextObject("{=AfsRi9wL}Fervor"));
-
-            foreach (var notable in settlement.Notables)
+            if (settlement == null)
             {
-                if (notable.IsPreacher)
-                {
-                    continue;
-                }
+                return result;
+            }
 
-                var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(notable);
-                if (rel != null && rel == religion)
+            if (settlement.Notables != null)
+            {
+                foreach (var notable in settlement.Notables)
                 {
-                    result.Add(GetNotableFactor(notable, settlement), notable.Name);
+                    if (notable.IsPreacher)
+                    {
+                        continue;
+                    }
+
+                    var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(notable);
+                    if (rel != null && rel == religion)
+                    {
+                        result.Add(GetNotableFactor(notable, settlement), notable.Name);
+                    }
                 }
             }
 
