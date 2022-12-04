@@ -16,6 +16,7 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
+            CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnPartyDailyTick);
             CampaignEvents.OnPartyJoinedArmyEvent.AddNonSerializedListener(this, OnPartyJoinedArmyEvent);
             CampaignEvents.ArmyCreated.AddNonSerializedListener(this, OnArmyCreated);
             CampaignEvents.ArmyDispersed.AddNonSerializedListener(this, OnArmyDispersed);
@@ -31,6 +32,32 @@ namespace BannerKings.Behaviours
 
             dataStore.SyncData("bannerkings-military-duty", ref playerArmyDuty);
             dataStore.SyncData("bannerkings-military-duty-time", ref lastDutyTime);
+        }
+
+        private void OnPartyDailyTick(MobileParty party)
+        {
+            EvaluateCreateArmy(party);
+        }
+
+        private void EvaluateCreateArmy(MobileParty party)
+        {
+            if (!party.IsLordParty || party.LeaderHero == null || party.LeaderHero.Clan == null)
+            {
+                return;
+            }
+
+            var leader = party.LeaderHero;
+            var kingdom = leader.Clan.Kingdom;
+            if (kingdom == null || leader != leader.Clan.Leader || leader.Clan.Influence < 100f)
+            {
+                return;
+            }
+
+            if (kingdom.Armies.Count == 0)
+            {
+                kingdom.CreateArmy(leader, SettlementHelper.FindNearestSettlement(x => x.IsFortification || x.IsVillage,
+                        party), Army.ArmyTypes.Besieger);
+            }
         }
 
         public void OnPartyJoinedArmyEvent(MobileParty party)
