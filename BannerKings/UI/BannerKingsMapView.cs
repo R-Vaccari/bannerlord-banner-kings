@@ -10,6 +10,8 @@ using BannerKings.UI.Titles;
 using SandBox.View.Map;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Engine.GauntletUI;
+using TaleWorlds.ScreenSystem;
 using ReligionVM = BannerKings.UI.Religion.ReligionVM;
 
 namespace BannerKings.UI
@@ -17,6 +19,8 @@ namespace BannerKings.UI
     public class BannerKingsMapView : MapView
     {
         public string id;
+        private GauntletLayer Layer { get; set; }
+        private BannerKingsViewModel VM { get; set; }
 
         public BannerKingsMapView(string id)
         {
@@ -27,10 +31,14 @@ namespace BannerKings.UI
         protected override void CreateLayout()
         {
             base.CreateLayout();
-            UIManager.Instance.BKScreen.OnFinalize();
+            //UIManager.Instance.BKScreen.OnFinalize();
             var tuple = GetVM(id);
-            UIManager.Instance.SetScreen(new BannerKingsScreen());
-            UIManager.Instance.BKScreen.LoadLayer(tuple.Item1, tuple.Item2);
+            Layer = new GauntletLayer(999);
+            VM = tuple.Item1;
+            Layer.LoadMovie(tuple.Item2, tuple.Item1);
+            Layer.InputRestrictions.SetInputRestrictions(false);
+            MapScreen.Instance.AddLayer(Layer);
+            ScreenManager.TrySetFocus(Layer);
         }
 
         private (BannerKingsViewModel, string) GetVM(string id)
@@ -76,12 +84,18 @@ namespace BannerKings.UI
 
         public void Close()
         {
-            UIManager.Instance.BKScreen.CloseLayer();
+            if (Layer != null)
+            {
+                MapScreen.Instance.RemoveLayer(Layer);
+            }
         }
 
         public void Refresh()
         {
-            UIManager.Instance.BKScreen.Refresh();
+            if (VM != null)
+            {
+                VM.RefreshValues();
+            }
         }
     }
 }
