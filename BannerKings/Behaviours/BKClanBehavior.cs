@@ -15,8 +15,8 @@ using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Election;
-using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -46,47 +46,31 @@ namespace BannerKings.Behaviours
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-            starter.AddPlayerLine("conversation_prisoner_chat_player", 
-                "prisoner_recruit_start_player",
-                "close_window", 
-                "{=!}Stay there and pray for your masters to ransom you.", 
-                null, 
-                () =>
-                {
-                    if (PlayerEncounter.Current != null)
-                    {
-                        PlayerEncounter.LeaveEncounter = true;
-                    }
-                }, 
-                100, 
-                null, 
-                null);
-
-            starter.AddPlayerLine("conversation_prisoner_chat_player",
-                "prisoner_recruit_start_player",
+            starter.AddDialogLine("ally_thanks_after_helping_in_battle", 
+                "start", 
                 "close_window",
-                "{=!}Stay in your place, {COMPANION_CLAN} mongrel.",
+                "{=!}Thank you, {?PLAYER.GENDER}madam{?}sir{\\?}. I will tell the {CLAN} of your deeds.", 
                 () =>
                 {
-                    var clan = Hero.OneToOneConversationHero.Clan;
-                    if (clan != null)
+                    if (Hero.OneToOneConversationHero.Clan != null)
                     {
-                        MBTextManager.SetTextVariable("COMPANION_CLAN", clan.Name);
+                        MBTextManager.SetTextVariable("CLAN", Hero.OneToOneConversationHero.Clan.Name);
                     }
-                    
-                    return true;
-                },
+
+                    return IsCompanionOfAnotherClan() && MapEvent.PlayerMapEvent != null && Hero.OneToOneConversationHero != null && 
+                    !FactionManager.IsAtWarAgainstFaction(Hero.MainHero.MapFaction, Hero.OneToOneConversationHero.MapFaction) && 
+                    MapEvent.PlayerMapEvent.WinningSide == PartyBase.MainParty.Side;
+                }, 
                 () =>
                 {
-                    ChangeRelationAction.ApplyPlayerRelation(Hero.OneToOneConversationHero, -8);
-                    if (PlayerEncounter.Current != null)
+                    int playerGainedRelationAmount = 2;
+                    ChangeRelationAction.ApplyPlayerRelation(Hero.OneToOneConversationHero, playerGainedRelationAmount, true, true);
+                    if (Hero.OneToOneConversationHero.IsPrisoner)
                     {
-                        PlayerEncounter.LeaveEncounter = true;
+                        EndCaptivityAction.ApplyByReleasedAfterBattle(Hero.OneToOneConversationHero);
                     }
                 },
-                100,
-                null,
-                null);
+                110, null);
 
             starter.AddDialogLine("default_conversation_for_wrongly_created_heroes", "start", "close_window", 
                 "{=!}I am under your mercy.", 
