@@ -1,29 +1,19 @@
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
-using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Components
 {
-    internal class RetinueComponent : PopulationPartyComponent
+    internal class RetinueComponent : BannerKingsComponent
     {
-        public RetinueComponent(Settlement origin) : base(origin, origin, "", false, PopType.None)
+        public RetinueComponent(Settlement origin) : base(origin, "{=!}Retinue from {ORIGIN}")
         {
             behavior = AiBehavior.Hold;
         }
 
         [SaveableProperty(1001)] public AiBehavior behavior { get; set; }
-
-        public override Hero PartyOwner => HomeSettlement.OwnerClan.Leader;
-
-        public override TextObject Name => new TextObject("{=MNYnLSej}Retinue from {SETTLEMENT}")
-            .SetTextVariable("SETTLEMENT", HomeSettlement.Name);
-
-        public override Settlement HomeSettlement => Target;
 
         private static MobileParty CreateParty(string id, Settlement origin)
         {
@@ -40,10 +30,8 @@ namespace BannerKings.Components
         public static MobileParty CreateRetinue(Settlement origin)
         {
             var retinue = CreateParty($"bk_retinue_{origin.Name}", origin);
-            retinue.InitializeMobilePartyAtPosition(origin.Culture.DefaultPartyTemplate, origin.GatePosition);
+            retinue.InitializeMobilePartyAtPosition(origin.Culture.DefaultPartyTemplate, origin.GatePosition, 4);
             EnterSettlementAction.ApplyForParty(retinue, origin);
-            GiveFood(ref retinue);
-            BannerKingsConfig.Instance.PopulationManager.AddParty(retinue);
             return retinue;
         }
 
@@ -62,6 +50,16 @@ namespace BannerKings.Components
                 var character = Party.MemberRoster.GetTroopRoster().GetRandomElement().Character;
                 Party.MemberRoster.RemoveTroop(character);
             }
+        }
+
+        public override void TickHourly()
+        {
+            if (MobileParty.CurrentSettlement == null)
+            {
+                EnterSettlementAction.ApplyForParty(MobileParty, HomeSettlement);
+            }
+
+            MobileParty.SetMoveModeHold();
         }
     }
 }

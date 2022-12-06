@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Extensions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
@@ -44,7 +45,7 @@ namespace BannerKings.Managers.Court
         public void SetPeerage(Peerage peerage)
         {
             Peerage = peerage;
-           
+
         }
 
         public Hero Owner => clan.Leader;
@@ -239,7 +240,6 @@ namespace BannerKings.Managers.Court
                     }
                 }
 
-
                 var royal = GetIdealRoyalPositions();
                 foreach (var position in royal)
                 {
@@ -282,6 +282,8 @@ namespace BannerKings.Managers.Court
                 }
             }
 
+            Owner.AddSkillXp(BKSkills.Instance.Lordship, AllPositions.Count);
+
             if (Owner == Hero.MainHero || MBRandom.RandomInt(1, 100) >= 5)
             {
                 return;
@@ -312,17 +314,6 @@ namespace BannerKings.Managers.Court
                     action.Reject(Owner);
                 }
             }
-
-            /* bool answer = false;
-                   InformationManager.ShowInquiry(new InquiryData(new TextObject("{=D2ggvBEp}Council Position Request").ToString(),
-                       new TextObject("{=DmdEjEY4}{REQUESTER} requests the position of {POSITION} in your council.")
-                       .SetTextVariable("REQUESTER", action.ActionTaker.EncyclopediaLinkWithName)
-                       .SetTextVariable("POSITION", action.TargetPosition.GetName()).ToString(),
-                   action.Possible, true, GameTexts.FindText("str_selection_widget_accept").ToString(),
-                   GameTexts.FindText("str_selection_widget_cancel").ToString(), 
-                   () => action.TakeAction(),
-                   () => action.Reject(Owner), string.Empty));
-                  */
         }
 
         public List<CouncilMember> GetIdealRoyalPositions()
@@ -351,7 +342,7 @@ namespace BannerKings.Managers.Court
             {
                 //case GovernmentType.Imperial:
                 //    positions.Add(new CouncilMember(null, CouncilPosition.Prince, clan));
-                 //   break;
+                //   break;
                 case GovernmentType.Feudal:
                     positions.Add(new CouncilMember(null, CouncilPosition.Constable, clan));
                     break;
@@ -414,9 +405,8 @@ namespace BannerKings.Managers.Court
         public List<Hero> GetCourtMembers()
         {
             var heroes = new List<Hero>();
-
             var members = clan.Heroes;
-            if (members is {Count: > 0})
+            if (members is { Count: > 0 })
             {
                 foreach (var member in members)
                 {
@@ -427,41 +417,64 @@ namespace BannerKings.Managers.Court
                 }
             }
 
-            if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Owner))
+            var vassals = BannerKingsConfig.Instance.TitleManager.GetVassals(Owner);
+            if (vassals is { Count: > 0 })
             {
-                var vassals = BannerKingsConfig.Instance.TitleManager.GetVassals(Owner);
-                if (vassals is {Count: > 0})
+                foreach (var vassal in vassals)
                 {
-                    foreach (var vassal in vassals)
+                    if (vassal.deJure != clan.Leader && !heroes.Contains(vassal.deJure))
                     {
-                        if (vassal.deJure != clan.Leader && !heroes.Contains(vassal.deJure))
-                        {
-                            heroes.Add(vassal.deJure);
-                        }
+                        heroes.Add(vassal.deJure);
                     }
                 }
+            }
 
-                var highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(Owner);
-                if (highest is {IsSovereignLevel: true} && clan.Kingdom != null)
+            var highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(Owner);
+            if (highest is { IsSovereignLevel: true } && clan.Kingdom != null)
+            {
+                foreach (var clan in clan.Kingdom.Clans)
                 {
-                    foreach (var clan in clan.Kingdom.Clans)
+                    if (clan.Leader != Owner && !heroes.Contains(clan.Leader))
                     {
-                        if (clan.Leader != Owner && !heroes.Contains(clan.Leader))
+                        heroes.Add(clan.Leader);
+                    }
+                }
+            }
+
+            var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
+            var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Owner);
+            foreach (var title in titles)
+            {
+                if (title.type == TitleType.Lordship && title.fief.MapFaction == Owner.MapFaction)
+                {
+                    foreach (var notable in title.fief.Notables)
+                    {
+                        if (!heroes.Contains(notable))
                         {
-                            heroes.Add(clan.Leader);
+                            if (notable.IsPreacher)
+                            {
+                                var clergyman =
+                                    BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(notable);
+                                if (clergyman != null &&
+                                    BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman) !=
+                                    rel)
+                                {
+                                    continue;
+                                }
+                            }
+                            heroes.Add(notable);
                         }
                     }
                 }
             }
 
-            var towns = this.clan.Fiefs;
-            if (towns is {Count: > 0})
+            var towns = clan.Fiefs;
+            if (towns is { Count: > 0 })
             {
-                var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
                 foreach (var town in towns)
                 {
                     var notables = town.Settlement.Notables;
-                    if (notables is {Count: > 0})
+                    if (notables is { Count: > 0 })
                     {
                         foreach (var notable in notables)
                         {
@@ -475,7 +488,7 @@ namespace BannerKings.Managers.Court
                     foreach (var village in town.Villages)
                     {
                         var villageNotables = village.Settlement.Notables;
-                        if (villageNotables is {Count: > 0})
+                        if (villageNotables is { Count: > 0 } && village.GetActualOwner() == Owner)
                         {
                             foreach (var notable in villageNotables)
                             {
@@ -593,7 +606,7 @@ namespace BannerKings.Managers.Court
 
         public CouncilMember GetCouncilMember(CouncilPosition position)
         {
-            return  members.FirstOrDefault(x => x.Position == position) ?? royalMembers.FirstOrDefault(x => x.Position == position);
+            return members.FirstOrDefault(x => x.Position == position) ?? royalMembers.FirstOrDefault(x => x.Position == position);
         }
     }
 
@@ -734,13 +747,13 @@ namespace BannerKings.Managers.Court
 
         public bool IsValidCandidate(Hero candidate)
         {
-            if (candidate.Clan is {IsUnderMercenaryService: true})
+            if (candidate.Clan is { IsUnderMercenaryService: true })
             {
                 return false;
             }
 
             var clanReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
-            if (clanReligion != null && clanReligion.HasDoctrine(DefaultDoctrines.Instance.Legalism)) 
+            if (clanReligion != null && clanReligion.HasDoctrine(DefaultDoctrines.Instance.Legalism))
             {
                 var candidateReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(candidate);
                 if (candidateReligion == null || candidateReligion != clanReligion)

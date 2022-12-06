@@ -15,8 +15,8 @@ using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Election;
-using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -46,6 +46,32 @@ namespace BannerKings.Behaviours
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
+            starter.AddDialogLine("ally_thanks_after_helping_in_battle", 
+                "start", 
+                "close_window",
+                "{=!}Thank you, {?PLAYER.GENDER}madam{?}sir{\\?}. I will tell the {CLAN} of your deeds.", 
+                () =>
+                {
+                    if (Hero.OneToOneConversationHero.Clan != null)
+                    {
+                        MBTextManager.SetTextVariable("CLAN", Hero.OneToOneConversationHero.Clan.Name);
+                    }
+
+                    return IsCompanionOfAnotherClan() && MapEvent.PlayerMapEvent != null && Hero.OneToOneConversationHero != null && 
+                    !FactionManager.IsAtWarAgainstFaction(Hero.MainHero.MapFaction, Hero.OneToOneConversationHero.MapFaction) && 
+                    MapEvent.PlayerMapEvent.WinningSide == PartyBase.MainParty.Side;
+                }, 
+                () =>
+                {
+                    int playerGainedRelationAmount = 2;
+                    ChangeRelationAction.ApplyPlayerRelation(Hero.OneToOneConversationHero, playerGainedRelationAmount, true, true);
+                    if (Hero.OneToOneConversationHero.IsPrisoner)
+                    {
+                        EndCaptivityAction.ApplyByReleasedAfterBattle(Hero.OneToOneConversationHero);
+                    }
+                },
+                110, null);
+
             starter.AddDialogLine("default_conversation_for_wrongly_created_heroes", "start", "close_window", 
                 "{=!}I am under your mercy.", 
                 null,

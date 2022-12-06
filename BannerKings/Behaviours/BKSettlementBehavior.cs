@@ -333,6 +333,11 @@ namespace BannerKings.Behaviours
 
                     var foodModel = (BKFoodModel)Campaign.Current.Models.SettlementFoodModel;
                     var popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                    if (popData == null)
+                    {
+                        return;
+                    }
+
                     var excess = foodModel.GetPopulationFoodProduction(popData, town).ResultNumber - 10 - foodModel.GetPopulationFoodConsumption(popData).ResultNumber;
                     //float pasturePorportion = data.Pastureland / data.Acreage;
 
@@ -391,32 +396,41 @@ namespace BannerKings.Behaviours
 
         private void TickVillage(Settlement settlement)
         {
-            if (settlement.IsVillage)
+            ExceptionUtils.TryCatch(() =>
             {
-                var villageData = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).VillageData;
-                if (villageData == null)
+                if (settlement.IsVillage)
                 {
-                    return;
+                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                    if (data == null)
+                    {
+                        return;
+                    }
+
+                    var villageData = data.VillageData;
+                    if (villageData == null)
+                    {
+                        return;
+                    }
+
+                    float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
+                    if (!(manor > 0))
+                    {
+                        return;
+                    }
+
+                    var retinues = BannerKingsConfig.Instance.PopulationManager.AllParties;
+                    MobileParty retinue = null;
+                    if (retinues.Count > 0)
+                    {
+                        retinue = retinues.FirstOrDefault(x =>
+                            x.StringId.Contains($"bk_retinue_{settlement.Name}"));
+                    }
+
+                    retinue ??= RetinueComponent.CreateRetinue(settlement);
+
+                    (retinue.PartyComponent as RetinueComponent).DailyTick(manor);
                 }
-
-                float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
-                if (!(manor > 0))
-                {
-                    return;
-                }
-
-                var retinues = BannerKingsConfig.Instance.PopulationManager.AllParties;
-                MobileParty retinue = null;
-                if (retinues.Count > 0)
-                {
-                    retinue = retinues.FirstOrDefault(x =>
-                        x.StringId.Contains($"bk_retinue_{settlement.Name}"));
-                }
-
-                retinue ??= RetinueComponent.CreateRetinue(settlement);
-
-                (retinue.PartyComponent as RetinueComponent).DailyTick(manor);
-            }
+            }, this.GetType().Name);
         }
 
         private void BuyOutput(Town town, ItemObject item, int count, int price)

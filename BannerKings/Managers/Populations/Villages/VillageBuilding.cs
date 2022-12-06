@@ -27,5 +27,14 @@ namespace BannerKings.Managers.Populations.Villages
                 new Tuple<BuildingEffectEnum, float, float, float>[] { },
                 type.StartLevel);
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is VillageBuilding)
+            {
+                return BuildingType.StringId == (obj as VillageBuilding).BuildingType.StringId;
+            }
+            return base.Equals(obj);
+        }
     }
 }

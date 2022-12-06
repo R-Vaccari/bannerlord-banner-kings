@@ -77,7 +77,7 @@ namespace BannerKings.UI
         {
             if (mapView != null)
             {
-                BKScreen.CloseLayer();
+                mapView.Close();
                 mapView = null;
             }
         }

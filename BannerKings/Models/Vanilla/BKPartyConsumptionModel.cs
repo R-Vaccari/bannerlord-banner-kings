@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Education.Lifestyles;
+﻿using BannerKings.Components;
+using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -9,6 +10,16 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKPartyConsumptionModel : DefaultMobilePartyFoodConsumptionModel
     {
+        public override bool DoesPartyConsumeFood(MobileParty mobileParty)
+        {
+            if (mobileParty.PartyComponent.GetType().IsSubclassOf(typeof(BannerKingsComponent)))
+            {
+                return false;
+            }
+
+            return base.DoesPartyConsumeFood(mobileParty);
+        }
+
         public override ExplainedNumber CalculateDailyFoodConsumptionf(MobileParty party, ExplainedNumber baseConsumption)
         {
             var result = base.CalculateDailyFoodConsumptionf(party, baseConsumption);

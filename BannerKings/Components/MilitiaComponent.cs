@@ -3,13 +3,12 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
-using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Components
 {
-    internal class MilitiaComponent : PopulationPartyComponent
+    internal class MilitiaComponent : BannerKingsComponent
     {
-        public MilitiaComponent(Settlement origin, MobileParty escortTarget) : base(origin, origin, "", false, PopType.None)
+        public MilitiaComponent(Settlement origin, MobileParty escortTarget) : base(origin, "{=!}Raised Militia from {ORIGIN}")
         {
             Escort = escortTarget;
             Behavior = AiBehavior.EscortParty;
@@ -19,12 +18,8 @@ namespace BannerKings.Components
 
         [SaveableProperty(1002)] public AiBehavior Behavior { get; set; }
 
-        public override Hero PartyOwner => HomeSettlement.OwnerClan.Leader;
-
-        public override TextObject Name => new TextObject("{=mNwggeSn}Raised Militia from {SETTLEMENT}")
+        public override TextObject Name => new TextObject("{=!}Raised Militia from {SETTLEMENT}")
             .SetTextVariable("SETTLEMENT", HomeSettlement.Name);
-
-        public override Settlement HomeSettlement => Target;
 
         private static MobileParty CreateParty(string id, Settlement origin, MobileParty escortTarget)
         {
@@ -51,6 +46,19 @@ namespace BannerKings.Components
             GiveMounts(ref caravan);
             GiveFood(ref caravan);
             BannerKingsConfig.Instance.PopulationManager.AddParty(caravan);
+        }
+
+        public override void TickHourly()
+        {
+            var behavior = Behavior;
+            if (behavior == AiBehavior.EscortParty)
+            {
+                MobileParty.SetMoveEscortParty(Escort);
+            }
+            else
+            {
+                MobileParty.SetMoveGoToSettlement(HomeSettlement);
+            }
         }
     }
 }
