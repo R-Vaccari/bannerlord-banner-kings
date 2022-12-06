@@ -2,37 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Components
 {
-    public class PopulationPartyComponent : PartyComponent
+    public class PopulationPartyComponent : BannerKingsComponent
     {
         public PopulationPartyComponent(Settlement target, Settlement origin, string name, bool slaveCaravan,
-            PopType popType, bool trading = false)
+            PopType popType, bool trading = false) : base(origin, name)
         {
-            Target = target;
-            nameString = name;
-            Origin = origin;
+            TargetSettlement = target;
             SlaveCaravan = slaveCaravan;
             PopulationType = popType;
             Trading = trading;
         }
 
-        [SaveableProperty(1)] protected Settlement Target { get; set; }
-
-        [SaveableProperty(2)] protected Settlement Origin { get; set; }
-
-        [SaveableProperty(3)] private string nameString { get; set; }
+        [SaveableProperty(3)] public Settlement TargetSettlement { get; protected set; }
 
         [SaveableProperty(4)] public bool SlaveCaravan { get; private set; }
 
@@ -56,15 +49,6 @@ namespace BannerKings.Components
             }
         }
 
-        public override Hero PartyOwner => HomeSettlement.OwnerClan.Leader;
-
-        public override TextObject Name => new TextObject(nameString)
-            .SetTextVariable("ORIGIN", OriginSettlement.Name);
-
-        public override Settlement HomeSettlement => Target;
-
-        public Settlement OriginSettlement => Origin;
-
         private static MobileParty CreateParty(string id, Settlement origin, bool slaveCaravan, Settlement target,
             string name, PopType popType, bool trading = false)
         {
@@ -82,9 +66,13 @@ namespace BannerKings.Components
                 });
         }
 
-        public static void CreateSlaveCaravan(string id, Settlement origin, Settlement target, string name, int slaves)
+        public static void CreateSlaveCaravan(Settlement origin, Settlement target, int slaves)
         {
-            var caravan = CreateParty(id, origin, true, target, name, PopType.None);
+            var caravan = CreateParty("slavecaravan_" + origin.Name, origin, 
+                true, 
+                target, 
+                "{=cCzJ9Nk6}Slave Caravan from {ORIGIN}", 
+                PopType.None);
             caravan.AddPrisoner(CharacterObject.All.FirstOrDefault(x => x.StringId == "looter"), slaves);
             caravan.InitializeMobilePartyAtPosition(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition);
             GiveMounts(ref caravan);
@@ -174,13 +162,6 @@ namespace BannerKings.Components
             return (int) (partySize / (float) (tier + (ranged ? 3 : 2))) + MBRandom.RandomInt(-2, 3);
         }
 
-        protected static void GiveMounts(ref MobileParty party)
-        {
-            var lacking = party.Party.NumberOfRegularMembers - party.Party.NumberOfMounts;
-            var horse = Items.All.FirstOrDefault(x => x.StringId == "sumpter_horse");
-            party.ItemRoster.AddToCounts(horse, lacking);
-        }
-
         protected static void GivePackAnimals(ref MobileParty party)
         {
             ItemObject itemObject = null;
@@ -195,23 +176,6 @@ namespace BannerKings.Components
             if (itemObject != null)
             {
                 party.ItemRoster.Add(new ItemRosterElement(itemObject, (int) (party.Party.NumberOfAllMembers * 0.25f)));
-            }
-        }
-
-        public static void GiveFood(ref MobileParty party)
-        {
-            foreach (var itemObject in Items.All)
-            {
-                if (itemObject.IsFood)
-                {
-                    var num2 = MBRandom.RoundRandomized(party.Party.NumberOfAllMembers *
-                                                        (1f / itemObject.Value) * 16 * MBRandom.RandomFloat *
-                                                        MBRandom.RandomFloat * MBRandom.RandomFloat * MBRandom.RandomFloat);
-                    if (num2 > 0)
-                    {
-                        party.ItemRoster.AddToCounts(itemObject, num2);
-                    }
-                }
             }
         }
 
@@ -273,6 +237,60 @@ namespace BannerKings.Components
                 var good = MBRandom.ChooseWeighted(goods);
                 totalValue += good.Value;
                 party.ItemRoster.AddToCounts(good, 1);
+            }
+        }
+
+        public override void TickHourly()
+        {
+            var target = TargetSettlement;
+            if (target != null)
+            {
+                var distance = Campaign.Current.Models.MapDistanceModel.GetDistance(MobileParty, target);
+                if (distance <= 1f)
+                {
+                    EnterSettlementAction.ApplyForParty(MobileParty, target);
+                }
+                else
+                {
+                    switch (target.IsVillage)
+                    {
+                        case true:
+                            {
+                                MobileParty.Ai.SetAIState(AIState.VisitingVillage);
+                                if (target.Village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided)
+                                {
+                                    MobileParty.SetMoveModeHold();
+                                }
+                                else
+                                {
+                                    MobileParty.Ai.SetAIState(AIState.VisitingVillage);
+                                    MobileParty.SetMoveGoToSettlement(target);
+                                }
+
+                                break;
+                            }
+                        case false:
+                            {
+                                MobileParty.Ai.SetAIState(AIState.VisitingNearbyTown);
+                                if (!target.IsUnderSiege)
+                                {
+                                    MobileParty.Ai.SetAIState(AIState.VisitingNearbyTown);
+                                    MobileParty.SetMoveGoToSettlement(target);
+                                }
+                                else
+                                {
+                                    MobileParty.SetMoveModeHold();
+                                }
+
+                                break;
+                            }
+                    }
+                }
+            }
+            else
+            {
+                DestroyPartyAction.Apply(null, MobileParty);
+                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(MobileParty);
             }
         }
     }
