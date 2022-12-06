@@ -166,6 +166,8 @@ namespace BannerKings
             AddClassDefinition(typeof(Feast), 109);
             AddClassDefinition(typeof(MarriageContract), 110);
             AddClassDefinition(typeof(PeerageKingdomDecision), 111);
+            AddClassDefinition(typeof(BannerKingsComponent), 112);
+            AddClassDefinition(typeof(GarrisonPartyComponent), 113);
 
 
             AddClassDefinition(typeof(MercenaryCareer), 1000); 
