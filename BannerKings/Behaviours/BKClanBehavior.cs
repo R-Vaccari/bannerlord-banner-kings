@@ -52,12 +52,17 @@ namespace BannerKings.Behaviours
                 "{=!}Thank you, {?PLAYER.GENDER}madam{?}sir{\\?}. I will tell the {CLAN} of your deeds.", 
                 () =>
                 {
+                    if (Hero.OneToOneConversationHero == null)
+                    {
+                        return false;
+                    }
+
                     if (Hero.OneToOneConversationHero.Clan != null)
                     {
                         MBTextManager.SetTextVariable("CLAN", Hero.OneToOneConversationHero.Clan.Name);
                     }
 
-                    return IsCompanionOfAnotherClan() && MapEvent.PlayerMapEvent != null && Hero.OneToOneConversationHero != null && 
+                    return IsCompanionOfAnotherClan() && MapEvent.PlayerMapEvent != null && 
                     !FactionManager.IsAtWarAgainstFaction(Hero.MainHero.MapFaction, Hero.OneToOneConversationHero.MapFaction) && 
                     MapEvent.PlayerMapEvent.WinningSide == PartyBase.MainParty.Side;
                 }, 
