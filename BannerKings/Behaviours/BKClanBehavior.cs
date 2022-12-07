@@ -686,8 +686,8 @@ namespace BannerKings.Behaviours
 
                     var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(clan.Leader).ResultNumber;
                     var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(clan).ResultNumber;
-                    float factor = limit - current;
-                    __result *= factor / 2f;
+                    float factor = current / limit;
+                    __result *= 1f - factor;
                 }
             }
         }
