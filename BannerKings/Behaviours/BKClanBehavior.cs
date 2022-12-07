@@ -46,29 +46,21 @@ namespace BannerKings.Behaviours
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-            starter.AddDialogLine("ally_thanks_after_helping_in_battle", 
-                "start", 
+            starter.AddPlayerLine("conversation_prisoner_chat_player",
+              "prisoner_recruit_start_player",
+              "companion_freed_after_battle",
+              "{=!}You are free to go.",
+              () => IsCompanionOfAnotherClan(),
+              null);
+
+            starter.AddDialogLine("companion_freed_after_battle",
+                "companion_freed_after_battle", 
                 "close_window",
-                "{=!}Thank you, {?PLAYER.GENDER}madam{?}sir{\\?}. I will tell the {CLAN} of your deeds.", 
+                "{=!}Thank you, {?PLAYER.GENDER}madam{?}sir{\\?}. I will tell the {CLAN} of your deed.", 
+                null, 
                 () =>
                 {
-                    if (Hero.OneToOneConversationHero == null)
-                    {
-                        return false;
-                    }
-
-                    if (Hero.OneToOneConversationHero.Clan != null)
-                    {
-                        MBTextManager.SetTextVariable("CLAN", Hero.OneToOneConversationHero.Clan.Name);
-                    }
-
-                    return IsCompanionOfAnotherClan() && MapEvent.PlayerMapEvent != null && 
-                    !FactionManager.IsAtWarAgainstFaction(Hero.MainHero.MapFaction, Hero.OneToOneConversationHero.MapFaction) && 
-                    MapEvent.PlayerMapEvent.WinningSide == PartyBase.MainParty.Side;
-                }, 
-                () =>
-                {
-                    int playerGainedRelationAmount = 2;
+                    int playerGainedRelationAmount = 5;
                     ChangeRelationAction.ApplyPlayerRelation(Hero.OneToOneConversationHero, playerGainedRelationAmount, true, true);
                     if (Hero.OneToOneConversationHero.IsPrisoner)
                     {
