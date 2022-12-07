@@ -47,7 +47,7 @@ namespace BannerKings.Behaviours
                         }
                     }
 
-                    if (!inElection && kingdom.Clans.Count(x => !x.IsUnderMercenaryService) > 2)
+                    if (!inElection && kingdom.Clans.Count(x => !x.IsUnderMercenaryService) > 2 && kingdom.RulingClan != null)
                     {
                         kingdom.AddDecision(new RepublicElectionDecision(kingdom.RulingClan, kingdom.RulingClan), true);
                     }

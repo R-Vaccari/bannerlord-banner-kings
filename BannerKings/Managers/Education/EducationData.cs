@@ -255,7 +255,6 @@ namespace BannerKings.Managers.Education
         {
             if (LanguageInstructor != null && (LanguageInstructor.IsDead || LanguageInstructor.IsDisabled))
             {
-               
                 if (hero == Hero.MainHero)
                 {
                     InformationManager.DisplayMessage(

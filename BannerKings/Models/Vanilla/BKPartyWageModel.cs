@@ -33,7 +33,6 @@ namespace BannerKings.Models.Vanilla
         public override ExplainedNumber GetTotalWage(MobileParty mobileParty, bool includeDescriptions = false)
         {
             var result = base.GetTotalWage(mobileParty, includeDescriptions);
-
             var leader = mobileParty.LeaderHero ?? mobileParty.Owner;
             if (leader != null)
             {
@@ -107,6 +106,8 @@ namespace BannerKings.Models.Vanilla
                 {
                     result.AddFactor(-0.1f, BKPerks.Instance.CaravaneerDealer.Name);
                 }
+
+                result.AddFactor(-0.25f, GameTexts.FindText("str_party_type", "Caravan"));
             }
 
             return result;

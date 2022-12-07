@@ -252,45 +252,45 @@ namespace BannerKings.Components
                 }
                 else
                 {
-                    switch (target.IsVillage)
+                    if (target.IsVillage)
                     {
-                        case true:
-                            {
-                                MobileParty.Ai.SetAIState(AIState.VisitingVillage);
-                                if (target.Village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided)
-                                {
-                                    MobileParty.SetMoveModeHold();
-                                }
-                                else
-                                {
-                                    MobileParty.Ai.SetAIState(AIState.VisitingVillage);
-                                    MobileParty.SetMoveGoToSettlement(target);
-                                }
-
-                                break;
-                            }
-                        case false:
-                            {
-                                MobileParty.Ai.SetAIState(AIState.VisitingNearbyTown);
-                                if (!target.IsUnderSiege)
-                                {
-                                    MobileParty.Ai.SetAIState(AIState.VisitingNearbyTown);
-                                    MobileParty.SetMoveGoToSettlement(target);
-                                }
-                                else
-                                {
-                                    MobileParty.SetMoveModeHold();
-                                }
-
-                                break;
-                            }
+                        MobileParty.Ai.SetAIState(AIState.VisitingVillage);
+                        if (target.Village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided)
+                        {
+                            MobileParty.SetMoveModeHold();
+                        }
+                        else
+                        {
+                            MobileParty.Ai.SetAIState(AIState.VisitingVillage);
+                            MobileParty.SetMoveGoToSettlement(target);
+                        }
+                    }
+                    else
+                    {
+                        MobileParty.Ai.SetAIState(AIState.VisitingNearbyTown);
+                        if (!target.IsUnderSiege)
+                        {
+                            MobileParty.Ai.SetAIState(AIState.VisitingNearbyTown);
+                            MobileParty.SetMoveGoToSettlement(target);
+                        }
+                        else
+                        {
+                            MobileParty.SetMoveModeHold();
+                        }
                     }
                 }
             }
             else
             {
-                DestroyPartyAction.Apply(null, MobileParty);
-                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(MobileParty);
+                if (Home != null && Home.MapFaction == MobileParty.MapFaction && !Home.IsUnderSiege)
+                {
+                    MobileParty.SetMoveGoToSettlement(Home);
+                }
+                else
+                {
+                    DestroyPartyAction.Apply(null, MobileParty);
+                    BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(MobileParty);
+                }
             }
         }
     }
