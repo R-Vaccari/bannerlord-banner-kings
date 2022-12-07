@@ -4,6 +4,7 @@ using System.Linq;
 using BannerKings.Components;
 using BannerKings.Managers.Populations;
 using BannerKings.Settings;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -15,7 +16,6 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
-using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Behaviours
@@ -57,91 +57,72 @@ namespace BannerKings.Behaviours
 
         private void HourlyTickParty(MobileParty party)
         {
-            if (party == null || BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
+            if (party == null || BannerKingsConfig.Instance.PopulationManager == null)
             {
                 return;
             }
 
-            var component = (PopulationPartyComponent) party.PartyComponent;
-            var target = component.HomeSettlement;
+            AddCustomPartyBehaviors(party);
+
+            if (party.GetTotalStrengthWithFollowers() < 25f ||party.IsBandit || 
+                (party.MapFaction.IsKingdomFaction && party.IsLordParty && party == MobileParty.MainParty))
+            {
+                EvaluateSendGarrison(SettlementHelper.FindNearestSettlement(x =>
+                    {
+                        if (x.MapFaction == null || x.OwnerClan == null)
+                        {
+                            return false;
+                        }
+                        var stance = x.MapFaction.GetStanceWith(party.MapFaction);
+                        return stance != null && x.Town != null && (stance.IsAtWar || stance.IsAtConstantWar);
+                    },
+                    party),
+                    party);
+            }
+        }
+
+        private void AddCustomPartyBehaviors(MobileParty party)
+        {
+            if (party.PartyComponent is not BannerKingsComponent)
+            {
+                return;
+            }
+
             party.Ai.DisableAi();
-
-            switch (component)
-            {
-                case RetinueComponent:
-                {
-                    if (party.CurrentSettlement == null)
-                    {
-                        EnterSettlementAction.ApplyForParty(party, party.HomeSettlement);
-                    }
-
-                    party.SetMoveModeHold();
-                    return;
-                }
-                case MilitiaComponent militiaComponent:
-                {
-                    var behavior = militiaComponent.Behavior;
-                    if (behavior == AiBehavior.EscortParty)
-                    {
-                        party.SetMoveEscortParty(militiaComponent.Escort);
-                    }
-                    else
-                    {
-                        party.SetMoveGoToSettlement(militiaComponent.OriginSettlement);
-                    }
-
-                    return;
-                }
-            }
-
-            if (target != null)
-            {
-                var distance = Campaign.Current.Models.MapDistanceModel.GetDistance(party, target);
-                if (distance <= 1f)
-                {
-                    EnterSettlementAction.ApplyForParty(party, target);
-                }
-                else
-                {
-                    switch (target.IsVillage)
-                    {
-                        case true:
-                        {
-                            party.Ai.SetAIState(AIState.VisitingVillage);
-                            if (target.Village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided)
-                            {
-                                party.SetMoveModeHold();
-                            }
-                            else
-                            {
-                                party.Ai.SetAIState(AIState.VisitingVillage);
-                                party.SetMoveGoToSettlement(target);
-                            }
-
-                            break;
-                        }
-                        case false:
-                        {
-                            party.Ai.SetAIState(AIState.VisitingNearbyTown);
-                            if (!target.IsUnderSiege)
-                            {
-                                party.Ai.SetAIState(AIState.VisitingNearbyTown);
-                                party.SetMoveGoToSettlement(target);
-                            }
-                            else
-                            {
-                                party.SetMoveModeHold();
-                            }
-
-                            break;
-                        }
-                    }
-                }
-            }
-            else if (target == null)
+            var bkComponent = (BannerKingsComponent)party.PartyComponent;
+            if (bkComponent.HomeSettlement == null)
             {
                 DestroyPartyAction.Apply(null, party);
                 BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
+                return;
+            }
+
+            bkComponent.TickHourly();
+        }
+
+        private void EvaluateSendGarrison(Settlement origin, MobileParty target)
+        {
+            if (origin == null || target == null)
+            {
+                return;
+            }
+
+            var distance = Campaign.Current.Models.MapDistanceModel.GetDistance(target, origin);
+            if (distance > 10f)
+            {
+                return;
+            }
+
+            var garrison = origin.Town.GarrisonParty;
+            if (origin.IsUnderSiege || garrison.MemberRoster.TotalHealthyCount < 100)
+            {
+                return;
+            }
+
+            MobileParty garrisonParty = GarrisonPartyComponent.CreateParty(origin, target);
+            if (garrisonParty != null)
+            {
+                (garrisonParty.PartyComponent as GarrisonPartyComponent).TickHourly();
             }
         }
 
@@ -254,7 +235,8 @@ namespace BannerKings.Behaviours
             {
                 return;
             }
-            
+
+            AddGarrisonParty(party, target);
             AddRealisticIncome(party, target);
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target);
             if (data == null)
@@ -264,6 +246,48 @@ namespace BannerKings.Behaviours
 
             AddCaravanFees(party, target, data);
             AddPopulationPartyBehavior(party, target, data);
+        }
+
+        private void AddGarrisonParty(MobileParty party, Settlement settlement)
+        {
+            if (party.PartyComponent is GarrisonPartyComponent)
+            {
+                var component = party.PartyComponent as GarrisonPartyComponent;
+                if (settlement != component.HomeSettlement)
+                {
+                    return;
+                }
+
+                foreach (var element in party.MemberRoster.GetTroopRoster())
+                {
+                    settlement.Town.GarrisonParty.MemberRoster.AddToCounts(element.Character, 
+                        element.Number, 
+                        false, 
+                        element.WoundedNumber);
+                }
+
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                if (data == null)
+                {
+                    return;
+                }
+
+                foreach (var element in party.MemberRoster.GetTroopRoster())
+                {
+                    bool hero = element.Character.IsHero;
+                    if (!hero)
+                    {
+                        data.UpdatePopType(PopType.Slaves, element.Number, true);
+                    }
+                    else
+                    {
+                        TakePrisonerAction.Apply(settlement.Party, element.Character.HeroObject);
+                    }
+                }
+
+                DestroyPartyAction.Apply(null, party);
+                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
+            }
         }
 
         private void AddCaravanFees(MobileParty party, Settlement target, PopulationData data)
@@ -283,55 +307,53 @@ namespace BannerKings.Behaviours
 
         private void AddPopulationPartyBehavior(MobileParty party, Settlement target, PopulationData data)
         {
-            if (!BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
+            if (party.PartyComponent is PopulationPartyComponent)
             {
-                return;
-            }
-            
-            var component = (PopulationPartyComponent)party.PartyComponent;
-            if (component.Trading)
-            {
-                var localData = target.Town.MarketData;
-                foreach (var element in party.ItemRoster)
+                var component = (PopulationPartyComponent)party.PartyComponent;
+                if (component.Trading)
                 {
-                    float price = localData.GetPrice(element.EquipmentElement);
-                    target.Town.ChangeGold(-(int)(price * element.Amount));
-                    target.Town.Owner.ItemRoster.AddToCounts(element.EquipmentElement, element.Amount);
-                }
-            }
-
-            if (component is MilitiaComponent && target.IsVillage)
-            {
-                foreach (var element in party.MemberRoster.GetTroopRoster())
-                {
-                    target.MilitiaPartyComponent.MobileParty.MemberRoster.AddToCounts(element.Character,
-                        element.Number);
-                }
-
-                if (party.PrisonRoster.TotalRegulars > 0)
-                {
-                    foreach (var element in party.PrisonRoster.GetTroopRoster().Where(element => !element.Character.IsHero))
+                    var localData = target.Town.MarketData;
+                    foreach (var element in party.ItemRoster)
                     {
-                        data.UpdatePopType(PopType.Slaves, element.Number);
+                        float price = localData.GetPrice(element.EquipmentElement);
+                        target.Town.ChangeGold(-(int)(price * element.Amount));
+                        target.Town.Owner.ItemRoster.AddToCounts(element.EquipmentElement, element.Amount);
                     }
                 }
-            }
 
-            if (component.SlaveCaravan)
-            {
-                var slaves = Utils.Helpers.GetRosterCount(party.PrisonRoster);
-                data.UpdatePopType(PopType.Slaves, slaves);
-            }
-            else if (component.PopulationType != PopType.None)
-            {
-                var filter = component.PopulationType == PopType.Serfs ? "villager" :
-                    component.PopulationType == PopType.Craftsmen ? "craftsman" : "noble";
-                var pops = Utils.Helpers.GetRosterCount(party.MemberRoster, filter);
-                data.UpdatePopType(component.PopulationType, pops);
-            }
+                if (component is MilitiaComponent && target.IsVillage)
+                {
+                    foreach (var element in party.MemberRoster.GetTroopRoster())
+                    {
+                        target.MilitiaPartyComponent.MobileParty.MemberRoster.AddToCounts(element.Character,
+                            element.Number);
+                    }
 
-            DestroyPartyAction.Apply(null, party);
-            BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
+                    if (party.PrisonRoster.TotalRegulars > 0)
+                    {
+                        foreach (var element in party.PrisonRoster.GetTroopRoster().Where(element => !element.Character.IsHero))
+                        {
+                            data.UpdatePopType(PopType.Slaves, element.Number);
+                        }
+                    }
+                }
+
+                if (component.SlaveCaravan)
+                {
+                    var slaves = Utils.Helpers.GetRosterCount(party.PrisonRoster);
+                    data.UpdatePopType(PopType.Slaves, slaves);
+                }
+                else if (component.PopulationType != PopType.None)
+                {
+                    var filter = component.PopulationType == PopType.Serfs ? "villager" :
+                        component.PopulationType == PopType.Craftsmen ? "craftsman" : "noble";
+                    var pops = Utils.Helpers.GetRosterCount(party.MemberRoster, filter);
+                    data.UpdatePopType(component.PopulationType, pops);
+                }
+
+                DestroyPartyAction.Apply(null, party);
+                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
+            }
         }
 
         private void AddRealisticIncome(MobileParty party, Settlement target)
@@ -446,12 +468,35 @@ namespace BannerKings.Behaviours
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(origin);
             var slaves = (int) (data.GetTypeCount(PopType.Slaves) * 0.005d);
             data.UpdatePopType(PopType.Slaves, (int) (slaves * -1f));
-            PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "{=cCzJ9Nk6}Slave Caravan from {ORIGIN}", slaves);
+            PopulationPartyComponent.CreateSlaveCaravan(origin, target.Settlement, slaves);
         }
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
             AddDialog(campaignGameStarter);
+            WipeTraders();
+        }
+
+        private void WipeTraders()
+        {
+            var list = new List<MobileParty>();
+            foreach (var party in MobileParty.All)
+            {
+                if (party.PartyComponent is PopulationPartyComponent)
+                {
+                    var component = party.PartyComponent as PopulationPartyComponent;
+                    if (component.Trading && (component.TargetSettlement == null || component.HomeSettlement == null || 
+                        component.Name.ToString().IsEmpty()))
+                    {
+                        list.Add(party);
+                    }
+                }
+            }
+
+            foreach (var party in list)
+            {
+                DestroyPartyAction.Apply(null, party);
+            }
         }
 
         private void AddDialog(CampaignGameStarter starter)
@@ -656,11 +701,11 @@ namespace BannerKings.Behaviours
             }
 
             var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
-            var partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
+            var partyKingdom = component.HomeSettlement.OwnerClan.Kingdom;
             if (partyKingdom != null)
             {
                 if (Hero.MainHero.Clan.Kingdom == null ||
-                    component.OriginSettlement.OwnerClan.Kingdom != Hero.MainHero.Clan.Kingdom)
+                    component.HomeSettlement.OwnerClan.Kingdom != Hero.MainHero.Clan.Kingdom)
                 {
                     value = true;
                 }
@@ -679,14 +724,14 @@ namespace BannerKings.Behaviours
             }
 
             var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
-            var partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
+            var partyKingdom = component.HomeSettlement.OwnerClan.Kingdom;
             if (partyKingdom == null || !component.SlaveCaravan)
             {
                 return false;
             }
 
             if (Hero.MainHero.Clan.Kingdom == null ||
-                component.OriginSettlement.OwnerClan.Kingdom != Hero.MainHero.Clan.Kingdom)
+                component.HomeSettlement.OwnerClan.Kingdom != Hero.MainHero.Clan.Kingdom)
             {
                 value = true;
             }
@@ -704,9 +749,9 @@ namespace BannerKings.Behaviours
             }
 
             var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
-            var partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
+            var partyKingdom = component.HomeSettlement.OwnerClan.Kingdom;
             var heroKingdom = Hero.MainHero.Clan.Kingdom;
-            if (component.SlaveCaravan && ((partyKingdom != null && heroKingdom != null && partyKingdom == heroKingdom) || component.OriginSettlement.OwnerClan == Hero.MainHero.Clan))
+            if (component.SlaveCaravan && ((partyKingdom != null && heroKingdom != null && partyKingdom == heroKingdom) || component.HomeSettlement.OwnerClan == Hero.MainHero.Clan))
             {
                 value = true;
             }

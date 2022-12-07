@@ -51,13 +51,13 @@ namespace BannerKings.Managers.Items
             Carrot.InitializeObject(true, 20, 0, ItemCategory.Property.BonusToFoodStores);
 
             Honey = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("honey"));
-            Honey.InitializeObject(true, 10, 20, ItemCategory.Property.BonusToFoodStores);
+            Honey.InitializeObject(true, 5, 10, ItemCategory.Property.BonusToFoodStores);
 
             Gold = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("gold"));
             Gold.InitializeObject(true, 20, 50, ItemCategory.Property.BonusToTax);
 
             Limestone = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("limestone"));
-            Limestone.InitializeObject(true, 50, 40, ItemCategory.Property.BonusToProduction);
+            Limestone.InitializeObject(true, 30, 10, ItemCategory.Property.BonusToProduction);
 
             Marble = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("marble"));
             Marble.InitializeObject(true, 10, 60, ItemCategory.Property.BonusToProsperity);

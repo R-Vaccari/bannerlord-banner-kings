@@ -15,7 +15,6 @@ using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Election;
-using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
@@ -46,47 +45,29 @@ namespace BannerKings.Behaviours
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-            starter.AddPlayerLine("conversation_prisoner_chat_player", 
-                "prisoner_recruit_start_player",
-                "close_window", 
-                "{=!}Stay there and pray for your masters to ransom you.", 
-                null, 
-                () =>
-                {
-                    if (PlayerEncounter.Current != null)
-                    {
-                        PlayerEncounter.LeaveEncounter = true;
-                    }
-                }, 
-                100, 
-                null, 
-                null);
-
             starter.AddPlayerLine("conversation_prisoner_chat_player",
                 "prisoner_recruit_start_player",
-                "close_window",
-                "{=!}Stay in your place, {COMPANION_CLAN} mongrel.",
-                () =>
-                {
-                    var clan = Hero.OneToOneConversationHero.Clan;
-                    if (clan != null)
-                    {
-                        MBTextManager.SetTextVariable("COMPANION_CLAN", clan.Name);
-                    }
-                    
-                    return true;
-                },
-                () =>
-                {
-                    ChangeRelationAction.ApplyPlayerRelation(Hero.OneToOneConversationHero, -8);
-                    if (PlayerEncounter.Current != null)
-                    {
-                        PlayerEncounter.LeaveEncounter = true;
-                    }
-                },
-                100,
+                "companion_freed_after_battle",
+                "{=!}You are free to go.",
                 null,
-                null);
+                null,
+                100);
+
+            starter.AddDialogLine("companion_freed_after_battle",
+                "companion_freed_after_battle", 
+                "close_window",
+                "{=!}Thank you, {?PLAYER.GENDER}madam{?}sir{\\?}. I will tell the {CLAN} of your deed.", 
+                null, 
+                () =>
+                {
+                    int playerGainedRelationAmount = 5;
+                    ChangeRelationAction.ApplyPlayerRelation(Hero.OneToOneConversationHero, playerGainedRelationAmount, true, true);
+                    if (Hero.OneToOneConversationHero.IsPrisoner)
+                    {
+                        EndCaptivityAction.ApplyByReleasedAfterBattle(Hero.OneToOneConversationHero);
+                    }
+                },
+                110, null);
 
             starter.AddDialogLine("default_conversation_for_wrongly_created_heroes", "start", "close_window", 
                 "{=!}I am under your mercy.", 
@@ -162,7 +143,6 @@ namespace BannerKings.Behaviours
 
         private bool IsCompanionOfAnotherClan() => CharacterObject.OneToOneConversationCharacter != null && CharacterObject.OneToOneConversationCharacter.IsHero && 
                     CharacterObject.OneToOneConversationCharacter.Occupation == Occupation.Wanderer && 
-                    CharacterObject.OneToOneConversationCharacter.HeroObject.HeroState != Hero.CharacterStates.Prisoner &&
                     Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan &&
                     Hero.OneToOneConversationHero.Clan.StringId != "neutral";
 
@@ -684,6 +664,23 @@ namespace BannerKings.Behaviours
                 }
                 __result = list;
                 return false;
+            }
+
+            [HarmonyPostfix]
+            [HarmonyPatch("CalculateMeritOfOutcome")]
+            private static void CalculateMeritOfOutcomePostfix(SettlementClaimantDecision __instance,
+               DecisionOutcome candidateOutcome, ref float __result)
+            {
+                if (BannerKingsConfig.Instance.TitleManager != null)
+                {
+                    SettlementClaimantDecision.ClanAsDecisionOutcome clanAsDecisionOutcome = (SettlementClaimantDecision.ClanAsDecisionOutcome)candidateOutcome;
+                    Clan clan = clanAsDecisionOutcome.Clan;
+
+                    var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(clan.Leader).ResultNumber;
+                    var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(clan).ResultNumber;
+                    float factor = current / limit;
+                    __result *= 1f - factor;
+                }
             }
         }
 

@@ -82,7 +82,6 @@ namespace BannerKings.Behaviours
             RunMarketplace(settlement.Village, data);
         }
 
-
         private void RunMarketplace(Village village, PopulationData data)
         {
             ExceptionUtils.TryCatch(() =>

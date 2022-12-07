@@ -23,7 +23,7 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKTaxModel : CalradiaExpandedKingdoms.Models.CEKSettlementTaxModel
     {
-        public static readonly float SERF_OUTPUT = 0.3f;
+        public static readonly float SERF_OUTPUT = 0.33f;
 
         public float GetNobleOutput(FeudalTitle title)
         {
@@ -65,7 +65,7 @@ namespace BannerKings.Models.Vanilla
 
         public float GetSlaveOutput(FeudalTitle title)
         {
-            float result = 0.32f;
+            float result = 0.4f;
 
             if (title != null)
             {

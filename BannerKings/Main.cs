@@ -83,7 +83,6 @@ namespace BannerKings
             campaignStarter.AddModel(new BKPartyWageModel());
             campaignStarter.AddModel(new BKSettlementValueModel());
             campaignStarter.AddModel(new BKNotablePowerModel());
-            campaignStarter.AddModel(new BKPartyFoodConsumption());
             campaignStarter.AddModel(BannerKingsConfig.Instance.SmithingModel);
             campaignStarter.AddModel(new BKMapTrackModel());
             campaignStarter.AddModel(new BKAgentDamageModel());
