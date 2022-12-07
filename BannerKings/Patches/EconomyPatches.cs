@@ -404,7 +404,7 @@ namespace BannerKings.Patches
                             __result *= data.EconomicData.CaravanAttraction.ResultNumber;
                         }
                         
-                        __result -= data.EconomicData.CaravanFee(caravanParty) * 2f;
+                        __result -= data.EconomicData.CaravanFee(caravanParty) / 10f;
                     }
                 }
             }
