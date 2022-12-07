@@ -673,6 +673,23 @@ namespace BannerKings.Behaviours
                 __result = list;
                 return false;
             }
+
+            [HarmonyPostfix]
+            [HarmonyPatch("CalculateMeritOfOutcome")]
+            private static void CalculateMeritOfOutcomePostfix(SettlementClaimantDecision __instance,
+               DecisionOutcome candidateOutcome, ref float __result)
+            {
+                if (BannerKingsConfig.Instance.TitleManager != null)
+                {
+                    SettlementClaimantDecision.ClanAsDecisionOutcome clanAsDecisionOutcome = (SettlementClaimantDecision.ClanAsDecisionOutcome)candidateOutcome;
+                    Clan clan = clanAsDecisionOutcome.Clan;
+
+                    var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(clan.Leader).ResultNumber;
+                    var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(clan).ResultNumber;
+                    float factor = limit - current;
+                    __result *= factor / 2f;
+                }
+            }
         }
 
         [HarmonyPatch(typeof(LordConversationsCampaignBehavior))]
