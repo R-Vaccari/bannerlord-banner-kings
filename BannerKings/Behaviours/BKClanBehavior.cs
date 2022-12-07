@@ -16,7 +16,6 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.GameComponents;
-using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -47,11 +46,12 @@ namespace BannerKings.Behaviours
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
             starter.AddPlayerLine("conversation_prisoner_chat_player",
-              "prisoner_recruit_start_player",
-              "companion_freed_after_battle",
-              "{=!}You are free to go.",
-              () => IsCompanionOfAnotherClan(),
-              null);
+                "prisoner_recruit_start_player",
+                "companion_freed_after_battle",
+                "{=!}You are free to go.",
+                null,
+                null,
+                100);
 
             starter.AddDialogLine("companion_freed_after_battle",
                 "companion_freed_after_battle", 
@@ -143,7 +143,6 @@ namespace BannerKings.Behaviours
 
         private bool IsCompanionOfAnotherClan() => CharacterObject.OneToOneConversationCharacter != null && CharacterObject.OneToOneConversationCharacter.IsHero && 
                     CharacterObject.OneToOneConversationCharacter.Occupation == Occupation.Wanderer && 
-                    CharacterObject.OneToOneConversationCharacter.HeroObject.HeroState != Hero.CharacterStates.Prisoner &&
                     Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan &&
                     Hero.OneToOneConversationHero.Clan.StringId != "neutral";
 
