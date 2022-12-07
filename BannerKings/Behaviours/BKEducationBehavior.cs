@@ -26,6 +26,7 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
+            CampaignEvents.HeroLevelledUp.AddNonSerializedListener(this, OnHeroLevelledUp);
             CampaignEvents.HeroCreated.AddNonSerializedListener(this, OnHeroCreated);
             CampaignEvents.HeroComesOfAgeEvent.AddNonSerializedListener(this, OnHeroComesOfAge);
             CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTick);
@@ -84,6 +85,14 @@ namespace BannerKings.Behaviours
             if (dataStore.IsLoading)
             {
                 bookSellers ??= new Dictionary<Hero, ItemRoster>();
+            }
+        }
+
+        private void OnHeroLevelledUp(Hero hero, bool shouldNotify = true)
+        {
+            if (hero.Level % 5 == 0)
+            {
+                hero.HeroDeveloper.UnspentFocusPoints++;
             }
         }
 
