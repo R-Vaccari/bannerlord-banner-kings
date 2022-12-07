@@ -64,7 +64,7 @@ namespace BannerKings.Behaviours
 
             AddCustomPartyBehaviors(party);
 
-            if (party.GetTotalStrengthWithFollowers() < 25f ||party.IsBandit || 
+            if (party.GetTotalStrengthWithFollowers() > 25f ||party.IsBandit || 
                 (party.MapFaction.IsKingdomFaction && party.IsLordParty && party == MobileParty.MainParty))
             {
                 EvaluateSendGarrison(SettlementHelper.FindNearestSettlement(x =>
@@ -114,7 +114,7 @@ namespace BannerKings.Behaviours
             }
 
             var garrison = origin.Town.GarrisonParty;
-            if (origin.IsUnderSiege || garrison.MemberRoster.TotalHealthyCount < 100)
+            if (origin.IsUnderSiege || garrison == null || garrison.MemberRoster.TotalHealthyCount < 100)
             {
                 return;
             }
