@@ -57,12 +57,15 @@ namespace BannerKings.Behaviours
 
         private void HourlyTickParty(MobileParty party)
         {
-            if (party == null || BannerKingsConfig.Instance.PopulationManager == null || party.GetTotalStrengthWithFollowers() < 25f)
+            if (party == null || BannerKingsConfig.Instance.PopulationManager == null)
             {
                 return;
             }
 
-            if (party.IsBandit || (party.MapFaction.IsKingdomFaction && party.IsLordParty && party == MobileParty.MainParty))
+            AddCustomPartyBehaviors(party);
+
+            if (party.GetTotalStrengthWithFollowers() < 25f ||party.IsBandit || 
+                (party.MapFaction.IsKingdomFaction && party.IsLordParty && party == MobileParty.MainParty))
             {
                 EvaluateSendGarrison(SettlementHelper.FindNearestSettlement(x =>
                     {
@@ -76,8 +79,6 @@ namespace BannerKings.Behaviours
                     party),
                     party);
             }
-
-            AddCustomPartyBehaviors(party);
         }
 
         private void AddCustomPartyBehaviors(MobileParty party)
@@ -273,7 +274,15 @@ namespace BannerKings.Behaviours
 
                 foreach (var element in party.MemberRoster.GetTroopRoster())
                 {
-                    data.UpdatePopType(PopType.Slaves, element.Number, true);
+                    bool hero = element.Character.IsHero;
+                    if (!hero)
+                    {
+                        data.UpdatePopType(PopType.Slaves, element.Number, true);
+                    }
+                    else
+                    {
+                        TakePrisonerAction.Apply(settlement.Party, element.Character.HeroObject);
+                    }
                 }
 
                 DestroyPartyAction.Apply(null, party);
@@ -465,6 +474,29 @@ namespace BannerKings.Behaviours
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
             AddDialog(campaignGameStarter);
+            WipeTraders();
+        }
+
+        private void WipeTraders()
+        {
+            var list = new List<MobileParty>();
+            foreach (var party in MobileParty.All)
+            {
+                if (party.PartyComponent is PopulationPartyComponent)
+                {
+                    var component = party.PartyComponent as PopulationPartyComponent;
+                    if (component.Trading && (component.TargetSettlement == null || component.HomeSettlement == null || 
+                        component.Name.ToString().IsEmpty()))
+                    {
+                        list.Add(party);
+                    }
+                }
+            }
+
+            foreach (var party in list)
+            {
+                DestroyPartyAction.Apply(null, party);
+            }
         }
 
         private void AddDialog(CampaignGameStarter starter)
