@@ -63,6 +63,11 @@ namespace BannerKings.Behaviours.Mercenary
 
         internal void Tick(float progress)
         {
+            if (!Clan.IsUnderMercenaryService)
+            {
+                return;
+            }
+
             KingdomProgress[Kingdom] += progress;
             ServiceDays++;
             if (((float)ServiceDays / (float)CampaignTime.DaysInYear) % 1f == 0f)
