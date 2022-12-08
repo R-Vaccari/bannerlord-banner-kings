@@ -12,6 +12,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.ScreenSystem;
+using TaleWorlds.TwoDimension;
 using ReligionVM = BannerKings.UI.Religion.ReligionVM;
 
 namespace BannerKings.UI
@@ -21,6 +22,7 @@ namespace BannerKings.UI
         public string id;
         private GauntletLayer Layer { get; set; }
         private BannerKingsViewModel VM { get; set; }
+        private SpriteCategory categoryDeveloper, categoryEncyclopedia;
 
         public BannerKingsMapView(string id)
         {
@@ -31,6 +33,15 @@ namespace BannerKings.UI
         protected override void CreateLayout()
         {
             base.CreateLayout();
+            var spriteData = UIResourceManager.SpriteData;
+            var resourceContext = UIResourceManager.ResourceContext;
+            var resourceDepot = UIResourceManager.UIResourceDepot;
+
+            categoryDeveloper = spriteData.SpriteCategories["ui_characterdeveloper"];
+            categoryDeveloper.Load(resourceContext, resourceDepot);
+
+            categoryEncyclopedia = spriteData.SpriteCategories["ui_encyclopedia"];
+            categoryEncyclopedia.Load(resourceContext, resourceDepot);
             //UIManager.Instance.BKScreen.OnFinalize();
             var tuple = GetVM(id);
             Layer = new GauntletLayer(999);
