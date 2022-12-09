@@ -3,6 +3,7 @@ using BannerKings.Managers.Titles;
 using BannerKings.Models.Vanilla;
 using HarmonyLib;
 using Helpers;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -53,7 +54,7 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            if (kingdom.Armies.Count == 0)
+            if (kingdom.Armies.Count == 0 && FactionManager.GetEnemyKingdoms(kingdom).Count() > 0)
             {
                 kingdom.CreateArmy(leader, SettlementHelper.FindNearestSettlement(x => x.IsFortification || x.IsVillage,
                         party), Army.ArmyTypes.Besieger);

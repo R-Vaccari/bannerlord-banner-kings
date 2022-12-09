@@ -418,17 +418,26 @@ namespace BannerKings.Behaviours
                         return;
                     }
 
-                    var retinues = BannerKingsConfig.Instance.PopulationManager.AllParties;
-                    MobileParty retinue = null;
-                    if (retinues.Count > 0)
+                    var toRemove = new List<MobileParty>();
+                    foreach (var party in settlement.Parties)
                     {
-                        retinue = retinues.FirstOrDefault(x =>
-                            x.StringId.Contains($"bk_retinue_{settlement.Name}"));
+                        if (party.PartyComponent is RetinueComponent)
+                        {
+                            toRemove.Add(party);
+                        }
                     }
 
-                    retinue ??= RetinueComponent.CreateRetinue(settlement);
+                    toRemove.RemoveAt(0);
+                    foreach (var party in toRemove)
+                    {
+                        DestroyPartyAction.Apply(null, party);
+                    }
 
-                    (retinue.PartyComponent as RetinueComponent).DailyTick(manor);
+                    var retinue = RetinueComponent.CreateRetinue(settlement);
+                    if (retinue != null)
+                    {
+                        (retinue.PartyComponent as RetinueComponent).DailyTick(manor);
+                    }
                 }
             }, this.GetType().Name);
         }
