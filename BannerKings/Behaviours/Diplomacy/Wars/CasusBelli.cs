@@ -15,22 +15,29 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         {
         }
 
-        public void Initialize(TextObject name, TextObject description,
+        public void Initialize(TextObject name, TextObject description, float conquest, float raid, float capture,
             Func<War, bool> isFulfilled, Func<War, bool> isAdequate, Dictionary<TraitObject, float> traitWeights)
         {
             Initialize(name, description);
             this.isFulfilled = isFulfilled;
             this.isAdequate = isAdequate;
             TraitWeights = traitWeights;
+            ConquestWeight = conquest;
+            RaidWeight = raid;
+            CaptureWeight = capture;
         }
 
         public CasusBelli GetCopy()
         {
             var copy = new CasusBelli(StringId);
-            copy.Initialize(Name, Description, IsFulfilled, IsAdequate, TraitWeights);
+            copy.Initialize(Name, Description, ConquestWeight,
+                RaidWeight, CaptureWeight, IsFulfilled, IsAdequate, TraitWeights);
             return copy;
         }
         private Dictionary<TraitObject, float> TraitWeights { get; set; }
+        public float ConquestWeight { get; private set; }
+        public float CaptureWeight { get; private set; }
+        public float RaidWeight { get; private set; }
         public float GetTraitWeight(TraitObject trait)
         {
             float result = 0f;
@@ -55,17 +62,6 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             }
 
             return base.Equals(obj);
-        }
-        public enum WarReason
-        {
-            Conquest,
-            Claim,
-            Tributary,
-            Liberation,
-            ImperialSupremacy,
-            ImperialReintegration,
-            DeJure,
-            GreatRaid
         }
     }
 }

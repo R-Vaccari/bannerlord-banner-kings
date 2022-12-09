@@ -6,7 +6,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
     {
         public IFaction Attacker { get; }
         public IFaction Defender { get; }
-
+        public CasusBelli CasusBelli { get; }
         public Kingdom Sovereign { get; }
 
         public bool IsInternalWar() => Attacker.IsClan && Defender.IsClan && Sovereign != null;
