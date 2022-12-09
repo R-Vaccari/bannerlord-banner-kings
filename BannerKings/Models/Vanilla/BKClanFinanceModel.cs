@@ -31,7 +31,7 @@ namespace BannerKings.Models.Vanilla
 
         public override int CalculateOwnerIncomeFromWorkshop(Workshop workshop)
         {
-            var result = MathF.Max(0, workshop.ProfitMade);
+            var result = MathF.Max(0f, workshop.ProfitMade / 2f);
             var taxes = workshop.TaxExpenses();
             if (workshopTaxes.ContainsKey(workshop))
             {
@@ -42,7 +42,7 @@ namespace BannerKings.Models.Vanilla
                 workshopTaxes.Add(workshop, taxes);
             }
 
-            return result;
+            return (int)result;
         }
 
         public int CalculateOwnerIncomeFromEstates(Hero owner, bool applyWithdrawals)
@@ -78,7 +78,7 @@ namespace BannerKings.Models.Vanilla
         }
 
         public override int CalculateOwnerIncomeFromCaravan(MobileParty caravan) => 
-            BannerKingsSettings.Instance.RealisticCaravanIncome ? 0 : MathF.Max(0, caravan.PartyTradeGold - 10000);
+            (int)(BannerKingsSettings.Instance.RealisticCaravanIncome ? 0f : MathF.Max(0f, (caravan.PartyTradeGold - 10000) / 2f));
 
         public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
         {
@@ -153,7 +153,10 @@ namespace BannerKings.Models.Vanilla
                 {
                     int marketTax = (int)(town.Gold * 0.008f);
                     totalMarketTaxes += marketTax;
-                    town.ChangeGold(-marketTax);
+                    if (applyWithdrawals)
+                    {
+                        town.ChangeGold(-marketTax);
+                    }
                 }
 
                 if (!BannerKingsConfig.Instance.AI.AcceptNotableAid(clan, BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement)))
@@ -185,7 +188,7 @@ namespace BannerKings.Models.Vanilla
 
             if (totalMarketTaxes > 0)
             {
-                result.Add(totalNotablesAids,
+                result.Add(totalMarketTaxes,
                                     new TextObject("{=!}Taxes on Markets"));
             }
 

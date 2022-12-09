@@ -63,22 +63,6 @@ namespace BannerKings.Behaviours
             }
 
             AddCustomPartyBehaviors(party);
-
-            if (party.GetTotalStrengthWithFollowers() > 25f ||party.IsBandit || 
-                (party.MapFaction.IsKingdomFaction && party.IsLordParty && party == MobileParty.MainParty))
-            {
-                EvaluateSendGarrison(SettlementHelper.FindNearestSettlement(x =>
-                    {
-                        if (x.MapFaction == null || x.OwnerClan == null)
-                        {
-                            return false;
-                        }
-                        var stance = x.MapFaction.GetStanceWith(party.MapFaction);
-                        return stance != null && x.Town != null && (stance.IsAtWar || stance.IsAtConstantWar);
-                    },
-                    party),
-                    party);
-            }
         }
 
         private void AddCustomPartyBehaviors(MobileParty party)
@@ -98,32 +82,6 @@ namespace BannerKings.Behaviours
             }
 
             bkComponent.TickHourly();
-        }
-
-        private void EvaluateSendGarrison(Settlement origin, MobileParty target)
-        {
-            if (origin == null || target == null)
-            {
-                return;
-            }
-
-            var distance = Campaign.Current.Models.MapDistanceModel.GetDistance(target, origin);
-            if (distance > 10f)
-            {
-                return;
-            }
-
-            var garrison = origin.Town.GarrisonParty;
-            if (origin.IsUnderSiege || garrison == null || garrison.MemberRoster.TotalHealthyCount < 100)
-            {
-                return;
-            }
-
-            MobileParty garrisonParty = GarrisonPartyComponent.CreateParty(origin, target);
-            if (garrisonParty != null)
-            {
-                (garrisonParty.PartyComponent as GarrisonPartyComponent).TickHourly();
-            }
         }
 
         private void DailySettlementTick(Settlement settlement)

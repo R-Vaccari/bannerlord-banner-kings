@@ -11,6 +11,7 @@ using BannerKings.Managers.Populations.Villages;
 using BannerKings.Models.Vanilla;
 using BannerKings.Utils;
 using HarmonyLib;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
@@ -219,6 +220,57 @@ namespace BannerKings.Behaviours
                 //HandleExcessWorkforce(data, town);
                 HandleExcessFood(data, town);
                 HandleMarketGold(town);
+                HandleGarrison(town);
+            }
+        }
+
+        private void HandleGarrison(Town town)
+        {
+            var parties = new MobilePartiesAroundPositionList();
+            var list = parties.GetPartiesAroundPosition(town.Settlement.GatePosition, 15f);
+
+            MobileParty party = list.FirstOrDefault(x => x.Party.TotalStrength > 25f && (x.IsBandit ||
+               (x.MapFaction.IsKingdomFaction && x.IsLordParty)));
+
+            if (party != null)
+            {
+                EvaluateSendGarrison(SettlementHelper.FindNearestSettlement(x =>
+                {
+                    if (x.MapFaction == null || x.OwnerClan == null)
+                    {
+                        return false;
+                    }
+                    var stance = x.MapFaction.GetStanceWith(party.MapFaction);
+                    return stance != null && x.Town != null && (stance.IsAtWar || stance.IsAtConstantWar);
+                },
+                party),
+                party);
+            }
+        }
+
+        private void EvaluateSendGarrison(Settlement origin, MobileParty target)
+        {
+            if (origin == null || target == null)
+            {
+                return;
+            }
+
+            var distance = Campaign.Current.Models.MapDistanceModel.GetDistance(target, origin);
+            if (distance > 10f)
+            {
+                return;
+            }
+
+            var garrison = origin.Town.GarrisonParty;
+            if (origin.IsUnderSiege || garrison == null || garrison.MemberRoster.TotalHealthyCount < 100)
+            {
+                return;
+            }
+
+            MobileParty garrisonParty = GarrisonPartyComponent.CreateParty(origin, target);
+            if (garrisonParty != null)
+            {
+                (garrisonParty.PartyComponent as GarrisonPartyComponent).TickHourly();
             }
         }
 

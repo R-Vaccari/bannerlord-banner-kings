@@ -12,7 +12,8 @@ namespace BannerKings.Models.Vanilla
     {
         public override bool DoesPartyConsumeFood(MobileParty mobileParty)
         {
-            if (mobileParty.PartyComponent.GetType().IsSubclassOf(typeof(BannerKingsComponent)))
+            var type = mobileParty.PartyComponent.GetType();
+            if (type != null && type.IsSubclassOf(typeof(BannerKingsComponent)))
             {
                 return false;
             }
