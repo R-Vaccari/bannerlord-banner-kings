@@ -153,7 +153,10 @@ namespace BannerKings.Models.Vanilla
                 {
                     int marketTax = (int)(town.Gold * 0.008f);
                     totalMarketTaxes += marketTax;
-                    town.ChangeGold(-marketTax);
+                    if (applyWithdrawals)
+                    {
+                        town.ChangeGold(-marketTax);
+                    }
                 }
 
                 if (!BannerKingsConfig.Instance.AI.AcceptNotableAid(clan, BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement)))
@@ -185,7 +188,7 @@ namespace BannerKings.Models.Vanilla
 
             if (totalMarketTaxes > 0)
             {
-                result.Add(totalNotablesAids,
+                result.Add(totalMarketTaxes,
                                     new TextObject("{=!}Taxes on Markets"));
             }
 
