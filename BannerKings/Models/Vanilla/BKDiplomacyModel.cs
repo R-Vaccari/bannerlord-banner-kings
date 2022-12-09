@@ -14,12 +14,19 @@ namespace BannerKings.Models.Vanilla
             {
                 Kingdom kingdom = (Kingdom)factionDeclaresWar;
                 float wealthFactor = 0;
+                int totalWealth = 0;
                 foreach (var clan in kingdom.Clans)
                 {
                     if (!clan.IsUnderMercenaryService)
                     {
                         wealthFactor += (clan.Gold - 25000) / 100000f;
+                        totalWealth += clan.Gold;
                     }
+                }
+
+                if (totalWealth < kingdom.Clans.Count * 85000)
+                {
+                    return 0f;
                 }
 
                 result *= wealthFactor / kingdom.Clans.Count;
