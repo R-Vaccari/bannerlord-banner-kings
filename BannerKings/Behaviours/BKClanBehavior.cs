@@ -757,10 +757,10 @@ namespace BannerKings.Behaviours
                     }
 
                     var income = Campaign.Current.Models.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber *
-                                 (war ? 0.5f : 0.2f);
+                                 (war ? 0.45f : 0.15f);
                     if (war)
                     {
-                        income += clan.Gold * 0.05f;
+                        income += clan.Gold * 0.005f;
                     }
 
                     if (income > 0f)

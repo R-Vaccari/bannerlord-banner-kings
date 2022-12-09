@@ -17,13 +17,13 @@ namespace BannerKings.Models.Vanilla
         {
             var result = character.Tier switch
             {
-                0 => 3,
-                1 => 6,
-                2 => 10,
-                3 => 15,
-                4 => 26,
-                5 => 38,
-                6 => 50,
+                0 => 1,
+                1 => 2,
+                2 => 4,
+                3 => 6,
+                4 => 16,
+                5 => 32,
+                6 => 45,
                 _ => 60
             };
 

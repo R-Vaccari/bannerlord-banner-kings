@@ -1,3 +1,4 @@
+using System.Linq;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -15,6 +16,8 @@ namespace BannerKings.Components
 
         [SaveableProperty(1001)] public AiBehavior behavior { get; set; }
 
+        public static string GetId(Settlement origin) => $"bk_retinue_{origin.Name}";
+
         private static MobileParty CreateParty(string id, Settlement origin)
         {
             return MobileParty.CreateParty(id, new RetinueComponent(origin),
@@ -29,7 +32,14 @@ namespace BannerKings.Components
 
         public static MobileParty CreateRetinue(Settlement origin)
         {
-            var retinue = CreateParty($"bk_retinue_{origin.Name}", origin);
+            string id = GetId(origin);
+            var currentRetinue = MobileParty.All.FirstOrDefault(x => x.StringId == id);
+            if (currentRetinue != null)
+            {
+                return currentRetinue;
+            }
+
+            var retinue = CreateParty(id, origin);
             retinue.InitializeMobilePartyAtPosition(origin.Culture.DefaultPartyTemplate, origin.GatePosition, 4);
             EnterSettlementAction.ApplyForParty(retinue, origin);
             return retinue;

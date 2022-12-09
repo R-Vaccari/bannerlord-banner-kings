@@ -19,6 +19,9 @@ using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement;
+using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Policies;
 using TaleWorlds.Core;
 using TaleWorlds.GauntletUI;
 using TaleWorlds.GauntletUI.BaseTypes;
@@ -192,6 +195,49 @@ namespace BannerKings.Patches
                 var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
                 __result = __instance.Kingdom == Clan.PlayerClan.Kingdom && !Clan.PlayerClan.IsUnderMercenaryService &&
                     council.Peerage != null && council.Peerage.CanVote;
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(KingdomPoliciesVM), "GetCanProposeOrDisavowPolicyWithReason")]
+        internal class GetCanProposeOrDisavowPolicyWithReasonPatch
+        {
+            private static bool Prefix(KingdomPoliciesVM __instance, bool hasUnresolvedDecision, ref bool __result, out TextObject disabledReason)
+            {
+                TextObject textObject;
+                if (!CampaignUIHelper.GetMapScreenActionIsEnabledWithReason(out textObject))
+                {
+                    disabledReason = textObject;
+                    __result = false;
+                    return false;
+                }
+                if (Clan.PlayerClan.IsUnderMercenaryService)
+                {
+                    disabledReason = GameTexts.FindText("str_mercenaries_cannot_propose_policies", null);
+                    __result = false;
+                    return false;
+                }
+                if (!hasUnresolvedDecision && Clan.PlayerClan.Influence < (float)__instance.ProposalAndDisavowalCost)
+                {
+                    disabledReason = GameTexts.FindText("str_warning_you_dont_have_enough_influence", null);
+                    __result = false;
+                    return false;
+                }
+
+                var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
+                if (council != null)
+                {
+                    if (council.Peerage == null || (council.Peerage != null && !council.Peerage.CanStartElection))
+                    {
+                        disabledReason = new TextObject("{=RDDOdoeR}The Peerage of {CLAN} does not allow starting elections.")
+                            .SetTextVariable("CLAN", Clan.PlayerClan.Name);
+                        __result = false;
+                        return false;
+                    }
+                }
+
+                 disabledReason = TextObject.Empty;
+                __result = true;
                 return false;
             }
         }
