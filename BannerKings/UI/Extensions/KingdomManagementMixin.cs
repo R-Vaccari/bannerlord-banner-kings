@@ -126,7 +126,7 @@ namespace BannerKings.UI.Extensions
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
             if (council != null)
             {
-                if (council.Peerage != null && !council.Peerage.CanStartElection)
+                if (council.Peerage == null || (council.Peerage != null && !council.Peerage.CanStartElection))
                 {
                     var policy = kingdomManagement.Policy;
                     var diplomacy = kingdomManagement.Diplomacy;
