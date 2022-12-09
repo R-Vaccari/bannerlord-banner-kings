@@ -427,10 +427,13 @@ namespace BannerKings.Behaviours
                         }
                     }
 
-                    toRemove.RemoveAt(0);
-                    foreach (var party in toRemove)
+                    if (toRemove.Count > 0)
                     {
-                        DestroyPartyAction.Apply(null, party);
+                        toRemove.RemoveAt(0);
+                        foreach (var party in toRemove)
+                        {
+                            DestroyPartyAction.Apply(null, party);
+                        }
                     }
 
                     var retinue = RetinueComponent.CreateRetinue(settlement);
