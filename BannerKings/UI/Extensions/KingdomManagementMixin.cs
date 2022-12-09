@@ -1,8 +1,5 @@
-using BannerKings.Behaviours;
 using BannerKings.UI.Court;
 using BannerKings.UI.Kingdoms;
-using BannerKings.UI.Mercenary;
-using BannerKings.UI.Management;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem;
@@ -16,9 +13,7 @@ namespace BannerKings.UI.Extensions
     internal class KingdomManagementMixin : BaseViewModelMixin<KingdomManagementVM>
     {
         private readonly KingdomManagementVM kingdomManagement;
-        private bool courtSelected, courtEnabled, demesneSelected, demesneEnabled, careerSelected,
-            showCareer;
-        private MercenaryCareerVM careerVM;
+        private bool courtSelected, courtEnabled, demesneSelected, demesneEnabled;
         private CourtVM courtVM;
         private KingdomDemesneVM demesneVM;
 
@@ -31,13 +26,6 @@ namespace BannerKings.UI.Extensions
             demesneVM = new KingdomDemesneVM(title, vm.Kingdom);
             demesneVM.IsSelected = DemesneEnabled;
 
-            ShowCareer = false;
-            Career = new MercenaryCareerVM();
-            if (Clan.PlayerClan.IsUnderMercenaryService)
-            {
-                ShowCareer = true;
-            }
-
             //var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(vm.Kingdom);
             CourtEnabled = true;
             kingdomManagement.RefreshValues();
@@ -45,35 +33,6 @@ namespace BannerKings.UI.Extensions
 
         [DataSourceProperty] public string DemesneText => new TextObject("{=6QMDGRSt}Demesne").ToString();
         [DataSourceProperty] public string CourtText => new TextObject("{=2QGyA46m}Court").ToString();
-        [DataSourceProperty] public string CareerText => new TextObject("{=!}Career").ToString();
-
-        [DataSourceProperty]
-        public bool ShowCareer
-        {
-            get => showCareer;
-            set
-            {
-                if (value != showCareer)
-                {
-                    showCareer = value;
-                    ViewModel!.OnPropertyChangedWithValue(value);
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public bool CareerSelected
-        {
-            get => careerSelected;
-            set
-            {
-                if (value != careerSelected)
-                {
-                    careerSelected = value;
-                    ViewModel!.OnPropertyChangedWithValue(value);
-                }
-            }
-        }
 
         [DataSourceProperty]
         public bool DemesneSelected
@@ -159,20 +118,6 @@ namespace BannerKings.UI.Extensions
             }
         }
 
-        [DataSourceProperty]
-        public MercenaryCareerVM Career
-        {
-            get => careerVM;
-            set
-            {
-                if (value != careerVM)
-                {
-                    careerVM = value;
-                    ViewModel!.OnPropertyChangedWithValue(value);
-                }
-            }
-        }
-
         public override void OnRefresh()
         {
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
@@ -216,23 +161,16 @@ namespace BannerKings.UI.Extensions
 
             Court.RefreshValues();
             Demesne?.RefreshValues();
-            Career?.RefreshValues();
             if (kingdomManagement.Clan.Show || kingdomManagement.Settlement.Show || kingdomManagement.Policy.Show ||
                 kingdomManagement.Army.Show || kingdomManagement.Diplomacy.Show)
             {
                 Court.IsSelected = false;
                 CourtSelected = false;
                 DemesneSelected = false;
-                CareerSelected = false;
 
                 if (Demesne != null)
                 {
                     Demesne.IsSelected = false;
-                }
-
-                if (Career != null)
-                {
-                    Career.IsSelected = false;
                 }
             }
         }
@@ -250,12 +188,6 @@ namespace BannerKings.UI.Extensions
             if (Demesne != null)
             {
                 Demesne.IsSelected = false;
-            }
-
-            if (Career != null)
-            {
-                Career.IsSelected = false;
-                CareerSelected = false;
             }
 
             Court.IsSelected = true;
@@ -279,37 +211,7 @@ namespace BannerKings.UI.Extensions
                 Demesne.IsSelected = true;
                 Court.IsSelected = false;
                 CourtSelected = false;
-
-                if (Career != null)
-                {
-                    Career.IsSelected = false;
-                    CareerSelected = false;
-                }
             }
-
-            kingdomManagement.RefreshValues();
-        }
-
-        [DataSourceMethod]
-        public void SelectCareer()
-        {
-            kingdomManagement.Clan.Show = false;
-            kingdomManagement.Settlement.Show = false;
-            kingdomManagement.Policy.Show = false;
-            kingdomManagement.Army.Show = false;
-            kingdomManagement.Diplomacy.Show = false;
-
-            DemesneSelected = false;
-            if (Demesne != null)
-            {
-                Demesne.IsSelected = false;
-            }
-
-            CareerSelected = true;
-            Career.IsSelected = true;
-
-            Court.IsSelected = false;
-            CourtSelected = false;
 
             kingdomManagement.RefreshValues();
         }
