@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
-using BannerKings.Behaviours.Mercenary;
 using BannerKings.Components;
 using BannerKings.Managers;
 using BannerKings.Managers.CampaignStart;
@@ -168,12 +167,6 @@ namespace BannerKings
             AddClassDefinition(typeof(PeerageKingdomDecision), 111);
             AddClassDefinition(typeof(BannerKingsComponent), 112);
             AddClassDefinition(typeof(GarrisonPartyComponent), 113);
-
-
-            AddClassDefinition(typeof(MercenaryCareer), 1000); 
-            AddClassDefinition(typeof(MercenaryPrivilege), 1001);
-            AddClassDefinition(typeof(CustomTroop), 1002);
-            AddClassDefinition(typeof(CustomTroopPreset), 1003);
         }
 
         protected override void DefineContainerDefinitions()
@@ -220,14 +213,6 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, Town>));
             ConstructContainerDefinition(typeof(Dictionary<Town, Feast>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, List<Estate>>));
-
-
-            ConstructContainerDefinition(typeof(List<MercenaryPrivilege>));
-            ConstructContainerDefinition(typeof(Dictionary<Kingdom, List<MercenaryPrivilege>>));
-            ConstructContainerDefinition(typeof(Dictionary<Clan, MercenaryCareer>));
-            ConstructContainerDefinition(typeof(Dictionary<Kingdom, float>));
-            ConstructContainerDefinition(typeof(Dictionary<CultureObject, CustomTroop>));
-            ConstructContainerDefinition(typeof(Dictionary<Kingdom, CampaignTime>));
         }
     }
 }
