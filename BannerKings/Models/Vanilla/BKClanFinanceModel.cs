@@ -137,6 +137,7 @@ namespace BannerKings.Models.Vanilla
 
             int totalWorkshopTaxes = 0;
             int totalNotablesAids = 0;
+            int totalMarketTaxes = 0;
 
             foreach (var town in clan.Fiefs)
             {
@@ -146,6 +147,13 @@ namespace BannerKings.Models.Vanilla
                     {
                         totalWorkshopTaxes += GetWorkshopTaxes(wk);
                     }
+                }
+
+                if (town.Gold >= 150000)
+                {
+                    int marketTax = (int)(town.Gold * 0.008f);
+                    totalMarketTaxes += marketTax;
+                    town.ChangeGold(-marketTax);
                 }
 
                 if (!BannerKingsConfig.Instance.AI.AcceptNotableAid(clan, BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement)))
@@ -175,6 +183,11 @@ namespace BannerKings.Models.Vanilla
                     new TextObject("{=WYDGftvz}Notable aids"));
             }
 
+            if (totalMarketTaxes > 0)
+            {
+                result.Add(totalNotablesAids,
+                                    new TextObject("{=!}Taxes on Markets"));
+            }
 
             var dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassals(clan);
             if (dictionary.Count >= 0)
