@@ -194,7 +194,7 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            AddGarrisonParty(party, target);
+           
             AddRealisticIncome(party, target);
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target);
             if (data == null)
@@ -202,11 +202,12 @@ namespace BannerKings.Behaviours
                 return;
             }
 
+            AddGarrisonParty(party, target, data);
             AddCaravanFees(party, target, data);
             AddPopulationPartyBehavior(party, target, data);
         }
 
-        private void AddGarrisonParty(MobileParty party, Settlement settlement)
+        private void AddGarrisonParty(MobileParty party, Settlement settlement, PopulationData data)
         {
             if (party.PartyComponent is GarrisonPartyComponent)
             {
@@ -222,12 +223,6 @@ namespace BannerKings.Behaviours
                         element.Number, 
                         false, 
                         element.WoundedNumber);
-                }
-
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                if (data == null)
-                {
-                    return;
                 }
 
                 foreach (var element in party.MemberRoster.GetTroopRoster())

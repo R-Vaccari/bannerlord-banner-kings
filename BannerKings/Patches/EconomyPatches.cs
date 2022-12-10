@@ -335,7 +335,7 @@ namespace BannerKings.Patches
                     town.Owner.ItemRoster.AddToCounts(element, 1);
                 }
 
-                if (Campaign.Current.GameStarted && !doNotEffectCapital && workshop.WorkshopType.StringId != "artisans")
+                if (Campaign.Current.GameStarted && !doNotEffectCapital)
                 {
                     var num = totalValue;
                     workshop.ChangeGold(num);
