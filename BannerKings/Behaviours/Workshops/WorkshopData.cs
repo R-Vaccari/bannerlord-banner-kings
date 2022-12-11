@@ -55,7 +55,7 @@ namespace BannerKings.Behaviours.Workshops
                     else break;
                 }
             }
-            else
+            else if (Workshop.NotRunnedDays > 0 && Workshop.IsRunning)
             {
                 IsRunningOnInventory = true;
                 for (int i = 0; i < Workshop.WorkshopType.Productions.Count; i++)
