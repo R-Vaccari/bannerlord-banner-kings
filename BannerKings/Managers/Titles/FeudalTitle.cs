@@ -248,11 +248,6 @@ namespace BannerKings.Managers.Titles
                 return ClaimType.Ongoing;
             }
 
-            if (fief != null && fief.OwnerClan != null && fief.OwnerClan.Leader == hero)
-            {
-                return ClaimType.DeFacto;
-            }
-
             return ClaimType.None;
         }
 

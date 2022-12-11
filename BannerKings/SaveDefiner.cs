@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
+using BannerKings.Behaviours.Workshops;
 using BannerKings.Behaviours.Mercenary;
 using BannerKings.Components;
 using BannerKings.Managers;
@@ -35,6 +36,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
@@ -168,6 +170,7 @@ namespace BannerKings
             AddClassDefinition(typeof(PeerageKingdomDecision), 111);
             AddClassDefinition(typeof(BannerKingsComponent), 112);
             AddClassDefinition(typeof(GarrisonPartyComponent), 113);
+            AddClassDefinition(typeof(WorkshopData), 114);
 
             AddClassDefinition(typeof(MercenaryCareer), 1000);
             AddClassDefinition(typeof(MercenaryPrivilege), 1001);
@@ -217,8 +220,9 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(List<Estate>));
             ConstructContainerDefinition(typeof(Dictionary<PopType, float>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, Town>));
-            ConstructContainerDefinition(typeof(Dictionary<Town, Feast>));
+            ConstructContainerDefinition(typeof(Dictionary<Town, Feast>)); 
             ConstructContainerDefinition(typeof(Dictionary<Hero, List<Estate>>));
+            ConstructContainerDefinition(typeof(Dictionary<Workshop, WorkshopData>));
 
             ConstructContainerDefinition(typeof(List<MercenaryPrivilege>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, List<MercenaryPrivilege>>));
