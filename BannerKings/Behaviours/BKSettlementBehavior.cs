@@ -214,10 +214,9 @@ namespace BannerKings.Behaviours
             if (settlement.Town != null)
             {
                 var town = settlement.Town;
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData;
                 HandleItemAvailability(town);
                 //HandleExcessWorkforce(data, town);
-                HandleExcessFood(data, town);
+                HandleExcessFood(town);
                 HandleMarketGold(town);
                 HandleGarrison(town);
             }
@@ -367,7 +366,7 @@ namespace BannerKings.Behaviours
             }, GetType().Name); 
         }
 
-        private void HandleExcessFood(LandData data, Town town)
+        private void HandleExcessFood(Town town)
         {
             ExceptionUtils.TryCatch(() =>
             {
@@ -389,6 +388,7 @@ namespace BannerKings.Behaviours
                         return;
                     }
 
+                    var data = popData.LandData;
                     var excess = foodModel.GetPopulationFoodProduction(popData, town).ResultNumber - 10 - foodModel.GetPopulationFoodConsumption(popData).ResultNumber;
                     //float pasturePorportion = data.Pastureland / data.Acreage;
 
