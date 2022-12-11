@@ -44,7 +44,7 @@ namespace BannerKings.UI
             categoryEncyclopedia.Load(resourceContext, resourceDepot);
             //UIManager.Instance.BKScreen.OnFinalize();
             var tuple = GetVM(id);
-            Layer = new GauntletLayer(999);
+            Layer = new GauntletLayer(500);
             VM = tuple.Item1;
             Layer.LoadMovie(tuple.Item2, tuple.Item1);
             Layer.InputRestrictions.SetInputRestrictions(false);
