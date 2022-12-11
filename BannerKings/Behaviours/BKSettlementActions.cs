@@ -403,14 +403,17 @@ namespace BannerKings.Behaviours
         public void StartCraftingMenu(float totalHours)
         {
             this.totalHours = totalHours;
-            MBTextManager.SetTextVariable("CRAFTING_HOURS", totalHours.ToString("0.0"));
-            var cost = BannerKingsConfig.Instance.SmithingModel.GetSmithingHourlyPrice(Settlement.CurrentSettlement,
-                Hero.MainHero);
-            var costInt = (int)cost.ResultNumber;
-            GameTexts.SetVariable("CRAFTING_RATE", costInt);
-            GameTexts.SetVariable("CRAFTING_EXPLANATION", cost.GetExplanations());
-            GameTexts.SetVariable("GOLD_ICON", "<img src=\"General\\Icons\\Coin@2x\" extend=\"8\">");
-            GameMenu.SwitchToMenu("bannerkings_wait_crafting");
+            if (totalHours > 0f)
+            {
+                MBTextManager.SetTextVariable("CRAFTING_HOURS", totalHours.ToString("0.0"));
+                var cost = BannerKingsConfig.Instance.SmithingModel.GetSmithingHourlyPrice(Settlement.CurrentSettlement,
+                    Hero.MainHero);
+                var costInt = (int)cost.ResultNumber;
+                GameTexts.SetVariable("CRAFTING_RATE", costInt);
+                GameTexts.SetVariable("CRAFTING_EXPLANATION", cost.GetExplanations());
+                GameTexts.SetVariable("GOLD_ICON", "<img src=\"General\\Icons\\Coin@2x\" extend=\"8\">");
+                GameMenu.SwitchToMenu("bannerkings_wait_crafting");
+            }
         }
 
         private static void TickWaitStudy(MenuCallbackArgs args, CampaignTime dt)
