@@ -98,7 +98,6 @@ namespace BannerKings.Behaviours
                 }
             }
 
-
             campaignGameStarter.AddGameMenu("bannerkings", "Banner Kings", MenuBannerKingsInit);
             campaignGameStarter.AddGameMenu("bannerkings_actions", "Banner Kings", MenuBannerKingsInit);
 
@@ -121,7 +120,8 @@ namespace BannerKings.Behaviours
                 delegate (MenuCallbackArgs args)
                 {
                     PlayerEncounter.Current.IsPlayerWaiting = false;
-                    SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
+                    string id = Hero.MainHero.CurrentSettlement.IsTown ? "town" : "castle";
+                    GameMenu.SwitchToMenu(id);
                 }, true);
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_train_guards",
@@ -141,7 +141,8 @@ namespace BannerKings.Behaviours
                 delegate (MenuCallbackArgs args)
                 {
                     PlayerEncounter.Current.IsPlayerWaiting = false;
-                    SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
+                    string id = Hero.MainHero.CurrentSettlement.IsTown ? "town" : "castle";
+                    GameMenu.SwitchToMenu(id);
                 }, true);
 
 
@@ -162,7 +163,8 @@ namespace BannerKings.Behaviours
                 delegate (MenuCallbackArgs args)
                 {
                     PlayerEncounter.Current.IsPlayerWaiting = false;
-                    SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
+                    string id = Hero.MainHero.CurrentSettlement.IsTown ? "town" : "castle";
+                    GameMenu.SwitchToMenu(id);
                 }, true);
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_meet_nobility",
@@ -182,7 +184,8 @@ namespace BannerKings.Behaviours
                 delegate (MenuCallbackArgs args)
                 {
                     PlayerEncounter.Current.IsPlayerWaiting = false;
-                    SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
+                    string id = Hero.MainHero.CurrentSettlement.IsTown ? "town" : "castle";
+                    GameMenu.SwitchToMenu(id);
                 }, true);
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_study",
@@ -202,7 +205,8 @@ namespace BannerKings.Behaviours
                 delegate (MenuCallbackArgs args)
                 {
                     PlayerEncounter.Current.IsPlayerWaiting = false;
-                    SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
+                    string id = Hero.MainHero.CurrentSettlement.IsTown ? "town" : "castle";
+                    GameMenu.SwitchToMenu(id);
                 }, true);
 
 
@@ -213,7 +217,6 @@ namespace BannerKings.Behaviours
                 MenuActionConsequenceNeutral,
                 TickWaitCrafting, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
                 GameOverlays.MenuOverlayType.SettlementWithBoth);
-
 
             // ------- ACTIONS --------
 
