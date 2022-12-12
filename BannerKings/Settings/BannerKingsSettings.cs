@@ -8,7 +8,7 @@ using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Settings
 {
-    public class BannerKingsSettings : AttributeGlobalSettings<BannerKingsSettings>
+    public partial class BannerKingsSettings : AttributeGlobalSettings<BannerKingsSettings>
     {
         private int volunteersLimit = 10;
         public override string Id => "BannerKings";

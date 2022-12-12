@@ -16,7 +16,7 @@ namespace Localizer
             _random = new Random();
 
             Console.WriteLine("Path to Source folder:");
-            var sourceFolder = new DirectoryInfo(Console.ReadLine()!);
+            var sourceFolder = new DirectoryInfo(@"G:\Dev\BannerLordMods\TXP4\src\TournamentsXPanded4"); //new DirectoryInfo(Console.ReadLine()!);
             if (!sourceFolder.Exists)
             {
                 Exit("Directory does not exist.");
@@ -24,7 +24,7 @@ namespace Localizer
             }
 
             Console.WriteLine("\nPath to Modules folder:");
-            var modulesFolder = new DirectoryInfo(Console.ReadLine()!);
+            var modulesFolder = new DirectoryInfo(@"G:\Dev\BannerLordMods\TXP4\src\TournamentsXPanded4\_Module");
             if (!modulesFolder.Exists)
             {
                 Console.WriteLine("Directory does not exist. External IDs won't be considered.");

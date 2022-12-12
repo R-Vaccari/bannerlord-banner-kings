@@ -1,5 +1,7 @@
 ﻿using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
+using BannerKings.Settings;
+
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -14,7 +16,7 @@ namespace BannerKings.Models.Vanilla
     {
         public ExplainedNumber GetSmithingHourlyPrice(Settlement settlement, Hero hero)
         {
-            var result = new ExplainedNumber(50f, true);
+            var result = new ExplainedNumber(BannerKingsSettings.Instance.SmithingGoldCostPerHour, true);
 
             var prosperity = settlement.Prosperity / 5000f;
             if (prosperity >= 1f)

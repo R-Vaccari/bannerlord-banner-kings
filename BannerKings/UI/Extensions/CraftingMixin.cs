@@ -1,6 +1,7 @@
 using System.Linq;
 using BannerKings.Behaviours;
 using BannerKings.Extensions;
+using BannerKings.Settings;
 using BannerKings.UI.Crafting;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
@@ -306,7 +307,7 @@ namespace BannerKings.UI.Extensions
 
         private float GetSpentHours()
         {
-            return spentStamina / 6f;
+            return (spentStamina / 6f) * BannerKingsSettings.Instance.SmithingStaminaPerHourModifier;
         }
 
         public void UpdateMaterials()
