@@ -217,6 +217,11 @@ namespace BannerKings.Behaviours
                     return;
                 }
 
+                if (settlement.Town.GarrisonParty == null)
+                {
+                    settlement.AddGarrisonParty();
+                }
+
                 foreach (var element in party.MemberRoster.GetTroopRoster())
                 {
                     settlement.Town.GarrisonParty.MemberRoster.AddToCounts(element.Character, 
