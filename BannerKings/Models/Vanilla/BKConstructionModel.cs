@@ -19,8 +19,9 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKConstructionModel : DefaultBuildingConstructionModel
     {
-        private const float SLAVE_CONSTRUCTION = 0.015f;
-        private const float SERF_CONSTRUCTION = 0.010f;
+        private const float SLAVE_CONSTRUCTION = 0.02f;
+        private const float SERF_CONSTRUCTION = 0.015f;
+        private const float CRAFTSMEN_CONSTRUCTION = 0.03f;
         private readonly TextObject CultureText = GameTexts.FindText("str_culture");
         private readonly TextObject HighLoyaltyBonusText = new("{=fNiANUo4}High Loyalty");
         private readonly TextObject LowLoyaltyPenaltyText = new("{=fETzfZzS}Low Loyalty");
@@ -107,7 +108,6 @@ namespace BannerKings.Models.Vanilla
             {
                 var result = new ExplainedNumber(0f);
                 return CalculateDailyConstructionPowerInternal(town, ref result, true);
-                ;
             }
 
             return base.CalculateDailyConstructionPowerWithoutBoost(town);
@@ -115,12 +115,14 @@ namespace BannerKings.Models.Vanilla
 
         public override int GetBoostCost(Town town)
         {
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                var craftsmen = data.GetTypeCount(PopType.Craftsmen);
-                return town.IsCastle ? (int) (craftsmen * 2f) : (int) (craftsmen / 2f);
+                if (data != null)
+                {
+                    var craftsmen = data.GetTypeCount(PopType.Craftsmen);
+                    return town.IsCastle ? (int)(craftsmen * 2f) : (int)(craftsmen / 2f);
+                }
             }
 
             return base.GetBoostCost(town);
@@ -128,22 +130,15 @@ namespace BannerKings.Models.Vanilla
 
         public override int GetBoostAmount(Town town)
         {
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                var craftsmen = data.GetTypeCount(PopType.Craftsmen);
-                var slaves = data.GetTypeCount(PopType.Slaves);
-
-                if (slaves <= 0)
+                if (data != null)
                 {
-                    slaves = 1;
+                    var craftsmen = data.GetTypeCount(PopType.Craftsmen);
+                    var result = (int)(craftsmen * 0.3f * CRAFTSMEN_CONSTRUCTION);
+                    return MBMath.ClampInt(result, 0, 100);
                 }
-
-                var proportion = craftsmen / (float) slaves;
-                var finalProportion = Math.Min(proportion, town.IsCastle ? 0.4f : 0.1f);
-                var result = (int) (GetWorkforce(town.Settlement) * (finalProportion * 8f));
-                return MBMath.ClampInt(result, 0, 100);
             }
 
             return base.GetBoostAmount(town);
