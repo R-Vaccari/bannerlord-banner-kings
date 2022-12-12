@@ -55,4 +55,8 @@
 		<PackageReference Include="Newtonsoft.Json" Version="11.0.2" PrivateAssets="all" IncludeAssets="compile" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Behaviours\Diplomacy\Factions\" />
+	</ItemGroup>
+
 </Project>
