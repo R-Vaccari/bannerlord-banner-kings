@@ -534,6 +534,11 @@ namespace BannerKings.Behaviours
                 value = true;
             }
 
+            if (party.MobileParty.PartyComponent is not PopulationPartyComponent)
+            {
+                value = false;
+            }
+
             return value;
         }
 
