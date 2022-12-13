@@ -122,6 +122,7 @@ namespace BannerKings.Behaviours
                             {
                                 village.ChangeGold(-price);
                                 town.ChangeGold(price);
+                                town.Owner.ItemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -1);
                             }
                         }
                     }

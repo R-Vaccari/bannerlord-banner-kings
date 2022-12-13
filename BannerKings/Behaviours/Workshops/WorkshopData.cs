@@ -49,6 +49,7 @@ namespace BannerKings.Behaviours.Workshops
                         {
                             Workshop.ChangeGold(-price);
                             town.ChangeGold(price);
+                            town.Owner.ItemRoster.AddToCounts(input, -1);
                             Inventory.AddToCounts(input, 1);
                         }
                     }
