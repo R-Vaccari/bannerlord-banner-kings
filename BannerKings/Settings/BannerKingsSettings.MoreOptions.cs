@@ -19,7 +19,7 @@ namespace BannerKings.Settings
         public float SmithingGoldCostPerHour { get; set; } = 50f;
 
         [SettingPropertyGroup("Smithing")]
-        [SettingPropertyFloatingInteger("Hour per modifier", 0f, 5f, "Modifiers how long it takes to craft per stamina used. Lower is faster. Default 1")]
+        [SettingPropertyFloatingInteger("Hour per modifier", 0f, 5f, HintText = "Modifiers how long it takes to craft per stamina used. Lower is faster. Default 1", Order = 2)]
         public float SmithingStaminaPerHourModifier { get; set; } = 1f;
     }
 }
