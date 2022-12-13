@@ -230,7 +230,7 @@ namespace BannerKings.Behaviours
                         element.WoundedNumber);
                 }
 
-                foreach (var element in party.MemberRoster.GetTroopRoster())
+                foreach (var element in party.PrisonRoster.GetTroopRoster())
                 {
                     bool hero = element.Character.IsHero;
                     if (!hero)
