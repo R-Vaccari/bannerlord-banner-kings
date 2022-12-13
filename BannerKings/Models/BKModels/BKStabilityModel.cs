@@ -352,29 +352,17 @@ namespace BannerKings.Models.BKModels
         {
             var result = new ExplainedNumber(0f, true);
             result.LimitMin(0f);
-
             var leader = clan.Leader;
-            foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
+            var list = BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(clan);
+            foreach (var vassal in list)
             {
-                if (title.vassals == null || title.vassals.Count == 0)
+                if (vassal.Clan == leader.Clan)
                 {
-                    continue;
+                    result.Add(0.5f, vassal.Name);
                 }
-
-                foreach (var deJure in title.vassals.Select(vassal => vassal.deJure).Where(deJure => deJure != null && deJure != leader))
+                else
                 {
-                    if (deJure.Clan == leader.Clan)
-                    {
-                        result.Add(0.5f, deJure.Name);
-                    }
-                    else
-                    {
-                        var suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(deJure);
-                        if (suzerain != null && suzerain.deJure == leader)
-                        {
-                            result.Add(1f, deJure.Name);
-                        }
-                    }
+                    result.Add(1f, vassal.Name);
                 }
             }
 
