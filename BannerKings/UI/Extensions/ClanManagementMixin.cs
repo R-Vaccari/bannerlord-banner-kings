@@ -13,7 +13,7 @@ namespace BannerKings.UI.Extensions
     {
         //private BasicTooltipViewModel pietyHint;
         private readonly ClanManagementVM clanManagement;
-        private bool courtSelected, courtEnabled, financesVisible;
+        private bool courtSelected, courtEnabled, demesneSelected, demesneEnabled, financesVisible;
         private CourtVM courtVM;
 
         public ClanManagementMixin(ClanManagementVM vm) : base(vm)
@@ -31,6 +31,7 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty] public string CourtText => new TextObject("{=2QGyA46m}Court").ToString();
+        [DataSourceProperty] public string DemesneText => new TextObject("{=6QMDGRSt}Demesne").ToString();
 
         [DataSourceProperty]
         public bool FinancesVisible
@@ -41,6 +42,36 @@ namespace BannerKings.UI.Extensions
                 if (value != financesVisible)
                 {
                     financesVisible = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+
+        [DataSourceProperty]
+        public bool DemesneEnabled
+        {
+            get => demesneEnabled;
+            set
+            {
+                if (value != demesneEnabled)
+                {
+                    demesneEnabled = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool DemesneSelected
+        {
+            get => demesneSelected;
+            set
+            {
+                if (value != demesneSelected)
+                {
+                    demesneSelected = value;
+                    FinancesVisible = !value;
                     ViewModel!.OnPropertyChangedWithValue(value);
                 }
             }
@@ -112,8 +143,29 @@ namespace BannerKings.UI.Extensions
             clanManagement.IsPartiesSelected = false;
             clanManagement.IsFiefsSelected = false;
             clanManagement.IsIncomeSelected = false;
+
+            DemesneSelected = false;
+
             Court.IsSelected = true;
             CourtSelected = true;
+        }
+
+        [DataSourceMethod]
+        public void SelectDemesne()
+        {
+            clanManagement.ClanMembers.IsSelected = false;
+            clanManagement.ClanParties.IsSelected = false;
+            clanManagement.ClanFiefs.IsSelected = false;
+            clanManagement.ClanIncome.IsSelected = false;
+
+            clanManagement.IsMembersSelected = false;
+            clanManagement.IsPartiesSelected = false;
+            clanManagement.IsFiefsSelected = false;
+            clanManagement.IsIncomeSelected = false;
+            Court.IsSelected = false;
+            CourtSelected = false;
+
+            DemesneSelected = true;
         }
     }
 }
