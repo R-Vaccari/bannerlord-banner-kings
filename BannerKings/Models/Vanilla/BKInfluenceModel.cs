@@ -1,5 +1,6 @@
 using System;
 using BannerKings.Behaviours;
+using BannerKings.Extensions;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
@@ -8,6 +9,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -118,28 +120,22 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
 
+                var settlementResult = CalculateSettlementInfluence(settlement, data, includeDescriptions);
+                if (settlement.IsVillage)
+                {
+                    var owner = settlement.Village.GetActualOwner();
+                    if (!owner.IsClanLeader() && owner.MapFaction == settlement.MapFaction)
+                    {
+                        BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(owner, settlementResult.ResultNumber * 0.1f);
+                        continue;
+                    }
+                }
+
                 generalSupport += data.NotableSupport.ResultNumber - 0.5f;
                 generalAutonomy += -0.5f * data.Autonomy;
                 i++;
 
-                var settlementResult = CalculateSettlementInfluence(settlement, data, includeDescriptions);
                 baseResult.Add(settlementResult.ResultNumber, settlement.Name);
-                if (!settlement.IsVillage)
-                {
-                    continue;
-                }
-
-                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
-                if (title == null || title.deJure == null)
-                {
-                    continue;
-                }
-
-                var deJureClan = title.deJure.Clan;
-                if (title.deJure != deJureClan.Leader && settlement.MapFaction == deJureClan.MapFaction && !includeDescriptions)
-                {
-                    BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(title.deJure, settlementResult.ResultNumber * 0.1f);
-                }
             }
 
             var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
@@ -184,6 +180,8 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber CalculateSettlementInfluence(Settlement settlement, PopulationData data, bool includeDescriptions = false)
         {
             var settlementResult = new ExplainedNumber(0f, true);
+            settlementResult.LimitMin(0f);
+
             float nobles = data.GetTypeCount(PopType.Nobles);
             settlementResult.Add(MBMath.ClampFloat(GetNoblesInfluence(data, nobles), 0f, 20f), new TextObject($"{{=!}}Nobles influence from {settlement.Name}"));
 
@@ -211,7 +209,7 @@ namespace BannerKings.Models.Vanilla
                 foreach (var estate in data.EstateData.Estates)
                 {
                     float proportion = estate.Acreage/ data.LandData.Acreage;
-                    float estateResult = settlementResult.ResultNumber * proportion;
+                    float estateResult = MathF.Clamp(settlementResult.ResultNumber * proportion, 0f, settlementResult.ResultNumber * 0.2f);
                     settlementResult.Add(-estateResult, estate.Name);
                     if (!includeDescriptions && estate.Owner != null && estate.Owner.IsNotable)
                     {
@@ -219,15 +217,6 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
             }
-
-            if (!BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Nobles, true))
-            {
-                return settlementResult;
-            }
-
-            var result = settlementResult.ResultNumber;
-            float extra = BannerKingsConfig.Instance.PopulationManager.GetPopCountOverLimit(settlement, PopType.Nobles);
-            settlementResult.Add(MBMath.ClampFloat(extra * -0.01f, result * -0.5f, -0.1f), new TextObject($"{{=!}}Excess noble population at {settlement.Name}"));
 
             return settlementResult;
         }
