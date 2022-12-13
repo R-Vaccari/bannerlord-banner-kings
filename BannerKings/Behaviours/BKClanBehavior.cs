@@ -6,6 +6,7 @@ using BannerKings.Managers.Court;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Settings;
+using BannerKings.UI.Court;
 using HarmonyLib;
 using Helpers;
 using SandBox.CampaignBehaviors;
@@ -285,6 +286,39 @@ namespace BannerKings.Behaviours
             if (councillours != 0)
             {
                 clan.Leader.AddSkillXp(BKSkills.Instance.Lordship, councillours * 2f);
+            }
+
+            if (!clan.IsUnderMercenaryService && clan.Kingdom != null)
+            {
+                var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+                if (council.Peerage == null || !council.Peerage.CanVote)
+                {
+                    council.SetPeerage(new Peerage(new TextObject("{=rmxeMFzz}Lesser Peerage"),
+                        true,
+                        false,
+                        false,
+                        false,
+                        true,
+                        true));
+
+                    if (clan == Clan.PlayerClan)
+                    {
+                        var peerage = council.Peerage;
+                        InformationManager.ShowInquiry(new InquiryData(
+                            peerage.Name.ToString(),
+                            new TextObject("{=dVTqLz5i}As part of joinning a realm, the {CLAN} is receiving {PEERAGE}. {TEXT}")
+                            .SetTextVariable("CLAN", Clan.PlayerClan.Name)
+                            .SetTextVariable("PEERAGE", peerage.Name)
+                            .SetTextVariable("TEXT", peerage.PeerageGrantedText())
+                            .ToString(),
+                            true,
+                            false,
+                            GameTexts.FindText("str_ok").ToString(),
+                            String.Empty,
+                            null,
+                            null));
+                    }
+                }
             }
 
             if (clan == Clan.PlayerClan || clan.IsUnderMercenaryService || clan.IsMinorFaction || clan.IsBanditFaction)
