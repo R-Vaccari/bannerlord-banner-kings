@@ -706,13 +706,5 @@ namespace BannerKings.Behaviours
 
             }
         }
-
-        [HarmonyPatch(typeof(DefaultBuildingTypes), "InitializeAll")]
-        internal class InitializeBuildingsPatch
-        {
-            private static void Postfix()
-            {
-            }
-        }
     }
 }
