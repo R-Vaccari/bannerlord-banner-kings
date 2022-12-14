@@ -17,6 +17,7 @@ using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.Library;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations;
 
 namespace BannerKings.Patches
 {
@@ -340,6 +341,11 @@ namespace BannerKings.Patches
                     float prosperityFactor = town.Prosperity / 10000f;
                     float craftsmenFactor = data.GetTypeCount(PopType.Craftsmen) / 50f;
                     count = (int)MathF.Max(1f, count + ((craftsmenFactor / outputItem.ItemValue) * prosperityFactor));
+                }
+                else if (workshop.WorkshopType.StringId == "mines")
+                {
+                    MineralData mineralData = data.MineralData;
+                    outputItem = new EquipmentElement(mineralData.GetRandomItem());
                 }
 
                 var result = BannerKingsConfig.Instance.WorkshopModel.GetProductionQuality(workshop).ResultNumber;
