@@ -365,7 +365,8 @@ namespace BannerKings.Behaviours
             }
 
             var villages = settlement.BoundVillages;
-            return villages is {Count: > 0} && BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Slaves);
+            return villages is {Count: > 0} && BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement) != null &&
+                BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Slaves);
         }
 
         private Settlement GetTownToTravel(Settlement origin)
