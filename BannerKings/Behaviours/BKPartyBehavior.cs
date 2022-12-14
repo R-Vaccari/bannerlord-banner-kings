@@ -432,7 +432,7 @@ namespace BannerKings.Behaviours
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
             AddDialog(campaignGameStarter);
-            WipeTraders();
+            //WipeTraders();
         }
 
         private void WipeTraders()
