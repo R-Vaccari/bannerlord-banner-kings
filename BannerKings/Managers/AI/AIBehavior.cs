@@ -261,7 +261,7 @@ namespace BannerKings.Managers.AI
                 }
                 else if (first == DefaultSkills.Roguery || second == DefaultSkills.Roguery)
                 {
-                    if (hero.Clan is {IsMinorFaction: true})
+                    if (hero.IsLord && hero.Clan.IsUnderMercenaryService)
                     {
                         tuple.Item2 += mercenaryWeight;
                     }
@@ -446,7 +446,7 @@ namespace BannerKings.Managers.AI
         {
             var tax = (BKTaxPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tax");
             var taxType = tax.Policy;
-            if ((value == 1 && taxType != TaxType.High) || (value == -1 && taxType != TaxType.Low))
+            if ((value == 1 && taxType != TaxType.Low) || (value == -1 && taxType != TaxType.High))
             {
                 BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(settlement,
                     new BKTaxPolicy(taxType + value, settlement));
