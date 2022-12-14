@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
@@ -33,6 +34,28 @@ namespace BannerKings.Behaviours.Workshops
                 inventories = new Dictionary<Workshop, WorkshopData>();
             }
         }
+
+        /*private void OnGameLoaded(CampaignGameStarter starter)
+        {
+            foreach (Town town in Town.AllTowns)
+            {
+                if (town.Workshops.Count() == 4)
+                {
+                    Workshop[] oldWorkshops = new Workshop[4];
+                    for (int i = 0; i < town.Workshops.Count(); i++)
+                    {
+                        Workshop workshop = town.Workshops[i];
+                        oldWorkshops[i] = workshop;
+                    }
+
+                    town.InitializeWorkshops(6);
+                    for (int i = 0; i < oldWorkshops.Count(); i++)
+                    {
+                        town.Workshops[i] = oldWorkshops[i];
+                    }
+                }
+            }
+        }*/
 
         private void OnTownDailyTick(Town town)
         {
