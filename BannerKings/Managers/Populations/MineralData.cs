@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers.Items;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -57,6 +58,18 @@ namespace BannerKings.Managers.Populations
             return result;
         }
 
+        public ItemObject GetRandomItem()
+        {
+            foreach (var pair in Composition)
+            {
+                if (MBRandom.RandomFloat <= pair.Value)
+                {
+                    return GetItem(pair.Key);
+                }
+            }
+
+            return GetItem(Composition.First().Key);
+        }
 
         private void Init()
         {
@@ -176,7 +189,6 @@ namespace BannerKings.Managers.Populations
 
             return MineralType.NONE;
         }
-
 
         internal override void Update(PopulationData data)
         {

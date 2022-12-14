@@ -55,7 +55,6 @@ namespace BannerKings.UI.Extensions
     [PrefabExtension("KingdomManagement", "descendant::KingdomTabControlListPanel", "KingdomManagement")]
     internal class KingdomManagementAttribute : PrefabExtensionSetAttributePatch
     {
-
         public override List<Attribute> Attributes => new()
         {
             new Attribute("WidthSizePolicy", "StretchToParent"),
@@ -67,7 +66,6 @@ namespace BannerKings.UI.Extensions
     [PrefabExtension("KingdomManagement", "descendant::ButtonWidget[@Id='ClanTabButton']", "KingdomManagement")]
     internal class KingdomManagementClanAttribute : PrefabExtensionSetAttributePatch
     {
-
         public override List<Attribute> Attributes => new()
         {
             new Attribute("WidthSizePolicy", "StretchToParent")
@@ -77,7 +75,6 @@ namespace BannerKings.UI.Extensions
     [PrefabExtension("KingdomManagement", "descendant::ButtonWidget[@Id='FiefsTabButton']", "KingdomManagement")]
     internal class KingdomManagementFiefsAttribute : PrefabExtensionSetAttributePatch
     {
-
         public override List<Attribute> Attributes => new()
         {
             new Attribute("WidthSizePolicy", "StretchToParent")
@@ -87,7 +84,6 @@ namespace BannerKings.UI.Extensions
     [PrefabExtension("KingdomManagement", "descendant::ButtonWidget[@Id='PoliciesTabButton']", "KingdomManagement")]
     internal class KingdomManagementPoliciesAttribute : PrefabExtensionSetAttributePatch
     {
-
         public override List<Attribute> Attributes => new()
         {
             new Attribute("WidthSizePolicy", "StretchToParent")
@@ -97,7 +93,6 @@ namespace BannerKings.UI.Extensions
     [PrefabExtension("KingdomManagement", "descendant::ButtonWidget[@Id='ArmiesTabButton']", "KingdomManagement")]
     internal class KingdomManagementArmiesAttribute : PrefabExtensionSetAttributePatch
     {
-
         public override List<Attribute> Attributes => new()
         {
             new Attribute("WidthSizePolicy", "StretchToParent")
@@ -107,7 +102,6 @@ namespace BannerKings.UI.Extensions
     [PrefabExtension("KingdomManagement", "descendant::ButtonWidget[@Id='DiplomacyTabButton']", "KingdomManagement")]
     internal class KingdomManagementDiplomacyAttribute : PrefabExtensionSetAttributePatch
     {
-
         public override List<Attribute> Attributes => new()
         {
             new Attribute("WidthSizePolicy", "StretchToParent")

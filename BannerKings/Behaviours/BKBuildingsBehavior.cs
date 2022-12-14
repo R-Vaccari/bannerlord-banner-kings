@@ -122,6 +122,7 @@ namespace BannerKings.Behaviours
                             {
                                 village.ChangeGold(-price);
                                 town.ChangeGold(price);
+                                town.Owner.ItemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -1);
                             }
                         }
                     }
@@ -183,10 +184,8 @@ namespace BannerKings.Behaviours
             }
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-            if ((building.CurrentLevel > 0) && data.MineralData != null)
+            if ((building.CurrentLevel > 0) && data != null && data.MineralData != null)
             {
-
-
                 if (miningRevenues.ContainsKey(town))
                 {
                     miningRevenues[town] = 0;

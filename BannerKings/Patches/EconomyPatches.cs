@@ -17,6 +17,7 @@ using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.Library;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations;
 
 namespace BannerKings.Patches
 {
@@ -95,6 +96,12 @@ namespace BannerKings.Patches
             [HarmonyPatch("MeatCount", MethodType.Getter)]
             private static void MeatCountPostfix(HorseComponent __instance, ref int __result)
             {
+                if (__instance.Monster != null && __instance.Monster.StringId == "chicken" ||
+                    __instance.Monster.StringId == "goose")
+                {
+                    __result = 0;
+                }
+
                 if (__instance.Item != null && __instance.Item.Weight < 10)
                 {
                     __result = 0;
@@ -105,6 +112,12 @@ namespace BannerKings.Patches
             [HarmonyPatch("HideCount", MethodType.Getter)]
             private static void HideCountPostfix(HorseComponent __instance, ref int __result)
             {
+                if (__instance.Monster != null && __instance.Monster.StringId == "chicken" ||
+                   __instance.Monster.StringId == "goose")
+                {
+                    __result = 0;
+                }
+
                 if (__instance.Item != null && __instance.Item.Weight < 10)
                 {
                     __result = 0;
@@ -274,10 +287,24 @@ namespace BannerKings.Patches
             }
         }
 
-        [HarmonyPatch(typeof(WorkshopsCampaignBehavior), "ProduceOutput")]
+        [HarmonyPatch(typeof(WorkshopsCampaignBehavior))]
         internal class WorkshopProduceOutputPatch
         {
-            private static bool Prefix(EquipmentElement outputItem, Town town, Workshop workshop, int count,
+            [HarmonyPrefix]
+            [HarmonyPatch("InitializeWorkshops", MethodType.Normal)]
+            private static bool InitializeWorkshopsPrefix()
+            {
+                foreach (Town town in Town.AllTowns)
+                {
+                    town.InitializeWorkshops(6);
+                }
+
+                return false;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("ProduceOutput", MethodType.Normal)]
+            private static bool ProduceOutputPrefix(EquipmentElement outputItem, Town town, Workshop workshop, int count,
                 bool doNotEffectCapital)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
@@ -314,6 +341,13 @@ namespace BannerKings.Patches
                     float prosperityFactor = town.Prosperity / 10000f;
                     float craftsmenFactor = data.GetTypeCount(PopType.Craftsmen) / 50f;
                     count = (int)MathF.Max(1f, count + ((craftsmenFactor / outputItem.ItemValue) * prosperityFactor));
+                }
+                else if (workshop.WorkshopType.StringId == "mines")
+                {
+                    MineralData mineralData = data.MineralData;
+                    outputItem = new EquipmentElement(mineralData.GetRandomItem());
+                    if (mineralData.Richness == MineralRichness.RICH) count += 2;
+                    else if (mineralData.Richness == MineralRichness.ADEQUATE) count += 1;
                 }
 
                 var result = BannerKingsConfig.Instance.WorkshopModel.GetProductionQuality(workshop).ResultNumber;
