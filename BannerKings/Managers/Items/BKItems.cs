@@ -83,6 +83,7 @@ namespace BannerKings.Managers.Items
                 yield return Gems;
                 yield return Mead;
                 yield return Garum;
+                yield return Orange;
             }
         }
 
