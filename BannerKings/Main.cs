@@ -4,7 +4,6 @@ using BannerKings.Behaviours.Marriage;
 using BannerKings.Behaviours.Workshops;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Innovations;
-using BannerKings.Managers.Items;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Models.Vanilla;
@@ -108,9 +107,7 @@ namespace BannerKings
 
             BKAttributes.Instance.Initialize();
             BKSkills.Instance.Initialize();
-            BKPerks.Instance.Initialize();
-            BKItemCategories.Instance.Initialize();
-            BKItems.Instance.Initialize();
+            BKPerks.Instance.Initialize();   
             BKPolicies.Instance.Initialize();
             DefaultInnovations.Instance.Initialize();
             BKBuildings.Instance.Initialize();
