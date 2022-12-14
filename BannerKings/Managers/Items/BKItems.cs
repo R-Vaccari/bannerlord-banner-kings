@@ -146,12 +146,12 @@ namespace BannerKings.Managers.Items
             Mead = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("mead"));
             InitializeTradeGood(Mead,
                 new TextObject("{=!}Mead{@Plural}barrels of mead{\\@}"), "bd_barrel_a",
-                DefaultItemCategories.Beer, 120, 10f, ItemObject.ItemTypeEnum.Goods);
+                 BKItemCategories.Instance.Mead, 120, 10f, ItemObject.ItemTypeEnum.Goods);
 
             Garum = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("garum"));
             InitializeTradeGood(Garum,
                 new TextObject("{=!}Garum{@Plural}amphorae of garum{\\@}"), "amphora_slim",
-                DefaultItemCategories.Olives, 35, 10f, ItemObject.ItemTypeEnum.Goods);
+                BKItemCategories.Instance.Garum, 35, 10f, ItemObject.ItemTypeEnum.Goods);
 
 
             BookHeartsDesire = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_hearts_desire"));
