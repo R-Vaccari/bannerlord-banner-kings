@@ -346,6 +346,8 @@ namespace BannerKings.Patches
                 {
                     MineralData mineralData = data.MineralData;
                     outputItem = new EquipmentElement(mineralData.GetRandomItem());
+                    if (mineralData.Richness == MineralRichness.RICH) count += 2;
+                    else if (mineralData.Richness == MineralRichness.ADEQUATE) count += 1;
                 }
 
                 var result = BannerKingsConfig.Instance.WorkshopModel.GetProductionQuality(workshop).ResultNumber;
