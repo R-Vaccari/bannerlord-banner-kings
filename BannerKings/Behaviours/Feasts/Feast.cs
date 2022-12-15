@@ -139,6 +139,7 @@ namespace BannerKings.Behaviours.Feasts
 
         private void Automanage(float food, float variety, float alcohol)
         {
+            food = food * 1.5f;
             int boughtFood = 0;
             int boughAlcohol = 0;
             //HashSet<ItemObject> items = new HashSet<ItemObject>();
@@ -148,7 +149,7 @@ namespace BannerKings.Behaviours.Feasts
                 bool isAlcohol = item.StringId == "wine" || item.StringId == "beer";
                 if (item.IsFood || isAlcohol)
                 {
-                    int count = MBRandom.RandomInt(1, MathF.Min(element.Amount, (int)food));
+                    int count = MathF.Min(element.Amount, (int)food - boughtFood);
                     int cost = (int)(Town.GetItemPrice(element.EquipmentElement) * (float)count);
 
                     if (!isAlcohol && boughtFood >= food) continue;
