@@ -182,6 +182,7 @@ namespace BannerKings.Managers.Populations.Estates
             else
             {
                 Manpowers[type] += count;
+                Manpowers[type] = MathF.Max(Manpowers[type], 0f);
             }
         }
 
@@ -196,6 +197,18 @@ namespace BannerKings.Managers.Populations.Estates
             {
                 return;
             }
+
+            float maxFarmland = data.LandData.Farmland * 0.2f;
+            Farmland = MathF.Clamp(Farmland, 0f, maxFarmland);
+
+            float maxPastureland= data.LandData.Pastureland * 0.2f;
+            Pastureland = MathF.Clamp(Pastureland, 0f, maxPastureland);
+
+            float maxWoodland = data.LandData.Woodland * 0.2f;
+            Woodland = MathF.Clamp(Woodland, 0f, maxWoodland);
+
+            Serfs = (int)MathF.Clamp(Serfs, 0f, data.GetTypeCount(PopType.Serfs) * 0.2f);
+            Slaves = (int)MathF.Clamp(Slaves, 0f, data.GetTypeCount(PopType.Slaves) * 0.2f);
 
             BannerKingsConfig.Instance.PopulationManager.AddEstate(this);
             if (Task == EstateTask.Land_Expansion)
@@ -230,6 +243,7 @@ namespace BannerKings.Managers.Populations.Estates
 
         public void AddPopulation(PopType type, int toAdd)
         {
+            toAdd = (int)MathF.Clamp(toAdd, -20f, 20f);
             if (type == PopType.Serfs)
             {
                 Serfs += toAdd;
@@ -257,7 +271,6 @@ namespace BannerKings.Managers.Populations.Estates
 
             return result;
         }
-
 
         public enum EstateDuty
         {

@@ -54,6 +54,8 @@ namespace BannerKings.Managers.Items
         public ItemObject GoldIngot { get; private set; }
 
         public ItemObject Gems { get; private set; }
+        public ItemObject Mead { get; private set; }
+        public ItemObject Garum { get; private set; }
 
         public override IEnumerable<ItemObject> All
         {
@@ -79,6 +81,9 @@ namespace BannerKings.Managers.Items
                 yield return GoldOre;
                 yield return GoldIngot;
                 yield return Gems;
+                yield return Mead;
+                yield return Garum;
+                yield return Orange;
             }
         }
 
@@ -124,7 +129,6 @@ namespace BannerKings.Managers.Items
                 new TextObject("{=D3mU8bc3}Marble{@Plural}stacks of marble bricks{\\@}"), "marblestone",
                 BKItemCategories.Instance.Marble, 150, 10f, ItemObject.ItemTypeEnum.Goods);
 
-
             GoldOre = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("gold_ore"));
             InitializeTradeGood(GoldOre,
                 new TextObject("{=E6sgXO5n}Gold Ore{@Plural}sacks of gold ore{\\@}"), "goldore",
@@ -140,7 +144,15 @@ namespace BannerKings.Managers.Items
                 new TextObject("{=SajCUfsW}Gems{@Plural}pouches of gems{\\@}"), "pouchofgems",
                 BKItemCategories.Instance.Gems, 50000, 1f, ItemObject.ItemTypeEnum.Goods);
 
+            Mead = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("mead"));
+            InitializeTradeGood(Mead,
+                new TextObject("{=!}Mead{@Plural}barrels of mead{\\@}"), "bd_barrel_a",
+                 BKItemCategories.Instance.Mead, 120, 10f, ItemObject.ItemTypeEnum.Goods);
 
+            Garum = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("garum"));
+            InitializeTradeGood(Garum,
+                new TextObject("{=!}Garum{@Plural}amphorae of garum{\\@}"), "amphora_slim",
+                BKItemCategories.Instance.Garum, 35, 10f, ItemObject.ItemTypeEnum.Goods);
 
 
             BookHeartsDesire = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_hearts_desire"));

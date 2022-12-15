@@ -1,4 +1,5 @@
 using BannerKings.Behaviours.Marriage;
+using BannerKings.Managers.Goals.Decisions;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
@@ -16,6 +17,7 @@ namespace BannerKings.Behaviours.Feasts
 
         public override void RegisterEvents()
         {
+            CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnDailyTickClan);
             CampaignEvents.DailyTickTownEvent.AddNonSerializedListener(this, OnDailyTickTown);
             CampaignEvents.HourlyTickSettlementEvent.AddNonSerializedListener(this, OnSettlementHourlyTick);
             CampaignEvents.OnMissionStartedEvent.AddNonSerializedListener(this, OnMissionStarted);
@@ -45,6 +47,7 @@ namespace BannerKings.Behaviours.Feasts
                 guests,
                 town,
                 CampaignTime.WeeksFromNow(1f),
+                town.OwnerClan != Clan.PlayerClan,
                 marriage);
 
             if (town.MapFaction == Hero.MainHero.MapFaction)
@@ -104,7 +107,7 @@ namespace BannerKings.Behaviours.Feasts
 
         private void HourlyTickParty(MobileParty party)
         {
-            if (!party.IsLordParty || party.LeaderHero == null || party.LeaderHero.Clan == Clan.PlayerClan)
+            if (!party.IsLordParty || party.LeaderHero == null || party.LeaderHero == Hero.MainHero)
             {
                 return;
             }
@@ -123,7 +126,7 @@ namespace BannerKings.Behaviours.Feasts
 
             foreach (var town in kingdom.Fiefs)
             {
-                if (feasts.ContainsKey(town) && feasts[town].Guests.Contains(clan))
+                if (feasts.ContainsKey(town) && (feasts[town].Guests.Contains(clan) || feasts[town].Host.Clan == clan))
                 {
                     if (party.CurrentSettlement != town.Settlement)
                     {
@@ -179,6 +182,15 @@ namespace BannerKings.Behaviours.Feasts
             feast.Tick(false);
         }
 
-        private bool IsFeastTown(Settlement settlement) => settlement.Town != null && feasts.ContainsKey(settlement.Town);
+        private void OnDailyTickClan(Clan clan)
+        {
+            if (clan.Kingdom != null && clan != Clan.PlayerClan)
+            {
+                var decision = new OrganizeFeastDecision(clan.Leader);
+                decision.DoAiDecision();
+            }
+        }
+
+        public bool IsFeastTown(Settlement settlement) => settlement.Town != null && feasts.ContainsKey(settlement.Town);
     }
 }

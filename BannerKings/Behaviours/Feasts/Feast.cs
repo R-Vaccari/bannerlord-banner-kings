@@ -14,13 +14,14 @@ namespace BannerKings.Behaviours.Feasts
 {
     public class Feast
     {
-        public Feast(Hero host, List<Clan> guests, Town town, CampaignTime endDate, MarriageContract marriageContract = null)
+        public Feast(Hero host, List<Clan> guests, Town town, CampaignTime endDate, bool autoManaged, MarriageContract marriageContract = null)
         {
             Host = host;
             Guests = guests;
             Town = town;
             EndDate = endDate;
             MarriageContract = marriageContract;
+            AutoManaged = autoManaged;
         }
 
         public static float FoodConsumptionRatio => 0.5f;
@@ -42,6 +43,7 @@ namespace BannerKings.Behaviours.Feasts
         [SaveableProperty(11)] private float HostPresence { get; set; }
 
         [SaveableProperty(12)] public MarriageContract MarriageContract { get; private set; }
+        [SaveableProperty(13)] public bool AutoManaged { get; private set; }
 
         public void Tick(bool hourly = true)
         {
@@ -71,6 +73,11 @@ namespace BannerKings.Behaviours.Feasts
                 float desiredVariety = Items.AllTradeGoods.ToList().FindAll(x => x.IsFood).Count * 0.7f;
                 float desiredFood = heroes * FoodConsumptionRatio;
                 float desiredAlcohol = heroes * AlcoholConsumptionRatio;
+
+                if (AutoManaged)
+                {
+                    Automanage(desiredFood, desiredVariety, desiredAlcohol);
+                }
 
                 float availableQuantity = 0f;
                 float availableAlcohol = 0f;
@@ -126,6 +133,33 @@ namespace BannerKings.Behaviours.Feasts
                     int amount = MBRandom.RandomInt(1, random.Amount);
                     alcoholToConsume -= amount;
                     stash.AddToCounts(random.EquipmentElement, -amount);
+                }
+            }
+        }
+
+        private void Automanage(float food, float variety, float alcohol)
+        {
+            food = food * 1.5f;
+            int boughtFood = 0;
+            int boughAlcohol = 0;
+            //HashSet<ItemObject> items = new HashSet<ItemObject>();
+            foreach (var element in Town.Owner.ItemRoster)
+            {
+                var item = element.EquipmentElement.Item;
+                bool isAlcohol = item.StringId == "wine" || item.StringId == "beer";
+                if (item.IsFood || isAlcohol)
+                {
+                    int count = MathF.Min(element.Amount, (int)food - boughtFood);
+                    int cost = (int)(Town.GetItemPrice(element.EquipmentElement) * (float)count);
+
+                    if (!isAlcohol && boughtFood >= food) continue;
+                    if (isAlcohol && boughAlcohol >= alcohol) continue;
+
+                    if (isAlcohol) boughAlcohol += count;
+                    else boughtFood += count;
+                    Host.ChangeHeroGold(-cost);
+                    Town.ChangeGold(cost);
+                    Town.Settlement.Stash.AddToCounts(element.EquipmentElement, count);
                 }
             }
         }

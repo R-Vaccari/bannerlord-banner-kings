@@ -365,7 +365,8 @@ namespace BannerKings.Behaviours
             }
 
             var villages = settlement.BoundVillages;
-            return villages is {Count: > 0} && BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Slaves);
+            return villages is {Count: > 0} && BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement) != null &&
+                BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Slaves);
         }
 
         private Settlement GetTownToTravel(Settlement origin)
@@ -432,7 +433,7 @@ namespace BannerKings.Behaviours
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
             AddDialog(campaignGameStarter);
-            WipeTraders();
+            //WipeTraders();
         }
 
         private void WipeTraders()
@@ -460,15 +461,15 @@ namespace BannerKings.Behaviours
         private void AddDialog(CampaignGameStarter starter)
         {
             starter.AddDialogLine("traveller_serf_party_start", "start", "traveller_party_greeting",
-                "M'lord! We are humble folk, travelling between towns, looking for work and trade.",
+                "{=!}{?PLAYER.GENDER}M'lady!{?}M'lord!{\\?} We are humble folk, travelling between towns, looking for work and trade.",
                 traveller_serf_start_on_condition, null);
 
             starter.AddDialogLine("traveller_craftsman_party_start", "start", "traveller_party_greeting",
-                "Good day to you. We are craftsmen travelling for business purposes.",
+                "{=!}Good day to you. We are craftsmen travelling for business purposes.",
                 traveller_craftsman_start_on_condition, null);
 
             starter.AddDialogLine("traveller_noble_party_start", "start", "traveller_party_greeting",
-                "Yes? Please do not interfere with our caravan.",
+                "{=!}Yes? Please do not interfere with our caravan.",
                 traveller_noble_start_on_condition, null);
 
 
@@ -482,11 +483,11 @@ namespace BannerKings.Behaviours
                 delegate { PlayerEncounter.LeaveEncounter = true; });
 
             starter.AddDialogLine("slavecaravan_friend_party_start", "start", "slavecaravan_party_greeting",
-                "My lord, we are taking these rabble somewhere they can be put to good use.",
+                "{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, we are taking these rabble somewhere they can be put to good use.",
                 slavecaravan_amicable_on_condition, null);
 
             starter.AddDialogLine("slavecaravan_neutral_party_start", "start", "slavecaravan_party_greeting",
-                "If you're not planning to join those vermin back there, move away![rf:idle_angry][ib:aggressive]",
+                "{=!}If you're not planning to join those vermin back there, move away![rf:idle_angry][ib:aggressive]",
                 slavecaravan_neutral_on_condition, null);
 
             starter.AddPlayerLine("slavecaravan_party_leave", "slavecaravan_party_greeting", "close_window",
@@ -499,11 +500,11 @@ namespace BannerKings.Behaviours
                 null);
 
             starter.AddDialogLine("slavecaravan_party_threat_response", "slavecaravan_threat", "close_window",
-                "One more for the mines! Lads, get the whip![rf:idle_angry][ib:aggressive]",
+                "{=!}One more for the mines! Lads, get the whip![rf:idle_angry][ib:aggressive]",
                 null, delegate { PlayerEncounter.Current.IsEnemy = true; });
 
             starter.AddDialogLine("raised_militia_party_start", "start", "raised_militia_greeting",
-                "M'lord! We are ready to serve you.",
+                "{=!}{?PLAYER.GENDER}M'lady!{?}M'lord!{\\?} We are ready to serve you.",
                 raised_militia_start_on_condition, null);
 
             starter.AddPlayerLine("raised_militia_party_follow", "raised_militia_greeting", "raised_militia_order",
@@ -517,7 +518,7 @@ namespace BannerKings.Behaviours
                 raised_militia_retreat_on_consequence);
 
             starter.AddDialogLine("raised_militia_order_response", "raised_militia_order", "close_window",
-                "Aye!",
+                "{=!}Aye!",
                 null, delegate { PlayerEncounter.LeaveEncounter = true; });
         }
 
@@ -532,6 +533,11 @@ namespace BannerKings.Behaviours
             if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
             {
                 value = true;
+            }
+
+            if (party.MobileParty.PartyComponent is not PopulationPartyComponent)
+            {
+                value = false;
             }
 
             return value;

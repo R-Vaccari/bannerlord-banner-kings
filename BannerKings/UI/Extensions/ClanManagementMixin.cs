@@ -47,7 +47,6 @@ namespace BannerKings.UI.Extensions
             }
         }
 
-
         [DataSourceProperty]
         public bool DemesneEnabled
         {

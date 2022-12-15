@@ -128,7 +128,14 @@ namespace BannerKings.Behaviours
 
         private void AddFood(MobileParty party, int limit)
         {
-            party.ItemRoster.Clear();
+            foreach (ItemRosterElement itemRosterElement in party.ItemRoster)
+            {
+                if (!itemRosterElement.EquipmentElement.IsQuestItem)
+                {
+                    party.ItemRoster.Remove(itemRosterElement);
+                }
+            }
+
             while (party.Food < limit)
             {
                 foreach (var itemObject in Items.All)
