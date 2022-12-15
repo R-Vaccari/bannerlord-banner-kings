@@ -184,8 +184,11 @@ namespace BannerKings.Behaviours.Feasts
 
         private void OnDailyTickClan(Clan clan)
         {
-            var decision = new OrganizeFeastDecision(clan.Leader);
-            decision.DoAiDecision();
+            if (clan.Kingdom != null && clan != Clan.PlayerClan)
+            {
+                var decision = new OrganizeFeastDecision(clan.Leader);
+                decision.DoAiDecision();
+            }
         }
 
         public bool IsFeastTown(Settlement settlement) => settlement.Town != null && feasts.ContainsKey(settlement.Town);

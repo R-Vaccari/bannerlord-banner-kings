@@ -50,6 +50,11 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(new TextObject("{=4Gqf2t8F}It has been less than a year since your last feast"));
             }
 
+            if (GetFulfiller().Clan.Fiefs.Count == 0)
+            {
+                failedReasons.Add(new TextObject("{=!}No adequate fief to make a feast"));
+            }
+
             /*
             if (Clan.PlayerClan.Influence < decision.GetProposalInfluenceCost())
             {
@@ -181,7 +186,7 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             var behavior = Campaign.Current.GetCampaignBehavior<BKFeastBehavior>();
-            foreach (var fief in fulfiller.Clan.Fiefs)
+            foreach (var fief in fulfiller.Clan.Kingdom.Fiefs)
             {
                 if (behavior.IsFeastTown(fief.Settlement))
                 {
@@ -202,6 +207,7 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             this.guests = guests;
+            feastPlace = fulfiller.Clan.Fiefs.GetRandomElement();
             ApplyGoal();
         }
     }
