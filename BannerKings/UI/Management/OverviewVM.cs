@@ -133,7 +133,7 @@ namespace BannerKings.UI.Management
 
             if (!settlement.IsVillage)
             {
-                var stability = BannerKingsConfig.Instance.StabilityModel.CalculateStabilityTarget(settlement);
+                var stability = BannerKingsConfig.Instance.StabilityModel.CalculateStabilityTarget(settlement, true);
                 StatsInfo.Add(new InformationElement("Stability:", $"{data.Stability:P}",
                     new TextObject("{=Uw3xBMKd}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
@@ -143,7 +143,7 @@ namespace BannerKings.UI.Management
                         .SetTextVariable("TARGET", FormatValue(stability.ResultNumber))
                         .ToString()));
 
-                var autonomy = BannerKingsConfig.Instance.StabilityModel.CalculateAutonomyTarget(settlement, data.Stability);
+                var autonomy = BannerKingsConfig.Instance.StabilityModel.CalculateAutonomyTarget(settlement, data.Stability, true);
                 StatsInfo.Add(new InformationElement("Autonomy:", $"{data.Autonomy:P}",
                     new TextObject("{=Uw3xBMKd}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
@@ -178,7 +178,7 @@ namespace BannerKings.UI.Management
                 $"{data.TotalPop:n0}",
                 new TextObject("{=zaCDpfP2}Number of people present in this settlement and surrounding regions.").ToString()));
 
-            var cap = BannerKingsConfig.Instance.GrowthModel.CalculateSettlementCap(settlement, data);
+            var cap = BannerKingsConfig.Instance.GrowthModel.CalculateSettlementCap(settlement, data, true);
             StatsInfo.Add(new InformationElement(new TextObject("{=OfNn72n9}Population Cap:").ToString(),
                 ((int)cap.ResultNumber).ToString(),
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")

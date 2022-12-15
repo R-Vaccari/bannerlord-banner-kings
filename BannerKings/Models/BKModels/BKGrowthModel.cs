@@ -63,9 +63,9 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateSettlementCap(Settlement settlement, PopulationData data)
+        public ExplainedNumber CalculateSettlementCap(Settlement settlement, PopulationData data, bool descriptions = false)
         {
-            var result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(0f, descriptions);
 
             if (settlement.IsVillage)
             {

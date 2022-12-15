@@ -98,9 +98,9 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateAutonomyTarget(Settlement settlement, float stability)
+        public ExplainedNumber CalculateAutonomyTarget(Settlement settlement, float stability, bool descriptions = false)
         {
-            var result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
             result.LimitMax(1f);
 
@@ -134,9 +134,9 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateStabilityTarget(Settlement settlement)
+        public ExplainedNumber CalculateStabilityTarget(Settlement settlement, bool descriptions = false)
         {
-            var result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
             result.LimitMax(1f);
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
