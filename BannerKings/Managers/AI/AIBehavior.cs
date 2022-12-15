@@ -164,124 +164,134 @@ namespace BannerKings.Managers.AI
                 return null;
             }
 
-            var candidates = new List<(Lifestyle, float)>();
-
-            var rogueWeight = hero.GetTraitLevel(DefaultTraits.RogueSkills) - hero.GetTraitLevel(DefaultTraits.Mercy) -
-                              hero.GetTraitLevel(DefaultTraits.Honor) + hero.GetTraitLevel(DefaultTraits.Thug) +
-                              hero.GetTraitLevel(DefaultTraits.Thief);
-
-            var politicianWeight =
-                hero.GetTraitLevel(DefaultTraits.Politician) + hero.GetTraitLevel(DefaultTraits.Commander);
-
-            var merchantWeight = hero.GetTraitLevel(DefaultTraits.Blacksmith) + hero.GetTraitLevel(DefaultTraits.Manager);
-
-            var siegeWeight = hero.GetTraitLevel(DefaultTraits.Siegecraft);
-
-            var healerWeight = hero.GetTraitLevel(DefaultTraits.Surgery);
-
-            var warriorWeight = hero.GetTraitLevel(DefaultTraits.ArcherFIghtingSkills) +
-                                hero.GetTraitLevel(DefaultTraits.BossFightingSkills) +
-                                hero.GetTraitLevel(DefaultTraits.CavalryFightingSkills) +
-                                hero.GetTraitLevel(DefaultTraits.HuscarlFightingSkills) +
-                                hero.GetTraitLevel(DefaultTraits.HopliteFightingSkills) +
-                                hero.GetTraitLevel(DefaultTraits.HorseArcherFightingSkills) +
-                                hero.GetTraitLevel(DefaultTraits.KnightFightingSkills) +
-                                hero.GetTraitLevel(DefaultTraits.PeltastFightingSkills) +
-                                hero.GetTraitLevel(DefaultTraits.Fighter);
-
-            var mercenaryWeight = hero.GetTraitLevel(DefaultTraits.RogueSkills) - hero.GetTraitLevel(DefaultTraits.Honor);
-
-            var occupation = hero.Occupation;
-            switch (occupation)
+            Lifestyle result = null;
+            ExceptionUtils.TryCatch(() =>
             {
-                case Occupation.Lord:
-                {
-                    politicianWeight += 2;
-                    warriorWeight += 3;
+                var candidates = new List<(Lifestyle, float)>();
 
-                    if (!hero.Clan.IsMinorFaction)
+                var rogueWeight = hero.GetTraitLevel(DefaultTraits.RogueSkills) - hero.GetTraitLevel(DefaultTraits.Mercy) -
+                                  hero.GetTraitLevel(DefaultTraits.Honor) + hero.GetTraitLevel(DefaultTraits.Thug) +
+                                  hero.GetTraitLevel(DefaultTraits.Thief);
+
+                var politicianWeight =
+                    hero.GetTraitLevel(DefaultTraits.Politician) + hero.GetTraitLevel(DefaultTraits.Commander);
+
+                var merchantWeight = hero.GetTraitLevel(DefaultTraits.Blacksmith) + hero.GetTraitLevel(DefaultTraits.Manager);
+
+                var siegeWeight = hero.GetTraitLevel(DefaultTraits.Siegecraft);
+
+                var healerWeight = hero.GetTraitLevel(DefaultTraits.Surgery);
+
+                var warriorWeight = hero.GetTraitLevel(DefaultTraits.ArcherFIghtingSkills) +
+                                    hero.GetTraitLevel(DefaultTraits.BossFightingSkills) +
+                                    hero.GetTraitLevel(DefaultTraits.CavalryFightingSkills) +
+                                    hero.GetTraitLevel(DefaultTraits.HuscarlFightingSkills) +
+                                    hero.GetTraitLevel(DefaultTraits.HopliteFightingSkills) +
+                                    hero.GetTraitLevel(DefaultTraits.HorseArcherFightingSkills) +
+                                    hero.GetTraitLevel(DefaultTraits.KnightFightingSkills) +
+                                    hero.GetTraitLevel(DefaultTraits.PeltastFightingSkills) +
+                                    hero.GetTraitLevel(DefaultTraits.Fighter);
+
+                var mercenaryWeight = hero.GetTraitLevel(DefaultTraits.RogueSkills) - hero.GetTraitLevel(DefaultTraits.Honor);
+
+                var occupation = hero.Occupation;
+                switch (occupation)
+                {
+                    case Occupation.Lord:
+                        {
+                            politicianWeight += 2;
+                            warriorWeight += 3;
+
+                            if (!hero.Clan.IsMinorFaction)
+                            {
+                                mercenaryWeight = 0;
+                            }
+                            else
+                            {
+                                mercenaryWeight += 2;
+                            }
+
+                            healerWeight -= 1;
+                            break;
+                        }
+                    case Occupation.Wanderer:
+                        warriorWeight += 4;
+                        mercenaryWeight += 1;
+                        break;
+                    default:
+                        {
+                            if (hero.IsNotable)
+                            {
+                                if (occupation == Occupation.GangLeader)
+                                {
+                                    rogueWeight += 2;
+                                }
+
+                                politicianWeight = 0;
+                                warriorWeight = 0;
+                                mercenaryWeight = 0;
+                            }
+
+                            break;
+                        }
+                }
+
+                foreach (var lf in DefaultLifestyles.Instance.All)
+                {
+                    if (!lf.CanLearn(hero))
                     {
-                        mercenaryWeight = 0;
+                        continue;
                     }
 
-                    healerWeight -= 1;
-                    break;
-                }
-                case Occupation.Wanderer:
-                    warriorWeight += 4;
-                    mercenaryWeight += 1;
-                    break;
-                default:
-                {
-                    if (hero.IsNotable)
+                    var first = lf.FirstSkill;
+                    var second = lf.SecondSkill;
+                    (Lifestyle, float) tuple = new(lf, 0f);
+
+                    if (first == DefaultSkills.Medicine || second == DefaultSkills.Medicine)
                     {
-                        if (occupation == Occupation.GangLeader)
+                        tuple.Item2 += healerWeight;
+                    }
+                    else if (first == DefaultSkills.Engineering || second == DefaultSkills.Engineering)
+                    {
+                        tuple.Item2 += siegeWeight;
+                    }
+                    else if (first == DefaultSkills.Trade || second == DefaultSkills.Trade)
+                    {
+                        tuple.Item2 += merchantWeight;
+                    }
+                    else if (first == DefaultSkills.Leadership || second == DefaultSkills.Leadership ||
+                             first == BKSkills.Instance.Lordship || second == BKSkills.Instance.Lordship)
+                    {
+                        tuple.Item2 += politicianWeight;
+                    }
+                    else if (first == DefaultSkills.Roguery || second == DefaultSkills.Roguery)
+                    {
+                        if (hero.IsLord && hero.Clan.IsUnderMercenaryService)
                         {
-                            rogueWeight += 2;
+                            tuple.Item2 += mercenaryWeight;
                         }
 
-                        mercenaryWeight += 4;
-
-                        politicianWeight = 0;
-                        warriorWeight = 0;
-                        mercenaryWeight = 0;
+                        tuple.Item2 += rogueWeight;
                     }
-
-                    break;
-                }
-            }
-
-            foreach (var lf in DefaultLifestyles.Instance.All)
-            {
-                if (!lf.CanLearn(hero))
-                {
-                    continue;
-                }
-
-                var first = lf.FirstSkill;
-                var second = lf.SecondSkill;
-                (Lifestyle, float) tuple = new(lf, 0f);
-
-                if (first == DefaultSkills.Medicine || second == DefaultSkills.Medicine)
-                {
-                    tuple.Item2 += healerWeight;
-                }
-                else if (first == DefaultSkills.Engineering || second == DefaultSkills.Engineering)
-                {
-                    tuple.Item2 += siegeWeight;
-                }
-                else if (first == DefaultSkills.Trade || second == DefaultSkills.Trade)
-                {
-                    tuple.Item2 += merchantWeight;
-                }
-                else if (first == DefaultSkills.Leadership || second == DefaultSkills.Leadership ||
-                         first == BKSkills.Instance.Lordship || second == BKSkills.Instance.Lordship)
-                {
-                    tuple.Item2 += politicianWeight;
-                }
-                else if (first == DefaultSkills.Roguery || second == DefaultSkills.Roguery)
-                {
-                    if (hero.IsLord && hero.Clan.IsUnderMercenaryService)
+                    else
                     {
-                        tuple.Item2 += mercenaryWeight;
+                        tuple.Item2 += warriorWeight;
                     }
 
-                    tuple.Item2 += rogueWeight;
-                }
-                else
-                {
-                    tuple.Item2 += warriorWeight;
-                }
+                    if (lf.Culture == hero.Culture && tuple.Item2 != 0f)
+                    {
+                        tuple.Item2 += 1f;
+                    }
 
-                if (lf.Culture == hero.Culture && tuple.Item2 != 0f)
-                {
-                    tuple.Item2 += 1f;
+                    candidates.Add(tuple);
                 }
 
-                candidates.Add(tuple);
-            }
+                result = MBRandom.ChooseWeighted(candidates);
+            },
+            GetType().Name,
+            false);
 
-            return MBRandom.ChooseWeighted(candidates);
+            return result;
         }
 
         public bool AcceptNotableAid(Clan clan, PopulationData data)
