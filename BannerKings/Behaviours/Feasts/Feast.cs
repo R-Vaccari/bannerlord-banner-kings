@@ -139,7 +139,28 @@ namespace BannerKings.Behaviours.Feasts
 
         private void Automanage(float food, float variety, float alcohol)
         {
+            int boughtFood = 0;
+            int boughAlcohol = 0;
+            //HashSet<ItemObject> items = new HashSet<ItemObject>();
+            foreach (var element in Town.Owner.ItemRoster)
+            {
+                var item = element.EquipmentElement.Item;
+                bool isAlcohol = item.StringId == "wine" || item.StringId == "beer";
+                if (item.IsFood || isAlcohol)
+                {
+                    int count = MBRandom.RandomInt(1, MathF.Min(element.Amount, (int)food));
+                    int cost = (int)(Town.GetItemPrice(element.EquipmentElement) * (float)count);
 
+                    if (!isAlcohol && boughtFood >= food) continue;
+                    if (isAlcohol && boughAlcohol >= alcohol) continue;
+
+                    if (isAlcohol) boughAlcohol += count;
+                    else boughtFood += count;
+                    Host.ChangeHeroGold(-cost);
+                    Town.ChangeGold(cost);
+                    Town.Settlement.Stash.AddToCounts(element.EquipmentElement, count);
+                }
+            }
         }
 
         public void Finish(TextObject reason)

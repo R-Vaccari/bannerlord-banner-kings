@@ -107,7 +107,7 @@ namespace BannerKings.Behaviours.Feasts
 
         private void HourlyTickParty(MobileParty party)
         {
-            if (!party.IsLordParty || party.LeaderHero == null || party.LeaderHero.Clan == Clan.PlayerClan)
+            if (!party.IsLordParty || party.LeaderHero == null || party.LeaderHero == Hero.MainHero)
             {
                 return;
             }
@@ -126,7 +126,7 @@ namespace BannerKings.Behaviours.Feasts
 
             foreach (var town in kingdom.Fiefs)
             {
-                if (feasts.ContainsKey(town) && feasts[town].Guests.Contains(clan))
+                if (feasts.ContainsKey(town) && (feasts[town].Guests.Contains(clan) || feasts[town].Host.Clan == clan))
                 {
                     if (party.CurrentSettlement != town.Settlement)
                     {
