@@ -57,11 +57,6 @@ namespace BannerKings.Managers.Goals.Decisions
             return failedReasons.Count == 0;
         }
 
-        internal override Hero GetFulfiller()
-        {
-            return Hero.MainHero;
-        }
-
         internal override void ShowInquiry()
         {
             ApplyGoal();

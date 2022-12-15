@@ -18,6 +18,7 @@ using TaleWorlds.ObjectSystem;
 using TaleWorlds.Library;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
+using System.Linq;
 
 namespace BannerKings.Patches
 {
@@ -288,7 +289,7 @@ namespace BannerKings.Patches
         }
 
         [HarmonyPatch(typeof(WorkshopsCampaignBehavior))]
-        internal class WorkshopProduceOutputPatch
+        internal class WorkshopsCampaignBehaviorPatches
         {
             [HarmonyPrefix]
             [HarmonyPatch("InitializeWorkshops", MethodType.Normal)]
@@ -300,6 +301,43 @@ namespace BannerKings.Patches
                 }
 
                 return false;
+            }
+            
+            [HarmonyPostfix]
+            [HarmonyPatch(methodName: "DecideBestWorkshopType", MethodType.Normal)]
+            private static void DecideBestWorkshopTypePostfix(ref WorkshopType __result, 
+                Settlement currentSettlement, bool atGameStart, WorkshopType workshopToExclude = null)
+            {
+                if (__result != null && currentSettlement != null && currentSettlement.Town != null)
+                {
+                    var id = __result.StringId;
+                    if (currentSettlement.Town.Workshops.Any(x => x != null && x.WorkshopType != null && x.WorkshopType.StringId == id))
+                    {
+                        if (MBRandom.RandomFloat <= 0.3f)
+                        {
+                            __result = WorkshopType.Find("mines");
+                        }
+                        else
+                        {
+                            List<WorkshopType> list = new List<WorkshopType>();
+                            list.Add(WorkshopType.Find("smithy"));
+                            list.Add(WorkshopType.Find("fletcher"));
+                            list.Add(WorkshopType.Find("barding-smithy"));
+                            list.Add(WorkshopType.Find("armorsmithy"));
+                            list.Add(WorkshopType.Find("weaponsmithy"));
+                            var random = list.GetRandomElement();
+                            if (currentSettlement.Town.Workshops.Any(x => x != null && x.WorkshopType != null && 
+                            x.WorkshopType.StringId == random.StringId))
+                            {
+                                __result = list.GetRandomElement();
+                            }
+                            else
+                            {
+                                __result = random;
+                            }
+                        }
+                    }
+                }
             }
 
             [HarmonyPrefix]
@@ -342,7 +380,7 @@ namespace BannerKings.Patches
                     float craftsmenFactor = data.GetTypeCount(PopType.Craftsmen) / 50f;
                     count = (int)MathF.Max(1f, count + ((craftsmenFactor / outputItem.ItemValue) * prosperityFactor));
                 }
-                else if (workshop.WorkshopType.StringId == "mines")
+                else if (workshop.WorkshopType.StringId == "mines" && data.MineralData != null)
                 {
                     MineralData mineralData = data.MineralData;
                     outputItem = new EquipmentElement(mineralData.GetRandomItem());
