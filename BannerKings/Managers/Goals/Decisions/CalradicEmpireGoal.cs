@@ -122,11 +122,6 @@ namespace BannerKings.Managers.Goals.Decisions
             return failedReasons.IsEmpty();
         }
 
-        internal override Hero GetFulfiller()
-        {
-            return settlements.First().Owner;
-        }
-
         internal override void ShowInquiry()
         {
             var (gold, influence) = GetCosts(GetFulfiller());
