@@ -179,7 +179,7 @@ namespace BannerKings.Models.Vanilla
         
         public ExplainedNumber CalculateSettlementInfluence(Settlement settlement, PopulationData data, bool includeDescriptions = false)
         {
-            var settlementResult = new ExplainedNumber(0f, true);
+            var settlementResult = new ExplainedNumber(0f, includeDescriptions);
             settlementResult.LimitMin(0f);
 
             float nobles = data.GetTypeCount(PopType.Nobles);

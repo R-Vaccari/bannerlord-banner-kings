@@ -208,8 +208,8 @@ namespace BannerKings.UI.Management
                         new TextObject("{=BvJb2QSM}The dukedom this settlement is associated with.").ToString()));
                 }
 
-                var currentDemesne = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(Hero.MainHero.Clan);
-                var demesneCap = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(Hero.MainHero);
+                var currentDemesne = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(Hero.MainHero.Clan, true);
+                var demesneCap = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(Hero.MainHero, true);
 
                 GovernmentInfo.Add(new InformationElement(new TextObject("{=02REd9mG}Demesne limit:").ToString(),
                     $"{currentDemesne.ResultNumber:n2}/{demesneCap.ResultNumber:n2}",

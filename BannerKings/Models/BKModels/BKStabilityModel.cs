@@ -313,9 +313,9 @@ namespace BannerKings.Models.BKModels
             return value;
         }
 
-        public ExplainedNumber CalculateCurrentDemesne(Clan clan)
+        public ExplainedNumber CalculateCurrentDemesne(Clan clan, bool descriptions = false)
         {
-            var result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
 
             var leader = clan.Leader;
@@ -369,9 +369,9 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateDemesneLimit(Hero hero)
+        public ExplainedNumber CalculateDemesneLimit(Hero hero, bool descriptions = false)
         {
-            var result = new ExplainedNumber(0.5f, true);
+            var result = new ExplainedNumber(0.5f, descriptions);
             result.LimitMin(0.5f);
             result.LimitMax(10f);
 
