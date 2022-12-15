@@ -13,6 +13,11 @@ namespace BannerKings.Managers.Helpers
     {
         public static void ApplyInheritanceAllTitles(List<FeudalTitle> titles, Hero victim)
         {
+            if (BannerKingsConfig.Instance.TitleManager == null)
+            {
+                return;
+            }
+
             FeudalTitle highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(victim);
             var mainHeir = GetHeirInternal(victim, highest.contract);
 
