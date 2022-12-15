@@ -176,43 +176,48 @@ namespace BannerKings.Behaviours
 
         private void RunMines(Town town)
         {
-            var building = town.Buildings.FirstOrDefault(x => x.BuildingType.StringId == BKBuildings.Instance.Mines.StringId ||
+            ExceptionUtils.TryCatch(() =>
+            {
+                var building = town.Buildings.FirstOrDefault(x => x.BuildingType.StringId == BKBuildings.Instance.Mines.StringId ||
                                         x.BuildingType.StringId == BKBuildings.Instance.CastleMines.StringId);
-            if (building == null)
-            {
-                return;
-            }
-
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-            if ((building.CurrentLevel > 0) && data != null && data.MineralData != null)
-            {
-                if (miningRevenues.ContainsKey(town))
+                if (building == null)
                 {
-                    miningRevenues[town] = 0;
+                    return;
                 }
 
-                foreach (var pair in data.MineralData.GetLocalMinerals())
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                if ((building.CurrentLevel > 0) && data != null && data.MineralData != null)
                 {
-                    if (MBRandom.RandomFloat * ((int)data.MineralData.Richness + 0.5f) < pair.Item2)
+                    if (miningRevenues.ContainsKey(town))
                     {
-                        var quantity = building.CurrentLevel;
-                        var item = pair.Item1;
+                        miningRevenues[town] = 0;
+                    }
 
-                        var itemPrice = town.GetItemPrice(item);
-                        var finalPrice = (int)(itemPrice * (float)quantity);
-                        if (town.Gold >= finalPrice)
+                    foreach (var pair in data.MineralData.GetLocalMinerals())
+                    {
+                        if (MBRandom.RandomFloat * ((int)data.MineralData.Richness + 0.5f) < pair.Item2)
                         {
-                            town.Owner.ItemRoster.AddToCounts(item, quantity);
-                            town.ChangeGold(-finalPrice);
-                            AddRevenue(town, finalPrice);
-                        }
-                        else
-                        {
-                            town.Settlement.Stash.AddToCounts(item, quantity);
+                            var quantity = building.CurrentLevel;
+                            var item = pair.Item1;
+
+                            var itemPrice = town.GetItemPrice(item);
+                            var finalPrice = (int)(itemPrice * (float)quantity);
+                            if (town.Gold >= finalPrice)
+                            {
+                                town.Owner.ItemRoster.AddToCounts(item, quantity);
+                                town.ChangeGold(-finalPrice);
+                                AddRevenue(town, finalPrice);
+                            }
+                            else
+                            {
+                                town.Settlement.Stash.AddToCounts(item, quantity);
+                            }
                         }
                     }
                 }
-            }
+            },
+            GetType().Name,
+            false);
         }
 
         private void AddRevenue(Town town, int revenue)
