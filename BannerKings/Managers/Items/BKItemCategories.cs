@@ -7,27 +7,18 @@ namespace BannerKings.Managers.Items
     public class BKItemCategories : DefaultTypeInitializer<BKItemCategories, ItemCategory>
     {
         public ItemCategory Book { get; private set; }
-
         public ItemCategory Apple { get; private set; }
-
         public ItemCategory Orange { get; private set; }
-
         public ItemCategory Bread { get; private set; }
-
         public ItemCategory Pie { get; private set; }
-
         public ItemCategory Carrot { get; private set; }
-
         public ItemCategory Honey { get; private set; }
-
         public ItemCategory Gold { get; private set; }
-
         public ItemCategory Limestone { get; private set; }
-
         public ItemCategory Marble { get; private set; }
-
         public ItemCategory Gems { get; private set; }
-
+        public ItemCategory Mead { get; private set; }
+        public ItemCategory Garum { get; private set; }
         public override IEnumerable<ItemCategory> All => throw new NotImplementedException();
 
         public override void Initialize()
@@ -52,6 +43,12 @@ namespace BannerKings.Managers.Items
 
             Honey = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("honey"));
             Honey.InitializeObject(true, 5, 10, ItemCategory.Property.BonusToFoodStores);
+
+            Mead = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("mead"));
+            Mead.InitializeObject(true, 10, 5, ItemCategory.Property.BonusToFoodStores);
+
+            Garum = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("garum"));
+            Garum.InitializeObject(true, 10, 5, ItemCategory.Property.BonusToFoodStores);
 
             Gold = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("gold"));
             Gold.InitializeObject(true, 20, 50, ItemCategory.Property.BonusToTax);

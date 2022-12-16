@@ -6,6 +6,6 @@ namespace BannerKings.Models
 {
     public interface IGrowthModel : IBannerKingsModel
     {
-        public ExplainedNumber CalculateEffect(Settlement settlement, PopulationData data);
+        public ExplainedNumber CalculateEffect(Settlement settlement, PopulationData data, bool descriptions = false);
     }
 }

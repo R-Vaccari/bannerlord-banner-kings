@@ -70,14 +70,14 @@ namespace BannerKings.Behaviours
                 },
                 110, null);
 
-            starter.AddDialogLine("default_conversation_for_wrongly_created_heroes", "start", "close_window", 
+            /*starter.AddDialogLine("default_conversation_for_wrongly_created_heroes", "start", "close_window", 
                 "{=!}I am under your mercy.", 
                 null,
                 () =>
                 {
                     TakePrisonerAction.Apply(Campaign.Current.MainParty.Party, CharacterObject.OneToOneConversationCharacter.HeroObject);
                 }, 
-                0, null);
+                0, null);*/
 
             starter.AddDialogLine("companion_captured",
               "companion_captured",

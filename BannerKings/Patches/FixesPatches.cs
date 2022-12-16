@@ -1,10 +1,9 @@
-﻿using HarmonyLib;
-using System.Collections.Generic;
+﻿using BannerKings.Managers.Items;
+using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Party.PartyComponents;
-using TaleWorlds.CampaignSystem.Settlements;
-using TaleWorlds.Core;
+
 
 namespace BannerKings.Patches
 {
@@ -25,6 +24,18 @@ namespace BannerKings.Patches
                 }
 
                 return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(DefaultItems))]
+        internal class RegisterItemsAndCategories
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("InitializeAll")]
+            private static void InitializeAllPostfix()
+            {
+                BKItemCategories.Instance.Initialize();
+                BKItems.Instance.Initialize();
             }
         }
     }

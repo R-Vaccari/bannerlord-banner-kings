@@ -97,7 +97,7 @@ namespace BannerKings.Behaviours
                 
                 if (education.Lifestyle == null)
                 {
-                    education.SetCurrentLifestyle(new AIBehavior().ChooseLifestyle(hero));
+                    education.SetCurrentLifestyle(BannerKingsConfig.Instance.AI.ChooseLifestyle(hero));
                 }
                 else if (education.Lifestyle.CanInvestFocus(hero))
                 {
