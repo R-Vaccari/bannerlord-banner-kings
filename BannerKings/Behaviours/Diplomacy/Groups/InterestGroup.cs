@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups
 {
@@ -9,6 +10,21 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
     {
         public InterestGroup(string stringId) : base(stringId)
         {
+        }
+
+        public void Initialize(TextObject name, TextObject description, TraitObject mainTrait,
+            bool demandsCouncil, bool allowsCommoners, bool allowsNobles, List<PolicyObject> supportedPolicy,
+            List<PolicyObject> shunnedPolicies, List<DemesneLaw> supportedLaws, List<DemesneLaw> shunnedLaws)
+        {
+            Initialize(name, description);
+            MainTrait = mainTrait;
+            DemandsCouncil = demandsCouncil;
+            AllowsCommoners = allowsCommoners;
+            AllowsNobles = allowsNobles;
+            SupportedPolicies = supportedPolicy;
+            ShunnedPolicies = shunnedPolicies;
+            SupportedLaws = supportedLaws;
+            ShunnedLaws = shunnedLaws;
         }
 
         public TraitObject MainTrait { get; private set; }
