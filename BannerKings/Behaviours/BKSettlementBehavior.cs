@@ -375,9 +375,16 @@ namespace BannerKings.Behaviours
                     var items = new HashSet<ItemObject>();
                     if (town.Villages.Count > 0)
                     {
-                        foreach (var tuple in town.Villages.Select(vil => BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement)).SelectMany(data => BannerKingsConfig.Instance.PopulationManager.GetProductions(data)))
+                        foreach (var vil in town.Villages)
                         {
-                            items.Add(tuple.Item1);
+                            var villagePopData = BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement);
+                            if (villagePopData != null && villagePopData.VillageData != null)
+                            {
+                                foreach (var tuple in BannerKingsConfig.Instance.PopulationManager.GetProductions(villagePopData))
+                                {
+                                    items.Add(tuple.Item1);
+                                }
+                            }
                         }
                     }
 
@@ -704,14 +711,6 @@ namespace BannerKings.Behaviours
                 __result = (int) (Campaign.Current.Models.SettlementFoodModel.FoodStocksUpperLimit + (__instance.IsCastle ? Campaign.Current.Models.SettlementFoodModel.CastleFoodStockUpperLimitBonus : 0) + __instance.GetEffectOfBuildings(BuildingEffectEnum.Foodstock) + result);
                 return false;
 
-            }
-        }
-
-        [HarmonyPatch(typeof(DefaultBuildingTypes), "InitializeAll")]
-        internal class InitializeBuildingsPatch
-        {
-            private static void Postfix()
-            {
             }
         }
     }
