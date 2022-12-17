@@ -70,7 +70,7 @@ namespace BannerKings.UI
             var model = BannerKingsConfig.Instance.PietyModel;
             var tooltipForAccumulatingProperty =
                 CampaignUIHelper.GetTooltipForAccumulatingProperty(new TextObject("{=0EVuzzOU}Piety").ToString(), piety,
-                    model.CalculateEffect(hero));
+                    model.CalculateEffect(hero, true));
 
             TextObject relText = null;
             if (rel == null)

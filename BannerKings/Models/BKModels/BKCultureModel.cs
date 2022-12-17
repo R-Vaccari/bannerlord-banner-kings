@@ -94,8 +94,11 @@ namespace BannerKings.Models.BKModels
             result.Add(GetNotableFactor(notable, notable.CurrentSettlement));
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
-            var acceptance = data.CultureData.GetAcceptance(converter.Culture);
-            result.AddFactor(1f - acceptance);
+            if (data != null && data.CultureData != null)
+            {
+                var acceptance = data.CultureData.GetAcceptance(converter.Culture);
+                result.AddFactor(1f - acceptance);
+            }
 
             return result;
         }
