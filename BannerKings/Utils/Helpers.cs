@@ -704,10 +704,10 @@ namespace BannerKings.Utils
 
         public static bool IsRetinueTroop(CharacterObject character)
         {
-            var nobleRecruit = character.Culture.EliteBasicTroop;
+            var nobleRecruit = character?.Culture?.EliteBasicTroop;
             bool result = false;
 
-            if (nobleRecruit.UpgradeTargets == null)
+            if (nobleRecruit == null || nobleRecruit.UpgradeTargets == null)
             {
                 return false;
             }

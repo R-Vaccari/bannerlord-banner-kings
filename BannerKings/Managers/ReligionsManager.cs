@@ -526,7 +526,18 @@ namespace BannerKings.Managers
 
         public Clergyman GetClergymanFromHeroHero(Hero hero)
         {
-            return Religions.Keys.ToList().SelectMany(rel => rel.Clergy.Values.ToList()).FirstOrDefault(clergy => clergy.Hero == hero);
+            foreach (var rel in Religions.Keys)
+            {
+                foreach (var clergyPair in rel.Clergy)
+                {
+                    if (clergyPair.Value != null && clergyPair.Value.Hero == hero)
+                    {
+                        return clergyPair.Value;
+                    }
+                }
+            }
+
+            return null;
         }
 
         public Religion GetClergymanReligion(Clergyman clergyman)

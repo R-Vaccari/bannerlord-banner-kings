@@ -39,7 +39,11 @@ namespace BannerKings.Managers.Goals.Decisions
                 return false;
             }
 
-            if (FactionManager.GetEnemyKingdoms(GetFulfiller().Clan.Kingdom).Count() > 0)
+            if (GetFulfiller().Clan.Kingdom == null)
+            {
+                failedReasons.Add(new TextObject("{=JDFpx1eN}No kingdom."));
+            }
+            else if (FactionManager.GetEnemyKingdoms(GetFulfiller().Clan.Kingdom).Count() > 0)
             {
                 failedReasons.Add(new TextObject("{=gn6WKs03}Cannot organize feasts during wars"));
             }
@@ -207,7 +211,12 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             this.guests = guests;
-            feastPlace = fulfiller.Clan.Fiefs.GetRandomElement();
+            feastPlace = fulfiller.Clan.Fiefs.GetRandomElementWithPredicate(x => x.IsTown);
+            if (feastPlace == null)
+            {
+                return;
+            }
+
             ApplyGoal();
         }
     }
