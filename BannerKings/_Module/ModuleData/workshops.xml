@@ -49,6 +49,22 @@
 		</Production>
 		<Production conversion_speed="1">
 		  <Inputs>
+			<Input input_item="chicken" input_count="4" />
+		  </Inputs>
+		  <Outputs>
+			<Output output="ItemCategory.meat" output_count="1" />
+		  </Outputs>
+		</Production>
+		<Production conversion_speed="1">
+		  <Inputs>
+			<Input input_item="goose" input_count="4" />
+		  </Inputs>
+		  <Outputs>
+			<Output output="ItemCategory.meat" output_count="1" />
+		  </Outputs>
+		</Production>
+		<Production conversion_speed="1">
+		  <Inputs>
 			<Input input_item="cow" />
 		  </Inputs>
 		  <Outputs>
@@ -583,6 +599,22 @@
 	description="{=!}We butcher all sorts of animals, for their meat and hides. Unlike unskilled folks, we make the most of the animal, while giving it a clean death.">
     <Meshes sign_mesh_name="shop_sign_merchantleather" shop_prop_mesh_name_1="shop_prop_merchantarmory_a" shop_prop_mesh_name_2="shop_prop_merchantleather_b" shop_prop_mesh_name_3_1="shop_prop_merchantarmory_medium_c" shop_prop_mesh_name_4="shop_prop_merchantleather_d" shop_prop_mesh_name_5="shop_prop_merchantleather_e" shop_prop_mesh_name_6="shop_prop_merchantleather_f" />
     <Production conversion_speed="1">
+	  <Inputs>
+		<Input input_item="chicken" input_count="2" />
+	  </Inputs>
+	  <Outputs>
+		<Output output="ItemCategory.meat" output_count="1" />
+	  </Outputs>
+	</Production>
+	<Production conversion_speed="1">
+	  <Inputs>
+		<Input input_item="goose" input_count="2" />
+	  </Inputs>
+	  <Outputs>
+		<Output output="ItemCategory.meat" output_count="1" />
+	  </Outputs>
+	</Production>
+	<Production conversion_speed="1">
       <Inputs>
         <Input input_item="cow" />
       </Inputs>
