@@ -2,6 +2,7 @@
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Utils;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -118,79 +119,82 @@ namespace BannerKings.Models.Vanilla
             var result = new ExplainedNumber(base.GetTroopRecruitmentCost(troop, buyerHero, withoutItemCost) * 1.4f);
             result.LimitMin(GetCharacterWage(troop) * 2f);
 
-            if (buyerHero != null)
+            ExceptionUtils.TryCatch(() =>
             {
-                if (buyerHero.CurrentSettlement != null)
+                if (buyerHero != null)
                 {
-                    var title = BannerKingsConfig.Instance.TitleManager.GetTitle(buyerHero.CurrentSettlement);
-                    if (title != null)
+                    if (buyerHero.CurrentSettlement != null)
                     {
-                        var contract = title.contract;
-                        if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingFreeContracts))
+                        var title = BannerKingsConfig.Instance.TitleManager.GetTitle(buyerHero.CurrentSettlement);
+                        if (title != null)
                         {
-                            result.Add(1f, DefaultDemesneLaws.Instance.DraftingFreeContracts.Name);
+                            var contract = title.contract;
+                            if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingFreeContracts))
+                            {
+                                result.AddFactor(1f, DefaultDemesneLaws.Instance.DraftingFreeContracts.Name);
+                            }
+                            else if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingHidage))
+                            {
+                                result.AddFactor(0.5f, DefaultDemesneLaws.Instance.DraftingHidage.Name);
+                            }
                         }
-                        else if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingHidage))
+                    }
+
+                    var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(buyerHero);
+                    if (troop.Occupation == Occupation.Mercenary && education.HasPerk(BKPerks.Instance.MercenaryLocalConnections))
+                    {
+                        result.AddFactor(-0.1f, BKPerks.Instance.MercenaryLocalConnections.Name);
+                    }
+
+                    if (troop.IsMounted && education.HasPerk(BKPerks.Instance.RitterOathbound))
+                    {
+                        result.AddFactor(-0.15f, BKPerks.Instance.RitterOathbound.Name);
+                    }
+
+                    if (Utils.Helpers.IsRetinueTroop(troop))
+                    {
+                        result.AddFactor(0.20f);
+                    }
+
+                    if (troop.Culture == buyerHero.Culture)
+                    {
+                        result.AddFactor(-0.05f, GameTexts.FindText("str_culture"));
+                    }
+
+                    if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Artisan))
+                    {
+                        result.AddFactor(0.15f, DefaultLifestyles.Instance.Artisan.Name);
+                    }
+
+                    if (buyerHero.Clan != null)
+                    {
+                        if (troop.Culture.StringId == "aserai" && BannerKingsConfig.Instance.ReligionsManager
+                            .HasBlessing(buyerHero, DefaultDivinities.Instance.AseraSecondary2))
                         {
-                            result.Add(0.5f, DefaultDemesneLaws.Instance.DraftingHidage.Name);
+                            result.AddFactor(-0.1f);
+                        }
+
+                        var buyerKingdom = buyerHero.Clan.Kingdom;
+                        if (buyerKingdom != null && troop.Culture != buyerHero.Culture)
+                        {
+                            result.AddFactor(0.25f, GameTexts.FindText("str_kingdom"));
+                        }
+
+                        switch (buyerHero.Clan.Tier)
+                        {
+                            case >= 4:
+                                result.AddFactor((buyerHero.Clan.Tier - 3) * 0.05f);
+                                break;
+                            case <= 1:
+                                result.AddFactor((buyerHero.Clan.Tier - 2) * 0.05f);
+                                break;
                         }
                     }
                 }
-
-
-                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(buyerHero);
-                if (troop.Occupation == Occupation.Mercenary && education.HasPerk(BKPerks.Instance.MercenaryLocalConnections))
-                {
-                    result.AddFactor(-0.1f, BKPerks.Instance.MercenaryLocalConnections.Name);
-                }
-
-                if (troop.IsMounted && education.HasPerk(BKPerks.Instance.RitterOathbound))
-                {
-                    result.AddFactor(-0.15f, BKPerks.Instance.RitterOathbound.Name);
-                }
-
-                if (Utils.Helpers.IsRetinueTroop(troop))
-                {
-                    result.AddFactor(0.20f);
-                }
-
-                if (troop.Culture == buyerHero.Culture)
-                {
-                    result.AddFactor(-0.05f, GameTexts.FindText("str_culture"));
-                }
-
-                if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Artisan))
-                {
-                    result.AddFactor(0.15f, DefaultLifestyles.Instance.Artisan.Name);
-                }
-
-                if (buyerHero.Clan != null)
-                {
-
-                    if (troop.Culture.StringId == "aserai" && BannerKingsConfig.Instance.ReligionsManager
-                        .HasBlessing(buyerHero, DefaultDivinities.Instance.AseraSecondary2))
-                    {
-                        result.AddFactor(-0.1f);
-                    }
-
-                    var buyerKingdom = buyerHero.Clan.Kingdom;
-                    if (buyerKingdom != null && troop.Culture != buyerHero.Culture)
-                    {
-                        result.AddFactor(0.25f, GameTexts.FindText("str_kingdom"));
-                    }
-
-                    switch (buyerHero.Clan.Tier)
-                    {
-                        case >= 4:
-                            result.AddFactor((buyerHero.Clan.Tier - 3) * 0.05f);
-                            break;
-                        case <= 1:
-                            result.AddFactor((buyerHero.Clan.Tier - 2) * 0.05f);
-                            break;
-                    }
-                }
-            }
-
+            },
+            GetType().Name,
+            false);
+            
             return (int) result.ResultNumber;
         }
     }
