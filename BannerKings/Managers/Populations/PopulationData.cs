@@ -40,6 +40,11 @@ namespace BannerKings.Managers.Populations
             {
                 villageData = new VillageData(settlement.Village);
             }
+
+            if (BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber > 0)
+            {
+                EstateData = new EstateData(Settlement);
+            }
         }
 
         [SaveableProperty(1)] private List<PopulationClass> classes { get; set; }
