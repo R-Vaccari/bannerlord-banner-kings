@@ -116,7 +116,7 @@ namespace BannerKings.Behaviours
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
                 if (education.HasPerk(BKPerks.Instance.GladiatorTourDeCalradia))
                 {
-                    __result += 150;
+                    __result *= MathF.Round(1.5);
                 }
             }
         }
