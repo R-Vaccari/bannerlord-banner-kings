@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Skills;
+using BannerKings.Utils;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -10,8 +11,6 @@ namespace BannerKings.Models.BKModels
 {
     public class BKPietyModel : IReligionModel
     {
-        public ExplainedNumber CalculateEffect(Settlement settlement) => new ExplainedNumber();
-
         public int GetHeroVirtuesCount(Hero hero)
         {
             var result = 0;
@@ -42,71 +41,82 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateEffect(Hero hero)
+        public ExplainedNumber CalculateEffect(Hero hero, bool descriptions = false)
         {
-            var result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(0f, descriptions);
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
             if (rel != null)
             {
-                var traits = rel.Faith.Traits;
-                var toCheck = new List<TraitObject>
+                ExceptionUtils.TryCatch(() =>
+                {
+                    var traits = rel.Faith.Traits;
+                    var toCheck = new List<TraitObject>
                     {DefaultTraits.Honor, DefaultTraits.Calculating, DefaultTraits.Valor, DefaultTraits.Mercy};
-                foreach (var trait in toCheck)
-                {
-                    var traitLevel = hero.GetTraitLevel(trait);
-                    if (traits.ContainsKey(trait) && traitLevel != 0)
+                    foreach (var trait in toCheck)
                     {
-                        var target = traits[trait] ? 1 : -1;
-                        if (target > 0)
+                        var traitLevel = hero.GetTraitLevel(trait);
+                        if (traits.ContainsKey(trait) && traitLevel != 0)
                         {
-                            result.Add(traitLevel * (traitLevel > 0 ? 0.2f : -0.2f), trait.Name);
+                            var target = traits[trait] ? 1 : -1;
+                            if (target > 0)
+                            {
+                                result.Add(traitLevel * (traitLevel > 0 ? 0.2f : -0.2f), trait.Name);
+                            }
+                            else
+                            {
+                                result.Add(traitLevel * (-traitLevel < 0 ? 0.2f : -0.2f), trait.Name);
+                            }
                         }
-                        else
+                    }
+
+                    if (rel.FavoredCultures.Contains(hero.Culture))
+                    {
+                        result.Add(0.1f, GameTexts.FindText("str_culture"));
+                    }
+
+                    if (hero.GetPerkValue(BKPerks.Instance.TheologyFaithful))
+                    {
+                        result.Add(0.2f, BKPerks.Instance.TheologyFaithful.Name);
+                    }
+
+                    if (hero.Clan != null && rel.HasDoctrine(DefaultDoctrines.Instance.Animism))
+                    {
+                        var acres = 0f;
+                        foreach (var settlement in hero.Clan.Settlements)
                         {
-                            result.Add(traitLevel * (-traitLevel < 0 ? 0.2f : -0.2f), trait.Name);
+                            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                            if (data != null && data.LandData != null)
+                            {
+                                acres += data.LandData.Woodland;
+                            }
+                        }
+
+                        if (acres != 0f)
+                        {
+                            result.Add(acres / 10000f, DefaultDoctrines.Instance.Animism.Name);
                         }
                     }
-                }
 
-                if (rel.FavoredCultures.Contains(hero.Culture))
-                {
-                    result.Add(0.1f, GameTexts.FindText("str_culture"));
-                }
-
-                if (hero.GetPerkValue(BKPerks.Instance.TheologyFaithful))
-                {
-                    result.Add(0.2f, BKPerks.Instance.TheologyFaithful.Name);
-                }
-
-                if (hero.Clan != null && rel.HasDoctrine(DefaultDoctrines.Instance.Animism))
-                {
-                    var acres = 0f;
-                    foreach (var settlement in hero.Clan.Settlements)
+                    if (rel.HasDoctrine(DefaultDoctrines.Instance.Literalism))
                     {
-                        acres += BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData.Woodland;
+                        var skill = hero.GetSkillValue(BKSkills.Instance.Scholarship);
+                        if (!hero.GetPerkValue(BKPerks.Instance.ScholarshipLiterate))
+                        {
+                            result.Add(-0.2f, DefaultDoctrines.Instance.Literalism.Name);
+                        }
+                        else if (skill > 100)
+                        {
+                            result.Add(skill * 0.01f, DefaultDoctrines.Instance.Literalism.Name);
+                        }
                     }
-
-                    if (acres != 0f)
-                    {
-                        result.Add(acres / 10000f, DefaultDoctrines.Instance.Animism.Name);
-                    }
-                }
-
-                if (rel.HasDoctrine(DefaultDoctrines.Instance.Literalism))
-                {
-                    var skill = hero.GetSkillValue(BKSkills.Instance.Scholarship);
-                    if (!hero.GetPerkValue(BKPerks.Instance.ScholarshipLiterate))
-                    {
-                        result.Add(-0.2f, DefaultDoctrines.Instance.Literalism.Name);
-                    }
-                    else if (skill > 100)
-                    {
-                        result.Add(skill * 0.01f, DefaultDoctrines.Instance.Literalism.Name);
-                    }
-                }
+                },
+                GetType().Name,
+                false);
             }
 
             return result;
         }
+
+        public ExplainedNumber CalculateEffect(Settlement settlement) => new ExplainedNumber();
     }
 }
