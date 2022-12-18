@@ -10,25 +10,20 @@ namespace BannerKings.Actions
 {
     public static class ClanActions
     {
-        public static TextObject CanCreateNewClan(Hero hero, Settlement settlement, TextObject name = null)
+        public static TextObject CanCreateNewClan(CultureObject culture, Settlement settlement, TextObject name = null)
         {
             if (name == null)
             {
-                name = GetRandomName(hero.Culture, settlement);
+                name = GetRandomName(culture, settlement);
             }
 
             var names = new List<string>();
-            foreach (var existingClan in Clan.All.ToList().FindAll(x => x.Culture == hero.Culture))
+            foreach (var existingClan in Clan.All.ToList().FindAll(x => x.Culture == culture))
             {
                 names.Add(existingClan.Name.ToString());
             }
 
             if (name == null || names.Any(x => x.Contains(name.ToString()) || x == name.ToString()))
-            {
-                return null;
-            }
-
-            if (Clan.All.Any(x => x.HomeSettlement == settlement))
             {
                 return null;
             }
@@ -41,7 +36,7 @@ namespace BannerKings.Actions
         {
             if (name == null)
             {
-                name = CanCreateNewClan(hero, settlement);
+                name = CanCreateNewClan(hero.Culture, settlement);
             }
 
             if (name == null)
@@ -77,7 +72,11 @@ namespace BannerKings.Actions
                 }
             }
 
-            ChangeKingdomAction.ApplyByJoinToKingdom(clan, originalClan.Kingdom, false);
+            if (originalClan != null)
+            {
+                ChangeKingdomAction.ApplyByJoinToKingdom(clan, originalClan.Kingdom, false);
+            }
+
             BannerKingsConfig.Instance.TitleManager.RemoveKnights(hero);
             if (removeGold)
             {

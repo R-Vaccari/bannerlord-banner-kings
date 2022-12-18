@@ -43,7 +43,7 @@ namespace BannerKings.Managers.Populations
 
             if (BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber > 0)
             {
-                EstateData = new EstateData(Settlement);
+                EstateData = new EstateData(Settlement, this);
             }
         }
 
@@ -351,7 +351,7 @@ namespace BannerKings.Managers.Populations
 
             if (EstateData == null && BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber > 0)
             {
-                EstateData = new EstateData(Settlement);
+                EstateData = new EstateData(Settlement, this);
             }
 
             EstateData?.Update(this);
