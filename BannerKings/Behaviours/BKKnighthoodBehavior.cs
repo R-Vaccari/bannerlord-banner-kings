@@ -76,7 +76,7 @@ namespace BannerKings.Behaviours
             }
             else
             {
-                var clanName = ClanActions.CanCreateNewClan(hero, title.fief);
+                var clanName = ClanActions.CanCreateNewClan(hero.Culture, title.fief);
                 if (clanName == null)
                 {
                     return;

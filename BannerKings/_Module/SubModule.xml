@@ -49,6 +49,14 @@
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
+            <XmlName path="cultures" id="SPCultures"/>
+            <IncludedGameTypes>
+                <GameType value="Campaign"/>
+                <GameType value="CampaignStoryMode"/>
+                <GameType value="CustomGame"/>
+            </IncludedGameTypes>
+        </XmlNode>
+		<XmlNode>
 			<XmlName id="EquipmentRosters" path="equipment_sets" />
 			<IncludedGameTypes>
 				<GameType value="Campaign" />

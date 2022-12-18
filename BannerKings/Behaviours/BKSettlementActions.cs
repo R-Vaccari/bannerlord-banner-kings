@@ -435,10 +435,19 @@ namespace BannerKings.Behaviours
                         .GetBookSeller(Settlement.CurrentSettlement);
                     if (seller != null)
                     {
-                        main.AddSkillXp(BKSkills.Instance.Scholarship, 5f);
-                        GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, seller,
-                            (int)BannerKingsConfig.Instance.EducationModel.CalculateLessonsCost(Hero.MainHero, seller)
-                                .ResultNumber);
+                        var cost = (int)BannerKingsConfig.Instance.EducationModel.CalculateLessonsCost(Hero.MainHero, seller)
+                                .ResultNumber;
+
+                        if (Hero.MainHero.Gold < cost)
+                        {
+                            InformationManager.DisplayMessage(new InformationMessage(
+                                                        new TextObject("{=!}You have stopped your lesson due to lacking funds.").ToString()));
+                            GameMenu.SwitchToMenu("bannerkings_actions");
+                        }
+
+                        main.AddSkillXp(BKSkills.Instance.Scholarship, 20f);
+                        GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, seller, cost);
+
                         InformationManager.DisplayMessage(new InformationMessage(
                             new TextObject("{=ArMJ9nUV}You have improved your {SKILL} skill during your current action.")
                                 .SetTextVariable("SKILL", BKSkills.Instance.Scholarship.Name)
