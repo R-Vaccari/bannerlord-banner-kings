@@ -1,7 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+
 using BannerKings.Extensions;
 using BannerKings.Managers.Skills;
 using BannerKings.UI;
+using BannerKings.Utils;
+
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Encounters;
@@ -556,6 +561,14 @@ namespace BannerKings.Behaviours
                     GameTexts.SetVariable("CRAFTING_RATE", costInt);
                     GameTexts.SetVariable("CRAFTING_EXPLANATION", cost.GetExplanations());
                     GiveGoldAction.ApplyForCharacterToSettlement(Hero.MainHero, Settlement.CurrentSettlement, costInt);
+                    //foreach party member - add some smithing xp
+                    foreach(var troop in MobileParty.MainParty.MemberRoster.GetTroopRoster().Where( r => r.Character.IsHero))
+                    {
+                        ExceptionUtils.TryCatch(() =>
+                        {
+                            troop.Character.HeroObject.AddSkillXp(DefaultSkills.Crafting, cost.ResultNumber / 10);
+                        }, "Adding Smith XP");
+                    }
                 }
             }
         }
@@ -760,10 +773,18 @@ namespace BannerKings.Behaviours
 
         private static bool MenuEstatesManageCondition(MenuCallbackArgs args)
         {
-            args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
-            var settlement = Settlement.CurrentSettlement;
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            return data.EstateData != null;
+            bool result = false;
+            ExceptionUtils.TryCatch(() =>
+            {
+                args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
+                if (Settlement.CurrentSettlement != null)
+                {
+                    var settlement = Settlement.CurrentSettlement;
+                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                    result = data.EstateData != null;
+                }
+            }, "MenuEstatesManageCondition");                                    
+            return result;
         }
 
         private static bool MenuSettlementManageCondition(MenuCallbackArgs args)
