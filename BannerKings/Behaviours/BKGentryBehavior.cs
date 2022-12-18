@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
 namespace BannerKings.Behaviours
@@ -74,9 +74,41 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            var hero = HeroCreator.CreateSpecialHero(settlement.Culture.LordTemplates.GetRandomElement(), 
-                settlement, 
-                null, 
+            string name = clanName.ToString();
+            var applicable = FactionHelper.IsClanNameApplicable(name);
+            if (!applicable.Item1)
+            {
+                return;
+            }
+
+            int cost = (int)(vacantEstate.EstateValue.ResultNumber * 0.5f);
+            if (settlement.Owner == Hero.MainHero)
+            {
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}The Gentry of {SETTLEMENT}")
+                    .SetTextVariable("SETTLEMENT", settlement.Name)
+                    .ToString(),
+                    new TextObject("{=!}A local of relative wealth has offered to buy a vacant estate in your domain, {SETTLEMENT}. They offer {GOLD}{GOLD_ICON} for the property, as well as their vassalage. As their suzerain you would be entitled taxing their estate and calling them to war.")
+                    .SetTextVariable("SETTLEMENT", settlement.Name)
+                    .ToString(),
+                    true,
+                    true,
+                    GameTexts.FindText("str_accept").ToString(),
+                    GameTexts.FindText("str_reject").ToString(),
+                    () => CreateGentryClan(settlement, vacantEstate, clanName, equipment, campaignStart, cost),
+                    null));
+            }
+            else
+            {
+                CreateGentryClan(settlement, vacantEstate, clanName, equipment, campaignStart, cost);
+            }
+        }
+
+        private void CreateGentryClan(Settlement settlement, Estate vacantEstate, TextObject clanName, Equipment equipment,
+            bool campaignStart, int cost)
+        {
+            var hero = HeroCreator.CreateSpecialHero(settlement.Culture.LordTemplates.GetRandomElement(),
+                settlement,
+                null,
                 null,
                 MBRandom.RandomInt(25, 65));
             EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, equipment);
@@ -84,7 +116,7 @@ namespace BannerKings.Behaviours
             Clan clan = ClanActions.CreateNewClan(hero,
                 settlement,
                 $"gentryClan_{settlement.Name}_{settlement.Culture}",
-                null,
+                clanName,
                 MBRandom.RandomFloatRanged(50f, 200f));
             if (clan != null)
             {
@@ -97,6 +129,17 @@ namespace BannerKings.Behaviours
                 }
                 Kingdom kingdom = settlement.MapFaction as Kingdom;
                 ChangeKingdomAction.ApplyByJoinToKingdom(clan, kingdom, false);
+                if (campaignStart)
+                {
+                    EstateAction action = BannerKingsConfig.Instance.EstatesModel.GetGrant(vacantEstate, settlement.Owner, hero);
+                    action.TakeAction();
+                }
+                else
+                {
+                    hero.ChangeHeroGold(1000 + cost);
+                    EstateAction action = BannerKingsConfig.Instance.EstatesModel.GetBuy(vacantEstate, hero);
+                    action.TakeAction();
+                }
             }
             else
             {

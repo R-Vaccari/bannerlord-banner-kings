@@ -23,7 +23,7 @@ namespace BannerKings.Actions
                 names.Add(existingClan.Name.ToString());
             }
 
-            if (name == null || names.Any(x => x.Contains(name.ToString()) || x == name.ToString()))
+            if (name == null || names.Any(x => x.Contains(name.ToString()) || x.ToString().Equals(name.ToString())))
             {
                 return null;
             }
@@ -96,10 +96,10 @@ namespace BannerKings.Actions
 
         public static TextObject GetRandomName(CultureObject culture, Settlement settlement)
         {
-            TextObject random = null;
+            TextObject random;
             if (culture.ClanNameList.Count > 1)
             {
-                random = culture.ClanNameList.GetRandomElementInefficiently();
+                random = culture.ClanNameList.GetRandomElement();
             }
             else
             {
