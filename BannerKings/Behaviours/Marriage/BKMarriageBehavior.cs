@@ -459,6 +459,8 @@ namespace BannerKings.Behaviours.Marriage
                        GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -proposedMarriage.Influence);
                    }
 
+                   var finalClan = proposedMarriage.FinalClan;
+
                    if (!proposedMarriage.ArrangedMarriage)
                    {
                        AnnounceBetrothal();
@@ -509,13 +511,17 @@ namespace BannerKings.Behaviours.Marriage
             {
                 MarriageAction.Apply(proposedMarriage.Proposer, proposedMarriage.Proposed);
                 var finalClan = proposedMarriage.FinalClan;
+                Hero proposerLeader = proposedMarriage.Proposer.Clan.Leader;
+                Hero proposedLeader = proposedMarriage.Proposed.Clan.Leader;
                 if (proposedMarriage.Proposer.Clan != finalClan)
                 {
+                    GiveGoldAction.ApplyBetweenCharacters(proposedLeader, proposerLeader, proposedMarriage.Dowry);
                     ClanActions.JoinClan(proposedMarriage.Proposer, proposedMarriage.FinalClan);
                 }
 
                 if (proposedMarriage.Proposed.Clan != finalClan)
                 {
+                    GiveGoldAction.ApplyBetweenCharacters(proposerLeader, proposedLeader, proposedMarriage.Dowry);
                     ClanActions.JoinClan(proposedMarriage.Proposed, proposedMarriage.FinalClan);
                 }
 
