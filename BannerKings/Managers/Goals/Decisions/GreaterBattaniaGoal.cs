@@ -89,15 +89,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
 
                 var battaniaKingdom = Campaign.Current.Kingdoms.FirstOrDefault(k => k.StringId == "battania");
-                if (battaniaKingdom != null)
-                {
-                    if (battaniaKingdom.Leader != referenceHero)
-                    {
-                        failedReasons.Add(new TextObject("{=NCVPvemT}You're not the leader of {KINGDOM}.")
-                            .SetTextVariable("KINGDOM", battaniaKingdom.EncyclopediaLinkWithName));
-                    }
-                }
-                else if (referenceHero.Clan.Kingdom != null)
+                if (referenceHero.Clan.Kingdom != null)
                 {
                     if (referenceHero.Clan.Kingdom.Culture != culture)
                     {
