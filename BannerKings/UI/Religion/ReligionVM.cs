@@ -301,9 +301,10 @@ namespace BannerKings.UI.Religion
                 RefreshValues();
             });
 
-            foreach (var clgm in currentReligion.Clergy.Values)
+            foreach (var pair in currentReligion.Clergy)
             {
-                if (clgm.Hero != null)
+                var clgm = pair.Value;
+                if (clgm != null && clgm.Hero != null)
                 {
                     Clergymen.Add(new ReligionMemberVM(clgm, null));
                 }

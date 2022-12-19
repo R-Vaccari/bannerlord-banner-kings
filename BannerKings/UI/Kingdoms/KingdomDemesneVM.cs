@@ -47,7 +47,6 @@ namespace BannerKings.UI.Kingdoms
 
                 var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(Kingdom.Leader, Title.contract);
                 var explanations = new Dictionary<Hero, ExplainedNumber>();
-                var maxScore = 0f;
 
                 foreach (Hero hero in candidates)
                 {

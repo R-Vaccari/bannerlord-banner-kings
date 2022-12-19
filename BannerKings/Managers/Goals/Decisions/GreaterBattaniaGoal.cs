@@ -88,6 +88,7 @@ namespace BannerKings.Managers.Goals.Decisions
                         .SetTextVariable("CULTURE", culture.EncyclopediaText));
                 }
 
+                var battaniaKingdom = Campaign.Current.Kingdoms.FirstOrDefault(k => k.StringId == "battania");
                 if (referenceHero.Clan.Kingdom != null)
                 {
                     if (referenceHero.Clan.Kingdom.Culture != culture)

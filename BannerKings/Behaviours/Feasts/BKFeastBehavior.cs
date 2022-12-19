@@ -1,6 +1,7 @@
 using BannerKings.Behaviours.Marriage;
 using BannerKings.Managers.Goals.Decisions;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -168,6 +169,14 @@ namespace BannerKings.Behaviours.Feasts
             if (feast.EndDate.IsPast)
             {
                 EndFeast(feast, new TextObject());
+            }
+
+            if (settlement.OwnerClan != null && settlement.MapFaction.IsKingdomFaction)
+            {
+                if (FactionManager.GetEnemyKingdoms(settlement.MapFaction as Kingdom).Count() > 0)
+                {
+                    EndFeast(feast, new TextObject("{=!}The kingdom is at war!"));
+                }
             }
         }
 

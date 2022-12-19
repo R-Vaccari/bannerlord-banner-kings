@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BannerKings.Managers.Policies;
@@ -6,6 +7,7 @@ using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Inventory;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -392,9 +394,41 @@ namespace BannerKings.UI.Management
         {
             var tournament = new TournamentData(settlement.Town);
             data.TournamentData = tournament;
-            roster = tournament.Roster;
-            InventoryManager.OpenScreenAsStash(tournament.Roster);
-            RefreshValues();
+
+            var list = new List<InquiryElement>();
+            foreach (var element in MobileParty.MainParty.ItemRoster)
+            {
+                var item = element.EquipmentElement.Item;
+                if (item.HasWeaponComponent || item.HasArmorComponent || (item.HasHorseComponent && !item.HorseComponent.IsLiveStock))
+                {
+                    if (item.Value > 100)
+                    {
+                        list.Add(new InquiryElement(item,
+                                                element.EquipmentElement.GetModifiedItemName().ToString(),
+                                                new ImageIdentifier(item),
+                                                true,
+                                                ""));
+                    }
+                }
+            }
+
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                GameTexts.FindText("str_tournament")
+                .SetTextVariable("SETTLEMENT_NAME", settlement.Name)
+                .ToString(),
+                new TextObject("{=!}Select a prize for your tournament. The bigger is it's value, the more renown will be awarded to once the tournament is finished.").ToString(),
+                null,
+                true,
+                1,
+                GameTexts.FindText("str_accept").ToString(),
+                GameTexts.FindText("str_reject").ToString(),
+                delegate (List<InquiryElement> list)
+                {
+                    ItemObject item = (ItemObject)list[0].Identifier;
+                    tournament.SetPrize(item);
+                    RefreshValues();
+                },
+                null));
         }
 
         public override void OnFinalize()

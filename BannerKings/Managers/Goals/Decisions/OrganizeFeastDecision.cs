@@ -161,8 +161,12 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             if (guests.Count < 3)
             {
-                InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=YR4uDhkZ}Too few guests! Invite at least 3 clans for a feast.").ToString()));
+                if (GetFulfiller() == Hero.MainHero)
+                {
+                    InformationManager.DisplayMessage(new InformationMessage(
+                                       new TextObject("{=YR4uDhkZ}Too few guests! Invite at least 3 clans for a feast.").ToString()));
+                }
+               
                 return;
             }
 
