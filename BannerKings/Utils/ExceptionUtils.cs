@@ -23,13 +23,13 @@ namespace BannerKings.Utils
                     .ToString(),
                     ex);
                 File.AppendAllText(path + fileName, Environment.NewLine + exception.Message + Environment.NewLine + ex.StackTrace);
-                if (notifty)
-                {
-                    InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=3dMr1P4W}A Banner Kings error was detected. Send the contents of {FILE} from BannerKings module to support channel.")
-                    .SetTextVariable("FILE", fileName)
-                    .ToString()));
-                }
+                //if (notifty)
+                //{
+                //    InformationManager.DisplayMessage(new InformationMessage(
+                //    new TextObject("{=3dMr1P4W}A Banner Kings error was detected. Send the contents of {FILE} from BannerKings module to support channel.")
+                //    .SetTextVariable("FILE", fileName)
+                //    .ToString()));
+                //}
             }
         }
     }

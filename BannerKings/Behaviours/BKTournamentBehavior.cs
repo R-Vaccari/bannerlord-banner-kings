@@ -1,4 +1,5 @@
 using BannerKings.Managers.Skills;
+using BannerKings.Utils;
 
 using HarmonyLib;
 
@@ -32,12 +33,12 @@ namespace BannerKings.Behaviours
         private void OnTournamentFinished(CharacterObject winner, MBReadOnlyList<CharacterObject> participants, Town town,
             ItemObject prize)
         {
-            if (BannerKingsConfig.Instance.PopulationManager == null)
+            ExceptionUtils.TryCatch(() =>
             {
-                return;
-            }
-            try
-            {
+                if (BannerKingsConfig.Instance.PopulationManager == null)
+                {
+                    return;
+                }
 
                 if (participants.Contains(Hero.MainHero.CharacterObject))
                 {
@@ -98,8 +99,7 @@ namespace BannerKings.Behaviours
                             town.Name)));
                     tournament.Active = false;
                 }
-            }
-            catch (Exception ex) { }
+            }, "OnTournamentFinished");
         }
 
     }
