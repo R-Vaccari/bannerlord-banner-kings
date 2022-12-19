@@ -54,6 +54,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKMarriageBehavior());
             campaignStarter.AddBehavior(new BKFeastBehavior());
             campaignStarter.AddBehavior(new BKWorkshopBehavior());
+            //campaignStarter.AddBehavior(new BKGentryBehavior());
             //campaignStarter.AddBehavior(new BKCombatBehavior());
 
             campaignStarter.AddModel(new BKPrisonerModel());
