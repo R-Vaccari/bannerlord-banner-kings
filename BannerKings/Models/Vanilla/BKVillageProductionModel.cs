@@ -223,7 +223,7 @@ namespace BannerKings.Models.Vanilla
             if (valid)
             {
                 var acres = data.Pastureland;
-                result.Add((acres * data.GetAcreOutput("pasture")) / item.HorseComponent.MeatCount);
+                result.Add((acres * data.GetAcreOutput("pasture")) / Math.Min(item.HorseComponent.MeatCount, 0));
                 if (item.IsMountable)
                 {
                     result.AddFactor(-0.5f);
