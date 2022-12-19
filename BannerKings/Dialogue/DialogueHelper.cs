@@ -102,7 +102,7 @@ namespace BannerKings.Dialogue
             result.Add(new DialogueOption(
                 new TextObject("{=Pmo8GKez}Let it be known that {PROPOSER} and {PROPOSED} are now united in blood. I hope that we can keep finding common cause in the future, and thrive together.")
                 .SetTextVariable("PROPOSED", contract.Proposed.Name)
-                .SetTextVariable("PROPOSER", contract.Proposed.Name),
+                .SetTextVariable("PROPOSER", contract.Proposer.Name),
                 0.1f,
                 0.0f,
                 0f,

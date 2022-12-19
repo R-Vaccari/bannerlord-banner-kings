@@ -228,7 +228,6 @@ namespace BannerKings.UI.Management
                 new TextObject("{=uaEXD3tE}Manpower from serf and craftsmen classes. These are drafted as cultural non-noble recruits.")
                     .ToString()));
 
-
             ManpowerInfo.Add(new InformationElement(new TextObject("{=4gnA3tsw}Militarism:").ToString(), 
                 $"{data.MilitaryData.Militarism.ResultNumber:P}",
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
@@ -283,7 +282,8 @@ namespace BannerKings.UI.Management
             }
             else
             {
-                RaiseMilitiaButton = new DecisionElement().SetAsButtonOption("Raise militia", delegate
+                RaiseMilitiaButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Raise militia").ToString(), 
+                    delegate
                 {
                     var serfs = data.GetTypeCount(PopType.Serfs);
                     var party = settlement.MilitiaPartyComponent.MobileParty;
