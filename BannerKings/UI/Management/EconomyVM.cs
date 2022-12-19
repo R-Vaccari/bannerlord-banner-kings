@@ -401,17 +401,22 @@ namespace BannerKings.UI.Management
                 var item = element.EquipmentElement.Item;
                 if (item.HasWeaponComponent || item.HasArmorComponent || (item.HasHorseComponent && !item.HorseComponent.IsLiveStock))
                 {
-                    list.Add(new InquiryElement(item, 
-                        element.EquipmentElement.GetModifiedItemName().ToString(),
-                        new ImageIdentifier(item),
-                        true,
-                        ""));
+                    if (item.Value > 100)
+                    {
+                        list.Add(new InquiryElement(item,
+                                                element.EquipmentElement.GetModifiedItemName().ToString(),
+                                                new ImageIdentifier(item),
+                                                true,
+                                                ""));
+                    }
                 }
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject().ToString(),
-                new TextObject().ToString(),
+                GameTexts.FindText("str_tournament")
+                .SetTextVariable("SETTLEMENT_NAME", settlement.Name)
+                .ToString(),
+                new TextObject("{=!}Select a prize for your tournament. The bigger is it's value, the more renown will be awarded to once the tournament is finished.").ToString(),
                 null,
                 true,
                 1,
