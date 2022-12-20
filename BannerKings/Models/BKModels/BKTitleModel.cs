@@ -179,7 +179,7 @@ namespace BannerKings.Models.BKModels
 
         public HashSet<Hero> GetSuccessionCandidates(Hero currentLeader, FeudalContract contract)
         {
-            var list = new List<Hero>();
+            var list = new HashSet<Hero>();
             var succession = contract.Succession;
 
             if (succession == SuccessionType.Hereditary_Monarchy)
@@ -203,7 +203,10 @@ namespace BannerKings.Models.BKModels
                 {
                     if (clan == currentLeader.Clan && succession == SuccessionType.Imperial)
                     {
-                        list.AddRange(GetInheritanceCandidates(currentLeader));
+                        foreach (var candidate in GetInheritanceCandidates(currentLeader))
+                        {
+                            list.Add(candidate);
+                        }
                     }
                     else if (clan != currentLeader.Clan)
                     {
