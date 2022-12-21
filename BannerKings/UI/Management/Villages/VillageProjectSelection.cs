@@ -177,7 +177,6 @@ namespace BannerKings.UI.Management.Villages
                     }
                 }
             }
-            //RefreshCurrentDevelopment();
         }
 
         private void RefreshDevelopmentsQueueIndex()
