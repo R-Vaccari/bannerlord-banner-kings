@@ -203,9 +203,9 @@ namespace BannerKings.Models.BKModels
                 {
                     if (clan == currentLeader.Clan && succession == SuccessionType.Imperial)
                     {
-                        foreach (var hero in GetInheritanceCandidates(currentLeader))
+                        foreach (var candidate in GetInheritanceCandidates(currentLeader))
                         {
-                            list.Add(hero);
+                            list.Add(candidate);
                         }
                     }
                     else if (clan != currentLeader.Clan)

@@ -14,7 +14,7 @@ namespace BannerKings.Managers.Goals.Decisions
         private BKEducationBehavior behavior;
         private BookType book;
 
-        public AcquireBookDecision() : base("goal_acquire_book", GoalUpdateType.Manual)
+        public AcquireBookDecision() : base("goal_acquire_book", GoalCategory.Personal, GoalUpdateType.Manual)
         {
             var name = new TextObject("{=DNAVAvqp}Acquire Book");
             var description = new TextObject("{=b4tSEcHn}Acquire a book from local book seller. Books can be read for skill improvements and progression in Scholarship.");

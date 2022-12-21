@@ -124,6 +124,10 @@ namespace BannerKings.UI.Extensions
         {
             var options = new List<InquiryElement>();
 
+            var personalDecisions = new List<InquiryElement>();
+            var kingdomDecisions = new List<InquiryElement>();
+            var uniqueDecisions = new List<InquiryElement>();
+
             foreach (var goal in DefaultGoals.Instance.All)
             {
                 if (goal.IsAvailable())
@@ -136,24 +140,89 @@ namespace BannerKings.UI.Extensions
                         hint = reasons.Aggregate(hint, (current, reason) => current + Environment.NewLine + reason);
                     }
 
-                    options.Add(new InquiryElement(goal,
+                    var element = new InquiryElement(goal,
                         goal.Name.ToString(),
                         null,
                         enabled,
-                        hint));
-                }           
+                        hint);
+
+                    if (goal.goalType == GoalCategory.Personal)
+                    {
+                        personalDecisions.Add(element);
+                    }
+                    else if (goal.goalType == GoalCategory.Kingdom)
+                    {
+                        kingdomDecisions.Add(element);
+                    }
+                    else
+                    {
+                        uniqueDecisions.Add(element);
+                    }
+                }
             }
+
+            options.Add(new InquiryElement(
+            new DecisionCategoryOption(
+                new TextObject("{=!}Personal"),
+                new TextObject("{=!}Personal decisions affect your character and sometimes your close family."),
+                personalDecisions),
+            new TextObject("{=!}Personal").ToString(),
+            null,
+            personalDecisions.Count > 0,
+            new TextObject("{=!}Personal decisions affect your character and sometimes your close family.").ToString()));
+
+            options.Add(new InquiryElement(
+            new DecisionCategoryOption(
+                GameTexts.FindText("str_kingdom"),
+                new TextObject("{=!}Kingdom decisions affect your realm as a whole or your family's position in the realm."),
+                kingdomDecisions),
+            GameTexts.FindText("str_kingdom").ToString(),
+            null,
+            kingdomDecisions.Count > 0,
+            new TextObject("{=!}Kingdom decisions affect your realm as a whole or your family's position in the realm.").ToString()));
+
+            options.Add(new InquiryElement(
+            new DecisionCategoryOption(
+                new TextObject("{=!}Unique"),
+                new TextObject("{=!}Unique decisions are difficult and special decisions that often can only be taken once, such as reviving a historical empire."),
+                uniqueDecisions),
+            new TextObject("{=!}Unique").ToString(),
+            null,
+            uniqueDecisions.Count > 0,
+            new TextObject("{=!}Unique decisions are special decisions that often can only be taken once, such as reviving a historical empire.").ToString()));
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                             new TextObject("{=GMNhGSUb}Decisions").ToString(),
-                            new TextObject("{=bn2Ohzow}Choose a personal decision to take.").ToString(),
-                            options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
+                            new TextObject("{=!}Choose a category of decisions to take. Decisions are always taken on behalf of the family head, regardless of what hero is chosen in the Character tab.").ToString(),
+                            options, 
+                            true,
+                            1, 
+                            GameTexts.FindText("str_done").ToString(), 
+                            string.Empty,
                             delegate (List<InquiryElement> x)
                             {
-                                var result = (Goal)x[0].Identifier;
-                                result.ShowInquiry();
-                            }, null, string.Empty));
-
+                                DecisionCategoryOption categoryOption = (DecisionCategoryOption)x[0].Identifier;
+                                MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                                        categoryOption.Title.ToString(),
+                                        categoryOption.Description.ToString(),
+                                        categoryOption.Options, 
+                                        true, 
+                                        1,
+                                        GameTexts.FindText("str_done").ToString(),
+                                        GameTexts.FindText("str_cancel").ToString(),
+                                        delegate (List<InquiryElement> x)
+                                        {
+                                            var result = (Goal)x[0].Identifier;
+                                            result.ShowInquiry();
+                                        },
+                                        delegate (List<InquiryElement> x)
+                                        {
+                                            OpenDecisions();
+                                        },
+                                        string.Empty));
+                            }, 
+                            null, 
+                            string.Empty));
             OnRefresh();
         }
 
@@ -169,6 +238,20 @@ namespace BannerKings.UI.Extensions
         {
             ReligionVisible = false;
             OnRefresh();
+        }
+
+        private class DecisionCategoryOption
+        {
+            public DecisionCategoryOption(TextObject title, TextObject description, List<InquiryElement> options)
+            {
+                Title = title;
+                Description = description;
+                Options = options;
+            }
+
+            public TextObject Title { get; private set; }
+            public TextObject Description { get; private set; }
+            public List<InquiryElement> Options { get; private set; }
         }
     }
 }

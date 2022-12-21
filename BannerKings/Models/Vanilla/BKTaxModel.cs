@@ -202,9 +202,9 @@ namespace BannerKings.Models.Vanilla
             return baseResult;
         }
 
-        public ExplainedNumber CalculateVillageTaxFromIncome(Village village)
+        public ExplainedNumber CalculateVillageTaxFromIncome(Village village, bool descriptions = false, bool applyWithdrawal = false)
         {
-            var result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
             result.LimitMax(10000f);
             if (village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided)
@@ -260,15 +260,19 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            if (data != null)
-            {
-                CalculateDueTax(data, (float)result.ResultNumber);
-            }
-
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(village.Settlement.OwnerClan);
             if (council != null)
             {
                 CalculateDueWages(council, (float)result.ResultNumber);
+            }
+
+            if (data != null)
+            {
+                CalculateDueTax(data, (float)result.ResultNumber);
+                if (applyWithdrawal)
+                {
+                    data.VillageData.LastPayment = (int)result.ResultNumber;
+                }
             }
 
             return result;

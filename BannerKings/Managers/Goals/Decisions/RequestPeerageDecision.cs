@@ -14,7 +14,7 @@ namespace BannerKings.Managers.Goals.Decisions
     internal class RequestPeerageDecision : Goal
     {
 
-        public RequestPeerageDecision() : base("goal_request_peerage_decision", GoalUpdateType.Manual)
+        public RequestPeerageDecision() : base("goal_request_peerage_decision", GoalCategory.Kingdom, GoalUpdateType.Manual)
         {
             var name = new TextObject("{=sdpM1PD3}Request Full Peerage");
             var description = new TextObject("{=O7LLRFEX}Request the recognition of your family as a full Peer of the realm. A full Peer does not have legal restrictions on voting, starting elections, granting knighthood, hosting a council or being awarded fiefs. They are the very top of the realm's nobility. Successfully requesting Peerage will require renown (clan tier 4 minimum is recommended) and having good relations with full Peers. Holding property (caravans, workshops, estates, lordships) is a good positive factor as well.\n");

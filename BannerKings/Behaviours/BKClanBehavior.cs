@@ -1070,7 +1070,11 @@ namespace BannerKings.Behaviours
             private static int CalculateVillageIncome(ref ExplainedNumber goldChange, Village village, Clan clan,
                 bool applyWithdrawals)
             {
-                var total = (int)BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(village).ResultNumber;
+                var total = (int)BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(village, 
+                    false, 
+                    applyWithdrawals)
+                    .ResultNumber;
+
                 if (applyWithdrawals)
                 {
                     village.TradeTaxAccumulated -= MathF.Min(village.TradeTaxAccumulated, total);

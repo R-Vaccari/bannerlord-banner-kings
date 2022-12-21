@@ -4,6 +4,7 @@ using BannerKings.UI.CampaignStart;
 using BannerKings.UI.Estates;
 using BannerKings.UI.Management;
 using BannerKings.UI.Management.BannerKings.UI.Panels;
+using BannerKings.UI.Management.Villages;
 using BannerKings.UI.Marriages;
 using BannerKings.UI.Panels;
 using BannerKings.UI.Titles;

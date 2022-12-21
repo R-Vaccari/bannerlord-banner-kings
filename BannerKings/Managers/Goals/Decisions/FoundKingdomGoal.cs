@@ -12,7 +12,7 @@ namespace BannerKings.Managers.Goals.Decisions
 {
     internal class FoundKingdomGoal : Goal
     {
-        public FoundKingdomGoal() : base("goal_found_kingdom", GoalUpdateType.Hero)
+        public FoundKingdomGoal() : base("goal_found_kingdom", GoalCategory.Unique, GoalUpdateType.Hero)
         {
             var name = new TextObject("{=nbV21qZv}Found Kingdom");
             var description = new TextObject("{=Df3Fdnuw}Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title.");

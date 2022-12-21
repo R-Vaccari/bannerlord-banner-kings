@@ -14,7 +14,7 @@ namespace BannerKings.Managers.Goals.Decisions
     {
         private readonly List<Settlement> settlements;
 
-        public GreaterBattaniaGoal() : base("goal_greater_battania", GoalUpdateType.Settlement)
+        public GreaterBattaniaGoal() : base("goal_greater_battania", GoalCategory.Unique, GoalUpdateType.Settlement)
         {
             var name = new TextObject("{=BLugLsWR}Unite Greater Battania");
             var description = new TextObject("{=EKBkrvse}Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm. The new empire will have a feudal contract with hereditary succcession.\n\n");
@@ -116,14 +116,18 @@ namespace BannerKings.Managers.Goals.Decisions
                         .SetTextVariable("RELIGION", amra.Faith.GetFaithName()));
                 }
 
-                failedReasons.AddRange
-                (
-                    from settlement in settlements
-                    let title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement)
-                    where title.deFacto.MapFaction != referenceHero.MapFaction
-                    select new TextObject("{=btzaJMMD}Your kingdom is not de facto ruler of {SETTLEMENT}")
-                        .SetTextVariable("SETTLEMENT", settlement.EncyclopediaLinkWithName)
-                );
+                if (BannerKingsConfig.Instance.TitleManager != null)
+                {
+                    foreach (var settlement in settlements)
+                    {
+                        var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                        if (title != null && (title.deFacto == null || title.deFacto.MapFaction != referenceHero.MapFaction))
+                        {
+                            failedReasons.Add(new TextObject("{=btzaJMMD}Your kingdom is not de facto ruler of {SETTLEMENT}")
+                                .SetTextVariable("SETTLEMENT", settlement.Name));
+                        }
+                    }
+                }
             }
 
             return failedReasons.IsEmpty();

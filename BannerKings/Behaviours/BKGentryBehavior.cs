@@ -1,24 +1,30 @@
 ﻿using BannerKings.Actions;
 using BannerKings.Managers.Populations.Estates;
+using BannerKings.Utils;
 using Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
+using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Behaviours
 {
     public class BKGentryBehavior : CampaignBehaviorBase
     {
+        private Dictionary<Hero, CampaignTime> heroRecords = new Dictionary<Hero, CampaignTime>();
         public override void RegisterEvents()
         {
             CampaignEvents.OnNewGameCreatedPartialFollowUpEndEvent.AddNonSerializedListener(this, OnGameCreatedFollowUp);
-            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, OnSettlementDailyTick);
+            //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, OnSettlementDailyTick);
+            CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnClanDailyTick);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -31,6 +37,114 @@ namespace BannerKings.Behaviours
             {
                 InitializeGentry(settlement, true);
             }
+        }
+
+        private void OnClanDailyTick(Clan clan)
+        {
+            ExceptionUtils.TryCatch(() =>
+            {
+                if (clan.IsBanditFaction || clan.IsUnderMercenaryService || clan.Kingdom == null || clan == Clan.PlayerClan)
+                {
+                    return;
+                }
+
+                (bool, Estate) gentryTuple = IsGentryClan(clan);
+                if (!gentryTuple.Item1 || gentryTuple.Item2 == null)
+                {
+                    return;
+                }
+           
+                Kingdom kingdom = clan.Kingdom;
+                bool war = FactionManager.GetEnemyKingdoms(kingdom).Count() > 0;
+                if (!war)
+                {
+                    if (clan.WarPartyComponents.Count > 0)
+                    {
+                        var estate = gentryTuple.Item2;
+                        foreach (var party in clan.WarPartyComponents)
+                        {
+                            FinishParty(party, estate);
+                        }
+                    }
+                }
+                else
+                {
+                    if (clan.WarPartyComponents.Count > 0)
+                    {
+                        var estate = gentryTuple.Item2;
+                        foreach (var party in clan.WarPartyComponents)
+                        {
+                            if (party.Leader != null && party.MobileParty.Army == null)
+                            {
+                                FinishParty(party, estate);
+                            }
+                        }
+                    }
+                }
+            },
+            GetType().Name);
+        }
+
+        private void FinishParty(WarPartyComponent party, Estate estate)
+        {
+            estate.AddPopulation(PopType.Serfs, party.MobileParty.MemberRoster.TotalRegulars);
+            estate.AddManpower(PopType.Serfs, party.MobileParty.MemberRoster.TotalRegulars);
+
+            estate.AddPopulation(PopType.Slaves, party.MobileParty.PrisonRoster.TotalRegulars);
+            DestroyPartyAction.Apply(null, party.MobileParty);
+        }
+
+        public (bool, Estate) IsGentryClan(Clan clan)
+        {
+            bool isGentry = false;
+            Estate estate = null;
+
+            if (clan.Fiefs.Count > 0)
+            {
+                return new(false, null);
+            }
+
+            var estates = BannerKingsConfig.Instance.PopulationManager.GetEstates(clan.Leader);
+            if (estates.Count > 0)
+            {
+                estate = estates[0];
+            }
+
+            var court = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+            if (court != null && court.Peerage != null)
+            {
+                isGentry = court.Peerage.IsLesserPeerage;
+            }
+
+            return new(isGentry, estate);
+        }
+
+        public void SummonGentry(Clan clan, Army army, Estate estate)
+        {
+            (bool, Estate) isGentry = IsGentryClan(clan);
+            if (isGentry.Item1 && estate == isGentry.Item2)
+            {
+                MobileParty party = MobilePartyHelper.SpawnLordParty(clan.Leader, estate.EstatesData.Settlement);
+                SetPartyAiAction.GetActionForEscortingParty(party, army.LeaderParty);
+            }
+        }
+
+        public bool IsAvailableForSummoning(Clan clan, Estate estate)
+        {
+            Hero leader = clan.Leader;
+            bool leaderReady = leader.IsAlive && !leader.IsChild &&
+                leader.PartyBelongedTo == null && !leader.IsPrisoner && !leader.IsNoncombatant;
+            var settlement = estate.EstatesData.Settlement;
+            bool villageReady = settlement.Village.VillageState == Village.VillageStates.Normal;
+
+            return leaderReady && villageReady && estate.GetManpower(PopType.Serfs) >= 10;
+        }
+
+        public int GetGentryPartySize(Clan clan, Estate estate)
+        {
+            var leader = clan.Leader;
+            var manpower = estate.GetManpower(PopType.Serfs);
+            return MathF.Min(manpower, 20);
         }
 
         private void OnSettlementDailyTick(Settlement settlement)
@@ -58,7 +172,7 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            if (MBRandom.RandomFloat < (campaignStart ? 0.4f : 0.003f))
+            if (MBRandom.RandomFloat < (campaignStart ? 0.4f : 0.0001f))
             {
                 return;
             }
@@ -137,8 +251,8 @@ namespace BannerKings.Behaviours
                 else
                 {
                     hero.ChangeHeroGold(1000 + cost);
-                    EstateAction action = BannerKingsConfig.Instance.EstatesModel.GetBuy(vacantEstate, hero);
-                    action.TakeAction();
+                    GiveGoldAction.ApplyBetweenCharacters(hero, vacantEstate.Owner, cost);
+                    vacantEstate.SetOwner(hero);
                 }
             }
             else
