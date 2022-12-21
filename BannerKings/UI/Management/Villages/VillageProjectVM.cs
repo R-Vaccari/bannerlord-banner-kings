@@ -1,26 +1,24 @@
 using System.Text;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
-using BannerKings.Models.Vanilla;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
-using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Management
+namespace BannerKings.UI.Management.Villages
 {
     public class VillageProjectVM : BannerKingsViewModel
     {
         private MBBindingList<InformationElement> constructionInfo;
         private MBBindingList<InformationElement> productionInfo;
-        private SettlementProjectSelectionVM projects;
+        private VillageProjectSelectionVM projects;
         private readonly VillageData villageData;
 
         public VillageProjectVM(PopulationData data) : base(data, true)
         {
-            projects = new SettlementProjectSelectionVM(data.Settlement, OnProjectSelectionDone);
+            projects = new VillageProjectSelectionVM(data);
             constructionInfo = new MBBindingList<InformationElement>();
             productionInfo = new MBBindingList<InformationElement>();
             GameTexts.SetVariable("VILLAGE_NAME", data.Settlement.Name);
@@ -30,7 +28,7 @@ namespace BannerKings.UI.Management
         [DataSourceProperty] public string Title => new TextObject("{=y5BMxhJv}Projects at {VILLAGE_NAME}").ToString();
 
         [DataSourceProperty]
-        public SettlementProjectSelectionVM Projects
+        public VillageProjectSelectionVM Projects
         {
             get => projects;
 
@@ -79,19 +77,19 @@ namespace BannerKings.UI.Management
 
             ConstructionInfo.Clear();
             ProductionInfo.Clear();
-            ConstructionInfo.Add(new InformationElement(new TextObject("{=KbTvcQko}Construction:").ToString(), 
+            ConstructionInfo.Add(new InformationElement(new TextObject("{=KbTvcQko}Construction:").ToString(),
                 new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
                     .SetTextVariable("POINTS", villageData.Construction.ToString("0.00")).ToString(),
                 new TextObject("{=pVCiG95C}How much the local population can progress with construction projects, on a daily basis").ToString()));
 
-            ConstructionInfo.Add(new InformationElement(new TextObject("{=fvaNp0we}Current Progress:").ToString(), 
+            ConstructionInfo.Add(new InformationElement(new TextObject("{=fvaNp0we}Current Progress:").ToString(),
                 villageData.IsCurrentlyBuilding
                     ? FormatValue(villageData.CurrentBuilding.BuildingProgress /
                                   villageData.CurrentBuilding.GetConstructionCost())
                     : new TextObject("{=ZhWtAYrh}Daily project (endless)").ToString(),
                 new TextObject("{=uUQpLvpq}Amount of completed work in the current project").ToString()));
 
-            ConstructionInfo.Add(new InformationElement(new TextObject("{=CT7CW9ZL}Days to complete:").ToString(), 
+            ConstructionInfo.Add(new InformationElement(new TextObject("{=CT7CW9ZL}Days to complete:").ToString(),
                 villageData.IsCurrentlyBuilding
                     ? FormatDays((villageData.CurrentBuilding.GetConstructionCost() -
                                   villageData.CurrentBuilding.BuildingProgress) /
@@ -118,7 +116,7 @@ namespace BannerKings.UI.Management
                     .SetTextVariable("EXPLANATIONS", productionExplained.GetExplanations())
                     .ToString()));
 
-            ProductionInfo.Add(new InformationElement(new TextObject("Items Produced:").ToString(), 
+            ProductionInfo.Add(new InformationElement(new TextObject("Items Produced:").ToString(),
                 productionString,
                 new TextObject("{=0RAPEDaT}Goods locally produced by the population.").ToString()));
         }
@@ -130,7 +128,7 @@ namespace BannerKings.UI.Management
                 villageData.BuildingsInProgress.Clear();
                 var localDevelopmentList = Projects.LocalDevelopmentList;
                 var building = Projects.CurrentDailyDefault?.Building;
-                if (localDevelopmentList is {Count: > 0})
+                if (localDevelopmentList is { Count: > 0 })
                 {
                     foreach (VillageBuilding building2 in localDevelopmentList)
                     {
