@@ -9,7 +9,7 @@ namespace BannerKings.Managers.Goals
         {
             get
             {
-                yield return CallBannersGoal;
+                //yield return CallBannersGoal;
                 yield return AssumeCulture;
                 yield return OrganizeFeastDecision;
                 yield return AcquireBookDecision;
