@@ -249,8 +249,7 @@ namespace BannerKings.UI.Management
             if (IsVillage)
             {
                 var villageData = data.VillageData;
-
-                var villageRevenue = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(villageData.Village);
+                var villageRevenue = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(villageData.Village, true);
                 RevenueInfo.Add(new InformationElement(new TextObject("{=BXFLXR6B}Village Revenue:").ToString(),
                     FormatFloatGain(villageRevenue.ResultNumber),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
@@ -258,6 +257,10 @@ namespace BannerKings.UI.Management
                             new TextObject("{=L3KACGcQ}The village's revenue output. Most of the revenue in villages is generated through production and selling of products by serfs and slaves. They are taxed through their labor rather than in coin. Nobles and craftsmen however may be taxed in coins through construction of tax offices."))
                         .SetTextVariable("EXPLANATIONS", villageRevenue.GetExplanations())
                         .ToString()));
+
+                RevenueInfo.Add(new InformationElement(new TextObject("{=!}Last Payment:").ToString(),
+                    FormatFloatGain(villageData.LastPayment),
+                    new TextObject("{=!}The last payment this it's owner village has done.").ToString()));
 
                 ProductionInfo.Add(new InformationElement(new TextObject("{=KbTvcQko}Construction:").ToString(),
                     new TextObject("{=mbUwoU0h}{POINTS} (Daily)")

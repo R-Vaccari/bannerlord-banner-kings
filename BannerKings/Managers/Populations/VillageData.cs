@@ -25,9 +25,8 @@ namespace BannerKings.Managers.Populations
         }
 
         [SaveableProperty(1)] private Village village { get; set; }
-
         [SaveableProperty(2)] private List<VillageBuilding> buildings { get; set; }
-
+        [SaveableProperty(3)] public int LastPayment { get; set; }
         [SaveableProperty(5)] private Queue<Building> inProgress { get; set; }
 
         public Village Village => village;
