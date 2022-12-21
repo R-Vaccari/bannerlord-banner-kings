@@ -1,7 +1,9 @@
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
+using BannerKings.Utils;
 using BannerKings.Utils.Extensions;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -20,40 +22,97 @@ namespace BannerKings.Models.Vanilla
             var proposedScore = GetSpouseScore(secondHero).ResultNumber;
             result.Add(proposerScore - proposedScore, new TextObject("{=NeydSXjc}Score differences"));
 
-            if (proposer.Culture != secondHero.Culture)
+            ExceptionUtils.TryCatch(() =>
             {
-                result.Add(-50f, GameTexts.FindText("str_culture"));
-            }
-            else
-            {
-                result.Add(50f, GameTexts.FindText("str_culture"));
-            }
-
-            var proposerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(proposer);
-            var proposedReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(secondHero);
-
-            if (proposerReligion != proposedReligion)
-            {
-                float factor = -50f;
-                if (proposerReligion != null && proposedReligion != null)
+                if (proposer.Culture != secondHero.Culture)
                 {
-                    FaithStance stance = proposedReligion.Faith.GetStance(proposerReligion.Faith);
-                    if (stance == FaithStance.Hostile)
-                    {
-                        factor = -100f;
-                    }
-                    else if (stance == FaithStance.Tolerated)
-                    {
-                        factor = -20f;
-                    }
+                    result.Add(-50f, GameTexts.FindText("str_culture"));
+                }
+                else
+                {
+                    result.Add(50f, GameTexts.FindText("str_culture"));
                 }
 
-                result.Add(factor, new TextObject("{=gyHK87NL}Faith differences"));
-            } 
-            else if (proposerReligion != null && proposedReligion != null)
-            {
-                result.Add(50f, proposerReligion.Faith.GetFaithName());
-            }
+                var proposerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(proposer);
+                var proposedReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(secondHero);
+
+                if (proposerReligion != proposedReligion)
+                {
+                    float factor = -50f;
+                    if (proposerReligion != null && proposedReligion != null)
+                    {
+                        FaithStance stance = proposedReligion.Faith.GetStance(proposerReligion.Faith);
+                        if (stance == FaithStance.Hostile)
+                        {
+                            factor = -100f;
+                        }
+                        else if (stance == FaithStance.Tolerated)
+                        {
+                            factor = -20f;
+                        }
+                    }
+
+                    result.Add(factor, new TextObject("{=gyHK87NL}Faith differences"));
+                }
+                else if (proposerReligion != null && proposedReligion != null)
+                {
+                    result.Add(50f, proposerReligion.Faith.GetFaithName());
+                }
+
+                if (!IsCoupleSuitableForMarriage(proposer, secondHero))
+                {
+                    Hero playerCourting = Romance.GetCourtedHeroInOtherClan(proposer, secondHero);
+                    if (playerCourting != null && playerCourting != secondHero)
+                    {
+                        result.Add(-1000f, new TextObject("{=!}{HERO} is currently courting {COURTING}")
+                            .SetTextVariable("HERO", proposer.Name)
+                            .SetTextVariable("COURTING", playerCourting.Name));
+                    }
+
+                    Hero aiCourting = Romance.GetCourtedHeroInOtherClan(secondHero, proposer);
+                    if (aiCourting != null && aiCourting != proposer)
+                    {
+                        result.Add(-1000f, new TextObject("{=!}{HERO} is currently courting {COURTING}")
+                            .SetTextVariable("HERO", secondHero.Name)
+                            .SetTextVariable("COURTING", aiCourting.Name));
+                    }
+
+                    if (DiscoverAncestors(proposer, 3).Intersect(DiscoverAncestors(secondHero, 3)).Any())
+                    {
+                        result.Add(-1000f, new TextObject("{=!}Spouses are too closely related."));
+                    }
+
+                    if (proposer.IsFemale == secondHero.IsFemale)
+                    {
+                        result.Add(-1000f, new TextObject("{=!}Same sex marriages are not accepted."));
+                    }
+
+                    if (!proposer.CanMarry())
+                    {
+                        result.Add(-1000f, new TextObject("{=!}{HERO} is not available for marriage.")
+                            .SetTextVariable("HERO", proposer.Name));
+                    }
+
+                    if (!secondHero.CanMarry())
+                    {
+                        result.Add(-1000f, new TextObject("{=!}{HERO} is not available for marriage.")
+                            .SetTextVariable("HERO", secondHero.Name));
+                    }
+
+                    if (!IsClanSuitableForMarriage(proposer.Clan))
+                    {
+                        result.Add(-1000f, new TextObject("{=!}{CLAN} is not adequate for marriage.")
+                                                    .SetTextVariable("CLAN", proposer.Clan.Name));
+                    }
+
+                    if (!IsClanSuitableForMarriage(secondHero.Clan))
+                    {
+                        result.Add(-1000f, new TextObject("{=!}{CLAN} is not adequate for marriage.")
+                                                    .SetTextVariable("CLAN", secondHero.Clan.Name));
+                    }
+                }
+            },
+            GetType().Name);
 
             return result;
         }
@@ -226,6 +285,30 @@ namespace BannerKings.Models.Vanilla
             if (peerage.CanHaveCouncil) score += 20f;
 
             return score;
+        }
+
+        private IEnumerable<Hero> DiscoverAncestors(Hero hero, int n)
+        {
+            if (hero == null)
+            {
+                yield break;
+            }
+
+            yield return hero;
+            if (n <= 0)
+            {
+                yield break;
+            }
+
+            foreach (Hero item in DiscoverAncestors(hero.Mother, n - 1))
+            {
+                yield return item;
+            }
+
+            foreach (Hero item2 in DiscoverAncestors(hero.Father, n - 1))
+            {
+                yield return item2;
+            }
         }
     }
 }

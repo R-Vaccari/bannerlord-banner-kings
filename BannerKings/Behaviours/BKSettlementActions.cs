@@ -772,7 +772,7 @@ namespace BannerKings.Behaviours
             args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
             var settlement = Settlement.CurrentSettlement;
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            return data.EstateData != null;
+            return data != null && data.EstateData != null;
         }
 
         private static bool MenuSettlementManageCondition(MenuCallbackArgs args)

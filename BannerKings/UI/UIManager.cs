@@ -134,10 +134,30 @@ namespace BannerKings.UI
         [HarmonyPatch(typeof(Hero))]
         internal class HeroNamePatch
         {
+            private static Dictionary<Hero, TextObject> names = new Dictionary<Hero, TextObject>();
+
+            private static void AddName(Hero hero, TextObject name)
+            {
+                if (names.ContainsKey(hero))
+                {
+                    names[hero] = name;
+                }
+                else
+                {
+                    names.Add(hero, name); 
+                }
+            }
+
             [HarmonyPostfix]
             [HarmonyPatch("Name", MethodType.Getter)]
             internal static void GetterPostfix(Hero __instance, ref TextObject __result)
             {
+                if (names.ContainsKey(__instance) && MBRandom.RandomFloat > 0.001f)
+                {
+                    __result = names[__instance];
+                    return;
+                }
+
                 var namingSetting = BannerKingsSettings.Instance.Naming.SelectedValue;
                 if (__instance.IsLord && namingSetting != DefaultSettings.Instance.NamingNoTitles &&
                     BannerKingsConfig.Instance.TitleManager != null)
@@ -177,6 +197,7 @@ namespace BannerKings.UI
                             __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
                                 .SetTextVariable("TITLE", honorary)
                                 .SetTextVariable("NAME", name);
+                           
                         }
                     }
                     else if (__instance.Clan != null && __instance.Clan.Leader != __instance && BannerKingsSettings.Instance.CloseRelativesNaming)
@@ -216,6 +237,8 @@ namespace BannerKings.UI
                             }
                         }
                     }
+
+                    AddName(__instance, __result);
                 }
             }
         }
@@ -611,217 +634,6 @@ namespace BannerKings.UI
             }
         }
 
-        [HarmonyPatch(typeof(SettlementBuildingProjectVM), "RefreshProductionText")]
-        internal class BuildingProjectVMRefreshPatch
-        {
-            private static bool Prefix()
-            {
-                var settlement = Settlement.CurrentSettlement;
-                if (!settlement.IsVillage)
-                {
-                    return true;
-                }
-
-                return false;
-            }
-        }
-
-        [HarmonyPatch(typeof(SettlementProjectSelectionVM), "OnCurrentProjectSelection")]
-        internal class OnCurrentProjectSelectionPatch
-        {
-            private static bool Prefix(SettlementProjectSelectionVM __instance, SettlementProjectVM selectedItem,
-                bool isSetAsActiveDevelopment)
-            {
-                if (!selectedItem.IsDaily)
-                {
-                    if (isSetAsActiveDevelopment)
-                    {
-                        __instance.LocalDevelopmentList.Clear();
-                        __instance.LocalDevelopmentList.Add(selectedItem.Building);
-                    }
-                    else if (__instance.LocalDevelopmentList.Exists(d => d == selectedItem.Building))
-                    {
-                        __instance.LocalDevelopmentList.Remove(selectedItem.Building);
-                    }
-                    else
-                    {
-                        __instance.LocalDevelopmentList.Add(selectedItem.Building);
-                    }
-                }
-                else
-                {
-                    __instance.CurrentDailyDefault.IsDefault = false;
-                    __instance.CurrentDailyDefault = selectedItem as SettlementDailyProjectVM;
-                    (selectedItem as SettlementDailyProjectVM).IsDefault = true;
-                }
-
-                var refresh = __instance.GetType().GetMethod("RefreshDevelopmentsQueueIndex",
-                    BindingFlags.Instance | BindingFlags.NonPublic);
-                refresh.Invoke(__instance, null);
-                if (__instance.LocalDevelopmentList.Count == 0)
-                {
-                    __instance.CurrentSelectedProject = __instance.CurrentDailyDefault;
-                }
-                else if (selectedItem != __instance.CurrentSelectedProject)
-                {
-                    __instance.CurrentSelectedProject = selectedItem;
-                }
-
-                var fi = __instance.GetType()
-                    .GetField("_onAnyChangeInQueue", BindingFlags.Instance | BindingFlags.NonPublic);
-                var onAnyChangeInQueue = (Action) fi.GetValue(__instance);
-                onAnyChangeInQueue?.Invoke();
-
-                return false;
-            }
-        }
-
-        [HarmonyPatch(typeof(SettlementProjectSelectionVM), "Refresh")]
-        internal class ProjectSelectionRefreshPatch
-        {
-            private static void Postfix(SettlementProjectSelectionVM __instance)
-            {
-                var settlement = (Settlement) __instance.GetType()
-                    .GetField("_settlement", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(__instance);
-
-                List<Building> buildings = new List<Building>();
-             
-                if (settlement.IsVillage)
-                {
-                    var villageData = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).VillageData;
-                    if (villageData != null)
-                    {
-                        foreach (var b in villageData.Buildings)
-                        {
-                            buildings.Add(b);
-                        }
-                    }
-
-                    Queue<Building> inProgress = null;
-                    string currentBuildingId = "";
-                    string currentDefaultId = "";
-
-                    inProgress = villageData.BuildingsInProgress;
-                    currentDefaultId = villageData.CurrentDefault.BuildingType.StringId;
-                    currentBuildingId = villageData.CurrentBuilding.BuildingType.StringId;
-                    SetBuildings(__instance, buildings, inProgress, currentBuildingId, currentDefaultId);
-                }
-                else if (settlement.Town != null)
-                {
-                    var town = settlement.Town;
-                    foreach (var b in town.Buildings)
-                    {
-                        if (!b.IsBuildingSuitable())
-                        {
-                            var project = __instance.AvailableProjects.FirstOrDefault(x => x.Building.BuildingType == b.BuildingType);
-                            if (project != null)
-                            {
-                                __instance.AvailableProjects.Remove(project);
-                            }
-                        }
-                    }
-                }
-            }
-
-            private static void SetBuildings(SettlementProjectSelectionVM __instance, List<Building> buildings,
-                Queue<Building> buildingsInProgress, string currentBuildingId, string currentDefaultId)
-            {
-                var selection = __instance.GetType().GetMethod("OnCurrentProjectSelection",
-                            BindingFlags.Instance | BindingFlags.NonPublic);
-                var set = __instance.GetType().GetMethod("OnCurrentProjectSet",
-                    BindingFlags.Instance | BindingFlags.NonPublic);
-                var reset = __instance.GetType().GetMethod("OnResetCurrentProject",
-                    BindingFlags.Instance | BindingFlags.NonPublic);
-
-                foreach (var building in buildings)
-                {
-                    var location = building.BuildingType.BuildingLocation;
-                    if (location != BuildingLocation.Daily)
-                    {
-                        var vm = new SettlementBuildingProjectVM(
-                            delegate (SettlementProjectVM x, bool y)
-                            {
-                                selection.Invoke(__instance, new object[] { x, y });
-                            },
-                            delegate (SettlementProjectVM x) { set.Invoke(__instance, new object[] { x }); },
-                            delegate
-                            {
-                                __instance.CurrentSelectedProject = __instance.LocalDevelopmentList.Count > 0
-                                    ? __instance.AvailableProjects.First(p =>
-                                        p.Building.BuildingType.StringId == __instance.LocalDevelopmentList[0]
-                                            .BuildingType.StringId)
-                                    : __instance.CurrentDailyDefault;
-                            }, building);
-
-                        __instance.AvailableProjects.Add(vm);
-                        if (building.BuildingType.StringId == currentBuildingId)
-                        {
-                            __instance.CurrentSelectedProject = vm;
-                        }
-                    }
-                    else
-                    {
-                        var settlementDailyProjectVM = new SettlementDailyProjectVM(
-                            delegate (SettlementProjectVM x, bool y)
-                            {
-                                selection.Invoke(__instance, new object[] { x, y });
-                            },
-                            delegate (SettlementProjectVM x) { set.Invoke(__instance, new object[] { x }); },
-                            delegate
-                            {
-                                __instance.CurrentSelectedProject = __instance.LocalDevelopmentList.Count > 0
-                                    ? __instance.AvailableProjects.First(p =>
-                                        p.Building.BuildingType.StringId == __instance.LocalDevelopmentList[0]
-                                            .BuildingType.StringId)
-                                    : __instance.CurrentDailyDefault;
-                            },
-                            building);
-                        __instance.DailyDefaultList.Add(settlementDailyProjectVM);
-                        if (building.BuildingType.StringId == currentDefaultId)
-                        {
-                            __instance.CurrentDailyDefault = settlementDailyProjectVM;
-                            __instance.CurrentDailyDefault.IsDefault = true;
-                            settlementDailyProjectVM.IsDefault = true;
-                        }
-                    }
-                }
-
-                foreach (Building item in buildingsInProgress)
-                {
-                    __instance.LocalDevelopmentList.Add(item);
-                }
-
-                if (__instance.LocalDevelopmentList.Count > 0)
-                {
-                    var first = __instance.LocalDevelopmentList[0];
-                    selection.Invoke(__instance,
-                        new object[]
-                        {
-                                    __instance.AvailableProjects.First(x =>
-                                        x.Building.BuildingType.StringId == first.BuildingType.StringId),
-                                    true
-                        });
-                    foreach (Building b in buildingsInProgress)
-                    {
-                        if (b.BuildingType.StringId != first.BuildingType.StringId)
-                        {
-                            selection.Invoke(__instance,
-                                new object[]
-                                {
-                                            __instance.AvailableProjects.First(x =>
-                                                x.Building.BuildingType.StringId == b.BuildingType.StringId),
-                                            false
-                                });
-                        }
-                    }
-                }
-
-                var refreshQueue = __instance.GetType().GetMethod("RefreshDevelopmentsQueueIndex",
-                    BindingFlags.Instance | BindingFlags.NonPublic);
-                refreshQueue.Invoke(__instance, null);
-            }
-        }
-
         [HarmonyPatch(typeof(ArmyManagementVM))]
         internal class ArmyManagementVMPatch
         {
@@ -837,7 +649,7 @@ namespace BannerKings.UI
             [HarmonyPatch("ExecuteDone", MethodType.Normal)]
             static bool Prefix(ArmyManagementVM __instance)
             {
-                bool canCreate = new BKArmyManagementModel().CanCreateArmy(Hero.MainHero);
+                bool canCreate = BannerKingsConfig.Instance.ArmyManagementModel.CanCreateArmy(Hero.MainHero);
                 if (!canCreate)
                 {
                     var rulingClan = Clan.PlayerClan.Kingdom.RulingClan;

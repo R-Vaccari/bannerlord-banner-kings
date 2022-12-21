@@ -13,6 +13,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static TaleWorlds.CampaignSystem.Actions.ChangeKingdomAction;
@@ -370,29 +371,7 @@ namespace BannerKings.Behaviours
                 conqueredByArmies.Remove(settlement);
             }
 
-            if (detail == ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByBarter)
-            {
-                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
-                if (oldOwner == title.deJure)
-                {
-                    BannerKingsConfig.Instance.TitleManager.InheritTitle(oldOwner, newOwner, title);
-                    if (!settlement.IsVillage)
-                    {
-                        foreach (var village in settlement.BoundVillages)
-                        {
-                            var villageTitle = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
-                            if (villageTitle.deJure == oldOwner)
-                            {
-                                BannerKingsConfig.Instance.TitleManager.InheritTitle(oldOwner,
-                                    newOwner,
-                                    villageTitle);
-                            }
-                        }
-                    }
-                }
-
-                return;
-            }
+            AddBarter(detail, settlement, oldOwner, newOwner);
 
             if (settlement.Town is {IsOwnerUnassigned: true} &&
                 detail != ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByLeaveFaction)
@@ -487,6 +466,34 @@ namespace BannerKings.Behaviours
                             true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
                     }
                 }
+            }
+        }
+
+        private void AddBarter(ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail, Settlement settlement,
+            Hero oldOwner, Hero newOwner)
+        {
+            if (detail == ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByBarter)
+            {
+                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                if (oldOwner == title.deJure)
+                {
+                    BannerKingsConfig.Instance.TitleManager.InheritTitle(oldOwner, newOwner, title);
+                    if (!settlement.IsVillage)
+                    {
+                        foreach (var village in settlement.BoundVillages)
+                        {
+                            var villageTitle = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
+                            if (villageTitle.deJure == oldOwner)
+                            {
+                                BannerKingsConfig.Instance.TitleManager.InheritTitle(oldOwner,
+                                    newOwner,
+                                    villageTitle);
+                            }
+                        }
+                    }
+                }
+
+                return;
             }
         }
 

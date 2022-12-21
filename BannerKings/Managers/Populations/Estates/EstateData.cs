@@ -141,7 +141,11 @@ namespace BannerKings.Managers.Populations.Estates
                             }
                             else
                             {
-                                Estates.Add(Estate.CreateNotableEstate(notable, data, this));
+                                var estate = Estate.CreateNotableEstate(notable, data, this);
+                                if (estate != null)
+                                {
+                                    Estates.Add(estate);
+                                }
                             }
                         }
                     }
@@ -150,7 +154,11 @@ namespace BannerKings.Managers.Populations.Estates
 
                 if (Estates.Count < BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber)
                 {
-                    Estates.Add(Estate.CreateNotableEstate(null, data, this));
+                    var estate = Estate.CreateNotableEstate(null, data, this);
+                    if (estate != null)
+                    {
+                        Estates.Add(estate);
+                    }
                 }
             }, 
             this.GetType().Name,

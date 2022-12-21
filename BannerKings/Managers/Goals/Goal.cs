@@ -6,11 +6,13 @@ namespace BannerKings.Managers.Goals
 {
     public abstract class Goal : BannerKingsObject
     {
-        internal readonly GoalUpdateType goalUpdateType;
+        public readonly GoalUpdateType goalUpdateType;
+        public readonly GoalCategory goalType;
         protected Hero Fulfiller;
 
-        internal Goal(string stringId, GoalUpdateType goalUpdateType, Hero fulfiller = null) : base(stringId)
+        internal Goal(string stringId, GoalCategory goalType, GoalUpdateType goalUpdateType, Hero fulfiller = null) : base(stringId)
         {
+            this.goalType = goalType;
             this.goalUpdateType = goalUpdateType;
             Fulfiller = fulfiller;
         }
