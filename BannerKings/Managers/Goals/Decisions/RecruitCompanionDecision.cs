@@ -19,7 +19,7 @@ namespace BannerKings.Managers.Goals.Decisions
         private readonly List<CompanionType> companionTypes;
         private CompanionType selectedCompanionType;
 
-        public RecruitCompanionDecision() : base("goal_recruit_companion_decision", GoalUpdateType.Manual)
+        public RecruitCompanionDecision() : base("goal_recruit_companion_decision", GoalCategory.Personal, GoalUpdateType.Manual)
         {
             var name = new TextObject("{=FMuDf3DM}Recruit Companion");
             var description = new TextObject("{=fG0AXwff}Select a type of companion to recruit.");

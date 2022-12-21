@@ -13,7 +13,7 @@ namespace BannerKings.Managers.Goals.Decisions
     {
         private CouncilAction chosenAction;
 
-        public RequestCouncilDecision() : base("goal_request_council_decision", GoalUpdateType.Manual)
+        public RequestCouncilDecision() : base("goal_request_council_decision", GoalCategory.Kingdom, GoalUpdateType.Manual)
         {
             var name = new TextObject("{=oBxXQmTb}Request Council Position");
             var description = new TextObject("{=7aLyDGEt}Request a position in your suzerain's council.");
