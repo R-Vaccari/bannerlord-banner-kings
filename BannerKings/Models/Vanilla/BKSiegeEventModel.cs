@@ -25,9 +25,9 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            if (BannerKingsSettings.Instance.LongerSieges)
+            if (BannerKingsSettings.Instance.LongerSieges > 0f)
             {
-                result *= 0.5f;
+                result *= (1f - BannerKingsSettings.Instance.LongerSieges);
             }
 
             return result;
