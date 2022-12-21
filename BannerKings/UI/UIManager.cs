@@ -134,12 +134,29 @@ namespace BannerKings.UI
         [HarmonyPatch(typeof(Hero))]
         internal class HeroNamePatch
         {
+            private static Dictionary<Hero, TextObject> names = new Dictionary<Hero, TextObject>();
+
+            private static void AddName(Hero hero, TextObject name)
+            {
+                if (names.ContainsKey(hero))
+                {
+                    names[hero] = name;
+                }
+                else
+                {
+                    names.Add(hero, name); 
+                }
+            }
+
             [HarmonyPostfix]
             [HarmonyPatch("Name", MethodType.Getter)]
             internal static void GetterPostfix(Hero __instance, ref TextObject __result)
             {
-                __result = __instance.FirstName;
-                return;
+                if (names.ContainsKey(__instance) && MBRandom.RandomFloat > 0.001f)
+                {
+                    __result = names[__instance];
+                    return;
+                }
 
                 var namingSetting = BannerKingsSettings.Instance.Naming.SelectedValue;
                 if (__instance.IsLord && namingSetting != DefaultSettings.Instance.NamingNoTitles &&
@@ -180,6 +197,7 @@ namespace BannerKings.UI
                             __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
                                 .SetTextVariable("TITLE", honorary)
                                 .SetTextVariable("NAME", name);
+                           
                         }
                     }
                     else if (__instance.Clan != null && __instance.Clan.Leader != __instance && BannerKingsSettings.Instance.CloseRelativesNaming)
@@ -219,6 +237,8 @@ namespace BannerKings.UI
                             }
                         }
                     }
+
+                    AddName(__instance, __result);
                 }
             }
         }
