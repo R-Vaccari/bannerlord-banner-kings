@@ -306,7 +306,7 @@ namespace BannerKings.Managers
             var behavior = Campaign.Current.GetCampaignBehavior<BKGentryBehavior>();
             foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
             {
-                /*if (title.fief != null && title.fief.IsVillage)
+                if (title.fief != null && title.fief.IsVillage)
                 {
                     PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(title.fief);
                     if (data != null && data.EstateData != null)
@@ -323,7 +323,7 @@ namespace BannerKings.Managers
                             }
                         }
                     }
-                }*/
+                }
 
                 if (title.vassals == null || title.vassals.Count == 0)
                 {
