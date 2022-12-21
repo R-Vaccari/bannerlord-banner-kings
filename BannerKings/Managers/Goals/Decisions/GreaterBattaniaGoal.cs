@@ -116,14 +116,18 @@ namespace BannerKings.Managers.Goals.Decisions
                         .SetTextVariable("RELIGION", amra.Faith.GetFaithName()));
                 }
 
-                failedReasons.AddRange
-                (
-                    from settlement in settlements
-                    let title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement)
-                    where title.deFacto.MapFaction != referenceHero.MapFaction
-                    select new TextObject("{=btzaJMMD}Your kingdom is not de facto ruler of {SETTLEMENT}")
-                        .SetTextVariable("SETTLEMENT", settlement.EncyclopediaLinkWithName)
-                );
+                if (BannerKingsConfig.Instance.TitleManager != null)
+                {
+                    foreach (var settlement in settlements)
+                    {
+                        var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                        if (title != null && (title.deFacto == null || title.deFacto.MapFaction != referenceHero.MapFaction))
+                        {
+                            failedReasons.Add(new TextObject("{=btzaJMMD}Your kingdom is not de facto ruler of {SETTLEMENT}")
+                                .SetTextVariable("SETTLEMENT", settlement.Name));
+                        }
+                    }
+                }
             }
 
             return failedReasons.IsEmpty();
