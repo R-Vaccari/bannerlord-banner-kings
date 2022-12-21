@@ -30,10 +30,10 @@ namespace BannerKings.UI.Management.Villages
 
         public override void RefreshValues()
         {
-            AvailableProjects = new MBBindingList<SettlementBuildingProjectVM>();
-            DailyDefaultList = new MBBindingList<SettlementDailyProjectVM>();
+            AvailableProjects = new MBBindingList<VillageBuildingProjectVM>();
+            DailyDefaultList = new MBBindingList<VillageBuildingDailyProjectVM>();
             LocalDevelopmentList = new List<Building>();
-            CurrentDevelopmentQueue = new MBBindingList<SettlementBuildingProjectVM>();
+            CurrentDevelopmentQueue = new MBBindingList<VillageBuildingProjectVM>();
             AvailableProjects.Clear();
 
             if (villageData == null)
@@ -53,15 +53,15 @@ namespace BannerKings.UI.Management.Villages
                                           where x.BuildingType.BuildingLocation != BuildingLocation.Daily
                                           select x)
             {
-                SettlementBuildingProjectVM settlementBuildingProjectVM = new SettlementBuildingProjectVM(
+                VillageBuildingProjectVM VillageBuildingProjectVM = new VillageBuildingProjectVM(
                     new Action<SettlementProjectVM, bool>(OnCurrentProjectSelection),
                     new Action<SettlementProjectVM>(OnCurrentProjectSet),
                     new Action(OnResetCurrentProject),
                     building);
-                AvailableProjects.Add(settlementBuildingProjectVM);
-                if (settlementBuildingProjectVM.Building.BuildingType.StringId == villageData.CurrentBuilding.BuildingType.StringId)
+                AvailableProjects.Add(VillageBuildingProjectVM);
+                if (VillageBuildingProjectVM.Building.BuildingType.StringId == villageData.CurrentBuilding.BuildingType.StringId)
                 {
-                    CurrentSelectedProject = settlementBuildingProjectVM;
+                    CurrentSelectedProject = VillageBuildingProjectVM;
                 }
             }
             if (Settlement.CurrentSettlement != null)
@@ -70,18 +70,18 @@ namespace BannerKings.UI.Management.Villages
                                                where x.BuildingType.BuildingLocation == BuildingLocation.Daily
                                                select x)
                 {
-                    SettlementDailyProjectVM settlementDailyProjectVM = new SettlementDailyProjectVM(
+                    VillageBuildingDailyProjectVM VillageBuildingDailyProjectVM = new VillageBuildingDailyProjectVM(
                         new Action<SettlementProjectVM, bool>(OnCurrentProjectSelection),
                         new Action<SettlementProjectVM>(OnCurrentProjectSet),
                         new Action(OnResetCurrentProject),
                         building2);
-                    DailyDefaultList.Add(settlementDailyProjectVM);
-                    if (settlementDailyProjectVM.Building.BuildingType.StringId ==
+                    DailyDefaultList.Add(VillageBuildingDailyProjectVM);
+                    if (VillageBuildingDailyProjectVM.Building.BuildingType.StringId ==
                         villageData.CurrentDefault.BuildingType.StringId)
                     {
-                        CurrentDailyDefault = settlementDailyProjectVM;
+                        CurrentDailyDefault = VillageBuildingDailyProjectVM;
                         CurrentDailyDefault.IsDefault = true;
-                        settlementDailyProjectVM.IsDefault = true;
+                        VillageBuildingDailyProjectVM.IsDefault = true;
                     }
                 }
             }
@@ -104,7 +104,7 @@ namespace BannerKings.UI.Management.Villages
 
         private void OnResetCurrentProject()
         {
-            CurrentSelectedProject = LocalDevelopmentList.Count > 0 ? AvailableProjects.First((SettlementBuildingProjectVM p) => p.Building == LocalDevelopmentList[0]) : CurrentDailyDefault;
+            CurrentSelectedProject = LocalDevelopmentList.Count > 0 ? AvailableProjects.First((VillageBuildingProjectVM p) => p.Building == LocalDevelopmentList[0]) : CurrentDailyDefault;
             CurrentSelectedProject.RefreshProductionText();
         }
 
@@ -129,8 +129,8 @@ namespace BannerKings.UI.Management.Villages
             else
             {
                 CurrentDailyDefault.IsDefault = false;
-                CurrentDailyDefault = selectedItem as SettlementDailyProjectVM;
-                (selectedItem as SettlementDailyProjectVM).IsDefault = true;
+                CurrentDailyDefault = selectedItem as VillageBuildingDailyProjectVM;
+                (selectedItem as VillageBuildingDailyProjectVM).IsDefault = true;
             }
             RefreshDevelopmentsQueueIndex();
             if (LocalDevelopmentList.Count == 0)
@@ -170,10 +170,7 @@ namespace BannerKings.UI.Management.Villages
             {
                 foreach (Building b in villageData.Buildings)
                 {
-                    if (currentDefault.IsCurrentlyDefault)
-                    {
-                        currentDefault.IsCurrentlyDefault = false;
-                    }
+                    b.IsCurrentlyDefault = false;
                     if (b.BuildingType.StringId == currentDefault.BuildingType.StringId)
                     {
                         currentDefault.IsCurrentlyDefault = true;
@@ -186,12 +183,12 @@ namespace BannerKings.UI.Management.Villages
         private void RefreshDevelopmentsQueueIndex()
         {
             CurrentSelectedProject = null;
-            CurrentDevelopmentQueue = new MBBindingList<SettlementBuildingProjectVM>();
-            using (IEnumerator<SettlementBuildingProjectVM> enumerator = AvailableProjects.GetEnumerator())
+            CurrentDevelopmentQueue = new MBBindingList<VillageBuildingProjectVM>();
+            using (IEnumerator<VillageBuildingProjectVM> enumerator = AvailableProjects.GetEnumerator())
             {
                 while (enumerator.MoveNext())
                 {
-                    SettlementBuildingProjectVM item = enumerator.Current;
+                    VillageBuildingProjectVM item = enumerator.Current;
                     item.DevelopmentQueueIndex = -1;
                     item.IsInQueue = LocalDevelopmentList.Any((d) => d.BuildingType == item.Building.BuildingType);
                     item.IsCurrentActiveProject = false;
@@ -206,7 +203,7 @@ namespace BannerKings.UI.Management.Villages
                         }
                         CurrentDevelopmentQueue.Add(item);
                     }
-                    Comparer<SettlementBuildingProjectVM> comparer = Comparer<SettlementBuildingProjectVM>.Create((s1, s2) => s1.DevelopmentQueueIndex.CompareTo(s2.DevelopmentQueueIndex));
+                    Comparer<VillageBuildingProjectVM> comparer = Comparer<VillageBuildingProjectVM>.Create((s1, s2) => s1.DevelopmentQueueIndex.CompareTo(s2.DevelopmentQueueIndex));
                     CurrentDevelopmentQueue.Sort(comparer);
                     item.RefreshProductionText();
                 }
@@ -214,10 +211,10 @@ namespace BannerKings.UI.Management.Villages
         }
 
         private SettlementProjectVM currentProject;
-        private SettlementDailyProjectVM currentDefault;
-        private MBBindingList<SettlementBuildingProjectVM> availableProjects;
-        private MBBindingList<SettlementBuildingProjectVM> currentDevelopmentQueue;
-        private MBBindingList<SettlementDailyProjectVM> dailyProjectList;
+        private VillageBuildingDailyProjectVM currentDefault;
+        private MBBindingList<VillageBuildingProjectVM> availableProjects;
+        private MBBindingList<VillageBuildingProjectVM> currentDevelopmentQueue;
+        private MBBindingList<VillageBuildingDailyProjectVM> dailyProjectList;
 
         [DataSourceProperty]
         public SettlementProjectVM CurrentSelectedProject
@@ -231,7 +228,7 @@ namespace BannerKings.UI.Management.Villages
         }
 
         [DataSourceProperty]
-        public SettlementDailyProjectVM CurrentDailyDefault
+        public VillageBuildingDailyProjectVM CurrentDailyDefault
         {
             get => currentDefault;
             set
@@ -242,7 +239,7 @@ namespace BannerKings.UI.Management.Villages
         }
 
         [DataSourceProperty]
-        public MBBindingList<SettlementBuildingProjectVM> AvailableProjects
+        public MBBindingList<VillageBuildingProjectVM> AvailableProjects
         {
             get => availableProjects;
             set
@@ -253,7 +250,7 @@ namespace BannerKings.UI.Management.Villages
         }
 
         [DataSourceProperty]
-        public MBBindingList<SettlementBuildingProjectVM> CurrentDevelopmentQueue
+        public MBBindingList<VillageBuildingProjectVM> CurrentDevelopmentQueue
         {
             get => currentDevelopmentQueue;
             set
@@ -264,7 +261,7 @@ namespace BannerKings.UI.Management.Villages
         }
 
         [DataSourceProperty]
-        public MBBindingList<SettlementDailyProjectVM> DailyDefaultList
+        public MBBindingList<VillageBuildingDailyProjectVM> DailyDefaultList
         {
             get => dailyProjectList;
             set
