@@ -25,6 +25,11 @@ namespace BannerKings.Managers.Populations.Estates
 
         public static Estate CreateNotableEstate(Hero notable, PopulationData data, EstateData estateData= null)
         {
+            if (data == null || data.LandData == null)
+            {
+                return null;
+            }
+
             float acreage = data.LandData.Acreage;
             float acres = MBRandom.RandomFloatRanged(BannerKingsConfig.Instance.EstatesModel.MinimumEstateAcreage, 
                 BannerKingsConfig.Instance.EstatesModel.MaximumEstateAcreagePercentage * acreage);
