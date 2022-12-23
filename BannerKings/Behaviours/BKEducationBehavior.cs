@@ -530,7 +530,10 @@ namespace BannerKings.Behaviours
 
         private static void ApplyScholarshipTutorEffect(Hero hero)
         {
-            hero.HeroDeveloper.UnspentAttributePoints += hero.Clan.Heroes.Count(_ => hero.GetPerkValue(BKPerks.Instance.ScholarshipTutor));
+            if (hero.Clan != null)
+            {
+                hero.HeroDeveloper.UnspentAttributePoints += hero.Clan.Heroes.Count(_ => hero.GetPerkValue(BKPerks.Instance.ScholarshipTutor));
+            }
         }
 
         private static void ApplyScholarshipTeacherEffect(Hero hero)
