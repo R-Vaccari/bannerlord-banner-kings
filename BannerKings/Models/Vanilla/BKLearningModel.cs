@@ -1,14 +1,47 @@
 using BannerKings.Managers.Skills;
+using System.Collections.Generic;
+using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKLearningModel : DefaultCharacterDevelopmentModel
     {
+        public override List<Tuple<SkillObject, int>> GetSkillsDerivedFromTraits(Hero hero, CharacterObject templateCharacter = null, bool isByNaturalGrowth = false)
+        {
+            List <Tuple<SkillObject, int>> list =  base.GetSkillsDerivedFromTraits(hero, templateCharacter, isByNaturalGrowth);
+
+            int politician = templateCharacter.GetTraitLevel(DefaultTraits.Politician);
+            int surgery = templateCharacter.GetTraitLevel(DefaultTraits.Surgery);
+            int manager = templateCharacter.GetTraitLevel(DefaultTraits.Manager);
+
+            float scholarship = (surgery * 10f) + (manager * 8f);
+            float lordship = politician * 15f;
+            float theology = 0;
+            if (hero.IsLord)
+            {
+                scholarship += 30;
+                theology += 15;
+            }
+
+            if (hero.IsPreacher)
+            {
+                theology += 100;
+                scholarship += 50;
+            }
+
+            list.Add(new Tuple<SkillObject, int>(BKSkills.Instance.Scholarship, (int)scholarship));
+            list.Add(new Tuple<SkillObject, int>(BKSkills.Instance.Lordship, (int)lordship));
+            list.Add(new Tuple<SkillObject, int>(BKSkills.Instance.Theology, (int)theology));
+            return list;
+        }
+
+
         public override float CalculateLearningRate(Hero hero, SkillObject skill)
         {
             var level = hero.Level;
