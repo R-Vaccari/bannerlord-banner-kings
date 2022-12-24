@@ -16,12 +16,8 @@ namespace BannerKings.Models.Vanilla
         {
             List <Tuple<SkillObject, int>> list =  base.GetSkillsDerivedFromTraits(hero, templateCharacter, isByNaturalGrowth);
 
-            int politician = templateCharacter.GetTraitLevel(DefaultTraits.Politician);
-            int surgery = templateCharacter.GetTraitLevel(DefaultTraits.Surgery);
-            int manager = templateCharacter.GetTraitLevel(DefaultTraits.Manager);
-
-            float scholarship = (surgery * 10f) + (manager * 8f);
-            float lordship = politician * 15f;
+            float scholarship = 0;
+            float lordship = 0;
             float theology = 0;
             if (hero.IsLord)
             {
@@ -35,12 +31,22 @@ namespace BannerKings.Models.Vanilla
                 scholarship += 50;
             }
 
+            if (templateCharacter != null)
+            {
+                int politician = templateCharacter.GetTraitLevel(DefaultTraits.Politician);
+                int surgery = templateCharacter.GetTraitLevel(DefaultTraits.Surgery);
+                int manager = templateCharacter.GetTraitLevel(DefaultTraits.Manager);
+
+                scholarship += surgery * 10f;
+                scholarship += manager * 8f;
+                lordship += politician * 15f;
+            }
+
             list.Add(new Tuple<SkillObject, int>(BKSkills.Instance.Scholarship, (int)scholarship));
             list.Add(new Tuple<SkillObject, int>(BKSkills.Instance.Lordship, (int)lordship));
             list.Add(new Tuple<SkillObject, int>(BKSkills.Instance.Theology, (int)theology));
             return list;
         }
-
 
         public override float CalculateLearningRate(Hero hero, SkillObject skill)
         {
