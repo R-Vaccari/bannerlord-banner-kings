@@ -22,12 +22,13 @@ namespace BannerKings.Behaviours
 {
     public class BKGentryBehavior : CampaignBehaviorBase
     {
-        private Dictionary<Hero, CampaignTime> heroRecords = new Dictionary<Hero, CampaignTime>();
         public override void RegisterEvents()
         {
             CampaignEvents.OnNewGameCreatedPartialFollowUpEndEvent.AddNonSerializedListener(this, OnGameCreatedFollowUp);
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
             CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnClanDailyTick);
+            CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnPartyDailyTick);
+            CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -42,11 +43,91 @@ namespace BannerKings.Behaviours
             }
         }
 
+        private void OnDailyTick()
+        {
+            foreach (var kingdom in Kingdom.All)
+            {
+                if (MBRandom.RandomFloat <= 0.001f)
+                {
+                    InitializeGentry(kingdom.Settlements.GetRandomElementWithPredicate(x => x.IsVillage), false);
+                }
+            }
+        }
+
+        private void OnPartyDailyTick(MobileParty party)
+        {
+            ExceptionUtils.TryCatch(() =>
+            {
+                if (!party.IsLordParty || party.LeaderHero == null || party.WarPartyComponent == null || party.ActualClan == null || 
+                party.ActualClan == Clan.PlayerClan)
+                {
+                    return;
+                }
+
+                var clan = party.ActualClan;
+                (bool, Estate) gentryTuple = IsGentryClan(clan);
+                if (!gentryTuple.Item1 || gentryTuple.Item2 == null)
+                {
+                    return;
+                }
+
+                Kingdom kingdom = clan.Kingdom;
+                bool war = FactionManager.GetEnemyKingdoms(kingdom).Count() > 0;
+                if (!war)
+                {
+                    party.Ai.DisableAi();
+                    party.SetMoveGoToSettlement(gentryTuple.Item2.EstatesData.Settlement);
+                }
+                else
+                {
+                    if (party.Army != null)
+                    {
+                        return;
+                    }
+
+                    if (party.DefaultBehavior == AiBehavior.EscortParty && party.TargetParty != null)
+                    {
+                        return;
+                    }
+
+                    party.Ai.DisableAi();
+                    party.SetMoveGoToSettlement(gentryTuple.Item2.EstatesData.Settlement);
+                }
+            },
+            GetType().Name);
+        }
+
+        private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
+        {
+            ExceptionUtils.TryCatch(() =>
+            {
+                if (party == null || !party.IsLordParty || party.WarPartyComponent == null || party.LeaderHero == null || 
+                party.ActualClan == null || party.ActualClan == Clan.PlayerClan)
+                {
+                    return;
+                }
+
+                var clan = party.ActualClan;
+                (bool, Estate) gentryTuple = IsGentryClan(clan);
+                if (!gentryTuple.Item1 || gentryTuple.Item2 == null)
+                {
+                    return;
+                }
+
+                var settlement = gentryTuple.Item2.EstatesData.Settlement;
+                if (target == settlement && party.Ai.IsDisabled)
+                {
+                    FinishParty(party.WarPartyComponent, gentryTuple.Item2);
+                }
+            },
+            GetType().Name);
+        }
+
         private void OnClanDailyTick(Clan clan)
         {
             ExceptionUtils.TryCatch(() =>
             {
-                if (clan.IsBanditFaction || clan.IsUnderMercenaryService || clan.Kingdom == null || clan == Clan.PlayerClan)
+               /* if (clan.IsBanditFaction || clan.IsUnderMercenaryService || clan.Kingdom == null || clan == Clan.PlayerClan)
                 {
                     return;
                 }
@@ -95,7 +176,7 @@ namespace BannerKings.Behaviours
                             FinishParty(party, estate);
                         }
                     }
-                }
+                }*/
             },
             GetType().Name);
         }
@@ -153,17 +234,6 @@ namespace BannerKings.Behaviours
             bool villageReady = settlement.Village.VillageState == Village.VillageStates.Normal;
 
             return leaderReady && villageReady && estate.GetManpower(PopType.Serfs) >= 10;
-        }
-
-        private void OnDailyTick()
-        {
-            foreach (var kingdom in Kingdom.All)
-            {
-                if (MBRandom.RandomFloat <= 1f)
-                {
-                    InitializeGentry(kingdom.Settlements.GetRandomElementWithPredicate(x => x.IsVillage), false);
-                }
-            }
         }
 
         private void InitializeGentry(Settlement settlement, bool campaignStart = false)
