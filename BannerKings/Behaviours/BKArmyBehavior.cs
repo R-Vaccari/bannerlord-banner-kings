@@ -13,7 +13,7 @@ namespace BannerKings.Behaviours
     public class BKArmyBehavior : CampaignBehaviorBase
     {
         public static AuxiliumDuty playerArmyDuty;
-        public static CampaignTime lastDutyTime = CampaignTime.Never;
+        public static CampaignTime lastDutyTime = CampaignTime.Zero;
 
         public override void RegisterEvents()
         {
@@ -133,6 +133,11 @@ namespace BannerKings.Behaviours
             if (Hero.MainHero.IsPrisoner)
             {
                 return;
+            }
+
+            if (lastDutyTime == CampaignTime.Never)
+            {
+                lastDutyTime = CampaignTime.Zero;
             }
 
             var suzerainParty = EvaluateSuzerainParty(army, suzerain.deJure, joinningParty);
