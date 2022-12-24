@@ -180,17 +180,15 @@ namespace BannerKings.Behaviours.Feasts
             {
                 foreach (var hero in clan.Heroes)
                 {
-                    if (hero.CurrentSettlement == Town.Settlement)
+                    if (hero.PartyBelongedTo != null)
                     {
-                        if (hero.PartyBelongedTo != null)
-                        {
-                            hero.PartyBelongedTo.Ai.EnableAi();
-                        }
-                        else if (clan.Fiefs.Count > 0)
-                        {
-                            LeaveSettlementAction.ApplyForCharacterOnly(hero);
-                            EnterSettlementAction.ApplyForCharacterOnly(hero, clan.Fiefs.GetRandomElement().Settlement);
-                        }
+                        hero.PartyBelongedTo.Ai.EnableAi();
+                    }
+
+                    if (clan.Fiefs.Count > 0 && hero.CurrentSettlement == Town.Settlement)
+                    {
+                        LeaveSettlementAction.ApplyForCharacterOnly(hero);
+                        EnterSettlementAction.ApplyForCharacterOnly(hero, clan.Fiefs.GetRandomElement().Settlement);
                     }
                 }
 

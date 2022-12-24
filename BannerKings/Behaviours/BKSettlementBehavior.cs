@@ -225,24 +225,15 @@ namespace BannerKings.Behaviours
         private void HandleGarrison(Town town)
         {
             var parties = new MobilePartiesAroundPositionList();
-            var list = parties.GetPartiesAroundPosition(town.Settlement.GatePosition, 15f);
+            var list = parties.GetPartiesAroundPosition(town.Settlement.GatePosition, 10f);
 
             MobileParty party = list.FirstOrDefault(x => x.Party.TotalStrength > 25f && (x.IsBandit ||
-               (x.MapFaction.IsKingdomFaction && x.IsLordParty)));
+               (x.MapFaction.IsKingdomFaction && x.IsLordParty) && x.MapFaction != null &&
+               town.MapFaction.GetStanceWith(x.MapFaction).IsAtWar));
 
             if (party != null)
             {
-                EvaluateSendGarrison(SettlementHelper.FindNearestSettlement(x =>
-                {
-                    if (x.MapFaction == null || x.OwnerClan == null)
-                    {
-                        return false;
-                    }
-                    var stance = x.MapFaction.GetStanceWith(party.MapFaction);
-                    return stance != null && x.Town != null && (stance.IsAtWar || stance.IsAtConstantWar);
-                },
-                party),
-                party);
+                EvaluateSendGarrison(town.Settlement, party);
             }
         }
 

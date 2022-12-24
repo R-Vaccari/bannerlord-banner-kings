@@ -27,7 +27,17 @@ namespace BannerKings.Models.Vanilla
                     {
                         int itemPrice = settlementComponent.GetItemPrice(elementCopyAtIndex.EquipmentElement, mobileParty, false);
                         int itemValue = elementCopyAtIndex.EquipmentElement.ItemValue;
-                        if ((itemPrice < 120 || flag) && mobileParty.LeaderHero.Gold >= itemPrice)
+                        int gold;
+                        if (mobileParty.LeaderHero != null)
+                        {
+                            gold = mobileParty.LeaderHero.Gold;
+                        }
+                        else
+                        {
+                            gold = mobileParty.PartyTradeGold;
+                        }
+
+                        if ((itemPrice < 120 || flag) && gold >= itemPrice)
                         {
                             float obj = flag ? ((120f - (float)(itemPrice / elementCopyAtIndex.EquipmentElement.Item.HorseComponent.MeatCount)) * 0.0083f) : ((float)(120 - itemPrice) * 0.0083f);
                             float num3 = flag ? ((100f - (float)(itemValue / elementCopyAtIndex.EquipmentElement.Item.HorseComponent.MeatCount)) * 0.01f) : ((float)(100 - itemValue) * 0.01f);

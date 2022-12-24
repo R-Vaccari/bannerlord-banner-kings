@@ -41,9 +41,9 @@ namespace BannerKings.UI.Extensions
                 viewModel.CurrentSelectedIncome.RefreshValues();
                 var workshop = viewModel.CurrentSelectedIncome.Workshop;
                 var time = CampaignTime.Now - CampaignTime.Days(workshop.NotRunnedDays);
-                WorkshopInfo.Add(new InformationElement(new TextObject("{=OXes1FKN}Last run:").ToString(),
-                    time.ToString(),
-                    new TextObject("{=a2FbzfvH}The last day this workshop has successfully run without issues.").ToString()));
+                //WorkshopInfo.Add(new InformationElement(new TextObject("{=OXes1FKN}Last run:").ToString(),
+                //    time.ToString(),
+                //    new TextObject("{=a2FbzfvH}The last day this workshop has successfully run without issues.").ToString()));
 
                 CanUpgrade = workshop.CanBeUpgraded;
                 TextObject state = new TextObject("{=Bom9FTfz}Running normally.");
