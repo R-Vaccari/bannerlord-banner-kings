@@ -144,6 +144,14 @@ namespace BannerKings.Models.Vanilla
                 baseResult.Add(position.IsCorePosition(position.Position) ? 1f : 0.5f, new TextObject("{=WvhXhUFS}Councillor role"));
             }
 
+            float currentVassals = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentVassals(clan).ResultNumber;
+            float vassalLimit = BannerKingsConfig.Instance.StabilityModel.CalculateVassalLimit(clan.Leader).ResultNumber;
+            if (currentVassals > vassalLimit)
+            {
+                float factor = vassalLimit - currentVassals;
+                baseResult.Add(-factor * 3f, new TextObject("{=!}Over Vassal Limit"));
+            }
+
             if (i > 0)
             {
                 var finalSupport = MBMath.ClampFloat(generalSupport / i, -0.5f, 0.5f);
