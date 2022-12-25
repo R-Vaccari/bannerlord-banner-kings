@@ -1,6 +1,8 @@
 using BannerKings.Extensions;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -140,6 +142,30 @@ namespace BannerKings.Managers.Populations.Estates
         [SaveableProperty(10)] public EstateDuty Duty { get; private set; }
         [SaveableProperty(11)] public EstateTask Task { get; private set; }
         [SaveableProperty(12)] private Dictionary<PopType, float> Manpowers { get; set; }
+
+        public TroopRoster RaiseManpower(int limit)
+        {
+            if (limit > GetManpower(PopType.Serfs))
+            {
+                limit = GetManpower(PopType.Serfs);
+            }
+
+            TroopRoster roster = TroopRoster.CreateDummyTroopRoster();
+            CultureObject culture = EstatesData.Settlement.Culture;
+            roster.AddToCounts(culture.BasicTroop, (int)(limit / 2f));
+
+            var upgrades = culture.BasicTroop.UpgradeTargets;
+            if (upgrades != null && upgrades.Count() > 0)
+            {
+                for (int i = 0; i < upgrades.Count(); i++)
+                {
+                    int toAdd = (int)(limit * 0.5f / upgrades.Count());
+                    roster.AddToCounts(upgrades[i], toAdd);
+                }
+            }
+
+            return roster;
+        }
 
         public int GetTypeCount(PopType type)
         {
