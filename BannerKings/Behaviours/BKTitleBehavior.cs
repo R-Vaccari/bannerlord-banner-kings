@@ -371,7 +371,14 @@ namespace BannerKings.Behaviours
                 conqueredByArmies.Remove(settlement);
             }
 
-            AddBarter(detail, settlement, oldOwner, newOwner);
+            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+            if (title == null)
+            {
+                return;
+            }
+
+            AddBarter(detail, settlement, oldOwner, newOwner, title);
+            AddGift(detail, settlement, oldOwner, newOwner, title);
 
             if (settlement.Town is {IsOwnerUnassigned: true} &&
                 detail != ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByLeaveFaction)
@@ -398,24 +405,20 @@ namespace BannerKings.Behaviours
                 var absoluteRightGranted = false;
                 if (sovereign.contract.Rights.Contains(FeudalRights.Absolute_Land_Rights))
                 {
-                    var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
-                    if (title != null)
+                    foreach (var clan in kingdom.Clans)
                     {
-                        foreach (var clan in kingdom.Clans)
+                        if (clan.Leader == title.deJure)
                         {
-                            if (clan.Leader == title.deJure)
+                            ChangeOwnerOfSettlementAction.ApplyByKingDecision(clan.Leader, settlement);
+                            absoluteRightGranted = true;
+                            if (clan.Leader == Hero.MainHero)
                             {
-                                ChangeOwnerOfSettlementAction.ApplyByKingDecision(clan.Leader, settlement);
-                                absoluteRightGranted = true;
-                                if (clan.Leader == Hero.MainHero)
-                                {
-                                    GameTexts.SetVariable("SETTLEMENT", settlement.Name);
-                                    InformationManager.ShowInquiry(new InquiryData(
-                                        new TextObject("{=Rc5gU5bS}Absolute Land Right").ToString(),
-                                        new TextObject("{=AuEhA2EB}By contract law, you have been awarded the ownership of {SETTLEMENT} due to your legal right to this fief.")
-                                            .ToString(),
-                                        true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
-                                }
+                                GameTexts.SetVariable("SETTLEMENT", settlement.Name);
+                                InformationManager.ShowInquiry(new InquiryData(
+                                    new TextObject("{=Rc5gU5bS}Absolute Land Right").ToString(),
+                                    new TextObject("{=AuEhA2EB}By contract law, you have been awarded the ownership of {SETTLEMENT} due to your legal right to this fief.")
+                                        .ToString(),
+                                    true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
                             }
                         }
                     }
@@ -469,12 +472,25 @@ namespace BannerKings.Behaviours
             }
         }
 
+        private void AddGift(ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail, Settlement settlement,
+            Hero oldOwner, Hero newOwner, FeudalTitle title)
+        {
+            if (detail != ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByGift)
+            {
+                return;
+            }
+
+            if (oldOwner == title.deJure)
+            {
+                BannerKingsConfig.Instance.TitleManager.InheritTitle(oldOwner, newOwner, title);
+            }
+        }
+
         private void AddBarter(ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail, Settlement settlement,
-            Hero oldOwner, Hero newOwner)
+            Hero oldOwner, Hero newOwner, FeudalTitle title)
         {
             if (detail == ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByBarter)
             {
-                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
                 if (oldOwner == title.deJure)
                 {
                     BannerKingsConfig.Instance.TitleManager.InheritTitle(oldOwner, newOwner, title);
