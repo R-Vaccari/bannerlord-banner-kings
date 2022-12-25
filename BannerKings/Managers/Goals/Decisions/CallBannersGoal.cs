@@ -94,8 +94,9 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
 
                 Clan clan = vassal.Clan;
+                var influence = GetInfluenceCost(Hero.MainHero, vassal.Clan);
                 BannerOption option = new BannerOption(vassal,
-                    GetInfluenceCost(Hero.MainHero, vassal.Clan),
+                    influence,
                     hero.PartyBelongedTo,
                     estate);
                 bool ready = false;
@@ -103,20 +104,32 @@ namespace BannerKings.Managers.Goals.Decisions
                 if (vassal.PartyBelongedTo != null && vassal.PartyBelongedTo.LeaderHero == vassal)
                 {
                     var party = vassal.PartyBelongedTo;
+                    var troops = party.MemberRoster.TotalManCount;
                     ready = party.IsReady && party.Army == null && party.SiegeEvent == null;
                     if (vassal.Clan == Clan.PlayerClan)
                     {
-                        hint = new TextObject("{=!}Summon {HERO} to your army. They are a knight in your household. They currently lead {TROOPS} troops.");
+                        hint = new TextObject("{=!}Summon {HERO} to your army. They are a knight in your household. They currently lead {TROOPS} troops. Calling them will cost {INFLUENCE} influence.")
+                            .SetTextVariable("HERO", vassal.Name)
+                            .SetTextVariable("INFLUENCE", influence)
+                            .SetTextVariable("TROOPS", troops);
                     }
                     else
                     {
-                        hint = new TextObject("{=!}Summon {HERO} to your army. They are a vassal and currently lead {TROOPS} troops. Calling them will cost {INFLUENCE}{INFLUENCE_ICON}");
+                        hint = new TextObject("{=!}Summon {HERO} to your army. They are a vassal and currently lead {TROOPS} troops. Calling them will cost {INFLUENCE} influence.")
+                            .SetTextVariable("HERO", vassal.Name)
+                            .SetTextVariable("INFLUENCE", influence)
+                            .SetTextVariable("TROOPS", troops);
                     }
                 }
                 else if (estate != null)
                 {
-                    ready = behavior.IsAvailableForSummoning(clan, estate);
-                    hint = new TextObject("{=!}Summon {HERO} to your army. They are landed gentry and will return to their property once the army is finished. Calling them will cost {INFLUENCE}{INFLUENCE_ICON}");
+                    (bool, TextObject) readyTuple = behavior.IsAvailableForSummoning(clan, estate);
+                    ready = readyTuple.Item1;
+                    hint = new TextObject("{=!}Summon {HERO} to your army. They are landed gentry and will return to their property once the army is finished. Their estate can provide {TROOPS} troops. Calling them will cost {INFLUENCE} influence.\n\n{READY}")
+                        .SetTextVariable("HERO", vassal.Name)
+                        .SetTextVariable("INFLUENCE", influence)
+                        .SetTextVariable("TROOPS", estate.GetManpower(PopulationManager.PopType.Serfs))
+                        .SetTextVariable("READY", readyTuple.Item2);
                 }
 
                 if (hint != null)

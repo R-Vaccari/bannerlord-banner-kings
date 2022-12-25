@@ -15,6 +15,9 @@ namespace BannerKings.Settings
         public override string FolderName => "BannerKings"; 
         public override string FormatType => "json2";
 
+        [SettingProperty("{=!}Feasts", RequireRestart = true, HintText = "{=!}Enable the ability to trigger feasts for player and AI. Default: True.")]
+        public bool Feasts { get; set; } = true;
+
         [SettingProperty("{=o394sPDk}Close Relatives Honorifics", RequireRestart = false, HintText = "{=AinXkzz7}Apply title honorifcs for close relatives of title holders. This only takes effect if the 'Title Honorifcs' option is any other than 'No Titles'. Different rules apply but in general, spouses of will have an equivalent, gendered title (ie, 'Queen FemaleName' the spouse of 'King MaleName'), while children of Kings and Emperors may be Princes.")]
         public bool CloseRelativesNaming { get; set; } = true;
 

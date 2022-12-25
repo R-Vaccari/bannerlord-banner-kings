@@ -130,7 +130,7 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            if (Hero.MainHero.IsPrisoner)
+            if (Hero.MainHero.IsPrisoner || MobileParty.MainParty.Army != null)
             {
                 return;
             }

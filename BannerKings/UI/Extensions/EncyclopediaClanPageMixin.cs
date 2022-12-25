@@ -50,8 +50,6 @@ namespace BannerKings.UI.Extensions
         [DataSourceProperty]
         public string HeirText => new TextObject("{=vArnerHC}Heir").ToString();
 
-
-
         [DataSourceProperty]
         public MBBindingList<HeirVM> Heirs
         {
@@ -138,13 +136,11 @@ namespace BannerKings.UI.Extensions
 
         public override void OnRefresh()
         {
-            clanPageVM.ClanInfo.Clear();
-            Knights.Clear();
-            Councillors.Clear();
-            Companions.Clear();
-            Heirs.Clear();
             var clan = clanPageVM.Obj as Clan;
             CultureInfo = new EncyclopediaCultureVM(clan.Culture);
+            Companions.Clear();
+            Councillors.Clear();
+            Heirs.Clear();
             var caravans = 0;
             var workshops = 0;
 
@@ -230,23 +226,9 @@ namespace BannerKings.UI.Extensions
                 }
             }
 
-
             if (!addedFields)
             {
                 var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
-
-                GameTexts.SetVariable("LEFT", new TextObject("{=t9cmsSU1}Clan Tier").ToString());
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(GameTexts.FindText("str_LEFT_colon").ToString(),
-                    clan.Tier.ToString()));
-
-                GameTexts.SetVariable("LEFT", new TextObject("{=d9qmQEZh}Clan Strength").ToString());
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(GameTexts.FindText("str_LEFT_colon").ToString(),
-                    clan.TotalStrength.ToString("F0")));
-
-                GameTexts.SetVariable("LEFT", GameTexts.FindText("str_wealth").ToString());
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(GameTexts.FindText("str_LEFT_colon").ToString(),
-                    CampaignUIHelper.GetClanWealthStatusText(clan)));
-
                 if (rel != null)
                 {
                     clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=OKw2P9m1}Faith:").ToString(),

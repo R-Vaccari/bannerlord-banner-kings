@@ -8,6 +8,7 @@ using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Models.Vanilla;
+using BannerKings.Settings;
 using BannerKings.UI;
 using Bannerlord.UIExtenderEx;
 using HarmonyLib;
@@ -53,7 +54,11 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKTradeGoodsFixesBehavior());
             campaignStarter.AddBehavior(new BKCapitalBehavior());
             campaignStarter.AddBehavior(new BKMarriageBehavior());
-            campaignStarter.AddBehavior(new BKFeastBehavior());
+            if (BannerKingsSettings.Instance.Feasts)
+            {
+                campaignStarter.AddBehavior(new BKFeastBehavior());
+            }
+            
             campaignStarter.AddBehavior(new BKWorkshopBehavior());
             campaignStarter.AddBehavior(new BKGentryBehavior());
             campaignStarter.AddBehavior(new BKMercenaryCareerBehavior());

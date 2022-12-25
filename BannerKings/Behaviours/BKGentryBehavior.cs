@@ -11,6 +11,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Party.PartyComponents;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -26,7 +27,6 @@ namespace BannerKings.Behaviours
         {
             CampaignEvents.OnNewGameCreatedPartialFollowUpEndEvent.AddNonSerializedListener(this, OnGameCreatedFollowUp);
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
-            CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnClanDailyTick);
             CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnPartyDailyTick);
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
         }
@@ -119,64 +119,22 @@ namespace BannerKings.Behaviours
                 {
                     FinishParty(party.WarPartyComponent, gentryTuple.Item2);
                 }
-            },
-            GetType().Name);
-        }
-
-        private void OnClanDailyTick(Clan clan)
-        {
-            ExceptionUtils.TryCatch(() =>
-            {
-               /* if (clan.IsBanditFaction || clan.IsUnderMercenaryService || clan.Kingdom == null || clan == Clan.PlayerClan)
-                {
-                    return;
-                }
-
-                (bool, Estate) gentryTuple = IsGentryClan(clan);
-                if (!gentryTuple.Item1 || gentryTuple.Item2 == null)
-                {
-                    return;
-                }
-           
-                Kingdom kingdom = clan.Kingdom;
-                bool war = FactionManager.GetEnemyKingdoms(kingdom).Count() > 0;
-                if (!war)
-                {
-                    if (clan.WarPartyComponents.Count > 0)
-                    {
-                        var estate = gentryTuple.Item2;
-                        var list = new List<WarPartyComponent>();
-                        foreach (var party in clan.WarPartyComponents)
-                        {
-                            list.Add(party);
-                        }
-
-                        foreach (var party in list)
-                        {
-                            FinishParty(party, estate);
-                        }
-                    }
-                }
                 else
                 {
-                    if (clan.WarPartyComponents.Count > 0)
+                    if (party.TotalWage >= party.PaymentLimit)
                     {
-                        var estate = gentryTuple.Item2;
-                        var list = new List<WarPartyComponent>();
-                        foreach (var party in clan.WarPartyComponents)
-                        {
-                            if (party.Leader != null && party.MobileParty.Army == null)
-                            {
-                                list.Add(party);
-                            }
-                        }
-
-                        foreach (var party in list)
-                        {
-                            FinishParty(party, estate);
-                        }
+                        return;
                     }
-                }*/
+
+                    int freeSpaces = party.LimitedPartySize - party.MemberRoster.TotalManCount;
+                    if (freeSpaces <= 0)
+                    {
+                        return;
+                    }
+
+                    TroopRoster raisedTroops = gentryTuple.Item2.RaiseManpower(freeSpaces);
+                    party.MemberRoster.Add(raisedTroops);
+                }
             },
             GetType().Name);
         }
@@ -220,20 +178,37 @@ namespace BannerKings.Behaviours
             (bool, Estate) isGentry = IsGentryClan(clan);
             if (isGentry.Item1 && estate == isGentry.Item2)
             {
-                MobileParty party = MobilePartyHelper.SpawnLordParty(clan.Leader, estate.EstatesData.Settlement);
+                var settlement = estate.EstatesData.Settlement;
+                MobileParty party = MobilePartyHelper.SpawnLordParty(clan.Leader, settlement);
+                EnterSettlementAction.ApplyForParty(party, settlement);
+                LeaveSettlementAction.ApplyForParty(party);
                 SetPartyAiAction.GetActionForEscortingParty(party, army.LeaderParty);
             }
         }
 
-        public bool IsAvailableForSummoning(Clan clan, Estate estate)
+        public (bool, TextObject) IsAvailableForSummoning(Clan clan, Estate estate)
         {
+            var text = TextObject.Empty;
             Hero leader = clan.Leader;
-            bool leaderReady = leader.IsAlive && !leader.IsChild &&
+            bool ready = leader.IsAlive && !leader.IsChild &&
                 leader.PartyBelongedTo == null && !leader.IsPrisoner && !leader.IsNoncombatant;
-            var settlement = estate.EstatesData.Settlement;
-            bool villageReady = settlement.Village.VillageState == Village.VillageStates.Normal;
+            if (!ready)
+            {
+                text = new TextObject("{=!}{HERO} is currently not fit to be summoned.")
+                    .SetTextVariable("HERO", leader.Name);
+            }
+            else
+            {
+                var settlement = estate.EstatesData.Settlement;
+                ready = settlement.Village.VillageState == Village.VillageStates.Normal;
+                if (!ready)
+                {
+                    text = new TextObject("{=!}{SETTLEMENT} is under attack or pillaged.")
+                        .SetTextVariable("SETTLEMENT", settlement.Name);
+                }
+            }
 
-            return leaderReady && villageReady && estate.GetManpower(PopType.Serfs) >= 10;
+            return new (ready, text);
         }
 
         private void InitializeGentry(Settlement settlement, bool campaignStart = false)
@@ -349,10 +324,12 @@ namespace BannerKings.Behaviours
                 }
                 else
                 {
-                    hero.ChangeHeroGold(1000 + cost);
+                    hero.ChangeHeroGold(cost);
                     GiveGoldAction.ApplyBetweenCharacters(hero, vacantEstate.Owner, cost);
                     vacantEstate.SetOwner(hero);
                 }
+
+                hero.ChangeHeroGold(15000);
             }
             else
             {
