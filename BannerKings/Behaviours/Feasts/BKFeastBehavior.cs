@@ -193,7 +193,7 @@ namespace BannerKings.Behaviours.Feasts
 
         private void OnDailyTickClan(Clan clan)
         {
-            if (clan.Kingdom != null && clan != Clan.PlayerClan)
+            if (clan.Kingdom != null && clan != Clan.PlayerClan && MBRandom.RandomFloat <= 0.05f)
             {
                 var decision = new OrganizeFeastDecision(clan.Leader);
                 decision.DoAiDecision();
