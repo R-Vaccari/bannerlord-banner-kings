@@ -166,8 +166,6 @@ namespace BannerKings.Behaviours.Feasts
 
         public void Finish(TextObject reason)
         {
-            List<TextObject> goodComments = GetCompliments();
-            List<TextObject> badComments = GetComplaints();
             float satisfaction = ((FoodQuality / 7f) + (FoodQuantity / 7f) +
                 (FoodVariety / 7f) + (Alcohol / 7f) + (HostPresence / Ticks)) / 5f;
 
@@ -203,25 +201,31 @@ namespace BannerKings.Behaviours.Feasts
                     .SetTextVariable("TOWN", Town.Name)
                     .SetTextVariable("REASON", reason));
 
-                TextObject text;
-                if (satisfaction >= 0.8f)
+                if (Host == Hero.MainHero)
                 {
-                    text = new TextObject("{=e83AjuGY}The feast was a success! The guests praised {COMPLIMENT}.")
-                        .SetTextVariable("COMPLIMENT", goodComments.GetRandomElement());
-                }
-                else if (satisfaction >= 0.3f && satisfaction < 0.8f)
-                {
-                    text = new TextObject("{=9QbnYBn0}The feast was acceptable. The guests compliment that {COMPLIMENT}, but complain that {COMPLAINT}.")
-                        .SetTextVariable("COMPLIMENT", goodComments.GetRandomElement())
-                        .SetTextVariable("COMPLAINT", badComments.GetRandomElement());
-                }
-                else
-                {
-                    text = new TextObject("{=bAgf4mvT}The feast was a failure... The guests complain that {COMPLAINT}.")
-                        .SetTextVariable("COMPLAINT", badComments.GetRandomElement());
-                }
+                    List<TextObject> goodComments = GetCompliments();
+                    List<TextObject> badComments = GetComplaints();
 
-                InformationManager.DisplayMessage(new InformationMessage(text.ToString()));
+                    TextObject text;
+                    if (satisfaction >= 0.8f)
+                    {
+                        text = new TextObject("{=e83AjuGY}The feast was a success! The guests praised {COMPLIMENT}.")
+                            .SetTextVariable("COMPLIMENT", goodComments.GetRandomElement());
+                    }
+                    else if (satisfaction >= 0.3f && satisfaction < 0.8f)
+                    {
+                        text = new TextObject("{=9QbnYBn0}The feast was acceptable. The guests compliment that {COMPLIMENT}, but complain that {COMPLAINT}.")
+                            .SetTextVariable("COMPLIMENT", goodComments.GetRandomElement())
+                            .SetTextVariable("COMPLAINT", badComments.GetRandomElement());
+                    }
+                    else
+                    {
+                        text = new TextObject("{=bAgf4mvT}The feast was a failure... The guests complain that {COMPLAINT}.")
+                            .SetTextVariable("COMPLAINT", badComments.GetRandomElement());
+                    }
+
+                    InformationManager.DisplayMessage(new InformationMessage(text.ToString()));
+                }
             }
         }
 

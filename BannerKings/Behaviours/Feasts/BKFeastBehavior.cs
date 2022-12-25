@@ -3,6 +3,7 @@ using BannerKings.Managers.Goals.Decisions;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -24,6 +25,8 @@ namespace BannerKings.Behaviours.Feasts
             CampaignEvents.OnMissionStartedEvent.AddNonSerializedListener(this, OnMissionStarted);
             CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, HourlyTickParty);
             CampaignEvents.AfterSettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
+            CampaignEvents.WarDeclared.AddNonSerializedListener(this, OnWarDeclared);
+            CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -91,6 +94,63 @@ namespace BannerKings.Behaviours.Feasts
             return CampaignTime.Zero;
         }
 
+        public bool KingdomHasFeast(Kingdom kingdom)
+        {
+            foreach (var fief in kingdom.Fiefs)
+            {
+                if (IsFeastTown(fief.Settlement))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void OnOwnerChanged(Settlement settlement, bool openToClaim, Hero newOwner, Hero oldOwner,
+            Hero capturerHero,
+            ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
+        {
+            if (settlement.Town == null)
+            {
+                return;
+            }
+
+            if (feasts.ContainsKey(settlement.Town))
+            {
+                var feast = feasts[settlement.Town];
+                EndFeast(feast, new TextObject("{=!}{TOWN} is no longer part of the kingdom!")
+                    .SetTextVariable("TOWN", settlement.Name));
+            }
+        }
+
+        private void OnWarDeclared(IFaction faction1, IFaction faction2)
+        {
+            if (faction1.IsKingdomFaction)
+            {
+                foreach (var feast in feasts)
+                {
+                    if (feast.Key.MapFaction == faction1)
+                    {
+                        EndFeast(feast.Value, new TextObject("{=!}War has broke out with the {FACTION}!")
+                            .SetTextVariable("FACTION", faction2.Name));
+                    }
+                }
+            }
+
+            if (faction2.IsKingdomFaction)
+            {
+                foreach (var feast in feasts)
+                {
+                    if (feast.Key.MapFaction == faction2)
+                    {
+                        EndFeast(feast.Value, new TextObject("{=!}War has broke out with the {FACTION}!")
+                            .SetTextVariable("FACTION", faction1.Name));
+                    }
+                }
+            }
+        }
+
         private void OnMissionStarted(IMission mission)
         {
             if (Hero.MainHero.CurrentSettlement != null)
@@ -98,7 +158,6 @@ namespace BannerKings.Behaviours.Feasts
                 var settlement = Hero.MainHero.CurrentSettlement;
                 if (settlement.Town != null && feasts.ContainsKey(settlement.Town))
                 {
-
                     SoundEvent.PlaySound2D(string.Format("event:/music/musicians/{0}/0{1}",
                         settlement.Culture.StringId,
                         MBRandom.RandomInt(1, 4)));
