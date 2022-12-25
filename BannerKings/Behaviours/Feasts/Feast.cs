@@ -181,6 +181,10 @@ namespace BannerKings.Behaviours.Feasts
                     if (hero.PartyBelongedTo != null)
                     {
                         hero.PartyBelongedTo.Ai.EnableAi();
+                        if (hero.CurrentSettlement == Town.Settlement)
+                        {
+                            LeaveSettlementAction.ApplyForParty(hero.PartyBelongedTo);
+                        }
                     }
 
                     if (clan.Fiefs.Count > 0 && hero.CurrentSettlement == Town.Settlement)
