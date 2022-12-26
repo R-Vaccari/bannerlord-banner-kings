@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BannerKings.Behaviours;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Kingdoms.Policies;
@@ -9,7 +10,9 @@ using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -22,7 +25,7 @@ namespace BannerKings.Managers.Goals.Decisions
         List<BannerOption> allBanners = new List<BannerOption>();
         List<InquiryElement> elements = new List<InquiryElement>();
 
-        public CallBannersGoal(Hero fulfiller = null) : base("goal_found_kingdom", GoalCategory.Kingdom, GoalUpdateType.Hero)
+        public CallBannersGoal(Hero fulfiller = null) : base("goal_found_kingdom", GoalCategory.Kingdom, GoalUpdateType.Hero, fulfiller)
         {
             var name = new TextObject("{=!}Call Banners");
             var description = new TextObject("{=!}Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title.");
@@ -96,8 +99,13 @@ namespace BannerKings.Managers.Goals.Decisions
             allBanners.Clear();
             vassalBanners.Clear();
             elements.Clear();
+            AddBanners(hero.Clan);
+        }
+
+        private void AddBanners(Clan suzerainClan)
+        {
             var behavior = Campaign.Current.GetCampaignBehavior<BKGentryBehavior>();
-            foreach (var vassal in BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(Clan.PlayerClan))
+            foreach (var vassal in BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(suzerainClan))
             {
                 var estates = BannerKingsConfig.Instance.PopulationManager.GetEstates(vassal);
                 Estate estate = null;
@@ -107,10 +115,10 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
 
                 Clan clan = vassal.Clan;
-                var influence = GetInfluenceCost(Hero.MainHero, vassal);
+                var influence = GetInfluenceCost(GetFulfiller(), vassal);
                 BannerOption option = new BannerOption(vassal,
                     influence,
-                    hero.PartyBelongedTo,
+                    vassal.PartyBelongedTo,
                     estate);
                 bool ready = false;
                 TextObject hint = null;
@@ -145,7 +153,7 @@ namespace BannerKings.Managers.Goals.Decisions
                         .SetTextVariable("READY", readyTuple.Item2);
                 }
 
-                if (hint != null)
+                if (hint != null && allBanners.FirstOrDefault(x => x.Hero == vassal) == null)
                 {
                     allBanners.Add(option);
                     elements.Add(new InquiryElement(option,
@@ -153,6 +161,7 @@ namespace BannerKings.Managers.Goals.Decisions
                                                     new ImageIdentifier(clan.Banner),
                                                     ready && Clan.PlayerClan.Influence >= option.Influence,
                                                     hint.ToString()));
+                    AddBanners(vassal.Clan);
                 }
             }
         }
@@ -182,7 +191,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 null));
         }
 
-        private float GetInfluenceCost(Hero fulfiller, Hero banner)
+        private float GetInfluenceCost(Hero fulfiller, Hero banner, Estate estate = null)
         {
             if (banner.IsPartyLeader)
             {
@@ -193,7 +202,11 @@ namespace BannerKings.Managers.Goals.Decisions
             {
                 float result = banner.Clan.Tier * 2f;
                 result += banner.GetRelation(fulfiller) / -10f;
-                return result;
+                if (estate != null)
+                {
+                    result += estate.GetManpower(PopulationManager.PopType.Serfs) * 0.3f;
+                }
+                return MathF.Clamp(result, 15f, 60f);
             }
         }
 
@@ -205,9 +218,10 @@ namespace BannerKings.Managers.Goals.Decisions
             {
                 AIBehavior = Army.AIBehaviorFlags.Gathering
             };
+            Settlement settlement = hero.CurrentSettlement != null ? hero.CurrentSettlement :
+                SettlementHelper.FindNearestSettlement(x => x.Town != null || x.IsVillage, hero.PartyBelongedTo);
+            army.Gather(settlement);
             mobileParty.Army = army;
-            GatherArmyAction.Apply(mobileParty,
-                SettlementHelper.FindNearestSettlement(x => x.IsFortification || x.IsVillage, hero.PartyBelongedTo));
 
             var behavior = Campaign.Current.GetCampaignBehavior<BKGentryBehavior>();
             float influenceTotal = 0f;
@@ -218,7 +232,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     influenceTotal += option.Influence;
                     if (option.Party != null)
                     {
-                        SetPartyAiAction.GetActionForEscortingParty(option.Party, mobileParty);
+                        SetPartyAiAction.GetActionForEscortingParty(option.Party, army.LeaderParty);
                     }
                     else if (option.Estate != null)
                     {
@@ -246,6 +260,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("TROOPS", troops).ToString(),
                     Color.FromUint(4282569842U)));
+                SoundEvent.PlaySound2D(Utils.Helpers.GetKingdomDecisionSound());
             }
         }
 
@@ -284,6 +299,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 Hero = clan;
                 Estate = estate;
                 Influence = influence;
+                Party = party;
             }
 
             public Hero Hero { get; private set; }

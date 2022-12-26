@@ -29,6 +29,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
             CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnPartyDailyTick);
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
+            CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnClanDailyTick);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -52,6 +53,11 @@ namespace BannerKings.Behaviours
                     InitializeGentry(kingdom.Settlements.GetRandomElementWithPredicate(x => x.IsVillage), false);
                 }
             }
+        }
+
+        private void OnClanDailyTick(Clan clan)
+        {
+
         }
 
         private void OnPartyDailyTick(MobileParty party)
@@ -188,7 +194,8 @@ namespace BannerKings.Behaviours
 
         public (bool, TextObject) IsAvailableForSummoning(Clan clan, Estate estate)
         {
-            var text = TextObject.Empty;
+            var text = new TextObject("{=!}The {CLAN} gentry clan is ready to be summoned.")
+                .SetTextVariable("CLAN", clan.Name);
             Hero leader = clan.Leader;
             bool ready = leader.IsAlive && !leader.IsChild &&
                 leader.PartyBelongedTo == null && !leader.IsPrisoner && !leader.IsNoncombatant;

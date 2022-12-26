@@ -10,6 +10,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.LinQuick;
 
 namespace BannerKings.Behaviours
 {
@@ -80,7 +81,7 @@ namespace BannerKings.Behaviours
 
             var leader = party.LeaderHero;
             var kingdom = leader.Clan.Kingdom;
-            if (kingdom == null || leader != leader.Clan.Leader || leader.Clan.Influence < 100f)
+            if (kingdom == null || leader != leader.Clan.Leader || party.ActualClan == Clan.PlayerClan || leader.Clan.Influence < 100f)
             {
                 return;
             }
@@ -133,7 +134,8 @@ namespace BannerKings.Behaviours
             var leaderParty = army.LeaderParty;
             var playerKingdom = Clan.PlayerClan.Kingdom;
             if (playerKingdom == null || playerKingdom != leaderParty.LeaderHero.Clan.Kingdom ||
-                BannerKingsConfig.Instance.TitleManager == null || leaderParty == MobileParty.MainParty)
+                BannerKingsConfig.Instance.TitleManager == null || leaderParty == MobileParty.MainParty
+                || leaderParty.MapFaction != Hero.MainHero.MapFaction)
             {
                 return;
             }
@@ -157,7 +159,7 @@ namespace BannerKings.Behaviours
             var completion = contract.Duties[FeudalDuties.Auxilium];
 
             var suzerain = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(playerTitle);
-            if (suzerain == null)
+            if (suzerain == null || suzerain.deJure == null)
             {
                 return;
             }
