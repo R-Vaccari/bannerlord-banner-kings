@@ -545,35 +545,6 @@ namespace BannerKings.Behaviours
                 
                 return true;
             }
-
-            [HarmonyPrefix]
-            [HarmonyPatch("fief_grant_answer_consequence", MethodType.Normal)]
-            private static bool GrantPeeragePrefix()
-            {
-                ConversationSentence.SetObjectsToRepeatOver((from x in Hero.MainHero.Clan.Settlements
-                                                             where x.IsTown || x.IsCastle &&
-                                                             BannerKingsConfig.Instance.TitleManager.GetTitle(x).deJure == Hero.MainHero
-                                                             select x).ToList<Settlement>(), 5);
-
-                return false;
-            }
-
-            [HarmonyPostfix]
-            [HarmonyPatch("ClanNameSelectionIsDone", MethodType.Normal)]
-            private static void GrantPeerageFinishedPostfix(CompanionRolesCampaignBehavior __instance)
-            {
-                CompanionRolesCampaignBehavior current = Campaign.Current.GetCampaignBehavior<CompanionRolesCampaignBehavior>();
-                Settlement settlement = (Settlement)AccessTools.Field(current.GetType(), "_selectedFief").GetValue(current);
-                if (settlement != null)
-                {
-                    var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
-                    if (title != null)
-                    {
-                        var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, Hero.MainHero);
-                        BannerKingsConfig.Instance.TitleManager.GrantTitle(action, Hero.OneToOneConversationHero);
-                    }
-                }
-            }
         }
 
         [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "FindSuitableCompanionsToLeadCaravan")]
