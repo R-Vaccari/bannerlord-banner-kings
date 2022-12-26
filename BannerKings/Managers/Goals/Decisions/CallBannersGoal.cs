@@ -10,6 +10,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
@@ -17,11 +18,16 @@ namespace BannerKings.Managers.Goals.Decisions
     public class CallBannersGoal : Goal
     {
         List<BannerOption> banners = new List<BannerOption>();
-        public CallBannersGoal() : base("goal_found_kingdom", GoalCategory.Kingdom, GoalUpdateType.Hero)
+        List<BannerOption> vassalBanners = new List<BannerOption>();
+        List<BannerOption> allBanners = new List<BannerOption>();
+        List<InquiryElement> elements = new List<InquiryElement>();
+
+        public CallBannersGoal(Hero fulfiller = null) : base("goal_found_kingdom", GoalCategory.Kingdom, GoalUpdateType.Hero)
         {
             var name = new TextObject("{=!}Call Banners");
             var description = new TextObject("{=!}Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title.");
             Initialize(name, description);
+            Refresh();
         }
 
         internal override bool IsAvailable()
@@ -72,18 +78,25 @@ namespace BannerKings.Managers.Goals.Decisions
             {
                 failedReasons.Add(GameTexts.FindText("str_in_army"));
             }
+
+            var behavior = Campaign.Current.GetCampaignBehavior<BKArmyBehavior>();
+            if (behavior.LastHeroArmy(fulfiller).ElapsedSeasonsUntilNow < 2f)
+            {
+                failedReasons.Add(new TextObject("{=!}It has been less than 2 seasons since you last summoned your banners."));
+            }
             
             return failedReasons.IsEmpty();
         }
 
-        internal override void ShowInquiry()
+        private void Refresh()
         {
-            banners.Clear();
             var hero = GetFulfiller();
-            var kingdom = Clan.PlayerClan.Kingdom;
 
+            banners.Clear();
+            allBanners.Clear();
+            vassalBanners.Clear();
+            elements.Clear();
             var behavior = Campaign.Current.GetCampaignBehavior<BKGentryBehavior>();
-            var elements = new List<InquiryElement>();
             foreach (var vassal in BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(Clan.PlayerClan))
             {
                 var estates = BannerKingsConfig.Instance.PopulationManager.GetEstates(vassal);
@@ -94,7 +107,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
 
                 Clan clan = vassal.Clan;
-                var influence = GetInfluenceCost(Hero.MainHero, vassal.Clan);
+                var influence = GetInfluenceCost(Hero.MainHero, vassal);
                 BannerOption option = new BannerOption(vassal,
                     influence,
                     hero.PartyBelongedTo,
@@ -134,6 +147,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
                 if (hint != null)
                 {
+                    allBanners.Add(option);
                     elements.Add(new InquiryElement(option,
                                                     vassal.Name.ToString(),
                                                     new ImageIdentifier(clan.Banner),
@@ -141,6 +155,11 @@ namespace BannerKings.Managers.Goals.Decisions
                                                     hint.ToString()));
                 }
             }
+        }
+
+        internal override void ShowInquiry()
+        {
+            Refresh();
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=!}Call Banners").ToString(),
@@ -161,11 +180,22 @@ namespace BannerKings.Managers.Goals.Decisions
                     ApplyGoal();
                 },
                 null));
-
-            var action = BannerKingsConfig.Instance.TitleModel.GetFoundKingdom(kingdom, hero);
         }
 
-        private float GetInfluenceCost(Hero fulfiller, Clan clan) => 5f;
+        private float GetInfluenceCost(Hero fulfiller, Hero banner)
+        {
+            if (banner.IsPartyLeader)
+            {
+                return BannerKingsConfig.Instance.ArmyManagementModel.CalculatePartyInfluenceCost(fulfiller.PartyBelongedTo,
+                    banner.PartyBelongedTo) * 0.75f;
+            }
+            else
+            {
+                float result = banner.Clan.Tier * 2f;
+                result += banner.GetRelation(fulfiller) / -10f;
+                return result;
+            }
+        }
 
         internal override void ApplyGoal()
         {
@@ -198,11 +228,53 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             GainKingdomInfluenceAction.ApplyForDefault(hero, -influenceTotal);
+            var armyBehavior = Campaign.Current.GetCampaignBehavior<BKArmyBehavior>();
+            armyBehavior.AddRecord(hero);
+            if (hero != Hero.MainHero && hero.MapFaction == Hero.MainHero.MapFaction)
+            {
+                int troops = hero.PartyBelongedTo.MemberRoster.TotalManCount;
+                foreach (var option in banners)
+                {
+                    if (option.Hero.PartyBelongedTo != null)
+                    {
+                        troops += option.Hero.PartyBelongedTo.MemberRoster.TotalManCount;
+                    }
+                }
+
+                InformationManager.DisplayMessage(new InformationMessage(
+                    new TextObject("{=!}{HERO} has called his banners! {TROOPS} troops are gathering for war.")
+                    .SetTextVariable("HERO", hero.Name)
+                    .SetTextVariable("TROOPS", troops).ToString(),
+                    Color.FromUint(4282569842U)));
+            }
         }
 
         public override void DoAiDecision()
         {
-            throw new NotImplementedException();
+            Hero fulfiller = GetFulfiller();
+            if (allBanners.Count < 5 || fulfiller.PartyBelongedTo.HasUnpaidWages > 0 || fulfiller.PartyBelongedTo.GetNumDaysForFoodToLast() < 10)
+            {
+                return;
+            }
+
+            float cost = 0f;
+            int parties = 0;
+            foreach (var banner in allBanners)
+            {
+                if (cost + banner.Influence <= fulfiller.Clan.Influence)
+                {
+                    banners.Add(banner);
+                    parties++;
+                    cost += banner.Influence;
+                }
+            }
+
+            if (banners.Count < 5)
+            {
+                return;
+            }
+
+            ApplyGoal();
         }
 
         private class BannerOption

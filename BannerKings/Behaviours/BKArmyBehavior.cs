@@ -1,20 +1,23 @@
 ﻿using BannerKings.Managers.Duties;
+using BannerKings.Managers.Goals.Decisions;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.Vanilla;
 using HarmonyLib;
 using Helpers;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 
 namespace BannerKings.Behaviours
 {
     public class BKArmyBehavior : CampaignBehaviorBase
     {
-        public static AuxiliumDuty playerArmyDuty;
-        public static CampaignTime lastDutyTime = CampaignTime.Zero;
-
+        private AuxiliumDuty playerArmyDuty;
+        private CampaignTime lastDutyTime = CampaignTime.Zero;
+        private Dictionary<Hero, CampaignTime> heroRecords = new Dictionary<Hero, CampaignTime>(); 
         public override void RegisterEvents()
         {
             CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnPartyDailyTick);
@@ -33,6 +36,34 @@ namespace BannerKings.Behaviours
 
             dataStore.SyncData("bannerkings-military-duty", ref playerArmyDuty);
             dataStore.SyncData("bannerkings-military-duty-time", ref lastDutyTime);
+            dataStore.SyncData("bannerkings-army-records", ref heroRecords);
+
+            if (heroRecords == null)
+            {
+                heroRecords = new Dictionary<Hero, CampaignTime>();
+            }
+        }
+
+        public void AddRecord(Hero hero)
+        {
+            if (heroRecords.ContainsKey(hero))
+            {
+                heroRecords[hero] = CampaignTime.Now;
+            }
+            else
+            {
+                heroRecords.Add(hero, CampaignTime.Now);
+            }
+        }
+
+        public CampaignTime LastHeroArmy(Hero hero)
+        {
+            if (heroRecords.ContainsKey(hero))
+            {
+                return heroRecords[hero];
+            }
+
+            return CampaignTime.Zero;
         }
 
         private void OnPartyDailyTick(MobileParty party)
@@ -54,10 +85,11 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            if (kingdom.Armies.Count == 0 && FactionManager.GetEnemyKingdoms(kingdom).Count() > 0)
+            if (kingdom.Armies.Count == 0 && FactionManager.GetEnemyKingdoms(kingdom).Count() > 0 &&
+                MBRandom.RandomFloat <= 0.5f)
             {
-                kingdom.CreateArmy(leader, SettlementHelper.FindNearestSettlement(x => x.IsFortification || x.IsVillage,
-                        party), Army.ArmyTypes.Besieger);
+                var decision = new CallBannersGoal(leader);
+                decision.DoAiDecision();
             }
         }
 
