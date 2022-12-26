@@ -313,7 +313,7 @@ namespace BannerKings.Managers
                     {
                         foreach (var estate in data.EstateData.Estates)
                         {
-                            if (estate.Owner != null && estate.Owner.IsLord)
+                            if (estate.Owner != null && estate.Owner.IsLord && estate.Owner.MapFaction == clan.MapFaction)
                             {
                                 (bool, Estate) isGentry = behavior.IsGentryClan(estate.Owner.Clan);
                                 if (isGentry.Item1 && isGentry.Item2 == estate)
@@ -342,7 +342,7 @@ namespace BannerKings.Managers
                         else
                         {
                             var suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(deJure);
-                            if (suzerain != null && suzerain.deJure == clan.Leader)
+                            if (suzerain != null && suzerain.deJure == clan.Leader && clan.MapFaction == vassal.deJure.MapFaction)
                             {
                                 list.Add(deJure);
                             }
