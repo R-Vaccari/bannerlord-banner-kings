@@ -152,7 +152,7 @@ namespace BannerKings.UI
             [HarmonyPatch("Name", MethodType.Getter)]
             internal static void GetterPostfix(Hero __instance, ref TextObject __result)
             {
-                if (names.ContainsKey(__instance) && MBRandom.RandomFloat > 0.001f)
+                if (names.ContainsKey(__instance) && MBRandom.RandomFloat > 0.1f)
                 {
                     __result = names[__instance];
                     return;
