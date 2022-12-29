@@ -21,7 +21,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Behaviours
 {
-    public class BKGentryBehavior : CampaignBehaviorBase
+    public class BKGentryBehavior : BannerKingsBehavior
     {
         public override void RegisterEvents()
         {
