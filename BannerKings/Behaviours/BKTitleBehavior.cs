@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using BannerKings.Managers.AI;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Skills;
@@ -13,14 +12,13 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static TaleWorlds.CampaignSystem.Actions.ChangeKingdomAction;
 
 namespace BannerKings.Behaviours
 {
-    public class BKTitleBehavior : CampaignBehaviorBase
+    public class BKTitleBehavior : BannerKingsBehavior
     {
         private Dictionary<Settlement, List<Clan>> conqueredByArmies = new();
 
@@ -76,13 +74,16 @@ namespace BannerKings.Behaviours
             {
                 CheckOverDemesneLimit(hero);
                 CheckOverUnlandedDemesneLimit(hero);
-                CheckOverVassalLimit(hero);
+                //CheckOverVassalLimit(hero);
             }
         }
 
         private void CheckOverDemesneLimit(Hero hero)
         {
-            if (!BannerKingsConfig.Instance.StabilityModel.IsHeroOverDemesneLimit(hero))
+            var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(hero).ResultNumber;
+            var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(hero.Clan).ResultNumber;
+
+            if (current <= limit)
             {
                 int xp = 0;
                 foreach (FeudalTitle ownedTitle in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero))
@@ -103,44 +104,38 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            if (hero.Clan.Kingdom != null && hero.Clan == hero.Clan.Kingdom.RulingClan)
-            {
-                var kingdom = hero.Clan.Kingdom;
-                if (kingdom.UnresolvedDecisions.Any(x => x is SettlementClaimantDecision))
-                {
-                    return;
-                }
-            }
-
-            var ai = new AIBehavior();
-            var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(hero).ResultNumber;
-            var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(hero.Clan).ResultNumber;
-
             var diff = current - limit;
             if (diff < 0.5f)
             {
                 return;
             }
 
-            var title = ai.ChooseTitleToGive(hero, diff);
-            if (title == null)
+            RunWeekly(() =>
             {
-                return;
-            }
+                var title = BannerKingsConfig.Instance.AI.ChooseTitleToGive(hero, diff);
+                if (title == null)
+                {
+                    return;
+                }
 
-            var receiver = ai.ChooseVassalToGiftLandedTitle(hero, title);
-            if (receiver == null)
-            {
-                return;
-            }
+                var receiver = BannerKingsConfig.Instance.AI.ChooseVassalToGiftLandedTitle(hero, title);
+                if (receiver == null)
+                {
+                    return;
+                }
 
-            var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, hero);
-            BannerKingsConfig.Instance.TitleManager.GrantTitle(action, receiver);
+                var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, hero);
+                BannerKingsConfig.Instance.TitleManager.GrantTitle(action, receiver);
+            },
+            GetType().Name,
+            false);
         }
 
         private void CheckOverUnlandedDemesneLimit(Hero hero)
         {
-            if (!BannerKingsConfig.Instance.StabilityModel.IsHeroOverUnlandedDemesneLimit(hero))
+            var limit = BannerKingsConfig.Instance.StabilityModel.CalculateUnlandedDemesneLimit(hero).ResultNumber;
+            var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentUnlandedDemesne(hero.Clan).ResultNumber;
+            if (current <= limit)
             {
                 return;
             }
@@ -159,25 +154,26 @@ namespace BannerKings.Behaviours
             var random = vassals.Keys.ToList().GetRandomElement();
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, random.Leader, -2);
 
-            var ai = new AIBehavior();
-            var limit = BannerKingsConfig.Instance.StabilityModel.CalculateUnlandedDemesneLimit(hero).ResultNumber;
-            var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentUnlandedDemesne(hero.Clan).ResultNumber;
-
-            var diff = current - limit;
-            var title = ai.ChooseTitleToGive(hero, diff, false);
-            if (title == null || title.type != TitleType.Dukedom)
+            RunWeekly(() =>
             {
-                return;
-            }
+                var diff = current - limit;
+                var title = BannerKingsConfig.Instance.AI.ChooseTitleToGive(hero, diff, false);
+                if (title == null || title.type != TitleType.Dukedom)
+                {
+                    return;
+                }
 
-            var receiver = ai.ChooseVassalToGiftUnlandedTitle(hero, title, vassals);
-            if (receiver == null)
-            {
-                return;
-            }
+                var receiver = BannerKingsConfig.Instance.AI.ChooseVassalToGiftUnlandedTitle(hero, title, vassals);
+                if (receiver == null)
+                {
+                    return;
+                }
 
-            var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, hero);
-            BannerKingsConfig.Instance.TitleManager.GrantTitle(action, receiver);
+                var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, hero);
+                BannerKingsConfig.Instance.TitleManager.GrantTitle(action, receiver);
+            },
+            GetType().Name,
+            false);
         }
 
         private void CheckOverVassalLimit(Hero hero)

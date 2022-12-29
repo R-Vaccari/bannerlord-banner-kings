@@ -5,6 +5,7 @@ using BannerKings.Components;
 using BannerKings.Extensions;
 using BannerKings.Managers;
 using BannerKings.Managers.Buildings;
+using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
@@ -15,6 +16,7 @@ using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -22,11 +24,13 @@ using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using static BannerKings.Managers.Policies.BKTaxPolicy;
+using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Behaviours
 {
-    public class BKSettlementBehavior : CampaignBehaviorBase
+    public class BKSettlementBehavior : BannerKingsBehavior
     {
         private CourtManager courtManager;
         private EducationManager educationsManager;
@@ -44,7 +48,6 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameCreated);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
-            CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
         }
 
@@ -178,20 +181,6 @@ namespace BannerKings.Behaviours
                     .ToString()));
         }
 
-        private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
-        {
-            if (party is not {IsLordParty: true} || target.OwnerClan == null || party.LeaderHero != target.OwnerClan.Leader)
-            {
-                return;
-            }
-
-            if ((!target.IsVillage && target.Town.Governor == null) ||
-                (target.IsVillage && target.Village.Bound.Town.Governor == null))
-            {
-                BannerKingsConfig.Instance.AI.SettlementManagement(target);
-            }
-        }
-
         private void DailySettlementTick(Settlement settlement)
         {
             if (settlement == null || settlement.StringId.Contains("tutorial") || settlement.StringId.Contains("Ruin"))
@@ -201,9 +190,7 @@ namespace BannerKings.Behaviours
 
             TickSettlementData(settlement);
             TickRotting(settlement);
-
-            BannerKingsConfig.Instance.AI.SettlementManagement(settlement);
-
+            TickManagement(settlement);
             TickTown(settlement);
             TickCastle(settlement);
             TickVillage(settlement);
@@ -219,6 +206,169 @@ namespace BannerKings.Behaviours
                 HandleExcessFood(town);
                 HandleMarketGold(town);
                 HandleGarrison(town);
+            }
+        }
+
+        private void TickManagement(Settlement target)
+        {
+            RunWeekly(() =>
+            {
+                if (target == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target))
+                {
+                    return;
+                }
+
+                var owner = target.IsVillage ? target.Village.GetActualOwner() : target.OwnerClan.Leader;
+                if (owner.Clan == Clan.PlayerClan)
+                {
+                    return;
+                }
+
+                var kingdom = target.OwnerClan.Kingdom;
+                var currentDecisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(target);
+                var changedDecisions = new List<BannerKingsDecision>();
+
+                var town = target.Town;
+                if (town is { Governor: { } })
+                {
+                    if (town.FoodStocks < town.FoodStocksUpperLimit() * 0.2f && town.FoodChange < 0f)
+                    {
+                        var rationDecision =
+                            (BKRationDecision)currentDecisions.FirstOrDefault(x => x.GetIdentifier() == "decision_ration");
+                        rationDecision.Enabled = true;
+                        changedDecisions.Add(rationDecision);
+                    }
+                    else
+                    {
+                        var rationDecision =
+                            (BKRationDecision)currentDecisions.FirstOrDefault(x => x.GetIdentifier() == "decision_ration");
+                        rationDecision.Enabled = false;
+                        changedDecisions.Add(rationDecision);
+                    }
+
+                    var garrison = town.GarrisonParty;
+                    if (garrison != null)
+                    {
+                        float wage = garrison.TotalWage;
+                        var income = Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(town).ResultNumber;
+                        if (wage >= income * 0.5f)
+                        {
+                            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target,
+                                new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Dischargement, target));
+                        }
+                        else if (wage <= income * 0.2f)
+                        {
+                            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target,
+                                new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Enlistment, target));
+                        }
+                        else
+                        {
+                            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target,
+                                new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Standard, target));
+                        }
+                    }
+
+                    if (town.LoyaltyChange < 0)
+                    {
+                        UpdateTaxPolicy(1, target);
+                    }
+                    else
+                    {
+                        UpdateTaxPolicy(-1, target);
+                    }
+
+                    if (kingdom != null)
+                    {
+                        var enemies = FactionManager.GetEnemyKingdoms(kingdom);
+                        var atWar = enemies.Any();
+
+                        if (target.Owner.GetTraitLevel(DefaultTraits.Calculating) > 0)
+                        {
+                            var subsidizeMilitiaDecision =
+                                (BKSubsidizeMilitiaDecision)currentDecisions.FirstOrDefault(x =>
+                                    x.GetIdentifier() == "decision_militia_subsidize");
+                            subsidizeMilitiaDecision.Enabled = atWar ? true : false;
+                            changedDecisions.Add(subsidizeMilitiaDecision);
+                        }
+                    }
+
+                    var criminal = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(target, "criminal");
+                    var mercy = target.Owner.GetTraitLevel(DefaultTraits.Mercy);
+                    var targetCriminal = mercy switch
+                    {
+                        > 0 => new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Forgiveness, target),
+                        < 0 => new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Execution, target),
+                        _ => new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Enslavement, target)
+                    };
+
+                    if (targetCriminal.Policy != criminal.Policy)
+                    {
+                        BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, targetCriminal);
+                    }
+
+                    var taxSlavesDecision =
+                        (BKTaxSlavesDecision)currentDecisions.FirstOrDefault(x => x.GetIdentifier() == "decision_slaves_tax");
+                    if (target.Owner.GetTraitLevel(DefaultTraits.Authoritarian) > 0)
+                    {
+                        taxSlavesDecision.Enabled = true;
+                    }
+                    else if (target.Owner.GetTraitLevel(DefaultTraits.Egalitarian) > 0)
+                    {
+                        taxSlavesDecision.Enabled = false;
+                    }
+
+                    changedDecisions.Add(taxSlavesDecision);
+
+                    var workforce = (BKWorkforcePolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(target, "workforce");
+                    var workforcePolicies = new List<ValueTuple<WorkforcePolicy, float>> { (WorkforcePolicy.None, 1f) };
+                    var saturation = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).LandData
+                        .WorkforceSaturation;
+                    if (saturation > 1f)
+                    {
+                        workforcePolicies.Add((WorkforcePolicy.Land_Expansion, 2f));
+                    }
+
+                    if (town.Security < 20f)
+                    {
+                        workforcePolicies.Add((WorkforcePolicy.Martial_Law, 2f));
+                    }
+
+                    BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target,
+                        new BKWorkforcePolicy(MBRandom.ChooseWeighted(workforcePolicies), target));
+
+                    foreach (var dec in changedDecisions)
+                    {
+                        BannerKingsConfig.Instance.PolicyManager.UpdateSettlementDecision(target, dec);
+                    }
+                }
+                else if (target.IsVillage && target.Village.Bound.Town.Governor != null)
+                {
+                    var villageData = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).VillageData;
+                    villageData.StartRandomProject();
+                    var hearths = target.Village.Hearth;
+                    switch (hearths)
+                    {
+                        case < 300f:
+                            UpdateTaxPolicy(-1, target);
+                            break;
+                        case > 1000f:
+                            UpdateTaxPolicy(1, target);
+                            break;
+                    }
+                }
+            },
+            GetType().Name,
+            false);
+        }
+
+        private static void UpdateTaxPolicy(int value, Settlement settlement)
+        {
+            var tax = (BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tax");
+            var taxType = tax.Policy;
+            if ((value == 1 && taxType != TaxType.Low) || (value == -1 && taxType != TaxType.High))
+            {
+                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(settlement,
+                    new BKTaxPolicy(taxType + value, settlement));
             }
         }
 
@@ -287,7 +437,7 @@ namespace BannerKings.Behaviours
 
         private void HandleItemAvailability(Town town)
         {
-            ExceptionUtils.TryCatch(() =>
+            RunWeekly(() =>
             {
                 if (!town.IsTown)
                 {
@@ -328,7 +478,9 @@ namespace BannerKings.Behaviours
                         }
                     }
                 }
-            }, GetType().Name);
+            }, 
+            GetType().Name,
+            false);
         }
 
         private void HandleExcessWorkforce(LandData data, Town town)
@@ -359,7 +511,7 @@ namespace BannerKings.Behaviours
 
         private void HandleExcessFood(Town town)
         {
-            ExceptionUtils.TryCatch(() =>
+            RunWeekly(() =>
             {
                 if (town.FoodStocks >= town.FoodStocksUpperLimit() - 10)
                 {
@@ -520,25 +672,29 @@ namespace BannerKings.Behaviours
 
         private void TickRotting(Settlement settlement)
         {
-            var party = settlement.Party;
-
-            var roster = party?.ItemRoster;
-            if (roster == null)
+            RunWeekly(() =>
             {
-                return;
-            }
+                var party = settlement.Party;
+                var roster = party?.ItemRoster;
+                if (roster == null)
+                {
+                    return;
+                }
 
-            var maxStorage = 1000f;
-            if (settlement.Town != null)
-            {
-                maxStorage += settlement.Town.Buildings.Where(b => b.BuildingType == DefaultBuildingTypes.CastleGranary || b.BuildingType == DefaultBuildingTypes.SettlementGranary).Sum(b => b.CurrentLevel * 5000f);
-            }
+                var maxStorage = 1000f;
+                if (settlement.Town != null)
+                {
+                    maxStorage += settlement.Town.Buildings.Where(b => b.BuildingType == DefaultBuildingTypes.CastleGranary || b.BuildingType == DefaultBuildingTypes.SettlementGranary).Sum(b => b.CurrentLevel * 5000f);
+                }
 
-            RotRosterFood(roster, maxStorage);
-            if (settlement.Stash != null)
-            {
-                RotRosterFood(settlement.Stash, settlement.IsCastle ? maxStorage : 1000f);
-            }
+                RotRosterFood(roster, maxStorage);
+                if (settlement.Stash != null)
+                {
+                    RotRosterFood(settlement.Stash, settlement.IsCastle ? maxStorage : 1000f);
+                }
+            },
+            GetType().Name,
+            false);
         }
 
         private void RotRosterFood(ItemRoster roster, float maxStorage)
