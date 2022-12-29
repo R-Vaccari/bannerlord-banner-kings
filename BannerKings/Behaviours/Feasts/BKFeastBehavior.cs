@@ -126,14 +126,14 @@ namespace BannerKings.Behaviours.Feasts
 
         private void OnWarDeclared(IFaction faction1, IFaction faction2)
         {
+            List<Feast> toRemove = new List<Feast>();
             if (faction1.IsKingdomFaction)
             {
                 foreach (var feast in feasts)
                 {
                     if (feast.Key.MapFaction == faction1)
                     {
-                        EndFeast(feast.Value, new TextObject("{=!}War has broke out with the {FACTION}!")
-                            .SetTextVariable("FACTION", faction2.Name));
+                        toRemove.Add(feast.Value);
                     }
                 }
             }
@@ -144,10 +144,14 @@ namespace BannerKings.Behaviours.Feasts
                 {
                     if (feast.Key.MapFaction == faction2)
                     {
-                        EndFeast(feast.Value, new TextObject("{=!}War has broke out with the {FACTION}!")
-                            .SetTextVariable("FACTION", faction1.Name));
+                        toRemove.Add(feast.Value);
                     }
                 }
+            }
+
+            foreach(var feast in toRemove)
+            {
+                EndFeast(feast, new TextObject("{=!}War has broke out!"));
             }
         }
 
