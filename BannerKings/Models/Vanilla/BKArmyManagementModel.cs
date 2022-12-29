@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -22,11 +23,6 @@ namespace BannerKings.Models.Vanilla
                 var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(armyLeader);
                 if (title != null)
                 {
-                    if (title.contract.GenderLaw == GenderLaw.Agnatic && armyLeader.IsFemale)
-                    {
-                        return false;
-                    }
-
                     if (kingdom.ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
                     {
                         var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
@@ -38,6 +34,11 @@ namespace BannerKings.Models.Vanilla
                     else if (title.type < TitleType.Lordship)
                     {
                         return true;
+                    }
+
+                    if (title.contract.GenderLaw == GenderLaw.Agnatic && armyLeader.IsFemale && !armyLeader.IsClanLeader)
+                    {
+                        return false;
                     }
                 }
             }
