@@ -570,7 +570,9 @@ namespace BannerKings.Behaviours
                         }
                     }
                 }
-            }, GetType().Name);
+            }, 
+            GetType().Name,
+            false);
         }
 
         private void TickCastle(Settlement settlement)
