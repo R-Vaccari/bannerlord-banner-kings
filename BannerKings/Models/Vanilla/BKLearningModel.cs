@@ -60,6 +60,10 @@ namespace BannerKings.Models.Vanilla
 
         public ExplainedNumber CalculateLearningRate(Hero hero, int attributeValue, int focusValue, int skillValue, int characterLevel, TextObject attributeName, bool includeDescriptions = false)
         {
+            if (skillValue >= 500)
+            {
+                return new ExplainedNumber(0f);
+            }
             var result = new ExplainedNumber(1.25f, includeDescriptions);
             result.AddFactor(0.4f * attributeValue, attributeName);
             result.AddFactor(focusValue * 1f, new TextObject("{=fa3Dmxdo}Skill Focus"));
@@ -77,7 +81,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             result.LimitMin(0.05f);
-            return result;
+            return result; 
         }
 
         public override ExplainedNumber CalculateLearningRate(int attributeValue, int focusValue, int skillValue,
