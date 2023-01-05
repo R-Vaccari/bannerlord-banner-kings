@@ -221,7 +221,7 @@ namespace BannerKings.Behaviours
         private void InitializeGentry(Settlement settlement, bool campaignStart = false)
         {
             if (!settlement.IsVillage || BannerKingsConfig.Instance.PopulationManager == null ||
-                settlement.OwnerClan == null || !settlement.MapFaction.IsKingdomFaction)
+                settlement.OwnerClan == null || settlement.MapFaction == null || !settlement.MapFaction.IsKingdomFaction)
             {
                 return;
             }
