@@ -35,11 +35,6 @@ namespace BannerKings.Models.Vanilla
                     {
                         return true;
                     }
-
-                    if (title.contract.GenderLaw == GenderLaw.Agnatic && armyLeader.IsFemale && !armyLeader.IsClanLeader())
-                    {
-                        return false;
-                    }
                 }
             }
 
