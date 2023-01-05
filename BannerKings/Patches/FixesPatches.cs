@@ -1,9 +1,13 @@
 ﻿using BannerKings.Managers.Items;
 using HarmonyLib;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Party.PartyComponents;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 
 namespace BannerKings.Patches
@@ -25,6 +29,50 @@ namespace BannerKings.Patches
                 }
 
                 return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(SiegeAftermathCampaignBehavior))]
+        internal class SiegeAftermathCampaignBehaviorPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("GetSiegeAftermathInfluenceCost")]
+            private static bool GetSiegeAftermathInfluenceCostPrefix(MobileParty attackerParty, Settlement settlement, 
+                SiegeAftermathCampaignBehavior.SiegeAftermath aftermathType, ref float __result)
+            {
+                float result = 0f;
+                if (attackerParty.Army != null && aftermathType != SiegeAftermathCampaignBehavior.SiegeAftermath.Pillage)
+                {
+                    int num = attackerParty.Army.Parties.Count((MobileParty t) =>
+                    {
+                        if (t.LeaderHero != null)
+                        {
+                            return t.LeaderHero.GetTraitLevel(DefaultTraits.Mercy) > 0;
+                        }
+
+                        return false;
+                    });
+                    int num2 = attackerParty.Army.Parties.Count((MobileParty t) => 
+                    {
+                        if (t.LeaderHero != null)
+                        {
+                            return t.LeaderHero.GetTraitLevel(DefaultTraits.Mercy) > 0;
+                        }
+
+                        return false;
+                    });
+                    if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.Devastate)
+                    {
+                        result = settlement.Prosperity / 400f * (float)num;
+                    }
+                    else if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.ShowMercy && attackerParty.MapFaction.Culture != settlement.Culture)
+                    {
+                        result = settlement.Prosperity / 400f * (float)num2;
+                    }
+                }
+                __result = result;
+
+                return false;
             }
         }
 
