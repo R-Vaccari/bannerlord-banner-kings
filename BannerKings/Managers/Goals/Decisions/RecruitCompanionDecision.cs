@@ -121,7 +121,13 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(new TextObject("{=hkUJWHgi}You can't afford any companion."));
             }
 
-            return true;
+            var clan = GetFulfiller().Clan;
+            if (clan.Companions.Count >= clan.CompanionLimit)
+            {
+                failedReasons.Add(new TextObject("{=!}Your clan has reached it's companion limit."));
+            }
+
+            return failedReasons.Count == 0;
             //return failedReasons.IsEmpty();
         }
 
