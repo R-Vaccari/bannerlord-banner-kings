@@ -374,6 +374,11 @@ namespace BannerKings.Behaviours
 
         private void HandleGarrison(Town town)
         {
+            if (town.IsUnderSiege)
+            {
+                return;
+            }
+
             var parties = new MobilePartiesAroundPositionList();
             var list = parties.GetPartiesAroundPosition(town.Settlement.GatePosition, 10f);
 
