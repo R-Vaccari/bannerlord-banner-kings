@@ -1,6 +1,7 @@
 ﻿using BannerKings.Behaviours;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
+using BannerKings.Behaviours.Mercenary;
 using BannerKings.Behaviours.Workshops;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Innovations;
@@ -60,6 +61,7 @@ namespace BannerKings
             
             campaignStarter.AddBehavior(new BKWorkshopBehavior());
             campaignStarter.AddBehavior(new BKGentryBehavior());
+            campaignStarter.AddBehavior(new BKMercenaryCareerBehavior());
             //campaignStarter.AddBehavior(new BKCombatBehavior());
 
             campaignStarter.AddModel(new BKPrisonerModel());
@@ -118,6 +120,9 @@ namespace BannerKings
             BKPolicies.Instance.Initialize();
             DefaultInnovations.Instance.Initialize();
             BKBuildings.Instance.Initialize();
+
+            DefaultMercenaryPrivileges.Instance.Initialize();
+            DefaultCustomTroopPresets.Instance.Initialize();
 
             UIManager.Instance.SetScreen(new BannerKingsScreen());
         }

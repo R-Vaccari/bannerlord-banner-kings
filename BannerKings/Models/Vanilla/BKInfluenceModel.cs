@@ -1,5 +1,6 @@
 using System;
 using BannerKings.Behaviours;
+using BannerKings.Behaviours.Mercenary;
 using BannerKings.Extensions;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
@@ -55,6 +56,13 @@ namespace BannerKings.Models.Vanilla
                     {
                         baseResult.Add((float)(mercenaryChange * 0.1f), BKPerks.Instance.VaryagRecognizedMercenary.Name);
                     }
+                }
+
+                var career = Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetCareer(clan);
+                if (career != null && career.HasPrivilegeCurrentKingdom(DefaultMercenaryPrivileges.Instance.IncreasedPay))
+                {
+                    int level = career.GetPrivilegeLevelCurrentKingdom(DefaultMercenaryPrivileges.Instance.IncreasedPay);
+                    baseResult.Add((float)(mercenaryChange * level * 0.05f), DefaultMercenaryPrivileges.Instance.IncreasedPay.Name);
                 }
             }
 
