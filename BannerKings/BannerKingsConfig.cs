@@ -15,7 +15,6 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
-using BannerKings.Models;
 using BannerKings.Models.BKModels;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
@@ -26,12 +25,10 @@ namespace BannerKings
 {
     public class BannerKingsConfig
     {
-
         public bool FirstUse { get; private set; } = true;
 
         public AIBehavior AI = new();
 
-        public HashSet<IBannerKingsModel> Models = new();
         public bool wipeData = false;
         public PopulationManager PopulationManager { get; private set; }
         public PolicyManager PolicyManager { get; private set; }
@@ -41,7 +38,6 @@ namespace BannerKings
         public EducationManager EducationManager { get; private set; }
         public InnovationsManager InnovationsManager { get; private set; }
         public GoalManager GoalManager { get; private set; }
-
 
         public BKConstructionModel ConstructionModel { get; } = new();
         public BKInfluenceModel InfluenceModel { get; } = new();
@@ -67,7 +63,12 @@ namespace BannerKings
         public BKTaxModel TaxModel { get; } = new();
         public BKEstatesModel EstatesModel { get; } = new();
         public BKMarriageModel MarriageModel { get; } = new();
+        public BKArmyManagementModel ArmyManagementModel { get; } = new();
 
+        static BannerKingsConfig()
+        {
+            ConfigHolder.CONFIG = new();
+        }
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
 
@@ -91,7 +92,6 @@ namespace BannerKings
                     EducationManager.InitHeroEducation(hero);
                 }
             }
-      
 
             FirstUse = false;
         }
@@ -106,17 +106,6 @@ namespace BannerKings
             DefaultBookTypes.Instance.Initialize();
             DefaultLifestyles.Instance.Initialize();
             DefaultDemesneLaws.Instance.Initialize();
-
-            Models.Add(new BKCultureModel());
-            Models.Add(new BKCultureAcceptanceModel());
-            Models.Add(new BKAdministrativeModel());
-            Models.Add(new BKLegitimacyModel());
-            Models.Add(new BKTitleModel());
-            Models.Add(new BKStabilityModel());
-            Models.Add(new BKGrowthModel());
-            Models.Add(new BKEconomyModel());
-            Models.Add(new BKPietyModel());
-            Models.Add(new BKCouncilModel());
         }
 
         public void InitManagers()

@@ -75,7 +75,7 @@ namespace BannerKings.UI.Court
                     options.Add(new InquiryElement(vm.Governor, name, image, true, hint));
                 }
 
-                var model = (BKCouncilModel) BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
+                var model = BannerKingsConfig.Instance.CouncilModel;
                 MBInformationManager.ShowMultiSelectionInquiry(
                     new MultiSelectionInquiryData(
                         new TextObject("{=91fEPp8b}Select Councillor").ToString(),

@@ -1,4 +1,5 @@
 using System.Linq;
+using BannerKings.Behaviours.Workshops;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -75,6 +76,8 @@ namespace BannerKings.Models.Vanilla
             result *= BannerKingsConfig.Instance.EconomyModel.CalculateProductionQuality(workshop.Settlement)
                 .ResultNumber;
 
+            result += GetInventoryCost(workshop);
+
             return (int)result;
         }
 
@@ -88,7 +91,7 @@ namespace BannerKings.Models.Vanilla
                 result *= 1.15f;
             }
 
-            if (workshop.Owner.OwnedCommonAreas.Count == 0)
+            if (workshop.Owner.IsNotable && workshop.Owner.OwnedCommonAreas.Count == 0)
             {
                 result *= 1.15f;
             }
@@ -97,14 +100,28 @@ namespace BannerKings.Models.Vanilla
             return (int) result;
         }
 
+        public int GetInventoryCost(Workshop workshop)
+        {
+            int cost = 0;
+            WorkshopData data = Campaign.Current.GetCampaignBehavior<BKWorkshopBehavior>().GetInventory(workshop);
+            if (data != null)
+            {
+                foreach (var element in data.Inventory)
+                {
+                    int price = workshop.Settlement.Town.GetItemPrice(element.EquipmentElement, null, true);
+                    cost += (int)(price * (float)element.Amount);
+                }
+            }
+
+            return cost;
+        }
+
         public override float GetPolicyEffectToProduction(Town town)
         {
             if (BannerKingsConfig.Instance.PopulationManager != null &&
                 BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
-                var model = (BKEconomyModel) BannerKingsConfig.Instance.Models.First(x =>
-                    x.GetType() == typeof(BKEconomyModel));
-                return model.CalculateProductionEfficiency(town.Settlement).ResultNumber;
+                return BannerKingsConfig.Instance.EconomyModel.CalculateProductionEfficiency(town.Settlement).ResultNumber;
             }
 
             return base.GetPolicyEffectToProduction(town);

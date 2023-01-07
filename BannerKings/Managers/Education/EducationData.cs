@@ -14,8 +14,8 @@ namespace BannerKings.Managers.Education
 {
     public class EducationData : BannerKingsData
     {
-        private const float LANGUAGE_RATE = 1f / (CampaignTime.DaysInYear * 5f);
-        private const float BOOK_RATE = 1f / (CampaignTime.DaysInYear * 3f);
+        private const float LANGUAGE_RATE = 1f / (CampaignTime.DaysInYear * 3f);
+        private const float BOOK_RATE = 1f / (CampaignTime.DaysInYear * 1.5f);
 
         [SaveableField(2)] private readonly Dictionary<BookType, float> books;
 
@@ -101,7 +101,7 @@ namespace BannerKings.Managers.Education
 
         public ExplainedNumber CurrentBookReadingRate => BannerKingsConfig.Instance.EducationModel.CalculateBookReadingRate(CurrentBook, hero);
 
-        public float StandartLifestyleProgress => 1f / (CampaignTime.DaysInYear * 5f);
+        public float StandartLifestyleProgress => 1f / (CampaignTime.DaysInYear * 3f);
 
         public void PostInitialize()
         {
@@ -224,7 +224,7 @@ namespace BannerKings.Managers.Education
                 hero.AddSkillXp(BKSkills.Instance.Scholarship, 200);
             }
 
-            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 2, 10));
+            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 5, 10));
         }
 
         public void GainBookReading(BookType book, float rate)
@@ -248,14 +248,13 @@ namespace BannerKings.Managers.Education
                 hero.AddSkillXp(BKSkills.Instance.Scholarship, 200);
             }
 
-            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 2, 10));
+            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 5, 10));
         }
 
         internal override void Update(PopulationData data)
         {
             if (LanguageInstructor != null && (LanguageInstructor.IsDead || LanguageInstructor.IsDisabled))
             {
-               
                 if (hero == Hero.MainHero)
                 {
                     InformationManager.DisplayMessage(
@@ -297,7 +296,7 @@ namespace BannerKings.Managers.Education
             if (Lifestyle != null)
             {
                 AddProgress(StandartLifestyleProgress);
-                hero.AddSkillXp(BKSkills.Instance.Scholarship, 1f);
+                hero.AddSkillXp(BKSkills.Instance.Scholarship, 5f);
             }
         }
     }

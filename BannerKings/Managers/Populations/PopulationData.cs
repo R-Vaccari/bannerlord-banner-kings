@@ -40,6 +40,11 @@ namespace BannerKings.Managers.Populations
             {
                 villageData = new VillageData(settlement.Village);
             }
+
+            if (BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber > 0)
+            {
+                EstateData = new EstateData(Settlement, this);
+            }
         }
 
         [SaveableProperty(1)] private List<PopulationClass> classes { get; set; }
@@ -97,15 +102,7 @@ namespace BannerKings.Managers.Populations
         }
 
         public Settlement Settlement => settlement;
-
-        public ExplainedNumber Growth
-        {
-            get
-            {
-                var model = (BKGrowthModel) BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKGrowthModel));
-                return model.CalculateEffect(settlement, this);
-            }
-        }
+        public ExplainedNumber Growth => BannerKingsConfig.Instance.GrowthModel.CalculateEffect(settlement, this);
 
         public float Stability
         {
@@ -317,10 +314,10 @@ namespace BannerKings.Managers.Populations
 
         internal override void Update(PopulationData data)
         {
-            var model = (BKGrowthModel) BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKGrowthModel));
+            var model = BannerKingsConfig.Instance.GrowthModel;
             var growthFactor = (int) model.CalculateEffect(settlement, this).ResultNumber;
             UpdatePopulation(settlement, growthFactor, PopType.None);
-            var stabilityModel = (BKStabilityModel) BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKStabilityModel));
+            var stabilityModel = BannerKingsConfig.Instance.StabilityModel;
             Stability += stabilityModel.CalculateEffect(settlement).ResultNumber;
             Autonomy += stabilityModel.CalculateAutonomyEffect(settlement, Stability, Autonomy).ResultNumber;
 
@@ -354,7 +351,7 @@ namespace BannerKings.Managers.Populations
 
             if (EstateData == null && BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber > 0)
             {
-                EstateData = new EstateData(Settlement);
+                EstateData = new EstateData(Settlement, this);
             }
 
             EstateData?.Update(this);

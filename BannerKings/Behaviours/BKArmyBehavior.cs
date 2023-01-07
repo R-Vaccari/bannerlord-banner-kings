@@ -1,21 +1,27 @@
 ﻿using BannerKings.Managers.Duties;
+using BannerKings.Managers.Goals.Decisions;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.Vanilla;
 using HarmonyLib;
 using Helpers;
+using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
+using TaleWorlds.LinQuick;
 
 namespace BannerKings.Behaviours
 {
     public class BKArmyBehavior : CampaignBehaviorBase
     {
-        public static AuxiliumDuty playerArmyDuty;
-        public static CampaignTime lastDutyTime = CampaignTime.Never;
-
+        private AuxiliumDuty playerArmyDuty;
+        private CampaignTime lastDutyTime = CampaignTime.Zero;
+        private Dictionary<Hero, CampaignTime> heroRecords = new Dictionary<Hero, CampaignTime>(); 
         public override void RegisterEvents()
         {
+            CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnPartyDailyTick);
             CampaignEvents.OnPartyJoinedArmyEvent.AddNonSerializedListener(this, OnPartyJoinedArmyEvent);
             CampaignEvents.ArmyCreated.AddNonSerializedListener(this, OnArmyCreated);
             CampaignEvents.ArmyDispersed.AddNonSerializedListener(this, OnArmyDispersed);
@@ -31,6 +37,61 @@ namespace BannerKings.Behaviours
 
             dataStore.SyncData("bannerkings-military-duty", ref playerArmyDuty);
             dataStore.SyncData("bannerkings-military-duty-time", ref lastDutyTime);
+            dataStore.SyncData("bannerkings-army-records", ref heroRecords);
+
+            if (heroRecords == null)
+            {
+                heroRecords = new Dictionary<Hero, CampaignTime>();
+            }
+        }
+
+        public void AddRecord(Hero hero)
+        {
+            if (heroRecords.ContainsKey(hero))
+            {
+                heroRecords[hero] = CampaignTime.Now;
+            }
+            else
+            {
+                heroRecords.Add(hero, CampaignTime.Now);
+            }
+        }
+
+        public CampaignTime LastHeroArmy(Hero hero)
+        {
+            if (heroRecords.ContainsKey(hero))
+            {
+                return heroRecords[hero];
+            }
+
+            return CampaignTime.Zero;
+        }
+
+        private void OnPartyDailyTick(MobileParty party)
+        {
+            EvaluateCreateArmy(party);
+        }
+
+        private void EvaluateCreateArmy(MobileParty party)
+        {
+            if (!party.IsLordParty || party.LeaderHero == null || party.LeaderHero.Clan == null)
+            {
+                return;
+            }
+
+            var leader = party.LeaderHero;
+            var kingdom = leader.Clan.Kingdom;
+            if (kingdom == null || leader != leader.Clan.Leader || party.ActualClan == Clan.PlayerClan || leader.Clan.Influence < 100f)
+            {
+                return;
+            }
+
+            if (kingdom.Armies.Count == 0 && FactionManager.GetEnemyKingdoms(kingdom).Count() > 0 &&
+                MBRandom.RandomFloat <= 0.5f)
+            {
+                var decision = new CallBannersGoal(leader);
+                decision.DoAiDecision();
+            }
         }
 
         public void OnPartyJoinedArmyEvent(MobileParty party)
@@ -73,7 +134,8 @@ namespace BannerKings.Behaviours
             var leaderParty = army.LeaderParty;
             var playerKingdom = Clan.PlayerClan.Kingdom;
             if (playerKingdom == null || playerKingdom != leaderParty.LeaderHero.Clan.Kingdom ||
-                BannerKingsConfig.Instance.TitleManager == null || leaderParty == MobileParty.MainParty)
+                BannerKingsConfig.Instance.TitleManager == null || leaderParty == MobileParty.MainParty
+                || leaderParty.MapFaction != Hero.MainHero.MapFaction)
             {
                 return;
             }
@@ -97,14 +159,19 @@ namespace BannerKings.Behaviours
             var completion = contract.Duties[FeudalDuties.Auxilium];
 
             var suzerain = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(playerTitle);
-            if (suzerain == null)
+            if (suzerain == null || suzerain.deJure == null)
             {
                 return;
             }
 
-            if (Hero.MainHero.IsPrisoner)
+            if (Hero.MainHero.IsPrisoner || MobileParty.MainParty.Army != null)
             {
                 return;
+            }
+
+            if (lastDutyTime == CampaignTime.Never)
+            {
+                lastDutyTime = CampaignTime.Zero;
             }
 
             var suzerainParty = EvaluateSuzerainParty(army, suzerain.deJure, joinningParty);

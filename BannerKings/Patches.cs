@@ -1,14 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using BannerKings.Extensions;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Skills;
 using HarmonyLib;
-using Helpers;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Election;
@@ -18,15 +13,14 @@ using TaleWorlds.CampaignSystem.Issues;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
-using TaleWorlds.CampaignSystem.Settlements.Workshops;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Policies;
 using TaleWorlds.Core;
 using TaleWorlds.GauntletUI;
 using TaleWorlds.GauntletUI.BaseTypes;
 using TaleWorlds.GauntletUI.GamepadNavigation;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.ObjectSystem;
-using static BannerKings.Managers.PopulationManager;
 using static TaleWorlds.CampaignSystem.Election.KingSelectionKingdomDecision;
 using static TaleWorlds.CampaignSystem.Issues.CaravanAmbushIssueBehavior;
 using static TaleWorlds.CampaignSystem.Issues.EscortMerchantCaravanIssueBehavior;
@@ -195,15 +189,58 @@ namespace BannerKings.Patches
                 return false;
             }
         }
+
+        [HarmonyPatch(typeof(KingdomPoliciesVM), "GetCanProposeOrDisavowPolicyWithReason")]
+        internal class GetCanProposeOrDisavowPolicyWithReasonPatch
+        {
+            private static bool Prefix(KingdomPoliciesVM __instance, bool hasUnresolvedDecision, ref bool __result, out TextObject disabledReason)
+            {
+                TextObject textObject;
+                if (!CampaignUIHelper.GetMapScreenActionIsEnabledWithReason(out textObject))
+                {
+                    disabledReason = textObject;
+                    __result = false;
+                    return false;
+                }
+                if (Clan.PlayerClan.IsUnderMercenaryService)
+                {
+                    disabledReason = GameTexts.FindText("str_mercenaries_cannot_propose_policies", null);
+                    __result = false;
+                    return false;
+                }
+                if (!hasUnresolvedDecision && Clan.PlayerClan.Influence < (float)__instance.ProposalAndDisavowalCost)
+                {
+                    disabledReason = GameTexts.FindText("str_warning_you_dont_have_enough_influence", null);
+                    __result = false;
+                    return false;
+                }
+
+                var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
+                if (council != null)
+                {
+                    if (council.Peerage == null || (council.Peerage != null && !council.Peerage.CanStartElection))
+                    {
+                        disabledReason = new TextObject("{=RDDOdoeR}The Peerage of {CLAN} does not allow starting elections.")
+                            .SetTextVariable("CLAN", Clan.PlayerClan.Name);
+                        __result = false;
+                        return false;
+                    }
+                }
+
+                 disabledReason = TextObject.Empty;
+                __result = true;
+                return false;
+            }
+        }
     }
 
     namespace Perks
     {
 
-        [HarmonyPatch(typeof(MapEventParty), "OnTroopKilled")]
-        internal class NameGeneratorPatch
+        [HarmonyPatch(typeof(MapEventParty), "ContributionToBattle", MethodType.Getter)]
+        internal class ContributionToBattlePatch
         {
-            private static void Postfix(MapEventParty __instance, UniqueTroopDescriptor troopSeed)
+            private static void Postfix(MapEventParty __instance, ref int __result)
             {
                 var leader = __instance.Party.LeaderHero;
                 if (leader == null)
@@ -212,11 +249,9 @@ namespace BannerKings.Patches
                 }
 
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
-                if (education.HasPerk(BKPerks.Instance.MercenaryRansacker) && 
-                    MBRandom.RandomFloat < 0.1f)
+                if (education.HasPerk(BKPerks.Instance.MercenaryRansacker))
                 {
-                    var contribution = __instance.ContributionToBattle;
-                    AccessTools.Field(__instance.GetType(), "_contributionToBattle").SetValue(__instance, contribution + 1);
+                    __result = (int)(__result * 1.1f);
                 }
             }
         }

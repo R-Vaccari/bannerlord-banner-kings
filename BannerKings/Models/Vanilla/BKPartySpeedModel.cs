@@ -84,10 +84,9 @@ namespace BannerKings.Models.Vanilla
                 baseResult.AddFactor(-0.05f, DefaultStartOptions.Instance.Caravaneer.Name);
             }
 
-            if (BannerKingsSettings.Instance.SlowerParties)
+            if (BannerKingsSettings.Instance.SlowerParties > 0f)
             {
-                var result = baseResult.ResultNumber * 0.3f;
-                baseResult.Add(-result, new TaleWorlds.Localization.TextObject("{=OohdenyR}Slower Parties setting"));
+                baseResult.AddFactor(-BannerKingsSettings.Instance.SlowerParties, new TaleWorlds.Localization.TextObject("{=OohdenyR}Slower Parties setting"));
             }
 
             return baseResult;

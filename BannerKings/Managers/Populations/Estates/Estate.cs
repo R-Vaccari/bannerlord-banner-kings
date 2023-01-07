@@ -1,6 +1,8 @@
 using BannerKings.Extensions;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -23,8 +25,13 @@ namespace BannerKings.Managers.Populations.Estates
             EstatesData = data;
         }
 
-        public static Estate CreateNotableEstate(Hero notable, PopulationData data)
+        public static Estate CreateNotableEstate(Hero notable, PopulationData data, EstateData estateData= null)
         {
+            if (data == null || data.LandData == null)
+            {
+                return null;
+            }
+
             float acreage = data.LandData.Acreage;
             float acres = MBRandom.RandomFloatRanged(BannerKingsConfig.Instance.EstatesModel.MinimumEstateAcreage, 
                 BannerKingsConfig.Instance.EstatesModel.MaximumEstateAcreagePercentage * acreage);
@@ -40,7 +47,7 @@ namespace BannerKings.Managers.Populations.Estates
             float desiredSerfs = (int)(desiredWorkforce * 0.8f);
             float desiredSlaves = (int)(desiredWorkforce * 0.2f);
 
-            var result = new Estate(notable, data.EstateData, farmland, pastureland, woodland,
+            var result = new Estate(notable, estateData != null ? estateData : data.EstateData, farmland, pastureland, woodland,
                 (int)MathF.Min(desiredSerfs, totalSerfs * 0.15f),
                 (int)MathF.Min(desiredSlaves, totalSlaves * 0.25f));
 
@@ -136,6 +143,30 @@ namespace BannerKings.Managers.Populations.Estates
         [SaveableProperty(11)] public EstateTask Task { get; private set; }
         [SaveableProperty(12)] private Dictionary<PopType, float> Manpowers { get; set; }
 
+        public TroopRoster RaiseManpower(int limit)
+        {
+            if (limit > GetManpower(PopType.Serfs))
+            {
+                limit = GetManpower(PopType.Serfs);
+            }
+
+            TroopRoster roster = TroopRoster.CreateDummyTroopRoster();
+            CultureObject culture = EstatesData.Settlement.Culture;
+            roster.AddToCounts(culture.BasicTroop, (int)(limit / 2f));
+
+            var upgrades = culture.BasicTroop.UpgradeTargets;
+            if (upgrades != null && upgrades.Count() > 0)
+            {
+                for (int i = 0; i < upgrades.Count(); i++)
+                {
+                    int toAdd = (int)(limit * 0.5f / upgrades.Count());
+                    roster.AddToCounts(upgrades[i], toAdd);
+                }
+            }
+
+            return roster;
+        }
+
         public int GetTypeCount(PopType type)
         {
             if (type == PopType.Serfs)
@@ -182,6 +213,7 @@ namespace BannerKings.Managers.Populations.Estates
             else
             {
                 Manpowers[type] += count;
+                Manpowers[type] = MathF.Max(Manpowers[type], 0f);
             }
         }
 
@@ -196,6 +228,18 @@ namespace BannerKings.Managers.Populations.Estates
             {
                 return;
             }
+
+            float maxFarmland = data.LandData.Farmland * 0.2f;
+            Farmland = MathF.Clamp(Farmland, 0f, maxFarmland);
+
+            float maxPastureland= data.LandData.Pastureland * 0.2f;
+            Pastureland = MathF.Clamp(Pastureland, 0f, maxPastureland);
+
+            float maxWoodland = data.LandData.Woodland * 0.2f;
+            Woodland = MathF.Clamp(Woodland, 0f, maxWoodland);
+
+            Serfs = (int)MathF.Clamp(Serfs, 0f, data.GetTypeCount(PopType.Serfs) * 0.2f);
+            Slaves = (int)MathF.Clamp(Slaves, 0f, data.GetTypeCount(PopType.Slaves) * 0.2f);
 
             BannerKingsConfig.Instance.PopulationManager.AddEstate(this);
             if (Task == EstateTask.Land_Expansion)
@@ -230,6 +274,7 @@ namespace BannerKings.Managers.Populations.Estates
 
         public void AddPopulation(PopType type, int toAdd)
         {
+            toAdd = (int)MathF.Clamp(toAdd, -20f, 20f);
             if (type == PopType.Serfs)
             {
                 Serfs += toAdd;
@@ -257,7 +302,6 @@ namespace BannerKings.Managers.Populations.Estates
 
             return result;
         }
-
 
         public enum EstateDuty
         {

@@ -1,12 +1,13 @@
 ﻿using BannerKings.Behaviours;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
+using BannerKings.Behaviours.Workshops;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Innovations;
-using BannerKings.Managers.Items;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Models.Vanilla;
+using BannerKings.Settings;
 using BannerKings.UI;
 using Bannerlord.UIExtenderEx;
 using HarmonyLib;
@@ -52,9 +53,16 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKTradeGoodsFixesBehavior());
             campaignStarter.AddBehavior(new BKCapitalBehavior());
             campaignStarter.AddBehavior(new BKMarriageBehavior());
-            campaignStarter.AddBehavior(new BKFeastBehavior());
+            if (BannerKingsSettings.Instance.Feasts)
+            {
+                campaignStarter.AddBehavior(new BKFeastBehavior());
+            }
+            
+            campaignStarter.AddBehavior(new BKWorkshopBehavior());
+            campaignStarter.AddBehavior(new BKGentryBehavior());
             //campaignStarter.AddBehavior(new BKCombatBehavior());
 
+            campaignStarter.AddModel(new BKPrisonerModel());
             campaignStarter.AddModel(new BKCompanionPrices());
             campaignStarter.AddModel(BannerKingsConfig.Instance.ProsperityModel);
             campaignStarter.AddModel(BannerKingsConfig.Instance.TaxModel);
@@ -82,7 +90,6 @@ namespace BannerKings
             campaignStarter.AddModel(new BKPartyWageModel());
             campaignStarter.AddModel(new BKSettlementValueModel());
             campaignStarter.AddModel(new BKNotablePowerModel());
-            campaignStarter.AddModel(new BKPartyFoodConsumption());
             campaignStarter.AddModel(BannerKingsConfig.Instance.SmithingModel);
             campaignStarter.AddModel(new BKMapTrackModel());
             campaignStarter.AddModel(new BKAgentDamageModel());
@@ -101,13 +108,13 @@ namespace BannerKings
             campaignStarter.AddModel(new BKBattleMoraleModel());
             campaignStarter.AddModel(new BKLearningModel());
             campaignStarter.AddModel(new BKKingodmDecsionModel());
+            campaignStarter.AddModel(new BKDiplomacyModel());
+            campaignStarter.AddModel(new BKPartyFoodBuyingModel());
             //campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
 
             BKAttributes.Instance.Initialize();
             BKSkills.Instance.Initialize();
-            BKPerks.Instance.Initialize();
-            BKItemCategories.Instance.Initialize();
-            BKItems.Instance.Initialize();
+            BKPerks.Instance.Initialize();   
             BKPolicies.Instance.Initialize();
             DefaultInnovations.Instance.Initialize();
             BKBuildings.Instance.Initialize();

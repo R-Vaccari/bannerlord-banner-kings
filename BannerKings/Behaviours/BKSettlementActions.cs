@@ -98,7 +98,6 @@ namespace BannerKings.Behaviours
                 }
             }
 
-
             campaignGameStarter.AddGameMenu("bannerkings", "Banner Kings", MenuBannerKingsInit);
             campaignGameStarter.AddGameMenu("bannerkings_actions", "Banner Kings", MenuBannerKingsInit);
 
@@ -121,7 +120,8 @@ namespace BannerKings.Behaviours
                 delegate (MenuCallbackArgs args)
                 {
                     PlayerEncounter.Current.IsPlayerWaiting = false;
-                    SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
+                    string id = Hero.MainHero.CurrentSettlement.IsTown ? "town" : "castle";
+                    GameMenu.SwitchToMenu(id);
                 }, true);
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_train_guards",
@@ -141,7 +141,8 @@ namespace BannerKings.Behaviours
                 delegate (MenuCallbackArgs args)
                 {
                     PlayerEncounter.Current.IsPlayerWaiting = false;
-                    SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
+                    string id = Hero.MainHero.CurrentSettlement.IsTown ? "town" : "castle";
+                    GameMenu.SwitchToMenu(id);
                 }, true);
 
 
@@ -162,7 +163,8 @@ namespace BannerKings.Behaviours
                 delegate (MenuCallbackArgs args)
                 {
                     PlayerEncounter.Current.IsPlayerWaiting = false;
-                    SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
+                    string id = Hero.MainHero.CurrentSettlement.IsTown ? "town" : "castle";
+                    GameMenu.SwitchToMenu(id);
                 }, true);
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_meet_nobility",
@@ -182,7 +184,8 @@ namespace BannerKings.Behaviours
                 delegate (MenuCallbackArgs args)
                 {
                     PlayerEncounter.Current.IsPlayerWaiting = false;
-                    SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
+                    string id = Hero.MainHero.CurrentSettlement.IsTown ? "town" : "castle";
+                    GameMenu.SwitchToMenu(id);
                 }, true);
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_study",
@@ -202,7 +205,8 @@ namespace BannerKings.Behaviours
                 delegate (MenuCallbackArgs args)
                 {
                     PlayerEncounter.Current.IsPlayerWaiting = false;
-                    SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
+                    string id = Hero.MainHero.CurrentSettlement.IsTown ? "town" : "castle";
+                    GameMenu.SwitchToMenu(id);
                 }, true);
 
 
@@ -213,7 +217,6 @@ namespace BannerKings.Behaviours
                 MenuActionConsequenceNeutral,
                 TickWaitCrafting, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
                 GameOverlays.MenuOverlayType.SettlementWithBoth);
-
 
             // ------- ACTIONS --------
 
@@ -403,14 +406,17 @@ namespace BannerKings.Behaviours
         public void StartCraftingMenu(float totalHours)
         {
             this.totalHours = totalHours;
-            MBTextManager.SetTextVariable("CRAFTING_HOURS", totalHours.ToString("0.0"));
-            var cost = BannerKingsConfig.Instance.SmithingModel.GetSmithingHourlyPrice(Settlement.CurrentSettlement,
-                Hero.MainHero);
-            var costInt = (int)cost.ResultNumber;
-            GameTexts.SetVariable("CRAFTING_RATE", costInt);
-            GameTexts.SetVariable("CRAFTING_EXPLANATION", cost.GetExplanations());
-            GameTexts.SetVariable("GOLD_ICON", "<img src=\"General\\Icons\\Coin@2x\" extend=\"8\">");
-            GameMenu.SwitchToMenu("bannerkings_wait_crafting");
+            if (totalHours > 0f)
+            {
+                MBTextManager.SetTextVariable("CRAFTING_HOURS", totalHours.ToString("0.0"));
+                var cost = BannerKingsConfig.Instance.SmithingModel.GetSmithingHourlyPrice(Settlement.CurrentSettlement,
+                    Hero.MainHero);
+                var costInt = (int)cost.ResultNumber;
+                GameTexts.SetVariable("CRAFTING_RATE", costInt);
+                GameTexts.SetVariable("CRAFTING_EXPLANATION", cost.GetExplanations());
+                GameTexts.SetVariable("GOLD_ICON", "<img src=\"General\\Icons\\Coin@2x\" extend=\"8\">");
+                GameMenu.SwitchToMenu("bannerkings_wait_crafting");
+            }
         }
 
         private static void TickWaitStudy(MenuCallbackArgs args, CampaignTime dt)
@@ -429,10 +435,19 @@ namespace BannerKings.Behaviours
                         .GetBookSeller(Settlement.CurrentSettlement);
                     if (seller != null)
                     {
-                        main.AddSkillXp(BKSkills.Instance.Scholarship, 5f);
-                        GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, seller,
-                            (int)BannerKingsConfig.Instance.EducationModel.CalculateLessonsCost(Hero.MainHero, seller)
-                                .ResultNumber);
+                        var cost = (int)BannerKingsConfig.Instance.EducationModel.CalculateLessonsCost(Hero.MainHero, seller)
+                                .ResultNumber;
+
+                        if (Hero.MainHero.Gold < cost)
+                        {
+                            InformationManager.DisplayMessage(new InformationMessage(
+                                                        new TextObject("{=!}You have stopped your lesson due to lacking funds.").ToString()));
+                            GameMenu.SwitchToMenu("bannerkings_actions");
+                        }
+
+                        main.AddSkillXp(BKSkills.Instance.Scholarship, 20f);
+                        GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, seller, cost);
+
                         InformationManager.DisplayMessage(new InformationMessage(
                             new TextObject("{=ArMJ9nUV}You have improved your {SKILL} skill during your current action.")
                                 .SetTextVariable("SKILL", BKSkills.Instance.Scholarship.Name)
@@ -757,7 +772,7 @@ namespace BannerKings.Behaviours
             args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
             var settlement = Settlement.CurrentSettlement;
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            return data.EstateData != null;
+            return data != null && data.EstateData != null;
         }
 
         private static bool MenuSettlementManageCondition(MenuCallbackArgs args)

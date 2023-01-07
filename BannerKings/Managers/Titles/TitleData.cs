@@ -54,7 +54,7 @@ namespace BannerKings.Managers.Titles
                 return;
             }
 
-            var model = BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel;
+            var model = BannerKingsConfig.Instance.TitleModel;
             var claimAction = model.GetAction(ActionType.Claim, title, owner);
             if (claimAction.Possible)
             {

@@ -31,7 +31,7 @@ namespace BannerKings.Models.Vanilla
 
         public override int CalculateOwnerIncomeFromWorkshop(Workshop workshop)
         {
-            var result = MathF.Max(0, workshop.ProfitMade);
+            var result = MathF.Max(0f, workshop.ProfitMade / 2f);
             var taxes = workshop.TaxExpenses();
             if (workshopTaxes.ContainsKey(workshop))
             {
@@ -42,7 +42,7 @@ namespace BannerKings.Models.Vanilla
                 workshopTaxes.Add(workshop, taxes);
             }
 
-            return result;
+            return (int)result;
         }
 
         public int CalculateOwnerIncomeFromEstates(Hero owner, bool applyWithdrawals)
@@ -78,7 +78,7 @@ namespace BannerKings.Models.Vanilla
         }
 
         public override int CalculateOwnerIncomeFromCaravan(MobileParty caravan) => 
-            BannerKingsSettings.Instance.RealisticCaravanIncome ? 0 : MathF.Max(0, caravan.PartyTradeGold - 10000);
+            (int)(BannerKingsSettings.Instance.RealisticCaravanIncome ? 0f : MathF.Max(0f, (caravan.PartyTradeGold - 10000) / 2f));
 
         public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
         {
@@ -137,6 +137,7 @@ namespace BannerKings.Models.Vanilla
 
             int totalWorkshopTaxes = 0;
             int totalNotablesAids = 0;
+            int totalMarketTaxes = 0;
 
             foreach (var town in clan.Fiefs)
             {
@@ -145,6 +146,16 @@ namespace BannerKings.Models.Vanilla
                     if (wk.IsRunning && wk.Owner != clan.Leader && wk.WorkshopType.StringId != "artisans")
                     {
                         totalWorkshopTaxes += GetWorkshopTaxes(wk);
+                    }
+                }
+
+                if (town.Gold >= 150000)
+                {
+                    int marketTax = (int)(town.Gold * 0.008f);
+                    totalMarketTaxes += marketTax;
+                    if (applyWithdrawals)
+                    {
+                        town.ChangeGold(-marketTax);
                     }
                 }
 
@@ -175,6 +186,11 @@ namespace BannerKings.Models.Vanilla
                     new TextObject("{=WYDGftvz}Notable aids"));
             }
 
+            if (totalMarketTaxes > 0)
+            {
+                result.Add(totalMarketTaxes,
+                                    new TextObject("{=!}Taxes on Markets"));
+            }
 
             var dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassals(clan);
             if (dictionary.Count >= 0)

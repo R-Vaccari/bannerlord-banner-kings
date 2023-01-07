@@ -4,13 +4,17 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals
 {
-    internal abstract class Goal : BannerKingsObject
+    public abstract class Goal : BannerKingsObject
     {
-        internal readonly GoalUpdateType goalUpdateType;
+        public readonly GoalUpdateType goalUpdateType;
+        public readonly GoalCategory goalType;
+        protected Hero Fulfiller;
 
-        internal Goal(string stringId, GoalUpdateType goalUpdateType) : base(stringId)
+        internal Goal(string stringId, GoalCategory goalType, GoalUpdateType goalUpdateType, Hero fulfiller = null) : base(stringId)
         {
+            this.goalType = goalType;
             this.goalUpdateType = goalUpdateType;
+            Fulfiller = fulfiller;
         }
 
         internal List<TextObject> FailedReasons
@@ -26,7 +30,11 @@ namespace BannerKings.Managers.Goals
 
         internal abstract bool IsFulfilled(out List<TextObject> failedReasons);
 
-        internal abstract Hero GetFulfiller();
+        internal Hero GetFulfiller()
+        {
+            if (Fulfiller != null) return Fulfiller;
+            return Hero.MainHero;
+        }
 
         internal abstract void ShowInquiry();
 

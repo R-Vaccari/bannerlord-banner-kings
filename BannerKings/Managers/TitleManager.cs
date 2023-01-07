@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using BannerKings.Actions;
+using BannerKings.Behaviours;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -298,6 +300,59 @@ namespace BannerKings.Managers
             return null;
         }
 
+        public List<Hero> CalculateAllVassals(Clan clan)
+        {
+            var list = new List<Hero>();
+            var behavior = Campaign.Current.GetCampaignBehavior<BKGentryBehavior>();
+            foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
+            {
+                if (title.fief != null && title.fief.IsVillage)
+                {
+                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(title.fief);
+                    if (data != null && data.EstateData != null)
+                    {
+                        foreach (var estate in data.EstateData.Estates)
+                        {
+                            if (estate.Owner != null && estate.Owner.IsLord && estate.Owner.MapFaction == clan.MapFaction)
+                            {
+                                (bool, Estate) isGentry = behavior.IsGentryClan(estate.Owner.Clan);
+                                if (isGentry.Item1 && isGentry.Item2 == estate && estate.Owner.MapFaction == clan.MapFaction)
+                                {
+                                    list.Add(estate.Owner);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (title.vassals == null || title.vassals.Count == 0)
+                {
+                    continue;
+                }
+
+                foreach (var vassal in title.vassals)
+                {
+                    var deJure = vassal.deJure;
+                    if (deJure != null && deJure != clan.Leader)
+                    {
+                        if (deJure.Clan == clan)
+                        {
+                            list.Add(deJure);
+                        }
+                        else
+                        {
+                            var suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(deJure);
+                            if (suzerain != null && suzerain.deJure == clan.Leader && clan.MapFaction == vassal.deJure.MapFaction)
+                            {
+                                list.Add(deJure);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return list;
+        }
 
         public Dictionary<Clan, List<FeudalTitle>> CalculateVassals(Clan suzerainClan, Clan targetClan = null)
         {

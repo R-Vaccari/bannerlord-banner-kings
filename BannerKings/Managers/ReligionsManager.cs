@@ -311,7 +311,6 @@ namespace BannerKings.Managers
                     religion.Faith.GetFaithDescription().ToString()));
             }
                 
-
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=VrzR1ZzZ}Your faith").ToString(),
                 new TextObject("{=ASWWGeQ3}You look up to the skies and realize there must be something more. You feel there must be a higher purpose for yourself, and people expect you to defend a certain faith. Upholding your cultural forefathers' faith would be considered most pious. Similarly, following a faith that accepts your culture would be pious, however not as much as your true ancestry. Alternatively, having a completely different faith is possible, though a less walked path. What is your faith?")
@@ -536,7 +535,18 @@ namespace BannerKings.Managers
 
         public Clergyman GetClergymanFromHeroHero(Hero hero)
         {
-            return Religions.Keys.ToList().SelectMany(rel => rel.Clergy.Values.ToList()).FirstOrDefault(clergy => clergy.Hero == hero);
+            foreach (var rel in Religions.Keys)
+            {
+                foreach (var clergyPair in rel.Clergy)
+                {
+                    if (clergyPair.Value != null && clergyPair.Value.Hero == hero)
+                    {
+                        return clergyPair.Value;
+                    }
+                }
+            }
+
+            return null;
         }
 
         public Religion GetClergymanReligion(Clergyman clergyman)

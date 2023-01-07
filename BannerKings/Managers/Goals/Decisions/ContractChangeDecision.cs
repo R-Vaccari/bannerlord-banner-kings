@@ -15,7 +15,7 @@ namespace BannerKings.Managers.Goals.Decisions
     {
         private ContractChangeOption chosenAction;
 
-        public ContractChangeDecision() : base("goal_contract_change", GoalUpdateType.Manual)
+        public ContractChangeDecision() : base("goal_contract_change", GoalCategory.Kingdom, GoalUpdateType.Manual)
         {
             var name = new TextObject("{=fKXLiUti}Propose Contract Change");
             var description = new TextObject("{=Ba2hpnco}Propose a contract change to your faction's titles.");
@@ -57,10 +57,6 @@ namespace BannerKings.Managers.Goals.Decisions
             return failedReasons.IsEmpty();
         }
 
-        internal override Hero GetFulfiller()
-        {
-            return Hero.MainHero;
-        }
 
         internal override void ShowInquiry()
         {

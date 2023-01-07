@@ -4,12 +4,16 @@ using BannerKings.UI.CampaignStart;
 using BannerKings.UI.Estates;
 using BannerKings.UI.Management;
 using BannerKings.UI.Management.BannerKings.UI.Panels;
+using BannerKings.UI.Management.Villages;
 using BannerKings.UI.Marriages;
 using BannerKings.UI.Panels;
 using BannerKings.UI.Titles;
 using SandBox.View.Map;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Engine.GauntletUI;
+using TaleWorlds.ScreenSystem;
+using TaleWorlds.TwoDimension;
 using ReligionVM = BannerKings.UI.Religion.ReligionVM;
 
 namespace BannerKings.UI
@@ -17,6 +21,9 @@ namespace BannerKings.UI
     public class BannerKingsMapView : MapView
     {
         public string id;
+        private GauntletLayer Layer { get; set; }
+        private BannerKingsViewModel VM { get; set; }
+        private SpriteCategory categoryDeveloper, categoryEncyclopedia;
 
         public BannerKingsMapView(string id)
         {
@@ -27,10 +34,23 @@ namespace BannerKings.UI
         protected override void CreateLayout()
         {
             base.CreateLayout();
-            UIManager.Instance.BKScreen.OnFinalize();
+            var spriteData = UIResourceManager.SpriteData;
+            var resourceContext = UIResourceManager.ResourceContext;
+            var resourceDepot = UIResourceManager.UIResourceDepot;
+
+            categoryDeveloper = spriteData.SpriteCategories["ui_characterdeveloper"];
+            categoryDeveloper.Load(resourceContext, resourceDepot);
+
+            categoryEncyclopedia = spriteData.SpriteCategories["ui_encyclopedia"];
+            categoryEncyclopedia.Load(resourceContext, resourceDepot);
+            //UIManager.Instance.BKScreen.OnFinalize();
             var tuple = GetVM(id);
-            UIManager.Instance.SetScreen(new BannerKingsScreen());
-            UIManager.Instance.BKScreen.LoadLayer(tuple.Item1, tuple.Item2);
+            Layer = new GauntletLayer(500);
+            VM = tuple.Item1;
+            Layer.LoadMovie(tuple.Item2, tuple.Item1);
+            Layer.InputRestrictions.SetInputRestrictions(false);
+            MapScreen.Instance.AddLayer(Layer);
+            ScreenManager.TrySetFocus(Layer);
         }
 
         private (BannerKingsViewModel, string) GetVM(string id)
@@ -76,12 +96,18 @@ namespace BannerKings.UI
 
         public void Close()
         {
-            UIManager.Instance.BKScreen.CloseLayer();
+            if (Layer != null)
+            {
+                MapScreen.Instance.RemoveLayer(Layer);
+            }
         }
 
         public void Refresh()
         {
-            UIManager.Instance.BKScreen.Refresh();
+            if (VM != null)
+            {
+                VM.RefreshValues();
+            }
         }
     }
 }

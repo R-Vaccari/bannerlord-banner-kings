@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -16,7 +17,7 @@ namespace BannerKings.Managers.Goals.Decisions
         private Town feastPlace;
         private List<Clan> guests;
         private float influenceCost;
-        public OrganizeFeastDecision() : base("goal_organize_feast_decision", GoalUpdateType.Manual)
+        public OrganizeFeastDecision(Hero fulfiller = null) : base("goal_organize_feast_decision", GoalCategory.Kingdom, GoalUpdateType.Manual, fulfiller)
         {
             var name = new TextObject("{=RH2NC5ij}Organize Feast");
             var description = new TextObject("{=8XXOBM1L}Organize a feast. Summon lords of the realm to one of your towns or castles, and celebrate with bountiful food. Feasts are an opportunity to improve relations with your Peers. However, some planning is necessary - you don't want your guests out of food or alcohol! Despite all planning, some unfortunate events may occur...\n");
@@ -38,7 +39,11 @@ namespace BannerKings.Managers.Goals.Decisions
                 return false;
             }
 
-            if (FactionManager.GetEnemyKingdoms(Clan.PlayerClan.Kingdom).Count() > 0)
+            if (GetFulfiller().Clan.Kingdom == null)
+            {
+                failedReasons.Add(new TextObject("{=JDFpx1eN}No kingdom."));
+            }
+            else if (FactionManager.GetEnemyKingdoms(GetFulfiller().Clan.Kingdom).Count() > 0)
             {
                 failedReasons.Add(new TextObject("{=gn6WKs03}Cannot organize feasts during wars"));
             }
@@ -49,6 +54,11 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(new TextObject("{=4Gqf2t8F}It has been less than a year since your last feast"));
             }
 
+            if (GetFulfiller().Clan.Fiefs.Count == 0)
+            {
+                failedReasons.Add(new TextObject("{=!}No adequate fief to make a feast"));
+            }
+
             /*
             if (Clan.PlayerClan.Influence < decision.GetProposalInfluenceCost())
             {
@@ -56,11 +66,6 @@ namespace BannerKings.Managers.Goals.Decisions
             }*/
 
             return failedReasons.Count == 0;
-        }
-
-        internal override Hero GetFulfiller()
-        {
-            return Hero.MainHero;
         }
 
         private float GuestInfluenceCost(Clan clan)
@@ -88,7 +93,6 @@ namespace BannerKings.Managers.Goals.Decisions
             {
                 list.Add(new InquiryElement(town, town.Name.ToString(), null));
             }
-
 
             var clanList = new List<InquiryElement>();
             foreach (var clan in Clan.PlayerClan.Kingdom.Clans)
@@ -157,8 +161,12 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             if (guests.Count < 3)
             {
-                InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=YR4uDhkZ}Too few guests! Invite at least 3 clans for a feast.").ToString()));
+                if (GetFulfiller() == Hero.MainHero)
+                {
+                    InformationManager.DisplayMessage(new InformationMessage(
+                                       new TextObject("{=YR4uDhkZ}Too few guests! Invite at least 3 clans for a feast.").ToString()));
+                }
+               
                 return;
             }
 
@@ -168,7 +176,49 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public override void DoAiDecision()
         {
-            throw new NotImplementedException();
+            var reasons = new List<TextObject>();
+            if (!IsFulfilled(out reasons))
+            {
+                return;
+            }
+
+            var fulfiller = GetFulfiller();
+            if (fulfiller.Gold < 80000)
+            {
+                return;
+            }
+
+            if (fulfiller.Clan.Kingdom.UnresolvedDecisions.Any(x => x is DeclareWarDecision))
+            {
+                return;
+            }
+
+            var behavior = Campaign.Current.GetCampaignBehavior<BKFeastBehavior>();
+            if (behavior.KingdomHasFeast(fulfiller.Clan.Kingdom))
+            {
+                return;
+            }
+
+            var guests = new List<Clan>();
+            float influenceSum = 0f;
+            foreach (var clan in fulfiller.Clan.Kingdom.Clans)
+            {
+                float cost = GuestInfluenceCost(clan);
+                if (!clan.IsUnderMercenaryService && fulfiller.Clan.Influence >= influenceSum + cost)
+                {
+                    influenceSum += cost;
+                    guests.Add(clan);
+                }
+            }
+
+            this.guests = guests;
+            feastPlace = fulfiller.Clan.Fiefs.GetRandomElementWithPredicate(x => x.IsTown);
+            if (feastPlace == null)
+            {
+                return;
+            }
+
+            ApplyGoal();
         }
     }
 }

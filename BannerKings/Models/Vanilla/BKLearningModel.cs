@@ -1,14 +1,53 @@
 using BannerKings.Managers.Skills;
+using System.Collections.Generic;
+using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKLearningModel : DefaultCharacterDevelopmentModel
     {
+        public override List<Tuple<SkillObject, int>> GetSkillsDerivedFromTraits(Hero hero, CharacterObject templateCharacter = null, bool isByNaturalGrowth = false)
+        {
+            List <Tuple<SkillObject, int>> list =  base.GetSkillsDerivedFromTraits(hero, templateCharacter, isByNaturalGrowth);
+
+            float scholarship = 0;
+            float lordship = 0;
+            float theology = 0;
+            if (hero.IsLord)
+            {
+                scholarship += 30;
+                theology += 15;
+            }
+
+            if (hero.IsPreacher)
+            {
+                theology += 100;
+                scholarship += 50;
+            }
+
+            if (templateCharacter != null)
+            {
+                int politician = templateCharacter.GetTraitLevel(DefaultTraits.Politician);
+                int surgery = templateCharacter.GetTraitLevel(DefaultTraits.Surgery);
+                int manager = templateCharacter.GetTraitLevel(DefaultTraits.Manager);
+
+                scholarship += surgery * 10f;
+                scholarship += manager * 8f;
+                lordship += politician * 15f;
+            }
+
+            list.Add(new Tuple<SkillObject, int>(BKSkills.Instance.Scholarship, (int)scholarship));
+            list.Add(new Tuple<SkillObject, int>(BKSkills.Instance.Lordship, (int)lordship));
+            list.Add(new Tuple<SkillObject, int>(BKSkills.Instance.Theology, (int)theology));
+            return list;
+        }
+
         public override float CalculateLearningRate(Hero hero, SkillObject skill)
         {
             var level = hero.Level;
@@ -21,6 +60,10 @@ namespace BannerKings.Models.Vanilla
 
         public ExplainedNumber CalculateLearningRate(Hero hero, int attributeValue, int focusValue, int skillValue, int characterLevel, TextObject attributeName, bool includeDescriptions = false)
         {
+            if (skillValue >= 500)
+            {
+                return new ExplainedNumber(0f);
+            }
             var result = new ExplainedNumber(1.25f, includeDescriptions);
             result.AddFactor(0.4f * attributeValue, attributeName);
             result.AddFactor(focusValue * 1f, new TextObject("{=fa3Dmxdo}Skill Focus"));
@@ -38,7 +81,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             result.LimitMin(0.05f);
-            return result;
+            return result; 
         }
 
         public override ExplainedNumber CalculateLearningRate(int attributeValue, int focusValue, int skillValue,

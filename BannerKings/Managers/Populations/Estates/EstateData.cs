@@ -10,10 +10,11 @@ namespace BannerKings.Managers.Populations.Estates
     public class EstateData : BannerKingsData
     {
 
-        public EstateData(Settlement settlement)
+        public EstateData(Settlement settlement, PopulationData data)
         {
             Settlement = settlement;
             Estates = new List<Estate>();
+            Update(data);
         }
 
         [SaveableProperty(1)] public Settlement Settlement { get; private set; }
@@ -140,7 +141,11 @@ namespace BannerKings.Managers.Populations.Estates
                             }
                             else
                             {
-                                Estates.Add(Estate.CreateNotableEstate(notable, data));
+                                var estate = Estate.CreateNotableEstate(notable, data, this);
+                                if (estate != null)
+                                {
+                                    Estates.Add(estate);
+                                }
                             }
                         }
                     }
@@ -149,7 +154,11 @@ namespace BannerKings.Managers.Populations.Estates
 
                 if (Estates.Count < BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber)
                 {
-                    Estates.Add(Estate.CreateNotableEstate(null, data));
+                    var estate = Estate.CreateNotableEstate(null, data, this);
+                    if (estate != null)
+                    {
+                        Estates.Add(estate);
+                    }
                 }
             }, 
             this.GetType().Name,

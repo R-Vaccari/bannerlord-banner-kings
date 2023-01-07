@@ -14,13 +14,14 @@ namespace BannerKings.Behaviours.Feasts
 {
     public class Feast
     {
-        public Feast(Hero host, List<Clan> guests, Town town, CampaignTime endDate, MarriageContract marriageContract = null)
+        public Feast(Hero host, List<Clan> guests, Town town, CampaignTime endDate, bool autoManaged, MarriageContract marriageContract = null)
         {
             Host = host;
             Guests = guests;
             Town = town;
             EndDate = endDate;
             MarriageContract = marriageContract;
+            AutoManaged = autoManaged;
         }
 
         public static float FoodConsumptionRatio => 0.5f;
@@ -42,6 +43,7 @@ namespace BannerKings.Behaviours.Feasts
         [SaveableProperty(11)] private float HostPresence { get; set; }
 
         [SaveableProperty(12)] public MarriageContract MarriageContract { get; private set; }
+        [SaveableProperty(13)] public bool AutoManaged { get; private set; }
 
         public void Tick(bool hourly = true)
         {
@@ -71,6 +73,11 @@ namespace BannerKings.Behaviours.Feasts
                 float desiredVariety = Items.AllTradeGoods.ToList().FindAll(x => x.IsFood).Count * 0.7f;
                 float desiredFood = heroes * FoodConsumptionRatio;
                 float desiredAlcohol = heroes * AlcoholConsumptionRatio;
+
+                if (AutoManaged)
+                {
+                    Automanage(desiredFood, desiredVariety, desiredAlcohol);
+                }
 
                 float availableQuantity = 0f;
                 float availableAlcohol = 0f;
@@ -130,10 +137,35 @@ namespace BannerKings.Behaviours.Feasts
             }
         }
 
+        private void Automanage(float food, float variety, float alcohol)
+        {
+            food = food * 1.5f;
+            int boughtFood = 0;
+            int boughAlcohol = 0;
+            //HashSet<ItemObject> items = new HashSet<ItemObject>();
+            foreach (var element in Town.Owner.ItemRoster)
+            {
+                var item = element.EquipmentElement.Item;
+                bool isAlcohol = item.StringId == "wine" || item.StringId == "beer";
+                if (item.IsFood || isAlcohol)
+                {
+                    int count = MathF.Min(element.Amount, (int)food - boughtFood);
+                    int cost = (int)(Town.GetItemPrice(element.EquipmentElement) * (float)count);
+
+                    if (!isAlcohol && boughtFood >= food) continue;
+                    if (isAlcohol && boughAlcohol >= alcohol) continue;
+
+                    if (isAlcohol) boughAlcohol += count;
+                    else boughtFood += count;
+                    Host.ChangeHeroGold(-cost);
+                    Town.ChangeGold(cost);
+                    Town.Settlement.Stash.AddToCounts(element.EquipmentElement, count);
+                }
+            }
+        }
+
         public void Finish(TextObject reason)
         {
-            List<TextObject> goodComments = GetCompliments();
-            List<TextObject> badComments = GetComplaints();
             float satisfaction = ((FoodQuality / 7f) + (FoodQuantity / 7f) +
                 (FoodVariety / 7f) + (Alcohol / 7f) + (HostPresence / Ticks)) / 5f;
 
@@ -146,17 +178,19 @@ namespace BannerKings.Behaviours.Feasts
             {
                 foreach (var hero in clan.Heroes)
                 {
-                    if (hero.CurrentSettlement == Town.Settlement)
+                    if (hero.PartyBelongedTo != null)
                     {
-                        if (hero.PartyBelongedTo != null)
+                        hero.PartyBelongedTo.Ai.EnableAi();
+                        if (hero.CurrentSettlement == Town.Settlement)
                         {
-                            hero.PartyBelongedTo.Ai.EnableAi();
+                            LeaveSettlementAction.ApplyForParty(hero.PartyBelongedTo);
                         }
-                        else if (clan.Fiefs.Count > 0)
-                        {
-                            LeaveSettlementAction.ApplyForCharacterOnly(hero);
-                            EnterSettlementAction.ApplyForCharacterOnly(hero, clan.Fiefs.GetRandomElement().Settlement);
-                        }
+                    }
+
+                    if (clan.Fiefs.Count > 0 && hero.CurrentSettlement == Town.Settlement)
+                    {
+                        LeaveSettlementAction.ApplyForCharacterOnly(hero);
+                        EnterSettlementAction.ApplyForCharacterOnly(hero, clan.Fiefs.GetRandomElement().Settlement);
                     }
                 }
 
@@ -171,25 +205,31 @@ namespace BannerKings.Behaviours.Feasts
                     .SetTextVariable("TOWN", Town.Name)
                     .SetTextVariable("REASON", reason));
 
-                TextObject text;
-                if (satisfaction >= 0.8f)
+                if (Host == Hero.MainHero)
                 {
-                    text = new TextObject("{=e83AjuGY}The feast was a success! The guests praised {COMPLIMENT}.")
-                        .SetTextVariable("COMPLIMENT", goodComments.GetRandomElement());
-                }
-                else if (satisfaction >= 0.3f && satisfaction < 0.8f)
-                {
-                    text = new TextObject("{=9QbnYBn0}The feast was acceptable. The guests compliment that {COMPLIMENT}, but complain that {COMPLAINT}.")
-                        .SetTextVariable("COMPLIMENT", goodComments.GetRandomElement())
-                        .SetTextVariable("COMPLAINT", badComments.GetRandomElement());
-                }
-                else
-                {
-                    text = new TextObject("{=bAgf4mvT}The feast was a failure... The guests complain that {COMPLAINT}.")
-                        .SetTextVariable("COMPLAINT", badComments.GetRandomElement());
-                }
+                    List<TextObject> goodComments = GetCompliments();
+                    List<TextObject> badComments = GetComplaints();
 
-                InformationManager.DisplayMessage(new InformationMessage(text.ToString()));
+                    TextObject text;
+                    if (satisfaction >= 0.8f)
+                    {
+                        text = new TextObject("{=e83AjuGY}The feast was a success! The guests praised {COMPLIMENT}.")
+                            .SetTextVariable("COMPLIMENT", goodComments.GetRandomElement());
+                    }
+                    else if (satisfaction >= 0.3f && satisfaction < 0.8f)
+                    {
+                        text = new TextObject("{=9QbnYBn0}The feast was acceptable. The guests compliment that {COMPLIMENT}, but complain that {COMPLAINT}.")
+                            .SetTextVariable("COMPLIMENT", goodComments.GetRandomElement())
+                            .SetTextVariable("COMPLAINT", badComments.GetRandomElement());
+                    }
+                    else
+                    {
+                        text = new TextObject("{=bAgf4mvT}The feast was a failure... The guests complain that {COMPLAINT}.")
+                            .SetTextVariable("COMPLAINT", badComments.GetRandomElement());
+                    }
+
+                    InformationManager.DisplayMessage(new InformationMessage(text.ToString()));
+                }
             }
         }
 

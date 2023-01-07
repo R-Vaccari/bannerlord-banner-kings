@@ -44,6 +44,8 @@ namespace BannerKings.Managers.Court
             return new Peerage(new TextObject("{=RjMW9nuO}No Peerage"), false, false, false, false, false, false);
         }
 
+        public bool IsLesserPeerage => CanVote && !CanStartElection && !CanGrantKnighthood && !CanHaveFief && CanHaveCouncil;
+
         [SaveableProperty(1)] public TextObject Name { get; private set; }
         [SaveableProperty(2)] public bool CanVote { get; private set; }
         [SaveableProperty(3)] public bool CanStartElection { get; private set; }

@@ -93,9 +93,15 @@ namespace BannerKings.Models.BKModels
             result.Add(notable.GetRelation(converter) * -0.1f);
             result.Add(GetNotableFactor(notable, notable.CurrentSettlement));
 
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
-            var acceptance = data.CultureData.GetAcceptance(converter.Culture);
-            result.AddFactor(1f - acceptance);
+            if (BannerKingsConfig.Instance.PopulationManager != null)
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
+                if (data != null && data.CultureData != null)
+                {
+                    var acceptance = data.CultureData.GetAcceptance(converter.Culture);
+                    result.AddFactor(1f - acceptance);
+                }
+            }
 
             return result;
         }

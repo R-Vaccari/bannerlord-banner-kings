@@ -13,7 +13,7 @@ namespace BannerKings.Managers.Goals.Decisions
     {
         private LawChangeOption chosenAction;
 
-        public DemesneLawChangeDecision() : base("goal_contract_law_change", GoalUpdateType.Manual)
+        public DemesneLawChangeDecision() : base("goal_contract_law_change", GoalCategory.Kingdom, GoalUpdateType.Manual)
         {
             var name = new TextObject("{=YgefyGT4}Propose Demesne Law Change");
             var description = new TextObject("{=Ba2hpnco}Propose a contract change to your faction's titles.");
@@ -53,11 +53,6 @@ namespace BannerKings.Managers.Goals.Decisions
 
 
             return failedReasons.IsEmpty();
-        }
-
-        internal override Hero GetFulfiller()
-        {
-            return Hero.MainHero;
         }
 
         internal override void ShowInquiry()

@@ -18,12 +18,12 @@ namespace BannerKings.Models.BKModels
     {
         private const float POP_GROWTH_FACTOR = 0.005f;
 
-        public ExplainedNumber CalculateEffect(Settlement settlement, PopulationData data)
+        public ExplainedNumber CalculateEffect(Settlement settlement, PopulationData data, bool descriptions = false)
         {
-            var result = new ExplainedNumber(5f, true);
+            var result = new ExplainedNumber(5f, descriptions);
 
             var filledCapacity = data.TotalPop / CalculateSettlementCap(settlement, data).ResultNumber;
-            data.Classes.ForEach(popClass =>
+            foreach (var popClass in data.Classes)
             {
                 var factor = POP_GROWTH_FACTOR;
                 if (popClass.type != PopType.Slaves)
@@ -31,9 +31,9 @@ namespace BannerKings.Models.BKModels
                     factor *= 0.4f;
                 }
 
-                result.Add(popClass.count * factor, new TextObject("{=9XTWXhVi}{POPULATION_CLASS} growth")
-                    .SetTextVariable("POPULATION_CLASS", Utils.Helpers.GetClassName(popClass.type, settlement.Culture)));
-            });
+                result.Add(popClass.count * factor, descriptions ? new TextObject("{=9XTWXhVi}{POPULATION_CLASS} growth")
+                    .SetTextVariable("POPULATION_CLASS", Utils.Helpers.GetClassName(popClass.type, settlement.Culture)) : null);
+            }
 
             result.AddFactor(-filledCapacity, new TextObject("{=MRQmKbko}Filled capacity"));
             if (settlement.IsStarving)
@@ -63,9 +63,9 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateSettlementCap(Settlement settlement, PopulationData data)
+        public ExplainedNumber CalculateSettlementCap(Settlement settlement, PopulationData data, bool descriptions = false)
         {
-            var result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(0f, descriptions);
 
             if (settlement.IsVillage)
             {

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using BannerKings.Actions;
@@ -10,10 +8,8 @@ using HarmonyLib;
 using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement.Categories;
 using TaleWorlds.Core;
@@ -23,7 +19,7 @@ using ActionType = BannerKings.Managers.Titles.ActionType;
 
 namespace BannerKings.Behaviours
 {
-    public class BKKnighthoodBehavior : CampaignBehaviorBase
+    public class BKKnighthoodBehavior : BannerKingsBehavior
     {
         private readonly List<InquiryElement> lordshipsToGive = new();
         private readonly List<InquiryElement> estatesToGive = new();
@@ -42,89 +38,94 @@ namespace BannerKings.Behaviours
 
         private void OnHeroDailyTick(Hero hero)
         {
-            if (hero.Clan == null || hero == hero.Clan.Leader || hero == Hero.MainHero ||
-                hero.Occupation != Occupation.Lord ||
-                BannerKingsConfig.Instance.TitleManager == null)
+            RunWeekly(() =>
             {
-                return;
-            }
-
-            var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
-            if (title == null || title.type != TitleType.Lordship || title.fief.Village == null)
-            {
-                return;
-            }
-
-            //if (hero.Clan.GetName().ToString() == "Prienicos")
-            //   if (!hero.Clan.Heroes.Contains(hero))
-            //       ClanActions.JoinClan(hero, hero.Clan);
-
-            if (!CanCreateClan(hero))
-            {
-                return;
-            }
-
-            var originalClan = hero.Clan;
-            if (hero.Spouse != null && Utils.Helpers.IsClanLeader(hero.Spouse))
-            {
-                return;
-            }
-
-            if (originalClan != Clan.PlayerClan)
-            {
-                CreateClan(hero, originalClan, title);
-            }
-            else
-            {
-                var clanName = ClanActions.CanCreateNewClan(hero, title.fief);
-                if (clanName == null)
+                if (hero.Clan == null || hero == hero.Clan.Leader || hero == Hero.MainHero ||
+                               hero.Occupation != Occupation.Lord ||
+                               BannerKingsConfig.Instance.TitleManager == null)
                 {
                     return;
                 }
 
-                TextObject requestText;
-                if (hero.IsFriend(Hero.MainHero))
+                var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
+                if (title == null || title.type != TitleType.Lordship || title.fief.Village == null)
                 {
-                    requestText =
-                        new TextObject("{=adCAG0nk}I humbly ask of you to release me of my duties in the {CLAN}. I shall remain as your vassal and loyal friend.");
+                    return;
                 }
-                else if (hero.IsEnemy(Hero.MainHero))
+
+                //if (hero.Clan.GetName().ToString() == "Prienicos")
+                //   if (!hero.Clan.Heroes.Contains(hero))
+                //       ClanActions.JoinClan(hero, hero.Clan);
+
+                if (!CanCreateClan(hero))
                 {
-                    requestText =
-                        new TextObject("{=KwjG1wou}I request of you to release me of my duties in the {CLAN}. It is time for me to lead my own family.");
+                    return;
+                }
+
+                var originalClan = hero.Clan;
+                if (hero.Spouse != null && Utils.Helpers.IsClanLeader(hero.Spouse))
+                {
+                    return;
+                }
+
+                if (originalClan != Clan.PlayerClan)
+                {
+                    CreateClan(hero, originalClan, title);
                 }
                 else
                 {
-                    requestText =
-                        new TextObject("{=PDD36QvM}I demand of you to release me of the {CLAN}. It is time we part ways.");
+                    var clanName = ClanActions.CanCreateNewClan(hero.Culture, title.fief);
+                    if (clanName == null)
+                    {
+                        return;
+                    }
+
+                    TextObject requestText;
+                    if (hero.IsFriend(Hero.MainHero))
+                    {
+                        requestText =
+                            new TextObject("{=adCAG0nk}I humbly ask of you to release me of my duties in the {CLAN}. I shall remain as your vassal and loyal friend.");
+                    }
+                    else if (hero.IsEnemy(Hero.MainHero))
+                    {
+                        requestText =
+                            new TextObject("{=KwjG1wou}I request of you to release me of my duties in the {CLAN}. It is time for me to lead my own family.");
+                    }
+                    else
+                    {
+                        requestText =
+                            new TextObject("{=PDD36QvM}I demand of you to release me of the {CLAN}. It is time we part ways.");
+                    }
+
+                    requestText = requestText.SetTextVariable("CLAN", originalClan.Name);
+
+                    var cost = BannerKingsConfig.Instance.InfluenceModel.GetRejectKnighthoodCost(originalClan);
+                    InformationManager.ShowInquiry(new InquiryData(
+                        new TextObject("{=VE2h1JQz}The clan of {HERO}").SetTextVariable("HERO", hero.Name).ToString(),
+                        new TextObject("{=MQtSCDgK}{GREETING} {PLAYER}, {TEXT}\nRejecting their request would cost {INFLUENCE} influence.")
+                            .SetTextVariable("GREETING",
+                                GameTexts.FindText(Hero.MainHero.IsFemale ? "str_my_lady" : "str_my_lord"))
+                            .SetTextVariable("PLAYER", Hero.MainHero.Name)
+                            .SetTextVariable("TEXT", requestText)
+                            .SetTextVariable("INFLUENCE", cost)
+                            .ToString(),
+                        true, true, GameTexts.FindText("str_accept").ToString(),
+                        GameTexts.FindText("str_reject").ToString(),
+                        () =>
+                        {
+                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, originalClan.Leader, 5);
+                            CreateClan(hero, originalClan, title, clanName);
+                        },
+                        () =>
+                        {
+                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, originalClan.Leader, -12);
+                            GainKingdomInfluenceAction.ApplyForDefault(originalClan.Leader, -cost);
+                            BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(hero, -200);
+                        }));
                 }
-
-                requestText = requestText.SetTextVariable("CLAN", originalClan.Name);
-
-                var cost = BannerKingsConfig.Instance.InfluenceModel.GetRejectKnighthoodCost(originalClan);
-                InformationManager.ShowInquiry(new InquiryData(
-                    new TextObject("{=VE2h1JQz}The clan of {HERO}").SetTextVariable("HERO", hero.Name).ToString(),
-                    new TextObject("{=MQtSCDgK}{GREETING} {PLAYER}, {TEXT}\nRejecting their request would cost {INFLUENCE} influence.")
-                        .SetTextVariable("GREETING",
-                            GameTexts.FindText(Hero.MainHero.IsFemale ? "str_my_lady" : "str_my_lord"))
-                        .SetTextVariable("PLAYER", Hero.MainHero.Name)
-                        .SetTextVariable("TEXT", requestText)
-                        .SetTextVariable("INFLUENCE", cost)
-                        .ToString(),
-                    true, true, GameTexts.FindText("str_accept").ToString(),
-                    GameTexts.FindText("str_reject").ToString(),
-                    () =>
-                    {
-                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, originalClan.Leader, 5);
-                        CreateClan(hero, originalClan, title, clanName);
-                    },
-                    () =>
-                    {
-                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, originalClan.Leader, -12);
-                        GainKingdomInfluenceAction.ApplyForDefault(originalClan.Leader, -cost);
-                        BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(hero, -200);
-                    }));
-            }
+            },
+            GetType().Name,
+            false); 
         }
 
         private void CreateClan(Hero hero, Clan originalClan, FeudalTitle title, TextObject name = null)
@@ -230,7 +231,6 @@ namespace BannerKings.Behaviours
                 null,
                 null);
 
-
             starter.AddPlayerLine("companion_knighthood_finish_estate", "companion_knighthood_finish_estate",
                 "companion_knighthood_finished",
                new TextObject("It is decided then. I bestow upon you the title of Knight.").ToString(),
@@ -242,7 +242,6 @@ namespace BannerKings.Behaviours
                 "{=G4ALCxaA}Never mind.",
                 null,
                 null);
-
 
             starter.AddDialogLine("companion_knighthood_finished", "companion_knighthood_finished",
                 "close_window",
@@ -545,35 +544,6 @@ namespace BannerKings.Behaviours
                 
                 return true;
             }
-
-            [HarmonyPrefix]
-            [HarmonyPatch("fief_grant_answer_consequence", MethodType.Normal)]
-            private static bool GrantPeeragePrefix()
-            {
-                ConversationSentence.SetObjectsToRepeatOver((from x in Hero.MainHero.Clan.Settlements
-                                                             where x.IsTown || x.IsCastle &&
-                                                             BannerKingsConfig.Instance.TitleManager.GetTitle(x).deJure == Hero.MainHero
-                                                             select x).ToList<Settlement>(), 5);
-
-                return false;
-            }
-
-            [HarmonyPostfix]
-            [HarmonyPatch("ClanNameSelectionIsDone", MethodType.Normal)]
-            private static void GrantPeerageFinishedPostfix(CompanionRolesCampaignBehavior __instance)
-            {
-                CompanionRolesCampaignBehavior current = Campaign.Current.GetCampaignBehavior<CompanionRolesCampaignBehavior>();
-                Settlement settlement = (Settlement)AccessTools.Field(current.GetType(), "_selectedFief").GetValue(current);
-                if (settlement != null)
-                {
-                    var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
-                    if (title != null)
-                    {
-                        var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, Hero.MainHero);
-                        BannerKingsConfig.Instance.TitleManager.GrantTitle(action, Hero.OneToOneConversationHero);
-                    }
-                }
-            }
         }
 
         [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "FindSuitableCompanionsToLeadCaravan")]
@@ -774,21 +744,5 @@ namespace BannerKings.Behaviours
                 return false;
             }
         }
-
-        /*
-        [HarmonyPatch(typeof(Settlement))]
-        [HarmonyPatch("Owner", MethodType.Getter)]
-        class VillageOwnerPatch
-        {
-            static void Postfix(Settlement __instance, ref Hero __result)
-            {
-                if (__instance.IsVillage && BannerKingsConfig.Instance.TitleManager != null)
-                {
-                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(__instance);
-                    if (title != null)
-                        __result = title.deFacto;
-                }
-            }
-        } */
     }
 }

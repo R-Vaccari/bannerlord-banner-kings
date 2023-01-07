@@ -17,6 +17,8 @@ using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.Library;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations;
+using System.Linq;
 
 namespace BannerKings.Patches
 {
@@ -32,7 +34,7 @@ namespace BannerKings.Patches
                 MobileParty tradingParty = null, bool isSelling = false, PartyBase merchantParty = null)
             {
                 var item = itemRosterElement.Item;
-                if (item.HasHorseComponent)
+                if (item != null && item.HasHorseComponent)
                 {
                     int minimumPrice = 0;
                     if (item.HorseComponent.MeatCount > 0)
@@ -65,7 +67,7 @@ namespace BannerKings.Patches
                 MobileParty tradingParty, bool isSelling, PartyBase merchantParty)
             {
                 var item = itemRosterElement.Item;
-                if (item.HasHorseComponent)
+                if (item != null && item.HasHorseComponent)
                 {
                     int minimumPrice = 0;
                     if (item.HorseComponent.MeatCount > 0)
@@ -95,6 +97,12 @@ namespace BannerKings.Patches
             [HarmonyPatch("MeatCount", MethodType.Getter)]
             private static void MeatCountPostfix(HorseComponent __instance, ref int __result)
             {
+                if (__instance.Monster != null && __instance.Monster.StringId == "chicken" ||
+                    __instance.Monster.StringId == "goose")
+                {
+                    __result = 0;
+                }
+
                 if (__instance.Item != null && __instance.Item.Weight < 10)
                 {
                     __result = 0;
@@ -105,6 +113,12 @@ namespace BannerKings.Patches
             [HarmonyPatch("HideCount", MethodType.Getter)]
             private static void HideCountPostfix(HorseComponent __instance, ref int __result)
             {
+                if (__instance.Monster != null && __instance.Monster.StringId == "chicken" ||
+                   __instance.Monster.StringId == "goose")
+                {
+                    __result = 0;
+                }
+
                 if (__instance.Item != null && __instance.Item.Weight < 10)
                 {
                     __result = 0;
@@ -274,10 +288,61 @@ namespace BannerKings.Patches
             }
         }
 
-        [HarmonyPatch(typeof(WorkshopsCampaignBehavior), "ProduceOutput")]
-        internal class WorkshopProduceOutputPatch
+        [HarmonyPatch(typeof(WorkshopsCampaignBehavior))]
+        internal class WorkshopsCampaignBehaviorPatches
         {
-            private static bool Prefix(EquipmentElement outputItem, Town town, Workshop workshop, int count,
+            [HarmonyPrefix]
+            [HarmonyPatch("InitializeWorkshops", MethodType.Normal)]
+            private static bool InitializeWorkshopsPrefix()
+            {
+                foreach (Town town in Town.AllTowns)
+                {
+                    town.InitializeWorkshops(6);
+                }
+
+                return false;
+            }
+            
+            [HarmonyPostfix]
+            [HarmonyPatch(methodName: "DecideBestWorkshopType", MethodType.Normal)]
+            private static void DecideBestWorkshopTypePostfix(ref WorkshopType __result, 
+                Settlement currentSettlement, bool atGameStart, WorkshopType workshopToExclude = null)
+            {
+                if (__result != null && currentSettlement != null && currentSettlement.Town != null)
+                {
+                    var id = __result.StringId;
+                    if (currentSettlement.Town.Workshops.Any(x => x != null && x.WorkshopType != null && x.WorkshopType.StringId == id))
+                    {
+                        if (MBRandom.RandomFloat <= 0.3f)
+                        {
+                            __result = WorkshopType.Find("mines");
+                        }
+                        else
+                        {
+                            List<WorkshopType> list = new List<WorkshopType>();
+                            list.Add(WorkshopType.Find("smithy"));
+                            list.Add(WorkshopType.Find("fletcher"));
+                            list.Add(WorkshopType.Find("barding-smithy"));
+                            list.Add(WorkshopType.Find("armorsmithy"));
+                            list.Add(WorkshopType.Find("weaponsmithy"));
+                            var random = list.GetRandomElement();
+                            if (currentSettlement.Town.Workshops.Any(x => x != null && x.WorkshopType != null && 
+                            x.WorkshopType.StringId == random.StringId))
+                            {
+                                __result = list.GetRandomElement();
+                            }
+                            else
+                            {
+                                __result = random;
+                            }
+                        }
+                    }
+                }
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("ProduceOutput", MethodType.Normal)]
+            private static bool ProduceOutputPrefix(EquipmentElement outputItem, Town town, Workshop workshop, int count,
                 bool doNotEffectCapital)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
@@ -315,6 +380,13 @@ namespace BannerKings.Patches
                     float craftsmenFactor = data.GetTypeCount(PopType.Craftsmen) / 50f;
                     count = (int)MathF.Max(1f, count + ((craftsmenFactor / outputItem.ItemValue) * prosperityFactor));
                 }
+                else if (workshop.WorkshopType.StringId == "mines" && data.MineralData != null)
+                {
+                    MineralData mineralData = data.MineralData;
+                    outputItem = new EquipmentElement(mineralData.GetRandomItem());
+                    if (mineralData.Richness == MineralRichness.RICH) count += 2;
+                    else if (mineralData.Richness == MineralRichness.ADEQUATE) count += 1;
+                }
 
                 var result = BannerKingsConfig.Instance.WorkshopModel.GetProductionQuality(workshop).ResultNumber;
                 var itemPrice = town.GetItemPrice(new EquipmentElement(outputItem));
@@ -335,7 +407,7 @@ namespace BannerKings.Patches
                     town.Owner.ItemRoster.AddToCounts(element, 1);
                 }
 
-                if (Campaign.Current.GameStarted && !doNotEffectCapital && workshop.WorkshopType.StringId != "artisans")
+                if (Campaign.Current.GameStarted && !doNotEffectCapital)
                 {
                     var num = totalValue;
                     workshop.ChangeGold(num);
@@ -404,7 +476,7 @@ namespace BannerKings.Patches
                             __result *= data.EconomicData.CaravanAttraction.ResultNumber;
                         }
                         
-                        __result -= data.EconomicData.CaravanFee(caravanParty) * 2f;
+                        __result -= data.EconomicData.CaravanFee(caravanParty) / 10f;
                     }
                 }
             }

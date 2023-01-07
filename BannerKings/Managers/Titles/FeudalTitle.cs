@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Titles
             this.vassals = vassals;
             this.deJure = deJure;
             this.deFacto = deFacto;
-            this.name = new TextObject("{TITLE} of {NAME}")
+            this.name = new TextObject("{=wMius2i9}{TITLE} of {NAME}")
                 .SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(type, contract.Government))
                 .SetTextVariable("NAME", name);
             shortName = new TextObject(name);

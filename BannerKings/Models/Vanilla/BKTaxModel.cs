@@ -23,7 +23,7 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKTaxModel : DefaultSettlementTaxModel
     {
-        public static readonly float SERF_OUTPUT = 0.3f;
+        public static readonly float SERF_OUTPUT = 0.33f;
 
         public float GetNobleOutput(FeudalTitle title)
         {
@@ -65,7 +65,7 @@ namespace BannerKings.Models.Vanilla
 
         public float GetSlaveOutput(FeudalTitle title)
         {
-            float result = 0.32f;
+            float result = 0.4f;
 
             if (title != null)
             {
@@ -202,9 +202,9 @@ namespace BannerKings.Models.Vanilla
             return baseResult;
         }
 
-        public ExplainedNumber CalculateVillageTaxFromIncome(Village village)
+        public ExplainedNumber CalculateVillageTaxFromIncome(Village village, bool descriptions = false, bool applyWithdrawal = false)
         {
-            var result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
             result.LimitMax(10000f);
             if (village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided)
@@ -234,6 +234,9 @@ namespace BannerKings.Models.Vanilla
                 {
                     AddVillagePopulationTaxes(ref result, village.Settlement, nobles, craftsmen, taxOffice, taxType);
                 }
+
+                var admCost = BannerKingsConfig.Instance.AdministrativeModel.CalculateEffect(village.Settlement).ResultNumber;
+                result.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
             }
 
             var clan = village.GetActualOwner().Clan;
@@ -257,15 +260,19 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            if (data != null)
-            {
-                CalculateDueTax(data, (float)result.ResultNumber);
-            }
-
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(village.Settlement.OwnerClan);
             if (council != null)
             {
                 CalculateDueWages(council, (float)result.ResultNumber);
+            }
+
+            if (data != null)
+            {
+                CalculateDueTax(data, (float)result.ResultNumber);
+                if (applyWithdrawal)
+                {
+                    data.VillageData.LastPayment = (int)result.ResultNumber;
+                }
             }
 
             return result;

@@ -18,11 +18,20 @@ namespace BannerKings.Managers.Duties
             Party = leader;
             RunnedHours = 0;
             ArmyHours = 0;
-            InformationManager.ShowInquiry(new InquiryData("Duty Calls",
-                string.Format(
-                    "Your suzerain, {0}, has summoned you to fulfill your oath of military aid. You have {1} days to join {2}, currently close to {3}.",
-                    leader.LeaderHero.Name, 2, armyName, proximity.Name),
-                true, false, "Understood", null, null, null));
+            InformationManager.ShowInquiry(new InquiryData(
+                new TextObject("{=!}Duty of Military Aid").ToString(),
+                new TextObject("Your suzerain, {SUZERAIN}, has summoned you to fulfill your oath of military aid. You have {DAYS} days to join {ARMY}, currently close to {SETTLEMENT}. Failing to fulfill it will tarnish your name and standing with your suzerain.")
+                .SetTextVariable("SUZERAIN", leader.LeaderHero.Name)
+                .SetTextVariable("DAYS", 2)
+                .SetTextVariable("ARMY", armyName)
+                .SetTextVariable("SETTLEMENT", proximity.Name)
+                .ToString(),
+                true, 
+                false, 
+                GameTexts.FindText("str_ok").ToString(), 
+                null, null, 
+                null),
+                true);
         }
 
         [SaveableProperty(4)] public MobileParty Party { get; set; }
@@ -62,8 +71,16 @@ namespace BannerKings.Managers.Duties
                 result.SetTextVariable("RELATION", relation);
             }
 
-            InformationManager.ShowInquiry(new InquiryData("Duty of Military Aid", result.ToString(),
-                true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
+            InformationManager.ShowInquiry(new InquiryData(
+                new TextObject("{=!}Duty of Military Aid").ToString(), 
+                result.ToString(),
+                true, 
+                false,
+                GameTexts.FindText("str_done").ToString(), 
+                null, 
+                null, 
+                null), 
+                true);
         }
 
         public override void Tick()

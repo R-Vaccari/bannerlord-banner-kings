@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Goals.Decisions
     {
         private CultureObject culture;
 
-        public AssumeCultureDecision() : base("goal_assume_cukture_decision", GoalUpdateType.Manual)
+        public AssumeCultureDecision() : base("goal_assume_cukture_decision", GoalCategory.Personal, GoalUpdateType.Manual)
         {
             var name = new TextObject("{=LcqUwqJz}Assume Culture");
             var description = new TextObject("{=XCancyYB}Assume a culture different than your current. Cultures can be assumed from settlements, your spouse or your faction leader. Direct family members will assume the culture as well. Assuming a culture yields a significant negative impact on clan renown.\n\n");
@@ -65,11 +65,6 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             return failedReasons.IsEmpty();
-        }
-
-        internal override Hero GetFulfiller()
-        {
-            return Hero.MainHero;
         }
 
         internal override void ShowInquiry()

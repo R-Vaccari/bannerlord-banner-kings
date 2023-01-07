@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BannerKings.Managers.Policies;
@@ -6,6 +7,7 @@ using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Inventory;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -37,7 +39,6 @@ namespace BannerKings.UI.Management
             settlement = _settlement;
             RefreshValues();
         }
-
 
         [DataSourceProperty]
         public string ProductionText => new TextObject("{=bk_production}Production").ToString();
@@ -221,7 +222,6 @@ namespace BannerKings.UI.Management
             SatisfactionInfo.Clear();
             SlaveryInfo.Clear();
 
-
             ProductionInfo.Add(new InformationElement(new TextObject("{=NnOoYOTC}State Slaves:").ToString(),
                 $"{data.EconomicData.StateSlaves:P}",
                 new TextObject("{=yJzJMg5Z}Percentage of slaves in this settlement that are state-owned and therefore used for state purposes such as building projects.")
@@ -246,12 +246,10 @@ namespace BannerKings.UI.Management
                     .SetTextVariable("EXPLANATIONS", efficiency.GetExplanations())
                     .ToString()));
 
-
             if (IsVillage)
             {
                 var villageData = data.VillageData;
-
-                var villageRevenue = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(villageData.Village);
+                var villageRevenue = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(villageData.Village, true);
                 RevenueInfo.Add(new InformationElement(new TextObject("{=BXFLXR6B}Village Revenue:").ToString(),
                     FormatFloatGain(villageRevenue.ResultNumber),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
@@ -260,6 +258,9 @@ namespace BannerKings.UI.Management
                         .SetTextVariable("EXPLANATIONS", villageRevenue.GetExplanations())
                         .ToString()));
 
+                RevenueInfo.Add(new InformationElement(new TextObject("{=!}Last Payment:").ToString(),
+                    FormatFloatGain(villageData.LastPayment),
+                    new TextObject("{=!}The last payment this it's owner village has done.").ToString()));
 
                 ProductionInfo.Add(new InformationElement(new TextObject("{=KbTvcQko}Construction:").ToString(),
                     new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
@@ -318,7 +319,6 @@ namespace BannerKings.UI.Management
                         .SetTextVariable("EXPLANATIONS", caravanAttractiveness.GetExplanations())
                         .ToString()));
 
-
                 for (var i = 0; i < 4; i++)
                 {
                     var value = data.EconomicData.Satisfactions[i];
@@ -368,8 +368,6 @@ namespace BannerKings.UI.Management
                     }, new TextObject(mercantilismDecision.GetHint()));
             }
 
-
-
             var slavePrice = BannerKingsConfig.Instance.GrowthModel.CalculateSlavePrice(settlement, true);
             SlaveryInfo.Add(new InformationElement(new TextObject("{=CTerwC4b}Slave Price:").ToString(),
                 ((int)slavePrice.ResultNumber).ToString(),
@@ -379,10 +377,6 @@ namespace BannerKings.UI.Management
             SlaveryInfo.Add(new InformationElement(new TextObject("{=KdEiqFm2}Slave Demand:").ToString(),
                 FormatValue(slaveDemand.ResultNumber),
                 slaveDemand.GetExplanations()));
-
-            
-
-
 
             var admCost = data.EconomicData.AdministrativeCost;
             RevenueInfo.Add(new InformationElement(new TextObject("{=MhzdyoWG}Administrative Cost:").ToString(), 
@@ -403,9 +397,41 @@ namespace BannerKings.UI.Management
         {
             var tournament = new TournamentData(settlement.Town);
             data.TournamentData = tournament;
-            roster = tournament.Roster;
-            InventoryManager.OpenScreenAsStash(tournament.Roster);
-            RefreshValues();
+
+            var list = new List<InquiryElement>();
+            foreach (var element in MobileParty.MainParty.ItemRoster)
+            {
+                var item = element.EquipmentElement.Item;
+                if (item.HasWeaponComponent || item.HasArmorComponent || (item.HasHorseComponent && !item.HorseComponent.IsLiveStock))
+                {
+                    if (item.Value > 100)
+                    {
+                        list.Add(new InquiryElement(item,
+                                                element.EquipmentElement.GetModifiedItemName().ToString(),
+                                                new ImageIdentifier(item),
+                                                true,
+                                                ""));
+                    }
+                }
+            }
+
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                GameTexts.FindText("str_tournament")
+                .SetTextVariable("SETTLEMENT_NAME", settlement.Name)
+                .ToString(),
+                new TextObject("{=!}Select a prize for your tournament. The bigger is it's value, the more renown will be awarded to once the tournament is finished.").ToString(),
+                null,
+                true,
+                1,
+                GameTexts.FindText("str_accept").ToString(),
+                GameTexts.FindText("str_reject").ToString(),
+                delegate (List<InquiryElement> list)
+                {
+                    ItemObject item = (ItemObject)list[0].Identifier;
+                    tournament.SetPrize(item);
+                    RefreshValues();
+                },
+                null));
         }
 
         public override void OnFinalize()

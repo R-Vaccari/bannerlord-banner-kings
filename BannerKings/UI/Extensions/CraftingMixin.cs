@@ -27,7 +27,6 @@ namespace BannerKings.UI.Extensions
         private readonly float startingStamina;
         private float spentStamina;
 
-
         public CraftingMixin(CraftingVM vm) : base(vm)
         {
             crafting = vm;
@@ -46,7 +45,6 @@ namespace BannerKings.UI.Extensions
         }
 
         public Hero Hero => crafting.CurrentCraftingHero.Hero;
-
 
         private int[] CurrentMaterials =>
             BannerKingsConfig.Instance.SmithingModel.GetCraftingInputForArmor(armorCrafting.CurrentItem.Item);
@@ -338,13 +336,13 @@ namespace BannerKings.UI.Extensions
                 var items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
                 if (materials[9] > 0)
                 {
-                    extraMaterials = CurrentExtraMaterials.First(x => x.Material.StringId == "leather").ResourceAmount >
+                    extraMaterials = CurrentExtraMaterials.First(x => x.Material.StringId == "leather").ResourceAmount >=
                                      materials[9];
                 }
 
                 if (materials[10] > 0)
                 {
-                    extraMaterials = CurrentExtraMaterials.First(x => x.Material.StringId == "linen").ResourceAmount >
+                    extraMaterials = CurrentExtraMaterials.First(x => x.Material.StringId == "linen").ResourceAmount >=
                                      materials[10];
                 }
             }

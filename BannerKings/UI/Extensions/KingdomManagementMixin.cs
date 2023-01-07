@@ -1,7 +1,5 @@
-using BannerKings.Behaviours;
 using BannerKings.UI.Court;
 using BannerKings.UI.Kingdoms;
-using BannerKings.UI.Management;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem;
@@ -14,10 +12,11 @@ namespace BannerKings.UI.Extensions
     [ViewModelMixin("RefreshValues")]
     internal class KingdomManagementMixin : BaseViewModelMixin<KingdomManagementVM>
     {
-        private bool courtSelected, courtEnabled, demesneSelected, demesneEnabled;
+        private readonly KingdomManagementVM kingdomManagement;
+        private bool courtSelected, courtEnabled, demesneSelected, demesneEnabled, careerSelected,
+            showCareer;
         private CourtVM courtVM;
         private KingdomDemesneVM demesneVM;
-        private readonly KingdomManagementVM kingdomManagement;
 
         public KingdomManagementMixin(KingdomManagementVM vm) : base(vm)
         {
@@ -27,15 +26,14 @@ namespace BannerKings.UI.Extensions
             DemesneEnabled = title != null;
             demesneVM = new KingdomDemesneVM(title, vm.Kingdom);
             demesneVM.IsSelected = DemesneEnabled;
-
             //var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(vm.Kingdom);
             CourtEnabled = true;
             kingdomManagement.RefreshValues();
         }
 
         [DataSourceProperty] public string DemesneText => new TextObject("{=6QMDGRSt}Demesne").ToString();
-
         [DataSourceProperty] public string CourtText => new TextObject("{=2QGyA46m}Court").ToString();
+        [DataSourceProperty] public string CareerText => new TextObject("{=!}Career").ToString();
 
         [DataSourceProperty]
         public bool DemesneSelected
@@ -126,7 +124,7 @@ namespace BannerKings.UI.Extensions
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
             if (council != null)
             {
-                if (council.Peerage != null && !council.Peerage.CanStartElection)
+                if (council.Peerage == null || (council.Peerage != null && !council.Peerage.CanStartElection))
                 {
                     var policy = kingdomManagement.Policy;
                     var diplomacy = kingdomManagement.Diplomacy;
@@ -192,7 +190,7 @@ namespace BannerKings.UI.Extensions
             {
                 Demesne.IsSelected = false;
             }
-            
+
             Court.IsSelected = true;
             CourtSelected = true;
 
@@ -215,6 +213,27 @@ namespace BannerKings.UI.Extensions
                 Court.IsSelected = false;
                 CourtSelected = false;
             }
+
+            kingdomManagement.RefreshValues();
+        }
+
+        [DataSourceMethod]
+        public void SelectCareer()
+        {
+            kingdomManagement.Clan.Show = false;
+            kingdomManagement.Settlement.Show = false;
+            kingdomManagement.Policy.Show = false;
+            kingdomManagement.Army.Show = false;
+            kingdomManagement.Diplomacy.Show = false;
+
+            DemesneSelected = false;
+            if (Demesne != null)
+            {
+                Demesne.IsSelected = false;
+            }
+
+            Court.IsSelected = false;
+            CourtSelected = false;
 
             kingdomManagement.RefreshValues();
         }

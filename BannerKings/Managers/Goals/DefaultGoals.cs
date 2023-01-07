@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BannerKings.Managers.Goals.Decisions;
+using BannerKings.Settings;
 
 namespace BannerKings.Managers.Goals
 {
@@ -9,8 +10,13 @@ namespace BannerKings.Managers.Goals
         {
             get
             {
+                yield return CallBannersGoal;
                 yield return AssumeCulture;
-                yield return OrganizeFeastDecision;
+                if (BannerKingsSettings.Instance.Feasts)
+                {
+                    yield return OrganizeFeastDecision;
+                }
+                 
                 yield return AcquireBookDecision;
                 yield return RecruitCompanionDecision;
                 yield return RequestCouncil;
@@ -34,6 +40,7 @@ namespace BannerKings.Managers.Goals
         internal Goal DemesneLawChangeDecision { get; private set; }
         internal Goal RequestPeerageDecision { get; private set; }
         internal Goal OrganizeFeastDecision { get; private set; }
+        internal Goal CallBannersGoal { get; private set; }
 
         public override void Initialize()
         {
@@ -48,6 +55,7 @@ namespace BannerKings.Managers.Goals
             DemesneLawChangeDecision = new DemesneLawChangeDecision();
             OrganizeFeastDecision = new OrganizeFeastDecision();
             RequestPeerageDecision = new RequestPeerageDecision();
+            CallBannersGoal = new CallBannersGoal();
         }
     }
 }

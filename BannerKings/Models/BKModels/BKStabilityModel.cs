@@ -98,9 +98,9 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateAutonomyTarget(Settlement settlement, float stability)
+        public ExplainedNumber CalculateAutonomyTarget(Settlement settlement, float stability, bool descriptions = false)
         {
-            var result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
             result.LimitMax(1f);
 
@@ -134,9 +134,9 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateStabilityTarget(Settlement settlement)
+        public ExplainedNumber CalculateStabilityTarget(Settlement settlement, bool descriptions = false)
         {
-            var result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
             result.LimitMax(1f);
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
@@ -194,8 +194,7 @@ namespace BannerKings.Models.BKModels
                 }
 
                 var legitimacy = 0f;
-                var legitimacyType = (LegitimacyType) BannerKingsConfig.Instance.Models
-                    .First(x => x.GetType() == typeof(BKLegitimacyModel))
+                var legitimacyType = (LegitimacyType) BannerKingsConfig.Instance.LegitimacyModel
                     .CalculateEffect(settlement).ResultNumber;
                 legitimacy = legitimacyType switch
                 {
@@ -314,9 +313,9 @@ namespace BannerKings.Models.BKModels
             return value;
         }
 
-        public ExplainedNumber CalculateCurrentDemesne(Clan clan)
+        public ExplainedNumber CalculateCurrentDemesne(Clan clan, bool descriptions = false)
         {
-            var result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
 
             var leader = clan.Leader;
@@ -353,38 +352,26 @@ namespace BannerKings.Models.BKModels
         {
             var result = new ExplainedNumber(0f, true);
             result.LimitMin(0f);
-
             var leader = clan.Leader;
-            foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
+            var list = BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(clan);
+            foreach (var vassal in list)
             {
-                if (title.vassals == null || title.vassals.Count == 0)
+                if (vassal.Clan == leader.Clan)
                 {
-                    continue;
+                    result.Add(0.5f, vassal.Name);
                 }
-
-                foreach (var deJure in title.vassals.Select(vassal => vassal.deJure).Where(deJure => deJure != null && deJure != leader))
+                else
                 {
-                    if (deJure.Clan == leader.Clan)
-                    {
-                        result.Add(0.5f, deJure.Name);
-                    }
-                    else
-                    {
-                        var suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(deJure);
-                        if (suzerain != null && suzerain.deJure == leader)
-                        {
-                            result.Add(1f, deJure.Name);
-                        }
-                    }
+                    result.Add(1f, vassal.Name);
                 }
             }
 
             return result;
         }
 
-        public ExplainedNumber CalculateDemesneLimit(Hero hero)
+        public ExplainedNumber CalculateDemesneLimit(Hero hero, bool descriptions = false)
         {
-            var result = new ExplainedNumber(0.5f, true);
+            var result = new ExplainedNumber(0.5f, descriptions);
             result.LimitMin(0.5f);
             result.LimitMax(10f);
 

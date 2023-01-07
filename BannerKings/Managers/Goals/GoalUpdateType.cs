@@ -1,6 +1,6 @@
 ﻿namespace BannerKings.Managers.Goals
 {
-    internal enum GoalUpdateType
+    public enum GoalUpdateType
     {
         Manual,
         Settlement,

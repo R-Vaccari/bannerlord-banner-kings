@@ -13,6 +13,11 @@ namespace BannerKings.Managers.Helpers
     {
         public static void ApplyInheritanceAllTitles(List<FeudalTitle> titles, Hero victim)
         {
+            if (BannerKingsConfig.Instance.TitleManager == null)
+            {
+                return;
+            }
+
             FeudalTitle highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(victim);
             var mainHeir = GetHeirInternal(victim, highest.contract);
 
@@ -42,12 +47,18 @@ namespace BannerKings.Managers.Helpers
                         }
                     }
 
+                    var heroesToJoin = new List<Hero>();
                     foreach (var h in victim.Clan.Heroes)
                     {
                         if (h != mainHeir && (h == heir.Spouse || h.Children.Contains(h))) 
                         {
-                            ClanActions.JoinClan(h, newClan);
+                            heroesToJoin.Add(h);
                         }
+                    }
+
+                    foreach (var hero in heroesToJoin)
+                    {
+                        ClanActions.JoinClan(hero, newClan);
                     }
                         
                     if (victim.Clan.Kingdom != null)

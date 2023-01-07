@@ -19,7 +19,7 @@ namespace BannerKings.Managers.Goals.Decisions
         private readonly List<CompanionType> companionTypes;
         private CompanionType selectedCompanionType;
 
-        public RecruitCompanionDecision() : base("goal_recruit_companion_decision", GoalUpdateType.Manual)
+        public RecruitCompanionDecision() : base("goal_recruit_companion_decision", GoalCategory.Personal, GoalUpdateType.Manual)
         {
             var name = new TextObject("{=FMuDf3DM}Recruit Companion");
             var description = new TextObject("{=fG0AXwff}Select a type of companion to recruit.");
@@ -121,13 +121,14 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(new TextObject("{=hkUJWHgi}You can't afford any companion."));
             }
 
-            return true;
-            //return failedReasons.IsEmpty();
-        }
+            var clan = GetFulfiller().Clan;
+            if (clan.Companions.Count >= clan.CompanionLimit)
+            {
+                failedReasons.Add(new TextObject("{=!}Your clan has reached it's companion limit."));
+            }
 
-        internal override Hero GetFulfiller()
-        {
-            return Hero.MainHero;
+            return failedReasons.Count == 0;
+            //return failedReasons.IsEmpty();
         }
 
         internal override void ShowInquiry()

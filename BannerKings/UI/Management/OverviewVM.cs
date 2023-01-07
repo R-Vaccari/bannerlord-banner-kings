@@ -104,9 +104,7 @@ namespace BannerKings.UI.Management
         public override void RefreshValues()
         {
             base.RefreshValues();
-            
             var data = this.data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-
             PopList.Clear();
             CultureList.Clear();
             CultureInfo.Clear();
@@ -133,10 +131,9 @@ namespace BannerKings.UI.Management
                     .ResultNumber;
             }
 
-
             if (!settlement.IsVillage)
             {
-                var stability = BannerKingsConfig.Instance.StabilityModel.CalculateStabilityTarget(settlement);
+                var stability = BannerKingsConfig.Instance.StabilityModel.CalculateStabilityTarget(settlement, true);
                 StatsInfo.Add(new InformationElement("Stability:", $"{data.Stability:P}",
                     new TextObject("{=Uw3xBMKd}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
@@ -146,7 +143,7 @@ namespace BannerKings.UI.Management
                         .SetTextVariable("TARGET", FormatValue(stability.ResultNumber))
                         .ToString()));
 
-                var autonomy = BannerKingsConfig.Instance.StabilityModel.CalculateAutonomyTarget(settlement, data.Stability);
+                var autonomy = BannerKingsConfig.Instance.StabilityModel.CalculateAutonomyTarget(settlement, data.Stability, true);
                 StatsInfo.Add(new InformationElement("Autonomy:", $"{data.Autonomy:P}",
                     new TextObject("{=Uw3xBMKd}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
@@ -177,15 +174,11 @@ namespace BannerKings.UI.Management
                         .ToString()));
             }
 
-         
-
             StatsInfo.Add(new InformationElement(new TextObject("{=9s1iC4kE}Total Population:").ToString(), 
                 $"{data.TotalPop:n0}",
                 new TextObject("{=zaCDpfP2}Number of people present in this settlement and surrounding regions.").ToString()));
 
-           
-
-            var cap = BannerKingsConfig.Instance.GrowthModel.CalculateSettlementCap(settlement, data);
+            var cap = BannerKingsConfig.Instance.GrowthModel.CalculateSettlementCap(settlement, data, true);
             StatsInfo.Add(new InformationElement(new TextObject("{=OfNn72n9}Population Cap:").ToString(),
                 ((int)cap.ResultNumber).ToString(),
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
@@ -194,7 +187,7 @@ namespace BannerKings.UI.Management
                     .SetTextVariable("EXPLANATIONS", cap.GetExplanations())
                     .ToString()));
 
-            var growth = BannerKingsConfig.Instance.GrowthModel.CalculateEffect(settlement, data);
+            var growth = BannerKingsConfig.Instance.GrowthModel.CalculateEffect(settlement, data, true);
             StatsInfo.Add(new InformationElement(new TextObject("{=HcFqTg6k}Population Growth:").ToString(),
                 FormatFloatGain((int)growth.ResultNumber).ToString(),
                  new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
@@ -203,7 +196,7 @@ namespace BannerKings.UI.Management
                     .SetTextVariable("EXPLANATIONS", growth.GetExplanations())
                     .ToString()));
 
-            var influence = BannerKingsConfig.Instance.InfluenceModel.CalculateSettlementInfluence(settlement, data);
+            var influence = BannerKingsConfig.Instance.InfluenceModel.CalculateSettlementInfluence(settlement, data, true);
             StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
                 FormatFloatGain(influence.ResultNumber),
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
@@ -232,7 +225,6 @@ namespace BannerKings.UI.Management
                .ToString()));
             }
            
-
             var heroCulture = data.CultureData.Cultures.FirstOrDefault(x => x.Culture == Hero.MainHero.Culture);
             if (heroCulture != null)
             {
@@ -256,7 +248,6 @@ namespace BannerKings.UI.Management
                     .ToString()));
             }
           
-
             CultureInfo.Add(new InformationElement(new TextObject("{=Lb5b7JZX}Cultural Acceptance:").ToString(),
                 $"{data.CultureData.GetAcceptance(Hero.MainHero.Culture):P}",
                 new TextObject("{=K4DsLUBQ}How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into. Acceptance is gained through a stable reign and competent governor in place.")

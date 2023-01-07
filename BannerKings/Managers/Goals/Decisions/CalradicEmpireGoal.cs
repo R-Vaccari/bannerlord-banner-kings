@@ -15,7 +15,7 @@ namespace BannerKings.Managers.Goals.Decisions
     {
         private readonly List<Settlement> settlements;
 
-        public CalradicEmpireGoal() : base("goal_calradic_empire", GoalUpdateType.Settlement)
+        public CalradicEmpireGoal() : base("goal_calradic_empire", GoalCategory.Unique, GoalUpdateType.Settlement)
         {
             var name = new TextObject("{=cZzO6kya}Reform the Imperium Calradium");
             var description = new TextObject("{=WCde02Um}Reestablish the former Calradian Empire. The Empire spanned most of the continent before emperor Arenicos died without a clear heir. By reforming the empire, you crush the validity of claimants, and ahead of you lies a new path for greatness. You must bring all imperial duchies under control of your realm.\n\n");
@@ -44,7 +44,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         internal override bool IsAvailable()
         {
-            return BannerKingsConfig.Instance.TitleManager.GetTitleByStringId("title_calradic_empire") == null;
+            return Clan.PlayerClan.Kingdom != null &&
+                BannerKingsConfig.Instance.TitleManager.GetTitleByStringId("title_calradic_empire") == null;
         }
 
         internal override bool IsFulfilled(out List<TextObject> failedReasons)
@@ -120,11 +121,6 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             return failedReasons.IsEmpty();
-        }
-
-        internal override Hero GetFulfiller()
-        {
-            return settlements.First().Owner;
         }
 
         internal override void ShowInquiry()

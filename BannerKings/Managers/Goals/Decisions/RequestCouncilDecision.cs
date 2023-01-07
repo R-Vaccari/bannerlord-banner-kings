@@ -13,7 +13,7 @@ namespace BannerKings.Managers.Goals.Decisions
     {
         private CouncilAction chosenAction;
 
-        public RequestCouncilDecision() : base("goal_request_council_decision", GoalUpdateType.Manual)
+        public RequestCouncilDecision() : base("goal_request_council_decision", GoalCategory.Kingdom, GoalUpdateType.Manual)
         {
             var name = new TextObject("{=oBxXQmTb}Request Council Position");
             var description = new TextObject("{=7aLyDGEt}Request a position in your suzerain's council.");
@@ -32,11 +32,6 @@ namespace BannerKings.Managers.Goals.Decisions
             return true;
         }
 
-        internal override Hero GetFulfiller()
-        {
-            return Hero.MainHero;
-        }
-
         internal override void ShowInquiry()
         {
             IsFulfilled(out var failedReasons);
@@ -49,7 +44,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 TextObject name = null;
                 var hint = new TextObject("{=SXfiwy0X}{DESCRIPTION}\n\n{REASON}");
                 CouncilAction action;
-                var model = (BKCouncilModel)BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
+                var model = BannerKingsConfig.Instance.CouncilModel;
                 if (member.Member == Hero.MainHero)
                 {
                     action = model.GetAction(CouncilActionType.RELINQUISH, council, Hero.MainHero, member);
