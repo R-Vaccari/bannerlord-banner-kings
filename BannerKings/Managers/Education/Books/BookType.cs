@@ -43,7 +43,7 @@ namespace BannerKings.Managers.Education.Books
             else
             {
                 hero.AddSkillXp(Skill, 300f);
-                if (hero.HeroDeveloper.CanAddFocusToSkill(Skill))
+                if (hero.HeroDeveloper.GetFocus(Skill) < Campaign.Current.Models.CharacterDevelopmentModel.MaxFocusPerSkill)
                 {
                     hero.HeroDeveloper.AddFocus(Skill, 1);
                 }

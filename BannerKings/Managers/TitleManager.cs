@@ -316,7 +316,7 @@ namespace BannerKings.Managers
                             if (estate.Owner != null && estate.Owner.IsLord && estate.Owner.MapFaction == clan.MapFaction)
                             {
                                 (bool, Estate) isGentry = behavior.IsGentryClan(estate.Owner.Clan);
-                                if (isGentry.Item1 && isGentry.Item2 == estate)
+                                if (isGentry.Item1 && isGentry.Item2 == estate && estate.Owner.MapFaction == clan.MapFaction)
                                 {
                                     list.Add(estate.Owner);
                                 }

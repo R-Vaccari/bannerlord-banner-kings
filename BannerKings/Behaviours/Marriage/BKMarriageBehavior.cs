@@ -450,7 +450,7 @@ namespace BannerKings.Behaviours.Marriage
                         new TextObject("{=m48122Zw}It is decided then. {CONFIRMATION}")
                         .SetTextVariable("CONFIRMATION", DialogueHelper.GetRandomText(Hero.OneToOneConversationHero, DialogueHelper.GetMarriageConfirmationTexts(proposedMarriage))));
 
-                   return true;
+                   return proposedMarriage != null;
                },
                () =>
                {
