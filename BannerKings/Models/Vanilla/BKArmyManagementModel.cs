@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -22,11 +23,6 @@ namespace BannerKings.Models.Vanilla
                 var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(armyLeader);
                 if (title != null)
                 {
-                    if (title.contract.GenderLaw == GenderLaw.Agnatic && armyLeader.IsFemale)
-                    {
-                        return false;
-                    }
-
                     if (kingdom.ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
                     {
                         var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
@@ -78,25 +74,13 @@ namespace BannerKings.Models.Vanilla
                 return base.AverageCallToArmyCost;
             }
 
-
             float result = base.CalculatePartyInfluenceCost(armyLeaderParty, party);
-            if (BannerKingsConfig.Instance.TitleManager != null)
+            if (BannerKingsConfig.Instance.TitleManager != null && !party.ActualClan.IsUnderMercenaryService)
             {
-                var leader = armyLeaderParty.LeaderHero;
-                var summonedLeader = party.LeaderHero;
-                if (leader != null && summonedLeader != null)
+                var vassals = BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(armyLeaderParty.ActualClan);
+                if (!vassals.Contains(party.LeaderHero))
                 {
-                    var leaderTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(leader);
-                    var summonedLeaderTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(summonedLeader);
-
-                    if (leaderTitle != null && summonedLeaderTitle != null)
-                    {
-                        var rank = leaderTitle.type;
-                        var summonedRank = summonedLeaderTitle.type;
-
-                        var factor = 1f + 0.25f * (rank - summonedRank);
-                        result *= factor;
-                    }
+                    result *= 2f;
                 }
             }
 

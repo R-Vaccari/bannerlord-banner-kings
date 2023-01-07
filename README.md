@@ -2,7 +2,8 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/r-vaccari/bannerlord-banner-kings/badge)](https://www.codefactor.io/repository/github/r-vaccari/bannerlord-banner-kings)
 
-<a href="https://www.buymeacoffee.com/basilevsmodding" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-red.png" alt="Buy Me A Coffee" width="220px"></a>
+<a href="https://www.buymeacoffee.com/basilevsmodding" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-red.png" alt="Buy Me A Coffee" width="220px"></a> 
+<a href="https://discord.gg/z7DS5R46wC" target="_blank"><img src="https://i.imgur.com/xsWPvks.png" alt="Discord" width="220px"></a>
 
 
 Banner Kings is a suite of features developed for Mount & Blade: Bannerlord. The modification focuses on adding depth to gameplay. This is done by expanding and adding layers of complexity to non-combat related features of the game. Inspiration for the mod systems is mostly drawn from games such as Crusader Kings.
@@ -29,6 +30,7 @@ The mod is big, complicated and not perfect. If you have an issue, describe it p
 ## Known Issues
 
 - Missing texts or localisation keys.
+- A minority of people have reported freezes. The reason for it is still unclear.
 - A loading crash when combined with CE. CE will be updated with it fixed. A placeholder fix is provided in the [Discord](https://discord.gg/z7DS5R46wC).
 - Most issues are reported and fixed first on [Discord](https://discord.gg/z7DS5R46wC) through test-versions. Test-versions are separate versions of the mod which are usually in-between 2 official updates, and are used to verify fixes mostly. A lot of issues are identified and fixed quickly, you don't need to make the 15th comment about it.
 

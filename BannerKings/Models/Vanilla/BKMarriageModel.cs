@@ -266,7 +266,7 @@ namespace BannerKings.Models.Vanilla
                 result = 0f;
             }
 
-            return result;
+            return result * 1.25f;
         }
 
         public bool IsClanHeir(FeudalTitle title, Hero hero)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BannerKings.Managers.Goals.Decisions;
+using BannerKings.Settings;
 
 namespace BannerKings.Managers.Goals
 {
@@ -9,9 +10,13 @@ namespace BannerKings.Managers.Goals
         {
             get
             {
-                //yield return CallBannersGoal;
+                yield return CallBannersGoal;
                 yield return AssumeCulture;
-                yield return OrganizeFeastDecision;
+                if (BannerKingsSettings.Instance.Feasts)
+                {
+                    yield return OrganizeFeastDecision;
+                }
+                 
                 yield return AcquireBookDecision;
                 yield return RecruitCompanionDecision;
                 yield return RequestCouncil;

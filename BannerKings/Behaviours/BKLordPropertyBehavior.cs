@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using HarmonyLib;
 using SandBox.CampaignBehaviors;
@@ -15,7 +14,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours
 {
-    public class BKLordPropertyBehavior : CampaignBehaviorBase
+    public class BKLordPropertyBehavior : BannerKingsBehavior
     {
         public override void RegisterEvents()
         {
@@ -42,45 +41,50 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            var caravanCost = BannerKingsConfig.Instance.EconomyModel.GetCaravanPrice(target, lord).ResultNumber;
-            if (ShouldHaveCaravan(lord, (int) caravanCost))
+            RunWeekly(() =>
             {
-                lord.ChangeHeroGold(-(int) caravanCost);
-                CaravanPartyComponent.CreateCaravanParty(lord, target);
-            }
-
-            if (target.IsTown && !target.Town.Workshops.Any(x => x.Owner == lord))
-            {
-                var random = target.Town.Workshops.GetRandomElement();
-                if (random != null)
+                var caravanCost = BannerKingsConfig.Instance.EconomyModel.GetCaravanPrice(target, lord).ResultNumber;
+                if (ShouldHaveCaravan(lord, (int)caravanCost))
                 {
-                    float workshopCost = BannerKingsConfig.Instance.WorkshopModel.GetBuyingCostForPlayer(random);
-                    if (ShouldHaveWorkshop(lord, (int) workshopCost))
-                    {
+                    lord.ChangeHeroGold(-(int)caravanCost);
+                    CaravanPartyComponent.CreateCaravanParty(lord, target);
+                }
 
-                        if (random.Owner == Hero.MainHero)
+                if (target.IsTown && !target.Town.Workshops.Any(x => x.Owner == lord))
+                {
+                    var random = target.Town.Workshops.GetRandomElement();
+                    if (random != null)
+                    {
+                        float workshopCost = BannerKingsConfig.Instance.WorkshopModel.GetBuyingCostForPlayer(random);
+                        if (ShouldHaveWorkshop(lord, (int)workshopCost))
                         {
-                            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=HGHxECuY}Workshop Acquisition").ToString(),
-                                new TextObject("{=Q19XEcNq}The {CLAN} proposes to buy your {WORKSHOP} at {TOWN}. They offer you {GOLD}{GOLD_ICON}")
-                                .SetTextVariable("CLAN", lord.Clan.Name)
-                                .SetTextVariable("WORKSHOP", random.WorkshopType.Name)
-                                .SetTextVariable("TOWN", target.Name)
-                                .SetTextVariable("GOLD", (int)workshopCost).ToString(),
-                                true, 
-                                true,
-                                GameTexts.FindText("str_accept").ToString(),
-                                GameTexts.FindText("str_reject").ToString(),
-                                () => BuyWorkshop(random, lord, kingdom, workshopCost),
-                                null), 
-                                true);
-                        }
-                        else
-                        {
-                            BuyWorkshop(random, lord, kingdom, workshopCost);
+
+                            if (random.Owner == Hero.MainHero)
+                            {
+                                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=HGHxECuY}Workshop Acquisition").ToString(),
+                                    new TextObject("{=Q19XEcNq}The {CLAN} proposes to buy your {WORKSHOP} at {TOWN}. They offer you {GOLD}{GOLD_ICON}")
+                                    .SetTextVariable("CLAN", lord.Clan.Name)
+                                    .SetTextVariable("WORKSHOP", random.WorkshopType.Name)
+                                    .SetTextVariable("TOWN", target.Name)
+                                    .SetTextVariable("GOLD", (int)workshopCost).ToString(),
+                                    true,
+                                    true,
+                                    GameTexts.FindText("str_accept").ToString(),
+                                    GameTexts.FindText("str_reject").ToString(),
+                                    () => BuyWorkshop(random, lord, kingdom, workshopCost),
+                                    null),
+                                    true);
+                            }
+                            else
+                            {
+                                BuyWorkshop(random, lord, kingdom, workshopCost);
+                            }
                         }
                     }
                 }
-            }
+            },
+            GetType().Name,
+            false);
         }
 
         private void BuyWorkshop(Workshop wk, Hero buyer, Kingdom kingdom, float cost)

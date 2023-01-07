@@ -152,7 +152,7 @@ namespace BannerKings.UI
             [HarmonyPatch("Name", MethodType.Getter)]
             internal static void GetterPostfix(Hero __instance, ref TextObject __result)
             {
-                if (names.ContainsKey(__instance) && MBRandom.RandomFloat > 0.001f)
+                if (names.ContainsKey(__instance) && MBRandom.RandomFloat > 0.1f)
                 {
                     __result = names[__instance];
                     return;
@@ -184,6 +184,7 @@ namespace BannerKings.UI
                                 .SetTextVariable("TITLE", honorary)
                                 .SetTextVariable("NAME", name)
                                 .SetTextVariable("SETTLEMENT", title.shortName);
+                            AddName(__instance, __result);
                         }
                         else if (namingSetting.Equals(DefaultSettings.Instance.NamingFullTitles))
                         {
@@ -191,13 +192,14 @@ namespace BannerKings.UI
                                 .SetTextVariable("TITLE", honorary)
                                 .SetTextVariable("NAME", name)
                                 .SetTextVariable("SETTLEMENT", title.shortName);
+                            AddName(__instance, __result);
                         }
                         else if (namingSetting.Equals(DefaultSettings.Instance.NamingTitlePrefix))
                         {
                             __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
                                 .SetTextVariable("TITLE", honorary)
                                 .SetTextVariable("NAME", name);
-                           
+                            AddName(__instance, __result);
                         }
                     }
                     else if (__instance.Clan != null && __instance.Clan.Leader != __instance && BannerKingsSettings.Instance.CloseRelativesNaming)
@@ -224,6 +226,7 @@ namespace BannerKings.UI
                                 __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
                                     .SetTextVariable("TITLE", honorary)
                                     .SetTextVariable("NAME", name);
+                                AddName(__instance, __result);
                             }
                             else if (government != GovernmentType.Republic && leaderTitle.IsSovereignLevel && 
                                 (leader.Children.Contains(__instance) || leader.Siblings.Contains(__instance)))
@@ -234,11 +237,10 @@ namespace BannerKings.UI
                                 __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
                                     .SetTextVariable("TITLE", honorary)
                                     .SetTextVariable("NAME", name);
+                                AddName(__instance, __result);
                             }
                         }
                     }
-
-                    AddName(__instance, __result);
                 }
             }
         }

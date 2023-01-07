@@ -13,7 +13,8 @@ namespace BannerKings.UI.Extensions
     internal class KingdomManagementMixin : BaseViewModelMixin<KingdomManagementVM>
     {
         private readonly KingdomManagementVM kingdomManagement;
-        private bool courtSelected, courtEnabled, demesneSelected, demesneEnabled;
+        private bool courtSelected, courtEnabled, demesneSelected, demesneEnabled, careerSelected,
+            showCareer;
         private CourtVM courtVM;
         private KingdomDemesneVM demesneVM;
 
@@ -25,7 +26,6 @@ namespace BannerKings.UI.Extensions
             DemesneEnabled = title != null;
             demesneVM = new KingdomDemesneVM(title, vm.Kingdom);
             demesneVM.IsSelected = DemesneEnabled;
-
             //var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(vm.Kingdom);
             CourtEnabled = true;
             kingdomManagement.RefreshValues();
@@ -33,6 +33,7 @@ namespace BannerKings.UI.Extensions
 
         [DataSourceProperty] public string DemesneText => new TextObject("{=6QMDGRSt}Demesne").ToString();
         [DataSourceProperty] public string CourtText => new TextObject("{=2QGyA46m}Court").ToString();
+        [DataSourceProperty] public string CareerText => new TextObject("{=!}Career").ToString();
 
         [DataSourceProperty]
         public bool DemesneSelected
@@ -212,6 +213,27 @@ namespace BannerKings.UI.Extensions
                 Court.IsSelected = false;
                 CourtSelected = false;
             }
+
+            kingdomManagement.RefreshValues();
+        }
+
+        [DataSourceMethod]
+        public void SelectCareer()
+        {
+            kingdomManagement.Clan.Show = false;
+            kingdomManagement.Settlement.Show = false;
+            kingdomManagement.Policy.Show = false;
+            kingdomManagement.Army.Show = false;
+            kingdomManagement.Diplomacy.Show = false;
+
+            DemesneSelected = false;
+            if (Demesne != null)
+            {
+                Demesne.IsSelected = false;
+            }
+
+            Court.IsSelected = false;
+            CourtSelected = false;
 
             kingdomManagement.RefreshValues();
         }

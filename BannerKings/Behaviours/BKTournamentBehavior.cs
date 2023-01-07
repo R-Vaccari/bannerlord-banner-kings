@@ -69,7 +69,10 @@ namespace BannerKings.Behaviours
                         if (town.Settlement.Notables != null && town.Settlement.Notables.Count > 0)
                         {
                             var notable = town.Settlement.Notables.GetRandomElement();
-                            ChangeRelationAction.ApplyPlayerRelation(notable, 2);
+                            if (notable != null)
+                            {
+                                ChangeRelationAction.ApplyPlayerRelation(notable, 2);
+                            }
                         }
                     }
                 }

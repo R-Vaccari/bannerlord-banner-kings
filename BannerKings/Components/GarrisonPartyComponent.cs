@@ -60,6 +60,7 @@ namespace BannerKings.Components
                 garrisonRoster.AddToCounts(element.Character, -1);
             }
 
+            patrol.Party.Visuals.OnStartup(patrol.Party);
             patrol.InitializeMobilePartyAtPosition(members, new TroopRoster(patrol.Party), origin.GatePosition);
             return patrol;
         }

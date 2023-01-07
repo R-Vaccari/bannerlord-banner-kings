@@ -14,8 +14,8 @@ namespace BannerKings.Managers.Education
 {
     public class EducationData : BannerKingsData
     {
-        private const float LANGUAGE_RATE = 1f / (CampaignTime.DaysInYear * 5f);
-        private const float BOOK_RATE = 1f / (CampaignTime.DaysInYear * 3f);
+        private const float LANGUAGE_RATE = 1f / (CampaignTime.DaysInYear * 3f);
+        private const float BOOK_RATE = 1f / (CampaignTime.DaysInYear * 1.5f);
 
         [SaveableField(2)] private readonly Dictionary<BookType, float> books;
 
@@ -101,7 +101,7 @@ namespace BannerKings.Managers.Education
 
         public ExplainedNumber CurrentBookReadingRate => BannerKingsConfig.Instance.EducationModel.CalculateBookReadingRate(CurrentBook, hero);
 
-        public float StandartLifestyleProgress => 1f / (CampaignTime.DaysInYear * 5f);
+        public float StandartLifestyleProgress => 1f / (CampaignTime.DaysInYear * 3f);
 
         public void PostInitialize()
         {

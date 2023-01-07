@@ -44,7 +44,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         internal override bool IsAvailable()
         {
-            return BannerKingsConfig.Instance.TitleManager.GetTitleByStringId("title_calradic_empire") == null;
+            return Clan.PlayerClan.Kingdom != null &&
+                BannerKingsConfig.Instance.TitleManager.GetTitleByStringId("title_calradic_empire") == null;
         }
 
         internal override bool IsFulfilled(out List<TextObject> failedReasons)
