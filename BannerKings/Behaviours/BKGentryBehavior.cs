@@ -3,6 +3,7 @@ using BannerKings.Managers.Populations.Estates;
 using BannerKings.Utils;
 using HarmonyLib;
 using Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -57,7 +58,51 @@ namespace BannerKings.Behaviours
 
         private void OnClanDailyTick(Clan clan)
         {
+            RunWeekly(() =>
+            {
+                if (clan == null || clan.Leader == null || clan.IsEliminated || clan == Clan.PlayerClan || clan.IsBanditFaction)
+                {
+                    return;
+                }
 
+                (bool, Estate) gentryTuple = IsGentryClan(clan);
+                if (!gentryTuple.Item1 || gentryTuple.Item2 == null)
+                {
+                    return;
+                }
+
+                var villageSettlement = gentryTuple.Item2.EstatesData.Settlement;
+                foreach (var member in clan.Heroes)
+                {
+                    if (member.PartyBelongedTo == null && !member.IsPrisoner)
+                    {
+                        if (villageSettlement.MapFaction == clan.MapFaction)
+                        {
+                            EnterSettlementAction.ApplyForCharacterOnly(member, villageSettlement);
+                        }
+                        else
+                        {
+                            if (clan.Leader == member && clan.MapFaction.IsKingdomFaction && (member.CurrentSettlement == null ||
+                            member.CurrentSettlement.MapFaction != clan.MapFaction))
+                            {
+                                var kingdom = clan.Kingdom;
+                                var random = kingdom.Fiefs.GetRandomElement();
+                                if (random != null)
+                                {
+                                    EnterSettlementAction.ApplyForCharacterOnly(member, random.Settlement);
+                                }
+                            }
+                            else if (clan.Leader.CurrentSettlement != null && !clan.Leader.IsPrisoner &&
+                            clan.Leader.CurrentSettlement.MapFaction == clan.MapFaction)
+                            {
+                                EnterSettlementAction.ApplyForCharacterOnly(member, villageSettlement);
+                            }
+                        }
+                    }
+                }
+            },
+            GetType().Name,
+            false);
         }
 
         private void OnPartyDailyTick(MobileParty party)
@@ -220,73 +265,78 @@ namespace BannerKings.Behaviours
 
         private void InitializeGentry(Settlement settlement, bool campaignStart = false)
         {
-            if (!settlement.IsVillage || BannerKingsConfig.Instance.PopulationManager == null ||
+            ExceptionUtils.TryCatch(() =>
+            {
+                if (settlement == null || !settlement.IsVillage || BannerKingsConfig.Instance.PopulationManager == null ||
                 settlement.OwnerClan == null || settlement.MapFaction == null || !settlement.MapFaction.IsKingdomFaction)
-            {
-                return;
-            }
+                {
+                    return;
+                }
 
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            if (data == null || data.EstateData == null)
-            {
-                return;
-            }
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                if (data == null || data.EstateData == null)
+                {
+                    return;
+                }
 
-            Estate vacantEstate = data.EstateData.Estates.FirstOrDefault(x => x.IsDisabled);
-            if (vacantEstate == null)
-            {
-                return;
-            }
+                Estate vacantEstate = data.EstateData.Estates.FirstOrDefault(x => x.IsDisabled);
+                if (vacantEstate == null)
+                {
+                    return;
+                }
 
-            if (campaignStart && MBRandom.RandomFloat < 0.4f)
-            {
-                return;
-            }
+                if (campaignStart && MBRandom.RandomFloat < 0.4f)
+                {
+                    return;
+                }
 
-            Equipment equipment = GetEquipmentIfPossible(settlement.Culture);
-            if (equipment == null)
-            {
-                return;
-            }
-            var clanName = ClanActions.CanCreateNewClan(settlement.Culture, settlement);
-            if (clanName == null)
-            {
-                return;
-            }
+                Equipment equipment = GetEquipmentIfPossible(settlement.Culture);
+                if (equipment == null)
+                {
+                    return;
+                }
+                var clanName = ClanActions.CanCreateNewClan(settlement.Culture, settlement);
+                if (clanName == null)
+                {
+                    return;
+                }
 
-            string name = clanName.ToString();
-            var applicable = FactionHelper.IsClanNameApplicable(name);
-            if (!applicable.Item1)
-            {
-                return;
-            }
+                string name = clanName.ToString();
+                var applicable = FactionHelper.IsClanNameApplicable(name);
+                if (!applicable.Item1)
+                {
+                    return;
+                }
 
-            var template = GetTemplate(settlement.Culture);
-            if (template == null)
-            {
-                return;
-            }
+                var template = GetTemplate(settlement.Culture);
+                if (template == null)
+                {
+                    return;
+                }
 
-            int cost = (int)(vacantEstate.EstateValue.ResultNumber * 0.5f);
-            if (settlement.Owner == Hero.MainHero)
-            {
-                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}The Gentry of {SETTLEMENT}")
-                    .SetTextVariable("SETTLEMENT", settlement.Name)
-                    .ToString(),
-                    new TextObject("{=!}A local of relative wealth has offered to buy a vacant estate in your domain, {SETTLEMENT}. They offer {GOLD}{GOLD_ICON} for the property, as well as their vassalage. As their suzerain you would be entitled taxing their estate and calling them to war.")
-                    .SetTextVariable("SETTLEMENT", settlement.Name)
-                    .ToString(),
-                    true,
-                    true,
-                    GameTexts.FindText("str_accept").ToString(),
-                    GameTexts.FindText("str_reject").ToString(),
-                    () => CreateGentryClan(settlement, vacantEstate, clanName, equipment, campaignStart, cost, template),
-                    null));
-            }
-            else
-            {
-                CreateGentryClan(settlement, vacantEstate, clanName, equipment, campaignStart, cost, template);
-            }
+                int cost = (int)(vacantEstate.EstateValue.ResultNumber * 0.5f);
+                if (settlement.Owner == Hero.MainHero)
+                {
+                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}The Gentry of {SETTLEMENT}")
+                        .SetTextVariable("SETTLEMENT", settlement.Name)
+                        .ToString(),
+                        new TextObject("{=!}A local of relative wealth has offered to buy a vacant estate in your domain, {SETTLEMENT}. They offer {GOLD}{GOLD_ICON} for the property, as well as their vassalage. As their suzerain you would be entitled taxing their estate and calling them to war.")
+                        .SetTextVariable("SETTLEMENT", settlement.Name)
+                        .ToString(),
+                        true,
+                        true,
+                        GameTexts.FindText("str_accept").ToString(),
+                        GameTexts.FindText("str_reject").ToString(),
+                        () => CreateGentryClan(settlement, vacantEstate, clanName, equipment, campaignStart, cost, template),
+                        null));
+                }
+                else
+                {
+                    CreateGentryClan(settlement, vacantEstate, clanName, equipment, campaignStart, cost, template);
+                }
+            },
+            GetType().Name,
+            false);
         }
 
         private CharacterObject GetTemplate(CultureObject culture, bool spouse = false)
