@@ -1,6 +1,7 @@
 ﻿using BannerKings.Behaviours.Diplomacy;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
@@ -58,6 +59,24 @@ namespace BannerKings.Models.Vanilla
                     {
                         result.AddFactor(-0.25f);
                     }
+
+                    if (diplomacy.HasValidTruce(defenderKingdom))
+                    {
+                        float honor = attackerKingdom.Leader.GetTraitLevel(DefaultTraits.Honor);
+                        if (honor >= 0)
+                        {
+                            return new ExplainedNumber(-50000f);
+                        }
+                        else
+                        {
+                            result.AddFactor(-0.9f);
+                        }
+                    }
+
+                    foreach (var casusBelli in diplomacy.GetAvailableCasusBelli(defenderKingdom))
+                    {
+                        result.Add(casusBelli.DeclareWarScore);
+                    }
                 }
             }     
 
@@ -66,7 +85,7 @@ namespace BannerKings.Models.Vanilla
             float attackerScore = attackerStats.Strength + attackerStats.ValueOfSettlements - (attackerStats.TotalStrengthOfEnemies * 1.25f);
             float defenderScore = defenderStats.Strength + defenderStats.ValueOfSettlements - (defenderStats.TotalStrengthOfEnemies * 1.25f);
             float scoreProportion = (attackerScore / defenderScore) - 1f;
-            result.Add(scoreProportion * 50000f);
+            result.AddFactor(scoreProportion);
 
             float relations = attackerStats.RulingClan.GetRelationWithClan(defenderStats.RulingClan);
             result.AddFactor(relations * -0.3f);

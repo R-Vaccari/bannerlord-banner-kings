@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
@@ -9,31 +10,36 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
     public class CasusBelli : BannerKingsObject
     {
         private Func<War, bool> isFulfilled;
-        private Func<War, bool> isAdequate;
-
+        private Func<War, bool> isInvalid;
+        private Func<IFaction, IFaction, CasusBelli, bool> isAdequate;
         public CasusBelli(string id) : base(id)
         {
         }
 
-        public void Initialize(TextObject name, TextObject description, float conquest, float raid, float capture,
-            Func<War, bool> isFulfilled, Func<War, bool> isAdequate, Dictionary<TraitObject, float> traitWeights)
+        public void Initialize(TextObject name, TextObject description, float conquest, float raid, float capture, float declareWarScore,
+            Func<War, bool> isFulfilled, Func<War, bool> isInvalid, Func<IFaction, IFaction, CasusBelli, bool> isAdequate,
+            Dictionary<TraitObject, float> traitWeights)
         {
             Initialize(name, description);
             this.isFulfilled = isFulfilled;
+            this.isInvalid = isInvalid;
             this.isAdequate = isAdequate;
             TraitWeights = traitWeights;
             ConquestWeight = conquest;
             RaidWeight = raid;
             CaptureWeight = capture;
+            DeclareWarScore = declareWarScore;
         }
 
         public CasusBelli GetCopy()
         {
             var copy = new CasusBelli(StringId);
-            copy.Initialize(Name, Description, ConquestWeight,
-                RaidWeight, CaptureWeight, IsFulfilled, IsAdequate, TraitWeights);
+            copy.Initialize(Name, Description, ConquestWeight, RaidWeight, DeclareWarScore,
+                CaptureWeight, IsFulfilled, IsInvalid, IsAdequate, TraitWeights);
             return copy;
         }
+
+        public float DeclareWarScore { get; private set; }
         private Dictionary<TraitObject, float> TraitWeights { get; set; }
         public float ConquestWeight { get; private set; }
         public float CaptureWeight { get; private set; }
@@ -49,10 +55,11 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             return result;
         }
 
-        public Settlement Fief { get; private set; }
+        public Settlement Fief { get; set; }
 
         public bool IsFulfilled(War war) => isFulfilled(war);
-        public bool IsAdequate(War war) => isAdequate(war);
+        public bool IsInvalid(War war) => isInvalid(war);
+        public bool IsAdequate(IFaction faction1, IFaction faction2, CasusBelli casusBelli) => isAdequate(faction1, faction2, casusBelli);
 
         public override bool Equals(object obj)
         {
