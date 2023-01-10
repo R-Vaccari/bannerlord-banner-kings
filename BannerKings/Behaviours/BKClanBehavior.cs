@@ -318,6 +318,30 @@ namespace BannerKings.Behaviours
                             null));
                     }
                 }
+
+                if (clan.Kingdom.RulingClan == clan && (council.Peerage == null || !council.Peerage.CanHaveFief))
+                {
+                    council.SetPeerage(new Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"), true,
+                                true, true, true, true, false));
+
+                    if (clan == Clan.PlayerClan)
+                    {
+                        var peerage = council.Peerage;
+                        InformationManager.ShowInquiry(new InquiryData(
+                            peerage.Name.ToString(),
+                            new TextObject("{=!}As part of beng a ruling clan, the {CLAN} is now considered to have {PEERAGE}. {TEXT}")
+                            .SetTextVariable("CLAN", Clan.PlayerClan.Name)
+                            .SetTextVariable("PEERAGE", peerage.Name)
+                            .SetTextVariable("TEXT", peerage.PeerageGrantedText())
+                            .ToString(),
+                            true,
+                            false,
+                            GameTexts.FindText("str_ok").ToString(),
+                            String.Empty,
+                            null,
+                            null));
+                    }
+                }
             }
 
             if (clan == Clan.PlayerClan || clan.IsUnderMercenaryService || clan.IsMinorFaction || clan.IsBanditFaction)
@@ -1021,56 +1045,44 @@ namespace BannerKings.Behaviours
                     var lordships = BannerKingsConfig.Instance.TitleManager
                         .GetAllDeJure(clan)
                         .FindAll(x => x.type == TitleType.Lordship);
-                    foreach (var village in clan.Villages)
+                    var addedVillages = new Dictionary<Village, Hero>();
+
+                    foreach (FeudalTitle lordship in lordships)
                     {
-                        var title = lordships.FirstOrDefault(x => x.fief.Village == village);
-                        if (title == null)
+                        Village village = lordship.fief.Village;
+                        if (village.Settlement.MapFaction == clan.MapFaction)
                         {
-                            title = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
+                            addedVillages.Add(village, lordship.deJure);
                         }
-                        else
-                        {
-                            lordships.Remove(title);
-                        }
-
-                        var result = CalculateVillageIncome(ref goldChange, village, clan, applyWithdrawals);
-
-                        if (title != null)
-                        {
-                            var deJure = title.deJure;
-                            var knightOwned = title.deJure != clan.Leader && title.deJure.Clan == clan;
-                            if (knightOwned)
-                            {
-                                deJure.Gold += result;
-                                continue;
-                            }
-
-                            if (deJure.Clan.Kingdom == clan.Kingdom)
-                            {
-                                continue;
-                            }
-                        }
-
-                        totalGold += result;
                     }
 
-                    foreach (var lordship in lordships)
+                    foreach (Village village in clan.Villages)
                     {
-                        var village = lordship.fief.Village;
-                        var ownerClan = village.Settlement.OwnerClan;
-                        if (ownerClan.Kingdom == clan.Kingdom)
+                        if (addedVillages.ContainsKey(village))
                         {
-                            var result = CalculateVillageIncome(ref goldChange, village, clan, applyWithdrawals);
-                            var leaderOwned = lordship.deJure == clan.Leader;
-                            if (!leaderOwned)
-                            {
-                                var deJure = lordship.deJure;
-                                deJure.Gold += result;
-                            }
-                            else
-                            {
-                                totalGold += result;
-                            }
+                            continue;
+                        }
+
+                        var lordship = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
+                        if (lordship.deJure.MapFaction != clan.MapFaction)
+                        {
+                            addedVillages.Add(village, clan.Leader);
+                        }
+                    }
+
+                    foreach (var pair in addedVillages)
+                    {
+                        Hero owner = pair.Value;
+                        Village village = pair.Key;
+                        int income = CalculateVillageIncome(village);
+                        if (owner == clan.Leader)
+                        {
+                            totalGold += income;
+                        }
+
+                        if (applyWithdrawals)
+                        {
+                            ApplyWithdrawal(village, income, owner == clan.Leader ? null : owner);
                         }
                     }
 
@@ -1081,21 +1093,22 @@ namespace BannerKings.Behaviours
                 return true;
             }
 
-            private static int CalculateVillageIncome(ref ExplainedNumber goldChange, Village village, Clan clan,
-                bool applyWithdrawals)
+            private static void ApplyWithdrawal(Village village, int income, Hero payTo = null)
             {
-                var total = (int)BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(village, 
-                    false, 
-                    applyWithdrawals)
-                    .ResultNumber;
-
-                if (applyWithdrawals)
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
+                data.VillageData.LastPayment = income;
+                village.TradeTaxAccumulated -= MathF.Min(village.TradeTaxAccumulated, income);
+                if (payTo != null)
                 {
-                    village.TradeTaxAccumulated -= MathF.Min(village.TradeTaxAccumulated, total);
+                    payTo.Gold += income;
                 }
-
-                return total;
             }
+
+            private static int CalculateVillageIncome(Village village) => (int)BannerKingsConfig.Instance.TaxModel
+                .CalculateVillageTaxFromIncome(village,
+                    false,
+                    false)
+                    .ResultNumber;
         }
     }
 }
