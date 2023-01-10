@@ -1,10 +1,11 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Behaviours.Diplomacy;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKKingodmDecsionModel : DefaultKingdomDecisionPermissionModel
+    public class BKKingdomDecisionModel : DefaultKingdomDecisionPermissionModel
     {
         public override bool IsKingSelectionDecisionAllowed(Kingdom kingdom)
         {
@@ -42,6 +43,13 @@ namespace BannerKings.Models.Vanilla
             if (clanStance.IsAllied)
             {
                 reason = new TextObject("{=!}Ruling clans are allies.");
+                return false;
+            }
+
+            var diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(kingdom1);
+            if (diplomacy != null && diplomacy.HasTradePact(kingdom2))
+            {
+                reason = new TextObject("{=!}Kingdoms are in truce.");
                 return false;
             }
 

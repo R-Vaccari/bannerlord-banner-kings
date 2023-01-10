@@ -29,11 +29,6 @@ namespace BannerKings.Models.Vanilla
             }
 
             StanceLink stance = factionDeclaresWar.GetStanceWith(factionDeclaredWar);
-            if (stance.IsAllied)
-            {
-                return new ExplainedNumber(-50000f);
-            }
-
             if (stance.GetDailyTributePaid(factionDeclaredWar) < 0)
             {
                 return new ExplainedNumber(-50000f);
@@ -41,17 +36,20 @@ namespace BannerKings.Models.Vanilla
 
             if (factionDeclaredWar.IsKingdomFaction && factionDeclaresWar.IsKingdomFaction)
             {
-                StanceLink clanStance = (factionDeclaresWar as Kingdom).RulingClan.GetStanceWith((factionDeclaredWar as Kingdom).RulingClan);
-                if (clanStance.IsAllied)
+                var attackerKingdom = (Kingdom)factionDeclaresWar;
+                var defenderKingdom = (Kingdom)factionDeclaredWar;
+
+                TextObject reason;
+                bool warAllowed = Campaign.Current.Models.KingdomDecisionPermissionModel
+                    .IsWarDecisionAllowedBetweenKingdoms(attackerKingdom, defenderKingdom, out reason);
+                if (!warAllowed)
                 {
                     return new ExplainedNumber(-50000f);
                 }
 
                 var tributes = factionDeclaresWar.Stances.ToList().FindAll(x => x.GetDailyTributePaid(x.Faction2) > 0);
                 result.AddFactor(-0.15f * tributes.Count);
-
-                var attackerKingdom = (Kingdom)factionDeclaresWar;
-                var defenderKingdom = (Kingdom)factionDeclaredWar;
+   
                 KingdomDiplomacy diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(attackerKingdom);
                 if (diplomacy != null)
                 {

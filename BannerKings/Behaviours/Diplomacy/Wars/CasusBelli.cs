@@ -12,18 +12,20 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         private Func<War, bool> isFulfilled;
         private Func<War, bool> isInvalid;
         private Func<IFaction, IFaction, CasusBelli, bool> isAdequate;
+        private Func<Kingdom, bool> showAsOption;
         public CasusBelli(string id) : base(id)
         {
         }
 
         public void Initialize(TextObject name, TextObject description, float conquest, float raid, float capture, float declareWarScore,
             Func<War, bool> isFulfilled, Func<War, bool> isInvalid, Func<IFaction, IFaction, CasusBelli, bool> isAdequate,
-            Dictionary<TraitObject, float> traitWeights)
+            Func<Kingdom, bool> showAsOption, Dictionary<TraitObject, float> traitWeights)
         {
             Initialize(name, description);
             this.isFulfilled = isFulfilled;
             this.isInvalid = isInvalid;
             this.isAdequate = isAdequate;
+            this.showAsOption = showAsOption;
             TraitWeights = traitWeights;
             ConquestWeight = conquest;
             RaidWeight = raid;
@@ -35,7 +37,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         {
             var copy = new CasusBelli(StringId);
             copy.Initialize(Name, Description, ConquestWeight, RaidWeight, DeclareWarScore,
-                CaptureWeight, IsFulfilled, IsInvalid, IsAdequate, TraitWeights);
+                CaptureWeight, IsFulfilled, IsInvalid, IsAdequate, ShowAsOption, TraitWeights);
             return copy;
         }
 
@@ -60,6 +62,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         public bool IsFulfilled(War war) => isFulfilled(war);
         public bool IsInvalid(War war) => isInvalid(war);
         public bool IsAdequate(IFaction faction1, IFaction faction2, CasusBelli casusBelli) => isAdequate(faction1, faction2, casusBelli);
+        public bool ShowAsOption(Kingdom kingdom) => showAsOption(kingdom);
 
         public override bool Equals(object obj)
         {

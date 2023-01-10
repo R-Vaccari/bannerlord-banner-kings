@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Titles.Laws;
+﻿using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Managers.Titles.Laws;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -14,7 +15,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
         public void Initialize(TextObject name, TextObject description, TraitObject mainTrait,
             bool demandsCouncil, bool allowsCommoners, bool allowsNobles, List<PolicyObject> supportedPolicy,
-            List<PolicyObject> shunnedPolicies, List<DemesneLaw> supportedLaws, List<DemesneLaw> shunnedLaws)
+            List<PolicyObject> shunnedPolicies, List<DemesneLaw> supportedLaws, List<DemesneLaw> shunnedLaws,
+            List<CasusBelli> supportedCasusBelli)
         {
             Initialize(name, description);
             MainTrait = mainTrait;
@@ -25,6 +27,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             ShunnedPolicies = shunnedPolicies;
             SupportedLaws = supportedLaws;
             ShunnedLaws = shunnedLaws;
+            SupportedCasusBelli = supportedCasusBelli;
         }
 
         public TraitObject MainTrait { get; private set; }
@@ -37,5 +40,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         public List<PolicyObject> ShunnedPolicies { get; private set; }
         public List<DemesneLaw> SupportedLaws { get; private set; }
         public List<DemesneLaw> ShunnedLaws { get; private set; }
+        public List<CasusBelli> SupportedCasusBelli { get; private set; }
     }
 }

@@ -34,6 +34,10 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     var settlement = casusBelli.Fief;
                     return settlement != null && settlement.Culture == faction1.Culture && settlement.Culture != faction2.Culture;
                 },
+                (Kingdom kingdom) =>
+                {
+                    return true;
+                },
                 new Dictionary<TraitObject, float>()
                 {
 
@@ -66,6 +70,16 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     }
                     var settlement = casusBelli.Fief;
                     return settlement != null && settlement.Culture == faction1.Culture && settlement.Culture != faction2.Culture;
+                },
+                (Kingdom kingdom) =>
+                {
+                    var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                    if (title != null && title.contract.Government == Managers.Titles.GovernmentType.Imperial)
+                    {
+                        return true;
+                    }
+
+                    return false;
                 },
                 new Dictionary<TraitObject, float>()
                 {
