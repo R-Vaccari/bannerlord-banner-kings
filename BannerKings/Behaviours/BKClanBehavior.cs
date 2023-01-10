@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BannerKings.Managers.Court;
-using BannerKings.Managers.Goals;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Settings;
@@ -307,6 +306,30 @@ namespace BannerKings.Behaviours
                         InformationManager.ShowInquiry(new InquiryData(
                             peerage.Name.ToString(),
                             new TextObject("{=dVTqLz5i}As part of joinning a realm, the {CLAN} is receiving {PEERAGE}. {TEXT}")
+                            .SetTextVariable("CLAN", Clan.PlayerClan.Name)
+                            .SetTextVariable("PEERAGE", peerage.Name)
+                            .SetTextVariable("TEXT", peerage.PeerageGrantedText())
+                            .ToString(),
+                            true,
+                            false,
+                            GameTexts.FindText("str_ok").ToString(),
+                            String.Empty,
+                            null,
+                            null));
+                    }
+                }
+
+                if (clan.Kingdom.RulingClan == clan && (council.Peerage == null || !council.Peerage.CanHaveFief))
+                {
+                    council.SetPeerage(new Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"), true,
+                                true, true, true, true, false));
+
+                    if (clan == Clan.PlayerClan)
+                    {
+                        var peerage = council.Peerage;
+                        InformationManager.ShowInquiry(new InquiryData(
+                            peerage.Name.ToString(),
+                            new TextObject("{=!}As part of beng a ruling clan, the {CLAN} is now considered to have {PEERAGE}. {TEXT}")
                             .SetTextVariable("CLAN", Clan.PlayerClan.Name)
                             .SetTextVariable("PEERAGE", peerage.Name)
                             .SetTextVariable("TEXT", peerage.PeerageGrantedText())
