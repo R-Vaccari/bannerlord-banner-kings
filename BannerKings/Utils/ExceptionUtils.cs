@@ -22,7 +22,9 @@ namespace BannerKings.Utils
                     .SetTextVariable("CLASS", className)
                     .ToString(),
                     ex);
-                File.AppendAllText(path + fileName, Environment.NewLine + exception.Message + Environment.NewLine + ex.StackTrace);
+                File.AppendAllText(path + fileName, Environment.NewLine + "Version: " + BannerKingsConfig.Instance.VersionName + 
+                    Environment.NewLine + exception.Message + 
+                    Environment.NewLine + ex.StackTrace);
                 if (notifty)
                 {
                     InformationManager.DisplayMessage(new InformationMessage(
