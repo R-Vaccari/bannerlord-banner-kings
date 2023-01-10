@@ -351,7 +351,7 @@ namespace BannerKings.UI.Management
                     {
                         tariffDecision.OnChange(value);
                         RefreshValues();
-                    }, new TextObject(slaveDecision.GetHint()));
+                    }, new TextObject(tariffDecision.GetHint()));
 
                 slaveTaxToogle = new DecisionElement()
                     .SetAsBooleanOption(slaveTaxDecision.GetName(), slaveTaxDecision.Enabled, delegate(bool value)
