@@ -3,12 +3,17 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKDiplomacyModel : DefaultDiplomacyModel
     {
+        public override int GetInfluenceCostOfProposingWar(Kingdom proposingKingdom)
+        {
+            return 100;
+        }
         public override float GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan, out TextObject warReason)
         {
             return GetScoreOfDeclaringWar(factionDeclaresWar, factionDeclaredWar, evaluatingClan, false, out warReason).ResultNumber;
@@ -32,6 +37,9 @@ namespace BannerKings.Models.Vanilla
             {
                 return new ExplainedNumber(-50000f);
             }
+
+            WarStats attackerStats = CalculateWarStats(factionDeclaresWar, factionDeclaredWar);
+            float attackerScore = attackerStats.Strength + attackerStats.ValueOfSettlements - (attackerStats.TotalStrengthOfEnemies * 1.25f);
 
             if (factionDeclaredWar.IsKingdomFaction && factionDeclaresWar.IsKingdomFaction)
             {
@@ -62,17 +70,23 @@ namespace BannerKings.Models.Vanilla
                         result.Add(casusBelli.DeclareWarScore);
                     }
                 }
-            }     
 
-            WarStats attackerStats = CalculateWarStats(factionDeclaresWar, factionDeclaredWar);
+                foreach (Kingdom enemyKingdom in FactionManager.GetEnemyKingdoms(attackerKingdom))
+                {
+                    WarStats enemyStats = CalculateWarStats(factionDeclaredWar, factionDeclaresWar);
+                    float enemyScore = enemyStats.Strength + enemyStats.ValueOfSettlements - (enemyStats.TotalStrengthOfEnemies * 1.25f);
+                    float proportion = MathF.Clamp((attackerScore / (enemyScore * 4f)) - 1f, -1f, 0f);
+                    result.AddFactor(proportion);
+                }
+            }     
+           
             WarStats defenderStats = CalculateWarStats(factionDeclaredWar, factionDeclaresWar);
-            float attackerScore = attackerStats.Strength + attackerStats.ValueOfSettlements - (attackerStats.TotalStrengthOfEnemies * 1.25f);
             float defenderScore = defenderStats.Strength + defenderStats.ValueOfSettlements - (defenderStats.TotalStrengthOfEnemies * 1.25f);
             float scoreProportion = (attackerScore / defenderScore) - 1f;
             result.AddFactor(scoreProportion);
 
             float relations = attackerStats.RulingClan.GetRelationWithClan(defenderStats.RulingClan);
-            result.AddFactor(relations * -0.3f);
+            result.AddFactor(relations * -0.003f);
 
             if (evaluatingPeace)
             {

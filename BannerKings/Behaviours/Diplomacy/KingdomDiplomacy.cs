@@ -1,6 +1,7 @@
 ﻿using BannerKings.Behaviours.Diplomacy.Wars;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -29,17 +30,54 @@ namespace BannerKings.Behaviours.Diplomacy
             return false;
         }
 
-        public List<CasusBelli> GetAvailableCasusBelli(Kingdom kingdom)
+        public List<CasusBelli> GetAvailableCasusBelli(Kingdom targetKingdom = null)
+        {
+            if (targetKingdom != null)
+            {
+                return GetTargetKingdomCasusBelli(targetKingdom);
+            }
+
+            var list = new List<CasusBelli>();
+            foreach (var kingdom in Kingdom.All)
+            {
+                list.AddRange(GetTargetKingdomCasusBelli(kingdom));
+            }
+
+            return list;
+        }
+
+        private List<CasusBelli> GetTargetKingdomCasusBelli(Kingdom targetKingdom)
         {
             var list = new List<CasusBelli>();
-            foreach (var fief in kingdom.Fiefs)
+            foreach (var fief in targetKingdom.Fiefs)
             {
                 CasusBelli liberation = DefaultCasusBelli.Instance.CulturalLiberation.GetCopy();
-                liberation.Fief = fief.Settlement;
-                if (liberation.IsAdequate(Kingdom, kingdom, liberation))
+                liberation.SetInstanceData(Kingdom, targetKingdom, fief.Settlement);
+                if (liberation.IsAdequate(Kingdom, liberation.Defender, liberation))
                 {
                     list.Add(liberation);
                 }
+            }
+
+            CasusBelli greatRaid = DefaultCasusBelli.Instance.GreatRaid.GetCopy();
+            greatRaid.SetInstanceData(Kingdom, targetKingdom);
+            if (greatRaid.IsAdequate(Kingdom, targetKingdom, greatRaid))
+            {
+                list.Add(greatRaid);
+            }
+
+            CasusBelli invasion = DefaultCasusBelli.Instance.Invasion.GetCopy();
+            invasion.SetInstanceData(Kingdom, targetKingdom);
+            if (invasion.IsAdequate(Kingdom, targetKingdom, invasion))
+            {
+                list.Add(invasion);
+            }
+
+            CasusBelli superiority = DefaultCasusBelli.Instance.ImperialSuperiority.GetCopy();
+            superiority.SetInstanceData(Kingdom, targetKingdom);
+            if (superiority.IsAdequate(Kingdom, targetKingdom, superiority))
+            {
+                list.Add(superiority);
             }
 
             return list;

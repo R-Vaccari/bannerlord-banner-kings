@@ -13,13 +13,14 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         private Func<War, bool> isInvalid;
         private Func<IFaction, IFaction, CasusBelli, bool> isAdequate;
         private Func<Kingdom, bool> showAsOption;
+        private TextObject warDeclaredText;
         public CasusBelli(string id) : base(id)
         {
         }
 
         public void Initialize(TextObject name, TextObject description, float conquest, float raid, float capture, float declareWarScore,
             Func<War, bool> isFulfilled, Func<War, bool> isInvalid, Func<IFaction, IFaction, CasusBelli, bool> isAdequate,
-            Func<Kingdom, bool> showAsOption, Dictionary<TraitObject, float> traitWeights)
+            Func<Kingdom, bool> showAsOption, Dictionary<TraitObject, float> traitWeights, TextObject warDeclaredText)
         {
             Initialize(name, description);
             this.isFulfilled = isFulfilled;
@@ -31,15 +32,33 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             RaidWeight = raid;
             CaptureWeight = capture;
             DeclareWarScore = declareWarScore;
+            this.warDeclaredText = warDeclaredText;
         }
 
         public CasusBelli GetCopy()
         {
             var copy = new CasusBelli(StringId);
-            copy.Initialize(Name, Description, ConquestWeight, RaidWeight, DeclareWarScore,
-                CaptureWeight, IsFulfilled, IsInvalid, IsAdequate, ShowAsOption, TraitWeights);
+            copy.Initialize(Name, Description, ConquestWeight, RaidWeight, CaptureWeight,
+                DeclareWarScore, IsFulfilled, IsInvalid, IsAdequate, ShowAsOption, TraitWeights, 
+                warDeclaredText);
             return copy;
         }
+
+        public void SetInstanceData(Kingdom attacker, Kingdom defender, Settlement fief = null)
+        {
+            Attacker = attacker;
+            Defender = defender;
+            Fief = fief;
+        }
+
+        public TextObject WarDeclaredText => warDeclaredText.SetTextVariable("FIEF", Fief != null ? Fief.Name : new TextObject())
+            .SetTextVariable("ATTACKER", Attacker != null ? Attacker.Name : new TextObject())
+            .SetTextVariable("DEFENDER", Defender != null ? Defender.Name : new TextObject());
+
+        public TextObject QueryNameText => Fief != null ? new TextObject("{=!}{FIEF} - {NAME}")
+            .SetTextVariable("FIEF", Fief.Name)
+            .SetTextVariable("NAME", Name)
+            : Name;
 
         public float DeclareWarScore { get; private set; }
         private Dictionary<TraitObject, float> TraitWeights { get; set; }
@@ -57,7 +76,9 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             return result;
         }
 
-        public Settlement Fief { get; set; }
+        public Settlement Fief { get; private set; }
+        public Kingdom Attacker { get; private set; }
+        public Kingdom Defender { get; private set; }
 
         public bool IsFulfilled(War war) => isFulfilled(war);
         public bool IsInvalid(War war) => isInvalid(war);

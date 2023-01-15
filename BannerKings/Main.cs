@@ -1,4 +1,6 @@
 ﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours.Diplomacy;
+using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
 using BannerKings.Behaviours.Workshops;
@@ -60,6 +62,7 @@ namespace BannerKings
             
             campaignStarter.AddBehavior(new BKWorkshopBehavior());
             campaignStarter.AddBehavior(new BKGentryBehavior());
+            campaignStarter.AddBehavior(new BKDiplomacyBehavior());
             //campaignStarter.AddBehavior(new BKCombatBehavior());
 
             campaignStarter.AddModel(new BKPrisonerModel());
