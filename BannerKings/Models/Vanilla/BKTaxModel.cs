@@ -269,10 +269,6 @@ namespace BannerKings.Models.Vanilla
             if (data != null)
             {
                 CalculateDueTax(data, (float)result.ResultNumber);
-                if (applyWithdrawal)
-                {
-                    data.VillageData.LastPayment = (int)result.ResultNumber;
-                }
             }
 
             return result;
