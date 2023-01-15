@@ -12,6 +12,13 @@ namespace BannerKings.Behaviours.Diplomacy
         public List<Kingdom> TradePacts { get; private set; }
         public Dictionary<Kingdom, CampaignTime> Truces { get; private set; }
 
+        public KingdomDiplomacy(Kingdom kingdom)
+        {
+            Kingdom = kingdom;
+            TradePacts = new List<Kingdom>();
+            Truces = new Dictionary<Kingdom, CampaignTime>();
+        }
+
         public bool HasValidTruce(Kingdom kingdom)
         {
             if (Truces.ContainsKey(kingdom))

@@ -1,7 +1,6 @@
 ﻿using BannerKings.Behaviours.Diplomacy;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
@@ -56,19 +55,6 @@ namespace BannerKings.Models.Vanilla
                     if (diplomacy.HasTradePact(defenderKingdom))
                     {
                         result.AddFactor(-0.25f);
-                    }
-
-                    if (diplomacy.HasValidTruce(defenderKingdom))
-                    {
-                        float honor = attackerKingdom.Leader.GetTraitLevel(DefaultTraits.Honor);
-                        if (honor >= 0)
-                        {
-                            return new ExplainedNumber(-50000f);
-                        }
-                        else
-                        {
-                            result.AddFactor(-0.9f);
-                        }
                     }
 
                     foreach (var casusBelli in diplomacy.GetAvailableCasusBelli(defenderKingdom))

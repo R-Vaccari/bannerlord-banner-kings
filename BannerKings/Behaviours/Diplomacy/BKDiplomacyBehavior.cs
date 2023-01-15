@@ -29,10 +29,34 @@ namespace BannerKings.Behaviours.Diplomacy
         {
             CampaignEvents.WarDeclared.AddNonSerializedListener(this, OnWarDeclared);
             CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnDailyTickClan);
+            CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnNewGameCreated);
+            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnNewGameCreated);
+            CampaignEvents.KingdomCreatedEvent.AddNonSerializedListener(this, OnKingdomCreated);
         }
 
         public override void SyncData(IDataStore dataStore)
         {
+        }
+
+        private void OnNewGameCreated(CampaignGameStarter starter)
+        {
+            InitializeDiplomacies();
+        }
+
+        private void InitializeDiplomacies()
+        {
+            foreach (var kingdom in Kingdom.All)
+            {
+                if (!kingdomDiplomacies.ContainsKey(kingdom))
+                {
+                    kingdomDiplomacies.Add(kingdom, new KingdomDiplomacy(kingdom));
+                }
+            }
+        }
+
+        private void OnKingdomCreated(Kingdom kingdom)
+        {
+            kingdomDiplomacies.Add(kingdom, new KingdomDiplomacy(kingdom));
         }
 
         private void OnDailyTickClan(Clan clan)
