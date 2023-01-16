@@ -6,6 +6,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.Election;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Diplomacy;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -16,6 +17,19 @@ namespace BannerKings.Behaviours.Diplomacy
     public class BKDiplomacyBehavior : BannerKingsBehavior
     {
         private Dictionary<Kingdom, KingdomDiplomacy> kingdomDiplomacies = new Dictionary<Kingdom, KingdomDiplomacy>();
+        private List<War> wars = new List<War>();
+
+        public CasusBelli GetWarJustification(IFaction faction1, IFaction faction2)
+        {
+            War war = wars.FirstOrDefault(x => (x.Attacker == faction1 || x.Defender == faction1) && 
+            (x.Attacker == faction2 || x.Defender == faction2));
+            if (war != null)
+            {
+                return war.CasusBelli;
+            }
+
+            return null;
+        }
 
         public KingdomDiplomacy GetKingdomDiplomacy(Kingdom kingdom)
         {
@@ -32,6 +46,12 @@ namespace BannerKings.Behaviours.Diplomacy
             return null;
         }
 
+        public void TriggerJustifiedWar(CasusBelli justification, Kingdom attacker, Kingdom defender)
+        {
+            wars.Add(new War(attacker, defender, justification));
+            InformationManager.DisplayMessage(new InformationMessage(justification.WarDeclaredText.ToString()));
+        }
+
         public override void RegisterEvents()
         {
             CampaignEvents.WarDeclared.AddNonSerializedListener(this, OnWarDeclared);
@@ -39,6 +59,7 @@ namespace BannerKings.Behaviours.Diplomacy
             CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnNewGameCreated);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnNewGameCreated);
             CampaignEvents.KingdomCreatedEvent.AddNonSerializedListener(this, OnKingdomCreated);
+            CampaignEvents.AiHourlyTickEvent.AddNonSerializedListener(this, OnAiHourlyTick);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -46,6 +67,11 @@ namespace BannerKings.Behaviours.Diplomacy
             if (kingdomDiplomacies == null)
             {
                 kingdomDiplomacies = new Dictionary<Kingdom, KingdomDiplomacy>();
+            }
+
+            if (wars == null)
+            {
+                wars = new List<War>();
             }
         }
 
@@ -73,6 +99,11 @@ namespace BannerKings.Behaviours.Diplomacy
         private void OnKingdomCreated(Kingdom kingdom)
         {
             kingdomDiplomacies.Add(kingdom, new KingdomDiplomacy(kingdom));
+        }
+
+        private void OnAiHourlyTick(MobileParty party, PartyThinkParams p)
+        {
+
         }
 
         private void OnDailyTickClan(Clan clan)

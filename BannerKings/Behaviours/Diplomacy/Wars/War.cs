@@ -4,6 +4,14 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 {
     public class War
     {
+        public War(IFaction attacker, IFaction defender, CasusBelli casusBelli, Kingdom sovereign = null)
+        {
+            Attacker = attacker;
+            Defender = defender;
+            CasusBelli = casusBelli;
+            Sovereign = sovereign;
+        }
+
         public IFaction Attacker { get; }
         public IFaction Defender { get; }
         public CasusBelli CasusBelli { get; }

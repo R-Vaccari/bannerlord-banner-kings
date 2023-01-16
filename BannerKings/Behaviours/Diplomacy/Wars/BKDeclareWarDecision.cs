@@ -1,6 +1,5 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
-using TaleWorlds.Library;
 
 namespace BannerKings.Behaviours.Diplomacy.Wars
 {
@@ -15,7 +14,12 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
             base.ApplyChosenOutcome(chosenOutcome);
-            InformationManager.DisplayMessage(new InformationMessage(CasusBelli.WarDeclaredText.ToString()));
+            DeclareWarDecisionOutcome outcome = (DeclareWarDecisionOutcome)chosenOutcome;
+            if (outcome.ShouldWarBeDeclared)
+            {
+                Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
+                    .TriggerJustifiedWar(CasusBelli, Kingdom, FactionToDeclareWarOn as Kingdom);
+            }
         }
     }
 }
