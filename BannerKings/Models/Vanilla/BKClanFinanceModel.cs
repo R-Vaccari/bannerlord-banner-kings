@@ -189,7 +189,7 @@ namespace BannerKings.Models.Vanilla
             if (totalMarketTaxes > 0)
             {
                 result.Add(totalMarketTaxes,
-                                    new TextObject("{=!}Taxes on Markets"));
+                                    new TextObject("{=y1Jzq1cv}Taxes on Markets"));
             }
 
             var dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassals(clan);

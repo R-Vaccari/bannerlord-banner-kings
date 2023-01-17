@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -67,7 +67,7 @@ namespace BannerKings.Behaviours.Workshops
             starter.AddRepeatablePlayerLine("lord_workshop_select_workshop",
                 "lord_workshop_select_workshop", 
                 "lord_workshop_buy_response", 
-                "{=!}{WORKSHOP_NAME}", 
+                "{=V9FPM5aG}{WORKSHOP_NAME}", 
                 "{=5z4hEq68}I am thinking of a different kind of workshop.", 
                 "workshop_owner_notable_multiple_response",
                 BuyLordWorkshopSelectMultiple, 
@@ -81,7 +81,7 @@ namespace BannerKings.Behaviours.Workshops
             starter.AddDialogLine("lord_workshop_buy_response",
                 "lord_workshop_buy_response",
                 "lord_workshop_player_options", 
-                "{=!}I'm willing to sell. But it will cost you {COST} {GOLD_ICON}. {PREMIUM} {INVENTORY} Are you willing to pay?", 
+                "{=hj2SDH6s}I'm willing to sell. But it will cost you {COST} {GOLD_ICON}. {PREMIUM} {INVENTORY} Are you willing to pay?", 
                 () =>
                 {
                     if (selectedWorkshop != null)
@@ -89,13 +89,13 @@ namespace BannerKings.Behaviours.Workshops
                         MBTextManager.SetTextVariable("COST", Campaign.Current.Models.WorkshopModel.GetBuyingCostForPlayer(selectedWorkshop));
                         if (selectedWorkshop.Owner.OwnedWorkshops.Count == 1)
                         {
-                            MBTextManager.SetTextVariable("PREMIUM", new TextObject("{=!}I'll be charging you a premium of 15% as this is my only workshop."));
+                            MBTextManager.SetTextVariable("PREMIUM", new TextObject("{=13LGeTLO}I'll be charging you a premium of 15% as this is my only workshop."));
                         }
 
                         var inventoryCost = BannerKingsConfig.Instance.WorkshopModel.GetInventoryCost(selectedWorkshop);
                         if (inventoryCost > 0)
                         {
-                            MBTextManager.SetTextVariable("INVENTORY", new TextObject("{=!}{INVENTORY_PRICE} {GOLD_ICON} is added to the final price as the workshop's inventory value.")
+                            MBTextManager.SetTextVariable("INVENTORY", new TextObject("{=FWQjpwex}{INVENTORY_PRICE} {GOLD_ICON} is added to the final price as the workshop's inventory value.")
                                 .SetTextVariable("INVENTORY_PRICE", inventoryCost));
                         }
 

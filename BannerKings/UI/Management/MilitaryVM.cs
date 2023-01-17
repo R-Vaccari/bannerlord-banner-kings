@@ -282,7 +282,7 @@ namespace BannerKings.UI.Management
             }
             else
             {
-                RaiseMilitiaButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Raise militia").ToString(), 
+                RaiseMilitiaButton = new DecisionElement().SetAsButtonOption(new TextObject("{=mGfT9o4X}Raise militia").ToString(), 
                     delegate
                 {
                     var serfs = data.GetTypeCount(PopType.Serfs);

@@ -8,7 +8,7 @@ namespace BannerKings.Components
 {
     internal class MilitiaComponent : BannerKingsComponent
     {
-        public MilitiaComponent(Settlement origin, MobileParty escortTarget) : base(origin, "{=!}Raised Militia from {ORIGIN}")
+        public MilitiaComponent(Settlement origin, MobileParty escortTarget) : base(origin, "{=scETr7Ej}Raised Militia from {ORIGIN}")
         {
             Escort = escortTarget;
             Behavior = AiBehavior.EscortParty;
@@ -18,7 +18,7 @@ namespace BannerKings.Components
 
         [SaveableProperty(1002)] public AiBehavior Behavior { get; set; }
 
-        public override TextObject Name => new TextObject("{=!}Raised Militia from {SETTLEMENT}")
+        public override TextObject Name => new TextObject("Raised Militia from {SETTLEMENT}")
             .SetTextVariable("SETTLEMENT", HomeSettlement.Name);
 
         private static MobileParty CreateParty(string id, Settlement origin, MobileParty escortTarget)

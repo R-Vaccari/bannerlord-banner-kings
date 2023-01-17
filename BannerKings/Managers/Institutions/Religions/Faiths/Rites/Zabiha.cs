@@ -24,7 +24,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         public override void SetDialogue()
         {
             MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM",
-                new TextObject("{=!}Will you commit to the slaughter, as the Code and the Patriarch have taught our kin?"));
+                new TextObject("{=TmB613jp}Will you commit to the slaughter, as the Code and the Patriarch have taught our kin?"));
         }
     }
 }

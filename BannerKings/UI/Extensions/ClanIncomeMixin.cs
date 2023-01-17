@@ -62,11 +62,11 @@ namespace BannerKings.UI.Extensions
                         if (data.IsRunningOnInventory)
                         {
                             inventory = true;
-                            state = new TextObject("{=!}Workshop is running on inventory!");
+                            state = new TextObject("{=VX9LJJpS}Workshop is running on inventory!");
                         }
 
                         WorkshopInfo.Add(new InformationElement(GameTexts.FindText("str_inventory").ToString() + ':',
-                            new TextObject("{=!}{NUMBER} / {CAPACITY}")
+                            new TextObject("{=8YCJrv0F}{NUMBER} / {CAPACITY}")
                             .SetTextVariable("NUMBER", data.GetInventoryCount())
                             .SetTextVariable("CAPACITY", data.GetInventoryCapacity())
                             .ToString(),

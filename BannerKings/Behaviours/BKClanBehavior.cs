@@ -48,7 +48,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("conversation_prisoner_chat_player",
                 "prisoner_recruit_start_player",
                 "companion_freed_after_battle",
-                "{=!}You are free to go.",
+                "{=mgmaiTbH}You are free to go.",
                 null,
                 null,
                 100);
@@ -56,7 +56,7 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("companion_freed_after_battle",
                 "companion_freed_after_battle", 
                 "close_window",
-                "{=!}Thank you, {?PLAYER.GENDER}madam{?}sir{\\?}. I will tell the {CLAN} of your deed.", 
+                "{=jm464D6p}Thank you, {?PLAYER.GENDER}madam{?}sir{\\?}. I will tell the {CLAN} of your deed.", 
                 null, 
                 () =>
                 {
@@ -70,7 +70,7 @@ namespace BannerKings.Behaviours
                 110, null);
 
             starter.AddDialogLine("default_conversation_for_wrongly_created_heroes", "start", "close_window", 
-                "{=!}I am under your mercy.", 
+                "{=fAXkhM0C}I am under your mercy.", 
                 () => Hero.OneToOneConversationHero != null && Hero.OneToOneConversationHero.CompanionOf != null,
                 () =>
                 {
@@ -81,7 +81,7 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("companion_captured",
               "companion_captured",
               "close_window",
-              "{=!}As you say.",
+              "{=odndVRfW}As you say.",
               null,
               () =>
               {
@@ -91,14 +91,14 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("default_conversation_for_wrongly_created_heroes",
               "start",
               "companion_captured",
-              "{=!}You'll be coming with me now.",
+              "{=5S2TAT0h}You'll be coming with me now.",
               () => IsCompanionOfAnotherClan() && Campaign.Current.CurrentConversationContext == ConversationContext.CapturedLord,
               null);
 
             starter.AddPlayerLine("meet_wanderer_different_clan", 
                 "wanderer_meet_player_response", 
                 "wanderer_different_clan_response",
-                "{=!}My name is {PLAYER.NAME}, {?PLAYER.GENDER}madam{?}sir{\\?}. Tell me about yourself.",
+                "{=ZCdo5ZKf}My name is {PLAYER.NAME}, {?PLAYER.GENDER}madam{?}sir{\\?}. Tell me about yourself.",
                 IsCompanionOfAnotherClan,
                 null);
 
@@ -329,7 +329,7 @@ namespace BannerKings.Behaviours
                         var peerage = council.Peerage;
                         InformationManager.ShowInquiry(new InquiryData(
                             peerage.Name.ToString(),
-                            new TextObject("{=!}As part of beng a ruling clan, the {CLAN} is now considered to have {PEERAGE}. {TEXT}")
+                            new TextObject("{=tEWSy6Na}As part of beng a ruling clan, the {CLAN} is now considered to have {PEERAGE}. {TEXT}")
                             .SetTextVariable("CLAN", Clan.PlayerClan.Name)
                             .SetTextVariable("PEERAGE", peerage.Name)
                             .SetTextVariable("TEXT", peerage.PeerageGrantedText())
@@ -469,6 +469,11 @@ namespace BannerKings.Behaviours
 
         private void EvaluateRecruitCompanion(Clan clan)
         {
+            if (!BannerKingsSettings.Instance.AICompanions)
+            {
+                return;
+            }
+
             RunWeekly(() =>
             {
                 if (clan.Leader.PartyBelongedTo == null || clan.Leader.IsPrisoner || clan.Companions.Count >= clan.CompanionLimit)
@@ -1064,7 +1069,7 @@ namespace BannerKings.Behaviours
                         }
 
                         var lordship = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
-                        if (lordship.deJure.MapFaction != clan.MapFaction)
+                        if (lordship != null && lordship.deJure != null && lordship.deJure.MapFaction != clan.MapFaction)
                         {
                             addedVillages.Add(village, clan.Leader);
                         }
