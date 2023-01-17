@@ -226,7 +226,7 @@ namespace BannerKings.Models.Vanilla
                 result.Add((acres * data.GetAcreOutput("pasture")) / Math.Max(item.HorseComponent.MeatCount, 1));
                 if (item.IsMountable)
                 {
-                    result.AddFactor(result.ResultNumber * item.Tierf * -1f);
+                    result.AddFactor(item.Tierf * -0.12f);
                 }
             }
 
