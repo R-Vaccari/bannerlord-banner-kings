@@ -56,7 +56,7 @@ namespace BannerKings.Models.Vanilla
                     result.Add(-0.5f * foodProduction, GameTexts.FindText("str_season_" + season));
                     break;
                 case 1f:
-                    result.AddFactor(0.5f * foodProduction, GameTexts.FindText("str_season_" + season));
+                    result.Add(0.5f * foodProduction, GameTexts.FindText("str_season_" + season));
                     break;
             }
 
