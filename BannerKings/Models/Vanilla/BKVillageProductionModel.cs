@@ -168,7 +168,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             bool woodland = AddWoodlandProcution(ref result, serfs, slaves, item, data.LandData);
-            bool animal = AddAnimalProcution(ref result, serfs, slaves, item, data.LandData);
+            bool animal = AddAnimalProcution(ref result, item, data.LandData);
             bool farm = AddFarmProcution(ref result, serfs, slaves, item, data);
             if (!woodland && !animal && !farm)
             {
@@ -217,7 +217,7 @@ namespace BannerKings.Models.Vanilla
             return valid;
         }
 
-        private bool AddAnimalProcution(ref ExplainedNumber result, float serfs, float slaves, ItemObject item, LandData data)
+        private bool AddAnimalProcution(ref ExplainedNumber result, ItemObject item, LandData data)
         {
             bool valid = item.IsAnimal || item.IsMountable;
             if (valid)
@@ -226,7 +226,7 @@ namespace BannerKings.Models.Vanilla
                 result.Add((acres * data.GetAcreOutput("pasture")) / Math.Max(item.HorseComponent.MeatCount, 1));
                 if (item.IsMountable)
                 {
-                    result.AddFactor(-0.5f);
+                    result.AddFactor(item.Tierf * -0.12f);
                 }
             }
 

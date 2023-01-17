@@ -56,7 +56,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             if (GetFulfiller().Clan.Fiefs.Count == 0)
             {
-                failedReasons.Add(new TextObject("{=!}No adequate fief to make a feast"));
+                failedReasons.Add(new TextObject("{=MeYrOaFb}No adequate fief to make a feast"));
             }
 
             /*

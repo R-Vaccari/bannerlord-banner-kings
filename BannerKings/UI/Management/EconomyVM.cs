@@ -258,9 +258,9 @@ namespace BannerKings.UI.Management
                         .SetTextVariable("EXPLANATIONS", villageRevenue.GetExplanations())
                         .ToString()));
 
-                RevenueInfo.Add(new InformationElement(new TextObject("{=!}Last Payment:").ToString(),
+                RevenueInfo.Add(new InformationElement(new TextObject("{=krVcSaH5}Last Payment:").ToString(),
                     FormatFloatGain(villageData.LastPayment),
-                    new TextObject("{=!}The last payment this it's owner village has done.").ToString()));
+                    new TextObject("{=oGNtP5yt}The last payment this it's owner village has done.").ToString()));
 
                 ProductionInfo.Add(new InformationElement(new TextObject("{=KbTvcQko}Construction:").ToString(),
                     new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
@@ -351,7 +351,7 @@ namespace BannerKings.UI.Management
                     {
                         tariffDecision.OnChange(value);
                         RefreshValues();
-                    }, new TextObject(slaveDecision.GetHint()));
+                    }, new TextObject(tariffDecision.GetHint()));
 
                 slaveTaxToogle = new DecisionElement()
                     .SetAsBooleanOption(slaveTaxDecision.GetName(), slaveTaxDecision.Enabled, delegate(bool value)
@@ -419,7 +419,7 @@ namespace BannerKings.UI.Management
                 GameTexts.FindText("str_tournament")
                 .SetTextVariable("SETTLEMENT_NAME", settlement.Name)
                 .ToString(),
-                new TextObject("{=!}Select a prize for your tournament. The bigger is it's value, the more renown will be awarded to once the tournament is finished.").ToString(),
+                new TextObject("{=JdH9ubwj}Select a prize for your tournament. The bigger is it's value, the more renown will be awarded to once the tournament is finished.").ToString(),
                 null,
                 true,
                 1,

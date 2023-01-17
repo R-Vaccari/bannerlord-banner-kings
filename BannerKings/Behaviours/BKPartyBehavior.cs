@@ -127,7 +127,7 @@ namespace BannerKings.Behaviours
                 CharacterObject civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>()
                             .FirstOrDefault(x => x.StringId == "villager_" + settlement.Culture.StringId);
                 int count = MBRandom.RandomInt(12, 25);
-                var name = "{=!}Traders from {ORIGIN}";
+                var name = "{=ds9BcMxr}Traders from {ORIGIN}";
 
                 if (civilian != null)
                 {
@@ -461,15 +461,15 @@ namespace BannerKings.Behaviours
         private void AddDialog(CampaignGameStarter starter)
         {
             starter.AddDialogLine("traveller_serf_party_start", "start", "traveller_party_greeting",
-                "{=!}{?PLAYER.GENDER}M'lady!{?}M'lord!{\\?} We are humble folk, travelling between towns, looking for work and trade.",
+                "{=q8yhpkxZ}{?PLAYER.GENDER}M'lady!{?}M'lord!{\\?} We are humble folk, travelling between towns, looking for work and trade.",
                 traveller_serf_start_on_condition, null);
 
             starter.AddDialogLine("traveller_craftsman_party_start", "start", "traveller_party_greeting",
-                "{=!}Good day to you. We are craftsmen travelling for business purposes.",
+                "{=yJ91Ooas}Good day to you. We are craftsmen travelling for business purposes.",
                 traveller_craftsman_start_on_condition, null);
 
             starter.AddDialogLine("traveller_noble_party_start", "start", "traveller_party_greeting",
-                "{=!}Yes? Please do not interfere with our caravan.",
+                "{=eetBXdvK}Yes? Please do not interfere with our caravan.",
                 traveller_noble_start_on_condition, null);
 
 
@@ -483,11 +483,11 @@ namespace BannerKings.Behaviours
                 delegate { PlayerEncounter.LeaveEncounter = true; });
 
             starter.AddDialogLine("slavecaravan_friend_party_start", "start", "slavecaravan_party_greeting",
-                "{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, we are taking these rabble somewhere they can be put to good use.",
+                "{=jqSXkN5h}{?PLAYER.GENDER}My lady{?}My lord{\\?}, we are taking these rabble somewhere they can be put to good use.",
                 slavecaravan_amicable_on_condition, null);
 
             starter.AddDialogLine("slavecaravan_neutral_party_start", "start", "slavecaravan_party_greeting",
-                "{=!}If you're not planning to join those vermin back there, move away![rf:idle_angry][ib:aggressive]",
+                "{=WTVAdsFN}If you're not planning to join those vermin back there, move away![rf:idle_angry][ib:aggressive]",
                 slavecaravan_neutral_on_condition, null);
 
             starter.AddPlayerLine("slavecaravan_party_leave", "slavecaravan_party_greeting", "close_window",
@@ -500,11 +500,11 @@ namespace BannerKings.Behaviours
                 null);
 
             starter.AddDialogLine("slavecaravan_party_threat_response", "slavecaravan_threat", "close_window",
-                "{=!}One more for the mines! Lads, get the whip![rf:idle_angry][ib:aggressive]",
+                "{=18j2nO70}One more for the mines! Lads, get the whip![rf:idle_angry][ib:aggressive]",
                 null, delegate { PlayerEncounter.Current.IsEnemy = true; });
 
             starter.AddDialogLine("raised_militia_party_start", "start", "raised_militia_greeting",
-                "{=!}{?PLAYER.GENDER}M'lady!{?}M'lord!{\\?} We are ready to serve you.",
+                "{=SRg8cwUN}{?PLAYER.GENDER}M'lady!{?}M'lord!{\\?} We are ready to serve you.",
                 raised_militia_start_on_condition, null);
 
             starter.AddPlayerLine("raised_militia_party_follow", "raised_militia_greeting", "raised_militia_order",
@@ -518,7 +518,7 @@ namespace BannerKings.Behaviours
                 raised_militia_retreat_on_consequence);
 
             starter.AddDialogLine("raised_militia_order_response", "raised_militia_order", "close_window",
-                "{=!}Aye!",
+                "{=Oo88Sazm}Aye!",
                 null, delegate { PlayerEncounter.LeaveEncounter = true; });
         }
 

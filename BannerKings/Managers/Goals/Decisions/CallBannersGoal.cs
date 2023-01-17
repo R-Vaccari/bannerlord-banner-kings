@@ -27,8 +27,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public CallBannersGoal(Hero fulfiller = null) : base("goal_found_kingdom", GoalCategory.Kingdom, GoalUpdateType.Hero, fulfiller)
         {
-            var name = new TextObject("{=!}Call Banners");
-            var description = new TextObject("{=!}Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title.");
+            var name = new TextObject("{=zzjbxN9h}Call Banners");
+            var description = new TextObject("Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title.");
             Initialize(name, description);
             Refresh();
         }
@@ -75,7 +75,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             if (fulfiller.PartyBelongedTo == null)
             {
-                failedReasons.Add(new TextObject("{=!}Not in a party."));
+                failedReasons.Add(new TextObject("{=QHfkhG0b}Not in a party."));
             }
             else if (fulfiller.PartyBelongedTo.Army != null)
             {
@@ -85,7 +85,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var behavior = Campaign.Current.GetCampaignBehavior<BKArmyBehavior>();
             if (behavior.LastHeroArmy(fulfiller).ElapsedSeasonsUntilNow < 2f)
             {
-                failedReasons.Add(new TextObject("{=!}It has been less than 2 seasons since you last summoned your banners."));
+                failedReasons.Add(new TextObject("{=yG6r0iaK}It has been less than 2 seasons since you last summoned your banners."));
             }
             
             return failedReasons.IsEmpty();
@@ -129,14 +129,14 @@ namespace BannerKings.Managers.Goals.Decisions
                     ready = party.IsReady && party.Army == null && party.SiegeEvent == null;
                     if (vassal.Clan == Clan.PlayerClan)
                     {
-                        hint = new TextObject("{=!}Summon {HERO} to your army. They are a knight in your household. They currently lead {TROOPS} troops. Calling them will cost {INFLUENCE} influence.")
+                        hint = new TextObject("{=5v0L5y5A}Summon {HERO} to your army. They are a knight in your household. They currently lead {TROOPS} troops. Calling them will cost {INFLUENCE} influence.")
                             .SetTextVariable("HERO", vassal.Name)
                             .SetTextVariable("INFLUENCE", influence)
                             .SetTextVariable("TROOPS", troops);
                     }
                     else
                     {
-                        hint = new TextObject("{=!}Summon {HERO} to your army. They are a vassal and currently lead {TROOPS} troops. Calling them will cost {INFLUENCE} influence.")
+                        hint = new TextObject("{=M03ZVW56}Summon {HERO} to your army. They are a vassal and currently lead {TROOPS} troops. Calling them will cost {INFLUENCE} influence.")
                             .SetTextVariable("HERO", vassal.Name)
                             .SetTextVariable("INFLUENCE", influence)
                             .SetTextVariable("TROOPS", troops);
@@ -146,7 +146,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 {
                     (bool, TextObject) readyTuple = behavior.IsAvailableForSummoning(clan, estate);
                     ready = readyTuple.Item1;
-                    hint = new TextObject("{=!}Summon {HERO} to your army. They are landed gentry and will return to their property once the army is finished. Their estate can provide {TROOPS} troops. Calling them will cost {INFLUENCE} influence.\n\n{READY}")
+                    hint = new TextObject("{=djtn6LCe}Summon {HERO} to your army. They are landed gentry and will return to their property once the army is finished. Their estate can provide {TROOPS} troops. Calling them will cost {INFLUENCE} influence.\n\n{READY}")
                         .SetTextVariable("HERO", vassal.Name)
                         .SetTextVariable("INFLUENCE", influence)
                         .SetTextVariable("TROOPS", estate.GetManpower(PopulationManager.PopType.Serfs))
@@ -171,8 +171,8 @@ namespace BannerKings.Managers.Goals.Decisions
             Refresh();
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Call Banners").ToString(),
-                new TextObject("{=!}Summon your vassals to fulfill their duties.").ToString(),
+                new TextObject("{=zzjbxN9h}Call Banners").ToString(),
+                new TextObject("{=QDf3sOgR}Summon your vassals to fulfill their duties.").ToString(),
                 elements,
                 true,
                 elements.Count,
@@ -256,7 +256,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
 
                 InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=!}{HERO} has called his banners! {TROOPS} troops are gathering for war.")
+                    new TextObject("{=YZfBWynb}{HERO} has called his banners! {TROOPS} troops are gathering for war.")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("TROOPS", troops).ToString(),
                     Color.FromUint(4282569842U)));

@@ -48,7 +48,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("conversation_prisoner_chat_player",
                 "prisoner_recruit_start_player",
                 "companion_freed_after_battle",
-                "{=!}You are free to go.",
+                "{=mgmaiTbH}You are free to go.",
                 null,
                 null,
                 100);
@@ -56,7 +56,7 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("companion_freed_after_battle",
                 "companion_freed_after_battle", 
                 "close_window",
-                "{=!}Thank you, {?PLAYER.GENDER}madam{?}sir{\\?}. I will tell the {CLAN} of your deed.", 
+                "{=jm464D6p}Thank you, {?PLAYER.GENDER}madam{?}sir{\\?}. I will tell the {CLAN} of your deed.", 
                 null, 
                 () =>
                 {
@@ -70,7 +70,7 @@ namespace BannerKings.Behaviours
                 110, null);
 
             starter.AddDialogLine("default_conversation_for_wrongly_created_heroes", "start", "close_window", 
-                "{=!}I am under your mercy.", 
+                "{=fAXkhM0C}I am under your mercy.", 
                 () => Hero.OneToOneConversationHero != null && Hero.OneToOneConversationHero.CompanionOf != null,
                 () =>
                 {
@@ -81,7 +81,7 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("companion_captured",
               "companion_captured",
               "close_window",
-              "{=!}As you say.",
+              "{=odndVRfW}As you say.",
               null,
               () =>
               {
@@ -91,14 +91,14 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("default_conversation_for_wrongly_created_heroes",
               "start",
               "companion_captured",
-              "{=!}You'll be coming with me now.",
+              "{=5S2TAT0h}You'll be coming with me now.",
               () => IsCompanionOfAnotherClan() && Campaign.Current.CurrentConversationContext == ConversationContext.CapturedLord,
               null);
 
             starter.AddPlayerLine("meet_wanderer_different_clan", 
                 "wanderer_meet_player_response", 
                 "wanderer_different_clan_response",
-                "{=!}My name is {PLAYER.NAME}, {?PLAYER.GENDER}madam{?}sir{\\?}. Tell me about yourself.",
+                "{=ZCdo5ZKf}My name is {PLAYER.NAME}, {?PLAYER.GENDER}madam{?}sir{\\?}. Tell me about yourself.",
                 IsCompanionOfAnotherClan,
                 null);
 
@@ -318,6 +318,30 @@ namespace BannerKings.Behaviours
                             null));
                     }
                 }
+
+                if (clan.Kingdom.RulingClan == clan && (council.Peerage == null || !council.Peerage.CanHaveFief))
+                {
+                    council.SetPeerage(new Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"), true,
+                                true, true, true, true, false));
+
+                    if (clan == Clan.PlayerClan)
+                    {
+                        var peerage = council.Peerage;
+                        InformationManager.ShowInquiry(new InquiryData(
+                            peerage.Name.ToString(),
+                            new TextObject("{=tEWSy6Na}As part of beng a ruling clan, the {CLAN} is now considered to have {PEERAGE}. {TEXT}")
+                            .SetTextVariable("CLAN", Clan.PlayerClan.Name)
+                            .SetTextVariable("PEERAGE", peerage.Name)
+                            .SetTextVariable("TEXT", peerage.PeerageGrantedText())
+                            .ToString(),
+                            true,
+                            false,
+                            GameTexts.FindText("str_ok").ToString(),
+                            String.Empty,
+                            null,
+                            null));
+                    }
+                }
             }
 
             if (clan == Clan.PlayerClan || clan.IsUnderMercenaryService || clan.IsMinorFaction || clan.IsBanditFaction)
@@ -445,6 +469,11 @@ namespace BannerKings.Behaviours
 
         private void EvaluateRecruitCompanion(Clan clan)
         {
+            if (!BannerKingsSettings.Instance.AICompanions)
+            {
+                return;
+            }
+
             RunWeekly(() =>
             {
                 if (clan.Leader.PartyBelongedTo == null || clan.Leader.IsPrisoner || clan.Companions.Count >= clan.CompanionLimit)
@@ -1020,56 +1049,44 @@ namespace BannerKings.Behaviours
                     var lordships = BannerKingsConfig.Instance.TitleManager
                         .GetAllDeJure(clan)
                         .FindAll(x => x.type == TitleType.Lordship);
-                    foreach (var village in clan.Villages)
+                    var addedVillages = new Dictionary<Village, Hero>();
+
+                    foreach (FeudalTitle lordship in lordships)
                     {
-                        var title = lordships.FirstOrDefault(x => x.fief.Village == village);
-                        if (title == null)
+                        Village village = lordship.fief.Village;
+                        if (village.Settlement.MapFaction == clan.MapFaction)
                         {
-                            title = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
+                            addedVillages.Add(village, lordship.deJure);
                         }
-                        else
-                        {
-                            lordships.Remove(title);
-                        }
-
-                        var result = CalculateVillageIncome(ref goldChange, village, clan, applyWithdrawals);
-
-                        if (title != null)
-                        {
-                            var deJure = title.deJure;
-                            var knightOwned = title.deJure != clan.Leader && title.deJure.Clan == clan;
-                            if (knightOwned)
-                            {
-                                deJure.Gold += result;
-                                continue;
-                            }
-
-                            if (deJure.Clan.Kingdom == clan.Kingdom)
-                            {
-                                continue;
-                            }
-                        }
-
-                        totalGold += result;
                     }
 
-                    foreach (var lordship in lordships)
+                    foreach (Village village in clan.Villages)
                     {
-                        var village = lordship.fief.Village;
-                        var ownerClan = village.Settlement.OwnerClan;
-                        if (ownerClan.Kingdom == clan.Kingdom)
+                        if (addedVillages.ContainsKey(village))
                         {
-                            var result = CalculateVillageIncome(ref goldChange, village, clan, applyWithdrawals);
-                            var leaderOwned = lordship.deJure == clan.Leader;
-                            if (!leaderOwned)
-                            {
-                                var deJure = lordship.deJure;
-                                deJure.Gold += result;
-                            }
-                            else
-                            {
-                                totalGold += result;
-                            }
+                            continue;
+                        }
+
+                        var lordship = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
+                        if (lordship != null && lordship.deJure != null && lordship.deJure.MapFaction != clan.MapFaction)
+                        {
+                            addedVillages.Add(village, clan.Leader);
+                        }
+                    }
+
+                    foreach (var pair in addedVillages)
+                    {
+                        Hero owner = pair.Value;
+                        Village village = pair.Key;
+                        int income = CalculateVillageIncome(village);
+                        if (owner == clan.Leader)
+                        {
+                            totalGold += income;
+                        }
+
+                        if (applyWithdrawals)
+                        {
+                            ApplyWithdrawal(village, income, owner == clan.Leader ? null : owner);
                         }
                     }
 
@@ -1080,21 +1097,22 @@ namespace BannerKings.Behaviours
                 return true;
             }
 
-            private static int CalculateVillageIncome(ref ExplainedNumber goldChange, Village village, Clan clan,
-                bool applyWithdrawals)
+            private static void ApplyWithdrawal(Village village, int income, Hero payTo = null)
             {
-                var total = (int)BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(village, 
-                    false, 
-                    applyWithdrawals)
-                    .ResultNumber;
-
-                if (applyWithdrawals)
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
+                data.VillageData.LastPayment = income;
+                village.TradeTaxAccumulated -= MathF.Min(village.TradeTaxAccumulated, income);
+                if (payTo != null)
                 {
-                    village.TradeTaxAccumulated -= MathF.Min(village.TradeTaxAccumulated, total);
+                    payTo.Gold += income;
                 }
-
-                return total;
             }
+
+            private static int CalculateVillageIncome(Village village) => (int)BannerKingsConfig.Instance.TaxModel
+                .CalculateVillageTaxFromIncome(village,
+                    false,
+                    false)
+                    .ResultNumber;
         }
     }
 }

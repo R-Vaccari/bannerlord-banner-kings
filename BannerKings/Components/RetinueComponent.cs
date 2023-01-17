@@ -9,7 +9,7 @@ namespace BannerKings.Components
 {
     internal class RetinueComponent : BannerKingsComponent
     {
-        public RetinueComponent(Settlement origin) : base(origin, "{=!}Retinue from {ORIGIN}")
+        public RetinueComponent(Settlement origin) : base(origin, "{=9JxzuH5a}Retinue from {ORIGIN}")
         {
             behavior = AiBehavior.Hold;
         }

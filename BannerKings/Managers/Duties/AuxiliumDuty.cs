@@ -19,7 +19,7 @@ namespace BannerKings.Managers.Duties
             RunnedHours = 0;
             ArmyHours = 0;
             InformationManager.ShowInquiry(new InquiryData(
-                new TextObject("{=!}Duty of Military Aid").ToString(),
+                new TextObject("{=c0yr2MTu}Duty of Military Aid").ToString(),
                 new TextObject("Your suzerain, {SUZERAIN}, has summoned you to fulfill your oath of military aid. You have {DAYS} days to join {ARMY}, currently close to {SETTLEMENT}. Failing to fulfill it will tarnish your name and standing with your suzerain.")
                 .SetTextVariable("SUZERAIN", leader.LeaderHero.Name)
                 .SetTextVariable("DAYS", 2)
@@ -72,7 +72,7 @@ namespace BannerKings.Managers.Duties
             }
 
             InformationManager.ShowInquiry(new InquiryData(
-                new TextObject("{=!}Duty of Military Aid").ToString(), 
+                new TextObject("{=c0yr2MTu}Duty of Military Aid").ToString(), 
                 result.ToString(),
                 true, 
                 false,

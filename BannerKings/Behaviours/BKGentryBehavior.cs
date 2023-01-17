@@ -1,4 +1,4 @@
-﻿using BannerKings.Actions;
+using BannerKings.Actions;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Utils;
 using HarmonyLib;
@@ -239,14 +239,14 @@ namespace BannerKings.Behaviours
 
         public (bool, TextObject) IsAvailableForSummoning(Clan clan, Estate estate)
         {
-            var text = new TextObject("{=!}The {CLAN} gentry clan is ready to be summoned.")
+            var text = new TextObject("{=9BgtAOpZ}The {CLAN} gentry clan is ready to be summoned.")
                 .SetTextVariable("CLAN", clan.Name);
             Hero leader = clan.Leader;
             bool ready = leader.IsAlive && !leader.IsChild &&
                 leader.PartyBelongedTo == null && !leader.IsPrisoner && !leader.IsNoncombatant;
             if (!ready)
             {
-                text = new TextObject("{=!}{HERO} is currently not fit to be summoned.")
+                text = new TextObject("{=9uPgqv0w}{HERO} is currently not fit to be summoned.")
                     .SetTextVariable("HERO", leader.Name);
             }
             else
@@ -255,7 +255,7 @@ namespace BannerKings.Behaviours
                 ready = settlement.Village.VillageState == Village.VillageStates.Normal;
                 if (!ready)
                 {
-                    text = new TextObject("{=!}{SETTLEMENT} is under attack or pillaged.")
+                    text = new TextObject("{=wp1wFjOY}{SETTLEMENT} is under attack or pillaged.")
                         .SetTextVariable("SETTLEMENT", settlement.Name);
                 }
             }
@@ -317,10 +317,10 @@ namespace BannerKings.Behaviours
                 int cost = (int)(vacantEstate.EstateValue.ResultNumber * 0.5f);
                 if (settlement.Owner == Hero.MainHero)
                 {
-                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}The Gentry of {SETTLEMENT}")
+                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=uK9B9RPu}The Gentry of {SETTLEMENT}")
                         .SetTextVariable("SETTLEMENT", settlement.Name)
                         .ToString(),
-                        new TextObject("{=!}A local of relative wealth has offered to buy a vacant estate in your domain, {SETTLEMENT}. They offer {GOLD}{GOLD_ICON} for the property, as well as their vassalage. As their suzerain you would be entitled taxing their estate and calling them to war.")
+                        new TextObject("{=yoYXAmFM}A local of relative wealth has offered to buy a vacant estate in your domain, {SETTLEMENT}. They offer {GOLD}{GOLD_ICON} for the property, as well as their vassalage. As their suzerain you would be entitled taxing their estate and calling them to war.")
                         .SetTextVariable("SETTLEMENT", settlement.Name)
                         .ToString(),
                         true,

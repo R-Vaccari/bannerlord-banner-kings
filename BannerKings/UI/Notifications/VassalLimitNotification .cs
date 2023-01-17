@@ -9,7 +9,7 @@ namespace BannerKings.UI.Notifications
         {
         }
 
-        public override TextObject TitleText => new("{=!}Over Vassal Limit");
+        public override TextObject TitleText => new("{=EF0OTQ0p}Over Vassal Limit");
 
         public override string SoundEventPath => "event:/ui/notification/relation";
     }

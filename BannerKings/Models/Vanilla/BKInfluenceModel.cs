@@ -157,7 +157,7 @@ namespace BannerKings.Models.Vanilla
             if (currentVassals > vassalLimit)
             {
                 float factor = vassalLimit - currentVassals;
-                baseResult.Add(factor * 1.5f, new TextObject("{=!}Over Vassal Limit"));
+                baseResult.Add(factor * 1.5f, new TextObject("{=EF0OTQ0p}Over Vassal Limit"));
             }
 
             if (i > 0)

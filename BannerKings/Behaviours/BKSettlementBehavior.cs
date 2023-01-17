@@ -860,7 +860,7 @@ namespace BannerKings.Behaviours
 
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(__instance.Settlement);
                 var total = data.TotalPop;
-                var result = (int) (total / 6.5f);
+                var result = (int) (total / 3.5f);
 
                 __result = (int) (Campaign.Current.Models.SettlementFoodModel.FoodStocksUpperLimit + (__instance.IsCastle ? Campaign.Current.Models.SettlementFoodModel.CastleFoodStockUpperLimitBonus : 0) + __instance.GetEffectOfBuildings(BuildingEffectEnum.Foodstock) + result);
                 return false;
