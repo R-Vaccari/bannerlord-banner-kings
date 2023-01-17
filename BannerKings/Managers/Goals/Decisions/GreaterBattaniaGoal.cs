@@ -85,7 +85,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 if (referenceHero.Culture != culture)
                 {
                     failedReasons.Add(new TextObject("{=18Dv2nt4}You are not part of {CULTURE} culture.")
-                        .SetTextVariable("CULTURE", culture.EncyclopediaText));
+                        .SetTextVariable("CULTURE", culture.Name));
                 }
 
                 var battaniaKingdom = Campaign.Current.Kingdoms.FirstOrDefault(k => k.StringId == "battania");
