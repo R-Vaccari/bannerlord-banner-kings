@@ -16,7 +16,12 @@ namespace BannerKings.Settings
         public override string FormatType => "json2";
 
         [SettingProperty("{=!}Feasts", RequireRestart = true, HintText = "{=!}Enable the ability to trigger feasts for player and AI. Default: True.")]
+        [SettingPropertyGroup("{=!}Performance")]
         public bool Feasts { get; set; } = true;
+
+        [SettingProperty("{=!}AI Companions", RequireRestart = true, HintText = "{=!}Enable the ability for AI to generate companions. Will add a large amount of heroes to the world and may impact performance. Default: True.")]
+        [SettingPropertyGroup("{=!}Performance")]
+        public bool AICompanions { get; set; } = true;
 
         [SettingProperty("{=o394sPDk}Close Relatives Honorifics", RequireRestart = false, HintText = "{=AinXkzz7}Apply title honorifcs for close relatives of title holders. This only takes effect if the 'Title Honorifcs' option is any other than 'No Titles'. Different rules apply but in general, spouses of will have an equivalent, gendered title (ie, 'Queen FemaleName' the spouse of 'King MaleName'), while children of Kings and Emperors may be Princes.")]
         public bool CloseRelativesNaming { get; set; } = true;
@@ -46,6 +51,10 @@ namespace BannerKings.Settings
         [SettingPropertyFloatingInteger("{=FtWk1Jm0}Longer Sieges", minValue: 0f, maxValue: 0.75f, "#0%", RequireRestart = false, HintText = "{=!}Decreases siege camp build speed. 0% is the original speed. Intended to make sieges harder and more impactful, and prevent multiple sequential sieges of same settlement. Default: 50%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float LongerSieges { get; set; } = 0.5f;
+
+        [SettingProperty("{=!}Crafting Waiting Time", RequireRestart = false, HintText = "{=!}When doing any type of work in the smithy, you'll be forced to wait an amount of time correspondent to how much energy was used, as well as pay for that time. Represents a more realistic approach to crafting. Default: true.")]
+        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        public bool CraftingWaitingTime { get; set; } = true;
 
         // Value is displayed as "X Denars"
         [SettingPropertyInteger("{=iLmmsgFE}Volunteers Limit", 6, 20, "{=!}0 Volunteers",
