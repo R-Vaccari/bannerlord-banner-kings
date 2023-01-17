@@ -72,7 +72,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
                 text = new TextObject("{=qyNdYeda}Not enough roquery");
             }
 
-            if (hero.Culture != Utils.Helpers.GetCulture("battania"))
+            
+            if (!CalradiaExpandedKingdoms.Helpers.CEKHelpers.IsInCultureGroup(hero.Culture, Utils.Helpers.GetCulture("battania")))
             {
                 possible = false;
                 text = new TextObject("{=9Sh0wCfR}Unaccepted culture");
