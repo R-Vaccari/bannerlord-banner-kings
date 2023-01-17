@@ -469,6 +469,11 @@ namespace BannerKings.Behaviours
 
         private void EvaluateRecruitCompanion(Clan clan)
         {
+            if (!BannerKingsSettings.Instance.AICompanions)
+            {
+                return;
+            }
+
             RunWeekly(() =>
             {
                 if (clan.Leader.PartyBelongedTo == null || clan.Leader.IsPrisoner || clan.Companions.Count >= clan.CompanionLimit)
@@ -1063,7 +1068,7 @@ namespace BannerKings.Behaviours
                         }
 
                         var lordship = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
-                        if (lordship.deJure.MapFaction != clan.MapFaction)
+                        if (lordship != null && lordship.deJure != null && lordship.deJure.MapFaction != clan.MapFaction)
                         {
                             addedVillages.Add(village, clan.Leader);
                         }
