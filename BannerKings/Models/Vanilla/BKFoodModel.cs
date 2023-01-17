@@ -53,10 +53,10 @@ namespace BannerKings.Models.Vanilla
             switch (season)
             {
                 case 3f:
-                    result.Add(-0.5f * foodProduction, GameTexts.FindText("str_date_format_" + season));
+                    result.Add(-0.5f * foodProduction, GameTexts.FindText("str_season_" + season));
                     break;
                 case 1f:
-                    result.AddFactor(0.5f * foodProduction, GameTexts.FindText("str_date_format_" + season));
+                    result.AddFactor(0.5f * foodProduction, GameTexts.FindText("str_season_" + season));
                     break;
             }
 
