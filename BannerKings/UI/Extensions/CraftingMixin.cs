@@ -1,6 +1,7 @@
 using System.Linq;
 using BannerKings.Behaviours;
 using BannerKings.Extensions;
+using BannerKings.Settings;
 using BannerKings.UI.Crafting;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
@@ -146,9 +147,13 @@ namespace BannerKings.UI.Extensions
                 spentStamina = startingStamina - heroVm.CurrentStamina;
             }
 
-            HoursSpentText = new TextObject("{=G1NUDN2i}Hours spent for all actions: {HOURS} hours.")
-                .SetTextVariable("HOURS", GetSpentHours().ToString("0.0"))
-                .ToString();
+            if (BannerKingsSettings.Instance.CraftingWaitingTime)
+            {
+                HoursSpentText = new TextObject("{=G1NUDN2i}Hours spent for all actions: {HOURS} hours.")
+                                .SetTextVariable("HOURS", GetSpentHours().ToString("0.0"))
+                                .ToString();
+            }
+            
 
             /*float hours;
     
@@ -201,7 +206,7 @@ namespace BannerKings.UI.Extensions
                 }
 
                 var element = new EquipmentElement(item);
-                var qualityText = new TextObject("{=!}");
+                var qualityText = new TextObject();
                 if ((item.HasWeaponComponent && item.WeaponComponent.ItemModifierGroup != null) ||
                     (item.HasArmorComponent && item.ArmorComponent.ItemModifierGroup != null))
                 {
@@ -329,7 +334,7 @@ namespace BannerKings.UI.Extensions
         public bool HasMaterials()
         {
             var ingots = !crafting.PlayerCurrentMaterials.Any(m => m.ResourceChangeAmount + m.ResourceAmount < 0);
-            var extraMaterials = false;
+            var extraMaterials = true;
             if (ingots)
             {
                 var materials = CurrentMaterials;
@@ -367,7 +372,7 @@ namespace BannerKings.UI.Extensions
         public void CloseWithWait()
         {
             crafting.ExecuteCancel();
-            if (spentStamina != 0f)
+            if (spentStamina != 0f && BannerKingsSettings.Instance.CraftingWaitingTime)
             {
                 Campaign.Current.GetCampaignBehavior<BKSettlementActions>().StartCraftingMenu(GetSpentHours());
             }
