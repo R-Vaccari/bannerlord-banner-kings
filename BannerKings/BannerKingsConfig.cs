@@ -26,7 +26,7 @@ namespace BannerKings
     public class BannerKingsConfig
     {
         public const string VersionNumber = "1.2.6.1";
-        public const string VersionEdition = "Standard";
+        public const string VersionEdition = "CEK";
         public string VersionName => VersionNumber + VersionEdition;
 
         public bool FirstUse { get; private set; } = true;
