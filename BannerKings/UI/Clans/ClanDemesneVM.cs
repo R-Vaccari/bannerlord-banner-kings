@@ -71,7 +71,7 @@ namespace BannerKings.UI.Kingdoms
 
             if (Title != null)
             {
-                SuzerainReasonText = new TextObject("{=!}{SUZERAIN} is your de jure suzerain as the {TITLE} is your highest title.")
+                SuzerainReasonText = new TextObject("{=iQ7M8YNb}{SUZERAIN} is your de jure suzerain as the {TITLE} is your highest title.")
                         .SetTextVariable("SUZERAIN", Suzerain.NameText)
                         .SetTextVariable("TITLE", Title.FullName)
                         .ToString();
@@ -80,7 +80,7 @@ namespace BannerKings.UI.Kingdoms
             {
                 if (HasSuzerain)
                 {
-                    SuzerainReasonText = new TextObject("{=!}{SUZERAIN} is your default suzerain as a vassal without titles.")
+                    SuzerainReasonText = new TextObject("{=QrXhX0kF}{SUZERAIN} is your default suzerain as a vassal without titles.")
                         .SetTextVariable("SUZERAIN", Suzerain.NameText)
                         .ToString();
                 }
@@ -100,7 +100,7 @@ namespace BannerKings.UI.Kingdoms
         public string InheritanceText => new TextObject("{=aELuNrRC}Inheritance").ToString();
 
         [DataSourceProperty]
-        public string SuzerainText => new TextObject("{=!}Suzerain").ToString();
+        public string SuzerainText => new TextObject("{=WpXfTefm}Suzerain").ToString();
 
         [DataSourceProperty]
         public bool HasSuzerain
