@@ -285,9 +285,9 @@ namespace BannerKings.Managers.Populations
         {
             var result = type switch
             {
-                "farmland" => 0.015f,
-                "pasture" => 0.005f,
-                _ => 0.0010f
+                "farmland" => 0.017f,
+                "pasture" => 0.0065f,
+                _ => 0.0012f
             };
 
             Hero owner = null;
