@@ -270,7 +270,7 @@ namespace BannerKings.Managers.Populations
             {
                 EstateData?.UpdatePopulation(type, count, GetTypeCount(type));
                 var pops = classes.Find(popClass => popClass.type == type);
-                if (pops == null && count > 0)
+                if (pops == null)
                 {
                     pops = new PopulationClass(type, 0);
                     classes.Add(pops);
