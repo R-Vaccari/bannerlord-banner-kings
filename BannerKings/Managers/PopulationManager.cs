@@ -476,7 +476,7 @@ namespace BannerKings.Managers
                     return new Dictionary<PopType, float[]>
                     {
                         {PopType.Nobles, new[] {0.035f * nobleFactor, 0.055f * nobleFactor}},
-                        {PopType.Craftsmen, new[] {0.01f, 0.02f}},
+                        {PopType.Craftsmen, new[] {0.035f, 0.55f}},
                         {PopType.Serfs, new[] {0.7f, 0.8f}},
                         {PopType.Slaves, new[] {0.1f * slaveFactor, 0.2f * slaveFactor}}
                     };
@@ -487,7 +487,7 @@ namespace BannerKings.Managers
                     return new Dictionary<PopType, float[]>
                     {
                         {PopType.Nobles, new[] {0.02f * nobleFactor, 0.04f * nobleFactor}},
-                        {PopType.Craftsmen, new[] {0.01f, 0.02f}},
+                        {PopType.Craftsmen, new[] {0.055f, 0.1f}},
                         {PopType.Serfs, new[] {0.3f, 0.4f}},
                         {PopType.Slaves, new[] {0.6f * slaveFactor, 0.7f * slaveFactor}}
                     };
@@ -496,7 +496,7 @@ namespace BannerKings.Managers
                 return new Dictionary<PopType, float[]>
                 {
                     {PopType.Nobles, new[] {0.025f * nobleFactor, 0.045f * nobleFactor}},
-                    {PopType.Craftsmen, new[] {0.01f, 0.02f}},
+                    {PopType.Craftsmen, new[] {0.45f, 0.65f}},
                     {PopType.Serfs, new[] {0.5f, 0.7f}},
                     {PopType.Slaves, new[] {0.4f * slaveFactor, 0.5f * slaveFactor}}
                 };

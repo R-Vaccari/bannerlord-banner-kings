@@ -163,37 +163,37 @@ namespace BannerKings.UI.Extensions
 
             options.Add(new InquiryElement(
             new DecisionCategoryOption(
-                new TextObject("{=!}Personal"),
-                new TextObject("{=!}Personal decisions affect your character and sometimes your close family."),
+                new TextObject("{=AaS8WTzj}Personal"),
+                new TextObject("{=AaS8WTzj}Personal decisions affect your character and sometimes your close family."),
                 personalDecisions),
-            new TextObject("{=!}Personal").ToString(),
+            new TextObject("{=AaS8WTzj}Personal").ToString(),
             null,
             personalDecisions.Count > 0,
-            new TextObject("{=!}Personal decisions affect your character and sometimes your close family.").ToString()));
+            new TextObject("{=AaS8WTzj}Personal decisions affect your character and sometimes your close family.").ToString()));
 
             options.Add(new InquiryElement(
             new DecisionCategoryOption(
                 GameTexts.FindText("str_kingdom"),
-                new TextObject("{=!}Kingdom decisions affect your realm as a whole or your family's position in the realm."),
+                new TextObject("{=Tcir35E5}Kingdom decisions affect your realm as a whole or your family's position in the realm."),
                 kingdomDecisions),
             GameTexts.FindText("str_kingdom").ToString(),
             null,
             kingdomDecisions.Count > 0,
-            new TextObject("{=!}Kingdom decisions affect your realm as a whole or your family's position in the realm.").ToString()));
+            new TextObject("{=Tcir35E5}Kingdom decisions affect your realm as a whole or your family's position in the realm.").ToString()));
 
             options.Add(new InquiryElement(
             new DecisionCategoryOption(
-                new TextObject("{=!}Unique"),
-                new TextObject("{=!}Unique decisions are difficult and special decisions that often can only be taken once, such as reviving a historical empire."),
+                new TextObject("{=8MLr4eSD}Unique"),
+                new TextObject("{=8MLr4eSD}Unique decisions are difficult and special decisions that often can only be taken once, such as reviving a historical empire."),
                 uniqueDecisions),
-            new TextObject("{=!}Unique").ToString(),
+            new TextObject("{=8MLr4eSD}Unique").ToString(),
             null,
             uniqueDecisions.Count > 0,
-            new TextObject("{=!}Unique decisions are special decisions that often can only be taken once, such as reviving a historical empire.").ToString()));
+            new TextObject("{=8MLr4eSD}Unique decisions are special decisions that often can only be taken once, such as reviving a historical empire.").ToString()));
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                             new TextObject("{=GMNhGSUb}Decisions").ToString(),
-                            new TextObject("{=!}Choose a category of decisions to take. Decisions are always taken on behalf of the family head, regardless of what hero is chosen in the Character tab.").ToString(),
+                            new TextObject("{=VbM15ztE}Choose a category of decisions to take. Decisions are always taken on behalf of the family head, regardless of what hero is chosen in the Character tab.").ToString(),
                             options, 
                             true,
                             1, 

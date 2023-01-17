@@ -441,7 +441,7 @@ namespace BannerKings.Behaviours
                         if (Hero.MainHero.Gold < cost)
                         {
                             InformationManager.DisplayMessage(new InformationMessage(
-                                                        new TextObject("{=!}You have stopped your lesson due to lacking funds.").ToString()));
+                                                        new TextObject("{=Nbf4SZPx}You have stopped your lesson due to lacking funds.").ToString()));
                             GameMenu.SwitchToMenu("bannerkings_actions");
                         }
 

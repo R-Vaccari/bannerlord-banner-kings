@@ -364,33 +364,33 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("book_seller_buy",
                 "book_seller_buy",
                 "hero_main_options",
-                "{=!}This is my literature collection, {PLAYER.NAME}. Be sure to not damage them.",
+                "{=qjwEq7xS}This is my literature collection, {PLAYER.NAME}. Be sure to not damage them.",
                 null,
                 null);
 
             starter.AddPlayerLine("bk_question_preaching", "hero_main_options", "book_seller_topics",
-                "{=!}I would like to ask you scholarly questions.",
+                "{=GhAnLnpN}I would like to ask you scholarly questions.",
                 IsBookSeller,
                 null);
 
             starter.AddDialogLine("book_seller_topics",
                 "book_seller_topics", 
                 "book_seller_scholarly_questions",
-                "{=!}Surely, {PLAYER.NAME}. What would you like to learn about?",
+                "{=L0MesNHP}Surely, {PLAYER.NAME}. What would you like to learn about?",
                 IsBookSeller,
                 null);
 
             starter.AddPlayerLine("book_seller_scholarly_questions", 
                 "book_seller_scholarly_questions", 
                 "book_seller_topic_books",
-                "{=!}How can make use of books?",
+                "{=UGvR5Ni8}How can make use of books?",
                 null,
                 null);
 
             starter.AddPlayerLine("book_seller_scholarly_questions", 
                 "book_seller_scholarly_questions", 
                 "book_seller_topic_languages",
-                "{=!}How can I make use of languages?",
+                "{=Fcnbhv1b}How can I make use of languages?",
                 null,
                 null);
 
@@ -404,19 +404,19 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("book_seller_topic_books",
                "book_seller_topic_books",
                "book_seller_topics",
-               "{=!}Most books will serve to increase your learning in a certain Skill set. They allow you insight into the many martial arts and competences a noble requires, and may be used with all your family. Spouses our spouse candidates may also be interested in you reciting them poems. All cultures have their own books, so you must usually know the book's language. Alternatively you may use the Dictionarium Calradium, to read anything, although slowly. Of course, you must be Literate first.",
+               "{=QLhXYhVF}Most books will serve to increase your learning in a certain Skill set. They allow you insight into the many martial arts and competences a noble requires, and may be used with all your family. Spouses our spouse candidates may also be interested in you reciting them poems. All cultures have their own books, so you must usually know the book's language. Alternatively you may use the Dictionarium Calradium, to read anything, although slowly. Of course, you must be Literate first.",
                null,
                null);
 
             starter.AddDialogLine("book_seller_topic_languages",
                "book_seller_topic_languages",
                "book_seller_topics",
-               "{=!}{PLAYER.NAME}, languages are key for your scholarly progress. Languages will allow you to read books from foreign cultures. As a lord, they also allow you to better connect with foreign populations. Folks will always mistrust a foreigner, but more so one that takes no interest in their customs. Have a family member or servant that knows a language well and trusts you, and they will be able to instruct you.",
+               "{=ZJH8vssd}{PLAYER.NAME}, languages are key for your scholarly progress. Languages will allow you to read books from foreign cultures. As a lord, they also allow you to better connect with foreign populations. Folks will always mistrust a foreigner, but more so one that takes no interest in their customs. Have a family member or servant that knows a language well and trusts you, and they will be able to instruct you.",
                null,
                null);
 
             starter.AddPlayerLine("lord_meet_player_response3", "lord_meet_player_response", "lord_introduction",
-                "{=!}My name is {PLAYER.NAME}, {?CONVERSATION_NPC.GENDER}madam{?}sir{\\?}. May I ask your name?. (You ask in {NPC_LANGUAGE})",
+                "{=bgvjNfX3}My name is {PLAYER.NAME}, {?CONVERSATION_NPC.GENDER}madam{?}sir{\\?}. May I ask your name?. (You ask in {NPC_LANGUAGE})",
                 OnMeetLanguageCondition,
                 OnMeetLanguageConsequence);
         }

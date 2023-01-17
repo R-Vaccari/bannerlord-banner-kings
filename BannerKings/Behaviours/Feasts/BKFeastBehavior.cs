@@ -119,7 +119,7 @@ namespace BannerKings.Behaviours.Feasts
             if (feasts.ContainsKey(settlement.Town))
             {
                 var feast = feasts[settlement.Town];
-                EndFeast(feast, new TextObject("{=!}{TOWN} is no longer part of the kingdom!")
+                EndFeast(feast, new TextObject("{=50TKr7ae}{TOWN} is no longer part of the kingdom!")
                     .SetTextVariable("TOWN", settlement.Name));
             }
         }
@@ -151,7 +151,7 @@ namespace BannerKings.Behaviours.Feasts
 
             foreach(var feast in toRemove)
             {
-                EndFeast(feast, new TextObject("{=!}War has broke out!"));
+                EndFeast(feast, new TextObject("{=qj2yixfi}War has broke out!"));
             }
         }
 
@@ -238,7 +238,7 @@ namespace BannerKings.Behaviours.Feasts
             {
                 if (FactionManager.GetEnemyKingdoms(settlement.MapFaction as Kingdom).Count() > 0)
                 {
-                    EndFeast(feast, new TextObject("{=!}The kingdom is at war!"));
+                    EndFeast(feast, new TextObject("{=4oTFuJYd}The kingdom is at war!"));
                 }
             }
         }

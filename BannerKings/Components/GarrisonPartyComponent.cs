@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
@@ -11,7 +11,7 @@ namespace BannerKings.Components
 {
     public class GarrisonPartyComponent : BannerKingsComponent
     {
-        public GarrisonPartyComponent(MobileParty target, Settlement origin) : base(origin, "{=!}Garrison from {ORIGIN}")
+        public GarrisonPartyComponent(MobileParty target, Settlement origin) : base(origin, "{=YfLY43hV}Garrison from {ORIGIN}")
         {
             TargetParty = target;
             HoursPatrolled = 0;

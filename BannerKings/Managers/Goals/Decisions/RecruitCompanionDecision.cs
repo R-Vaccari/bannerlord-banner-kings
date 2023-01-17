@@ -124,7 +124,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var clan = GetFulfiller().Clan;
             if (clan.Companions.Count >= clan.CompanionLimit)
             {
-                failedReasons.Add(new TextObject("{=!}Your clan has reached it's companion limit."));
+                failedReasons.Add(new TextObject("{=L9NQ0yOu}Your clan has reached it's companion limit."));
             }
 
             return failedReasons.Count == 0;

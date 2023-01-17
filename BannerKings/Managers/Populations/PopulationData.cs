@@ -273,6 +273,7 @@ namespace BannerKings.Managers.Populations
                 if (pops == null)
                 {
                     pops = new PopulationClass(type, 0);
+                    classes.Add(pops);
                 }
 
                 if (type == PopType.Slaves)

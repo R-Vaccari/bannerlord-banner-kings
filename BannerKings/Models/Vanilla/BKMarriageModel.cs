@@ -64,7 +64,7 @@ namespace BannerKings.Models.Vanilla
                     Hero playerCourting = Romance.GetCourtedHeroInOtherClan(proposer, secondHero);
                     if (playerCourting != null && playerCourting != secondHero)
                     {
-                        result.Add(-1000f, new TextObject("{=!}{HERO} is currently courting {COURTING}")
+                        result.Add(-1000f, new TextObject("{=jb7sCNT2}{HERO} is currently courting {COURTING}")
                             .SetTextVariable("HERO", proposer.Name)
                             .SetTextVariable("COURTING", playerCourting.Name));
                     }
@@ -72,42 +72,42 @@ namespace BannerKings.Models.Vanilla
                     Hero aiCourting = Romance.GetCourtedHeroInOtherClan(secondHero, proposer);
                     if (aiCourting != null && aiCourting != proposer)
                     {
-                        result.Add(-1000f, new TextObject("{=!}{HERO} is currently courting {COURTING}")
+                        result.Add(-1000f, new TextObject("{=jb7sCNT2}{HERO} is currently courting {COURTING}")
                             .SetTextVariable("HERO", secondHero.Name)
                             .SetTextVariable("COURTING", aiCourting.Name));
                     }
 
                     if (DiscoverAncestors(proposer, 3).Intersect(DiscoverAncestors(secondHero, 3)).Any())
                     {
-                        result.Add(-1000f, new TextObject("{=!}Spouses are too closely related."));
+                        result.Add(-1000f, new TextObject("{=1d2DhozK}Spouses are too closely related."));
                     }
 
                     if (proposer.IsFemale == secondHero.IsFemale)
                     {
-                        result.Add(-1000f, new TextObject("{=!}Same sex marriages are not accepted."));
+                        result.Add(-1000f, new TextObject("{=0w2ADdES}Same sex marriages are not accepted."));
                     }
 
                     if (!proposer.CanMarry())
                     {
-                        result.Add(-1000f, new TextObject("{=!}{HERO} is not available for marriage.")
+                        result.Add(-1000f, new TextObject("{=Ug3zXQdc}{HERO} is not available for marriage.")
                             .SetTextVariable("HERO", proposer.Name));
                     }
 
                     if (!secondHero.CanMarry())
                     {
-                        result.Add(-1000f, new TextObject("{=!}{HERO} is not available for marriage.")
+                        result.Add(-1000f, new TextObject("{=Ug3zXQdc}{HERO} is not available for marriage.")
                             .SetTextVariable("HERO", secondHero.Name));
                     }
 
                     if (!IsClanSuitableForMarriage(proposer.Clan))
                     {
-                        result.Add(-1000f, new TextObject("{=!}{CLAN} is not adequate for marriage.")
+                        result.Add(-1000f, new TextObject("{=vjSgVRAm}{CLAN} is not adequate for marriage.")
                                                     .SetTextVariable("CLAN", proposer.Clan.Name));
                     }
 
                     if (!IsClanSuitableForMarriage(secondHero.Clan))
                     {
-                        result.Add(-1000f, new TextObject("{=!}{CLAN} is not adequate for marriage.")
+                        result.Add(-1000f, new TextObject("{=vjSgVRAm}{CLAN} is not adequate for marriage.")
                                                     .SetTextVariable("CLAN", secondHero.Clan.Name));
                     }
                 }

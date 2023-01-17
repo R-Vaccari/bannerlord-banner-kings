@@ -2,7 +2,6 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Issues;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -14,7 +13,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models.Vanilla
 {
-    internal class BKFoodModel : SettlementFoodModel
+    internal class BKFoodModel : DefaultSettlementFoodModel
     {
         private static readonly float NOBLE_FOOD = -0.1f;
         private static readonly float CRAFTSMEN_FOOD = -0.05f;
@@ -27,25 +26,39 @@ namespace BannerKings.Models.Vanilla
         public override ExplainedNumber CalculateTownFoodStocksChange(Town town, bool includeMarketStocks = true,
             bool includeDescriptions = false)
         {
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager != null)
             {
-                return CalculateTownFoodChangeInternal(town, includeDescriptions);
+                return CalculateTownFoodChangeInternal(town, includeMarketStocks, includeDescriptions);
             }
 
-            return new DefaultSettlementFoodModel().CalculateTownFoodStocksChange(town, includeDescriptions);
+            return base.CalculateTownFoodStocksChange(town, includeMarketStocks, includeDescriptions);
         }
 
-        public ExplainedNumber CalculateTownFoodChangeInternal(Town town, bool includeDescriptions)
+        public ExplainedNumber CalculateTownFoodChangeInternal(Town town, bool includeMarketStocks, bool includeDescriptions)
         {
-            //InformationManager.DisplayMessage(new InformationMessage("Food model running..."));
             var result = new ExplainedNumber(0f, includeDescriptions);
-
-            // ------- Pops / Prosperity consumption ---------
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 
+            if (data == null)
+            {
+                return base.CalculateTownFoodStocksChange(town, includeMarketStocks, includeDescriptions);
+            }
+
             result.Add(GetPopulationFoodConsumption(data).ResultNumber, new TextObject("{=3JzB3jVw}Population Consumption"));
-            result.Add(GetPopulationFoodProduction(data, town).ResultNumber, new TextObject("{=AOdwTPTa}Population Production"));
+
+            float foodProduction = GetPopulationFoodProduction(data, town).ResultNumber;
+            result.Add(foodProduction, new TextObject("{=AOdwTPTa}Population Production"));
+
+            float season = CampaignTime.Now.GetSeasonOfYear;
+            switch (season)
+            {
+                case 3f:
+                    result.Add(-0.5f * foodProduction, GameTexts.FindText("str_season_" + season));
+                    break;
+                case 1f:
+                    result.Add(0.5f * foodProduction, GameTexts.FindText("str_season_" + season));
+                    break;
+            }
 
             var garrisonParty = town.GarrisonParty;
             var garrisonConsumption = garrisonParty != null ? garrisonParty.Party.NumberOfAllMembers : 0;
@@ -58,6 +71,24 @@ namespace BannerKings.Models.Vanilla
             {
                 result.AddFactor(-0.25f, new TextObject("{=1aq83aPr}Conscription policy"));
             }
+
+            var ownerClan = town.Settlement.OwnerClan;
+            if (ownerClan?.Kingdom != null &&
+                town.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.HuntingRights))
+            {
+                result.Add(2f, DefaultPolicies.HuntingRights.Name);
+            }
+
+            var marketConsumption = 0;
+            foreach (var sellLog in town.SoldItems)
+            {
+                if (sellLog.Category.Properties == ItemCategory.Property.BonusToFoodStores)
+                {
+                    marketConsumption += sellLog.Number;
+                }
+            }
+
+            result.Add(marketConsumption, new TextObject("{=3hEk7Bdk}Market consumption"));
 
             if (town.Governor != null)
             {
@@ -75,36 +106,17 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
 
-                if (town.Governor.GetPerkValue(DefaultPerks.Steward.MasterOfWarcraft))
+                if (town.Governor.GetPerkValue(DefaultPerks.Roguery.DirtyFighting))
+                {
+                    result.Add(DefaultPerks.Roguery.DirtyFighting.SecondaryBonus, DefaultPerks.Roguery.DirtyFighting.Name);
+                }
+
+                if (result.ResultNumber > 0f && town.Governor.GetPerkValue(DefaultPerks.Steward.MasterOfWarcraft))
                 {
                     result.AddFactor(-DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus,
                         DefaultPerks.Steward.MasterOfWarcraft.Name);
                 }
             }
-
-            // ------- Other factors ---------
-            var ownerClan = town.Settlement.OwnerClan;
-            if (ownerClan?.Kingdom != null &&
-                town.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.HuntingRights))
-            {
-                result.Add(2f, DefaultPolicies.HuntingRights.Name);
-            }
-
-            if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Roguery.DirtyFighting))
-            {
-                result.Add(DefaultPerks.Roguery.DirtyFighting.SecondaryBonus, DefaultPerks.Roguery.DirtyFighting.Name);
-            }
-
-            var marketConsumption = 0;
-            foreach (var sellLog in town.SoldItems)
-            {
-                if (sellLog.Category.Properties == ItemCategory.Property.BonusToFoodStores)
-                {
-                    marketConsumption += sellLog.Number;
-                }
-            }
-
-            result.Add(marketConsumption, new TextObject("{=3hEk7Bdk}Market consumption"));
 
             GetSettlementFoodChangeDueToIssues(town, ref result);
             return result;
@@ -121,7 +133,7 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber GetPopulationFoodConsumption(PopulationData data)
         {
             var result = new ExplainedNumber();
-            result.LimitMin(-1500f);
+            result.LimitMin(-3000f);
             result.LimitMax(0f);
             var citySerfs = data.GetTypeCount(PopType.Serfs);
             if (citySerfs > 0)
@@ -168,7 +180,6 @@ namespace BannerKings.Models.Vanilla
         {
             var result = new ExplainedNumber();
             result.LimitMin(0f);
-            result.LimitMax(1500f);
             if (!town.IsUnderSiege)
             {
                 var landData = data.LandData;
@@ -200,17 +211,6 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 result.AddFactor(MathF.Clamp(data.LandData.WorkforceSaturation - 1f, -1f, 0f), new TextObject("{=LohssChh}Workforce saturation"));
-
-                float season = CampaignTime.Now.GetSeasonOfYear;
-                switch (season)
-                {
-                    case 3f:
-                        result.AddFactor(-0.5f, GameTexts.FindText("str_date_format_" + season));
-                        break;
-                    case 1f:
-                        result.AddFactor(0.2f, GameTexts.FindText("str_date_format_" + season));
-                        break;
-                }
 
                 Building b = null;
                 foreach (var building in town.Buildings)
