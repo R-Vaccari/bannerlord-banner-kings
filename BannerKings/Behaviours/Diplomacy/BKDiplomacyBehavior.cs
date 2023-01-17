@@ -19,10 +19,21 @@ namespace BannerKings.Behaviours.Diplomacy
         private Dictionary<Kingdom, KingdomDiplomacy> kingdomDiplomacies = new Dictionary<Kingdom, KingdomDiplomacy>();
         private List<War> wars = new List<War>();
 
+        public War GetWar(IFaction faction1, IFaction faction2)
+        {
+            if (wars == null)
+            {
+                wars = new List<War>();
+                return null;
+            }
+
+            return wars.FirstOrDefault(x => (x.Attacker == faction1 || x.Defender == faction1) &&
+            (x.Attacker == faction2 || x.Defender == faction2));
+        }
+
         public CasusBelli GetWarJustification(IFaction faction1, IFaction faction2)
         {
-            War war = wars.FirstOrDefault(x => (x.Attacker == faction1 || x.Defender == faction1) && 
-            (x.Attacker == faction2 || x.Defender == faction2));
+            War war = GetWar(faction1, faction2);   
             if (war != null)
             {
                 return war.CasusBelli;
