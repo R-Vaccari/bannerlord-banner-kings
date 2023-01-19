@@ -221,7 +221,7 @@ namespace BannerKings.Behaviours.Diplomacy
                         .SetTextVariable("CHANCE", (support * 100).ToString("0.00")).ToString(),
                         null,
                         true,
-                        casusBelli.Description.ToString()));
+                        casusBelli.GetDescriptionWithModifers().ToString()));
                     }
 
                     list.Add(new InquiryElement(null, new TextObject("{=!}No Casus Belli").ToString(), null));

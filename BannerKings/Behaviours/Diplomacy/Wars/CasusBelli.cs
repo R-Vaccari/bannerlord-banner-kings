@@ -51,6 +51,12 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             Fief = fief;
         }
 
+        public TextObject GetDescriptionWithModifers() => new TextObject("{=!}{DESCRIPTION}\n\nConquest Modifier: {CONQUEST}%\nHostage Modifier: {HOSTAGE}%\nRaiding Modifier: {RAID}%")
+            .SetTextVariable("DESCRIPTION", Description)
+            .SetTextVariable("CONQUEST", ConquestWeight * 100)
+            .SetTextVariable("HOSTAGE", CaptureWeight * 100)
+            .SetTextVariable("RAID", RaidWeight * 100);
+
         public TextObject WarDeclaredText => warDeclaredText.SetTextVariable("FIEF", Fief != null ? Fief.Name : new TextObject())
             .SetTextVariable("ATTACKER", Attacker != null ? Attacker.Name : new TextObject())
             .SetTextVariable("DEFENDER", Defender != null ? Defender.Name : new TextObject());
