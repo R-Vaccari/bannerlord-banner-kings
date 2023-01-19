@@ -139,9 +139,9 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateSuccessionLine(FeudalContract contract, Clan clan, Hero victim = null, int count = 6)
+        public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateSuccessionLine(FeudalContract contract, Clan rulingClan, Hero victim = null, int count = 6)
         {
-            var leader = victim != null ? victim : clan.Leader;
+            var leader = victim != null ? victim : rulingClan.Leader;
             var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(leader, contract);
             var explanations = new Dictionary<Hero, ExplainedNumber>();
 

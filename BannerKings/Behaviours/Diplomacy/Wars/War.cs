@@ -38,7 +38,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 }
             }
 
-            DefenderBorderFief = attackerDic.FirstOrDefault(x => x.Value == attackerDic.Values.Max()).Key;
+            DefenderOriginalFront = attackerDic.FirstOrDefault(x => x.Value == attackerDic.Values.Max()).Key;
 
             Dictionary<Town, int> defenderDic = new Dictionary<Town, int>();
             foreach (var fief in Attacker.Fiefs)
@@ -58,15 +58,34 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 }
             }
 
-            AttackerBorderFief = defenderDic.FirstOrDefault(x => x.Value == defenderDic.Values.Max()).Key;
+            AttackerOriginalFront = defenderDic.FirstOrDefault(x => x.Value == defenderDic.Values.Max()).Key;
         }
 
         public IFaction Attacker { get; }
         public IFaction Defender { get; }
         public CasusBelli CasusBelli { get; }
         public Kingdom Sovereign { get; }
-        public Town AttackerBorderFief { get; private set; }
-        public Town DefenderBorderFief { get; private set; }
+        public Town AttackerOriginalFront { get; private set; }
+        public Town DefenderOriginalFront { get; private set; }
+
+        public bool IsOriginalFront(Town town) => town == AttackerOriginalFront || town == DefenderOriginalFront;
+
+        public ExplainedNumber TotalWarScore => BannerKingsConfig.Instance.WarModel.CalculateTotalWarScore(this, false);
+
+        public ExplainedNumber CalculateWarScore(IFaction faction, bool explanations)
+        {
+            if (faction == Attacker)
+            {
+                return BannerKingsConfig.Instance.WarModel.CalculateWarScore(this, Attacker, Defender, false, explanations);
+            }
+
+            if (faction == Defender)
+            {
+                return BannerKingsConfig.Instance.WarModel.CalculateWarScore(this, Attacker, Defender, true, explanations);
+            }
+
+            return new ExplainedNumber();
+        }
 
         public bool IsInternalWar() => Attacker.IsClan && Defender.IsClan && Sovereign != null;
         public bool IsMatchingWar(IFaction faction1, IFaction faction2) => faction1 == Attacker && faction2 == Defender ||
