@@ -39,7 +39,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 }
             }
 
-            DefenderOriginalFront = attackerDic.FirstOrDefault(x => x.Value == attackerDic.Values.Max()).Key;
+            DefenderFront = attackerDic.FirstOrDefault(x => x.Value == attackerDic.Values.Max()).Key;
 
             Dictionary<Town, int> defenderDic = new Dictionary<Town, int>();
             foreach (var fief in Attacker.Fiefs)
@@ -59,17 +59,37 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 }
             }
 
-            AttackerOriginalFront = defenderDic.FirstOrDefault(x => x.Value == defenderDic.Values.Max()).Key;
+            AttackerFront = defenderDic.FirstOrDefault(x => x.Value == defenderDic.Values.Max()).Key;
         }
 
         public IFaction Attacker { get; }
         public IFaction Defender { get; }
         public CasusBelli CasusBelli { get; }
         public Kingdom Sovereign { get; }
-        public Town AttackerOriginalFront { get; private set; }
-        public Town DefenderOriginalFront { get; private set; }
+        public Town AttackerFront { get; private set; }
+        public Town DefenderFront { get; private set; }
 
-        public bool IsOriginalFront(Town town) => town == AttackerOriginalFront || town == DefenderOriginalFront;
+        public bool IsOriginalFront(Town town) => town == AttackerFront || town == DefenderFront;
+
+        public Town GetFront(IFaction faction)
+        {
+            if (faction == Attacker)
+            {
+                return AttackerFront;
+            }
+
+            return DefenderFront;
+        }
+
+        public IFaction GetPlayerEnemyFaction()
+        {
+            if (Attacker == Hero.MainHero.MapFaction)
+            {
+                return Defender;
+            }
+
+            return Attacker;
+        }
 
         public ExplainedNumber TotalWarScore => BannerKingsConfig.Instance.WarModel.CalculateTotalWarScore(this, false);
 

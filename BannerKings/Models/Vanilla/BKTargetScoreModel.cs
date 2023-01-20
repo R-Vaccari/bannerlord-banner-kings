@@ -61,8 +61,8 @@ namespace BannerKings.Models.Vanilla
                     result *= 4f;
                 }
 
-                if (targetSettlement.Town != null && (targetSettlement.Town == war.DefenderOriginalFront || 
-                    targetSettlement.Town == war.AttackerOriginalFront))
+                if (targetSettlement.Town != null && (targetSettlement.Town == war.DefenderFront || 
+                    targetSettlement.Town == war.AttackerFront))
                 {
                     result *= 2f;
                 }
