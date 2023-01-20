@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Helpers;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Diplomacy.Wars
@@ -57,7 +60,11 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 5000f,
                 (War war) =>
                 {
-                    return war.CasusBelli.Fief.MapFaction == war.Attacker;
+                    StanceLink attackerLink = war.Attacker.GetStanceWith(war.Defender);
+                    List<Settlement> attackerConquests = DiplomacyHelper.GetSuccessfullSiegesInWarForFaction(war.Attacker,
+                       attackerLink, (Settlement x) => x.Town != null);
+
+                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture).Count >= 2;
                 },
                 (War war) =>
                 {
@@ -67,7 +74,8 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 (IFaction faction1, IFaction faction2, CasusBelli casusBelli) =>
                 {
                     var id = faction1.StringId;
-                    return (id == "vlandia" || id == "aserai") && faction2.Culture != faction1.Culture;
+                    bool hasFiefs = faction2.Fiefs.ToList().FindAll(x => x.Culture == faction2.Culture).Count() >= 2;
+                    return (id == "vlandia" || id == "aserai") && faction2.Culture != faction1.Culture && hasFiefs;
                 },
                 (Kingdom kingdom) =>
                 {
@@ -88,7 +96,11 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 5000f,
                 (War war) =>
                 {
-                    return war.CasusBelli.Fief.MapFaction == war.Attacker;
+                    StanceLink attackerLink = war.Attacker.GetStanceWith(war.Defender);
+                    List<Settlement> attackerConquests = DiplomacyHelper.GetRaidsInWar(war.Attacker,
+                       attackerLink, null);
+
+                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture).Count >= 12;
                 },
                 (War war) =>
                 {
@@ -98,7 +110,8 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 (IFaction faction1, IFaction faction2, CasusBelli casusBelli) =>
                 {
                     var id = faction1.StringId;
-                    return (id == "battania" || id == "khuzait" || id == "sturgia") && faction2.Culture != faction1.Culture;
+                    bool hasFiefs = faction2.Settlements.ToList().FindAll(x => x.IsVillage && x.Culture == faction2.Culture).Count() >= 12;
+                    return (id == "battania" || id == "khuzait" || id == "sturgia") && faction2.Culture != faction1.Culture && hasFiefs;
                 },
                 (Kingdom kingdom) =>
                 {
@@ -113,13 +126,17 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             ImperialSuperiority.Initialize(new TextObject("{=!}Imperial Superiority"),
                 new TextObject("{=!}Subjugate barbarians with our Imperial might as the original Empire once did. Strength is the language that they understand."),
                 new TextObject("{=!}Humiliate in Battle"),
-                1.5f,
-                0.2f,
+                1.4f,
                 0.8f,
+                1.2f,
                 5000f,
                 (War war) =>
                 {
-                    return war.CasusBelli.Fief.MapFaction == war.Attacker;
+                    StanceLink attackerLink = war.Attacker.GetStanceWith(war.Defender);
+                    List<Settlement> attackerConquests = DiplomacyHelper.GetSuccessfullSiegesInWarForFaction(war.Attacker,
+                       attackerLink, (Settlement x) => x.Town != null);
+
+                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture).Count >= 2;
                 },
                 (War war) =>
                 {
@@ -128,11 +145,12 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 },
                 (IFaction faction1, IFaction faction2, CasusBelli casusBelli) =>
                 {
+                    bool adequateKingdom = false;
                     if (faction1.IsKingdomFaction)
                     {
                         if (faction1.Culture.StringId == "empire" && faction2.Culture != faction1.Culture)
                         {
-                            return true;
+                            adequateKingdom = true;
                         }
 
                         var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction1 as Kingdom);
@@ -144,17 +162,18 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                                 if (enemyTitle != null && enemyTitle.contract.Government != Managers.Titles.GovernmentType.Imperial &&
                                 faction2.Culture != faction1.Culture)
                                 {
-                                    return true;
+                                    adequateKingdom = true;
                                 }
                             }
                             else if (faction2.Culture != faction1.Culture) 
                             {
-                                return true;
+                                adequateKingdom =  true;
                             }
                         }
                     }
 
-                    return false;
+                   bool hasFiefs = faction2.Fiefs.ToList().FindAll(x => x.Culture == faction2.Culture).Count() >= 2;
+                   return adequateKingdom && hasFiefs;
                 },
                 (Kingdom kingdom) =>
                 {
@@ -181,7 +200,11 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 5000f,
                 (War war) =>
                 {
-                    return war.CasusBelli.Fief.MapFaction == war.Attacker;
+                    StanceLink attackerLink = war.Attacker.GetStanceWith(war.Defender);
+                    List<Settlement> attackerConquests = DiplomacyHelper.GetSuccessfullSiegesInWarForFaction(war.Attacker,
+                       attackerLink, (Settlement x) => x.Town != null);
+
+                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture).Count >= 1;
                 },
                 (War war) =>
                 {
@@ -190,7 +213,8 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 },
                 (IFaction faction1, IFaction faction2, CasusBelli casusBelli) =>
                 {
-                    return faction1.Culture.StringId == "empire" && faction2.Culture == faction1.Culture;
+                    bool hasFiefs = faction2.Fiefs.ToList().FindAll(x => x.Culture == faction2.Culture).Count() >= 1;
+                    return faction1.Culture.StringId == "empire" && faction2.Culture == faction1.Culture && hasFiefs;
                 },
                 (Kingdom kingdom) =>
                 {

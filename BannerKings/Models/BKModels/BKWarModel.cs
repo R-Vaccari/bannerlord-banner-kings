@@ -7,6 +7,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
@@ -146,7 +147,7 @@ namespace BannerKings.Models.BKModels
                     }
                 }
 
-                float renown = hero.Clan.Renown * 2;
+                float renown = hero.Clan.Renown / 2;
                 result.Add(renown);
                 if (hero.IsClanLeader())
                 {
@@ -248,7 +249,9 @@ namespace BannerKings.Models.BKModels
             result.Add(casualties / limit, GameTexts.FindText("str_war_casualties_inflicted"));
 
             float yearsPassed = stance.WarStartDate.ElapsedYearsUntilNow;
-            result.Add(yearsPassed * 0.08f, new TextObject("{=!}War duration"));
+            result.Add(yearsPassed * 0.04f, new TextObject("{=!}War duration"));
+            float daysPassed = MathF.Max(1f, yearsPassed * CampaignTime.DaysInYear);
+            result.AddFactor(-war.GetDaysHeldObjective(faction) / daysPassed, new TextObject("{=!}Time controlling objective"));
 
             return result;
         }

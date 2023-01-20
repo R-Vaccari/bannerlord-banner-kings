@@ -71,6 +71,7 @@ namespace BannerKings.Behaviours.Diplomacy
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnNewGameCreated);
             CampaignEvents.KingdomCreatedEvent.AddNonSerializedListener(this, OnKingdomCreated);
             CampaignEvents.AiHourlyTickEvent.AddNonSerializedListener(this, OnAiHourlyTick);
+            CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -83,6 +84,14 @@ namespace BannerKings.Behaviours.Diplomacy
             if (wars == null)
             {
                 wars = new List<War>();
+            }
+        }
+
+        private void OnDailyTick()
+        {
+            foreach (War war in wars)
+            {
+                war.Update();
             }
         }
 

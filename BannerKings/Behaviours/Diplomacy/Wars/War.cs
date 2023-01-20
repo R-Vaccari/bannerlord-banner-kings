@@ -24,7 +24,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             Dictionary<Town, int> attackerDic = new Dictionary<Town, int>();
             foreach (var fief in Attacker.Fiefs)
             {
-                Settlement settlement = SettlementHelper.FindNearestFortification(x => x.Town != null && x.MapFaction == Defender);
+                Settlement settlement = SettlementHelper.FindNearestFortification(x => x.Town != null && x.MapFaction == Defender, fief.Settlement);
                 if (settlement != null)
                 {
                     Town town = settlement.Town;
@@ -42,9 +42,9 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             DefenderFront = attackerDic.FirstOrDefault(x => x.Value == attackerDic.Values.Max()).Key;
 
             Dictionary<Town, int> defenderDic = new Dictionary<Town, int>();
-            foreach (var fief in Attacker.Fiefs)
+            foreach (var fief in Defender.Fiefs)
             {
-                Settlement settlement = SettlementHelper.FindNearestFortification(x => x.Town != null && x.MapFaction == Attacker);
+                Settlement settlement = SettlementHelper.FindNearestFortification(x => x.Town != null && x.MapFaction == Attacker, fief.Settlement);
                 if (settlement != null)
                 {
                     Town town = settlement.Town;
@@ -68,6 +68,8 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         public Kingdom Sovereign { get; }
         public Town AttackerFront { get; private set; }
         public Town DefenderFront { get; private set; }
+        public int DaysAttackerHeldObjective { get; private set; }
+        public int DaysDefenderHeldObjective { get; private set; }
 
         public bool IsOriginalFront(Town town) => town == AttackerFront || town == DefenderFront;
 
@@ -91,6 +93,16 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             return Attacker;
         }
 
+        public int GetDaysHeldObjective(IFaction faction)
+        {
+            if (faction == Attacker)
+            {
+                return DaysAttackerHeldObjective;
+            }
+
+            return DaysDefenderHeldObjective;
+        }
+
         public ExplainedNumber TotalWarScore => BannerKingsConfig.Instance.WarModel.CalculateTotalWarScore(this, false);
 
         public BKExplainedNumber CalculateWarScore(IFaction faction, bool explanations)
@@ -111,6 +123,18 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         public bool IsInternalWar() => Attacker.IsClan && Defender.IsClan && Sovereign != null;
         public bool IsMatchingWar(IFaction faction1, IFaction faction2) => faction1 == Attacker && faction2 == Defender ||
             faction2 == Attacker && faction1 == Defender;
+
+        public void Update()
+        {
+            if (CasusBelli.IsFulfilled(this))
+            {
+                DaysAttackerHeldObjective++;
+            }
+            else
+            {
+                DaysDefenderHeldObjective++;
+            }
+        }
 
         public void EndWar()
         {
