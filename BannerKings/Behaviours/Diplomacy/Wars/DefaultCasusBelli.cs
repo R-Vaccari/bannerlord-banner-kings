@@ -19,6 +19,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         {
             CulturalLiberation.Initialize(new TextObject("{=!}Cultural Liberation"),
                 new TextObject("{=!}Liberate a fief of your people from the rule of foreigners. Any town or castle that is mostly composed by our culture is reason enough for us to rule it rather than foreigners."),
+                null,
                 1.5f,
                 0.2f,
                 0.8f,
@@ -49,6 +50,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
             Invasion.Initialize(new TextObject("{=!}Invasion"),
                 new TextObject("{=!}Invade a foreign kingdom as is the way of our ancestors. Seize their property and stablish our own rule."),
+                new TextObject("{=!}Conquer Fiefs"),
                 1.5f,
                 0.2f,
                 0.8f,
@@ -79,6 +81,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
             GreatRaid.Initialize(new TextObject("{=!}Great Raid"),
                 new TextObject("{=!}Pillage and steal from our enemies as our ancestors did. Ruling their lands may be unviable, but it will not stop us from taking what we are owed by the rule of the strongest."),
+                new TextObject("{=!}Mass Raiding"),
                 1.5f,
                 0.2f,
                 0.8f,
@@ -109,6 +112,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
             ImperialSuperiority.Initialize(new TextObject("{=!}Imperial Superiority"),
                 new TextObject("{=!}Subjugate barbarians with our Imperial might as the original Empire once did. Strength is the language that they understand."),
+                new TextObject("{=!}Humiliate in Battle"),
                 1.5f,
                 0.2f,
                 0.8f,
@@ -170,6 +174,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
             ImperialReconquest.Initialize(new TextObject("{=!}Imperial Reconquest"),
                 new TextObject("{=!}Subjugate pretenders of the Empire. As rightful heirs of the Calradian Empire, any other kingdom that claims to be so ought to be subjugated and annexed by any means necessary."),
+                new TextObject("{=!}Conquer Fiefs"),
                 1.5f,
                 0.1f,
                 0.8f,

@@ -18,11 +18,12 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         {
         }
 
-        public void Initialize(TextObject name, TextObject description, float conquest, float raid, float capture, float declareWarScore,
+        public void Initialize(TextObject name, TextObject description, TextObject objectiveText, float conquest, float raid, float capture, float declareWarScore,
             Func<War, bool> isFulfilled, Func<War, bool> isInvalid, Func<IFaction, IFaction, CasusBelli, bool> isAdequate,
             Func<Kingdom, bool> showAsOption, Dictionary<TraitObject, float> traitWeights, TextObject warDeclaredText)
         {
             Initialize(name, description);
+            ObjectiveText = objectiveText;
             this.isFulfilled = isFulfilled;
             this.isInvalid = isInvalid;
             this.isAdequate = isAdequate;
@@ -38,9 +39,9 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         public CasusBelli GetCopy()
         {
             var copy = new CasusBelli(StringId);
-            copy.Initialize(Name, Description, ConquestWeight, RaidWeight, CaptureWeight,
-                DeclareWarScore, IsFulfilled, IsInvalid, IsAdequate, ShowAsOption, TraitWeights, 
-                warDeclaredText);
+            copy.Initialize(Name, Description, ObjectiveText, ConquestWeight, RaidWeight, CaptureWeight,
+                DeclareWarScore, IsFulfilled, IsInvalid, IsAdequate, ShowAsOption, 
+                TraitWeights, warDeclaredText);
             return copy;
         }
 
@@ -85,6 +86,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         public Settlement Fief { get; private set; }
         public Kingdom Attacker { get; private set; }
         public Kingdom Defender { get; private set; }
+        public TextObject ObjectiveText { get; private set; }
 
         public bool IsFulfilled(War war) => isFulfilled(war);
         public bool IsInvalid(War war) => isInvalid(war);
