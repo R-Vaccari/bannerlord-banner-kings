@@ -1,4 +1,6 @@
 ﻿using BannerKings.Behaviours.Diplomacy;
+using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Utils.Models;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -17,6 +19,21 @@ namespace BannerKings.Models.Vanilla
         public override float GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan, out TextObject warReason)
         {
             return GetScoreOfDeclaringWar(factionDeclaresWar, factionDeclaredWar, evaluatingClan, false, out warReason).ResultNumber;
+        }
+
+        public override float GetScoreOfDeclaringPeace(IFaction factionDeclaresPeace, IFaction factionDeclaredPeace, IFaction evaluatingClan, out TextObject peaceReason)
+        {
+            ExplainedNumber result = new ExplainedNumber(base.GetScoreOfDeclaringPeace(factionDeclaresPeace, 
+                factionDeclaredPeace, evaluatingClan, out peaceReason));
+
+            War war = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetWar(factionDeclaresPeace,factionDeclaredPeace);
+            if (war != null)
+            {
+                BKExplainedNumber fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, Hero.MainHero.MapFaction, true);
+                result.AddFactor(fatigue.ResultNumber);
+            }
+
+            return result.ResultNumber;
         }
 
         public ExplainedNumber GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan,

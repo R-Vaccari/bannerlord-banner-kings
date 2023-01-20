@@ -1,4 +1,5 @@
-﻿using Helpers;
+﻿using BannerKings.Utils.Models;
+using Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -72,7 +73,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
         public ExplainedNumber TotalWarScore => BannerKingsConfig.Instance.WarModel.CalculateTotalWarScore(this, false);
 
-        public ExplainedNumber CalculateWarScore(IFaction faction, bool explanations)
+        public BKExplainedNumber CalculateWarScore(IFaction faction, bool explanations)
         {
             if (faction == Attacker)
             {
@@ -84,7 +85,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 return BannerKingsConfig.Instance.WarModel.CalculateWarScore(this, Attacker, Defender, true, explanations);
             }
 
-            return new ExplainedNumber();
+            return new BKExplainedNumber();
         }
 
         public bool IsInternalWar() => Attacker.IsClan && Defender.IsClan && Sovereign != null;

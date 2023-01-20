@@ -1,10 +1,12 @@
 ﻿using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Utils.Extensions;
+using BannerKings.Utils.Models;
 using Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
@@ -24,10 +26,13 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateWarScore(War war, IFaction attacker, IFaction defender, bool isDefenderScore = false, 
+        public BKExplainedNumber CalculateWarScore(War war, IFaction attacker, IFaction defender, bool isDefenderScore = false, 
             bool explanations = false)
         {
-            var result = new ExplainedNumber(0f, explanations);
+            var result = new BKExplainedNumber(0f, explanations);
+            result.LimitMin(-1f);
+            result.LimitMax(1f);
+
             StanceLink attackerLink = attacker.GetStanceWith(defender);
             CasusBelli justification = war.CasusBelli;
             float totalWarScore = CalculateTotalWarScore(war).ResultNumber;
@@ -46,8 +51,8 @@ namespace BannerKings.Models.BKModels
             List<Settlement> attackerRaids = DiplomacyHelper.GetRaidsInWar(attacker, attackerLink, null);
             foreach (var settlement in attackerRaids)
             {
-                result.Add(CalculateFiefScore(settlement).ResultNumber / 3 * justification.ConquestWeight,
-                    settlement.Name);
+                float points = CalculateFiefScore(settlement).ResultNumber / 3 * justification.ConquestWeight;
+                result.Add(points / totalWarScore, settlement.Name);
             }
 
             List<Hero> attackerCaptives = DiplomacyHelper.GetPrisonersOfWarTakenByFaction(attacker, defender);
@@ -68,8 +73,8 @@ namespace BannerKings.Models.BKModels
            
             foreach (var hero in attackerCaptives)
             {
-                result.Add(CalculateHeroScore(hero, totalWarScore, hero == defenderHeir).ResultNumber * justification.CaptureWeight, 
-                    hero.Name);
+                float points = CalculateHeroScore(hero, totalWarScore, hero == defenderHeir).ResultNumber * justification.CaptureWeight;
+                result.Add(points / totalWarScore,  hero.Name);
             }
 
             // --- DEFENDER ----
@@ -80,17 +85,16 @@ namespace BannerKings.Models.BKModels
             {
                 if (settlement.MapFaction == defender && settlement != justification.Fief)
                 {
-                    float points = -CalculateFiefScore(settlement).ResultNumber * justification.ConquestWeight;
-                    result.Add(totalWarScore / points,
-                        settlement.Name);
+                    float points = -CalculateFiefScore(settlement).ResultNumber;
+                    result.Add(points / totalWarScore, settlement.Name);
                 }
             }
 
             List<Settlement> defenderRaids = DiplomacyHelper.GetRaidsInWar(defender, attackerLink, null);
             foreach (var settlement in defenderRaids)
             {
-                result.Add(-CalculateFiefScore(settlement).ResultNumber / 3 * justification.RaidWeight,
-                    settlement.Name);
+                float points = -CalculateFiefScore(settlement).ResultNumber / 3;
+                result.Add(points / totalWarScore, settlement.Name);
             }
 
             List<Hero> defenderCaptives = DiplomacyHelper.GetPrisonersOfWarTakenByFaction(defender, attacker);
@@ -111,7 +115,8 @@ namespace BannerKings.Models.BKModels
 
             foreach (var hero in defenderCaptives)
             {
-                result.Add(-CalculateHeroScore(hero, totalWarScore, hero == attackerHeir).ResultNumber, hero.Name);
+                float points = -CalculateHeroScore(hero, totalWarScore, hero == attackerHeir).ResultNumber;
+                result.Add(points / totalWarScore, hero.Name);
             }
 
             if (isDefenderScore)
@@ -141,7 +146,7 @@ namespace BannerKings.Models.BKModels
                     }
                 }
 
-                float renown = hero.Clan.Renown;
+                float renown = hero.Clan.Renown * 2;
                 result.Add(renown);
                 if (hero.IsClanLeader())
                 {
@@ -206,6 +211,57 @@ namespace BannerKings.Models.BKModels
             }
 
             return result;
+        }
+
+        public BKExplainedNumber CalculateFatigue(War war, IFaction faction, bool explanations = false)
+        {
+            var result = new BKExplainedNumber(0f, explanations);
+            result.LimitMin(0f);
+            result.LimitMax(1f);
+
+            IFaction enemy;
+            if (war.Defender == faction)
+            {
+                enemy = war.Attacker;
+            }
+            else
+            {
+                enemy = war.Defender;
+            }
+
+            StanceLink stance = faction.GetStanceWith(enemy);
+            int casualties = stance.GetCasualties(faction);
+            int limit = 0;
+
+            foreach (var fief in faction.Fiefs)
+            {
+                limit += GetTotalManpower(fief.Settlement);
+                if (fief.Villages  != null)
+                {
+                    foreach (Village village in fief.Villages)
+                    {
+                        limit += GetTotalManpower(village.Settlement);
+                    }
+                }
+            }
+
+            result.Add(casualties / limit, GameTexts.FindText("str_war_casualties_inflicted"));
+
+            float yearsPassed = stance.WarStartDate.ElapsedYearsUntilNow;
+            result.Add(yearsPassed * 0.08f, new TextObject("{=!}War duration"));
+
+            return result;
+        }
+
+        private int GetTotalManpower(Settlement settlement)
+        {
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            if (data != null)
+            {
+                return (int)(BannerKingsConfig.Instance.GrowthModel.CalculateSettlementCap(settlement, data).ResultNumber * 0.08f);
+            }
+
+            return 0;
         }
     }
 }
