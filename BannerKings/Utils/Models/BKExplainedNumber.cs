@@ -83,6 +83,11 @@ namespace BannerKings.Utils.Models
                 string value = string.Format("{0} : {1}{2:0.##}\n", valueTuple.Item1, (valueTuple.Item2 > 0.001f) ? "+" : "", (valueTuple.Item2 * 100).ToString() + '%');
                 mbstringBuilder.Append<string>(value);
             }
+
+            if (_explainer.Lines.Count == 0)
+            {
+                mbstringBuilder.Append(new TextObject("{=!}No factors yet").ToString());
+            }
             return mbstringBuilder.ToStringAndRelease();
         }
 

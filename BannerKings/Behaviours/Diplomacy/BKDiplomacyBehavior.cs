@@ -3,10 +3,12 @@ using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Diplomacy;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -72,6 +74,7 @@ namespace BannerKings.Behaviours.Diplomacy
             CampaignEvents.KingdomCreatedEvent.AddNonSerializedListener(this, OnKingdomCreated);
             CampaignEvents.AiHourlyTickEvent.AddNonSerializedListener(this, OnAiHourlyTick);
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
+            CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -112,6 +115,25 @@ namespace BannerKings.Behaviours.Diplomacy
                 if (!kingdomDiplomacies.ContainsKey(kingdom))
                 {
                     kingdomDiplomacies.Add(kingdom, new KingdomDiplomacy(kingdom));
+                }
+            }
+        }
+
+        private void OnOwnerChanged(Settlement settlement, bool openToClaim, Hero newOwner, Hero oldOwner,
+           Hero capturerHero,
+           ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
+        {
+            if (newOwner != null && oldOwner != null)
+            {
+                IFaction attacker = newOwner.MapFaction;
+                IFaction defender = oldOwner.MapFaction;
+                if (attacker != defender)
+                {
+                    War war = GetWar(attacker, defender);
+                    if (war != null)
+                    {
+                        war.RecalculateFronts();
+                    }
                 }
             }
         }
