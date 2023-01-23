@@ -21,7 +21,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         public override void Initialize()
         {
             CulturalLiberation.Initialize(new TextObject("{=!}Cultural Liberation"),
-                new TextObject("{=!}Liberate a fief of your people from the rule of foreigners. Any town or castle that is mostly composed by our culture is reason enough for us to rule it rather than foreigners."),
+                new TextObject("{=!}Liberate a fief of your people from the rule of foreigners. Any town or castle that is mostly composed by our culture is reason enough for us to rule it rather than foreigners.\n\nObjective: Capture the selected target."),
                 null,
                 1.5f,
                 0.2f,
@@ -52,7 +52,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=!}The {ATTACKER} marches to war! {FIEF} is being liberated from the oppresion of {DEFENDER}!"));
 
             Invasion.Initialize(new TextObject("{=!}Invasion"),
-                new TextObject("{=!}Invade a foreign kingdom as is the way of our ancestors. Seize their property and stablish our own rule."),
+                new TextObject("{=!}Invade a foreign kingdom as is the way of our ancestors. Seize their property and stablish our own rule.\n\nObjective: Capture 2 or more fiefs of the enemy's culture."),
                 new TextObject("{=!}Conquer Fiefs"),
                 1.5f,
                 0.2f,
@@ -64,7 +64,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     List<Settlement> attackerConquests = DiplomacyHelper.GetSuccessfullSiegesInWarForFaction(war.Attacker,
                        attackerLink, (Settlement x) => x.Town != null);
 
-                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture).Count >= 2;
+                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture && x.MapFaction == war.Attacker).Count >= 2;
                 },
                 (War war) =>
                 {
@@ -88,7 +88,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=!}The {ATTACKER} is launching a large scale invasion on the {DEFENDER}!"));
 
             GreatRaid.Initialize(new TextObject("{=!}Great Raid"),
-                new TextObject("{=!}Pillage and steal from our enemies as our ancestors did. Ruling their lands may be unviable, but it will not stop us from taking what we are owed by the rule of the strongest."),
+                new TextObject("{=!}Pillage and steal from our enemies as our ancestors did. Ruling their lands may be unviable, but it will not stop us from taking what we are owed by the rule of the strongest.\n\nObjective: Raid 12 or more villages of the enemy's culture."),
                 new TextObject("{=!}Mass Raiding"),
                 1.5f,
                 0.2f,
@@ -124,7 +124,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=!}The {ATTACKER} ride out for a great raid! {DEFENDER} towns and villages will be razed to the ground."));
 
             ImperialSuperiority.Initialize(new TextObject("{=!}Imperial Superiority"),
-                new TextObject("{=!}Subjugate barbarians with our Imperial might as the original Empire once did. Strength is the language that they understand."),
+                new TextObject("{=!}Subjugate barbarians with our Imperial might as the original Empire once did. Strength is the language that they understand.\n\nObjective: Capture 2 or more fiefs of the enemy's culture."),
                 new TextObject("{=!}Humiliate in Battle"),
                 1.4f,
                 0.8f,
@@ -136,7 +136,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     List<Settlement> attackerConquests = DiplomacyHelper.GetSuccessfullSiegesInWarForFaction(war.Attacker,
                        attackerLink, (Settlement x) => x.Town != null);
 
-                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture).Count >= 2;
+                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture && x.MapFaction == war.Attacker).Count >= 2;
                 },
                 (War war) =>
                 {
@@ -192,7 +192,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=!}The {ATTACKER} is subjugating the barbarians of {DEFENDER}!"));
 
             ImperialReconquest.Initialize(new TextObject("{=!}Imperial Reconquest"),
-                new TextObject("{=!}Subjugate pretenders of the Empire. As rightful heirs of the Calradian Empire, any other kingdom that claims to be so ought to be subjugated and annexed by any means necessary."),
+                new TextObject("{=!}Subjugate pretenders of the Empire. As rightful heirs of the Calradian Empire, any other kingdom that claims to be so ought to be subjugated and annexed by any means necessary.\n\nObjective: Capture 1 or more fiefs of the enemy's culture."),
                 new TextObject("{=!}Conquer Fiefs"),
                 1.5f,
                 0.1f,
@@ -204,7 +204,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     List<Settlement> attackerConquests = DiplomacyHelper.GetSuccessfullSiegesInWarForFaction(war.Attacker,
                        attackerLink, (Settlement x) => x.Town != null);
 
-                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture).Count >= 1;
+                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture && x.MapFaction == war.Attacker).Count >= 1;
                 },
                 (War war) =>
                 {

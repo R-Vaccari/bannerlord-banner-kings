@@ -16,10 +16,10 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             CasusBelli = casusBelli;
             Sovereign = sovereign;
 
-            SetBorders();
+            RecalculateFronts();
         }
 
-        private void SetBorders()
+        public void RecalculateFronts()
         {
             Dictionary<Town, int> attackerDic = new Dictionary<Town, int>();
             foreach (var fief in Attacker.Fiefs)
