@@ -18,6 +18,7 @@ using BannerKings.Managers.Titles.Laws;
 using BannerKings.Settings;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -109,11 +110,16 @@ namespace BannerKings.Models.Vanilla
                 }
                 else if (settlement.IsVillage ? settlement.Village.GetActualOwner() == buyerHero : settlement.Owner == buyerHero)
                 {
-                    factor = 0.5f;
+                    factor = 0.6f;
                 }
                 else if (buyerHero.PartyBelongedTo != null && buyerHero.PartyBelongedTo.Army != null)
                 {
                     factor = 0.4f;
+                }
+
+                if (buyerHero.MapFaction.IsKingdomFaction && FactionManager.GetEnemyKingdoms(buyerHero.MapFaction as Kingdom).Count() > 0)
+                {
+                    factor += 0.15f;
                 }
             }
             else if (settlement.IsVillage)
