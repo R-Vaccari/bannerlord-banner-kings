@@ -118,7 +118,7 @@ namespace BannerKings.Utils
         public static bool IsCloseFamily(Hero hero, Hero family)
         {
             return hero.Father == family || hero.Mother == family || hero.Children.Contains(family) ||
-                   hero.Siblings.Contains(family);
+                   hero.Siblings.Contains(family) || hero.Spouse == family;
         }
 
         public static int GetRosterCount(TroopRoster roster, string filter = null)
