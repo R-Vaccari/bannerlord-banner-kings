@@ -16,7 +16,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         public void Initialize(TextObject name, TextObject description, TraitObject mainTrait,
             bool demandsCouncil, bool allowsCommoners, bool allowsNobles, List<Occupation> preferredOccupations, 
             List<PolicyObject> supportedPolicy, List<PolicyObject> shunnedPolicies, List<DemesneLaw> supportedLaws, 
-            List<DemesneLaw> shunnedLaws, List<CasusBelli> supportedCasusBelli)
+            List<DemesneLaw> shunnedLaws, List<CasusBelli> supportedCasusBelli, List<Demand> possibleDemands)
         {
             Initialize(name, description);
             MainTrait = mainTrait;
@@ -29,6 +29,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             SupportedLaws = supportedLaws;
             ShunnedLaws = shunnedLaws;
             SupportedCasusBelli = supportedCasusBelli;
+            PossibleDemands = possibleDemands;
         }
 
         public bool IsInterestGroup { get; private set; }
@@ -48,5 +49,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         public List<DemesneLaw> SupportedLaws { get; private set; }
         public List<DemesneLaw> ShunnedLaws { get; private set; }
         public List<CasusBelli> SupportedCasusBelli { get; private set; }
+        public List<Demand> PossibleDemands { get; private set; }
     }
 }

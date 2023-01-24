@@ -1,5 +1,4 @@
-﻿
-using BannerKings.Behaviours.Diplomacy.Wars;
+﻿using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Titles.Laws;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -21,8 +20,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
         public override void Initialize()
         {
-            Royalists.Initialize(new TextObject(),
-                new TextObject(),
+            Royalists.Initialize(new TextObject("{=!}Royalists"),
+                new TextObject("{=!}The royalists are those who support the royal administration. They favor the sovereign even over themselves, be for true loyalty or for the prospect of compensation. Royalists support everything that benefits the royal administration regardless of impacts on other groups."),
                 DefaultTraits.Authoritarian,
                 false,
                 true,
@@ -60,10 +59,15 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 new List<CasusBelli>()
                 {
                     DefaultCasusBelli.Instance.CulturalLiberation
+                },
+                new List<Demand>()
+                {
+                    DefaultDemands.Instance.LawChange,
+                    DefaultDemands.Instance.PolicyChange
                 });
 
-            Traditionalists.Initialize(new TextObject(),
-               new TextObject(),
+            Traditionalists.Initialize(new TextObject("{=!}Traditionalists"),
+               new TextObject("{=!}Traditionalists support the status quo and the way of the ancestors. More than anything, they believe in strength. While they recognize the necessity for a strong ruler, they also do the necessity of liberty for the noble classes. They aim for a balance of power between the sovereign and their vassals, a continuation of old traditions and exerting power through force."),
                DefaultTraits.Authoritarian,
                false,
                true,
@@ -73,22 +77,24 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                },
                new List<PolicyObject>()
                {
-                    DefaultPolicies.SacredMajesty,
-                    DefaultPolicies.StateMonopolies,
                     DefaultPolicies.CrownDuty,
-                    DefaultPolicies.RoyalCommissions,
                     DefaultPolicies.RoyalGuard,
-                    DefaultPolicies.RoyalPrivilege,
-                    DefaultPolicies.PrecarialLandTenure,
-                    DefaultPolicies.LandTax,
-                    DefaultPolicies.ImperialTowns
+                    DefaultPolicies.FeudalInheritance,
+                    DefaultPolicies.RoadTolls,
+                    DefaultPolicies.Lawspeakers,
+                    DefaultPolicies.MilitaryCoronae,
+                    DefaultPolicies.LandGrantsForVeterans,
+                    DefaultPolicies.Serfdom
                },
                new List<PolicyObject>()
                {
                     DefaultPolicies.Marshals,
-                    DefaultPolicies.FeudalInheritance,
+                    DefaultPolicies.PrecarialLandTenure,
                     DefaultPolicies.WarTax,
-                    DefaultPolicies.Peerage
+                    DefaultPolicies.Magistrates,
+                    DefaultPolicies.ForgivenessOfDebts,
+                    DefaultPolicies.TribunesOfThePeople,
+                    DefaultPolicies.TrialByJury
                },
                new List<DemesneLaw>()
                {
@@ -96,15 +102,22 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                },
                new List<DemesneLaw>()
                {
-                    DefaultDemesneLaws.Instance.SlaveryAserai
+                    DefaultDemesneLaws.Instance.SlaveryManumission
                },
                new List<CasusBelli>()
                {
-                    DefaultCasusBelli.Instance.CulturalLiberation
+                    DefaultCasusBelli.Instance.CulturalLiberation,
+                    DefaultCasusBelli.Instance.Invasion,
+                    DefaultCasusBelli.Instance.GreatRaid
+               },
+               new List<Demand>()
+               {
+                   DefaultDemands.Instance.LawChange,
+                   DefaultDemands.Instance.PolicyChange
                });
 
-            Oligarchists.Initialize(new TextObject(),
-               new TextObject(),
+            Oligarchists.Initialize(new TextObject("{=!}Oligarchists"),
+               new TextObject("{=!}Oligarchists are noble people of influence concerned, first and foremost, with their own advantage. They continuously seek benefits for themselves or their peers, understanding they are part of the same class. Thus, their interests are often misaligned both with the ruler's, and with the common people."),
                DefaultTraits.Oligarchic,
                false,
                true,
@@ -149,6 +162,11 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                new List<CasusBelli>()
                {
                     DefaultCasusBelli.Instance.CulturalLiberation
+               },
+               new List<Demand>()
+               {
+                   DefaultDemands.Instance.LawChange,
+                   DefaultDemands.Instance.PolicyChange
                });
 
 
@@ -199,6 +217,11 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 new List<CasusBelli>()
                 {
                     DefaultCasusBelli.Instance.CulturalLiberation
+                },
+                new List<Demand>()
+                {
+                    DefaultDemands.Instance.LawChange,
+                    DefaultDemands.Instance.PolicyChange
                 });
         }
     }
