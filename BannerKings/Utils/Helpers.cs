@@ -59,17 +59,21 @@ namespace BannerKings.Utils
 
         public static void AddNotableToKeep(Hero notable, Settlement settlement)
         {
-            var town = settlement.Town;
-            LocationCharacter locCharacter = town.Settlement.LocationComplex.GetLocationCharacterOfHero(notable);
-            if (locCharacter != null)
+            if (notable != null && settlement != null)
             {
-                locCharacter.SpecialTargetTag = null;
+                var town = settlement.Town;
 
-                Location characterLocation = town.Settlement.LocationComplex.GetLocationOfCharacter(notable);
-                if (characterLocation.StringId != "lordshall")
+                LocationCharacter locCharacter = town.Settlement.LocationComplex.GetLocationCharacterOfHero(notable);
+                if (locCharacter != null)
                 {
-                    town.Settlement.LocationComplex.ChangeLocation(locCharacter, characterLocation,
-                                        settlement.LocationComplex.GetLocationWithId("lordshall"));
+                    locCharacter.SpecialTargetTag = null;
+
+                    Location characterLocation = town.Settlement.LocationComplex.GetLocationOfCharacter(notable);
+                    if (characterLocation.StringId != "lordshall")
+                    {
+                        town.Settlement.LocationComplex.ChangeLocation(locCharacter, characterLocation,
+                                            settlement.LocationComplex.GetLocationWithId("lordshall"));
+                    }
                 }
             }
         }
