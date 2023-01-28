@@ -218,7 +218,10 @@ namespace BannerKings.Models.Vanilla
                 factor = 0.8f;
             }
 
-            result.Add(village.TradeTaxAccumulated * factor, new TextObject("{=ZJePQQpz}Production sold by villagers"));
+            if (village.TradeTaxAccumulated > 0)
+            {
+                result.Add(village.TradeTaxAccumulated * factor, new TextObject("{=ZJePQQpz}Production sold by villagers"));
+            }
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
             if (data != null && data.VillageData != null)
