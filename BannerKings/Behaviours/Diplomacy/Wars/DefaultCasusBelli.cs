@@ -1,4 +1,5 @@
-﻿using Helpers;
+﻿using BannerKings.Managers.Titles;
+using Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         public CasusBelli CulturalLiberation { get; } = new CasusBelli("cultural_liberation");
         public CasusBelli GreatRaid { get; } = new CasusBelli("great_raid");
         public CasusBelli Invasion { get; } = new CasusBelli("invasion");
+        public CasusBelli FiefClaim { get; } = new CasusBelli("fief_claim");
         public override IEnumerable<CasusBelli> All => throw new NotImplementedException();
 
         public override void Initialize()
@@ -23,9 +25,9 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             CulturalLiberation.Initialize(new TextObject("{=!}Cultural Liberation"),
                 new TextObject("{=!}Liberate a fief of your people from the rule of foreigners. Any town or castle that is mostly composed by our culture is reason enough for us to rule it rather than foreigners.\n\nObjective: Capture the selected target."),
                 null,
-                1.5f,
-                0.2f,
-                0.8f,
+                1.3f,
+                0.5f,
+                1f,
                 5000f,
                 (War war) =>
                 {
@@ -40,6 +42,39 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 {
                     var settlement = casusBelli.Fief;
                     return settlement != null && settlement.Culture == faction1.Culture && settlement.Culture != faction2.Culture;
+                },
+                (Kingdom kingdom) =>
+                {
+                    return true;
+                },
+                new Dictionary<TraitObject, float>()
+                {
+
+                },
+                new TextObject("{=!}The {ATTACKER} marches to war! {FIEF} is being liberated from the oppresion of {DEFENDER}!"));
+
+            FiefClaim.Initialize(new TextObject("{=!}Claim Fief"),
+                new TextObject("{=!}Conquer a fief claimed by your realm. The benefactor of the conquest will always be the claimant, regardless of other ownership procedures.\n\nObjective: Capture the selected target."),
+                null,
+                1.2f,
+                0.7f,
+                1f,
+                5000f,
+                (War war) =>
+                {
+                    return war.CasusBelli.Fief.MapFaction == war.Attacker;
+                },
+                (War war) =>
+                {
+                    var targetFaction = war.CasusBelli.Fief.MapFaction;
+                    return targetFaction != war.Defender && targetFaction != war.Attacker;
+                },
+                (IFaction faction1, IFaction faction2, CasusBelli casusBelli) =>
+                {
+                    var settlement = casusBelli.Fief;
+                    var title = casusBelli.Title;
+                    ClaimType claim = title.GetHeroClaim(casusBelli.Claimant);
+                    return settlement != null && claim != ClaimType.None && claim != ClaimType.Ongoing;
                 },
                 (Kingdom kingdom) =>
                 {

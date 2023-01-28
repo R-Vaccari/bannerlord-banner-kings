@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BannerKings.Managers.Titles;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -52,6 +53,15 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             Fief = fief;
         }
 
+        public void SetInstanceData(Kingdom attacker, Kingdom defender, FeudalTitle title, Hero claimant)
+        {
+            Attacker = attacker;
+            Defender = defender;
+            Fief = title.fief;
+            Title = title;
+            Claimant = claimant;
+        }
+
         public TextObject GetDescriptionWithModifers() => new TextObject("{=!}{DESCRIPTION}\n\nConquest Modifier: {CONQUEST}%\nHostage Modifier: {HOSTAGE}%\nRaiding Modifier: {RAID}%")
             .SetTextVariable("DESCRIPTION", Description)
             .SetTextVariable("CONQUEST", ConquestWeight * 100)
@@ -83,6 +93,8 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             return result;
         }
 
+        public Hero Claimant { get; private set; }
+        public FeudalTitle Title { get; private set; }
         public Settlement Fief { get; private set; }
         public Kingdom Attacker { get; private set; }
         public Kingdom Defender { get; private set; }
