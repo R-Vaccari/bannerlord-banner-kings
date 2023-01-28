@@ -686,7 +686,7 @@ namespace BannerKings.Managers
 
         public void GiveLordshipOnKingdomJoin(Kingdom newKingdom, Clan clan, bool force = false)
         {
-            var clanTitles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
+            var clanTitles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan.Leader);
             if (clanTitles.Count > 0)
             {
                 return;
@@ -712,7 +712,17 @@ namespace BannerKings.Managers
             var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(newKingdom.Leader);
             if (titles.Count == 0)
             {
-                return;
+                foreach (Clan kingdomClan in newKingdom.Clans)
+                {
+                    if (kingdomClan != Clan.PlayerClan)
+                    {
+                        titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(kingdomClan.Leader);
+                        if (titles.Count > 0 && titles.FindAll(x => x.type == TitleType.Lordship).Count > 0)
+                        {
+                            break;
+                        }
+                    }
+                }
             }
 
             var lordships = titles.FindAll(x => x.type == TitleType.Lordship);
