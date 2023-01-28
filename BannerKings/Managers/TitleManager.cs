@@ -708,14 +708,16 @@ namespace BannerKings.Managers
                 return;
             }
 
-            GIVE:
+        GIVE:
+            Hero owner = newKingdom.Leader;
             var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(newKingdom.Leader);
-            if (titles.Count == 0)
+            if (titles.Count == 0 || titles.FindAll(x => x.type == TitleType.Lordship).Count == 0)
             {
                 foreach (Clan kingdomClan in newKingdom.Clans)
                 {
                     if (kingdomClan != Clan.PlayerClan)
                     {
+                        owner = kingdomClan.Leader;
                         titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(kingdomClan.Leader);
                         if (titles.Count > 0 && titles.FindAll(x => x.type == TitleType.Lordship).Count > 0)
                         {
@@ -735,8 +737,8 @@ namespace BannerKings.Managers
                 .FirstOrDefault();
             if (lordship != null)
             {
-                var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, lordship, newKingdom.Leader);
-                action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(newKingdom.Leader)
+                var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, lordship, owner);
+                action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(owner)
                     .ResultNumber;
                 action.TakeAction(clan.Leader);
 
