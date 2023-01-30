@@ -248,7 +248,8 @@ namespace BannerKings.Models.BKModels
 
             if (limit == 0)
             {
-                limit = faction.Fiefs.Count * 3000;
+                limit += 5000;
+                limit += faction.Fiefs.Count * 3000;
             }
 
             result.Add(casualties / limit, GameTexts.FindText("str_war_casualties_inflicted"));
