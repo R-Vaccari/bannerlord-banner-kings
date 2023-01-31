@@ -12,14 +12,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
     public class DefaultFaiths
     {
-        private PolytheisticFaith amraFaith, canticlesFaith;
-        private MonotheisticFaith aseraCode, darusosian;
-        private FaithGroup aseraGroup, battaniaGroup, imperialGroup, vlandiaGroup;
+        private FaithGroup aseraGroup, battaniaGroup, imperialGroup, vlandiaGroup, sturgiaGroup;
 
-        public Faith AseraCode => aseraCode;
-        public Faith AmraOllahm => amraFaith;
-        public Faith Darusosian => darusosian;
-        public Faith Canticles => canticlesFaith;
+        public MonotheisticFaith AseraCode { get; private set; }
+        public PolytheisticFaith AmraOllahm { get; private set; }
+        public MonotheisticFaith Darusosian { get; private set; }
+        public PolytheisticFaith Canticles { get; private set; }
+        public PolytheisticFaith Treelore { get; private set; }
 
         public FaithGroup ImperialGroup => imperialGroup;
 
@@ -40,10 +39,10 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         {
             aseraGroup = new FaithGroup(new TextObject("{=UAeorLSO}Aseran Faiths"),
                 new TextObject("{=9bKowx3B}Those that believe in Asera as the true and only prohpet."));
-            aseraCode = new AseraFaith();
+            AseraCode = new AseraFaith();
 
-            Rite zabiha = new Zabiha();
-            aseraCode.Initialize(DefaultDivinities.Instance.AseraMain,
+            ContextualRite zabiha = new Zabiha();
+            AseraCode.Initialize(DefaultDivinities.Instance.AseraMain,
                 new List<Divinity>
                 {
                     DefaultDivinities.Instance.AseraSecondary1, DefaultDivinities.Instance.AseraSecondary2,
@@ -54,28 +53,28 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     {DefaultTraits.Honor, true},
                     {DefaultTraits.Valor, true}
                 },
-                aseraGroup, new List<Rite> {zabiha});
+                aseraGroup, new List<ContextualRite> {zabiha});
 
             battaniaGroup = new FaithGroup(new TextObject("{=GbQpgQat}Derwyddon Faiths"),
                 new TextObject("{=ZonhX1rf}The faiths in the true old Calradian gods."));
-            amraFaith = new AmraFaith();
+            AmraOllahm = new AmraFaith();
 
-            Rite ironOffering = new Offering(DefaultItems.IronOre, 100);
-            amraFaith.Initialize(DefaultDivinities.Instance.AmraMain,
+            ContextualRite ironOffering = new Offering(DefaultItems.IronOre, 100);
+            AmraOllahm.Initialize(DefaultDivinities.Instance.AmraMain,
                 new List<Divinity> {DefaultDivinities.Instance.AmraSecondary1, DefaultDivinities.Instance.AmraSecondary2},
                 new Dictionary<TraitObject, bool>
                 {
                     {DefaultTraits.Honor, false},
                     {DefaultTraits.Valor, true}
                 },
-                battaniaGroup, new List<Rite> {ironOffering});
+                battaniaGroup, new List<ContextualRite> {ironOffering});
 
 
             imperialGroup = new FaithGroup(new TextObject("{=NWqkTdMt}Calradian Faiths"),
                 new TextObject("{=eqvyNpT8}The Imperial Calradian faiths."));
-            darusosian = new DarusosianFaith();
+            Darusosian = new DarusosianFaith();
             DarusosianExecution darusosianExecution = new DarusosianExecution();
-            darusosian.Initialize(DefaultDivinities.Instance.DarusosianMain,
+            Darusosian.Initialize(DefaultDivinities.Instance.DarusosianMain,
                 new List<Divinity>
                     {DefaultDivinities.Instance.DarusosianSecondary1, DefaultDivinities.Instance.DarusosianSecondary2},
                 new Dictionary<TraitObject, bool>
@@ -83,13 +82,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     {DefaultTraits.Honor, true},
                     {DefaultTraits.Mercy, true}
                 },
-                imperialGroup, new List<Rite>() { darusosianExecution });
+                imperialGroup, new List<ContextualRite>() { darusosianExecution });
 
 
             vlandiaGroup = new FaithGroup(new TextObject("{=6FGQ31TM}Vlandic Faiths"),
                 new TextObject("{=U4yTbB0J}The faiths brought through the seas by the Vlandic peoples."));
-            canticlesFaith = new CanticlesFaith();
-            canticlesFaith.Initialize(DefaultDivinities.Instance.VlandiaMain,
+            Canticles = new CanticlesFaith();
+            Canticles.Initialize(DefaultDivinities.Instance.VlandiaMain,
                 new List<Divinity>
                     {DefaultDivinities.Instance.VlandiaSecondary1, DefaultDivinities.Instance.VlandiaSecondary2},
                 new Dictionary<TraitObject, bool>
@@ -97,7 +96,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     {DefaultTraits.Mercy, false},
                     {DefaultTraits.Valor, true}
                 },
-                vlandiaGroup, new List<Rite>());
+                vlandiaGroup, new List<ContextualRite>());
         }
 
         public Faith GetById(string id)

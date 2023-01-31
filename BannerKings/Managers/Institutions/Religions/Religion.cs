@@ -33,11 +33,11 @@ namespace BannerKings.Managers.Institutions.Religions
             leadership.Initialize(this);
         }
 
-        public MBReadOnlyList<Rite> Rites
+        public MBReadOnlyList<ContextualRite> Rites
         {
             get
             {
-                var list = new List<Rite>();
+                var list = new List<ContextualRite>();
                 list.AddRange(Faith.Rites);
                 if (doctrineIds.Contains("sacrifice"))
                 {
@@ -84,12 +84,8 @@ namespace BannerKings.Managers.Institutions.Religions
         }
 
         public MBReadOnlyDictionary<Settlement, Clergyman> Clergy => clergy.GetReadOnlyDictionary();
-
         public MBReadOnlyList<CultureObject> FavoredCultures => favoredCultures.GetReadOnlyList();
         public ExplainedNumber Fervor => BannerKingsConfig.Instance.ReligionModel.CalculateFervor(this);
-  
-       
-            
 
         internal void PostInitialize(Faith faith)
         {

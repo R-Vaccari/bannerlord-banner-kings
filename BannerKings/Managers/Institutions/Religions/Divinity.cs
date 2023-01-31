@@ -1,7 +1,6 @@
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
-using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
@@ -14,12 +13,13 @@ namespace BannerKings.Managers.Institutions.Religions
         }
 
         public void Initialize(TextObject name, TextObject description, TextObject effects,
-            TextObject secondaryTitle = null, int blessingCost = 300)
+            TextObject secondaryTitle = null, int blessingCost = 300, bool isIndefiniteMembership = false)
         {
             Initialize(name, description);
             Effects = effects;
             SecondaryTitle = secondaryTitle ?? new TextObject("{=!}");
             this.blessingCost = blessingCost;
+            IsIndefiniteMembership = isIndefiniteMembership;
         }
 
         public int BaseBlessingCost => blessingCost;
@@ -36,7 +36,7 @@ namespace BannerKings.Managers.Institutions.Religions
         }
 
         public TextObject Effects { get; private set; }
-
         public TextObject SecondaryTitle { get; private set; }
+        public bool IsIndefiniteMembership { get; private set; }
     }
 }

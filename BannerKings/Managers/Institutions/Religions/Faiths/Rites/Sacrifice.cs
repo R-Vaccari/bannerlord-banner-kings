@@ -8,7 +8,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 {
-    public class Sacrifice : Rite
+    public class Sacrifice : ContextualRite
     {
         private Hero input;
 
@@ -65,18 +65,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
             BannerKingsConfig.Instance.ReligionsManager.AddPiety(actionTaker, piety, actionTaker.Clan == Clan.PlayerClan);
             actionTaker.AddSkillXp(BKSkills.Instance.Theology, piety * 1.2f);
-
-            /*foreach (Clan clan in Clan.All)
-            {
-                Religion clanReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
-                if (clan != actionTaker.Clan && (clanReligion == null || !clanReligion.Doctrines.Contains("sacrifice")))
-                {
-                    bool affectRelatives;
-                    int relationChangeForExecutingHero = Campaign.Current.Models.ExecutionRelationModel.GetRelationChangeForExecutingHero(input, actionTaker, out affectRelatives);
-                    if (relationChangeForExecutingHero != 0)
-                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(actionTaker, clan.Leader, relationChangeForExecutingHero, true);
-                }
-            }*/
 
             if (actionTaker.GetPerkValue(BKPerks.Instance.TheologyRitesOfPassage))
             {

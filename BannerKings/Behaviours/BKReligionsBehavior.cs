@@ -25,7 +25,7 @@ namespace BannerKings.Behaviours
     {
         private static ReligionsManager ReligionsManager => BannerKingsConfig.Instance.ReligionsManager;
         private Divinity selectedDivinity;
-        private Rite selectedRite;
+        private ContextualRite selectedRite;
 
         public override void RegisterEvents()
         {
@@ -702,7 +702,7 @@ namespace BannerKings.Behaviours
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate(List<InquiryElement> x)
                 {
-                    var rite = (Rite?) x[0].Identifier;
+                    var rite = (ContextualRite?) x[0].Identifier;
                     selectedRite = rite;
                     rite.Execute(Hero.MainHero);
                 },

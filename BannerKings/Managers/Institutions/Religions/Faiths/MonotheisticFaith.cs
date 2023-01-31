@@ -7,7 +7,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
     public abstract class MonotheisticFaith : Faith
     {
         public void Initialize(Divinity mainGod, List<Divinity> pantheon, Dictionary<TraitObject, bool> traits,
-            FaithGroup faithGroup, List<Rite> rites = null)
+            FaithGroup faithGroup, List<ContextualRite> rites = null)
         {
             Initialize(mainGod, traits, faithGroup, rites);
             this.pantheon = pantheon;

@@ -6,7 +6,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 {
-    public class Offering : Rite
+    public class Offering : ContextualRite
     {
         protected readonly ItemObject input;
         protected readonly int inputCount;

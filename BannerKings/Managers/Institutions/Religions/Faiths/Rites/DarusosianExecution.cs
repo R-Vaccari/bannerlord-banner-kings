@@ -9,7 +9,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 {
-    public class DarusosianExecution : Rite
+    public class DarusosianExecution : ContextualRite
     {
         private Hero input;
 
