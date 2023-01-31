@@ -512,6 +512,10 @@ namespace BannerKings.Behaviours
                 args.MenuContext.GameMenu.SetProgressOfWaitingInMenu(diff * 0.125f);
 
                 var settlement = Settlement.CurrentSettlement;
+                if (settlement == null)
+                {
+                    GameMenu.SwitchToMenu("bannerkings_actions");
+                }
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData;
                 var woodland = data.Woodland;
                 var game = woodland switch
@@ -708,7 +712,10 @@ namespace BannerKings.Behaviours
                 huntingRight = kingdom.HasPolicy(DefaultPolicies.HuntingRights);
             }
 
-            return !IsWounded() && !criminal && (huntingRight || Settlement.CurrentSettlement.OwnerClan == Clan.PlayerClan);
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
+
+            return !IsWounded() && !criminal && (huntingRight || Settlement.CurrentSettlement.OwnerClan == Clan.PlayerClan) && data != null 
+                && data.LandData != null;
         }
 
         private static bool MenuCastleRecruitsCondition(MenuCallbackArgs args)

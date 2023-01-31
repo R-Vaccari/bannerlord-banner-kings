@@ -50,7 +50,6 @@ namespace BannerKings.UI.Estates
         [DataSourceProperty]
         public bool IsEnabled => !Estate.IsDisabled;
 
-
         public Estate Estate { get; private set; }
 
         public override void RefreshValues()
@@ -89,15 +88,12 @@ namespace BannerKings.UI.Estates
                new BasicTooltipViewModel(() => new TextObject("{=RhMomMnx}This estate's manpower, drawn from it's population. This manpower is used to fuel the estate owner's volunteers. When volunteers are recruited from an estate-owner, the manpower is drawn from the estate rather than the overall settlement.")
                .ToString())));
 
-
             var acreage = Estate.AcreageGrowth;
             MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("Acreage:"),
                (int)Estate.Acreage,
                (int)acreage.ResultNumber,
                TownManagementDescriptionItemVM.DescriptionType.Prosperity,
                new BasicTooltipViewModel(() => acreage.GetExplanations())));
-
-
 
             PlayerOwned = Estate.Owner == Hero.MainHero && !IsDisabled;
 
@@ -122,7 +118,6 @@ namespace BannerKings.UI.Estates
             {
                 DutyEnabled = false;
             }
-            
 
             DutySelector = new BannerKingsSelectorVM<BKItemVM>(DutyEnabled, 0, OnDutyChange);
             DutySelector.AddItem(new BKItemVM(EstateDuty.Taxation, true, "",
@@ -137,7 +132,6 @@ namespace BannerKings.UI.Estates
 
             if (IsEnabled)
             {
-                
                 LandInfo.Add(new InformationElement(new TextObject("{=56YOTTBC}Farmland:").ToString(),
                    new TextObject("{=xqot659p}{ACRES} acres").SetTextVariable("ACRES", Estate.Farmland.ToString("0.00")).ToString(),
                    new TextObject("{=ABrCGWep}Acres in this region used as farmland, the main source of food in most places")
@@ -310,6 +304,9 @@ namespace BannerKings.UI.Estates
 
         [DataSourceProperty]
         public string GrantText => new TextObject("{=dugq4xHo}Grant").ToString();
+
+        [DataSourceProperty]
+        public string ReclaimText => new TextObject("{=!}Reclaim").ToString();
 
 
         [DataSourceProperty]

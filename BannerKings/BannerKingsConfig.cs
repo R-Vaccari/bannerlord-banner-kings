@@ -78,23 +78,20 @@ namespace BannerKings
 
         public void InitializeManagersFirstTime()
         {
-            if (FirstUse)
+            InitManagers();
+            foreach (var settlement in Settlement.All.Where(settlement => settlement.IsVillage || settlement.IsTown || settlement.IsCastle))
             {
-                InitManagers();
-                foreach (var settlement in Settlement.All.Where(settlement => settlement.IsVillage || settlement.IsTown || settlement.IsCastle))
-                {
-                    PopulationManager.InitializeSettlementPops(settlement);
-                }
+                PopulationManager.InitializeSettlementPops(settlement);
+            }
 
-                foreach (var clan in Clan.All.Where(clan => !clan.IsEliminated && !clan.IsBanditFaction))
-                {
-                    CourtManager.CreateCouncil(clan);
-                }
+            foreach (var clan in Clan.All.Where(clan => !clan.IsEliminated && !clan.IsBanditFaction))
+            {
+                CourtManager.CreateCouncil(clan);
+            }
 
-                foreach (var hero in Hero.AllAliveHeroes)
-                {
-                    EducationManager.InitHeroEducation(hero);
-                }
+            foreach (var hero in Hero.AllAliveHeroes)
+            {
+                EducationManager.InitHeroEducation(hero);
             }
 
             FirstUse = false;

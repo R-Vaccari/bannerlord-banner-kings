@@ -126,7 +126,7 @@ namespace BannerKings.Models.Vanilla
                     if (buyerHero.CurrentSettlement != null)
                     {
                         var title = BannerKingsConfig.Instance.TitleManager.GetTitle(buyerHero.CurrentSettlement);
-                        if (title != null)
+                        if (title != null && buyerHero.MapFaction != buyerHero.CurrentSettlement.MapFaction)
                         {
                             var contract = title.contract;
                             if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingFreeContracts))
