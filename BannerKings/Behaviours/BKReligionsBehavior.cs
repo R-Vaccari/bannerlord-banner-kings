@@ -69,7 +69,6 @@ namespace BannerKings.Behaviours
 
                 if (religion != null)
                 {
-                   
                     List<Hero> toRemove = new List<Hero>();
                     int count = settlement.Notables.Count(x => x.IsPreacher);
                     if (count > 1)
@@ -129,13 +128,8 @@ namespace BannerKings.Behaviours
                             }
                         }
                     }
-                   
                 }
             }
-          
-
-           
-            
         }
 
         private void OnRaidCompleted(BattleSideEnum winnerSide, MapEvent mapEvent)
@@ -217,12 +211,10 @@ namespace BannerKings.Behaviours
                     }
                 }
 
-
                 AddHeroToIdealReligion(hero);
             } 
             else
             {
- 
                 if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
                     DefaultDivinities.Instance.AseraSecondary2) && hero.IsPartyLeader)
                 {
@@ -267,7 +259,6 @@ namespace BannerKings.Behaviours
                             Color.ConvertStringToColor("#00CCFF")));
                     }
                 }
-
 
                 if (CampaignTime.Now.GetDayOfSeason == 1 && BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
                     DefaultDivinities.Instance.DarusosianSecondary1))
@@ -327,7 +318,6 @@ namespace BannerKings.Behaviours
                     ReligionsManager.AddPiety(religion, hero, BannerKingsConfig.Instance.PietyModel.CalculateEffect(hero).ResultNumber);
                 }
             }
-            
         }
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
@@ -365,7 +355,6 @@ namespace BannerKings.Behaviours
                 "{=KdVPngCa}{CLERGYMAN_PREACHING_LAST}",
                 IsPreacher, null);
 
-
             starter.AddPlayerLine("bk_question_faith", "hero_main_options", "bk_preacher_asked_faith",
                 "{=rhPmXyLC}How do I prove my faith?",
                 IsPreacher, null);
@@ -377,7 +366,6 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("bk_answer_faith_2", "bk_preacher_asked_faith_last", "hero_main_options",
                 "{=Pv6nVzD1}{CLERGYMAN_FAITH_LAST}",
                 IsPreacher, null);
-
 
             starter.AddPlayerLine("bk_question_faith_forbidden", "hero_main_options",
                 "bk_preacher_asked_faith_forbidden",
@@ -410,7 +398,6 @@ namespace BannerKings.Behaviours
                 "{=6d9H5id0}{CLERGYMAN_INDUCTION_LAST}",
                 IsPreacher, InductionOnConsequence);
 
-
             starter.AddPlayerLine("bk_question_boon", "hero_main_options", "bk_preacher_asked_boon",
                 "{=H9E58HNp}{CLERGYMAN_BLESSING_ACTION}",
                 IsPreacher,
@@ -440,7 +427,6 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_boon_confirm", "bk_boon_confirm", "hero_main_options",
                 "{=G4ALCxaA}Never mind.",
                 null, null);
-
 
             starter.AddPlayerLine("bk_question_rite", "hero_main_options", "bk_preacher_asked_rites",
                 "{=hcK4qzV2}I would like to perform a rite.",
@@ -480,7 +466,6 @@ namespace BannerKings.Behaviours
                 "{=G4ALCxaA}Never mind.",
                 null, null);
 
-
             starter.AddPlayerLine("bk_blessing_recruit_battania_bandits", "bandit_attacker", "common_encounter_ultimatum_answer",
                 "{=2QtnvGFq}I am oathbound to the Na Sidhfir. As men of the wilds, will you join me?",
                 RecruitBattaniaBanditsOnCondition,
@@ -488,8 +473,6 @@ namespace BannerKings.Behaviours
                 100, 
                 null, 
                 null);
-
-
         }
 
         private bool RecruitBattaniaBanditsOnCondition()
@@ -544,15 +527,12 @@ namespace BannerKings.Behaviours
                 faithText = new TextObject("{=WWkVwmPy}Lords of {CURRENT_FAITH} faith may disapprove your change")
                 .SetTextVariable("CURRENT_FAITH", playerReligion.Faith.GetFaithName());
             }
-            
 
             var result = religion.Faith.GetInductionAllowed(Hero.MainHero, clergyman.Rank);
             if (!result.Item1)
             {
                 hintText = result.Item2;
                 return false;
-
-                
             }
 
             hintText = new TextObject("{=Uygas52E}{POSSIBLE}. Changing faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}")
@@ -641,7 +621,6 @@ namespace BannerKings.Behaviours
                 }
             }
 
-
             if (!anyPossible)
             {
                 hintText = new TextObject("{=LCTBJedU}Not enough piety to receive any blessing (minimum {PIETY} piety).")
@@ -726,7 +705,6 @@ namespace BannerKings.Behaviours
                 sb.Append(rite.GetName() + ", ");
             }
 
-
             MBTextManager.SetTextVariable("CLERGYMAN_RITE", riteText.SetTextVariable("RITES", faithText
                 .SetTextVariable("FAITH", religion.Faith.GetFaithName())
                 .SetTextVariable("RITES", sb.ToString())));
@@ -749,7 +727,6 @@ namespace BannerKings.Behaviours
 
             InitializePreacherTexts();
             return true;
-
         }
 
         private void InitializePreacherTexts()
@@ -808,9 +785,6 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
-
-        
-
         [HarmonyPatch(typeof(KingdomDecision), "GetInfluenceCostOfSupport")]
         internal class GetInfluenceCostOfSupportPatch
         {
