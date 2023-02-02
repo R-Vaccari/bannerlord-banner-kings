@@ -1,5 +1,7 @@
 using BannerKings.Managers.Skills;
+using System;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions
@@ -7,19 +9,22 @@ namespace BannerKings.Managers.Institutions.Religions
     public class Divinity : BannerKingsObject
     {
         private int blessingCost;
+        private Func<Hero, bool> canBeInducted;
 
         public Divinity(string id) : base(id)
         {
         }
 
         public void Initialize(TextObject name, TextObject description, TextObject effects,
-            TextObject secondaryTitle = null, int blessingCost = 300, bool isIndefiniteMembership = false)
+            TextObject secondaryTitle = null, int blessingCost = 300, Settlement shrine = null, 
+            Func<Hero, bool> canBeInducted = null)
         {
             Initialize(name, description);
             Effects = effects;
             SecondaryTitle = secondaryTitle ?? new TextObject("{=!}");
+            Shrine = shrine;
             this.blessingCost = blessingCost;
-            IsIndefiniteMembership = isIndefiniteMembership;
+            this.canBeInducted = canBeInducted;
         }
 
         public int BaseBlessingCost => blessingCost;
@@ -35,8 +40,18 @@ namespace BannerKings.Managers.Institutions.Religions
             return (int)baseCost;
         }
 
+        public bool CanBeInducted(Hero hero)
+        {
+            if (canBeInducted != null)
+            {
+                return canBeInducted(hero);
+            }
+
+            return true;
+        }
+
         public TextObject Effects { get; private set; }
         public TextObject SecondaryTitle { get; private set; }
-        public bool IsIndefiniteMembership { get; private set; }
+        public Settlement Shrine { get; private set; }
     }
 }

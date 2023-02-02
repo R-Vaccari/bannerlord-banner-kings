@@ -3,7 +3,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 {
     public abstract class RecurrentRite : Rite
     {
-        public int DayOfTheSeason { get; protected set; }
-        public int SeasonOfTheYear { get; protected set; }
+        public abstract int DayOfTheSeason { get; }
+        public abstract int SeasonOfTheYear { get; }
     }
 }

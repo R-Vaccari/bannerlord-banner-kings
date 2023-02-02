@@ -8,7 +8,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
     {
         public void Initialize(Divinity mainGod, List<Divinity> pantheon, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup, List<ContextualRite> rites = null)
         {
-            base.Initialize(mainGod, traits, faithGroup);
+            base.Initialize(mainGod, traits, faithGroup, rites);
             this.pantheon = pantheon;
         }
     }

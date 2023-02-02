@@ -57,10 +57,10 @@ namespace BannerKings.Managers.Institutions.Religions
             Piety += piety;
         }
 
-        public void AddBlessing(Divinity blessing, Hero hero)
+        public void AddBlessing(Divinity blessing, Hero hero, bool isIdefiniteMembership = false)
         {
             Blessing = blessing;
-            if (blessing.IsIndefiniteMembership)
+            if (isIdefiniteMembership)
             {
                 blessingEndDate = CampaignTime.Never;
             }

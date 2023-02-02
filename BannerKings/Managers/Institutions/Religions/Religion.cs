@@ -211,10 +211,5 @@ namespace BannerKings.Managers.Institutions.Religions
 
             return base.Equals(obj);
         }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
     }
 }
