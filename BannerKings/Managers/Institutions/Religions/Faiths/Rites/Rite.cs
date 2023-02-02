@@ -8,7 +8,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         public abstract TextObject GetName();
         public abstract TextObject GetDescription();
         public abstract float GetPietyReward();
-        public abstract bool MeetsCondition(Hero hero);
+        public abstract bool MeetsCondition(Hero hero, out TextObject reason);
         public abstract void Execute(Hero executor);
     }
 }

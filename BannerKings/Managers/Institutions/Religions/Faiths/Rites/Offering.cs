@@ -1,4 +1,5 @@
 using BannerKings.Managers.Skills;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -48,8 +49,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                 .SetTextVariable("COUNT", inputCount);
         }
 
-        public override bool MeetsCondition(Hero hero)
+        public override bool MeetsCondition(Hero hero, out TextObject reason)
         {
+            reason = new TextObject("{=!}This rite is available to be performed.");
             var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
             bool baseResult = hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
                              data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero));
@@ -60,11 +62,26 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                 foreach (var element in roster)
                 {
                     var item = element.EquipmentElement.Item;
-                    if (item != null && item.StringId == input.StringId && element.Amount >= inputCount)
+                    if (item != null && (input != null && item.StringId == input.StringId) && element.Amount >= inputCount)
                     {
                         hasItems = true;
                         break;
                     }
+                }
+            }
+            else
+            {
+                reason = new TextObject("{=!}Not enough time ({YEARS} years) has passed since the last rite of this type was performed.")
+                    .SetTextVariable("YEARS", GetTimeInterval(hero).ToString("0.0"));
+            }
+
+            if (!hasItems)
+            {
+                if (input != null)
+                {
+                    reason = new TextObject("{=!}This rite requires {COUNT} unit(s) of {ITEM}.")
+                        .SetTextVariable("COUNT", inputCount)
+                        .SetTextVariable("ITEM", input.Name);
                 }
             }
 

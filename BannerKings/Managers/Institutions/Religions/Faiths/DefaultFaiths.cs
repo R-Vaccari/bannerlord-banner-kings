@@ -5,7 +5,6 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Empire;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Battania;
 using BannerKings.Managers.Institutions.Religions.Faiths.Vlandia;
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Localization;
 
@@ -59,8 +58,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             battaniaGroup = new FaithGroup(new TextObject("{=GbQpgQat}Derwyddon Faiths"),
                 new TextObject("{=ZonhX1rf}The faiths in the true old Calradian gods."));
             AmraOllahm = new AmraFaith();
-
-            ContextualRite ironOffering = new IronOffering();
             AmraOllahm.Initialize(DefaultDivinities.Instance.AmraMain,
                 new List<Divinity> {DefaultDivinities.Instance.AmraSecondary1, DefaultDivinities.Instance.AmraSecondary2},
                 new Dictionary<TraitObject, bool>
@@ -68,8 +65,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     {DefaultTraits.Honor, false},
                     {DefaultTraits.Valor, true}
                 },
-                battaniaGroup, new List<ContextualRite> {ironOffering});
-
+                battaniaGroup, 
+                new List<ContextualRite> 
+                { 
+                    new IronOffering(), 
+                    new GreatSwordOffering()
+                });
 
             imperialGroup = new FaithGroup(new TextObject("{=NWqkTdMt}Calradian Faiths"),
                 new TextObject("{=eqvyNpT8}The Imperial Calradian faiths."));

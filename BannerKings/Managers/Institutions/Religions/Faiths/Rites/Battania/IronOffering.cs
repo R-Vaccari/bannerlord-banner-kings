@@ -9,7 +9,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Battania
         {
         }
 
-        public override TextObject GetName() => new TextObject("{=!}Lann-Tairgseadh");
+        public override TextObject GetName() => new TextObject("{=!}Iarnaig-Tairgseadh");
         public override TextObject GetDescription() => new TextObject("{=!}Believed to me");
     }
 }
