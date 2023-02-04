@@ -15,7 +15,21 @@ namespace BannerKings.Managers.Institutions.Religions
         public Religion Canticles { get; } = new Religion("canticles");
         public Religion Treelore { get; } = new Religion("treelore");
 
-        public override IEnumerable<Religion> All => throw new System.NotImplementedException();
+        public override IEnumerable<Religion> All
+        {
+            get
+            {
+                yield return AseraCode;
+                yield return Amra;
+                yield return Martyrdom;
+                yield return Canticles;
+                yield return Treelore;
+                foreach (Religion item in ModAdditions)
+                {
+                    yield return item;
+                }
+            }
+        }
 
         public override void Initialize()
         {

@@ -9,17 +9,11 @@ namespace BannerKings.Managers.Education.Languages
     public class DefaultLanguages : DefaultTypeInitializer<DefaultLanguages, Language>
     {
         public Language Battanian { get; private set; }
-
         public Language Vlandic { get; private set; }
-
         public Language Calradian { get; private set; }
-
         public Language Sturgian { get; private set; }
-
         public Language Aseran { get; private set; }
-
         public Language Khuzait { get; private set; }
-
         public Language Vakken { get; private set; }
 
         public override IEnumerable<Language> All
@@ -33,6 +27,10 @@ namespace BannerKings.Managers.Education.Languages
                 yield return Aseran;
                 yield return Khuzait;
                 yield return Vakken;
+                foreach (Language item in ModAdditions)
+                {
+                    yield return item;
+                }
             }
         }
 
@@ -55,8 +53,10 @@ namespace BannerKings.Managers.Education.Languages
                 cultures.First(x => x.StringId == "khuzait"), GetIntelligibles(Khuzait));
             Vlandic.Initialize(new TextObject("{=6FGQ31TM}Vlandic"), new TextObject("{=!}"),
                 cultures.First(x => x.StringId == "vlandia"), GetIntelligibles(Vlandic));
-            Calradian.Initialize(new TextObject("{=NWqkTdMt}Calradian"), new TextObject("{=!}"),
-                cultures.First(x => x.StringId == "empire"), GetIntelligibles(Calradian));
+            Calradian.Initialize(new TextObject("{=NWqkTdMt}Calradian"), 
+                new TextObject("{=!}The Imperial language of the Calradian empire. Though scholars have made efforts into keeping the language pure, centuries of contact with local cultures have made Calradian adopt small quantities of local vocabularies. Being a language of prestige, Calradian vocabulary are also often adopted by foreign languages, due to it's usefulness in the continent as a Lingua Franca, often used by traders, nobles during their education or peasants looking for a better life within the Empire."),
+                cultures.First(x => x.StringId == "empire"), 
+                GetIntelligibles(Calradian));
             Aseran.Initialize(new TextObject("{=UAeorLSO}Aseran"), new TextObject("{=!}"), cultures.First(x => x.StringId == "aserai"),
                 GetIntelligibles(Aseran));
             Vakken.Initialize(new TextObject("{=brxz2SmN}Vakken"), new TextObject("{=!}"),

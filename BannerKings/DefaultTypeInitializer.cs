@@ -10,6 +10,8 @@ namespace BannerKings
 
         public abstract IEnumerable<TMBObjectBase> All { get; }
 
+        protected List<TMBObjectBase> ModAdditions { get; } = new List<TMBObjectBase>();
+
         public abstract void Initialize();
 
         public TMBObjectBase GetById(TMBObjectBase input)
@@ -24,6 +26,14 @@ namespace BannerKings
             return input != null 
                 ? All.FirstOrDefault(x => x.StringId == input) 
                 : null;
+        }
+
+        public void AddObject(TMBObjectBase toAdd)
+        {
+            if (toAdd != null)
+            {
+                ModAdditions.Add(toAdd);
+            }
         }
 
         private struct ConfigHolder
