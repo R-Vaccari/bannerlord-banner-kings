@@ -53,41 +53,7 @@ namespace BannerKings.Managers
 
         public void InitializeReligions()
         {
-            var aserai = Utils.Helpers.GetCulture("aserai");
-            var khuzait = Utils.Helpers.GetCulture("khuzait");
-            var imperial = Utils.Helpers.GetCulture("empire");
-            var battania = Utils.Helpers.GetCulture("battania");
-            var vlandia = Utils.Helpers.GetCulture("vlandia");
-
-            var aseraiReligion = new Religion(null,
-                DefaultFaiths.Instance.AseraCode, new KinshipLeadership(),
-                new List<CultureObject> {aserai, khuzait, imperial},
-                new List<string> {"literalism", "legalism", "heathen_tax"});
-
-            var battaniaReligion = new Religion(null,
-                DefaultFaiths.Instance.AmraOllahm, new AutonomousLeadership(),
-                new List<CultureObject> {battania},
-                new List<string> {"druidism", "animism"});
-
-            var darusosianReligion = new Religion(Settlement.All.First(x => x.StringId == "town_ES4"),
-                DefaultFaiths.Instance.Darusosian, new HierocraticLeadership(),
-                new List<CultureObject> {imperial},
-                new List<string> {"legalism", "childbirth" });
-
-            var vlandiaReligion = new Religion(null,
-                DefaultFaiths.Instance.Canticles, new HierocraticLeadership(),
-                new List<CultureObject> {vlandia},
-                new List<string> {"sacrifice", "literalism"});
-
-            var religions = new List<Religion>
-            {
-                aseraiReligion,
-                battaniaReligion,
-                darusosianReligion,
-                vlandiaReligion
-            };
-
-            foreach (var religion in religions.Where(rel => !Religions.ContainsKey(rel)))
+            foreach (var religion in DefaultReligions.Instance.All)
             {
                 Religions.Add(religion, new Dictionary<Hero, FaithfulData>());
                 InitializeFaithfulHeroes(religion);
@@ -187,8 +153,6 @@ namespace BannerKings.Managers
 
         public void ExecuteRemoveHero(Hero hero, bool isConversion = false)
         {
-
-            
             var rel = GetHeroReligion(hero);
             if (IsPreacher(hero))
             {
@@ -328,7 +292,6 @@ namespace BannerKings.Managers
             return rel != null ? Religions[rel][hero] : null;
         }
 
-
         public List<Religion> GetReligions()
         {
             return Religions.Keys.ToList();
@@ -398,8 +361,6 @@ namespace BannerKings.Managers
 
             return Religions[religion].ContainsKey(hero);
         }
-
-        
 
         public void AddPiety(Religion rel, Hero hero, float piety, bool notifyPlayer = false)
         {

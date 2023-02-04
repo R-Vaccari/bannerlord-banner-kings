@@ -107,6 +107,7 @@ namespace BannerKings
             DefaultBookTypes.Instance.Initialize();
             DefaultLifestyles.Instance.Initialize();
             DefaultDemesneLaws.Instance.Initialize();
+            DefaultReligions.Instance.Initialize();
         }
 
         public void InitManagers()
