@@ -183,7 +183,7 @@ namespace BannerKings.Behaviours
             else if (hero.IsNotable && hero.CurrentSettlement != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(hero.CurrentSettlement);
-                if (data.ReligionData != null)
+                if (data != null && data.ReligionData != null)
                 {
                     startingReligion = data.ReligionData.GetRandomReligion();
                 }

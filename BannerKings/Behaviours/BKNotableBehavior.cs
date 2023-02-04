@@ -26,6 +26,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnGovernorChangedEvent.AddNonSerializedListener(this, OnGovernorChanged);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
+            CampaignEvents.HeroCreated.AddNonSerializedListener(this, OnHeroCreated);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -45,6 +46,21 @@ namespace BannerKings.Behaviours
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
             AddDialogue(starter);
+        }
+
+        private void OnHeroCreated(Hero hero, bool bornNaturally)
+        {
+            if (hero == null || !hero.IsNotable)
+            {
+                return;
+            }
+
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(hero.CurrentSettlement);
+            if (data != null && data.CultureData != null)
+            {
+                var culture = data.CultureData.GetRandomCulture();
+                hero.Culture = culture;
+            }
         }
 
         private void OnGovernorChanged(Town town, Hero oldGovernor, Hero newGovernor)

@@ -1,11 +1,10 @@
-﻿using BannerKings.Models.BKModels;
+﻿using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Populations
@@ -19,7 +18,6 @@ namespace BannerKings.Managers.Populations
         }
 
         [SaveableProperty(1)] private List<CultureDataClass> cultures { get; set; }
-
         [SaveableProperty(2)] private Hero settlementOwner { get; set; }
 
         public List<CultureDataClass> Cultures => cultures;
@@ -29,6 +27,19 @@ namespace BannerKings.Managers.Populations
             get => (from x in cultures
                     orderby x.Assimilation descending
                     select x).First().Culture;
+        }
+
+        public CultureObject GetRandomCulture()
+        {
+            foreach (var cultureData in Cultures)
+            {
+                if (MBRandom.RandomFloat <= cultureData.Assimilation)
+                {
+                    return cultureData.Culture;
+                }
+            }
+
+            return DominantCulture;
         }
 
         public Hero SettlementOwner
@@ -149,8 +160,6 @@ namespace BannerKings.Managers.Populations
             }, GetType().Name);
         }
 
-
-
         private void BalanceCultures(PopulationData data)
         {
             var toRemove = new List<CultureDataClass>();
@@ -168,11 +177,6 @@ namespace BannerKings.Managers.Populations
             {
                 cultures.Remove(cultureData);
             }
-        }
-
-        private bool IsForeigner(PopulationData data, CultureDataClass cultureData)
-        {
-            return cultureData.Culture != settlementOwner.Culture && cultureData.Culture != data.Settlement.Culture;
         }
     }
 }

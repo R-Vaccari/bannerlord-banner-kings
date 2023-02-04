@@ -33,7 +33,7 @@ namespace BannerKings.Managers.Institutions.Religions
                 }
             }
 
-            return Religions.Keys.First();
+            return DominantReligion;
         }
 
         public float GetHeathenPercentage(Religion target)
