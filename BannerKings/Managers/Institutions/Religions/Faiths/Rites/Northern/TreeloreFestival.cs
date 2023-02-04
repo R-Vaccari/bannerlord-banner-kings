@@ -1,5 +1,4 @@
-﻿using BannerKings.Utils.Extensions;
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Northern
@@ -22,9 +21,5 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Northern
         {
             return 100;
         }
-
-        public override bool MeetsCondition(Hero hero) => hero.Clan != null && hero.IsClanLeader() &&
-            hero.Clan.Fiefs.Count > 0 && CampaignTime.Now.GetSeasonOfYear == SeasonOfTheYear &&
-            CampaignTime.Now.GetDayOfSeason == DayOfTheSeason;
     }
 }

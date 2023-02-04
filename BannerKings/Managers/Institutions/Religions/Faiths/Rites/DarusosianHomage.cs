@@ -15,7 +15,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override void Execute(Hero executor)
         {
-            if (!MeetsCondition(executor))
+            TextObject reason;
+            if (!MeetsCondition(executor, out reason))
             {
                 return;
             }
@@ -103,8 +104,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             return list;
         }
 
-        public override bool MeetsCondition(Hero hero)
+        public override bool MeetsCondition(Hero hero, out TextObject reason)
         {
+            reason = new TextObject("{=!}This rite is available to be performed.");
             var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
             var hasTarget = GetAdequateSacrifices(hero).Count > 0;
             

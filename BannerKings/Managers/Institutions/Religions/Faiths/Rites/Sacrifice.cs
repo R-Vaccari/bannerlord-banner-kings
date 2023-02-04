@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Drawing;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -14,7 +15,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override void Execute(Hero executor)
         {
-            if (!MeetsCondition(executor))
+            TextObject reason;
+            if (!MeetsCondition(executor, out reason))
             {
                 return;
             }
@@ -74,13 +76,26 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             input = null;
         }
 
-        public override bool MeetsCondition(Hero hero)
+        public override bool MeetsCondition(Hero hero, out TextObject reason)
         {
+            reason = new TextObject("{=!}This rite is available to be performed.");
             var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
-            return hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
-                   data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero)) && hero.IsPartyLeader &&
-                   hero.PartyBelongedTo.PrisonRoster.TotalHeroes > 0;
-            ;
+            bool baseResult = hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
+                             data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero));
+
+            if (!baseResult)
+            {
+                reason = new TextObject("{=!}Not enough time ({YEARS} years) have passed since the last rite of this type was performed.")
+                    .SetTextVariable("YEARS", GetTimeInterval(hero).ToString("0.0"));
+            }
+
+            bool prisoners = hero.PartyBelongedTo != null && hero.PartyBelongedTo.PrisonRoster.TotalHeroes > 0;
+            if (!prisoners)
+            {
+                reason = new TextObject("{=!}You need lord prisoners to be sacrificed.");
+            }
+
+            return baseResult && prisoners;
         }
 
         public override TextObject GetDescription()
