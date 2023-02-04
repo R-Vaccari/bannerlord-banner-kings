@@ -19,6 +19,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using Color = TaleWorlds.Library.Color;
 
 namespace BannerKings.Behaviours
 {
@@ -180,9 +181,15 @@ namespace BannerKings.Behaviours
             {
                 startingReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero.Clan.Leader);
             }
-            else if (hero.IsNotable && hero.CurrentSettlement != null)
+            else if (hero.IsNotable)
             {
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(hero.CurrentSettlement);
+                var settlement = hero.CurrentSettlement != null ? hero.CurrentSettlement : hero.BornSettlement;
+                if (settlement == null)
+                {
+                    return;
+                }
+
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 if (data != null && data.ReligionData != null)
                 {
                     startingReligion = data.ReligionData.GetRandomReligion();

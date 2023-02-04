@@ -55,7 +55,13 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(hero.CurrentSettlement);
+            var settlement = hero.CurrentSettlement != null ? hero.CurrentSettlement : hero.BornSettlement;
+            if (settlement == null)
+            {
+                return;
+            }
+
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             if (data != null && data.CultureData != null)
             {
                 var culture = data.CultureData.GetRandomCulture();
