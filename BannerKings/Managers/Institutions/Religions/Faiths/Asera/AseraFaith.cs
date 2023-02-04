@@ -7,15 +7,16 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 {
     public class AseraFaith : MonotheisticFaith
     {
-        public override bool IsHeroNaturalFaith(Hero hero)
+        public override bool IsCultureNaturalFaith(CultureObject culture)
         {
-            if (hero.Culture.StringId == "aserai")
+            if (culture.StringId == "aserai")
             {
                 return true;
             }
 
             return false;
         }
+        public override bool IsHeroNaturalFaith(Hero hero) => IsCultureNaturalFaith(hero.Culture);
 
         public override TextObject GetFaithName()
         {

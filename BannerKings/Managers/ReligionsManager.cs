@@ -349,7 +349,16 @@ namespace BannerKings.Managers
 
         public Religion GetIdealReligion(CultureObject culture)
         {
-            return Religions.Keys.ToList().FirstOrDefault(rel => rel.MainCulture == culture);
+            Religion result = null;
+            foreach(var religion in Religions.Keys.ToList())
+            {
+                if (religion.Faith.IsCultureNaturalFaith(culture))
+                {
+                    result = religion;
+                }
+            }
+
+            return result;
         }
 
         public bool IsReligionMember(Hero hero, Religion religion)

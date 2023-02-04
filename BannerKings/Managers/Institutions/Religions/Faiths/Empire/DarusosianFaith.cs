@@ -7,9 +7,18 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 {
     public class DarusosianFaith : MonotheisticFaith
     {
+        public override bool IsCultureNaturalFaith(CultureObject culture)
+        {
+            if (culture.StringId == "empire")
+            {
+                return true;
+            }
+
+            return false;
+        }
         public override bool IsHeroNaturalFaith(Hero hero)
         {
-            if (hero.Culture.StringId == "empire" && hero.MapFaction != null && hero.MapFaction.IsKingdomFaction && 
+            if (IsCultureNaturalFaith(hero.Culture) && hero.MapFaction != null && hero.MapFaction.IsKingdomFaction && 
                 hero.MapFaction.StringId == "empire_s")
             {
                 return true;
