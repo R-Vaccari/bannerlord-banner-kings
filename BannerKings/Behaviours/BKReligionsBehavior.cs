@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using BannerKings.Managers;
@@ -510,7 +511,6 @@ namespace BannerKings.Behaviours
             PlayerEncounter.LeaveEncounter = true;
         }
 
-
         private bool InductionOnClickable(out TextObject hintText)
         {
             var clergyman = ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
@@ -591,7 +591,6 @@ namespace BannerKings.Behaviours
             var religion = ReligionsManager.GetClergymanReligion(clergyman);
             var playerReligion = ReligionsManager.GetHeroReligion(Hero.MainHero);
 
-
             if (playerReligion == null || religion.Faith.GetId() != playerReligion.Faith.GetId())
             {
                 hintText = new TextObject("{=vE0bYBmL}You do not adhere to the {FAITH} faith.")
@@ -604,7 +603,6 @@ namespace BannerKings.Behaviours
             if (playerReligion != null)
             {
                 var piety = ReligionsManager.GetPiety(playerReligion, Hero.MainHero);
-                
                 foreach (var divinity in religion.Faith.GetSecondaryDivinities())
                 {
                     var cost = divinity.BlessingCost(Hero.MainHero);
@@ -656,13 +654,28 @@ namespace BannerKings.Behaviours
                 return false;
             }
 
-            bool anyPossible = religion.Rites.Any(rite => rite.MeetsCondition(Hero.MainHero));
+            MBStringBuilder sb = default(MBStringBuilder);
+            sb.Append(new TextObject("{=QbUTvLMt}No rite is currently possible to perform."));
+            foreach (Rite rite in religion.Rites)
+            {
+                TextObject reason;
+                bool possible = rite.MeetsCondition(Hero.MainHero, out reason);
+                if (!possible)
+                {
+                    sb.Append(new TextObject("{=!}{RITE}: {REASON}")
+                        .SetTextVariable("RITE", rite.GetName()
+                        .SetTextVariable("REASON", reason)));
+                }
+            }
+            TextObject r;
+            bool anyPossible = religion.Rites.Any(rite => rite.MeetsCondition(Hero.MainHero, out r));
             if (!anyPossible)
             {
-                hintText = new TextObject("{=QbUTvLMt}No rite is currently possible to perform.");
+                hintText = new TextObject("{=!}" + sb.ToStringAndRelease());
                 return false;
             }
 
+            sb.Release();
             hintText = new TextObject("{=2Q6R8xum}Perform a rite such as an offering in exchange for piety.");
             return true;
         }
@@ -672,13 +685,27 @@ namespace BannerKings.Behaviours
             var religion = ReligionsManager.GetHeroReligion(Hero.MainHero);
             var piety = ReligionsManager.GetPiety(religion, Hero.MainHero);
 
-            var list = religion.Rites.Select(rite => new InquiryElement(rite, rite.GetName().ToString(), null, rite.MeetsCondition(Hero.MainHero), rite.GetDescription().ToString())).ToList();
+            var list = religion.Rites.Select(rite =>
+            {
+                TextObject reason;
+                bool available = rite.MeetsCondition(Hero.MainHero, out reason);
+                return new InquiryElement(rite,
+                           rite.GetName().ToString(),
+                           null,
+                           available,
+                           new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                           .SetTextVariable("TEXT", rite.GetDescription().ToString())
+                           .SetTextVariable("EXPLANATIONS", reason).ToString());
+            }
+           ).ToList();
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 religion.Faith.GetSecondaryDivinitiesDescription().ToString(),
-                string.Empty, list,
+                string.Empty, 
+                list,
                 false, 1,
-                GameTexts.FindText("str_done").ToString(), string.Empty,
+                GameTexts.FindText("str_done").ToString(), 
+                string.Empty,
                 delegate(List<InquiryElement> x)
                 {
                     var rite = (ContextualRite?) x[0].Identifier;
