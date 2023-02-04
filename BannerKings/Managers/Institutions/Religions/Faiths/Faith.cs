@@ -102,6 +102,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             return null;
         }
 
+        public abstract bool IsHeroNaturalFaith(Hero hero);
         public abstract TextObject GetFaithName();
         public abstract TextObject GetFaithDescription();
         public abstract Divinity GetMainDivinity();

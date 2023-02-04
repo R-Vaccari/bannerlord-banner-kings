@@ -8,6 +8,16 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 {
     public class CanticlesFaith : PolytheisticFaith
     {
+        public override bool IsHeroNaturalFaith(Hero hero)
+        {
+            if (hero.Culture.StringId == "vlandia")
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public override TextObject GetFaithName()
         {
             return new TextObject("{=pTg6co0a}The Canticles");

@@ -8,6 +8,16 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
 {
     public class TreeloreFaith : PolytheisticFaith
     {
+        public override bool IsHeroNaturalFaith(Hero hero)
+        {
+            if (hero.Culture.StringId == "sturgia" || hero.Culture.StringId == "vakken")
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public override TextObject GetBlessingAction()
         {
             throw new NotImplementedException();

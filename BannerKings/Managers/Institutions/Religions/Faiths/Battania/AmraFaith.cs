@@ -9,6 +9,15 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
 {
     public class AmraFaith : PolytheisticFaith
     {
+        public override bool IsHeroNaturalFaith(Hero hero)
+        {
+            if (hero.Culture.StringId == "battania")
+            {
+                return true;
+            }
+
+            return false;
+        }
         public override TextObject GetFaithName()
         {
             return new TextObject("{=fkHLNjpR}Amra Ollamh");

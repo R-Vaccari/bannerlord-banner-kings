@@ -1,4 +1,3 @@
-using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
@@ -8,6 +7,16 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 {
     public class AseraFaith : MonotheisticFaith
     {
+        public override bool IsHeroNaturalFaith(Hero hero)
+        {
+            if (hero.Culture.StringId == "aserai")
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public override TextObject GetFaithName()
         {
             return new TextObject("{=4sC3k7fO}Code of Asera");
