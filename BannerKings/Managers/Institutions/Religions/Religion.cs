@@ -19,18 +19,24 @@ namespace BannerKings.Managers.Institutions.Religions
     {
         [SaveableField(1)] private readonly Dictionary<Settlement, Clergyman> clergy;
 
-        [SaveableField(5)] private readonly List<string> doctrineIds;
+        [SaveableField(5)] private List<string> doctrineIds;
 
-        [SaveableField(4)] private readonly List<CultureObject> favoredCultures;
+        [SaveableField(4)] private List<CultureObject> favoredCultures;
 
-        public Religion(Settlement settlement, Faith faith, ReligiousLeadership leadership, List<CultureObject> favoredCultures, List<string> doctrineIds) : base(settlement)
+        public Religion(string id) : base(id)
         {
             clergy = new Dictionary<Settlement, Clergyman>();
+        }
+
+        public void Initialize(Faith faith, ReligiousLeadership leadership, List<CultureObject> favoredCultures, 
+            List<string> doctrineIds, Settlement settlement)
+        {
             Leadership = leadership;
             Faith = faith;
             this.favoredCultures = favoredCultures;
             this.doctrineIds = doctrineIds;
             leadership.Initialize(this);
+            base.settlement = settlement;
         }
 
         public MBReadOnlyList<ContextualRite> Rites
@@ -49,7 +55,7 @@ namespace BannerKings.Managers.Institutions.Religions
         }
 
         public CultureObject MainCulture => favoredCultures[0];
-        [field: SaveableField(2)] public ReligiousLeadership Leadership { get; }
+        [field: SaveableField(2)] public ReligiousLeadership Leadership { get; private set; }
 
         public Divinity MainGod => Faith.MainGod;
         [field: SaveableField(3)] public Faith Faith { get; private set; }

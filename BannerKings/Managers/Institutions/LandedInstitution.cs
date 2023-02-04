@@ -6,9 +6,8 @@ namespace BannerKings.Managers.Institutions
     {
         protected Settlement settlement;
 
-        public LandedInstitution(Settlement settlement)
+        public LandedInstitution(string id) : base(id)
         {
-            this.settlement = settlement;
         }
 
         public Settlement Settlement => settlement;
