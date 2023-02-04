@@ -1,5 +1,4 @@
 ﻿using BannerKings.Managers.Populations;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -23,6 +22,19 @@ namespace BannerKings.Managers.Institutions.Religions
         public Dictionary<Religion, float> Religions { get; private set; }
 
         [field: SaveableField(1)] public Settlement Settlement { get; }
+
+        public Religion GetRandomReligion()
+        {
+            foreach (var pair in Religions)
+            {
+                if (MBRandom.RandomFloat <= pair.Value)
+                {
+                    return pair.Key;
+                }
+            }
+
+            return Religions.Keys.First();
+        }
 
         public float GetHeathenPercentage(Religion target)
         {
