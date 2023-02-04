@@ -56,10 +56,7 @@ namespace BannerKings.Managers.CampaignStart
                 {
                     var items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
                     var sumpter = items.FirstOrDefault(x => x.StringId == "sumpter_horse");
-
-                    var templates = Game.Current.ObjectManager.GetObjectTypeList<PartyTemplateObject>();
-                    var template = templates.First(x =>
-                        x.StringId == "kingdom_hero_party_" + Hero.MainHero.Culture.StringId + "_template");
+                    var template = Hero.MainHero.Culture.DefaultPartyTemplate;
 
                     var roster = MobileParty.MainParty.MemberRoster;
                     for (var i = 0; i < 10; i++)
