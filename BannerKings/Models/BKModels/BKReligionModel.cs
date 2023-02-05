@@ -217,7 +217,6 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateReligionWeight(Religion religion, Settlement settlement)
         {
             var result = new ExplainedNumber(0f, true);
-            result.Add(religion.Fervor.ResultNumber * 100f, new TextObject("{=AfsRi9wL}Fervor"));
             if (settlement == null)
             {
                 return result;
@@ -251,7 +250,7 @@ namespace BannerKings.Models.BKModels
                 var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
                 if (rel != null && rel == religion)
                 {
-                    result.Add(50f, new TextObject("{=tKhBP7mF}Owner's faith"));
+                    result.Add(5f, new TextObject("{=tKhBP7mF}Owner's faith"));
                 }
 
                 if (owner.GetPerkValue(BKPerks.Instance.TheologyPreacher))
@@ -270,6 +269,8 @@ namespace BannerKings.Models.BKModels
                     result.AddFactor(0.15f, DefaultDivinities.Instance.AseraSecondary1.Name);
                 }
             }
+
+            result.AddFactor(religion.Fervor.ResultNumber, new TextObject("{=AfsRi9wL}Fervor"));
 
             return result;
         }
