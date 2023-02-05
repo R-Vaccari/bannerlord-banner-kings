@@ -544,12 +544,6 @@ namespace BannerKings.Behaviours
             }
 
             var result = religion.Faith.GetInductionAllowed(Hero.MainHero, clergyman.Rank);
-            if (!result.Item1)
-            {
-                hintText = result.Item2;
-                return false;
-            }
-
             hintText = new TextObject("{=Uygas52E}{POSSIBLE}. Changing faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}")
                 .SetTextVariable("POSSIBLE", result.Item2)
                 .SetTextVariable("FAITH_TEXT", faithText);
@@ -560,7 +554,12 @@ namespace BannerKings.Behaviours
         {
             var clergyman = ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
             var religion = ReligionsManager.GetClergymanReligion(clergyman);
-            ReligionsManager.AddToReligion(Hero.MainHero, religion);
+
+            var result = religion.Faith.GetInductionAllowed(Hero.MainHero, clergyman.Rank);
+            if (result.Item1)
+            {
+                ReligionsManager.AddToReligion(Hero.MainHero, religion);
+            }
         }
 
         private void BlessingPositiveAnswerOnConsequence()
