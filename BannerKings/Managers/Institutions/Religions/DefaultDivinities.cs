@@ -5,32 +5,21 @@ namespace BannerKings.Managers.Institutions.Religions
 {
     public class DefaultDivinities : DefaultTypeInitializer<DefaultDivinities, Divinity>
     {
-
         public Divinity AseraMain { get; private set; }
-
         public Divinity AseraSecondary1 { get; private set; }
-
         public Divinity AseraSecondary2 { get; private set; }
-
         public Divinity AseraSecondary3 { get; private set; }
-
         public Divinity AmraMain { get; private set; }
-
         public Divinity AmraSecondary1 { get; private set; }
-
         public Divinity AmraSecondary2 { get; private set; }
-
         public Divinity DarusosianMain { get; private set; }
-
         public Divinity DarusosianSecondary1 { get; private set; }
-
         public Divinity DarusosianSecondary2 { get; private set; }
-
         public Divinity VlandiaMain { get; private set; }
-
         public Divinity VlandiaSecondary1 { get; private set; }
-
         public Divinity VlandiaSecondary2 { get; private set; }
+        public Divinity TreeloreMain { get; private set; } = new Divinity("treelore_main");
+        public Divinity TreeloreMoon { get; private set; } = new Divinity("treelore_moon");
 
         public override IEnumerable<Divinity> All
         {
@@ -49,6 +38,10 @@ namespace BannerKings.Managers.Institutions.Religions
                 yield return VlandiaMain;
                 yield return VlandiaSecondary1;
                 yield return VlandiaSecondary2;
+                foreach (Divinity item in ModAdditions)
+                {
+                    yield return item;
+                }
             }
         }
 
@@ -129,6 +122,14 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=Wip91rve}The vitriolic and zealous among the modern Vlandians have as of late begun singing the Meridional Cantigan and marching towards the Southlands in a belligerent crusade. Claiming to be a reprisal of a song sung before the days of Osrac Iron-Arm, these goliard warrior-poets speak the harsh rhymes of their ancient conqueror patriarchs and wayward followers. They seek truth in deed, to be worthy of a completed song for an era; to serve in harmony with the Canticles, the Lai Vlandia, and to be remembered in illuminations befitting those enshrined in legend."),
                 new TextObject("{=uyhPvxs2}Occasionally receive zealot warriors\nParty morale bonus for vlandian troops"),
                 new TextObject("{=neVhyybi}Saga"));
+
+            TreeloreMain.Initialize(new TextObject("{=!}Pérkos, Thunder Wielder"),
+                new TextObject("{=!}Once, there was naught between the Underworld, nested deep in the roots of the Great World Tree, and the heavenly canopy of the gods. Pérkos struck the Great Tree's bark, and from it's sap, mankind blossomed. Such is the tale told by the children of the forest, that is, those that adhere to Pérkenweyd. Though the faith accepts a multitude of gods, the Thunder Wielder is idolized as their ultimate protector, the highest and noblest of gods, charged with protecting the Great Tree itself."),
+                new TextObject());
+
+            TreeloreMoon.Initialize(new TextObject("{=!}Méhns Cult"),
+                new TextObject("{=!}Among the children of the forest, many devouts, specially in the Chertyg region, have devoted themselves to Méhns. The Moon, in their understanding, is the source of prosperity for both land and mankind."),
+                new TextObject());
         }
     }
 }

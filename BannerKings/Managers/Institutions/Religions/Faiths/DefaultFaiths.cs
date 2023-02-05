@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BannerKings.Managers.Institutions.Religions.Faiths.Asera;
 using BannerKings.Managers.Institutions.Religions.Faiths.Battania;
 using BannerKings.Managers.Institutions.Religions.Faiths.Empire;
+using BannerKings.Managers.Institutions.Religions.Faiths.Northern;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Battania;
 using BannerKings.Managers.Institutions.Religions.Faiths.Vlandia;
@@ -30,6 +31,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 yield return AmraOllahm;
                 yield return Darusosian;
                 yield return Canticles;
+                yield return Treelore;
             }
         }
 
@@ -99,6 +101,22 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     {DefaultTraits.Valor, true}
                 },
                 vlandiaGroup, new List<ContextualRite>());
+
+            sturgiaGroup = new FaithGroup(new TextObject(),
+                new TextObject());
+            Treelore = new TreeloreFaith();
+            Treelore.Initialize(DefaultDivinities.Instance.TreeloreMain,
+                new List<Divinity>
+                { 
+                    DefaultDivinities.Instance.TreeloreMoon 
+                },
+                new Dictionary<TraitObject, bool>
+                {
+                    {DefaultTraits.Generosity, true},
+                    {DefaultTraits.Valor, true}
+                },
+                sturgiaGroup, 
+                new List<ContextualRite>());
         }
 
         public Faith GetById(string id)
