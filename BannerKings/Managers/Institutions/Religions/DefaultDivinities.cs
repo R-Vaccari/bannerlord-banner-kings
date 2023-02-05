@@ -124,7 +124,7 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=neVhyybi}Saga"));
 
             TreeloreMain.Initialize(new TextObject("{=!}Pérkos, Thunder Wielder"),
-                new TextObject("{=!}Once, there was naught between the Underworld, nested deep in the roots of the Great World Tree, and the heavenly canopy of the gods. Pérkos struck the Great Tree's bark, and from it's sap, mankind blossomed. Such is the tale told by the children of the forest, that is, those that adhere to Pérkenweyd. Though the faith accepts a multitude of gods, the Thunder Wielder is idolized as their ultimate protector, the highest and noblest of gods, charged with protecting the Great Tree itself."),
+                new TextObject("{=!}Once, there was naught between the Underworld, nested deep in the roots of the Great Oak, and the heavenly canopy of the gods. Pérkos struck the Great Tree's bark, and from it's sap, mankind blossomed. Such is the tale told by the children of the forest, that is, those that adhere to Pérkenweyd. Though the faith accepts a multitude of gods, the Thunder Wielder is idolized as their ultimate protector, the highest and noblest of gods, charged with protecting the Great Tree itself."),
                 new TextObject());
 
             TreeloreMoon.Initialize(new TextObject("{=!}Méhns Cult"),
