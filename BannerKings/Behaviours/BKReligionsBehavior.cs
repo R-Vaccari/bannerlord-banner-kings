@@ -544,7 +544,7 @@ namespace BannerKings.Behaviours
             }
 
             var result = religion.Faith.GetInductionAllowed(Hero.MainHero, clergyman.Rank);
-            hintText = new TextObject("{=Uygas52E}{POSSIBLE}. Changing faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}")
+            hintText = new TextObject("{=!}{POSSIBLE}.\n\nChanging faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}")
                 .SetTextVariable("POSSIBLE", result.Item2)
                 .SetTextVariable("FAITH_TEXT", faithText);
             return true;
