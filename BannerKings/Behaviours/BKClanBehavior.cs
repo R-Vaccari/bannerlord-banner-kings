@@ -608,6 +608,11 @@ namespace BannerKings.Behaviours
 
         private void EvaluateRecruitKnight(Clan clan)
         {
+            if (!BannerKingsSettings.Instance.AIKnights)
+            {
+                return;
+            }
+
             RunWeekly(() =>
             {
                 if (clan.WarPartyComponents.Count >= clan.CommanderLimit || clan.Companions.Count >= clan.CompanionLimit || clan.Settlements.Count(x => x.IsVillage) <= 1 || !(clan.Influence >= BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(clan.Leader).ResultNumber))

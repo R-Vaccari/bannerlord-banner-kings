@@ -23,6 +23,14 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=FnRzVf4Q}Performance")]
         public bool AICompanions { get; set; } = true;
 
+        [SettingProperty("{=!}AI Knights", RequireRestart = true, HintText = "{=!}Enable the ability for AI to generate knights. Will add a large amount of heroes to the world and may impact performance. Default: True.")]
+        [SettingPropertyGroup("{=FnRzVf4Q}Performance")]
+        public bool AIKnights { get; set; } = true;
+
+        [SettingProperty("{=!}AI Management", RequireRestart = true, HintText = "{=!}Enable the ability for AI to manage their domains and vassals by calculating when to give away titles. Default: True.")]
+        [SettingPropertyGroup("{=FnRzVf4Q}Performance")]
+        public bool AIManagement { get; set; } = true;
+
         [SettingProperty("{=o394sPDk}Close Relatives Honorifics", RequireRestart = false, HintText = "{=AinXkzz7}Apply title honorifcs for close relatives of title holders. This only takes effect if the 'Title Honorifcs' option is any other than 'No Titles'. Different rules apply but in general, spouses of will have an equivalent, gendered title (ie, 'Queen FemaleName' the spouse of 'King MaleName'), while children of Kings and Emperors may be Princes.")]
         public bool CloseRelativesNaming { get; set; } = true;
 
