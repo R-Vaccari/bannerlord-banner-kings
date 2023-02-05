@@ -195,26 +195,29 @@ namespace BannerKings.Models.Vanilla
 
         private void GetSettlementLoyaltyChangeDueToOwnerCulture(Town town, ref ExplainedNumber explainedNumber)
         {
-            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                var assim = data.CultureData.GetAssimilation(town.Owner.Culture);
-                var factor = assim - 1f + assim;
-                var result = LOYALTY_FACTOR * factor;
-                explainedNumber.Add(result, new TextObject("{=D3trXTDz}Cultural Assimilation"));
-
-                if (town.Governor == null)
+                if (data != null)
                 {
-                    return;
-                }
+                    var assim = data.CultureData.GetAssimilation(town.OwnerClan.Leader.Culture);
+                    var factor = assim - 1f + assim;
+                    var result = LOYALTY_FACTOR * factor;
+                    explainedNumber.Add(result, new TextObject("{=D3trXTDz}Cultural Assimilation"));
 
-                explainedNumber.Add(result * (town.Governor.Culture == town.Culture ? 0.1f : -0.1f), GovernorCultureText);
+                    if (town.Governor == null)
+                    {
+                        return;
+                    }
 
-                var lordshipAdaptivePerk = BKPerks.Instance.LordshipAdaptive;
-                if (town.Culture != town.Governor.Culture && town.Governor.GetPerkValue(lordshipAdaptivePerk))
-                {
-                    explainedNumber.AddFactor(-0.15f, lordshipAdaptivePerk.Name);
-                }
+                    explainedNumber.Add(result * (town.Governor.Culture == town.Culture ? 0.1f : -0.1f), GovernorCultureText);
+
+                    var lordshipAdaptivePerk = BKPerks.Instance.LordshipAdaptive;
+                    if (town.Culture != town.Governor.Culture && town.Governor.GetPerkValue(lordshipAdaptivePerk))
+                    {
+                        explainedNumber.AddFactor(-0.15f, lordshipAdaptivePerk.Name);
+                    }
+                } 
             }
             else if (town.Settlement.OwnerClan.Culture != town.Settlement.Culture) // vanilla behavior
             {
