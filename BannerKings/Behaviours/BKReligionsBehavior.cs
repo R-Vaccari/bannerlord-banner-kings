@@ -55,6 +55,7 @@ namespace BannerKings.Behaviours
 
         private void OnGameLoaded(CampaignGameStarter starter)
         {
+            BannerKingsConfig.Instance.ReligionsManager.InitializeReligions();
         }
 
         private void OnDailyTickSettlement(Settlement settlement)

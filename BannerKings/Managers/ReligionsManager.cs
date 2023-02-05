@@ -53,8 +53,11 @@ namespace BannerKings.Managers
         {
             foreach (var religion in DefaultReligions.Instance.All)
             {
-                Religions.Add(religion, new Dictionary<Hero, FaithfulData>());
-                InitializeFaithfulHeroes(religion);
+                if (!Religions.ContainsKey(religion))
+                {
+                    Religions.Add(religion, new Dictionary<Hero, FaithfulData>());
+                    InitializeFaithfulHeroes(religion);
+                }
             }
 
             RefreshCaches();
@@ -64,7 +67,7 @@ namespace BannerKings.Managers
         {
             foreach (var hero in Hero.AllAliveHeroes)
             {
-                if (hero == Hero.MainHero || hero.IsChild)
+                if (hero == Hero.MainHero || hero.IsChild || GetHeroReligion(hero) != null)
                 {
                     continue;
                 }
