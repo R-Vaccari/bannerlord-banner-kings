@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.ObjectSystem;
 
 namespace BannerKings.Managers.Institutions
 {
-    public abstract class Institution : BannerKingsObject
+    public abstract class Institution : MBObjectBase
     {
         protected Dictionary<Hero, float> favors;
         protected float influence;
 
-        protected Institution(string id) : base(id)
+        protected Institution(string id) : base()
         {
             favors = new Dictionary<Hero, float>();
         }
