@@ -1,3 +1,4 @@
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Populations;
 using BannerKings.UI.Items;
@@ -80,26 +81,53 @@ namespace BannerKings.UI.Religion
             }
         }
 
-        [DataSourceProperty] public string HeroFaithText => new TextObject("{=diqoFxAm}{HERO} {RELIGION_TEXT}.")
-            .SetTextVariable("HERO", hero.Name)
-            .SetTextVariable("RELIGION_TEXT", heroReligion == null ? 
-            new TextObject("{=JoZGpNrK} does not follow any faith") :
-            new TextObject("{=Ckk2iVKQ}is following the {FAITH}")
-            .SetTextVariable("FAITH", heroReligion.Faith.GetFaithName()))
-            .ToString();
+        [DataSourceProperty]
+        public string HeroFaithText
+        {
+            get
+            {
+                TextObject baseText = new TextObject("{=diqoFxAm}{HERO} {RELIGION_TEXT}.\n{CULT_TEXT}")
+                    .SetTextVariable("HERO", hero.Name);
+
+                TextObject relText = heroReligion == null ? new TextObject("{=JoZGpNrK} does not follow any faith") :
+                    new TextObject("{=Ckk2iVKQ}is following the {FAITH}").SetTextVariable("FAITH", heroReligion.Faith.GetFaithName());
+
+                var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
+                Divinity cult = null;
+                if (data != null)
+                {
+                    cult = data.Blessing;
+                }
+
+                string cultText = "";
+                bool indefinitely = data.BlessingEndDate == CampaignTime.Never;
+                if (cult != null)
+                {
+                    if (indefinitely)
+                    {
+                        cultText = new TextObject("{=!}They are pledged to {CULT} indefinitely.")
+                            .SetTextVariable("CULT", cult.Name).ToString();
+                    }
+                    else
+                    {
+                        cultText = new TextObject("{=!}They are pledged to {CULT} until {DATE}.")
+                            .SetTextVariable("CULT", cult.Name)
+                            .SetTextVariable("DATE", data.BlessingEndDate.ToString()).ToString();
+                    }
+                }
+
+                return baseText.SetTextVariable("RELIGION_TEXT", relText)
+                    .SetTextVariable("CULT_TEXT", cultText)
+                    .ToString();
+            }
+        }
 
         [DataSourceProperty] public string ClergymenText => new TextObject("{=GbMZ6V8B}Clergymen").ToString();
-
         [DataSourceProperty] public string FaithfulText => new TextObject("{=mnpTkVYf}Faithful").ToString();
-
         [DataSourceProperty] public string GroupText => new TextObject("{=OKw2P9m1}Faith Group").ToString();
-
         [DataSourceProperty] public string VirtuesText => new TextObject("{=p6itQbf8}Virtues").ToString();
-
         [DataSourceProperty] public string DoctrinesText => new TextObject("{=BKLacKdC}Doctrines").ToString();
-
         [DataSourceProperty] public string AspectsText => new TextObject("{=1sKJS1JR}Aspects").ToString();
-
         [DataSourceProperty] public string RitesText => new TextObject("{=Yy2s38FQ}Rites").ToString();
 
         [DataSourceProperty]
@@ -282,7 +310,7 @@ namespace BannerKings.UI.Religion
             Description = currentReligion.Faith.GetFaithDescription().ToString();
             GroupName = currentReligion.Faith.FaithGroup.Name.ToString();
             GroupDescription = currentReligion.Faith.FaithGroup.Description.ToString();
-            SecondaryDivinitiesText = currentReligion.Faith.GetSecondaryDivinitiesDescription().ToString();
+            SecondaryDivinitiesText = currentReligion.Faith.GetCultsDescription().ToString();
 
             var selectedIndex = 0;
             Selector = new SelectorVM<ReligionSelectorItemVM>(0, null);
@@ -334,6 +362,12 @@ namespace BannerKings.UI.Religion
                 Rites.Add(new ReligionElementVM(rite.GetName(), rite.GetDescription(), rite.GetRequirementsText(hero)));
             }
 
+            var mainDivinity = currentReligion.Faith.GetMainDivinity();
+            SecondaryDivinities.Add(new ReligionElementVM(mainDivinity.SecondaryTitle, mainDivinity.Name,
+                    new TextObject("{=77isPS24}{EFFECTS}\nPiety cost: {COST}")
+                    .SetTextVariable("EFFECTS", mainDivinity.Description)
+                    .SetTextVariable("COST", mainDivinity.BlessingCost(hero)), mainDivinity.Effects));
+
             foreach (var divinity in currentReligion.Faith.GetSecondaryDivinities())
             {
                 SecondaryDivinities.Add(new ReligionElementVM(divinity.SecondaryTitle, divinity.Name,
@@ -344,12 +378,12 @@ namespace BannerKings.UI.Religion
 
             Aspects.Add(new ReligionElementVM(new TextObject("{=FRaCMrgt}Leadership"), currentReligion.Leadership.GetName(),
                 currentReligion.Leadership.GetHint()));
-            Aspects.Add(new ReligionElementVM(currentReligion.Faith.GetMainDivinitiesDescription(),
-                currentReligion.Faith.GetMainDivinity().Name, currentReligion.Faith.GetMainDivinity().Description));
+            //Aspects.Add(new ReligionElementVM(currentReligion.Faith.GetMainDivinitiesDescription(),
+            //    currentReligion.Faith.GetMainDivinity().Name, currentReligion.Faith.GetMainDivinity().Description));
             Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith Group"), currentReligion.Faith.FaithGroup.Name,
                 currentReligion.Faith.FaithGroup.Description));
-            Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith"), UIHelper.GetFaithTypeName(currentReligion.Faith),
-                UIHelper.GetFaithTypeDescription(currentReligion.Faith)));
+            //Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith"), UIHelper.GetFaithTypeName(currentReligion.Faith),
+            //    UIHelper.GetFaithTypeDescription(currentReligion.Faith)));
             Aspects.Add(new ReligionElementVM(new TextObject("{=EjTxnGJp}Culture"), currentReligion.MainCulture.Name,
                 new TextObject("{=6NYxLhjH}The main culture associated with this faith.")));
         }

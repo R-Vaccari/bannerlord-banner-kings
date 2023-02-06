@@ -108,8 +108,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract TextObject GetFaithDescription();
         public abstract Divinity GetMainDivinity();
         public abstract MBReadOnlyList<Divinity> GetSecondaryDivinities();
-        public abstract TextObject GetMainDivinitiesDescription();
-        public abstract TextObject GetSecondaryDivinitiesDescription();
+        public abstract TextObject GetCultsDescription();
         public abstract int GetMaxClergyRank();
         public abstract TextObject GetClergyGreeting(int rank);
         public abstract TextObject GetClergyGreetingInducted(int rank);

@@ -575,9 +575,9 @@ namespace BannerKings.Behaviours
                 .ToList();
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                religion.Faith.GetSecondaryDivinitiesDescription().ToString(),
+                religion.Faith.GetCultsDescription().ToString(),
                 new TextObject("{=QUvKUF87}Select which of the {SECONDARIES} you would like to {BLESSING_ACTION}.")
-                    .SetTextVariable("SECONDARIES", religion.Faith.GetSecondaryDivinitiesDescription())
+                    .SetTextVariable("SECONDARIES", religion.Faith.GetCultsDescription())
                     .SetTextVariable("BLESSING_ACTION", religion.Faith.GetBlessingActionName())
                     .ToString(),
                 list,
@@ -715,7 +715,7 @@ namespace BannerKings.Behaviours
            ).ToList();
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                religion.Faith.GetSecondaryDivinitiesDescription().ToString(),
+                religion.Faith.GetCultsDescription().ToString(),
                 string.Empty, 
                 list,
                 false, 1,

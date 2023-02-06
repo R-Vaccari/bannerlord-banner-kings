@@ -288,11 +288,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
             return mainGod;
         }
 
-        public override TextObject GetMainDivinitiesDescription()
-        {
-            return new TextObject("{=iYqD0kQM}Great Spirits");
-        }
-
         public override int GetMaxClergyRank()
         {
             return 2;
@@ -318,7 +313,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
             return pantheon.GetReadOnlyList();
         }
 
-        public override TextObject GetSecondaryDivinitiesDescription()
+        public override TextObject GetCultsDescription()
         {
             return new TextObject("{=CXQJSwOR}Spirits");
         }

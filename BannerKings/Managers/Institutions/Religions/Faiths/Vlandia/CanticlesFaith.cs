@@ -229,11 +229,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
             return mainGod;
         }
 
-        public override TextObject GetMainDivinitiesDescription()
-        {
-            return new TextObject("{=7rdxBfJi}Great Saga");
-        }
-
         public override int GetMaxClergyRank()
         {
             return 3;
@@ -256,7 +251,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
             return pantheon.GetReadOnlyList();
         }
 
-        public override TextObject GetSecondaryDivinitiesDescription()
+        public override TextObject GetCultsDescription()
         {
             return new TextObject("{=neVhyybi}Sagas");
         }

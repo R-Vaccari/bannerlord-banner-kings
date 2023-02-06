@@ -131,6 +131,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
 
         public override MBReadOnlyList<Divinity> GetSecondaryDivinities() => pantheon.GetReadOnlyList();
 
-        public override TextObject GetSecondaryDivinitiesDescription() => new TextObject("{=J4D4X2XJ}Cults");
+        public override TextObject GetCultsDescription() => new TextObject("{=J4D4X2XJ}Cults");
     }
 }

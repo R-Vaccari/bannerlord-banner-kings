@@ -190,11 +190,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             return mainGod;
         }
 
-        public override TextObject GetMainDivinitiesDescription()
-        {
-            return new TextObject("{=iYqD0kQM}Great Spirits");
-        }
-
         public override int GetMaxClergyRank()
         {
             return 3;
@@ -217,7 +212,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             return pantheon.GetReadOnlyList();
         }
 
-        public override TextObject GetSecondaryDivinitiesDescription()
+        public override TextObject GetCultsDescription()
         {
             return new TextObject("{=J4D4X2XJ}Cults");
         }
