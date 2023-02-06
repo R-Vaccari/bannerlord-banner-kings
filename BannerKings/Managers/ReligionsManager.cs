@@ -256,9 +256,13 @@ namespace BannerKings.Managers
                 }, null));
         }
 
-        public bool HasBlessing(Hero hero, Divinity blessing)
+        public bool HasBlessing(Hero hero, Divinity blessing, Religion rel = null)
         {
-            var rel = GetHeroReligion(hero);
+            if (rel == null)
+            {
+                rel = GetHeroReligion(hero);
+            }
+             
             if (rel != null)
             {
                 return Religions[rel][hero].Blessing == blessing;
