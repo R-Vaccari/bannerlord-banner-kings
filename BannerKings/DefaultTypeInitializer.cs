@@ -4,7 +4,7 @@ using TaleWorlds.ObjectSystem;
 
 namespace BannerKings
 {
-    public abstract class DefaultTypeInitializer<TDefaultTypeInitializer, TMBObjectBase> where TDefaultTypeInitializer : new() where TMBObjectBase : MBObjectBase
+    public abstract class DefaultTypeInitializer<TDefaultTypeInitializer, TMBObjectBase> : ITypeInitializer where TDefaultTypeInitializer : new() where TMBObjectBase : MBObjectBase
     {
         public static TDefaultTypeInitializer Instance => ConfigHolder.CONFIG;
 
