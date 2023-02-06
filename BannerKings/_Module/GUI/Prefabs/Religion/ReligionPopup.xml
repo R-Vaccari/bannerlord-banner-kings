@@ -216,10 +216,10 @@
 
 																		<GridWidget Id="VirtuesGrid" DataSource="{Virtues}" WidthSizePolicy="StretchToParent"
 																			HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center"
-																			SuggestedHeight="350" DefaultCellWidth="100" DefaultCellHeight="120" ColumnCount="4" MarginTop="10">
+																			SuggestedHeight="350" DefaultCellWidth="350" DefaultCellHeight="120" ColumnCount="2" MarginTop="10">
 																			<ItemTemplate>
 																				<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren"
-																					WidthSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop">
+																					WidthSizePolicy="StretchToParent" StackLayout.LayoutMethod="VerticalBottomToTop">
 																					<Children>
 																						<EncyclopediaHeroTraitVisualWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
 																							SuggestedWidth="130" SuggestedHeight="130" HorizontalAlignment="Center" TraitId="@TraitId"
