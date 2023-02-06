@@ -50,7 +50,13 @@ namespace BannerKings.Models.BKModels
                     var tension = data.ReligionData.Tension;
                     result.AddFactor(tension.ResultNumber);
                 }
-               
+
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(converter,
+                    DefaultDivinities.Instance.DarusosianMain))
+                {
+                    result.AddFactor(-0.2f, DefaultDivinities.Instance.DarusosianMain.Name);
+                }
+
             });
 
             return result;
@@ -72,6 +78,12 @@ namespace BannerKings.Models.BKModels
                 {
                     var tension = data.ReligionData.Tension;
                     result.AddFactor(tension.ResultNumber);
+                }
+
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(converter,
+                    DefaultDivinities.Instance.DarusosianMain))
+                {
+                    result.AddFactor(-0.2f, DefaultDivinities.Instance.DarusosianMain.Name);
                 }
             });
 

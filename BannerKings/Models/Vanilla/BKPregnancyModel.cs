@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Institutions.Religions.Doctrines;
+﻿using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 
@@ -21,6 +22,19 @@ namespace BannerKings.Models.Vanilla
                 if (spouseRel != null && spouseRel.HasDoctrine(DefaultDoctrines.Instance.Childbirth))
                 {
                     result *= 1.15f;
+                }
+            }
+
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero, DefaultDivinities.Instance.TreeloreMoon))
+            {
+                result *= 1.25f;
+            }
+
+            if (hero.Spouse != null)
+            {
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Spouse, DefaultDivinities.Instance.TreeloreMoon))
+                {
+                    result *= 1.25f;
                 }
             }
 

@@ -143,11 +143,21 @@ namespace BannerKings.Behaviours
                 if (mapEventParty.Party.IsActive)
                 {
                     var mobileParty = mapEventParty.Party.MobileParty;
-                    if (mobileParty != null && mobileParty.LeaderHero != null && 
-                        mapEvent.MapEventSettlement.Culture.StringId != "battania")
+                    if (mobileParty != null && mobileParty.LeaderHero != null)
                     {
+                        var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(mobileParty.LeaderHero);
+                        var settlementCulture = mapEvent.MapEventSettlement.Culture;
+                        if (settlementCulture.StringId != "battania")
+                        {
+                            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(mobileParty.LeaderHero,
+                                DefaultDivinities.Instance.AmraSecondary2, rel))
+                            {
+                                GainRenownAction.Apply(mobileParty.LeaderHero, 10f);
+                            }
+                        }
+
                         if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(mobileParty.LeaderHero,
-                            DefaultDivinities.Instance.AmraSecondary2))
+                                DefaultDivinities.Instance.TreeloreMain, rel) && !rel.FavoredCultures.Contains(settlementCulture))
                         {
                             GainRenownAction.Apply(mobileParty.LeaderHero, 10f);
                         }
