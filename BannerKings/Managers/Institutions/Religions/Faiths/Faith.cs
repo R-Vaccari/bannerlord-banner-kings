@@ -130,6 +130,15 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract TextObject GetBlessingQuestion();
         public abstract TextObject GetBlessingConfirmQuestion();
         public abstract TextObject GetBlessingQuickInformation();
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Faith)
+            {
+                return GetId() == (obj as Faith).GetId();
+            }
+            return base.Equals(obj);
+        }
     }
 
     public enum FaithStance
