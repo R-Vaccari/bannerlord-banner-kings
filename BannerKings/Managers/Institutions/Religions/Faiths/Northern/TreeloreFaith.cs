@@ -121,8 +121,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
                 .SetTextVariable("VAKKEN", Utils.Helpers.GetCulture("vakken").Name));
         }
 
-        public override TextObject GetMainDivinitiesDescription() => new TextObject("{=!}Supreme God");
-
         public override Divinity GetMainDivinity() => mainGod;
 
         public override int GetMaxClergyRank() => 1;
