@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BannerKings.Managers;
 using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Skills;
 using HarmonyLib;
@@ -163,6 +164,15 @@ namespace BannerKings.Behaviours
             }
 
             InitializeFaith(hero);
+
+            if (hero.Clan != null && hero.Clan.Leader != null )
+            {
+                var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero.Clan.Leader);
+                if (rel != null && rel.HasDoctrine(DefaultDoctrines.Instance.Childbirth))
+                {
+                    hero.Clan.AddRenown(25f, true);
+                }
+            }
         }
 
         private void OnHeroComesOfAge(Hero hero)
