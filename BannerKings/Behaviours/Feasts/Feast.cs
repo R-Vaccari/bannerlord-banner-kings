@@ -14,7 +14,8 @@ namespace BannerKings.Behaviours.Feasts
 {
     public class Feast
     {
-        public Feast(Hero host, List<Clan> guests, Town town, CampaignTime endDate, bool autoManaged, MarriageContract marriageContract = null)
+        public Feast(Hero host, List<Clan> guests, Town town, CampaignTime endDate, bool autoManaged, MarriageContract marriageContract = null,
+            FeastType type = FeastType.Normal)
         {
             Host = host;
             Guests = guests;
@@ -28,6 +29,7 @@ namespace BannerKings.Behaviours.Feasts
         public static float AlcoholConsumptionRatio => 1f;
         public static float SpiceConsumptionRatio => 0.02f;
 
+        public FeastType Type { get; private set; }
         [SaveableProperty(1)] public Hero Host { get; private set; }
         [SaveableProperty(2)] public List<Clan> Guests { get; private set; }
         [SaveableProperty(3)] public Town Town { get; private set; }
@@ -334,6 +336,12 @@ namespace BannerKings.Behaviours.Feasts
             }
 
             return list;
+        }
+
+        public enum FeastType
+        {
+            Normal,
+            Treelore
         }
     }
 }
