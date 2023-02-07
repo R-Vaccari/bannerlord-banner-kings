@@ -16,7 +16,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         protected Divinity mainGod;
         protected List<Divinity> pantheon;
         protected Dictionary<int, CharacterObject> presets;
-        protected List<ContextualRite> rites;
+        protected List<Rite> rites;
 
         [SaveableField(1)] protected Dictionary<Faith, FaithStance> stances;
 
@@ -28,17 +28,17 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             presets = new Dictionary<int, CharacterObject>();
         }
 
-        public MBReadOnlyList<ContextualRite> Rites => rites.GetReadOnlyList();
+        public MBReadOnlyList<Rite> Rites => rites.GetReadOnlyList();
         public MBReadOnlyDictionary<TraitObject, bool> Traits => traits.GetReadOnlyDictionary();
         public FaithGroup FaithGroup => faithGroup;
         public Divinity MainGod => mainGod;
 
-        protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup, List<ContextualRite> rites = null)
+        protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup, List<Rite> rites = null)
         {
             this.mainGod = mainGod;
             this.traits = traits;
             this.faithGroup = faithGroup;
-            rites ??= new List<ContextualRite>();
+            rites ??= new List<Rite>();
 
             this.rites = rites;
         }

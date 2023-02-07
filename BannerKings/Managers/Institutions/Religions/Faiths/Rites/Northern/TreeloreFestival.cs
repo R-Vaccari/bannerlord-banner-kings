@@ -1,12 +1,19 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Goals.Decisions;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Northern
 {
     public class TreeloreFestival : Festival
     {
-        public override int DayOfTheSeason => 1;
+        public override int DayOfTheSeason => 15;
         public override int SeasonOfTheYear => 0;
+
+        public override void Complete(Hero actionTaker)
+        {
+            var decision = new OrganizeFeastDecision(Hero.MainHero, Behaviours.Feasts.Feast.FeastType.Treelore);
+            decision.ShowInquiry();
+        }
 
         public override void Execute(Hero executor)
         {
@@ -20,6 +27,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Northern
         public override float GetPietyReward()
         {
             return 100;
+        }
+
+        public override void SetDialogue()
+        {
+            MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM",
+                new TextObject("{=!}!"));
         }
     }
 }

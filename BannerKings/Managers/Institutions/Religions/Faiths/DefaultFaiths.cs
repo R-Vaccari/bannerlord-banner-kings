@@ -5,6 +5,7 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Empire;
 using BannerKings.Managers.Institutions.Religions.Faiths.Northern;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Battania;
+using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Northern;
 using BannerKings.Managers.Institutions.Religions.Faiths.Vlandia;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Localization;
@@ -55,7 +56,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     {DefaultTraits.Honor, true},
                     {DefaultTraits.Valor, true}
                 },
-                aseraGroup, new List<ContextualRite> {zabiha});
+                aseraGroup, new List<Rite> {zabiha});
 
             battaniaGroup = new FaithGroup(new TextObject("{=GbQpgQat}Derwyddon Faiths"),
                 new TextObject("{=ZonhX1rf}The faiths in the true old Calradian gods."));
@@ -68,7 +69,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     {DefaultTraits.Valor, true}
                 },
                 battaniaGroup, 
-                new List<ContextualRite> 
+                new List<Rite> 
                 { 
                     new IronOffering(), 
                     new GreatSwordOffering()
@@ -86,7 +87,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     {DefaultTraits.Honor, true},
                     {DefaultTraits.Mercy, true}
                 },
-                imperialGroup, new List<ContextualRite>() { darusosianExecution });
+                imperialGroup, new List<Rite>() { darusosianExecution });
 
 
             vlandiaGroup = new FaithGroup(new TextObject("{=6FGQ31TM}Vlandic Faiths"),
@@ -100,23 +101,26 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     {DefaultTraits.Mercy, false},
                     {DefaultTraits.Valor, true}
                 },
-                vlandiaGroup, new List<ContextualRite>());
+                vlandiaGroup, new List<Rite>());
 
             sturgiaGroup = new FaithGroup(new TextObject(),
                 new TextObject());
             Treelore = new TreeloreFaith();
             Treelore.Initialize(DefaultDivinities.Instance.TreeloreMain,
                 new List<Divinity>
-                { 
-                    DefaultDivinities.Instance.TreeloreMoon 
+                {
+                    DefaultDivinities.Instance.TreeloreMoon
                 },
                 new Dictionary<TraitObject, bool>
                 {
                     {DefaultTraits.Generosity, true},
                     {DefaultTraits.Valor, true}
                 },
-                sturgiaGroup, 
-                new List<ContextualRite>());
+                sturgiaGroup,
+                new List<Rite>()
+                {
+                    new TreeloreFestival()
+                });
         }
 
         public Faith GetById(string id)

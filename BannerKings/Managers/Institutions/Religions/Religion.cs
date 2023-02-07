@@ -39,11 +39,11 @@ namespace BannerKings.Managers.Institutions.Religions
             base.settlement = settlement;
         }
 
-        public MBReadOnlyList<ContextualRite> Rites
+        public MBReadOnlyList<Rite> Rites
         {
             get
             {
-                var list = new List<ContextualRite>();
+                var list = new List<Rite>();
                 list.AddRange(Faith.Rites);
                 if (doctrineIds.Contains("sacrifice"))
                 {

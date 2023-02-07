@@ -1,9 +1,8 @@
 ﻿using BannerKings.Utils.Extensions;
-using System.Collections.Generic;
-using System.Drawing;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
@@ -12,35 +11,25 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
     {
         protected Settlement festivalPlace;
 
+        public override TextObject GetRequirementsText(Hero hero)
+        {
+            return new TextObject("{=!}The current date must match the festival's traditional season and day of season.");
+        }
+
         public override void Execute(Hero executor)
         {
-            TextObject reason;
-            if (!MeetsCondition(executor, out reason))
-            {
-                return;
-            }
-
-            var options = new List<InquiryElement>();
-            foreach (var fief in executor.Clan.Fiefs)
-            {
-                options.Add(new InquiryElement(fief.Settlement, fief.Name.ToString(), null));
-            }
-
-            MBInformationManager.ShowMultiSelectionInquiry(
-                new MultiSelectionInquiryData(
-                    GetName().ToString(),
-                    GetDescription().ToString(),
-                    options,
-                    false,
-                    1,
-                    GameTexts.FindText("str_done").ToString(),
-                    string.Empty,
-                    delegate (List<InquiryElement> x)
-                    {
-                        festivalPlace = (Settlement?)x[0].Identifier;
-                    },
-                    null,
-                    string.Empty));
+            InformationManager.ShowInquiry(new InquiryData(
+                new TextObject("{=!}Organize Festival").ToString(),
+                new TextObject("{=!}A religious festival is a way to celebrate your faith and improve bonds with your fellow faithful. The festival will require a feast in a town or castle of yours. Piety will be awarded according to number of guests and their satisfaction with the feast, so be sure to provide plenty of good food and beverage.").ToString(),
+                true,
+                false,
+                GameTexts.FindText("str_ok").ToString(),
+                string.Empty,
+                () =>
+                {
+                    SetDialogue();
+                },
+                null));
         }
 
         public override float GetPietyReward()

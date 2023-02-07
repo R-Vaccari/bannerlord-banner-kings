@@ -73,10 +73,10 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
             var induction = GetInductionAllowed(Hero.MainHero, rank);
             if (!induction.Item1)
             {
-                return new TextObject("{=!}Go now, and return to those of your kind, wherever they might be. The children of the forest only accept those born in it.[if:convo_bored]");
+                return new TextObject("{=!}Go now, and return to those of your kind, wherever they might be. The children of the forest only accept those born in it.[rf:convo_bored]");
             }
 
-            return new TextObject("{=!}Be welcome as a child of the forest. Defend your brethren and your gods - fight our enemies fiercely, but also be kind to those that visit your hearth. Do not try and convince them of our ways - it is not their place. Yet it is ours to keep unharmed.");
+            return new TextObject("{=!}Be welcome as a child of the forest. Defend your brethren and your gods - fight our enemies fiercely, but also be kind to those that visit your hearth. Do not try and convince them of our ways - it is not their place. Yet it is ours to keep unharmed.[if:convo_excited]");
         }
 
         public override TextObject GetClergyPreachingAnswer(int rank) => new TextObject("{=!}When it comes to the gods, there is nothing the words of man can say that the rustling of leaves or burbling of rivers does not tell better. The forest, offspring of the Great Oak, holds the chronicles of the past. Truth, you see, is embedded within all that which is godly, be it the river flow or the oak grain. I merely interpret it.");

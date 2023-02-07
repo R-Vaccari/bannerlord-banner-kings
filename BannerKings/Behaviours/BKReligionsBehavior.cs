@@ -28,7 +28,7 @@ namespace BannerKings.Behaviours
     {
         private static ReligionsManager ReligionsManager => BannerKingsConfig.Instance.ReligionsManager;
         private Divinity selectedDivinity;
-        private ContextualRite selectedRite;
+        private Rite selectedRite;
 
         public override void RegisterEvents()
         {
@@ -689,28 +689,27 @@ namespace BannerKings.Behaviours
                 return false;
             }
 
-            MBStringBuilder sb = default(MBStringBuilder);
-            sb.Append(new TextObject("{=QbUTvLMt}No rite is currently possible to perform."));
+            StringBuilder sb = new StringBuilder();
+            sb.Append(new TextObject("{=!}Each rite has different conditions to be fulfilled. They also have time intervals before being able to me performed again, check their details in the Religion tab."));
             foreach (Rite rite in religion.Rites)
             {
                 TextObject reason;
                 bool possible = rite.MeetsCondition(Hero.MainHero, out reason);
                 if (!possible)
                 {
-                    sb.Append(new TextObject("{=!}{RITE}: {REASON}")
-                        .SetTextVariable("RITE", rite.GetName()
-                        .SetTextVariable("REASON", reason)));
+                    sb.Append(new TextObject("{=!}\n{RITE}: {REASON}")
+                        .SetTextVariable("RITE", rite.GetName())
+                        .SetTextVariable("REASON", reason));
                 }
             }
             TextObject r;
             bool anyPossible = religion.Rites.Any(rite => rite.MeetsCondition(Hero.MainHero, out r));
             if (!anyPossible)
             {
-                hintText = new TextObject("{=!}" + sb.ToStringAndRelease());
+                hintText = new TextObject("{=!}" + sb.ToString());
                 return false;
             }
 
-            sb.Release();
             hintText = new TextObject("{=2Q6R8xum}Perform a rite such as an offering in exchange for piety.");
             return true;
         }
@@ -735,15 +734,15 @@ namespace BannerKings.Behaviours
            ).ToList();
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                religion.Faith.GetCultsDescription().ToString(),
-                string.Empty, 
+                new TextObject("{=Yy2s38FQ}Rites").ToString(),
+                new TextObject("{=!}Select what rite you would like to perform. Check their descriptions and entries on Religions tab for details.").ToString(), 
                 list,
                 false, 1,
                 GameTexts.FindText("str_done").ToString(), 
                 string.Empty,
                 delegate(List<InquiryElement> x)
                 {
-                    var rite = (ContextualRite?) x[0].Identifier;
+                    var rite = (Rite?) x[0].Identifier;
                     selectedRite = rite;
                     rite.Execute(Hero.MainHero);
                 },
