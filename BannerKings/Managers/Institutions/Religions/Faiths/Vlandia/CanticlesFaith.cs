@@ -292,5 +292,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
         {
             return new TextObject("{=Yz4aFGU9}medidate upon.");
         }
+
+        public override TextObject GetInductionExplanationText() => new TextObject("{=!}You need clan tier 3 or higher.");
     }
 }
