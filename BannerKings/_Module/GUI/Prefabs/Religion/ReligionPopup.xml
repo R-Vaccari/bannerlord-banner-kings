@@ -102,6 +102,27 @@
 																		</GridWidget>
 
 
+																		<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent"
+																				WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
+																			<Children>
+																				<HintWidget DataSource="{InductionHint}" WidthSizePolicy="StretchToParent"
+																					HeightSizePolicy="StretchToParent" SuggestedHeight="15" SuggestedWidth="100"
+																					VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																					Command.HoverEnd="ExecuteEndHint" />
+																				<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed"
+																					SuggestedWidth="250" StackLayout.LayoutMethod="VerticalBottomToTop">
+																					<Children>
+																						<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																							HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="20" Text="@InductionText"
+																							MarginBottom="15" />
+																						<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																							HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@InductionExplanationText" />
+																					</Children>
+																				</ListPanel>
+																			</Children>
+																		</Widget>
+																				
+
 																		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7"
 																			MarginLeft="250" MarginRight="250" MarginTop="20" VerticalAlignment="Bottom" PositionYOffset="7"
 																			Sprite="SPGeneral\TownManagement\horizontal_divider" />

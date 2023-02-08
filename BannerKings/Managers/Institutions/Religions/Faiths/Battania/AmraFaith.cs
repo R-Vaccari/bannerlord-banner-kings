@@ -342,5 +342,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
         {
             return new TextObject("{=bd7HQSJH}pledge an oath to.");
         }
+
+        public override TextObject GetInductionExplanationText() => new TextObject("{=!}Only Battanians with 50 or more roguery are accepted.");
     }
 }

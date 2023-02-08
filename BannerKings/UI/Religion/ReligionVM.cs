@@ -5,6 +5,7 @@ using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -23,7 +24,7 @@ namespace BannerKings.UI.Religion
         private MBBindingList<ReligionElementVM> secondaryDivinities;
         private MBBindingList<BKTraitItemVM> virtues;
         private SelectorVM<ReligionSelectorItemVM> selector;
-        private string name, description, groupName, groupDescription, divinities;
+        private string name, description, groupName, groupDescription, divinities, inductionExplanation;
         private Hero hero;
 
         public ReligionVM(Managers.Institutions.Religions.Religion heroReligion, Hero hero) : base(null, true)
@@ -129,6 +130,20 @@ namespace BannerKings.UI.Religion
         [DataSourceProperty] public string DoctrinesText => new TextObject("{=BKLacKdC}Doctrines").ToString();
         [DataSourceProperty] public string AspectsText => new TextObject("{=1sKJS1JR}Aspects").ToString();
         [DataSourceProperty] public string RitesText => new TextObject("{=Yy2s38FQ}Rites").ToString();
+        [DataSourceProperty] public string InductionText => new TextObject("{=!}Induction").ToString();
+
+        [DataSourceProperty] public HintViewModel InductionHint => new HintViewModel(new TextObject("{=!}The criteria for being inducted into this faith. Induction may be done through preachers. Depending on the preacher's rank, they may require different things."));
+
+        [DataSourceProperty]
+        public string InductionExplanationText
+        {
+            get => inductionExplanation;
+            set
+            {
+                inductionExplanation = value;
+                OnPropertyChangedWithValue(value, "InductionExplanationText");
+            }
+        }
 
         [DataSourceProperty]
         public string SecondaryDivinitiesText
@@ -328,6 +343,8 @@ namespace BannerKings.UI.Religion
                 currentReligion = obj.SelectedItem.Religion;
                 RefreshValues();
             });
+
+            InductionExplanationText = currentReligion.Faith.GetInductionExplanationText().ToString();
 
             foreach (var pair in currentReligion.Clergy)
             {
