@@ -102,21 +102,21 @@
 																		</GridWidget>
 
 
-																		<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent"
+																		<Widget HorizontalAlignment="Center" HeightSizePolicy="CoverChildren"
 																				WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
 																			<Children>
 																				<HintWidget DataSource="{InductionHint}" WidthSizePolicy="StretchToParent"
-																					HeightSizePolicy="StretchToParent" SuggestedHeight="15" SuggestedWidth="100"
+																					HeightSizePolicy="CoverChildren" SuggestedHeight="15" SuggestedWidth="100"
 																					VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
 																					Command.HoverEnd="ExecuteEndHint" />
 																				<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed"
-																					SuggestedWidth="250" StackLayout.LayoutMethod="VerticalBottomToTop">
+																					SuggestedWidth="750" StackLayout.LayoutMethod="VerticalBottomToTop">
 																					<Children>
 																						<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																							HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="20" Text="@InductionText"
+																							HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="26" Text="@InductionText"
 																							MarginBottom="15" />
 																						<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																							HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@InductionExplanationText" />
+																							HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="24" Text="@InductionExplanationText" />
 																					</Children>
 																				</ListPanel>
 																			</Children>
