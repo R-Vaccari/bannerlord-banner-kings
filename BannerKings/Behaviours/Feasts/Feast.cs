@@ -1,4 +1,5 @@
 using BannerKings.Behaviours.Marriage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -144,7 +145,7 @@ namespace BannerKings.Behaviours.Feasts
             food = food * 1.5f;
             int boughtFood = 0;
             int boughAlcohol = 0;
-            //HashSet<ItemObject> items = new HashSet<ItemObject>();
+            var list = new List<ValueTuple<EquipmentElement, int>>();
             foreach (var element in Town.Owner.ItemRoster)
             {
                 var item = element.EquipmentElement.Item;
@@ -162,7 +163,13 @@ namespace BannerKings.Behaviours.Feasts
                     Host.ChangeHeroGold(-cost);
                     Town.ChangeGold(cost);
                     Town.Settlement.Stash.AddToCounts(element.EquipmentElement, count);
+                    list.Add(new (element.EquipmentElement, count));
                 }
+            }
+
+            foreach (var pair in list)
+            {
+                Town.Owner.ItemRoster.AddToCounts(pair.Item1, pair.Item2);
             }
         }
 
@@ -341,7 +348,8 @@ namespace BannerKings.Behaviours.Feasts
         public enum FeastType
         {
             Normal,
-            Treelore
+            Treelore,
+            Astaronia
         }
     }
 }
