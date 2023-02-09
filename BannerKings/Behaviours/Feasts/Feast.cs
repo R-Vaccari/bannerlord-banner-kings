@@ -1,4 +1,5 @@
 using BannerKings.Behaviours.Marriage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -14,7 +15,8 @@ namespace BannerKings.Behaviours.Feasts
 {
     public class Feast
     {
-        public Feast(Hero host, List<Clan> guests, Town town, CampaignTime endDate, bool autoManaged, MarriageContract marriageContract = null)
+        public Feast(Hero host, List<Clan> guests, Town town, CampaignTime endDate, bool autoManaged, MarriageContract marriageContract = null,
+            FeastType type = FeastType.Normal)
         {
             Host = host;
             Guests = guests;
@@ -28,6 +30,7 @@ namespace BannerKings.Behaviours.Feasts
         public static float AlcoholConsumptionRatio => 1f;
         public static float SpiceConsumptionRatio => 0.02f;
 
+        public FeastType Type { get; private set; }
         [SaveableProperty(1)] public Hero Host { get; private set; }
         [SaveableProperty(2)] public List<Clan> Guests { get; private set; }
         [SaveableProperty(3)] public Town Town { get; private set; }
@@ -44,6 +47,9 @@ namespace BannerKings.Behaviours.Feasts
 
         [SaveableProperty(12)] public MarriageContract MarriageContract { get; private set; }
         [SaveableProperty(13)] public bool AutoManaged { get; private set; }
+
+        private float GeneralSatisfaction => ((FoodQuality / 7f) + (FoodQuantity / 7f) +
+                (FoodVariety / 7f) + (Alcohol / 7f) + (HostPresence / Ticks)) / 5f;
 
         public void Tick(bool hourly = true)
         {
@@ -142,7 +148,7 @@ namespace BannerKings.Behaviours.Feasts
             food = food * 1.5f;
             int boughtFood = 0;
             int boughAlcohol = 0;
-            //HashSet<ItemObject> items = new HashSet<ItemObject>();
+            var list = new List<ValueTuple<EquipmentElement, int>>();
             foreach (var element in Town.Owner.ItemRoster)
             {
                 var item = element.EquipmentElement.Item;
@@ -160,15 +166,19 @@ namespace BannerKings.Behaviours.Feasts
                     Host.ChangeHeroGold(-cost);
                     Town.ChangeGold(cost);
                     Town.Settlement.Stash.AddToCounts(element.EquipmentElement, count);
+                    list.Add(new (element.EquipmentElement, count));
                 }
+            }
+
+            foreach (var pair in list)
+            {
+                Town.Owner.ItemRoster.AddToCounts(pair.Item1, pair.Item2);
             }
         }
 
         public void Finish(TextObject reason)
         {
-            float satisfaction = ((FoodQuality / 7f) + (FoodQuantity / 7f) +
-                (FoodVariety / 7f) + (Alcohol / 7f) + (HostPresence / Ticks)) / 5f;
-
+            float satisfaction = GeneralSatisfaction;
             if (MarriageContract != null)
             {
                 Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().ApplyMarriageContract();
@@ -196,9 +206,11 @@ namespace BannerKings.Behaviours.Feasts
 
                 int relation = (int)MathF.Clamp((MBRandom.RandomInt(3, 8) * satisfaction - 0.5f), -10f, 20f);
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Host, clan.Leader, relation);
+                AddPiety(clan.Leader);
             }
 
             GainRenownAction.Apply(Host, 15 * satisfaction);
+            AddPiety(Host, true);
             if (Host.MapFaction == Hero.MainHero.MapFaction)
             {
                 MBInformationManager.AddQuickInformation(new TextObject("{=W7RqGAhs}The feast at {TOWN} has ended! {REASON}")
@@ -229,6 +241,28 @@ namespace BannerKings.Behaviours.Feasts
                     }
 
                     InformationManager.DisplayMessage(new InformationMessage(text.ToString()));
+                }
+            }
+        }
+
+        private void AddPiety(Hero hero, bool host = false)
+        {
+            var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+            if (religion == null)
+            {
+                return;
+            }
+
+            if (religion.Faith.FeastType == Type)
+            {
+                if (!host)
+                {
+                    BannerKingsConfig.Instance.ReligionsManager.AddPiety(religion, hero, 15f);
+                }
+                else
+                {
+                    float piety = 20 * Guests.Count * GeneralSatisfaction;
+                    BannerKingsConfig.Instance.ReligionsManager.AddPiety(religion, hero, piety);
                 }
             }
         }
@@ -334,6 +368,14 @@ namespace BannerKings.Behaviours.Feasts
             }
 
             return list;
+        }
+
+        public enum FeastType
+        {
+            None,
+            Normal,
+            Treelore,
+            Astaronia
         }
     }
 }

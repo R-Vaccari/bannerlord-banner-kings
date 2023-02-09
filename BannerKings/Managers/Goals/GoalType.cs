@@ -5,6 +5,7 @@ namespace BannerKings.Managers.Goals
     {
         Kingdom,
         Personal,
-        Unique
+        Unique,
+        Religious
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
@@ -8,6 +7,17 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 {
     public class AseraFaith : MonotheisticFaith
     {
+        public override bool IsCultureNaturalFaith(CultureObject culture)
+        {
+            if (culture.StringId == "aserai")
+            {
+                return true;
+            }
+
+            return false;
+        }
+        public override bool IsHeroNaturalFaith(Hero hero) => IsCultureNaturalFaith(hero.Culture);
+
         public override TextObject GetFaithName()
         {
             return new TextObject("{=4sC3k7fO}Code of Asera");
@@ -17,7 +27,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         {
             return new TextObject("{=CoLCEywd}Founded by the immediate sons of the legendary patriarch of the Southlands, the Code of Asera forms the basis of philosophy, art and law among the members of the confederated Aserai tribes. All tribesmen of the Aserai who do not wander as bedouin, are assumed to be followers of the Code of Asera - though only those who seek to study the intricacies of the mythic patrilineal bloodline and its influence upon the world are celebrated and viewed as Sons of Asera; a facet of colloquial nomenclature meant to force camaraderie as all members of the Sultanate make claim to being descendants of Asera. Faqir, akhund, imams, and mushid make up the various levels of clergy who preach the Code and seek to apply its nuanced legalisms and rites to the Southlands. As a whole, those who follow the Code of Asera place an emphasis on charity between communities, vengeance against those who defy precedent or tradition, and mercy given in kindness with justice forced if kindness is scorned.");
         }
-
 
         public override TextObject GetClergyForbiddenAnswer(int rank)
         {
@@ -347,11 +356,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             return mainGod;
         }
 
-        public override TextObject GetMainDivinitiesDescription()
-        {
-            return new TextObject("{=aw6BtMa7}Patriarch");
-        }
-
         public override int GetMaxClergyRank()
         {
             return 4;
@@ -375,7 +379,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             return pantheon.GetReadOnlyList();
         }
 
-        public override TextObject GetSecondaryDivinitiesDescription()
+        public override TextObject GetCultsDescription()
         {
             return new TextObject("{=MBYo3Pjx}Schools");
         }
@@ -439,7 +443,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
                         }
                         else
                         {
-                            text = new TextObject("{=iaxTPOgg}Not part Aserai, Imperial or Khuzait cultures.");
+                            text = new TextObject("{=SLogDwvH}Not part of Aserai, Imperial or Khuzait cultures.");
                         }
 
                         break;
@@ -507,5 +511,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         {
             return new TextObject("{=SwvMtLtQ}study from.");
         }
+
+        public override TextObject GetInductionExplanationText() => new TextObject("{=CrfLUm3F}You must be part of Aserai, Imperial or Khuzait cultures, or have relations with village notables (Faqir), have an Aserai spouse (Imam) or clan tier above 2 (Murshid).");
     }
 }

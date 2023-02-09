@@ -9,7 +9,7 @@ namespace BannerKings.Managers.Institutions
         protected Dictionary<Hero, float> favors;
         protected float influence;
 
-        protected Institution()
+        protected Institution(string id) : base()
         {
             favors = new Dictionary<Hero, float>();
         }

@@ -18,6 +18,7 @@ using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Institutions.Religions.Faiths.Asera;
 using BannerKings.Managers.Institutions.Religions.Faiths.Battania;
 using BannerKings.Managers.Institutions.Religions.Faiths.Empire;
+using BannerKings.Managers.Institutions.Religions.Faiths.Northern;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Institutions.Religions.Faiths.Vlandia;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
@@ -170,6 +171,7 @@ namespace BannerKings
             AddClassDefinition(typeof(BannerKingsComponent), 112);
             AddClassDefinition(typeof(GarrisonPartyComponent), 113);
             AddClassDefinition(typeof(WorkshopData), 114);
+            AddClassDefinition(typeof(TreeloreFaith), 115);
         }
 
         protected override void DefineContainerDefinitions()

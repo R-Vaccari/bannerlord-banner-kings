@@ -9,13 +9,14 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 {
-    public class DarusosianHomage : Rite
+    public class DarusosianHomage : ContextualRite
     {
         private Hero input;
 
         public override void Execute(Hero executor)
         {
-            if (!MeetsCondition(executor))
+            TextObject reason;
+            if (!MeetsCondition(executor, out reason))
             {
                 return;
             }
@@ -103,8 +104,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             return list;
         }
 
-        public override bool MeetsCondition(Hero hero)
+        public override bool MeetsCondition(Hero hero, out TextObject reason)
         {
+            reason = new TextObject("{=oo3xtFfT}This rite is available to be performed.");
             var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
             var hasTarget = GetAdequateSacrifices(hero).Count > 0;
             

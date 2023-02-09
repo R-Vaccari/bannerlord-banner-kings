@@ -11,33 +11,19 @@ namespace BannerKings.Managers.Education.Lifestyles
     public class DefaultLifestyles : DefaultTypeInitializer<DefaultLifestyles, Lifestyle>
     {
         public Lifestyle Kheshig { get; private set; }
-
         public Lifestyle Varyag { get; private set; }
-
         public Lifestyle Fian { get; private set; }
-
         public Lifestyle Diplomat { get; private set; }
-
         public Lifestyle August { get; private set; }
-
         public Lifestyle Cataphract { get; private set; }
-
         public Lifestyle SiegeEngineer { get; private set; }
-
         public Lifestyle CivilAdministrator { get; private set; }
-
         public Lifestyle Outlaw { get; private set; }
-
         public Lifestyle Caravaneer { get; private set; }
-
         public Lifestyle Mercenary { get; private set; }
-
         public Lifestyle Artisan { get; private set; }
-
         public Lifestyle Gladiator { get; private set; }
-
         public Lifestyle Ritter { get; private set; }
-
         public Lifestyle Jawwal { get; private set; }
 
         public override IEnumerable<Lifestyle> All
@@ -57,6 +43,10 @@ namespace BannerKings.Managers.Education.Lifestyles
                 yield return August;
                 yield return SiegeEngineer;
                 yield return CivilAdministrator;
+                foreach (Lifestyle item in ModAdditions)
+                {
+                    yield return item;
+                }
             }
         }
 

@@ -1,4 +1,3 @@
-using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
@@ -8,6 +7,26 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 {
     public class DarusosianFaith : MonotheisticFaith
     {
+        public override bool IsCultureNaturalFaith(CultureObject culture)
+        {
+            if (culture.StringId == "empire")
+            {
+                return true;
+            }
+
+            return false;
+        }
+        public override bool IsHeroNaturalFaith(Hero hero)
+        {
+            if (IsCultureNaturalFaith(hero.Culture) && hero.MapFaction != null && hero.MapFaction.IsKingdomFaction && 
+                hero.MapFaction.StringId == "empire_s")
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public override TextObject GetFaithName()
         {
             return new TextObject("{=wrOvqkyB}Darusosian Martyrdom");
@@ -171,11 +190,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             return mainGod;
         }
 
-        public override TextObject GetMainDivinitiesDescription()
-        {
-            return new TextObject("{=iYqD0kQM}Great Spirits");
-        }
-
         public override int GetMaxClergyRank()
         {
             return 3;
@@ -198,7 +212,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             return pantheon.GetReadOnlyList();
         }
 
-        public override TextObject GetSecondaryDivinitiesDescription()
+        public override TextObject GetCultsDescription()
         {
             return new TextObject("{=J4D4X2XJ}Cults");
         }
@@ -240,5 +254,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
         {
             return new TextObject("{=Yz4aFGU9}medidate upon.");
         }
+
+        public override TextObject GetInductionExplanationText() => new TextObject("{=NNMB0hrF}Only members of the Southern Empire are accepted.");
     }
 }

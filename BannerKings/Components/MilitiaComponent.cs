@@ -18,8 +18,8 @@ namespace BannerKings.Components
 
         [SaveableProperty(1002)] public AiBehavior Behavior { get; set; }
 
-        public override TextObject Name => new TextObject("Raised Militia from {SETTLEMENT}")
-            .SetTextVariable("SETTLEMENT", HomeSettlement.Name);
+        public override TextObject Name => new TextObject("{=scETr7Ej}Raised Militia from {ORIGIN}")
+            .SetTextVariable("ORIGIN", HomeSettlement.Name);
 
         private static MobileParty CreateParty(string id, Settlement origin, MobileParty escortTarget)
         {

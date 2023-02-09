@@ -105,7 +105,12 @@ namespace BannerKings.Behaviours
 
         private bool ShouldHaveCaravan(Hero hero, int cost)
         {
-            return hero == hero.Clan.Leader && hero.Clan.Gold >= (int) (cost * 2f) &&
+            CharacterObject master = CharacterObject.All.FirstOrDefault((CharacterObject character) => 
+                character.Occupation == Occupation.CaravanGuard && 
+                character.IsInfantry && 
+                character.Level == 26 && 
+                character.Culture == hero.Culture);
+            return master != null && hero == hero.Clan.Leader && hero.Clan.Gold >= (int) (cost * 2f) &&
                    hero.OwnedCaravans.Count < (int) (hero.Clan.Tier / 3f);
         }
 

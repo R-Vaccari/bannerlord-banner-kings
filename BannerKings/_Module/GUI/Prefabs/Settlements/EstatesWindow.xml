@@ -189,7 +189,7 @@
 																							  SuggestedWidth="130" HorizontalAlignment="Center" VerticalAlignment="Top"
 																							  Brush="ButtonBrush2" Command.Click="ExecuteReclaim" IsVisible="@ReclaimVisible">
 																					<Children>
-																						<HintWidget DataSource="{GrantHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																						<HintWidget DataSource="{ReclaimHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
 																									HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
 																									Command.HoverEnd="ExecuteEndHint" />
 																						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
@@ -197,7 +197,19 @@
 																										Brush.FontSize="20" Text="@ReclaimText" />
 																					</Children>
 																				</ButtonWidget>
-
+																				
+																				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" MarginRight="15" MarginLeft="15"
+																							  SuggestedWidth="130" HorizontalAlignment="Center" VerticalAlignment="Top"
+																							  Brush="ButtonBrush2" Command.Click="ExecuteReclaim" IsVisible="@VassalizeVisible">
+																					<Children>
+																						<HintWidget DataSource="{VassalizeHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																									HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																									Command.HoverEnd="ExecuteEndHint" />
+																						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																										HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
+																										Brush.FontSize="20" Text="@VassalizeText" />
+																					</Children>
+																				</ButtonWidget>
 																				
 																			</Children>
 																		</ListPanel>

@@ -49,7 +49,6 @@ namespace BannerKings.Managers.Institutions.Religions
         }
 
         public bool CanReceiveBlessing() => blessingEndDate.RemainingDaysFromNow <= 0f;
-        
 
         [field: SaveableField(1)] public float Piety { get; private set; }
 
@@ -58,9 +57,17 @@ namespace BannerKings.Managers.Institutions.Religions
             Piety += piety;
         }
 
-        public void AddBlessing(Divinity blessing, Hero hero)
+        public void AddBlessing(Divinity blessing, Hero hero, bool isIdefiniteMembership = false)
         {
             Blessing = blessing;
+            if (isIdefiniteMembership)
+            {
+                blessingEndDate = CampaignTime.Never;
+            }
+            else
+            {
+                blessingEndDate = CampaignTime.YearsFromNow(GetBlessingYearsWindow(hero));
+            }
         }
 
         public bool HasTimePassedForRite(RiteType type, float years)
@@ -90,6 +97,11 @@ namespace BannerKings.Managers.Institutions.Religions
             if (lastBlessing == null)
             {
                 lastBlessing = CampaignTime.Never;
+            }
+
+            if (Blessing != null && BlessingEndDate != null && BlessingEndDate.IsPast)
+            {
+                Blessing = null;
             }
         }
     }

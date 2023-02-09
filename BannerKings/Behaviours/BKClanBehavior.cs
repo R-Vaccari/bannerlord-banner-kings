@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Settings;
@@ -609,6 +610,11 @@ namespace BannerKings.Behaviours
 
         private void EvaluateRecruitKnight(Clan clan)
         {
+            if (!BannerKingsSettings.Instance.AIKnights)
+            {
+                return;
+            }
+
             RunWeekly(() =>
             {
                 if (clan.WarPartyComponents.Count >= clan.CommanderLimit || clan.Companions.Count >= clan.CompanionLimit || clan.Settlements.Count(x => x.IsVillage) <= 1 || !(clan.Influence >= BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(clan.Leader).ResultNumber))
@@ -753,10 +759,16 @@ namespace BannerKings.Behaviours
                     SettlementClaimantDecision.ClanAsDecisionOutcome clanAsDecisionOutcome = (SettlementClaimantDecision.ClanAsDecisionOutcome)candidateOutcome;
                     Clan clan = clanAsDecisionOutcome.Clan;
 
+                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, DefaultDivinities.Instance.AseraMain))
+                    {
+                        __result *= 0.2f;
+                    }
+
                     var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(clan.Leader).ResultNumber;
                     var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(clan).ResultNumber;
                     float factor = current / limit;
                     __result *= 1f - factor;
+
                 }
             }
         }

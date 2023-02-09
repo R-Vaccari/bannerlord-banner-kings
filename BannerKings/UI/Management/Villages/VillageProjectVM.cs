@@ -106,7 +106,7 @@ namespace BannerKings.UI.Management.Villages
             sb.Remove(sb.Length - 2, 1);
             var productionString = sb.ToString();
             var productionExplained = villageData.ProductionsExplained;
-            ProductionInfo.Add(new InformationElement(new TextObject("Goods Production:").ToString(),
+            ProductionInfo.Add(new InformationElement(new TextObject("{=Fin3KXMP}Goods Production:").ToString(),
                 new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
                 .SetTextVariable("POINTS", productionExplained.ResultNumber.ToString("0.00"))
                 .ToString(),

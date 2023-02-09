@@ -6,9 +6,8 @@ using BannerKings.Managers.Populations;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Inventory;
+
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
@@ -25,7 +24,7 @@ namespace BannerKings.UI.Management
         private DecisionElement exportToogle, tariffToogle, slaveTaxToogle, mercantilismToogle;
         private MBBindingList<InformationElement> productionInfo, revenueInfo, satisfactionInfo,
             slaveryInfo;
-        private ItemRoster roster;
+        private TournamentData tournamentData;
         private readonly Settlement settlement;
         private BKTaxPolicy taxItem;
         private SelectorVM<BKItemVM> taxSelector, criminalSelector;
@@ -51,14 +50,13 @@ namespace BannerKings.UI.Management
 
 
         [DataSourceProperty]
-        public string TaxPolicyText => new TextObject("Tax policy").ToString();
+        public string TaxPolicyText => new TextObject("{=L7QhNa6a}Tax policy").ToString();
 
         [DataSourceProperty]
-        public string CriminalPolicyText => new TextObject("Criminal policy").ToString();
+        public string CriminalPolicyText => new TextObject("{=qyjqPWxJ}Criminal policy").ToString();
 
         [DataSourceProperty]
-        public HintViewModel TournamentHint => new(new TextObject("{=VeMSE94s}Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as " +
-                                                                  "provide an adequate prize. Sponsoring games improves population loyalty towards you, and valuable prizes provide renown to your name."));
+        public HintViewModel TournamentHint => new(new TextObject("{=GqmH24N4}Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as provide an adequate prize. Sponsoring games improves population loyalty towards you, and valuable prizes provide renown to your name."));
 
         [DataSourceProperty]
         public bool TournamentAvailable
@@ -277,7 +275,7 @@ namespace BannerKings.UI.Management
                 sb.Remove(sb.Length - 2, 1);
                 var productionString = sb.ToString();
                 var productionExplained = villageData.ProductionsExplained;
-                ProductionInfo.Add(new InformationElement(new TextObject("Goods Production:").ToString(),
+                ProductionInfo.Add(new InformationElement(new TextObject("{=Fin3KXMP}Goods Production:").ToString(),
                     new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
                     .SetTextVariable("POINTS", productionExplained.ResultNumber.ToString("0.00"))
                     .ToString(),
@@ -302,7 +300,7 @@ namespace BannerKings.UI.Management
                     new TextObject("{=UgD3or79}Percentage of an item's value charged as tax when sold.").ToString()));
 
                 var mercantilism = data.EconomicData.Mercantilism;
-                RevenueInfo.Add(new InformationElement(new TextObject("Mercantilism:").ToString(),
+                RevenueInfo.Add(new InformationElement(new TextObject("{=5E2NZBtK}Mercantilism:").ToString(),
                     $"{mercantilism.ResultNumber:P}",
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
@@ -420,7 +418,7 @@ namespace BannerKings.UI.Management
                 .SetTextVariable("SETTLEMENT_NAME", settlement.Name)
                 .ToString(),
                 new TextObject("{=JdH9ubwj}Select a prize for your tournament. The bigger is it's value, the more renown will be awarded to once the tournament is finished.").ToString(),
-                null,
+                list,
                 true,
                 1,
                 GameTexts.FindText("str_accept").ToString(),
@@ -429,6 +427,7 @@ namespace BannerKings.UI.Management
                 {
                     ItemObject item = (ItemObject)list[0].Identifier;
                     tournament.SetPrize(item);
+                    tournamentData = tournament;
                     RefreshValues();
                 },
                 null));
@@ -437,14 +436,9 @@ namespace BannerKings.UI.Management
         public override void OnFinalize()
         {
             base.OnFinalize();
-            if (roster != null && !roster.IsEmpty())
+            if (tournamentData != null)
             {
-                var tournamentManager = Campaign.Current.TournamentManager;
-                tournamentManager.AddTournament(Campaign.Current.Models.TournamentModel.CreateTournament(settlement.Town));
-                Hero.MainHero.ChangeHeroGold(-5000);
-                InformationManager.DisplayMessage(new InformationMessage(
-                    $"Tournament started with prize: {data.TournamentData.Prize.Name}",
-                    "event:/ui/notification/coins_negative"));
+                tournamentData.Start(settlement.Town);
             }
         }
     }

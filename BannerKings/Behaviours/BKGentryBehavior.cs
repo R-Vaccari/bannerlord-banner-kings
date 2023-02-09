@@ -123,6 +123,11 @@ namespace BannerKings.Behaviours
                 }
 
                 Kingdom kingdom = clan.Kingdom;
+                if (kingdom == null)
+                {
+                    return;
+                }
+
                 bool war = FactionManager.GetEnemyKingdoms(kingdom).Count() > 0;
                 if (!war)
                 {
