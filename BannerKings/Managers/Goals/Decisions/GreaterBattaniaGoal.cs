@@ -53,7 +53,7 @@ namespace BannerKings.Managers.Goals.Decisions
             failedReasons = new List<TextObject>();
 
             var referenceSettlement = settlements.First();
-            var referenceHero = referenceSettlement.Owner;
+            var referenceHero = Hero.MainHero;
             var (gold, influence) = GetCosts(referenceHero);
             var culture = Utils.Helpers.GetCulture("battania");
 
