@@ -9,6 +9,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Localization;
+using static BannerKings.Behaviours.Feasts.Feast;
 
 namespace BannerKings.Behaviours.Feasts
 {
@@ -45,14 +46,15 @@ namespace BannerKings.Behaviours.Feasts
             }
         }
 
-        public void LaunchFeast(Town town, List<Clan> guests, MarriageContract marriage = null)
+        public void LaunchFeast(Town town, List<Clan> guests, MarriageContract marriage = null, FeastType type = FeastType.Normal)
         {
             var feast = new Feast(town.OwnerClan.Leader,
                 guests,
                 town,
                 CampaignTime.WeeksFromNow(1f),
                 town.OwnerClan != Clan.PlayerClan,
-                marriage);
+                marriage,
+                type);
 
             if (town.MapFaction == Hero.MainHero.MapFaction)
             {
@@ -82,6 +84,21 @@ namespace BannerKings.Behaviours.Feasts
             {
                 heroRecords.Add(hero, CampaignTime.Now);
             }
+        }
+
+        public bool IsClanBusy(Clan clan)
+        {
+            var result = false;
+            foreach (var feast in feasts)
+            {
+                if (feast.Value.Guests.Contains(clan))
+                {
+                    result = true;
+                    break;
+                }
+            }
+
+            return result;
         }
 
         public CampaignTime LastHeroFeast(Hero hero)

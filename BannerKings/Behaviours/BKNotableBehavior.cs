@@ -26,6 +26,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnGovernorChangedEvent.AddNonSerializedListener(this, OnGovernorChanged);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
+            CampaignEvents.HeroCreated.AddNonSerializedListener(this, OnHeroCreated);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -45,6 +46,27 @@ namespace BannerKings.Behaviours
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
             AddDialogue(starter);
+        }
+
+        private void OnHeroCreated(Hero hero, bool bornNaturally)
+        {
+            if (hero == null || !hero.IsNotable)
+            {
+                return;
+            }
+
+            var settlement = hero.CurrentSettlement != null ? hero.CurrentSettlement : hero.BornSettlement;
+            if (settlement == null)
+            {
+                return;
+            }
+
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            if (data != null && data.CultureData != null)
+            {
+                var culture = data.CultureData.GetRandomCulture();
+                hero.Culture = culture;
+            }
         }
 
         private void OnGovernorChanged(Town town, Hero oldGovernor, Hero newGovernor)
@@ -323,7 +345,7 @@ namespace BannerKings.Behaviours
             }
 
             MBTextManager.SetTextVariable("NOTABLE_CONVERT_CULTURE", 
-                new TextObject("I would like you to convert to my culture ({INFLUENCE} influence).")
+                new TextObject("{=rf3QLBok}I would like you to convert to my culture ({INFLUENCE} influence).")
                 .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.CultureModel.GetConversionCost(notable,
                 Hero.MainHero).ResultNumber.ToString("0")));
             return IsPlayerNotable() && IsCultureDifferent();
@@ -332,7 +354,7 @@ namespace BannerKings.Behaviours
         private bool ConvertCultureAnswerOnCondition()
         {
             MBTextManager.SetTextVariable("NOTABLE_ANSWER_CONVERT_CULTURE",
-                new TextObject("If that is your bidding, I would not deny it. Folks at {SETTLEMENT} might not like this. Over time however, they may accept it."));
+                new TextObject("{=TKUCnCtD}If that is your bidding, I would not deny it. Folks at {SETTLEMENT} might not like this. Over time however, they may accept it."));
             return IsPlayerNotable();
         }
 
@@ -363,7 +385,7 @@ namespace BannerKings.Behaviours
         {
 
             MBTextManager.SetTextVariable("NOTABLE_ANSWER_CONVERT_FAITH",
-                new TextObject("If that is your bidding, I am inclined to accept it. The people {SETTLEMENT} might not like this. Over time however, they may accept it."));
+                new TextObject("{=8x1gZye8}If that is your bidding, I am inclined to accept it. The people {SETTLEMENT} might not like this. Over time however, they may accept it."));
             return IsPlayerNotable();
         }
 
@@ -410,7 +432,7 @@ namespace BannerKings.Behaviours
             }
 
             MBTextManager.SetTextVariable("NOTABLE_CONVERT_FAITH",
-                new TextObject("I would like you to convert to my faith ({INFLUENCE} influence, {PIETY} piety).")
+                new TextObject("{=EOm86XND}I would like you to convert to my faith ({INFLUENCE} influence, {PIETY} piety).")
                 .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.ReligionModel.GetConversionInfluenceCost(notable,
                 Hero.MainHero).ResultNumber.ToString("0"))
                 .SetTextVariable("PIETY", BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(notable,

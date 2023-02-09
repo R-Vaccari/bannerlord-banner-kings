@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Drawing;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -8,13 +9,14 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 {
-    public class Sacrifice : Rite
+    public class Sacrifice : ContextualRite
     {
         private Hero input;
 
         public override void Execute(Hero executor)
         {
-            if (!MeetsCondition(executor))
+            TextObject reason;
+            if (!MeetsCondition(executor, out reason))
             {
                 return;
             }
@@ -66,18 +68,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             BannerKingsConfig.Instance.ReligionsManager.AddPiety(actionTaker, piety, actionTaker.Clan == Clan.PlayerClan);
             actionTaker.AddSkillXp(BKSkills.Instance.Theology, piety * 1.2f);
 
-            /*foreach (Clan clan in Clan.All)
-            {
-                Religion clanReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
-                if (clan != actionTaker.Clan && (clanReligion == null || !clanReligion.Doctrines.Contains("sacrifice")))
-                {
-                    bool affectRelatives;
-                    int relationChangeForExecutingHero = Campaign.Current.Models.ExecutionRelationModel.GetRelationChangeForExecutingHero(input, actionTaker, out affectRelatives);
-                    if (relationChangeForExecutingHero != 0)
-                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(actionTaker, clan.Leader, relationChangeForExecutingHero, true);
-                }
-            }*/
-
             if (actionTaker.GetPerkValue(BKPerks.Instance.TheologyRitesOfPassage))
             {
                 actionTaker.Clan.AddRenown(5f);
@@ -86,13 +76,26 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             input = null;
         }
 
-        public override bool MeetsCondition(Hero hero)
+        public override bool MeetsCondition(Hero hero, out TextObject reason)
         {
+            reason = new TextObject("{=oo3xtFfT}This rite is available to be performed.");
             var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
-            return hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
-                   data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero)) && hero.IsPartyLeader &&
-                   hero.PartyBelongedTo.PrisonRoster.TotalHeroes > 0;
-            ;
+            bool baseResult = hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
+                             data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero));
+
+            if (!baseResult)
+            {
+                reason = new TextObject("{=NZyz0ChH}Not enough time ({YEARS} years) have passed since the last rite of this type was performed.")
+                    .SetTextVariable("YEARS", GetTimeInterval(hero).ToString("0.0"));
+            }
+
+            bool prisoners = hero.PartyBelongedTo != null && hero.PartyBelongedTo.PrisonRoster.TotalHeroes > 0;
+            if (!prisoners)
+            {
+                reason = new TextObject("{=EqMjsAzB}You need lord prisoners to be sacrificed.");
+            }
+
+            return baseResult && prisoners;
         }
 
         public override TextObject GetDescription()

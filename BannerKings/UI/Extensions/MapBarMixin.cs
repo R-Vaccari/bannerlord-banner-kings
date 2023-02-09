@@ -14,6 +14,7 @@ namespace BannerKings.UI.Extensions
         private int piety;
         private string pietyAbbr;
         private BasicTooltipViewModel pietyHint;
+        private bool pietyWarning;
 
         public MapBarMixin(MapInfoVM vm) : base(vm)
         {
@@ -63,6 +64,20 @@ namespace BannerKings.UI.Extensions
             }
         }
 
+        [DataSourceProperty]
+        public bool IsPietyTooltipWarning
+        {
+            get => pietyWarning;
+            set
+            {
+                if (value != pietyWarning)
+                {
+                    pietyWarning = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
         public override void OnRefresh()
         {
             if (BannerKingsConfig.Instance.ReligionsManager == null)
@@ -74,6 +89,7 @@ namespace BannerKings.UI.Extensions
             Piety = (int) BannerKingsConfig.Instance.ReligionsManager.GetPiety(rel, Hero.MainHero);
             PietyHint = new BasicTooltipViewModel(() => UIHelper.GetPietyTooltip(rel, Hero.MainHero, Piety));
             PietyWithAbbrText = CampaignUIHelper.GetAbbreviatedValueTextFromValue(Piety);
+            IsPietyTooltipWarning = Piety < 0f;
             //if (rel == null) return;
         }
     }

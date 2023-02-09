@@ -35,35 +35,7 @@ The mod is big, complicated and not perfect. If you have an issue, describe it p
 - Most issues are reported and fixed first on [Discord](https://discord.gg/z7DS5R46wC) through test-versions. Test-versions are separate versions of the mod which are usually in-between 2 official updates, and are used to verify fixes mostly. A lot of issues are identified and fixed quickly, you don't need to make the 15th comment about it.
 
 ## For Modders
+Details can be found in [Modding BK](https://github.com/R-Vaccari/bannerlord-banner-kings/wiki/Modding-BK).
 BannerKings was bult from the principle of being a framework. Both for multiple official versions of the mod and possibly third parties extensions of it.
+It has support for being used as a dependency and there is reference material for asking for a custom version.
 
-### Extending Models
-A lot of the mod's effects are implemented through models. Bannerlord models are me to be overridable. By default, only 1 mod can override each model type. However it is still possible to keep the effects of several mods through Inheritance.
-
-#### Vanilla Models
-Just like BannerKings inherits from Bannerlord models, your mod would need to inherit from BannerKings. Let's see an easy example.
-```
-public class BKCrimeModel : DefaultCrimeModel
-{
-    public override ExplainedNumber GetDailyCrimeRatingChange(IFaction faction, bool includeDescriptions = false)
-    {
-        var result = base.GetDailyCrimeRatingChange(faction, includeDescriptions);
-        if (Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
-            .HasDebuff(DefaultStartOptions.Instance.Outlaw))
-        {
-            return new ExplainedNumber(0f, includeDescriptions, DefaultStartOptions.Instance.Outlaw.Name);
-        }
-
-        return result;
-    }
-}
-```
-Here BannerKings extends the vanilla `DefaultCrimeModel` through it's class `BKCrimeModel`. This means that all the inherit logic from `DefaultCrimeModel` is maintained while allowing BannerKings to add it's own effects on top of it. Here we override the `GetDailyCrimeRatingChange` method, and we can access the super class' result by using `base.GetDailyCrimeRatingChange(faction, includeDescriptions)`. You can then add onto it, or even return a completely new result, as it's done here. 
-
-Likewise, your mod, with your own `ModXCrimeModel` would extend `BKCrimeModel`. Thus the game would have the full effects of `ModXCrimeModel`, `BKCrimeModel` and `DefaultCrimeModel` combined.
-
-#### BannerKings Models
-To be done.
-
-### Religions
-To be done,

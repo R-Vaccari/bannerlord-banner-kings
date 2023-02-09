@@ -4,6 +4,7 @@ using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Settings;
 using BannerKings.UI.Notifications;
 using HarmonyLib;
 using SandBox.CampaignBehaviors;
@@ -39,24 +40,6 @@ namespace BannerKings.Behaviours
             dataStore.SyncData("bannerkings-armies", ref conqueredByArmies);
         }
 
-        private void OnRulingClanChanged(Kingdom kingdom, Clan clan)
-        {
-            if (BannerKingsConfig.Instance.TitleManager == null)
-            {
-                return;
-            }
-
-            var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-            if (sovereign?.contract == null)
-            {
-                return;
-            }
-
-            if (sovereign.deJure == clan.Leader)
-            {
-            }
-        }
-
         private void OnDailyTickHero(Hero hero)
         {
             if (hero == null)
@@ -72,9 +55,12 @@ namespace BannerKings.Behaviours
 
             if (hero.Clan != null && hero == hero.Clan.Leader)
             {
-                CheckOverDemesneLimit(hero);
-                CheckOverUnlandedDemesneLimit(hero);
-                //CheckOverVassalLimit(hero);
+                if (BannerKingsSettings.Instance.AIManagement)
+                {
+                    CheckOverDemesneLimit(hero);
+                    CheckOverUnlandedDemesneLimit(hero);
+                    //CheckOverVassalLimit(hero);
+                }
             }
         }
 

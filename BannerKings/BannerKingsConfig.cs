@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers;
 using BannerKings.Managers.AI;
@@ -25,9 +26,11 @@ namespace BannerKings
 {
     public class BannerKingsConfig
     {
-        public const string VersionNumber = "1.2.6.1";
+        public const string VersionNumber = "1.2.6.5";
         public const string VersionEdition = "Standard";
         public string VersionName => VersionNumber + VersionEdition;
+
+        private List<ITypeInitializer> modInitializers = new List<ITypeInitializer>();
 
         public bool FirstUse { get; private set; } = true;
 
@@ -76,6 +79,14 @@ namespace BannerKings
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
 
+        public void AddInitializer(ITypeInitializer init)
+        {
+            if (init != null)
+            {
+                modInitializers.Add(init);
+            }
+        }
+
         public void InitializeManagersFirstTime()
         {
             InitManagers();
@@ -107,6 +118,11 @@ namespace BannerKings
             DefaultBookTypes.Instance.Initialize();
             DefaultLifestyles.Instance.Initialize();
             DefaultDemesneLaws.Instance.Initialize();
+            DefaultReligions.Instance.Initialize();
+            foreach (ITypeInitializer init in modInitializers)
+            {
+                init.Initialize();
+            }
         }
 
         public void InitManagers()

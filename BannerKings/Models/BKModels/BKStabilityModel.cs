@@ -179,10 +179,17 @@ namespace BannerKings.Models.BKModels
                         .SetTextVariable("LIFESTYLE", DefaultLifestyles.Instance.Mercenary.Name));
                 }
 
+                var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(town.OwnerClan.Leader);
                 if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(town.OwnerClan.Leader, 
-                    DefaultDivinities.Instance.DarusosianSecondary2))
+                    DefaultDivinities.Instance.DarusosianSecondary2, religion))
                 {
                     result.Add(0.04f, DefaultDivinities.Instance.DarusosianSecondary2.Name);
+                }
+
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(town.OwnerClan.Leader,
+                    DefaultDivinities.Instance.TreeloreMain, religion) && religion.FavoredCultures.Contains(town.Culture))
+                {
+                    result.Add(0.06f, DefaultDivinities.Instance.DarusosianSecondary2.Name);
                 }
 
                 var demesneLimit = CalculateDemesneLimit(settlement.Owner).ResultNumber;

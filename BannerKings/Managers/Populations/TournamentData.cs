@@ -1,5 +1,8 @@
-﻿using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Populations
@@ -20,6 +23,16 @@ namespace BannerKings.Managers.Populations
         {
             get => active;
             set => active = value;
+        }
+
+        public void Start(Town town)
+        {
+            var tournamentManager = Campaign.Current.TournamentManager;
+            tournamentManager.AddTournament(Campaign.Current.Models.TournamentModel.CreateTournament(town));
+            Hero.MainHero.ChangeHeroGold(-5000);
+            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=CyF16uSZ}Tournament started with prize: {PRIZE}")
+                .SetTextVariable("PRIZE", Prize.Name).ToString(),
+                "event:/ui/notification/coins_negative"));
         }
 
         internal override void Update(PopulationData data)

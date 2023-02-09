@@ -162,7 +162,7 @@ namespace BannerKings.UI.Titles
             TitleInfo.Add(new InformationElement(new TextObject("{=bLbvfBnb}Total Population").ToString(),
                 Population.ToString(), string.Empty));
 
-            TitleInfo.Add(new InformationElement(new TextObject("Government Type:").ToString(),
+            TitleInfo.Add(new InformationElement(new TextObject("{=aoZYxUYV}Government Type:").ToString(),
              title.contract.Government.ToString(),
              new TextObject("{=BvJb2QSM}The dukedom this settlement is associated with.").ToString()));
             TitleInfo.Add(new InformationElement(new TextObject("{=HJcuXO5J}Succession Type:").ToString(),

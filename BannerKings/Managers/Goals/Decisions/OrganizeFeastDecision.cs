@@ -9,6 +9,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using static BannerKings.Behaviours.Feasts.Feast;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
@@ -17,7 +18,8 @@ namespace BannerKings.Managers.Goals.Decisions
         private Town feastPlace;
         private List<Clan> guests;
         private float influenceCost;
-        public OrganizeFeastDecision(Hero fulfiller = null) : base("goal_organize_feast_decision", GoalCategory.Kingdom, GoalUpdateType.Manual, fulfiller)
+        private FeastType type;
+        public OrganizeFeastDecision(Hero fulfiller = null, FeastType type = FeastType.Normal) : base("goal_organize_feast_decision", GoalCategory.Kingdom, GoalUpdateType.Manual, fulfiller)
         {
             var name = new TextObject("{=RH2NC5ij}Organize Feast");
             var description = new TextObject("{=8XXOBM1L}Organize a feast. Summon lords of the realm to one of your towns or castles, and celebrate with bountiful food. Feasts are an opportunity to improve relations with your Peers. However, some planning is necessary - you don't want your guests out of food or alcohol! Despite all planning, some unfortunate events may occur...\n");
@@ -102,6 +104,12 @@ namespace BannerKings.Managers.Goals.Decisions
                     continue;
                 }
 
+                var busy = Campaign.Current.GetCampaignBehavior<BKFeastBehavior>().IsClanBusy(clan);
+                if (busy)
+                {
+                    continue;
+                }
+
                 clanList.Add(new InquiryElement(clan, 
                     new TextObject("{=USJTkG5d}{CLAN} - {INFLUENCE} influence")
                     .SetTextVariable("CLAN", clan.Name)
@@ -171,7 +179,7 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             GainKingdomInfluenceAction.ApplyForDefault(GetFulfiller(), -influenceCost);
-            Campaign.Current.GetCampaignBehavior<BKFeastBehavior>().LaunchFeast(feastPlace, guests);
+            Campaign.Current.GetCampaignBehavior<BKFeastBehavior>().LaunchFeast(feastPlace, guests, null, type);
         }
 
         public override void DoAiDecision()

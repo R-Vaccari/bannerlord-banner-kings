@@ -123,9 +123,9 @@ namespace BannerKings.UI.Extensions
         public void OpenDecisions()
         {
             var options = new List<InquiryElement>();
-
             var personalDecisions = new List<InquiryElement>();
             var kingdomDecisions = new List<InquiryElement>();
+            var religiousDecisions = new List<InquiryElement>();
             var uniqueDecisions = new List<InquiryElement>();
 
             foreach (var goal in DefaultGoals.Instance.All)
@@ -154,6 +154,10 @@ namespace BannerKings.UI.Extensions
                     {
                         kingdomDecisions.Add(element);
                     }
+                    else if (goal.goalType == GoalCategory.Religious)
+                    {
+                        religiousDecisions.Add(element);
+                    }
                     else
                     {
                         uniqueDecisions.Add(element);
@@ -162,7 +166,7 @@ namespace BannerKings.UI.Extensions
             }
 
             options.Add(new InquiryElement(
-            new DecisionCategoryOption(
+                new DecisionCategoryOption(
                 new TextObject("{=AaS8WTzj}Personal"),
                 new TextObject("{=AaS8WTzj}Personal decisions affect your character and sometimes your close family."),
                 personalDecisions),
@@ -180,6 +184,16 @@ namespace BannerKings.UI.Extensions
             null,
             kingdomDecisions.Count > 0,
             new TextObject("{=Tcir35E5}Kingdom decisions affect your realm as a whole or your family's position in the realm.").ToString()));
+
+            /*options.Add(new InquiryElement(
+            new DecisionCategoryOption(
+                new TextObject("{=8uURr54W}Religious"),
+                new TextObject("{=8uURr54W}Religious decisions are ways for you interact with the world through your faith."),
+                religiousDecisions),
+            new TextObject("{=8uURr54W}Religious").ToString(),
+            null,
+            religiousDecisions.Count > 0,
+            new TextObject("{=8uURr54W}Religious decisions are ways for you interact with the world through your faith.").ToString()));*/
 
             options.Add(new InquiryElement(
             new DecisionCategoryOption(
