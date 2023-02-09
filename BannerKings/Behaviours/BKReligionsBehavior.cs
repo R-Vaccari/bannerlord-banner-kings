@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using BannerKings.Managers;
 using BannerKings.Managers.Institutions.Religions;
@@ -761,9 +762,18 @@ namespace BannerKings.Behaviours
                     .SetTextVariable("HERO", Hero.MainHero.Name);
 
             var sb = new StringBuilder();
-            foreach (var rite in religion.Rites)
+            int count = religion.Rites.Count;
+            for (int i = 0; i < count; i++)
             {
-                sb.Append(rite.GetName() + ", ");
+                var rite = religion.Rites.ElementAt(i);
+                if (i != count - 1) 
+                {
+                    sb.Append(rite.GetName() + ", ");
+                }
+                else
+                {
+                    sb.Append(rite.GetName());
+                }
             }
 
             MBTextManager.SetTextVariable("CLERGYMAN_RITE", riteText.SetTextVariable("RITES", faithText

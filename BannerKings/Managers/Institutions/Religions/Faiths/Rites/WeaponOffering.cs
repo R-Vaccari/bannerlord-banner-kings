@@ -80,11 +80,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                 foreach (var element in roster)
                 {
                     var item = element.EquipmentElement.Item;
-                    if (item != null && item.HasWeaponComponent && item.PrimaryWeapon.WeaponClass == weaponClass && 
-                        item.Tier >= minimumTier)
+                    if (item != null && item.HasWeaponComponent && item.PrimaryWeapon.WeaponClass == weaponClass )
                     {
-                        hasItems = true;
-                        break;
+                        if (item.Tier >= minimumTier)
+                        {
+                            hasItems = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -98,7 +100,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             {
                 reason = new TextObject("{=HOLqofSR}This rite requires a {TYPE} weapon of minimum tier {TIER}.")
                     .SetTextVariable("TYPE", GameTexts.FindText("str_inventory_weapon", ((int)weaponClass).ToString()).ToString())
-                    .SetTextVariable("TIER", (minimumTier + 1).ToString());
+                    .SetTextVariable("TIER", ((int)(minimumTier + 1)).ToString());
             }
 
             return baseResult && hasItems;
@@ -106,7 +108,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override float GetPietyReward()
         {
-            return Mathf.Sqrt(selectedItem.ItemValue) * 3f;
+            return Mathf.Sqrt(selectedItem.ItemValue);
         }
 
         public override RiteType GetRiteType()
