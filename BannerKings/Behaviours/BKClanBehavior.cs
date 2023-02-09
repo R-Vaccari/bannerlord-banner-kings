@@ -758,8 +758,7 @@ namespace BannerKings.Behaviours
                     SettlementClaimantDecision.ClanAsDecisionOutcome clanAsDecisionOutcome = (SettlementClaimantDecision.ClanAsDecisionOutcome)candidateOutcome;
                     Clan clan = clanAsDecisionOutcome.Clan;
 
-                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader,
-                        DefaultDivinities.Instance.VlandiaMain))
+                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, DefaultDivinities.Instance.AseraMain))
                     {
                         __result *= 0.2f;
                     }
