@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -14,15 +14,15 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Battania
         public override void Complete(Hero actionTaker)
         {
             base.Complete(actionTaker);
-            MBInformationManager.AddQuickInformation(new TextObject("{=!}The {ITEM} was sacrificed in a sacred lynn!")
+            MBInformationManager.AddQuickInformation(new TextObject("{=1kTYb7pF}The {ITEM} was sacrificed in a sacred lynn!")
                     .SetTextVariable("ITEM", base.selectedItem.GetModifiedItemName()),
                 0, 
                 actionTaker.CharacterObject,
                 "event:/ui/notification/relation");
         }
 
-        public override TextObject GetName() => new TextObject("{=!}Lann-Tairgseadh");
-        public override TextObject GetDescription() => new TextObject("{=!}As a gift for our Fian ancestors, a great blade must be offered for them to use it in the afterlife. They ought to be thrown deep into the sacred lynns, the most sacred passageways between the world of men and the underworld.");
+        public override TextObject GetName() => new TextObject("{=GtRd2Arh}Lann-Tairgseadh");
+        public override TextObject GetDescription() => new TextObject("{=ZS2v37LF}As a gift for our Fian ancestors, a great blade must be offered for them to use it in the afterlife. They ought to be thrown deep into the sacred lynns, the most sacred passageways between the world of men and the underworld.");
 
         public override void SetDialogue()
         {

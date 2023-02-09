@@ -443,7 +443,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
                         }
                         else
                         {
-                            text = new TextObject("{=!}Not part of Aserai, Imperial or Khuzait cultures.");
+                            text = new TextObject("{=SLogDwvH}Not part of Aserai, Imperial or Khuzait cultures.");
                         }
 
                         break;
@@ -512,6 +512,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             return new TextObject("{=SwvMtLtQ}study from.");
         }
 
-        public override TextObject GetInductionExplanationText() => new TextObject("{=!}You must be part of Aserai, Imperial or Khuzait cultures, or have relations with village notables (Faqir), have an Aserai spouse (Imam) or clan tier above 2 (Murshid).");
+        public override TextObject GetInductionExplanationText() => new TextObject("{=CrfLUm3F}You must be part of Aserai, Imperial or Khuzait cultures, or have relations with village notables (Faqir), have an Aserai spouse (Imam) or clan tier above 2 (Murshid).");
     }
 }

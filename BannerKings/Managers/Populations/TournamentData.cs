@@ -1,4 +1,4 @@
-﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -30,7 +30,7 @@ namespace BannerKings.Managers.Populations
             var tournamentManager = Campaign.Current.TournamentManager;
             tournamentManager.AddTournament(Campaign.Current.Models.TournamentModel.CreateTournament(town));
             Hero.MainHero.ChangeHeroGold(-5000);
-            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}Tournament started with prize: {PRIZE}")
+            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=CyF16uSZ}Tournament started with prize: {PRIZE}")
                 .SetTextVariable("PRIZE", Prize.Name).ToString(),
                 "event:/ui/notification/coins_negative"));
         }

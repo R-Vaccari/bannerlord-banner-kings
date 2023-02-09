@@ -1,4 +1,4 @@
-﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Battania
@@ -9,7 +9,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Battania
         {
         }
 
-        public override TextObject GetName() => new TextObject("{=!}Iarnaig-Tairgseadh");
-        public override TextObject GetDescription() => new TextObject("{=!}Believed to me");
+        public override TextObject GetName() => new TextObject("{=DhQXSbip}Iarnaig-Tairgseadh");
+        public override TextObject GetDescription() => new TextObject("{=2rzDN3zO}Believed to me");
     }
 }

@@ -23,11 +23,11 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=FnRzVf4Q}Performance")]
         public bool AICompanions { get; set; } = true;
 
-        [SettingProperty("{=!}AI Knights", RequireRestart = true, HintText = "{=!}Enable the ability for AI to generate knights. Will add a large amount of heroes to the world and may impact performance. Default: True.")]
+        [SettingProperty("{=6Qs7booz}AI Knights", RequireRestart = true, HintText = "{=aNSCjnzn}Enable the ability for AI to generate knights. Will add a large amount of heroes to the world and may impact performance. Default: True.")]
         [SettingPropertyGroup("{=FnRzVf4Q}Performance")]
         public bool AIKnights { get; set; } = true;
 
-        [SettingProperty("{=!}AI Management", RequireRestart = true, HintText = "{=!}Enable the ability for AI to manage their domains and vassals by calculating when to give away titles. Default: True.")]
+        [SettingProperty("{=UgfQur9G}AI Management", RequireRestart = true, HintText = "{=3tCf6aOi}Enable the ability for AI to manage their domains and vassals by calculating when to give away titles. Default: True.")]
         [SettingPropertyGroup("{=FnRzVf4Q}Performance")]
         public bool AIManagement { get; set; } = true;
 

@@ -187,13 +187,13 @@ namespace BannerKings.UI.Extensions
 
             /*options.Add(new InquiryElement(
             new DecisionCategoryOption(
-                new TextObject("{=!}Religious"),
-                new TextObject("{=!}Religious decisions are ways for you interact with the world through your faith."),
+                new TextObject("{=8uURr54W}Religious"),
+                new TextObject("{=8uURr54W}Religious decisions are ways for you interact with the world through your faith."),
                 religiousDecisions),
-            new TextObject("{=!}Religious").ToString(),
+            new TextObject("{=8uURr54W}Religious").ToString(),
             null,
             religiousDecisions.Count > 0,
-            new TextObject("{=!}Religious decisions are ways for you interact with the world through your faith.").ToString()));*/
+            new TextObject("{=8uURr54W}Religious decisions are ways for you interact with the world through your faith.").ToString()));*/
 
             options.Add(new InquiryElement(
             new DecisionCategoryOption(

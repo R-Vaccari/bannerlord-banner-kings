@@ -106,7 +106,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override bool MeetsCondition(Hero hero, out TextObject reason)
         {
-            reason = new TextObject("{=!}This rite is available to be performed.");
+            reason = new TextObject("{=oo3xtFfT}This rite is available to be performed.");
             var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
             var hasTarget = GetAdequateSacrifices(hero).Count > 0;
             

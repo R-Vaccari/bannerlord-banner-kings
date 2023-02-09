@@ -51,7 +51,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override bool MeetsCondition(Hero hero, out TextObject reason)
         {
-            reason = new TextObject("{=!}This rite is available to be performed.");
+            reason = new TextObject("{=oo3xtFfT}This rite is available to be performed.");
             var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
             bool baseResult = hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
                              data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero));
@@ -71,7 +71,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             }
             else
             {
-                reason = new TextObject("{=!}Not enough time ({YEARS} years) has passed since the last rite of this type was performed.")
+                reason = new TextObject("{=G5vYrCrV}Not enough time ({YEARS} years) has passed since the last rite of this type was performed.")
                     .SetTextVariable("YEARS", GetTimeInterval(hero).ToString("0.0"));
             }
 
@@ -79,7 +79,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             {
                 if (input != null)
                 {
-                    reason = new TextObject("{=!}This rite requires {COUNT} unit(s) of {ITEM}.")
+                    reason = new TextObject("{=DriDEPpi}This rite requires {COUNT} unit(s) of {ITEM}.")
                         .SetTextVariable("COUNT", inputCount)
                         .SetTextVariable("ITEM", input.Name);
                 }

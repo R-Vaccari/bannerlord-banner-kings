@@ -106,12 +106,12 @@ namespace BannerKings.UI.Religion
                 {
                     if (indefinitely)
                     {
-                        cultText = new TextObject("{=!}They are pledged to {CULT} indefinitely.")
+                        cultText = new TextObject("{=1O1b2s03}They are pledged to {CULT} indefinitely.")
                             .SetTextVariable("CULT", cult.Name).ToString();
                     }
                     else
                     {
-                        cultText = new TextObject("{=!}They are pledged to {CULT} until {DATE}.")
+                        cultText = new TextObject("{=wA81PG4d}They are pledged to {CULT} until {DATE}.")
                             .SetTextVariable("CULT", cult.Name)
                             .SetTextVariable("DATE", data.BlessingEndDate.ToString()).ToString();
                     }
@@ -130,9 +130,9 @@ namespace BannerKings.UI.Religion
         [DataSourceProperty] public string DoctrinesText => new TextObject("{=BKLacKdC}Doctrines").ToString();
         [DataSourceProperty] public string AspectsText => new TextObject("{=1sKJS1JR}Aspects").ToString();
         [DataSourceProperty] public string RitesText => new TextObject("{=Yy2s38FQ}Rites").ToString();
-        [DataSourceProperty] public string InductionText => new TextObject("{=!}Induction").ToString();
+        [DataSourceProperty] public string InductionText => new TextObject("{=M3CdwrTZ}Induction").ToString();
 
-        [DataSourceProperty] public HintViewModel InductionHint => new HintViewModel(new TextObject("{=!}The criteria for being inducted into this faith. Induction may be done through preachers. Depending on the preacher's rank, they may require different things."));
+        [DataSourceProperty] public HintViewModel InductionHint => new HintViewModel(new TextObject("{=yS81FhXP}The criteria for being inducted into this faith. Induction may be done through preachers. Depending on the preacher's rank, they may require different things."));
 
         [DataSourceProperty]
         public string InductionExplanationText

@@ -565,7 +565,7 @@ namespace BannerKings.Behaviours
             }
 
             var result = religion.Faith.GetInductionAllowed(Hero.MainHero, clergyman.Rank);
-            hintText = new TextObject("{=!}{POSSIBLE}.\n\nChanging faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}")
+            hintText = new TextObject("{=VqkEaJWp}{POSSIBLE}.\n\nChanging faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}")
                 .SetTextVariable("POSSIBLE", result.Item2)
                 .SetTextVariable("FAITH_TEXT", faithText);
             return true;
@@ -690,14 +690,14 @@ namespace BannerKings.Behaviours
             }
 
             StringBuilder sb = new StringBuilder();
-            sb.Append(new TextObject("{=!}Each rite has different conditions to be fulfilled. They also have time intervals before being able to me performed again, check their details in the Religion tab."));
+            sb.Append(new TextObject("{=OXP2Kb4E}Each rite has different conditions to be fulfilled. They also have time intervals before being able to me performed again, check their details in the Religion tab."));
             foreach (Rite rite in religion.Rites)
             {
                 TextObject reason;
                 bool possible = rite.MeetsCondition(Hero.MainHero, out reason);
                 if (!possible)
                 {
-                    sb.Append(new TextObject("{=!}\n{RITE}: {REASON}")
+                    sb.Append(new TextObject("{=cqofEPx2}\n{RITE}: {REASON}")
                         .SetTextVariable("RITE", rite.GetName())
                         .SetTextVariable("REASON", reason));
                 }
@@ -735,7 +735,7 @@ namespace BannerKings.Behaviours
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=Yy2s38FQ}Rites").ToString(),
-                new TextObject("{=!}Select what rite you would like to perform. Check their descriptions and entries on Religions tab for details.").ToString(), 
+                new TextObject("{=B4M6aqo5}Select what rite you would like to perform. Check their descriptions and entries on Religions tab for details.").ToString(), 
                 list,
                 false, 1,
                 GameTexts.FindText("str_done").ToString(), 

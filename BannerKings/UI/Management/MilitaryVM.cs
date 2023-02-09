@@ -218,7 +218,7 @@ namespace BannerKings.UI.Management
                 $"{data.MilitaryData.Manpower:n0}",
                 new TextObject("{=MYdkfodC}The total manpower of nobles plus peasants.").ToString()));
 
-            ManpowerInfo.Add(new InformationElement(new TextObject("{=!}Noble Manpower:").ToString(), 
+            ManpowerInfo.Add(new InformationElement(new TextObject("{=pQ9cKQoK}Noble Manpower:").ToString(), 
                 $"{data.MilitaryData.NobleManpower:n0}",
                 new TextObject("{=08n0UTDS}Manpower from noble population. Noble militarism is higher, but nobles often are less numerous. These are drafted as noble recruits.")
                     .ToString()));
@@ -302,14 +302,14 @@ namespace BannerKings.UI.Management
                             MilitiaComponent.CreateMilitiaEscort(settlement, Hero.MainHero.PartyBelongedTo, party);
                             if (lord == Hero.MainHero)
                             {
-                                InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{COUNT} men raised at {SETTLEMENT}")
+                                InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=b5S7tfOo}{COUNT} men raised at {SETTLEMENT}")
                                     .SetTextVariable("COUNT", menCount)
                                     .SetTextVariable("SETTLEMENT", settlement.Name).ToString()));
                             }
                         }
                         else if (lord == Hero.MainHero)
                         {
-                            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}Militia already raised from {SETTLEMENT}")
+                            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=V8KAUwe9}Militia already raised from {SETTLEMENT}")
                                 .SetTextVariable("SETTLEMENT", settlement.Name).ToString()));
                         }
                     }

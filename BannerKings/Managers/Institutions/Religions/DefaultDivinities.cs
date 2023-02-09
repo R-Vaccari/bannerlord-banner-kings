@@ -52,7 +52,7 @@ namespace BannerKings.Managers.Institutions.Religions
             AseraMain = new Divinity("asera-main");
             AseraMain.Initialize(new TextObject("{=7BJOY24H}Asera the Patriarch"),
                 new TextObject("{=AzD0sa65}First of his line, the legendary patriarch united the various badw tribes of the Nahasa and the coastal Behr al-Yeshm into the lawful confederacy of the Aserai Sultanate. Asera was deified by his deeds and the codes of law which allowed him to establish dominion and settle his people from the Jabal Tamar to the Jabal Ashab. Asera is that which all followers of his Code seek to live up to; though most followers will accept that the words of Asera are transcribed to benefit the bloodlines which followed him. Thus one can only ever seek to live as Asera did, and to know only their success upon arrival in Paradise."),
-                new TextObject("{=!}Greater chance of being awarded fiefs during elections"),
+                new TextObject("{=Z0uU7Tn6}Greater chance of being awarded fiefs during elections"),
                 new TextObject("{=aw6BtMa7}Patriarch"),
                 200);
 
@@ -77,7 +77,7 @@ namespace BannerKings.Managers.Institutions.Religions
             AmraMain = new Divinity("amra-main");
             AmraMain.Initialize(new TextObject("{=v3UAh1rJ}Sluagh Aos’An"),
                 new TextObject("{=zYHZu2OC}Constituting the major heavenly divine of the Battanians are those known as the Slaugh Aos’An - the Host of Noble Folk who reign between darkened clouds and watch over humanity with starlight torches. Seldom petitioned, as they are viewed as capricious entities; the Slaugh Aos’An are said to visit Battania during the changing of the seasons and to witness the birth of those ordained by fate to bring about weal and doom to the land. To make an oath under the auspices of the Slaugh Aos’An is to be bound to the letter or the spirit of one’s words; never more and never both. To break such an oath is to invite all of fate to conspire towards your end, and to know no peace in Heaven nor Hell."),
-                new TextObject("{=!}Increased prosperity of cattle, hog and forestry villages"),
+                new TextObject("{=iNvtNtoK}Increased prosperity of cattle, hog and forestry villages"),
                 new TextObject("{=iYqD0kQM}Great Spirits"),
                 200);
 
@@ -96,8 +96,8 @@ namespace BannerKings.Managers.Institutions.Religions
             DarusosianMain = new Divinity("darusosian-main");
             DarusosianMain.Initialize(new TextObject("{=Y9jVBX9n}Martyr Darusos"),
                 new TextObject("{=7r3RV3jr}Born in a period of relative internal peace and outward expansion, Darusos was a young emperor who allegedly sought reformations within the Calradic Empire before being betrayed by his closest generals and crucified upon a sacred fig tree in the imperial gardens of Lycaron. Those devoted to Darusos view him as having achieved the rite of the divus in his dying hours, achieving immortality and awaiting those who seek to practice his reforms in the heavenly realms."),
-                new TextObject("{=!}Improved settlement cultural assimilation\nReduced costs for convincing vassals to assume culture or faith"),
-                new TextObject("{=!}Emperor Martyr"),
+                new TextObject("{=4cnju8xP}Improved settlement cultural assimilation\nReduced costs for convincing vassals to assume culture or faith"),
+                new TextObject("{=ouvoa3Y4}Emperor Martyr"),
                 200);
 
             DarusosianSecondary1 = new Divinity("darusosian-secondary-1");
@@ -115,7 +115,7 @@ namespace BannerKings.Managers.Institutions.Religions
             VlandiaMain = new Divinity("vlandia-main");
             VlandiaMain.Initialize(new TextObject("{=ePJb0qTR}Lai Vlandia"),
                 new TextObject("{=2hEMRmtZ}The Canticles sung in stanza and deed within the Lai Vlandia speak to the grand narrative of the modern age; couplets detailing tales of adventure and romance, of peasant heroes and baronial lords. All modern men are viewed as participants within the Lai Vlandia; regardless of their wishes, so long as they know that Vlandia exists. The songs are often written in such a way that one may make known their beliefs and views on the subject by means of intonation; whilst the tomes depicting the tales are renown for their strange marginalia which often descend into comic flourishes where lesser scriveners depict their favored and reviled characters as strange creatures or grotesque beasts."),
-                new TextObject("{=!}Extra influence as battle reward\nGain extra relations from victories with those that share faith"),
+                new TextObject("{=XzD669be}Extra influence as battle reward\nGain extra relations from victories with those that share faith"),
                 new TextObject("{=7rdxBfJi}Great Saga"),
                 200);
 
@@ -131,15 +131,15 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=uyhPvxs2}Occasionally receive zealot warriors\nParty morale bonus for vlandian troops"),
                 new TextObject("{=neVhyybi}Saga"));
 
-            TreeloreMain.Initialize(new TextObject("{=!}Pérkos, Thunder Wielder"),
-                new TextObject("{=!}Once, there was naught between the Underworld, nested deep in the roots of the Great Oak, and the heavenly canopy of the gods. Pérkos struck the Great Tree's bark, and from it's sap, mankind blossomed. Such is the tale told by the children of the forest, that is, those that adhere to Pérkenweyd. Though the faith accepts a multitude of gods, the Thunder Wielder is idolized as their ultimate protector, the highest and noblest of gods, charged with protecting the Great Oak itself."),
-                new TextObject("{=!}Stability for all settlements of acceptable cultures\nRenown gain for every successful raid on foreign villages"),
-                new TextObject("{=!}Supreme God"));
+            TreeloreMain.Initialize(new TextObject("{=qBT3wpBX}Pérkos, Thunder Wielder"),
+                new TextObject("{=8gGop7db}Once, there was naught between the Underworld, nested deep in the roots of the Great Oak, and the heavenly canopy of the gods. Pérkos struck the Great Tree's bark, and from it's sap, mankind blossomed. Such is the tale told by the children of the forest, that is, those that adhere to Pérkenweyd. Though the faith accepts a multitude of gods, the Thunder Wielder is idolized as their ultimate protector, the highest and noblest of gods, charged with protecting the Great Oak itself."),
+                new TextObject("{=CfqOi9gq}Stability for all settlements of acceptable cultures\nRenown gain for every successful raid on foreign villages"),
+                new TextObject("{=z0VYqrO5}Supreme God"));
 
-            TreeloreMoon.Initialize(new TextObject("{=!}Méhns Cult"),
-                new TextObject("{=!}Among the children of the forest, many devouts, specially in the Chertyg region, have devoted themselves to Méhns. The Moon, in their understanding, is the source of prosperity for both land and mankind, and thus the Goddess gained popularity among believers. Although not a warrior as Pérkos, she is also believed to a protector of the children, in a motherly manner, as Méhns is solely responsible for keeping darkness away during nighttime."),
-                new TextObject("{=!}Prosperity for all villages of acceptable cultures\nIncreased fertility"),
-                new TextObject("{=!}Goddess"));
+            TreeloreMoon.Initialize(new TextObject("{=AJ3sq4c9}Méhns Cult"),
+                new TextObject("{=tXp4wuPZ}Among the children of the forest, many devouts, specially in the Chertyg region, have devoted themselves to Méhns. The Moon, in their understanding, is the source of prosperity for both land and mankind, and thus the Goddess gained popularity among believers. Although not a warrior as Pérkos, she is also believed to a protector of the children, in a motherly manner, as Méhns is solely responsible for keeping darkness away during nighttime."),
+                new TextObject("{=Vn3bTO6r}Prosperity for all villages of acceptable cultures\nIncreased fertility"),
+                new TextObject("{=foD5TnsR}Goddess"));
         }
     }
 }

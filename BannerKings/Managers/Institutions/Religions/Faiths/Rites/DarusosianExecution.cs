@@ -109,7 +109,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override bool MeetsCondition(Hero hero, out TextObject reason)
         {
-            reason = new TextObject("{=!}This rite is available to be performed.");
+            reason = new TextObject("{=oo3xtFfT}This rite is available to be performed.");
             var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
             bool baseResult = hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
                              data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero));
@@ -117,7 +117,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             
             if (!baseResult)
             {
-                reason = new TextObject("{=!}Not enough time ({YEARS} years) have passed since the last rite of this type was performed.")
+                reason = new TextObject("{=NZyz0ChH}Not enough time ({YEARS} years) have passed since the last rite of this type was performed.")
                     .SetTextVariable("YEARS", GetTimeInterval(hero).ToString("0.0"));
             }
 
@@ -125,7 +125,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             {
                 var kingdom = Kingdom.All.FirstOrDefault(x => x.StringId == "empire_s");
                 TextObject name = kingdom != null ? kingdom.Name : new TextObject("{=frBQ9mbP}Southern Empire");
-                reason = new TextObject("{=!}You have no lord prisoners from Imperial contestors of the {KINGDOM}.")
+                reason = new TextObject("{=u3xzCV63}You have no lord prisoners from Imperial contestors of the {KINGDOM}.")
                     .SetTextVariable("KINGDOM", name);
             }
 
@@ -133,7 +133,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             if (!southernEmpire)
             {
                 var kingdom = Kingdom.All.FirstOrDefault(x => x.StringId == "empire_s");
-                reason = new TextObject("{=!}You are not part of the {KINGDOM}.")
+                reason = new TextObject("{=H6CdxwrS}You are not part of the {KINGDOM}.")
                     .SetTextVariable("KINGDOM", kingdom != null ? kingdom.Name : new TextObject("{=frBQ9mbP}Southern Empire"));
             }
 

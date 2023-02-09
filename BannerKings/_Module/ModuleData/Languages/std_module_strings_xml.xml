@@ -94,7 +94,6 @@
     <string id="vE0bYBmL" text="You do not adhere to the {FAITH} faith." />
     <string id="LCTBJedU" text="Not enough piety to receive any blessing (minimum {PIETY} piety)." />
     <string id="TWny4y7r" text="Expend your piety in exchange of a blessing or inspiration." />
-    <string id="QbUTvLMt" text="No rite is currently possible to perform." />
     <string id="2Q6R8xum" text="Perform a rite such as an offering in exchange for piety." />
     <string id="eV3uOZCw" text="{FAITH} teaches us that we may perform {RITES}." />
     <string id="1b08dLC7" text="Certainly, {HERO}. Remember that proving your devotion is a life-long process. Once a rite is done, some time is needed before it may be consummated again. {RITES}" />
@@ -726,7 +725,6 @@
     <string id="oHJ6Y66V" text="Demesne limit describes how many settlements you may own without negative implications. Different settlement types have different weights, villages being the lowest, towns being the highest. Being over the limit reduces stability across all your settlements. Owning a settlement's title will reduce it's weight." />
     <string id="XAvCOvv4" text="Unlanded demesne limit describes how many unlanded titles you may own. Unlanded titles are titles such as dukedoms and kingdoms - titles not directly associated with a settlement. Dukedoms have the lowest weight while empires have the biggest. Being over the limit progressively reduces relations with your vassals." />
     <string id="nhBf1JY5" text="Vassal limit is how many vassals you may have without negative consequences. Vassals are clans whose highest title are under your own (ie, a barony title under your county title, or knight clans with a single lordship) or knights in your clan. Knights only weight 0.5 towards the limit, while clan leaders weight 1. Companions and family members do not count. Being over the limit progressively reduces your influence gain." />
-    <string id="VeMSE94s" text="Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as " />
     <string id="ez3NzFgO" text="{TEXT}\n{EXPLANATIONS}" />
     <string id="rHXu32s5" text="Describes the quality of products produced in this settlement. Higher quality means workshops are more likely to produce goods with positive modifiers, therefore yielding a higher income. Because better products are more expensive, more money is extracted from caravans into market gold and the owner's tariff. This is also a factor in workshop prices." />
     <string id="0z7FL2oe" text="The speed at which workshops produce goods, affected by kingdom policies and craftsmen" />
@@ -1371,7 +1369,6 @@
     <string id="cCzJ9Nk6" text="Slave Caravan from {ORIGIN}" />
     <string id="KGqPK07Z" text="{COUNT} {UNIT} zealots have joined your party!" />
     <string id="WWkVwmPy" text="Lords of {CURRENT_FAITH} faith may disapprove your change" />
-    <string id="Uygas52E" text="{POSSIBLE}. Changing faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}" />
     <string id="mMuy4hat" text="The union between {PROPOSER} and {PROPOSED} is not adequate. Our {PROPOSED} is worth more than that." />
     <string id="vPx19Oy6" text="I would not entertain giving away {PROPOSED} to a pack of mongrels such as the {CLAN}." />
     <string id="GXBmSEi1" text="Unfortunately, I do not find the union between {PROPOSER} and {PROPOSED} to be adequate. You should improve the standing of your family within the realm, and then we may renegotiate." />
@@ -1843,7 +1840,6 @@
     <string id="ugie03WY" text="Please repeat this oath and I shall serve as your witness: \" />
     <string id="0cGq14Jt" text="Clan tier is insufficient (less than 3) or not Aserai." />
     <string id="mHrwmbzU" text="Not part of Aserai, Imperial or Khuzait cultures, or have a spouse part of them" />
-    <string id="iaxTPOgg" text="Not part Aserai, Imperial or Khuzait cultures." />
     <string id="maHkoBga" text="Not part of Aserai culture." />
     <string id="DN8yvo7b" text="Not enough relations with locals (medium of 20)." />
     <string id="0rBEhKBT" text="{PLAYER_NAME} was it? Yes, yes… You serve our Empire and thus already walk upon a righteous path; but full glad am I to know you seek to open your heart to the sacraments of the Martyr. It is a kindness that you do not seek to rest idle upon the laurels of your current service - some pay only lip service when devotion is required. It warms my soul to see you are not of such company." />
@@ -1909,7 +1905,6 @@
     <string id="FnRzVf4Q" text="Performance" />
     <string id="W54KmZDR" text="AI Companions" />
     <string id="juP6OXmp" text="Enable the ability for AI to generate companions. Will add a large amount of heroes to the world and may impact performance. Default: True." />
-    <string id="2oJQ4Snn" text="Economy" />
     <string id="5MR7XH9E" text="Slows all parties down related to their original speed. 0% is the original speed. Intended to better reflect a realistic map scale. Default: 40%." />
     <string id="0ctG0FEp" text="Decreases siege camp build speed. 0% is the original speed. Intended to make sieges harder and more impactful, and prevent multiple sequential sieges of same settlement. Default: 50%." />
     <string id="DZyyJXRn" text="Crafting Waiting Time" />
@@ -1947,7 +1942,6 @@
     <string id="JdH9ubwj" text="Select a prize for your tournament. The bigger is it's value, the more renown will be awarded to once the tournament is finished." />
     <string id="mGfT9o4X" text="Raise militia" />
     <string id="zzjbxN9h" text="Call Banners" />
-    <string id="Df3Fdnuw" text="Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title." />
     <string id="QHfkhG0b" text="Not in a party." />
     <string id="yG6r0iaK" text="It has been less than 2 seasons since you last summoned your banners." />
     <string id="5v0L5y5A" text="Summon {HERO} to your army. They are a knight in your household. They currently lead {TROOPS} troops. Calling them will cost {INFLUENCE} influence." />
@@ -1959,5 +1953,110 @@
     <string id="L9NQ0yOu" text="Your clan has reached it's companion limit." />
     <string id="tV52TCT8" text="Allow locals to sell off their excess production in the designated marketplace. Travelling merchants and individuals will stop by to trade. Adds village consumption of town goods and boosts hearth growth." />
     <string id="TmB613jp" text="Will you commit to the slaughter, as the Code and the Patriarch have taught our kin?" />
+    <string id="WWViZXWf" text="In Banner Kings, the economy landscape is quite different.\nDemand is generated by population in settlements, and therefore much more dynamic than before as population classes fluctuate, and each class has different demands.\nTrade goods have modifiers such as 'fine', 'masterwork' or 'crude', what opens new possibilities in terms of profit.\nManufactured items are on average quite more expensive, making workshops and caravans significantly more profitable.\nWorkshops owners now pay taxes to the settlement owner.\nSettlement market gold no longer resets on a daily basis - settlements can accumulate large amounts of gold, or go bankrupt, hence need some time to recover." />
+    <string id="civsKq8g" text="Villages produce income by selling their production outputs. Villages will now produce based on population workforce, as well as available acreage, if fitting. For example, agricultural productions are limited by the amount of acres available and their production capacity - even if you have extra workers, the fields can only produce so much.\nAs a result, villages can produce much more income than before. This is extra relevant for Knighthood, which you can read more about in the articles below." />
+    <string id="9G2RkTYh" text="In Banner Kings, legal titles exist in what is called Demesne (domain) Hierarchy. Titles may be landed or not. Landed titles are directly attached to a fief - lordships are village titles, baronies are castle titles, counties are town titles. Above these are unlanded titles, such as dukedoms and kingdoms. The hierarchy stablishes suzerain-vassal relationships between the title holders. Holding a title has several impacts, mainly affecting your Vassal Limit and Demesne Limit, that limit your number of vassal clans &amp; knights, and your limit of fiefs, respectively. Every faction at game start has a kingdom-level title that represents them. This title is passed on to successive leaders of the faction, in different forms, depending on the title's Succession law." />
+    <string id="r27hBdeh" text="In Banner Kings, companions are no longer able to raise clan parties. Instead, they can be knighted, a process that involves spending influence and denars. Once knighted, they can raise a party. It also requires a lordship title, who the knight will receive and use it's income to pay their own party - you only pay for those led by your family members. Knights can eventualy grow as lords and found their own clan. Knights are used by the AI, meaning many new lords are travelling on the map, and eventually many new clans sprout. The player may try to stop their own knights from creating clans." />
+    <string id="GLumT6vM" text="It is decided then. I bestow upon you the title of Knight." />
+    <string id="rf3QLBok" text="I would like you to convert to my culture ({INFLUENCE} influence)." />
+    <string id="TKUCnCtD" text="If that is your bidding, I would not deny it. Folks at {SETTLEMENT} might not like this. Over time however, they may accept it." />
+    <string id="sjy26XtU" text="{HERO} has converted to the {FAITH} faith." />
+    <string id="8x1gZye8" text="If that is your bidding, I am inclined to accept it. The people {SETTLEMENT} might not like this. Over time however, they may accept it." />
+    <string id="EOm86XND" text="I would like you to convert to my faith ({INFLUENCE} influence, {PIETY} piety)." />
+    <string id="VqkEaJWp" text="{POSSIBLE}.\n\nChanging faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}" />
+    <string id="OXP2Kb4E" text="Each rite has different conditions to be fulfilled. They also have time intervals before being able to me performed again, check their details in the Religion tab." />
+    <string id="cqofEPx2" text="\n{RITE}: {REASON}" />
+    <string id="B4M6aqo5" text="Select what rite you would like to perform. Check their descriptions and entries on Religions tab for details." />
+    <string id="6Qs7booz" text="AI Knights" />
+    <string id="aNSCjnzn" text="Enable the ability for AI to generate knights. Will add a large amount of heroes to the world and may impact performance. Default: True." />
+    <string id="UgfQur9G" text="AI Management" />
+    <string id="3tCf6aOi" text="Enable the ability for AI to manage their domains and vassals by calculating when to give away titles. Default: True." />
+    <string id="tT53t7ny" text="Your suzerain, {SUZERAIN}, has summoned you to fulfill your oath of military aid. You have {DAYS} days to join {ARMY}, currently close to {SETTLEMENT}. Failing to fulfill it will tarnish your name and standing with your suzerain." />
+    <string id="CyF16uSZ" text="Tournament started with prize: {PRIZE}" />
+    <string id="Fin3KXMP" text="Goods Production:" />
+    <string id="RmEtkH3A" text="Reclaim" />
+    <string id="8uURr54W" text="Religious" />
+    <string id="aoZYxUYV" text="Government Type:" />
+    <string id="GqmH24N4" text="Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as provide an adequate prize. Sponsoring games improves population loyalty towards you, and valuable prizes provide renown to your name." />
+    <string id="5E2NZBtK" text="Mercantilism:" />
+    <string id="pQ9cKQoK" text="Noble Manpower:" />
+    <string id="b5S7tfOo" text="{COUNT} men raised at {SETTLEMENT}" />
+    <string id="V8KAUwe9" text="Militia already raised from {SETTLEMENT}" />
+    <string id="eTBhP7tY" text="Stability:" />
+    <string id="5PtgU6L1" text="Autonomy:" />
+    <string id="Ccr7mQMZ" text="Notable Support:" />
+    <string id="1O1b2s03" text="They are pledged to {CULT} indefinitely." />
+    <string id="wA81PG4d" text="They are pledged to {CULT} until {DATE}." />
+    <string id="M3CdwrTZ" text="Induction" />
+    <string id="yS81FhXP" text="The criteria for being inducted into this faith. Induction may be done through preachers. Depending on the preacher's rank, they may require different things." />
+    <string id="GmqBFSgN" text="The Imperial language of the Calradian empire. Though scholars have made efforts into keeping the language pure, centuries of contact with local cultures have made Calradian adopt small quantities of local vocabularies. Being a language of prestige, Calradian vocabulary are also often adopted by foreign languages, due to it's usefulness in the continent as a Lingua Franca, often used by traders, nobles during their education or peasants looking for a better life within the Empire." />
+    <string id="Df3Fdnuw" text="Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title." />
+    <string id="Z0uU7Tn6" text="Greater chance of being awarded fiefs during elections" />
+    <string id="iNvtNtoK" text="Increased prosperity of cattle, hog and forestry villages" />
+    <string id="4cnju8xP" text="Improved settlement cultural assimilation\nReduced costs for convincing vassals to assume culture or faith" />
+    <string id="ouvoa3Y4" text="Emperor Martyr" />
+    <string id="XzD669be" text="Extra influence as battle reward\nGain extra relations from victories with those that share faith" />
+    <string id="qBT3wpBX" text="Pérkos, Thunder Wielder" />
+    <string id="8gGop7db" text="Once, there was naught between the Underworld, nested deep in the roots of the Great Oak, and the heavenly canopy of the gods. Pérkos struck the Great Tree's bark, and from it's sap, mankind blossomed. Such is the tale told by the children of the forest, that is, those that adhere to Pérkenweyd. Though the faith accepts a multitude of gods, the Thunder Wielder is idolized as their ultimate protector, the highest and noblest of gods, charged with protecting the Great Oak itself." />
+    <string id="CfqOi9gq" text="Stability for all settlements of acceptable cultures\nRenown gain for every successful raid on foreign villages" />
+    <string id="z0VYqrO5" text="Supreme God" />
+    <string id="AJ3sq4c9" text="Méhns Cult" />
+    <string id="tXp4wuPZ" text="Among the children of the forest, many devouts, specially in the Chertyg region, have devoted themselves to Méhns. The Moon, in their understanding, is the source of prosperity for both land and mankind, and thus the Goddess gained popularity among believers. Although not a warrior as Pérkos, she is also believed to a protector of the children, in a motherly manner, as Méhns is solely responsible for keeping darkness away during nighttime." />
+    <string id="Vn3bTO6r" text="Prosperity for all villages of acceptable cultures\nIncreased fertility" />
+    <string id="foD5TnsR" text="Goddess" />
+    <string id="hmtRGrpt" text="Items Produced:" />
+    <string id="SLogDwvH" text="Not part of Aserai, Imperial or Khuzait cultures." />
+    <string id="CrfLUm3F" text="You must be part of Aserai, Imperial or Khuzait cultures, or have relations with village notables (Faqir), have an Aserai spouse (Imam) or clan tier above 2 (Murshid)." />
+    <string id="m5CCxwmx" text="Only Battanians with 50 or more roguery are accepted." />
+    <string id="NNMB0hrF" text="Only members of the Southern Empire are accepted." />
+    <string id="qYmkFsWj" text="I would like to pledge myself to a cult." />
+    <string id="1wZntvX3" text="Confirm it, {?PLAYER.GENDER}sister{?}brother{\\?} of the forest, and it will be done." />
+    <string id="u8UXkpef" text="To whom would you pledge? The Thunder-Wielder Pérkos, or the godess Méhns?" />
+    <string id="j1U1juRf" text="{HERO} has pledged an oath to {DIVINITY}." />
+    <string id="AZf5AS94" text="What is forbidden? Not upholding family and tradition are crimes in the eyes of the gods. Likewise, betraying in act or word those you take as guests. But most of all, cravenness, of course. A craven is no child of forest, much like spoiled fruit is no nourishment. Fight with boldness or do not fight at all." />
+    <string id="jcLBX8Db" text="The struggle between righteousness and darkness is the nature of the worlds. Our world, that of mankind, lies right in its midst. Uphold all that is godly, or rot in darkness." />
+    <string id="zSR2NTfA" text="Hail to you, foreigner. Know that the spirits watch over all mankind, true believers or otherwise, and that no malice escapes their senses, and no misdeed goes unrecorded by the oak grain." />
+    <string id="4FBPYfAH" text="Hail to you, brethren. How can I help you? Do you wish to hear the truth of the gods, or, perhaps, foretell the future?" />
+    <string id="e4mTQb3c" text="Alas, one born outside the embrace of the gods, can not choose to be embraced. Though one can be respected for their boldness, only a child of the forest can follow the path of the true gods - it is written in our ancestry. Such is the tale written in the oak grain.[if:convo_bored]" />
+    <string id="9ZxHecHk" text="I ask of you only this - why have you not come before? My brethren of the woods, you have come to your home. The way of Pérkos, Méhns and all the gods of the heavenly canopy, that is your true nature. Your blood and bone." />
+    <string id="x2BRcZSr" text="Go now, and return to those of your kind, wherever they might be. The children of the forest only accept those born in it.[rf:convo_bored]" />
+    <string id="3eB4RvfE" text="Be welcome as a child of the forest. Defend your brethren and your gods - fight our enemies fiercely, but also be kind to those that visit your hearth. Do not try and convince them of our ways - it is not their place. Yet it is ours to keep unharmed.[if:convo_excited]" />
+    <string id="cDgdXvLX" text="When it comes to the gods, there is nothing the words of man can say that the rustling of leaves or burbling of rivers does not tell better. The forest, offspring of the Great Oak, holds the chronicles of the past. Truth, you see, is embedded within all that which is godly, be it the river flow or the oak grain. I merely interpret it." />
+    <string id="Zz2xgYgb" text="But if you insist... We preach the way of the Thunder Wielder. Valor in defending your ancestry, honor in keeping your word, and generosity towards those you take into your hearth." />
+    <string id="7abfdtqE" text="Naturally, to follow the way of Pérkos is to be a true faithful. Uphold honor, honesty and righteousness. Defend your brethren with valor, as the gods that perch upon the Great Oak do over men. Those you take into your hearth as guests - treat them as your own blood, as much as good sense allows." />
+    <string id="m5Zva8LP" text="Most importantly, uphold tradition and ancestry as a child of the forest, remain true to your family and multiply, lest the Great Oak is unrooted by darkness." />
+    <string id="4tqa5pOC" text="Pérkenweyd is a native faith of the Calradian continent, stretching from the Kachyar peninsula to the Chertyg mountains. Thus, it is the natural faith of the Vakken and Sturgian peoples. Though the Sturgians have been in contact with different cultures and faiths, the Sturgian populace remains true to their ancestry. Pérkenweyd, or 'tree lore', understands that the Great Oak is the source of life and root for the world of mankind. Besides the physical world, a dualistic view of Underworld and the Sacred Canopy separates what is good and bad, righteous and malicious. The Gods perch on the Sacred Canopy, atop the Great Oak, from where they defend and guide the children of the forest, that is, those that adhere to the faith. The children believe that spirits roam this world, and in the grains of oaks they chronicle all that which they witness. Experienced elders claim, however, that also the future may be known through the spirits, and as such are known to delve into divination practices. Moreover, believers argue that being a child of the forest is not a decision one takes, but is, instead, their ancestry. As such, a child of the forest must uphold the Gods, family and ancestry above all else." />
+    <string id="ro2nheLf" text="Pérkenweyd" />
+    <string id="8k60TAmt" text="The {FAITH} only accepts those of {STURGIA} and {VAKKEN} cultures" />
+    <string id="Yc1bVZ7a" text="Elder" />
+    <string id="oo3xtFfT" text="This rite is available to be performed." />
+    <string id="NZyz0ChH" text="Not enough time ({YEARS} years) have passed since the last rite of this type was performed." />
+    <string id="u3xzCV63" text="You have no lord prisoners from Imperial contestors of the {KINGDOM}." />
+    <string id="H6CdxwrS" text="You are not part of the {KINGDOM}." />
+    <string id="qc84kXx2" text="The current date must match the festival's traditional season and day of season." />
+    <string id="Eoo3Nw3V" text="Organize Festival" />
+    <string id="4trbnHXT" text="A religious festival is a way to celebrate your faith and improve bonds with your fellow faithful. The festival will require a feast in a town or castle of yours. Piety will be awarded according to number of guests and their satisfaction with the feast, so be sure to provide plenty of good food and beverage." />
+    <string id="sAqwDCfa" text="The festival needs a town or castle to be performed in." />
+    <string id="tgJXDohX" text="The festival may only be performed on the {ORDINAL} of {SEASON}." />
+    <string id="G5vYrCrV" text="Not enough time ({YEARS} years) has passed since the last rite of this type was performed." />
+    <string id="DriDEPpi" text="This rite requires {COUNT} unit(s) of {ITEM}." />
+    <string id="EqMjsAzB" text="You need lord prisoners to be sacrificed." />
+    <string id="HOLqofSR" text="This rite requires a {TYPE} weapon of minimum tier {TIER}." />
+    <string id="MUVsX9mp" text="The Canticles is a the history of deeds of the Vlandic peoples. It understands the world as a collection of sagas, of which all people are parts of. It does not discriminate between cultures, nor does it see itself as a 'faith', bur rather, a fact. History is a long, bloody play. There are those who bask themselves in glory, and be worthy of writting about by the scriveners, and those who will be forgotten." />
+    <string id="UVtXdcVd" text="You need clan tier 3 or higher." />
+    <string id="1kTYb7pF" text="The {ITEM} was sacrificed in a sacred lynn!" />
+    <string id="GtRd2Arh" text="Lann-Tairgseadh" />
+    <string id="ZS2v37LF" text="As a gift for our Fian ancestors, a great blade must be offered for them to use it in the afterlife. They ought to be thrown deep into the sacred lynns, the most sacred passageways between the world of men and the underworld." />
+    <string id="DhQXSbip" text="Iarnaig-Tairgseadh" />
+    <string id="2rzDN3zO" text="Believed to me" />
+    <string id="pQmosHxT" text="Astaronia, bride of Iovis and mother of Calradia. Though the Imperials are not native to the continent, that is how commonfolk think of her - the mother of all, regardless of 'native' faiths to the continent, and the Imperials as their legitimate children. On the equinox of Autumnus, she is celebrated as a symbol of motherhood, fertility and prosperity." />
+    <string id="oL7Lkkj4" text="Dies Astaroniae" />
+    <string id="ZNU4rSxp" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, a feast for the Goddess would be a most pious choice. Let her ease the coming autumn and winter and bring us a bountiful spring." />
+    <string id="LmkLMoVf" text="The {ITEM} was offered to Pérkos, Thunder Wielder." />
+    <string id="doFoWhY5" text="Other than his Thunder, the almighty God of the holy canopy is known to use his axe to defend the realm of mankind. A votive offering must be offered in his name to show our good faith." />
+    <string id="v7tGeXES" text="Axe of Pérkos" />
+    <string id="G5o9j5gW" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, the spirits teach us a blade is a virtuous offering for the Gods. The best its craftsmanship is, the more it pleases the Gods, as only the best man can craft is worthy of them." />
+    <string id="c6cFhmH9" text="The Festival of Pérkos is celebrated on the evennight of spring. To the children of the forest, spring represents the creation of the world of men. It is said no world existed between the heavenly home of the gods and birds and the underworld of snakes and worms, until Pérkos, the Tunder Wielder, struck the bark of the Great Oak and, from it's sap, mankind blossomed." />
+    <string id="0cs7e6h1" text="Festival of Pérkos" />
   </strings>
 </base>

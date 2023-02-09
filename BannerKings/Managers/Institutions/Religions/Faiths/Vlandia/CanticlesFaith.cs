@@ -26,7 +26,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetFaithDescription()
         {
-            return new TextObject("{=!}The Canticles is a the history of deeds of the Vlandic peoples. It understands the world as a collection of sagas, of which all people are parts of. It does not discriminate between cultures, nor does it see itself as a 'faith', bur rather, a fact. History is a long, bloody play. There are those who bask themselves in glory, and be worthy of writting about by the scriveners, and those who will be forgotten.");
+            return new TextObject("{=MUVsX9mp}The Canticles is a the history of deeds of the Vlandic peoples. It understands the world as a collection of sagas, of which all people are parts of. It does not discriminate between cultures, nor does it see itself as a 'faith', bur rather, a fact. History is a long, bloody play. There are those who bask themselves in glory, and be worthy of writting about by the scriveners, and those who will be forgotten.");
         }
 
         public override TextObject GetClergyForbiddenAnswer(int rank)
@@ -293,6 +293,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
             return new TextObject("{=Yz4aFGU9}medidate upon.");
         }
 
-        public override TextObject GetInductionExplanationText() => new TextObject("{=!}You need clan tier 3 or higher.");
+        public override TextObject GetInductionExplanationText() => new TextObject("{=UVtXdcVd}You need clan tier 3 or higher.");
     }
 }

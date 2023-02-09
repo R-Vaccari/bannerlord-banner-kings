@@ -149,7 +149,7 @@ namespace BannerKings.UI.Estates
                 ExtraInfos.Add(LandInfo);
 
                 var production = Estate.Production;
-                WorkforceInfo.Add(new InformationElement(new TextObject("{=!}Goods Production:").ToString(),
+                WorkforceInfo.Add(new InformationElement(new TextObject("{=Fin3KXMP}Goods Production:").ToString(),
                     new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
                     .SetTextVariable("POINTS", production.ResultNumber.ToString("0.00"))
                     .ToString(),
@@ -305,7 +305,7 @@ namespace BannerKings.UI.Estates
         public string GrantText => new TextObject("{=dugq4xHo}Grant").ToString();
 
         [DataSourceProperty]
-        public string ReclaimText => new TextObject("{=!}Reclaim").ToString();
+        public string ReclaimText => new TextObject("{=RmEtkH3A}Reclaim").ToString();
 
 
         [DataSourceProperty]

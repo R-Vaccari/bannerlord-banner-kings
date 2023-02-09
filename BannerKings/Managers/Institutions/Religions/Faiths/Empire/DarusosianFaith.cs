@@ -255,6 +255,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             return new TextObject("{=Yz4aFGU9}medidate upon.");
         }
 
-        public override TextObject GetInductionExplanationText() => new TextObject("{=!}Only members of the Southern Empire are accepted.");
+        public override TextObject GetInductionExplanationText() => new TextObject("{=NNMB0hrF}Only members of the Southern Empire are accepted.");
     }
 }
