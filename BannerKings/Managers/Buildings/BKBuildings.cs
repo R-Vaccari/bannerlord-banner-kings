@@ -9,7 +9,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Buildings
 {
-    internal class BKBuildings : DefaultTypeInitializer<BKBuildings, BuildingType>
+    public class BKBuildings : DefaultTypeInitializer<BKBuildings, BuildingType>
     {
 
         public static MBReadOnlyList<BuildingType> AllBuildings
@@ -42,6 +42,10 @@ namespace BannerKings.Managers.Buildings
                 yield return Armory;
                 yield return CourtHouse;
                 yield return WarhorseStuds;
+                foreach (var item in ModAdditions)
+                {
+                    yield return item;
+                }
                 //yield return DailyAssimilation;
             }
         }
@@ -154,7 +158,7 @@ namespace BannerKings.Managers.Buildings
 
 
             DailyAssimilation = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bk_building_daily_assimilation"));
-            DailyAssimilation.Initialize(new TextObject("Cultural Assimilation"),
+            DailyAssimilation.Initialize(new TextObject("{=rZOM0Jit}Cultural assimilation"),
                 new TextObject("{=QrcPgzMf}Focus efforts on assimilating local pouplace to your culture. Increases Cultural Presence."),
                 new int[3],
                 BuildingLocation.Daily,
