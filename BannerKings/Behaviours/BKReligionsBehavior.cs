@@ -698,7 +698,7 @@ namespace BannerKings.Behaviours
                 bool possible = rite.MeetsCondition(Hero.MainHero, out reason);
                 if (!possible)
                 {
-                    sb.Append(new TextObject("{=!}\n\n{RITE}: {REASON}")
+                    sb.Append(new TextObject("{=UcLBbKzj}\n\n{RITE}: {REASON}")
                         .SetTextVariable("RITE", rite.GetName())
                         .SetTextVariable("REASON", reason));
                 }

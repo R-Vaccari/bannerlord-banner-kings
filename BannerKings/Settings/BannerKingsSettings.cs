@@ -44,7 +44,7 @@ namespace BannerKings.Settings
         }, selectedIndex: 0);
 
 
-        [SettingPropertyFloatingInteger("{=!}Tax Income", minValue: 0.2f, maxValue: 2f, "#0%", RequireRestart = false, HintText = "{=!}Affects the volume of settlement taxes. May SEVERELY impact AI and it's ability to recruit/keep troops. Default: 100%.")]
+        [SettingPropertyFloatingInteger("{=9G8cJYQd}Tax Income", minValue: 0.2f, maxValue: 2f, "#0%", RequireRestart = false, HintText = "{=VFRd9aNe}Affects the volume of settlement taxes. May SEVERELY impact AI and it's ability to recruit/keep troops. Default: 100%.")]
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public float TaxIncome { get; set; } = 1f;
 
@@ -57,7 +57,7 @@ namespace BannerKings.Settings
         public bool RealisticCaravanIncome { get; set; } = true;
 
 
-        [SettingPropertyFloatingInteger("{=!}Troop Upgrade Xp", minValue: 1f, maxValue: 5f, "#0%", RequireRestart = false, HintText = "{=!}How much Xp troops need to upgrade. Vanilla is 100%. Default: 200%.")]
+        [SettingPropertyFloatingInteger("{=2yDhJfgh}Troop Upgrade Xp", minValue: 1f, maxValue: 5f, "#0%", RequireRestart = false, HintText = "{=xvNKsFbW}How much Xp troops need to upgrade. Vanilla is 100%. Default: 200%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float TroopUpgradeXp { get; set; } = 2f;
 

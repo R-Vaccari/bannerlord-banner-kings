@@ -278,7 +278,6 @@
     <string id="2fcEecjz" text="Vanilla start. No troops, goods or any benefits." />
     <string id="2VoYzCNj" text="Indebted Lord" />
     <string id="P1rwCkZJ" text="After a series of inherited problems and bad decisions, you find yourself in debt. Thankfuly, you are a landed lord, with income from your Lordship. A food supply and a small retinue accompany you, though their loyalty will be tested by the lack of denars..." />
-    <string id="qGzc0y7c" text="Start as a lord in a kingdom, with a Lordship title. No settlement income or influence for 5 years. The village you own can be managed by you, and you will receive it's income after 5 years. Gain Scholarship skill." />
     <string id="kLHXZnLY" text="Mercenary" />
     <string id="wcWg3KPt" text="You serve as a free mercenary company, roaming around the continent in search of employment. After a long period of joblessness, you find your company in the verge of collapse, with little morale, food and finances." />
     <string id="G2yNVZ9R" text="Start with a mercenary band, in desperate need for plundering gold and food. Party morale reduced for 5 years. Mercenary lifestyle is kickstarted as part of your education." />
@@ -1960,12 +1959,10 @@
     <string id="GLumT6vM" text="It is decided then. I bestow upon you the title of Knight." />
     <string id="rf3QLBok" text="I would like you to convert to my culture ({INFLUENCE} influence)." />
     <string id="TKUCnCtD" text="If that is your bidding, I would not deny it. Folks at {SETTLEMENT} might not like this. Over time however, they may accept it." />
-    <string id="sjy26XtU" text="{HERO} has converted to the {FAITH} faith." />
     <string id="8x1gZye8" text="If that is your bidding, I am inclined to accept it. The people {SETTLEMENT} might not like this. Over time however, they may accept it." />
     <string id="EOm86XND" text="I would like you to convert to my faith ({INFLUENCE} influence, {PIETY} piety)." />
     <string id="VqkEaJWp" text="{POSSIBLE}.\n\nChanging faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}" />
     <string id="OXP2Kb4E" text="Each rite has different conditions to be fulfilled. They also have time intervals before being able to me performed again, check their details in the Religion tab." />
-    <string id="cqofEPx2" text="\n{RITE}: {REASON}" />
     <string id="B4M6aqo5" text="Select what rite you would like to perform. Check their descriptions and entries on Religions tab for details." />
     <string id="6Qs7booz" text="AI Knights" />
     <string id="aNSCjnzn" text="Enable the ability for AI to generate knights. Will add a large amount of heroes to the world and may impact performance. Default: True." />
@@ -1990,7 +1987,6 @@
     <string id="M3CdwrTZ" text="Induction" />
     <string id="yS81FhXP" text="The criteria for being inducted into this faith. Induction may be done through preachers. Depending on the preacher's rank, they may require different things." />
     <string id="GmqBFSgN" text="The Imperial language of the Calradian empire. Though scholars have made efforts into keeping the language pure, centuries of contact with local cultures have made Calradian adopt small quantities of local vocabularies. Being a language of prestige, Calradian vocabulary are also often adopted by foreign languages, due to it's usefulness in the continent as a Lingua Franca, often used by traders, nobles during their education or peasants looking for a better life within the Empire." />
-    <string id="Df3Fdnuw" text="Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title." />
     <string id="Z0uU7Tn6" text="Greater chance of being awarded fiefs during elections" />
     <string id="iNvtNtoK" text="Increased prosperity of cattle, hog and forestry villages" />
     <string id="4cnju8xP" text="Improved settlement cultural assimilation\nReduced costs for convincing vassals to assume culture or faith" />
@@ -2004,7 +2000,6 @@
     <string id="tXp4wuPZ" text="Among the children of the forest, many devouts, specially in the Chertyg region, have devoted themselves to Méhns. The Moon, in their understanding, is the source of prosperity for both land and mankind, and thus the Goddess gained popularity among believers. Although not a warrior as Pérkos, she is also believed to a protector of the children, in a motherly manner, as Méhns is solely responsible for keeping darkness away during nighttime." />
     <string id="Vn3bTO6r" text="Prosperity for all villages of acceptable cultures\nIncreased fertility" />
     <string id="foD5TnsR" text="Goddess" />
-    <string id="hmtRGrpt" text="Items Produced:" />
     <string id="SLogDwvH" text="Not part of Aserai, Imperial or Khuzait cultures." />
     <string id="CrfLUm3F" text="You must be part of Aserai, Imperial or Khuzait cultures, or have relations with village notables (Faqir), have an Aserai spouse (Imam) or clan tier above 2 (Murshid)." />
     <string id="m5CCxwmx" text="Only Battanians with 50 or more roguery are accepted." />
@@ -2048,7 +2043,6 @@
     <string id="GtRd2Arh" text="Lann-Tairgseadh" />
     <string id="ZS2v37LF" text="As a gift for our Fian ancestors, a great blade must be offered for them to use it in the afterlife. They ought to be thrown deep into the sacred lynns, the most sacred passageways between the world of men and the underworld." />
     <string id="DhQXSbip" text="Iarnaig-Tairgseadh" />
-    <string id="2rzDN3zO" text="Believed to me" />
     <string id="pQmosHxT" text="Astaronia, bride of Iovis and mother of Calradia. Though the Imperials are not native to the continent, that is how commonfolk think of her - the mother of all, regardless of 'native' faiths to the continent, and the Imperials as their legitimate children. On the equinox of Autumnus, she is celebrated as a symbol of motherhood, fertility and prosperity." />
     <string id="oL7Lkkj4" text="Dies Astaroniae" />
     <string id="ZNU4rSxp" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, a feast for the Goddess would be a most pious choice. Let her ease the coming autumn and winter and bring us a bountiful spring." />
@@ -2058,5 +2052,11 @@
     <string id="G5o9j5gW" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, the spirits teach us a blade is a virtuous offering for the Gods. The best its craftsmanship is, the more it pleases the Gods, as only the best man can craft is worthy of them." />
     <string id="c6cFhmH9" text="The Festival of Pérkos is celebrated on the evennight of spring. To the children of the forest, spring represents the creation of the world of men. It is said no world existed between the heavenly home of the gods and birds and the underworld of snakes and worms, until Pérkos, the Tunder Wielder, struck the bark of the Great Oak and, from it's sap, mankind blossomed." />
     <string id="0cs7e6h1" text="Festival of Pérkos" />
+    <string id="UcLBbKzj" text="\n\n{RITE}: {REASON}" />
+    <string id="9G8cJYQd" text="Tax Income" />
+    <string id="VFRd9aNe" text="Affects the volume of settlement taxes. May SEVERELY impact AI and it's ability to recruit/keep troops. Default: 100%." />
+    <string id="2yDhJfgh" text="Troop Upgrade Xp" />
+    <string id="xvNKsFbW" text="How much Xp troops need to upgrade. Vanilla is 100%. Default: 200%." />
+    <string id="CiWCMaQV" text="Start as a lord in a kingdom, with a Lordship title. Redcued influence for 5 years. The village you own can be managed by you. Gain Scholarship skill." />
   </strings>
 </base>
