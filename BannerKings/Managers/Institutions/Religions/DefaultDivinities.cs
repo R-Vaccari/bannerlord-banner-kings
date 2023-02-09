@@ -38,6 +38,8 @@ namespace BannerKings.Managers.Institutions.Religions
                 yield return VlandiaMain;
                 yield return VlandiaSecondary1;
                 yield return VlandiaSecondary2;
+                yield return TreeloreMain;
+                yield return TreeloreMoon;
                 foreach (Divinity item in ModAdditions)
                 {
                     yield return item;
@@ -94,7 +96,7 @@ namespace BannerKings.Managers.Institutions.Religions
             DarusosianMain = new Divinity("darusosian-main");
             DarusosianMain.Initialize(new TextObject("{=Y9jVBX9n}Martyr Darusos"),
                 new TextObject("{=7r3RV3jr}Born in a period of relative internal peace and outward expansion, Darusos was a young emperor who allegedly sought reformations within the Calradic Empire before being betrayed by his closest generals and crucified upon a sacred fig tree in the imperial gardens of Lycaron. Those devoted to Darusos view him as having achieved the rite of the divus in his dying hours, achieving immortality and awaiting those who seek to practice his reforms in the heavenly realms."),
-                new TextObject("{=!}Improved settlement cultural assimilation\nReduced drawbacks for convincing vassals to assume culture or faith"),
+                new TextObject("{=!}Improved settlement cultural assimilation\nReduced costs for convincing vassals to assume culture or faith"),
                 new TextObject("{=!}Emperor Martyr"),
                 200);
 
@@ -130,12 +132,12 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=neVhyybi}Saga"));
 
             TreeloreMain.Initialize(new TextObject("{=!}Pérkos, Thunder Wielder"),
-                new TextObject("{=!}Once, there was naught between the Underworld, nested deep in the roots of the Great Oak, and the heavenly canopy of the gods. Pérkos struck the Great Tree's bark, and from it's sap, mankind blossomed. Such is the tale told by the children of the forest, that is, those that adhere to Pérkenweyd. Though the faith accepts a multitude of gods, the Thunder Wielder is idolized as their ultimate protector, the highest and noblest of gods, charged with protecting the Great Tree itself."),
+                new TextObject("{=!}Once, there was naught between the Underworld, nested deep in the roots of the Great Oak, and the heavenly canopy of the gods. Pérkos struck the Great Tree's bark, and from it's sap, mankind blossomed. Such is the tale told by the children of the forest, that is, those that adhere to Pérkenweyd. Though the faith accepts a multitude of gods, the Thunder Wielder is idolized as their ultimate protector, the highest and noblest of gods, charged with protecting the Great Oak itself."),
                 new TextObject("{=!}Stability for all settlements of acceptable cultures\nRenown gain for every successful raid on foreign villages"),
                 new TextObject("{=!}Supreme God"));
 
             TreeloreMoon.Initialize(new TextObject("{=!}Méhns Cult"),
-                new TextObject("{=!}Among the children of the forest, many devouts, specially in the Chertyg region, have devoted themselves to Méhns. The Moon, in their understanding, is the source of prosperity for both land and mankind."),
+                new TextObject("{=!}Among the children of the forest, many devouts, specially in the Chertyg region, have devoted themselves to Méhns. The Moon, in their understanding, is the source of prosperity for both land and mankind, and thus the Goddess gained popularity among believers. Although not a warrior as Pérkos, she is also believed to a protector of the children, in a motherly manner, as Méhns is solely responsible for keeping darkness away during nighttime."),
                 new TextObject("{=!}Prosperity for all villages of acceptable cultures\nIncreased fertility"),
                 new TextObject("{=!}Goddess"));
         }
