@@ -49,7 +49,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             }
 
             bool date = CampaignTime.Now.GetSeasonOfYear == SeasonOfTheYear &&
-            CampaignTime.Now.GetDayOfSeason == DayOfTheSeason;
+            CampaignTime.Now.GetDayOfSeason + 1 == DayOfTheSeason;
 
             if (!date)
             {

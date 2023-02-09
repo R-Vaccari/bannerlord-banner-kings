@@ -14,8 +14,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Battania
         public override void Complete(Hero actionTaker)
         {
             base.Complete(actionTaker);
-            MBInformationManager.AddQuickInformation(new TextObject("{=5sWFJZV6}{COUNT} {OFFERING} was ritually offered by {HERO}.")
-                    .SetTextVariable("HERO", actionTaker.Name),
+            MBInformationManager.AddQuickInformation(new TextObject("{=!}The {ITEM} was sacrificed in a sacred lynn!")
+                    .SetTextVariable("ITEM", base.selectedItem.GetModifiedItemName()),
                 0, 
                 actionTaker.CharacterObject,
                 "event:/ui/notification/relation");

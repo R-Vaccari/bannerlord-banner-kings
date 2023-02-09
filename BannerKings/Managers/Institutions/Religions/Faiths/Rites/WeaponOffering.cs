@@ -1,5 +1,4 @@
 ﻿using BannerKings.Managers.Skills;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
