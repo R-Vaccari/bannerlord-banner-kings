@@ -1,3 +1,4 @@
+using CalradiaExpandedKingdoms.Helpers;
 using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -11,7 +12,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
     {
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {
-            if (culture.StringId == "battania")
+            if (CEKHelpers.IsInCultureGroup(culture.StringId, "battania"))
             {
                 return true;
             }

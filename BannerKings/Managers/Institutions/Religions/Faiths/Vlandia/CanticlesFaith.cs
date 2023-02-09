@@ -1,3 +1,4 @@
+using CalradiaExpandedKingdoms.Helpers;
 using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -10,7 +11,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
     {
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {
-            if (culture.StringId == "vlandia")
+            if (CEKHelpers.IsInCultureGroup(culture.StringId, referenceId: "vlandia"))
             {
                 return true;
             }

@@ -1,3 +1,4 @@
+using CalradiaExpandedKingdoms.Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
@@ -9,7 +10,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
     {
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {
-            if (culture.StringId == "sturgia" || culture.StringId == "vakken")
+            if (CEKHelpers.IsInCultureGroup(culture.StringId, referenceId: "sturgia"))
             {
                 return true;
             }
