@@ -42,7 +42,7 @@ namespace BannerKings.UI.Management
         public string MilitiaPolicyText => new TextObject("{=sYmEYKF8}Militia policy").ToString();
 
         [DataSourceProperty]
-        public string GarrisonPolicyText => new TextObject("Garrison policy").ToString();
+        public string GarrisonPolicyText => new TextObject("{=DEhtngoL}Garrison policy").ToString();
 
         [DataSourceProperty]
         public string DraftingPolicyText => new TextObject("{=T614zQR8}Drafting policy").ToString();
@@ -218,7 +218,7 @@ namespace BannerKings.UI.Management
                 $"{data.MilitaryData.Manpower:n0}",
                 new TextObject("{=MYdkfodC}The total manpower of nobles plus peasants.").ToString()));
 
-            ManpowerInfo.Add(new InformationElement(new TextObject("Noble Manpower:").ToString(), 
+            ManpowerInfo.Add(new InformationElement(new TextObject("{=!}Noble Manpower:").ToString(), 
                 $"{data.MilitaryData.NobleManpower:n0}",
                 new TextObject("{=08n0UTDS}Manpower from noble population. Noble militarism is higher, but nobles often are less numerous. These are drafted as noble recruits.")
                     .ToString()));
@@ -302,12 +302,15 @@ namespace BannerKings.UI.Management
                             MilitiaComponent.CreateMilitiaEscort(settlement, Hero.MainHero.PartyBelongedTo, party);
                             if (lord == Hero.MainHero)
                             {
-                                InformationManager.DisplayMessage(new InformationMessage($"{menCount:n0} men raised as militia at {settlement.Name}!"));
+                                InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{COUNT} men raised at {SETTLEMENT}")
+                                    .SetTextVariable("COUNT", menCount)
+                                    .SetTextVariable("SETTLEMENT", settlement.Name).ToString()));
                             }
                         }
                         else if (lord == Hero.MainHero)
                         {
-                            InformationManager.DisplayMessage(new InformationMessage($"Militia already raised from {settlement.Name}"));
+                            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}Militia already raised from {SETTLEMENT}")
+                                .SetTextVariable("SETTLEMENT", settlement.Name).ToString()));
                         }
                     }
                     else if (lord == Hero.MainHero)

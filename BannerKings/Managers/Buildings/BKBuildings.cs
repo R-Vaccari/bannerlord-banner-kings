@@ -42,11 +42,11 @@ namespace BannerKings.Managers.Buildings
                 yield return Armory;
                 yield return CourtHouse;
                 yield return WarhorseStuds;
+                yield return DailyAssimilation;
                 foreach (var item in ModAdditions)
                 {
                     yield return item;
                 }
-                //yield return DailyAssimilation;
             }
         }
 

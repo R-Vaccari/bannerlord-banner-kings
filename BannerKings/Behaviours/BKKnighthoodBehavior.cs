@@ -221,7 +221,7 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("companion_knighthood_finish_fief", "companion_knighthood_finish_fief",
                 "companion_knighthood_finished",
-                new TextObject("It is decided then. I bestow upon you the title of Knight.").ToString(),
+                new TextObject("{=!}It is decided then. I bestow upon you the title of Knight.").ToString(),
                 null, 
                 GrantFiefOnConsequence);
 
@@ -233,7 +233,7 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("companion_knighthood_finish_estate", "companion_knighthood_finish_estate",
                 "companion_knighthood_finished",
-               new TextObject("It is decided then. I bestow upon you the title of Knight.").ToString(),
+               new TextObject("{=!}It is decided then. I bestow upon you the title of Knight.").ToString(),
                null, 
                GrantEstateOnConsequence);
 

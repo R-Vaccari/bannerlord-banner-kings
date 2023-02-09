@@ -6,7 +6,6 @@ using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.Core;
@@ -67,7 +66,7 @@ namespace BannerKings.UI.Estates
                 ImageIdentifier = new ImageIdentifierVM(new ImageIdentifier(CampaignUIHelper.GetCharacterCode(Estate.Owner.CharacterObject)));
             }
 
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("Population:"), 
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=VRbXbsPE}Population:"), 
                 Estate.Population, 
                 0,
                 TownManagementDescriptionItemVM.DescriptionType.Loyalty));
@@ -81,7 +80,7 @@ namespace BannerKings.UI.Estates
 
             var serfManpower = Estate.GetManpower(Managers.PopulationManager.PopType.Serfs);
             var slavesManpower = Estate.GetManpower(Managers.PopulationManager.PopType.Serfs);
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("Manpower:"),
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=t9sG2dMh}Manpower:"),
                serfManpower + slavesManpower,
                0,
                TownManagementDescriptionItemVM.DescriptionType.Militia,
@@ -89,7 +88,7 @@ namespace BannerKings.UI.Estates
                .ToString())));
 
             var acreage = Estate.AcreageGrowth;
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("Acreage:"),
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=FT5kL9k5}Acreage:"),
                (int)Estate.Acreage,
                (int)acreage.ResultNumber,
                TownManagementDescriptionItemVM.DescriptionType.Prosperity,
@@ -150,7 +149,7 @@ namespace BannerKings.UI.Estates
                 ExtraInfos.Add(LandInfo);
 
                 var production = Estate.Production;
-                WorkforceInfo.Add(new InformationElement(new TextObject("Goods Production:").ToString(),
+                WorkforceInfo.Add(new InformationElement(new TextObject("{=!}Goods Production:").ToString(),
                     new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
                     .SetTextVariable("POINTS", production.ResultNumber.ToString("0.00"))
                     .ToString(),

@@ -38,19 +38,10 @@ namespace BannerKings.UI.Management
             landInfo = new MBBindingList<InformationElement>();
             terrainInfo = new MBBindingList<InformationElement>();
             workforceInfo = new MBBindingList<InformationElement>();
-
-            /*
-            
-            this.duchyCosts = model.GetUsurpationCosts(_duchy, Hero.MainHero);
-            
-            this._usurpDuchyEnabled = this._duchy.deJure != Hero.MainHero;
-            if (title.vassals != null)
-                foreach (FeudalTitle vassal in title.vassals)
-                    if (vassal.fief != null) _vassals.Add(new VassalTitleVM(vassal)); */
         }
 
         [DataSourceProperty]
-        public string WorkforcePolicyText => new TextObject("Workforce policy").ToString();
+        public string WorkforcePolicyText => new TextObject("{=MBHftZmv}Workforce policy").ToString();
 
         [DataSourceProperty]
         public string TerrainText => new TextObject("{=BZacZ2Cj}Terrain").ToString();
@@ -245,7 +236,7 @@ namespace BannerKings.UI.Management
                         .SetTextVariable("LIMIT", vassalsCap.GetExplanations())
                         .ToString()));
 
-                GovernmentInfo.Add(new InformationElement(new TextObject("Government Type:").ToString(),
+                GovernmentInfo.Add(new InformationElement(new TextObject("{=!}Government Type:").ToString(),
                     title.contract.Government.ToString(),
                     new TextObject("{=BvJb2QSM}The dukedom this settlement is associated with.").ToString()));
                 GovernmentInfo.Add(new InformationElement(new TextObject("{=HJcuXO5J}Succession Type:").ToString(),
@@ -263,7 +254,6 @@ namespace BannerKings.UI.Management
 
                 DeJure = new HeroVM(title.deJure);
             }
-
 
             LandInfo.Add(new InformationElement(new TextObject("{=FT5kL9k5}Acreage:").ToString(), landData.Acreage + " acres",
                 new TextObject("{=thVdn5fm}Current quantity of usable acres in this region").ToString()));
@@ -287,7 +277,6 @@ namespace BannerKings.UI.Management
                 new TextObject("{=TVp8DsE9}Represents how difficult it is to create new usable acres. Like fertility, depends on terrain, but is not strictly correlated to it")
                     .ToString()));
 
-
             if (data.MineralData != null)
             {
                 MineralInfo.Add(new InformationElement(new TextObject("{=iEGG5vQ9}Mineral Richness:").ToString(),
@@ -301,7 +290,6 @@ namespace BannerKings.UI.Management
                         ""));
                 }
             }
-
 
             WorkforceInfo.Add(new InformationElement(new TextObject("{=p7yrSOcC}Available Workforce:").ToString(),
                 landData.AvailableWorkForce.ToString(),
@@ -319,7 +307,6 @@ namespace BannerKings.UI.Management
                 WorkforceSelector.SetOnChangeAction(workforceItem.OnChange);
             }
         }
-
 
         private void OnUsurpPress()
         {

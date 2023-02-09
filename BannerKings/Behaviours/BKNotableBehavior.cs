@@ -345,7 +345,7 @@ namespace BannerKings.Behaviours
             }
 
             MBTextManager.SetTextVariable("NOTABLE_CONVERT_CULTURE", 
-                new TextObject("I would like you to convert to my culture ({INFLUENCE} influence).")
+                new TextObject("{=!}I would like you to convert to my culture ({INFLUENCE} influence).")
                 .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.CultureModel.GetConversionCost(notable,
                 Hero.MainHero).ResultNumber.ToString("0")));
             return IsPlayerNotable() && IsCultureDifferent();
@@ -354,7 +354,7 @@ namespace BannerKings.Behaviours
         private bool ConvertCultureAnswerOnCondition()
         {
             MBTextManager.SetTextVariable("NOTABLE_ANSWER_CONVERT_CULTURE",
-                new TextObject("If that is your bidding, I would not deny it. Folks at {SETTLEMENT} might not like this. Over time however, they may accept it."));
+                new TextObject("{=!}If that is your bidding, I would not deny it. Folks at {SETTLEMENT} might not like this. Over time however, they may accept it."));
             return IsPlayerNotable();
         }
 
@@ -370,7 +370,7 @@ namespace BannerKings.Behaviours
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(notable, converter, -8);
             if (converter == Hero.MainHero)
             {
-                NotificationsHelper.AddQuickNotificationWithSound(new TextObject("{HERO} has converted to the {FAITH} faith.")
+                NotificationsHelper.AddQuickNotificationWithSound(new TextObject("{=!}{HERO} has converted to the {FAITH} faith.")
                     .SetTextVariable("HERO", notable.Name)
                     .SetTextVariable("FAITH", rel.Faith.GetFaithName()));
             }
@@ -385,7 +385,7 @@ namespace BannerKings.Behaviours
         {
 
             MBTextManager.SetTextVariable("NOTABLE_ANSWER_CONVERT_FAITH",
-                new TextObject("If that is your bidding, I am inclined to accept it. The people {SETTLEMENT} might not like this. Over time however, they may accept it."));
+                new TextObject("{=!}If that is your bidding, I am inclined to accept it. The people {SETTLEMENT} might not like this. Over time however, they may accept it."));
             return IsPlayerNotable();
         }
 
@@ -432,7 +432,7 @@ namespace BannerKings.Behaviours
             }
 
             MBTextManager.SetTextVariable("NOTABLE_CONVERT_FAITH",
-                new TextObject("I would like you to convert to my faith ({INFLUENCE} influence, {PIETY} piety).")
+                new TextObject("{=!}I would like you to convert to my faith ({INFLUENCE} influence, {PIETY} piety).")
                 .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.ReligionModel.GetConversionInfluenceCost(notable,
                 Hero.MainHero).ResultNumber.ToString("0"))
                 .SetTextVariable("PIETY", BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(notable,

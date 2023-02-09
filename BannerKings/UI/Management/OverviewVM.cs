@@ -134,7 +134,8 @@ namespace BannerKings.UI.Management
             if (!settlement.IsVillage)
             {
                 var stability = BannerKingsConfig.Instance.StabilityModel.CalculateStabilityTarget(settlement, true);
-                StatsInfo.Add(new InformationElement("Stability:", $"{data.Stability:P}",
+                StatsInfo.Add(new InformationElement(new TextObject("{=!}Stability:").ToString(), 
+                    $"{data.Stability:P}",
                     new TextObject("{=Uw3xBMKd}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject(
@@ -144,7 +145,8 @@ namespace BannerKings.UI.Management
                         .ToString()));
 
                 var autonomy = BannerKingsConfig.Instance.StabilityModel.CalculateAutonomyTarget(settlement, data.Stability, true);
-                StatsInfo.Add(new InformationElement("Autonomy:", $"{data.Autonomy:P}",
+                StatsInfo.Add(new InformationElement(new TextObject("{=!}Autonomy:").ToString(), 
+                    $"{data.Autonomy:P}",
                     new TextObject("{=Uw3xBMKd}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject(
@@ -154,7 +156,8 @@ namespace BannerKings.UI.Management
                         .ToString()));
 
                 var support = data.NotableSupport;
-                StatsInfo.Add(new InformationElement("Notable Support:", $"{support.ResultNumber:P}",
+                StatsInfo.Add(new InformationElement(new TextObject("{=!}Notable Support:").ToString(), 
+                    $"{support.ResultNumber:P}",
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject(

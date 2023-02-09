@@ -113,7 +113,7 @@ namespace BannerKings.UI.Kingdoms
         public string HeirText => new TextObject("{=vArnerHC}Heir").ToString();
 
         [DataSourceProperty]
-        public string SuccessionText => new TextObject("Succession").ToString();
+        public string SuccessionText => new TextObject("{=rTUgik07}Succession").ToString();
 
         [DataSourceProperty]
         public string LawsText => new TextObject("{=fE6RYz1k}Laws").ToString();

@@ -50,14 +50,13 @@ namespace BannerKings.UI.Management
 
 
         [DataSourceProperty]
-        public string TaxPolicyText => new TextObject("Tax policy").ToString();
+        public string TaxPolicyText => new TextObject("{=L7QhNa6a}Tax policy").ToString();
 
         [DataSourceProperty]
-        public string CriminalPolicyText => new TextObject("Criminal policy").ToString();
+        public string CriminalPolicyText => new TextObject("{=qyjqPWxJ}Criminal policy").ToString();
 
         [DataSourceProperty]
-        public HintViewModel TournamentHint => new(new TextObject("{=VeMSE94s}Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as " +
-                                                                  "provide an adequate prize. Sponsoring games improves population loyalty towards you, and valuable prizes provide renown to your name."));
+        public HintViewModel TournamentHint => new(new TextObject("{=!}Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as provide an adequate prize. Sponsoring games improves population loyalty towards you, and valuable prizes provide renown to your name."));
 
         [DataSourceProperty]
         public bool TournamentAvailable
@@ -276,7 +275,7 @@ namespace BannerKings.UI.Management
                 sb.Remove(sb.Length - 2, 1);
                 var productionString = sb.ToString();
                 var productionExplained = villageData.ProductionsExplained;
-                ProductionInfo.Add(new InformationElement(new TextObject("Goods Production:").ToString(),
+                ProductionInfo.Add(new InformationElement(new TextObject("{=!}Goods Production:").ToString(),
                     new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
                     .SetTextVariable("POINTS", productionExplained.ResultNumber.ToString("0.00"))
                     .ToString(),
@@ -301,7 +300,7 @@ namespace BannerKings.UI.Management
                     new TextObject("{=UgD3or79}Percentage of an item's value charged as tax when sold.").ToString()));
 
                 var mercantilism = data.EconomicData.Mercantilism;
-                RevenueInfo.Add(new InformationElement(new TextObject("Mercantilism:").ToString(),
+                RevenueInfo.Add(new InformationElement(new TextObject("{=!}Mercantilism:").ToString(),
                     $"{mercantilism.ResultNumber:P}",
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",

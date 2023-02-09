@@ -28,7 +28,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public CallBannersGoal(Hero fulfiller = null) : base("goal_found_kingdom", GoalCategory.Kingdom, GoalUpdateType.Hero, fulfiller)
         {
             var name = new TextObject("{=zzjbxN9h}Call Banners");
-            var description = new TextObject("Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title.");
+            var description = new TextObject("{=!}Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title.");
             Initialize(name, description);
             Refresh();
         }
