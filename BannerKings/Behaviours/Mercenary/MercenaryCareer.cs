@@ -38,6 +38,11 @@ namespace BannerKings.Behaviours.Mercenary
 
         [SaveableProperty(9)] public int ServiceDays { get; private set; }
 
+        public void ChangeKingdom(Kingdom kingdom)
+        {
+            Kingdom = kingdom;
+        }
+
         internal void PostInitialize()
         {
             foreach (var pair in LevyTroops)
@@ -147,6 +152,7 @@ namespace BannerKings.Behaviours.Mercenary
 
         internal void AddKingdom(Kingdom kingdom)
         {
+            Kingdom = kingdom;
             if (!KingdomPrivileges.ContainsKey(kingdom))
             {
                 KingdomPrivileges.Add(kingdom, new List<MercenaryPrivilege>());
