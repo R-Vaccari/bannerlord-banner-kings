@@ -6,9 +6,8 @@ using BannerKings.Managers.Populations;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Inventory;
+
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
@@ -25,7 +24,7 @@ namespace BannerKings.UI.Management
         private DecisionElement exportToogle, tariffToogle, slaveTaxToogle, mercantilismToogle;
         private MBBindingList<InformationElement> productionInfo, revenueInfo, satisfactionInfo,
             slaveryInfo;
-        private ItemRoster roster;
+        private TournamentData tournamentData;
         private readonly Settlement settlement;
         private BKTaxPolicy taxItem;
         private SelectorVM<BKItemVM> taxSelector, criminalSelector;
@@ -420,7 +419,7 @@ namespace BannerKings.UI.Management
                 .SetTextVariable("SETTLEMENT_NAME", settlement.Name)
                 .ToString(),
                 new TextObject("{=JdH9ubwj}Select a prize for your tournament. The bigger is it's value, the more renown will be awarded to once the tournament is finished.").ToString(),
-                null,
+                list,
                 true,
                 1,
                 GameTexts.FindText("str_accept").ToString(),
@@ -429,6 +428,7 @@ namespace BannerKings.UI.Management
                 {
                     ItemObject item = (ItemObject)list[0].Identifier;
                     tournament.SetPrize(item);
+                    tournamentData = tournament;
                     RefreshValues();
                 },
                 null));
@@ -437,14 +437,9 @@ namespace BannerKings.UI.Management
         public override void OnFinalize()
         {
             base.OnFinalize();
-            if (roster != null && !roster.IsEmpty())
+            if (tournamentData != null)
             {
-                var tournamentManager = Campaign.Current.TournamentManager;
-                tournamentManager.AddTournament(Campaign.Current.Models.TournamentModel.CreateTournament(settlement.Town));
-                Hero.MainHero.ChangeHeroGold(-5000);
-                InformationManager.DisplayMessage(new InformationMessage(
-                    $"Tournament started with prize: {data.TournamentData.Prize.Name}",
-                    "event:/ui/notification/coins_negative"));
+                tournamentData.Start(settlement.Town);
             }
         }
     }
