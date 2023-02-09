@@ -87,7 +87,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     {DefaultTraits.Honor, true},
                     {DefaultTraits.Mercy, true}
                 },
-                imperialGroup, new List<Rite>() { darusosianExecution });
+                imperialGroup, new List<Rite>() { darusosianExecution },
+                Behaviours.Feasts.Feast.FeastType.Astaronia);
 
 
             vlandiaGroup = new FaithGroup(new TextObject("{=6FGQ31TM}Vlandic Faiths"),
@@ -120,7 +121,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 new List<Rite>()
                 {
                     new TreeloreFestival()
-                });
+                },
+                Behaviours.Feasts.Feast.FeastType.Treelore);
         }
 
         public Faith GetById(string id)

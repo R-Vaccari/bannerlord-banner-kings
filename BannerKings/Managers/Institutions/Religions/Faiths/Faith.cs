@@ -7,6 +7,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
+using static BannerKings.Behaviours.Feasts.Feast;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
@@ -32,8 +33,10 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public MBReadOnlyDictionary<TraitObject, bool> Traits => traits.GetReadOnlyDictionary();
         public FaithGroup FaithGroup => faithGroup;
         public Divinity MainGod => mainGod;
+        public FeastType FeastType { get; private set; }
 
-        protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup, List<Rite> rites = null)
+        protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup, List<Rite> rites = null,
+            FeastType feastType = FeastType.None)
         {
             this.mainGod = mainGod;
             this.traits = traits;
@@ -41,6 +44,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             rites ??= new List<Rite>();
 
             this.rites = rites;
+            FeastType = FeastType;
         }
 
         public FaithStance GetStance(Faith otherFaith)

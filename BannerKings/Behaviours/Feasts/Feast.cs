@@ -48,6 +48,9 @@ namespace BannerKings.Behaviours.Feasts
         [SaveableProperty(12)] public MarriageContract MarriageContract { get; private set; }
         [SaveableProperty(13)] public bool AutoManaged { get; private set; }
 
+        private float GeneralSatisfaction => ((FoodQuality / 7f) + (FoodQuantity / 7f) +
+                (FoodVariety / 7f) + (Alcohol / 7f) + (HostPresence / Ticks)) / 5f;
+
         public void Tick(bool hourly = true)
         {
             if (hourly)
@@ -175,9 +178,7 @@ namespace BannerKings.Behaviours.Feasts
 
         public void Finish(TextObject reason)
         {
-            float satisfaction = ((FoodQuality / 7f) + (FoodQuantity / 7f) +
-                (FoodVariety / 7f) + (Alcohol / 7f) + (HostPresence / Ticks)) / 5f;
-
+            float satisfaction = GeneralSatisfaction;
             if (MarriageContract != null)
             {
                 Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().ApplyMarriageContract();
@@ -205,9 +206,11 @@ namespace BannerKings.Behaviours.Feasts
 
                 int relation = (int)MathF.Clamp((MBRandom.RandomInt(3, 8) * satisfaction - 0.5f), -10f, 20f);
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Host, clan.Leader, relation);
+                AddPiety(clan.Leader);
             }
 
             GainRenownAction.Apply(Host, 15 * satisfaction);
+            AddPiety(Host, true);
             if (Host.MapFaction == Hero.MainHero.MapFaction)
             {
                 MBInformationManager.AddQuickInformation(new TextObject("{=W7RqGAhs}The feast at {TOWN} has ended! {REASON}")
@@ -238,6 +241,28 @@ namespace BannerKings.Behaviours.Feasts
                     }
 
                     InformationManager.DisplayMessage(new InformationMessage(text.ToString()));
+                }
+            }
+        }
+
+        private void AddPiety(Hero hero, bool host = false)
+        {
+            var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+            if (religion == null)
+            {
+                return;
+            }
+
+            if (religion.Faith.FeastType == Type)
+            {
+                if (!host)
+                {
+                    BannerKingsConfig.Instance.ReligionsManager.AddPiety(religion, hero, 15f);
+                }
+                else
+                {
+                    float piety = 20 * Guests.Count * GeneralSatisfaction;
+                    BannerKingsConfig.Instance.ReligionsManager.AddPiety(religion, hero, piety);
                 }
             }
         }
@@ -347,6 +372,7 @@ namespace BannerKings.Behaviours.Feasts
 
         public enum FeastType
         {
+            None,
             Normal,
             Treelore,
             Astaronia
