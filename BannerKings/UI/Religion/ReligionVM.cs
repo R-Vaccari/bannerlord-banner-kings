@@ -94,32 +94,37 @@ namespace BannerKings.UI.Religion
                     new TextObject("{=Ckk2iVKQ}is following the {FAITH}").SetTextVariable("FAITH", heroReligion.Faith.GetFaithName());
 
                 var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
-                Divinity cult = null;
                 if (data != null)
                 {
-                    cult = data.Blessing;
+                    Divinity cult = null;
+                    if (data != null)
+                    {
+                        cult = data.Blessing;
+                    }
+
+                    string cultText = "";
+                    bool indefinitely = data.BlessingEndDate == CampaignTime.Never;
+                    if (cult != null)
+                    {
+                        if (indefinitely)
+                        {
+                            cultText = new TextObject("{=1O1b2s03}They are pledged to {CULT} indefinitely.")
+                                .SetTextVariable("CULT", cult.Name).ToString();
+                        }
+                        else
+                        {
+                            cultText = new TextObject("{=wA81PG4d}They are pledged to {CULT} until {DATE}.")
+                                .SetTextVariable("CULT", cult.Name)
+                                .SetTextVariable("DATE", data.BlessingEndDate.ToString()).ToString();
+                        }
+                    }
+
+                    return baseText.SetTextVariable("RELIGION_TEXT", relText)
+                        .SetTextVariable("CULT_TEXT", cultText)
+                        .ToString();
                 }
 
-                string cultText = "";
-                bool indefinitely = data.BlessingEndDate == CampaignTime.Never;
-                if (cult != null)
-                {
-                    if (indefinitely)
-                    {
-                        cultText = new TextObject("{=1O1b2s03}They are pledged to {CULT} indefinitely.")
-                            .SetTextVariable("CULT", cult.Name).ToString();
-                    }
-                    else
-                    {
-                        cultText = new TextObject("{=wA81PG4d}They are pledged to {CULT} until {DATE}.")
-                            .SetTextVariable("CULT", cult.Name)
-                            .SetTextVariable("DATE", data.BlessingEndDate.ToString()).ToString();
-                    }
-                }
-
-                return baseText.SetTextVariable("RELIGION_TEXT", relText)
-                    .SetTextVariable("CULT_TEXT", cultText)
-                    .ToString();
+                return string.Empty;
             }
         }
 
