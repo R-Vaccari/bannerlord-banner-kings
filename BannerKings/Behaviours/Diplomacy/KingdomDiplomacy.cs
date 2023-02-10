@@ -1,4 +1,6 @@
-﻿using BannerKings.Behaviours.Diplomacy.Wars;
+﻿using BannerKings.Behaviours.Diplomacy.Groups;
+using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Managers.Institutions.Religions;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -11,12 +13,15 @@ namespace BannerKings.Behaviours.Diplomacy
         public Kingdom Kingdom { get; }
         public List<Kingdom> TradePacts { get; private set; }
         public Dictionary<Kingdom, CampaignTime> Truces { get; private set; }
+        public Religion Religion { get; private set; } 
+        public List<InterestGroup> Groups { get; private set; }
 
         public KingdomDiplomacy(Kingdom kingdom)
         {
             Kingdom = kingdom;
             TradePacts = new List<Kingdom>();
             Truces = new Dictionary<Kingdom, CampaignTime>();
+            Groups = new List<InterestGroup>();
         }
 
         public bool HasValidTruce(Kingdom kingdom)
@@ -130,6 +135,20 @@ namespace BannerKings.Behaviours.Diplomacy
             foreach (var kingdom in trucesToDelete)
             {
                 DissolveTruce(kingdom, new TextObject("{=!}The agreed time has expired."));
+            }
+
+            foreach (var group in DefaultInterestGroup.Instance.All)
+            {
+                bool adequate = group.IsAdequateForKingdom(this);
+                if (adequate && !Groups.Contains(group))
+                {
+                    Groups.Add(group.GetCopy());
+                }
+
+                if (!adequate && Groups.Contains(group))
+                {
+                    Groups.Remove(group);
+                }
             }
         }
     }

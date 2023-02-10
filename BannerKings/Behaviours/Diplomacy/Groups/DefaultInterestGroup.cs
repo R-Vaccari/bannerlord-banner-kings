@@ -16,7 +16,17 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         public InterestGroup Gentry { get; } = new InterestGroup("gentry");
         public InterestGroup Guilds { get; } = new InterestGroup("guilds");
         public InterestGroup Commoners { get; } = new InterestGroup("commoners");
-        public override IEnumerable<InterestGroup> All => throw new System.NotImplementedException();
+        public override IEnumerable<InterestGroup> All
+        {
+            get
+            {
+                yield return Royalists;
+                yield return Traditionalists;
+                yield return Oligarchists;
+                yield return Zealots;
+                yield return Commoners;
+            }
+        }
 
         public override void Initialize()
         {
@@ -117,7 +127,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                });
 
             Oligarchists.Initialize(new TextObject("{=!}Oligarchists"),
-               new TextObject("{=!}Oligarchists are noble people of influence concerned, first and foremost, with their own advantage. They continuously seek benefits for themselves or their peers, understanding they are part of the same class. Thus, their interests are often misaligned both with the ruler's, and with the common people."),
+               new TextObject("{=!}Oligarchists are noble people of influence that are concerned, first and foremost, with their own advantage. They continuously seek benefits for themselves or their peers, understanding they are part of the same class. Thus, their interests are often misaligned both with the ruler's, and with the common people."),
                DefaultTraits.Oligarchic,
                false,
                true,
@@ -168,7 +178,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                    DefaultDemands.Instance.LawChange,
                    DefaultDemands.Instance.PolicyChange
                });
-
 
             Commoners.Initialize(new TextObject(),
                 new TextObject(),

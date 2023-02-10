@@ -44,6 +44,7 @@ namespace BannerKings
         public InnovationsManager InnovationsManager { get; private set; }
         public GoalManager GoalManager { get; private set; }
 
+        public BKInterestGroupsModel InterestGroupsModel { get; } = new();
         public BKConstructionModel ConstructionModel { get; } = new();
         public BKInfluenceModel InfluenceModel { get; } = new();
         public BKTitleModel TitleModel { get; } = new();
