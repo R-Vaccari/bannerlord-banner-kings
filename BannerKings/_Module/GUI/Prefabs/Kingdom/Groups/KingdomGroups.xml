@@ -14,9 +14,9 @@
 							
 										<GridWidget Id="InterestGroupsGrid" DataSource="{InterestGroups}" WidthSizePolicy="StretchToParent"
 													HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center"
-													DefaultCellWidth="250" DefaultCellHeight="550" ColumnCount="1" MarginTop="10">
+													DefaultCellWidth="250" DefaultCellHeight="700" ColumnCount="1" MarginTop="10">
 											<ItemTemplate>
-												<ListPanel Id="VerticalList" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="300" 
+												<ListPanel Id="VerticalList" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" SuggestedHeight="300" 
 														   StackLayout.LayoutMethod="VerticalBottomToTop">
 													<Children>
 													
@@ -92,12 +92,40 @@
 																
 															</Children>
 														</ListPanel>
+
+														<GridWidget DataSource="{Headers}" WidthSizePolicy="CoverChildren" 
+																	HeightSizePolicy="Fixed" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+																	SuggestedHeight="150" DefaultCellWidth="160" DefaultCellHeight="110" ColumnCount="5">
+															<ItemTemplate>
+
+																<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent"
+																	WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
+																	<Children>
+																		<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent"
+																			HeightSizePolicy="StretchToParent" SuggestedHeight="15" SuggestedWidth="100"
+																			VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																			Command.HoverEnd="ExecuteEndHint" />
+																		<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed"
+																			SuggestedWidth="250" StackLayout.LayoutMethod="VerticalBottomToTop">
+																			<Children>
+																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="24" Text="@Definition"
+																					MarginBottom="15" />
+																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="36" Text="@Value" />
+																			</Children>
+																		</ListPanel>
+																	</Children>
+																</Widget>
+
+															</ItemTemplate>
+														</GridWidget>
 														
-														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="100"
-																   VerticalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight" DoNotAcceptEvents="false"
-																   MarginTop="30" MarginRight="400" MarginLeft="400">
-															<Children>
-															
+														<GridWidget DataSource="{SecondaryHeaders}" WidthSizePolicy="CoverChildren" 
+																	HeightSizePolicy="StretchToParent" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+																	SuggestedHeight="150" DefaultCellWidth="160" DefaultCellHeight="110" ColumnCount="5">
+															<ItemTemplate>
+
 																<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent"
 																	WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
 																	<Children>
@@ -109,64 +137,23 @@
 																			SuggestedWidth="250" StackLayout.LayoutMethod="VerticalBottomToTop">
 																			<Children>
 																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="24" Text="Influence"
+																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="20" Text="@Definition"
 																					MarginBottom="15" />
 																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="36" Text="25%" />
+																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@Value" />
 																			</Children>
 																		</ListPanel>
 																	</Children>
 																</Widget>
-																
-																<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent"
-																	WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
-																	<Children>
-																		<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent"
-																			HeightSizePolicy="StretchToParent" SuggestedHeight="15" SuggestedWidth="100"
-																			VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
-																			Command.HoverEnd="ExecuteEndHint" />
-																		<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed"
-																			SuggestedWidth="250" StackLayout.LayoutMethod="VerticalBottomToTop">
-																			<Children>
-																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="20" Text="Support"
-																					MarginBottom="15" />
-																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="40%" />
-																			</Children>
-																		</ListPanel>
-																	</Children>
-																</Widget>
-																
-																<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent"
-																	WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
-																	<Children>
-																		<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent"
-																			HeightSizePolicy="StretchToParent" SuggestedHeight="15" SuggestedWidth="100"
-																			VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
-																			Command.HoverEnd="ExecuteEndHint" />
-																		<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed"
-																			SuggestedWidth="250" StackLayout.LayoutMethod="VerticalBottomToTop">
-																			<Children>
-																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="20" Text="Members"
-																					MarginBottom="15" />
-																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="15" />
-																			</Children>
-																		</ListPanel>
-																	</Children>
-																</Widget>
-															
-															</Children>
-														</ListPanel>
+
+															</ItemTemplate>
+														</GridWidget>
 														
-														
-														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="100"
-																   VerticalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight" DoNotAcceptEvents="false"
-																   MarginTop="30" MarginRight="300" MarginLeft="300">
-															<Children>
-															
+														<GridWidget DataSource="{TertiaryHeaders}" WidthSizePolicy="StretchToParent" 
+																	HeightSizePolicy="Fixed" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+																	SuggestedHeight="150" DefaultCellWidth="160" DefaultCellHeight="110" ColumnCount="3"
+																	MarginLeft="300" MarginRight="300">
+															<ItemTemplate>
 																<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent"
 																	WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
 																	<Children>
@@ -174,61 +161,14 @@
 																			HeightSizePolicy="StretchToParent" SuggestedHeight="15" SuggestedWidth="100"
 																			VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
 																			Command.HoverEnd="ExecuteEndHint" />
-																		<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed"
-																			SuggestedWidth="250" StackLayout.LayoutMethod="VerticalBottomToTop">
-																			<Children>
-																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="24" Text="Influence"
+																		<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@Definition"
 																					MarginBottom="15" />
-																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="36" Text="25%" />
-																			</Children>
-																		</ListPanel>
 																	</Children>
 																</Widget>
-																
-																<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent"
-																	WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
-																	<Children>
-																		<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent"
-																			HeightSizePolicy="StretchToParent" SuggestedHeight="15" SuggestedWidth="100"
-																			VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
-																			Command.HoverEnd="ExecuteEndHint" />
-																		<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed"
-																			SuggestedWidth="250" StackLayout.LayoutMethod="VerticalBottomToTop">
-																			<Children>
-																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="20" Text="Support"
-																					MarginBottom="15" />
-																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="40%" />
-																			</Children>
-																		</ListPanel>
-																	</Children>
-																</Widget>
-																
-																<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent"
-																	WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
-																	<Children>
-																		<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent"
-																			HeightSizePolicy="StretchToParent" SuggestedHeight="15" SuggestedWidth="100"
-																			VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
-																			Command.HoverEnd="ExecuteEndHint" />
-																		<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed"
-																			SuggestedWidth="250" StackLayout.LayoutMethod="VerticalBottomToTop">
-																			<Children>
-																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="20" Text="Members"
-																					MarginBottom="15" />
-																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="15" />
-																			</Children>
-																		</ListPanel>
-																	</Children>
-																</Widget>
-															
-															</Children>
-														</ListPanel>
+															</ItemTemplate>
+														</GridWidget>
+
 
 														<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7"
 																MarginLeft="250" MarginRight="250" MarginTop="20" VerticalAlignment="Center"

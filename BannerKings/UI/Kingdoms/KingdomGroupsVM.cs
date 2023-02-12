@@ -37,7 +37,7 @@ namespace BannerKings.UI.Kingdoms
             {
                 foreach (var group in KingdomDiplomacy.Groups)
                 {
-                    InterestGroups.Add(new InterestGroupVM(group));
+                    InterestGroups.Add(new InterestGroupVM(group, KingdomDiplomacy));
                 }
 
                 foreach (var item in InterestGroups)

@@ -1,13 +1,137 @@
 ﻿using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Managers.Titles;
+using BannerKings.Utils.Extensions;
 using BannerKings.Utils.Models;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
 {
     public class BKInterestGroupsModel
     {
+        public BKExplainedNumber CalculateGroupInfluence(InterestGroup group, KingdomDiplomacy diplomacy, bool explanations = false)
+        {
+            var result = new BKExplainedNumber(0f, explanations);
+            result.LimitMin(0f);
+            result.LimitMax(1f);
+
+            float totalPower = 0;
+            foreach (var settlement in diplomacy.Kingdom.Settlements)
+            {
+                if (settlement.Notables != null)
+                {
+                    foreach (var notable in settlement.Notables)
+                    {
+                        totalPower += notable.Power;
+                    }
+                }
+            }
+
+            float totalStrength = 0f;
+            foreach (var clan in diplomacy.Kingdom.Clans)
+            {
+                totalStrength += Campaign.Current.Models.DiplomacyModel.GetClanStrength(clan);
+            }
+
+            foreach (var member in group.Members)
+            {
+                if (member.IsNotable)
+                {
+                    result.Add(0.25f * (member.Power / totalPower), member.Name);
+                }
+
+                if (member.Clan != null && member.IsClanLeader())
+                {
+                    float strength = Campaign.Current.Models.DiplomacyModel.GetClanStrength(member.Clan);
+                    result.Add(0.75f * (strength / totalStrength), member.Clan.Name);
+                }
+            }
+
+            return result;
+        }
+
+        public BKExplainedNumber CalculateGroupSupport(InterestGroup group, KingdomDiplomacy diplomacy, bool explanations = false)
+        {
+            var result = new BKExplainedNumber(0f, explanations);
+            result.LimitMin(0f);
+            result.LimitMax(1f);
+            Hero sovereign = diplomacy.Kingdom.Leader;
+            if (group.Leader != null)
+            {
+                result.Add(0.25f * group.Leader.GetRelation(sovereign) * 0.01f, new TextObject("{=uYDaqbt6}Approval by {HERO}")
+                    .SetTextVariable("HERO", group.Leader.Name));
+            }
+
+            float approval = 0f;
+            foreach (var member in group.Members)
+            {
+                if (member != group.Leader)
+                {
+                    approval += (0.25f / group.Members.Count) * member.GetRelation(sovereign) * 0.01f;
+                }
+            }
+            result.Add(approval, new TextObject("{=!}Approval by group members"));
+
+            float supportedPolicies = 0f;
+            int supportedPoliciesCount = 0;
+            foreach (var policy in group.SupportedPolicies)
+            {
+                if (diplomacy.Kingdom.ActivePolicies.Contains(policy))
+                {
+                    supportedPolicies += 0.25f / group.SupportedPolicies.Count;
+                    supportedPoliciesCount++;
+                }
+            }
+            result.Add(supportedPolicies, new TextObject("{=!}Endorsed policies active (x{COUNT})")
+                .SetTextVariable("COUNT", supportedPoliciesCount));
+
+            float shunnedPolicies = 0f;
+            int shunnedPoliciesCount = 0;
+            foreach (var policy in group.ShunnedPolicies)
+            {
+                if (diplomacy.Kingdom.ActivePolicies.Contains(policy))
+                {
+                    shunnedPolicies += -0.25f / group.ShunnedPolicies.Count;
+                    shunnedPoliciesCount++;
+                }
+            }
+            result.Add(-shunnedPolicies, new TextObject("{=!}Shunned policies active (x{COUNT})")
+                .SetTextVariable("COUNT", shunnedPoliciesCount));
+
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(diplomacy.Kingdom);
+            if (title != null)
+            {
+                float supportedLaws = 0f;
+                int supportedLawsCount = 0;
+                foreach (var law in group.SupportedLaws)
+                {
+                    if (title.contract.IsLawEnacted(law))
+                    {
+                        supportedLaws += 0.25f / group.SupportedLaws.Count;
+                        supportedLawsCount++;
+                    }
+                }
+                result.Add(supportedLaws, new TextObject("{=!}Endorsed laws active (x{COUNT})")
+                    .SetTextVariable("COUNT", supportedLawsCount));
+
+                float shunnedLaws = 0f;
+                int shunnedLawsCount = 0;
+                foreach (var law in group.ShunnedLaws)
+                {
+                    if (title.contract.IsLawEnacted(law))
+                    {
+                        shunnedLaws += 0.25f / group.ShunnedLaws.Count;
+                        shunnedLawsCount++;
+                    }
+                }
+                result.Add(-shunnedLaws, new TextObject("{=!}Shunned laws active (x{COUNT})")
+                    .SetTextVariable("COUNT", shunnedLawsCount));
+            }
+
+            return result;
+        }
+
         public BKExplainedNumber CalculateHeroInfluence(InterestGroup group, Hero hero, bool explanations = false)
         {
             var result = new BKExplainedNumber(0f, explanations);
@@ -46,24 +170,34 @@ namespace BannerKings.Models.BKModels
                 return result;
             }
 
+            if (hero.IsChild || hero.IsDead)
+            {
+                return result;
+            }
+
             if (group.Equals(DefaultInterestGroup.Instance.Royalists))
             {
                 Hero leader = hero.MapFaction.Leader;
                 float relation = hero.GetRelation(leader);
-                result.Add(relation * 0.3f);
+                result.Add(relation * 0.003f);
             }
 
             if (group.Equals(DefaultInterestGroup.Instance.Traditionalists))
             {
                 Hero leader = hero.MapFaction.Leader;
                 float relation = hero.GetRelation(leader);
-                result.Add(relation * 0.1f);
-                result.Add(hero.Clan.Tier * 0.2f);
+                result.Add(relation * 0.001f);
+                result.Add(hero.Clan.Tier * 0.02f);
+
+                if (hero.Culture == hero.MapFaction.Culture)
+                {
+                    result.Add(0.1f);
+                }
             }
 
             if (group.Equals(DefaultInterestGroup.Instance.Oligarchists))
             {
-                result.Add(hero.Clan.Tier * 0.5f);
+                result.Add(hero.Clan.Tier * 0.05f);
                 var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
                 if (title != null)
                 {
