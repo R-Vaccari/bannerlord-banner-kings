@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers;
 using BannerKings.Managers.AI;
@@ -114,6 +115,7 @@ namespace BannerKings
             DefaultLifestyles.Instance.Initialize();
             DefaultDemesneLaws.Instance.Initialize();
             DefaultCasusBelli.Instance.Initialize();
+            DefaultInterestGroup.Instance.Initialize();
         }
 
         public void InitManagers()

@@ -1,12 +1,9 @@
 ﻿using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Titles.Laws;
-using BannerKings.Utils.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups
@@ -34,6 +31,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             ShunnedLaws = shunnedLaws;
             SupportedCasusBelli = supportedCasusBelli;
             PossibleDemands = possibleDemands;
+
+            Members = new List<Hero>();
         }
 
         public InterestGroup GetCopy()
@@ -52,16 +51,28 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         public Hero Leader { get; private set; }
         public List<Hero> Members { get; private set; }
 
+        public void AddMember(Hero hero)
+        {
+            if (hero != null)
+            {
+                Members.Add(hero);
+            }
+        }
+
         public void SetNewLeader()
         {
             var dictionary = new Dictionary<Hero, float>();
             foreach (var member in Members)
             {
-                dictionary.Add(member, CalculateHeroInfluence(member).ResultNumber);
+                dictionary.Add(member, BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroInfluence(this, member)
+                    .ResultNumber);
             }
 
-            Hero hero = dictionary.FirstOrDefault(x => x.Value == dictionary.Max().Value).Key;
-            Leader = hero;
+            if (dictionary.Count > 0)
+            {
+                Hero hero = dictionary.FirstOrDefault(x => x.Value == dictionary.Values.Max()).Key;
+                Leader = hero;
+            }
         }
 
         public bool DemandsCouncil { get; private set; }

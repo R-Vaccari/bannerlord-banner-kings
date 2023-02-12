@@ -1,3 +1,4 @@
+using BannerKings.Behaviours.Diplomacy;
 using BannerKings.UI.Court;
 using BannerKings.UI.Kingdoms;
 using Bannerlord.UIExtenderEx.Attributes;
@@ -13,10 +14,11 @@ namespace BannerKings.UI.Extensions
     internal class KingdomManagementMixin : BaseViewModelMixin<KingdomManagementVM>
     {
         private readonly KingdomManagementVM kingdomManagement;
-        private bool courtSelected, courtEnabled, demesneSelected, demesneEnabled, careerSelected,
-            showCareer;
+        private bool courtSelected, courtEnabled, demesneSelected, demesneEnabled, groupsEnabled,
+            groupsSelected;
         private CourtVM courtVM;
         private KingdomDemesneVM demesneVM;
+        private KingdomGroupsVM groupsVM;
 
         public KingdomManagementMixin(KingdomManagementVM vm) : base(vm)
         {
@@ -29,11 +31,17 @@ namespace BannerKings.UI.Extensions
             //var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(vm.Kingdom);
             CourtEnabled = true;
             kingdomManagement.RefreshValues();
+
+            var diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(vm.Kingdom);
+            Groups = new KingdomGroupsVM(diplomacy);
+            GroupsEnabled = diplomacy != null;
         }
 
         [DataSourceProperty] public string DemesneText => new TextObject("{=6QMDGRSt}Demesne").ToString();
         [DataSourceProperty] public string CourtText => new TextObject("{=2QGyA46m}Court").ToString();
         [DataSourceProperty] public string CareerText => new TextObject("{=WmzEL8hL}Career").ToString();
+        [DataSourceProperty] public string GroupsText => new TextObject("{=!}Groups").ToString();
+        
 
         [DataSourceProperty]
         public bool DemesneSelected
@@ -92,6 +100,34 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty]
+        public bool GroupsEnabled
+        {
+            get => groupsEnabled;
+            set
+            {
+                if (value != groupsEnabled)
+                {
+                    groupsEnabled = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool GroupsSelected
+        {
+            get => groupsSelected;
+            set
+            {
+                if (value != groupsSelected)
+                {
+                    groupsSelected = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
         public CourtVM Court
         {
             get => courtVM;
@@ -114,6 +150,20 @@ namespace BannerKings.UI.Extensions
                 if (value != demesneVM)
                 {
                     demesneVM = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public KingdomGroupsVM Groups
+        {
+            get => groupsVM;
+            set
+            {
+                if (value != groupsVM)
+                {
+                    groupsVM = value;
                     ViewModel!.OnPropertyChangedWithValue(value);
                 }
             }
@@ -162,6 +212,7 @@ namespace BannerKings.UI.Extensions
 
             Court.RefreshValues();
             Demesne?.RefreshValues();
+            Groups.RefreshValues();
             if (kingdomManagement.Clan.Show || kingdomManagement.Settlement.Show || kingdomManagement.Policy.Show ||
                 kingdomManagement.Army.Show || kingdomManagement.Diplomacy.Show)
             {
@@ -173,6 +224,9 @@ namespace BannerKings.UI.Extensions
                 {
                     Demesne.IsSelected = false;
                 }
+
+                Groups.IsSelected = false;
+                GroupsSelected = false;
             }
         }
 
@@ -194,6 +248,9 @@ namespace BannerKings.UI.Extensions
             Court.IsSelected = true;
             CourtSelected = true;
 
+            GroupsSelected = false;
+            Groups.IsSelected = false;
+
             kingdomManagement.RefreshValues();
         }
 
@@ -212,10 +269,38 @@ namespace BannerKings.UI.Extensions
                 Demesne.IsSelected = true;
                 Court.IsSelected = false;
                 CourtSelected = false;
+
+                GroupsSelected = false;
+                Groups.IsSelected = false;
             }
 
             kingdomManagement.RefreshValues();
         }
+
+        [DataSourceMethod]
+        public void SelectGroups()
+        {
+            if (Demesne != null)
+            {
+                kingdomManagement.Clan.Show = false;
+                kingdomManagement.Settlement.Show = false;
+                kingdomManagement.Policy.Show = false;
+                kingdomManagement.Army.Show = false;
+                kingdomManagement.Diplomacy.Show = false;
+
+                DemesneSelected = false;
+                Demesne.IsSelected = false;
+                Court.IsSelected = false;
+                CourtSelected = false;
+
+                GroupsSelected = true;
+                Groups.IsSelected = true;
+            }
+
+            kingdomManagement.RefreshValues();
+        }
+
+        
 
         [DataSourceMethod]
         public void SelectCareer()

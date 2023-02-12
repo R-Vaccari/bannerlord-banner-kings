@@ -33,9 +33,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             Royalists.Initialize(new TextObject("{=!}Royalists"),
                 new TextObject("{=!}The royalists are those who support the royal administration. They favor the sovereign even over themselves, be for true loyalty or for the prospect of compensation. Royalists support everything that benefits the royal administration regardless of impacts on other groups."),
                 DefaultTraits.Authoritarian,
-                false,
                 true,
-                false,
+                true,
+                true,
                 new List<Occupation>()
                 {
                 },
@@ -79,9 +79,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             Traditionalists.Initialize(new TextObject("{=!}Traditionalists"),
                new TextObject("{=!}Traditionalists support the status quo and the way of the ancestors. More than anything, they believe in strength. While they recognize the necessity for a strong ruler, they also do the necessity of liberty for the noble classes. They aim for a balance of power between the sovereign and their vassals, a continuation of old traditions and exerting power through force."),
                DefaultTraits.Authoritarian,
-               false,
                true,
                false,
+               true,
                new List<Occupation>()
                {
                },
@@ -129,11 +129,12 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             Oligarchists.Initialize(new TextObject("{=!}Oligarchists"),
                new TextObject("{=!}Oligarchists are noble people of influence that are concerned, first and foremost, with their own advantage. They continuously seek benefits for themselves or their peers, understanding they are part of the same class. Thus, their interests are often misaligned both with the ruler's, and with the common people."),
                DefaultTraits.Oligarchic,
-               false,
                true,
                false,
+               true,
                new List<Occupation>()
                {
+                   Occupation.Lord
                },
                new List<PolicyObject>()
                {
@@ -179,7 +180,61 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                    DefaultDemands.Instance.PolicyChange
                });
 
-            Commoners.Initialize(new TextObject(),
+            Zealots.Initialize(new TextObject("{=!}Zealots"),
+                new TextObject(),
+                DefaultTraits.Generosity,
+                true,
+                true,
+                true,
+                new List<Occupation>()
+                {
+                    Occupation.Headman
+                },
+                new List<PolicyObject>()
+                {
+                    DefaultPolicies.Citizenship,
+                    DefaultPolicies.ForgivenessOfDebts,
+                    DefaultPolicies.GrazingRights,
+                    DefaultPolicies.TribunesOfThePeople,
+                    DefaultPolicies.LandGrantsForVeterans,
+                    DefaultPolicies.CouncilOfTheCommons,
+                    DefaultPolicies.HuntingRights,
+                    DefaultPolicies.CharterOfLiberties,
+                    DefaultPolicies.TrialByJury
+                },
+                new List<PolicyObject>()
+                {
+                    DefaultPolicies.WarTax,
+                    DefaultPolicies.RoadTolls,
+                    DefaultPolicies.Serfdom
+                },
+                new List<DemesneLaw>()
+                {
+                    DefaultDemesneLaws.Instance.SlaveryManumission,
+                    DefaultDemesneLaws.Instance.SerfsLaxDuties,
+                    DefaultDemesneLaws.Instance.CraftsmenLaxDuties
+                },
+                new List<DemesneLaw>()
+                {
+                    DefaultDemesneLaws.Instance.SlaveryAserai,
+                    DefaultDemesneLaws.Instance.SlaveryStandard,
+                    DefaultDemesneLaws.Instance.SlaveryVlandia,
+                    DefaultDemesneLaws.Instance.SerfsAgricultureDuties,
+                    DefaultDemesneLaws.Instance.SerfsMilitaryServiceDuties,
+                    DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties,
+                    DefaultDemesneLaws.Instance.CraftsmenTaxDuties
+                },
+                new List<CasusBelli>()
+                {
+                    DefaultCasusBelli.Instance.CulturalLiberation
+                },
+                new List<Demand>()
+                {
+                    DefaultDemands.Instance.LawChange,
+                    DefaultDemands.Instance.PolicyChange
+                });
+
+            Commoners.Initialize(new TextObject("{=!}Commoners"),
                 new TextObject(),
                 DefaultTraits.Generosity,
                 false,

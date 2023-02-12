@@ -121,6 +121,19 @@ namespace BannerKings.Behaviours.Diplomacy
             }
         }
 
+        public InterestGroup GetHeroGroup(Hero hero)
+        {
+            foreach (var group in Groups)
+            {
+                if (group.Members.Contains(hero))
+                {
+                    return group;
+                }
+            }
+
+            return null;
+        }
+
         public void Update()
         {
             var trucesToDelete = new List<Kingdom>();
@@ -139,7 +152,7 @@ namespace BannerKings.Behaviours.Diplomacy
 
             foreach (var group in DefaultInterestGroup.Instance.All)
             {
-                bool adequate = group.IsAdequateForKingdom(this);
+                bool adequate = BannerKingsConfig.Instance.InterestGroupsModel.IsGroupAdequateForKingdom(this, group);
                 if (adequate && !Groups.Contains(group))
                 {
                     Groups.Add(group.GetCopy());
@@ -148,6 +161,50 @@ namespace BannerKings.Behaviours.Diplomacy
                 if (!adequate && Groups.Contains(group))
                 {
                     Groups.Remove(group);
+                }
+            }
+
+            foreach (var clan in Kingdom.Clans)
+            {
+                if (clan.IsUnderMercenaryService)
+                {
+                    continue;
+                }
+
+                foreach (var member in clan.Lords)
+                {
+                    if (member == Hero.MainHero) continue;
+                    EvaluateJoinAGroup(member);
+                }
+            }
+
+            foreach (var settlement in Kingdom.Settlements)
+            {
+                if (settlement.Notables != null)
+                {
+                    foreach (var notable in settlement.Notables)
+                    {
+                        EvaluateJoinAGroup(notable);
+                    }
+                }
+            }
+        }
+
+        private void EvaluateJoinAGroup(Hero hero)
+        {
+            InterestGroup currentGroup = GetHeroGroup(hero);
+            if (currentGroup == null) // && MBRandom.RandomFloat < 0.05f
+            {
+                foreach (var group in Groups)
+                {
+                    float chance = BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroJoinChance(hero, group)
+                        .ResultNumber;
+                    if (MBRandom.RandomFloat < chance)
+                    {
+                        group.AddMember(hero);
+                        group.SetNewLeader();
+                        break;
+                    }
                 }
             }
         }

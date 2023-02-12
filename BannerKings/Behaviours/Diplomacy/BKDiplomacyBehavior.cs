@@ -96,6 +96,11 @@ namespace BannerKings.Behaviours.Diplomacy
             {
                 war.Update();
             }
+
+            foreach (var pair in kingdomDiplomacies)
+            {
+                pair.Value.Update();
+            }
         }
 
         private void OnNewGameCreated(CampaignGameStarter starter)
