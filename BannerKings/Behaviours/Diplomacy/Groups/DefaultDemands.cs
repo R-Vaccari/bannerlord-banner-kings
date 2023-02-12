@@ -16,7 +16,51 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
         public override void Initialize()
         {
-            CouncilPosition.Initialize(new TextObject("{=!}Council Position"),
+            CouncilPosition.Initialize(new TextObject("{=!}Demand Council Position"),
+                new TextObject("{=!}"),
+                true,
+                (InterestGroup group) =>
+                {
+                    return true;
+                },
+                new List<Demand.DemandResponse>()
+                {
+                    new Demand.DemandResponse(new TextObject(),
+                    new TextObject(),
+                    0,
+                    (Hero fulfiller) =>
+                    {
+                        return true;
+                    },
+                    (InterestGroup group, Hero fulfiller) =>
+                    {
+
+                    })
+                });
+
+            LawChange.Initialize(new TextObject("{=!}Demand Law Change"),
+                new TextObject("{=!}"),
+                true,
+                (InterestGroup group) =>
+                {
+                    return true;
+                },
+                new List<Demand.DemandResponse>()
+                {
+                    new Demand.DemandResponse(new TextObject(),
+                    new TextObject(),
+                    0,
+                    (Hero fulfiller) =>
+                    {
+                        return true;
+                    },
+                    (InterestGroup group, Hero fulfiller) =>
+                    {
+
+                    })
+                });
+
+            PolicyChange.Initialize(new TextObject("{=!}Demand Policy Change"),
                 new TextObject("{=!}"),
                 true,
                 (InterestGroup group) =>

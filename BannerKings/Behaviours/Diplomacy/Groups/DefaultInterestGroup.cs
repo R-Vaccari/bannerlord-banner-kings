@@ -81,7 +81,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                new TextObject("{=!}Traditionalists support the status quo and the way of the ancestors. More than anything, they believe in strength. While they recognize the necessity for a strong ruler, they also do the necessity of liberty for the noble classes. They aim for a balance of power between the sovereign and their vassals, a continuation of old traditions and exerting power through force."),
                BKTraits.Instance.Conservative,
                true,
-               false,
+               true,
                true,
                new List<Occupation>()
                {
@@ -110,11 +110,16 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                },
                new List<DemesneLaw>()
                {
-                    DefaultDemesneLaws.Instance.SlaveryManumission
+                    DefaultDemesneLaws.Instance.NoblesMilitaryServiceDuties,
+                    DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties,
+                    DefaultDemesneLaws.Instance.SerfsMilitaryServiceDuties
                },
                new List<DemesneLaw>()
                {
-                    DefaultDemesneLaws.Instance.SlaveryManumission
+                    DefaultDemesneLaws.Instance.SlaveryManumission,
+                    DefaultDemesneLaws.Instance.NoblesLaxDuties,
+                    DefaultDemesneLaws.Instance.CraftsmenLaxDuties,
+                    DefaultDemesneLaws.Instance.SerfsLaxDuties
                },
                new List<CasusBelli>()
                {
