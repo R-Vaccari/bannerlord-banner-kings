@@ -1,5 +1,8 @@
 ﻿using BannerKings.Behaviours.Diplomacy.Groups;
+using System.Linq;
+using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace BannerKings.UI.Kingdoms
 {
@@ -7,6 +10,7 @@ namespace BannerKings.UI.Kingdoms
     {
         private MBBindingList<GroupMemberVM> members;
         private GroupMemberVM leader;
+        private bool isEmpty;
         public InterestGroup Group { get; }
 
         public InterestGroupVM(InterestGroup interestGroup)
@@ -15,7 +19,23 @@ namespace BannerKings.UI.Kingdoms
             Members = new MBBindingList<GroupMemberVM>();
         }
 
+        [DataSourceProperty] public string LeaderText => new TextObject("{=SrfYbg3x}Leader").ToString();
         [DataSourceProperty] public string GroupName => Group.Name.ToString();
+        [DataSourceProperty] public HintViewModel Hint => new HintViewModel(Group.Description);
+
+        [DataSourceProperty]
+        public bool IsEmpty
+        {
+            get => isEmpty;
+            set
+            {
+                if (value != isEmpty)
+                {
+                    isEmpty = value;
+                    OnPropertyChangedWithValue(value, "IsEmpty");
+                }
+            }
+        }
 
         [DataSourceProperty]
         public GroupMemberVM Leader
@@ -49,8 +69,13 @@ namespace BannerKings.UI.Kingdoms
         {
             base.RefreshValues();
             Members.Clear();
-            Leader = new GroupMemberVM(Group.Leader, true);
-            foreach (var member in Group.Members)
+            IsEmpty = Group.Members.Count == 0;
+            if (Group.Leader != null)
+            {
+                Leader = new GroupMemberVM(Group.Leader, true);
+            }
+
+            foreach (var member in Group.GetSortedMembers().Take(5))
             {
                 if (member != Leader.Hero)
                 {

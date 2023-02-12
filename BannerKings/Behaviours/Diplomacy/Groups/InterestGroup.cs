@@ -75,6 +75,25 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             }
         }
 
+        public List<Hero> GetSortedMembers()
+        {
+            var list = new List<Hero>(Members);
+            if (Leader != null)
+            {
+                list.Remove(Leader);
+            }
+
+            var dictionary = new Dictionary<Hero, float>();
+            foreach (var member in Members)
+            {
+                dictionary.Add(member, BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroInfluence(this, member)
+                    .ResultNumber);
+            }
+
+            list.Sort((x, y) => dictionary[x].CompareTo(dictionary[y]));
+            return list;
+        }
+
         public bool DemandsCouncil { get; private set; }
         public bool AllowsCommoners { get; private set; }
         public bool AllowsNobles { get; private set; }

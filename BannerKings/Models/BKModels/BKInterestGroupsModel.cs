@@ -53,6 +53,14 @@ namespace BannerKings.Models.BKModels
                 result.Add(relation * 0.3f);
             }
 
+            if (group.Equals(DefaultInterestGroup.Instance.Traditionalists))
+            {
+                Hero leader = hero.MapFaction.Leader;
+                float relation = hero.GetRelation(leader);
+                result.Add(relation * 0.1f);
+                result.Add(hero.Clan.Tier * 0.2f);
+            }
+
             if (group.Equals(DefaultInterestGroup.Instance.Oligarchists))
             {
                 result.Add(hero.Clan.Tier * 0.5f);

@@ -1,5 +1,6 @@
 ﻿using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Managers.Traits;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -78,12 +79,13 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
             Traditionalists.Initialize(new TextObject("{=!}Traditionalists"),
                new TextObject("{=!}Traditionalists support the status quo and the way of the ancestors. More than anything, they believe in strength. While they recognize the necessity for a strong ruler, they also do the necessity of liberty for the noble classes. They aim for a balance of power between the sovereign and their vassals, a continuation of old traditions and exerting power through force."),
-               DefaultTraits.Authoritarian,
+               BKTraits.Instance.Conservative,
                true,
                false,
                true,
                new List<Occupation>()
                {
+                   Occupation.Lord
                },
                new List<PolicyObject>()
                {
