@@ -1,9 +1,11 @@
 using BannerKings.Managers.Buildings;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -101,6 +103,12 @@ namespace BannerKings.Models.BKModels
                     var acceptance = data.CultureData.GetAcceptance(converter.Culture);
                     result.AddFactor(1f - acceptance);
                 }
+            }
+
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(converter,
+                DefaultDivinities.Instance.DarusosianMain)) 
+            {
+                result.AddFactor(-0.3f, DefaultDivinities.Instance.DarusosianMain.Name);
             }
 
             return result;

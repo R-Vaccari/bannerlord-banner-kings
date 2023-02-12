@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -9,13 +10,14 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 {
-    public class DarusosianExecution : Rite
+    public class DarusosianExecution : ContextualRite
     {
         private Hero input;
 
         public override void Execute(Hero executor)
         {
-            if (!MeetsCondition(executor))
+            TextObject reason;
+            if (!MeetsCondition(executor, out reason))
             {
                 return;
             }
@@ -105,15 +107,37 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             return list;
         }
 
-        public override bool MeetsCondition(Hero hero)
+        public override bool MeetsCondition(Hero hero, out TextObject reason)
         {
+            reason = new TextObject("{=oo3xtFfT}This rite is available to be performed.");
             var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
+            bool baseResult = hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
+                             data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero));
             var hasTarget = GetAdequateSacrifices(hero).Count > 0;
             
+            if (!baseResult)
+            {
+                reason = new TextObject("{=NZyz0ChH}Not enough time ({YEARS} years) have passed since the last rite of this type was performed.")
+                    .SetTextVariable("YEARS", GetTimeInterval(hero).ToString("0.0"));
+            }
 
-            return hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && data != null && 
-                data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero)) && hasTarget &&
-                hero.Clan.Kingdom != null && hero.Clan.Kingdom.StringId == "empire_s";
+            if (!hasTarget)
+            {
+                var kingdom = Kingdom.All.FirstOrDefault(x => x.StringId == "empire_s");
+                TextObject name = kingdom != null ? kingdom.Name : new TextObject("{=frBQ9mbP}Southern Empire");
+                reason = new TextObject("{=u3xzCV63}You have no lord prisoners from Imperial contestors of the {KINGDOM}.")
+                    .SetTextVariable("KINGDOM", name);
+            }
+
+            bool southernEmpire = hero.Clan.Kingdom.StringId == "empire_s";
+            if (!southernEmpire)
+            {
+                var kingdom = Kingdom.All.FirstOrDefault(x => x.StringId == "empire_s");
+                reason = new TextObject("{=H6CdxwrS}You are not part of the {KINGDOM}.")
+                    .SetTextVariable("KINGDOM", kingdom != null ? kingdom.Name : new TextObject("{=frBQ9mbP}Southern Empire"));
+            }
+
+            return baseResult && hasTarget && southernEmpire;
         }
 
         public override TextObject GetDescription()

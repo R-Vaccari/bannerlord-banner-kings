@@ -696,7 +696,7 @@ namespace BannerKings.Managers.Court
                             break;
                         case CouncilPosition.Spymaster:
                             primarySkill = member.GetSkillValue(DefaultSkills.Roguery);
-                            secondarySkill = member.GetSkillValue(DefaultSkills.Scouting);
+                            secondarySkill = member.GetSkillValue(BKSkills.Instance.Lordship);
                             break;
                         case CouncilPosition.Castellan:
                             primarySkill = member.GetSkillValue(DefaultSkills.Steward);

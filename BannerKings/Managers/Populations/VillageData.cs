@@ -22,6 +22,7 @@ namespace BannerKings.Managers.Populations
             }
 
             inProgress = new Queue<Building>();
+            LastPayment = 0;
         }
 
         [SaveableProperty(1)] private Village village { get; set; }

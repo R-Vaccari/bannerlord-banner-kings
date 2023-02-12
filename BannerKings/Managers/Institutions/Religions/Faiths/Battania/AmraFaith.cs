@@ -9,6 +9,17 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
 {
     public class AmraFaith : PolytheisticFaith
     {
+        public override bool IsCultureNaturalFaith(CultureObject culture)
+        {
+            if (culture.StringId == "battania")
+            {
+                return true;
+            }
+
+            return false;
+        }
+        public override bool IsHeroNaturalFaith(Hero hero) => IsCultureNaturalFaith(hero.Culture);
+
         public override TextObject GetFaithName()
         {
             return new TextObject("{=fkHLNjpR}Amra Ollamh");
@@ -277,11 +288,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
             return mainGod;
         }
 
-        public override TextObject GetMainDivinitiesDescription()
-        {
-            return new TextObject("{=iYqD0kQM}Great Spirits");
-        }
-
         public override int GetMaxClergyRank()
         {
             return 2;
@@ -307,7 +313,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
             return pantheon.GetReadOnlyList();
         }
 
-        public override TextObject GetSecondaryDivinitiesDescription()
+        public override TextObject GetCultsDescription()
         {
             return new TextObject("{=CXQJSwOR}Spirits");
         }
@@ -336,5 +342,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
         {
             return new TextObject("{=bd7HQSJH}pledge an oath to.");
         }
+
+        public override TextObject GetInductionExplanationText() => new TextObject("{=m5CCxwmx}Only Battanians with 50 or more roguery are accepted.");
     }
 }

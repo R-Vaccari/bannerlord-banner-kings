@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Wars;
@@ -30,6 +31,8 @@ namespace BannerKings
         public const string VersionNumber = "1.2.6.1";
         public const string VersionEdition = "Development";
         public string VersionName => VersionNumber + VersionEdition;
+
+        private List<ITypeInitializer> modInitializers = new List<ITypeInitializer>();
 
         public bool FirstUse { get; private set; } = true;
 
@@ -80,25 +83,30 @@ namespace BannerKings
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
 
+        public void AddInitializer(ITypeInitializer init)
+        {
+            if (init != null)
+            {
+                modInitializers.Add(init);
+            }
+        }
+
         public void InitializeManagersFirstTime()
         {
-            if (FirstUse)
+            InitManagers();
+            foreach (var settlement in Settlement.All.Where(settlement => settlement.IsVillage || settlement.IsTown || settlement.IsCastle))
             {
-                InitManagers();
-                foreach (var settlement in Settlement.All.Where(settlement => settlement.IsVillage || settlement.IsTown || settlement.IsCastle))
-                {
-                    PopulationManager.InitializeSettlementPops(settlement);
-                }
+                PopulationManager.InitializeSettlementPops(settlement);
+            }
 
-                foreach (var clan in Clan.All.Where(clan => !clan.IsEliminated && !clan.IsBanditFaction))
-                {
-                    CourtManager.CreateCouncil(clan);
-                }
+            foreach (var clan in Clan.All.Where(clan => !clan.IsEliminated && !clan.IsBanditFaction))
+            {
+                CourtManager.CreateCouncil(clan);
+            }
 
-                foreach (var hero in Hero.AllAliveHeroes)
-                {
-                    EducationManager.InitHeroEducation(hero);
-                }
+            foreach (var hero in Hero.AllAliveHeroes)
+            {
+                EducationManager.InitHeroEducation(hero);
             }
 
             FirstUse = false;
@@ -114,6 +122,11 @@ namespace BannerKings
             DefaultBookTypes.Instance.Initialize();
             DefaultLifestyles.Instance.Initialize();
             DefaultDemesneLaws.Instance.Initialize();
+            DefaultReligions.Instance.Initialize();
+            foreach (ITypeInitializer init in modInitializers)
+            {
+                init.Initialize();
+            }
             DefaultCasusBelli.Instance.Initialize();
             DefaultInterestGroup.Instance.Initialize();
         }

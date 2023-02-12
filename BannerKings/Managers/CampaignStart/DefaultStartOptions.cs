@@ -50,16 +50,13 @@ namespace BannerKings.Managers.CampaignStart
             IndebtedLord = new StartOption("start_lord");
             IndebtedLord.Initialize(new TextObject("{=2VoYzCNj}Indebted Lord"),
                 new TextObject("{=P1rwCkZJ}After a series of inherited problems and bad decisions, you find yourself in debt. Thankfuly, you are a landed lord, with income from your Lordship. A food supply and a small retinue accompany you, though their loyalty will be tested by the lack of denars..."),
-                new TextObject("{=qGzc0y7c}Start as a lord in a kingdom, with a Lordship title. No settlement income or influence for 5 years. The village you own can be managed by you, and you will receive it's income after 5 years. Gain Scholarship skill."),
+                new TextObject("{=CiWCMaQV}Start as a lord in a kingdom, with a Lordship title. Redcued influence for 5 years. The village you own can be managed by you. Gain Scholarship skill."),
                 0, 25, 10, 50, -50f,
                 () =>
                 {
                     var items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
                     var sumpter = items.FirstOrDefault(x => x.StringId == "sumpter_horse");
-
-                    var templates = Game.Current.ObjectManager.GetObjectTypeList<PartyTemplateObject>();
-                    var template = templates.First(x =>
-                        x.StringId == "kingdom_hero_party_" + Hero.MainHero.Culture.StringId + "_template");
+                    var template = Hero.MainHero.Culture.DefaultPartyTemplate;
 
                     var roster = MobileParty.MainParty.MemberRoster;
                     for (var i = 0; i < 10; i++)

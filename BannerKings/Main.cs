@@ -113,6 +113,8 @@ namespace BannerKings
             campaignStarter.AddModel(new BKKingdomDecisionModel());
             campaignStarter.AddModel(new BKDiplomacyModel());
             campaignStarter.AddModel(new BKPartyFoodBuyingModel());
+            campaignStarter.AddModel(new BKPregnancyModel());
+            //campaignStarter.AddModel(new BKPrisonerRecruitmentModel());
             campaignStarter.AddModel(new BKTargetScoreModel());
             //campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
 

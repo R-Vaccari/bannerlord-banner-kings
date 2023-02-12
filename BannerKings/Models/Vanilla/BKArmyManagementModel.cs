@@ -20,13 +20,18 @@ namespace BannerKings.Models.Vanilla
                     return true;
                 }
 
+                var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
+                if (armyLeader == council.Marshall)
+                {
+                    return true;
+                }
+
                 var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(armyLeader);
                 if (title != null)
                 {
                     if (kingdom.ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
                     {
-                        var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
-                        if (title.type <= TitleType.Dukedom || armyLeader == council.Marshall)
+                        if (title.type <= TitleType.Dukedom)
                         {
                             return true;
                         }

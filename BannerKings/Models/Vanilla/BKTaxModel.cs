@@ -111,25 +111,26 @@ namespace BannerKings.Models.Vanilla
 
                     if (nobles > 0f)
                     {
-                        baseResult.Add(MBMath.ClampFloat(nobles * GetNobleOutput(title), 0f, 50000f),
-                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=pop_class_nobles}Nobles")));
+                        baseResult.Add(MBMath.ClampFloat(nobles * GetNobleOutput(title), 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
+                            new TextObject("{=5mCY3JCP}{CLASS} output")
+                            .SetTextVariable("CLASS", new TextObject("{=pop_class_nobles}Nobles")));
                     }
 
                     if (craftsmen > 0f)
                     {
-                        baseResult.Add(MBMath.ClampFloat(craftsmen * GetCraftsmenOutput(title), 0f, 50000f),
+                        baseResult.Add(MBMath.ClampFloat(craftsmen * GetCraftsmenOutput(title), 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
                             new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=pop_class_craftsmen}Craftsmen")));
                     }
 
                     if (serfs > 0f)
                     {
-                        baseResult.Add(MBMath.ClampFloat(serfs * SERF_OUTPUT, 0f, 50000f),
+                        baseResult.Add(MBMath.ClampFloat(serfs * SERF_OUTPUT, 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
                             new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=pop_class_serfs}Serfs")));
                     }
 
                     if (slaves > 0f)
                     {
-                        baseResult.Add(MBMath.ClampFloat(slaves * GetSlaveOutput(title), 0f, 50000f),
+                        baseResult.Add(MBMath.ClampFloat(slaves * GetSlaveOutput(title), 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
                             new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=pop_class_slaves}Slaves")));
                     }
 
@@ -218,7 +219,10 @@ namespace BannerKings.Models.Vanilla
                 factor = 0.8f;
             }
 
-            result.Add(village.TradeTaxAccumulated * factor, new TextObject("{=ZJePQQpz}Production sold by villagers"));
+            if (village.TradeTaxAccumulated > 0)
+            {
+                result.Add(village.TradeTaxAccumulated * factor, new TextObject("{=ZJePQQpz}Production sold by villagers"));
+            }
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
             if (data != null && data.VillageData != null)

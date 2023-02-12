@@ -13,11 +13,12 @@ namespace BannerKings.Managers.Institutions.Guilds
         private Hero guildMaster;
         protected List<Hero> members;
 
-        public Guild(Settlement settlement, Hero guildMaster, GuildTrade trade) : base(settlement)
+        public Guild(string id, Settlement settlement, Hero guildMaster, GuildTrade trade) : base(id)
         {
             this.guildMaster = guildMaster;
             members = new List<Hero>();
             GuildType = new GuildType(trade);
+            base.settlement = settlement;
         }
 
         public int Income

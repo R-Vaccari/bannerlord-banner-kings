@@ -32,7 +32,7 @@ namespace BannerKings.Models.Vanilla
 
             if (clan == Clan.PlayerClan && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().HasDebuff(DefaultStartOptions.Instance.IndebtedLord))
             {
-                baseResult.Add(-5f, DefaultStartOptions.Instance.IndebtedLord.Name);
+                baseResult.Add(-2f, DefaultStartOptions.Instance.IndebtedLord.Name);
             }
 
             var generalSupport = 0f;

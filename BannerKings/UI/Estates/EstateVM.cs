@@ -6,7 +6,6 @@ using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.Core;
@@ -50,7 +49,6 @@ namespace BannerKings.UI.Estates
         [DataSourceProperty]
         public bool IsEnabled => !Estate.IsDisabled;
 
-
         public Estate Estate { get; private set; }
 
         public override void RefreshValues()
@@ -68,7 +66,7 @@ namespace BannerKings.UI.Estates
                 ImageIdentifier = new ImageIdentifierVM(new ImageIdentifier(CampaignUIHelper.GetCharacterCode(Estate.Owner.CharacterObject)));
             }
 
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("Population:"), 
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=VRbXbsPE}Population:"), 
                 Estate.Population, 
                 0,
                 TownManagementDescriptionItemVM.DescriptionType.Loyalty));
@@ -82,22 +80,19 @@ namespace BannerKings.UI.Estates
 
             var serfManpower = Estate.GetManpower(Managers.PopulationManager.PopType.Serfs);
             var slavesManpower = Estate.GetManpower(Managers.PopulationManager.PopType.Serfs);
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("Manpower:"),
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=t9sG2dMh}Manpower:"),
                serfManpower + slavesManpower,
                0,
                TownManagementDescriptionItemVM.DescriptionType.Militia,
                new BasicTooltipViewModel(() => new TextObject("{=RhMomMnx}This estate's manpower, drawn from it's population. This manpower is used to fuel the estate owner's volunteers. When volunteers are recruited from an estate-owner, the manpower is drawn from the estate rather than the overall settlement.")
                .ToString())));
 
-
             var acreage = Estate.AcreageGrowth;
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("Acreage:"),
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=FT5kL9k5}Acreage:"),
                (int)Estate.Acreage,
                (int)acreage.ResultNumber,
                TownManagementDescriptionItemVM.DescriptionType.Prosperity,
                new BasicTooltipViewModel(() => acreage.GetExplanations())));
-
-
 
             PlayerOwned = Estate.Owner == Hero.MainHero && !IsDisabled;
 
@@ -122,7 +117,6 @@ namespace BannerKings.UI.Estates
             {
                 DutyEnabled = false;
             }
-            
 
             DutySelector = new BannerKingsSelectorVM<BKItemVM>(DutyEnabled, 0, OnDutyChange);
             DutySelector.AddItem(new BKItemVM(EstateDuty.Taxation, true, "",
@@ -137,7 +131,6 @@ namespace BannerKings.UI.Estates
 
             if (IsEnabled)
             {
-                
                 LandInfo.Add(new InformationElement(new TextObject("{=56YOTTBC}Farmland:").ToString(),
                    new TextObject("{=xqot659p}{ACRES} acres").SetTextVariable("ACRES", Estate.Farmland.ToString("0.00")).ToString(),
                    new TextObject("{=ABrCGWep}Acres in this region used as farmland, the main source of food in most places")
@@ -156,7 +149,7 @@ namespace BannerKings.UI.Estates
                 ExtraInfos.Add(LandInfo);
 
                 var production = Estate.Production;
-                WorkforceInfo.Add(new InformationElement(new TextObject("Goods Production:").ToString(),
+                WorkforceInfo.Add(new InformationElement(new TextObject("{=Fin3KXMP}Goods Production:").ToString(),
                     new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
                     .SetTextVariable("POINTS", production.ResultNumber.ToString("0.00"))
                     .ToString(),
@@ -310,6 +303,9 @@ namespace BannerKings.UI.Estates
 
         [DataSourceProperty]
         public string GrantText => new TextObject("{=dugq4xHo}Grant").ToString();
+
+        [DataSourceProperty]
+        public string ReclaimText => new TextObject("{=RmEtkH3A}Reclaim").ToString();
 
 
         [DataSourceProperty]

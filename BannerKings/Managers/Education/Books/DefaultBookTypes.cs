@@ -9,31 +9,18 @@ namespace BannerKings.Managers.Education.Books
     public class DefaultBookTypes : DefaultTypeInitializer<DefaultBookTypes, BookType>
     {
         public BookType HeatsDesire { get; private set; }
-
         public BookType Siege { get; private set; }
-
         public BookType Strategikon { get; private set; }
-
         public BookType Trade { get; private set; }
-
         public BookType Dictionary { get; private set; }
-
         public BookType Mounted { get; private set; }
-
         public BookType Leadership { get; private set; }
-
         public BookType OneHanded { get; private set; }
-
         public BookType TwoHanded { get; private set; }
-
         public BookType Polearm { get; private set; }
-
         public BookType Crossbow { get; private set; }
-
         public BookType Bow { get; private set; }
-
         public BookType Throwing { get; private set; }
-
         public BookType Medicine { get; private set; }
 
         public override IEnumerable<BookType> All
@@ -54,6 +41,10 @@ namespace BannerKings.Managers.Education.Books
                 yield return Bow;
                 yield return Throwing;
                 yield return Medicine;
+                foreach (BookType item in ModAdditions)
+                {
+                    yield return item;
+                }
             }
         }
 

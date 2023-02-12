@@ -2,11 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
-using BannerKings.Managers.Institutions.Religions.Leaderships;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -53,44 +51,13 @@ namespace BannerKings.Managers
 
         public void InitializeReligions()
         {
-            var aserai = Utils.Helpers.GetCulture("aserai");
-            var khuzait = Utils.Helpers.GetCulture("khuzait");
-            var imperial = Utils.Helpers.GetCulture("empire");
-            var battania = Utils.Helpers.GetCulture("battania");
-            var vlandia = Utils.Helpers.GetCulture("vlandia");
-
-            var aseraiReligion = new Religion(null,
-                DefaultFaiths.Instance.AseraCode, new KinshipLeadership(),
-                new List<CultureObject> {aserai, khuzait, imperial},
-                new List<string> {"literalism", "legalism", "heathen_tax"});
-
-            var battaniaReligion = new Religion(null,
-                DefaultFaiths.Instance.AmraOllahm, new AutonomousLeadership(),
-                new List<CultureObject> {battania},
-                new List<string> {"druidism", "animism"});
-
-            var darusosianReligion = new Religion(Settlement.All.First(x => x.StringId == "town_ES4"),
-                DefaultFaiths.Instance.Darusosian, new HierocraticLeadership(),
-                new List<CultureObject> {imperial},
-                new List<string> {"legalism", "childbirth" });
-
-            var vlandiaReligion = new Religion(null,
-                DefaultFaiths.Instance.Canticles, new HierocraticLeadership(),
-                new List<CultureObject> {vlandia},
-                new List<string> {"sacrifice", "literalism"});
-
-            var religions = new List<Religion>
+            foreach (var religion in DefaultReligions.Instance.All)
             {
-                aseraiReligion,
-                battaniaReligion,
-                darusosianReligion,
-                vlandiaReligion
-            };
-
-            foreach (var religion in religions.Where(rel => !Religions.ContainsKey(rel)))
-            {
-                Religions.Add(religion, new Dictionary<Hero, FaithfulData>());
-                InitializeFaithfulHeroes(religion);
+                if (!Religions.ContainsKey(religion))
+                {
+                    Religions.Add(religion, new Dictionary<Hero, FaithfulData>());
+                    InitializeFaithfulHeroes(religion);
+                }
             }
 
             RefreshCaches();
@@ -100,18 +67,20 @@ namespace BannerKings.Managers
         {
             foreach (var hero in Hero.AllAliveHeroes)
             {
-                if (hero == Hero.MainHero || hero.IsDisabled || hero.IsChild || hero.Culture != rel.MainCulture)
+                if (hero == Hero.MainHero || hero.IsChild || GetHeroReligion(hero) != null)
                 {
                     continue;
                 }
 
-                InitializeHeroFaith(hero, rel);
+                if (rel.Faith.IsHeroNaturalFaith(hero))
+                {
+                    InitializeHeroFaith(hero, rel);
+                }
             }
         }
 
         public void InitializeHeroFaith(Hero hero, Religion rel = null)
         {
-
             if (rel == null)
             {
                 rel = GetIdealReligion(hero.Culture);
@@ -121,44 +90,10 @@ namespace BannerKings.Managers
                 }
             }
 
-
             if (Religions[rel].ContainsKey(hero))
             {
                 RefreshCaches();
                 return;
-            }
-
-            if (hero.IsNotable && hero.CurrentSettlement != null)
-            {
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(hero.CurrentSettlement);
-                if (data != null && data.ReligionData != null)
-                {
-                    rel = data.ReligionData.DominantReligion;
-                }
-            }
-
-
-            var id = rel.Faith.GetId();
-            if (id == "darusosian")
-            {
-                Kingdom kingdom = null;
-                if (hero.Clan != null)
-                {
-                    kingdom = hero.Clan.Kingdom;
-                }
-                else if (hero.IsNotable && hero.CurrentSettlement is { OwnerClan: { } })
-                {
-                    kingdom = hero.CurrentSettlement.OwnerClan.Kingdom;
-                }
-                else if (hero.IsWanderer && hero.BornSettlement is { OwnerClan: { } })
-                {
-                    kingdom = hero.BornSettlement.OwnerClan.Kingdom;
-                }
-
-                if (kingdom == null || (id == "darusosian" && kingdom.StringId != "empire_s"))
-                {
-                    return;
-                }
             }
 
             Religions[rel].Add(hero, new FaithfulData(100f));
@@ -219,8 +154,6 @@ namespace BannerKings.Managers
 
         public void ExecuteRemoveHero(Hero hero, bool isConversion = false)
         {
-
-            
             var rel = GetHeroReligion(hero);
             if (IsPreacher(hero))
             {
@@ -274,7 +207,7 @@ namespace BannerKings.Managers
                         MBInformationManager.AddQuickInformation(new TextObject("{=sjy26XtU}{HERO} has converted to the {FAITH} faith.")
                                 .SetTextVariable("HERO", hero.Name)
                                 .SetTextVariable("FAITH", religion.Faith.GetFaithName()),
-                            0, hero.CharacterObject, "event:/ui/notification/relation");
+                            0, hero.CharacterObject, Utils.Helpers.GetKingdomDecisionSound());
                     }
 
                     if (hero == hero.Clan.Leader)
@@ -290,6 +223,13 @@ namespace BannerKings.Managers
                 {
                     hero.AddPower(-20f);
                 }
+            }
+            else
+            {
+                MBInformationManager.AddQuickInformation(new TextObject("{=sjy26XtU}{HERO} has converted to the {FAITH} faith.")
+                    .SetTextVariable("HERO", hero.Name)
+                    .SetTextVariable("FAITH", religion.Faith.GetFaithName()),
+                    0, hero.CharacterObject, Utils.Helpers.GetKingdomDecisionSound());
             }
         }
 
@@ -323,9 +263,13 @@ namespace BannerKings.Managers
                 }, null));
         }
 
-        public bool HasBlessing(Hero hero, Divinity blessing)
+        public bool HasBlessing(Hero hero, Divinity blessing, Religion rel = null)
         {
-            var rel = GetHeroReligion(hero);
+            if (rel == null)
+            {
+                rel = GetHeroReligion(hero);
+            }
+             
             if (rel != null)
             {
                 return Religions[rel][hero].Blessing == blessing;
@@ -359,7 +303,6 @@ namespace BannerKings.Managers
             var rel = GetHeroReligion(hero);
             return rel != null ? Religions[rel][hero] : null;
         }
-
 
         public List<Religion> GetReligions()
         {
@@ -418,7 +361,16 @@ namespace BannerKings.Managers
 
         public Religion GetIdealReligion(CultureObject culture)
         {
-            return Religions.Keys.ToList().FirstOrDefault(rel => rel.MainCulture == culture);
+            Religion result = null;
+            foreach(var religion in Religions.Keys.ToList())
+            {
+                if (religion.Faith.IsCultureNaturalFaith(culture))
+                {
+                    result = religion;
+                }
+            }
+
+            return result;
         }
 
         public bool IsReligionMember(Hero hero, Religion religion)
@@ -430,8 +382,6 @@ namespace BannerKings.Managers
 
             return Religions[religion].ContainsKey(hero);
         }
-
-        
 
         public void AddPiety(Religion rel, Hero hero, float piety, bool notifyPlayer = false)
         {

@@ -54,10 +54,26 @@ namespace BannerKings.Models.Vanilla
                           CouncilPosition.Elder, 0.2f, false);
             }
 
+            var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
             if ((village.VillageType == DefaultVillageTypes.DateFarm || village.VillageType == DefaultVillageTypes.DesertHorseRanch) 
-                && BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.AseraSecondary3)) 
+                && BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.AseraSecondary3, rel)) 
             {
-                baseResult.Add(0.4f, DefaultDivinities.Instance.AseraSecondary3.Name);
+                baseResult.Add(0.1f, DefaultDivinities.Instance.AseraSecondary3.Name);
+            }
+
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.AmraMain, rel) 
+                && (village.VillageType == DefaultVillageTypes.HogFarm || village.VillageType == DefaultVillageTypes.CattleRange ||
+                village.VillageType == DefaultVillageTypes.Lumberjack)) 
+            {
+                baseResult.Add(0.2f, DefaultDivinities.Instance.AmraMain.Name);
+            }
+
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.TreeloreMoon, rel))
+            {
+                if (rel.FavoredCultures.Contains(village.Settlement.Culture))
+                {
+                    baseResult.Add(0.08f, DefaultDivinities.Instance.TreeloreMoon.Name);
+                }
             }
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);

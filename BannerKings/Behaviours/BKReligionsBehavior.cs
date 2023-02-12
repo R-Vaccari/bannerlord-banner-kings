@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using BannerKings.Managers;
 using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Skills;
 using HarmonyLib;
@@ -18,6 +21,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using Color = TaleWorlds.Library.Color;
 
 namespace BannerKings.Behaviours
 {
@@ -53,6 +57,7 @@ namespace BannerKings.Behaviours
 
         private void OnGameLoaded(CampaignGameStarter starter)
         {
+            BannerKingsConfig.Instance.ReligionsManager.InitializeReligions();
         }
 
         private void OnDailyTickSettlement(Settlement settlement)
@@ -69,7 +74,6 @@ namespace BannerKings.Behaviours
 
                 if (religion != null)
                 {
-                   
                     List<Hero> toRemove = new List<Hero>();
                     int count = settlement.Notables.Count(x => x.IsPreacher);
                     if (count > 1)
@@ -129,13 +133,8 @@ namespace BannerKings.Behaviours
                             }
                         }
                     }
-                   
                 }
             }
-          
-
-           
-            
         }
 
         private void OnRaidCompleted(BattleSideEnum winnerSide, MapEvent mapEvent)
@@ -145,11 +144,21 @@ namespace BannerKings.Behaviours
                 if (mapEventParty.Party.IsActive)
                 {
                     var mobileParty = mapEventParty.Party.MobileParty;
-                    if (mobileParty != null && mobileParty.LeaderHero != null && 
-                        mapEvent.MapEventSettlement.Culture.StringId != "battania")
+                    if (mobileParty != null && mobileParty.LeaderHero != null)
                     {
+                        var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(mobileParty.LeaderHero);
+                        var settlementCulture = mapEvent.MapEventSettlement.Culture;
+                        if (settlementCulture.StringId != "battania")
+                        {
+                            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(mobileParty.LeaderHero,
+                                DefaultDivinities.Instance.AmraSecondary2, rel))
+                            {
+                                GainRenownAction.Apply(mobileParty.LeaderHero, 10f);
+                            }
+                        }
+
                         if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(mobileParty.LeaderHero,
-                            DefaultDivinities.Instance.AmraSecondary2))
+                                DefaultDivinities.Instance.TreeloreMain, rel) && !rel.FavoredCultures.Contains(settlementCulture))
                         {
                             GainRenownAction.Apply(mobileParty.LeaderHero, 10f);
                         }
@@ -166,6 +175,15 @@ namespace BannerKings.Behaviours
             }
 
             InitializeFaith(hero);
+
+            if (hero.Clan != null && hero.Clan.Leader != null )
+            {
+                var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero.Clan.Leader);
+                if (rel != null && rel.HasDoctrine(DefaultDoctrines.Instance.Childbirth))
+                {
+                    hero.Clan.AddRenown(25f, true);
+                }
+            }
         }
 
         private void OnHeroComesOfAge(Hero hero)
@@ -184,6 +202,20 @@ namespace BannerKings.Behaviours
             if (hero.Clan != null && hero != hero.Clan.Leader && hero.Clan.Leader != null)
             {
                 startingReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero.Clan.Leader);
+            }
+            else if (hero.IsNotable)
+            {
+                var settlement = hero.CurrentSettlement != null ? hero.CurrentSettlement : hero.BornSettlement;
+                if (settlement == null)
+                {
+                    return;
+                }
+
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                if (data != null && data.ReligionData != null)
+                {
+                    startingReligion = data.ReligionData.GetRandomReligion();
+                }
             }
 
             ReligionsManager.InitializeHeroFaith(hero, startingReligion);
@@ -217,12 +249,10 @@ namespace BannerKings.Behaviours
                     }
                 }
 
-
                 AddHeroToIdealReligion(hero);
             } 
             else
             {
- 
                 if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
                     DefaultDivinities.Instance.AseraSecondary2) && hero.IsPartyLeader)
                 {
@@ -267,7 +297,6 @@ namespace BannerKings.Behaviours
                             Color.ConvertStringToColor("#00CCFF")));
                     }
                 }
-
 
                 if (CampaignTime.Now.GetDayOfSeason == 1 && BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
                     DefaultDivinities.Instance.DarusosianSecondary1))
@@ -327,7 +356,6 @@ namespace BannerKings.Behaviours
                     ReligionsManager.AddPiety(religion, hero, BannerKingsConfig.Instance.PietyModel.CalculateEffect(hero).ResultNumber);
                 }
             }
-            
         }
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
@@ -365,7 +393,6 @@ namespace BannerKings.Behaviours
                 "{=KdVPngCa}{CLERGYMAN_PREACHING_LAST}",
                 IsPreacher, null);
 
-
             starter.AddPlayerLine("bk_question_faith", "hero_main_options", "bk_preacher_asked_faith",
                 "{=rhPmXyLC}How do I prove my faith?",
                 IsPreacher, null);
@@ -377,7 +404,6 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("bk_answer_faith_2", "bk_preacher_asked_faith_last", "hero_main_options",
                 "{=Pv6nVzD1}{CLERGYMAN_FAITH_LAST}",
                 IsPreacher, null);
-
 
             starter.AddPlayerLine("bk_question_faith_forbidden", "hero_main_options",
                 "bk_preacher_asked_faith_forbidden",
@@ -410,7 +436,6 @@ namespace BannerKings.Behaviours
                 "{=6d9H5id0}{CLERGYMAN_INDUCTION_LAST}",
                 IsPreacher, InductionOnConsequence);
 
-
             starter.AddPlayerLine("bk_question_boon", "hero_main_options", "bk_preacher_asked_boon",
                 "{=H9E58HNp}{CLERGYMAN_BLESSING_ACTION}",
                 IsPreacher,
@@ -440,7 +465,6 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_boon_confirm", "bk_boon_confirm", "hero_main_options",
                 "{=G4ALCxaA}Never mind.",
                 null, null);
-
 
             starter.AddPlayerLine("bk_question_rite", "hero_main_options", "bk_preacher_asked_rites",
                 "{=hcK4qzV2}I would like to perform a rite.",
@@ -480,7 +504,6 @@ namespace BannerKings.Behaviours
                 "{=G4ALCxaA}Never mind.",
                 null, null);
 
-
             starter.AddPlayerLine("bk_blessing_recruit_battania_bandits", "bandit_attacker", "common_encounter_ultimatum_answer",
                 "{=2QtnvGFq}I am oathbound to the Na Sidhfir. As men of the wilds, will you join me?",
                 RecruitBattaniaBanditsOnCondition,
@@ -488,8 +511,6 @@ namespace BannerKings.Behaviours
                 100, 
                 null, 
                 null);
-
-
         }
 
         private bool RecruitBattaniaBanditsOnCondition()
@@ -527,7 +548,6 @@ namespace BannerKings.Behaviours
             PlayerEncounter.LeaveEncounter = true;
         }
 
-
         private bool InductionOnClickable(out TextObject hintText)
         {
             var clergyman = ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
@@ -544,18 +564,9 @@ namespace BannerKings.Behaviours
                 faithText = new TextObject("{=WWkVwmPy}Lords of {CURRENT_FAITH} faith may disapprove your change")
                 .SetTextVariable("CURRENT_FAITH", playerReligion.Faith.GetFaithName());
             }
-            
 
             var result = religion.Faith.GetInductionAllowed(Hero.MainHero, clergyman.Rank);
-            if (!result.Item1)
-            {
-                hintText = result.Item2;
-                return false;
-
-                
-            }
-
-            hintText = new TextObject("{=Uygas52E}{POSSIBLE}. Changing faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}")
+            hintText = new TextObject("{=VqkEaJWp}{POSSIBLE}.\n\nChanging faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}")
                 .SetTextVariable("POSSIBLE", result.Item2)
                 .SetTextVariable("FAITH_TEXT", faithText);
             return true;
@@ -565,7 +576,12 @@ namespace BannerKings.Behaviours
         {
             var clergyman = ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
             var religion = ReligionsManager.GetClergymanReligion(clergyman);
-            ReligionsManager.AddToReligion(Hero.MainHero, religion);
+
+            var result = religion.Faith.GetInductionAllowed(Hero.MainHero, clergyman.Rank);
+            if (result.Item1)
+            {
+                ReligionsManager.AddToReligion(Hero.MainHero, religion);
+            }
         }
 
         private void BlessingPositiveAnswerOnConsequence()
@@ -580,9 +596,9 @@ namespace BannerKings.Behaviours
                 .ToList();
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                religion.Faith.GetSecondaryDivinitiesDescription().ToString(),
+                religion.Faith.GetCultsDescription().ToString(),
                 new TextObject("{=QUvKUF87}Select which of the {SECONDARIES} you would like to {BLESSING_ACTION}.")
-                    .SetTextVariable("SECONDARIES", religion.Faith.GetSecondaryDivinitiesDescription())
+                    .SetTextVariable("SECONDARIES", religion.Faith.GetCultsDescription())
                     .SetTextVariable("BLESSING_ACTION", religion.Faith.GetBlessingActionName())
                     .ToString(),
                 list,
@@ -611,7 +627,6 @@ namespace BannerKings.Behaviours
             var religion = ReligionsManager.GetClergymanReligion(clergyman);
             var playerReligion = ReligionsManager.GetHeroReligion(Hero.MainHero);
 
-
             if (playerReligion == null || religion.Faith.GetId() != playerReligion.Faith.GetId())
             {
                 hintText = new TextObject("{=vE0bYBmL}You do not adhere to the {FAITH} faith.")
@@ -624,7 +639,6 @@ namespace BannerKings.Behaviours
             if (playerReligion != null)
             {
                 var piety = ReligionsManager.GetPiety(playerReligion, Hero.MainHero);
-                
                 foreach (var divinity in religion.Faith.GetSecondaryDivinities())
                 {
                     var cost = divinity.BlessingCost(Hero.MainHero);
@@ -640,7 +654,6 @@ namespace BannerKings.Behaviours
                     }
                 }
             }
-
 
             if (!anyPossible)
             {
@@ -677,10 +690,24 @@ namespace BannerKings.Behaviours
                 return false;
             }
 
-            bool anyPossible = religion.Rites.Any(rite => rite.MeetsCondition(Hero.MainHero));
+            StringBuilder sb = new StringBuilder();
+            sb.Append(new TextObject("{=OXP2Kb4E}Each rite has different conditions to be fulfilled. They also have time intervals before being able to me performed again, check their details in the Religion tab."));
+            foreach (Rite rite in religion.Rites)
+            {
+                TextObject reason;
+                bool possible = rite.MeetsCondition(Hero.MainHero, out reason);
+                if (!possible)
+                {
+                    sb.Append(new TextObject("{=UcLBbKzj}\n\n{RITE}: {REASON}")
+                        .SetTextVariable("RITE", rite.GetName())
+                        .SetTextVariable("REASON", reason));
+                }
+            }
+            TextObject r;
+            bool anyPossible = religion.Rites.Any(rite => rite.MeetsCondition(Hero.MainHero, out r));
             if (!anyPossible)
             {
-                hintText = new TextObject("{=QbUTvLMt}No rite is currently possible to perform.");
+                hintText = new TextObject("{=!}" + sb.ToString());
                 return false;
             }
 
@@ -693,13 +720,27 @@ namespace BannerKings.Behaviours
             var religion = ReligionsManager.GetHeroReligion(Hero.MainHero);
             var piety = ReligionsManager.GetPiety(religion, Hero.MainHero);
 
-            var list = religion.Rites.Select(rite => new InquiryElement(rite, rite.GetName().ToString(), null, rite.MeetsCondition(Hero.MainHero), rite.GetDescription().ToString())).ToList();
+            var list = religion.Rites.Select(rite =>
+            {
+                TextObject reason;
+                bool available = rite.MeetsCondition(Hero.MainHero, out reason);
+                return new InquiryElement(rite,
+                           rite.GetName().ToString(),
+                           null,
+                           available,
+                           new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                           .SetTextVariable("TEXT", rite.GetDescription().ToString())
+                           .SetTextVariable("EXPLANATIONS", reason).ToString());
+            }
+           ).ToList();
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                religion.Faith.GetSecondaryDivinitiesDescription().ToString(),
-                string.Empty, list,
+                new TextObject("{=Yy2s38FQ}Rites").ToString(),
+                new TextObject("{=B4M6aqo5}Select what rite you would like to perform. Check their descriptions and entries on Religions tab for details.").ToString(), 
+                list,
                 false, 1,
-                GameTexts.FindText("str_done").ToString(), string.Empty,
+                GameTexts.FindText("str_done").ToString(), 
+                string.Empty,
                 delegate(List<InquiryElement> x)
                 {
                     var rite = (Rite?) x[0].Identifier;
@@ -721,11 +762,19 @@ namespace BannerKings.Behaviours
                     .SetTextVariable("HERO", Hero.MainHero.Name);
 
             var sb = new StringBuilder();
-            foreach (var rite in religion.Rites)
+            int count = religion.Rites.Count;
+            for (int i = 0; i < count; i++)
             {
-                sb.Append(rite.GetName() + ", ");
+                var rite = religion.Rites.ElementAt(i);
+                if (i != count - 1) 
+                {
+                    sb.Append(rite.GetName() + ", ");
+                }
+                else
+                {
+                    sb.Append(rite.GetName());
+                }
             }
-
 
             MBTextManager.SetTextVariable("CLERGYMAN_RITE", riteText.SetTextVariable("RITES", faithText
                 .SetTextVariable("FAITH", religion.Faith.GetFaithName())
@@ -749,7 +798,6 @@ namespace BannerKings.Behaviours
 
             InitializePreacherTexts();
             return true;
-
         }
 
         private void InitializePreacherTexts()
@@ -808,9 +856,6 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
-
-        
-
         [HarmonyPatch(typeof(KingdomDecision), "GetInfluenceCostOfSupport")]
         internal class GetInfluenceCostOfSupportPatch
         {

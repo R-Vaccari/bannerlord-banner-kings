@@ -93,7 +93,7 @@ namespace BannerKings.Behaviours
 
             if (dataStore.IsLoading)
             {
-                if (firstUse)
+                if (firstUse || populationManager == null)
                 {
                     BannerKingsConfig.Instance.InitializeManagersFirstTime();
                 }
@@ -106,10 +106,7 @@ namespace BannerKings.Behaviours
 
         private void OnGameCreated(CampaignGameStarter starter)
         {
-            if (firstUse)
-            {
-                BannerKingsConfig.Instance.InitializeManagersFirstTime();
-            }
+            BannerKingsConfig.Instance.InitializeManagersFirstTime();
         }
 
         private void OnGameLoaded(CampaignGameStarter starter)
