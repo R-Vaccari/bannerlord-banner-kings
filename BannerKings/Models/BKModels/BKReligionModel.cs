@@ -2,30 +2,45 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Skills;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
 {
     public class BKReligionModel
     {
-        protected void Try(System.Action method)
+        public Religion GetKingdomStateReligion(Kingdom kingdom)
         {
-            try
+            string id = kingdom.StringId;
+            if (id == "sturgia")
             {
-                method();
+                return DefaultReligions.Instance.Treelore;
             }
-            catch (System.Exception ex)
+
+            if (id == "vlandia")
             {
-                InformationManager.DisplayMessage(new InformationMessage(ex.Message));
+                return DefaultReligions.Instance.Canticles;
             }
-            finally
+
+            if (id == "aserai")
             {
-                // logging or fixing the null here?
+                return DefaultReligions.Instance.AseraCode;
             }
+
+            if (id == "battania")
+            {
+                return DefaultReligions.Instance.Amra;
+            }
+
+            if (id == "empire_s")
+            {
+                return DefaultReligions.Instance.Martyrdom;
+            }
+
+            return DefaultReligions.Instance.All.FirstOrDefault(x => x.Faith.IsCultureNaturalFaith(kingdom.Culture));
         }
 
         public ExplainedNumber GetConversionInfluenceCost(Hero notable, Hero converter)
@@ -39,25 +54,21 @@ namespace BannerKings.Models.BKModels
                 return new ExplainedNumber(0f);
             }
 
-            Try(() =>
+            result.Add(notable.GetRelation(converter) * -0.1f);
+            result.Add(GetNotableFactor(notable, notable.CurrentSettlement) / 2f);
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
+
+            if (data != null && data.ReligionData != null)
             {
-                result.Add(notable.GetRelation(converter) * -0.1f);
-                result.Add(GetNotableFactor(notable, notable.CurrentSettlement) / 2f);
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
+                var tension = data.ReligionData.Tension;
+                result.AddFactor(tension.ResultNumber);
+            }
 
-                if (data != null && data.ReligionData != null)
-                {
-                    var tension = data.ReligionData.Tension;
-                    result.AddFactor(tension.ResultNumber);
-                }
-
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(converter,
-                    DefaultDivinities.Instance.DarusosianMain))
-                {
-                    result.AddFactor(-0.2f, DefaultDivinities.Instance.DarusosianMain.Name);
-                }
-
-            });
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(converter,
+                DefaultDivinities.Instance.DarusosianMain))
+            {
+                result.AddFactor(-0.2f, DefaultDivinities.Instance.DarusosianMain.Name);
+            }
 
             return result;
         }
@@ -68,24 +79,21 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(40f);
             result.LimitMax(150f);
 
-            Try(() =>
+            result.Add(notable.GetRelation(converter) * -0.1f);
+            result.Add(GetNotableFactor(notable, notable.CurrentSettlement));
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
+
+            if (data != null && data.ReligionData != null)
             {
-                result.Add(notable.GetRelation(converter) * -0.1f);
-                result.Add(GetNotableFactor(notable, notable.CurrentSettlement));
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
+                var tension = data.ReligionData.Tension;
+                result.AddFactor(tension.ResultNumber);
+            }
 
-                if (data != null && data.ReligionData != null)
-                {
-                    var tension = data.ReligionData.Tension;
-                    result.AddFactor(tension.ResultNumber);
-                }
-
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(converter,
-                    DefaultDivinities.Instance.DarusosianMain))
-                {
-                    result.AddFactor(-0.2f, DefaultDivinities.Instance.DarusosianMain.Name);
-                }
-            });
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(converter,
+                DefaultDivinities.Instance.DarusosianMain))
+            {
+                result.AddFactor(-0.2f, DefaultDivinities.Instance.DarusosianMain.Name);
+            }
 
             return result;
         }

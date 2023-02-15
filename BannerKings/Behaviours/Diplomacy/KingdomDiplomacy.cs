@@ -150,12 +150,23 @@ namespace BannerKings.Behaviours.Diplomacy
                 DissolveTruce(kingdom, new TextObject("{=!}The agreed time has expired."));
             }
 
+            if (Religion == null)
+            {
+                Religion = BannerKingsConfig.Instance.ReligionModel.GetKingdomStateReligion(Kingdom);
+            }
+
             foreach (var group in DefaultInterestGroup.Instance.All)
             {
                 bool adequate = BannerKingsConfig.Instance.InterestGroupsModel.IsGroupAdequateForKingdom(this, group);
                 if (adequate && !Groups.Contains(group))
                 {
-                    Groups.Add(group.GetCopy());
+                    var copy = group.GetCopy();
+                    if (copy.Equals(DefaultInterestGroup.Instance.Zealots))
+                    {
+                        copy.SetName(Religion.Faith.GetZealotsGroupName());
+                    }
+
+                    Groups.Add(copy);
                 }
 
                 if (!adequate && Groups.Contains(group))

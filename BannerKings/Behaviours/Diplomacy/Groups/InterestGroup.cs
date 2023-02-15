@@ -44,6 +44,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             return result;
         }
 
+        public void SetName(TextObject name) => this.name = name;
+
         public bool IsInterestGroup { get; private set; }
         public bool IsRadicalGroup => !IsInterestGroup;
         public Kingdom Kingdom { get; private set; }

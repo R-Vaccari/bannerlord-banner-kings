@@ -9,6 +9,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
 {
     public class AmraFaith : PolytheisticFaith
     {
+        public override TextObject GetZealotsGroupName()
+        {
+            return new TextObject("{=!}Wolves of Llyn Tywal");
+        }
+
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {
             if (culture.StringId == "battania")

@@ -188,19 +188,30 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public BKExplainedNumber CalculateHeroInfluence(InterestGroup group, Hero hero, bool explanations = false)
+        public BKExplainedNumber CalculateHeroInfluence(InterestGroup group, KingdomDiplomacy diplomacy,
+            Hero hero, bool explanations = false)
         {
             var result = new BKExplainedNumber(0f, explanations);
-
-            if (hero.IsLord)
+            float totalPower = 0;
+            foreach (var settlement in diplomacy.Kingdom.Settlements)
             {
-                result.Add(hero.Clan.Tier * hero.Clan.Tier * 10f);
-                var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
+                if (settlement.Notables != null)
+                {
+                    foreach (var notable in settlement.Notables)
+                    {
+                        totalPower += notable.Power;
+                    }
+                }
             }
 
             if (hero.IsNotable)
             {
-                result.Add(hero.Power);
+                result.Add((hero.Power / totalPower));
+            }
+
+            if (hero.Clan != null)
+            {
+                result.Add((hero.IsClanLeader() ? 1f : 0.1f) * CalculateClanInfluence(hero.Clan, diplomacy).ResultNumber);
             }
 
             return result;
@@ -270,7 +281,7 @@ namespace BannerKings.Models.BKModels
                 result.Add(0.2f);
             }
             
-            result.AddFactor(hero.GetTraitLevel(group.MainTrait) * 0.15f);
+            result.Add(hero.GetTraitLevel(group.MainTrait) * 0.15f);
             return result;
         }
 

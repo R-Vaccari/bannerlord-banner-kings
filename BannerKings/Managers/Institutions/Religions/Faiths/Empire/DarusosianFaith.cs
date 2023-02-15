@@ -7,6 +7,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 {
     public class DarusosianFaith : MonotheisticFaith
     {
+        public override TextObject GetZealotsGroupName()
+        {
+            return new TextObject("{=!}Keepers of the Flame");
+        }
+
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {
             if (culture.StringId == "empire")

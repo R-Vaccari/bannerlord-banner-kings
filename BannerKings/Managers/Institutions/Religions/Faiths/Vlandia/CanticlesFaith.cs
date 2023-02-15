@@ -294,5 +294,10 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
         }
 
         public override TextObject GetInductionExplanationText() => new TextObject("{=UVtXdcVd}You need clan tier 3 or higher.");
+
+        public override TextObject GetZealotsGroupName()
+        {
+            return new TextObject("{=!}Wardens of the Tale");
+        }
     }
 }
