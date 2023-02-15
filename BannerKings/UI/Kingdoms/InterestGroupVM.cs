@@ -1,8 +1,11 @@
 ﻿using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Utils.Models;
+using Bannerlord.UIExtenderEx.Attributes;
 using System;
 using System.Linq;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Generic;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
@@ -17,15 +20,18 @@ namespace BannerKings.UI.Kingdoms
         private MBBindingList<StringPairItemVM> tertiaryHeaders;
         private MBBindingList<GroupMemberVM> members;
         private GroupMemberVM leader;
+        private ImageIdentifierVM clanBanner;
         private bool isEmpty;
+        private KingdomGroupsVM groupsVM;
 
         public KingdomDiplomacy KingdomDiplomacy { get; }
         public InterestGroup Group { get; }
 
-        public InterestGroupVM(InterestGroup interestGroup, KingdomDiplomacy diplomacy) : base(null, false)
+        public InterestGroupVM(InterestGroup interestGroup, KingdomGroupsVM groupsVM) : base(null, false)
         {
             Group = interestGroup;
-            KingdomDiplomacy = diplomacy;
+            this.groupsVM = groupsVM;
+            KingdomDiplomacy = groupsVM.KingdomDiplomacy;
             Members = new MBBindingList<GroupMemberVM>();
             Headers = new MBBindingList<StringPairItemVM>();
             SecondaryHeaders = new MBBindingList<StringPairItemVM>();
@@ -35,6 +41,11 @@ namespace BannerKings.UI.Kingdoms
         [DataSourceProperty] public string LeaderText => new TextObject("{=SrfYbg3x}Leader").ToString();
         [DataSourceProperty] public string GroupName => Group.Name.ToString();
         [DataSourceProperty] public HintViewModel Hint => new HintViewModel(Group.Description);
+
+        public void SetGroup()
+        {
+            groupsVM.SetGroup(this);
+        }
 
         public override void RefreshValues()
         {
@@ -47,6 +58,10 @@ namespace BannerKings.UI.Kingdoms
             if (Group.Leader != null)
             {
                 Leader = new GroupMemberVM(Group.Leader, true);
+                if (Group.Leader.Clan != null)
+                {
+                    ClanBanner = new ImageIdentifierVM(BannerCode.CreateFrom(Group.Leader.Clan.Banner), true);
+                }
             }
 
             foreach (var member in Group.GetSortedMembers().Take(5))
@@ -74,6 +89,18 @@ namespace BannerKings.UI.Kingdoms
             Headers.Add(new StringPairItemVM(new TextObject("{=!}Members").ToString(),
                 Group.Members.Count.ToString(),
                 new BasicTooltipViewModel(() => new TextObject("{=!}The amount of members in this group.").ToString())));
+
+            SecondaryHeaders.Add(new StringPairItemVM(new TextObject("{=!}Endorsed Trait").ToString(),
+                Group.MainTrait.Name.ToString(),
+                new BasicTooltipViewModel(() => new TextObject("{=!}This group favors those with this personality trait. Hero with this trait are more likely to join the group, and the group supports more a sovereign with this trait.").ToString())));
+
+            SecondaryHeaders.Add(new StringPairItemVM(new TextObject("{=!}Allows Nobility").ToString(),
+               GameTexts.FindText(Group.AllowsNobles ? "str_yes" : "str_no").ToString(),
+               new BasicTooltipViewModel(() => new TextObject("{=!}Whether or not lords are allowed to participate in this group.").ToString())));
+
+            SecondaryHeaders.Add(new StringPairItemVM(new TextObject("{=!}Allows Commoners").ToString(),
+               GameTexts.FindText(Group.AllowsCommoners ? "str_yes" : "str_no").ToString(),
+               new BasicTooltipViewModel(() => new TextObject("{=!}Whether or not relevant commoners (notables) are allowed to participate in this group.").ToString())));
 
             TextObject endorsedExplanation = new TextObject("{=!}Laws\n{LAWS}\n\n\nPolicies\n{POLICIES}\n\n\nCasus Belli\n{CASUS}")
                 .SetTextVariable("LAWS", Group.SupportedLaws.Aggregate("", (current, law) => 
@@ -158,6 +185,20 @@ namespace BannerKings.UI.Kingdoms
                 {
                     tertiaryHeaders = value;
                     OnPropertyChangedWithValue(value, "TertiaryHeaders");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public ImageIdentifierVM ClanBanner
+        {
+            get => clanBanner;
+            set
+            {
+                if (value != clanBanner)
+                {
+                    clanBanner = value;
+                    OnPropertyChangedWithValue(value, "ClanBanner");
                 }
             }
         }

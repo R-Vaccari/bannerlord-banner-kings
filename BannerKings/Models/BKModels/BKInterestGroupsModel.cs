@@ -4,6 +4,7 @@ using BannerKings.Managers.Titles;
 using BannerKings.Utils.Extensions;
 using BannerKings.Utils.Models;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
@@ -28,10 +29,10 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            float totalStrength = 0f;
+            float totalClanInfluence = 0f;
             foreach (var clan in diplomacy.Kingdom.Clans)
             {
-                totalStrength += Campaign.Current.Models.DiplomacyModel.GetClanStrength(clan);
+                totalClanInfluence += CalculateClanInfluence(clan, diplomacy).ResultNumber;
             }
 
             foreach (var member in group.Members)
@@ -44,9 +45,64 @@ namespace BannerKings.Models.BKModels
                 if (member.Clan != null && member.IsClanLeader())
                 {
                     float strength = Campaign.Current.Models.DiplomacyModel.GetClanStrength(member.Clan);
-                    result.Add(0.75f * (strength / totalStrength), member.Clan.Name);
+                    result.Add(0.75f * (CalculateClanInfluence(member.Clan, diplomacy).ResultNumber / totalClanInfluence), member.Clan.Name);
                 }
             }
+
+            if (group.Equals(DefaultInterestGroup.Instance.Commoners))
+            {
+                foreach (var fief in diplomacy.Kingdom.Fiefs)
+                {
+                    if (fief.Loyalty < 30f)
+                    {
+                        result.Add(CalculateTownInfluence(fief).ResultNumber);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public BKExplainedNumber CalculateClanInfluence(Clan clan, KingdomDiplomacy diplomacy, bool explanations = false)
+        {
+            var result = new BKExplainedNumber(0f, explanations);
+            result.LimitMin(0f);
+            result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(clan));
+            if (clan.Influence > 0)
+            {
+                result.Add(clan.Influence * 3f);
+            }
+           
+            if (clan.Gold > 0)
+            {
+                result.Add(clan.Gold / 10f);
+            }
+
+            foreach (var town in clan.Fiefs)
+            {
+                if (town.Loyalty > 70f)
+                {
+                    result.Add(CalculateTownInfluence(town).ResultNumber);
+                }
+            }
+
+            FeudalTitle sovereignTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(diplomacy.Kingdom);
+            foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
+            {
+                if (!title.IsSovereignLevel && title.sovereign == sovereignTitle)
+                {
+                    result.Add(5000f / (float)title.type);
+                }
+            }
+
+            return result;
+        }
+
+        public BKExplainedNumber CalculateTownInfluence(Town town, bool explanations = false)
+        {
+            var result = new BKExplainedNumber(0f, explanations);
+            result.LimitMin(0f);
+            result.Add(town.Prosperity);
 
             return result;
         }
@@ -187,7 +243,11 @@ namespace BannerKings.Models.BKModels
                 Hero leader = hero.MapFaction.Leader;
                 float relation = hero.GetRelation(leader);
                 result.Add(relation * 0.001f);
-                result.Add(hero.Clan.Tier * 0.02f);
+
+                if (hero.Clan != null)
+                {
+                    result.Add(hero.Clan.Tier * 0.02f);
+                }
 
                 if (hero.Culture == hero.MapFaction.Culture)
                 {

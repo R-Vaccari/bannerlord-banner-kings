@@ -80,7 +80,7 @@ namespace BannerKings.Utils.Models
             mbstringBuilder.Initialize(16, "GetExplanations");
             foreach (ValueTuple<string, float> valueTuple in _explainer.GetLines(BaseNumber, ResultNumber))
             {
-                string value = string.Format("{0} : {1}{2:0.##}\n", valueTuple.Item1, (valueTuple.Item2 > 0.001f) ? "+" : "", (valueTuple.Item2 * 100).ToString() + '%');
+                string value = string.Format("{0} : {1}{2:0.00}\n", valueTuple.Item1, (valueTuple.Item2 > 0.001f) ? "+" : "", (valueTuple.Item2 * 100).ToString() + '%');
                 mbstringBuilder.Append<string>(value);
             }
 

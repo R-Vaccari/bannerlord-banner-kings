@@ -18,6 +18,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Managers.Traits;
 using BannerKings.Models.BKModels;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
@@ -128,6 +129,7 @@ namespace BannerKings
                 init.Initialize();
             }
             DefaultCasusBelli.Instance.Initialize();
+            BKTraits.Instance.Initialize();
             DefaultInterestGroup.Instance.Initialize();
         }
 
