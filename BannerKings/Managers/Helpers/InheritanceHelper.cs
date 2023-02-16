@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Actions;
 using BannerKings.Managers.Titles;
+using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Library;
@@ -74,7 +75,7 @@ namespace BannerKings.Managers.Helpers
                 }
             }
 
-            if (mainHeir != null)
+            if (mainHeir != null && victim.IsClanLeader())
             {
                 ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, mainHeir);
             }
