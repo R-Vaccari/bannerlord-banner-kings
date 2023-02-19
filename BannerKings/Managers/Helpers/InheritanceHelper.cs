@@ -21,15 +21,24 @@ namespace BannerKings.Managers.Helpers
 
             FeudalTitle highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(victim);
             var mainHeir = GetHeirInternal(victim, highest.contract);
+            if (mainHeir != null)
+            {
+                foreach (var t in titles)
+                {
+                    BannerKingsConfig.Instance.TitleManager.InheritTitle(victim, mainHeir, t);
+                }
 
-            var inheritanceDic = GetClanHeirs(titles, victim);
+                if (victim.IsClanLeader())
+                {
+                    ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, mainHeir);
+                }
+            }
+
+            /*var inheritanceDic = GetClanHeirs(titles, victim);
             foreach (var pair in inheritanceDic)
             {
                 var heir = pair.Key;
-                foreach (var t in pair.Value)
-                {
-                    BannerKingsConfig.Instance.TitleManager.InheritTitle(victim, heir, t);
-                }
+                
 
                 if (heir != mainHeir && mainHeir != null && pair.Value.Any(x => x.fief != null))
                 {
@@ -73,12 +82,7 @@ namespace BannerKings.Managers.Helpers
                             .SetTextVariable("ORIGINAL", victim.Clan.Name)
                             .ToString()));
                 }
-            }
-
-            if (mainHeir != null && victim.IsClanLeader())
-            {
-                ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, mainHeir);
-            }
+            }*/
         }
 
         public static Dictionary<Hero, List<FeudalTitle>> GetClanHeirs(List<FeudalTitle> titles, Hero leader)
