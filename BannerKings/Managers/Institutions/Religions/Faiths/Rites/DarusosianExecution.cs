@@ -129,7 +129,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                     .SetTextVariable("KINGDOM", name);
             }
 
-            bool southernEmpire = hero.Clan.Kingdom.StringId == "empire_s";
+            bool southernEmpire = hero.Clan.Kingdom != null &&hero.Clan.Kingdom.StringId == "empire_s";
             if (!southernEmpire)
             {
                 var kingdom = Kingdom.All.FirstOrDefault(x => x.StringId == "empire_s");

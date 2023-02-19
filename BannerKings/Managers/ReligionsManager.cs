@@ -207,7 +207,7 @@ namespace BannerKings.Managers
                         MBInformationManager.AddQuickInformation(new TextObject("{=sjy26XtU}{HERO} has converted to the {FAITH} faith.")
                                 .SetTextVariable("HERO", hero.Name)
                                 .SetTextVariable("FAITH", religion.Faith.GetFaithName()),
-                            0, hero.CharacterObject, "event:/ui/notification/relation");
+                            0, hero.CharacterObject, Utils.Helpers.GetKingdomDecisionSound());
                     }
 
                     if (hero == hero.Clan.Leader)
@@ -223,6 +223,13 @@ namespace BannerKings.Managers
                 {
                     hero.AddPower(-20f);
                 }
+            }
+            else
+            {
+                MBInformationManager.AddQuickInformation(new TextObject("{=sjy26XtU}{HERO} has converted to the {FAITH} faith.")
+                    .SetTextVariable("HERO", hero.Name)
+                    .SetTextVariable("FAITH", religion.Faith.GetFaithName()),
+                    0, hero.CharacterObject, Utils.Helpers.GetKingdomDecisionSound());
             }
         }
 
