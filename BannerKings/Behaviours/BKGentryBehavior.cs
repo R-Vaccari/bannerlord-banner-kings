@@ -74,7 +74,7 @@ namespace BannerKings.Behaviours
                 var villageSettlement = gentryTuple.Item2.EstatesData.Settlement;
                 foreach (var member in clan.Heroes)
                 {
-                    if (member.PartyBelongedTo == null && !member.IsPrisoner)
+                    if (member.PartyBelongedTo == null && !member.IsPrisoner && !member.IsChild && member.IsAlive)
                     {
                         if (villageSettlement.MapFaction == clan.MapFaction)
                         {
