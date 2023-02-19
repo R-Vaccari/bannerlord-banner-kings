@@ -286,16 +286,19 @@ namespace BannerKings.UI.Marriages
 
         private void MakeContract()
         {
-            Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().SetProposedMarriage(
-                new MarriageContract(ProposerHero.Hero,
-                ProposedHero.Hero,
-                GetFinalClan(),
-                (int)BannerKingsConfig.Instance.MarriageModel.GetDowryValue(GetDowryHero(), ArrangedMarriage, true).ResultNumber,
-                (int)BannerKingsConfig.Instance.MarriageModel.GetInfluenceCost(ProposedHero.Hero, true).ResultNumber,
-                ArrangedMarriage,
-                alliance,
-                feast
-                ));
+            if (ProposerHero != null && ProposedHero != null)
+            {
+                Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().SetProposedMarriage(
+                               new MarriageContract(ProposerHero.Hero,
+                               ProposedHero.Hero,
+                               GetFinalClan(),
+                               (int)BannerKingsConfig.Instance.MarriageModel.GetDowryValue(GetDowryHero(), ArrangedMarriage, true).ResultNumber,
+                               (int)BannerKingsConfig.Instance.MarriageModel.GetInfluenceCost(ProposedHero.Hero, true).ResultNumber,
+                               ArrangedMarriage,
+                               alliance,
+                               feast
+                               ));
+            }
 
             ExecuteClose();
         }
