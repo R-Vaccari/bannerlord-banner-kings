@@ -224,7 +224,7 @@ namespace BannerKings.Managers
                     hero.AddPower(-20f);
                 }
             }
-            else
+            else if (hero.Clan == Clan.PlayerClan)
             {
                 MBInformationManager.AddQuickInformation(new TextObject("{=sjy26XtU}{HERO} has converted to the {FAITH} faith.")
                     .SetTextVariable("HERO", hero.Name)
