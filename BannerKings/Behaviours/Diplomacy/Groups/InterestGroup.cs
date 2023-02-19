@@ -61,12 +61,12 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             }
         }
 
-        public void SetNewLeader()
+        public void SetNewLeader(KingdomDiplomacy diplomacy)
         {
             var dictionary = new Dictionary<Hero, float>();
             foreach (var member in Members)
             {
-                dictionary.Add(member, BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroInfluence(this, member)
+                dictionary.Add(member, BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroInfluence(this, diplomacy, member)
                     .ResultNumber);
             }
 
@@ -77,7 +77,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             }
         }
 
-        public List<Hero> GetSortedMembers()
+        public List<Hero> GetSortedMembers(KingdomDiplomacy diplomacy)
         {
             var list = new List<Hero>(Members);
             if (Leader != null)
@@ -88,7 +88,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             var dictionary = new Dictionary<Hero, float>();
             foreach (var member in Members)
             {
-                dictionary.Add(member, BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroInfluence(this, member)
+                dictionary.Add(member, BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroInfluence(this, diplomacy, member)
                     .ResultNumber);
             }
 

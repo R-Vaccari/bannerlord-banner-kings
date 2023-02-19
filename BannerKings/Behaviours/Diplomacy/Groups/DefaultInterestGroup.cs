@@ -189,13 +189,13 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
             Zealots.Initialize(new TextObject("{=!}Zealots"),
                 new TextObject(),
-                DefaultTraits.Generosity,
+                BKTraits.Instance.Zealous,
                 true,
                 true,
                 true,
                 new List<Occupation>()
                 {
-                    Occupation.Headman
+                    Occupation.Preacher
                 },
                 new List<PolicyObject>()
                 {

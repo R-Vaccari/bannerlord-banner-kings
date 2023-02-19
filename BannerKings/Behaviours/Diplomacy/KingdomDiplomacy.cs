@@ -208,12 +208,12 @@ namespace BannerKings.Behaviours.Diplomacy
             {
                 foreach (var group in Groups)
                 {
-                    float chance = BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroJoinChance(hero, group)
+                    float chance = BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroJoinChance(hero, group, this)
                         .ResultNumber;
                     if (MBRandom.RandomFloat < chance)
                     {
                         group.AddMember(hero);
-                        group.SetNewLeader();
+                        group.SetNewLeader(this);
                         break;
                     }
                 }

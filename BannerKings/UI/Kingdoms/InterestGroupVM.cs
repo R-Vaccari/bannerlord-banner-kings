@@ -64,7 +64,7 @@ namespace BannerKings.UI.Kingdoms
                 }
             }
 
-            foreach (var member in Group.GetSortedMembers().Take(5))
+            foreach (var member in Group.GetSortedMembers(KingdomDiplomacy).Take(5))
             {
                 if (member != Leader.Hero)
                 {
@@ -102,7 +102,7 @@ namespace BannerKings.UI.Kingdoms
                GameTexts.FindText(Group.AllowsCommoners ? "str_yes" : "str_no").ToString(),
                new BasicTooltipViewModel(() => new TextObject("{=!}Whether or not relevant commoners (notables) are allowed to participate in this group.").ToString())));
 
-            TextObject endorsedExplanation = new TextObject("{=!}Laws\n{LAWS}\n\n\nPolicies\n{POLICIES}\n\n\nCasus Belli\n{CASUS}")
+            TextObject endorsedExplanation = new TextObject("{=!}Laws -----\n{LAWS}\n\n\nPolicies -----\n{POLICIES}\n\n\nCasus Belli -----\n{CASUS}")
                 .SetTextVariable("LAWS", Group.SupportedLaws.Aggregate("", (current, law) => 
                 current + Environment.NewLine + law.Name))
                 .SetTextVariable("POLICIES", Group.SupportedPolicies.Aggregate("", (current, policy) =>

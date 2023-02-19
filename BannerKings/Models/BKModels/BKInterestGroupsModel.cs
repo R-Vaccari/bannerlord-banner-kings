@@ -217,7 +217,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public BKExplainedNumber CalculateHeroJoinChance(Hero hero, InterestGroup group)
+        public BKExplainedNumber CalculateHeroJoinChance(Hero hero, InterestGroup group, KingdomDiplomacy diplomacy)
         {
             var result = new BKExplainedNumber(0f, false);
             result.LimitMin(-1f);
@@ -279,6 +279,12 @@ namespace BannerKings.Models.BKModels
             if (group.PreferredOccupations.Contains(hero.Occupation))
             {
                 result.Add(0.2f);
+            }
+
+            var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+            if (rel != null && rel.Equals(diplomacy.Religion))
+            {
+                result.Add(0.075f);
             }
             
             result.Add(hero.GetTraitLevel(group.MainTrait) * 0.15f);
