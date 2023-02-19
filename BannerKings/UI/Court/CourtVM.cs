@@ -340,6 +340,7 @@ namespace BannerKings.UI.Court
         {
             if (currentCharacter != null)
             {
+                CourtierInfo.Clear();
                 CourtierInfo.Add(new InformationElement(GameTexts.FindText("str_enc_sf_occupation").ToString(),
                     CampaignUIHelper.GetHeroOccupationName(currentCharacter.Hero), string.Empty));
 
