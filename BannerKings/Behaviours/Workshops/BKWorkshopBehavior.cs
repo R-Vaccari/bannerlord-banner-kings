@@ -5,6 +5,8 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
+using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Workshops
@@ -27,6 +29,8 @@ namespace BannerKings.Behaviours.Workshops
         {
             CampaignEvents.DailyTickTownEvent.AddNonSerializedListener(this, OnTownDailyTick);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
+            CampaignEvents.WarDeclared.AddNonSerializedListener(this, OnWarDeclared);
+            CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -36,6 +40,171 @@ namespace BannerKings.Behaviours.Workshops
             if (inventories == null)
             {
                 inventories = new Dictionary<Workshop, WorkshopData>();
+            }
+        }
+
+        private void OnOwnerChanged(Settlement settlement, bool openToClaim, Hero newOwner, Hero oldOwner,
+            Hero capturerHero, ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
+        {
+            if (newOwner != null && oldOwner != null && newOwner.MapFaction != oldOwner.MapFaction &&
+                settlement.Town != null)
+            {
+                SeizeWorkshops(settlement.Town, oldOwner.MapFaction);
+            }
+        } 
+
+        private void OnWarDeclared(IFaction faction1, IFaction faction2)
+        {
+            foreach (var town in faction1.Fiefs)
+            {
+                SeizeWorkshops(town, faction2);
+            }
+
+            foreach (var town in faction2.Fiefs)
+            {
+                SeizeWorkshops(town, faction1);
+            }
+        }
+
+        private void SeizeWorkshops(Town town, IFaction oldOwners)
+        {
+            foreach (var wk in town.Workshops)
+            {
+                if (wk.Owner != null && wk.Owner.MapFaction == oldOwners)
+                {
+                    Hero oldOwner = wk.Owner;
+                    Hero townOwner = town.OwnerClan.Leader;
+                    Hero hero = Campaign.Current.Models.WorkshopModel.SelectNextOwnerForWorkshop(town, wk, wk.Owner, 0);
+                    if (hero != null)
+                    {
+                        ChangeOwnerOfWorkshopAction.ApplyByWarDeclaration(wk, 
+                            hero, 
+                            wk.WorkshopType,
+                            Campaign.Current.Models.WorkshopModel.GetInitialCapital(1), 
+                            true, 
+                            null);
+                    }
+                    else
+                    {
+                        if (Campaign.Current.Models.WorkshopModel.GetMaxWorkshopCountForTier(townOwner.Clan.Tier) > 
+                            townOwner.OwnedWorkshops.Count)
+                        {
+                            ChangeOwnerOfWorkshopAction.ApplyByWarDeclaration(wk,
+                                                       townOwner,
+                                                       wk.WorkshopType,
+                                                       Campaign.Current.Models.WorkshopModel.GetInitialCapital(1),
+                                                       true,
+                                                       null);
+                            if (townOwner == Hero.MainHero)
+                            {
+                                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Workshop Seizure").ToString(),
+                                    new TextObject("{=!}The {WORKSHOP} has been seized from the {OWNER} at {TOWN} due to war between your realms.")
+                                    .SetTextVariable("WORKSHOP", wk.Name)
+                                    .SetTextVariable("OWNER", oldOwner.Name)
+                                    .SetTextVariable("TOWN", town.Name).ToString(),
+                                    true,
+                                    false,
+                                    GameTexts.FindText("str_ok").ToString(),
+                                    string.Empty,
+                                    null,
+                                    null),
+                                    true);
+                                
+                            }
+                        }
+                        else if (townOwner.MapFaction.IsKingdomFaction)
+                        {
+                            Kingdom kingdom = townOwner.MapFaction as Kingdom;
+                            if (townOwner == Hero.MainHero)
+                            {
+                                List<InquiryElement> options = new List<InquiryElement>();
+                                foreach (var clan in kingdom.Clans)
+                                {
+                                    if (clan.IsClanTypeMercenary || clan == townOwner.Clan)
+                                    {
+                                        continue;
+                                    }
+
+                                    bool enabled = Campaign.Current.Models.WorkshopModel.GetMaxWorkshopCountForTier(clan.Tier) >
+                                        clan.Leader.OwnedWorkshops.Count;
+
+                                    options.Add(new InquiryElement(clan,
+                                        clan.Name.ToString(),
+                                        new ImageIdentifier(clan.Banner),
+                                        enabled,
+                                        string.Empty));
+                                }
+
+                                MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                                    new TextObject("{=!}Workshop Grant").ToString(),
+                                    new TextObject("{=!}The {WORKSHOP} has been seized from the {OWNER} at {TOWN} due to war between your realms. {TOWNOWNER} has gifted you this property.")
+                                    .SetTextVariable("WORKSHOP", wk.Name)
+                                    .SetTextVariable("OWNER", oldOwner.Name)
+                                    .SetTextVariable("TOWN", town.Name)
+                                    .SetTextVariable("TOWNOWNER", townOwner.Name).ToString(),
+                                    options,
+                                    false,
+                                    1,
+                                    GameTexts.FindText("str_ok").ToString(),
+                                    string.Empty,
+                                    (List<InquiryElement> List) =>
+                                    {
+                                        Clan clan = (Clan)List[0].Identifier;
+                                        ChangeOwnerOfWorkshopAction.ApplyByWarDeclaration(wk,
+                                            clan.Leader,
+                                            wk.WorkshopType,
+                                            Campaign.Current.Models.WorkshopModel.GetInitialCapital(1),
+                                            true,
+                                            null);
+                                    },
+                                    null),
+                                    true);
+                            }
+                            else
+                            {
+                                List<(Hero, float)> options = new List<(Hero, float)>();
+                                foreach (var clan in kingdom.Clans)
+                                {
+                                    if (clan.IsClanTypeMercenary || clan == townOwner.Clan)
+                                    {
+                                        continue;
+                                    }
+
+                                    options.Add(new (clan.Leader, townOwner.GetRelation(clan.Leader)));
+                                }
+
+                                Hero result = MBRandom.ChooseWeighted(options);
+                                if (result != null)
+                                {
+                                    ChangeOwnerOfWorkshopAction.ApplyByWarDeclaration(wk,
+                                        result,
+                                        wk.WorkshopType,
+                                        Campaign.Current.Models.WorkshopModel.GetInitialCapital(1),
+                                        true,
+                                        null);
+
+                                    if (result == Hero.MainHero)
+                                    {
+                                        InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Workshop Grant").ToString(),
+                                            new TextObject("{=!}The {WORKSHOP} has been seized from the {OWNER} at {TOWN} due to war between your realms. {TOWNOWNER} has gifted you this property.")
+                                            .SetTextVariable("WORKSHOP", wk.Name)
+                                            .SetTextVariable("OWNER", oldOwner.Name)
+                                            .SetTextVariable("TOWN", town.Name)
+                                            .SetTextVariable("TOWNOWNER", townOwner.Name).ToString(),
+                                            true,
+                                            false,
+                                            GameTexts.FindText("str_ok").ToString(),
+                                            string.Empty,
+                                            null,
+                                            null),
+                                            true);
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -184,30 +353,6 @@ namespace BannerKings.Behaviours.Workshops
             }
             return false;
         }
-
-        /*private void OnGameLoaded(CampaignGameStarter starter)
-        {
-            foreach (Town town in Town.AllTowns)
-            {
-                if (town.Workshops.Count() == 4)
-                {
-                    Workshop[] oldWorkshops = new Workshop[4];
-                    for (int i = 0; i < town.Workshops.Count(); i++)
-                    {
-                        Workshop workshop = town.Workshops[i];
-                        oldWorkshops[i] = workshop;
-                    }
-
-                    town.InitializeWorkshops(6);
-                    for (int i = 0; i < oldWorkshops.Count(); i++)
-                    {
-                        town.Workshops[i] = oldWorkshops[i];
-                    }
-                }
-            }
-        }*/
-
-        
 
         private void AddInventory(Workshop workshop)
         {

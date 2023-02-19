@@ -893,10 +893,12 @@ namespace BannerKings.Behaviours
             }
         }
 
-        [HarmonyPatch(typeof(ClanVariablesCampaignBehavior), "UpdateClanSettlementAutoRecruitment")]
+        [HarmonyPatch(typeof(ClanVariablesCampaignBehavior))]
         internal class AutoRecruitmentPatch
         {
-            private static bool Prefix(Clan clan)
+            [HarmonyPrefix]
+            [HarmonyPatch("UpdateClanSettlementAutoRecruitment", MethodType.Normal)]
+            private static bool Prefix1(Clan clan)
             {
                 if (clan.MapFaction is {IsKingdomFaction: true})
                 {
