@@ -770,6 +770,16 @@ namespace BannerKings.Behaviours
 
                 }
             }
+
+            [HarmonyPostfix]
+            [HarmonyPatch("ShouldBeCancelledInternal")]
+            private static void ShouldBeCancelledInternalPostfix(SettlementClaimantDecision __instance, ref bool __result)
+            {
+                if (!__instance.Settlement.Town.IsOwnerUnassigned)
+                {
+                    __result = true;
+                }
+            }
         }
 
         [HarmonyPatch(typeof(LordConversationsCampaignBehavior))]
