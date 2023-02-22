@@ -1,4 +1,5 @@
-﻿using BannerKings.Behaviours.Diplomacy.Wars;
+﻿using BannerKings.Behaviours.Diplomacy.Groups.Demands;
+using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Managers.Traits;
 using System.Collections.Generic;

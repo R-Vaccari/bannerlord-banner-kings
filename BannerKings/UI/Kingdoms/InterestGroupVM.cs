@@ -4,7 +4,7 @@ using BannerKings.Utils.Models;
 using Bannerlord.UIExtenderEx.Attributes;
 using System;
 using System.Linq;
-using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Generic;
 using TaleWorlds.Core.ViewModelCollection.Information;
@@ -21,7 +21,9 @@ namespace BannerKings.UI.Kingdoms
         private MBBindingList<GroupMemberVM> members;
         private GroupMemberVM leader;
         private ImageIdentifierVM clanBanner;
-        private bool isEmpty;
+        private bool isEmpty, isActionEnabled;
+        private string actionName;
+        private HintViewModel actionHint;
         private KingdomGroupsVM groupsVM;
 
         public KingdomDiplomacy KingdomDiplomacy { get; }
@@ -102,6 +104,10 @@ namespace BannerKings.UI.Kingdoms
                GameTexts.FindText(Group.AllowsCommoners ? "str_yes" : "str_no").ToString(),
                new BasicTooltipViewModel(() => new TextObject("{=!}Whether or not relevant commoners (notables) are allowed to participate in this group.").ToString())));
 
+            int lords = Group.Members.FindAll(x => x.IsLord).Count;
+            int notables = Group.Members.FindAll(x => x.IsNotable).Count;
+
+
             TextObject endorsedExplanation = new TextObject("{=!}Laws -----\n{LAWS}\n\n\nPolicies -----\n{POLICIES}\n\n\nCasus Belli -----\n{CASUS}")
                 .SetTextVariable("LAWS", Group.SupportedLaws.Aggregate("", (current, law) => 
                 current + Environment.NewLine + law.Name))
@@ -131,6 +137,32 @@ namespace BannerKings.UI.Kingdoms
             TertiaryHeaders.Add(new StringPairItemVM(new TextObject("{=!}Shunned Acts").ToString(),
                 string.Empty,
                 new BasicTooltipViewModel(() => shunnedExplanation.ToString())));
+
+            if (Group.Members.Contains(Hero.MainHero))
+            {
+                ActionName = new TextObject("{=3sRdGQou}Leave").ToString();
+                IsActionEnabled = true;
+                ActionHint = new HintViewModel(new TextObject("{=!}Leave this group. This will break any ties to their interests and demands. Leaving a group will hurt your relations with it's members, mainly the group leader. If you are the leader yourself, this impact will be increased."));
+            }
+            else
+            {
+                ActionName = new TextObject("{=es0Y3Bxc}Join").ToString();
+                IsActionEnabled = Group.CanHeroJoin(Hero.MainHero, KingdomDiplomacy);
+                ActionHint = new HintViewModel(new TextObject("{=!}Join this group. Being a group member means you will be aligned with their interests and demands. The group leader will be responsible for the group's interaction with the realm's sovereign, and their actions will impact the entire group. For example, a malcontent group leader may make pressure for a member of the group to be awarded a title or property and thus increase the group's influence."));
+            }
+        }
+
+        [DataSourceMethod]
+        private void ExecuteAction()
+        {
+            if (Group.Members.Contains(Hero.MainHero))
+            {
+                Group.RemoveMember(Hero.MainHero, KingdomDiplomacy);
+            }
+            else
+            {
+                Group.AddMember(Hero.MainHero);
+            }
         }
 
         [DataSourceProperty]
@@ -143,6 +175,50 @@ namespace BannerKings.UI.Kingdoms
                 {
                     isEmpty = value;
                     OnPropertyChangedWithValue(value, "IsEmpty");
+                }
+            }
+        }
+
+
+        [DataSourceProperty]
+        public bool IsActionEnabled
+        {
+            get => isActionEnabled;
+            set
+            {
+                if (value != isActionEnabled)
+                {
+                    isActionEnabled = value;
+                    OnPropertyChangedWithValue(value, "IsActionEnabled");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string ActionName
+        {
+            get => actionName;
+            set
+            {
+                if (value != actionName)
+                {
+                    actionName = value;
+                    OnPropertyChangedWithValue(value, "ActionName");
+                }
+            }
+        }
+
+
+        [DataSourceProperty]
+        public HintViewModel ActionHint
+        {
+            get => actionHint;
+            set
+            {
+                if (value != actionHint)
+                {
+                    actionHint = value;
+                    OnPropertyChangedWithValue(value, "ActionHint");
                 }
             }
         }

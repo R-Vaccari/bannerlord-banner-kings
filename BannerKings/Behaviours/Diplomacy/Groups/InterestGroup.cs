@@ -1,10 +1,14 @@
-﻿using BannerKings.Behaviours.Diplomacy.Wars;
+﻿using BannerKings.Behaviours.Diplomacy.Groups.Demands;
+using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Titles.Laws;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using static SandBox.CampaignBehaviors.LordConversationsCampaignBehavior;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups
 {
@@ -53,11 +57,67 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         public Hero Leader { get; private set; }
         public List<Hero> Members { get; private set; }
 
+        public bool CanHeroJoin(Hero hero, KingdomDiplomacy diplomacy) => hero.MapFaction == diplomacy.Kingdom && 
+            hero.MapFaction.Leader != hero && diplomacy.GetHeroGroup(hero) == null;
+
         public void AddMember(Hero hero)
         {
-            if (hero != null)
+            if (hero != null && !Members.Contains(hero))
             {
                 Members.Add(hero);
+                if (hero.Clan == Clan.PlayerClan)
+                {
+                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has joined the {GROUP} group.")
+                        .SetTextVariable("HERO", hero.Name)
+                        .SetTextVariable("GROUP", this.Name),
+                        0,
+                        hero.CharacterObject,
+                        Utils.Helpers.GetKingdomDecisionSound());
+                }
+            }
+        }
+
+        public void RemoveMember(Hero hero, KingdomDiplomacy diplomacy, bool forced = false)
+        {
+            if (hero != null && Members.Contains(hero))
+            {
+                if (hero.Clan == Clan.PlayerClan)
+                {
+                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has left the {GROUP} group.")
+                        .SetTextVariable("HERO", hero.Name)
+                        .SetTextVariable("GROUP", this.Name),
+                        0,
+                        hero.CharacterObject,
+                        Utils.Helpers.GetRelationDecisionSound());
+                }
+
+                if (forced)
+                {
+                    Members.Remove(hero);
+                    return;
+                }
+
+                Members.Remove(hero);
+                if (Leader == hero)
+                {
+                    foreach (var member in Members)
+                    {
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, member, -10, false);
+                    }
+
+                    SetNewLeader(diplomacy);
+                }
+                else
+                {
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, Leader, -20, false);
+                    foreach (var member in Members)
+                    {
+                        if (MBRandom.RandomFloat < 0.3f)
+                        {
+                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, member, -6, false);
+                        }
+                    }
+                }
             }
         }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Behaviours.Diplomacy.Groups
+namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 {
     public class DefaultDemands : DefaultTypeInitializer<DefaultDemands, Demand>
     {
@@ -19,7 +19,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             CouncilPosition.Initialize(new TextObject("{=!}Demand Council Position"),
                 new TextObject("{=!}"),
                 true,
-                (InterestGroup group) =>
+                (group) =>
                 {
                     return true;
                 },
@@ -41,7 +41,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             LawChange.Initialize(new TextObject("{=!}Demand Law Change"),
                 new TextObject("{=!}"),
                 true,
-                (InterestGroup group) =>
+                (group) =>
                 {
                     return true;
                 },
@@ -63,7 +63,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             PolicyChange.Initialize(new TextObject("{=!}Demand Policy Change"),
                 new TextObject("{=!}"),
                 true,
-                (InterestGroup group) =>
+                (group) =>
                 {
                     return true;
                 },
