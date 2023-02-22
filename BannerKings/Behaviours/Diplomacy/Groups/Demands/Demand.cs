@@ -40,12 +40,14 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         {
             private Action<Demand, Hero> fulfill;
             private Func<Hero, bool> isAdequate;
+            private Func<Hero, float> calculateAiLikelihood;
 
             public DemandResponse(TextObject name, TextObject description, int relation, int fulfillerXp,
-                int groupLeaderXp, Func<Hero, bool> isAdequate, Action<Demand, Hero> fulfill)
+                int groupLeaderXp, Func<Hero, bool> isAdequate, Func<Hero, float> calculateAiLikelihood, Action<Demand, Hero> fulfill)
             {
                 this.fulfill = fulfill;
                 this.isAdequate = isAdequate;
+                this.calculateAiLikelihood = calculateAiLikelihood;
                 Name = name;
                 GroupLeaderXp = groupLeaderXp;
                 FulfillerXp = fulfillerXp;
@@ -58,6 +60,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             public int Relation { get; private set; }
             public int FulfillerXp { get; private set; }
             public int GroupLeaderXp { get; private set; }
+            public float CalculateAiLikelihood(Hero fulfiller) => calculateAiLikelihood(fulfiller);
             public bool IsAdequate(Hero fulfiller) => isAdequate(fulfiller);
             public void Fulfill(Demand demand, Hero fulfiller) => fulfill(demand, fulfiller);
         }

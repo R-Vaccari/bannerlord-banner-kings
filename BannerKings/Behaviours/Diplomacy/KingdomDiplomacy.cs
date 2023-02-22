@@ -160,10 +160,11 @@ namespace BannerKings.Behaviours.Diplomacy
                 bool adequate = BannerKingsConfig.Instance.InterestGroupsModel.IsGroupAdequateForKingdom(this, group);
                 if (adequate && !Groups.Contains(group))
                 {
-                    var copy = group.GetCopy();
+                    var copy = group.GetCopy(this);
                     if (copy.Equals(DefaultInterestGroup.Instance.Zealots))
                     {
                         copy.SetName(Religion.Faith.GetZealotsGroupName());
+                        
                     }
 
                     Groups.Add(copy);

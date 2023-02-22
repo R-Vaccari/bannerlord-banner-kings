@@ -39,12 +39,16 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             Members = new List<Hero>();
         }
 
-        public InterestGroup GetCopy()
+        public KingdomDiplomacy KingdomDiplomacy { get; private set; }
+        public Hero FactionLeader => KingdomDiplomacy.Kingdom.Leader;
+
+        public InterestGroup GetCopy(KingdomDiplomacy diplomacy)
         {
             InterestGroup result = new InterestGroup(StringId);
             result.Initialize(Name, Description, MainTrait, DemandsCouncil, AllowsCommoners,
                 AllowsNobles, PreferredOccupations, SupportedPolicies, ShunnedPolicies, SupportedLaws,
                 ShunnedLaws, SupportedCasusBelli, PossibleDemands);
+            KingdomDiplomacy = diplomacy;
             return result;
         }
 
