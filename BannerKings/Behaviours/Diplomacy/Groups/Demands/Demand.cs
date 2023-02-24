@@ -20,7 +20,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             this.isAdequate = isAdequate;
         }
 
-        public InterestGroup Group { get; private set; }
+        public abstract Demand GetCopy(InterestGroup group);
+
+        public InterestGroup Group { get; protected set; }
 
         public abstract void ShowPlayerDemandOptions();
         public abstract void ShowPlayerDemandAnswers();
@@ -38,12 +40,12 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public class DemandResponse
         {
-            private Action<Demand, Hero> fulfill;
+            private Action<Hero> fulfill;
             private Func<Hero, bool> isAdequate;
             private Func<Hero, float> calculateAiLikelihood;
 
             public DemandResponse(TextObject name, TextObject description, int relation, int fulfillerXp,
-                int groupLeaderXp, Func<Hero, bool> isAdequate, Func<Hero, float> calculateAiLikelihood, Action<Demand, Hero> fulfill)
+                int groupLeaderXp, Func<Hero, bool> isAdequate, Func<Hero, float> calculateAiLikelihood, Action<Hero> fulfill)
             {
                 this.fulfill = fulfill;
                 this.isAdequate = isAdequate;

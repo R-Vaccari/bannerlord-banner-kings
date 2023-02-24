@@ -1,11 +1,16 @@
-﻿using System;
+﻿using BannerKings.Managers.Court;
+using System;
 using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 {
     public class CouncilPositionDemand : Demand
     {
+        private CouncilPosition position;
+        private Hero benefactor;
+
         public CouncilPositionDemand(string stringId) : base(stringId)
         {
             Initialize(new TextObject("{=!}Council Position"),
@@ -16,8 +21,30 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         {
             get
             {
-                yield return new DemandResponse();
+                yield return new DemandResponse(new TextObject(),
+                    new TextObject(),
+                    6,
+                    250,
+                    1000,
+                    (Hero fulfiller) =>
+                    {
+                        return true;
+                    },
+                    (Hero benefactor) =>
+                    {
+                        return 1f;
+                    },
+                    (Hero fulfiller) =>
+                    {
+                    });
             }
+        }
+
+        public override Demand GetCopy(InterestGroup group)
+        {
+            CouncilPositionDemand demand = new CouncilPositionDemand(StringId);
+            demand.Group = group;
+            return demand;
         }
 
         public override (bool, TextObject) IsDemandCurrentlyAdequate()
