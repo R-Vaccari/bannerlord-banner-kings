@@ -532,6 +532,10 @@ namespace BannerKings.Behaviours
                             }
                         }
                     }
+                    if (Campaign.Current.Models.SettlementFoodModel is not BKFoodModel)
+                    {
+                        return;
+                    }
 
                     var foodModel = (BKFoodModel)Campaign.Current.Models.SettlementFoodModel;
                     var popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
