@@ -90,7 +90,7 @@ namespace BannerKings
             AddEnumDefinition(typeof(GenderLaw), 31);
             AddClassDefinition(typeof(TitleManager), 32);
             AddEnumDefinition(typeof(CouncilPosition), 33);
-            AddClassDefinition(typeof(CouncilMember), 34);
+            AddClassDefinition(typeof(CouncilPosition), 34);
             AddClassDefinition(typeof(CouncilData), 35);
             AddClassDefinition(typeof(CourtManager), 36);
             AddEnumDefinition(typeof(DraftPolicy), 37);
@@ -190,7 +190,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<FeudalDuties, float>));
             ConstructContainerDefinition(typeof(List<FeudalRights>));
             ConstructContainerDefinition(typeof(Dictionary<Clan, CouncilData>));
-            ConstructContainerDefinition(typeof(List<CouncilMember>));
+            ConstructContainerDefinition(typeof(List<CouncilPosition>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, ClaimType>));
             ConstructContainerDefinition(typeof(Dictionary<FeudalTitle, float>));
             ConstructContainerDefinition(typeof(Dictionary<Settlement, List<Clan>>));
