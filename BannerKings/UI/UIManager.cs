@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BannerKings.Extensions;
+using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
@@ -656,15 +657,15 @@ namespace BannerKings.UI
                 {
                     var rulingClan = Clan.PlayerClan.Kingdom.RulingClan;
                     var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(rulingClan);
-                    var councilMember = council.GetMemberFromPosition(Managers.Court.CouncilPosition.Marshall);
+                    var councilMember = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Marshal);
                     TextObject reason = new TextObject("{=9ap6ssvZ}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to Lordship level.")
-                        .SetTextVariable("MARSHAL", councilMember.GetName())
+                        .SetTextVariable("MARSHAL", councilMember.Name)
                         .SetTextVariable("CLAN", rulingClan.Name);
 
                     if (Clan.PlayerClan.Kingdom.HasPolicy(BKPolicies.Instance.LimitedArmyPrivilege))
                     {
                         reason = new TextObject("{=0Yoz051M}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to County level.")
-                                                .SetTextVariable("MARSHAL", councilMember.GetName())
+                                                .SetTextVariable("MARSHAL", councilMember.Name)
                                                 .SetTextVariable("CLAN", rulingClan.Name);
                     }
 

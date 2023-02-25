@@ -1,7 +1,8 @@
-﻿using BannerKings.Managers.Kingdoms.Policies;
+﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
-using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -21,7 +22,8 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
-                if (armyLeader == council.Marshall)
+                CouncilPosition position = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Marshal);
+                if (position != null && armyLeader == position.Member)
                 {
                     return true;
                 }

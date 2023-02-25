@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using BannerKings.Managers.Court;
-using BannerKings.Models.BKModels;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
@@ -37,7 +34,7 @@ namespace BannerKings.UI.Court
             base.RefreshValues();
             var currentCouncil = council.GetMembers();
             var newList = new MBBindingList<SettlementGovernorSelectionItemVM> {AvailableGovernors[0]};
-            var councilPosition = council.GetCouncilMember(Position);
+            var councilPosition = council.GetCouncilPosition(Position);
             foreach (var hero in courtMembers)
             {
                 if (!currentCouncil.Contains(hero) && hero.IsAlive && !hero.IsChild &&
@@ -56,23 +53,31 @@ namespace BannerKings.UI.Court
             var options = new List<InquiryElement>();
             if (council.Owner == Hero.MainHero)
             {
+                var councilPosition = council.GetCouncilPosition(Position);
                 foreach (var vm in AvailableGovernors)
                 {
                     ImageIdentifier image = null;
-                    var name = "None";
+                    var name = new TextObject("{=koX9okuG}None");
                     var hint = "";
                     if (vm.Governor != null)
                     {
                         image = new ImageIdentifier(CampaignUIHelper.GetCharacterCode(vm.Governor.CharacterObject));
-                        name = vm.Governor.Name.ToString();
-                        var sb = new StringBuilder(GameTexts.FindText("str_tooltip_label_type") + ": " +
-                                                   HeroHelper.GetCharacterTypeName(vm.Governor));
-                        sb.AppendLine(new TextObject("{=RMUyXy4e}Competence:").ToString() +
-                                      council.GetCompetence(vm.Governor, Position));
-                        hint = sb.ToString();
+                        name = vm.Governor.Name;
+                        TextObject textObject = new TextObject("{=!}The {POSITION} requires competency in {PRIMARY} and {SECONDARY} skills. {HERO} is a {TYPE} with {COMPETENCE}% competence for this position.")
+                            .SetTextVariable("COMPETENCE", 0)
+                            .SetTextVariable("TYPE", HeroHelper.GetCharacterTypeName(vm.Governor))
+                            .SetTextVariable("SECONDARY", councilPosition.SecondarySkill.Name)
+                            .SetTextVariable("PRIMARY", councilPosition.PrimarySkill.Name)
+                            .SetTextVariable("POSITION", councilPosition.Name);
+
+                        hint = textObject.ToString();
                     }
 
-                    options.Add(new InquiryElement(vm.Governor, name, image, true, hint));
+                    options.Add(new InquiryElement(vm.Governor, 
+                        name.ToString(), 
+                        image, 
+                        true, 
+                        hint));
                 }
 
                 var model = BannerKingsConfig.Instance.CouncilModel;
@@ -84,7 +89,7 @@ namespace BannerKings.UI.Court
                         delegate(List<InquiryElement> x)
                         {
                             var requester = (Hero?) x[0].Identifier;
-                            var position = council.AllPositions.FirstOrDefault(x => x.Position == Position);
+                            var position = council.GetCouncilPosition(Position);
                             CouncilAction action = null;
                             if (requester != null)
                             {

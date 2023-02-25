@@ -13,6 +13,7 @@ using BannerKings.Managers.Education.Lifestyles;
 using System.Linq;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Managers.Court.Members;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -104,7 +105,7 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, settlement.OwnerClan.Leader,
-                    CouncilPosition.Marshall, 1f, false);
+                    DefaultCouncilPositions.Instance.Marshal, 1f, false);
             }
 
             return baseResult;

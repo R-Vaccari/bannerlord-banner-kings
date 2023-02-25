@@ -207,7 +207,7 @@ namespace BannerKings.UI.Extensions
             {
                 foreach (var position in council.GetOccupiedPositions())
                 {
-                    Councillors.Add(new CustomNameHeroVM(position.Member, position.GetName()));
+                    Councillors.Add(new CustomNameHeroVM(position.Member, position.Name));
                 }
             }
 

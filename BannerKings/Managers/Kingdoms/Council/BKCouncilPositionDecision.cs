@@ -15,7 +15,7 @@ namespace BannerKings.Managers.Kingdoms.Council
 {
     public class BKCouncilPositionDecision : KingdomDecision
     {
-        public BKCouncilPositionDecision(Clan proposerClan, CouncilData data, CouncilMember position) : base(proposerClan)
+        public BKCouncilPositionDecision(Clan proposerClan, CouncilData data, CouncilPosition position) : base(proposerClan)
         {
             Data = data;
             Position = position;
@@ -25,7 +25,7 @@ namespace BannerKings.Managers.Kingdoms.Council
 
         [SaveableProperty(99)] protected CouncilData Data { get; set; }
 
-        [SaveableProperty(98)] protected CouncilMember Position { get; set; }
+        [SaveableProperty(98)] protected CouncilPosition Position { get; set; }
 
         [SaveableProperty(97)] protected Religion Religion { get; set; }
 
@@ -33,9 +33,8 @@ namespace BannerKings.Managers.Kingdoms.Council
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
-            Position.Member = ((CouncilPositionDecisionOutcome) chosenOutcome).Candidate;
+            Position.SetMember(((CouncilPositionDecisionOutcome) chosenOutcome).Candidate);
         }
-
 
         public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
         {
@@ -93,7 +92,7 @@ namespace BannerKings.Managers.Kingdoms.Council
             var result = 2f;
             var candidate = ((CouncilPositionDecisionOutcome) possibleOutcome).Candidate;
 
-            result += Data.GetCompetence(candidate, Position.Position) * 4f;
+            result += Data.GetCompetence(candidate, Position) * 4f;
             if (Religion != null)
             {
                 var candidateReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(candidate);
@@ -136,7 +135,7 @@ namespace BannerKings.Managers.Kingdoms.Council
         public override TextObject GetChooseTitle()
         {
             return new TextObject("{=dqEO1Ug4}Choose the next council member to occupy the position of {POSITION}")
-                .SetTextVariable("POSITION", Position.GetName());
+                .SetTextVariable("POSITION", Position.Name);
         }
 
         public override TextObject GetChosenOutcomeText(DecisionOutcome chosenOutcome, SupportStatus supportStatus,
@@ -152,9 +151,8 @@ namespace BannerKings.Managers.Kingdoms.Council
         public override TextObject GetGeneralTitle()
         {
             return new TextObject("{=mUaJDjqO}Council member for position {POSITION}")
-                .SetTextVariable("POSITION", Position.GetName());
+                .SetTextVariable("POSITION", Position.Name);
         }
-
 
         public override int GetProposalInfluenceCost()
         {
@@ -182,13 +180,13 @@ namespace BannerKings.Managers.Kingdoms.Council
         {
             return new TextObject("{=Hj6NHtbc}{KINGDOM_NAME} will decide who will occupy the position of {POSITION}. You can pick your stance regarding this decision.")
                 .SetTextVariable("KINGDOM_NAME", Kingdom.Name)
-                .SetTextVariable("POSITION", Position.GetName());
+                .SetTextVariable("POSITION", Position.Name);
         }
 
         public override TextObject GetSupportTitle()
         {
             return new TextObject("{=dqEO1Ug4}Choose the next council member to occupy the position of {POSITION}")
-                .SetTextVariable("POSITION", Position.GetName());
+                .SetTextVariable("POSITION", Position.Name);
         }
 
         public override bool IsAllowed()

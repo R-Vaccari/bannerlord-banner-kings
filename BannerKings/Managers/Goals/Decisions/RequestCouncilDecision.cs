@@ -39,7 +39,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var leadingClan = Clan.PlayerClan.Kingdom.RulingClan;
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(leadingClan);
 
-            foreach (var member in council.AllPositions)
+            foreach (var member in council.Positions)
             {
                 TextObject name = null;
                 var hint = new TextObject("{=SXfiwy0X}{DESCRIPTION}\n\n{REASON}");
@@ -51,7 +51,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     hint = hint.SetTextVariable("DESCRIPTION", 
                         new TextObject("{=yYVE3O3p}Relinquish your position in the council. It will cost no influence and exempt you of any council privileges."));
                     name = new TextObject("{=oXv9Zi3y}Relinquish {POSITION}")
-                       .SetTextVariable("POSITION", member.GetName());
+                       .SetTextVariable("POSITION", member.Name);
                 }
                 else if (council.GetHeroPosition(Hero.MainHero) == null || member.Member == null)
                 {
@@ -59,7 +59,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     hint = hint.SetTextVariable("DESCRIPTION", new TextObject("{=dcDs5auK}Request your liege to grant you this position in the council. This action will cost {INFLUENCE}{INFLUENCE_ICON}.\n\n{ACCEPT}")
                                 .SetTextVariable("INFLUENCE", action.Influence));
                     name = new TextObject("{=DwfLTc6R}Request {POSITION}")
-                       .SetTextVariable("POSITION", member.GetName());
+                       .SetTextVariable("POSITION", member.Name);
                 }
                 else
                 {
@@ -67,10 +67,10 @@ namespace BannerKings.Managers.Goals.Decisions
                         council.GetHeroPosition(Hero.MainHero));
                     hint = hint.SetTextVariable("DESCRIPTION", new TextObject("{=ZYyxmOv9}Request to swap your current position with {COUNCILMAN} position of {POSITION}. This action will cost {INFLUENCE}{INFLUENCE_ICON}.")
                                 .SetTextVariable("COUNCILMAN", action.TargetPosition.Member.Name)
-                                .SetTextVariable("POSITION", action.TargetPosition.GetName())
+                                .SetTextVariable("POSITION", action.TargetPosition.Name)
                                 .SetTextVariable("INFLUENCE", action.Influence));
                     name = new TextObject("{=tQ5eP9n6}Swap to {POSITION}")
-                        .SetTextVariable("POSITION", member.GetName());
+                        .SetTextVariable("POSITION", member.Name);
                 }
 
                 if (!action.Possible)

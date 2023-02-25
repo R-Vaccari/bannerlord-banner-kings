@@ -7,11 +7,11 @@ namespace BannerKings.UI.Court
 {
     public class CouncilPositionVM : HeroVM
     {
-        private readonly CouncilMember position;
+        private readonly CouncilPosition position;
         private readonly Action<string> setId;
         private readonly Action<string> updatePosition;
 
-        public CouncilPositionVM(CouncilMember position, Action<string> setId, Action<string> updatePosition) : base(
+        public CouncilPositionVM(CouncilPosition position, Action<string> setId, Action<string> updatePosition) : base(
             position.Member)
         {
             this.position = position;
@@ -19,16 +19,16 @@ namespace BannerKings.UI.Court
             this.updatePosition = updatePosition;
         }
 
-        [DataSourceProperty] public string Title => position.GetName().ToString();
+        [DataSourceProperty] public string Title => position.Name.ToString();
 
         private void SetId()
         {
-            setId?.Invoke(position.Position.ToString());
+            setId?.Invoke(position.StringId.ToString());
         }
 
         private void UpdatePosition()
         {
-            updatePosition?.Invoke(position.Position.ToString());
+            updatePosition?.Invoke(position.StringId.ToString());
         }
     }
 }
