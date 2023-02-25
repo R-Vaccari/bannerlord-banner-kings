@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -28,6 +29,7 @@ namespace BannerKings.Managers
         {
             foreach (var council in Councils)
             {
+                council.Value.PostInitialize();
                 if (council.Value.Peerage == null)
                 {
                     council.Value.SetPeerage(Peerage.GetAdequatePeerage(council.Key));
@@ -95,7 +97,7 @@ namespace BannerKings.Managers
             return council;
         }
 
-        public CouncilMember GetHeroPosition(Hero hero)
+        public CouncilPosition GetHeroPosition(Hero hero)
         {
             if ((hero.IsLord && hero.Clan?.Kingdom == null) || hero.IsChild ||
                 hero.IsDead)
@@ -150,7 +152,7 @@ namespace BannerKings.Managers
         {
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(action.Council.Owner);
             if (rel != null && rel.Leadership.GetType() == typeof(KinshipLeadership) &&
-                action.TargetPosition.Position == CouncilPosition.Spiritual)
+                action.TargetPosition.Equals(DefaultCouncilPositions.Instance.Spiritual))
             {
                 var currentClergyman = action.TargetPosition.Member;
                 if (currentClergyman != null)
@@ -196,11 +198,11 @@ namespace BannerKings.Managers
                 MBInformationManager.AddQuickInformation(
                     new TextObject("{=f2V1XRaf}{OWNER} has appointed you as their {POSITION}.")
                         .SetTextVariable("OWNER", action.Council.Owner.Name)
-                        .SetTextVariable("POSITION", action.TargetPosition.GetName()),
+                        .SetTextVariable("POSITION", action.TargetPosition.Name),
                     0, action.Council.Owner.CharacterObject, "event:/ui/notification/relation");
             }
 
-            action.TargetPosition.Member = action.ActionTaker;
+            action.TargetPosition.SetMember(action.ActionTaker);
             if (action.ActionTaker.Clan != null)
             {
                 GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
@@ -224,8 +226,8 @@ namespace BannerKings.Managers
             }
 
             var currentCouncilman = action.TargetPosition.Member;
-            action.CurrentPosition.Member = currentCouncilman;
-            action.TargetPosition.Member = action.ActionTaker;
+            action.CurrentPosition.SetMember(currentCouncilman);
+            action.TargetPosition.SetMember(action.ActionTaker);
             if (action.ActionTaker.Clan != null)
             {
                 GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
@@ -250,7 +252,7 @@ namespace BannerKings.Managers
             CheckReligionRankChange(action);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.TargetPosition.Member,
                 ON_FIRED_RELATION);
-            action.TargetPosition.Member = null;
+            action.TargetPosition.SetMember(null);
         }
     }
 }
