@@ -132,7 +132,7 @@ namespace BannerKings.Managers.Court
                 return;
             }
            
-            if (Owner == Hero.MainHero || MBRandom.RandomInt(1, 100) >= 5)
+            if (Owner == Hero.MainHero)
             {
                 return;
             }

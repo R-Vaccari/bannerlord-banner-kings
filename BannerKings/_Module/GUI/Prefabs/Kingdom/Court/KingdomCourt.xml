@@ -72,8 +72,7 @@
 												<ListPanel Id="Description" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" IsDisabled="true" StackLayout.LayoutMethod="HorizontalLeftToRight">
 												  <Children>
 													<BrushWidget Id="CollapseIndicator" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!Party.Toggle.ExpandIndicator.Width" SuggestedHeight="!Party.Toggle.ExpandIndicator.Height" VerticalAlignment="Center" MarginRight="5" Brush="Party.Toggle.ExpandIndicator" />
-													<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" MarginRight="5" Brush="Party.Text.Toggle" Text="@InterestGroupsText" />
-													<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" MarginLeft="5" Brush="Party.Text.Toggle" Text="@InterestGroupsCountText" />
+													<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" MarginRight="5" Brush="Party.Text.Toggle" Text="@FamilyText" />
 												  </Children>
 												</ListPanel>
 											  </Children>
@@ -83,7 +82,7 @@
 											  <Children>
 
 												<NavigationTargetSwitcher FromTarget="..\." ToTarget="..\InterestGroupsList" />
-												<NavigatableListPanel Id="InterestGroupsList" DataSource="{InterestGroups}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" UseSelfIndexForMinimum="true">
+												<NavigatableListPanel Id="InterestGroupsList" DataSource="{Family}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" UseSelfIndexForMinimum="true">
 												  <ItemTemplate>
 													<CourtierTuple IsSelected="@IsSelected" />
 												  </ItemTemplate>
@@ -96,8 +95,7 @@
 												<ListPanel Id="Description" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" IsDisabled="true" StackLayout.LayoutMethod="HorizontalLeftToRight">
 												  <Children>
 													<BrushWidget Id="CollapseIndicator" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!Party.Toggle.ExpandIndicator.Width" SuggestedHeight="!Party.Toggle.ExpandIndicator.Height" VerticalAlignment="Center" MarginRight="5" Brush="Party.Toggle.ExpandIndicator" />
-													<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" MarginRight="5" Brush="Party.Text.Toggle" Text="@PlayerTrucesText" />
-													<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" MarginLeft="5" Brush="Party.Text.Toggle" Text="@NumOfPlayerTrucesText" />
+													<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" MarginRight="5" Brush="Party.Text.Toggle" Text="@CourtiersText" />
 												  </Children>
 												</ListPanel>
 											  </Children>
@@ -108,7 +106,7 @@
 
 												<!-- Other Wars List -->
 												<NavigationTargetSwitcher FromTarget="..\." ToTarget="..\OtherWarsList" />
-												<NavigatableListPanel Id="OtherWarsList" DataSource="{PlayerTruces}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" StackLayout.LayoutMethod="VerticalBottomToTop" UseSelfIndexForMinimum="true">
+												<NavigatableListPanel Id="OtherWarsList" DataSource="{Courtiers}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" StackLayout.LayoutMethod="VerticalBottomToTop" UseSelfIndexForMinimum="true">
 												  <ItemTemplate>
 													<CourtierTuple IsSelected="@IsSelected" />
 												  </ItemTemplate>

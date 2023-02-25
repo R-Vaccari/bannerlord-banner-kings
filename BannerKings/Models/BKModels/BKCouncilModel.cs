@@ -26,9 +26,9 @@ namespace BannerKings.Models.BKModels
             }
 
             result.Add(hero.GetSkillValue(position.PrimarySkill) / 300f, position.PrimarySkill.Name);
-            result.Add(hero.GetSkillValue(position.SecondarySkill) / 600f, position.PrimarySkill.Name);
+            result.Add(hero.GetSkillValue(position.SecondarySkill) / 600f, position.SecondarySkill.Name);
 
-            result.AddFactor(0.15f * hero.GetAttributeValue(DefaultCharacterAttributes.Intelligence) - 4, 
+            result.AddFactor(0.15f * (hero.GetAttributeValue(DefaultCharacterAttributes.Intelligence) - 4), 
                 DefaultCharacterAttributes.Intelligence.Name);
 
             Language courtLanguage = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(position.Culture);

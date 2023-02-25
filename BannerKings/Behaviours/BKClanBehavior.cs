@@ -285,7 +285,7 @@ namespace BannerKings.Behaviours
             var councillours = BannerKingsConfig.Instance.CourtManager.GetCouncilloursCount(clan);
             if (councillours != 0)
             {
-                clan.Leader.AddSkillXp(BKSkills.Instance.Lordship, councillours * 2f);
+                clan.Leader.AddSkillXp(BKSkills.Instance.Lordship, councillours * 10f);
             }
 
             if (!clan.IsUnderMercenaryService && clan.Kingdom != null)

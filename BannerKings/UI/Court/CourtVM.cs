@@ -51,13 +51,15 @@ namespace BannerKings.UI.Court
             currentCharacter = new CharacterVM(Hero.MainHero, null);
         }
 
-        [DataSourceProperty] public string FamilyText => GameTexts.FindText("str_family_group").ToString();
+        [DataSourceProperty] public string FamilyText => new TextObject("{=!}Household").ToString();
         [DataSourceProperty] public string CourtiersText => new TextObject("{=PykdjcGm}Courtiers").ToString();
         [DataSourceProperty] public string EffectsText => new TextObject("{=K7df68TT}Effects").ToString();
         [DataSourceProperty] public string PrivilegesText => new TextObject("{=77D4i3pG}Privileges").ToString();
+        [DataSourceProperty] public string PrivyCouncilText => new TextObject("{=!}Privy Council").ToString();
+        [DataSourceProperty] public string ExtendedCouncilText => new TextObject("{=!}Extended Council").ToString();
         [DataSourceProperty] public bool PlayerOwned => council.Owner == Hero.MainHero;
         [DataSourceProperty] public bool DisableButtons => !PlayerOwned;
-  
+     
         public override void RefreshValues()
         {
             base.RefreshValues();
@@ -68,10 +70,14 @@ namespace BannerKings.UI.Court
             RoyalPositions.Clear();
             CourtierInfo.Clear();
             PrivilegesInfo.Clear();
-            councilPosition = council.Positions.First();
+           
             if (councilPosition == null)
             {
-                return;
+                councilPosition = council.Positions.FirstOrDefault();
+                if (councilPosition == null)
+                {
+                    return;
+                }
             }
 
             var heroes = council.GetCourtMembers();
@@ -79,9 +85,7 @@ namespace BannerKings.UI.Court
 
             foreach (var hero in heroes)
             {
-                if (hero.Spouse == council.Owner || council.Owner.Children.Contains(hero) ||
-                    council.Owner.Siblings.Contains(hero) ||
-                    council.Owner.Father == hero || council.Owner.Mother == hero)
+                if (hero.Clan == council.Owner.Clan)
                 {
                     Family.Add(new ClanLordItemVM(hero, teleportationBehavior, null, SetCurrentCharacter,
                         OnRequestRecall, OnRequestRecall));
@@ -103,7 +107,14 @@ namespace BannerKings.UI.Court
 
             foreach (var position in council.Positions)
             {
-                CorePositions.Add(new CouncilPositionVM(position, SetId, UpdatePositionTexts));
+                if (position.IsCorePosition(position.StringId))
+                {
+                    CorePositions.Add(new CouncilPositionVM(position, SetId, UpdatePositionTexts));
+                }
+                else
+                {
+                    RoyalPositions.Add(new CouncilPositionVM(position, SetId, UpdatePositionTexts));
+                }
             }
 
             var member = council.GetCouncilPosition(councilPosition);
@@ -186,7 +197,7 @@ namespace BannerKings.UI.Court
 
         private void SetId(string id)
         {
-            var newPosition = (CouncilPosition) Enum.Parse(typeof(CouncilPosition), id);
+            var newPosition = council.GetCouncilPosition(DefaultCouncilPositions.Instance.All.FirstOrDefault(x => x.StringId == id));
             if (councilPosition != newPosition)
             {
                 councilPosition = newPosition;

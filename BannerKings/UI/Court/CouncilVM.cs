@@ -63,12 +63,10 @@ namespace BannerKings.UI.Court
                     {
                         image = new ImageIdentifier(CampaignUIHelper.GetCharacterCode(vm.Governor.CharacterObject));
                         name = vm.Governor.Name;
-                        TextObject textObject = new TextObject("{=!}The {POSITION} requires competency in {PRIMARY} and {SECONDARY} skills. {HERO} is a {TYPE} with {COMPETENCE}% competence for this position.")
-                            .SetTextVariable("COMPETENCE", 0)
+                        TextObject textObject = new TextObject("{=!}{HERO} is a {TYPE} with {COMPETENCE}% competence for this position.")
+                            .SetTextVariable("COMPETENCE", (Position.CalculateCandidateCompetence(vm.Governor).ResultNumber * 100f).ToString("0.00"))
                             .SetTextVariable("TYPE", HeroHelper.GetCharacterTypeName(vm.Governor))
-                            .SetTextVariable("SECONDARY", councilPosition.SecondarySkill.Name)
-                            .SetTextVariable("PRIMARY", councilPosition.PrimarySkill.Name)
-                            .SetTextVariable("POSITION", councilPosition.Name);
+                            .SetTextVariable("HERO", name);
 
                         hint = textObject.ToString();
                     }
@@ -79,12 +77,24 @@ namespace BannerKings.UI.Court
                         true, 
                         hint));
                 }
+                TextObject current = new TextObject();
+                if (Position.Member != null)
+                {
+                    current = new TextObject("{=!}{HERO} current holds this position with a competence of {COMPETENCE}%.")
+                        .SetTextVariable("HERO", Position.Member.Name)
+                        .SetTextVariable("COMPETENCE", (Position.Competence.ResultNumber * 100f).ToString("0.00"));
+                }
 
                 var model = BannerKingsConfig.Instance.CouncilModel;
                 MBInformationManager.ShowMultiSelectionInquiry(
                     new MultiSelectionInquiryData(
                         new TextObject("{=91fEPp8b}Select Councillor").ToString(),
-                        new TextObject("{=i8YeRbDt}Select who you would like to fill this position.").ToString(),
+                        new TextObject("{=!}Select who you would like to fill this position. The {POSITION} requires competency in {PRIMARY} and {SECONDARY} skills. {CURRENT}")
+                        .SetTextVariable("SECONDARY", councilPosition.SecondarySkill.Name)
+                        .SetTextVariable("PRIMARY", councilPosition.PrimarySkill.Name)
+                        .SetTextVariable("POSITION", councilPosition.Name)
+                        .SetTextVariable("CURRENT", current)
+                        .ToString(),
                         options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
                         delegate(List<InquiryElement> x)
                         {
