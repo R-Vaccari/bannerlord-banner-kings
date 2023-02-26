@@ -38,6 +38,12 @@ namespace BannerKings.Behaviours.Mercenary
 
         [SaveableProperty(9)] public int ServiceDays { get; private set; }
 
+        public void AddPoints()
+        {
+            KingdomProgress[Kingdom] += 1000f;
+            PrivilegeTimes[Kingdom] = CampaignTime.YearsFromNow(-1f);
+        }
+
         public void ChangeKingdom(Kingdom kingdom)
         {
             Kingdom = kingdom;

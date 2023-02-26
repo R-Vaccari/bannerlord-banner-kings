@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Behaviours.Mercenary;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -107,6 +108,20 @@ namespace BannerKings
             }
 
             return $"{piety} piety added to Main player.";
+        }
+
+        [CommandLineFunctionality.CommandLineArgumentFunction("add_career_points", "bannerkings")]
+        public static string AddCareer(List<string> strings)
+        {
+
+            MercenaryCareer career = Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetCareer(Clan.PlayerClan);
+            if (career != null)
+            {
+                career.AddPoints();
+                return "Career points added!";
+            }
+
+            return "No mercenary career found.";
         }
 
         [CommandLineFunctionality.CommandLineArgumentFunction("disable_knighthood", "bannerkings")]
