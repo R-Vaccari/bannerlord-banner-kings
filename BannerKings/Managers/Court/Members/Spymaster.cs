@@ -7,7 +7,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Court.Members
 {
-    public class Spymaster : CouncilPosition
+    public class Spymaster : CouncilMember
     {
         public Spymaster() : base("Spymaster")
         {
@@ -50,7 +50,7 @@ namespace BannerKings.Managers.Court.Members
             }
         }
 
-        public override CouncilPosition GetCopy(Clan clan)
+        public override CouncilMember GetCopy(Clan clan)
         {
             Spymaster pos = new Spymaster();
             pos.Initialize(clan);

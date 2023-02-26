@@ -5,7 +5,7 @@ namespace BannerKings.Managers.Court
 {
     public class CouncilAction : BannerKingsAction
     {
-        public CouncilAction(CouncilActionType type, Hero actionTaker, CouncilPosition target, CouncilPosition current,
+        public CouncilAction(CouncilActionType type, Hero actionTaker, CouncilMember target, CouncilMember current,
             CouncilData council)
         {
             ActionTaker = actionTaker;
@@ -15,8 +15,8 @@ namespace BannerKings.Managers.Court
             Council = council;
         }
 
-        public CouncilPosition TargetPosition { get; }
-        public CouncilPosition CurrentPosition { get; }
+        public CouncilMember TargetPosition { get; }
+        public CouncilMember CurrentPosition { get; }
         public CouncilActionType Type { get; }
         public CouncilData Council { get; }
 

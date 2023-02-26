@@ -15,7 +15,7 @@ namespace BannerKings.Managers.Kingdoms.Council
 {
     public class BKCouncilPositionDecision : KingdomDecision
     {
-        public BKCouncilPositionDecision(Clan proposerClan, CouncilData data, CouncilPosition position) : base(proposerClan)
+        public BKCouncilPositionDecision(Clan proposerClan, CouncilData data, CouncilMember position) : base(proposerClan)
         {
             Data = data;
             Position = position;
@@ -25,7 +25,7 @@ namespace BannerKings.Managers.Kingdoms.Council
 
         [SaveableProperty(99)] protected CouncilData Data { get; set; }
 
-        [SaveableProperty(98)] protected CouncilPosition Position { get; set; }
+        [SaveableProperty(98)] protected CouncilMember Position { get; set; }
 
         [SaveableProperty(97)] protected Religion Religion { get; set; }
 

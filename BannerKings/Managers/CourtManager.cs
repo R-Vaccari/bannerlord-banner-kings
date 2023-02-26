@@ -37,7 +37,7 @@ namespace BannerKings.Managers
             }
         }
 
-        public void ApplyCouncilEffect(ref ExplainedNumber result, Hero settlementOwner, CouncilPosition position,
+        public void ApplyCouncilEffect(ref ExplainedNumber result, Hero settlementOwner, CouncilMember position,
             float maxEffect, bool factor)
         {
             var council = GetCouncil(settlementOwner);
@@ -55,7 +55,7 @@ namespace BannerKings.Managers
             }
         }
 
-        public int GetCouncilEffectInteger(Hero settlementOwner, CouncilPosition position, float maxEffect)
+        public int GetCouncilEffectInteger(Hero settlementOwner, CouncilMember position, float maxEffect)
         {
             var council = GetCouncil(settlementOwner);
             var competence = council.GetCompetence(position);
@@ -97,7 +97,7 @@ namespace BannerKings.Managers
             return council;
         }
 
-        public CouncilPosition GetHeroPosition(Hero hero)
+        public CouncilMember GetHeroPosition(Hero hero)
         {
             if ((hero.IsLord && hero.Clan?.Kingdom == null) || hero.IsChild ||
                 hero.IsDead)

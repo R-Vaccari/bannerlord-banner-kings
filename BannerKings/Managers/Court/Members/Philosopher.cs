@@ -8,7 +8,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Court.Members
 {
-    public class Philosopher : CouncilPosition
+    public class Philosopher : CouncilMember
     {
         public Philosopher() : base("Philosopher")
         {
@@ -40,7 +40,7 @@ namespace BannerKings.Managers.Court.Members
             }
         }
 
-        public override CouncilPosition GetCopy(Clan clan)
+        public override CouncilMember GetCopy(Clan clan)
         {
             Philosopher pos = new Philosopher();
             pos.Initialize(clan);

@@ -17,7 +17,7 @@ namespace BannerKings.UI.Court
         private readonly List<Hero> courtMembers;
         private readonly Action<Hero> onDone;
 
-        public CouncilVM(Action<Hero> onDone, CouncilData council, CouncilPosition position, List<Hero> courtMembers) :
+        public CouncilVM(Action<Hero> onDone, CouncilData council, CouncilMember position, List<Hero> courtMembers) :
             base(null, onDone)
         {
             this.onDone = onDone;
@@ -27,7 +27,7 @@ namespace BannerKings.UI.Court
             RefreshValues();
         }
 
-        public CouncilPosition Position { get; set; }
+        public CouncilMember Position { get; set; }
 
         public override void RefreshValues()
         {

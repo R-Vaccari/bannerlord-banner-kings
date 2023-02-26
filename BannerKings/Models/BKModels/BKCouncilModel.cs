@@ -15,7 +15,7 @@ namespace BannerKings.Models.BKModels
             return new ExplainedNumber();
         }
 
-        public ExplainedNumber CalculateHeroCompetence(Hero hero, CouncilPosition position, bool explanations = false)
+        public ExplainedNumber CalculateHeroCompetence(Hero hero, CouncilMember position, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0f, explanations);
             result.LimitMin(0f);
@@ -81,7 +81,7 @@ namespace BannerKings.Models.BKModels
 
 
         public CouncilAction GetAction(CouncilActionType type, CouncilData council, Hero requester,
-            CouncilPosition targetPosition, CouncilPosition currentPosition = null,
+            CouncilMember targetPosition, CouncilMember currentPosition = null,
             bool appointed = false)
         {
             return type switch
@@ -96,7 +96,7 @@ namespace BannerKings.Models.BKModels
 
 
         private CouncilAction GetSwap(CouncilActionType type, CouncilData council, Hero requester,
-            CouncilPosition targetPosition, CouncilPosition currentPosition = null, bool appointed = false)
+            CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
         {
             var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
             {
@@ -159,7 +159,7 @@ namespace BannerKings.Models.BKModels
         }
 
         private CouncilAction GetRelinquish(CouncilActionType type, CouncilData council, Hero requester,
-            CouncilPosition currentPosition, CouncilPosition targetPosition = null, bool appointed = false)
+            CouncilMember currentPosition, CouncilMember targetPosition = null, bool appointed = false)
         {
             var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
             {
@@ -189,7 +189,7 @@ namespace BannerKings.Models.BKModels
         }
 
         private CouncilAction GetRequest(CouncilActionType type, CouncilData council, Hero requester,
-            CouncilPosition targetPosition, CouncilPosition currentPosition = null, bool appointed = false)
+            CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
         {
             var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
             {
@@ -255,7 +255,7 @@ namespace BannerKings.Models.BKModels
             return action;
         }
 
-        public float GetDesirability(Hero candidate, CouncilData council, CouncilPosition position)
+        public float GetDesirability(Hero candidate, CouncilData council, CouncilMember position)
         {
             float titleWeight = 0;
             var competence = council.GetCompetence(candidate, position);
@@ -274,7 +274,7 @@ namespace BannerKings.Models.BKModels
             return (titleWeight + competence + relation) / 3f;
         }
 
-        public int GetInfluenceCost(CouncilActionType type, CouncilPosition targetPosition)
+        public int GetInfluenceCost(CouncilActionType type, CouncilMember targetPosition)
         {
             switch (type)
             {

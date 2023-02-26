@@ -7,7 +7,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Court.Members
 {
-    public class Spouse : CouncilPosition
+    public class Spouse : CouncilMember
     {
         public Spouse() : base("Spouse")
         {
@@ -38,7 +38,7 @@ namespace BannerKings.Managers.Court.Members
                 yield return DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy();
             }
         }
-        public override CouncilPosition GetCopy(Clan clan)
+        public override CouncilMember GetCopy(Clan clan)
         {
             Spouse pos = new Spouse();
             pos.Initialize(clan);

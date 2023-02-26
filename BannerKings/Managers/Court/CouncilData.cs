@@ -20,7 +20,7 @@ namespace BannerKings.Managers.Court
         public CouncilData(Clan clan)
         {
             this.Clan = clan;
-            Positions = new List<CouncilPosition>();
+            Positions = new List<CouncilMember>();
             Peerage = Peerage.GetAdequatePeerage(clan);
         }
 
@@ -28,7 +28,7 @@ namespace BannerKings.Managers.Court
         {
             if (Positions == null)
             {
-                Positions = new List<CouncilPosition>();
+                Positions = new List<CouncilMember>();
             }
 
             foreach (var pos in Positions)
@@ -38,7 +38,7 @@ namespace BannerKings.Managers.Court
         }
 
         [SaveableProperty(1)] public Clan Clan { get; private set; }
-        [SaveableProperty(2)] public List<CouncilPosition> Positions { get; private set; }
+        [SaveableProperty(5)] public List<CouncilMember> Positions { get; private set; }
         [SaveableProperty(4)] public Peerage Peerage { get; private set; }
 
         public void SetPeerage(Peerage peerage)
@@ -66,7 +66,7 @@ namespace BannerKings.Managers.Court
             }
         }
 
-        public float GetCompetence(Hero hero, CouncilPosition position)
+        public float GetCompetence(Hero hero, CouncilMember position)
         {
             if (hero != null && position != null)
             {
@@ -76,13 +76,13 @@ namespace BannerKings.Managers.Court
             return 0f;
         }
 
-        public float GetCompetence(CouncilPosition position) => position.Competence.ResultNumber;
-        public CouncilPosition GetCouncilPosition(CouncilPosition position) => Positions.FirstOrDefault(x => x.Equals(position));
+        public float GetCompetence(CouncilMember position) => position.Competence.ResultNumber;
+        public CouncilMember GetCouncilPosition(CouncilMember position) => Positions.FirstOrDefault(x => x.Equals(position));
 
         internal override void Update(PopulationData data)
         {
             var courtiers = GetCourtMembers();
-            List<CouncilPosition> positions = new List<CouncilPosition>();
+            List<CouncilMember> positions = new List<CouncilMember>();
             foreach (var pos in DefaultCouncilPositions.Instance.All)
             {
                 if (pos.IsAdequate(this))
@@ -192,7 +192,7 @@ namespace BannerKings.Managers.Court
             return available;
         }
 
-        public List<ValueTuple<Hero, float>> GetHeroesForPosition(CouncilPosition position)
+        public List<ValueTuple<Hero, float>> GetHeroesForPosition(CouncilMember position)
         {
             var list = new List<ValueTuple<Hero, float>>();
             foreach (var hero in GetAvailableHeroes())
@@ -322,10 +322,10 @@ namespace BannerKings.Managers.Court
             return heroes;
         }
 
-        public List<CouncilPosition> GetOccupiedPositions()
+        public List<CouncilMember> GetOccupiedPositions()
         {
             PostInitialize();
-            var heroes = new List<CouncilPosition>();
+            var heroes = new List<CouncilMember>();
             foreach (var councilMember in Positions)
             {
                 if (councilMember.Member != null)
@@ -352,7 +352,7 @@ namespace BannerKings.Managers.Court
             return heroes;
         }
 
-        public CouncilPosition GetHeroPosition(Hero hero)
+        public CouncilMember GetHeroPosition(Hero hero)
         {
             PostInitialize();
             foreach (var councilMember in Positions)
@@ -365,6 +365,22 @@ namespace BannerKings.Managers.Court
 
             return null;
         }
+    }
+
+    public enum CouncilPosition
+    {
+        Marshall,
+        Chancellor,
+        Steward,
+        Spymaster,
+        Spiritual,
+        Prince,
+        Castellan,
+        Druzina,
+        Elder,
+        Constable,
+        Philosopher,
+        None
     }
 
     public enum CouncilPrivileges

@@ -67,7 +67,7 @@ namespace BannerKings.UI
             return text;
         }
 
-        public static List<TooltipProperty> GetCouncilPositionTooltip(CouncilPosition position)
+        public static List<TooltipProperty> GetCouncilPositionTooltip(CouncilMember position)
         {
             List<TooltipProperty> properties = new List<TooltipProperty>();
             properties.Add(new TooltipProperty(position.Name.ToString() + "        ", 
@@ -499,7 +499,7 @@ namespace BannerKings.UI
             return correlation;
         }
 
-        public static List<TooltipProperty> GetHeroGovernorEffectsTooltip(Hero hero, CouncilPosition position,
+        public static List<TooltipProperty> GetHeroGovernorEffectsTooltip(Hero hero, CouncilMember position,
             float competence)
         {
             var list = new List<TooltipProperty>

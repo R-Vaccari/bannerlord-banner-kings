@@ -91,8 +91,7 @@ namespace BannerKings
             AddEnumDefinition(typeof(InheritanceType), 30);
             AddEnumDefinition(typeof(GenderLaw), 31);
             AddClassDefinition(typeof(TitleManager), 32);
-            AddClassDefinition(typeof(CouncilTask), 33);
-            AddClassDefinition(typeof(CouncilPosition), 34);
+            AddClassDefinition(typeof(CouncilMember), 34);
             AddClassDefinition(typeof(CouncilData), 35);
             AddClassDefinition(typeof(CourtManager), 36);
             AddEnumDefinition(typeof(DraftPolicy), 37);
@@ -183,7 +182,8 @@ namespace BannerKings
             AddClassDefinition(typeof(Castellan), 122);
             AddClassDefinition(typeof(Elder), 123);
             AddClassDefinition(typeof(Philosopher), 124);
-           
+            AddClassDefinition(typeof(CouncilTask), 125);
+
         }
 
         protected override void DefineContainerDefinitions()
@@ -202,7 +202,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<FeudalDuties, float>));
             ConstructContainerDefinition(typeof(List<FeudalRights>));
             ConstructContainerDefinition(typeof(Dictionary<Clan, CouncilData>));
-            ConstructContainerDefinition(typeof(List<CouncilPosition>));
+            ConstructContainerDefinition(typeof(List<CouncilMember>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, ClaimType>));
             ConstructContainerDefinition(typeof(Dictionary<FeudalTitle, float>));
             ConstructContainerDefinition(typeof(Dictionary<Settlement, List<Clan>>));

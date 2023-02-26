@@ -8,7 +8,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Court.Members
 {
-    public class Physician : CouncilPosition
+    public class Physician : CouncilMember
     {
         public Physician(string id) : base(id)
         {
@@ -27,7 +27,7 @@ namespace BannerKings.Managers.Court.Members
 
         public override IEnumerable<CouncilPrivileges> Privileges => throw new NotImplementedException();
 
-        public override CouncilPosition GetCopy(Clan clan)
+        public override CouncilMember GetCopy(Clan clan)
         {
             throw new NotImplementedException();
         }

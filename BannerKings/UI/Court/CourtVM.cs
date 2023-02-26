@@ -18,7 +18,7 @@ namespace BannerKings.UI.Court
     {
         private MBBindingList<CouncilPositionVM> corePositions, extraPositions;
         private readonly CouncilData council;
-        private CouncilPosition councilPosition;
+        private CouncilMember councilPosition;
         private CouncilVM councilVM;
         private MBBindingList<InformationElement> courtInfo, privilegesInfo, courtierInfo;
         private CharacterVM currentCharacter;

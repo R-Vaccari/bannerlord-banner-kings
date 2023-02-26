@@ -6,7 +6,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Court.Members
 {
-    public class Castellan : CouncilPosition
+    public class Castellan : CouncilMember
     {
         public Castellan() : base("Castellan")
         {
@@ -42,7 +42,7 @@ namespace BannerKings.Managers.Court.Members
             }
         }
 
-        public override CouncilPosition GetCopy(Clan clan)
+        public override CouncilMember GetCopy(Clan clan)
         {
             Castellan pos = new Castellan();
             pos.Initialize(clan);

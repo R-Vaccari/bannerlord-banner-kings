@@ -22,7 +22,7 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
-                CouncilPosition position = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Marshal);
+                CouncilMember position = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Marshal);
                 if (position != null && armyLeader == position.Member)
                 {
                     return true;

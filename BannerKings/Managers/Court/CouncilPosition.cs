@@ -9,9 +9,9 @@ using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Court
 {
-    public abstract class CouncilPosition : BannerKingsObject
+    public abstract class CouncilMember : BannerKingsObject
     {
-        public CouncilPosition(string id) : base(id)
+        public CouncilMember(string id) : base(id)
         {
             DueWage = 0;   
         }
@@ -29,7 +29,7 @@ namespace BannerKings.Managers.Court
             CurrentTask.PostInitialize();
         }
 
-        public abstract CouncilPosition GetCopy(Clan clan);
+        public abstract CouncilMember GetCopy(Clan clan);
 
         [SaveableProperty(100)] public Hero Member { get; private set; }
         [SaveableProperty(101)] public bool IsRoyal { get; private set; }
@@ -181,9 +181,9 @@ namespace BannerKings.Managers.Court
 
         public override bool Equals(object obj)
         {
-            if (obj is CouncilPosition)
+            if (obj is CouncilMember)
             {
-                return StringId == (obj as CouncilPosition).StringId;
+                return StringId == (obj as CouncilMember).StringId;
             }
             return base.Equals(obj);
         }

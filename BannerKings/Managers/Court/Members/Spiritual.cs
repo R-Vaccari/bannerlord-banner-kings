@@ -7,7 +7,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Court.Members
 {
-    public class Spiritual : CouncilPosition
+    public class Spiritual : CouncilMember
     {
         public Spiritual() : base("Spiritual")
         {
@@ -51,7 +51,7 @@ namespace BannerKings.Managers.Court.Members
             }
         }
 
-        public override CouncilPosition GetCopy(Clan clan)
+        public override CouncilMember GetCopy(Clan clan)
         {
             Spiritual pos = new Spiritual();
             pos.Initialize(clan);

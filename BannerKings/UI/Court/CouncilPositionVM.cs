@@ -8,12 +8,12 @@ namespace BannerKings.UI.Court
 {
     public class CouncilPositionVM : HeroVM
     {
-        private readonly CouncilPosition position;
+        private readonly CouncilMember position;
         private readonly Action<string> setId;
         private readonly Action<string> updatePosition;
         private BasicTooltipViewModel hint;
 
-        public CouncilPositionVM(CouncilPosition position, Action<string> setId, Action<string> updatePosition) : base(
+        public CouncilPositionVM(CouncilMember position, Action<string> setId, Action<string> updatePosition) : base(
             position.Member)
         {
             this.position = position;
