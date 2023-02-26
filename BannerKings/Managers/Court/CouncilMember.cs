@@ -1,5 +1,7 @@
-﻿using BannerKings.Managers.Court.Members.Tasks;
+﻿using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -9,27 +11,55 @@ using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Court
 {
-    public abstract class CouncilMember : BannerKingsObject
+    public class CouncilMember : BannerKingsObject
     {
+        private Func<CouncilData, bool> isAdequate;
+        private Func<CouncilMember, Hero, bool> isValidCandidateInternal;
+        private Func<CouncilMember, TextObject> getCulturalName;
+
         public CouncilMember(string id) : base(id)
         {
             DueWage = 0;   
         }
 
-        public void Initialize(Clan clan)
+        public void Initialize(SkillObject primary, SkillObject secondary,
+            List<CouncilTask> tasks, IEnumerable<CouncilPrivileges> privileges,
+            Func<CouncilData, bool> isAdequate, Func<CouncilMember, Hero, bool> isValidCandidateInternal,
+            Func<CouncilMember, TextObject> getCulturalName)
         {
-            Clan = clan;
-            SetStrings();
-            CurrentTask = Tasks.First();
+            PrimarySkill = primary;
+            SecondarySkill = secondary;
+            Tasks = tasks;
+            Privileges = privileges;
+            this.isAdequate = isAdequate;
+            this.isValidCandidateInternal = isValidCandidateInternal;
+            this.getCulturalName = getCulturalName;
         }
 
         public void PostInitialize()
         {
+            CouncilMember c = DefaultCouncilPositions.Instance.GetById(this);
+            Initialize(c.PrimarySkill, c.SecondarySkill, c.Tasks, c.Privileges,
+                c.isAdequate, c.isValidCandidateInternal, c.getCulturalName);
             SetStrings();
+            foreach (var task in Tasks)
+            {
+                task.PostInitialize();
+            }
             CurrentTask.PostInitialize();
         }
 
-        public abstract CouncilMember GetCopy(Clan clan);
+        public CouncilMember GetCopy(Clan clan)
+        {
+            CouncilMember member = new CouncilMember(StringId);
+            member.Initialize(PrimarySkill, SecondarySkill,
+                Tasks, Privileges, isAdequate, isValidCandidateInternal,
+                getCulturalName);
+            member.Clan = clan;
+            member.SetStrings();
+            member.CurrentTask = member.Tasks.FirstOrDefault();
+            return member;
+        }
 
         [SaveableProperty(100)] public Hero Member { get; private set; }
         [SaveableProperty(101)] public bool IsRoyal { get; private set; }
@@ -37,7 +67,21 @@ namespace BannerKings.Managers.Court
         [SaveableProperty(103)] public int DueWage { get; set; }
         [SaveableProperty(104)] public CouncilTask CurrentTask { get; private set; }
 
-        public abstract IEnumerable<CouncilTask> Tasks { get; }
+        public void SetTask(CouncilTask task)
+        {
+            CurrentTask = task.GetCopy();
+        }
+
+        public List<CouncilTask> Tasks { get; private set; }
+
+        public IEnumerable<CouncilPrivileges> Privileges { get; private set; }
+
+        public  SkillObject PrimarySkill { get; private set; }
+        public SkillObject SecondarySkill { get; private set; }
+        public TextObject GetCulturalName() => getCulturalName(this);
+
+        protected bool IsValidCandidateInternal(Hero candidate) => isValidCandidateInternal(this, candidate);
+        public bool IsAdequate(CouncilData data) => isAdequate(data);
 
         public void SetMember(Hero hero) => Member = hero;
         public void SetIsRoyal(bool isRoyal)
@@ -63,7 +107,7 @@ namespace BannerKings.Managers.Court
         public ExplainedNumber CalculateCandidateCompetence(Hero candidate) => BannerKingsConfig.Instance.CouncilModel
             .CalculateHeroCompetence(candidate, this);
         
-        public abstract bool IsAdequate(CouncilData data);
+       
         public bool IsValidCandidate(Hero candidate)
         {
             if (candidate.Clan is { IsUnderMercenaryService: true })
@@ -88,12 +132,6 @@ namespace BannerKings.Managers.Court
 
             return IsValidCandidateInternal(candidate);
         }
-
-        protected abstract bool IsValidCandidateInternal(Hero candidate);
-
-        public abstract SkillObject PrimarySkill { get; }
-        public abstract SkillObject SecondarySkill { get; }
-        public abstract TextObject GetCulturalName();
 
         private void SetStrings()
         {
@@ -177,13 +215,11 @@ namespace BannerKings.Managers.Court
             }
         }
 
-        public abstract IEnumerable<CouncilPrivileges> Privileges { get; }
-
         public override bool Equals(object obj)
         {
             if (obj is CouncilMember)
             {
-                return StringId == (obj as CouncilMember).StringId;
+                return StringId == (obj as CouncilMember).StringId && Clan == (obj as CouncilMember).Clan;
             }
             return base.Equals(obj);
         }

@@ -152,7 +152,7 @@ namespace BannerKings.Managers
         {
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(action.Council.Owner);
             if (rel != null && rel.Leadership.GetType() == typeof(KinshipLeadership) &&
-                action.TargetPosition.Equals(DefaultCouncilPositions.Instance.Spiritual))
+                action.TargetPosition.StringId == DefaultCouncilPositions.Instance.Spiritual.StringId)
             {
                 var currentClergyman = action.TargetPosition.Member;
                 if (currentClergyman != null)

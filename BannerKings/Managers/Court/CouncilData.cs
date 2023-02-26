@@ -77,17 +77,16 @@ namespace BannerKings.Managers.Court
         }
 
         public float GetCompetence(CouncilMember position) => position.Competence.ResultNumber;
-        public CouncilMember GetCouncilPosition(CouncilMember position) => Positions.FirstOrDefault(x => x.Equals(position));
+        public CouncilMember GetCouncilPosition(CouncilMember position) => Positions.FirstOrDefault(x => x.StringId == position.StringId);
 
         internal override void Update(PopulationData data)
         {
             var courtiers = GetCourtMembers();
-            List<CouncilMember> positions = new List<CouncilMember>();
             foreach (var pos in DefaultCouncilPositions.Instance.All)
             {
                 if (pos.IsAdequate(this))
                 {
-                    if (!Positions.Contains(pos))
+                    if (!Positions.Any(x => x.StringId == pos.StringId))
                     {
                         Positions.Add(pos.GetCopy(Clan));
                     }

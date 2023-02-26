@@ -106,8 +106,9 @@ namespace BannerKings.Models.Vanilla
             var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
             if (religion != null && clan.Settlements.Count > 0)
             {
-                if (religion.HasDoctrine(DefaultDoctrines.Instance.Druidism) && 
-                    council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spiritual).Member == null) 
+                var spiritual = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spiritual);
+                if (religion.HasDoctrine(DefaultDoctrines.Instance.Druidism) &&
+                    spiritual != null && spiritual.Member == null) 
                 {
                     baseResult.Add(-4f, DefaultDoctrines.Instance.Druidism.Name);
                 }

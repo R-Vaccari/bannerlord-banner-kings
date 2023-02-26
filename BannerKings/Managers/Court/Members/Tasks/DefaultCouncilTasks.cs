@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Court.Members.Tasks
@@ -17,7 +16,7 @@ namespace BannerKings.Managers.Court.Members.Tasks
 
         public override void Initialize()
         {
-            OrganizeMiltia.Initialize(new TextObject(),
+            OrganizeMiltia.Initialize(new TextObject("{=!}Organize Militia"),
                 new TextObject(),
                 new TextObject(),
                 0f);

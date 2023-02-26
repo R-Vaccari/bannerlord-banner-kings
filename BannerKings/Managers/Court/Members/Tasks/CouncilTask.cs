@@ -46,7 +46,7 @@ namespace BannerKings.Managers.Court.Members.Tasks
         {
             if (obj is CouncilTask)
             {
-                return StringId == (obj as CouncilTask).StringId;
+                return StringId == (obj as CouncilTask).StringId && base.Equals(obj);
             }
             return base.Equals(obj);
         }

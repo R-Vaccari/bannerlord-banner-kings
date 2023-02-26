@@ -40,13 +40,13 @@
 
 										<GridWidget Id="CoreGrid" DataSource="{CorePositions}" WidthSizePolicy="StretchToParent"
 										            HeightSizePolicy="CoverChildren" MarginTop="50" HorizontalAlignment="Center"
-										            SuggestedHeight="350" DefaultCellWidth="210" DefaultCellHeight="300" ColumnCount="3">
+										            SuggestedHeight="350" DefaultCellWidth="210" DefaultCellHeight="320" ColumnCount="3">
 											<ItemTemplate>
 												<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop"
 														   DoNotAcceptEvents="false">
 													<Children>
 														<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@Title" />
+																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="33" Text="@Title" />
 														<ToggleButtonWidget Command.Click="SetId" Command.HoverBegin="UpdatePosition" DoNotPassEventsToChildren="true" 
 																			WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedWidth="191" SuggestedHeight="140" 
 																			MarginRight="80" MarginLeft="80" HorizontalAlignment="Center" Brush="TownManagement.Governor" UpdateChildrenStates="true"
@@ -70,6 +70,19 @@
 
 															</Children>
 														</ToggleButtonWidget>
+														
+														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																   SuggestedWidth="200" MarginTop="30" StackLayout.LayoutMethod="VerticalBottomToTop" >
+															<Children>
+																<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
+																				SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Current Task"
+																				MarginTop="25" />
+																				
+																<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{Selector}" MarginTop="10" 
+																										HorizontalAlignment="Center" IsEnabled="@Enabled"/>
+																										
+															</Children>
+														</ListPanel>
 													</Children>
 												</ListPanel>
 											</ItemTemplate>
