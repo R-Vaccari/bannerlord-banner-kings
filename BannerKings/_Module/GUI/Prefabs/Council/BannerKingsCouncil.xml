@@ -40,7 +40,7 @@
 
 										<GridWidget Id="CoreGrid" DataSource="{CorePositions}" WidthSizePolicy="StretchToParent"
 										            HeightSizePolicy="CoverChildren" MarginTop="50" HorizontalAlignment="Center"
-										            SuggestedHeight="350" DefaultCellWidth="210" DefaultCellHeight="200" ColumnCount="3">
+										            SuggestedHeight="350" DefaultCellWidth="210" DefaultCellHeight="300" ColumnCount="3">
 											<ItemTemplate>
 												<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop"
 														   DoNotAcceptEvents="false">
@@ -49,7 +49,7 @@
 																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@Title" />
 														<ToggleButtonWidget Command.Click="SetId" Command.HoverBegin="UpdatePosition" DoNotPassEventsToChildren="true" 
 																			WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedWidth="191" SuggestedHeight="140" 
-																			MarginRight="60" MarginLeft="60" HorizontalAlignment="Center" Brush="TownManagement.Governor" UpdateChildrenStates="true"
+																			MarginRight="80" MarginLeft="80" HorizontalAlignment="Center" Brush="TownManagement.Governor" UpdateChildrenStates="true"
 																			GamepadNavigationIndex="0" IsEnabled="true">
 															<Children>
 
@@ -75,7 +75,7 @@
 											</ItemTemplate>
 										</GridWidget>
 
-										<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" IsVisible="@IsRoyal"
+										<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" IsVisible="@HasExtraPositions"
 												   StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="40" MarginLeft="25"
 												   MarginRight="25" DoNotAcceptEvents="true">
 											<Children>
@@ -91,7 +91,7 @@
 											</Children>
 										</ListPanel>
 
-										<GridWidget Id="RoyalGrid" DataSource="{RoyalPositions}"
+										<GridWidget Id="RoyalGrid" DataSource="{ExtraPositions}"
 										            WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginRight="100"
 										            MarginLeft="100" HorizontalAlignment="Center" SuggestedHeight="350" DefaultCellWidth="190"
 										            DefaultCellHeight="150" ColumnCount="4" MarginTop="50">

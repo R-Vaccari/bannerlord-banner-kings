@@ -38,7 +38,7 @@ namespace BannerKings.Managers.Court
         }
 
         [SaveableProperty(1)] public Clan Clan { get; private set; }
-        [SaveableProperty(5)] public List<CouncilPosition> Positions { get; private set; }
+        [SaveableProperty(2)] public List<CouncilPosition> Positions { get; private set; }
         [SaveableProperty(4)] public Peerage Peerage { get; private set; }
 
         public void SetPeerage(Peerage peerage)

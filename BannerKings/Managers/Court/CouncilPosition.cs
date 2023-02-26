@@ -26,6 +26,7 @@ namespace BannerKings.Managers.Court
         public void PostInitialize()
         {
             SetStrings();
+            CurrentTask.PostInitialize();
         }
 
         public abstract CouncilPosition GetCopy(Clan clan);

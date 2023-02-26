@@ -30,6 +30,12 @@ namespace BannerKings.Managers.Court.Members.Tasks
             }
         }
 
+        public void PostInitialize()
+        {
+            CouncilTask c = DefaultCouncilTasks.Instance.GetById(this);
+            Initialize(c.Name, c.Description, c.Effects, c.StartingProgress);
+        }
+
         public void ResetBuildUp() => BuildUp = StartingProgress;
 
         public TextObject Effects { get; private set; }

@@ -16,14 +16,14 @@ namespace BannerKings.UI.Court
 {
     internal class CourtVM : BannerKingsViewModel
     {
-        private MBBindingList<CouncilPositionVM> corePositions, royalPositions;
+        private MBBindingList<CouncilPositionVM> corePositions, extraPositions;
         private readonly CouncilData council;
         private CouncilPosition councilPosition;
         private CouncilVM councilVM;
         private MBBindingList<InformationElement> courtInfo, privilegesInfo, courtierInfo;
         private CharacterVM currentCharacter;
         private MBBindingList<ClanLordItemVM> family, courtiers;
-        private bool isRoyal;
+        private bool isRoyal, hasExtraPositions;
         private string positionName, positionDescription, positionEffects;
 
         private readonly ITeleportationCampaignBehavior teleportationBehavior =
@@ -43,7 +43,7 @@ namespace BannerKings.UI.Court
             family = new MBBindingList<ClanLordItemVM>();
             courtiers = new MBBindingList<ClanLordItemVM>();
             corePositions = new MBBindingList<CouncilPositionVM>();
-            royalPositions = new MBBindingList<CouncilPositionVM>();
+            extraPositions = new MBBindingList<CouncilPositionVM>();
             courtInfo = new MBBindingList<InformationElement>();
             courtierInfo = new MBBindingList<InformationElement>();
             privilegesInfo = new MBBindingList<InformationElement>();
@@ -67,7 +67,7 @@ namespace BannerKings.UI.Court
             Courtiers.Clear();
             CourtInfo.Clear();
             CorePositions.Clear();
-            RoyalPositions.Clear();
+            ExtraPositions.Clear();
             CourtierInfo.Clear();
             PrivilegesInfo.Clear();
            
@@ -113,9 +113,11 @@ namespace BannerKings.UI.Court
                 }
                 else
                 {
-                    RoyalPositions.Add(new CouncilPositionVM(position, SetId, UpdatePositionTexts));
+                    ExtraPositions.Add(new CouncilPositionVM(position, SetId, UpdatePositionTexts));
                 }
             }
+
+            HasExtraPositions = ExtraPositions.Count > 0;
 
             var member = council.GetCouncilPosition(councilPosition);
             if (member != null)
@@ -263,6 +265,20 @@ namespace BannerKings.UI.Court
         }
 
         [DataSourceProperty]
+        public bool HasExtraPositions
+        {
+            get => hasExtraPositions;
+            set
+            {
+                if (value != hasExtraPositions)
+                {
+                    hasExtraPositions = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
         public bool IsRoyal
         {
             get => isRoyal;
@@ -389,14 +405,14 @@ namespace BannerKings.UI.Court
         }
 
         [DataSourceProperty]
-        public MBBindingList<CouncilPositionVM> RoyalPositions
+        public MBBindingList<CouncilPositionVM> ExtraPositions
         {
-            get => royalPositions;
+            get => extraPositions;
             set
             {
-                if (value != royalPositions)
+                if (value != extraPositions)
                 {
-                    royalPositions = value;
+                    extraPositions = value;
                     OnPropertyChangedWithValue(value);
                 }
             }

@@ -91,7 +91,7 @@ namespace BannerKings
             AddEnumDefinition(typeof(InheritanceType), 30);
             AddEnumDefinition(typeof(GenderLaw), 31);
             AddClassDefinition(typeof(TitleManager), 32);
-            AddEnumDefinition(typeof(CouncilPosition), 33);
+            AddClassDefinition(typeof(CouncilTask), 33);
             AddClassDefinition(typeof(CouncilPosition), 34);
             AddClassDefinition(typeof(CouncilData), 35);
             AddClassDefinition(typeof(CourtManager), 36);
@@ -183,7 +183,7 @@ namespace BannerKings
             AddClassDefinition(typeof(Castellan), 122);
             AddClassDefinition(typeof(Elder), 123);
             AddClassDefinition(typeof(Philosopher), 124);
-            AddClassDefinition(typeof(CouncilTask), 125);
+           
         }
 
         protected override void DefineContainerDefinitions()
