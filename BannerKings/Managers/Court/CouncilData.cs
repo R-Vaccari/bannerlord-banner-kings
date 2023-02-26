@@ -30,6 +30,11 @@ namespace BannerKings.Managers.Court
             {
                 Positions = new List<CouncilPosition>();
             }
+
+            foreach (var pos in Positions)
+            {
+                pos.PostInitialize();
+            }
         }
 
         [SaveableProperty(1)] public Clan Clan { get; private set; }

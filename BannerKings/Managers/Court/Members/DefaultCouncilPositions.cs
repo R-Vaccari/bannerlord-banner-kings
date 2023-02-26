@@ -12,6 +12,7 @@ namespace BannerKings.Managers.Court.Members
         public CouncilPosition Philosopher { get; set; } = new Philosopher();
         public CouncilPosition Castellan { get; set; } = new Castellan();
         public CouncilPosition Elder { get; set; } = new Elder();
+        public CouncilPosition Spouse { get; set; } = new Spouse();
 
         public override IEnumerable<CouncilPosition> All
         {
@@ -22,6 +23,7 @@ namespace BannerKings.Managers.Court.Members
                 yield return Chancellor;
                 yield return Spymaster;
                 yield return Spiritual;
+                yield return Spouse;
                 yield return Philosopher;
                 yield return Castellan;
                 yield return Elder;

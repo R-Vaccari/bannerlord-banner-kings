@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Skills;
+﻿using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Skills;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -23,31 +24,39 @@ namespace BannerKings.Managers.Court.Members
             }
         }
 
+        public override TextObject GetCulturalName()
+        {
+            var id = Culture.StringId;
+            if (IsRoyal)
+            {
+                if (id == "battania") return new TextObject("{=!}Ard Seansalair");
+                if (id == "empire") return new TextObject("{=!}Magister Cancellarius");
+
+                return new TextObject("{=!}High Chancellor");
+            }
+
+            if (id == "battania") return new TextObject("{=!}Seansalair");
+            if (id == "empire") return new TextObject("{=!}Cancellarius");
+
+            return new TextObject("{=!}Chancellor");
+        }
+
         public override IEnumerable<CouncilTask> Tasks
         {
             get
             {
-                yield return new OverseeVassalsTask();
+                yield return DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy();
             }
         }
 
         public override CouncilPosition GetCopy(Clan clan)
         {
             Chancellor pos = new Chancellor();
-            pos.Initialize(null, clan);
+            pos.Initialize(clan);
             return pos;
         }
 
         public override bool IsAdequate(CouncilData data) => true;
         protected override bool IsValidCandidateInternal(Hero candidate) => true;
-
-        public class OverseeVassalsTask : CouncilTask
-        {
-            public override TextObject Name => new TextObject("{=!}Organize Militia");
-            public override TextObject Description => new TextObject("{=!}");
-            public override TextObject Effects => new TextObject("{=!}");
-
-            public override float StandartBuildUp => 0f;
-        }
     }
 }

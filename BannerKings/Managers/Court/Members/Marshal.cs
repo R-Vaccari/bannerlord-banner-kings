@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Skills;
+﻿using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Skills;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -14,6 +15,24 @@ namespace BannerKings.Managers.Court.Members
 
         public override SkillObject PrimarySkill => DefaultSkills.Leadership;
         public override SkillObject SecondarySkill => BKSkills.Instance.Lordship;
+        public override TextObject GetCulturalName()
+        {
+            var id = Culture.StringId;
+            if (IsRoyal)
+            {
+                if (id == "battania") return new TextObject("{=!}Ard Marasgal");
+                if (id == "empire") return new TextObject("{=!}Magister Domesticus");
+                if (id == "khuzait") return new TextObject("{=!}Tumetu-iin Noyan");
+
+                return new TextObject("{=!}Grand Marshal");
+            }
+
+            if (id == "battania") return new TextObject("{=!}Marasgal");
+            if (id == "khuzait") return new TextObject("{=!}Jagutu-iin Darga");
+            if (id == "empire") return new TextObject("{=!}Domesticus");
+
+            return new TextObject("{=!}Marshal");
+        }
 
         public override IEnumerable<CouncilPrivileges> Privileges
         {
@@ -30,38 +49,19 @@ namespace BannerKings.Managers.Court.Members
         {
             get
             {
-                yield return new OrganizeMilitiaTask();
-                yield return new EncourageMilitarismTask();
+                yield return DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy();
             }
         }
 
         public override CouncilPosition GetCopy(Clan clan)
         {
             Marshal pos = new Marshal();
-            pos.Initialize(null, clan);
+            pos.Initialize(clan);
             return pos;
         }
 
         public override bool IsAdequate(CouncilData data) => true;
 
         protected override bool IsValidCandidateInternal(Hero candidate) => true;
-
-        public class OrganizeMilitiaTask : CouncilTask
-        {
-            public override TextObject Name => new TextObject("{=!}Organize Militia");
-            public override TextObject Description => new TextObject("{=!}");
-            public override TextObject Effects => new TextObject("{=!}");
-
-            public override float StandartBuildUp => 0f;
-        }
-
-        public class EncourageMilitarismTask : CouncilTask
-        {
-            public override TextObject Name => new TextObject("{=!}Encourage Militarism");
-            public override TextObject Description => new TextObject("{=!}");
-            public override TextObject Effects => new TextObject("{=!}");
-
-            public override float StandartBuildUp => 0f;
-        }
     }
 }

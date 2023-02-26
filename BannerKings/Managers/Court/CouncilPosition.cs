@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Institutions.Religions.Doctrines;
+﻿using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -12,14 +13,18 @@ namespace BannerKings.Managers.Court
     {
         public CouncilPosition(string id) : base(id)
         {
-            DueWage = 0;
+            DueWage = 0;   
+        }
+
+        public void Initialize(Clan clan)
+        {
+            Clan = clan;
+            SetStrings();
             CurrentTask = Tasks.First();
         }
 
-        public void Initialize(Hero member, Clan clan)
+        public void PostInitialize()
         {
-            Member = member;
-            Clan = clan;
             SetStrings();
         }
 
@@ -29,7 +34,9 @@ namespace BannerKings.Managers.Court
         [SaveableProperty(101)] public bool IsRoyal { get; private set; }
         [SaveableProperty(102)] public Clan Clan { get; private set; }
         [SaveableProperty(103)] public int DueWage { get; set; }
-        public CouncilTask CurrentTask { get; private set; }
+        [SaveableProperty(104)] public CouncilTask CurrentTask { get; private set; }
+
+        public abstract IEnumerable<CouncilTask> Tasks { get; }
 
         public void SetMember(Hero hero) => Member = hero;
         public void SetIsRoyal(bool isRoyal)
@@ -54,7 +61,7 @@ namespace BannerKings.Managers.Court
         public ExplainedNumber Competence => BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(Member, this);
         public ExplainedNumber CalculateCandidateCompetence(Hero candidate) => BannerKingsConfig.Instance.CouncilModel
             .CalculateHeroCompetence(candidate, this);
-        public abstract IEnumerable<CouncilTask> Tasks { get; }
+        
         public abstract bool IsAdequate(CouncilData data);
         public bool IsValidCandidate(Hero candidate)
         {
@@ -85,13 +92,13 @@ namespace BannerKings.Managers.Court
 
         public abstract SkillObject PrimarySkill { get; }
         public abstract SkillObject SecondarySkill { get; }
+        public abstract TextObject GetCulturalName();
 
         private void SetStrings()
         {
-           name = GameTexts.FindText("str_bk_council_" + StringId.ToString().ToLower() + (IsRoyal ? "_royal" : ""),
-                Culture.StringId);
-           description = GameTexts.FindText("str_bk_council_description_" + StringId.ToString().ToLower())
-                .SetTextVariable("NAME", Name);
+            name = GetCulturalName();
+            description = GameTexts.FindText("str_bk_council_description_" + StringId.ToString().ToLower())
+                    .SetTextVariable("NAME", Name);
         }
 
         public TextObject GetEffects()
@@ -124,7 +131,8 @@ namespace BannerKings.Managers.Court
 
         public bool IsCorePosition(string id)
         {
-            return id == "Marshall" || id == "Steward" || id == "Spymaster" || id == "Chancellor" || id == "Spiritual";
+            return id == "Marshall" || id == "Steward" || id == "Spymaster" || id == "Chancellor" || id == "Spiritual" ||
+                id == "Spouse";
         }
 
         public IEnumerable<CouncilPrivileges> AllPrivileges
@@ -177,22 +185,6 @@ namespace BannerKings.Managers.Court
                 return StringId == (obj as CouncilPosition).StringId;
             }
             return base.Equals(obj);
-        }
-
-        public abstract class CouncilTask
-        {
-            public CouncilTask()
-            {
-                BuildUp = StandartBuildUp;
-            }
-
-            public void ResetBuildUp() => BuildUp = StandartBuildUp;
-
-            public abstract TextObject Name { get; }
-            public abstract TextObject Description { get; }
-            public abstract TextObject Effects { get; }
-            public abstract float StandartBuildUp { get; }
-            public float BuildUp { get; protected set; }
         }
     }
 }

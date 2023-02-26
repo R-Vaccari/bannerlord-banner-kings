@@ -1,4 +1,4 @@
-﻿using System;
+﻿using BannerKings.Managers.Court.Members.Tasks;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -10,14 +10,8 @@ namespace BannerKings.Managers.Court.Members
     {
         public Castellan() : base("Castellan")
         {
-        }
-
-        public override IEnumerable<CouncilTask> Tasks
-        {
-            get
-            {
-                yield return new OverseeCastlesTask();
-            }
+            name = new TextObject("{=!}Castellan");
+            description = new TextObject("{=!}The Castellans oversee castles and their administration. They are responsible for their prosperity, assuring constant growth and development of castle demesnes.");
         }
 
         public override SkillObject PrimarySkill => DefaultSkills.Steward;
@@ -31,10 +25,27 @@ namespace BannerKings.Managers.Court.Members
             }
         }
 
+        public override TextObject GetCulturalName()
+        {
+            var culture = Culture;
+            return new TextObject("{=!}{?ROYAL}High Steward{?}Steward{\\?}", new Dictionary<string, object>()
+            {
+                { "ROYAL", IsRoyal }
+            });
+        }
+
+        public override IEnumerable<CouncilTask> Tasks
+        {
+            get
+            {
+                yield return DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy();
+            }
+        }
+
         public override CouncilPosition GetCopy(Clan clan)
         {
             Castellan pos = new Castellan();
-            pos.Initialize(null, clan);
+            pos.Initialize(clan);
             return pos;
         }
 
@@ -44,14 +55,5 @@ namespace BannerKings.Managers.Court.Members
         }
 
         protected override bool IsValidCandidateInternal(Hero candidate) => true;
-
-        public class OverseeCastlesTask : CouncilTask
-        {
-            public override TextObject Name => new TextObject("{=!}Organize Militia");
-            public override TextObject Description => new TextObject("{=!}");
-            public override TextObject Effects => new TextObject("{=!}");
-
-            public override float StandartBuildUp => 0f;
-        }
     }
 }

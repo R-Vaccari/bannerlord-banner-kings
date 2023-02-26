@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Skills;
+﻿using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Skills;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -14,6 +15,25 @@ namespace BannerKings.Managers.Court.Members
 
         public override SkillObject PrimarySkill => BKSkills.Instance.Theology;
         public override SkillObject SecondarySkill => BKSkills.Instance.Scholarship;
+        public override TextObject GetCulturalName()
+        {
+            var id = Culture.StringId;
+            if (IsRoyal)
+            {
+                
+                if (id == "battania") return new TextObject("{=!}Ard Draoidh");
+                if (id == "sturgia") return new TextObject("{=!}Volkhvs");
+                if (id == "aserai") return new TextObject("{=!}Murshid");
+
+                return new TextObject("{=!}High Seneschal");
+            }
+
+            if (id == "battania") return new TextObject("{=!}Draoidh");
+            if (id == "sturgia") return new TextObject("{=!}Volkhvs");
+            if (id == "aserai") return new TextObject("{=!}Murshid");
+
+            return new TextObject("{=!}Seneschal");
+        }
 
         public override IEnumerable<CouncilPrivileges> Privileges
         {
@@ -27,14 +47,14 @@ namespace BannerKings.Managers.Court.Members
         {
             get
             {
-                yield return new OverseeReligiousMattersTask();
+                yield return DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy();
             }
         }
 
         public override CouncilPosition GetCopy(Clan clan)
         {
             Spiritual pos = new Spiritual();
-            pos.Initialize(null, clan);
+            pos.Initialize(clan);
             return pos;
         }
 
@@ -54,15 +74,6 @@ namespace BannerKings.Managers.Court.Members
             }
 
             return BannerKingsConfig.Instance.ReligionsManager.IsPreacher(candidate) && matchingFaith;
-        }
-
-        public class OverseeReligiousMattersTask : CouncilTask
-        {
-            public override TextObject Name => new TextObject("{=!}Organize Militia");
-            public override TextObject Description => new TextObject("{=!}");
-            public override TextObject Effects => new TextObject("{=!}");
-
-            public override float StandartBuildUp => 0f;
         }
     }
 }

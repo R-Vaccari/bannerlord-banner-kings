@@ -1,5 +1,5 @@
-﻿using BannerKings.Managers.Skills;
-using System;
+﻿using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Skills;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -13,16 +13,26 @@ namespace BannerKings.Managers.Court.Members
         {
         }
 
-        public override IEnumerable<CouncilTask> Tasks
-        {
-            get
-            {
-                yield return new OverseeSecurityTask();
-            }
-        }
-
         public override SkillObject PrimarySkill => DefaultSkills.Roguery;
         public override SkillObject SecondarySkill => BKSkills.Instance.Lordship;
+        public override TextObject GetCulturalName()
+        {
+            var id = Culture.StringId;
+            if (IsRoyal)
+            {
+                if (id == "battania") return new TextObject("{=!}Ard Treòraiche");
+                if (id == "empire") return new TextObject("{=!}Magister Officiorum");
+                if (id == "khuzait") return new TextObject("{=!}Cherbi");
+
+                return new TextObject("{=!}Grand Spymaster");
+            }
+
+            if (id == "battania") return new TextObject("{=!}Treòraiche");
+            if (id == "khuzait") return new TextObject("{=!}Khevtuul");
+            if (id == "empire") return new TextObject("{=!}Custodis");
+
+            return new TextObject("{=!}Spymaster");
+        }
 
         public override IEnumerable<CouncilPrivileges> Privileges
         {
@@ -32,23 +42,22 @@ namespace BannerKings.Managers.Court.Members
             }
         }
 
+        public override IEnumerable<CouncilTask> Tasks
+        {
+            get
+            {
+                yield return DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy();
+            }
+        }
+
         public override CouncilPosition GetCopy(Clan clan)
         {
             Spymaster pos = new Spymaster();
-            pos.Initialize(null, clan);
+            pos.Initialize(clan);
             return pos;
         }
 
         public override bool IsAdequate(CouncilData data) => true;
         protected override bool IsValidCandidateInternal(Hero candidate) => true;
-
-        public class OverseeSecurityTask : CouncilTask
-        {
-            public override TextObject Name => new TextObject("{=!}Organize Militia");
-            public override TextObject Description => new TextObject("{=!}");
-            public override TextObject Effects => new TextObject("{=!}");
-
-            public override float StandartBuildUp => 0f;
-        }
     }
 }

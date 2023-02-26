@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Institutions.Religions.Doctrines;
+﻿using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Skills;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -13,16 +14,15 @@ namespace BannerKings.Managers.Court.Members
         {
         }
 
-        public override IEnumerable<CouncilTask> Tasks
-        {
-            get
-            {
-                yield return new EducateFamilyTask();
-            }
-        }
-
         public override SkillObject PrimarySkill => BKSkills.Instance.Scholarship;
         public override SkillObject SecondarySkill => BKSkills.Instance.Lordship;
+        public override TextObject GetCulturalName()
+        {
+            var id = Culture.StringId;
+            if (id == "empire") return new TextObject("{=!}Philosophus");
+
+            return new TextObject("{=!}Philosopher");
+        }
 
         public override IEnumerable<CouncilPrivileges> Privileges
         {
@@ -32,10 +32,18 @@ namespace BannerKings.Managers.Court.Members
             }
         }
 
+        public override IEnumerable<CouncilTask> Tasks
+        {
+            get
+            {
+                yield return DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy();
+            }
+        }
+
         public override CouncilPosition GetCopy(Clan clan)
         {
             Philosopher pos = new Philosopher();
-            pos.Initialize(null, clan);
+            pos.Initialize(clan);
             return pos;
         }
 
@@ -46,14 +54,5 @@ namespace BannerKings.Managers.Court.Members
         }
 
         protected override bool IsValidCandidateInternal(Hero candidate) => true;
-
-        public class EducateFamilyTask : CouncilTask
-        {
-            public override TextObject Name => new TextObject("{=!}Organize Militia");
-            public override TextObject Description => new TextObject("{=!}");
-            public override TextObject Effects => new TextObject("{=!}");
-
-            public override float StandartBuildUp => 0f;
-        }
     }
 }

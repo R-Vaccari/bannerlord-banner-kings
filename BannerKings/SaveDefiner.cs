@@ -6,6 +6,8 @@ using BannerKings.Components;
 using BannerKings.Managers;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Duties;
 using BannerKings.Managers.Education;
@@ -172,6 +174,16 @@ namespace BannerKings
             AddClassDefinition(typeof(GarrisonPartyComponent), 113);
             AddClassDefinition(typeof(WorkshopData), 114);
             AddClassDefinition(typeof(TreeloreFaith), 115);
+            AddClassDefinition(typeof(Marshal), 116);
+            AddClassDefinition(typeof(Steward), 117);
+            AddClassDefinition(typeof(Chancellor), 118);
+            AddClassDefinition(typeof(Spymaster), 119);
+            AddClassDefinition(typeof(Spiritual), 120);
+            AddClassDefinition(typeof(Spouse), 121);
+            AddClassDefinition(typeof(Castellan), 122);
+            AddClassDefinition(typeof(Elder), 123);
+            AddClassDefinition(typeof(Philosopher), 124);
+            AddClassDefinition(typeof(CouncilTask), 125);
         }
 
         protected override void DefineContainerDefinitions()

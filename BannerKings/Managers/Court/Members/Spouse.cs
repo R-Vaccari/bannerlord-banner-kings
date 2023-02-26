@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Skills;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -6,14 +7,16 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Court.Members
 {
-    public class Elder : CouncilPosition
+    public class Spouse : CouncilPosition
     {
-        public Elder() : base("Elder")
+        public Spouse() : base("Spouse")
         {
+            description = new TaleWorlds.Localization.TextObject("");
         }
 
-        public override SkillObject PrimarySkill => DefaultSkills.Charm;
-        public override SkillObject SecondarySkill => DefaultSkills.Leadership;
+        public override SkillObject PrimarySkill => BKSkills.Instance.Lordship;
+
+        public override SkillObject SecondarySkill => DefaultSkills.Steward;
 
         public override IEnumerable<CouncilPrivileges> Privileges
         {
@@ -25,10 +28,7 @@ namespace BannerKings.Managers.Court.Members
 
         public override TextObject GetCulturalName()
         {
-            var id = Culture.StringId;
-            if (id == "battania") return new TextObject("{=!}Seanar");
-
-            return new TextObject("{=!}Elder");
+            return GameTexts.FindText("str_spouse");
         }
 
         public override IEnumerable<CouncilTask> Tasks
@@ -38,19 +38,14 @@ namespace BannerKings.Managers.Court.Members
                 yield return DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy();
             }
         }
-
         public override CouncilPosition GetCopy(Clan clan)
         {
-            Elder pos = new Elder();
+            Spouse pos = new Spouse();
             pos.Initialize(clan);
             return pos;
         }
 
-        public override bool IsAdequate(CouncilData data)
-        {
-            return data.IsRoyal && data.Clan.Culture == Utils.Helpers.GetCulture("battania");
-        }
-
-        protected override bool IsValidCandidateInternal(Hero candidate) => candidate.Age > 50;
+        public override bool IsAdequate(CouncilData data) => true;
+        protected override bool IsValidCandidateInternal(Hero candidate) => candidate.Spouse == Clan.Leader;
     }
 }
