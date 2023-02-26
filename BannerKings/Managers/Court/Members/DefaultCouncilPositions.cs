@@ -193,7 +193,8 @@ namespace BannerKings.Managers.Court.Members
                     var clanReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(position.Clan.Leader);
                     if (clanReligion != null)
                     {
-                        matchingFaith = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero).Equals(clanReligion);
+                        var heroReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+                        matchingFaith = heroReligion != null && heroReligion.Equals(clanReligion);
                     }
 
                     return BannerKingsConfig.Instance.ReligionsManager.IsPreacher(hero) && matchingFaith;
