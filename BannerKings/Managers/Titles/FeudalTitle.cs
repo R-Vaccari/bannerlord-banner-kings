@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Extensions;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
@@ -93,6 +94,10 @@ namespace BannerKings.Managers.Titles
             {
                 if (fief != null)
                 {
+                    if (fief.IsVillage)
+                    {
+                        return fief.Village.GetActualOwner();
+                    }
                     return fief.Owner;
                 }
 
