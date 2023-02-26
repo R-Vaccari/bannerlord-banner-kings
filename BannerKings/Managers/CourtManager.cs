@@ -164,11 +164,12 @@ namespace BannerKings.Managers
                             false));
                 }
 
-                var newClergyman = action.ActionTaker;
-                if (newClergyman != null)
+                var newHero = action.ActionTaker;
+                var newClergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(newHero);
+                if (newHero != null && newClergyman != null)
                 {
                     rel.Leadership.ChangeClergymanRank(rel,
-                        BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(newClergyman),
+                        newClergyman,
                         rel.Faith.GetMaxClergyRank());
                 }
             }
