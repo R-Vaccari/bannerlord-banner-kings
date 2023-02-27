@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -300,7 +301,9 @@ namespace BannerKings.Models.Vanilla
             }
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader,
-                DefaultCouncilPositions.Instance.Marshal, 0.25f, true);
+                DefaultCouncilPositions.Instance.Marshal,
+                DefaultCouncilTasks.Instance.EncourageMilitarism,
+                0.25f, true);
             
             var draftPolicy = ((BKDraftPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft")).Policy;
             switch (draftPolicy)
@@ -352,7 +355,9 @@ namespace BannerKings.Models.Vanilla
             }
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader,
-                DefaultCouncilPositions.Instance.Marshal, 0.03f, false);
+                DefaultCouncilPositions.Instance.Marshal,
+                DefaultCouncilTasks.Instance.EncourageMilitarism,
+                0.03f, false);
 
             if (settlement.Culture == settlement.Owner.Culture)
             {

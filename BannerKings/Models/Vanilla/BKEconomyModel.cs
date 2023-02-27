@@ -1,6 +1,7 @@
 using BannerKings.Behaviours;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
@@ -127,7 +128,9 @@ namespace BannerKings.Models.Vanilla
             }
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
-                DefaultCouncilPositions.Instance.Steward, 0.15f, true);
+                DefaultCouncilPositions.Instance.Steward,
+                DefaultCouncilTasks.Instance.EncourageMilitarism,
+                .15f, true);
 
             return result;
         }
@@ -198,7 +201,9 @@ namespace BannerKings.Models.Vanilla
             result.AddFactor(data.MilitaryData.Militarism.ResultNumber * -1f, new TextObject("{=m66LFb9g}Militarism"));
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
-                DefaultCouncilPositions.Instance.Steward, 0.15f, true);
+                DefaultCouncilPositions.Instance.Steward,
+                DefaultCouncilTasks.Instance.EncourageMilitarism, 
+                0.15f, true);
 
             if (settlement.Town != null)
             {

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -38,19 +39,23 @@ namespace BannerKings.Managers
         }
 
         public void ApplyCouncilEffect(ref ExplainedNumber result, Hero settlementOwner, CouncilMember position,
-            float maxEffect, bool factor)
+            CouncilTask task, float maxEffect, bool factor)
         {
-            var council = GetCouncil(settlementOwner);
-            var competence = council.GetCompetence(position);
-            if (competence != 0f)
+            var council = GetCouncil(settlementOwner.Clan);
+            var existingPosition = council.GetCouncilPosition(position);
+            if (existingPosition != null && existingPosition.CurrentTask.StringId == task.StringId)
             {
-                if (!factor)
+                var competence = existingPosition.Competence.ResultNumber;
+                if (competence != 0f)
                 {
-                    result.Add(maxEffect * competence, new TextObject("{=5TbiMahb}Council effect"));
-                }
-                else
-                {
-                    result.AddFactor(maxEffect * competence, new TextObject("{=5TbiMahb}Council effect"));
+                    if (!factor)
+                    {
+                        result.Add(maxEffect * competence, new TextObject("{=5TbiMahb}Council effect"));
+                    }
+                    else
+                    {
+                        result.AddFactor(maxEffect * competence, new TextObject("{=5TbiMahb}Council effect"));
+                    }
                 }
             }
         }

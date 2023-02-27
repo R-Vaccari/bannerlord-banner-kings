@@ -1,5 +1,6 @@
 using BannerKings.Managers;
 using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
@@ -47,7 +48,9 @@ namespace BannerKings.Models.BKModels
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.Owner,
-                    DefaultCouncilPositions.Instance.Philosopher, 0.05f, true);
+                    DefaultCouncilPositions.Instance.Philosopher,
+                    DefaultCouncilTasks.Instance.EncourageMilitarism,
+                    0.05f, true);
             }
 
             return result;

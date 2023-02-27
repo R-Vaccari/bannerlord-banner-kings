@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -132,7 +133,9 @@ namespace BannerKings.Models.Vanilla
             baseResult.Add(2f * data.Autonomy, new TextObject("Autonomy"));
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader,
-                DefaultCouncilPositions.Instance.Chancellor, 1f, false);
+                DefaultCouncilPositions.Instance.Chancellor,
+                DefaultCouncilTasks.Instance.EncourageMilitarism,
+                1f, false);
 
             return baseResult;
         }

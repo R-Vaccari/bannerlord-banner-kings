@@ -14,6 +14,8 @@ using System.Linq;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
+using TaleWorlds.Library;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -104,8 +106,12 @@ namespace BannerKings.Models.Vanilla
                     baseResult.Add(1.5f, DefaultLifestyles.Instance.Fian.Name);
                 }
 
-                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, settlement.OwnerClan.Leader,
-                    DefaultCouncilPositions.Instance.Marshal, 1f, false);
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, 
+                    settlement.OwnerClan.Leader,
+                    DefaultCouncilPositions.Instance.Marshal,
+                    DefaultCouncilTasks.Instance.OrganizeMiltia,
+                    1f, 
+                    false);
             }
 
             return baseResult;
@@ -190,6 +196,13 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
             }
+
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result,
+                    settlement.OwnerClan.Leader,
+                    DefaultCouncilPositions.Instance.Marshal,
+                    DefaultCouncilTasks.Instance.OrganizeMiltia,
+                    0.2f,
+                    true);
 
             return result;
         }
