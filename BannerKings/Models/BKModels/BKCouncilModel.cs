@@ -39,6 +39,11 @@ namespace BannerKings.Models.BKModels
                     .SetTextVariable("LANGUAGE", courtLanguage.Name));
             }
 
+            if (position.CurrentTask != null && position.CurrentTask.Efficiency != 1f)
+            {
+                result.AddFactor(position.CurrentTask.Efficiency - 1f, new TextObject("{=!}Task Efficiency"));
+            }
+
             return result;
         }
 
