@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BannerKings.Managers.Court;
 using BannerKings.Settings;
 using BannerKings.UI;
 using BannerKings.Utils;
@@ -10,6 +11,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -309,6 +311,18 @@ namespace BannerKings.Behaviours
             }
         }
 
+        public void ApplyCouncilCultureConversion(CouncilData council, Hero notable)
+        {
+            ApplyNotableCultureConversion(notable, council.Owner);
+            if (council.Owner == Hero.MainHero)
+            {
+                InformationManager.DisplayMessage(new InformationMessage(
+                    new TextObject("{=!}Your Steward has converted {HERO} to your culture!")
+                    .SetTextVariable("HERO", notable.Name)
+                    .ToString()));
+            }
+        }
+
         private void CultureConversionAcceptedConsequence()
         {
             ApplyNotableCultureConversion(Hero.OneToOneConversationHero, Hero.MainHero);
@@ -469,6 +483,24 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
+        
+        /*[HarmonyPatch(typeof(Hero), "SetInitialValuesFromCharacter")]
+        internal class SetInitialValuesFromCharacterPatch
+        {
+            private static bool Prefix(Hero __instance, CharacterObject characterObject)
+            {
+                foreach (SkillObject skill in Skills.All)
+                {
+                    __instance.SetSkillValue(skill, characterObject.GetSkillValue(skill));
+                }
+                foreach (TraitObject trait in TraitObject.All)
+                {
+                    __instance.SetTraitLevel(trait, characterObject.GetTraitLevel(trait));
+                }
+
+                return false;
+            }
+        }*/
 
         [HarmonyPatch(typeof(HeroHelper), "GetVolunteerTroopsOfHeroForRecruitment")]
         internal class GetVolunteerTroopsOfHeroForRecruitmentPatch

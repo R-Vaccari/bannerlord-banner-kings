@@ -277,7 +277,7 @@ namespace BannerKings.Models.Vanilla
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber,
                     fortification.OwnerClan.Leader, DefaultCouncilPositions.Instance.Steward,
-                    DefaultCouncilTasks.Instance.EncourageMilitarism,
+                    DefaultCouncilTasks.Instance.DevelopEconomy,
                     1f, false);
 
                 AddDemesneLawEffect(data, ref explainedNumber);

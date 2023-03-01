@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Settings;
+using BannerKings.Utils;
 using HarmonyLib;
 using Helpers;
 using SandBox.CampaignBehaviors;
@@ -353,6 +356,112 @@ namespace BannerKings.Behaviours
             EvaluateRecruitKnight(clan);
             EvaluateRecruitCompanion(clan);
             SetCompanionParty(clan);
+            RunCouncilTasks(clan);
+        }
+
+        private void RunCouncilTasks(Clan clan)
+        {
+            ExceptionUtils.TryCatch(() =>
+            {
+                CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+
+                if (MBRandom.RandomFloat < 0.02f && 
+                BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.PromoteCulture, 
+                out float cultureCompetence) && 
+                MBRandom.RandomFloat < cultureCompetence)
+                {
+                    Hero notable = null;
+                    foreach (var settlement in clan.Settlements)
+                    {
+                        notable = settlement.Notables.FirstOrDefault(x => x.Culture != clan.Culture);
+                    }
+
+                    if (notable != null)
+                    {
+                        Campaign.Current.GetCampaignBehavior<BKNotableBehavior>()
+                        .ApplyCouncilCultureConversion(council, notable);
+                    }
+                }
+
+                if (MBRandom.RandomFloat < 0.03f &&
+                BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.OverseeDignataries,
+                out float dignatariesCompetence) &&
+                MBRandom.RandomFloat < dignatariesCompetence)
+                {
+                    Hero notable = null;
+                    foreach (var settlement in clan.Settlements)
+                    {
+                        notable = settlement.Notables.GetRandomElement();
+                    }
+
+                    if (notable != null)
+                    {
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(clan.Leader, notable, (int)(8 * dignatariesCompetence), false);
+                    }
+
+                    if (clan == Clan.PlayerClan)
+                    {
+                        CouncilMember chancellor = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Chancellor);
+                        MBInformationManager.AddQuickInformation(
+                            new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {NOTABLE} is now more favorable to us.")
+                            .SetTextVariable("NOTABLE", notable.Name),
+                            0,
+                            chancellor.Member.CharacterObject,
+                            Utils.Helpers.GetKingdomDecisionSound());
+                    }
+                }
+
+                if (MBRandom.RandomFloat < 0.02f &&
+                BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.RepressCriminality,
+                out float criminalityCompetence) &&
+                MBRandom.RandomFloat < criminalityCompetence)
+                {
+                    Hideout hideout = null;
+                    Town town = null;
+                    foreach (var fief in clan.Fiefs)
+                    {
+                        if (hideout != null)
+                        {
+                            break;
+                        }
+
+                        foreach (var h in Hideout.All)
+                        {
+                            if (hideout.IsInfested && fief.Settlement.Position2D.DistanceSquared(hideout.Settlement.Position2D) < 40f * 40f)
+                            {
+                                hideout = h;
+                                town = fief;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (hideout != null)
+                    {
+                        foreach (var party in hideout.Owner.Settlement.Parties)
+                        {
+                            DestroyPartyAction.Apply(null, party);
+                        }
+
+                        foreach (var notable in town.Settlement.Notables)
+                        {
+                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(clan.Leader, notable, 3, false);
+                        }
+
+                        if (clan == Clan.PlayerClan)
+                        {
+                            CouncilMember spymaster = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spymaster);
+                            MBInformationManager.AddQuickInformation(new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, the hideout near {FIEF} was exterminated.")
+                                .SetTextVariable("FIEF", town.Name),
+                                0,
+                                spymaster.Member.CharacterObject,
+                                Utils.Helpers.GetKingdomDecisionSound());
+                        }
+                    }
+                }
+            },
+            this.GetType().Name,
+            false);
         }
 
         private void SetCompanionParty(Clan clan)

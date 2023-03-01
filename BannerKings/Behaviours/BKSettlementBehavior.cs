@@ -5,6 +5,7 @@ using BannerKings.Components;
 using BannerKings.Extensions;
 using BannerKings.Managers;
 using BannerKings.Managers.Buildings;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
@@ -17,6 +18,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Issues;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -191,6 +193,55 @@ namespace BannerKings.Behaviours
             TickTown(settlement);
             TickCastle(settlement);
             TickVillage(settlement);
+        }
+
+        private void HandleIssues(Settlement settlement)
+        {
+            if (settlement.Town == null)
+            {
+                return;
+            }
+
+            Hero governor = settlement.Town.Governor;
+            if (governor == null)
+            {
+                return;
+            }
+
+            RunWeekly(() =>
+            {
+                IssueBase issue = null;
+                foreach (var notable in settlement.Notables)
+                {
+                    if (notable.Issue != null)
+                    {
+                        issue = notable.Issue;
+                        break;
+                    }
+                }
+
+                if (issue != null && MBRandom.RandomFloat < (governor.GetSkillValue(DefaultSkills.Steward) / 1000f))
+                {
+                    FinishIssue(issue, governor, settlement.OwnerClan.Leader);
+                }
+            },
+            GetType().Name,
+            false);
+        }
+
+        private void FinishIssue(IssueBase issue, Hero handler, Hero clanLeader)
+        {
+            handler.AddSkillXp(DefaultSkills.Steward, 1000f * Campaign.Current.Models.IssueModel.GetIssueDifficultyMultiplier());
+
+            if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(clanLeader.Clan,
+                DefaultCouncilTasks.Instance.ManageDemesne, out var competence))
+            {
+                issue.CompleteIssueWithLordSolutionWithRefuseCounterOffer();
+            }
+            else
+            {
+                issue.CompleteIssueWithAiLord(null);
+            }
         }
 
         private void TickTown(Settlement settlement)

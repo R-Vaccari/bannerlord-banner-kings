@@ -1,7 +1,6 @@
 ﻿using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Skills;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -75,7 +74,7 @@ namespace BannerKings.Managers.Court.Members
                 DefaultSkills.Trade,
                 new List<CouncilTask>()
                 {
-                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                    DefaultCouncilTasks.Instance.PromoteCulture.GetCopy()
                 },
                 new List<CouncilPrivileges>() { },
                 (CouncilData data) =>
@@ -108,7 +107,7 @@ namespace BannerKings.Managers.Court.Members
                 BKSkills.Instance.Lordship,
                 new List<CouncilTask>()
                 {
-                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                    DefaultCouncilTasks.Instance.ManageVassals.GetCopy()
                 },
                 new List<CouncilPrivileges>() { },
                 (CouncilData data) =>
@@ -141,7 +140,7 @@ namespace BannerKings.Managers.Court.Members
                 BKSkills.Instance.Lordship,
                 new List<CouncilTask>()
                 {
-                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                    DefaultCouncilTasks.Instance.OverseeSecurity.GetCopy()
                 },
                 new List<CouncilPrivileges>() { },
                 (CouncilData data) =>
@@ -176,7 +175,7 @@ namespace BannerKings.Managers.Court.Members
                 BKSkills.Instance.Scholarship,
                 new List<CouncilTask>()
                 {
-                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                    DefaultCouncilTasks.Instance.PromoteFaith.GetCopy()
                 },
                 new List<CouncilPrivileges>() 
                 {
@@ -224,7 +223,7 @@ namespace BannerKings.Managers.Court.Members
                 DefaultSkills.Steward,
                 new List<CouncilTask>()
                 {
-                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                    DefaultCouncilTasks.Instance.ManageDemesne.GetCopy()
                 },
                 new List<CouncilPrivileges>() { },
                 (CouncilData data) =>

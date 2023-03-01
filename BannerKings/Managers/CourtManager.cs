@@ -260,5 +260,25 @@ namespace BannerKings.Managers
                 ON_FIRED_RELATION);
             action.TargetPosition.SetMember(null);
         }
+
+        public bool HasCurrentTask(CouncilData council, CouncilTask task, out float competence)
+        {
+            competence = 0f;
+            foreach (var pos in council.Positions)
+            {
+                if (pos.CurrentTask != null && pos.CurrentTask.StringId == task.StringId)
+                {
+                    competence = pos.Competence.ResultNumber;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool HasCurrentTask(Clan clan, CouncilTask task, out float competence)
+        {
+            return HasCurrentTask(GetCouncil(clan), task, out competence);
+        }
     }
 }
