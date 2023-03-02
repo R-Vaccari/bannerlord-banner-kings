@@ -36,7 +36,7 @@ namespace BannerKings.Managers.Kingdoms.Council
             Position.SetMember(((CouncilPositionDecisionOutcome) chosenOutcome).Candidate);
         }
 
-        public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
+        public override void ApplySecondaryEffects(MBReadOnlyList<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
         {
         }
 
@@ -75,7 +75,7 @@ namespace BannerKings.Managers.Kingdoms.Council
             }
         }
 
-        public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
+        public override void DetermineSponsors(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {
             foreach (var decisionOutcome in possibleOutcomes)
             {
@@ -159,7 +159,7 @@ namespace BannerKings.Managers.Kingdoms.Council
             return 0;
         }
 
-        public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
+        public override DecisionOutcome GetQueriedDecisionOutcome(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {
             return (from k in possibleOutcomes
                 orderby k.Merit descending

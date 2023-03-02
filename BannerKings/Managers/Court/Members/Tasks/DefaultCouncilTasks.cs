@@ -16,7 +16,6 @@ namespace BannerKings.Managers.Court.Members.Tasks
         public CouncilTask OverseeProduction { get; } = new CouncilTask("OverseeProduction");
         public CouncilTask PromoteCulture { get; } = new CouncilTask("PromoteCulture");
 
-
         public CouncilTask ManageVassals { get; } = new CouncilTask("ManageVassals");
         public CouncilTask OverseeDignataries { get; } = new CouncilTask("OverseeDignataries");
         public CouncilTask IntegrateTitles { get; } = new CouncilTask("IntegrateTitles");

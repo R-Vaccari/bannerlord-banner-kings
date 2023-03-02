@@ -143,9 +143,9 @@ namespace BannerKings.Behaviours
             BannerKingsConfig.Instance.PolicyManager.InitializeSettlement(settlement);
         }
 
-        private void OnSiegeAftermath(MobileParty attackerParty, Settlement settlement, SiegeAftermathCampaignBehavior.SiegeAftermath aftermathType, Clan previousSettlementOwner, Dictionary<MobileParty, float> partyContributions)
+        private void OnSiegeAftermath(MobileParty attackerParty, Settlement settlement, SiegeAftermathAction.SiegeAftermath aftermathType, Clan previousSettlementOwner, Dictionary<MobileParty, float> partyContributions)
         {
-            if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.ShowMercy || settlement?.Town == null ||
+            if (aftermathType == SiegeAftermathAction.SiegeAftermath.ShowMercy || settlement?.Town == null ||
                 BannerKingsConfig.Instance.PopulationManager == null ||
                 !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
             {
@@ -153,7 +153,7 @@ namespace BannerKings.Behaviours
             }
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            var shareToKill = aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.Pillage ? MBRandom.RandomFloatRanged(0.1f, 0.16f) : MBRandom.RandomFloatRanged(0.16f, 0.24f);
+            var shareToKill = aftermathType == SiegeAftermathAction.SiegeAftermath.Pillage ? MBRandom.RandomFloatRanged(0.1f, 0.16f) : MBRandom.RandomFloatRanged(0.16f, 0.24f);
 
             var killTotal = (int) (data.TotalPop * shareToKill);
             var lognum = killTotal;
@@ -427,7 +427,7 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            var parties = new MobilePartiesAroundPositionList();
+            /*var parties = new Mobile();
             var list = parties.GetPartiesAroundPosition(town.Settlement.GatePosition, 10f);
 
             MobileParty party = list.FirstOrDefault(x => x.Party.TotalStrength > 25f && (x.IsBandit ||
@@ -437,7 +437,7 @@ namespace BannerKings.Behaviours
             if (party != null)
             {
                 EvaluateSendGarrison(town.Settlement, party);
-            }
+            }*/
         }
 
         private void EvaluateSendGarrison(Settlement origin, MobileParty target)
