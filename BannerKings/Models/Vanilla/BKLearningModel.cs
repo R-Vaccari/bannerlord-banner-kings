@@ -15,6 +15,10 @@ namespace BannerKings.Models.Vanilla
         public override List<Tuple<SkillObject, int>> GetSkillsDerivedFromTraits(Hero hero, CharacterObject templateCharacter = null, bool isByNaturalGrowth = false)
         {
             List <Tuple<SkillObject, int>> list =  base.GetSkillsDerivedFromTraits(hero, templateCharacter, isByNaturalGrowth);
+            if (hero == null)
+            {
+                return list;
+            }
 
             float scholarship = 0;
             float lordship = 0;
