@@ -748,7 +748,7 @@ namespace BannerKings.Behaviours
 
         private static bool MenuFaithCondition(MenuCallbackArgs args)
         {
-            args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
+            args.optionLeaveType = GameMenuOption.LeaveType.Ransom;
 
             if (BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(Settlement.CurrentSettlement))
             {
@@ -776,7 +776,7 @@ namespace BannerKings.Behaviours
 
         private static bool MenuEstatesManageCondition(MenuCallbackArgs args)
         {
-            args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
+            args.optionLeaveType = GameMenuOption.LeaveType.Ransom;
             var settlement = Settlement.CurrentSettlement;
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             return data != null && data.EstateData != null;

@@ -563,7 +563,7 @@ namespace BannerKings.Behaviours
             {
                 var list = new List<CharacterAttribute>(BKAttributes.AllAttributes);
                 list.Remove(BKAttributes.Instance.Wisdom);
-                __result = list.GetReadOnlyList();
+                __result = new MBReadOnlyList<CharacterAttribute>(list);
                 return false;
             }
         }

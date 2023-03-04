@@ -157,13 +157,12 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        // Token: 0x06002D67 RID: 11623 RVA: 0x000B46D4 File Offset: 0x000B28D4
         private void GetSettlementLoyaltyChangeDueToGovernorPerks(Town town, ref ExplainedNumber explainedNumber)
         {
             PerkHelper.AddPerkBonusForTown(DefaultPerks.Leadership.HeroicLeader, town, ref explainedNumber);
             PerkHelper.AddPerkBonusForTown(DefaultPerks.Charm.NaturalLeader, town, ref explainedNumber);
             PerkHelper.AddPerkBonusForTown(DefaultPerks.Medicine.PhysicianOfPeople, town, ref explainedNumber);
-            PerkHelper.AddPerkBonusForTown(DefaultPerks.Athletics.HealthyCitizens, town, ref explainedNumber);
+            PerkHelper.AddPerkBonusForTown(DefaultPerks.Athletics.Durable, town, ref explainedNumber);
             PerkHelper.AddPerkBonusForTown(DefaultPerks.Bow.Discipline, town, ref explainedNumber);
             if (town.Settlement.Parties.Any(x =>
                     x.LeaderHero != null && x.LeaderHero.Clan == town.Settlement.OwnerClan &&
@@ -173,7 +172,6 @@ namespace BannerKings.Models.Vanilla
             }
         }
 
-        // Token: 0x06002D68 RID: 11624 RVA: 0x000B477C File Offset: 0x000B297C
         private void GetSettlementLoyaltyChangeDueToNotableRelations(Town town, ref ExplainedNumber explainedNumber)
         {
             var num = 0f;

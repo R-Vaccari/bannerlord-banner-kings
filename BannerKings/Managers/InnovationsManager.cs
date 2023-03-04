@@ -83,12 +83,12 @@ namespace BannerKings.Managers
             var list = new List<Innovation>();
             if (!Innovations.ContainsKey(culture))
             {
-                return list.GetReadOnlyList();
+                return new MBReadOnlyList<Innovation>(list);
             }
 
             list.AddRange(Innovations[culture].Innovations);
 
-            return list.GetReadOnlyList();
+            return new MBReadOnlyList<Innovation>(list);
         }
     }
 }

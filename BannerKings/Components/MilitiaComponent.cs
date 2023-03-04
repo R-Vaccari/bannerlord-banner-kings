@@ -28,11 +28,11 @@ namespace BannerKings.Components
                 {
                     mobileParty.SetPartyUsedByQuest(true);
                     mobileParty.Party.Visuals.SetMapIconAsDirty();
-                    mobileParty.SetInitiative(0.5f, 1f, float.MaxValue);
+                    mobileParty.Ai.SetInitiative(0.5f, 1f, float.MaxValue);
                     mobileParty.ShouldJoinPlayerBattles = true;
                     mobileParty.Aggressiveness = 0.1f;
-                    mobileParty.SetMoveEscortParty(escortTarget);
-                    mobileParty.PaymentLimit = Campaign.Current.Models.PartyWageModel.MaxWage;
+                    mobileParty.Ai.SetMoveEscortParty(escortTarget);
+                    mobileParty.SetWagePaymentLimit(Campaign.Current.Models.PartyWageModel.MaxWage);
                 });
         }
 
@@ -40,7 +40,7 @@ namespace BannerKings.Components
         {
             var caravan = CreateParty($"bk_raisedmilitia_{origin}", origin, escortTarget);
             caravan.InitializeMobilePartyAtPosition(reference.MemberRoster, reference.PrisonRoster, origin.GatePosition);
-            caravan.SetMoveEscortParty(escortTarget);
+            caravan.Ai.SetMoveEscortParty(escortTarget);
             reference.MemberRoster.RemoveIf(roster => roster.Number > 0);
             reference.PrisonRoster.RemoveIf(roster => roster.Number > 0);
             GiveMounts(ref caravan);
@@ -53,11 +53,11 @@ namespace BannerKings.Components
             var behavior = Behavior;
             if (behavior == AiBehavior.EscortParty)
             {
-                MobileParty.SetMoveEscortParty(Escort);
+                MobileParty.Ai.SetMoveEscortParty(Escort);
             }
             else
             {
-                MobileParty.SetMoveGoToSettlement(HomeSettlement);
+                MobileParty.Ai.SetMoveGoToSettlement(HomeSettlement);
             }
         }
     }

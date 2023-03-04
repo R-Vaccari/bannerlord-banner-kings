@@ -132,7 +132,7 @@ namespace BannerKings.Behaviours
                 if (!war)
                 {
                     party.Ai.DisableAi();
-                    party.SetMoveGoToSettlement(gentryTuple.Item2.EstatesData.Settlement);
+                    party.Ai.SetMoveGoToSettlement(gentryTuple.Item2.EstatesData.Settlement);
                 }
                 else
                 {
@@ -147,7 +147,7 @@ namespace BannerKings.Behaviours
                     }
 
                     party.Ai.DisableAi();
-                    party.SetMoveGoToSettlement(gentryTuple.Item2.EstatesData.Settlement);
+                    party.Ai.SetMoveGoToSettlement(gentryTuple.Item2.EstatesData.Settlement);
                 }
             },
             GetType().Name);
@@ -463,7 +463,8 @@ namespace BannerKings.Behaviours
             hero.Mother = mother;
             hero.Father = father;
             EquipmentFlags customFlags = EquipmentFlags.IsNobleTemplate | EquipmentFlags.IsChildEquipmentTemplate;
-            MBEquipmentRoster randomElementInefficiently = MBEquipmentRosterExtensions.GetAppropriateEquipmentRostersForHero(hero, customFlags, true).GetRandomElementInefficiently<MBEquipmentRoster>();
+            MBEquipmentRoster randomElementInefficiently = Campaign.Current.Models.EquipmentSelectionModel
+                .GetEquipmentRostersForDeliveredOffspring(hero).GetRandomElementInefficiently<MBEquipmentRoster>();
             if (randomElementInefficiently != null)
             {
                 Equipment randomElementInefficiently2 = randomElementInefficiently.GetCivilianEquipments().GetRandomElementInefficiently<Equipment>();

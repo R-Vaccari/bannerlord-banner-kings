@@ -990,7 +990,7 @@ namespace BannerKings.Behaviours
                                             .CalculateTownTax(title.fief.Town).ResultNumber;
                                     }
 
-                                    partyComponent.MobileParty.PaymentLimit = (int) (50f + limit);
+                                    partyComponent.MobileParty.SetWagePaymentLimit((int)(50f + limit));
                                 }
                             }
                         }
@@ -998,7 +998,7 @@ namespace BannerKings.Behaviours
                         foreach (var partyComponent in clan.WarPartyComponents)
                         {
                             var share = income / clan.WarPartyComponents.Count - knights;
-                            partyComponent.MobileParty.PaymentLimit = (int) (300f + share);
+                            partyComponent.MobileParty.SetWagePaymentLimit((int) (300f + share));
                         }
 
                         return false;

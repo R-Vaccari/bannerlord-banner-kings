@@ -69,7 +69,7 @@ namespace BannerKings.Components
                 EnterSettlementAction.ApplyForParty(MobileParty, HomeSettlement);
             }
 
-            MobileParty.SetMoveModeHold();
+            MobileParty.Ai.SetMoveModeHold();
         }
     }
 }

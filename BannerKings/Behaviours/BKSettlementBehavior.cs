@@ -13,7 +13,6 @@ using BannerKings.Managers.Populations.Villages;
 using BannerKings.Models.Vanilla;
 using BannerKings.Utils;
 using HarmonyLib;
-using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
@@ -46,11 +45,10 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
-            CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCharacterCreationOver);
             CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameCreated);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
-            CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
-            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
+            //CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
+            //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -131,11 +129,6 @@ namespace BannerKings.Behaviours
             BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
         }
 
-        private void OnCharacterCreationOver()
-        {
-            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
-            BannerKingsConfig.Instance.TitleManager.PostInitialize();
-        }
 
         private void TickSettlementData(Settlement settlement)
         {

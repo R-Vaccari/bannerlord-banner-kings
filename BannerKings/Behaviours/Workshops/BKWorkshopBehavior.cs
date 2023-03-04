@@ -53,7 +53,7 @@ namespace BannerKings.Behaviours.Workshops
             }
         } 
 
-        private void OnWarDeclared(IFaction faction1, IFaction faction2)
+        private void OnWarDeclared(IFaction faction1, IFaction faction2, DeclareWarAction.DeclareWarDetail detail)
         {
             foreach (var town in faction1.Fiefs)
             {
