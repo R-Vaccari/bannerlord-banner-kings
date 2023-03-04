@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BannerKings.Extensions;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
@@ -21,6 +22,7 @@ using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -1074,46 +1076,9 @@ namespace BannerKings.Behaviours
             }
 
             [HarmonyPrefix]
-            [HarmonyPatch("AddExpensesFromGarrisons", MethodType.Normal)]
-            private static bool GarrisonsPrefix(Clan clan, ref ExplainedNumber goldChange,
-                bool applyWithdrawals = false)
-            {
-                if (BannerKingsConfig.Instance.TitleManager != null)
-                {
-                    var model = new DefaultClanFinanceModel();
-                    var calculateWage = model.GetType().GetMethod("CalculatePartyWage",
-                        BindingFlags.Instance | BindingFlags.NonPublic);
-                    if (clan == Clan.PlayerClan)
-                    {
-                        Console.WriteLine();
-                    }
-
-                    foreach (var town in clan.Fiefs)
-                    {
-                        var garrisonParty = town.GarrisonParty;
-
-                        if (garrisonParty is {IsActive: true})
-                        {
-                            var wage = (int) calculateWage.Invoke(model,
-                                new object[] {garrisonParty, clan.Gold, applyWithdrawals});
-                            if (wage > 0)
-                            {
-                                goldChange.Add(-wage, new TextObject("{=tqCSk7ya}Party wages {A0}"),
-                                    garrisonParty.Name);
-                            }
-                        }
-                    }
-
-                    return false;
-                }
-
-                return true;
-            }
-
-            [HarmonyPrefix]
-            [HarmonyPatch("AddExpensesFromParties", MethodType.Normal)]
+            [HarmonyPatch("AddExpensesFromPartiesAndGarrisons", MethodType.Normal)]
             private static bool PartyExpensesPrefix(Clan clan, ref ExplainedNumber goldChange,
-                bool applyWithdrawals = false)
+                bool applyWithdrawals, bool includeDetails)
             {
                 if (BannerKingsConfig.Instance.TitleManager != null)
                 {
@@ -1133,6 +1098,14 @@ namespace BannerKings.Behaviours
                     foreach (var warPartyComponent in clan.WarPartyComponents)
                     {
                         list.Add(warPartyComponent.MobileParty);
+                    }
+
+                    foreach (Town town in clan.Fiefs)
+                    {
+                        if (town.GarrisonParty != null && town.GarrisonParty.IsActive)
+                        {
+                            list.Add(town.GarrisonParty);
+                        }
                     }
 
                     var model = new DefaultClanFinanceModel();
@@ -1170,57 +1143,47 @@ namespace BannerKings.Behaviours
             }
 
             [HarmonyPrefix]
-            [HarmonyPatch("AddVillagesIncome", MethodType.Normal)]
-            private static bool VillageIncomePrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
+            [HarmonyPatch("AddSettlementIncome", MethodType.Normal)]
+            private static bool VillageIncomePrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals, bool includeDetails)
             {
                 if (BannerKingsConfig.Instance.TitleManager != null)
                 {
-                    int totalGold = 0;
-                    var lordships = BannerKingsConfig.Instance.TitleManager
-                        .GetAllDeJure(clan)
-                        .FindAll(x => x.type == TitleType.Lordship);
-                    var addedVillages = new Dictionary<Village, Hero>();
-
-                    foreach (FeudalTitle lordship in lordships)
+                    ExplainedNumber explainedNumber = new ExplainedNumber(0f, goldChange.IncludeDescriptions, null);
+                    foreach (Town town in clan.Fiefs)
                     {
-                        Village village = lordship.fief.Village;
-                        if (village.Settlement.MapFaction == clan.MapFaction)
-                        {
-                            addedVillages.Add(village, lordship.deJure);
-                        }
-                    }
-
-                    foreach (Village village in clan.Villages)
-                    {
-                        if (addedVillages.ContainsKey(village))
-                        {
-                            continue;
-                        }
-
-                        var lordship = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
-                        if (lordship != null && lordship.deJure != null && lordship.deJure.MapFaction != clan.MapFaction)
-                        {
-                            addedVillages.Add(village, clan.Leader);
-                        }
-                    }
-
-                    foreach (var pair in addedVillages)
-                    {
-                        Hero owner = pair.Value;
-                        Village village = pair.Key;
-                        int income = CalculateVillageIncome(village);
-                        if (owner == clan.Leader)
-                        {
-                            totalGold += income;
-                        }
-
+                        ExplainedNumber explainedNumber2 = new ExplainedNumber((float)((int)((float)town.TradeTaxAccumulated / 5f)), false, null);
+                        int num = MathF.Round(explainedNumber2.ResultNumber);
+                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.ContentTrades, town, ref explainedNumber2);
+                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Crossbow.Steady, town, ref explainedNumber2);
+                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Roguery.SaltTheEarth, town, ref explainedNumber2);
+                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.GivingHands, town, ref explainedNumber2);
                         if (applyWithdrawals)
                         {
-                            ApplyWithdrawal(village, income, owner == clan.Leader ? null : owner);
+                            town.TradeTaxAccumulated -= num;
+                            if (clan == Clan.PlayerClan)
+                            {
+                                CampaignEventDispatcher.Instance.OnPlayerEarnedGoldFromAsset(DefaultClanFinanceModel.AssetIncomeType.Taxes, (int)explainedNumber2.ResultNumber);
+                            }
+                        }
+                        int num2 = (int)Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(town, false).ResultNumber;
+                        explainedNumber.Add((float)num2, new TextObject("{=TLuaPAIO}{A0} Taxes", null), town.Name);
+                        explainedNumber.Add(explainedNumber2.ResultNumber, new TextObject("{=wVMPdc8J}{A0}'s tariff", null), town.Name);
+                        if (town.CurrentDefaultBuilding != null && town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Engineering.ArchitecturalCommisions))
+                        {
+                            explainedNumber.Add(DefaultPerks.Engineering.ArchitecturalCommisions.SecondaryBonus, new TextObject("{=uixuohBp}Settlement Projects", null), null);
+                        }
+                        foreach (Village village in clan.GetActualVillages())
+                        {
+                            int num3 = CalculateVillageIncome(village);
+                            explainedNumber.Add((float)num3, village.Name, null);
                         }
                     }
-
-                    goldChange.Add(totalGold, new TextObject("{=GikQuojv}Village Demesnes"));
+                    if (!includeDetails)
+                    {
+                        goldChange.Add(explainedNumber.ResultNumber, new TextObject("{=AewK9qME}Settlement Income", null), null);
+                        return false;
+                    }
+                    goldChange.AddFromExplainedNumber(explainedNumber, new TextObject("{=AewK9qME}Settlement Income", null));
                     return false;
                 }
 
