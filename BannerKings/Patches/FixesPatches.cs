@@ -2,6 +2,7 @@
 using HarmonyLib;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Inventory;
@@ -38,10 +39,10 @@ namespace BannerKings.Patches
             [HarmonyPrefix]
             [HarmonyPatch("GetSiegeAftermathInfluenceCost")]
             private static bool GetSiegeAftermathInfluenceCostPrefix(MobileParty attackerParty, Settlement settlement, 
-                SiegeAftermathCampaignBehavior.SiegeAftermath aftermathType, ref float __result)
+                SiegeAftermathAction.SiegeAftermath aftermathType, ref float __result)
             {
                 float result = 0f;
-                if (attackerParty.Army != null && aftermathType != SiegeAftermathCampaignBehavior.SiegeAftermath.Pillage)
+                if (attackerParty.Army != null && aftermathType != SiegeAftermathAction.SiegeAftermath.Pillage)
                 {
                     int num = attackerParty.Army.Parties.Count((MobileParty t) =>
                     {
@@ -61,11 +62,11 @@ namespace BannerKings.Patches
 
                         return false;
                     });
-                    if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.Devastate)
+                    if (aftermathType == SiegeAftermathAction.SiegeAftermath.Devastate)
                     {
                         result = settlement.Prosperity / 400f * (float)num;
                     }
-                    else if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.ShowMercy && attackerParty.MapFaction.Culture != settlement.Culture)
+                    else if (aftermathType == SiegeAftermathAction.SiegeAftermath.ShowMercy && attackerParty.MapFaction.Culture != settlement.Culture)
                     {
                         result = settlement.Prosperity / 400f * (float)num2;
                     }

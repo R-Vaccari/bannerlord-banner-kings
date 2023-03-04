@@ -10,6 +10,7 @@ using HarmonyLib;
 using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -381,7 +382,6 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-
             if (detail == ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.BySiege)
             {
                 var absoluteRightGranted = false;
@@ -404,6 +404,7 @@ namespace BannerKings.Behaviours
                             }
                         }
                     }
+                    settlement.CanBeClaimed = -1;
                 }
 
                 if (!absoluteRightGranted && sovereign.contract.Rights.Contains(FeudalRights.Conquest_Rights))
@@ -445,11 +446,13 @@ namespace BannerKings.Behaviours
                     if (capturerHero == Hero.MainHero)
                     {
                         GameTexts.SetVariable("SETTLEMENT", settlement.Name);
-                        InformationManager.ShowInquiry(new InquiryData(new TextObject("{Conquest Right").ToString(),
+                        InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Conquest Right").ToString(),
                             new TextObject("{=FKMakM2V}By contract law, you have been awarded the ownership of {SETTLEMENT} due to you conquering it.")
                                 .ToString(),
                             true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
                     }
+
+                    settlement.CanBeClaimed = -1;
                 }
             }
         }
@@ -555,6 +558,26 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
+        [HarmonyPatch(typeof(SettlementClaimantCampaignBehavior))]
+        internal class SettlementClaimantCampaignBehaviorPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("OnSettlementOwnerChanged")]
+            private static bool OnSettlementOwnerChangedPrefix(Settlement settlement, bool openToClaim, Hero newOwner, Hero oldOwner, Hero capturerHero, ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
+            {
+                if (settlement.Town != null && settlement.CanBeClaimed == -1)
+                {
+                    if (settlement.IsVillage && settlement.Party.MapEvent != null && !FactionManager.IsAtWarAgainstFaction(settlement.Party.MapEvent.AttackerSide.LeaderParty.MapFaction, newOwner.MapFaction))
+                    {
+                        settlement.Party.MapEvent.FinalizeEvent();
+                    }
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
         [HarmonyPatch(typeof(HeirSelectionCampaignBehavior), "OnHeirSelectionOver")]
         internal class OnHeirSelectionOverPatch
         {

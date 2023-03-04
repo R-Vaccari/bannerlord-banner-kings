@@ -84,7 +84,7 @@ namespace BannerKings.Behaviours.Workshops
                             true, ref explainedNumber);
                     }
 
-                    float num = Workshop.ProductionProgress[i];
+                    float num = Workshop.GetProductionProgress(i);
                     if (num > 1f)
                     {
                         num = 1f;

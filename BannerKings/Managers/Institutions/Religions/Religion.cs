@@ -50,7 +50,7 @@ namespace BannerKings.Managers.Institutions.Religions
                     list.Add(new Sacrifice());
                 }
 
-                return list.GetReadOnlyList();
+                return new MBReadOnlyList<Rite>(list);
             }
         }
 
@@ -60,7 +60,7 @@ namespace BannerKings.Managers.Institutions.Religions
         public Divinity MainGod => Faith.MainGod;
         [field: SaveableField(3)] public Faith Faith { get; private set; }
 
-        public MBReadOnlyList<string> Doctrines => doctrineIds.GetReadOnlyList();
+        public MBReadOnlyList<string> Doctrines => new MBReadOnlyList<string>(doctrineIds);
 
         public bool HasDoctrine(Doctrine doctrine)
         {
@@ -90,7 +90,7 @@ namespace BannerKings.Managers.Institutions.Religions
         }
 
         public MBReadOnlyDictionary<Settlement, Clergyman> Clergy => clergy.GetReadOnlyDictionary();
-        public MBReadOnlyList<CultureObject> FavoredCultures => favoredCultures.GetReadOnlyList();
+        public MBReadOnlyList<CultureObject> FavoredCultures => new MBReadOnlyList<CultureObject>(favoredCultures);
         public ExplainedNumber Fervor => BannerKingsConfig.Instance.ReligionModel.CalculateFervor(this);
 
         internal void PostInitialize(Faith faith)

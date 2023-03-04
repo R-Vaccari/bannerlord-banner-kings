@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Managers.Institutions.Religions.Faiths;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -58,7 +59,7 @@ namespace BannerKings.Managers.Institutions.Guilds
         public int Capital => guildMaster.Gold;
         public GuildType GuildType { get; }
 
-        public MBReadOnlyList<Hero> Members => members.GetReadOnlyList();
+        public MBReadOnlyList<Hero> Members => new MBReadOnlyList<Hero>(members);
 
         public Hero Leader
         {

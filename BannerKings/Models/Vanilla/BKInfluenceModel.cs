@@ -3,6 +3,7 @@ using BannerKings.Behaviours;
 using BannerKings.Behaviours.Mercenary;
 using BannerKings.Extensions;
 using BannerKings.Managers.CampaignStart;
+using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
@@ -25,6 +26,23 @@ namespace BannerKings.Models.Vanilla
         public float GetRejectKnighthoodCost(Clan clan)
         {
             return 10f + MathF.Max(CalculateInfluenceChange(clan).ResultNumber, 5f) * 0.025f * CampaignTime.DaysInYear;
+        }
+
+        public ExplainedNumber CalculateInfluenceCap(Clan clan, bool includeDescriptions = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(50f, includeDescriptions);
+            result.Add(clan.Tier * 150f);
+
+            foreach (var fief in clan.Settlements)
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(fief);
+                if (data != null)
+                {
+                    result.Add(CalculateSettlementInfluence(fief, data, false).ResultNumber * 50f);
+                }
+            }
+
+            return result;
         }
 
         public override ExplainedNumber CalculateInfluenceChange(Clan clan, bool includeDescriptions = false)
@@ -96,10 +114,11 @@ namespace BannerKings.Models.Vanilla
             var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
             if (religion != null && clan.Settlements.Count > 0)
             {
-                if (religion.HasDoctrine(DefaultDoctrines.Instance.Druidism) && 
-                    council.GetMemberFromPosition(Managers.Court.CouncilPosition.Spiritual).Member == null) 
+                var spiritual = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spiritual);
+                if (religion.HasDoctrine(DefaultDoctrines.Instance.Druidism) &&
+                    spiritual != null && spiritual.Member == null) 
                 {
-                    baseResult.Add(-5f, DefaultDoctrines.Instance.Druidism.Name);
+                    baseResult.Add(-4f, DefaultDoctrines.Instance.Druidism.Name);
                 }
             }
 
@@ -149,7 +168,7 @@ namespace BannerKings.Models.Vanilla
             var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
             if (position != null)
             {
-                baseResult.Add(position.IsCorePosition(position.Position) ? 1f : 0.5f, new TextObject("{=WvhXhUFS}Councillor role"));
+                baseResult.Add(position.IsCorePosition(position.StringId) ? 1f : 0.5f, new TextObject("{=WvhXhUFS}Councillor role"));
             }
 
             float currentVassals = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentVassals(clan).ResultNumber;

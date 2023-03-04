@@ -5,6 +5,7 @@ using BannerKings.Components;
 using BannerKings.Extensions;
 using BannerKings.Managers;
 using BannerKings.Managers.Buildings;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
@@ -12,11 +13,11 @@ using BannerKings.Managers.Populations.Villages;
 using BannerKings.Models.Vanilla;
 using BannerKings.Utils;
 using HarmonyLib;
-using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Issues;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -44,11 +45,10 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
-            CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCharacterCreationOver);
             CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameCreated);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
-            CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
-            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
+            //CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
+            //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -129,11 +129,6 @@ namespace BannerKings.Behaviours
             BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
         }
 
-        private void OnCharacterCreationOver()
-        {
-            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
-            BannerKingsConfig.Instance.TitleManager.PostInitialize();
-        }
 
         private void TickSettlementData(Settlement settlement)
         {
@@ -141,9 +136,9 @@ namespace BannerKings.Behaviours
             BannerKingsConfig.Instance.PolicyManager.InitializeSettlement(settlement);
         }
 
-        private void OnSiegeAftermath(MobileParty attackerParty, Settlement settlement, SiegeAftermathCampaignBehavior.SiegeAftermath aftermathType, Clan previousSettlementOwner, Dictionary<MobileParty, float> partyContributions)
+        private void OnSiegeAftermath(MobileParty attackerParty, Settlement settlement, SiegeAftermathAction.SiegeAftermath aftermathType, Clan previousSettlementOwner, Dictionary<MobileParty, float> partyContributions)
         {
-            if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.ShowMercy || settlement?.Town == null ||
+            if (aftermathType == SiegeAftermathAction.SiegeAftermath.ShowMercy || settlement?.Town == null ||
                 BannerKingsConfig.Instance.PopulationManager == null ||
                 !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
             {
@@ -151,7 +146,7 @@ namespace BannerKings.Behaviours
             }
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            var shareToKill = aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.Pillage ? MBRandom.RandomFloatRanged(0.1f, 0.16f) : MBRandom.RandomFloatRanged(0.16f, 0.24f);
+            var shareToKill = aftermathType == SiegeAftermathAction.SiegeAftermath.Pillage ? MBRandom.RandomFloatRanged(0.1f, 0.16f) : MBRandom.RandomFloatRanged(0.16f, 0.24f);
 
             var killTotal = (int) (data.TotalPop * shareToKill);
             var lognum = killTotal;
@@ -191,6 +186,55 @@ namespace BannerKings.Behaviours
             TickTown(settlement);
             TickCastle(settlement);
             TickVillage(settlement);
+        }
+
+        private void HandleIssues(Settlement settlement)
+        {
+            if (settlement.Town == null)
+            {
+                return;
+            }
+
+            Hero governor = settlement.Town.Governor;
+            if (governor == null)
+            {
+                return;
+            }
+
+            RunWeekly(() =>
+            {
+                IssueBase issue = null;
+                foreach (var notable in settlement.Notables)
+                {
+                    if (notable.Issue != null)
+                    {
+                        issue = notable.Issue;
+                        break;
+                    }
+                }
+
+                if (issue != null && MBRandom.RandomFloat < (governor.GetSkillValue(DefaultSkills.Steward) / 1000f))
+                {
+                    FinishIssue(issue, governor, settlement.OwnerClan.Leader);
+                }
+            },
+            GetType().Name,
+            false);
+        }
+
+        private void FinishIssue(IssueBase issue, Hero handler, Hero clanLeader)
+        {
+            handler.AddSkillXp(DefaultSkills.Steward, 1000f * Campaign.Current.Models.IssueModel.GetIssueDifficultyMultiplier());
+
+            if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(clanLeader.Clan,
+                DefaultCouncilTasks.Instance.ManageDemesne, out var competence))
+            {
+                issue.CompleteIssueWithLordSolutionWithRefuseCounterOffer();
+            }
+            else
+            {
+                issue.CompleteIssueWithAiLord(null);
+            }
         }
 
         private void TickTown(Settlement settlement)
@@ -376,7 +420,7 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            var parties = new MobilePartiesAroundPositionList();
+            /*var parties = new Mobile();
             var list = parties.GetPartiesAroundPosition(town.Settlement.GatePosition, 10f);
 
             MobileParty party = list.FirstOrDefault(x => x.Party.TotalStrength > 25f && (x.IsBandit ||
@@ -386,7 +430,7 @@ namespace BannerKings.Behaviours
             if (party != null)
             {
                 EvaluateSendGarrison(town.Settlement, party);
-            }
+            }*/
         }
 
         private void EvaluateSendGarrison(Settlement origin, MobileParty target)
@@ -531,6 +575,10 @@ namespace BannerKings.Behaviours
                                 }
                             }
                         }
+                    }
+                    if (Campaign.Current.Models.SettlementFoodModel is not BKFoodModel)
+                    {
+                        return;
                     }
 
                     var foodModel = (BKFoodModel)Campaign.Current.Models.SettlementFoodModel;

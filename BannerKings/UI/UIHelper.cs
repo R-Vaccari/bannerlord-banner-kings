@@ -6,6 +6,7 @@ using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels;
 using Helpers;
+using Newtonsoft.Json.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
@@ -17,6 +18,7 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
+using static SandBox.CampaignBehaviors.LordConversationsCampaignBehavior;
 
 namespace BannerKings.UI
 {
@@ -63,6 +65,47 @@ namespace BannerKings.UI
             }
 
             return text;
+        }
+
+        public static List<TooltipProperty> GetCouncilPositionTooltip(CouncilMember position)
+        {
+            List<TooltipProperty> properties = new List<TooltipProperty>();
+            properties.Add(new TooltipProperty(position.Name.ToString() + "        ", 
+                string.Empty, 
+                0, 
+                onlyShowWhenExtended: false, 
+                TooltipProperty.TooltipPropertyFlags.Title));
+
+            properties.Add(new TooltipProperty(string.Empty,
+                position.Description.ToString(),
+                0,
+                false,
+                TooltipProperty.TooltipPropertyFlags.MultiLine));
+
+            TooltipAddEmptyLine(properties);
+            properties.Add(new TooltipProperty(new TextObject("{=!}Competences").ToString(), " ", 0));
+            TooltipAddSeperator(properties);
+
+            properties.Add(new TooltipProperty(new TextObject("{=!}Primary").ToString(),
+                position.PrimarySkill.ToString(),
+                0));
+
+            properties.Add(new TooltipProperty(new TextObject("{=!}Secondary").ToString(),
+                position.SecondarySkill.ToString(),
+                0));
+
+            TooltipAddEmptyLine(properties);
+            properties.Add(new TooltipProperty(new TextObject("{=77D4i3pG}Privileges").ToString(), " ", 0));
+            TooltipAddSeperator(properties);
+
+            foreach (var privilege in position.AllPrivileges)
+            {
+                properties.Add(new TooltipProperty(GameTexts.FindText("str_bk_council_privilege", privilege.ToString().ToLower()).ToString(),
+                    " ", 
+                    0));
+            }
+
+            return properties;
         }
 
         public static List<TooltipProperty> GetPietyTooltip(Managers.Institutions.Religions.Religion rel, Hero hero, int piety)
@@ -456,7 +499,7 @@ namespace BannerKings.UI
             return correlation;
         }
 
-        public static List<TooltipProperty> GetHeroGovernorEffectsTooltip(Hero hero, CouncilPosition position,
+        public static List<TooltipProperty> GetHeroGovernorEffectsTooltip(Hero hero, CouncilMember position,
             float competence)
         {
             var list = new List<TooltipProperty>

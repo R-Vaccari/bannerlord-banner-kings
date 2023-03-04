@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Skills;
@@ -152,10 +153,10 @@ namespace BannerKings.Behaviours
                     var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero.Clan);
                     if (council != null)
                     {
-                        var councilMember = council.GetMemberFromPosition(Managers.Court.CouncilPosition.Philosopher);
+                        var councilMember = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Philosopher);
                         if (councilMember != null && councilMember.Member != null)
                         {
-                            var skill = 5 * councilMember.Competence;
+                            var skill = 5 * councilMember.Competence.ResultNumber;
                             hero.AddSkillXp(BKSkills.Instance.Scholarship, (int)skill);
                         }
                     }
@@ -562,7 +563,7 @@ namespace BannerKings.Behaviours
             {
                 var list = new List<CharacterAttribute>(BKAttributes.AllAttributes);
                 list.Remove(BKAttributes.Instance.Wisdom);
-                __result = list.GetReadOnlyList();
+                __result = new MBReadOnlyList<CharacterAttribute>(list);
                 return false;
             }
         }

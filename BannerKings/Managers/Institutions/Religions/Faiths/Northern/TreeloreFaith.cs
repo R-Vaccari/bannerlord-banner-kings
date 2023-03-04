@@ -1,4 +1,5 @@
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -127,7 +128,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
 
         public override TextObject GetRankTitle(int rank) => new TextObject("{=Yc1bVZ7a}Elder");
 
-        public override MBReadOnlyList<Divinity> GetSecondaryDivinities() => pantheon.GetReadOnlyList();
+        public override MBReadOnlyList<Divinity> GetSecondaryDivinities() => new MBReadOnlyList<Divinity>(pantheon);
 
         public override TextObject GetCultsDescription() => new TextObject("{=J4D4X2XJ}Cults");
 

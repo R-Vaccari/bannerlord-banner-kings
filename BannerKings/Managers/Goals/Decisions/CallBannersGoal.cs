@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Behaviours;
-using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Utils.Extensions;
@@ -47,18 +46,18 @@ namespace BannerKings.Managers.Goals.Decisions
             {
                 var rulingClan = fulfiller.Clan.Kingdom.RulingClan;
                 var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(rulingClan);
-                var councilMember = council.GetMemberFromPosition(CouncilPosition.Marshall);
+                var councilMember = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Marshal);
 
                 if (fulfiller.Clan.Kingdom.HasPolicy(BKPolicies.Instance.LimitedArmyPrivilege))
                 {
                     failedReasons.Add(new TextObject("{=0Yoz051M}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to County level.")
-                                            .SetTextVariable("MARSHAL", councilMember.GetName())
+                                            .SetTextVariable("MARSHAL", councilMember.Name)
                                             .SetTextVariable("CLAN", rulingClan.Name));
                 }
                 else
                 {
                     failedReasons.Add(new TextObject("{=9ap6ssvZ}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to Lordship level.")
-                    .SetTextVariable("MARSHAL", councilMember.GetName())
+                    .SetTextVariable("MARSHAL", councilMember.Name)
                     .SetTextVariable("CLAN", rulingClan.Name));
                 }
             }

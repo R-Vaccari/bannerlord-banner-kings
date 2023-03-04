@@ -1,6 +1,8 @@
 using System.Linq;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
@@ -218,7 +220,9 @@ namespace BannerKings.Models.BKModels
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
-                           CouncilPosition.Castellan, 0.4f, false);
+                           DefaultCouncilPositions.Instance.Castellan,
+                           DefaultCouncilTasks.Instance.EncourageMilitarism,
+                           0.4f, false);
 
                 result.Add(legitimacy, new TextObject("{=UqLsS4GV}Legitimacy"));
             }

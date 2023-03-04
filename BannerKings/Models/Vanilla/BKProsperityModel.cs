@@ -1,6 +1,8 @@
 using System.Linq;
 using BannerKings.Extensions;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
@@ -51,7 +53,9 @@ namespace BannerKings.Models.Vanilla
             if (owner.Culture.StringId == "battania")
             {
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, owner,
-                          CouncilPosition.Elder, 0.2f, false);
+                          DefaultCouncilPositions.Instance.Elder,
+                          DefaultCouncilTasks.Instance.EncourageMilitarism,
+                          0.2f, false);
             }
 
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
@@ -186,7 +190,9 @@ namespace BannerKings.Models.Vanilla
                     if (owner.Culture.StringId == "vlandia")
                     {
                         BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, fortification.OwnerClan.Leader,
-                            CouncilPosition.Castellan, 1.5f, false);
+                            DefaultCouncilPositions.Instance.Castellan,
+                            DefaultCouncilTasks.Instance.EncourageMilitarism,
+                            1.5f, false);
                     }
                 }
 
@@ -270,7 +276,9 @@ namespace BannerKings.Models.Vanilla
                 GetSettlementProsperityChangeDueToIssues(fortification.Settlement, ref explainedNumber);
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber,
-                    fortification.OwnerClan.Leader, CouncilPosition.Steward, 1f, false);
+                    fortification.OwnerClan.Leader, DefaultCouncilPositions.Instance.Steward,
+                    DefaultCouncilTasks.Instance.DevelopEconomy,
+                    1f, false);
 
                 AddDemesneLawEffect(data, ref explainedNumber);
                 return explainedNumber;

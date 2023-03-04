@@ -1,5 +1,7 @@
 using BannerKings.Behaviours;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
@@ -63,7 +65,9 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader,
-                    CouncilPosition.Spymaster, 1f, false);
+                    DefaultCouncilPositions.Instance.Spymaster,
+                    DefaultCouncilTasks.Instance.EncourageMilitarism,
+                    1f, false);
             }
 
             GetHideoutBonus(town, ref baseResult);

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Extensions;
-using BannerKings.Managers.Institutions.Religions.Doctrines;
+using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -17,128 +17,44 @@ namespace BannerKings.Managers.Court
 {
     public class CouncilData : BannerKingsData
     {
-        public CouncilData(Clan clan, Hero marshall = null, Hero chancellor = null, Hero steward = null,
-            Hero spymaster = null,
-            Hero spiritual = null)
+        public CouncilData(Clan clan)
         {
-            this.clan = clan;
-            members = new List<CouncilMember>
-            {
-                new(marshall, CouncilPosition.Marshall, clan),
-                new(chancellor, CouncilPosition.Chancellor, clan),
-                new(steward, CouncilPosition.Steward, clan),
-                new(spymaster, CouncilPosition.Spymaster, clan),
-                new(spiritual, CouncilPosition.Spiritual, clan)
-            };
-            royalMembers = new List<CouncilMember>();
+            this.Clan = clan;
+            Positions = new List<CouncilMember>();
             Peerage = Peerage.GetAdequatePeerage(clan);
         }
 
-        [SaveableProperty(1)] private Clan clan { get; set; }
+        public void PostInitialize()
+        {
+            if (Positions == null)
+            {
+                Positions = new List<CouncilMember>();
+            }
 
-        [SaveableProperty(2)] private List<CouncilMember> members { get; set; }
+            foreach (var pos in Positions)
+            {
+                pos.PostInitialize();
+            }
+        }
 
-        [SaveableProperty(3)] private List<CouncilMember> royalMembers { get; set; }
-
+        [SaveableProperty(1)] public Clan Clan { get; private set; }
+        [SaveableProperty(5)] public List<CouncilMember> Positions { get; private set; }
         [SaveableProperty(4)] public Peerage Peerage { get; private set; }
 
         public void SetPeerage(Peerage peerage)
         {
             Peerage = peerage;
-
         }
 
-        public Hero Owner => clan.Leader;
-
-        public MBReadOnlyList<CouncilMember> Positions
-        {
-            get
-            {
-                if (members == null)
-                {
-                    members = new List<CouncilMember>();
-                }
-
-                return members.GetReadOnlyList();
-            }
-        }
-
-        public MBReadOnlyList<CouncilMember> RoyalPositions
-        {
-            get
-            {
-                if (royalMembers == null)
-                {
-                    royalMembers = new List<CouncilMember>();
-                }
-
-                return royalMembers.GetReadOnlyList();
-            }
-        }
-
-        public MBReadOnlyList<CouncilMember> AllPositions
-        {
-            get
-            {
-                var all = new List<CouncilMember>();
-                all.AddRange(members);
-                if (royalMembers != null)
-                {
-                    all.AddRange(royalMembers);
-                }
-
-                return all.GetReadOnlyList();
-            }
-        }
-
-        public bool IsRoyal => BannerKingsConfig.Instance.CouncilModel.IsCouncilRoyal(clan).Item1;
-
-        public Hero Marshall
-        {
-            get => members.First(x => x.Position == CouncilPosition.Marshall).Member;
-            set => members.First(x => x.Position == CouncilPosition.Marshall).Member = value;
-        }
-
-        public Hero Chancellor
-        {
-            get => members.First(x => x.Position == CouncilPosition.Chancellor).Member;
-            set => members.First(x => x.Position == CouncilPosition.Chancellor).Member = value;
-        }
-
-        public Hero Steward
-        {
-            get => members.First(x => x.Position == CouncilPosition.Steward).Member;
-            set => members.First(x => x.Position == CouncilPosition.Steward).Member = value;
-        }
-
-        public Hero Spymaster
-        {
-            get => members.First(x => x.Position == CouncilPosition.Spymaster).Member;
-            set => members.First(x => x.Position == CouncilPosition.Spymaster).Member = value;
-        }
-
-        public Hero Spiritual
-        {
-            get
-            {
-                var position = members.FirstOrDefault(x => x.Position == CouncilPosition.Spiritual);
-                if (position == null)
-                {
-                    position = new CouncilMember(null, CouncilPosition.Spiritual, clan);
-                    members.Add(position);
-                }
-
-                return position.Member;
-            }
-            set => members.First(x => x.Position == CouncilPosition.Spiritual).Member = value;
-        }
+        public Hero Owner => Clan.Leader;
+        public bool IsRoyal => BannerKingsConfig.Instance.CouncilModel.IsCouncilRoyal(Clan).Item1;
 
         public float AdministrativeCosts
         {
             get
             {
                 var costs = 0f;
-                foreach (var councilMember in members)
+                foreach (var councilMember in Positions)
                 {
                     if (councilMember.Member != null)
                     {
@@ -150,56 +66,49 @@ namespace BannerKings.Managers.Court
             }
         }
 
-        public CouncilMember GetMemberFromPosition(CouncilPosition position)
+        public float GetCompetence(Hero hero, CouncilMember position)
         {
-            var member = members.FirstOrDefault(x => x.Position == position);
-            if (member != null)
+            if (hero != null && position != null)
             {
-                return member;
+                return position.CalculateCandidateCompetence(hero).ResultNumber;
             }
 
-            var royalMember = royalMembers.FirstOrDefault(x => x.Position == position);
-            return royalMember;
+            return 0f;
         }
+
+        public float GetCompetence(CouncilMember position) => position.Competence.ResultNumber;
+        public CouncilMember GetCouncilPosition(CouncilMember position) => Positions.FirstOrDefault(x => x.StringId == position.StringId);
 
         internal override void Update(PopulationData data)
         {
-            if (royalMembers == null)
-            {
-                royalMembers = new List<CouncilMember>();
-            }
-
             var courtiers = GetCourtMembers();
-            if (GetMemberFromPosition(CouncilPosition.Spiritual) == null)
+            foreach (var pos in DefaultCouncilPositions.Instance.All)
             {
-                members.Add(new CouncilMember(null, CouncilPosition.Spiritual, clan));
-            }
-
-            foreach (var member in members)
-            {
-                if (member.Member != null &&
-                    (member.Member.IsDead || member.Member.IsDisabled || !courtiers.Contains(member.Member)))
+                if (pos.IsAdequate(this))
                 {
-                    member.Member = null;
+                    if (!Positions.Any(x => x.StringId == pos.StringId))
+                    {
+                        Positions.Add(pos.GetCopy(Clan));
+                    }
                 }
-
-                if (member.Clan == null)
+                else if (Positions.Contains(pos))
                 {
-                    member.Clan = clan;
+                    Positions.Remove(pos);
                 }
             }
 
-            foreach (var member in royalMembers)
+            foreach (var position in Positions)
             {
-                if (member.Member != null &&
-                    (member.Member.IsDead || member.Member.IsDisabled || !courtiers.Contains(member.Member)))
+                if (position.Member != null &&
+                    (position.Member.IsDead || position.Member.IsDisabled || !courtiers.Contains(position.Member)))
                 {
-                    member.Member = null;
+                    position.SetMember(null);
                 }
 
-                if (member.Clan == null)
+                position.SetIsRoyal(IsRoyal);
+                if (position.Member != null && !position.IsValidCandidate(position.Member))
                 {
-                    member.Clan = clan;
+                    position.SetMember(null);
                 }
             }
 
@@ -221,82 +130,21 @@ namespace BannerKings.Managers.Court
                 }
             }
 
-            if (clan.IsUnderMercenaryService)
+            Owner.AddSkillXp(BKSkills.Instance.Lordship, Positions.Count * 5);
+            if (Clan.IsUnderMercenaryService)
+            {
+                return;
+            }
+           
+            if (Owner == Hero.MainHero)
             {
                 return;
             }
 
-            if (IsRoyal)
-            {
-                foreach (var position in members)
-                {
-                    if (!position.IsRoyal)
-                    {
-                        position.IsRoyal = true;
-                        if (position.Member != null && !position.IsValidCandidate(position.Member))
-                        {
-                            position.Member = null;
-                        }
-                    }
-                }
-
-                var royal = GetIdealRoyalPositions();
-                foreach (var position in royal)
-                {
-                    if (royalMembers.FirstOrDefault(x => x.Position == position.Position) == null)
-                    {
-                        royalMembers.Add(position);
-                    }
-                }
-
-                var toRemove = new List<CouncilMember>();
-                foreach (var position in royalMembers)
-                {
-                    if (royal.FirstOrDefault(x => x.Position == position.Position) == null)
-                    {
-                        toRemove.Add(position);
-                    }
-                }
-
-                if (toRemove.Count > 0)
-                {
-                    foreach (var position in toRemove)
-                    {
-                        royalMembers.Remove(position);
-                    }
-                }
-            }
-            else
-            {
-                if (royalMembers.Count > 0)
-                {
-                    royalMembers.Clear();
-                }
-
-                foreach (var position in members)
-                {
-                    if (position.IsRoyal)
-                    {
-                        position.IsRoyal = false;
-                    }
-                }
-            }
-
-            Owner.AddSkillXp(BKSkills.Instance.Lordship, AllPositions.Count);
-
-            if (Owner == Hero.MainHero || MBRandom.RandomInt(1, 100) >= 5)
-            {
-                return;
-            }
-
-            var vacant = members.FirstOrDefault(x => x.Member == null);
+            var vacant = Positions.FirstOrDefault(x => x.Member == null);
             if (vacant == null)
             {
-                vacant = royalMembers.GetRandomElementWithPredicate(x => x.Member == null);
-                if (vacant == null)
-                {
-                    return;
-                }
+                return;
             }
 
             var hero = MBRandom.ChooseWeighted(GetHeroesForPosition(vacant));
@@ -314,51 +162,6 @@ namespace BannerKings.Managers.Court
                     action.Reject(Owner);
                 }
             }
-        }
-
-        public List<CouncilMember> GetIdealRoyalPositions()
-        {
-            var positions = new List<CouncilMember>();
-            if (clan.Kingdom == null)
-            {
-                return positions;
-            }
-
-            var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
-            if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Literalism))
-            {
-                positions.Add(new CouncilMember(null, CouncilPosition.Philosopher, clan));
-            }
-
-            var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(clan.Kingdom);
-            if (sovereign?.contract == null)
-            {
-                return positions;
-            }
-
-            var government = sovereign.contract.Government;
-
-            switch (government)
-            {
-                //case GovernmentType.Imperial:
-                //    positions.Add(new CouncilMember(null, CouncilPosition.Prince, clan));
-                //   break;
-                case GovernmentType.Feudal:
-                    positions.Add(new CouncilMember(null, CouncilPosition.Constable, clan));
-                    break;
-            }
-
-            if (clan.Kingdom.Culture == Utils.Helpers.GetCulture("vlandia"))
-            {
-                positions.Add(new CouncilMember(null, CouncilPosition.Castellan, clan));
-            }
-
-            if (clan.Kingdom.Culture == Utils.Helpers.GetCulture("battania"))
-            {
-                positions.Add(new CouncilMember(null, CouncilPosition.Elder, clan));
-            }
-
-            return positions;
         }
 
         public List<Hero> GetAvailableHeroes(bool lordsOnly = false)
@@ -395,7 +198,8 @@ namespace BannerKings.Managers.Court
             {
                 if (position.IsValidCandidate(hero))
                 {
-                    list.Add((hero, GetCompetence(hero, position.Position) + clan.Leader.GetRelation(hero) * 0.001f));
+                    list.Add((hero, GetCompetence(hero, position) +
+                        Clan.Leader.GetRelation(hero) * 0.001f));
                 }
             }
 
@@ -405,12 +209,12 @@ namespace BannerKings.Managers.Court
         public List<Hero> GetCourtMembers()
         {
             var heroes = new List<Hero>();
-            var members = clan.Heroes;
+            var members = Clan.Heroes;
             if (members is { Count: > 0 })
             {
                 foreach (var member in members)
                 {
-                    if (member != clan.Leader && member.IsAlive && !member.IsChild && !heroes.Contains(member))
+                    if (member != Clan.Leader && member.IsAlive && !member.IsChild && !heroes.Contains(member))
                     {
                         heroes.Add(member);
                     }
@@ -422,7 +226,7 @@ namespace BannerKings.Managers.Court
             {
                 foreach (var vassal in vassals)
                 {
-                    if (vassal.deJure != clan.Leader && !heroes.Contains(vassal.deJure))
+                    if (vassal.deJure != Clan.Leader && !heroes.Contains(vassal.deJure))
                     {
                         heroes.Add(vassal.deJure);
                     }
@@ -430,9 +234,9 @@ namespace BannerKings.Managers.Court
             }
 
             var highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(Owner);
-            if (highest is { IsSovereignLevel: true } && clan.Kingdom != null)
+            if (highest is { IsSovereignLevel: true } && Clan.Kingdom != null)
             {
-                foreach (var clan in clan.Kingdom.Clans)
+                foreach (var clan in Clan.Kingdom.Clans)
                 {
                     if (clan.Leader != Owner && !heroes.Contains(clan.Leader))
                     {
@@ -441,7 +245,7 @@ namespace BannerKings.Managers.Court
                 }
             }
 
-            var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
+            var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Clan.Leader);
             var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Owner);
             foreach (var title in titles)
             {
@@ -468,7 +272,7 @@ namespace BannerKings.Managers.Court
                 }
             }
 
-            var towns = clan.Fiefs;
+            var towns = Clan.Fiefs;
             if (towns is { Count: > 0 })
             {
                 foreach (var town in towns)
@@ -519,16 +323,9 @@ namespace BannerKings.Managers.Court
 
         public List<CouncilMember> GetOccupiedPositions()
         {
+            PostInitialize();
             var heroes = new List<CouncilMember>();
-            foreach (var councilMember in members)
-            {
-                if (councilMember.Member != null)
-                {
-                    heroes.Add(councilMember);
-                }
-            }
-
-            foreach (var councilMember in royalMembers)
+            foreach (var councilMember in Positions)
             {
                 if (councilMember.Member != null)
                 {
@@ -541,8 +338,9 @@ namespace BannerKings.Managers.Court
 
         public List<Hero> GetMembers()
         {
+            PostInitialize();
             var heroes = new List<Hero>();
-            foreach (var councilMember in members)
+            foreach (var councilMember in Positions)
             {
                 if (councilMember.Member != null)
                 {
@@ -555,7 +353,8 @@ namespace BannerKings.Managers.Court
 
         public CouncilMember GetHeroPosition(Hero hero)
         {
-            foreach (var councilMember in members)
+            PostInitialize();
+            foreach (var councilMember in Positions)
             {
                 if (councilMember.Member == hero)
                 {
@@ -564,292 +363,6 @@ namespace BannerKings.Managers.Court
             }
 
             return null;
-        }
-
-        public float GetCompetence(Hero hero, CouncilPosition position)
-        {
-            var competence = 0f;
-            var found = false;
-            foreach (var member in members)
-            {
-                if (member.Member == hero)
-                {
-                    competence = member.Competence;
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found)
-            {
-                competence = new CouncilMember(hero, position, clan).Competence;
-            }
-
-            return competence;
-        }
-
-
-        public float GetCompetence(CouncilPosition position)
-        {
-            var competence = 0f;
-            foreach (var member in members)
-            {
-                if (member.Position == position)
-                {
-                    competence = member.Competence;
-                    break;
-                }
-            }
-
-            return competence;
-        }
-
-        public CouncilMember GetCouncilMember(CouncilPosition position)
-        {
-            return members.FirstOrDefault(x => x.Position == position) ?? royalMembers.FirstOrDefault(x => x.Position == position);
-        }
-    }
-
-    public class CouncilMember
-    {
-        public CouncilMember(Hero member, CouncilPosition position, Clan clan)
-        {
-            this.member = member;
-            this.position = position;
-            this.clan = clan;
-            dueWage = 0;
-        }
-
-        [SaveableProperty(1)] private Hero member { get; set; }
-
-        [SaveableProperty(2)] private CouncilPosition position { get; set; }
-
-        [SaveableProperty(3)] private bool isRoyal { get; set; }
-
-        [SaveableProperty(4)] private Clan clan { get; set; }
-
-        [SaveableProperty(5)] private int dueWage { get; set; }
-
-        public Hero Member
-        {
-            get => member;
-            set => member = value;
-        }
-
-        public CouncilPosition Position => position;
-
-        public bool IsRoyal
-        {
-            get => isRoyal;
-            set => isRoyal = value;
-        }
-
-        public Clan Clan
-        {
-            get => clan;
-            set => clan = value;
-        }
-
-        public int DueWage
-        {
-            get => dueWage;
-            set => dueWage = value;
-        }
-
-        public CultureObject Culture
-        {
-            get
-            {
-                if (clan.Kingdom != null)
-                {
-                    return clan.Kingdom.Culture;
-                }
-
-                return clan.Culture;
-            }
-        }
-
-        public float Competence
-        {
-            get
-            {
-                if (member != null)
-                {
-                    var targetCap = 300;
-                    var primarySkill = 0f;
-                    var secondarySkill = 0f;
-
-                    targetCap += 15 * (member.GetAttributeValue(DefaultCharacterAttributes.Intelligence) - 5);
-                    switch (position)
-                    {
-                        case CouncilPosition.Marshall:
-                            primarySkill = member.GetSkillValue(DefaultSkills.Leadership);
-                            secondarySkill = member.GetSkillValue(DefaultSkills.Tactics);
-                            break;
-                        case CouncilPosition.Chancellor:
-                            primarySkill = member.GetSkillValue(DefaultSkills.Charm);
-                            secondarySkill = member.GetSkillValue(DefaultSkills.Charm);
-                            break;
-                        case CouncilPosition.Steward:
-                            primarySkill = member.GetSkillValue(DefaultSkills.Steward);
-                            secondarySkill = member.GetSkillValue(DefaultSkills.Trade);
-                            break;
-                        case CouncilPosition.Spymaster:
-                            primarySkill = member.GetSkillValue(DefaultSkills.Roguery);
-                            secondarySkill = member.GetSkillValue(BKSkills.Instance.Lordship);
-                            break;
-                        case CouncilPosition.Castellan:
-                            primarySkill = member.GetSkillValue(DefaultSkills.Steward);
-                            secondarySkill = member.GetSkillValue(BKSkills.Instance.Lordship);
-                            break;
-                        case CouncilPosition.Spiritual:
-                            primarySkill = member.GetSkillValue(BKSkills.Instance.Theology);
-                            secondarySkill = member.GetSkillValue(BKSkills.Instance.Scholarship);
-                            break;
-                        case CouncilPosition.Constable:
-                            primarySkill = member.GetSkillValue(DefaultSkills.Leadership);
-                            secondarySkill = member.GetSkillValue(DefaultSkills.Steward);
-                            break;
-                        case CouncilPosition.Elder:
-                            primarySkill = member.GetSkillValue(DefaultSkills.Charm);
-                            secondarySkill = member.GetSkillValue(BKSkills.Instance.Scholarship);
-                            break;
-                        case CouncilPosition.Philosopher:
-                            primarySkill = member.GetSkillValue(BKSkills.Instance.Scholarship);
-                            secondarySkill = member.GetSkillValue(BKSkills.Instance.Theology);
-                            break;
-                    }
-
-                    return MBMath.ClampFloat((primarySkill + secondarySkill / 2) / targetCap, 0f, 1f);
-                }
-
-                return 0f;
-            }
-        }
-
-        public TextObject GetName()
-        {
-            return GameTexts.FindText("str_bk_council_" + position.ToString().ToLower() + (isRoyal ? "_royal" : ""),
-                Culture.StringId);
-        }
-
-        public TextObject GetDescription()
-        {
-            return GameTexts.FindText("str_bk_council_description_" + position.ToString().ToLower())
-                .SetTextVariable("NAME", GetName());
-        }
-
-        public TextObject GetEffects()
-        {
-            return GameTexts.FindText("str_bk_council_" + position.ToString().ToLower() + "_effects")
-                .SetTextVariable("BREAK", "\n");
-        }
-
-        public bool IsValidCandidate(Hero candidate)
-        {
-            if (candidate.Clan is { IsUnderMercenaryService: true })
-            {
-                return false;
-            }
-
-            var clanReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
-            if (clanReligion != null && clanReligion.HasDoctrine(DefaultDoctrines.Instance.Legalism))
-            {
-                var candidateReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(candidate);
-                if (candidateReligion == null || candidateReligion != clanReligion)
-                {
-                    return false;
-                }
-            }
-
-            switch (position)
-            {
-                case CouncilPosition.Spiritual:
-                    return BannerKingsConfig.Instance.ReligionsManager.IsPreacher(candidate);
-                case CouncilPosition.Elder:
-                    return candidate.Culture == Culture && candidate.Age >= 50;
-            }
-
-            if (IsRoyal && IsCorePosition(position))
-            {
-                return candidate.Occupation == Occupation.Lord;
-            }
-
-            return true;
-        }
-
-        public float AdministrativeCosts()
-        {
-            var cost = 0.01f;
-            if (position == CouncilPosition.Spiritual)
-            {
-                cost = 0f;
-            }
-            else if (IsCorePosition(position))
-            {
-                cost = IsRoyal ? 0.045f : 0.0275f;
-            }
-
-            return cost;
-        }
-
-        public float InfluenceCosts()
-        {
-            var cost = 0f;
-            if (IsCorePosition(position) && position != CouncilPosition.Spiritual)
-            {
-                cost = IsRoyal ? 0.05f : 0.03f;
-            }
-
-            return cost;
-        }
-
-        public bool IsCorePosition(CouncilPosition position)
-        {
-            return position is CouncilPosition.Marshall or CouncilPosition.Steward or CouncilPosition.Spymaster or CouncilPosition.Chancellor;
-        }
-
-        public IEnumerable<CouncilPrivileges> GetPrivileges()
-        {
-            var adm = AdministrativeCosts();
-            switch (adm)
-            {
-                case > 0.03f:
-                    yield return CouncilPrivileges.HIGH_WAGE;
-                    break;
-                case > 0.01f:
-                    yield return CouncilPrivileges.MID_WAGE;
-                    break;
-                case > 0f:
-                    yield return CouncilPrivileges.LOW_WAGE;
-                    break;
-            }
-
-            if (position == CouncilPosition.Spiritual)
-            {
-                yield return CouncilPrivileges.CLERGYMEN_EXCLUSIVE;
-            }
-
-            if (IsCorePosition(position) && IsRoyal)
-            {
-                yield return CouncilPrivileges.NOBLE_EXCLUSIVE;
-            }
-
-            var influence = InfluenceCosts();
-            switch (influence)
-            {
-                case >= 0.05f:
-                    yield return CouncilPrivileges.HIGH_INFLUENCE;
-                    break;
-                case > 0f:
-                    yield return CouncilPrivileges.INFLUENCE;
-                    break;
-            }
-
-            if (position == CouncilPosition.Marshall && IsRoyal)
-            {
-                yield return CouncilPrivileges.ARMY_PRIVILEGE;
-            }
         }
     }
 

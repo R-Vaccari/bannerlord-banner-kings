@@ -1,5 +1,7 @@
 using BannerKings.Behaviours;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
@@ -126,7 +128,9 @@ namespace BannerKings.Models.Vanilla
             }
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
-                CouncilPosition.Steward, 0.15f, true);
+                DefaultCouncilPositions.Instance.Steward,
+                DefaultCouncilTasks.Instance.OverseeProduction,
+                .15f, true);
 
             return result;
         }
@@ -155,6 +159,11 @@ namespace BannerKings.Models.Vanilla
             {
                 result.Add(0.1f, BKPerks.Instance.CivilManufacturer.Name);
             }
+
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
+                DefaultCouncilPositions.Instance.Steward,
+                DefaultCouncilTasks.Instance.OverseeProduction,
+                .085f, true);
 
             return result;
         }
@@ -197,7 +206,9 @@ namespace BannerKings.Models.Vanilla
             result.AddFactor(data.MilitaryData.Militarism.ResultNumber * -1f, new TextObject("{=m66LFb9g}Militarism"));
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
-                CouncilPosition.Steward, 0.15f, true);
+                DefaultCouncilPositions.Instance.Steward,
+                DefaultCouncilTasks.Instance.DevelopEconomy, 
+                0.15f, false);
 
             if (settlement.Town != null)
             {

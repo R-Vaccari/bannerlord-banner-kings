@@ -1,6 +1,8 @@
 ﻿using BannerKings.Managers.AI;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
+using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -40,8 +42,9 @@ namespace BannerKings.Behaviours
             }
         }
 
-        private void OnConversationEnded(CharacterObject character)
+        private void OnConversationEnded(IEnumerable<CharacterObject> characters)
         {
+            CharacterObject character = characters.FirstOrDefault(x => x != Hero.MainHero.CharacterObject);
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
             if (education.Lifestyle == DefaultLifestyles.Instance.Outlaw && character.IsHero)
             {

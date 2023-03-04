@@ -7,6 +7,8 @@ using BannerKings.Components;
 using BannerKings.Managers;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Duties;
 using BannerKings.Managers.Education;
@@ -90,7 +92,6 @@ namespace BannerKings
             AddEnumDefinition(typeof(InheritanceType), 30);
             AddEnumDefinition(typeof(GenderLaw), 31);
             AddClassDefinition(typeof(TitleManager), 32);
-            AddEnumDefinition(typeof(CouncilPosition), 33);
             AddClassDefinition(typeof(CouncilMember), 34);
             AddClassDefinition(typeof(CouncilData), 35);
             AddClassDefinition(typeof(CourtManager), 36);
@@ -173,6 +174,8 @@ namespace BannerKings
             AddClassDefinition(typeof(GarrisonPartyComponent), 113);
             AddClassDefinition(typeof(WorkshopData), 114);
             AddClassDefinition(typeof(TreeloreFaith), 115);
+            AddClassDefinition(typeof(CouncilTask), 116);
+
 
             AddClassDefinition(typeof(MercenaryCareer), 1000);
             AddClassDefinition(typeof(MercenaryPrivilege), 1001);

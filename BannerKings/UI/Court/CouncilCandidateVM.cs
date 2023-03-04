@@ -12,7 +12,7 @@ namespace BannerKings.UI.Court
         private BasicTooltipViewModel courtHint;
 
         public CouncilCandidateVM(Hero member, Action<SettlementGovernorSelectionItemVM> onSelection,
-            CouncilPosition position, float competence) : base(member, onSelection)
+            CouncilMember position, float competence) : base(member, onSelection)
         {
             GovernorHint =
                 new BasicTooltipViewModel(() => UIHelper.GetHeroGovernorEffectsTooltip(member, position, competence));

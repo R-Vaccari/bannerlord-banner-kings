@@ -411,8 +411,9 @@ namespace BannerKings.Behaviours
                     break;
             }
 
-            var name = "{=xEwX83aU}Travelling {CLASS} from {ORIGIN}";
-            name = name.Replace("{CLASS}", Utils.Helpers.GetClassName(type, origin.Culture).ToString());
+            var name = new TextObject("{=xEwX83aU}Travelling {CLASS} from {ORIGIN}")
+                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(type, origin.Culture))
+                .ToString();
 
             if (civilian != null)
             {

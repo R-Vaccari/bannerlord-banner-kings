@@ -28,7 +28,7 @@ namespace BannerKings.Managers.Innovations
 
         [field: SaveableField(3)] public Innovation Fascination { get; private set; }
 
-        public MBReadOnlyList<Innovation> Innovations => innovations.GetReadOnlyList();
+        public MBReadOnlyList<Innovation> Innovations => new MBReadOnlyList<Innovation>(innovations);
 
         public void PostInitialize()
         {
