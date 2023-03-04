@@ -16,7 +16,7 @@
 
 										<GridWidget DataSource="{CourtInfo}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
 										            HorizontalAlignment="Left" MarginLeft="60" DefaultCellWidth="150" DefaultCellHeight="30"
-										            ColumnCount="1">
+										            ColumnCount="3">
 											<ItemTemplate>
 												<InformationElement />
 											</ItemTemplate>
@@ -133,57 +133,6 @@
 
 													</Children>
 												</ToggleButtonWidget>
-
-											</ItemTemplate>
-										</GridWidget>
-
-
-										<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed"
-										           SuggestedWidth="600" StackLayout.LayoutMethod="VerticalBottomToTop">
-											<Children>
-												<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-												                HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30"
-												                Text="@CurrentPositionNameText" MarginBottom="15" />
-												<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-												                HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="20"
-												                Text="@CurrentPositionDescriptionText" />
-											</Children>
-										</ListPanel>
-
-										<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="250"
-										        MarginRight="250" MarginTop="20" VerticalAlignment="Bottom" PositionYOffset="7"
-										        Sprite="SPGeneral\TownManagement\horizontal_divider" />
-
-										<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="15"
-										                HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@EffectsText"
-										                MarginBottom="15" />
-										<RichTextWidget HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren"
-										                VerticalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="24"
-										                Text="@CurrentEffectsDescriptionText" />
-
-										<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="250"
-										        MarginRight="250" MarginTop="20" VerticalAlignment="Bottom" PositionYOffset="7"
-										        Sprite="SPGeneral\TownManagement\horizontal_divider" />
-
-										<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="15"
-										                HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30"
-										                Text="@PrivilegesText" MarginBottom="15" />
-										<GridWidget DataSource="{PrivilegesInfo}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
-										            HorizontalAlignment="Center" DefaultCellWidth="200" DefaultCellHeight="30" ColumnCount="4">
-											<ItemTemplate>
-
-												<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent"
-												        VerticalAlignment="Center" DoNotPassEventsToChildren="true">
-													<Children>
-														<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
-														            SuggestedHeight="15" SuggestedWidth="100" VerticalAlignment="Center"
-														            HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
-														            Command.HoverEnd="ExecuteEndHint" />
-														<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-														                HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="24"
-														                Text="@Description" />
-													</Children>
-												</Widget>
 
 											</ItemTemplate>
 										</GridWidget>
