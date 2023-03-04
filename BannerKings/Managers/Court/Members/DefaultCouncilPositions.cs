@@ -39,7 +39,8 @@ namespace BannerKings.Managers.Court.Members
                 DefaultSkills.Tactics,
                 new List<CouncilTask>() 
                 { 
-                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy(),
+                    DefaultCouncilTasks.Instance.EncourageMilitarism.GetCopy()
                 },
                 new List<CouncilPrivileges>() { },
                 (CouncilData data) =>
@@ -74,6 +75,8 @@ namespace BannerKings.Managers.Court.Members
                 DefaultSkills.Trade,
                 new List<CouncilTask>()
                 {
+                    DefaultCouncilTasks.Instance.DevelopEconomy.GetCopy(),
+                    DefaultCouncilTasks.Instance.OverseeProduction.GetCopy(),
                     DefaultCouncilTasks.Instance.PromoteCulture.GetCopy()
                 },
                 new List<CouncilPrivileges>() { },
@@ -90,13 +93,13 @@ namespace BannerKings.Managers.Court.Members
                     var id = member.Culture.StringId;
                     if (member.IsRoyal)
                     {
-                        if (id == "battania") return new TextObject("{=!}Ard Seansalair");
+                        if (id == "battania") return new TextObject("{=!}Ard Sheumarlan");
                         if (id == "empire") return new TextObject("{=!}Magister Sacrarum Largitionum");
 
                         return new TextObject("{=!}High Steward");
                     }
 
-                    if (id == "battania") return new TextObject("{=!}Seansalair");
+                    if (id == "battania") return new TextObject("{=!}Sheumarlan");
                     if (id == "empire") return new TextObject("{=!}Praefectus Largitionum");
 
                     return new TextObject("{=!}Steward");
@@ -107,6 +110,7 @@ namespace BannerKings.Managers.Court.Members
                 BKSkills.Instance.Lordship,
                 new List<CouncilTask>()
                 {
+                    DefaultCouncilTasks.Instance.OverseeDignataries.GetCopy(),
                     DefaultCouncilTasks.Instance.ManageVassals.GetCopy()
                 },
                 new List<CouncilPrivileges>() { },
@@ -140,7 +144,8 @@ namespace BannerKings.Managers.Court.Members
                 BKSkills.Instance.Lordship,
                 new List<CouncilTask>()
                 {
-                    DefaultCouncilTasks.Instance.OverseeSecurity.GetCopy()
+                    DefaultCouncilTasks.Instance.OverseeSecurity.GetCopy(),
+                    DefaultCouncilTasks.Instance.RepressCriminality.GetCopy()
                 },
                 new List<CouncilPrivileges>() { },
                 (CouncilData data) =>
