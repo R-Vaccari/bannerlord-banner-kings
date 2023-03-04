@@ -22,6 +22,16 @@ namespace BannerKings.Managers.Court
             this.Clan = clan;
             Positions = new List<CouncilMember>();
             Peerage = Peerage.GetAdequatePeerage(clan);
+            foreach (var pos in DefaultCouncilPositions.Instance.All)
+            {
+                if (pos.IsAdequate(this))
+                {
+                    if (!Positions.Any(x => x.StringId == pos.StringId))
+                    {
+                        Positions.Add(pos.GetCopy(Clan));
+                    }
+                }
+            }
         }
 
         public void PostInitialize()

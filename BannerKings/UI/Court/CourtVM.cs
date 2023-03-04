@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Education.Languages;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
@@ -102,6 +104,19 @@ namespace BannerKings.UI.Court
             CourtInfo.Add(new InformationElement(new TextObject("{=7OQ7dN1T}Administrative costs:").ToString(), 
                 FormatValue(council.AdministrativeCosts),
                 new TextObject("{=1zAZjJy9}Costs associated with payment of council members, deducted on all your fiefs' revenues.")
+                .ToString()));
+
+            Language language = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(council.Clan.Culture);
+
+            CourtInfo.Add(new InformationElement(new TextObject("{=!}Court language:").ToString(),
+                language.Name.ToString(),
+                new TextObject("{=!}The native language spoken by the council leader. Speaking the court language is important for councillours to fulfill their tasks adequately.")
+                .ToString()));
+
+            Managers.Institutions.Religions.Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(council.Owner);
+            CourtInfo.Add(new InformationElement(new TextObject("{=!}Court religion:").ToString(),
+                rel != null ? rel.Faith.GetFaithName().ToString() : new TextObject("{=koX9okuG}None").ToString(),
+                new TextObject("{=!}The council leader's faith. Spiritual positions need to follow the same faith. Other positions may be favored or not according to the candidate's faith, and how well predisposed the council owner's faith is towards it.")
                 .ToString()));
 
             var royalExplanation = BannerKingsConfig.Instance.CouncilModel.IsCouncilRoyal(council.Owner.Clan);
