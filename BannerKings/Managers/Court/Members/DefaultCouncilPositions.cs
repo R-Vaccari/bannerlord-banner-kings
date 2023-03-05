@@ -180,7 +180,8 @@ namespace BannerKings.Managers.Court.Members
                 BKSkills.Instance.Scholarship,
                 new List<CouncilTask>()
                 {
-                    DefaultCouncilTasks.Instance.PromoteFaith.GetCopy()
+                    DefaultCouncilTasks.Instance.PromoteFaith.GetCopy(),
+                    DefaultCouncilTasks.Instance.CultivatePiety.GetCopy()
                 },
                 new List<CouncilPrivileges>() 
                 {

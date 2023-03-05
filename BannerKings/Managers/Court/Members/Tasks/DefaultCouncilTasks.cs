@@ -39,6 +39,7 @@ namespace BannerKings.Managers.Court.Members.Tasks
                 yield return OverseeDignataries;
                 yield return ManageVassals;
                 yield return PromoteFaith;
+                yield return CultivatePiety;
                 yield return ManageDemesne;
             }
         }
