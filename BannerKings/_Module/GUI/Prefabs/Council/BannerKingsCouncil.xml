@@ -15,7 +15,7 @@
 									<Children>
 
 										<GridWidget DataSource="{CourtInfo}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
-										            HorizontalAlignment="Left" MarginLeft="60" DefaultCellWidth="150" DefaultCellHeight="30"
+										            HorizontalAlignment="Left" MarginLeft="60" DefaultCellWidth="350" DefaultCellHeight="30"
 										            ColumnCount="3">
 											<ItemTemplate>
 												<InformationElement />
