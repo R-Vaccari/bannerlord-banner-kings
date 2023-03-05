@@ -1113,27 +1113,18 @@ namespace BannerKings.Behaviours
                         .GetMethod("AddPartyExpense", BindingFlags.Instance | BindingFlags.NonPublic);
                     foreach (var mobileParty in list)
                     {
-                        if (mobileParty.LeaderHero != null && mobileParty.LeaderHero != clan.Leader)
+                        object[] array = {mobileParty, clan, new ExplainedNumber(), applyWithdrawals};
+                        addExpense.Invoke(model, array);
+
+                        goldChange.Add(((ExplainedNumber)array[2]).ResultNumber,
+                                new TextObject("{=tqCSk7ya}Party wages {A0}"), mobileParty.Name);
+
+                        if (!includeDetails)
                         {
-                            object[] array = {mobileParty, clan, new ExplainedNumber(), applyWithdrawals};
-                            addExpense.Invoke(model, array);
-                            if (BannerKingsConfig.Instance.TitleManager.GetHighestTitle(mobileParty.LeaderHero) == null)
-                            {
-                                goldChange.Add(((ExplainedNumber) array[2]).ResultNumber,
-                                    new TextObject("{=tqCSk7ya}Party wages {A0}"), mobileParty.Name);
-                            }
-                            else
-                            {
-                                var calculateWage = model.GetType().GetMethod("CalculatePartyWage",
-                                    BindingFlags.Instance | BindingFlags.NonPublic);
-                                var wage = (int) calculateWage.Invoke(model,
-                                    new object[] {mobileParty, mobileParty.LeaderHero.Gold, applyWithdrawals});
-                                if (applyWithdrawals)
-                                {
-                                    mobileParty.LeaderHero.Gold -= MathF.Min(mobileParty.LeaderHero.Gold, wage);
-                                }
-                            }
+                            goldChange.Add(goldChange.ResultNumber, new TextObject("{=ChUDSiJw}Garrison and Party Expense", null), null);
+                            return false;
                         }
+                        goldChange.AddFromExplainedNumber(goldChange, new TextObject("{=ChUDSiJw}Garrison and Party Expense", null));
                     }
 
                     return false;
