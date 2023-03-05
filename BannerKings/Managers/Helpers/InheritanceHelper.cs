@@ -1,12 +1,8 @@
 using System.Collections.Generic;
-using System.Linq;
-using BannerKings.Actions;
 using BannerKings.Managers.Titles;
 using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.Library;
-using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Helpers
 {
@@ -20,7 +16,7 @@ namespace BannerKings.Managers.Helpers
             }
 
             FeudalTitle highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(victim);
-            var mainHeir = GetHeirInternal(victim, highest.contract);
+            var mainHeir = GetHeirInternal(victim, highest != null ? highest.contract : null);
             if (mainHeir != null)
             {
                 foreach (var t in titles)
