@@ -1,5 +1,7 @@
-﻿using BannerKings.Managers.Institutions.Religions.Doctrines;
+﻿using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Skills;
+using BannerKings.UI.Court;
 using BannerKings.Utils;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -108,6 +110,13 @@ namespace BannerKings.Models.BKModels
                         {
                             result.Add(skill * 0.01f, DefaultDoctrines.Instance.Literalism.Name);
                         }
+                    }
+
+                    if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(hero.Clan, 
+                        DefaultCouncilTasks.Instance.CultivatePiety,
+                        out float pietyCompetence))
+                    {
+                        result.Add(1f * pietyCompetence, DefaultCouncilTasks.Instance.CultivatePiety.Name);
                     }
                 },
                 GetType().Name,
