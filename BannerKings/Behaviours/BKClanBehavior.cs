@@ -1082,6 +1082,7 @@ namespace BannerKings.Behaviours
             {
                 if (BannerKingsConfig.Instance.TitleManager != null)
                 {
+                    ExplainedNumber explainedNumber = new ExplainedNumber(0f, goldChange.IncludeDescriptions, null);
                     var list = new List<MobileParty>();
                     foreach (var hero in clan.Lords)
                     foreach (var caravanPartyComponent in hero.OwnedCaravans)
@@ -1109,24 +1110,49 @@ namespace BannerKings.Behaviours
                     }
 
                     var model = new DefaultClanFinanceModel();
-                    var addExpense = model.GetType()
-                        .GetMethod("AddPartyExpense", BindingFlags.Instance | BindingFlags.NonPublic);
-                    foreach (var mobileParty in list)
+                    var getWage = model.GetType()
+                        .GetMethod("CalculatePartyWage", BindingFlags.Instance | BindingFlags.NonPublic);
+                    foreach (var party in list)
                     {
-                        object[] array = {mobileParty, clan, new ExplainedNumber(), applyWithdrawals};
-                        addExpense.Invoke(model, array);
+                        object[] array = {party, clan.Gold + (int)goldChange.ResultNumber, applyWithdrawals};
+                        int expense = (int)getWage.Invoke(model, array);
 
-                        goldChange.Add(((ExplainedNumber)array[2]).ResultNumber,
-                                new TextObject("{=tqCSk7ya}Party wages {A0}"), mobileParty.Name);
-
-                        if (!includeDetails)
+                        if (applyWithdrawals)
                         {
-                            goldChange.Add(goldChange.ResultNumber, new TextObject("{=ChUDSiJw}Garrison and Party Expense", null), null);
-                            return false;
+                            if (party.IsLordParty)
+                            {
+                                if (party.LeaderHero != null)
+                                {
+                                    party.LeaderHero.Gold -= expense;
+                                }
+                                else
+                                {
+                                    party.ActualClan.Leader.Gold -= expense;
+                                }
+                            }
+                            else
+                            {
+                                party.PartyTradeGold -= expense;
+                            }
                         }
-                        goldChange.AddFromExplainedNumber(goldChange, new TextObject("{=ChUDSiJw}Garrison and Party Expense", null));
+
+                        if (party.LeaderHero != null && party.LeaderHero != clan.Leader)
+                        {
+                            if (BannerKingsConfig.Instance.TitleManager.GetHighestTitle(party.LeaderHero) != null)
+                            {
+                                continue;
+                            }
+                        }
+                        explainedNumber.Add(-expense,new TextObject("{=tqCSk7ya}Party wages {A0}"), party.Name);
                     }
 
+                    if (!includeDetails)
+                    {
+                        goldChange.Add(explainedNumber.ResultNumber, new TextObject("{=ChUDSiJw}Garrison and Party Expense", null), null);
+                        return false;
+                    }
+
+                    goldChange.AddFromExplainedNumber(explainedNumber, new TextObject("{=ChUDSiJw}Garrison and Party Expense", null));
                     return false;
                 }
 
@@ -1165,8 +1191,20 @@ namespace BannerKings.Behaviours
                         }
                         foreach (Village village in clan.GetActualVillages())
                         {
-                            int num3 = CalculateVillageIncome(village);
-                            explainedNumber.Add((float)num3, village.Name, null);
+                            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
+                            var income = CalculateVillageIncome(village);
+                            if (title != null && title.deJure != clan.Leader && applyWithdrawals)
+                            {
+                                ApplyWithdrawal(village, income, title.deJure);
+                            }
+                            else
+                            {
+                                explainedNumber.Add((float)income, village.Name, null);
+                                if (applyWithdrawals)
+                                {
+                                    ApplyWithdrawal(village, income);
+                                }
+                            }
                         }
                     }
                     if (!includeDetails)

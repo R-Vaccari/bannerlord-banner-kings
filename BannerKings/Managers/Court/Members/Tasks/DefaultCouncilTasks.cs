@@ -21,6 +21,7 @@ namespace BannerKings.Managers.Court.Members.Tasks
         public CouncilTask IntegrateTitles { get; } = new CouncilTask("IntegrateTitles");
 
         public CouncilTask PromoteFaith { get; } = new CouncilTask("PromoteFaith");
+        public CouncilTask CultivatePiety { get; } = new CouncilTask("CultivatePiety");
 
         public CouncilTask ManageDemesne { get; } = new CouncilTask("ManageDemesne");
 
@@ -80,24 +81,29 @@ namespace BannerKings.Managers.Court.Members.Tasks
                 1f); 
 
             ManageVassals.Initialize(new TextObject("{=!}Manage Vassals"),
-               new TextObject("{=!}Delegate the handling of vassal relationships, allowing you to maintain more vassals without repercussions."),
-               new TextObject("{=!}Increased vassal limit"),
-               1f);
+                new TextObject("{=!}Delegate the handling of vassal relationships, allowing you to maintain more vassals without repercussions."),
+                new TextObject("{=!}Increased vassal limit"),
+                1f);
 
             OverseeDignataries.Initialize(new TextObject("{=!}Oversee Dignataries"),
-              new TextObject("{=!}Delegate relations with local authorities. Stronger bonds with dignataries such as notables lead to loyal fiefs."),
-              new TextObject("{=!}Increased settlement loyalty\nRandomly gain relations with notables"),
-              0f);
+                new TextObject("{=!}Delegate relations with local authorities. Stronger bonds with dignataries such as notables lead to loyal fiefs."),
+                new TextObject("{=!}Increased settlement loyalty\nRandomly gain relations with notables"),
+                0f);
 
             PromoteFaith.Initialize(new TextObject("{=!}Promote Faith"),
-               new TextObject("{=!}Promote the presence of your faith throughout your fiefs."),
-               new TextObject("{=!}Increased faith presence\nRandomly convert notables to your faith"),
-               0f);
+                new TextObject("{=!}Promote the presence of your faith throughout your fiefs."),
+                new TextObject("{=!}Increased faith presence\nRandomly convert notables to your faith"),
+                0f);
+
+            CultivatePiety.Initialize(new TextObject("{=!}Cultivate Piety"),
+                new TextObject("{=!}Foster piety within your family. Increases piety of clan members, may convert members of other faiths."),
+                new TextObject("{=!}Increased piety\nRandomly convert clan members to your faith"),
+                0f);
 
             ManageDemesne.Initialize(new TextObject("{=!}Manage Demesne"),
-              new TextObject("{=!}Promote the presence of your faith throughout your fiefs."),
-              new TextObject("{=!}Fiefs will be automatically assigned adequate governors\nIssues handled by governors will give you the rewards"),
-              1f);
+               new TextObject("{=!}Promote the presence of your faith throughout your fiefs."),
+               new TextObject("{=!}Fiefs will be automatically assigned adequate governors\nIssues handled by governors will give you the rewards"),
+               1f);
         }
     }
 }
