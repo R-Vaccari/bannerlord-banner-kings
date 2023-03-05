@@ -560,7 +560,7 @@ namespace BannerKings.UI.Mercenary
                     itemType == ItemTypeEnum.Thrown) return tierF <= 2.2f;
                 else if (itemType == ItemTypeEnum.Shield) return tierF <= 2.2f;
                 else if (itemType == ItemTypeEnum.Horse || itemType == ItemTypeEnum.HorseHarness) return tierF < 2f;
-                else return tierF <= 3f;
+                else return tierF <= 4f;
             }
             else
             {
@@ -573,7 +573,7 @@ namespace BannerKings.UI.Mercenary
                     itemType == ItemTypeEnum.Thrown) return tierF <= 4.2f;
                 else if (itemType == ItemTypeEnum.Shield) return tierF <= 3.2f;
                 else if (itemType == ItemTypeEnum.Horse || itemType == ItemTypeEnum.HorseHarness) return tierF < 3f;
-                else return tierF <= 5f;
+                else return tierF <= 6f;
             }
         }
 

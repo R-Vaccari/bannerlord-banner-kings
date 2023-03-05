@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -85,7 +86,7 @@ namespace BannerKings.Behaviours.Mercenary
 
         public void CreateEquipments()
         {
-            var list = new List<Equipment>();
+            var list = new MBList<Equipment>();
             list.Add(new Equipment());
             list.Add(new Equipment());
             list.Add(new Equipment());

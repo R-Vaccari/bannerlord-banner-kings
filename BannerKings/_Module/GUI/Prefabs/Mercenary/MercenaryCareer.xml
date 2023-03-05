@@ -209,7 +209,6 @@
 													</Children>
 												</ListPanel>
 											
-											
 												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop">
 													<Children>
 														<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="25"
@@ -220,7 +219,7 @@
 																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="22" Text="@ProfessionalCharacterName"
 																		MarginBottom="15" />
 														
-														<Widget WidthSizePolicy="Fixed" SuggestedWidth="370" HeightSizePolicy ="StretchToParent" HorizontalAlignment="Left" MarginBottom="1" VerticalAlignment="Center" 
+														<Widget WidthSizePolicy="Fixed" SuggestedWidth="370" HeightSizePolicy ="StretchToParent" HorizontalAlignment="Center" MarginBottom="1" VerticalAlignment="Center" 
 																IsVisible="@ProfessionalVisible" IsEnabled="false" ClipContents="true">
 														  <Children>
 															<CharacterTableauWidget DataSource="{ProfessionalCharacter}" WidthSizePolicy="StretchToParent"  HeightSizePolicy ="StretchToParent" HorizontalAlignment="Center" 

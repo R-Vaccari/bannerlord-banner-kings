@@ -216,7 +216,6 @@ namespace BannerKings.Behaviours.Mercenary
             bool granted = privilege.OnPrivilegeAdded(this);
             if (granted)
             {
-                newPrivilege.IncreaseLevel();
                 KingdomProgress[Kingdom] -= privilege.Points;
                 if (KingdomPrivileges[Kingdom].Contains(privilege))
                 {
