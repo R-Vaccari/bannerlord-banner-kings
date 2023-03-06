@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Titles;
-using BannerKings.Managers.Titles.Laws;
 using BannerKings.UI.Court;
 using BannerKings.UI.Cultures;
-using BannerKings.UI.Items.UI;
 using BannerKings.UI.Kingdoms;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
