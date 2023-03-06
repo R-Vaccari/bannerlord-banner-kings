@@ -63,7 +63,7 @@ namespace BannerKings.Managers.Institutions.Religions
                 new HierocraticLeadership(),
                 new List<CultureObject> { imperial },
                 new List<string> { "legalism", "childbirth" },
-                Settlement.All.First(x => x.StringId == "town_ES4"));
+                Settlement.All.FirstOrDefault(x => x.StringId == "town_ES4"));
 
             Canticles.Initialize(DefaultFaiths.Instance.Canticles, 
                 new HierocraticLeadership(),
