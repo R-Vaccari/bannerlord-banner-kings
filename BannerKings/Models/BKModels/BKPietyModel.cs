@@ -112,12 +112,16 @@ namespace BannerKings.Models.BKModels
                         }
                     }
 
-                    if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(hero.Clan, 
-                        DefaultCouncilTasks.Instance.CultivatePiety,
-                        out float pietyCompetence))
+                    if (hero.Clan != null)
                     {
-                        result.Add(1f * pietyCompetence, DefaultCouncilTasks.Instance.CultivatePiety.Name);
+                        if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(hero.Clan,
+                                              DefaultCouncilTasks.Instance.CultivatePiety,
+                                              out float pietyCompetence))
+                        {
+                            result.Add(1f * pietyCompetence, DefaultCouncilTasks.Instance.CultivatePiety.Name);
+                        }
                     }
+                  
                 },
                 GetType().Name,
                 false);
