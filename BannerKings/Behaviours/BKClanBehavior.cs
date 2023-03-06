@@ -1267,24 +1267,26 @@ namespace BannerKings.Behaviours
                         {
                             explainedNumber.Add(DefaultPerks.Engineering.ArchitecturalCommisions.SecondaryBonus, new TextObject("{=uixuohBp}Settlement Projects", null), null);
                         }
-                        foreach (Village village in clan.GetActualVillages())
+                    }
+
+                    foreach (Village village in clan.GetActualVillages())
+                    {
+                        FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
+                        var income = CalculateVillageIncome(village);
+                        if (title != null && title.deJure != clan.Leader && applyWithdrawals)
                         {
-                            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
-                            var income = CalculateVillageIncome(village);
-                            if (title != null && title.deJure != clan.Leader && applyWithdrawals)
+                            ApplyWithdrawal(village, income, title.deJure);
+                        }
+                        else
+                        {
+                            explainedNumber.Add((float)income, village.Name, null);
+                            if (applyWithdrawals)
                             {
-                                ApplyWithdrawal(village, income, title.deJure);
-                            }
-                            else
-                            {
-                                explainedNumber.Add((float)income, village.Name, null);
-                                if (applyWithdrawals)
-                                {
-                                    ApplyWithdrawal(village, income);
-                                }
+                                ApplyWithdrawal(village, income);
                             }
                         }
                     }
+
                     if (!includeDetails)
                     {
                         goldChange.Add(explainedNumber.ResultNumber, new TextObject("{=AewK9qME}Settlement Income", null), null);
