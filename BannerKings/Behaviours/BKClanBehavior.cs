@@ -1269,6 +1269,7 @@ namespace BannerKings.Behaviours
                         }
                     }
 
+                    int villageTotal = 0;
                     foreach (Village village in clan.GetActualVillages())
                     {
                         FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
@@ -1279,7 +1280,7 @@ namespace BannerKings.Behaviours
                         }
                         else
                         {
-                            explainedNumber.Add((float)income, village.Name, null);
+                            villageTotal += income;
                             if (applyWithdrawals)
                             {
                                 ApplyWithdrawal(village, income);
@@ -1287,6 +1288,7 @@ namespace BannerKings.Behaviours
                         }
                     }
 
+                    goldChange.Add(villageTotal, new TextObject("{=GikQuojv}Village Demesnes"));
                     if (!includeDetails)
                     {
                         goldChange.Add(explainedNumber.ResultNumber, new TextObject("{=AewK9qME}Settlement Income", null), null);

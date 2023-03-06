@@ -121,7 +121,6 @@ namespace BannerKings.Models.BKModels
                             result.Add(1f * pietyCompetence, DefaultCouncilTasks.Instance.CultivatePiety.Name);
                         }
                     }
-                  
                 },
                 GetType().Name,
                 false);
