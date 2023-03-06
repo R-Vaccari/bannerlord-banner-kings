@@ -10,6 +10,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Settings;
 using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -145,7 +146,8 @@ namespace BannerKings.Models.Vanilla
                     var owner = settlement.Village.GetActualOwner();
                     if (!owner.IsClanLeader() && owner.MapFaction == settlement.MapFaction)
                     {
-                        BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(owner, settlementResult.ResultNumber * 0.1f);
+                        BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(owner, 
+                            settlementResult.ResultNumber * 0.1f * BannerKingsSettings.Instance.KnightClanCreationSpeed);
                         continue;
                     }
                 }

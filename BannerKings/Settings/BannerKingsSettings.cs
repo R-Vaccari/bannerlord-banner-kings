@@ -57,7 +57,7 @@ namespace BannerKings.Settings
         public bool RealisticCaravanIncome { get; set; } = true;
 
 
-        [SettingPropertyFloatingInteger("{=2yDhJfgh}Troop Upgrade Xp", minValue: 1f, maxValue: 5f, "#0%", RequireRestart = false, HintText = "{=xvNKsFbW}How much Xp troops need to upgrade. Vanilla is 100%. Default: 200%.")]
+        [SettingPropertyFloatingInteger("{=2yDhJfgh}Troop Upgrade Xp", minValue: 1f, maxValue: 10f, "#0%", RequireRestart = false, HintText = "{=xvNKsFbW}How much Xp troops need to upgrade. Vanilla is 100%. Default: 200%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float TroopUpgradeXp { get; set; } = 2f;
 
@@ -68,6 +68,10 @@ namespace BannerKings.Settings
         [SettingPropertyFloatingInteger("{=FtWk1Jm0}Longer Sieges", minValue: 0f, maxValue: 0.75f, "#0%", RequireRestart = false, HintText = "{=0ctG0FEp}Decreases siege camp build speed. 0% is the original speed. Intended to make sieges harder and more impactful, and prevent multiple sequential sieges of same settlement. Default: 50%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float LongerSieges { get; set; } = 0.5f;
+
+        [SettingPropertyFloatingInteger("{=!}Knight Clan Creation Speed", minValue: 0f, maxValue: 5f, "#0%", RequireRestart = false, HintText = "{=!}Knight AI heroes can eventually form their own clans, even those in the player clan. Increasing this setting increases their speed of doing so. Setting it to 0% will stop knights from creating clans altogether. Default: 100%.")]
+        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        public float KnightClanCreationSpeed { get; set; } = 1f;
 
         [SettingProperty("{=DZyyJXRn}Crafting Waiting Time", RequireRestart = false, HintText = "{=pSX0rWGt}When doing any type of work in the smithy, you'll be forced to wait an amount of time correspondent to how much energy was used, as well as pay for that time. Represents a more realistic approach to crafting. Default: true.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
