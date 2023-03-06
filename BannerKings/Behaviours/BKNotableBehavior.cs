@@ -298,28 +298,20 @@ namespace BannerKings.Behaviours
                 null, null);
         }
 
-        public void ApplyNotableCultureConversion(Hero notable, Hero converter)
+        public void ApplyNotableCultureConversion(Hero notable, Hero converter, bool councilConversion = false)
         {
             notable.Culture = converter.Culture;
             GainKingdomInfluenceAction.ApplyForDefault(converter, -BannerKingsConfig.Instance.CultureModel.GetConversionCost(notable, converter).ResultNumber);
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(notable, converter, -8);
-            if (converter == Hero.MainHero)
+            
+            if (!councilConversion)
             {
-                NotificationsHelper.AddQuickNotificationWithSound(new TextObject("{=RBQS6wgF}{HERO} has assumed the {CULTURE} culture.")
-                    .SetTextVariable("HERO", notable.Name)
-                    .SetTextVariable("CULTURE", converter.Culture.Name));
-            }
-        }
-
-        public void ApplyCouncilCultureConversion(CouncilData council, Hero notable)
-        {
-            ApplyNotableCultureConversion(notable, council.Owner);
-            if (council.Owner == Hero.MainHero)
-            {
-                InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=!}Your Steward has converted {HERO} to your culture!")
-                    .SetTextVariable("HERO", notable.Name)
-                    .ToString()));
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(notable, converter, -8);
+                if (converter == Hero.MainHero)
+                {
+                    NotificationsHelper.AddQuickNotificationWithSound(new TextObject("{=RBQS6wgF}{HERO} has assumed the {CULTURE} culture.")
+                        .SetTextVariable("HERO", notable.Name)
+                        .SetTextVariable("CULTURE", converter.Culture.Name));
+                }
             }
         }
 
@@ -372,7 +364,7 @@ namespace BannerKings.Behaviours
             return IsPlayerNotable();
         }
 
-        public void ApplyNotableFaithConversion(Hero notable, Hero converter)
+        public void ApplyNotableFaithConversion(Hero notable, Hero converter, bool councilConversion = false)
         {
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(converter);
             BannerKingsConfig.Instance.ReligionsManager.AddToReligion(notable, rel);   
@@ -381,12 +373,16 @@ namespace BannerKings.Behaviours
             var piety = BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero, Hero.MainHero).ResultNumber;
             BannerKingsConfig.Instance.ReligionsManager.AddPiety(converter, -piety, true);
             GainKingdomInfluenceAction.ApplyForDefault(converter, -influence);
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(notable, converter, -8);
-            if (converter == Hero.MainHero)
+            if (!councilConversion)
             {
-                NotificationsHelper.AddQuickNotificationWithSound(new TextObject("{HERO} has converted to the {FAITH} faith.")
-                    .SetTextVariable("HERO", notable.Name)
-                    .SetTextVariable("FAITH", rel.Faith.GetFaithName()));
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(notable, converter, -8);
+
+                if (converter == Hero.MainHero)
+                {
+                    NotificationsHelper.AddQuickNotificationWithSound(new TextObject("{HERO} has converted to the {FAITH} faith.")
+                        .SetTextVariable("HERO", notable.Name)
+                        .SetTextVariable("FAITH", rel.Faith.GetFaithName()));
+                }
             }
         }
 
@@ -397,7 +393,6 @@ namespace BannerKings.Behaviours
 
         private bool FaithConvertAnswerOnCondition()
         {
-
             MBTextManager.SetTextVariable("NOTABLE_ANSWER_CONVERT_FAITH",
                 new TextObject("{=8x1gZye8}If that is your bidding, I am inclined to accept it. The people {SETTLEMENT} might not like this. Over time however, they may accept it."));
             return IsPlayerNotable();
@@ -405,7 +400,6 @@ namespace BannerKings.Behaviours
 
         private bool FaithConversionOnClickable(out TextObject hintText)
         {
-
             var influence = BannerKingsConfig.Instance.ReligionModel.GetConversionInfluenceCost(Hero.OneToOneConversationHero, Hero.MainHero).ResultNumber;
             if (Clan.PlayerClan.Influence < influence)
             {

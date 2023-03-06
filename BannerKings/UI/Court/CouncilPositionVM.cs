@@ -34,7 +34,7 @@ namespace BannerKings.UI.Court
             foreach (CouncilTask option in position.Tasks)
             {
                 Selector.AddItem(new BKItemVM(index,
-                    option.StringId != position.CurrentTask.StringId,
+                    true,
                     option.Description,
                     option.Name));
 

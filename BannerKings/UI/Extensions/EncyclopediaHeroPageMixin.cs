@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using BannerKings.Managers.Titles;
+using BannerKings.Utils.Extensions;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem;
@@ -27,9 +29,7 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty] public string CultureText => GameTexts.FindText("str_culture").ToString();
-
         [DataSourceProperty] public string MarriageText => new TextObject("{=mxVj1euY}Marriage").ToString();
-
 
         [DataSourceProperty]
         public MBBindingList<StringPairItemVM> Marriage
@@ -53,7 +53,6 @@ namespace BannerKings.UI.Extensions
 
             if (!addedFields)
             {
-
                 if (hero.Culture != null)
                 {
                     string definition = GameTexts.FindText("str_enc_sf_culture", null).ToString();
@@ -68,9 +67,7 @@ namespace BannerKings.UI.Extensions
                     heroPageVM.Stats.Add(new StringPairItemVM(definition3, heroOccupationName, null));
                 }
 
-
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
-
                 var languages = education.Languages.Keys;
                 heroPageVM.Stats.Add(new StringPairItemVM(new TextObject("{=yCaxpVGh}Languages:").ToString(),
                     education.Languages.Count.ToString(),
@@ -83,13 +80,22 @@ namespace BannerKings.UI.Extensions
                         new BasicTooltipViewModel(() => education.Lifestyle.Description.ToString())));
                 }
 
-
                 if (hero != Hero.MainHero)
                 {
-
                     string definition4 = GameTexts.FindText("str_enc_sf_relation", null).ToString();
                     heroPageVM.Stats.Add(new StringPairItemVM(definition4, hero.GetRelationWithPlayer().ToString(), null));
+                }
 
+                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
+                if (title != null && title.type == TitleType.Lordship && hero.Clan != null && !hero.IsClanLeader() && !hero.IsPlayer() &&
+                    !Utils.Helpers.IsCloseFamily(hero, hero.Clan.Leader))
+                {
+                    float progress = BannerKingsConfig.Instance.TitleManager.GetKnightInfluence(hero) / 350f;
+                    heroPageVM.Stats.Add(new StringPairItemVM(new TextObject("{=!}Clan Creation:").ToString(), 
+                        (progress * 100f).ToString("0.00") + '%', 
+                        new BasicTooltipViewModel(() =>
+                        new TextObject("{=!}As a knight or knightess, this person will eventually attemp to lead their own household. Their progress is determined by the influence of the lordships they hold. This does not apply to direct relatives of the family leader.")
+                        .ToString())));
                 }
 
                 addedFields = true;

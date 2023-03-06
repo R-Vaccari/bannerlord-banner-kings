@@ -92,6 +92,11 @@ namespace BannerKings.Managers
 
         public CouncilData GetCouncil(Clan clan)
         {
+            if (clan == null)
+            {
+                return null;
+            }
+
             if (Councils.ContainsKey(clan))
             {
                 return Councils[clan];

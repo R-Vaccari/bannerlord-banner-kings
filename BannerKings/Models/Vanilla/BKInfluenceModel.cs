@@ -11,10 +11,12 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Settings;
 using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
@@ -31,14 +33,41 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber CalculateInfluenceCap(Clan clan, bool includeDescriptions = false)
         {
             ExplainedNumber result = new ExplainedNumber(50f, includeDescriptions);
-            result.Add(clan.Tier * 150f);
+            result.Add(clan.Tier * 150f, GameTexts.FindText("str_clan_tier_bonus"));
 
-            foreach (var fief in clan.Settlements)
+            foreach (var fief in clan.Fiefs)
             {
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(fief);
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(fief.Settlement);
                 if (data != null)
                 {
-                    result.Add(CalculateSettlementInfluence(fief, data, false).ResultNumber * 50f);
+                    result.Add(CalculateSettlementInfluence(fief.Settlement, data, false).ResultNumber * 20f, fief.Name);
+                }
+            }
+
+            foreach (var village in clan.GetActualVillages())
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
+                if (data != null)
+                {
+                    result.Add(CalculateSettlementInfluence(village.Settlement, data, false).ResultNumber * 25f, village.Name);
+                }
+            }
+
+            foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
+            {
+                result.Add(500 / ((int)title.type * 8f), title.FullName);
+            }
+
+            if (clan.Kingdom != null)
+            {
+                if (clan == clan.Kingdom.RulingClan)
+                {
+                    result.Add(350, new TextObject("{=IcgVKFxZ}Ruler"));
+                }
+
+                if (clan.Culture != clan.Kingdom.Culture)
+                {
+                    result.AddFactor(-0.2f, new TextObject("{=!}Kingdom cultural difference"));
                 }
             }
 
@@ -52,6 +81,12 @@ namespace BannerKings.Models.Vanilla
             if (clan == Clan.PlayerClan && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().HasDebuff(DefaultStartOptions.Instance.IndebtedLord))
             {
                 baseResult.Add(-2f, DefaultStartOptions.Instance.IndebtedLord.Name);
+            }
+
+            ExplainedNumber cap = CalculateInfluenceCap(clan, includeDescriptions);
+            if (cap.ResultNumber < clan.Influence)
+            {
+                baseResult.Add(-(clan.Influence / cap.ResultNumber), new TextObject("{=!}Clan Influence Limit"));
             }
 
             var generalSupport = 0f;
@@ -153,7 +188,8 @@ namespace BannerKings.Models.Vanilla
                     var owner = settlement.Village.GetActualOwner();
                     if (!owner.IsClanLeader() && owner.MapFaction == settlement.MapFaction)
                     {
-                        BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(owner, settlementResult.ResultNumber * 0.1f);
+                        BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(owner, 
+                            settlementResult.ResultNumber * 0.1f * BannerKingsSettings.Instance.KnightClanCreationSpeed);
                         continue;
                     }
                 }
