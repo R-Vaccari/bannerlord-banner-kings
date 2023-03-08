@@ -18,6 +18,7 @@ namespace BannerKings.Managers.Court.Members.Tasks
 
         public CouncilTask ManageVassals { get; } = new CouncilTask("ManageVassals");
         public CouncilTask OverseeDignataries { get; } = new CouncilTask("OverseeDignataries");
+        public CouncilTask ArbitrateRelations { get; } = new CouncilTask("ArbitrateRelations");
         public CouncilTask IntegrateTitles { get; } = new CouncilTask("IntegrateTitles");
 
         public CouncilTask PromoteFaith { get; } = new CouncilTask("PromoteFaith");
@@ -37,6 +38,7 @@ namespace BannerKings.Managers.Court.Members.Tasks
                 yield return OverseeSecurity;
                 yield return RepressCriminality;
                 yield return OverseeDignataries;
+                yield return ArbitrateRelations;
                 yield return ManageVassals;
                 yield return PromoteFaith;
                 yield return CultivatePiety;
@@ -89,6 +91,11 @@ namespace BannerKings.Managers.Court.Members.Tasks
             OverseeDignataries.Initialize(new TextObject("{=!}Oversee Dignataries"),
                 new TextObject("{=!}Delegate relations with local authorities. Stronger bonds with dignataries such as notables lead to loyal fiefs."),
                 new TextObject("{=!}Increased settlement loyalty\nRandomly gain relations with notables"),
+                0f);
+
+            ArbitrateRelations.Initialize(new TextObject("{=!}Arbitrate Relations"),
+                new TextObject("{=!}Delegate relations with Peers. Improve standing with other families and the clan is more influential in the realm."),
+                new TextObject("{=!}Increased influence limit\nRandomly increase relations with clans"),
                 0f);
 
             PromoteFaith.Initialize(new TextObject("{=!}Promote Faith"),

@@ -3,6 +3,7 @@ using BannerKings.Behaviours;
 using BannerKings.Extensions;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
@@ -69,6 +70,13 @@ namespace BannerKings.Models.Vanilla
                     result.AddFactor(-0.2f, new TextObject("{=!}Kingdom cultural difference"));
                 }
             }
+
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result,
+                clan.Leader,
+                DefaultCouncilPositions.Instance.Chancellor,
+                DefaultCouncilTasks.Instance.ArbitrateRelations,
+                0.2f,
+                true);
 
             return result;
         }

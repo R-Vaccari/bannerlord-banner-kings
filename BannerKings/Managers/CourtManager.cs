@@ -38,10 +38,10 @@ namespace BannerKings.Managers
             }
         }
 
-        public void ApplyCouncilEffect(ref ExplainedNumber result, Hero settlementOwner, CouncilMember position,
+        public void ApplyCouncilEffect(ref ExplainedNumber result, Hero councilOwner, CouncilMember position,
             CouncilTask task, float maxEffect, bool factor)
         {
-            var council = GetCouncil(settlementOwner.Clan);
+            var council = GetCouncil(councilOwner.Clan);
             var existingPosition = council.GetCouncilPosition(position);
             if (existingPosition != null && existingPosition.CurrentTask.StringId == task.StringId)
             {

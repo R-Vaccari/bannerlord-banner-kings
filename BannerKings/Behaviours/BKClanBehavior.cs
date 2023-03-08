@@ -471,6 +471,43 @@ namespace BannerKings.Behaviours
                     }
                 }
             }
+
+            if (MBRandom.RandomFloat < 0.02f && clan.Kingdom != null &&
+               BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.ArbitrateRelations,
+               out float relationsCompetence) &&
+               MBRandom.RandomFloat < relationsCompetence)
+            {
+                Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
+                Hero clanLeader = null;
+                List<Hero> leaders = new List<Hero>();
+                foreach (var c in clan.Kingdom.Clans)
+                {
+                    if (c != clan && !c.IsUnderMercenaryService)
+                    {
+                        leaders.Add(c.Leader);
+                    }
+                }
+
+                clanLeader = leaders.GetRandomElement();
+                if (clanLeader != null)
+                {
+                    ChangeRelationAction.ApplyPlayerRelation(clanLeader, 
+                        (int)(10 * relationsCompetence), 
+                        false,
+                        false);
+
+                    if (clan == Clan.PlayerClan)
+                    {
+                        CouncilMember chancellor = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Chancellor);
+                        MBInformationManager.AddQuickInformation(
+                            new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} is now more favorable to us.")
+                            .SetTextVariable("HERO", clanLeader.Name),
+                            0,
+                            chancellor.Member.CharacterObject,
+                            Utils.Helpers.GetKingdomDecisionSound());
+                    }
+                }
+            }
         }
 
         private void HandleSpiritual(Clan clan, CouncilData council)

@@ -16,6 +16,7 @@ namespace BannerKings.Managers.Court.Members
         public CouncilMember Spymaster { get; set; } = new CouncilMember("Spymaster");
         public CouncilMember Philosopher { get; set; } = new CouncilMember("Philosopher");
         public CouncilMember Castellan { get; set; } = new CouncilMember("Castellan");
+        public CouncilMember Constable { get; set; } = new CouncilMember("Constable");
         public CouncilMember Elder { get; set; } = new CouncilMember("Elder");
         public CouncilMember Spouse { get; set; } = new CouncilMember("Spouse");
 
@@ -111,7 +112,8 @@ namespace BannerKings.Managers.Court.Members
                 new List<CouncilTask>()
                 {
                     DefaultCouncilTasks.Instance.OverseeDignataries.GetCopy(),
-                    DefaultCouncilTasks.Instance.ManageVassals.GetCopy()
+                    DefaultCouncilTasks.Instance.ManageVassals.GetCopy(),
+                    DefaultCouncilTasks.Instance.ArbitrateRelations.GetCopy()
                 },
                 new List<CouncilPrivileges>() { },
                 (CouncilData data) =>
@@ -244,6 +246,60 @@ namespace BannerKings.Managers.Court.Members
                 {
                     return GameTexts.FindText("str_spouse");
                 });
+
+            Castellan.Initialize(
+               DefaultSkills.Steward,
+               BKSkills.Instance.Lordship,
+               new List<CouncilTask>()
+               {
+                    DefaultCouncilTasks.Instance.ManageDemesne.GetCopy()
+               },
+               new List<CouncilPrivileges>() { },
+               (CouncilData data) =>
+               {
+                   var kingdom = data.Clan.Kingdom;
+                   return kingdom != null && kingdom.Culture == Utils.Helpers.GetCulture("vlandia");
+               },
+               (CouncilMember position, Hero hero) =>
+               {
+                   return true;
+               },
+               (CouncilMember member) =>
+               {
+                   return new TextObject("{=!}Castellan");
+               });
+
+            Constable.Initialize(
+               DefaultSkills.Steward,
+               BKSkills.Instance.Lordship,
+               new List<CouncilTask>()
+               {
+                    DefaultCouncilTasks.Instance.ManageDemesne.GetCopy()
+               },
+               new List<CouncilPrivileges>() { },
+               (CouncilData data) =>
+               {
+                   var kingdom = data.Clan.Kingdom;
+                   if (kingdom != null)
+                   {
+                       var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                       if (sovereign != null)
+                       {
+                           return sovereign.contract.Government == Titles.GovernmentType.Feudal || 
+                           sovereign.contract.Government == Titles.GovernmentType.Imperial;
+                       }
+                   }
+                   
+                   return false;
+               },
+               (CouncilMember position, Hero hero) =>
+               {
+                   return true;
+               },
+               (CouncilMember member) =>
+               {
+                   return new TextObject("{=!}Constable");
+               });
         }
     }
 }
