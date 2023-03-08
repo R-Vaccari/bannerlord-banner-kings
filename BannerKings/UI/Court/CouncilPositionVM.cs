@@ -2,11 +2,13 @@
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.UI.Items;
+using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace BannerKings.UI.Court
 {
@@ -17,6 +19,7 @@ namespace BannerKings.UI.Court
         private readonly Action<string> updatePosition;
         private BasicTooltipViewModel hint;
         private BannerKingsSelectorVM<BKItemVM> selector;
+        private MBBindingList<InformationElement> positionInfo;
 
         public CouncilPositionVM(CouncilMember position, Action<string> setId, Action<string> updatePosition) : base(
             position.Member)
@@ -48,7 +51,21 @@ namespace BannerKings.UI.Court
 
             Selector.SelectedIndex = selected;
             Selector.SetOnChangeAction(OnChange);
+
+            PositionInfo = new MBBindingList<InformationElement>();
+            if (position.Member != null)
+            {
+                PositionInfo.Add(new InformationElement(new TextObject("{=!}Competence:").ToString(),
+                                (position.Competence.ResultNumber * 100f).ToString("0.00") + '%',
+                                new TextObject("{=!}This councillor's competence in their position. The more competent they are, the more likely they are to trigger the tasks' effects and often with better results.").ToString()));
+
+                PositionInfo.Add(new InformationElement(new TextObject("{=!}Efficiency:").ToString(),
+                                (position.CurrentTask.Efficiency * 100f).ToString("0.00") + '%',
+                                new TextObject("{=!}This task's current efficiency. Efficiency is stacked on top of competence, meaning that a task only functions fully as intended when at 100% efficiency. Some tasks are always at 100%. Others start at 0% and slowly build up to 100%. This means that some tasks require time investment, and switching between them is not productive.").ToString()));
+            }
         }
+
+        [DataSourceProperty] public string Title => position.Name.ToString();
 
         private void OnChange(SelectorVM<BKItemVM> obj)
         {
@@ -61,7 +78,15 @@ namespace BannerKings.UI.Court
             }
         }
 
-        [DataSourceProperty] public string Title => position.Name.ToString();
+        private void SetId()
+        {
+            setId?.Invoke(position.StringId.ToString());
+        }
+
+        private void UpdatePosition()
+        {
+            updatePosition?.Invoke(position.StringId.ToString());
+        }
 
         [DataSourceProperty]
         public BasicTooltipViewModel Hint
@@ -77,14 +102,18 @@ namespace BannerKings.UI.Court
             }
         }
 
-        private void SetId()
+        [DataSourceProperty]
+        public MBBindingList<InformationElement> PositionInfo
         {
-            setId?.Invoke(position.StringId.ToString());
-        }
-
-        private void UpdatePosition()
-        {
-            updatePosition?.Invoke(position.StringId.ToString());
+            get => positionInfo;
+            set
+            {
+                if (value != positionInfo)
+                {
+                    positionInfo = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
         }
 
         [DataSourceProperty]
