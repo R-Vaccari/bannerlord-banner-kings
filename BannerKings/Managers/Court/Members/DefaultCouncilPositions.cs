@@ -17,6 +17,8 @@ namespace BannerKings.Managers.Court.Members
         public CouncilMember Philosopher { get; set; } = new CouncilMember("Philosopher");
         public CouncilMember Castellan { get; set; } = new CouncilMember("Castellan");
         public CouncilMember Constable { get; set; } = new CouncilMember("Constable");
+        public CouncilMember CourtPhysician { get; set; } = new CouncilMember("Constable");
+        public CouncilMember CourtSmith { get; set; } = new CouncilMember("Constable");
         public CouncilMember Elder { get; set; } = new CouncilMember("Elder");
         public CouncilMember Spouse { get; set; } = new CouncilMember("Spouse");
 
