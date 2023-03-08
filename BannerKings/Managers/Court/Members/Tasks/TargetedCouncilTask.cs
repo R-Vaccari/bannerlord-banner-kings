@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Court.Members.Tasks
 {
@@ -12,7 +8,7 @@ namespace BannerKings.Managers.Court.Members.Tasks
         {
         }
 
-        public T Target { get; protected set; }
+        [SaveableProperty(200)] public T Target { get; protected set; }
 
         public abstract void ShowOptions();
         public abstract void MakeAiChoice();

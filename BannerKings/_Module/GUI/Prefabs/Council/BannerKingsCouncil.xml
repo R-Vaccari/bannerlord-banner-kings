@@ -83,6 +83,14 @@
 																										
 															</Children>
 														</ListPanel>
+														
+														<GridWidget DataSource="{PositionInfo}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																	HorizontalAlignment="Left" MarginLeft="60" DefaultCellWidth="350" DefaultCellHeight="30"
+																	ColumnCount="1">
+															<ItemTemplate>
+																<InformationElement />
+															</ItemTemplate>
+														</GridWidget>
 													</Children>
 												</ListPanel>
 											</ItemTemplate>

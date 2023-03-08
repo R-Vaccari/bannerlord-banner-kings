@@ -26,7 +26,10 @@ namespace BannerKings.Models.BKModels
             }
 
             result.Add(hero.GetSkillValue(position.PrimarySkill) / 300f, position.PrimarySkill.Name);
-            result.Add(hero.GetSkillValue(position.SecondarySkill) / 600f, position.SecondarySkill.Name);
+            if (position.SecondarySkill != null)
+            {
+                result.Add(hero.GetSkillValue(position.SecondarySkill) / 600f, position.SecondarySkill.Name);
+            }
 
             result.AddFactor(0.15f * (hero.GetAttributeValue(DefaultCharacterAttributes.Intelligence) - 4), 
                 DefaultCharacterAttributes.Intelligence.Name);

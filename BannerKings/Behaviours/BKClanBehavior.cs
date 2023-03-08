@@ -30,6 +30,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using static TaleWorlds.CampaignSystem.SkillEffect;
+using static TaleWorlds.Core.ItemObject;
 
 namespace BannerKings.Behaviours
 {
@@ -467,6 +468,113 @@ namespace BannerKings.Behaviours
                             .SetTextVariable("FIEF", town.Name),
                             0,
                             spymaster.Member.CharacterObject,
+                            Utils.Helpers.GetKingdomDecisionSound());
+                    }
+                }
+            }
+
+            if (MBRandom.RandomFloat < 0.02f && clan.Kingdom != null &&
+               BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.ArbitrateRelations,
+               out float relationsCompetence) &&
+               MBRandom.RandomFloat < relationsCompetence)
+            {
+                Hero clanLeader = null;
+                List<Hero> leaders = new List<Hero>();
+                foreach (var c in clan.Kingdom.Clans)
+                {
+                    if (c != clan && !c.IsUnderMercenaryService)
+                    {
+                        leaders.Add(c.Leader);
+                    }
+                }
+
+                clanLeader = leaders.GetRandomElement();
+                if (clanLeader != null)
+                {
+                    ChangeRelationAction.ApplyPlayerRelation(clanLeader, 
+                        (int)(10 * relationsCompetence), 
+                        false,
+                        false);
+
+                    if (clan == Clan.PlayerClan)
+                    {
+                        CouncilMember chancellor = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Chancellor);
+                        MBInformationManager.AddQuickInformation(
+                            new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} is now more favorable to us.")
+                            .SetTextVariable("HERO", clanLeader.Name),
+                            0,
+                            chancellor.Member.CharacterObject,
+                            Utils.Helpers.GetKingdomDecisionSound());
+                    }
+                }
+            }
+
+            if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.EducateFamilyAntiquarian,
+               out float antiquarianCompetence))
+            {
+                foreach (var member in clan.Lords)
+                {
+                    member.AddSkillXp(BKSkills.Instance.Scholarship, 10 * antiquarianCompetence);
+                }
+            }
+
+            float smithCompetence;
+            if (MBRandom.RandomFloat < 0.02f &&
+               (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.SmithArmors,
+               out smithCompetence) ||
+               BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.SmithBardings,
+               out smithCompetence) ||
+               BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.SmithWeapons,
+               out smithCompetence)) &&
+               MBRandom.RandomFloat < smithCompetence)
+            {
+                CouncilMember smith = council.GetCouncilPosition(DefaultCouncilPositions.Instance.CourtSmith);
+                List<ItemTypeEnum> types = new List<ItemTypeEnum>();
+                if (smith.CurrentTask.StringId == DefaultCouncilTasks.Instance.SmithArmors.StringId)
+                {
+                    types.Add(ItemTypeEnum.ChestArmor);
+                    types.Add(ItemTypeEnum.HeadArmor);
+                    types.Add(ItemTypeEnum.HandArmor);
+                    types.Add(ItemTypeEnum.LegArmor);
+                    types.Add(ItemTypeEnum.Cape);
+                }
+
+                if (smith.CurrentTask.StringId == DefaultCouncilTasks.Instance.SmithWeapons.StringId)
+                {
+                    types.Add(ItemTypeEnum.Polearm);
+                    types.Add(ItemTypeEnum.OneHandedWeapon);
+                    types.Add(ItemTypeEnum.TwoHandedWeapon);
+                }
+
+                if (smith.CurrentTask.StringId == DefaultCouncilTasks.Instance.SmithBardings.StringId)
+                {
+                    types.Add(ItemTypeEnum.HorseHarness);
+                }
+
+                int smithingSkill = smith.Member.GetSkillValue(DefaultSkills.Crafting);
+                ItemObject item = null;
+                List<ItemObject> items = new List<ItemObject>();
+                foreach (var i in Game.Current.ObjectManager.GetObjectTypeList<ItemObject>())
+                {
+                    if (types.Contains(i.ItemType) && !i.IsUniqueItem && i.Tierf > 3f && 
+                        BannerKingsConfig.Instance.SmithingModel.GetItemDifficulty(i) <= smithingSkill)
+                    {
+                        items.Add(i);
+                    } 
+                }
+
+                item = items.GetRandomElement();
+                if (item != null)
+                {
+                  
+
+                    if (clan == Clan.PlayerClan)
+                    {
+                        MBInformationManager.AddQuickInformation(
+                            new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, I forged you the {ITEM}.")
+                            .SetTextVariable("ITEM", item.Name),
+                            0,
+                            smith.Member.CharacterObject,
                             Utils.Helpers.GetKingdomDecisionSound());
                     }
                 }

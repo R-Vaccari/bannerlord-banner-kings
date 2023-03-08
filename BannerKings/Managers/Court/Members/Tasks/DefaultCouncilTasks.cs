@@ -18,12 +18,23 @@ namespace BannerKings.Managers.Court.Members.Tasks
 
         public CouncilTask ManageVassals { get; } = new CouncilTask("ManageVassals");
         public CouncilTask OverseeDignataries { get; } = new CouncilTask("OverseeDignataries");
+        public CouncilTask ArbitrateRelations { get; } = new CouncilTask("ArbitrateRelations");
         public CouncilTask IntegrateTitles { get; } = new CouncilTask("IntegrateTitles");
 
         public CouncilTask PromoteFaith { get; } = new CouncilTask("PromoteFaith");
         public CouncilTask CultivatePiety { get; } = new CouncilTask("CultivatePiety");
 
         public CouncilTask ManageDemesne { get; } = new CouncilTask("ManageDemesne");
+
+        public CouncilTask EntertainFeastsMusician { get; } = new CouncilTask("EntertainFeastsMusician");
+
+        public CouncilTask SmithWeapons { get; } = new CouncilTask("SmithWeapons");
+        public CouncilTask SmithArmors { get; } = new CouncilTask("SmithArmors");
+        public CouncilTask SmithBardings { get; } = new CouncilTask("SmithBardings");
+
+        public CouncilTask EducateFamilyAntiquarian { get; } = new CouncilTask("EducateFamilyAntiquarian");
+
+        public OverseeSanitation OverseeSanitation { get; } = new OverseeSanitation();
 
         public override IEnumerable<CouncilTask> All
         {
@@ -37,10 +48,17 @@ namespace BannerKings.Managers.Court.Members.Tasks
                 yield return OverseeSecurity;
                 yield return RepressCriminality;
                 yield return OverseeDignataries;
+                yield return ArbitrateRelations;
                 yield return ManageVassals;
                 yield return PromoteFaith;
                 yield return CultivatePiety;
                 yield return ManageDemesne;
+                yield return EntertainFeastsMusician;
+                yield return SmithBardings;
+                yield return SmithArmors;
+                yield return SmithWeapons;
+                yield return OverseeSanitation;
+                yield return EducateFamilyAntiquarian;
             }
         }
 
@@ -91,6 +109,11 @@ namespace BannerKings.Managers.Court.Members.Tasks
                 new TextObject("{=!}Increased settlement loyalty\nRandomly gain relations with notables"),
                 0f);
 
+            ArbitrateRelations.Initialize(new TextObject("{=!}Arbitrate Relations"),
+                new TextObject("{=!}Delegate relations with Peers. Improve standing with other families and the clan is more influential in the realm."),
+                new TextObject("{=!}Increased influence limit\nRandomly increase relations with clans"),
+                0f);
+
             PromoteFaith.Initialize(new TextObject("{=!}Promote Faith"),
                 new TextObject("{=!}Promote the presence of your faith throughout your fiefs."),
                 new TextObject("{=!}Increased faith presence\nRandomly convert notables to your faith"),
@@ -104,6 +127,36 @@ namespace BannerKings.Managers.Court.Members.Tasks
             ManageDemesne.Initialize(new TextObject("{=!}Manage Demesne"),
                new TextObject("{=!}Promote the presence of your faith throughout your fiefs."),
                new TextObject("{=!}Fiefs will be automatically assigned adequate governors\nIssues handled by governors will give you the rewards"),
+               1f);
+
+            EntertainFeastsMusician.Initialize(new TextObject("{=!}Entertain Feasts"),
+               new TextObject("{=!}Entertain your feast guests with music."),
+               new TextObject("{=!}Feast guests will have better opinions of your feasts"),
+               1f);
+
+            OverseeSanitation.Initialize(new TextObject("{=!}Oversee Sanitation"),
+               new TextObject("{=!}Promote sanitation standarts that improve life quality in town. Improved health quality improves population growth."),
+               new TextObject("{=!}Improved population growth"),
+               1f);
+
+            SmithArmors.Initialize(new TextObject("{=!}Smith Armors"),
+               new TextObject("{=!}Forge armor pieces. Items will follow your culture. Their quality is based on the smith's skill - the higher their crafting capability, the better items they can make."),
+               new TextObject("{=!}Randomly forge armor pieces"),
+               1f);
+
+            SmithBardings.Initialize(new TextObject("{=!}Smith Bardings"),
+               new TextObject("{=!}Forge horse bardings. Items will follow your culture. Their quality is based on the smith's skill - the higher their crafting capability, the better items they can make."),
+               new TextObject("{=!}Randomly forge horse bardings"),
+               1f);
+
+            SmithWeapons.Initialize(new TextObject("{=!}Smith Weapons"),
+               new TextObject("{=!}Forge melee weapons. Items will follow your culture. Their quality is based on the smith's skill - the higher their crafting capability, the better items they can make."),
+               new TextObject("{=!}Randomly forge melee weapons"),
+               1f);
+
+            EducateFamilyAntiquarian.Initialize(new TextObject("{=!}Educate Family"),
+               new TextObject("{=!}Educate family members on subjects of history, literature and the sciences."),
+               new TextObject("{=!}Scholarship xp for all family members"),
                1f);
         }
     }

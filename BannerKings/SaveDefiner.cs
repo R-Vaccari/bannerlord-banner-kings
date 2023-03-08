@@ -175,6 +175,8 @@ namespace BannerKings
             AddClassDefinition(typeof(WorkshopData), 114);
             AddClassDefinition(typeof(TreeloreFaith), 115);
             AddClassDefinition(typeof(CouncilTask), 116);
+            AddClassDefinition(typeof(TargetedCouncilTask<>), 117);
+            AddClassDefinition(typeof(OverseeSanitation), 118); 
 
 
             AddClassDefinition(typeof(MercenaryCareer), 1000);

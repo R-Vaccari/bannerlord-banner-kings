@@ -85,16 +85,29 @@ namespace BannerKings.UI.Court
                         .SetTextVariable("COMPETENCE", (Position.Competence.ResultNumber * 100f).ToString("0.00"));
                 }
 
+                TextObject description;
+                if (councilPosition.SecondarySkill != null)
+                {
+                    description = new TextObject("{=!}Select who you would like to fill this position. The {POSITION} requires competency in {PRIMARY} and {SECONDARY} skills. {CURRENT}")
+                        .SetTextVariable("SECONDARY", councilPosition.SecondarySkill.Name)
+                        .SetTextVariable("PRIMARY", councilPosition.PrimarySkill.Name)
+                        .SetTextVariable("POSITION", councilPosition.Name)
+                        .SetTextVariable("CURRENT", current);
+                }
+                else
+                {
+                    description = new TextObject("{=!}Select who you would like to fill this position. The {POSITION} requires competency in the {PRIMARY} skill. {CURRENT}")
+                        .SetTextVariable("SECONDARY", councilPosition.SecondarySkill.Name)
+                        .SetTextVariable("PRIMARY", councilPosition.PrimarySkill.Name)
+                        .SetTextVariable("POSITION", councilPosition.Name)
+                        .SetTextVariable("CURRENT", current);
+                }
+
                 var model = BannerKingsConfig.Instance.CouncilModel;
                 MBInformationManager.ShowMultiSelectionInquiry(
                     new MultiSelectionInquiryData(
                         new TextObject("{=91fEPp8b}Select Councillor").ToString(),
-                        new TextObject("{=!}Select who you would like to fill this position. The {POSITION} requires competency in {PRIMARY} and {SECONDARY} skills. {CURRENT}")
-                        .SetTextVariable("SECONDARY", councilPosition.SecondarySkill.Name)
-                        .SetTextVariable("PRIMARY", councilPosition.PrimarySkill.Name)
-                        .SetTextVariable("POSITION", councilPosition.Name)
-                        .SetTextVariable("CURRENT", current)
-                        .ToString(),
+                        description.ToString(),
                         options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
                         delegate(List<InquiryElement> x)
                         {

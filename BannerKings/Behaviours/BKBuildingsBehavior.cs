@@ -20,9 +20,9 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
-            //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, OnDailyTickSettlement);
+            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, OnDailyTickSettlement);
             CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCreationOver);
-            //CampaignEvents.DailyTickTownEvent.AddNonSerializedListener(this, OnTownDailyTick);
+            CampaignEvents.DailyTickTownEvent.AddNonSerializedListener(this, OnTownDailyTick);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
         }
 

@@ -83,16 +83,19 @@ namespace BannerKings.UI
                 TooltipProperty.TooltipPropertyFlags.MultiLine));
 
             TooltipAddEmptyLine(properties);
-            properties.Add(new TooltipProperty(new TextObject("{=!}Competences").ToString(), " ", 0));
+            properties.Add(new TooltipProperty(new TextObject("{=!}Competence(s)").ToString(), " ", 0));
             TooltipAddSeperator(properties);
 
             properties.Add(new TooltipProperty(new TextObject("{=!}Primary").ToString(),
                 position.PrimarySkill.ToString(),
                 0));
 
-            properties.Add(new TooltipProperty(new TextObject("{=!}Secondary").ToString(),
-                position.SecondarySkill.ToString(),
-                0));
+            if (position.SecondarySkill != null)
+            {
+                properties.Add(new TooltipProperty(new TextObject("{=!}Secondary").ToString(),
+                                position.SecondarySkill.ToString(),
+                                0));
+            }
 
             TooltipAddEmptyLine(properties);
             properties.Add(new TooltipProperty(new TextObject("{=77D4i3pG}Privileges").ToString(), " ", 0));
