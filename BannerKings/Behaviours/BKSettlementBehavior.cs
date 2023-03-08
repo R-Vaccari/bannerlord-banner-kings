@@ -47,8 +47,8 @@ namespace BannerKings.Behaviours
         {
             CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameCreated);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
-            //CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
-            //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
+            CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
+            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
         }
 
         public override void SyncData(IDataStore dataStore)
