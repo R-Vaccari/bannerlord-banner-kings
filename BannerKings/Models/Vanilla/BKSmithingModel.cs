@@ -103,6 +103,15 @@ namespace BannerKings.Models.Vanilla
             return MBMath.ClampInt((int) result, 10, 300);
         }
 
+        public int GetItemDifficulty(ItemObject item)
+        {
+            if (item.IsCraftedWeapon)
+            {
+                return base.CalculateWeaponDesignDifficulty(item.WeaponDesign);
+            }
+
+            return CalculateArmorDifficulty(item);
+        }
 
         public int CalculateArmorDifficulty(ItemObject item)
         {

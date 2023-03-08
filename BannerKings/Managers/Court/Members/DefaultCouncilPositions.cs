@@ -17,8 +17,10 @@ namespace BannerKings.Managers.Court.Members
         public CouncilMember Philosopher { get; set; } = new CouncilMember("Philosopher");
         public CouncilMember Castellan { get; set; } = new CouncilMember("Castellan");
         public CouncilMember Constable { get; set; } = new CouncilMember("Constable");
-        public CouncilMember CourtPhysician { get; set; } = new CouncilMember("Constable");
-        public CouncilMember CourtSmith { get; set; } = new CouncilMember("Constable");
+        public CouncilMember CourtPhysician { get; set; } = new CouncilMember("CourtPhysician");
+        public CouncilMember CourtSmith { get; set; } = new CouncilMember("CourtSmith");
+        public CouncilMember CourtMusician { get; set; } = new CouncilMember("CourtMusician");
+        public CouncilMember Antiquarian { get; set; } = new CouncilMember("Antiquarian");
         public CouncilMember Elder { get; set; } = new CouncilMember("Elder");
         public CouncilMember Spouse { get; set; } = new CouncilMember("Spouse");
 
@@ -32,6 +34,12 @@ namespace BannerKings.Managers.Court.Members
                 yield return Spymaster;
                 yield return Spiritual;
                 yield return Spouse;
+                yield return Castellan;
+                yield return Constable;
+                yield return CourtPhysician;
+                yield return CourtSmith;
+                yield return CourtMusician;
+                yield return Antiquarian;
             }
         }
 
@@ -249,6 +257,92 @@ namespace BannerKings.Managers.Court.Members
                     return GameTexts.FindText("str_spouse");
                 });
 
+            CourtPhysician.Initialize(
+               DefaultSkills.Medicine,
+               BKSkills.Instance.Scholarship,
+               new List<CouncilTask>()
+               {
+                    DefaultCouncilTasks.Instance.OverseeSanitation.GetCopy()
+               },
+               new List<CouncilPrivileges>() { },
+               (CouncilData data) =>
+               {
+                   return data.Clan.Fiefs.Count > 0;
+               },
+               (CouncilMember position, Hero hero) =>
+               {
+                   return true;
+               },
+               (CouncilMember member) =>
+               {
+                   return new TextObject("{=!}Court Physician");
+               });
+
+            CourtSmith.Initialize(
+               DefaultSkills.Medicine,
+               BKSkills.Instance.Scholarship,
+               new List<CouncilTask>()
+               {
+                    DefaultCouncilTasks.Instance.SmithWeapons.GetCopy(),
+                    DefaultCouncilTasks.Instance.SmithArmors.GetCopy(),
+                    DefaultCouncilTasks.Instance.SmithBardings.GetCopy()
+               },
+               new List<CouncilPrivileges>() { },
+               (CouncilData data) =>
+               {
+                   return data.Clan.Fiefs.Count > 0;
+               },
+               (CouncilMember position, Hero hero) =>
+               {
+                   return true;
+               },
+               (CouncilMember member) =>
+               {
+                   return new TextObject("{=!}Court Smith");
+               });
+
+            CourtMusician.Initialize(
+               DefaultSkills.Medicine,
+               BKSkills.Instance.Scholarship,
+               new List<CouncilTask>()
+               {
+                    DefaultCouncilTasks.Instance.EntertainFeastsMusician.GetCopy()
+               },
+               new List<CouncilPrivileges>() { },
+               (CouncilData data) =>
+               {
+                   return data.Clan.Fiefs.Count > 0;
+               },
+               (CouncilMember position, Hero hero) =>
+               {
+                   return true;
+               },
+               (CouncilMember member) =>
+               {
+                   return new TextObject("{=!}Court Musician");
+               });
+
+            Antiquarian.Initialize(
+               DefaultSkills.Medicine,
+               BKSkills.Instance.Scholarship,
+               new List<CouncilTask>()
+               {
+                    DefaultCouncilTasks.Instance.EducateFamilyAntiquarian.GetCopy()
+               },
+               new List<CouncilPrivileges>() { },
+               (CouncilData data) =>
+               {
+                   return data.Clan.Fiefs.Count > 0;
+               },
+               (CouncilMember position, Hero hero) =>
+               {
+                   return true;
+               },
+               (CouncilMember member) =>
+               {
+                   return new TextObject("{=!}Antiquarian");
+               });
+
             Castellan.Initialize(
                DefaultSkills.Steward,
                BKSkills.Instance.Lordship,
@@ -260,7 +354,7 @@ namespace BannerKings.Managers.Court.Members
                (CouncilData data) =>
                {
                    var kingdom = data.Clan.Kingdom;
-                   return kingdom != null && kingdom.Culture == Utils.Helpers.GetCulture("vlandia");
+                   return data.IsRoyal && kingdom != null && kingdom.Culture == Utils.Helpers.GetCulture("vlandia");
                },
                (CouncilMember position, Hero hero) =>
                {
@@ -287,8 +381,8 @@ namespace BannerKings.Managers.Court.Members
                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                        if (sovereign != null)
                        {
-                           return sovereign.contract.Government == Titles.GovernmentType.Feudal || 
-                           sovereign.contract.Government == Titles.GovernmentType.Imperial;
+                           return data.IsRoyal && (sovereign.contract.Government == Titles.GovernmentType.Feudal || 
+                           sovereign.contract.Government == Titles.GovernmentType.Imperial);
                        }
                    }
                    
