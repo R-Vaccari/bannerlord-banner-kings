@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Kingdoms;
+﻿using BannerKings.Managers.Kingdoms.Succession;
 using BannerKings.Managers.Titles;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
