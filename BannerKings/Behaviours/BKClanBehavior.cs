@@ -1300,25 +1300,27 @@ namespace BannerKings.Behaviours
                         .GetMethod("CalculatePartyWage", BindingFlags.Instance | BindingFlags.NonPublic);
                     foreach (var party in list)
                     {
-                        object[] array = {party, clan.Gold + (int)goldChange.ResultNumber, applyWithdrawals};
+                        int budget = clan.Gold + (int)goldChange.ResultNumber + (int)goldChange.ResultNumber;
+                        object[] array = {party, budget, applyWithdrawals};
                         int expense = (int)getWage.Invoke(model, array);
 
-                        if (applyWithdrawals)
+                        if (applyWithdrawals && expense > budget)
                         {
+                            int diff = expense - budget;
                             if (party.IsLordParty)
                             {
                                 if (party.LeaderHero != null)
                                 {
-                                    party.LeaderHero.Gold -= expense;
+                                    party.LeaderHero.Gold -= diff;
                                 }
                                 else
                                 {
-                                    party.ActualClan.Leader.Gold -= expense;
+                                    party.ActualClan.Leader.Gold -= diff;
                                 }
                             }
                             else
                             {
-                                party.PartyTradeGold -= expense;
+                                party.PartyTradeGold -= diff;
                             }
                         }
 
