@@ -509,7 +509,7 @@ namespace BannerKings.Patches
                 if (title != null)
                 {
                     Hero king = ((KingSelectionDecisionOutcome)candidateOutcome).King;
-                    __result = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(king, clan.Leader, title.contract).ResultNumber;
+                    __result = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(king, clan.Leader, title).ResultNumber;
                     return false;
                 }
 
