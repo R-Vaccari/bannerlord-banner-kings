@@ -155,7 +155,7 @@ namespace BannerKings.Behaviours.Mercenary
             FullPeerage.Initialize(new TextObject("Full Peerage"),
                 new TextObject("{=!}For your extraordinary service, have your clan considered a full Peer. While the Peerage won't be effective until you leave your mercenary life behind, you will be able to join kingdoms as the elite of the nobility, rather than a lesser Peer."),
                 new TextObject("{=!}Your clan must not have a Peerage that allows all Peer privileges.\n\nPoints: {POINTS}\nMax level: {LEVEL}")
-                .SetTextVariable("POINTS", 100)
+                .SetTextVariable("POINTS", 1000)
                 .SetTextVariable("LEVEL", 1),
                 1000f,
                 1,
