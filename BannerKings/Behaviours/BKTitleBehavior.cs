@@ -235,20 +235,21 @@ namespace BannerKings.Behaviours
                 return;
             }
 
+            bool applySuccession = false;
             if (sovereign != null)
             {
-                foreach (var title in titles)
+                if (titles.Contains(sovereign))
                 {
-                    if (title.Equals(sovereign))
-                    {
-                        SuccessionHelper.ApplySovereignSuccession(title, victim, victim.Clan.Kingdom);
-                        titles.Remove(sovereign);
-                        break;
-                    }
+                    applySuccession = true;
+                    titles.Remove(sovereign);
                 }
             }
 
             InheritanceHelper.ApplyInheritanceAllTitles(titles, victim);
+            if (sovereign != null && applySuccession)
+            {
+                SuccessionHelper.ApplySovereignSuccession(sovereign, victim, victim.Clan.Kingdom);
+            }
         }
 
         public void OnDailyTickSettlement(Settlement settlement)
