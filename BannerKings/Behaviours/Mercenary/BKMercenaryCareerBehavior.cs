@@ -137,7 +137,7 @@ namespace BannerKings.Behaviours.Mercenary
 
         private void OnRenownGained(Hero hero, int gainedRenown, bool doNotNotifyPlayer)
         {
-            if (hero.Clan == null || !careers.ContainsKey(hero.Clan))
+            if (hero.Clan == null || !careers.ContainsKey(hero.Clan) || !hero.Clan.IsUnderMercenaryService)
             {
                 return;
             }
