@@ -402,7 +402,7 @@ namespace BannerKings.Models.BKModels
                 return claimAction;
             }
 
-            if (!possibleClaimants.Contains(claimant))
+            if (!possibleClaimants.ContainsKey(claimant))
             {
                 claimAction.Possible = false;
                 claimAction.Reason = new TextObject("{=KR2fio4X}Not a possible claimant.");
@@ -756,9 +756,9 @@ namespace BannerKings.Models.BKModels
             return heroes;
         }
 
-        public List<Hero> GetClaimants(FeudalTitle title)
+        public Dictionary<Hero, TextObject> GetClaimants(FeudalTitle title)
         {
-            var claimants = new List<Hero>();
+            var claimants = new Dictionary<Hero, TextObject>();
             var deFacto = title.DeFacto;
             if (deFacto != title.deJure)
             {
@@ -766,18 +766,18 @@ namespace BannerKings.Models.BKModels
                 {
                     if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(deFacto))
                     {
-                        claimants.Add(deFacto);
+                        claimants.Add(deFacto, new TextObject("{=!}De facto title holder"));
                     }
                 }
                 else
                 {
-                    claimants.Add(deFacto);
+                    claimants.Add(deFacto, new TextObject("{=!}De facto fief holder"));
                 }
             }
 
             if (title.sovereign != null && title.sovereign.deJure != title.deJure)
             {
-                claimants.Add(title.sovereign.deJure);
+                claimants.Add(title.sovereign.deJure, new TextObject("{=!}De jure sovereign of this title"));
             }
 
             if (title.vassals is {Count: > 0})
@@ -786,7 +786,7 @@ namespace BannerKings.Models.BKModels
                 {
                     if (vassal.deJure != title.deJure)
                     {
-                        claimants.Add(vassal.deJure);
+                        claimants.Add(vassal.deJure, new TextObject("{=!}De jure vassal of this title"));
                     }
                 }
             }
