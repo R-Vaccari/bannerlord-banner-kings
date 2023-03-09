@@ -1300,7 +1300,8 @@ namespace BannerKings.Behaviours
                         .GetMethod("CalculatePartyWage", BindingFlags.Instance | BindingFlags.NonPublic);
                     foreach (var party in list)
                     {
-                        object[] array = {party, clan.Gold + (int)goldChange.ResultNumber, applyWithdrawals};
+                        int budget = clan.Gold + (int)goldChange.ResultNumber + (int)goldChange.ResultNumber;
+                        object[] array = {party, budget, applyWithdrawals};
                         int expense = (int)getWage.Invoke(model, array);
 
                         if (applyWithdrawals)
@@ -1329,6 +1330,27 @@ namespace BannerKings.Behaviours
                                 continue;
                             }
                         }
+
+                        if (applyWithdrawals)
+                        {
+                            int refund = MathF.Min(expense, budget);
+                            if (party.IsLordParty)
+                            {
+                                if (party.LeaderHero != null)
+                                {
+                                    party.LeaderHero.Gold += refund;
+                                }
+                                else
+                                {
+                                    party.ActualClan.Leader.Gold += refund;
+                                }
+                            }
+                            else
+                            {
+                                party.PartyTradeGold += refund;
+                            }
+                        }
+
                         explainedNumber.Add(-expense,new TextObject("{=tqCSk7ya}Party wages {A0}"), party.Name);
                     }
 
