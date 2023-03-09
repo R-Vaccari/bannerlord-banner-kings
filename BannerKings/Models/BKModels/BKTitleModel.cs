@@ -62,16 +62,7 @@ namespace BannerKings.Models.BKModels
 
             if (succession == SuccessionType.Elective_Monarchy)
             {
-                var government = contract.Government;
-                if (government == GovernmentType.Tribal)
-                {
-                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 2, GameTexts.FindText("str_notable_power"));
-                }
-
-                if (government == GovernmentType.Feudal)
-                {
-                    result.Add(candidate.GetSkillValue(BKSkills.Instance.Lordship) * 0.1f, BKSkills.Instance.Lordship.Name);
-                }
+                result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 2, GameTexts.FindText("str_notable_power"));
             }
 
             if (candidate.Culture != currentLeader.Clan.Kingdom.Culture)
