@@ -63,15 +63,15 @@ namespace BannerKings.Managers
 
 
             var languages = new Dictionary<Language, float>();
-            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == hero.Culture) ?? DefaultLanguages.Instance.Calradian;
+            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == hero.Culture) ?? DefaultLanguages.Instance.Sicilian;
 
             languages.Add(native, 1f);
 
             if (hero.IsNotable)
             {
-                if (!languages.ContainsKey(DefaultLanguages.Instance.Calradian) && MBRandom.RandomFloat <= 0.15f)
+                if (!languages.ContainsKey(DefaultLanguages.Instance.Sicilian) && MBRandom.RandomFloat <= 0.15f)
                 {
-                    languages.Add(DefaultLanguages.Instance.Calradian, MBRandom.RandomFloatRanged(0.5f, 1f));
+                    languages.Add(DefaultLanguages.Instance.Sicilian, MBRandom.RandomFloatRanged(0.5f, 1f));
                 }
 
                 if (hero.Culture.StringId == "sturgia" && MBRandom.RandomFloat < 0.05f)
@@ -96,7 +96,7 @@ namespace BannerKings.Managers
         {
             Educations.Remove(Hero.MainHero);
             var languages = new Dictionary<Language, float>();
-            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == Hero.MainHero.Culture) ?? DefaultLanguages.Instance.Calradian;
+            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == Hero.MainHero.Culture) ?? DefaultLanguages.Instance.Sicilian;
 
             languages.Add(native, 1f);
             var data = new EducationData(Hero.MainHero, languages);
@@ -116,7 +116,7 @@ namespace BannerKings.Managers
             var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == culture);
             if (native == null)
             {
-                native = DefaultLanguages.Instance.Calradian;
+                native = DefaultLanguages.Instance.Sicilian;
             }
 
             return native;
