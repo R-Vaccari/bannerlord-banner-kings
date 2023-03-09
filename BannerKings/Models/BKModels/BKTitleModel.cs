@@ -775,7 +775,7 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            if (title.sovereign != null && title.sovereign.deJure != title.deJure)
+            if (title.sovereign != null && title.sovereign.deJure != title.deJure && !claimants.ContainsKey(title.sovereign.deJure))
             {
                 claimants.Add(title.sovereign.deJure, new TextObject("{=!}De jure sovereign of this title"));
             }
@@ -784,7 +784,7 @@ namespace BannerKings.Models.BKModels
             {
                 foreach (var vassal in title.vassals)
                 {
-                    if (vassal.deJure != title.deJure)
+                    if (vassal.deJure != null && vassal.deJure != title.deJure && !claimants.ContainsKey(vassal.deJure))
                     {
                         claimants.Add(vassal.deJure, new TextObject("{=!}De jure vassal of this title"));
                     }

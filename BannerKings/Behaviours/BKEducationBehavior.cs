@@ -99,21 +99,24 @@ namespace BannerKings.Behaviours
 
         private void OnPerkOpened(Hero hero, PerkObject perk)
         {
-            if (hero != Hero.MainHero || perk.AlternativePerk == null || hero.GetPerkValue(perk.AlternativePerk))
+            if (perk.AlternativePerk == null || hero.GetPerkValue(perk.AlternativePerk))
             {
                 return;
             }
 
             if (perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic)
             {
-                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=Vjg2DuT1}Double Perks").ToString(),
-                    new TextObject("{=eodABOkZ}From now on, double perks will be yielded for the {SKILL} skill. The perks will be rewarded after closing the Character tab with 'Done', not immediatly after selecting them.")
+                if (hero == Hero.MainHero)
+                {
+                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=Vjg2DuT1}Double Perks").ToString(),
+                        new TextObject("{=eodABOkZ}From now on, double perks will be yielded for the {SKILL} skill. The perks will be rewarded after closing the Character tab with 'Done', not immediatly after selecting them.")
                         .SetTextVariable("SKILL", perk.Skill.Name)
                         .ToString(),
-                    true, false,
-                    GameTexts.FindText("str_selection_widget_accept").ToString(),
-                    string.Empty,
-                    null, null, string.Empty));
+                        true, false,
+                        GameTexts.FindText("str_selection_widget_accept").ToString(),
+                        string.Empty,
+                        null, null, string.Empty));
+                }
             }
             else
             {
@@ -124,8 +127,11 @@ namespace BannerKings.Behaviours
                 }
 
                 hero.HeroDeveloper.AddPerk(perk.AlternativePerk);
-                MBInformationManager.AddQuickInformation(new TextObject("{=nk8mBkVd}You have received the {PERK} as a double perk yield reward.")
-                    .SetTextVariable("PERK", perk.AlternativePerk.Name));
+                if (hero == Hero.MainHero)
+                {
+                    MBInformationManager.AddQuickInformation(new TextObject("{=nk8mBkVd}You have received the {PERK} as a double perk yield reward.")
+                                        .SetTextVariable("PERK", perk.AlternativePerk.Name));
+                }
             }
         }
 
