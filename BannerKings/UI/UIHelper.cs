@@ -5,9 +5,7 @@ using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
-using BannerKings.Models.BKModels;
 using Helpers;
-using Newtonsoft.Json.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
@@ -18,9 +16,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.PlatformService;
 using static BannerKings.Managers.PopulationManager;
-using static SandBox.CampaignBehaviors.LordConversationsCampaignBehavior;
 
 namespace BannerKings.UI
 {
@@ -321,6 +317,11 @@ namespace BannerKings.UI
             }
 
             list.Add(new TooltipProperty(new TextObject("{=!}Actions").ToString(), " ", 0));
+            list.Add(new TooltipProperty(string.Empty,
+                new TextObject("{=!}Title actions allow you multiple ways to use them. Actions that actively undermine other lords are considered hostile actions, and often cost denars, influence, your clan's renown, and relations with the affected, so take them wisely. On the other hand, an action such as Grant of a title is considered amicable and grows relations instead, at the cost of your ownership of the title.").ToString(),
+                0,
+                false,
+                TooltipProperty.TooltipPropertyFlags.MultiLine));
             TooltipAddSeperator(list);
 
             foreach (var action in actions)
