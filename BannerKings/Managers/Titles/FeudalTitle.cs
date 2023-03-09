@@ -75,6 +75,16 @@ namespace BannerKings.Managers.Titles
 
         public Dictionary<Hero, CampaignTime> OngoingClaims => ongoingClaims ??= new Dictionary<Hero, CampaignTime>();
 
+        public bool HeroHasValidClaim(Hero hero)
+        {
+            if (Claims.ContainsKey(hero))
+            {
+                return Claims[hero] != ClaimType.None && Claims[hero] != ClaimType.Ongoing;
+            }
+
+            return false;
+        }
+
         public string StringId => stringId;
 
         public TextObject FullName

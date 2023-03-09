@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers;
@@ -17,6 +18,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.PlatformService;
 using static BannerKings.Managers.PopulationManager;
 using static SandBox.CampaignBehaviors.LordConversationsCampaignBehavior;
 
@@ -297,26 +299,29 @@ namespace BannerKings.UI
             var definition = GameTexts.FindText("str_LEFT_ONLY").ToString();
             list.Add(new TooltipProperty(definition, ((int) hero.GetRelationWithPlayer()).ToString(), 0));
 
-            MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type"));
-            var definition2 = GameTexts.FindText("str_LEFT_ONLY").ToString();
-            list.Add(new TooltipProperty(definition2, GetCorrelation(hero), 0));
+            list.Add(new TooltipProperty(GameTexts.FindText("str_enc_sf_occupation").ToString(),
+                CampaignUIHelper.GetHeroOccupationName(hero), 0));
 
-            list.Add(new TooltipProperty(new TextObject("{=uUmEcuV8}Age").ToString(), hero.Age.ToString(), 0));
+            list.Add(new TooltipProperty(new TextObject("{=uUmEcuV8}Age").ToString(), 
+                MBRandom.RoundRandomized(hero.Age).ToString(), 0));
 
-            if (hero.CurrentSettlement != null)
+            TooltipAddEmptyLine(list);
+
+            var claimants = BannerKingsConfig.Instance.TitleModel.GetClaimants(title);
+            if (claimants.Count > 0)
             {
-                list.Add(new TooltipProperty(new TextObject("{=J6oPqQmt}Settlement").ToString(), hero.CurrentSettlement.Name.ToString(), 0));
-            }
-
-            var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero);
-            if (titles.Count > 0)
-            {
-                TooltipAddEmptyLine(list);
-                list.Add(new TooltipProperty(new TextObject("{=2qXtnwSn}Titles").ToString(), " ", 0));
+                list.Add(new TooltipProperty(new TextObject("{=nFcAkRcD}Possible Claimants").ToString(), " ", 0));
                 TooltipAddSeperator(list);
 
-                list.AddRange(titles.Select(t => new TooltipProperty(t.FullName.ToString(), GetOwnership(hero, t), 0)));
+                list.AddRange(claimants.Select(claimant => new TooltipProperty(claimant.Key.Name.ToString(),
+                        claimant.Value.ToString(),
+                        0)));
+
+                TooltipAddEmptyLine(list);
             }
+
+            list.Add(new TooltipProperty(new TextObject("{=!}Actions").ToString(), " ", 0));
+            TooltipAddSeperator(list);
 
             foreach (var action in actions)
             {
@@ -354,18 +359,6 @@ namespace BannerKings.UI
                 list.AddRange(title.Claims.Select(pair => new TooltipProperty(pair.Key.Name.ToString(), GetClaimText(pair.Value).ToString(), 0)));
             }
 
-            var claimants = BannerKingsConfig.Instance.TitleModel.GetClaimants(title);
-            if (claimants is not {Count: > 0})
-            {
-                return list;
-            }
-
-            TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=nFcAkRcD}Possible Claimants").ToString(), " ", 0));
-            TooltipAddSeperator(list);
-
-            list.AddRange(claimants.Select(claimant => new TooltipProperty(claimant.Name.ToString(), new TextObject("{=!}").ToString(), 0)));
-
             return list;
         }
 
@@ -394,19 +387,19 @@ namespace BannerKings.UI
         {
             TooltipAddEmptyLine(list);
             list.Add(new TooltipProperty(GetActionText(action.Type).ToString(), " ", 0));
-            TooltipAddSeperator(list);
+            list.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
 
             list.Add(new TooltipProperty(new TextObject("{=n4LgwLxB}Reason").ToString(), action.Reason.ToString(), 0));
             if (action.Gold > 0)
             {
-                list.Add(new TooltipProperty(new TextObject("{=PBimWG33}Gold").ToString(), new TextObject("{=7rA02JY3}{GOLD} coins.")
+                list.Add(new TooltipProperty(new TextObject("{=!}Denars:").ToString(), new TextObject("{=7rA02JY3}{GOLD} coins.")
                     .SetTextVariable("GOLD", action.Gold.ToString("0.0"))
                     .ToString(), 0));
             }
 
             if (action.Influence > 0)
             {
-                list.Add(new TooltipProperty(new TextObject("{=EkFaisgP}Influence").ToString(),
+                list.Add(new TooltipProperty(new TextObject("{=!}Influence:").ToString(),
                     new TextObject("{=bqXrF5SC}{INFLUENCE} influence.")
                         .SetTextVariable("INFLUENCE", action.Influence.ToString("0.0"))
                         .ToString(), 0));
@@ -414,7 +407,7 @@ namespace BannerKings.UI
 
             if (action.Renown > 0)
             {
-                list.Add(new TooltipProperty(new TextObject("{=EkFaisgP}Influence").ToString(),
+                list.Add(new TooltipProperty(new TextObject("{=NqSLYe6b}Renown:").ToString(),
                     new TextObject("{=bW8pmr9u}{RENOWN} renown.")
                         .SetTextVariable("RENOWN", action.Renown.ToString("0.0"))
                         .ToString(), 0));

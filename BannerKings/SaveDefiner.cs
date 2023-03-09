@@ -28,6 +28,7 @@ using BannerKings.Managers.Institutions.Religions.Leaderships;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Kingdoms.Contract;
 using BannerKings.Managers.Kingdoms.Peerage;
+using BannerKings.Managers.Kingdoms.Succession;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;

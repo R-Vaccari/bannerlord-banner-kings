@@ -123,7 +123,8 @@ namespace BannerKings.Managers.Titles
         Hereditary_Monarchy,
         Elective_Monarchy,
         Imperial,
-        Republic
+        Republic,
+        FeudalElective
     }
 
     public enum InheritanceType
