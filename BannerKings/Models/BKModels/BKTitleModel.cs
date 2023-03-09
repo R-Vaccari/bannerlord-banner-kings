@@ -60,8 +60,6 @@ namespace BannerKings.Models.BKModels
                 {
                     result = GetInheritanceHeirScore(currentLeader, candidate, contract, explanations);
                 }
-
-                if ()
             }
 
             if (succession == SuccessionType.FeudalElective)
@@ -71,6 +69,13 @@ namespace BannerKings.Models.BKModels
                     result = GetInheritanceHeirScore(currentLeader, candidate, contract, explanations);
                     result.Add(300f, new TextObject("{=!}Former ruler's clan"));
                 }
+
+                if (title.HeroHasValidClaim(candidate))
+                {
+                    result.Add(200f, new TextObject("{=!}Claimant"));
+                }
+
+                result.Add(candidate.Clan.Tier * 50f, GameTexts.FindText("str_clan_tier_bonus"));
             }
 
             if (succession == SuccessionType.Elective_Monarchy)
