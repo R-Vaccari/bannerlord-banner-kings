@@ -1333,6 +1333,21 @@ namespace BannerKings.Behaviours
 
                         if (applyWithdrawals)
                         {
+                            bool needsExtra = false;
+                            if (party.IsLordParty && party.LeaderHero != null)
+                            {
+                                needsExtra = party.LeaderHero.Gold < 5000;
+                            }
+                            else
+                            {
+                                needsExtra = party.PartyTradeGold< 5000;
+                            }
+
+                            if (needsExtra && (expense + 200) < budget)
+                            {
+                                expense += 200;
+                            }
+
                             int refund = MathF.Min(expense, budget);
                             if (party.IsLordParty)
                             {
