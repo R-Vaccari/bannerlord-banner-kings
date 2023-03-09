@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Managers;
+using BannerKings.Managers.Court;
+using System.Collections.Generic;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -152,14 +154,16 @@ namespace BannerKings.Behaviours.Mercenary
 
             FullPeerage.Initialize(new TextObject("Full Peerage"),
                 new TextObject("{=!}For your extraordinary service, have your clan considered a full Peer. While the Peerage won't be effective until you leave your mercenary life behind, you will be able to join kingdoms as the elite of the nobility, rather than a lesser Peer."),
-                new TextObject("{=!}You fail to meet the requirements or privilege is already maxed out.\n\nPoints: {POINTS}\nMax level: {LEVEL}")
+                new TextObject("{=!}Your clan must not have a Peerage that allows all Peer privileges.\n\nPoints: {POINTS}\nMax level: {LEVEL}")
                 .SetTextVariable("POINTS", 100)
                 .SetTextVariable("LEVEL", 1),
                 1000f,
                 1,
                 delegate (MercenaryCareer career)
                 {
-                    return false;
+                    var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(career.Clan);
+                    Peerage peerage = council.Peerage;
+                    return peerage == null || !peerage.IsFullPeerage;
                 },
                 (MercenaryCareer career) => false);
         }
