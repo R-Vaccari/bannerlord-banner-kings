@@ -1304,23 +1304,22 @@ namespace BannerKings.Behaviours
                         object[] array = {party, budget, applyWithdrawals};
                         int expense = (int)getWage.Invoke(model, array);
 
-                        if (applyWithdrawals && expense > budget)
+                        if (applyWithdrawals)
                         {
-                            int diff = expense - budget;
                             if (party.IsLordParty)
                             {
                                 if (party.LeaderHero != null)
                                 {
-                                    party.LeaderHero.Gold -= diff;
+                                    party.LeaderHero.Gold -= expense;
                                 }
                                 else
                                 {
-                                    party.ActualClan.Leader.Gold -= diff;
+                                    party.ActualClan.Leader.Gold -= expense;
                                 }
                             }
                             else
                             {
-                                party.PartyTradeGold -= diff;
+                                party.PartyTradeGold -= expense;
                             }
                         }
 
@@ -1331,6 +1330,27 @@ namespace BannerKings.Behaviours
                                 continue;
                             }
                         }
+
+                        if (applyWithdrawals)
+                        {
+                            int refund = MathF.Min(expense, budget);
+                            if (party.IsLordParty)
+                            {
+                                if (party.LeaderHero != null)
+                                {
+                                    party.LeaderHero.Gold += refund;
+                                }
+                                else
+                                {
+                                    party.ActualClan.Leader.Gold += refund;
+                                }
+                            }
+                            else
+                            {
+                                party.PartyTradeGold += refund;
+                            }
+                        }
+
                         explainedNumber.Add(-expense,new TextObject("{=tqCSk7ya}Party wages {A0}"), party.Name);
                     }
 
