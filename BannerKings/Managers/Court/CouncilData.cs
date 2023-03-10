@@ -109,17 +109,8 @@ namespace BannerKings.Managers.Court
 
             foreach (var position in Positions)
             {
-                if (position.Member != null &&
-                    (position.Member.IsDead || position.Member.IsDisabled || !courtiers.Contains(position.Member)))
-                {
-                    position.SetMember(null);
-                }
-
                 position.SetIsRoyal(IsRoyal);
-                if (position.Member != null && !position.IsValidCandidate(position.Member))
-                {
-                    position.SetMember(null);
-                }
+                position.Tick(courtiers);
             }
 
             if (MBRandom.RandomFloat <= 0.02f)

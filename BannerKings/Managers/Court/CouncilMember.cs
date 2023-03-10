@@ -61,6 +61,21 @@ namespace BannerKings.Managers.Court
             return member;
         }
 
+        public void Tick(List<Hero> courtiers)
+        {
+            if (Member != null)
+            {
+                if (Member.IsDead || Member.IsDisabled || !courtiers.Contains(Member) || !IsValidCandidate(Member))
+                {
+                    Member = null;
+                    return;
+                }
+
+                Member.AddSkillXp(PrimarySkill, 10);
+                Member.AddSkillXp(SecondarySkill, 5);
+            }
+        }
+
         [SaveableProperty(100)] public Hero Member { get; private set; }
         [SaveableProperty(101)] public bool IsRoyal { get; private set; }
         [SaveableProperty(102)] public Clan Clan { get; private set; }

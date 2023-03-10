@@ -34,6 +34,10 @@ namespace BannerKings.Managers.Court.Members.Tasks
 
         public CouncilTask EducateFamilyAntiquarian { get; } = new CouncilTask("EducateFamilyAntiquarian");
 
+        public CouncilTask OverseeBaronies { get; } = new CouncilTask("OverseeBaronies");
+
+        public CouncilTask EnforceLaw { get; } = new CouncilTask("EnforceLaw");
+
         public OverseeSanitation OverseeSanitation { get; } = new OverseeSanitation();
 
         public override IEnumerable<CouncilTask> All
@@ -59,6 +63,10 @@ namespace BannerKings.Managers.Court.Members.Tasks
                 yield return SmithWeapons;
                 yield return OverseeSanitation;
                 yield return EducateFamilyAntiquarian;
+                foreach (CouncilTask item in ModAdditions)
+                {
+                    yield return item;
+                }
             }
         }
 
@@ -157,6 +165,16 @@ namespace BannerKings.Managers.Court.Members.Tasks
             EducateFamilyAntiquarian.Initialize(new TextObject("{=!}Educate Family"),
                new TextObject("{=!}Educate family members on subjects of history, literature and the sciences."),
                new TextObject("{=!}Scholarship xp for all family members"),
+               1f);
+
+            OverseeBaronies.Initialize(new TextObject("{=!}Oversee Baronies"),
+               new TextObject("{=!}The castellan is effectively a lord's official in the castellany, their area of jurisdiction. They are responsible for the upkeep and defences of castles, as well as enforcing and passing judgement if necessary."),
+               new TextObject("{=!}Improved prosperity for castles and attached villages"),
+               1f);
+
+            EnforceLaw.Initialize(new TextObject("{=!}Oversee Baronies"),
+               new TextObject("{=!}The castellan is effectively a lord's official in the castellany, their area of jurisdiction. They are responsible for the upkeep and defences of castles, as well as enforcing and passing judgement if necessary."),
+               new TextObject("{=!}Improved prosperity for castles and attached villages"),
                1f);
         }
     }
