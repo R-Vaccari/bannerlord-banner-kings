@@ -258,8 +258,8 @@ namespace BannerKings.Managers.Goals.Decisions
                     new TextObject("{=YZfBWynb}{HERO} has called his banners! {TROOPS} troops are gathering for war.")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("TROOPS", troops).ToString(),
-                    Color.FromUint(4282569842U)));
-                SoundEvent.PlaySound2D(Utils.Helpers.GetKingdomDecisionSound());
+                    Color.FromUint(4282569842U),
+                    Utils.Helpers.GetKingdomDecisionSound()));
             }
         }
 
@@ -267,6 +267,11 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             Hero fulfiller = GetFulfiller();
             if (allBanners.Count < 5 || fulfiller.PartyBelongedTo.HasUnpaidWages > 0 || fulfiller.PartyBelongedTo.GetNumDaysForFoodToLast() < 10)
+            {
+                return;
+            }
+
+            if (IsFulfilled(out List<TextObject> reasons))
             {
                 return;
             }
