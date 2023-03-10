@@ -157,6 +157,11 @@ namespace BannerKings.UI.Extensions
                         rel.Faith.GetFaithName().ToString()));
                 }
 
+                /*ExplainedNumber influenceChange = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceChange(clan, true);
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Influence Change:").ToString(),
+                   influenceChange.ResultNumber.ToString("0.00"),
+                   new BasicTooltipViewModel(() => influenceChange.GetExplanations())));*/
+
                 ExplainedNumber influenceCap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(clan, true);
                 clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Influence Limit:").ToString(),
                    MBRandom.RoundRandomized(influenceCap.ResultNumber).ToString(),
