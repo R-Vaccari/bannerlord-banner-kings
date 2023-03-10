@@ -1,0 +1,31 @@
+<Prefab>
+  <Constants>
+    <Constant Name="Encyclopedia.SubPage.Element.Width" BrushLayer="Default" BrushName="Encyclopedia.SubPage.Element" BrushValueType="Width" />
+    <Constant Name="Encyclopedia.SubPage.Element.Height" BrushLayer="Default" BrushName="Encyclopedia.SubPage.Element" BrushValueType="Height" />
+  </Constants>
+	<Window>
+		<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop">
+			<Children>
+				<EncyclopediaDivider MarginTop="30" Parameter.Title="@WorkshopsText" Parameter.ItemList="..\WorkshopsGrid"/>
+				<GridWidget Id="WorkshopsGrid" DataSource="{Workshops}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" SuggestedWidth="350" SuggestedHeight="350" DefaultCellWidth="100" DefaultCellHeight="100" HorizontalAlignment="Left" ColumnCount="7" MarginTop="10" MarginLeft="15">
+					<ItemTemplate>
+						<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!Encyclopedia.SubPage.Element.Width" SuggestedHeight="!Encyclopedia.SubPage.Element.Height" HorizontalAlignment="Center" Command.Click="ExecuteLink">
+						  <Children>
+
+							<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="84" SuggestedHeight="84" Sprite="Clan\portrait_slot_right_panel" HorizontalAlignment="Left" VerticalAlignment="Center" MarginRight="5" Command.HoverBegin="ExecuteBeginWorkshopHint" Command.HoverEnd="ExecuteEndHint">
+							  <Children>
+								<ClanWorkshopTypeVisualBrushWidget DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="37" HorizontalAlignment="Center" VerticalAlignment="Center" WorkshopType="@WorkshopTypeId" Brush="Clan.Workshop.Type.Image"/>
+							  </Children>
+							</Widget>
+
+							<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="30" VerticalAlignment="Bottom" PositionYOffset="34" Brush="Encyclopedia.SubPage.Element.Name.Text" Brush.TextVerticalAlignment="Top" Text="@NameText" />
+
+							<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+						  </Children>
+						</ButtonWidget>
+					</ItemTemplate>
+				</GridWidget>
+			</Children>
+		</ListPanel>
+	</Window>
+</Prefab>
