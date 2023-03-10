@@ -36,10 +36,14 @@ namespace BannerKings.Managers.Court.Members
                 yield return Spouse;
                 yield return Castellan;
                 yield return Constable;
-                yield return CourtPhysician;
+                //yield return CourtPhysician;
                 yield return CourtSmith;
                 yield return CourtMusician;
                 yield return Antiquarian;
+                foreach (CouncilMember item in ModAdditions)
+                {
+                    yield return item;
+                }
             }
         }
 

@@ -61,6 +61,21 @@ namespace BannerKings.Managers.Court
             return member;
         }
 
+        public void Tick(List<Hero> courtiers)
+        {
+            if (Member != null)
+            {
+                if (Member.IsDead || Member.IsDisabled || !courtiers.Contains(Member) || !IsValidCandidate(Member))
+                {
+                    Member = null;
+                    return;
+                }
+
+                Member.AddSkillXp(PrimarySkill, 10);
+                Member.AddSkillXp(SecondarySkill, 5);
+            }
+        }
+
         [SaveableProperty(100)] public Hero Member { get; private set; }
         [SaveableProperty(101)] public bool IsRoyal { get; private set; }
         [SaveableProperty(102)] public Clan Clan { get; private set; }
@@ -106,8 +121,7 @@ namespace BannerKings.Managers.Court
         public ExplainedNumber Competence => BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(Member, this);
         public ExplainedNumber CalculateCandidateCompetence(Hero candidate) => BannerKingsConfig.Instance.CouncilModel
             .CalculateHeroCompetence(candidate, this);
-        
-       
+
         public bool IsValidCandidate(Hero candidate)
         {
             if (candidate.Clan is { IsUnderMercenaryService: true })
@@ -125,9 +139,9 @@ namespace BannerKings.Managers.Court
                 }
             }
 
-            if (IsRoyal && IsCorePosition(StringId))
+            if (IsRoyal && IsCorePosition(StringId) && candidate.Occupation != Occupation.Lord)
             {
-                return candidate.Occupation == Occupation.Lord;
+                return false;
             }
 
             return IsValidCandidateInternal(candidate);

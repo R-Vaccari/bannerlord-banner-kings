@@ -26,6 +26,12 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKInfluenceModel : DefaultClanPoliticsModel
     {
+        public float GetClanInfluencePercentage(Clan clan)
+        {
+            float result = 0f;
+
+            return result;
+        }
         public float GetRejectKnighthoodCost(Clan clan)
         {
             return 10f + MathF.Max(CalculateInfluenceChange(clan).ResultNumber, 5f) * 0.025f * CampaignTime.DaysInYear;
@@ -94,7 +100,7 @@ namespace BannerKings.Models.Vanilla
             ExplainedNumber cap = CalculateInfluenceCap(clan, includeDescriptions);
             if (cap.ResultNumber < clan.Influence)
             {
-                baseResult.Add(-(clan.Influence / cap.ResultNumber), new TextObject("{=!}Clan Influence Limit"));
+                baseResult.Add((clan.Influence / cap.ResultNumber) * -2f, new TextObject("{=!}Clan Influence Limit"));
             }
 
             var generalSupport = 0f;

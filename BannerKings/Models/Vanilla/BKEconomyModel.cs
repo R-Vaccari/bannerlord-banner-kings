@@ -178,7 +178,7 @@ namespace BannerKings.Models.Vanilla
                     DefaultCulturalFeats.AseraiTraderFeat.Name);
             }
 
-            if (settlement == null)
+            /*if (settlement == null)
             {
                 settlement = Hero.OneToOneConversationHero.CurrentSettlement;
             }
@@ -192,7 +192,7 @@ namespace BannerKings.Models.Vanilla
                     cost.AddFactor(data.EconomicData.CaravanAttraction.ResultNumber - 1f,
                         new TextObject("{=FK7QzVtM}Caravan attraction"));
                 }
-            }
+            }*/
 
             return cost;
         }
