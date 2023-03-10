@@ -106,8 +106,7 @@ namespace BannerKings.Managers.Court
         public ExplainedNumber Competence => BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(Member, this);
         public ExplainedNumber CalculateCandidateCompetence(Hero candidate) => BannerKingsConfig.Instance.CouncilModel
             .CalculateHeroCompetence(candidate, this);
-        
-       
+
         public bool IsValidCandidate(Hero candidate)
         {
             if (candidate.Clan is { IsUnderMercenaryService: true })
@@ -125,9 +124,9 @@ namespace BannerKings.Managers.Court
                 }
             }
 
-            if (IsRoyal && IsCorePosition(StringId))
+            if (IsRoyal && IsCorePosition(StringId) && candidate.Occupation != Occupation.Lord)
             {
-                return candidate.Occupation == Occupation.Lord;
+                return false;
             }
 
             return IsValidCandidateInternal(candidate);
