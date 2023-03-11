@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Items;
 using HarmonyLib;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -114,14 +115,27 @@ namespace BannerKings.Patches
         internal class CraftingCampaignBehaviorPatches
         {
             [HarmonyPrefix]
-            [HarmonyPatch("CreateTownOrder")]
-            private static bool CreateTownOrderPrefix(Hero orderOwner, int orderSlot)
+            [HarmonyPatch("DailyTickSettlement")]
+            private static bool CreateTownOrderPrefix(CraftingCampaignBehavior __instance, Settlement settlement)
             {
-                if (orderOwner == null || orderOwner.CurrentSettlement == null || !orderOwner.CurrentSettlement.IsTown)
+                if (settlement.IsTown && __instance.CraftingOrders[settlement.Town].IsThereAvailableSlot())
                 {
-                    return false;
+                    List<Hero> list = new List<Hero>();
+                    foreach (Hero hero in settlement.Notables)
+                    {
+                        if (hero.CurrentSettlement == settlement && hero != Hero.MainHero && MBRandom.RandomFloat <= 0.05f)
+                        {
+                            int availableSlot = __instance.CraftingOrders[settlement.Town].GetAvailableSlot();
+                            if (availableSlot > -1)
+                            {
+                                __instance.CreateTownOrder(hero, availableSlot);
+                            }
+                        }
+                    }
+                    list = null;
                 }
-                return true;
+
+                return false;
             }
         }
 
