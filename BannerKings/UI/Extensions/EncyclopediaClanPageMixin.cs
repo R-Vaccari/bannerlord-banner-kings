@@ -43,7 +43,7 @@ namespace BannerKings.UI.Extensions
         [DataSourceProperty] public string CompanionsText => new TextObject("{=a3G31iZ0}Companions").ToString();
         [DataSourceProperty] public string CouncilText => new TextObject("{=mUaJDjqO}Council").ToString();
         [DataSourceProperty] public string InheritanceText => new TextObject("{=aELuNrRC}Inheritance").ToString();
-        [DataSourceProperty] public string VassalsText => new TextObject("{=!}Vassals").ToString(); 
+        [DataSourceProperty] public string VassalsText => new TextObject("{=rN34kLPu}Vassals").ToString(); 
 
         [DataSourceProperty]
         public string HeirText => new TextObject("{=vArnerHC}Heir").ToString();
@@ -158,12 +158,12 @@ namespace BannerKings.UI.Extensions
                 }
 
                 /*ExplainedNumber influenceChange = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceChange(clan, true);
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Influence Change:").ToString(),
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=d6Xpp44y}Influence Change:").ToString(),
                    influenceChange.ResultNumber.ToString("0.00"),
                    new BasicTooltipViewModel(() => influenceChange.GetExplanations())));*/
 
                 ExplainedNumber influenceCap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(clan, true);
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Influence Limit:").ToString(),
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=bNS2Lg7L}Influence Limit:").ToString(),
                    MBRandom.RoundRandomized(influenceCap.ResultNumber).ToString(),
                    new BasicTooltipViewModel(() => influenceCap.GetExplanations())));
 

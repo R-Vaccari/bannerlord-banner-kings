@@ -46,13 +46,13 @@ namespace BannerKings.Managers.Education.Languages
             Vakken = new Language("language_vakken");
 
             Battanian.Initialize(new TextObject("{=tRp08jyH}Battanian"), 
-                new TextObject("{=!}The language of the Battanian peoples has long since been a cultural divide between Battanians and other kingdoms in the continent. Given that Palaic, its sister language and culture, has mostly been erased by Imperials, the Battanian language is almost completely unintelligible to all other cultures present in Calradia. However, with the increased presence of Calradian as the lingua franca of trade, Battanians have slowly adopted some Imperial vocabulary. The language is still somewhat similar to Vakken, another natural culture of the continent, though recently the Vakken culture has mostly been replaced by Sturgians."),
+                new TextObject("{=hNK8XTow}The language of the Battanian peoples has long since been a cultural divide between Battanians and other kingdoms in the continent. Given that Palaic, its sister language and culture, has mostly been erased by Imperials, the Battanian language is almost completely unintelligible to all other cultures present in Calradia. However, with the increased presence of Calradian as the lingua franca of trade, Battanians have slowly adopted some Imperial vocabulary. The language is still somewhat similar to Vakken, another natural culture of the continent, though recently the Vakken culture has mostly been replaced by Sturgians."),
                 cultures.First(x => x.StringId == "battania"), GetIntelligibles(Battanian));
             Sturgian.Initialize(new TextObject("{=VtNL32g2}Sturgian"), 
-                new TextObject("{=!}Natural to the northern ends of Calradia, the Sturgians have an ancient linguistic tradition. Though this tradition has been recently shaken by the large mixing of nords, the Sturgian culture itself is native to the continent, as well as it's sister culture, Vakken, with which the Sturgian language still finds similarities."),
+                new TextObject("{=QT3S6XkQ}Natural to the northern ends of Calradia, the Sturgians have an ancient linguistic tradition. Though this tradition has been recently shaken by the large mixing of nords, the Sturgian culture itself is native to the continent, as well as it's sister culture, Vakken, with which the Sturgian language still finds similarities."),
                 cultures.First(x => x.StringId == "sturgia"), GetIntelligibles(Sturgian));
             Khuzait.Initialize(new TextObject("{=ZdFBNgoJ}Khuzait"), 
-                new TextObject("{=!}The langauge of the steppe is often described by foreigners as curt, but effective. Due to the near absence of scholarly research in the Khuzait culture, it often lacks terms for technical, or more abstract concepts, and as such it is certain those will be adopted from the Imperial language."),
+                new TextObject("{=rYVgj513}The langauge of the steppe is often described by foreigners as curt, but effective. Due to the near absence of scholarly research in the Khuzait culture, it often lacks terms for technical, or more abstract concepts, and as such it is certain those will be adopted from the Imperial language."),
                 cultures.First(x => x.StringId == "khuzait"), GetIntelligibles(Khuzait));
             Vlandic.Initialize(new TextObject("{=6FGQ31TM}Vlandic"), 
                 new TextObject("{=!}"),
@@ -62,11 +62,11 @@ namespace BannerKings.Managers.Education.Languages
                 cultures.First(x => x.StringId == "empire"), 
                 GetIntelligibles(Calradian));
             Aseran.Initialize(new TextObject("{=UAeorLSO}Aseran"), 
-                new TextObject("{=!}Although the Aserai peoples speak a multitude of dialects, scattered across the oases, springs and coasts of the Nahasa, a distinct tradition of literalism and poety has established a common variation that has been embraced by the higher Aserai classes."), 
+                new TextObject("{=gM4s1KQf}Although the Aserai peoples speak a multitude of dialects, scattered across the oases, springs and coasts of the Nahasa, a distinct tradition of literalism and poety has established a common variation that has been embraced by the higher Aserai classes."), 
                 cultures.First(x => x.StringId == "aserai"),
                 GetIntelligibles(Aseran));
             Vakken.Initialize(new TextObject("{=brxz2SmN}Vakken"), 
-                new TextObject("{=!}The Vakken, sometimes called 'children of the forest', are a group native to northern Calradia. Vakken and Sturgian cultures have ancient connections, as both have lived and traded for centuries before the Imperials arrived in the continent. However, with the prevailment of the Sturgia kingdom and culture, the Vakken tongue and tradition is being increasingly forgotten about in the north."),
+                new TextObject("{=bXUwFrCF}The Vakken, sometimes called 'children of the forest', are a group native to northern Calradia. Vakken and Sturgian cultures have ancient connections, as both have lived and traded for centuries before the Imperials arrived in the continent. However, with the prevailment of the Sturgia kingdom and culture, the Vakken tongue and tradition is being increasingly forgotten about in the north."),
                 cultures.First(x => x.StringId == "vakken"), GetIntelligibles(Vakken));
         }
 

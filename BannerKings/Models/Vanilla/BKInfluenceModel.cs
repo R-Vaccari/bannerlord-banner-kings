@@ -73,7 +73,7 @@ namespace BannerKings.Models.Vanilla
 
                 if (clan.Culture != clan.Kingdom.Culture)
                 {
-                    result.AddFactor(-0.2f, new TextObject("{=!}Kingdom cultural difference"));
+                    result.AddFactor(-0.2f, new TextObject("{=qW1tnxGu}Kingdom cultural difference"));
                 }
             }
 
@@ -99,7 +99,7 @@ namespace BannerKings.Models.Vanilla
             ExplainedNumber cap = CalculateInfluenceCap(clan, includeDescriptions);
             if (cap.ResultNumber < clan.Influence)
             {
-                baseResult.Add((clan.Influence / cap.ResultNumber) * -2f, new TextObject("{=!}Clan Influence Limit"));
+                baseResult.Add((clan.Influence / cap.ResultNumber) * -2f, new TextObject("{=wwYABLRd}Clan Influence Limit"));
             }
 
             var generalSupport = 0f;

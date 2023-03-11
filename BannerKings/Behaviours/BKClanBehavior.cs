@@ -396,7 +396,7 @@ namespace BannerKings.Behaviours
                     {
                         CouncilMember steward = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Steward);
                         MBInformationManager.AddQuickInformation(
-                            new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your culture!")
+                            new TextObject("{=pwcJeEaS}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your culture!")
                             .SetTextVariable("HERO", notable.Name),
                             0,
                             steward.Member.CharacterObject,
@@ -425,7 +425,7 @@ namespace BannerKings.Behaviours
                 {
                     CouncilMember chancellor = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Chancellor);
                     MBInformationManager.AddQuickInformation(
-                        new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {NOTABLE} is now more favorable to us.")
+                        new TextObject("{=ZwwfKpGu}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {NOTABLE} is now more favorable to us.")
                         .SetTextVariable("NOTABLE", notable.Name),
                         0,
                         chancellor.Member.CharacterObject,
@@ -473,7 +473,7 @@ namespace BannerKings.Behaviours
                     if (clan == Clan.PlayerClan)
                     {
                         CouncilMember spymaster = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spymaster);
-                        MBInformationManager.AddQuickInformation(new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, the hideout near {FIEF} was exterminated.")
+                        MBInformationManager.AddQuickInformation(new TextObject("{=6vgsdLQp}{?PLAYER.GENDER}My lady{?}My lord{\\?}, the hideout near {FIEF} was exterminated.")
                             .SetTextVariable("FIEF", town.Name),
                             0,
                             spymaster.Member.CharacterObject,
@@ -509,7 +509,7 @@ namespace BannerKings.Behaviours
                     {
                         CouncilMember chancellor = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Chancellor);
                         MBInformationManager.AddQuickInformation(
-                            new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} is now more favorable to us.")
+                            new TextObject("{=r8s1f28d}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} is now more favorable to us.")
                             .SetTextVariable("HERO", clanLeader.Name),
                             0,
                             chancellor.Member.CharacterObject,
@@ -580,7 +580,7 @@ namespace BannerKings.Behaviours
                     if (clan == Clan.PlayerClan)
                     {
                         MBInformationManager.AddQuickInformation(
-                            new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, I forged you the {ITEM}.")
+                            new TextObject("{=4ztP2tnz}{?PLAYER.GENDER}My lady{?}My lord{\\?}, I forged you the {ITEM}.")
                             .SetTextVariable("ITEM", item.Name),
                             0,
                             smith.Member.CharacterObject,
@@ -619,7 +619,7 @@ namespace BannerKings.Behaviours
                         {
                             CouncilMember spiritual = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spiritual);
                             MBInformationManager.AddQuickInformation(
-                                new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your faith!")
+                                new TextObject("{=MEby26tQ}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your faith!")
                                 .SetTextVariable("HERO", notable.Name),
                                 0,
                                 spiritual.Member.CharacterObject,
@@ -649,7 +649,7 @@ namespace BannerKings.Behaviours
                         {
                             CouncilMember spiritual = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spiritual);
                             MBInformationManager.AddQuickInformation(
-                                new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your faith!")
+                                new TextObject("{=MEby26tQ}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your faith!")
                                 .SetTextVariable("HERO", hero.Name),
                                 0,
                                 spiritual.Member.CharacterObject,

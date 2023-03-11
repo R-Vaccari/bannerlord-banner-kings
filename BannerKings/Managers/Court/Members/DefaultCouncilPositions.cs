@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Skills;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -71,18 +71,18 @@ namespace BannerKings.Managers.Court.Members
                     var id = member.Culture.StringId;
                     if (member.IsRoyal)
                     {
-                        if (id == "battania") return new TextObject("{=!}Ard Marasgal");
-                        if (id == "empire") return new TextObject("{=!}Magister Domesticus");
-                        if (id == "khuzait") return new TextObject("{=!}Tumetu-iin Noyan");
+                        if (id == "battania") return new TextObject("{=iTWqZLM4}Ard Marasgal");
+                        if (id == "empire") return new TextObject("{=MqHWpT0K}Magister Domesticus");
+                        if (id == "khuzait") return new TextObject("{=Qtt0vXAT}Tumetu-iin Noyan");
 
-                        return new TextObject("{=!}Grand Marshal");
+                        return new TextObject("{=7TxiJwdM}Grand Marshal");
                     }
 
-                    if (id == "battania") return new TextObject("{=!}Marasgal");
-                    if (id == "khuzait") return new TextObject("{=!}Jagutu-iin Darga");
-                    if (id == "empire") return new TextObject("{=!}Domesticus");
+                    if (id == "battania") return new TextObject("{=2SU2KRvB}Marasgal");
+                    if (id == "khuzait") return new TextObject("{=hfqCCmZi}Jagutu-iin Darga");
+                    if (id == "empire") return new TextObject("{=Qk2mgePL}Domesticus");
 
-                    return new TextObject("{=!}Marshal");
+                    return new TextObject("{=SCsGXova}Marshal");
                 });
 
             Steward.Initialize(
@@ -108,16 +108,16 @@ namespace BannerKings.Managers.Court.Members
                     var id = member.Culture.StringId;
                     if (member.IsRoyal)
                     {
-                        if (id == "battania") return new TextObject("{=!}Ard Sheumarlan");
-                        if (id == "empire") return new TextObject("{=!}Magister Sacrarum Largitionum");
+                        if (id == "battania") return new TextObject("{=M6eW9798}Ard Sheumarlan");
+                        if (id == "empire") return new TextObject("{=8sSPs8QV}Magister Sacrarum Largitionum");
 
-                        return new TextObject("{=!}High Steward");
+                        return new TextObject("{=3OSi32pX}High Steward");
                     }
 
-                    if (id == "battania") return new TextObject("{=!}Sheumarlan");
-                    if (id == "empire") return new TextObject("{=!}Praefectus Largitionum");
+                    if (id == "battania") return new TextObject("{=DJkHjoo4}Sheumarlan");
+                    if (id == "empire") return new TextObject("{=uP0GHCjS}Praefectus Largitionum");
 
-                    return new TextObject("{=!}Steward");
+                    return new TextObject("{=k4oyM9dT}Steward");
                 });
 
             Chancellor.Initialize(
@@ -143,16 +143,16 @@ namespace BannerKings.Managers.Court.Members
                     var id = member.Culture.StringId;
                     if (member.IsRoyal)
                     {
-                        if (id == "battania") return new TextObject("{=!}Ard Seansalair");
-                        if (id == "empire") return new TextObject("{=!}Magister Cancellarius");
+                        if (id == "battania") return new TextObject("{=wWNKVNgU}Ard Seansalair");
+                        if (id == "empire") return new TextObject("{=RHT0X2ZU}Magister Cancellarius");
 
-                        return new TextObject("{=!}High Chancellor");
+                        return new TextObject("{=EYfcHKO1}High Chancellor");
                     }
 
-                    if (id == "battania") return new TextObject("{=!}Seansalair");
-                    if (id == "empire") return new TextObject("{=!}Cancellarius");
+                    if (id == "battania") return new TextObject("{=pA79P1LE}Seansalair");
+                    if (id == "empire") return new TextObject("{=qRVOadig}Cancellarius");
 
-                    return new TextObject("{=!}Chancellor");
+                    return new TextObject("{=tgz9ut5s}Chancellor");
                 });
 
             Spymaster.Initialize(
@@ -177,18 +177,18 @@ namespace BannerKings.Managers.Court.Members
                     var id = member.Culture.StringId;
                     if (member.IsRoyal)
                     {
-                        if (id == "battania") return new TextObject("{=!}Ard Treòraiche");
-                        if (id == "empire") return new TextObject("{=!}Magister Officiorum");
-                        if (id == "khuzait") return new TextObject("{=!}Cherbi");
+                        if (id == "battania") return new TextObject("{=fTuydBMn}Ard Treòraiche");
+                        if (id == "empire") return new TextObject("{=HWfVPgFa}Magister Officiorum");
+                        if (id == "khuzait") return new TextObject("{=7PLFhL3m}Cherbi");
 
-                        return new TextObject("{=!}Grand Spymaster");
+                        return new TextObject("{=08umUPH5}Grand Spymaster");
                     }
 
-                    if (id == "battania") return new TextObject("{=!}Treòraiche");
-                    if (id == "khuzait") return new TextObject("{=!}Khevtuul");
-                    if (id == "empire") return new TextObject("{=!}Custodis");
+                    if (id == "battania") return new TextObject("{=FQe5GXkp}Treòraiche");
+                    if (id == "khuzait") return new TextObject("{=FsFE8NSM}Khevtuul");
+                    if (id == "empire") return new TextObject("{=bZCeizLU}Custodis");
 
-                    return new TextObject("{=!}Spymaster");
+                    return new TextObject("{=ZJ8eRkS2}Spymaster");
                 });
 
             Spiritual.Initialize(
@@ -226,18 +226,18 @@ namespace BannerKings.Managers.Court.Members
                     if (member.IsRoyal)
                     {
 
-                        if (id == "battania") return new TextObject("{=!}Ard Draoidh");
-                        if (id == "sturgia") return new TextObject("{=!}Volkhvs");
-                        if (id == "aserai") return new TextObject("{=!}Murshid");
+                        if (id == "battania") return new TextObject("{=PkQ9BKTk}Ard Draoidh");
+                        if (id == "sturgia") return new TextObject("{=ogAzFznn}Volkhvs");
+                        if (id == "aserai") return new TextObject("Murshid");
 
-                        return new TextObject("{=!}High Seneschal");
+                        return new TextObject("{=rhL4NnWR}High Seneschal");
                     }
 
-                    if (id == "battania") return new TextObject("{=!}Draoidh");
-                    if (id == "sturgia") return new TextObject("{=!}Volkhvs");
-                    if (id == "aserai") return new TextObject("{=!}Murshid");
+                    if (id == "battania") return new TextObject("{=ELf8YFXe}Draoidh");
+                    if (id == "sturgia") return new TextObject("{=ogAzFznn}Volkhvs");
+                    if (id == "aserai") return new TextObject("Murshid");
 
-                    return new TextObject("{=!}Seneschal");
+                    return new TextObject("{=ZNzX7SKR}Seneschal");
                 });
 
             Spouse.Initialize(
@@ -279,7 +279,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember member) =>
                {
-                   return new TextObject("{=!}Court Physician");
+                   return new TextObject("{=Gc1CyVPk}Court Physician");
                });
 
             CourtSmith.Initialize(
@@ -302,7 +302,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember member) =>
                {
-                   return new TextObject("{=!}Court Smith");
+                   return new TextObject("{=fWxtaYqn}Court Smith");
                });
 
             CourtMusician.Initialize(
@@ -323,7 +323,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember member) =>
                {
-                   return new TextObject("{=!}Court Musician");
+                   return new TextObject("{=O951oUMh}Court Musician");
                });
 
             Antiquarian.Initialize(
@@ -344,7 +344,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember member) =>
                {
-                   return new TextObject("{=!}Antiquarian");
+                   return new TextObject("{=KfZ29QpZ}Antiquarian");
                });
 
             Castellan.Initialize(
@@ -366,7 +366,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember member) =>
                {
-                   return new TextObject("{=!}Castellan");
+                   return new TextObject("{=Y3yvvUct}Castellan");
                });
 
             Constable.Initialize(
@@ -398,7 +398,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember member) =>
                {
-                   return new TextObject("{=!}Constable");
+                   return new TextObject("{=65dCSoEB}Constable");
                });
         }
     }

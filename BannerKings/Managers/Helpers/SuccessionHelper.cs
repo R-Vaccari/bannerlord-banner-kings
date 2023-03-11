@@ -90,7 +90,7 @@ namespace BannerKings.Managers.Helpers
                 BannerKingsConfig.Instance.TitleManager.InheritTitle(victim, heir, title);
                 if (kingdom == Clan.PlayerClan.MapFaction)
                 {
-                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}Due to abscence of other candidates, {HEIR} has inherited the {TITLE} uncontested.")
+                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=okUMw3Df}Due to abscence of other candidates, {HEIR} has inherited the {TITLE} uncontested.")
                         .SetTextVariable("HEIR", heir.Name)
                         .SetTextVariable("TITLE", title.FullName)
                         .ToString(),
@@ -102,7 +102,7 @@ namespace BannerKings.Managers.Helpers
                 kingdom.AddDecision(new KingSelectionKingdomDecision(victim.Clan));
                 if (kingdom == Clan.PlayerClan.MapFaction)
                 {
-                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}Due to abscence of {CLAN} candidates, the {TITLE} succession will be voted on by the Peers of the realm.")
+                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=vWDgQWUh}Due to abscence of {CLAN} candidates, the {TITLE} succession will be voted on by the Peers of the realm.")
                         .SetTextVariable("TITLE", title.FullName)
                         .SetTextVariable("CLAN", victim.Clan.Name)
                         .ToString(),

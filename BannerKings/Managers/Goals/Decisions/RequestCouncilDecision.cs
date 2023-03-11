@@ -42,7 +42,7 @@ namespace BannerKings.Managers.Goals.Decisions
             foreach (var member in council.Positions)
             {
                 TextObject name = null;
-                var hint = new TextObject("{=!}{DESCRIPTION}\n\n{REASON}\n\nYour competence is {COMPETENCE}%:\n{EXPLANATION}");
+                var hint = new TextObject("{=DX1iCyKA}{DESCRIPTION}\n\n{REASON}\n\nYour competence is {COMPETENCE}%:\n{EXPLANATION}");
                 CouncilAction action;
                 var model = BannerKingsConfig.Instance.CouncilModel;
                 if (member.Member == Hero.MainHero)

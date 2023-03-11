@@ -102,24 +102,24 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber GetBuyingCostExplained(Workshop workshop, Hero buyer, bool descriptions = false)
         {
             ExplainedNumber result = new ExplainedNumber(base.GetSellingCost(workshop), descriptions, 
-                new TextObject("{=!}Equipment costs"));
+                new TextObject("{=LiC18pJC}Equipment costs"));
             result.Add((int)(GetDailyExpense(workshop).ResultNumber * 15f * CampaignTime.DaysInYear));
 
-            result.Add(GetInventoryCost(workshop), new TextObject("{=!}Workshop inventory"));
+            result.Add(GetInventoryCost(workshop), new TextObject("{=u5LQxWO5}Workshop inventory"));
 
             if (workshop.Owner.OwnedWorkshops.Count == 1)
             {
-                result.AddFactor(0.15f, new TextObject("{=!}{OWNER}'s only workshop")
+                result.AddFactor(0.15f, new TextObject("{=jiLxCXBW}{OWNER}'s only workshop")
                     .SetTextVariable("OWNER", workshop.Owner.Name));
             }
 
             if (workshop.Owner.IsNotable && workshop.Owner.OwnedAlleys.Count == 0 && workshop.Owner.OwnedCaravans.Count == 0)
             {
-                result.AddFactor(0.15f, new TextObject("{=!}{OWNER} has no other incomes")
+                result.AddFactor(0.15f, new TextObject("{=uNzd25jE}{OWNER} has no other incomes")
                     .SetTextVariable("OWNER", workshop.Owner.Name));
             }
 
-            result.AddFactor(buyer.OwnedWorkshops.Count * 0.05f, new TextObject("{=!}{BUYER} has {COUNT} workshop(s)")
+            result.AddFactor(buyer.OwnedWorkshops.Count * 0.05f, new TextObject("{=jhWhrK2B}{BUYER} has {COUNT} workshop(s)")
                 .SetTextVariable("BUYER", buyer.Name)
                 .SetTextVariable("COUNT", buyer.OwnedWorkshops.Count));
             return result;
