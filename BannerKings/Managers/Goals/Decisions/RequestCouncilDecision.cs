@@ -42,7 +42,7 @@ namespace BannerKings.Managers.Goals.Decisions
             foreach (var member in council.Positions)
             {
                 TextObject name = null;
-                var hint = new TextObject("{=SXfiwy0X}{DESCRIPTION}\n\n{REASON}");
+                var hint = new TextObject("{=!}{DESCRIPTION}\n\n{REASON}\n\nYour competence is {COMPETENCE}%:\n{EXPLANATION}");
                 CouncilAction action;
                 var model = BannerKingsConfig.Instance.CouncilModel;
                 if (member.Member == Hero.MainHero)
@@ -77,7 +77,11 @@ namespace BannerKings.Managers.Goals.Decisions
                 {
                     hint = hint.SetTextVariable("REASON", action.Reason);
                 }
-                
+
+                ExplainedNumber competence = BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(Hero.MainHero,
+                        member, true);
+                hint = hint.SetTextVariable("COMPETENCE", (competence.ResultNumber * 100f).ToString("0.00"))
+                    .SetTextVariable("EXPLANATION", competence.GetExplanations());
 
                 options.Add(new InquiryElement(action, 
                     name.ToString(), 
