@@ -38,6 +38,8 @@ namespace BannerKings.Managers.Court.Members.Tasks
 
         public CouncilTask EnforceLaw { get; } = new CouncilTask("EnforceLaw");
 
+
+        public CouncilTask FamilyCare { get; } = new CouncilTask("FamilyCare");
         public OverseeSanitation OverseeSanitation { get; } = new OverseeSanitation();
 
         public override IEnumerable<CouncilTask> All
@@ -145,6 +147,11 @@ namespace BannerKings.Managers.Court.Members.Tasks
             OverseeSanitation.Initialize(new TextObject("{=!}Oversee Sanitation"),
                new TextObject("{=!}Promote sanitation standarts that improve life quality in town. Improved health quality improves population growth."),
                new TextObject("{=!}Improved population growth"),
+               1f);
+
+            FamilyCare.Initialize(new TextObject("{=!}Family Care"),
+               new TextObject("{=!}Heal family members and educate them into good health practices."),
+               new TextObject("{=!}Household members heal faster in settlements\nDaily medicine xp for household members"),
                1f);
 
             SmithArmors.Initialize(new TextObject("{=!}Smith Armors"),

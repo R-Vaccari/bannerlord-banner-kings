@@ -36,7 +36,7 @@ namespace BannerKings.Managers.Court.Members
                 yield return Spouse;
                 yield return Castellan;
                 yield return Constable;
-                //yield return CourtPhysician;
+                yield return CourtPhysician;
                 yield return CourtSmith;
                 yield return CourtMusician;
                 yield return Antiquarian;
@@ -266,7 +266,7 @@ namespace BannerKings.Managers.Court.Members
                BKSkills.Instance.Scholarship,
                new List<CouncilTask>()
                {
-                    DefaultCouncilTasks.Instance.OverseeSanitation.GetCopy()
+                    DefaultCouncilTasks.Instance.FamilyCare.GetCopy()
                },
                new List<CouncilPrivileges>() { },
                (CouncilData data) =>
@@ -352,7 +352,7 @@ namespace BannerKings.Managers.Court.Members
                BKSkills.Instance.Lordship,
                new List<CouncilTask>()
                {
-                    DefaultCouncilTasks.Instance.ManageDemesne.GetCopy()
+                    DefaultCouncilTasks.Instance.OverseeBaronies.GetCopy()
                },
                new List<CouncilPrivileges>() { },
                (CouncilData data) =>
@@ -374,7 +374,7 @@ namespace BannerKings.Managers.Court.Members
                BKSkills.Instance.Lordship,
                new List<CouncilTask>()
                {
-                    DefaultCouncilTasks.Instance.ManageDemesne.GetCopy()
+                    DefaultCouncilTasks.Instance.EnforceLaw.GetCopy()
                },
                new List<CouncilPrivileges>() { },
                (CouncilData data) =>
