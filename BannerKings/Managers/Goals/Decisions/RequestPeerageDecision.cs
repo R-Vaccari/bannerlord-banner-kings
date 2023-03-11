@@ -43,11 +43,6 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(new TextObject("{=SjBky9Op}Mercenaries cannot request Peerage"));
             }
 
-            if (FactionManager.GetEnemyKingdoms(Clan.PlayerClan.Kingdom).Count() > 0)
-            {
-                failedReasons.Add(new TextObject("{=QmMiGJpx}Cannot request Peerage during wars"));
-            }
-
             var decision = new PeerageKingdomDecision(Clan.PlayerClan.Kingdom.RulingClan, Clan.PlayerClan);
             if (Clan.PlayerClan.Influence < decision.GetProposalInfluenceCost())
             {
