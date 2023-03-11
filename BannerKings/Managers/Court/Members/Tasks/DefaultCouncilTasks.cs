@@ -65,6 +65,9 @@ namespace BannerKings.Managers.Court.Members.Tasks
                 yield return SmithWeapons;
                 yield return OverseeSanitation;
                 yield return EducateFamilyAntiquarian;
+                yield return OverseeBaronies;
+                yield return EnforceLaw;
+                yield return FamilyCare;
                 foreach (CouncilTask item in ModAdditions)
                 {
                     yield return item;
