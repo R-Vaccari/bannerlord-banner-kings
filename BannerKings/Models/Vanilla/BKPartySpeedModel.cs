@@ -58,7 +58,7 @@ namespace BannerKings.Models.Vanilla
                         var count = 0;
                         foreach (var element in mobileParty.MemberRoster.GetTroopRoster())
                         {
-                            if (element.Character.IsHero || element.Character.Occupation == Occupation.Bandit)
+                            if (!element.Character.IsHero && element.Character.IsInfantry)
                             {
                                 count += element.Number;
                             }
