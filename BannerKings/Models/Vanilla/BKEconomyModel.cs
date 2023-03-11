@@ -228,6 +228,13 @@ namespace BannerKings.Models.Vanilla
                 {
                     result.AddFactor(0.4f, new TextObject("{=fQVyeiJb}Capital"));
                 }
+
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result,
+                   settlement.OwnerClan.Leader, 
+                   DefaultCouncilPositions.Instance.Constable,
+                   DefaultCouncilTasks.Instance.EnforceLaw,
+                   0.05f, 
+                   true);
             }
 
             return result;

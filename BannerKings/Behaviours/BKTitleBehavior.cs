@@ -583,7 +583,7 @@ namespace BannerKings.Behaviours
                         if (capturerHero == Hero.MainHero)
                         {
                             GameTexts.SetVariable("SETTLEMENT", settlement.Name);
-                            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Conquest Right").ToString(),
+                            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=pht4SLHe}Conquest Right").ToString(),
                                 new TextObject("{=FKMakM2V}By contract law, you have been awarded the ownership of {SETTLEMENT} due to you conquering it.")
                                     .ToString(),
                                 true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);

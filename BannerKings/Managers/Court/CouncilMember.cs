@@ -47,6 +47,10 @@ namespace BannerKings.Managers.Court
                 task.PostInitialize();
             }
             CurrentTask.PostInitialize();
+            if (!Tasks.Any(x => x.StringId == CurrentTask.StringId))
+            {
+                SetTask(Tasks[0]);
+            }
         }
 
         public CouncilMember GetCopy(Clan clan)

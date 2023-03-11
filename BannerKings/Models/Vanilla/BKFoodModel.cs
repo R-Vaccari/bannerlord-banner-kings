@@ -214,7 +214,7 @@ namespace BannerKings.Models.Vanilla
                 if (efficiency != 0f)
                 {
                     var toDeduce = result.ResultNumber * efficiency;
-                    result.Add(toDeduce, new TextObject("{=!}Production efficiency"));
+                    result.Add(toDeduce, new TextObject("{=Q0AgGuB0}Production efficiency"));
                 }
 
                 result.AddFactor(MathF.Clamp(data.LandData.WorkforceSaturation - 1f, -1f, 0f), new TextObject("{=LohssChh}Workforce saturation"));

@@ -1,6 +1,4 @@
-using System;
 using System.Linq;
-using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Policies;
@@ -134,7 +132,7 @@ namespace BannerKings.Models.Vanilla
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader,
                 DefaultCouncilPositions.Instance.Chancellor,
-                DefaultCouncilTasks.Instance.EncourageMilitarism,
+                DefaultCouncilTasks.Instance.OverseeDignataries,
                 1f, false);
 
             return baseResult;

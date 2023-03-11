@@ -63,7 +63,7 @@ namespace BannerKings.UI.Court
                     {
                         image = new ImageIdentifier(CampaignUIHelper.GetCharacterCode(vm.Governor.CharacterObject));
                         name = vm.Governor.Name;
-                        TextObject textObject = new TextObject("{=!}{HERO} is a {TYPE} with {COMPETENCE}% competence for this position.")
+                        TextObject textObject = new TextObject("{=rKiPYUu3}{HERO} is a {TYPE} with {COMPETENCE}% competence for this position.")
                             .SetTextVariable("COMPETENCE", (Position.CalculateCandidateCompetence(vm.Governor).ResultNumber * 100f).ToString("0.00"))
                             .SetTextVariable("TYPE", HeroHelper.GetCharacterTypeName(vm.Governor))
                             .SetTextVariable("HERO", name);
@@ -80,7 +80,7 @@ namespace BannerKings.UI.Court
                 TextObject current = new TextObject();
                 if (Position.Member != null)
                 {
-                    current = new TextObject("{=!}{HERO} current holds this position with a competence of {COMPETENCE}%.")
+                    current = new TextObject("{=Qa6YdGEF}{HERO} current holds this position with a competence of {COMPETENCE}%.")
                         .SetTextVariable("HERO", Position.Member.Name)
                         .SetTextVariable("COMPETENCE", (Position.Competence.ResultNumber * 100f).ToString("0.00"));
                 }
@@ -88,7 +88,7 @@ namespace BannerKings.UI.Court
                 TextObject description;
                 if (councilPosition.SecondarySkill != null)
                 {
-                    description = new TextObject("{=!}Select who you would like to fill this position. The {POSITION} requires competency in {PRIMARY} and {SECONDARY} skills. {CURRENT}")
+                    description = new TextObject("{=HiA9DHMi}Select who you would like to fill this position. The {POSITION} requires competency in {PRIMARY} and {SECONDARY} skills. {CURRENT}")
                         .SetTextVariable("SECONDARY", councilPosition.SecondarySkill.Name)
                         .SetTextVariable("PRIMARY", councilPosition.PrimarySkill.Name)
                         .SetTextVariable("POSITION", councilPosition.Name)
@@ -96,7 +96,7 @@ namespace BannerKings.UI.Court
                 }
                 else
                 {
-                    description = new TextObject("{=!}Select who you would like to fill this position. The {POSITION} requires competency in the {PRIMARY} skill. {CURRENT}")
+                    description = new TextObject("{=oKVgKsY1}Select who you would like to fill this position. The {POSITION} requires competency in the {PRIMARY} skill. {CURRENT}")
                         .SetTextVariable("SECONDARY", councilPosition.SecondarySkill.Name)
                         .SetTextVariable("PRIMARY", councilPosition.PrimarySkill.Name)
                         .SetTextVariable("POSITION", councilPosition.Name)

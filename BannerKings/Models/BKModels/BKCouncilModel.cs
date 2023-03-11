@@ -44,7 +44,7 @@ namespace BannerKings.Models.BKModels
 
             if (position.CurrentTask != null && position.CurrentTask.Efficiency != 1f)
             {
-                result.AddFactor(position.CurrentTask.Efficiency - 1f, new TextObject("{=!}Task Efficiency"));
+                result.AddFactor(position.CurrentTask.Efficiency - 1f, new TextObject("{=ARQYxT6t}Task Efficiency"));
             }
 
             return result;

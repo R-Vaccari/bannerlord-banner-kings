@@ -67,12 +67,12 @@ namespace BannerKings.Models.BKModels
                 if (GetInheritanceCandidates(currentLeader).Contains(candidate))
                 {
                     result = GetInheritanceHeirScore(currentLeader, candidate, contract, explanations);
-                    result.Add(300f, new TextObject("{=!}Former ruler's clan"));
+                    result.Add(300f, new TextObject("{=x5vKZHNN}Former ruler's clan"));
                 }
 
                 if (title.HeroHasValidClaim(candidate))
                 {
-                    result.Add(200f, new TextObject("{=!}Claimant"));
+                    result.Add(200f, new TextObject("{=ipGDmaBZ}Claimant"));
                 }
 
                 result.Add(candidate.Clan.Tier * 50f, GameTexts.FindText("str_clan_tier_bonus"));
@@ -766,18 +766,18 @@ namespace BannerKings.Models.BKModels
                 {
                     if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(deFacto))
                     {
-                        claimants.Add(deFacto, new TextObject("{=!}De facto title holder"));
+                        claimants.Add(deFacto, new TextObject("{=XRMMs6QY}De facto title holder"));
                     }
                 }
                 else
                 {
-                    claimants.Add(deFacto, new TextObject("{=!}De facto fief holder"));
+                    claimants.Add(deFacto, new TextObject("{=TqfaGy3U}De facto fief holder"));
                 }
             }
 
             if (title.sovereign != null && title.sovereign.deJure != title.deJure && !claimants.ContainsKey(title.sovereign.deJure))
             {
-                claimants.Add(title.sovereign.deJure, new TextObject("{=!}De jure sovereign of this title"));
+                claimants.Add(title.sovereign.deJure, new TextObject("{=pkZ0J4Fo}De jure sovereign of this title"));
             }
 
             if (title.vassals is {Count: > 0})
@@ -786,7 +786,7 @@ namespace BannerKings.Models.BKModels
                 {
                     if (vassal.deJure != null && vassal.deJure != title.deJure && !claimants.ContainsKey(vassal.deJure))
                     {
-                        claimants.Add(vassal.deJure, new TextObject("{=!}De jure vassal of this title"));
+                        claimants.Add(vassal.deJure, new TextObject("{=J07mQQ6k}De jure vassal of this title"));
                     }
                 }
             }

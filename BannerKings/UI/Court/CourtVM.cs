@@ -51,12 +51,12 @@ namespace BannerKings.UI.Court
             currentCharacter = new CharacterVM(Hero.MainHero, null);
         }
 
-        [DataSourceProperty] public string FamilyText => new TextObject("{=!}Household").ToString();
+        [DataSourceProperty] public string FamilyText => new TextObject("{=QCw05MZN}Household").ToString();
         [DataSourceProperty] public string CourtiersText => new TextObject("{=PykdjcGm}Courtiers").ToString();
         [DataSourceProperty] public string EffectsText => new TextObject("{=K7df68TT}Effects").ToString();
         [DataSourceProperty] public string PrivilegesText => new TextObject("{=77D4i3pG}Privileges").ToString();
-        [DataSourceProperty] public string PrivyCouncilText => new TextObject("{=!}Privy Council").ToString();
-        [DataSourceProperty] public string ExtendedCouncilText => new TextObject("{=!}Extended Council").ToString();
+        [DataSourceProperty] public string PrivyCouncilText => new TextObject("{=7NeZtxVP}Privy Council").ToString();
+        [DataSourceProperty] public string ExtendedCouncilText => new TextObject("{=BkJbqOWj}Extended Council").ToString();
         [DataSourceProperty] public bool PlayerOwned => council.Owner == Hero.MainHero;
         [DataSourceProperty] public bool DisableButtons => !PlayerOwned;
      
@@ -104,15 +104,15 @@ namespace BannerKings.UI.Court
 
             Language language = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(council.Clan.Culture);
 
-            CourtInfo.Add(new InformationElement(new TextObject("{=!}Court language:").ToString(),
+            CourtInfo.Add(new InformationElement(new TextObject("{=7AkO8Nui}Court language:").ToString(),
                 language.Name.ToString(),
-                new TextObject("{=!}The native language spoken by the council leader. Speaking the court language is important for councillours to fulfill their tasks adequately.")
+                new TextObject("{=BEHbVOK5}The native language spoken by the council leader. Speaking the court language is important for councillours to fulfill their tasks adequately.")
                 .ToString()));
 
             Managers.Institutions.Religions.Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(council.Owner);
-            CourtInfo.Add(new InformationElement(new TextObject("{=!}Court religion:").ToString(),
+            CourtInfo.Add(new InformationElement(new TextObject("{=KxC0nxz1}Court religion:").ToString(),
                 rel != null ? rel.Faith.GetFaithName().ToString() : new TextObject("{=koX9okuG}None").ToString(),
-                new TextObject("{=!}The council leader's faith. Spiritual positions need to follow the same faith. Other positions may be favored or not according to the candidate's faith, and how well predisposed the council owner's faith is towards it.")
+                new TextObject("{=yGeij7MB}The council leader's faith. Spiritual positions need to follow the same faith. Other positions may be favored or not according to the candidate's faith, and how well predisposed the council owner's faith is towards it.")
                 .ToString()));
 
             var royalExplanation = BannerKingsConfig.Instance.CouncilModel.IsCouncilRoyal(council.Owner.Clan);

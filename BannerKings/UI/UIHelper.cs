@@ -117,7 +117,7 @@ namespace BannerKings.UI
                     hero.Clan.Name.ToString(), 0));
             }
 
-            properties.Add(new TooltipProperty(new TextObject("{=!}Capital").ToString(),
+            properties.Add(new TooltipProperty(new TextObject("Capital").ToString(),
                     MBRandom.RoundRandomized(workshop.Capital).ToString(), 0));
 
             ExplainedNumber result = BannerKingsConfig.Instance.WorkshopModel.GetBuyingCostExplained(workshop, Hero.MainHero, true);
@@ -151,16 +151,16 @@ namespace BannerKings.UI
                 TooltipProperty.TooltipPropertyFlags.MultiLine));
 
             TooltipAddEmptyLine(properties);
-            properties.Add(new TooltipProperty(new TextObject("{=!}Competence(s)").ToString(), " ", 0));
+            properties.Add(new TooltipProperty(new TextObject("{=HsgYtcxu}Competence(s)").ToString(), " ", 0));
             TooltipAddSeperator(properties);
 
-            properties.Add(new TooltipProperty(new TextObject("{=!}Primary").ToString(),
+            properties.Add(new TooltipProperty(new TextObject("{=PcM7JDMu}Primary").ToString(),
                 position.PrimarySkill.ToString(),
                 0));
 
             if (position.SecondarySkill != null)
             {
-                properties.Add(new TooltipProperty(new TextObject("{=!}Secondary").ToString(),
+                properties.Add(new TooltipProperty(new TextObject("{=sPsERGcn}Secondary").ToString(),
                                 position.SecondarySkill.ToString(),
                                 0));
             }
@@ -382,10 +382,10 @@ namespace BannerKings.UI
                 TooltipAddEmptyLine(list);
             }
 
-            list.Add(new TooltipProperty(new TextObject("{=!}Actions").ToString(), " ", 0));
+            list.Add(new TooltipProperty(new TextObject("{=T39jWYUx}Actions").ToString(), " ", 0));
             TooltipAddSeperator(list);
             list.Add(new TooltipProperty(string.Empty,
-                new TextObject("{=!}Title actions allow you multiple ways to use them. Actions that actively undermine other lords are considered hostile actions, and often cost denars, influence, your clan's renown, and relations with the affected, so take them wisely. On the other hand, an action such as Grant of a title is considered amicable and grows relations instead, at the cost of your ownership of the title.").ToString(),
+                new TextObject("{=rfwjouvE}Title actions allow you multiple ways to use them. Actions that actively undermine other lords are considered hostile actions, and often cost denars, influence, your clan's renown, and relations with the affected, so take them wisely. On the other hand, an action such as Grant of a title is considered amicable and grows relations instead, at the cost of your ownership of the title.").ToString(),
                 0,
                 false,
                 TooltipProperty.TooltipPropertyFlags.MultiLine));
@@ -459,14 +459,14 @@ namespace BannerKings.UI
             list.Add(new TooltipProperty(new TextObject("{=n4LgwLxB}Reason").ToString(), action.Reason.ToString(), 0));
             if (action.Gold > 0)
             {
-                list.Add(new TooltipProperty(new TextObject("{=!}Denars:").ToString(), new TextObject("{=7rA02JY3}{GOLD} coins.")
+                list.Add(new TooltipProperty(new TextObject("{=AsR4WzYu}Denars:").ToString(), new TextObject("{=7rA02JY3}{GOLD} coins.")
                     .SetTextVariable("GOLD", action.Gold.ToString("0.0"))
                     .ToString(), 0));
             }
 
             if (action.Influence > 0)
             {
-                list.Add(new TooltipProperty(new TextObject("{=!}Influence:").ToString(),
+                list.Add(new TooltipProperty(new TextObject("{=H0mrKw6B}Influence:").ToString(),
                     new TextObject("{=bqXrF5SC}{INFLUENCE} influence.")
                         .SetTextVariable("INFLUENCE", action.Influence.ToString("0.0"))
                         .ToString(), 0));

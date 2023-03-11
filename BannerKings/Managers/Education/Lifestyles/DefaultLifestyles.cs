@@ -128,7 +128,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             CivilAdministrator = new Lifestyle("lifestyle_civilAdministrator");
             CivilAdministrator.Initialize(new TextObject("{=EJEkuBZ4}Civil Administrator"), 
-                new TextObject("{=!}A rare skill in the continent, administrators are those specialized in the building of efficient, propserous towns. As most folks are preoccupied in not starving or dying violently, and education being rare and expensive, little has been developed in terms of planning efficient cities."),
+                new TextObject("{=PBecbLxj}A rare skill in the continent, administrators are those specialized in the building of efficient, propserous towns. As most folks are preoccupied in not starving or dying violently, and education being rare and expensive, little has been developed in terms of planning efficient cities."),
                 DefaultSkills.Engineering, DefaultSkills.Steward,
                 new List<PerkObject>
                 {
@@ -158,7 +158,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             Artisan = new Lifestyle("lifestyle_artisan");
             Artisan.Initialize(new TextObject("{=RUtaPqBv}Artisan"), 
-                new TextObject("{=!}Essential to the economy, artisans produce manufactured goods in high demand, such as high quality textiles, tools, beer, and much more. As one inclined to the artisan world, you have keen insight into crafting and managing your workshops."),
+                new TextObject("{=VOV4Shbm}Essential to the economy, artisans produce manufactured goods in high demand, such as high quality textiles, tools, beer, and much more. As one inclined to the artisan world, you have keen insight into crafting and managing your workshops."),
                 DefaultSkills.Crafting,
                 DefaultSkills.Trade, 
                 new List<PerkObject>
@@ -173,7 +173,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             Outlaw = new Lifestyle("lifestyle_outlaw");
             Outlaw.Initialize(new TextObject("{=GTYYnH9E}Outlaw"), 
-                new TextObject("{=!}Universally shamed, yet universally present, no realm can fully rid itself of outlaws. More 'professional' outlaws will specialize in efficient plundering, speed and furtiveness to avoid law enforcement. Known outlaws often become notorious for kidnapping nobles and demanding unfair ransoms."),
+                new TextObject("{=WRbLY55G}Universally shamed, yet universally present, no realm can fully rid itself of outlaws. More 'professional' outlaws will specialize in efficient plundering, speed and furtiveness to avoid law enforcement. Known outlaws often become notorious for kidnapping nobles and demanding unfair ransoms."),
                 DefaultSkills.Roguery, 
                 DefaultSkills.Scouting,
                 new List<PerkObject>
