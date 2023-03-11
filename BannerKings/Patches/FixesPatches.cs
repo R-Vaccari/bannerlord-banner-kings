@@ -8,6 +8,7 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Party.PartyComponents;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 
@@ -106,6 +107,78 @@ namespace BannerKings.Patches
             {
                 BKItemCategories.Instance.Initialize();
                 BKItems.Instance.Initialize();
+            }
+        }
+
+        [HarmonyPatch(typeof(CraftingCampaignBehavior))]
+        internal class CraftingCampaignBehaviorPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("CreateTownOrder")]
+            private static bool CreateTownOrderPrefix(Hero orderOwner, int orderSlot)
+            {
+                if (orderOwner == null || orderOwner.CurrentSettlement == null || !orderOwner.CurrentSettlement.IsTown)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(FoodConsumptionBehavior))]
+        internal class FoodConsumptionBehaviorPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("MakeFoodConsumption")]
+            private static bool MakeFoodConsumptionPrefix(MobileParty party, ref int partyRemainingFoodPercentage)
+            {
+                ItemRoster itemRoster = party.ItemRoster;
+                int num = 0;
+                for (int i = 0; i < itemRoster.Count; i++)
+                {
+                    if (itemRoster.GetItemAtIndex(i).IsFood)
+                    {
+                        num++;
+                    }
+                }
+                bool flag = false;
+                int count = 0;
+                while (num > 0 && partyRemainingFoodPercentage < 0)
+                {
+                    count++;
+                    if (count > 5000)
+                        break;
+                    int num2 = MBRandom.RandomInt(num);
+                    bool flag2 = false;
+                    int num3 = 0;
+                    for (int i = itemRoster.Count - 1; i >= 0 && !flag2; i--)
+                    {
+                        if (itemRoster.GetItemAtIndex(i).IsFood)
+                        {
+                            int elementNumber = itemRoster.GetElementNumber(i);
+                            if (elementNumber > 0)
+                            {
+                                num3++;
+                                if (num2 < num3)
+                                {
+                                    itemRoster.AddToCounts(itemRoster.GetItemAtIndex(i), -1);
+                                    partyRemainingFoodPercentage += 100;
+                                    if (elementNumber == 1)
+                                    {
+                                        num--;
+                                    }
+                                    flag2 = true;
+                                    flag = true;
+                                }
+                            }
+                        }
+                    }
+                    if (flag)
+                    {
+                        party.Party.OnConsumedFood();
+                    }
+                }
+                return false;
             }
         }
     }
