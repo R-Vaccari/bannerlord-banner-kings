@@ -367,6 +367,15 @@ namespace BannerKings.Behaviours
             CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
             HandleSpiritual(clan, council);
 
+            if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.FamilyCare,
+                out float healCompetence))
+            {
+                foreach (var member in clan.Heroes)
+                {
+                    member.AddSkillXp(DefaultSkills.Medicine, 5 * healCompetence);
+                }
+            }
+
             if (MBRandom.RandomFloat < 0.02f &&
             BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.PromoteCulture,
             out float cultureCompetence) &&

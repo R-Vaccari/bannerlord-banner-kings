@@ -182,9 +182,9 @@ namespace BannerKings.Managers.Court.Members.Tasks
                new TextObject("{=!}Improved prosperity for castles and attached villages"),
                1f);
 
-            EnforceLaw.Initialize(new TextObject("{=!}Oversee Baronies"),
-               new TextObject("{=!}The castellan is effectively a lord's official in the castellany, their area of jurisdiction. They are responsible for the upkeep and defences of castles, as well as enforcing and passing judgement if necessary."),
-               new TextObject("{=!}Improved prosperity for castles and attached villages"),
+            EnforceLaw.Initialize(new TextObject("{=!}Enforce Law"),
+               new TextObject("{=!}Oversee the enforcement of law through force or otherwise. Improved enforcement of laws provides a prosperous habitat for trade."),
+               new TextObject("{=!}Improved security\nImproved caravan attractiveness"),
                1f);
         }
     }

@@ -9,6 +9,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.UI.Court;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -48,14 +49,6 @@ namespace BannerKings.Models.Vanilla
             if (education.HasPerk(BKPerks.Instance.RitterPettySuzerain))
             {
                 baseResult.Add(0.1f, BKPerks.Instance.RitterPettySuzerain.Name);
-            }
-
-            if (owner.Culture.StringId == "battania")
-            {
-                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, owner,
-                          DefaultCouncilPositions.Instance.Elder,
-                          DefaultCouncilTasks.Instance.EncourageMilitarism,
-                          0.2f, false);
             }
 
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
@@ -106,6 +99,14 @@ namespace BannerKings.Models.Vanilla
                 {
                     baseResult.AddFactor(0.2f, new TextObject("{=HMao8su6}Tax exemption policy"));
                 }
+            }
+
+            if (village.Bound.IsCastle)
+            {
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult,
+                    owner, DefaultCouncilPositions.Instance.Castellan,
+                    DefaultCouncilTasks.Instance.OverseeBaronies,
+                    0.15f, false);
             }
 
             AddDemesneLawEffect(data, ref baseResult);
@@ -184,17 +185,6 @@ namespace BannerKings.Models.Vanilla
                         merchantGold >= 200000f ? MathF.Min(200000f * 0.000005f - 1f, 2f) : 0f;
                     explainedNumber.Add(merchantEffect, new TextObject("{=Crsf0YLd}Merchants wealth"));
                 } 
-                else if (fortification.IsCastle)
-                {
-                    var owner = fortification.OwnerClan.Leader;
-                    if (owner.Culture.StringId == "vlandia")
-                    {
-                        BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, fortification.OwnerClan.Leader,
-                            DefaultCouncilPositions.Instance.Castellan,
-                            DefaultCouncilTasks.Instance.EncourageMilitarism,
-                            1.5f, false);
-                    }
-                }
 
                 if (fortification.Governor != null)
                 {
@@ -279,6 +269,14 @@ namespace BannerKings.Models.Vanilla
                     fortification.OwnerClan.Leader, DefaultCouncilPositions.Instance.Steward,
                     DefaultCouncilTasks.Instance.DevelopEconomy,
                     1f, false);
+
+                if (fortification.IsCastle)
+                {
+                    BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber,
+                        fortification.OwnerClan.Leader, DefaultCouncilPositions.Instance.Castellan,
+                        DefaultCouncilTasks.Instance.OverseeBaronies,
+                        0.5f, false);
+                }
 
                 AddDemesneLawEffect(data, ref explainedNumber);
                 return explainedNumber;

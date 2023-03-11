@@ -219,11 +219,6 @@ namespace BannerKings.Models.BKModels
                     result.Add(0.05f, new TextObject("{=PSrEtF5L}Government"));
                 }
 
-                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
-                           DefaultCouncilPositions.Instance.Castellan,
-                           DefaultCouncilTasks.Instance.EncourageMilitarism,
-                           0.4f, false);
-
                 result.Add(legitimacy, new TextObject("{=UqLsS4GV}Legitimacy"));
             }
 
