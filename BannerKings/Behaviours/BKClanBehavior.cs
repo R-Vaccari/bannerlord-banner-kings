@@ -2,11 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BannerKings.Extensions;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Settings;
+using BannerKings.UI.Court;
+using BannerKings.Utils;
 using HarmonyLib;
 using Helpers;
 using SandBox.CampaignBehaviors;
@@ -25,6 +30,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using static TaleWorlds.CampaignSystem.SkillEffect;
+using static TaleWorlds.Core.ItemObject;
 
 namespace BannerKings.Behaviours
 {
@@ -285,7 +291,7 @@ namespace BannerKings.Behaviours
             var councillours = BannerKingsConfig.Instance.CourtManager.GetCouncilloursCount(clan);
             if (councillours != 0)
             {
-                clan.Leader.AddSkillXp(BKSkills.Instance.Lordship, councillours * 2f);
+                clan.Leader.AddSkillXp(BKSkills.Instance.Lordship, councillours * 10f);
             }
 
             if (!clan.IsUnderMercenaryService && clan.Kingdom != null)
@@ -353,6 +359,306 @@ namespace BannerKings.Behaviours
             EvaluateRecruitKnight(clan);
             EvaluateRecruitCompanion(clan);
             SetCompanionParty(clan);
+            RunCouncilTasks(clan);
+        }
+
+        private void RunCouncilTasks(Clan clan)
+        {
+            CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+            HandleSpiritual(clan, council);
+
+            if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.FamilyCare,
+                out float healCompetence))
+            {
+                foreach (var member in clan.Heroes)
+                {
+                    member.AddSkillXp(DefaultSkills.Medicine, 5 * healCompetence);
+                }
+            }
+
+            if (MBRandom.RandomFloat < 0.02f &&
+            BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.PromoteCulture,
+            out float cultureCompetence) &&
+            MBRandom.RandomFloat < cultureCompetence)
+            {
+                Hero notable = null;
+                foreach (var settlement in clan.Settlements)
+                {
+                    notable = settlement.Notables.GetRandomElementWithPredicate(x => x.Culture != clan.Culture);
+                }
+
+                if (notable != null)
+                {
+                    Campaign.Current.GetCampaignBehavior<BKNotableBehavior>()
+                    .ApplyNotableCultureConversion(notable, council.Owner);
+
+                    if (clan == Clan.PlayerClan)
+                    {
+                        CouncilMember steward = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Steward);
+                        MBInformationManager.AddQuickInformation(
+                            new TextObject("{=pwcJeEaS}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your culture!")
+                            .SetTextVariable("HERO", notable.Name),
+                            0,
+                            steward.Member.CharacterObject,
+                            Utils.Helpers.GetKingdomDecisionSound());
+                    }
+                }
+            }
+
+            if (MBRandom.RandomFloat < 0.03f &&
+            BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.OverseeDignataries,
+            out float dignatariesCompetence) &&
+            MBRandom.RandomFloat < dignatariesCompetence)
+            {
+                Hero notable = null;
+                foreach (var settlement in clan.Settlements)
+                {
+                    notable = settlement.Notables.GetRandomElement();
+                }
+
+                if (notable != null)
+                {
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(clan.Leader, notable, (int)(8 * dignatariesCompetence), false);
+                }
+
+                if (clan == Clan.PlayerClan)
+                {
+                    CouncilMember chancellor = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Chancellor);
+                    MBInformationManager.AddQuickInformation(
+                        new TextObject("{=ZwwfKpGu}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {NOTABLE} is now more favorable to us.")
+                        .SetTextVariable("NOTABLE", notable.Name),
+                        0,
+                        chancellor.Member.CharacterObject,
+                        Utils.Helpers.GetKingdomDecisionSound());
+                }
+            }
+
+            if (MBRandom.RandomFloat < 0.02f &&
+            BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.RepressCriminality,
+            out float criminalityCompetence) &&
+            MBRandom.RandomFloat < criminalityCompetence)
+            {
+                Hideout hideout = null;
+                Town town = null;
+                foreach (var fief in clan.Fiefs)
+                {
+                    if (hideout != null)
+                    {
+                        break;
+                    }
+
+                    foreach (var h in Hideout.All)
+                    {
+                        if (hideout.IsInfested && fief.Settlement.Position2D.DistanceSquared(hideout.Settlement.Position2D) < 40f * 40f)
+                        {
+                            hideout = h;
+                            town = fief;
+                            break;
+                        }
+                    }
+                }
+
+                if (hideout != null)
+                {
+                    foreach (var party in hideout.Owner.Settlement.Parties)
+                    {
+                        DestroyPartyAction.Apply(null, party);
+                    }
+
+                    foreach (var notable in town.Settlement.Notables)
+                    {
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(clan.Leader, notable, 3, false);
+                    }
+
+                    if (clan == Clan.PlayerClan)
+                    {
+                        CouncilMember spymaster = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spymaster);
+                        MBInformationManager.AddQuickInformation(new TextObject("{=6vgsdLQp}{?PLAYER.GENDER}My lady{?}My lord{\\?}, the hideout near {FIEF} was exterminated.")
+                            .SetTextVariable("FIEF", town.Name),
+                            0,
+                            spymaster.Member.CharacterObject,
+                            Utils.Helpers.GetKingdomDecisionSound());
+                    }
+                }
+            }
+
+            if (MBRandom.RandomFloat < 0.02f && clan.Kingdom != null &&
+               BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.ArbitrateRelations,
+               out float relationsCompetence) &&
+               MBRandom.RandomFloat < relationsCompetence)
+            {
+                Hero clanLeader = null;
+                List<Hero> leaders = new List<Hero>();
+                foreach (var c in clan.Kingdom.Clans)
+                {
+                    if (c != clan && !c.IsUnderMercenaryService)
+                    {
+                        leaders.Add(c.Leader);
+                    }
+                }
+
+                clanLeader = leaders.GetRandomElement();
+                if (clanLeader != null)
+                {
+                    ChangeRelationAction.ApplyPlayerRelation(clanLeader, 
+                        (int)(10 * relationsCompetence), 
+                        false,
+                        false);
+
+                    if (clan == Clan.PlayerClan)
+                    {
+                        CouncilMember chancellor = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Chancellor);
+                        MBInformationManager.AddQuickInformation(
+                            new TextObject("{=r8s1f28d}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} is now more favorable to us.")
+                            .SetTextVariable("HERO", clanLeader.Name),
+                            0,
+                            chancellor.Member.CharacterObject,
+                            Utils.Helpers.GetKingdomDecisionSound());
+                    }
+                }
+            }
+
+            if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.EducateFamilyAntiquarian,
+               out float antiquarianCompetence))
+            {
+                foreach (var member in clan.Lords)
+                {
+                    member.AddSkillXp(BKSkills.Instance.Scholarship, 10 * antiquarianCompetence);
+                }
+            }
+
+            float smithCompetence;
+            if (MBRandom.RandomFloat < 0.02f &&
+               (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.SmithArmors,
+               out smithCompetence) ||
+               BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.SmithBardings,
+               out smithCompetence) ||
+               BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.SmithWeapons,
+               out smithCompetence)) &&
+               MBRandom.RandomFloat < smithCompetence)
+            {
+                CouncilMember smith = council.GetCouncilPosition(DefaultCouncilPositions.Instance.CourtSmith);
+                List<ItemTypeEnum> types = new List<ItemTypeEnum>();
+                if (smith.CurrentTask.StringId == DefaultCouncilTasks.Instance.SmithArmors.StringId)
+                {
+                    types.Add(ItemTypeEnum.ChestArmor);
+                    types.Add(ItemTypeEnum.HeadArmor);
+                    types.Add(ItemTypeEnum.HandArmor);
+                    types.Add(ItemTypeEnum.LegArmor);
+                    types.Add(ItemTypeEnum.Cape);
+                }
+
+                if (smith.CurrentTask.StringId == DefaultCouncilTasks.Instance.SmithWeapons.StringId)
+                {
+                    types.Add(ItemTypeEnum.Polearm);
+                    types.Add(ItemTypeEnum.OneHandedWeapon);
+                    types.Add(ItemTypeEnum.TwoHandedWeapon);
+                }
+
+                if (smith.CurrentTask.StringId == DefaultCouncilTasks.Instance.SmithBardings.StringId)
+                {
+                    types.Add(ItemTypeEnum.HorseHarness);
+                }
+
+                int smithingSkill = smith.Member.GetSkillValue(DefaultSkills.Crafting);
+                ItemObject item = null;
+                List<ItemObject> items = new List<ItemObject>();
+                foreach (var i in Game.Current.ObjectManager.GetObjectTypeList<ItemObject>())
+                {
+                    if (types.Contains(i.ItemType) && !i.IsUniqueItem && i.Tierf > 3f && 
+                        BannerKingsConfig.Instance.SmithingModel.GetItemDifficulty(i) <= smithingSkill)
+                    {
+                        items.Add(i);
+                    } 
+                }
+
+                item = items.GetRandomElement();
+                if (item != null)
+                {
+                  
+
+                    if (clan == Clan.PlayerClan)
+                    {
+                        MBInformationManager.AddQuickInformation(
+                            new TextObject("{=4ztP2tnz}{?PLAYER.GENDER}My lady{?}My lord{\\?}, I forged you the {ITEM}.")
+                            .SetTextVariable("ITEM", item.Name),
+                            0,
+                            smith.Member.CharacterObject,
+                            Utils.Helpers.GetKingdomDecisionSound());
+                    }
+                }
+            }
+        }
+
+        private void HandleSpiritual(Clan clan, CouncilData council)
+        {
+            ExceptionUtils.TryCatch(() =>
+            {
+                if (MBRandom.RandomFloat < 0.02f &&
+                BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.PromoteFaith,
+                out float faithCompetence) &&
+                MBRandom.RandomFloat < faithCompetence)
+                {
+                    Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
+                    Hero notable = null;
+                    foreach (var settlement in clan.Settlements)
+                    {
+                        notable = settlement.Notables.GetRandomElementWithPredicate(x =>
+                        {
+                            var notableRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(x);
+                            return notableRel == null || !notableRel.Equals(rel);
+                        });
+                    }
+
+                    if (notable != null)
+                    {
+                        Campaign.Current.GetCampaignBehavior<BKNotableBehavior>()
+                        .ApplyNotableFaithConversion(notable, council.Owner, true);
+
+                        if (clan == Clan.PlayerClan)
+                        {
+                            CouncilMember spiritual = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spiritual);
+                            MBInformationManager.AddQuickInformation(
+                                new TextObject("{=MEby26tQ}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your faith!")
+                                .SetTextVariable("HERO", notable.Name),
+                                0,
+                                spiritual.Member.CharacterObject,
+                                Utils.Helpers.GetKingdomDecisionSound());
+                        }
+                    }
+                }
+
+                if (MBRandom.RandomFloat < 0.02f &&
+                BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.CultivatePiety,
+                out float pietyCompetence) &&
+                MBRandom.RandomFloat < pietyCompetence)
+                {
+                    Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
+                    Hero hero = clan.Heroes.GetRandomElementWithPredicate(x =>
+                    {
+                        var heroRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(x);
+                        return heroRel == null || !heroRel.Equals(rel);
+                    });
+
+                    if (hero != null)
+                    {
+                        Campaign.Current.GetCampaignBehavior<BKNotableBehavior>()
+                        .ApplyNotableFaithConversion(hero, council.Owner, true);
+
+                        if (clan == Clan.PlayerClan)
+                        {
+                            CouncilMember spiritual = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spiritual);
+                            MBInformationManager.AddQuickInformation(
+                                new TextObject("{=MEby26tQ}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your faith!")
+                                .SetTextVariable("HERO", hero.Name),
+                                0,
+                                spiritual.Member.CharacterObject,
+                                Utils.Helpers.GetKingdomDecisionSound());
+                        }
+                    }
+                }
+            }, this.GetType().Name,
+            false);
         }
 
         private void SetCompanionParty(Clan clan)
@@ -528,10 +834,7 @@ namespace BannerKings.Behaviours
                     PerkRole.Scout,
                     new List<TraitObject>
                     {
-                        DefaultTraits.WoodsScoutSkills,
-                        DefaultTraits.SteppeScoutSkills,
-                        DefaultTraits.HillScoutSkills,
-                        DefaultTraits.DesertScoutSkills
+                        DefaultTraits.ScoutSkills
                     }
                 },
                 {PerkRole.Surgeon, new List<TraitObject> {DefaultTraits.Surgery}},
@@ -770,6 +1073,16 @@ namespace BannerKings.Behaviours
 
                 }
             }
+
+            [HarmonyPostfix]
+            [HarmonyPatch("ShouldBeCancelledInternal")]
+            private static void ShouldBeCancelledInternalPostfix(SettlementClaimantDecision __instance, ref bool __result)
+            {
+                if (!__instance.Settlement.Town.IsOwnerUnassigned)
+                {
+                    __result = true;
+                }
+            }
         }
 
         [HarmonyPatch(typeof(LordConversationsCampaignBehavior))]
@@ -874,7 +1187,7 @@ namespace BannerKings.Behaviours
                                             .CalculateTownTax(title.fief.Town).ResultNumber;
                                     }
 
-                                    partyComponent.MobileParty.PaymentLimit = (int) (50f + limit);
+                                    partyComponent.MobileParty.SetWagePaymentLimit((int)(50f + limit));
                                 }
                             }
                         }
@@ -882,7 +1195,7 @@ namespace BannerKings.Behaviours
                         foreach (var partyComponent in clan.WarPartyComponents)
                         {
                             var share = income / clan.WarPartyComponents.Count - knights;
-                            partyComponent.MobileParty.PaymentLimit = (int) (300f + share);
+                            partyComponent.MobileParty.SetWagePaymentLimit((int) (300f + share));
                         }
 
                         return false;
@@ -958,49 +1271,13 @@ namespace BannerKings.Behaviours
             }
 
             [HarmonyPrefix]
-            [HarmonyPatch("AddExpensesFromGarrisons", MethodType.Normal)]
-            private static bool GarrisonsPrefix(Clan clan, ref ExplainedNumber goldChange,
-                bool applyWithdrawals = false)
-            {
-                if (BannerKingsConfig.Instance.TitleManager != null)
-                {
-                    var model = new DefaultClanFinanceModel();
-                    var calculateWage = model.GetType().GetMethod("CalculatePartyWage",
-                        BindingFlags.Instance | BindingFlags.NonPublic);
-                    if (clan == Clan.PlayerClan)
-                    {
-                        Console.WriteLine();
-                    }
-
-                    foreach (var town in clan.Fiefs)
-                    {
-                        var garrisonParty = town.GarrisonParty;
-
-                        if (garrisonParty is {IsActive: true})
-                        {
-                            var wage = (int) calculateWage.Invoke(model,
-                                new object[] {garrisonParty, clan.Gold, applyWithdrawals});
-                            if (wage > 0)
-                            {
-                                goldChange.Add(-wage, new TextObject("{=tqCSk7ya}Party wages {A0}"),
-                                    garrisonParty.Name);
-                            }
-                        }
-                    }
-
-                    return false;
-                }
-
-                return true;
-            }
-
-            [HarmonyPrefix]
-            [HarmonyPatch("AddExpensesFromParties", MethodType.Normal)]
+            [HarmonyPatch("AddExpensesFromPartiesAndGarrisons", MethodType.Normal)]
             private static bool PartyExpensesPrefix(Clan clan, ref ExplainedNumber goldChange,
-                bool applyWithdrawals = false)
+                bool applyWithdrawals, bool includeDetails)
             {
                 if (BannerKingsConfig.Instance.TitleManager != null)
                 {
+                    ExplainedNumber explainedNumber = new ExplainedNumber(0f, goldChange.IncludeDescriptions, null);
                     var list = new List<MobileParty>();
                     foreach (var hero in clan.Lords)
                     foreach (var caravanPartyComponent in hero.OwnedCaravans)
@@ -1019,34 +1296,95 @@ namespace BannerKings.Behaviours
                         list.Add(warPartyComponent.MobileParty);
                     }
 
-                    var model = new DefaultClanFinanceModel();
-                    var addExpense = model.GetType()
-                        .GetMethod("AddPartyExpense", BindingFlags.Instance | BindingFlags.NonPublic);
-                    foreach (var mobileParty in list)
+                    foreach (Town town in clan.Fiefs)
                     {
-                        if (mobileParty.LeaderHero != null && mobileParty.LeaderHero != clan.Leader)
+                        if (town.GarrisonParty != null && town.GarrisonParty.IsActive)
                         {
-                            object[] array = {mobileParty, clan, new ExplainedNumber(), applyWithdrawals};
-                            addExpense.Invoke(model, array);
-                            if (BannerKingsConfig.Instance.TitleManager.GetHighestTitle(mobileParty.LeaderHero) == null)
-                            {
-                                goldChange.Add(((ExplainedNumber) array[2]).ResultNumber,
-                                    new TextObject("{=tqCSk7ya}Party wages {A0}"), mobileParty.Name);
-                            }
-                            else
-                            {
-                                var calculateWage = model.GetType().GetMethod("CalculatePartyWage",
-                                    BindingFlags.Instance | BindingFlags.NonPublic);
-                                var wage = (int) calculateWage.Invoke(model,
-                                    new object[] {mobileParty, mobileParty.LeaderHero.Gold, applyWithdrawals});
-                                if (applyWithdrawals)
-                                {
-                                    mobileParty.LeaderHero.Gold -= MathF.Min(mobileParty.LeaderHero.Gold, wage);
-                                }
-                            }
+                            list.Add(town.GarrisonParty);
                         }
                     }
 
+                    var model = new DefaultClanFinanceModel();
+                    var getWage = model.GetType()
+                        .GetMethod("CalculatePartyWage", BindingFlags.Instance | BindingFlags.NonPublic);
+                    foreach (var party in list)
+                    {
+                        int budget = clan.Gold + (int)goldChange.ResultNumber + (int)goldChange.ResultNumber;
+                        object[] array = {party, budget, applyWithdrawals};
+                        int expense = (int)getWage.Invoke(model, array);
+
+                        if (applyWithdrawals)
+                        {
+                            if (party.IsLordParty)
+                            {
+                                if (party.LeaderHero != null)
+                                {
+                                    party.LeaderHero.Gold -= expense;
+                                }
+                                else
+                                {
+                                    party.ActualClan.Leader.Gold -= expense;
+                                }
+                            }
+                            else
+                            {
+                                party.PartyTradeGold -= expense;
+                            }
+                        }
+
+                        if (party.LeaderHero != null && party.LeaderHero != clan.Leader)
+                        {
+                            if (BannerKingsConfig.Instance.TitleManager.GetHighestTitle(party.LeaderHero) != null)
+                            {
+                                continue;
+                            }
+                        }
+
+                        if (applyWithdrawals)
+                        {
+                            bool needsExtra = false;
+                            if (party.IsLordParty && party.LeaderHero != null)
+                            {
+                                needsExtra = party.LeaderHero.Gold < 5000;
+                            }
+                            else
+                            {
+                                needsExtra = party.PartyTradeGold< 5000;
+                            }
+
+                            if (needsExtra && (expense + 200) < budget)
+                            {
+                                expense += 200;
+                            }
+
+                            int refund = MathF.Min(expense, budget);
+                            if (party.IsLordParty)
+                            {
+                                if (party.LeaderHero != null)
+                                {
+                                    party.LeaderHero.Gold += refund;
+                                }
+                                else
+                                {
+                                    party.ActualClan.Leader.Gold += refund;
+                                }
+                            }
+                            else
+                            {
+                                party.PartyTradeGold += refund;
+                            }
+                        }
+
+                        explainedNumber.Add(-expense,new TextObject("{=tqCSk7ya}Party wages {A0}"), party.Name);
+                    }
+
+                    if (!includeDetails)
+                    {
+                        goldChange.Add(explainedNumber.ResultNumber, new TextObject("{=ChUDSiJw}Garrison and Party Expense", null), null);
+                        return false;
+                    }
+
+                    goldChange.AddFromExplainedNumber(explainedNumber, new TextObject("{=ChUDSiJw}Garrison and Party Expense", null));
                     return false;
                 }
 
@@ -1054,57 +1392,63 @@ namespace BannerKings.Behaviours
             }
 
             [HarmonyPrefix]
-            [HarmonyPatch("AddVillagesIncome", MethodType.Normal)]
-            private static bool VillageIncomePrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
+            [HarmonyPatch("AddSettlementIncome", MethodType.Normal)]
+            private static bool VillageIncomePrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals, bool includeDetails)
             {
                 if (BannerKingsConfig.Instance.TitleManager != null)
                 {
-                    int totalGold = 0;
-                    var lordships = BannerKingsConfig.Instance.TitleManager
-                        .GetAllDeJure(clan)
-                        .FindAll(x => x.type == TitleType.Lordship);
-                    var addedVillages = new Dictionary<Village, Hero>();
-
-                    foreach (FeudalTitle lordship in lordships)
+                    ExplainedNumber explainedNumber = new ExplainedNumber(0f, goldChange.IncludeDescriptions, null);
+                    foreach (Town town in clan.Fiefs)
                     {
-                        Village village = lordship.fief.Village;
-                        if (village.Settlement.MapFaction == clan.MapFaction)
-                        {
-                            addedVillages.Add(village, lordship.deJure);
-                        }
-                    }
-
-                    foreach (Village village in clan.Villages)
-                    {
-                        if (addedVillages.ContainsKey(village))
-                        {
-                            continue;
-                        }
-
-                        var lordship = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
-                        if (lordship != null && lordship.deJure != null && lordship.deJure.MapFaction != clan.MapFaction)
-                        {
-                            addedVillages.Add(village, clan.Leader);
-                        }
-                    }
-
-                    foreach (var pair in addedVillages)
-                    {
-                        Hero owner = pair.Value;
-                        Village village = pair.Key;
-                        int income = CalculateVillageIncome(village);
-                        if (owner == clan.Leader)
-                        {
-                            totalGold += income;
-                        }
-
+                        ExplainedNumber explainedNumber2 = new ExplainedNumber((float)((int)((float)town.TradeTaxAccumulated / 5f)), false, null);
+                        int num = MathF.Round(explainedNumber2.ResultNumber);
+                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.ContentTrades, town, ref explainedNumber2);
+                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Crossbow.Steady, town, ref explainedNumber2);
+                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Roguery.SaltTheEarth, town, ref explainedNumber2);
+                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.GivingHands, town, ref explainedNumber2);
                         if (applyWithdrawals)
                         {
-                            ApplyWithdrawal(village, income, owner == clan.Leader ? null : owner);
+                            town.TradeTaxAccumulated -= num;
+                            if (clan == Clan.PlayerClan)
+                            {
+                                CampaignEventDispatcher.Instance.OnPlayerEarnedGoldFromAsset(DefaultClanFinanceModel.AssetIncomeType.Taxes, (int)explainedNumber2.ResultNumber);
+                            }
+                        }
+                        int num2 = (int)Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(town, false).ResultNumber;
+                        explainedNumber.Add((float)num2, new TextObject("{=TLuaPAIO}{A0} Taxes", null), town.Name);
+                        explainedNumber.Add(explainedNumber2.ResultNumber, new TextObject("{=wVMPdc8J}{A0}'s tariff", null), town.Name);
+                        if (town.CurrentDefaultBuilding != null && town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Engineering.ArchitecturalCommisions))
+                        {
+                            explainedNumber.Add(DefaultPerks.Engineering.ArchitecturalCommisions.SecondaryBonus, new TextObject("{=uixuohBp}Settlement Projects", null), null);
                         }
                     }
 
-                    goldChange.Add(totalGold, new TextObject("{=GikQuojv}Village Demesnes"));
+                    int villageTotal = 0;
+                    foreach (Village village in clan.GetActualVillages())
+                    {
+                        FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
+                        var income = CalculateVillageIncome(village);
+                        if (title != null && title.deJure != clan.Leader && applyWithdrawals)
+                        {
+                            ApplyWithdrawal(village, income, title.deJure);
+                        }
+                        else
+                        {
+                            villageTotal += income;
+                            if (applyWithdrawals)
+                            {
+                                ApplyWithdrawal(village, income);
+                            }
+                        }
+                    }
+
+                    goldChange.Add(villageTotal, new TextObject("{=GikQuojv}Village Demesnes"));
+                    if (!includeDetails)
+                    {
+                        goldChange.Add(explainedNumber.ResultNumber, new TextObject("{=AewK9qME}Settlement Income", null), null);
+                        return false;
+                    }
+                    goldChange.AddFromExplainedNumber(explainedNumber, new TextObject("{=AewK9qME}Settlement Income", null));
                     return false;
                 }
 

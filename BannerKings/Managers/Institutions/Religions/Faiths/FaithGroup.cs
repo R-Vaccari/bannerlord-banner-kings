@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
+using System.Collections.Generic;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -19,7 +20,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         public TextObject Description { get; }
 
-        public MBReadOnlyList<Faith> Members => members.GetReadOnlyList();
+        public MBReadOnlyList<Faith> Members => new MBReadOnlyList<Faith>(members);
 
         public void AddMember(Faith faith)
         {

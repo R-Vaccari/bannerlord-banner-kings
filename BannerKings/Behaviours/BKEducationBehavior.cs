@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Skills;
@@ -98,21 +99,24 @@ namespace BannerKings.Behaviours
 
         private void OnPerkOpened(Hero hero, PerkObject perk)
         {
-            if (hero != Hero.MainHero || perk.AlternativePerk == null || hero.GetPerkValue(perk.AlternativePerk))
+            if (perk.AlternativePerk == null || hero.GetPerkValue(perk.AlternativePerk))
             {
                 return;
             }
 
             if (perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic)
             {
-                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=Vjg2DuT1}Double Perks").ToString(),
-                    new TextObject("{=eodABOkZ}From now on, double perks will be yielded for the {SKILL} skill. The perks will be rewarded after closing the Character tab with 'Done', not immediatly after selecting them.")
+                if (hero == Hero.MainHero)
+                {
+                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=Vjg2DuT1}Double Perks").ToString(),
+                        new TextObject("{=eodABOkZ}From now on, double perks will be yielded for the {SKILL} skill. The perks will be rewarded after closing the Character tab with 'Done', not immediatly after selecting them.")
                         .SetTextVariable("SKILL", perk.Skill.Name)
                         .ToString(),
-                    true, false,
-                    GameTexts.FindText("str_selection_widget_accept").ToString(),
-                    string.Empty,
-                    null, null, string.Empty));
+                        true, false,
+                        GameTexts.FindText("str_selection_widget_accept").ToString(),
+                        string.Empty,
+                        null, null, string.Empty));
+                }
             }
             else
             {
@@ -123,8 +127,11 @@ namespace BannerKings.Behaviours
                 }
 
                 hero.HeroDeveloper.AddPerk(perk.AlternativePerk);
-                MBInformationManager.AddQuickInformation(new TextObject("{=nk8mBkVd}You have received the {PERK} as a double perk yield reward.")
-                    .SetTextVariable("PERK", perk.AlternativePerk.Name));
+                if (hero == Hero.MainHero)
+                {
+                    MBInformationManager.AddQuickInformation(new TextObject("{=nk8mBkVd}You have received the {PERK} as a double perk yield reward.")
+                                        .SetTextVariable("PERK", perk.AlternativePerk.Name));
+                }
             }
         }
 
@@ -152,10 +159,10 @@ namespace BannerKings.Behaviours
                     var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero.Clan);
                     if (council != null)
                     {
-                        var councilMember = council.GetMemberFromPosition(Managers.Court.CouncilPosition.Philosopher);
+                        var councilMember = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Philosopher);
                         if (councilMember != null && councilMember.Member != null)
                         {
-                            var skill = 5 * councilMember.Competence;
+                            var skill = 5 * councilMember.Competence.ResultNumber;
                             hero.AddSkillXp(BKSkills.Instance.Scholarship, (int)skill);
                         }
                     }
@@ -562,7 +569,7 @@ namespace BannerKings.Behaviours
             {
                 var list = new List<CharacterAttribute>(BKAttributes.AllAttributes);
                 list.Remove(BKAttributes.Instance.Wisdom);
-                __result = list.GetReadOnlyList();
+                __result = new MBReadOnlyList<CharacterAttribute>(list);
                 return false;
             }
         }

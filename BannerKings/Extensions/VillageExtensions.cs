@@ -7,7 +7,7 @@ namespace BannerKings.Extensions
     {
         public static Hero GetActualOwner(this Village village)
         {
-            var owner = village.Settlement.Owner;
+            var owner = village.Settlement.OwnerClan.Leader;
             var title = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
             if (title != null && title.deJure != null)
             {

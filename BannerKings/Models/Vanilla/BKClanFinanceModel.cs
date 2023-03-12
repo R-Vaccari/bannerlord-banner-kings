@@ -80,9 +80,9 @@ namespace BannerKings.Models.Vanilla
         public override int CalculateOwnerIncomeFromCaravan(MobileParty caravan) => 
             (int)(BannerKingsSettings.Instance.RealisticCaravanIncome ? 0f : MathF.Max(0f, (caravan.PartyTradeGold - 10000) / 2f));
 
-        public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
+        public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false, bool includeDetails = false)
         {
-            var baseResult = base.CalculateClanGoldChange(clan, true, applyWithdrawals);
+            var baseResult = base.CalculateClanGoldChange(clan, true, applyWithdrawals, includeDetails);
             if (BannerKingsConfig.Instance.TitleManager == null)
             {
                 return baseResult;
@@ -94,9 +94,9 @@ namespace BannerKings.Models.Vanilla
             return baseResult;
         }
 
-        public override ExplainedNumber CalculateClanIncome(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
+        public override ExplainedNumber CalculateClanIncome(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false, bool includeDetails = false)
         {
-            var baseResult = base.CalculateClanIncome(clan, includeDescriptions, applyWithdrawals);
+            var baseResult = base.CalculateClanIncome(clan, includeDescriptions, applyWithdrawals, includeDetails);
             if (BannerKingsConfig.Instance.TitleManager != null)
             {
                 AddIncomes(clan, ref baseResult, applyWithdrawals);
@@ -105,9 +105,9 @@ namespace BannerKings.Models.Vanilla
             return baseResult;
         }
 
-        public override ExplainedNumber CalculateClanExpenses(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
+        public override ExplainedNumber CalculateClanExpenses(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false, bool includeDetails = false)
         {
-            var baseResult = base.CalculateClanExpenses(clan, includeDescriptions, applyWithdrawals);
+            var baseResult = base.CalculateClanExpenses(clan, includeDescriptions, applyWithdrawals, includeDetails);
             if (BannerKingsConfig.Instance.TitleManager != null)
             {
                 AddExpenses(clan, ref baseResult, applyWithdrawals);

@@ -1,4 +1,3 @@
-using System.Linq;
 using BannerKings.Behaviours.Workshops;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
@@ -91,13 +90,39 @@ namespace BannerKings.Models.Vanilla
                 result *= 1.15f;
             }
 
-            if (workshop.Owner.IsNotable && workshop.Owner.OwnedCommonAreas.Count == 0)
+            if (workshop.Owner.IsNotable && workshop.Owner.OwnedAlleys.Count == 0)
             {
                 result *= 1.15f;
             }
 
             result *= 1f + (Hero.MainHero.OwnedWorkshops.Count * 0.05f);
             return (int) result;
+        }
+
+        public ExplainedNumber GetBuyingCostExplained(Workshop workshop, Hero buyer, bool descriptions = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(base.GetSellingCost(workshop), descriptions, 
+                new TextObject("{=LiC18pJC}Equipment costs"));
+            result.Add((int)(GetDailyExpense(workshop).ResultNumber * 15f * CampaignTime.DaysInYear));
+
+            result.Add(GetInventoryCost(workshop), new TextObject("{=u5LQxWO5}Workshop inventory"));
+
+            if (workshop.Owner.OwnedWorkshops.Count == 1)
+            {
+                result.AddFactor(0.15f, new TextObject("{=jiLxCXBW}{OWNER}'s only workshop")
+                    .SetTextVariable("OWNER", workshop.Owner.Name));
+            }
+
+            if (workshop.Owner.IsNotable && workshop.Owner.OwnedAlleys.Count == 0 && workshop.Owner.OwnedCaravans.Count == 0)
+            {
+                result.AddFactor(0.15f, new TextObject("{=uNzd25jE}{OWNER} has no other incomes")
+                    .SetTextVariable("OWNER", workshop.Owner.Name));
+            }
+
+            result.AddFactor(buyer.OwnedWorkshops.Count * 0.05f, new TextObject("{=jhWhrK2B}{BUYER} has {COUNT} workshop(s)")
+                .SetTextVariable("BUYER", buyer.Name)
+                .SetTextVariable("COUNT", buyer.OwnedWorkshops.Count));
+            return result;
         }
 
         public int GetInventoryCost(Workshop workshop)

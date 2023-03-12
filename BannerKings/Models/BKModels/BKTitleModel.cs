@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -17,10 +18,11 @@ namespace BannerKings.Models.BKModels
             return new ExplainedNumber();
         }
 
-        public ExplainedNumber GetSuccessionHeirScore(Hero currentLeader, Hero candidate, FeudalContract contract, bool explanations = false)
+        public ExplainedNumber GetSuccessionHeirScore(Hero currentLeader, Hero candidate, FeudalTitle title, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
 
+            FeudalContract contract = title.contract;
             var succession = contract.Succession;
             if (succession == SuccessionType.Imperial)
             {
@@ -60,18 +62,25 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            if (succession == SuccessionType.Elective_Monarchy)
+            if (succession == SuccessionType.FeudalElective)
             {
-                var government = contract.Government;
-                if (government == GovernmentType.Tribal)
+                if (GetInheritanceCandidates(currentLeader).Contains(candidate))
                 {
-                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 2, GameTexts.FindText("str_notable_power"));
+                    result = GetInheritanceHeirScore(currentLeader, candidate, contract, explanations);
+                    result.Add(300f, new TextObject("{=x5vKZHNN}Former ruler's clan"));
                 }
 
-                if (government == GovernmentType.Feudal)
+                if (title.HeroHasValidClaim(candidate))
                 {
-                    result.Add(candidate.GetSkillValue(BKSkills.Instance.Lordship) * 0.1f, BKSkills.Instance.Lordship.Name);
+                    result.Add(200f, new TextObject("{=ipGDmaBZ}Claimant"));
                 }
+
+                result.Add(candidate.Clan.Tier * 50f, GameTexts.FindText("str_clan_tier_bonus"));
+            }
+
+            if (succession == SuccessionType.Elective_Monarchy)
+            {
+                result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 2, GameTexts.FindText("str_notable_power"));
             }
 
             if (candidate.Culture != currentLeader.Clan.Kingdom.Culture)
@@ -85,8 +94,6 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber GetInheritanceHeirScore(Hero currentLeader, Hero candidate, FeudalContract contract, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
-
-
             if (contract == null)
             {
                 contract = new FeudalContract(null, null,
@@ -148,7 +155,7 @@ namespace BannerKings.Models.BKModels
             foreach (Hero hero in candidates)
             {
                 var explanation = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(leader,
-                    hero, contract, true);
+                    hero, title, true);
                 explanations.Add(hero, explanation);
             }
 
@@ -177,16 +184,55 @@ namespace BannerKings.Models.BKModels
                     select x).Take(count);
         }
 
-        public HashSet<Hero> GetSuccessionCandidates(Hero currentLeader, FeudalContract contract)
+        public HashSet<Hero> GetSuccessionCandidates(Hero currentLeader, FeudalTitle title)
         {
             var list = new HashSet<Hero>();
-            var succession = contract.Succession;
+            var succession = title.contract.Succession;
 
             if (succession == SuccessionType.Hereditary_Monarchy)
             {
                 foreach (Hero hero in GetInheritanceCandidates(currentLeader))
                 {
                     list.Add(hero);
+                }
+            }
+
+            if (succession == SuccessionType.FeudalElective)
+            {
+                foreach (Hero hero in GetInheritanceCandidates(currentLeader))
+                {
+                    list.Add(hero);
+                }
+
+                foreach (var claimant in title.Claims)
+                {
+                    Hero hero = claimant.Key;
+                    if (claimant.Value != ClaimType.Ongoing && claimant.Value != ClaimType.None)
+                    {
+                        if (hero.IsClanLeader() && !list.Contains(hero))
+                        {
+                            list.Add(hero);
+                        }
+                    }
+                }
+
+                if (list.Count < 5)
+                {
+                    int count = list.Count;
+                    while (count < 5)
+                    {
+                        int tier = 6;
+                        foreach (var clan in currentLeader.Clan.Kingdom.Clans)
+                        {
+                            if (clan.Tier >= tier && clan != currentLeader.Clan && !list.Contains(clan.Leader))
+                            {
+                                list.Add(clan.Leader);
+                                count++;
+                            }
+                        }
+
+                        tier--;
+                    }
                 }
             }
             else
@@ -356,7 +402,7 @@ namespace BannerKings.Models.BKModels
                 return claimAction;
             }
 
-            if (!possibleClaimants.Contains(claimant))
+            if (!possibleClaimants.ContainsKey(claimant))
             {
                 claimAction.Possible = false;
                 claimAction.Reason = new TextObject("{=KR2fio4X}Not a possible claimant.");
@@ -710,9 +756,9 @@ namespace BannerKings.Models.BKModels
             return heroes;
         }
 
-        public List<Hero> GetClaimants(FeudalTitle title)
+        public Dictionary<Hero, TextObject> GetClaimants(FeudalTitle title)
         {
-            var claimants = new List<Hero>();
+            var claimants = new Dictionary<Hero, TextObject>();
             var deFacto = title.DeFacto;
             if (deFacto != title.deJure)
             {
@@ -720,27 +766,27 @@ namespace BannerKings.Models.BKModels
                 {
                     if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(deFacto))
                     {
-                        claimants.Add(deFacto);
+                        claimants.Add(deFacto, new TextObject("{=XRMMs6QY}De facto title holder"));
                     }
                 }
                 else
                 {
-                    claimants.Add(deFacto);
+                    claimants.Add(deFacto, new TextObject("{=TqfaGy3U}De facto fief holder"));
                 }
             }
 
-            if (title.sovereign != null && title.sovereign.deJure != title.deJure)
+            if (title.sovereign != null && title.sovereign.deJure != title.deJure && !claimants.ContainsKey(title.sovereign.deJure))
             {
-                claimants.Add(title.sovereign.deJure);
+                claimants.Add(title.sovereign.deJure, new TextObject("{=pkZ0J4Fo}De jure sovereign of this title"));
             }
 
             if (title.vassals is {Count: > 0})
             {
                 foreach (var vassal in title.vassals)
                 {
-                    if (vassal.deJure != title.deJure)
+                    if (vassal.deJure != null && vassal.deJure != title.deJure && !claimants.ContainsKey(vassal.deJure))
                     {
-                        claimants.Add(vassal.deJure);
+                        claimants.Add(vassal.deJure, new TextObject("{=J07mQQ6k}De jure vassal of this title"));
                     }
                 }
             }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Extensions;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
@@ -74,6 +75,16 @@ namespace BannerKings.Managers.Titles
 
         public Dictionary<Hero, CampaignTime> OngoingClaims => ongoingClaims ??= new Dictionary<Hero, CampaignTime>();
 
+        public bool HeroHasValidClaim(Hero hero)
+        {
+            if (Claims.ContainsKey(hero))
+            {
+                return Claims[hero] != ClaimType.None && Claims[hero] != ClaimType.Ongoing;
+            }
+
+            return false;
+        }
+
         public string StringId => stringId;
 
         public TextObject FullName
@@ -93,6 +104,10 @@ namespace BannerKings.Managers.Titles
             {
                 if (fief != null)
                 {
+                    if (fief.IsVillage)
+                    {
+                        return fief.Village.GetActualOwner();
+                    }
                     return fief.Owner;
                 }
 

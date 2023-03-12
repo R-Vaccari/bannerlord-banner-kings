@@ -473,7 +473,7 @@ namespace BannerKings.Behaviours.Marriage
                            Utils.Helpers.SetAlliance(Clan.PlayerClan, Hero.OneToOneConversationHero.Clan);
                        }
 
-                       if (proposedMarriage.Feast)
+                       if (proposedMarriage.Feast && proposedMarriage.FinalClan.Kingdom != null)
                        {
                            AnnounceBetrothal();
                            var town = proposedMarriage.FinalClan.Fiefs.GetRandomElement();

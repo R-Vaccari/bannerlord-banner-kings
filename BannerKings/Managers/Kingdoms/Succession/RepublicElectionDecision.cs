@@ -8,7 +8,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Kingdoms
+namespace BannerKings.Managers.Kingdoms.Succession
 {
     public class RepublicElectionDecision : BKKingElectionDecision
     {
@@ -56,8 +56,8 @@ namespace BannerKings.Managers.Kingdoms
             }
 
             var enumerable = (from t in dictionary
-                orderby t.Value descending
-                select t).Take(3);
+                              orderby t.Value descending
+                              select t).Take(3);
             foreach (var keyValuePair in enumerable)
             {
                 yield return new KingSelectionDecisionOutcome(keyValuePair.Key.Leader);

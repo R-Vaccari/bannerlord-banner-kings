@@ -58,11 +58,11 @@ namespace BannerKings.Components
                 {
                     mobileParty.SetPartyUsedByQuest(true);
                     mobileParty.Party.Visuals.SetMapIconAsDirty();
-                    mobileParty.SetInitiative(0f, 1f, float.MaxValue);
+                    mobileParty.Ai.SetInitiative(0f, 1f, float.MaxValue);
                     mobileParty.ShouldJoinPlayerBattles = false;
                     mobileParty.Aggressiveness = 0f;
                     mobileParty.Ai.DisableAi();
-                    mobileParty.SetMoveGoToSettlement(target);
+                    mobileParty.Ai.SetMoveGoToSettlement(target);
                 });
         }
 
@@ -254,28 +254,24 @@ namespace BannerKings.Components
                 {
                     if (target.IsVillage)
                     {
-                        MobileParty.Ai.SetAIState(AIState.VisitingVillage);
                         if (target.Village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided)
                         {
-                            MobileParty.SetMoveModeHold();
+                            MobileParty.Ai.SetMoveModeHold();
                         }
                         else
                         {
-                            MobileParty.Ai.SetAIState(AIState.VisitingVillage);
-                            MobileParty.SetMoveGoToSettlement(target);
+                            MobileParty.Ai.SetMoveGoToSettlement(target);
                         }
                     }
                     else
                     {
-                        MobileParty.Ai.SetAIState(AIState.VisitingNearbyTown);
                         if (!target.IsUnderSiege)
                         {
-                            MobileParty.Ai.SetAIState(AIState.VisitingNearbyTown);
-                            MobileParty.SetMoveGoToSettlement(target);
+                            MobileParty.Ai.SetMoveGoToSettlement(target);
                         }
                         else
                         {
-                            MobileParty.SetMoveModeHold();
+                            MobileParty.Ai.SetMoveModeHold();
                         }
                     }
                 }
@@ -284,7 +280,7 @@ namespace BannerKings.Components
             {
                 if (Home != null && Home.MapFaction == MobileParty.MapFaction && !Home.IsUnderSiege)
                 {
-                    MobileParty.SetMoveGoToSettlement(Home);
+                    MobileParty.Ai.SetMoveGoToSettlement(Home);
                 }
                 else
                 {

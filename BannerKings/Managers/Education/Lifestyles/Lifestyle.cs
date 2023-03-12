@@ -1,3 +1,4 @@
+using BannerKings.Managers.Innovations;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -34,7 +35,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         public SkillObject SecondSkill { get; private set; }
 
-        public MBReadOnlyList<PerkObject> Perks => perks.GetReadOnlyList();
+        public MBReadOnlyList<PerkObject> Perks => new MBReadOnlyList<PerkObject>(perks);
 
         public override bool Equals(object obj)
         {

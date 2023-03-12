@@ -3,7 +3,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/r-vaccari/bannerlord-banner-kings/badge)](https://www.codefactor.io/repository/github/r-vaccari/bannerlord-banner-kings)
 
 <a href="https://discord.gg/z7DS5R46wC" target="_blank"><img src="https://i.imgur.com/xsWPvks.png" alt="Discord" width="220px"></a>
-
+<a href="https://trello.com/b/feKPhEox/banner-kings" target="_blank"><img src="https://logos-download.com/wp-content/uploads/2016/06/Trello_logo.png" alt="Trello" width="240px" height="70px"></a>
 
 <a href="https://www.buymeacoffee.com/basilevsmodding" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-red.png" alt="Buy Me A Coffee" width="220px"></a> 
 <a href="https://www.patreon.com/BasilevsModding" target="_blank"><img src="BannerKings/patreon.png" alt="Patreon" width="220px"></a>

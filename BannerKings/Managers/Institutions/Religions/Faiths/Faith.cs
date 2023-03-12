@@ -29,7 +29,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             presets = new Dictionary<int, CharacterObject>();
         }
 
-        public MBReadOnlyList<Rite> Rites => rites.GetReadOnlyList();
+        public MBReadOnlyList<Rite> Rites => new MBReadOnlyList<Rite>(rites);
         public MBReadOnlyDictionary<TraitObject, bool> Traits => traits.GetReadOnlyDictionary();
         public FaithGroup FaithGroup => faithGroup;
         public Divinity MainGod => mainGod;

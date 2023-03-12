@@ -45,12 +45,12 @@ namespace BannerKings.UI.Kingdoms
                         OnChange));
                 }
 
-                var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(Kingdom.Leader, Title.contract);
+                var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(Kingdom.Leader, Title);
                 var explanations = new Dictionary<Hero, ExplainedNumber>();
 
                 foreach (Hero hero in candidates)
                 {
-                    var explanation = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(Kingdom.Leader, hero, Title.contract, true);
+                    var explanation = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(Kingdom.Leader, hero, Title, true);
                     explanations.Add(hero, explanation);
                 }
 

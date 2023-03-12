@@ -24,6 +24,14 @@ namespace BannerKings.UI.Items
             Reference = type;
         }
 
+        public BKItemVM(int index, bool isAvailable, TextObject hint, TextObject name) : base("")
+        {
+            Value = index;
+            StringItem = name.ToString();
+            CanBeSelected = isAvailable;
+            Hint = new HintViewModel(hint);
+        }
+
         public int Value { get; }
 
         public Enum Reference { get; }

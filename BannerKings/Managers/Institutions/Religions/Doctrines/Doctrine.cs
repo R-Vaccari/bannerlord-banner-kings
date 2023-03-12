@@ -18,6 +18,6 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
         private List<string> incompatibleDoctrines { get; }
 
         public TextObject Effects => effects;
-        public MBReadOnlyList<string> IncompatibleDoctrines => incompatibleDoctrines.GetReadOnlyList();
+        public MBReadOnlyList<string> IncompatibleDoctrines => new MBReadOnlyList<string>(incompatibleDoctrines);
     }
 }

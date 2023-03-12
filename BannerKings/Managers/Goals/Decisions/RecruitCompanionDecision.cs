@@ -75,10 +75,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     new List<TraitObject>
                     {
                         DefaultTraits.Manager,
-                        DefaultTraits.DesertScoutSkills,
-                        DefaultTraits.HillScoutSkills,
-                        DefaultTraits.SteppeScoutSkills,
-                        DefaultTraits.WoodsScoutSkills,
+                        DefaultTraits.ScoutSkills,
                     },
                     new List<PerkObject>(),
                     new List<SkillObject> { DefaultSkills.Steward, DefaultSkills.Scouting }),

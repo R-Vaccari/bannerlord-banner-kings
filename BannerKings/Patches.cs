@@ -423,7 +423,7 @@ namespace BannerKings.Patches
             {
                 var num = MBMath.ClampFloat(party.ItemRoster.FoodVariety - 5f, -5f, 5f);
                 if (num != 0f && (num >= 0f || party.LeaderHero == null ||
-                                    !party.LeaderHero.GetPerkValue(DefaultPerks.Steward.Spartan)))
+                                    !party.LeaderHero.GetPerkValue(DefaultPerks.Steward.WarriorsDiet)))
                 {
                     if (num > 0f && party.HasPerk(DefaultPerks.Steward.Gourmet))
                     {
@@ -481,10 +481,12 @@ namespace BannerKings.Patches
             }
         }
 
-        [HarmonyPatch(typeof(KingSelectionKingdomDecision), "ApplyChosenOutcome")]
-        internal class ApplyChosenOutcomePatch
+        [HarmonyPatch(typeof(KingSelectionKingdomDecision))]
+        internal class KingSelectionKingdomDecisionPatches
         {
-            private static void Postfix(KingSelectionKingdomDecision __instance, DecisionOutcome chosenOutcome)
+            [HarmonyPostfix]
+            [HarmonyPatch("ApplyChosenOutcome", MethodType.Normal)]
+            private static void ApplyChosenOutcomePostfix(KingSelectionKingdomDecision __instance, DecisionOutcome chosenOutcome)
             {
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
                 if (title != null)
@@ -496,6 +498,22 @@ namespace BannerKings.Patches
                         BannerKingsConfig.Instance.TitleManager.InheritTitle(deJure, king, title);
                     }
                 }
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("CalculateMeritOfOutcomeForClan", MethodType.Normal)]
+            private static bool CalculateMeritOfOutcomeForClanPrefix(KingSelectionKingdomDecision __instance, Clan clan, 
+                DecisionOutcome candidateOutcome, ref float __result)
+            {
+                var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
+                if (title != null)
+                {
+                    Hero king = ((KingSelectionDecisionOutcome)candidateOutcome).King;
+                    __result = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(king, clan.Leader, title).ResultNumber;
+                    return false;
+                }
+
+                return true;
             }
         }
     }

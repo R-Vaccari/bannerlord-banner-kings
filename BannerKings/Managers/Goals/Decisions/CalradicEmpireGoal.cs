@@ -52,7 +52,12 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             failedReasons = new List<TextObject>();
 
-            var referenceSettlement = settlements.First();
+            var referenceSettlement = settlements.FirstOrDefault();
+            if (referenceSettlement == null)
+            {
+                return false;
+            }
+
             var referenceHero = Hero.MainHero;
             var (gold, influence) = GetCosts(referenceHero);
             var culture = Utils.Helpers.GetCulture("empire");

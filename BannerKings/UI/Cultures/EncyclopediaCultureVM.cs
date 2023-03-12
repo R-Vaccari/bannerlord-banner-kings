@@ -223,7 +223,7 @@ namespace BannerKings.UI.Cultures
             {
                 InformationManager.ShowInquiry(new InquiryData(new TextObject("{=e12LxgBp}Culture Head").ToString(),
                     new TextObject("{=1WXxCssM}Assume the position of culture head.").ToString(), true, true,
-                    GameTexts.FindText("str_confirm").ToString(),
+                    GameTexts.FindText("str_accept").ToString(),
                     GameTexts.FindText("str_cancel").ToString(),
                     () => innovationData.AssumeCulturalHead(Clan.PlayerClan),
                     null

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -45,7 +46,7 @@ namespace BannerKings.Managers.Education
             {
                 gainedPerks ??= new List<PerkObject>();
 
-                return gainedPerks.GetReadOnlyList();
+                return new MBReadOnlyList<PerkObject>(gainedPerks);
             }
         }
 

@@ -1,4 +1,3 @@
-using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -19,6 +18,8 @@ using BannerKings.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -298,7 +299,10 @@ namespace BannerKings.Models.Vanilla
                 explainedNumber.AddFactor(DefaultPerks.Riding.CavalryTactics.PrimaryBonus * 0.01f, DefaultPerks.Riding.CavalryTactics.PrimaryDescription);
             }
 
-            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.25f, true);
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader,
+                DefaultCouncilPositions.Instance.Marshal,
+                DefaultCouncilTasks.Instance.EncourageMilitarism,
+                0.25f, true);
             
             var draftPolicy = ((BKDraftPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft")).Policy;
             switch (draftPolicy)
@@ -349,7 +353,10 @@ namespace BannerKings.Models.Vanilla
                 explainedNumber.Add(tuple.Item2 / classes.Count, Utils.Helpers.GetClassName(tuple.Item1, settlement.Culture));
             }
 
-            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.03f, false);
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader,
+                DefaultCouncilPositions.Instance.Marshal,
+                DefaultCouncilTasks.Instance.EncourageMilitarism,
+                0.03f, false);
 
             if (settlement.Culture == settlement.Owner.Culture)
             {

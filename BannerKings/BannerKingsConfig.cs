@@ -6,6 +6,8 @@ using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers;
 using BannerKings.Managers.AI;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
@@ -124,6 +126,8 @@ namespace BannerKings
             DefaultLifestyles.Instance.Initialize();
             DefaultDemesneLaws.Instance.Initialize();
             DefaultReligions.Instance.Initialize();
+            DefaultCouncilTasks.Instance.Initialize();
+            DefaultCouncilPositions.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();

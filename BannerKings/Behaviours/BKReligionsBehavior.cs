@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Security.Policy;
 using System.Text;
 using BannerKings.Managers;
 using BannerKings.Managers.Institutions.Religions;
@@ -140,7 +138,7 @@ namespace BannerKings.Behaviours
             }
         }
 
-        private void OnRaidCompleted(BattleSideEnum winnerSide, MapEvent mapEvent)
+        private void OnRaidCompleted(BattleSideEnum winnerSide, RaidEventComponent mapEvent)
         {
             foreach (var mapEventParty in mapEvent.AttackerSide.Parties)
             {

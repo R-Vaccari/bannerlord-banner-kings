@@ -277,7 +277,7 @@ namespace BannerKings.Behaviours
                         list.Remove(type);
                     }
                 }
-                __result = list.GetReadOnlyList();
+                __result = new MBReadOnlyList<BuildingType>(list);
                 return false;
             }
         }

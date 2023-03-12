@@ -195,7 +195,7 @@ namespace BannerKings.Managers
             }
 
             RETURN:
-            return list.GetReadOnlyList();
+            return new MBReadOnlyList<ValueTuple<Language, Hero>>(list);
         }
 
         private bool KnowsLanguage(Hero hero, Language language)
@@ -280,12 +280,13 @@ namespace BannerKings.Managers
                 }
             }
 
-            return list.GetReadOnlyList();
+            return new MBReadOnlyList<Lifestyle>(list);
         }
 
         public MBReadOnlyList<Lifestyle> GetViableLifestyles(Hero hero)
         {
-            return DefaultLifestyles.Instance.All.Where(lf => lf.Culture == null || lf.Culture == hero.Culture).ToList().GetReadOnlyList();
+            return new MBReadOnlyList<Lifestyle>(DefaultLifestyles.Instance.All.Where(lf => lf.Culture == null || lf.Culture == hero.Culture)
+                .ToList());
         }
 
         public MBReadOnlyList<BookType> GetAvailableBooks(MobileParty party)
@@ -293,7 +294,7 @@ namespace BannerKings.Managers
             var list = new List<BookType>();
             if (party == null)
             {
-                return list.GetReadOnlyList();
+                return new MBReadOnlyList<BookType>(list);
             }
 
             foreach (var element in party.ItemRoster)
@@ -312,7 +313,7 @@ namespace BannerKings.Managers
 
             if (party.CurrentSettlement == null || party.LeaderHero == null || party.CurrentSettlement.OwnerClan != party.LeaderHero.Clan)
             {
-                return list.GetReadOnlyList();
+                return new MBReadOnlyList<BookType>(list);
             }
             
             foreach (var element in party.CurrentSettlement.Stash)
@@ -329,7 +330,7 @@ namespace BannerKings.Managers
                 }
             }
 
-            return list.GetReadOnlyList();
+            return new MBReadOnlyList<BookType>(list);
         }
     }
 }

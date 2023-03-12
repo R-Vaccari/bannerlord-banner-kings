@@ -8,6 +8,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Populations.Villages;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
@@ -50,7 +51,7 @@ namespace BannerKings.Managers
 
         [SaveableProperty(3)] private Dictionary<Hero, List<Estate>> Estates { get; set; }
 
-        public MBReadOnlyList<MobileParty> AllParties => Caravans.GetReadOnlyList();
+        public MBReadOnlyList<MobileParty> AllParties => new MBReadOnlyList<MobileParty>(Caravans);
 
         public void PostInitialize()
         {

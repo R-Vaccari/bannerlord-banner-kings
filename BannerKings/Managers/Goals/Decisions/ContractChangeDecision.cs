@@ -53,10 +53,8 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(new TextObject("{=nsQZHLQf}A contract-altering proposal is already being voted on."));
             }
 
-
             return failedReasons.IsEmpty();
         }
-
 
         internal override void ShowInquiry()
         {
@@ -91,7 +89,6 @@ namespace BannerKings.Managers.Goals.Decisions
                 elements.Add(new InquiryElement(option, option.Name.ToString(), null, true, option.Description.ToString()));
             }
 
-
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=mXhTPXZq}Contract Change").ToString(),
                 new TextObject("{=B5e1fznG}Propose a change to you faction's contract. These changes may be the form of governance, succession, clan inheritance or gender laws.").ToString(),
@@ -102,8 +99,11 @@ namespace BannerKings.Managers.Goals.Decisions
                 GameTexts.FindText("str_cancel").ToString(),
                 delegate (List<InquiryElement> selectedOptions)
                 {
-                    chosenAction = (ContractChangeOption)selectedOptions.First().Identifier;
-                    ApplyGoal();
+                    if (selectedOptions.Count > 0)
+                    {
+                        chosenAction = (ContractChangeOption)selectedOptions.First().Identifier;
+                        ApplyGoal();
+                    }
                 }, 
                 null, 
                 string.Empty));
@@ -195,7 +195,6 @@ namespace BannerKings.Managers.Goals.Decisions
             return laws;
         }
 
-
         internal class ContractChangeOption
         {
             internal TextObject Name { get; private set; }
@@ -229,10 +228,12 @@ namespace BannerKings.Managers.Goals.Decisions
                     string.Empty,
                     delegate (List<InquiryElement> x)
                     {
-                        GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -Influence);
-                        Decision.UpdateDecision((int)x[0].Identifier);
-                        Clan.PlayerClan.Kingdom.AddDecision(Decision, true);
-                        
+                        if (x.Count > 0)
+                        {
+                            GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -Influence);
+                            Decision.UpdateDecision((int)x[0].Identifier);
+                            Clan.PlayerClan.Kingdom.AddDecision(Decision, true);
+                        }
                     }, null, string.Empty));
             }
         }

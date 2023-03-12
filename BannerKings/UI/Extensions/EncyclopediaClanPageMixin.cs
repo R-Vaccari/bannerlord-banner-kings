@@ -24,7 +24,7 @@ namespace BannerKings.UI.Extensions
         private readonly EncyclopediaClanPageVM clanPageVM;
         private MBBindingList<CustomNameHeroVM> councillors, companions;
         private EncyclopediaCultureVM cultureVM;
-        private MBBindingList<HeroVM> knights;
+        private MBBindingList<HeroVM> knights, vassals;
         private MBBindingList<HeirVM> heirs;
         private HeirVM mainHeir;
 
@@ -35,104 +35,18 @@ namespace BannerKings.UI.Extensions
             councillors = new MBBindingList<CustomNameHeroVM>();
             companions = new MBBindingList<CustomNameHeroVM>();
             Heirs = new MBBindingList<HeirVM>();
+            Vassals = new MBBindingList<HeroVM>();
         }
 
         [DataSourceProperty] public string CultureText => GameTexts.FindText("str_culture").ToString();
-
         [DataSourceProperty] public string KnightsText => new TextObject("{=ph4LMn6k}Knights").ToString();
-
         [DataSourceProperty] public string CompanionsText => new TextObject("{=a3G31iZ0}Companions").ToString();
-
         [DataSourceProperty] public string CouncilText => new TextObject("{=mUaJDjqO}Council").ToString();
-
         [DataSourceProperty] public string InheritanceText => new TextObject("{=aELuNrRC}Inheritance").ToString();
+        [DataSourceProperty] public string VassalsText => new TextObject("{=rN34kLPu}Vassals").ToString(); 
 
         [DataSourceProperty]
         public string HeirText => new TextObject("{=vArnerHC}Heir").ToString();
-
-        [DataSourceProperty]
-        public MBBindingList<HeirVM> Heirs
-        {
-            get => heirs;
-            set
-            {
-                if (value != heirs)
-                {
-                    heirs = value;
-                    ViewModel!.OnPropertyChangedWithValue(value, "Heirs");
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public HeirVM MainHeir
-        {
-            get => mainHeir;
-            set
-            {
-                if (value != mainHeir)
-                {
-                    mainHeir = value;
-                    ViewModel!.OnPropertyChangedWithValue(value, "MainHeir");
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public EncyclopediaCultureVM CultureInfo
-        {
-            get => cultureVM;
-            set
-            {
-                if (value != cultureVM)
-                {
-                    cultureVM = value;
-                    ViewModel!.OnPropertyChangedWithValue(value);
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public MBBindingList<CustomNameHeroVM> Companions
-        {
-            get => companions;
-            set
-            {
-                if (value != companions)
-                {
-                    companions = value;
-                    ViewModel!.OnPropertyChangedWithValue(value);
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public MBBindingList<HeroVM> Knights
-        {
-            get => knights;
-            set
-            {
-                if (value != knights)
-                {
-                    knights = value;
-                    ViewModel!.OnPropertyChangedWithValue(value);
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public MBBindingList<CustomNameHeroVM> Councillors
-        {
-            get => councillors;
-            set
-            {
-                if (value != councillors)
-                {
-                    councillors = value;
-                    ViewModel!.OnPropertyChangedWithValue(value);
-                }
-            }
-        }
 
         public override void OnRefresh()
         {
@@ -141,8 +55,16 @@ namespace BannerKings.UI.Extensions
             Companions.Clear();
             Councillors.Clear();
             Heirs.Clear();
+            Vassals.Clear();
+            Knights.Clear();
             var caravans = 0;
             var workshops = 0;
+
+            List<Hero> vassals = BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(clan);
+            foreach (Hero hero in vassals)
+            {
+                Vassals.Add(new HeroVM(hero, true));
+            }
 
             string highestTitle = null;
             foreach (var member in clan.Lords)
@@ -207,7 +129,7 @@ namespace BannerKings.UI.Extensions
             {
                 foreach (var position in council.GetOccupiedPositions())
                 {
-                    Councillors.Add(new CustomNameHeroVM(position.Member, position.GetName()));
+                    Councillors.Add(new CustomNameHeroVM(position.Member, position.Name));
                 }
             }
 
@@ -234,6 +156,49 @@ namespace BannerKings.UI.Extensions
                     clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=OKw2P9m1}Faith:").ToString(),
                         rel.Faith.GetFaithName().ToString()));
                 }
+
+                /*ExplainedNumber influenceChange = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceChange(clan, true);
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=d6Xpp44y}Influence Change:").ToString(),
+                   influenceChange.ResultNumber.ToString("0.00"),
+                   new BasicTooltipViewModel(() => influenceChange.GetExplanations())));*/
+
+                ExplainedNumber influenceCap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(clan, true);
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=bNS2Lg7L}Influence Limit:").ToString(),
+                   MBRandom.RoundRandomized(influenceCap.ResultNumber).ToString(),
+                   new BasicTooltipViewModel(() => influenceCap.GetExplanations())));
+
+                var currentDemesne = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(clan, true);
+                var demesneCap = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(clan.Leader, true);
+
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=02REd9mG}Demesne limit:").ToString(),
+                   $"{currentDemesne.ResultNumber:n2}/{demesneCap.ResultNumber:n2}",
+                   new BasicTooltipViewModel(() => new TextObject("{=dhr9NJoA}{TEXT}\nCurrent demesne:\n{CURRENT}\n \nLimit:\n{LIMIT}")
+                       .SetTextVariable("TEXT",new TextObject("{=oHJ6Y66V}Demesne limit describes how many settlements you may own without negative implications. Different settlement types have different weights, villages being the lowest, towns being the highest. Being over the limit reduces stability across all your settlements. Owning a settlement's title will reduce it's weight."))
+                       .SetTextVariable("CURRENT", currentDemesne.GetExplanations())
+                       .SetTextVariable("LIMIT", demesneCap.GetExplanations())
+                       .ToString())));
+
+                var currentUnlandedDemesne = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentUnlandedDemesne(clan);
+                var unlandedDemesneCap = BannerKingsConfig.Instance.StabilityModel.CalculateUnlandedDemesneLimit(clan.Leader);
+
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=8J3DQsNE}Unlanded Demesne limit:").ToString(),
+                    $"{currentUnlandedDemesne.ResultNumber:n2}/{unlandedDemesneCap.ResultNumber:n2}",
+                    new BasicTooltipViewModel(() => new TextObject("{=dhr9NJoA}{TEXT}\nCurrent demesne:\n{CURRENT}\n \nLimit:\n{LIMIT}")
+                        .SetTextVariable("TEXT", new TextObject("{=XAvCOvv4}Unlanded demesne limit describes how many unlanded titles you may own. Unlanded titles are titles such as dukedoms and kingdoms - titles not directly associated with a settlement. Dukedoms have the lowest weight while empires have the biggest. Being over the limit progressively reduces relations with your vassals."))
+                        .SetTextVariable("CURRENT", currentUnlandedDemesne.GetExplanations())
+                        .SetTextVariable("LIMIT", unlandedDemesneCap.GetExplanations())
+                        .ToString())));
+
+                var currentVassals = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentVassals(clan);
+                var vassalsCap = BannerKingsConfig.Instance.StabilityModel.CalculateVassalLimit(clan.Leader);
+
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=dB5y6tTY}Vassal limit:").ToString(),
+                    $"{currentVassals.ResultNumber:n2}/{vassalsCap.ResultNumber:n2}",
+                    new BasicTooltipViewModel(() => new TextObject("{=Q50amDu9}{TEXT}\nCurrent vassals:\n{CURRENT}\n \nLimit:\n{LIMIT}")
+                        .SetTextVariable("TEXT", new TextObject("{=nhBf1JY5}Vassal limit is how many vassals you may have without negative consequences. Vassals are clans whose highest title are under your own (ie, a barony title under your county title, or knight clans with a single lordship) or knights in your clan. Knights only weight 0.5 towards the limit, while clan leaders weight 1. Companions and family members do not count. Being over the limit progressively reduces your influence gain."))
+                        .SetTextVariable("CURRENT", currentVassals.GetExplanations())
+                        .SetTextVariable("LIMIT", vassalsCap.GetExplanations())
+                        .ToString())));
 
                 clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=K7hq6hSE}Owned Caravans:").ToString(),
                     caravans.ToString()));
@@ -262,6 +227,104 @@ namespace BannerKings.UI.Extensions
                     expenses.ResultNumber.ToString(), new BasicTooltipViewModel(() => expenses.GetExplanations())));
 
                 addedFields = true;
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<HeirVM> Heirs
+        {
+            get => heirs;
+            set
+            {
+                if (value != heirs)
+                {
+                    heirs = value;
+                    ViewModel!.OnPropertyChangedWithValue(value, "Heirs");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public HeirVM MainHeir
+        {
+            get => mainHeir;
+            set
+            {
+                if (value != mainHeir)
+                {
+                    mainHeir = value;
+                    ViewModel!.OnPropertyChangedWithValue(value, "MainHeir");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public EncyclopediaCultureVM CultureInfo
+        {
+            get => cultureVM;
+            set
+            {
+                if (value != cultureVM)
+                {
+                    cultureVM = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<CustomNameHeroVM> Companions
+        {
+            get => companions;
+            set
+            {
+                if (value != companions)
+                {
+                    companions = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<HeroVM> Vassals
+        {
+            get => vassals;
+            set
+            {
+                if (value != vassals)
+                {
+                    vassals = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<HeroVM> Knights
+        {
+            get => knights;
+            set
+            {
+                if (value != knights)
+                {
+                    knights = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<CustomNameHeroVM> Councillors
+        {
+            get => councillors;
+            set
+            {
+                if (value != councillors)
+                {
+                    councillors = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
     }
