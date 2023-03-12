@@ -2,6 +2,7 @@
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Institutions.Religions;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -153,6 +154,14 @@ namespace BannerKings.Behaviours.Diplomacy
             if (Religion == null)
             {
                 Religion = BannerKingsConfig.Instance.ReligionModel.GetKingdomStateReligion(Kingdom);
+            }
+
+            foreach (var group in Groups)
+            {
+                if (group.PossibleDemands.First().IsDemandCurrentlyAdequate().Item1)
+                {
+                    group.PossibleDemands.First().SetUp();
+                }
             }
 
             foreach (var group in DefaultInterestGroup.Instance.All)

@@ -146,10 +146,10 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateSuccessionLine(FeudalContract contract, Clan rulingClan, Hero victim = null, int count = 6)
+        public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateSuccessionLine(FeudalTitle title, Clan clan, Hero victim = null, int count = 6)
         {
-            var leader = victim != null ? victim : rulingClan.Leader;
-            var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(leader, contract);
+            var leader = victim != null ? victim : clan.Leader;
+            var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(leader, title);
             var explanations = new Dictionary<Hero, ExplainedNumber>();
 
             foreach (Hero hero in candidates)
@@ -241,8 +241,8 @@ namespace BannerKings.Models.BKModels
                 if (currentLeader.Clan.Kingdom != null)
                 {
                     clans = (from t in currentLeader.Clan.Kingdom.Clans
-                            where !t.IsEliminated && !t.IsUnderMercenaryService
-                            select t).ToList();
+                             where !t.IsEliminated && !t.IsUnderMercenaryService
+                             select t).ToList();
                 }
 
                 foreach (var clan in clans)
@@ -284,7 +284,7 @@ namespace BannerKings.Models.BKModels
             var highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(grantor);
             var extra = 0f;
 
-            if (highest is {type: < TitleType.Barony})
+            if (highest is { type: < TitleType.Barony })
             {
                 extra = highest.type switch
                 {
@@ -505,57 +505,57 @@ namespace BannerKings.Models.BKModels
                     revokeAction.Reason = new TextObject("{=MSaLufNx}Republics can only revoke duke titles.");
                     return revokeAction;
                 case GovernmentType.Republic:
-                {
-                    var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
-                    if (revoker != sovereign.deJure)
                     {
-                        revokeAction.Possible = false;
-                        revokeAction.Reason = new TextObject("{=w7b5SE48}Not de Jure faction leader.");
-                        return revokeAction;
-                    }
-
-                    break;
-                }
-                case GovernmentType.Imperial:
-                {
-                    var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
-                    if (sovereign == null || revoker != sovereign.deJure)
-                    {
-                        revokeAction.Possible = false;
-                        revokeAction.Reason = new TextObject("{=w7b5SE48}Not de Jure faction leader.");
-                        return revokeAction;
-                    }
-
-                    break;
-                }
-                default:
-                {
-                    var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(revoker);
-                    var vassal = false;
-                    foreach (var revokerTitle in titles)
-                    {
-                        if (revokerTitle.vassals != null)
+                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
+                        if (revoker != sovereign.deJure)
                         {
-                            foreach (var revokerTitleVassal in revokerTitle.vassals)
+                            revokeAction.Possible = false;
+                            revokeAction.Reason = new TextObject("{=w7b5SE48}Not de Jure faction leader.");
+                            return revokeAction;
+                        }
+
+                        break;
+                    }
+                case GovernmentType.Imperial:
+                    {
+                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
+                        if (sovereign == null || revoker != sovereign.deJure)
+                        {
+                            revokeAction.Possible = false;
+                            revokeAction.Reason = new TextObject("{=w7b5SE48}Not de Jure faction leader.");
+                            return revokeAction;
+                        }
+
+                        break;
+                    }
+                default:
+                    {
+                        var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(revoker);
+                        var vassal = false;
+                        foreach (var revokerTitle in titles)
+                        {
+                            if (revokerTitle.vassals != null)
                             {
-                                if (revokerTitleVassal.deJure == title.deJure)
+                                foreach (var revokerTitleVassal in revokerTitle.vassals)
                                 {
-                                    vassal = true;
-                                    break;
+                                    if (revokerTitleVassal.deJure == title.deJure)
+                                    {
+                                        vassal = true;
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    if (!vassal)
-                    {
-                        revokeAction.Possible = false;
-                        revokeAction.Reason = new TextObject("{=Mk29oGgs}Not a direct vassal.");
-                        return revokeAction;
-                    }
+                        if (!vassal)
+                        {
+                            revokeAction.Possible = false;
+                            revokeAction.Reason = new TextObject("{=Mk29oGgs}Not a direct vassal.");
+                            return revokeAction;
+                        }
 
-                    break;
-                }
+                        break;
+                    }
             }
 
 
@@ -571,7 +571,7 @@ namespace BannerKings.Models.BKModels
                     return revokeAction;
                 }
             }
-            
+
 
             revokeAction.Possible = true;
             revokeAction.Reason = new TextObject("{=f5Be67QF}You may grant away this title.");
@@ -662,7 +662,7 @@ namespace BannerKings.Models.BKModels
                 usurpData.Possible = true;
                 usurpData.Reason = new TextObject("{=zMnXdAxp}You may claim this title.");
 
-                var titleLevel = (int) title.type;
+                var titleLevel = (int)title.type;
                 var clanTier = usurper.Clan.Tier;
                 if (clanTier < 2 || (titleLevel <= 2 && clanTier < 4))
                 {
@@ -780,7 +780,7 @@ namespace BannerKings.Models.BKModels
                 claimants.Add(title.sovereign.deJure, new TextObject("{=pkZ0J4Fo}De jure sovereign of this title"));
             }
 
-            if (title.vassals is {Count: > 0})
+            if (title.vassals is { Count: > 0 })
             {
                 foreach (var vassal in title.vassals)
                 {
@@ -796,17 +796,17 @@ namespace BannerKings.Models.BKModels
 
         private float GetInfluenceUsurpCost(FeudalTitle title)
         {
-            return 500f / (float) title.type + 1f;
+            return 500f / (float)title.type + 1f;
         }
 
         private float GetRenownUsurpCost(FeudalTitle title)
         {
-            return 100f / (float) title.type + 1f;
+            return 100f / (float)title.type + 1f;
         }
 
         public float GetGoldUsurpCost(FeudalTitle title)
         {
-            var gold = 100000f / (float) title.type + 1f;
+            var gold = 100000f / (float)title.type + 1f;
             if (title.fief != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(title.fief);

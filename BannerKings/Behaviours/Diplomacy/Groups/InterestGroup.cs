@@ -8,7 +8,6 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using static SandBox.CampaignBehaviors.LordConversationsCampaignBehavior;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups
 {
@@ -34,7 +33,12 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             SupportedLaws = supportedLaws;
             ShunnedLaws = shunnedLaws;
             SupportedCasusBelli = supportedCasusBelli;
-            PossibleDemands = possibleDemands;
+            List<Demand> demands = new List<Demand>();
+            foreach (var demand in possibleDemands)
+            {
+                demands.Add(demand.GetCopy(this));
+            }
+            PossibleDemands = demands;
 
             Members = new List<Hero>();
         }
@@ -48,7 +52,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             result.Initialize(Name, Description, MainTrait, DemandsCouncil, AllowsCommoners,
                 AllowsNobles, PreferredOccupations, SupportedPolicies, ShunnedPolicies, SupportedLaws,
                 ShunnedLaws, SupportedCasusBelli, PossibleDemands);
-            KingdomDiplomacy = diplomacy;
+            result.KingdomDiplomacy = diplomacy;
             return result;
         }
 

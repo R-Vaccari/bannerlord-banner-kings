@@ -74,8 +74,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 },
                 new List<Demand>()
                 {
-                    DefaultDemands.Instance.LawChange,
-                    DefaultDemands.Instance.PolicyChange
+                    DefaultDemands.Instance.CouncilPosition,
                 });
 
             Traditionalists.Initialize(new TextObject("{=!}Traditionalists"),
@@ -130,8 +129,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                },
                new List<Demand>()
                {
-                   DefaultDemands.Instance.LawChange,
-                   DefaultDemands.Instance.PolicyChange
+                   DefaultDemands.Instance.CouncilPosition,
                });
 
             Oligarchists.Initialize(new TextObject("{=!}Oligarchists"),
@@ -184,8 +182,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                },
                new List<Demand>()
                {
-                   DefaultDemands.Instance.LawChange,
-                   DefaultDemands.Instance.PolicyChange
+                   DefaultDemands.Instance.CouncilPosition,
                });
 
             Zealots.Initialize(new TextObject("{=!}Zealots"),
@@ -207,7 +204,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                     DefaultPolicies.LandGrantsForVeterans,
                     DefaultPolicies.CouncilOfTheCommons,
                     DefaultPolicies.HuntingRights,
-                    DefaultPolicies.CharterOfLiberties,
                     DefaultPolicies.TrialByJury
                 },
                 new List<PolicyObject>()
@@ -238,8 +234,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 },
                 new List<Demand>()
                 {
-                    DefaultDemands.Instance.LawChange,
-                    DefaultDemands.Instance.PolicyChange
+                    DefaultDemands.Instance.CouncilPosition,
                 });
 
             Commoners.Initialize(new TextObject("{=!}Commoners"),
@@ -261,7 +256,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                     DefaultPolicies.LandGrantsForVeterans,
                     DefaultPolicies.CouncilOfTheCommons,
                     DefaultPolicies.HuntingRights,
-                    DefaultPolicies.CharterOfLiberties,
                     DefaultPolicies.TrialByJury
                 },
                 new List<PolicyObject>()
@@ -292,8 +286,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 },
                 new List<Demand>()
                 {
-                    DefaultDemands.Instance.LawChange,
-                    DefaultDemands.Instance.PolicyChange
+                    DefaultDemands.Instance.CouncilPosition,
                 });
         }
     }

@@ -23,7 +23,7 @@ namespace BannerKings.UI.Kingdoms
                 }
 
                 InterestGroupsCountText = $"({InterestGroups.Count.ToString()})";
-                if (CurrentGroup == null)
+                if (CurrentGroup == null && InterestGroups.Count > 0)
                 {
                     SetGroup(InterestGroups.First());
                 }

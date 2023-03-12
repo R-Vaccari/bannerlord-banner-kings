@@ -64,7 +64,7 @@ namespace BannerKings.Models.BKModels
                 if (kingdomTitle != null)
                 {
                     IEnumerable<KeyValuePair<Hero, ExplainedNumber>> heirs = BannerKingsConfig.Instance.TitleModel
-                        .CalculateSuccessionLine(kingdomTitle.contract, defender.Leader.Clan);
+                        .CalculateSuccessionLine(kingdomTitle, defender.Leader.Clan);
                     if (heirs.Count() > 0)
                     {
                         defenderHeir = heirs.First().Key;
@@ -106,7 +106,7 @@ namespace BannerKings.Models.BKModels
                 if (kingdomTitle != null)
                 {
                     IEnumerable<KeyValuePair<Hero, ExplainedNumber>> heirs = BannerKingsConfig.Instance.TitleModel
-                        .CalculateSuccessionLine(kingdomTitle.contract, attacker.Leader.Clan);
+                        .CalculateSuccessionLine(kingdomTitle, attacker.Leader.Clan);
                     if (heirs.Count() > 0)
                     {
                         attackerHeir = heirs.First().Key;

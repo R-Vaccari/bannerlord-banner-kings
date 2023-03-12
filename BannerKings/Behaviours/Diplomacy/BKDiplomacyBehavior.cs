@@ -200,7 +200,7 @@ namespace BannerKings.Behaviours.Diplomacy
             false);
         }
       
-        private void OnWarDeclared(IFaction faction1, IFaction faction2)
+        private void OnWarDeclared(IFaction faction1, IFaction faction2, DeclareWarAction.DeclareWarDetail detail)
         {
             if (faction1.IsKingdomFaction && faction2.IsKingdomFaction)
             {
