@@ -75,14 +75,14 @@ namespace BannerKings.UI.Kingdoms
             }
 
             BKExplainedNumber influence = BannerKingsConfig.Instance.InterestGroupsModel
-                .CalculateGroupInfluence(Group, KingdomDiplomacy, true);
+                .CalculateGroupInfluence(Group, true);
 
             Headers.Add(new StringPairItemVM(new TextObject("{=EkFaisgP}Influence").ToString(),
                 FormatValue(influence.ResultNumber),
                 new BasicTooltipViewModel(() => influence.GetFormattedPercentage())));
 
             BKExplainedNumber support = BannerKingsConfig.Instance.InterestGroupsModel
-                .CalculateGroupSupport(Group, KingdomDiplomacy, true);
+                .CalculateGroupSupport(Group, true);
 
             Headers.Add(new StringPairItemVM(new TextObject("{=!}Support").ToString(),
                 FormatValue(support.ResultNumber), 

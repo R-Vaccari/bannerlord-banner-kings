@@ -1,5 +1,6 @@
 ﻿using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Managers.Traits;
 using System.Collections.Generic;
@@ -75,7 +76,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 new List<Demand>()
                 {
                     DefaultDemands.Instance.CouncilPosition,
-                });
+                },
+                null);
 
             Traditionalists.Initialize(new TextObject("{=!}Traditionalists"),
                new TextObject("{=!}Traditionalists support the status quo and the way of the ancestors. More than anything, they believe in strength. While they recognize the necessity for a strong ruler, they also do the necessity of liberty for the noble classes. They aim for a balance of power between the sovereign and their vassals, a continuation of old traditions and exerting power through force."),
@@ -130,7 +132,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                new List<Demand>()
                {
                    DefaultDemands.Instance.CouncilPosition,
-               });
+               },
+               null);
 
             Oligarchists.Initialize(new TextObject("{=!}Oligarchists"),
                new TextObject("{=!}Oligarchists are noble people of influence that are concerned, first and foremost, with their own advantage. They continuously seek benefits for themselves or their peers, understanding they are part of the same class. Thus, their interests are often misaligned both with the ruler's, and with the common people."),
@@ -183,7 +186,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                new List<Demand>()
                {
                    DefaultDemands.Instance.CouncilPosition,
-               });
+               },
+               null);
 
             Zealots.Initialize(new TextObject("{=!}Zealots"),
                 new TextObject(),
@@ -235,7 +239,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 new List<Demand>()
                 {
                     DefaultDemands.Instance.CouncilPosition,
-                });
+                },
+                DefaultCouncilPositions.Instance.Spiritual);
 
             Commoners.Initialize(new TextObject("{=!}Commoners"),
                 new TextObject(),
@@ -287,7 +292,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 new List<Demand>()
                 {
                     DefaultDemands.Instance.CouncilPosition,
-                });
+                },
+                null);
         }
     }
 }

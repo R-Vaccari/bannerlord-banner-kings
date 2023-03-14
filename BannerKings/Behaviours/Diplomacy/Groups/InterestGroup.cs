@@ -1,5 +1,6 @@
 ﻿using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles.Laws;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using static BannerKings.Behaviours.Diplomacy.Groups.Demands.Demand;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups
 {
@@ -20,7 +22,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         public void Initialize(TextObject name, TextObject description, TraitObject mainTrait,
             bool demandsCouncil, bool allowsCommoners, bool allowsNobles, List<Occupation> preferredOccupations, 
             List<PolicyObject> supportedPolicy, List<PolicyObject> shunnedPolicies, List<DemesneLaw> supportedLaws, 
-            List<DemesneLaw> shunnedLaws, List<CasusBelli> supportedCasusBelli, List<Demand> possibleDemands)
+            List<DemesneLaw> shunnedLaws, List<CasusBelli> supportedCasusBelli, List<Demand> possibleDemands,
+            CouncilMember favoredPosition)
         {
             Initialize(name, description);
             MainTrait = mainTrait;
@@ -39,19 +42,23 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 demands.Add(demand.GetCopy(this));
             }
             PossibleDemands = demands;
+            FavoredPosition = favoredPosition;
 
             Members = new List<Hero>();
+            RecentOucomes = new List<DemandOutcome>();
         }
 
         public KingdomDiplomacy KingdomDiplomacy { get; private set; }
         public Hero FactionLeader => KingdomDiplomacy.Kingdom.Leader;
+
+        public CouncilMember FavoredPosition { get; private set; }
 
         public InterestGroup GetCopy(KingdomDiplomacy diplomacy)
         {
             InterestGroup result = new InterestGroup(StringId);
             result.Initialize(Name, Description, MainTrait, DemandsCouncil, AllowsCommoners,
                 AllowsNobles, PreferredOccupations, SupportedPolicies, ShunnedPolicies, SupportedLaws,
-                ShunnedLaws, SupportedCasusBelli, PossibleDemands);
+                ShunnedLaws, SupportedCasusBelli, PossibleDemands, FavoredPosition);
             result.KingdomDiplomacy = diplomacy;
             return result;
         }
@@ -164,6 +171,14 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             return list;
         }
 
+        public void AddOutcome(Demand demand, DemandResponse response, bool success)
+        {
+            RecentOucomes.Add(new DemandOutcome(demand,
+                CampaignTime.YearsFromNow(1f),
+                response.Explanation,
+                success));
+        }
+
         public bool DemandsCouncil { get; private set; }
         public bool AllowsCommoners { get; private set; }
         public bool AllowsNobles { get; private set; }
@@ -174,6 +189,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         public List<DemesneLaw> ShunnedLaws { get; private set; }
         public List<CasusBelli> SupportedCasusBelli { get; private set; }
         public List<Demand> PossibleDemands { get; private set; }
+        public List<DemandOutcome> RecentOucomes { get; private set; }
 
         public override bool Equals(object obj)
         {
@@ -182,6 +198,22 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 return (obj as InterestGroup).StringId == StringId;
             }
             return base.Equals(obj);
+        }
+
+        public class DemandOutcome
+        {
+            public Demand Demand { get; private set; }
+            public CampaignTime EndDate { get; private set; }
+            public TextObject Explanation { get; private set; }
+            public bool Success { get; private set; }
+
+            public DemandOutcome(Demand demand, CampaignTime endDate, TextObject explanation, bool success)
+            {
+                Demand = demand;
+                EndDate = endDate;
+                Explanation = explanation;
+                Success = success;
+            }
         }
     }
 }

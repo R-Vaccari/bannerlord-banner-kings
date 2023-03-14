@@ -1,8 +1,8 @@
 ﻿using BannerKings.Behaviours.Diplomacy.Groups;
+using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Institutions.Religions;
 using System.Collections.Generic;
-using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -158,9 +158,11 @@ namespace BannerKings.Behaviours.Diplomacy
 
             foreach (var group in Groups)
             {
-                if (group.PossibleDemands.First().IsDemandCurrentlyAdequate().Item1)
+                Demand demand = group.PossibleDemands.GetRandomElement();
+
+                if (demand.IsDemandCurrentlyAdequate().Item1 && !demand.Active)
                 {
-                    group.PossibleDemands.First().SetUp();
+                    demand.SetUp();
                 }
             }
 

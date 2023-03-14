@@ -11,12 +11,27 @@ namespace BannerKings.Models.BKModels
 {
     public class BKInterestGroupsModel
     {
-        public BKExplainedNumber CalculateGroupInfluence(InterestGroup group, KingdomDiplomacy diplomacy, bool explanations = false)
+        public ExplainedNumber CalculateFinancialCompromiseCost(Hero fulfiller, int minimumInfluence, float factor, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(minimumInfluence, explanations);
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateLeverageInfluenceCost(Hero fulfiller, int minimumInfluence, float factor, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(minimumInfluence, explanations);
+
+            return result;
+        }
+
+        public BKExplainedNumber CalculateGroupInfluence(InterestGroup group, bool explanations = false)
         {
             var result = new BKExplainedNumber(0f, explanations);
             result.LimitMin(0f);
             result.LimitMax(1f);
 
+            KingdomDiplomacy diplomacy = group.KingdomDiplomacy;
             float totalPower = 0;
             foreach (var settlement in diplomacy.Kingdom.Settlements)
             {
@@ -107,11 +122,12 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public BKExplainedNumber CalculateGroupSupport(InterestGroup group, KingdomDiplomacy diplomacy, bool explanations = false)
+        public BKExplainedNumber CalculateGroupSupport(InterestGroup group, bool explanations = false)
         {
             var result = new BKExplainedNumber(0f, explanations);
             result.LimitMin(0f);
             result.LimitMax(1f);
+            KingdomDiplomacy diplomacy = group.KingdomDiplomacy;
             Hero sovereign = diplomacy.Kingdom.Leader;
             if (group.Leader != null)
             {

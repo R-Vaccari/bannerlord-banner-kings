@@ -1,10 +1,13 @@
 ﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Skills;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
@@ -20,14 +23,11 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 new TextObject());
         }
 
-        public override IEnumerable<DemandResponse> DemandResponses
-        {
-            get
-            {
-                yield return new DemandResponse(new TextObject("{=!}Accept Demand"),
-                    new TextObject("{=!}Accept the demand to put {BENEFACTOR} in charge of the {POSITION} position.")
+        public override DemandResponse PositiveAnswer => new DemandResponse(new TextObject("{=!}Concede"),
+                    new TextObject("{=!}Accept the demand to put {BENEFACTOR} in charge of the {POSITION} position. They will be satisfied with this outcome.")
                     .SetTextVariable("BENEFACTOR", benefactor.Name)
                     .SetTextVariable("POSITION", position.Name),
+                    new TextObject("{=!}"),
                     6,
                     250,
                     1000,
@@ -41,13 +41,24 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     },
                     (Hero fulfiller) =>
                     {
+                        if (fulfiller == Hero.MainHero)
+                        {
+                            InformationManager.DisplayMessage(new InformationMessage(
+                                new TextObject("{=!}The {GROUP} is satisfied! {BENEFACTOR} is now in charge of the {POSITION} position.")
+                                .SetTextVariable("GROUP", Group.Name)
+                                .SetTextVariable("BENEFACTOR", benefactor.Name)
+                                .SetTextVariable("POSITION", position.Name)
+                                .ToString(),
+                                Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
+                        }
                         position.SetMember(benefactor);
+                        return true;
                     });
-
-                yield return new DemandResponse(new TextObject("{=!}Deny Demand"),
-                   new TextObject("{=!}Deny the demand to put {BENEFACTOR} in charge of the {POSITION} position.")
+        public override DemandResponse NegativeAnswer => new DemandResponse(new TextObject("{=!}Reject"),
+                   new TextObject("{=!}Deny the demand to put {BENEFACTOR} in charge of the {POSITION} position. They will not like this outcome.")
                    .SetTextVariable("BENEFACTOR", benefactor.Name)
                    .SetTextVariable("POSITION", position.Name),
+                   new TextObject("{=!}"),
                    6,
                    250,
                    1000,
@@ -61,7 +72,196 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                    },
                    (Hero fulfiller) =>
                    {
+                       LoseRelationsWithGroup(fulfiller, -10, 0.5f);
+                       if (fulfiller == Hero.MainHero)
+                       {
+                           InformationManager.DisplayMessage(new InformationMessage(
+                               new TextObject("{=!}The {GROUP} is not satisfied...")
+                               .SetTextVariable("GROUP", Group.Name)
+                               .SetTextVariable("LEADER", Group.Leader.Name)
+                               .ToString(),
+                               Color.FromUint(Utils.TextHelper.COLOR_LIGHT_RED)));
+                       }
+                       return false;
+                   });
+
+        public override bool Active => position != null && benefactor != null;
+
+        public override IEnumerable<DemandResponse> DemandResponses
+        {
+            get
+            {
+                yield return PositiveAnswer;
+                yield return NegativeAnswer;
+                yield return new DemandResponse(new TextObject("{=!}Financial Compromise"),
+                   new TextObject("{=!}Negotiate with {LEADER} a financial compromise to appease the group's demand. A sum of denars based on your income will be paied out to the group, mostly to the leader. They will be satisfied with this outcome.")
+                   .SetTextVariable("LEADER", Group.Leader.Name)
+                   .SetTextVariable("DENARS", MBRandom.RoundRandomized(BannerKingsConfig.Instance.InterestGroupsModel
+                   .CalculateFinancialCompromiseCost(Hero.MainHero, 10000, 1f).ResultNumber)),
+                   new TextObject("{=!}"),
+                   5,
+                   300,
+                   300,
+                   (Hero fulfiller) =>
+                   {
+                       return true;
+                   },
+                   (Hero fulfiller) =>
+                   {
+                       return 1f;
+                   },
+                   (Hero fulfiller) =>
+                   {
+                       LoseRelationsWithGroup(fulfiller, -6, 0.2f);
+                       if (fulfiller == Hero.MainHero)
+                       {
+                           InformationManager.DisplayMessage(new InformationMessage(
+                               new TextObject("{=!}The {GROUP} accepts the compromise... However, some criticize it as bribery.")
+                               .SetTextVariable("GROUP", Group.Name)
+                               .ToString(),
+                               Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
+                       }
+
+                       return true;
+                   });
+
+                yield return new DemandResponse(new TextObject("{=!}Leverage Influence"),
+                   new TextObject("{=!}Use your political influence to deny this demand. {LEADER} will not be pleased with this option, but the group will accept it. They will be satisfied with this outcome.")
+                   .SetTextVariable("LEADER", Group.Leader.Name)
+                   .SetTextVariable("INFLUENCE", MBRandom.RoundRandomized(BannerKingsConfig.Instance.InterestGroupsModel
+                   .CalculateLeverageInfluenceCost(Hero.MainHero, 100, 1f).ResultNumber)),
+                   new TextObject("{=!}"),
+                   -8,
+                   500,
+                   200,
+                   (Hero fulfiller) =>
+                   {
+                       return fulfiller.Clan.Influence >=
+                       BannerKingsConfig.Instance.InterestGroupsModel.CalculateLeverageInfluenceCost(fulfiller, 100, 1f).ResultNumber;
+                   },
+                   (Hero fulfiller) =>
+                   {
+                       return 1f;
+                   },
+                   (Hero fulfiller) =>
+                   {
+                       if (fulfiller == Hero.MainHero)
+                       {
+                           InformationManager.DisplayMessage(new InformationMessage(
+                               new TextObject("{=!}The {GROUP} back down on their demand! {LEADER} was politically compelled to give up.")
+                               .SetTextVariable("GROUP", Group.Name)
+                               .SetTextVariable("LEADER", Group.Leader.Name)
+                               .ToString(),
+                               Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
+                       }
                        
+                       ChangeClanInfluenceAction.Apply(fulfiller.Clan, BannerKingsConfig.Instance.InterestGroupsModel
+                           .CalculateLeverageInfluenceCost(fulfiller, 100, 1f).ResultNumber);
+                       return true;
+                   });
+
+                yield return new DemandResponse(new TextObject("{=!}Appease (Charm)"),
+                   new TextObject("{=!}Use your diplomatic and charm skills to convince {LEADER} out of this idea. This option may or may not work. The chance of working depends on your Charm and how much {LEADER} likes you - its unlikely you will charm an enemy. Whether the group is satisfied or not depends on the leader being convinced.\nMinimum Charm: {CHARM}")
+                   .SetTextVariable("LEADER", Group.Leader.Name)
+                   .SetTextVariable("CHARM", 150),
+                   new TextObject("{=!}"),
+                   6,
+                   500,
+                   100,
+                   (Hero fulfiller) =>
+                   {
+                       return fulfiller.GetSkillValue(DefaultSkills.Charm) > 150;
+                   },
+                   (Hero fulfiller) =>
+                   {
+                       return 1f;
+                   },
+                   (Hero fulfiller) =>
+                   {
+                       int relation = Group.Leader.GetRelation(fulfiller);
+                       int skill = (int)(fulfiller.GetSkillValue(DefaultSkills.Charm) / 3f);
+                       float chance = (relation + skill) / 200f;
+                       if (MBRandom.RandomFloat <= chance)
+                       {
+                           if (fulfiller == Hero.MainHero)
+                           {
+                               InformationManager.DisplayMessage(new InformationMessage(
+                                   new TextObject("{=!}{LEADER} was appeased! The {GROUP} back down on their demand.")
+                                   .SetTextVariable("GROUP", Group.Name)
+                                   .SetTextVariable("LEADER", Group.Leader.Name)
+                                   .ToString(),
+                                   Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
+                           }
+                           
+                           return true;
+                       }
+                       else
+                       {
+                           if (fulfiller == Hero.MainHero)
+                           {
+                               InformationManager.DisplayMessage(new InformationMessage(
+                                   new TextObject("{=!}{LEADER} was not convinced... The {GROUP} is not satisfied with this outcome.")
+                                   .SetTextVariable("GROUP", Group.Name)
+                                   .SetTextVariable("LEADER", Group.Leader.Name)
+                                   .ToString(),
+                                   Color.FromUint(Utils.TextHelper.COLOR_LIGHT_RED)));
+                           }
+                          
+                           return false;
+                       }
+                   });
+
+                yield return new DemandResponse(new TextObject("{=!}Dispute (Lordship)"),
+                   new TextObject("{=!}Dispute on legal terms the efficacy of this demand. {LEADER} may or not be compelled to conceded, based on their Lordship ({LEADER_LORDSHIP}) against yours ({PLAYER_LORDSHIP}). Whether the group is satisfied or not depends on the leader being convinced.\nMinimum Lordship: {LORDSHIP}")
+                   .SetTextVariable("LEADER", Group.Leader.Name)
+                   .SetTextVariable("LEADER_LORDSHIP", Group.Leader.GetSkillValue(BKSkills.Instance.Lordship))
+                   .SetTextVariable("PLAYER_LORDSHIP", Hero.MainHero.GetSkillValue(BKSkills.Instance.Lordship))
+                   .SetTextVariable("LORDSHIP", 100),
+                   new TextObject("{=!}"),
+                   6,
+                   1000,
+                   100,
+                   (Hero fulfiller) =>
+                   {
+                       return fulfiller.GetSkillValue(BKSkills.Instance.Lordship) > 100;
+                   },
+                   (Hero fulfiller) =>
+                   {
+                       return 1f;
+                   },
+                   (Hero fulfiller) =>
+                   {
+                       float factor = fulfiller.GetSkillValue(BKSkills.Instance.Lordship) / 
+                       Group.Leader.GetSkillValue(BKSkills.Instance.Lordship);
+
+                       if (MBRandom.RandomFloat <= factor * 0.5f)
+                       {
+                           if (fulfiller == Hero.MainHero)
+                           {
+                               InformationManager.DisplayMessage(new InformationMessage(
+                                   new TextObject("{=!}{LEADER} was appeased! The {GROUP} back down on their demand.")
+                                   .SetTextVariable("GROUP", Group.Name)
+                                   .SetTextVariable("LEADER", Group.Leader.Name)
+                                   .ToString(),
+                                   Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
+                           }
+
+                           return true;
+                       }
+                       else
+                       {
+                           if (fulfiller == Hero.MainHero)
+                           {
+                               InformationManager.DisplayMessage(new InformationMessage(
+                                   new TextObject("{=!}{LEADER} was appeased! The {GROUP} back down on their demand.")
+                                   .SetTextVariable("GROUP", Group.Name)
+                                   .SetTextVariable("LEADER", Group.Leader.Name)
+                                   .ToString(),
+                                   Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
+                           }
+
+                           return false;
+                       }
                    });
             }
         }
@@ -76,24 +276,43 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         public override void SetUp()
         {
             CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Group.FactionLeader.Clan);
-            position = council.Positions.FindAll(x => x.IsCorePosition(StringId)
-            && x.IsValidCandidate(Group.Leader)).GetRandomElement();
-
-            if (Group.Leader == Hero.MainHero)
+            if (Group.FavoredPosition == null)
             {
-                ShowPlayerDemandOptions();
+                position = council.Positions.FindAll(x => x.IsCorePosition(x.StringId)
+                          && x.IsValidCandidate(Group.Leader)).GetRandomElement();
             }
             else
             {
-                ShowPlayerDemandOptions();
+                council.GetCouncilPosition(Group.FavoredPosition);
+            }
+
+            if (position != null)
+            {
                 benefactor = Group.Leader;
+                if (Group.Members.Contains(Hero.MainHero))
+                {
+                    ShowPlayerDemandOptions();
+                }
+                else
+                {
+                    ChooseBenefactor();
+                }
+
+                if (Group.FactionLeader == Hero.MainHero)
+                {
+                    ShowPlayerPrompt();
+                }
+            }
+            else
+            {
+                Finish();
             }
         }
 
         public override (bool, TextObject) IsDemandCurrentlyAdequate()
         {
             CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Group.FactionLeader.Clan);
-            CouncilMember currentPosition = council.Positions.FirstOrDefault(x => x.IsCorePosition(x.StringId) && Group.Members.Contains(x.Member));
+            CouncilMember currentPosition = council.Positions.FirstOrDefault(x => x.IsCorePosition(x.StringId) && Group.Leader == x.Member);
             if (currentPosition != null)
             {
                 return new(false, new TextObject("{=!}{HERO} already occupies the {POSITION} position.")
@@ -101,13 +320,44 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     .SetTextVariable("POSITION", currentPosition.Name));
             }
 
-            if (council.Positions.FindAll(x => x.IsCorePosition(StringId)
+            if (council.Positions.FindAll(x => x.IsCorePosition(x.StringId)
             && x.IsValidCandidate(Group.Leader)).Count == 0)
             {
                 return new(false, new TextObject("{=!}No adequate positions were found."));
             }
 
-            return new(false, new TextObject("{=!}This demand is possible."));
+            if (Active)
+            {
+                return new(false, new TextObject("{=!}This demand is already under revision by the ruler."));
+            }
+
+            return new(true, new TextObject("{=!}This demand is possible."));
+        }
+
+        public override void ShowPlayerPrompt()
+        {
+            InformationManager.ShowInquiry(new InquiryData(Name.ToString(),
+                new TextObject("{=!}The {GROUP} group is demanding the grant of the {POSITION} council position to {HERO}{ROLE}. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
+                .SetTextVariable("GROUP", Group.Name)
+                .SetTextVariable("POSITION", position.Name)
+                .SetTextVariable("HERO", benefactor.Name)
+                .SetTextVariable("ROLE", GetHeroRoleText(benefactor))
+                .ToString(),
+                true,
+                true,
+                new TextObject("{=!}Resolve").ToString(),
+                new TextObject("{=!}Postpone").ToString(),
+                () =>
+                {
+                    ShowPlayerDemandAnswers();
+                },
+                () =>
+                {
+                    DueDate = CampaignTime.DaysFromNow(7f);
+                },
+                Utils.Helpers.GetKingdomDecisionSound()),
+                true,
+                true);
         }
 
         public override void ShowPlayerDemandAnswers()
@@ -123,7 +373,16 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
-                Description.ToString(),
+                new TextObject("{=!}The {GROUP} is pushing for {HERO}{ROLE} to be appointed for the {POSITION} position. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
+                .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(Group).ResultNumber * 100f).ToString("0.00"))
+                .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(Group).ResultNumber * 100f).ToString("0.00"))
+                .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
+                .SetTextVariable("LEADER", Group.Leader.Name)
+                .SetTextVariable("POSITION", position.Name)
+                .SetTextVariable("ROLE", GetHeroRoleText(benefactor))
+                .SetTextVariable("HERO", benefactor.Name)
+                .SetTextVariable("GROUP", Group.Name)
+                .ToString(),
                 options,
                 false,
                 1,
@@ -181,16 +440,67 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     }
                     else
                     {
-                        benefactor = Group.Leader;
+                        ChooseBenefactor(Group.Leader, playerLead);
                     }
                 },
                 null));
+        }
+
+        private void ChooseBenefactor(Hero playerChoice = null, bool leader = false)
+        {
+            Dictionary<Hero, int> votes = new Dictionary<Hero, int>();
+            if (playerChoice != null)
+            {
+                votes.Add(playerChoice, leader ? 5 : 1);
+            }
+
+            foreach (Hero member in Group.Members)
+            {
+                if (member == Hero.MainHero) continue;
+                List<ValueTuple<Hero, float>> options = new List<(Hero, float)>();
+                foreach (Hero option in Group.Members)
+                {
+                    if (option == member) continue;
+                    float value = member.GetRelation(option) / 100f;
+                    value += BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(member, position, false)
+                        .ResultNumber / 100f;
+                    options.Add(new(option, value));
+                }
+
+                Hero result = MBRandom.ChooseWeighted(options);
+                if (votes.ContainsKey(result))
+                {
+                    votes[result] += 1;
+                }
+                else
+                {
+                    votes.Add(result, member == Group.Leader ? 5 : 1);
+                }
+            }
+
+            benefactor = votes.FirstOrDefault(x => x.Value == votes.Values.Max()).Key;
         }
 
         public override void Finish()
         {
             position = null;
             benefactor = null;
+            DueDate = CampaignTime.Never;
+        }
+
+        public override void Tick()
+        {
+            if (Active && DueDate.GetDayOfYear == CampaignTime.Now.GetDayOfYear && DueDate.GetYear == CampaignTime.Now.GetYear)
+            {
+                if (position.Member == benefactor)
+                {
+                    PositiveAnswer.Fulfill(Group.FactionLeader);
+                }
+                else
+                {
+                    ShowPlayerDemandAnswers();
+                }
+            }
         }
     }
 }
