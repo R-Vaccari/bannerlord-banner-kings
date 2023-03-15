@@ -123,6 +123,7 @@ namespace BannerKings.Managers.Court
         }
 
         public ExplainedNumber Competence => BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(Member, this);
+        public ExplainedNumber ProjectedCompetence => BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(Member, this, true, true);
         public ExplainedNumber CalculateCandidateCompetence(Hero candidate) => BannerKingsConfig.Instance.CouncilModel
             .CalculateHeroCompetence(candidate, this);
 
