@@ -165,7 +165,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                    .SetTextVariable("LEADER", Group.Leader.Name)
                    .SetTextVariable("CHARM", 150),
                    new TextObject("{=!}"),
-                   6,
+                   0,
                    500,
                    100,
                    (Hero fulfiller) =>
@@ -192,7 +192,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                                    .ToString(),
                                    Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
                            }
-                           
+
+                           ChangeRelationAction.ApplyRelationChangeBetweenHeroes(fulfiller, Group.Leader, 6);
                            return true;
                        }
                        else
@@ -206,7 +207,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                                    .ToString(),
                                    Color.FromUint(Utils.TextHelper.COLOR_LIGHT_RED)));
                            }
-                          
+
+                           ChangeRelationAction.ApplyRelationChangeBetweenHeroes(fulfiller, Group.Leader, -9);
                            return false;
                        }
                    });
@@ -218,7 +220,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                    .SetTextVariable("PLAYER_LORDSHIP", Hero.MainHero.GetSkillValue(BKSkills.Instance.Lordship))
                    .SetTextVariable("LORDSHIP", 100),
                    new TextObject("{=!}"),
-                   6,
+                   -5,
                    1000,
                    100,
                    (Hero fulfiller) =>
@@ -399,11 +401,25 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override void ShowPlayerDemandOptions()
         {
-            List<InquiryElement> options = new List<InquiryElement>();
+            CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Group.FactionLeader.Clan);
+            List<InquiryElement> positions = new List<InquiryElement>();
+            foreach (var position in council.Positions)
+            {
+                if (position.IsCorePosition(position.StringId))
+                {
+                    positions.Add(new InquiryElement(position,
+                        position.Name.ToString(),
+                        null,
+                        true,
+                        position.Description.ToString()));
+                }
+            }
+
+            List<InquiryElement> candidates = new List<InquiryElement>();
             foreach (var member in Group.Members)
             {
                 var competence = BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(member, position, true);
-                options.Add(new InquiryElement(member,
+                candidates.Add(new InquiryElement(member,
                     new TextObject("{=!}{HERO} - {COMPETENCE}% competence")
                     .SetTextVariable("HERO", member.Name)
                     .SetTextVariable("COMPETENCE", (competence.ResultNumber * 100).ToString("0.00"))
@@ -418,32 +434,50 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             if (playerLead)
             {
                 description = new TextObject("{=!}Choose the benefactor for the {POSITION} position.");
+                MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString() + " (1/2)",
+                    new TextObject("{=!}As a leader of your group you can decide what council position to demand. Only positions from the Privy Council are suitable.").ToString(),
+                    positions,
+                    true,
+                    1,
+                    GameTexts.FindText("str_accept").ToString(),
+                    String.Empty,
+                    (List<InquiryElement> list) =>
+                    {
+                        CouncilMember position = (CouncilMember)list[0].Identifier;
+                        this.position = position;
+
+                        MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString() + " (2/2)",
+                            description.ToString(),
+                            candidates,
+                            true,
+                            1,
+                            GameTexts.FindText("str_accept").ToString(),
+                            String.Empty,
+                            (List<InquiryElement> list) =>
+                            {
+                                Hero hero = (Hero)list[0].Identifier;
+                                benefactor = hero;
+                            },
+                            null));
+                    },
+                    null));
             }
             else
             {
                 description = new TextObject("{=!}Cast your vote on who should be the benefactor for the {POSITION} position.");
+                MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
+                       description.ToString(),
+                       candidates,
+                       true,
+                       1,
+                       GameTexts.FindText("str_accept").ToString(),
+                       String.Empty,
+                       (List<InquiryElement> list) =>
+                       {
+                            ChooseBenefactor(Group.Leader, playerLead);
+                       },
+                       null));
             }
-
-            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
-                description.ToString(),
-                options,
-                true,
-                1,
-                GameTexts.FindText("str_accept").ToString(),
-                String.Empty,
-                (List<InquiryElement> list) =>
-                {
-                    Hero hero = (Hero)list[0].Identifier;
-                    if (playerLead)
-                    {
-                        benefactor = hero;
-                    }
-                    else
-                    {
-                        ChooseBenefactor(Group.Leader, playerLead);
-                    }
-                },
-                null));
         }
 
         private void ChooseBenefactor(Hero playerChoice = null, bool leader = false)
@@ -462,7 +496,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 {
                     if (option == member) continue;
                     float value = member.GetRelation(option) / 100f;
-                    value += BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(member, position, false)
+                    value += BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(option, position, false)
                         .ResultNumber / 100f;
                     options.Add(new(option, value));
                 }
