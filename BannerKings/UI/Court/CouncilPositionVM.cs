@@ -55,9 +55,13 @@ namespace BannerKings.UI.Court
             PositionInfo = new MBBindingList<InformationElement>();
             if (position.Member != null)
             {
+                var competence = position.ProjectedCompetence;
                 PositionInfo.Add(new InformationElement(new TextObject("{=Oy8rn07Z}Competence:").ToString(),
-                                (position.Competence.ResultNumber * 100f).ToString("0.00") + '%',
-                                new TextObject("{=hdbcAeax}This councillor's competence in their position. The more competent they are, the more likely they are to trigger the tasks' effects and often with better results.").ToString()));
+                                (competence.ResultNumber * 100f).ToString("0.00") + '%',
+                                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                                .SetTextVariable("TEXT", new TextObject("{=hdbcAeax}This councillor's competence in their position. The more competent they are, the more likely they are to trigger the tasks' effects and often with better results."))
+                                .SetTextVariable("EXPLANATIONS", competence.GetExplanations())
+                                .ToString()));
 
                 PositionInfo.Add(new InformationElement(new TextObject("{=hrGvzpLz}Efficiency:").ToString(),
                                 (position.CurrentTask.Efficiency * 100f).ToString("0.00") + '%',

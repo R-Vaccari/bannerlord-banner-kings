@@ -82,7 +82,7 @@ namespace BannerKings.UI.Court
                 {
                     current = new TextObject("{=Qa6YdGEF}{HERO} current holds this position with a competence of {COMPETENCE}%.")
                         .SetTextVariable("HERO", Position.Member.Name)
-                        .SetTextVariable("COMPETENCE", (Position.Competence.ResultNumber * 100f).ToString("0.00"));
+                        .SetTextVariable("COMPETENCE", (Position.ProjectedCompetence.ResultNumber * 100f).ToString("0.00"));
                 }
 
                 TextObject description;
