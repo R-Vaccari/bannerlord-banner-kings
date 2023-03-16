@@ -84,6 +84,14 @@ namespace BannerKings.Models.Vanilla
                 0.2f,
                 true);
 
+            var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
+            if (position != null)
+            {
+                result.AddFactor(position.InfluenceCosts(), new TextObject("{=!}{POSITION} in {OWNER}'s council")
+                    .SetTextVariable("POSITION", position.Name)
+                    .SetTextVariable("OWNER", position.Clan.Leader.Name));
+            }
+
             return result;
         }
 
@@ -205,12 +213,6 @@ namespace BannerKings.Models.Vanilla
                 i++;
 
                 baseResult.Add(settlementResult.ResultNumber, settlement.Name);
-            }
-
-            var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
-            if (position != null)
-            {
-                baseResult.Add(position.IsCorePosition(position.StringId) ? 1f : 0.5f, new TextObject("{=WvhXhUFS}Councillor role"));
             }
 
             float currentVassals = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentVassals(clan).ResultNumber;
