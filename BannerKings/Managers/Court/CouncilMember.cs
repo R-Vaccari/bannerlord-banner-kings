@@ -102,7 +102,20 @@ namespace BannerKings.Managers.Court
         protected bool IsValidCandidateInternal(Hero candidate) => isValidCandidateInternal(this, candidate);
         public bool IsAdequate(CouncilData data) => isAdequate(data);
 
-        public void SetMember(Hero hero) => Member = hero;
+        public void SetMember(Hero hero)
+        {
+            if (Member != null)
+            {
+                BannerKingsConfig.Instance.CourtManager.RemoveCache(hero);
+            }
+
+            if (hero != null)
+            {
+                BannerKingsConfig.Instance.CourtManager.AddCache(hero, this);
+            }
+            Member = hero;
+
+        }
         public void SetIsRoyal(bool isRoyal)
         {
             IsRoyal = isRoyal;
