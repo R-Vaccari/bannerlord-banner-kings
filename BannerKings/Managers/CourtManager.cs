@@ -22,12 +22,15 @@ namespace BannerKings.Managers
         public CourtManager(Dictionary<Clan, CouncilData> councils)
         {
             Councils = councils;
+            PositionsCache = new Dictionary<Hero, CouncilMember>();
         }
 
         [SaveableProperty(1)] private Dictionary<Clan, CouncilData> Councils { get; set; }
+        private Dictionary<Hero, CouncilMember> PositionsCache { get; set; }
 
         public void PostInitialize()
         {
+            PositionsCache = new Dictionary<Hero, CouncilMember>();
             foreach (var council in Councils)
             {
                 council.Value.PostInitialize();
@@ -35,6 +38,34 @@ namespace BannerKings.Managers
                 {
                     council.Value.SetPeerage(Peerage.GetAdequatePeerage(council.Key));
                 }
+
+                foreach (var position in council.Value.Positions)
+                {
+                    if (position.Member != null)
+                    {
+                        AddCache(position.Member, position);
+                    }
+                }
+            }
+        }
+
+        internal void RemoveCache(Hero hero)
+        {
+            if (PositionsCache.ContainsKey(hero))
+            {
+                PositionsCache.Remove(hero);
+            }
+        }
+
+        internal void AddCache(Hero hero, CouncilMember member)
+        {
+            if (!PositionsCache.ContainsKey(hero))
+            {
+                PositionsCache.Add(hero, member);
+            }
+            else
+            {
+                PositionsCache[hero] = member;
             }
         }
 
@@ -113,6 +144,11 @@ namespace BannerKings.Managers
                 hero.IsDead)
             {
                 return null;
+            }
+
+            if (PositionsCache.ContainsKey(hero))
+            {
+                return PositionsCache[hero];
             }
 
             Kingdom kingdom = null;
