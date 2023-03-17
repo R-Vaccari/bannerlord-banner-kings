@@ -167,17 +167,15 @@ namespace BannerKings.Managers
                 var clans = Councils.Keys.ToList();
                 foreach (var clan in clans)
                 {
-                    if (Councils[clan].GetMembers().Contains(hero))
+                    if (clan.MapFaction == hero.MapFaction)
                     {
-                        targetClan = clan;
-                        break;
+                        CouncilMember result = Councils[clan].GetHeroPosition(hero);
+                        if (result != null)
+                        {
+                            return result;
+                        }
                     }
                 }
-            }
-
-            if (targetClan != null)
-            {
-                return Councils[targetClan].GetHeroPosition(hero);
             }
 
             return null;
