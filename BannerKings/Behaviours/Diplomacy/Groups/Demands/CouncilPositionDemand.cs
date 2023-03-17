@@ -87,6 +87,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override bool Active => position != null && benefactor != null;
 
+        public override float MinimumGroupInfluence => 0.2f;
+
         public override IEnumerable<DemandResponse> DemandResponses
         {
             get

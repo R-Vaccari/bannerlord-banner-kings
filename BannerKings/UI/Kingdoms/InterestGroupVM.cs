@@ -1,8 +1,10 @@
 ﻿using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
+using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Utils.Models;
 using Bannerlord.UIExtenderEx.Attributes;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -21,9 +23,9 @@ namespace BannerKings.UI.Kingdoms
         private MBBindingList<GroupMemberVM> members;
         private GroupMemberVM leader;
         private ImageIdentifierVM clanBanner;
-        private bool isEmpty, isActionEnabled;
-        private string actionName;
-        private HintViewModel actionHint;
+        private bool isEmpty, isActionEnabled, isDemandEnabled;
+        private string actionName, demandName;
+        private HintViewModel actionHint, demandHint;
         private KingdomGroupsVM groupsVM;
 
         public KingdomDiplomacy KingdomDiplomacy { get; }
@@ -107,7 +109,6 @@ namespace BannerKings.UI.Kingdoms
             int lords = Group.Members.FindAll(x => x.IsLord).Count;
             int notables = Group.Members.FindAll(x => x.IsNotable).Count;
 
-
             TextObject endorsedExplanation = new TextObject("{=!}Laws -----\n{LAWS}\n\n\nPolicies -----\n{POLICIES}\n\n\nCasus Belli -----\n{CASUS}")
                 .SetTextVariable("LAWS", Group.SupportedLaws.Aggregate("", (current, law) => 
                 current + Environment.NewLine + law.Name))
@@ -143,6 +144,11 @@ namespace BannerKings.UI.Kingdoms
                 ActionName = new TextObject("{=3sRdGQou}Leave").ToString();
                 IsActionEnabled = true;
                 ActionHint = new HintViewModel(new TextObject("{=!}Leave this group. This will break any ties to their interests and demands. Leaving a group will hurt your relations with it's members, mainly the group leader. If you are the leader yourself, this impact will be increased."));
+
+                DemandName = new TextObject("{=!}Push Demand").ToString();
+                IsDemandEnabled = Group.Leader == Hero.MainHero;
+                DemandHint = new HintViewModel(new TextObject("{=!}Deliver a demand to {SUZERAIN}. As the leader of this group, you are able to dictate what to demand from your ruler. Once a demand is made you can not disclaim the consequences, be them positive or otherwise.")
+                    .SetTextVariable("SUZERAIN", Group.FactionLeader.Name));
             }
             else
             {
@@ -163,6 +169,41 @@ namespace BannerKings.UI.Kingdoms
             {
                 Group.AddMember(Hero.MainHero);
             }
+        }
+
+        [DataSourceMethod]
+        private void ExecuteDemand()
+        {
+            var list = new List<InquiryElement>();
+            foreach (Demand demand in Group.PossibleDemands)
+            {
+                var possible = Group.CanPushDemand(demand);
+                list.Add(new InquiryElement(demand,
+                    demand.Name.ToString(),
+                    null,
+                    possible.Item1,
+                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT", demand.Description)
+                    .SetTextVariable("EXPLANATIONS", possible.Item2)
+                    .ToString()));
+            }
+
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Push Demand").ToString(),
+                new TextObject("{=!}As the representative of the {GROUP}, you are able to push demands to {SUZERAIN} in the group's name. Pushing for a demand will often harm your relationship with your suzerain. How the group will respond will feel about it will depend entirely on the suzerain's response. Once a demand is pushed, the group is both unable to press the same kind of request and its influence is lowered, temporarily.")
+                .SetTextVariable("GROUP", GroupName)
+                .SetTextVariable("SUZERAIN", Group.FactionLeader.Name)
+                .ToString(),
+                list,
+                true,
+                1,
+                GameTexts.FindText("str_accept").ToString(),
+                GameTexts.FindText("str_cancel").ToString(),
+                (List<InquiryElement> list) =>
+                {
+                    Demand demand = (Demand)list.First().Identifier;
+                    demand.SetUp();
+                },
+                null));
         }
 
         [DataSourceProperty]
@@ -219,6 +260,50 @@ namespace BannerKings.UI.Kingdoms
                 {
                     actionHint = value;
                     OnPropertyChangedWithValue(value, "ActionHint");
+                }
+            }
+        }
+
+
+        [DataSourceProperty]
+        public bool IsDemandEnabled
+        {
+            get => isDemandEnabled;
+            set
+            {
+                if (value != isDemandEnabled)
+                {
+                    isDemandEnabled = value;
+                    OnPropertyChangedWithValue(value, "IsDemandEnabled");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string DemandName
+        {
+            get => demandName;
+            set
+            {
+                if (value != demandName)
+                {
+                    demandName = value;
+                    OnPropertyChangedWithValue(value, "DemandName");
+                }
+            }
+        }
+
+
+        [DataSourceProperty]
+        public HintViewModel DemandHint
+        {
+            get => demandHint;
+            set
+            {
+                if (value != demandHint)
+                {
+                    demandHint = value;
+                    OnPropertyChangedWithValue(value, "DemandHint");
                 }
             }
         }

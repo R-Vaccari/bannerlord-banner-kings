@@ -5,6 +5,7 @@ using BannerKings.Utils.Extensions;
 using BannerKings.Utils.Models;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
@@ -59,7 +60,6 @@ namespace BannerKings.Models.BKModels
 
                 if (member.Clan != null && member.IsClanLeader())
                 {
-                    float strength = Campaign.Current.Models.DiplomacyModel.GetClanStrength(member.Clan);
                     result.Add(0.75f * (CalculateClanInfluence(member.Clan, diplomacy).ResultNumber / totalClanInfluence), member.Clan.Name);
                 }
             }
@@ -82,33 +82,15 @@ namespace BannerKings.Models.BKModels
         {
             var result = new BKExplainedNumber(0f, explanations);
             result.LimitMin(0f);
-            result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(clan));
-            if (clan.Influence > 0)
-            {
-                result.Add(clan.Influence * 3f);
-            }
+            result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(clan), GameTexts.FindText("str_notable_power"));
            
             if (clan.Gold > 0)
             {
-                result.Add(clan.Gold / 10f);
+                result.Add(clan.Gold / 10f, GameTexts.FindText("str_wealth"));
             }
 
-            foreach (var town in clan.Fiefs)
-            {
-                if (town.Loyalty > 70f)
-                {
-                    result.Add(CalculateTownInfluence(town).ResultNumber);
-                }
-            }
-
-            FeudalTitle sovereignTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(diplomacy.Kingdom);
-            foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
-            {
-                if (!title.IsSovereignLevel && title.sovereign == sovereignTitle)
-                {
-                    result.Add(5000f / (float)title.type);
-                }
-            }
+            result.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(clan).ResultNumber * 5f, 
+                new TextObject("{=wwYABLRd}Clan Influence Limit"));
 
             return result;
         }

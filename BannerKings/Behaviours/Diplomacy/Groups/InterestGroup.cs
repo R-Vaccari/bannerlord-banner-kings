@@ -2,6 +2,7 @@
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Utils.Models;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -177,6 +178,25 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 CampaignTime.YearsFromNow(1f),
                 response.Explanation,
                 success));
+        }
+
+        public (bool, TextObject) CanPushDemand(Demand demand)
+        {
+            DemandOutcome outcome = RecentOucomes.FirstOrDefault(x => x.Demand == demand);
+            if (outcome != null)
+            {
+                return new(false, outcome.Explanation);
+            }
+
+            BKExplainedNumber influence = BannerKingsConfig.Instance.InterestGroupsModel
+               .CalculateGroupInfluence(this, false);
+            if (influence.ResultNumber < demand.MinimumGroupInfluence)
+            {
+                return new(false, new TextObject("{=!}This demand requires at least {INFLUENCE}% group influence.")
+                    .SetTextVariable("INFLUENCE", (demand.MinimumGroupInfluence * 100f).ToString("0.0")));
+            }
+
+            return demand.IsDemandCurrentlyAdequate();
         }
 
         public bool DemandsCouncil { get; private set; }

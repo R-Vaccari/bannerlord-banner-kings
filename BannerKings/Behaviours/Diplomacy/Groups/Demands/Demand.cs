@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
@@ -22,6 +21,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public abstract DemandResponse PositiveAnswer { get; }
         public abstract DemandResponse NegativeAnswer { get; }
+
+        public abstract float MinimumGroupInfluence { get; }
 
         public abstract bool Active { get; }
 

@@ -294,18 +294,36 @@
 												</ItemTemplate>
 											</GridWidget>
 											
-											<Widget Id="GroupAction" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="227" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginRight="0" MarginBottom="2">
+											<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" 
+													   StackLayout.LayoutMethod="HorizontalLeftToRight">
 											  <Children>
-												<HintWidget DataSource="{ActionHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
-												<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="ButtonBrush2" UpdateChildrenStates="true" 
-															  Command.Click="ExecuteAction" IsEnabled="@IsActionEnabled" >
+											  
+												<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="227" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginRight="0" MarginBottom="2">
 												  <Children>
-													<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="Kingdom.GeneralButtons.Text" Text="@ActionName" />
+													<HintWidget DataSource="{ActionHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+													<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="ButtonBrush2" UpdateChildrenStates="true" 
+																  Command.Click="ExecuteAction" IsEnabled="@IsActionEnabled" >
+													  <Children>
+														<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="Kingdom.GeneralButtons.Text" Text="@ActionName" />
+													  </Children>
+													</ButtonWidget>
 												  </Children>
-												</ButtonWidget>
+												</Widget>
+												
+												<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="227" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginRight="0" MarginBottom="2">
+												  <Children>
+													<HintWidget DataSource="{DemandHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+													<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="ButtonBrush2" UpdateChildrenStates="true" 
+																  Command.Click="ExecuteDemand" IsEnabled="@IsDemandEnabled" >
+													  <Children>
+														<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="Kingdom.GeneralButtons.Text" Text="@DemandName" />
+													  </Children>
+													</ButtonWidget>
+												  </Children>
+												</Widget>
+											  
 											  </Children>
-											</Widget>
-
+											</ListPanel>
 										</Children>
 									</ListPanel>
 								</Children>
