@@ -146,7 +146,7 @@ namespace BannerKings.Managers
                 return null;
             }
 
-            if (PositionsCache.ContainsKey(hero))
+            if (PositionsCache != null && PositionsCache.ContainsKey(hero))
             {
                 return PositionsCache[hero];
             }
