@@ -179,9 +179,9 @@ namespace BannerKings.Managers.Court
         public float InfluenceCosts()
         {
             var cost = 0f;
-            if (IsCorePosition(StringId) && StringId != "Spiritual")
+            if (IsCorePosition(StringId))
             {
-                cost = IsRoyal ? 0.05f : 0.03f;
+                cost = IsRoyal ? 0.12f : 0.03f;
             }
 
             return cost;
