@@ -471,7 +471,7 @@ namespace BannerKings.Patches
                     var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
                     if (sovereign != null)
                     {
-                        __result = !PolicyHelper.GetForbiddenGovernmentPolicies(sovereign.contract.Government)
+                        __result = !PolicyHelper.GetForbiddenGovernmentPolicies(sovereign.Contract.Government)
                             .Contains(__instance.Policy);
                         return false;
                     }

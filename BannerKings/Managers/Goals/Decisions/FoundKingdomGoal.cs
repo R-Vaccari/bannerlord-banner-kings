@@ -81,7 +81,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
                 foreach (var title in titles)
                 {
-                    if (title.type == TitleType.Dukedom)
+                    if (title.TitleType == TitleType.Dukedom)
                     {
                         duchies.Add(new InquiryElement(title, title.FullName.ToString(), null));
                     }

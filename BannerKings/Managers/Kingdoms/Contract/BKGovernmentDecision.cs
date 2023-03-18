@@ -63,7 +63,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             var newGovernment = (chosenOutcome as GovernmentDecisionOutcome).ShouldDecisionBeEnforced;
             if (newGovernment)
             {
-                var succession = Title.contract.Succession;
+                var succession = Title.Contract.Succession;
                 switch (governmentType)
                 {
                     case GovernmentType.Imperial:
@@ -104,7 +104,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                     }
                 }
 
-                if (succession != Title.contract.Succession)
+                if (succession != Title.Contract.Succession)
                 {
                     Title.ChangeContract(succession);
                 }
@@ -114,7 +114,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         public override TextObject GetSecondaryEffects()
         {
             TextObject effects = null;
-            var succession = Title.contract.Succession;
+            var succession = Title.Contract.Succession;
             switch (governmentType)
             {
                 case GovernmentType.Imperial:
@@ -268,7 +268,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             textObject.SetTextVariable("KINGDOM", Kingdom.InformalName);
             textObject.SetTextVariable("POLICY_DESCRIPTION", Utils.Helpers
-                .GetGovernmentString(newGovernment ? governmentType : Title.contract.Government));
+                .GetGovernmentString(newGovernment ? governmentType : Title.Contract.Government));
             if (isShortVersion || IsSingleClanDecision())
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", TextObject.Empty);
@@ -314,7 +314,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
             textObject.SetTextVariable("CURRENT",
-                Utils.Helpers.GetGovernmentString(Title.contract.Government, Kingdom.Culture));
+                Utils.Helpers.GetGovernmentString(Title.Contract.Government, Kingdom.Culture));
             textObject.SetTextVariable("PROPOSED", Utils.Helpers.GetGovernmentString(governmentType, Kingdom.Culture));
             return textObject;
         }

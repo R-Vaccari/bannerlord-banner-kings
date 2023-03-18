@@ -129,20 +129,20 @@ namespace BannerKings.Models.BKModels
                     var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
                     if (title != null)
                     {
-                        if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryManumission))
+                        if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryManumission))
                         {
                             result.AddFactor(-1f, DefaultDemesneLaws.Instance.SlaveryManumission.Name);
                         }
-                        else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryVlandia))
+                        else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryVlandia))
                         {
                             result.AddFactor(-0.3f, DefaultDemesneLaws.Instance.SlaveryVlandia.Name);
                         }
-                        else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryAserai))
+                        else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryAserai))
                         {
                             result.AddFactor(0.5f, DefaultDemesneLaws.Instance.SlaveryAserai.Name);
                         }
 
-                        if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesAgricultureDuties))
+                        if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesAgricultureDuties))
                         {
                             float factor = -0.2f;
                             if (settlement.IsVillage)
@@ -155,7 +155,7 @@ namespace BannerKings.Models.BKModels
 
                             result.Add(result.ResultNumber * factor, DefaultDemesneLaws.Instance.SlavesAgricultureDuties.Name);
                         }
-                        else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesHardLabor)) 
+                        else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesHardLabor)) 
                         {
                             float factor = -0.2f;
                             if (settlement.IsVillage)

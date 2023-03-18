@@ -77,8 +77,8 @@ namespace BannerKings.Managers.Titles.Laws
         public List<DemesneLaw> GetAdequateLaws(FeudalTitle title)
         {
             var list = new List<DemesneLaw>();
-            var government = title.contract.Government;
-            var faction = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title.sovereign != null ? title.sovereign : title);
+            var government = title.Contract.Government;
+            var faction = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title.Sovereign != null ? title.Sovereign : title);
             CultureObject culture = null;
             if (faction != null)
             {

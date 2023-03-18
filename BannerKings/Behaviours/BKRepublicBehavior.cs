@@ -29,12 +29,12 @@ namespace BannerKings.Behaviours
             foreach (var kingdom in Kingdom.All)
             {
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-                if (title?.contract == null)
+                if (title?.Contract == null)
                 {
                     return;
                 }
 
-                var government = title.contract.Government;
+                var government = title.Contract.Government;
                 if (government == GovernmentType.Republic)
                 {
                     var inElection = false;

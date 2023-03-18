@@ -250,9 +250,9 @@ namespace BannerKings.Managers.Court
             var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Owner);
             foreach (var title in titles)
             {
-                if (title.type == TitleType.Lordship && title.fief.MapFaction == Owner.MapFaction)
+                if (title.TitleType == TitleType.Lordship && title.Fief.MapFaction == Owner.MapFaction)
                 {
-                    foreach (var notable in title.fief.Notables)
+                    foreach (var notable in title.Fief.Notables)
                     {
                         if (!heroes.Contains(notable))
                         {

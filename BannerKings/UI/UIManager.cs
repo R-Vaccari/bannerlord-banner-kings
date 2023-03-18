@@ -168,12 +168,12 @@ namespace BannerKings.UI
                     if (title != null)
                     {
                         var government = GovernmentType.Feudal;
-                        if (title.contract != null)
+                        if (title.Contract != null)
                         {
-                            government = title.contract.Government;
+                            government = title.Contract.Government;
                         }
 
-                        var honorary = Utils.Helpers.GetTitleHonorary(title.type, government, __instance.IsFemale,
+                        var honorary = Utils.Helpers.GetTitleHonorary(title.TitleType, government, __instance.IsFemale,
                             kingdom != null ? kingdom.Culture : __instance.Culture);
                         var name = (TextObject) __instance.GetType()
                             .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
@@ -210,9 +210,9 @@ namespace BannerKings.UI
                         if (leaderTitle != null)
                         {
                             var government = GovernmentType.Feudal;
-                            if (leaderTitle.contract != null)
+                            if (leaderTitle.Contract != null)
                             {
-                                government = leaderTitle.contract.Government;
+                                government = leaderTitle.Contract.Government;
                             }
 
                             var name = (TextObject)__instance.GetType()
@@ -221,7 +221,7 @@ namespace BannerKings.UI
 
                             if (leader == __instance.Spouse)
                             {
-                                var honorary = Utils.Helpers.GetTitleHonorary(leaderTitle.type, government, __instance.IsFemale,
+                                var honorary = Utils.Helpers.GetTitleHonorary(leaderTitle.TitleType, government, __instance.IsFemale,
                                     kingdom != null ? kingdom.Culture : __instance.Culture);
 
                                 __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
@@ -339,7 +339,7 @@ namespace BannerKings.UI
 
                 var title =
                     BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Hero.MainHero.MapFaction as Kingdom);
-                if (title?.contract == null)
+                if (title?.Contract == null)
                 {
                     return;
                 }
@@ -350,12 +350,12 @@ namespace BannerKings.UI
                     .GetMethod("OnPolicySelect", BindingFlags.Instance | BindingFlags.NonPublic);
 
 
-                if (title.contract == null)
+                if (title.Contract == null)
                 {
                     return;
                 }
 
-                var list = PolicyHelper.GetForbiddenGovernmentPolicies(title.contract.Government);
+                var list = PolicyHelper.GetForbiddenGovernmentPolicies(title.Contract.Government);
                 __instance.OtherPolicies.Clear();
                 foreach (var policy2 in from p in PolicyObject.All
                          where !(bool) active.Invoke(__instance, new object[] {p}) && !list.Contains(p)

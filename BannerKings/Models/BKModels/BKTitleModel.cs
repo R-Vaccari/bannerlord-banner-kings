@@ -22,7 +22,7 @@ namespace BannerKings.Models.BKModels
         {
             var result = new ExplainedNumber(0f, explanations);
 
-            FeudalContract contract = title.contract;
+            FeudalContract contract = title.Contract;
             var succession = contract.Succession;
             if (succession == SuccessionType.Imperial)
             {
@@ -173,7 +173,7 @@ namespace BannerKings.Models.BKModels
 
             foreach (Hero hero in candidates)
             {
-                var contract = clanTitle != null ? clanTitle.contract : null;
+                var contract = clanTitle != null ? clanTitle.Contract : null;
                 var explanation = BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(leader,
                     hero, contract, true);
                 explanations.Add(hero, explanation);
@@ -187,7 +187,7 @@ namespace BannerKings.Models.BKModels
         public HashSet<Hero> GetSuccessionCandidates(Hero currentLeader, FeudalTitle title)
         {
             var list = new HashSet<Hero>();
-            var succession = title.contract.Succession;
+            var succession = title.Contract.Succession;
 
             if (succession == SuccessionType.Hereditary_Monarchy)
             {
@@ -241,8 +241,8 @@ namespace BannerKings.Models.BKModels
                 if (currentLeader.Clan.Kingdom != null)
                 {
                     clans = (from t in currentLeader.Clan.Kingdom.Clans
-                             where !t.IsEliminated && !t.IsUnderMercenaryService
-                             select t).ToList();
+                            where !t.IsEliminated && !t.IsUnderMercenaryService
+                            select t).ToList();
                 }
 
                 foreach (var clan in clans)
@@ -284,9 +284,9 @@ namespace BannerKings.Models.BKModels
             var highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(grantor);
             var extra = 0f;
 
-            if (highest is { type: < TitleType.Barony })
+            if (highest is {TitleType: < TitleType.Barony})
             {
-                extra = highest.type switch
+                extra = highest.TitleType switch
                 {
                     TitleType.County => 30f,
                     TitleType.Dukedom => 60f,
@@ -340,14 +340,14 @@ namespace BannerKings.Models.BKModels
             }
 
             var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(founder);
-            if (titles.Any(x => x.type <= TitleType.Kingdom))
+            if (titles.Any(x => x.TitleType <= TitleType.Kingdom))
             {
                 foundAction.Possible = false;
                 foundAction.Reason = new TextObject("{=t8HXoFk7}Cannot found a kingdom while already being a de Jure sovereign.");
                 return foundAction;
             }
 
-            if (!titles.Any(x => x.type <= TitleType.Dukedom))
+            if (!titles.Any(x => x.TitleType <= TitleType.Dukedom))
             {
                 foundAction.Possible = false;
                 foundAction.Reason = new TextObject("{=Ac5LJzsc}Cannot found a kingdom without a de Jure duke level title.");
@@ -431,7 +431,7 @@ namespace BannerKings.Models.BKModels
                 return claimAction;
             }
 
-            if (title.type == TitleType.Lordship)
+            if (title.TitleType == TitleType.Lordship)
             {
                 var kingdom = claimant.Clan.Kingdom;
                 if (kingdom != null && kingdom == title.deJure.Clan.Kingdom &&
@@ -443,7 +443,7 @@ namespace BannerKings.Models.BKModels
                     return claimAction;
                 }
 
-                var boundTitle = BannerKingsConfig.Instance.TitleManager.GetTitle(title.fief.Village.Bound);
+                var boundTitle = BannerKingsConfig.Instance.TitleManager.GetTitle(title.Fief.Village.Bound);
                 if (claimant != boundTitle.deJure)
                 {
                     claimAction.Possible = false;
@@ -493,69 +493,69 @@ namespace BannerKings.Models.BKModels
                 return revokeAction;
             }
 
-            var governmentType = title.contract.Government;
+            var governmentType = title.Contract.Government;
             switch (governmentType)
             {
                 case GovernmentType.Tribal:
                     revokeAction.Possible = false;
                     revokeAction.Reason = new TextObject("{=duRc8Vrs}Tribal government does not allow revoking.");
                     return revokeAction;
-                case GovernmentType.Republic when title.type != TitleType.Dukedom:
+                case GovernmentType.Republic when title.TitleType != TitleType.Dukedom:
                     revokeAction.Possible = false;
                     revokeAction.Reason = new TextObject("{=MSaLufNx}Republics can only revoke duke titles.");
                     return revokeAction;
                 case GovernmentType.Republic:
+                {
+                    var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
+                    if (revoker != sovereign.deJure)
                     {
-                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
-                        if (revoker != sovereign.deJure)
-                        {
-                            revokeAction.Possible = false;
-                            revokeAction.Reason = new TextObject("{=w7b5SE48}Not de Jure faction leader.");
-                            return revokeAction;
-                        }
-
-                        break;
+                        revokeAction.Possible = false;
+                        revokeAction.Reason = new TextObject("{=w7b5SE48}Not de Jure faction leader.");
+                        return revokeAction;
                     }
+
+                    break;
+                }
                 case GovernmentType.Imperial:
+                {
+                    var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
+                    if (sovereign == null || revoker != sovereign.deJure)
                     {
-                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
-                        if (sovereign == null || revoker != sovereign.deJure)
-                        {
-                            revokeAction.Possible = false;
-                            revokeAction.Reason = new TextObject("{=w7b5SE48}Not de Jure faction leader.");
-                            return revokeAction;
-                        }
-
-                        break;
+                        revokeAction.Possible = false;
+                        revokeAction.Reason = new TextObject("{=w7b5SE48}Not de Jure faction leader.");
+                        return revokeAction;
                     }
+
+                    break;
+                }
                 default:
+                {
+                    var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(revoker);
+                    var vassal = false;
+                    foreach (var revokerTitle in titles)
                     {
-                        var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(revoker);
-                        var vassal = false;
-                        foreach (var revokerTitle in titles)
+                        if (revokerTitle.Vassals != null)
                         {
-                            if (revokerTitle.vassals != null)
+                            foreach (var revokerTitleVassal in revokerTitle.Vassals)
                             {
-                                foreach (var revokerTitleVassal in revokerTitle.vassals)
+                                if (revokerTitleVassal.deJure == title.deJure)
                                 {
-                                    if (revokerTitleVassal.deJure == title.deJure)
-                                    {
-                                        vassal = true;
-                                        break;
-                                    }
+                                    vassal = true;
+                                    break;
                                 }
                             }
                         }
-
-                        if (!vassal)
-                        {
-                            revokeAction.Possible = false;
-                            revokeAction.Reason = new TextObject("{=Mk29oGgs}Not a direct vassal.");
-                            return revokeAction;
-                        }
-
-                        break;
                     }
+
+                    if (!vassal)
+                    {
+                        revokeAction.Possible = false;
+                        revokeAction.Reason = new TextObject("{=Mk29oGgs}Not a direct vassal.");
+                        return revokeAction;
+                    }
+
+                    break;
+                }
             }
 
 
@@ -564,14 +564,14 @@ namespace BannerKings.Models.BKModels
 
             if (revokerHighest != null)
             {
-                if (targetHighest.type <= revokerHighest.type)
+                if (targetHighest.TitleType <= revokerHighest.TitleType)
                 {
                     revokeAction.Possible = false;
                     revokeAction.Reason = new TextObject("{=1DGBGp8e}Can not revoke from a lord of superior hierarchy.");
                     return revokeAction;
                 }
             }
-
+            
 
             revokeAction.Possible = true;
             revokeAction.Reason = new TextObject("{=f5Be67QF}You may grant away this title.");
@@ -597,7 +597,7 @@ namespace BannerKings.Models.BKModels
                 return grantAction;
             }
 
-            if (title.fief != null)
+            if (title.Fief != null)
             {
                 var deFacto = title.DeFacto;
                 if (deFacto != grantor)
@@ -608,7 +608,7 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            if (title.type > TitleType.Lordship)
+            if (title.TitleType > TitleType.Lordship)
             {
                 var candidates = GetGrantCandidates(grantor);
                 if (candidates.Count == 0)
@@ -662,7 +662,7 @@ namespace BannerKings.Models.BKModels
                 usurpData.Possible = true;
                 usurpData.Reason = new TextObject("{=zMnXdAxp}You may claim this title.");
 
-                var titleLevel = (int)title.type;
+                var titleLevel = (int) title.TitleType;
                 var clanTier = usurper.Clan.Tier;
                 if (clanTier < 2 || (titleLevel <= 2 && clanTier < 4))
                 {
@@ -762,7 +762,7 @@ namespace BannerKings.Models.BKModels
             var deFacto = title.DeFacto;
             if (deFacto != title.deJure)
             {
-                if (title.fief == null)
+                if (title.Fief == null)
                 {
                     if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(deFacto))
                     {
@@ -775,14 +775,14 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            if (title.sovereign != null && title.sovereign.deJure != title.deJure && !claimants.ContainsKey(title.sovereign.deJure))
+            if (title.Sovereign != null && title.Sovereign.deJure != title.deJure && !claimants.ContainsKey(title.Sovereign.deJure))
             {
-                claimants.Add(title.sovereign.deJure, new TextObject("{=pkZ0J4Fo}De jure sovereign of this title"));
+                claimants.Add(title.Sovereign.deJure, new TextObject("{=pkZ0J4Fo}De jure sovereign of this title"));
             }
 
-            if (title.vassals is { Count: > 0 })
+            if (title.Vassals is {Count: > 0})
             {
-                foreach (var vassal in title.vassals)
+                foreach (var vassal in title.Vassals)
                 {
                     if (vassal.deJure != null && vassal.deJure != title.deJure && !claimants.ContainsKey(vassal.deJure))
                     {
@@ -796,20 +796,20 @@ namespace BannerKings.Models.BKModels
 
         private float GetInfluenceUsurpCost(FeudalTitle title)
         {
-            return 500f / (float)title.type + 1f;
+            return 500f / (float) title.TitleType + 1f;
         }
 
         private float GetRenownUsurpCost(FeudalTitle title)
         {
-            return 100f / (float)title.type + 1f;
+            return 100f / (float) title.TitleType + 1f;
         }
 
         public float GetGoldUsurpCost(FeudalTitle title)
         {
-            var gold = 100000f / (float)title.type + 1f;
-            if (title.fief != null)
+            var gold = 100000f / (float) title.TitleType + 1f;
+            if (title.Fief != null)
             {
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(title.fief);
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(title.Fief);
                 gold += data.TotalPop / 100f;
             }
 
@@ -818,7 +818,7 @@ namespace BannerKings.Models.BKModels
 
         public int GetRelationImpact(FeudalTitle title)
         {
-            var result = title.type switch
+            var result = title.TitleType switch
             {
                 TitleType.Lordship => MBRandom.RandomInt(5, 10),
                 TitleType.Barony => MBRandom.RandomInt(15, 25),

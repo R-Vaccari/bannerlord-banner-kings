@@ -38,7 +38,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             settlements = BannerKingsConfig.Instance.TitleManager.GetAllTitlesByType(TitleType.Dukedom)
                 .Where(t => duchyStringIds.Contains(t.shortName.ToString()))
-                .SelectMany(t => t.vassals.Select(v => v.fief))
+                .SelectMany(t => t.Vassals.Select(v => v.Fief))
                 .ToList();
         }
 

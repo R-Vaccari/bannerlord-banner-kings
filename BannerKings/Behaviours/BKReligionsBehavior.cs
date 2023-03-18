@@ -312,9 +312,9 @@ namespace BannerKings.Behaviours
                             var bonus = 0f;
                             foreach (var title in titles)
                             {
-                                if (title.sovereign == empireTitle)
+                                if (title.Sovereign == empireTitle)
                                 {
-                                    bonus += 2f / (float)title.type;
+                                    bonus += 2f / (float)title.TitleType;
                                 }
                             }
 
