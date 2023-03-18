@@ -24,6 +24,35 @@ namespace BannerKings.Behaviours
     {
         private Dictionary<Settlement, List<Clan>> conqueredByArmies = new();
 
+        public void RemoveSettlement(Settlement settlement)
+        {
+            if (conqueredByArmies.ContainsKey(settlement))
+            {
+                conqueredByArmies.Remove(settlement);
+            }
+        }
+
+        public void AddClan(Clan clan, Settlement settlement)
+        {
+            if (!conqueredByArmies.ContainsKey(settlement))
+            {
+                conqueredByArmies.Add(settlement, new List<Clan>());
+            }
+
+            if (!conqueredByArmies[settlement].Contains(clan))
+            {
+                conqueredByArmies[settlement].Add(clan);
+            }
+        }
+
+        public void Clear(Settlement settlement)
+        {
+            if (conqueredByArmies.ContainsKey(settlement))
+            {
+                conqueredByArmies[settlement].Clear();
+            }
+        }
+
         public override void RegisterEvents()
         {
             //CampaignEvents.RulingCLanChanged.AddNonSerializedListener(this, new Action<Kingdom, Clan>(this.OnRulingClanChanged));
@@ -145,7 +174,7 @@ namespace BannerKings.Behaviours
             {
                 var diff = current - limit;
                 var title = BannerKingsConfig.Instance.AI.ChooseTitleToGive(hero, diff, false);
-                if (title == null || title.type != TitleType.Dukedom)
+                if (title == null || title.TitleType != TitleType.Dukedom)
                 {
                     return;
                 }
@@ -192,7 +221,7 @@ namespace BannerKings.Behaviours
                     continue;
                 }
 
-                var currentSovereign = duchy.sovereign;
+                var currentSovereign = duchy.Sovereign;
                 var currentFactionSovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
                 if (currentSovereign == null || currentFactionSovereign == null ||
                     currentSovereign == currentFactionSovereign)
@@ -219,7 +248,7 @@ namespace BannerKings.Behaviours
 
             BannerKingsConfig.Instance.TitleManager.RemoveKnights(victim);
             var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(victim.Clan.Kingdom);
-            if (sovereign?.contract == null)
+            if (sovereign?.Contract == null)
             {
                 return;
             }
@@ -267,13 +296,12 @@ namespace BannerKings.Behaviours
             }
 
             var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-            if (sovereign?.contract == null)
+            if (sovereign?.Contract == null)
             {
                 return;
             }
 
-
-            if (sovereign.contract.Rights.Contains(FeudalRights.Conquest_Rights))
+            if (sovereign.Contract.Rights.Contains(FeudalRights.Conquest_Rights))
             {
                 var decisions = kingdom.UnresolvedDecisions.ToList();
                 var bkDecision = decisions.FirstOrDefault(x =>
@@ -363,99 +391,6 @@ namespace BannerKings.Behaviours
 
             AddBarter(detail, settlement, oldOwner, newOwner, title);
             AddGift(detail, settlement, oldOwner, newOwner, title);
-
-            if (settlement.Town is {IsOwnerUnassigned: true} &&
-                detail != ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByLeaveFaction)
-            {
-                return;
-            }
-
-            BannerKingsConfig.Instance.TitleManager.ApplyOwnerChange(settlement, newOwner);
-            var kingdom = newOwner.Clan.Kingdom;
-            if (kingdom == null)
-            {
-                return;
-            }
-
-            var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-            if (sovereign?.contract == null)
-            {
-                return;
-            }
-
-            if (detail == ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.BySiege)
-            {
-                var absoluteRightGranted = false;
-                if (sovereign.contract.Rights.Contains(FeudalRights.Absolute_Land_Rights))
-                {
-                    foreach (var clan in kingdom.Clans)
-                    {
-                        if (clan.Leader == title.deJure)
-                        {
-                            ChangeOwnerOfSettlementAction.ApplyByKingDecision(clan.Leader, settlement);
-                            absoluteRightGranted = true;
-                            if (clan.Leader == Hero.MainHero)
-                            {
-                                GameTexts.SetVariable("SETTLEMENT", settlement.Name);
-                                InformationManager.ShowInquiry(new InquiryData(
-                                    new TextObject("{=Rc5gU5bS}Absolute Land Right").ToString(),
-                                    new TextObject("{=AuEhA2EB}By contract law, you have been awarded the ownership of {SETTLEMENT} due to your legal right to this fief.")
-                                        .ToString(),
-                                    true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
-                            }
-                        }
-                    }
-                    settlement.CanBeClaimed = -1;
-                }
-
-                if (!absoluteRightGranted && sovereign.contract.Rights.Contains(FeudalRights.Conquest_Rights))
-                {
-                    var decisions = kingdom.UnresolvedDecisions.ToList();
-                    var decision = decisions.FirstOrDefault(x =>
-                        x is SettlementClaimantDecision claimantDecision && claimantDecision.Settlement == settlement);
-                    if (decision != null)
-                    {
-                        kingdom.RemoveDecision(decision);
-                    }
-
-                    var party = settlement.LastAttackerParty;
-                    var army = party.Army;
-                    if (army != null)
-                    {
-                        if (!conqueredByArmies.ContainsKey(settlement))
-                        {
-                            conqueredByArmies.Add(settlement, new List<Clan>());
-                        }
-                        else
-                        {
-                            conqueredByArmies[settlement].Clear();
-                        }
-
-                        foreach (var clanParty in army.Parties)
-                        {
-                            if (!conqueredByArmies[settlement].Contains(clanParty.ActualClan) &&
-                                !clanParty.ActualClan.IsUnderMercenaryService)
-                            {
-                                conqueredByArmies[settlement].Add(clanParty.ActualClan);
-                            }
-                        }
-
-                        return;
-                    }
-
-                    ChangeOwnerOfSettlementAction.ApplyByKingDecision(capturerHero, settlement);
-                    if (capturerHero == Hero.MainHero)
-                    {
-                        GameTexts.SetVariable("SETTLEMENT", settlement.Name);
-                        InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Conquest Right").ToString(),
-                            new TextObject("{=FKMakM2V}By contract law, you have been awarded the ownership of {SETTLEMENT} due to you conquering it.")
-                                .ToString(),
-                            true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
-                    }
-
-                    settlement.CanBeClaimed = -1;
-                }
-            }
         }
 
         private void AddGift(ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail, Settlement settlement,
@@ -538,11 +473,11 @@ namespace BannerKings.Behaviours
                         }
                     }
 
-                    if (title.sovereign != null)
+                    if (title.Sovereign != null)
                     {
-                        if (title.sovereign.deJure != title.deJure && title.sovereign.deJure.IsAlive)
+                        if (title.Sovereign.deJure != title.deJure && title.Sovereign.deJure.IsAlive)
                         {
-                            BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, title.sovereign.deJure, title);
+                            BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, title.Sovereign.deJure, title);
                             continue;
                         }
                     }
@@ -562,20 +497,101 @@ namespace BannerKings.Behaviours
         [HarmonyPatch(typeof(SettlementClaimantCampaignBehavior))]
         internal class SettlementClaimantCampaignBehaviorPatches
         {
-            [HarmonyPrefix]
+            [HarmonyPostfix]
             [HarmonyPatch("OnSettlementOwnerChanged")]
-            private static bool OnSettlementOwnerChangedPrefix(Settlement settlement, bool openToClaim, Hero newOwner, Hero oldOwner, Hero capturerHero, ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
+            private static void OnSettlementOwnerChangedPostfix(Settlement settlement, bool openToClaim, Hero newOwner, Hero oldOwner, Hero capturerHero, ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
             {
-                if (settlement.Town != null && settlement.CanBeClaimed == -1)
+                if (settlement.Town is { IsOwnerUnassigned: true } &&
+                detail != ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByLeaveFaction)
                 {
-                    if (settlement.IsVillage && settlement.Party.MapEvent != null && !FactionManager.IsAtWarAgainstFaction(settlement.Party.MapEvent.AttackerSide.LeaderParty.MapFaction, newOwner.MapFaction))
-                    {
-                        settlement.Party.MapEvent.FinalizeEvent();
-                    }
-                    return false;
+                    return;
                 }
 
-                return true;
+                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                if (title == null)
+                {
+                    return;
+                }
+
+                BannerKingsConfig.Instance.TitleManager.ApplyOwnerChange(settlement, newOwner);
+                var kingdom = newOwner.Clan.Kingdom;
+                if (kingdom == null)
+                {
+                    return;
+                }
+
+                var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                if (sovereign?.Contract == null)
+                {
+                    return;
+                }
+
+                BKTitleBehavior behavior = Campaign.Current.GetCampaignBehavior<BKTitleBehavior>();
+
+                if (detail == ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.BySiege)
+                {
+                    var absoluteRightGranted = false;
+                    if (sovereign.Contract.Rights.Contains(FeudalRights.Absolute_Land_Rights))
+                    {
+                        foreach (var clan in kingdom.Clans)
+                        {
+                            if (clan.Leader == title.deJure)
+                            {
+                                ChangeOwnerOfSettlementAction.ApplyByKingDecision(clan.Leader, settlement);
+                                absoluteRightGranted = true;
+                                if (clan.Leader == Hero.MainHero)
+                                {
+                                    GameTexts.SetVariable("SETTLEMENT", settlement.Name);
+                                    InformationManager.ShowInquiry(new InquiryData(
+                                        new TextObject("{=Rc5gU5bS}Absolute Land Right").ToString(),
+                                        new TextObject("{=AuEhA2EB}By contract law, you have been awarded the ownership of {SETTLEMENT} due to your legal right to this fief.")
+                                            .ToString(),
+                                        true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
+                                }
+                            }
+                        }
+                        settlement.Town.IsOwnerUnassigned = false;
+                    }
+
+                    if (!absoluteRightGranted && sovereign.Contract.Rights.Contains(FeudalRights.Conquest_Rights))
+                    {
+                        var decisions = kingdom.UnresolvedDecisions.ToList();
+                        var decision = decisions.FirstOrDefault(x =>
+                            x is SettlementClaimantDecision claimantDecision && claimantDecision.Settlement == settlement);
+                        if (decision != null)
+                        {
+                            kingdom.RemoveDecision(decision);
+                        }
+
+                        var party = settlement.LastAttackerParty;
+                        var army = party.Army;
+                        if (army != null)
+                        {
+                            behavior.Clear(settlement);
+                            foreach (var clanParty in army.Parties)
+                            {
+                                if (!clanParty.ActualClan.IsUnderMercenaryService)
+                                {
+                                    behavior.AddClan(clanParty.ActualClan, settlement);
+                                }
+                            }
+
+                            return;
+                        }
+
+                        ChangeOwnerOfSettlementAction.ApplyByKingDecision(capturerHero, settlement);
+                        if (capturerHero == Hero.MainHero)
+                        {
+                            GameTexts.SetVariable("SETTLEMENT", settlement.Name);
+                            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=pht4SLHe}Conquest Right").ToString(),
+                                new TextObject("{=FKMakM2V}By contract law, you have been awarded the ownership of {SETTLEMENT} due to you conquering it.")
+                                    .ToString(),
+                                true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
+                        }
+
+                        settlement.Town.IsOwnerUnassigned = false;
+                    }
+                }
             }
         }
 

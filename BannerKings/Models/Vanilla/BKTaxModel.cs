@@ -31,11 +31,11 @@ namespace BannerKings.Models.Vanilla
 
             if (title != null)
             {
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesTaxDuties))
+                if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesTaxDuties))
                 {
                     result *= 1.25f;
                 }
-                else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
+                else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
                 {
                     result *= 0.6f;
                 }
@@ -50,11 +50,11 @@ namespace BannerKings.Models.Vanilla
 
             if (title != null)
             {
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenTaxDuties))
+                if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenTaxDuties))
                 {
                     result *= 1.35f;
                 }
-                else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
+                else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
                 {
                     result *= 0.6f;
                 }
@@ -69,7 +69,7 @@ namespace BannerKings.Models.Vanilla
 
             if (title != null)
             {
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesDomesticDuties))
+                if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesDomesticDuties))
                 {
                     result *= 1.15f;
                 }
@@ -346,11 +346,11 @@ namespace BannerKings.Models.Vanilla
                 return;
             }
 
-            var contract = titleData.Title.contract;
+            var contract = titleData.Title.Contract;
             if (contract != null && contract.Duties.ContainsKey(FeudalDuties.Taxation))
             {
                 var factor = MBMath.ClampFloat(contract.Duties[FeudalDuties.Taxation], 0f, 0.8f);
-                titleData.Title.dueTax = result * factor;
+                titleData.Title.DueTax = result * factor;
             }
         }
 

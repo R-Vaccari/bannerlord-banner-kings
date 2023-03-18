@@ -31,12 +31,12 @@ namespace BannerKings.Utils.Extensions
             var list = new List<Village>();
             var lordships = BannerKingsConfig.Instance.TitleManager
                         .GetAllDeJure(hero)
-                        .FindAll(x => x.type == TitleType.Lordship);
+                        .FindAll(x => x.TitleType == TitleType.Lordship);
             foreach (var lordship in lordships)
             {
-                if (lordship.fief.MapFaction == hero.MapFaction)
+                if (lordship.Fief.MapFaction == hero.MapFaction)
                 {
-                    list.Add(lordship.fief.Village);
+                    list.Add(lordship.Fief.Village);
                 }
             }
 

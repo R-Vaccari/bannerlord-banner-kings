@@ -40,7 +40,7 @@
 
 										<GridWidget Id="CoreGrid" DataSource="{CorePositions}" WidthSizePolicy="StretchToParent"
 										            HeightSizePolicy="CoverChildren" MarginTop="50" HorizontalAlignment="Center"
-										            SuggestedHeight="350" DefaultCellWidth="210" DefaultCellHeight="320" ColumnCount="3">
+										            SuggestedHeight="350" DefaultCellWidth="210" DefaultCellHeight="400" ColumnCount="3">
 											<ItemTemplate>
 												<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop"
 														   DoNotAcceptEvents="false">
@@ -111,37 +111,62 @@
 														Sprite="SPGeneral\TownManagement\horizontal_divider" />
 											</Children>
 										</ListPanel>
-
-										<GridWidget Id="RoyalGrid" DataSource="{ExtraPositions}"
-										            WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginRight="100"
-										            MarginLeft="100" HorizontalAlignment="Center" SuggestedHeight="350" DefaultCellWidth="190"
-										            DefaultCellHeight="150" ColumnCount="4" MarginTop="50">
+										
+										<GridWidget Id="RoyalGrid" DataSource="{ExtraPositions}" WidthSizePolicy="StretchToParent"
+										            HeightSizePolicy="CoverChildren" MarginTop="50" HorizontalAlignment="Center"
+										            SuggestedHeight="350" DefaultCellWidth="210" DefaultCellHeight="400" ColumnCount="3">
 											<ItemTemplate>
-
-												<ToggleButtonWidget Command.Click="SetId" Command.HoverBegin="UpdatePosition" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed"
-												                    HeightSizePolicy="Fixed" SuggestedWidth="191" SuggestedHeight="140"
-												                    HorizontalAlignment="Left" Brush="TownManagement.Governor" UpdateChildrenStates="true"
-												                    GamepadNavigationIndex="0" IsEnabled="true">
+												<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop"
+														   DoNotAcceptEvents="false">
 													<Children>
+														<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="33" Text="@Title" />
+														<ToggleButtonWidget Command.Click="SetId" Command.HoverBegin="UpdatePosition" DoNotPassEventsToChildren="true" 
+																			WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedWidth="191" SuggestedHeight="140" 
+																			MarginRight="80" MarginLeft="80" HorizontalAlignment="Center" Brush="TownManagement.Governor" UpdateChildrenStates="true"
+																			GamepadNavigationIndex="0" IsEnabled="true">
+															<Children>
 
-														<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="69" SuggestedHeight="69"
-														             HorizontalAlignment="Center" VerticalAlignment="Center"
-														             Brush="TownManagement.Governor.PlusButton" IsHidden="@HasGovernor" />
-														<ImageIdentifierWidget Id="ElementImage" DataSource="{ImageIdentifier}" WidthSizePolicy="StretchToParent"
-														                       HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" MarginLeft="3"
-														                       MarginRight="3" MarginTop="3" MarginBottom="3" AdditionalArgs="@AdditionalArgs"
-														                       ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
-														<TextWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="30"
-														            HorizontalAlignment="Center" VerticalAlignment="Bottom" PositionYOffset="40"
-														            Brush="Encyclopedia.SubPage.Element.Name.Text" Brush.FontSize="25" Text="@NameText" />
-														<HintWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
-														            Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
-														<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare"
-														        Color="#00000099" IsHidden="@DisableButtons" />
+																<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="69" SuggestedHeight="69"
+																			 HorizontalAlignment="Center" VerticalAlignment="Center"
+																			 Brush="TownManagement.Governor.PlusButton" IsHidden="@HasGovernor" />
+																<ImageIdentifierWidget Id="ElementImage" DataSource="{ImageIdentifier}" WidthSizePolicy="StretchToParent"
+																					   HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" MarginLeft="3"
+																					   MarginRight="3" MarginTop="3" MarginBottom="3" AdditionalArgs="@AdditionalArgs"
+																					   ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
+																<TextWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="30"
+																			HorizontalAlignment="Center" VerticalAlignment="Bottom" PositionYOffset="40"
+																			Brush="Encyclopedia.SubPage.Element.Name.Text" Brush.FontSize="25" Text="@NameText" />
+																<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
+																			Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+																<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare"
+																		Color="#00000099" IsHidden="@DisableButtons" />
 
+															</Children>
+														</ToggleButtonWidget>
+														
+														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																   SuggestedWidth="200" MarginTop="30" StackLayout.LayoutMethod="VerticalBottomToTop" >
+															<Children>
+																<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
+																				SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Current Task"
+																				MarginTop="25" />
+																				
+																<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{Selector}" MarginTop="10" 
+																										HorizontalAlignment="Center" IsEnabled="@Enabled"/>
+																										
+															</Children>
+														</ListPanel>
+														
+														<GridWidget DataSource="{PositionInfo}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																	HorizontalAlignment="Left" MarginLeft="60" DefaultCellWidth="350" DefaultCellHeight="30"
+																	ColumnCount="1">
+															<ItemTemplate>
+																<InformationElement />
+															</ItemTemplate>
+														</GridWidget>
 													</Children>
-												</ToggleButtonWidget>
-
+												</ListPanel>
 											</ItemTemplate>
 										</GridWidget>
 

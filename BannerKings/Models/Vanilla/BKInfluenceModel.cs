@@ -25,6 +25,12 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKInfluenceModel : DefaultClanPoliticsModel
     {
+        public float GetClanInfluencePercentage(Clan clan)
+        {
+            float result = 0f;
+
+            return result;
+        }
         public float GetRejectKnighthoodCost(Clan clan)
         {
             return 10f + MathF.Max(CalculateInfluenceChange(clan).ResultNumber, 5f) * 0.025f * CampaignTime.DaysInYear;
@@ -55,7 +61,7 @@ namespace BannerKings.Models.Vanilla
 
             foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
             {
-                result.Add(500 / ((int)title.type * 8f), title.FullName);
+                result.Add(500 / ((int)title.TitleType * 8f), title.FullName);
             }
 
             if (clan.Kingdom != null)
@@ -67,7 +73,7 @@ namespace BannerKings.Models.Vanilla
 
                 if (clan.Culture != clan.Kingdom.Culture)
                 {
-                    result.AddFactor(-0.2f, new TextObject("{=!}Kingdom cultural difference"));
+                    result.AddFactor(-0.2f, new TextObject("{=qW1tnxGu}Kingdom cultural difference"));
                 }
             }
 
@@ -77,6 +83,14 @@ namespace BannerKings.Models.Vanilla
                 DefaultCouncilTasks.Instance.ArbitrateRelations,
                 0.2f,
                 true);
+
+            var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
+            if (position != null)
+            {
+                result.AddFactor(position.InfluenceCosts(), new TextObject("{=!}{POSITION} in {OWNER}'s council")
+                    .SetTextVariable("POSITION", position.Name)
+                    .SetTextVariable("OWNER", position.Clan.Leader.Name));
+            }
 
             return result;
         }
@@ -93,7 +107,7 @@ namespace BannerKings.Models.Vanilla
             ExplainedNumber cap = CalculateInfluenceCap(clan, includeDescriptions);
             if (cap.ResultNumber < clan.Influence)
             {
-                baseResult.Add(-(clan.Influence / cap.ResultNumber), new TextObject("{=!}Clan Influence Limit"));
+                baseResult.Add((clan.Influence / cap.ResultNumber) * -2f, new TextObject("{=wwYABLRd}Clan Influence Limit"));
             }
 
             var generalSupport = 0f;
@@ -201,12 +215,6 @@ namespace BannerKings.Models.Vanilla
                 baseResult.Add(settlementResult.ResultNumber, settlement.Name);
             }
 
-            var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
-            if (position != null)
-            {
-                baseResult.Add(position.IsCorePosition(position.StringId) ? 1f : 0.5f, new TextObject("{=WvhXhUFS}Councillor role"));
-            }
-
             float currentVassals = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentVassals(clan).ResultNumber;
             float vassalLimit = BannerKingsConfig.Instance.StabilityModel.CalculateVassalLimit(clan.Leader).ResultNumber;
             if (currentVassals > vassalLimit)
@@ -239,7 +247,7 @@ namespace BannerKings.Models.Vanilla
             if (data.TitleData != null && data.TitleData.Title != null)
             {
                 var title = data.TitleData.Title;
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
+                if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
                 {
                     factor = 0.011f;
                 }

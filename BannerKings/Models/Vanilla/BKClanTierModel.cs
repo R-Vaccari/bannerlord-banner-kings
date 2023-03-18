@@ -14,7 +14,7 @@ namespace BannerKings.Models.Vanilla
                 var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
                 if (title != null)
                 {
-                    result += 5 - (int) title.type;
+                    result += 5 - (int) title.TitleType;
                 }
             }
 

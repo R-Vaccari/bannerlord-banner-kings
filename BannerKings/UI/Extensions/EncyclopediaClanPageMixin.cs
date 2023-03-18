@@ -43,7 +43,7 @@ namespace BannerKings.UI.Extensions
         [DataSourceProperty] public string CompanionsText => new TextObject("{=a3G31iZ0}Companions").ToString();
         [DataSourceProperty] public string CouncilText => new TextObject("{=mUaJDjqO}Council").ToString();
         [DataSourceProperty] public string InheritanceText => new TextObject("{=aELuNrRC}Inheritance").ToString();
-        [DataSourceProperty] public string VassalsText => new TextObject("{=!}Vassals").ToString(); 
+        [DataSourceProperty] public string VassalsText => new TextObject("{=rN34kLPu}Vassals").ToString(); 
 
         [DataSourceProperty]
         public string HeirText => new TextObject("{=vArnerHC}Heir").ToString();
@@ -80,7 +80,7 @@ namespace BannerKings.UI.Extensions
                 var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(member);
                 if (title != null)
                 {
-                    if (member != member.Clan.Leader && title.type == TitleType.Lordship)
+                    if (member != member.Clan.Leader && title.TitleType == TitleType.Lordship)
                     {
                         knights.Add(new HeroVM(member));
                         if (clanPageVM.Members.Any(x => x.Hero == member))
@@ -91,8 +91,8 @@ namespace BannerKings.UI.Extensions
                     }
                     else if (member == member.Clan.Leader)
                     {
-                        highestTitle = Utils.Helpers.GetTitlePrefix(title.type,
-                            title.contract.Government, member.MapFaction.Culture);
+                        highestTitle = Utils.Helpers.GetTitlePrefix(title.TitleType,
+                            title.Contract.Government, member.MapFaction.Culture);
                     }
                 }
             }
@@ -157,8 +157,13 @@ namespace BannerKings.UI.Extensions
                         rel.Faith.GetFaithName().ToString()));
                 }
 
+                /*ExplainedNumber influenceChange = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceChange(clan, true);
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=d6Xpp44y}Influence Change:").ToString(),
+                   influenceChange.ResultNumber.ToString("0.00"),
+                   new BasicTooltipViewModel(() => influenceChange.GetExplanations())));*/
+
                 ExplainedNumber influenceCap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(clan, true);
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Influence Limit:").ToString(),
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=bNS2Lg7L}Influence Limit:").ToString(),
                    MBRandom.RoundRandomized(influenceCap.ResultNumber).ToString(),
                    new BasicTooltipViewModel(() => influenceCap.GetExplanations())));
 

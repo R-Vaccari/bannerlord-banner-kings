@@ -38,15 +38,22 @@ namespace BannerKings.Managers.Court
 
         public void PostInitialize()
         {
-            CouncilMember c = DefaultCouncilPositions.Instance.GetById(this);
-            Initialize(c.PrimarySkill, c.SecondarySkill, c.Tasks, c.Privileges,
-                c.isAdequate, c.isValidCandidateInternal, c.getCulturalName);
-            SetStrings();
-            foreach (var task in Tasks)
+            if (this.PrimarySkill == null)
             {
-                task.PostInitialize();
+                CouncilMember c = DefaultCouncilPositions.Instance.GetById(this);
+                Initialize(c.PrimarySkill, c.SecondarySkill, c.Tasks, c.Privileges,
+                    c.isAdequate, c.isValidCandidateInternal, c.getCulturalName);
+                SetStrings();
+                foreach (var task in Tasks)
+                {
+                    task.PostInitialize();
+                }
+                CurrentTask.PostInitialize();
+                if (!Tasks.Any(x => x.StringId == CurrentTask.StringId))
+                {
+                    SetTask(Tasks[0]);
+                }
             }
-            CurrentTask.PostInitialize();
         }
 
         public CouncilMember GetCopy(Clan clan)
@@ -59,6 +66,21 @@ namespace BannerKings.Managers.Court
             member.SetStrings();
             member.CurrentTask = member.Tasks.FirstOrDefault();
             return member;
+        }
+
+        public void Tick(List<Hero> courtiers)
+        {
+            if (Member != null)
+            {
+                if (Member.IsDead || Member.IsDisabled || !courtiers.Contains(Member) || !IsValidCandidate(Member))
+                {
+                    Member = null;
+                    return;
+                }
+
+                Member.AddSkillXp(PrimarySkill, 10);
+                Member.AddSkillXp(SecondarySkill, 5);
+            }
         }
 
         [SaveableProperty(100)] public Hero Member { get; private set; }
@@ -83,7 +105,20 @@ namespace BannerKings.Managers.Court
         protected bool IsValidCandidateInternal(Hero candidate) => isValidCandidateInternal(this, candidate);
         public bool IsAdequate(CouncilData data) => isAdequate(data);
 
-        public void SetMember(Hero hero) => Member = hero;
+        public void SetMember(Hero hero)
+        {
+            if (Member != null)
+            {
+                BannerKingsConfig.Instance.CourtManager.RemoveCache(hero);
+            }
+
+            if (hero != null)
+            {
+                BannerKingsConfig.Instance.CourtManager.AddCache(hero, this);
+            }
+            Member = hero;
+
+        }
         public void SetIsRoyal(bool isRoyal)
         {
             IsRoyal = isRoyal;
@@ -104,10 +139,10 @@ namespace BannerKings.Managers.Court
         }
 
         public ExplainedNumber Competence => BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(Member, this);
+        public ExplainedNumber ProjectedCompetence => BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(Member, this, true, true);
         public ExplainedNumber CalculateCandidateCompetence(Hero candidate) => BannerKingsConfig.Instance.CouncilModel
             .CalculateHeroCompetence(candidate, this);
-        
-       
+
         public bool IsValidCandidate(Hero candidate)
         {
             if (candidate.Clan is { IsUnderMercenaryService: true })
@@ -125,9 +160,9 @@ namespace BannerKings.Managers.Court
                 }
             }
 
-            if (IsRoyal && IsCorePosition(StringId))
+            if (IsRoyal && IsCorePosition(StringId) && candidate.Occupation != Occupation.Lord)
             {
-                return candidate.Occupation == Occupation.Lord;
+                return false;
             }
 
             return IsValidCandidateInternal(candidate);
@@ -160,9 +195,9 @@ namespace BannerKings.Managers.Court
         public float InfluenceCosts()
         {
             var cost = 0f;
-            if (IsCorePosition(StringId) && StringId != "Spiritual")
+            if (IsCorePosition(StringId))
             {
-                cost = IsRoyal ? 0.05f : 0.03f;
+                cost = IsRoyal ? 0.12f : 0.03f;
             }
 
             return cost;

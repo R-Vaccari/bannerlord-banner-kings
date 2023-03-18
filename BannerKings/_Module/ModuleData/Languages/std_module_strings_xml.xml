@@ -172,7 +172,6 @@
     <string id="NOYOqKSV" text="Previous title owner" />
     <string id="0KERfXox" text="Fabricated claim" />
     <string id="n4LgwLxB" text="Reason" />
-    <string id="PBimWG33" text="Gold" />
     <string id="7rA02JY3" text="{GOLD} coins." />
     <string id="EkFaisgP" text="Influence" />
     <string id="bqXrF5SC" text="{INFLUENCE} influence." />
@@ -309,7 +308,6 @@
     <string id="5Wpq8YxN" text="Privately owned slaves' work will be taxed by the state, according to the tax policy, generating extra revenue. Slave owners will be dissatisfied." />
     <string id="qGB6RG9a" text="Tax private slaves" />
     <string id="TkkCkCWZ" text="You have failed to fulfill your duty of military assistance to {SUZERAIN}. As a result, your clan's renown has suffered, and your relationship with suzerain has changed by {RELATION}." />
-    <string id="8EAqqJ9A" text="{SUZERAIN} holds your duty of military aid fulfilled. You have gained {INFLUENCE} and {RELATION} relatin with your suzerain." />
     <string id="5OYuLkYg" text="Your suzerain, {SUZERAIN}, has requested that you fulfill your contract obligations and pay him {RANSOM} gold in order to compensate their ransom. You have {REMAINING} days left to pay it." />
     <string id="iykxiy3G" text="The {NEW} has branched off from {ORIGINAL} due to inheritance laws." />
     <string id="ytkncUx3" text="{HEIR} has rightfully inherited the {TITLE}" />
@@ -632,15 +630,9 @@
     <string id="wvmCvE74" text="Stats" />
     <string id="vKtLDRp6" text="Criminal" />
     <string id="91fEPp8b" text="Select Councillor" />
-    <string id="i8YeRbDt" text="Select who you would like to fill this position." />
     <string id="PykdjcGm" text="Courtiers" />
     <string id="K7df68TT" text="Effects" />
     <string id="77D4i3pG" text="Privileges" />
-    <string id="MSnF2Lpd" text="Crown council:" />
-    <string id="rogo1TDh" text="Court Religion:" />
-    <string id="u44RLcej" text="This council's owner's faith. Candidates for religious positions must adhere to the same faith. Other council positions may be affected by the faith's doctrines." />
-    <string id="qFgTXJKW" text="Court Language:" />
-    <string id="JeSR0Bu8" text="This council's owner's language. Courtiers that do not speak the language may feel alienated." />
     <string id="S9zTcqbp" text="Council Position:" />
     <string id="4fLp8Y5t" text="{LANGUAGE} ({COMPETENCE})," />
     <string id="yCaxpVGh" text="Languages:" />
@@ -1304,7 +1296,6 @@
     <string id="Df3Fdnuw" text="Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title." />
     <string id="oBxXQmTb" text="Request Council Position" />
     <string id="7aLyDGEt" text="Request a position in your suzerain's council." />
-    <string id="SXfiwy0X" text="{DESCRIPTION}\n\n{REASON}" />
     <string id="oXv9Zi3y" text="Relinquish {POSITION}" />
     <string id="DwfLTc6R" text="Request {POSITION}" />
     <string id="tQ5eP9n6" text="Swap to {POSITION}" />
@@ -1749,7 +1740,6 @@
     <string id="sdpM1PD3" text="Request Full Peerage" />
     <string id="O7LLRFEX" text="Request the recognition of your family as a full Peer of the realm. A full Peer does not have legal restrictions on voting, starting elections, granting knighthood, hosting a council or being awarded fiefs. They are the very top of the realm's nobility. Successfully requesting Peerage will require renown (clan tier 4 minimum is recommended) and having good relations with full Peers. Holding property (caravans, workshops, estates, lordships) is a good positive factor as well.\n" />
     <string id="SjBky9Op" text="Mercenaries cannot request Peerage" />
-    <string id="QmMiGJpx" text="Cannot request Peerage during wars" />
     <string id="HCMiSysD" text="Request full rights of Peerage. The any existing Peer with voting power may participate in the decision. Current support for the approval of {CLAN}: {SUPPORT}%." />
     <string id="5YsS2g7T" text="The Peers of {KINGDOM} will now vote on your request." />
     <string id="Nhceg9ks" text="Daily chance of relation gain with a random Aserai Banu\nReduced influence cost for supporting decisions" />
@@ -2058,5 +2048,179 @@
     <string id="2yDhJfgh" text="Troop Upgrade Xp" />
     <string id="xvNKsFbW" text="How much Xp troops need to upgrade. Vanilla is 100%. Default: 200%." />
     <string id="CiWCMaQV" text="Start as a lord in a kingdom, with a Lordship title. Redcued influence for 5 years. The village you own can be managed by you. Gain Scholarship skill." />
+    <string id="pwcJeEaS" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your culture!" />
+    <string id="ZwwfKpGu" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, {NOTABLE} is now more favorable to us." />
+    <string id="6vgsdLQp" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, the hideout near {FIEF} was exterminated." />
+    <string id="r8s1f28d" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} is now more favorable to us." />
+    <string id="4ztP2tnz" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, I forged you the {ITEM}." />
+    <string id="MEby26tQ" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your faith!" />
+    <string id="pht4SLHe" text="Conquest Right" />
+    <string id="gxcgWiwh" text="Knight Clan Creation Speed" />
+    <string id="yTkU621N" text="Knight AI heroes can eventually form their own clans, even those in the player clan. Increasing this setting increases their speed of doing so. Setting it to 0% will stop knights from creating clans altogether. Default: 100%." />
+    <string id="fQVyeiJb" text="Capital" />
+    <string id="HsgYtcxu" text="Competence(s)" />
+    <string id="PcM7JDMu" text="Primary" />
+    <string id="sPsERGcn" text="Secondary" />
+    <string id="T39jWYUx" text="Actions" />
+    <string id="rfwjouvE" text="Title actions allow you multiple ways to use them. Actions that actively undermine other lords are considered hostile actions, and often cost denars, influence, your clan's renown, and relations with the affected, so take them wisely. On the other hand, an action such as Grant of a title is considered amicable and grows relations instead, at the cost of your ownership of the title." />
+    <string id="AsR4WzYu" text="Denars:" />
+    <string id="H0mrKw6B" text="Influence:" />
+    <string id="P3EzcNY0" text="A feudal elective succession is a compromise between a hereditary monarchy and a fully elective monarchy. Votes will be cast by the Peers, however the main candidates are the former ruler's family. However, title claimants will also be considered. If there is a scarcity of candidates available, strong families in the realm will also be considered candidates. If the chosen heir is from the former ruler's family, they will inherit the clan, regardless of Inheritance laws." />
+    <string id="HZRnRmF8" text="Feudal Elective" />
+    <string id="doEjziQe" text="Workshop Seizure" />
+    <string id="eQbfxno4" text="The {WORKSHOP} has been seized from the {OWNER} at {TOWN} due to war between your realms." />
+    <string id="jvVup6nx" text="Workshop Grant" />
+    <string id="vnOgsWMq" text="{SUZERAIN} holds your duty of military aid fulfilled. You have gained {INFLUENCE} and {RELATION} relation with your suzerain." />
+    <string id="okUMw3Df" text="Due to abscence of other candidates, {HEIR} has inherited the {TITLE} uncontested." />
+    <string id="vWDgQWUh" text="Due to abscence of {CLAN} candidates, the {TITLE} succession will be voted on by the Peers of the realm." />
+    <string id="ARQYxT6t" text="Task Efficiency" />
+    <string id="x5vKZHNN" text="Former ruler's clan" />
+    <string id="ipGDmaBZ" text="Claimant" />
+    <string id="XRMMs6QY" text="De facto title holder" />
+    <string id="TqfaGy3U" text="De facto fief holder" />
+    <string id="pkZ0J4Fo" text="De jure sovereign of this title" />
+    <string id="J07mQQ6k" text="De jure vassal of this title" />
+    <string id="Q0AgGuB0" text="Production efficiency" />
+    <string id="qW1tnxGu" text="Kingdom cultural difference" />
+    <string id="wwYABLRd" text="Clan Influence Limit" />
+    <string id="LiC18pJC" text="Equipment costs" />
+    <string id="u5LQxWO5" text="Workshop inventory" />
+    <string id="jiLxCXBW" text="{OWNER}'s only workshop" />
+    <string id="uNzd25jE" text="{OWNER} has no other incomes" />
+    <string id="jhWhrK2B" text="{BUYER} has {COUNT} workshop(s)" />
+    <string id="Oy8rn07Z" text="Competence:" />
+    <string id="hdbcAeax" text="This councillor's competence in their position. The more competent they are, the more likely they are to trigger the tasks' effects and often with better results." />
+    <string id="hrGvzpLz" text="Efficiency:" />
+    <string id="WFrQAqOZ" text="This task's current efficiency. Efficiency is stacked on top of competence, meaning that a task only functions fully as intended when at 100% efficiency. Some tasks are always at 100%. Others start at 0% and slowly build up to 100%. This means that some tasks require time investment, and switching between them is not productive." />
+    <string id="rKiPYUu3" text="{HERO} is a {TYPE} with {COMPETENCE}% competence for this position." />
+    <string id="Qa6YdGEF" text="{HERO} current holds this position with a competence of {COMPETENCE}%." />
+    <string id="HiA9DHMi" text="Select who you would like to fill this position. The {POSITION} requires competency in {PRIMARY} and {SECONDARY} skills. {CURRENT}" />
+    <string id="oKVgKsY1" text="Select who you would like to fill this position. The {POSITION} requires competency in the {PRIMARY} skill. {CURRENT}" />
+    <string id="QCw05MZN" text="Household" />
+    <string id="7NeZtxVP" text="Privy Council" />
+    <string id="BkJbqOWj" text="Extended Council" />
+    <string id="7AkO8Nui" text="Court language:" />
+    <string id="BEHbVOK5" text="The native language spoken by the council leader. Speaking the court language is important for councillours to fulfill their tasks adequately." />
+    <string id="KxC0nxz1" text="Court religion:" />
+    <string id="yGeij7MB" text="The council leader's faith. Spiritual positions need to follow the same faith. Other positions may be favored or not according to the candidate's faith, and how well predisposed the council owner's faith is towards it." />
+    <string id="rN34kLPu" text="Vassals" />
+    <string id="d6Xpp44y" text="Influence Change:" />
+    <string id="bNS2Lg7L" text="Influence Limit:" />
+    <string id="MuZ2tL8E" text="Clan Creation:" />
+    <string id="2GvHUPV9" text="As a knight or knightess, this person will eventually attemp to lead their own household. Their progress is determined by the influence of the lordships they hold. This does not apply to direct relatives of the family leader." />
+    <string id="iTWqZLM4" text="Ard Marasgal" />
+    <string id="MqHWpT0K" text="Magister Domesticus" />
+    <string id="Qtt0vXAT" text="Tumetu-iin Noyan" />
+    <string id="7TxiJwdM" text="Grand Marshal" />
+    <string id="2SU2KRvB" text="Marasgal" />
+    <string id="hfqCCmZi" text="Jagutu-iin Darga" />
+    <string id="Qk2mgePL" text="Domesticus" />
+    <string id="SCsGXova" text="Marshal" />
+    <string id="M6eW9798" text="Ard Sheumarlan" />
+    <string id="8sSPs8QV" text="Magister Sacrarum Largitionum" />
+    <string id="3OSi32pX" text="High Steward" />
+    <string id="DJkHjoo4" text="Sheumarlan" />
+    <string id="uP0GHCjS" text="Praefectus Largitionum" />
+    <string id="k4oyM9dT" text="Steward" />
+    <string id="wWNKVNgU" text="Ard Seansalair" />
+    <string id="RHT0X2ZU" text="Magister Cancellarius" />
+    <string id="EYfcHKO1" text="High Chancellor" />
+    <string id="pA79P1LE" text="Seansalair" />
+    <string id="qRVOadig" text="Cancellarius" />
+    <string id="tgz9ut5s" text="Chancellor" />
+    <string id="fTuydBMn" text="Ard Treòraiche" />
+    <string id="HWfVPgFa" text="Magister Officiorum" />
+    <string id="7PLFhL3m" text="Cherbi" />
+    <string id="08umUPH5" text="Grand Spymaster" />
+    <string id="FQe5GXkp" text="Treòraiche" />
+    <string id="FsFE8NSM" text="Khevtuul" />
+    <string id="bZCeizLU" text="Custodis" />
+    <string id="ZJ8eRkS2" text="Spymaster" />
+    <string id="PkQ9BKTk" text="Ard Draoidh" />
+    <string id="ogAzFznn" text="Volkhvs" />
+    <string id="SQq0eH3Z" text="Murshid" />
+    <string id="rhL4NnWR" text="High Seneschal" />
+    <string id="ELf8YFXe" text="Draoidh" />
+    <string id="ZNzX7SKR" text="Seneschal" />
+    <string id="Gc1CyVPk" text="Court Physician" />
+    <string id="fWxtaYqn" text="Court Smith" />
+    <string id="O951oUMh" text="Court Musician" />
+    <string id="KfZ29QpZ" text="Antiquarian" />
+    <string id="Y3yvvUct" text="Castellan" />
+    <string id="65dCSoEB" text="Constable" />
+    <string id="hNK8XTow" text="The language of the Battanian peoples has long since been a cultural divide between Battanians and other kingdoms in the continent. Given that Palaic, its sister language and culture, has mostly been erased by Imperials, the Battanian language is almost completely unintelligible to all other cultures present in Calradia. However, with the increased presence of Calradian as the lingua franca of trade, Battanians have slowly adopted some Imperial vocabulary. The language is still somewhat similar to Vakken, another natural culture of the continent, though recently the Vakken culture has mostly been replaced by Sturgians." />
+    <string id="QT3S6XkQ" text="Natural to the northern ends of Calradia, the Sturgians have an ancient linguistic tradition. Though this tradition has been recently shaken by the large mixing of nords, the Sturgian culture itself is native to the continent, as well as it's sister culture, Vakken, with which the Sturgian language still finds similarities." />
+    <string id="rYVgj513" text="The langauge of the steppe is often described by foreigners as curt, but effective. Due to the near absence of scholarly research in the Khuzait culture, it often lacks terms for technical, or more abstract concepts, and as such it is certain those will be adopted from the Imperial language." />
+    <string id="gM4s1KQf" text="Although the Aserai peoples speak a multitude of dialects, scattered across the oases, springs and coasts of the Nahasa, a distinct tradition of literalism and poety has established a common variation that has been embraced by the higher Aserai classes." />
+    <string id="bXUwFrCF" text="The Vakken, sometimes called 'children of the forest', are a group native to northern Calradia. Vakken and Sturgian cultures have ancient connections, as both have lived and traded for centuries before the Imperials arrived in the continent. However, with the prevailment of the Sturgia kingdom and culture, the Vakken tongue and tradition is being increasingly forgotten about in the north." />
+    <string id="PBecbLxj" text="A rare skill in the continent, administrators are those specialized in the building of efficient, propserous towns. As most folks are preoccupied in not starving or dying violently, and education being rare and expensive, little has been developed in terms of planning efficient cities." />
+    <string id="VOV4Shbm" text="Essential to the economy, artisans produce manufactured goods in high demand, such as high quality textiles, tools, beer, and much more. As one inclined to the artisan world, you have keen insight into crafting and managing your workshops." />
+    <string id="WRbLY55G" text="Universally shamed, yet universally present, no realm can fully rid itself of outlaws. More 'professional' outlaws will specialize in efficient plundering, speed and furtiveness to avoid law enforcement. Known outlaws often become notorious for kidnapping nobles and demanding unfair ransoms." />
+    <string id="DX1iCyKA" text="{DESCRIPTION}\n\n{REASON}\n\nYour competence is {COMPETENCE}%:\n{EXPLANATION}" />
+    <string id="WQRibYcW" text="Organize Militia" />
+    <string id="ZVXnyVN3" text="Enact militia trainning drills and the obligation of households owning arms. Through stimulation of the state, more workforce members become active part of fief militias, as well as with generally improved trainning and equipment." />
+    <string id="5sazP1rU" text="Increased militia production\nImproved militia quality" />
+    <string id="FXZETOgg" text="Encourage Militarism" />
+    <string id="DViCQ3L7" text="Encourage militarism within the populace. More militarism means a larger portion of the population will serve as manpower, leading to bigger manpower pools that replenish faster. Notables will also replenish their volunteer slots quicker." />
+    <string id="zFwDhSTs" text="Increased militarism &amp; draft efficiency" />
+    <string id="K8nUXVve" text="Develop Economy" />
+    <string id="i7cD9XCL" text="Foster long-term prosperity within your demesne. Increased caravan attractiveness outputs more trade and tariff revenue." />
+    <string id="y1jcxLnC" text="Increased prosperity\nIncreased caravan attractiveness" />
+    <string id="gdAKEowx" text="Oversee Production" />
+    <string id="Es4VmNJs" text="Organize production methods and quality standarts Increased production means the population and workshops outputs more products, while increased quality means these products are, on average, of superior quality." />
+    <string id="kDeTbH8b" text="Increased production efficiency &amp; quality" />
+    <string id="CmPrt049" text="Promote Culture" />
+    <string id="Vkx4Vka4" text="Promote the presence of your culture throughout your fiefs. A populace that follows your culture is more stable, less rebellious and pays more taxes." />
+    <string id="Lp8Rdrjm" text="Increased cultural presence\nRandomly convert notables to your culture" />
+    <string id="t12urUmZ" text="Oversee Security" />
+    <string id="fiGcYFEO" text="Tighen up security through repression of criminal activity within your fiefs." />
+    <string id="x59AZOX9" text="Increased security" />
+    <string id="ojHwJr7W" text="Repress Criminality" />
+    <string id="Co828LTB" text="Seek out and destroy criminal networks operating ouside of town boundaries, exterminating sources of criminals that threaten traders and villagers." />
+    <string id="9YZwe7gF" text="Hideouts may be automatically destroyed" />
+    <string id="kveiriMe" text="Manage Vassals" />
+    <string id="e2GHMzQy" text="Delegate the handling of vassal relationships, allowing you to maintain more vassals without repercussions." />
+    <string id="mvavHNQn" text="Increased vassal limit" />
+    <string id="m8BAzkfq" text="Oversee Dignataries" />
+    <string id="DCMYNZpd" text="Delegate relations with local authorities. Stronger bonds with dignataries such as notables lead to loyal fiefs." />
+    <string id="beXFEM0K" text="Increased settlement loyalty\nRandomly gain relations with notables" />
+    <string id="HkLuhv7Y" text="Arbitrate Relations" />
+    <string id="e16thLp4" text="Delegate relations with Peers. Improve standing with other families and the clan is more influential in the realm." />
+    <string id="XaDKn2mM" text="Increased influence limit\nRandomly increase relations with clans" />
+    <string id="F6TozKia" text="Promote Faith" />
+    <string id="J13PZvJS" text="Promote the presence of your faith throughout your fiefs." />
+    <string id="Ey3Vc66Q" text="Increased faith presence\nRandomly convert notables to your faith" />
+    <string id="zdtoHqhQ" text="Cultivate Piety" />
+    <string id="88okbUiV" text="Foster piety within your family. Increases piety of clan members, may convert members of other faiths." />
+    <string id="TgjqSaem" text="Increased piety\nRandomly convert clan members to your faith" />
+    <string id="SwEz8RuK" text="Manage Demesne" />
+    <string id="9DyVa4Tc" text="Fiefs will be automatically assigned adequate governors\nIssues handled by governors will give you the rewards" />
+    <string id="UoQbHh0v" text="Entertain Feasts" />
+    <string id="QhB6WR8Z" text="Entertain your feast guests with music." />
+    <string id="9GWVmtRs" text="Feast guests will have better opinions of your feasts" />
+    <string id="PdmYfN4Y" text="Oversee Sanitation" />
+    <string id="OHWoKDeu" text="Promote sanitation standarts that improve life quality in town. Improved health quality improves population growth." />
+    <string id="5TiaPyyt" text="Improved population growth" />
+    <string id="EZWTi70m" text="Family Care" />
+    <string id="XiMo6cPC" text="Heal family members and educate them into good health practices." />
+    <string id="nmaSK0ca" text="Smith Armors" />
+    <string id="q2TF0mzR" text="Forge armor pieces. Items will follow your culture. Their quality is based on the smith's skill - the higher their crafting capability, the better items they can make." />
+    <string id="RvRk10xc" text="Randomly forge armor pieces" />
+    <string id="EgxmFkyv" text="Smith Bardings" />
+    <string id="Kar7ghbg" text="Forge horse bardings. Items will follow your culture. Their quality is based on the smith's skill - the higher their crafting capability, the better items they can make." />
+    <string id="Fv8EKJMB" text="Randomly forge horse bardings" />
+    <string id="yb6KCpEx" text="Smith Weapons" />
+    <string id="y7OnC1VF" text="Forge melee weapons. Items will follow your culture. Their quality is based on the smith's skill - the higher their crafting capability, the better items they can make." />
+    <string id="Ei6Z42ut" text="Randomly forge melee weapons" />
+    <string id="TveF1tT5" text="Educate Family" />
+    <string id="Vvxpoosf" text="Educate family members on subjects of history, literature and the sciences." />
+    <string id="W4JiUzdP" text="Scholarship xp for all family members" />
+    <string id="a39kNwH5" text="Oversee Baronies" />
+    <string id="rN1SK85E" text="The castellan is effectively a lord's official in the castellany, their area of jurisdiction. They are responsible for the upkeep and defences of castles, as well as enforcing and passing judgement if necessary." />
+    <string id="pTSRDrba" text="Improved prosperity for castles and attached villages" />
+    <string id="0bDAuMZe" text="Enforce Law" />
+    <string id="RQq8tssi" text="Oversee the enforcement of law through force or otherwise. Improved enforcement of laws provides a prosperous habitat for trade." />
+    <string id="o27axaVY" text="Improved security\nImproved caravan attractiveness" />
+    <string id="9D4AgMLu" text="Although the spirits accept many kinds of offerings, iron has been the staple option in the Uchalion plateau. Due to it's vast usefulness, it is prized as a gft worthy of the Gods, despite its raw nature." />
   </strings>
 </base>

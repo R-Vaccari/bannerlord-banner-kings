@@ -33,7 +33,7 @@ namespace BannerKings.UI.Cutscenes
                 }
 
                 FeudalTitle highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                if (highest != null && highest.type <= TitleType.Dukedom)
+                if (highest != null && highest.TitleType <= TitleType.Dukedom)
                 {
                     heroes.Add(clan.Leader);
                 }

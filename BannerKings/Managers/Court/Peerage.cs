@@ -31,7 +31,7 @@ namespace BannerKings.Managers.Court
             if (clan.Kingdom != null)
             {
                 var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
-                if (titles.Any(x => x.type != Titles.TitleType.Lordship) || clan.Fiefs.Count > 0)
+                if (titles.Any(x => x.TitleType != Titles.TitleType.Lordship) || clan.Fiefs.Count > 0)
                 {
                     return new Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"), true, true, true, true, true, false);
                 }

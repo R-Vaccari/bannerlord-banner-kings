@@ -109,17 +109,8 @@ namespace BannerKings.Managers.Court
 
             foreach (var position in Positions)
             {
-                if (position.Member != null &&
-                    (position.Member.IsDead || position.Member.IsDisabled || !courtiers.Contains(position.Member)))
-                {
-                    position.SetMember(null);
-                }
-
                 position.SetIsRoyal(IsRoyal);
-                if (position.Member != null && !position.IsValidCandidate(position.Member))
-                {
-                    position.SetMember(null);
-                }
+                position.Tick(courtiers);
             }
 
             if (MBRandom.RandomFloat <= 0.02f)
@@ -259,9 +250,9 @@ namespace BannerKings.Managers.Court
             var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Owner);
             foreach (var title in titles)
             {
-                if (title.type == TitleType.Lordship && title.fief.MapFaction == Owner.MapFaction)
+                if (title.TitleType == TitleType.Lordship && title.Fief.MapFaction == Owner.MapFaction)
                 {
-                    foreach (var notable in title.fief.Notables)
+                    foreach (var notable in title.Fief.Notables)
                     {
                         if (!heroes.Contains(notable))
                         {

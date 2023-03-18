@@ -367,6 +367,15 @@ namespace BannerKings.Behaviours
             CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
             HandleSpiritual(clan, council);
 
+            if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.FamilyCare,
+                out float healCompetence))
+            {
+                foreach (var member in clan.Heroes)
+                {
+                    member.AddSkillXp(DefaultSkills.Medicine, 5 * healCompetence);
+                }
+            }
+
             if (MBRandom.RandomFloat < 0.02f &&
             BannerKingsConfig.Instance.CourtManager.HasCurrentTask(council, DefaultCouncilTasks.Instance.PromoteCulture,
             out float cultureCompetence) &&
@@ -387,7 +396,7 @@ namespace BannerKings.Behaviours
                     {
                         CouncilMember steward = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Steward);
                         MBInformationManager.AddQuickInformation(
-                            new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your culture!")
+                            new TextObject("{=pwcJeEaS}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your culture!")
                             .SetTextVariable("HERO", notable.Name),
                             0,
                             steward.Member.CharacterObject,
@@ -416,7 +425,7 @@ namespace BannerKings.Behaviours
                 {
                     CouncilMember chancellor = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Chancellor);
                     MBInformationManager.AddQuickInformation(
-                        new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {NOTABLE} is now more favorable to us.")
+                        new TextObject("{=ZwwfKpGu}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {NOTABLE} is now more favorable to us.")
                         .SetTextVariable("NOTABLE", notable.Name),
                         0,
                         chancellor.Member.CharacterObject,
@@ -464,7 +473,7 @@ namespace BannerKings.Behaviours
                     if (clan == Clan.PlayerClan)
                     {
                         CouncilMember spymaster = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spymaster);
-                        MBInformationManager.AddQuickInformation(new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, the hideout near {FIEF} was exterminated.")
+                        MBInformationManager.AddQuickInformation(new TextObject("{=6vgsdLQp}{?PLAYER.GENDER}My lady{?}My lord{\\?}, the hideout near {FIEF} was exterminated.")
                             .SetTextVariable("FIEF", town.Name),
                             0,
                             spymaster.Member.CharacterObject,
@@ -500,7 +509,7 @@ namespace BannerKings.Behaviours
                     {
                         CouncilMember chancellor = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Chancellor);
                         MBInformationManager.AddQuickInformation(
-                            new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} is now more favorable to us.")
+                            new TextObject("{=r8s1f28d}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} is now more favorable to us.")
                             .SetTextVariable("HERO", clanLeader.Name),
                             0,
                             chancellor.Member.CharacterObject,
@@ -571,7 +580,7 @@ namespace BannerKings.Behaviours
                     if (clan == Clan.PlayerClan)
                     {
                         MBInformationManager.AddQuickInformation(
-                            new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, I forged you the {ITEM}.")
+                            new TextObject("{=4ztP2tnz}{?PLAYER.GENDER}My lady{?}My lord{\\?}, I forged you the {ITEM}.")
                             .SetTextVariable("ITEM", item.Name),
                             0,
                             smith.Member.CharacterObject,
@@ -610,7 +619,7 @@ namespace BannerKings.Behaviours
                         {
                             CouncilMember spiritual = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spiritual);
                             MBInformationManager.AddQuickInformation(
-                                new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your faith!")
+                                new TextObject("{=MEby26tQ}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your faith!")
                                 .SetTextVariable("HERO", notable.Name),
                                 0,
                                 spiritual.Member.CharacterObject,
@@ -640,7 +649,7 @@ namespace BannerKings.Behaviours
                         {
                             CouncilMember spiritual = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spiritual);
                             MBInformationManager.AddQuickInformation(
-                                new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your faith!")
+                                new TextObject("{=MEby26tQ}{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your faith!")
                                 .SetTextVariable("HERO", hero.Name),
                                 0,
                                 spiritual.Member.CharacterObject,
@@ -935,7 +944,7 @@ namespace BannerKings.Behaviours
                 }
 
                 CharacterObject template;
-                var genderLaw = title.contract.GenderLaw;
+                var genderLaw = title.Contract.GenderLaw;
                 if (genderLaw == GenderLaw.Agnatic)
                 {
                     template = (from e in clan.Culture.NotableAndWandererTemplates
@@ -1164,18 +1173,18 @@ namespace BannerKings.Behaviours
                             {
                                 var title =
                                     BannerKingsConfig.Instance.TitleManager.GetHighestTitle(partyComponent.Leader);
-                                if (title is {fief: { }})
+                                if (title is {Fief: { }})
                                 {
                                     knights++;
                                     var limit = 0f;
-                                    if (title.fief.IsVillage)
+                                    if (title.Fief.IsVillage)
                                     {
-                                        limit = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(title.fief.Village).ResultNumber;
+                                        limit = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(title.Fief.Village).ResultNumber;
                                     }
-                                    else if (title.fief.Town != null)
+                                    else if (title.Fief.Town != null)
                                     {
                                         limit = Campaign.Current.Models.SettlementTaxModel
-                                            .CalculateTownTax(title.fief.Town).ResultNumber;
+                                            .CalculateTownTax(title.Fief.Town).ResultNumber;
                                     }
 
                                     partyComponent.MobileParty.SetWagePaymentLimit((int)(50f + limit));
@@ -1235,8 +1244,8 @@ namespace BannerKings.Behaviours
                 if (BannerKingsConfig.Instance.TitleManager != null)
                 {
                     var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                    return title is {contract: { }} &&
-                           title.contract.Rights.Contains(FeudalRights.Assistance_Rights);
+                    return title is {Contract: { }} &&
+                           title.Contract.Rights.Contains(FeudalRights.Assistance_Rights);
                 }
 
                 return true;
@@ -1300,7 +1309,8 @@ namespace BannerKings.Behaviours
                         .GetMethod("CalculatePartyWage", BindingFlags.Instance | BindingFlags.NonPublic);
                     foreach (var party in list)
                     {
-                        object[] array = {party, clan.Gold + (int)goldChange.ResultNumber, applyWithdrawals};
+                        int budget = clan.Gold + (int)goldChange.ResultNumber + (int)goldChange.ResultNumber;
+                        object[] array = {party, budget, applyWithdrawals};
                         int expense = (int)getWage.Invoke(model, array);
 
                         if (applyWithdrawals)
@@ -1329,6 +1339,42 @@ namespace BannerKings.Behaviours
                                 continue;
                             }
                         }
+
+                        if (applyWithdrawals)
+                        {
+                            bool needsExtra = false;
+                            if (party.IsLordParty && party.LeaderHero != null)
+                            {
+                                needsExtra = party.LeaderHero.Gold < 5000;
+                            }
+                            else
+                            {
+                                needsExtra = party.PartyTradeGold< 5000;
+                            }
+
+                            if (needsExtra && (expense + 200) < budget)
+                            {
+                                expense += 200;
+                            }
+
+                            int refund = MathF.Min(expense, budget);
+                            if (party.IsLordParty)
+                            {
+                                if (party.LeaderHero != null)
+                                {
+                                    party.LeaderHero.Gold += refund;
+                                }
+                                else
+                                {
+                                    party.ActualClan.Leader.Gold += refund;
+                                }
+                            }
+                            else
+                            {
+                                party.PartyTradeGold += refund;
+                            }
+                        }
+
                         explainedNumber.Add(-expense,new TextObject("{=tqCSk7ya}Party wages {A0}"), party.Name);
                     }
 

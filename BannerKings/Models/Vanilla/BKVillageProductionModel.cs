@@ -187,7 +187,7 @@ namespace BannerKings.Models.Vanilla
                 if (data.TitleData != null && data.TitleData.Title != null)
                 {
                     var title = data.TitleData.Title;
-                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesHardLabor))
+                    if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesHardLabor))
                     {
                         result.Add(slaves * BOOSTED_PRODUCTION);
                         return;

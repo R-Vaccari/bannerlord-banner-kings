@@ -177,7 +177,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             textObject.SetTextVariable("KINGDOM", Kingdom.InformalName);
             textObject.SetTextVariable("POLICY_DESCRIPTION",
-                newGovernment ? Utils.TextHelper.GetName(successionType) : Utils.TextHelper.GetName(Title.contract.Succession));
+                newGovernment ? Utils.TextHelper.GetName(successionType) : Utils.TextHelper.GetName(Title.Contract.Succession));
             if (isShortVersion || IsSingleClanDecision())
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", TextObject.Empty);
@@ -222,7 +222,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
             textObject.SetTextVariable("CURRENT",
-                Utils.Helpers.GetGovernmentString(Title.contract.Government, Kingdom.Culture));
+                Utils.Helpers.GetGovernmentString(Title.Contract.Government, Kingdom.Culture));
             textObject.SetTextVariable("PROPOSED", Utils.TextHelper.GetName(successionType));
             return textObject;
         }

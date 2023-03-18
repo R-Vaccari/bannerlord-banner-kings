@@ -219,11 +219,6 @@ namespace BannerKings.Models.BKModels
                     result.Add(0.05f, new TextObject("{=PSrEtF5L}Government"));
                 }
 
-                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
-                           DefaultCouncilPositions.Instance.Castellan,
-                           DefaultCouncilTasks.Instance.EncourageMilitarism,
-                           0.4f, false);
-
                 result.Add(legitimacy, new TextObject("{=UqLsS4GV}Legitimacy"));
             }
 
@@ -239,12 +234,12 @@ namespace BannerKings.Models.BKModels
             var leader = clan.Leader;
             foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(leader))
             {
-                if (title.fief != null)
+                if (title.Fief != null)
                 {
                     continue;
                 }
 
-                var value = GetUnlandedDemesneWight(title.type);
+                var value = GetUnlandedDemesneWight(title.TitleType);
                 if (value != 0f)
                 {
                     result.Add(value, new TextObject("{=kfYELUGY}{TITLE}")
@@ -264,7 +259,7 @@ namespace BannerKings.Models.BKModels
             result.Add(hero.Clan.Tier / 3f, GameTexts.FindText("str_clan_tier_bonus"));
 
             var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
-            if (title is {type: <= TitleType.Kingdom})
+            if (title is {TitleType: <= TitleType.Kingdom})
             {
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
                 if (education.HasPerk(BKPerks.Instance.AugustKingOfKings))
@@ -279,12 +274,12 @@ namespace BannerKings.Models.BKModels
 
         public float GetTitleScore(FeudalTitle title)
         {
-            if (title.fief != null)
+            if (title.Fief != null)
             {
-                return GetSettlementDemesneWight(title.fief);
+                return GetSettlementDemesneWight(title.Fief);
             }
 
-            return GetUnlandedDemesneWight(title.type);
+            return GetUnlandedDemesneWight(title.TitleType);
         }
 
         public float GetUnlandedDemesneWight(TitleType type)
@@ -392,9 +387,9 @@ namespace BannerKings.Models.BKModels
             if (title != null)
             {
                 var bonus = 0f;
-                if (title.type != TitleType.Lordship)
+                if (title.TitleType != TitleType.Lordship)
                 {
-                    bonus = title.type switch
+                    bonus = title.TitleType switch
                     {
                         TitleType.Barony => 0.5f,
                         TitleType.County => 1f,
@@ -453,9 +448,9 @@ namespace BannerKings.Models.BKModels
             }
 
             var bonus = 0f;
-            if (title.type != TitleType.Lordship)
+            if (title.TitleType != TitleType.Lordship)
             {
-                switch (title.type)
+                switch (title.TitleType)
                 {
                     case TitleType.Barony:
                         bonus = 0.5f;
@@ -470,7 +465,7 @@ namespace BannerKings.Models.BKModels
                     case TitleType.Kingdom:
                     default:
                     {
-                        bonus = title.type == TitleType.Kingdom 
+                        bonus = title.TitleType == TitleType.Kingdom 
                             ? 3f 
                             : 4f;
 

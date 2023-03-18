@@ -1,4 +1,5 @@
 using BannerKings.Behaviours.Marriage;
+using BannerKings.Managers.Court.Members.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -123,22 +124,28 @@ namespace BannerKings.Behaviours.Feasts
                 Alcohol += MathF.Clamp(availableAlcohol / desiredAlcohol, 0f, 1f);
 
                 int foodToConsume = (int)MathF.Min(availableQuantity, desiredFood);
-                while (foodToConsume > 0)
+                for (int i = 0; i < foodToConsume; i++)
                 {
-                    ItemRosterElement random = stash.GetRandomElementWithPredicate(x => x.EquipmentElement.Item.IsFood);
-                    int amount = MBRandom.RandomInt(1, random.Amount);
-                    foodToConsume -= amount;
-                    stash.AddToCounts(random.EquipmentElement, -amount);
+                    if (foodToConsume > 0)
+                    {
+                        ItemRosterElement random = stash.GetRandomElementWithPredicate(x => x.EquipmentElement.Item.IsFood);
+                        int amount = MBRandom.RandomInt(1, random.Amount);
+                        foodToConsume -= amount;
+                        stash.AddToCounts(random.EquipmentElement, -amount);
+                    }
                 }
 
                 int alcoholToConsume = (int)MathF.Min(availableAlcohol, desiredAlcohol);
-                while (alcoholToConsume > 0)
+                for (int i = 0; i < alcoholToConsume; i++)
                 {
-                    ItemRosterElement random = stash.GetRandomElementWithPredicate(x => x.EquipmentElement.Item.StringId == "wine" ||
-                            x.EquipmentElement.Item.StringId == "beer");
-                    int amount = MBRandom.RandomInt(1, random.Amount);
-                    alcoholToConsume -= amount;
-                    stash.AddToCounts(random.EquipmentElement, -amount);
+                    if (alcoholToConsume > 0)
+                    {
+                        ItemRosterElement random = stash.GetRandomElementWithPredicate(x => x.EquipmentElement.Item.StringId == "wine" ||
+                           x.EquipmentElement.Item.StringId == "beer");
+                        int amount = MBRandom.RandomInt(1, random.Amount);
+                        alcoholToConsume -= amount;
+                        stash.AddToCounts(random.EquipmentElement, -amount);
+                    }
                 }
             }
         }
@@ -182,6 +189,13 @@ namespace BannerKings.Behaviours.Feasts
             if (MarriageContract != null)
             {
                 Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().ApplyMarriageContract();
+            }
+
+
+            if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(Host.Clan, DefaultCouncilTasks.Instance.EntertainFeastsMusician,
+                out float competence))
+            {
+                satisfaction *= 1f + (0.1f * competence);
             }
 
             foreach (var clan in Guests)

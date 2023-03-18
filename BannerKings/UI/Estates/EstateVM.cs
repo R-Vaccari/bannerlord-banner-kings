@@ -111,7 +111,7 @@ namespace BannerKings.UI.Estates
             if (title != null)
             {
                 var owner = settlement.IsVillage ? settlement.Village.GetActualOwner() : settlement.Owner;
-                DutyEnabled = title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureFeeTail) && owner == Hero.MainHero;
+                DutyEnabled = title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureFeeTail) && owner == Hero.MainHero;
             }
             else
             {

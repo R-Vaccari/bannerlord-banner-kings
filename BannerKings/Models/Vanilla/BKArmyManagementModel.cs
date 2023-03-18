@@ -33,12 +33,12 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (kingdom.ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
                     {
-                        if (title.type <= TitleType.Dukedom)
+                        if (title.TitleType <= TitleType.Dukedom)
                         {
                             return true;
                         }
                     }
-                    else if (title.type < TitleType.Lordship)
+                    else if (title.TitleType < TitleType.Lordship)
                     {
                         return true;
                     }

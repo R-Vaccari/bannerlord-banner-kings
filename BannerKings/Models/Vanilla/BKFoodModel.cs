@@ -214,7 +214,7 @@ namespace BannerKings.Models.Vanilla
                 if (efficiency != 0f)
                 {
                     var toDeduce = result.ResultNumber * efficiency;
-                    result.Add(toDeduce, new TextObject("{=!}Production efficiency"));
+                    result.Add(toDeduce, new TextObject("{=Q0AgGuB0}Production efficiency"));
                 }
 
                 result.AddFactor(MathF.Clamp(data.LandData.WorkforceSaturation - 1f, -1f, 0f), new TextObject("{=LohssChh}Workforce saturation"));
@@ -238,11 +238,11 @@ namespace BannerKings.Models.Vanilla
                 if (data.TitleData != null && data.TitleData.Title != null)
                 {
                     var title = data.TitleData.Title;
-                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                    if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
                     {
                         result.AddFactor(-0.05f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);
                     }
-                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsAgricultureDuties))
+                    else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsAgricultureDuties))
                     {
                         result.AddFactor(0.1f, DefaultDemesneLaws.Instance.SerfsAgricultureDuties.Name);
                     }

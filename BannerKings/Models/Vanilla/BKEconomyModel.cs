@@ -32,7 +32,7 @@ namespace BannerKings.Models.Vanilla
             var title = BannerKingsConfig.Instance.TitleManager.GetSovereignFromSettlement(settlement);
             if (title != null)
             {
-                var government = title.contract.Government;
+                var government = title.Contract.Government;
                 switch (government)
                 {
                     case GovernmentType.Republic:
@@ -178,7 +178,7 @@ namespace BannerKings.Models.Vanilla
                     DefaultCulturalFeats.AseraiTraderFeat.Name);
             }
 
-            if (settlement == null)
+            /*if (settlement == null)
             {
                 settlement = Hero.OneToOneConversationHero.CurrentSettlement;
             }
@@ -192,7 +192,7 @@ namespace BannerKings.Models.Vanilla
                     cost.AddFactor(data.EconomicData.CaravanAttraction.ResultNumber - 1f,
                         new TextObject("{=FK7QzVtM}Caravan attraction"));
                 }
-            }
+            }*/
 
             return cost;
         }
@@ -228,6 +228,13 @@ namespace BannerKings.Models.Vanilla
                 {
                     result.AddFactor(0.4f, new TextObject("{=fQVyeiJb}Capital"));
                 }
+
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result,
+                   settlement.OwnerClan.Leader, 
+                   DefaultCouncilPositions.Instance.Constable,
+                   DefaultCouncilTasks.Instance.EnforceLaw,
+                   0.05f, 
+                   true);
             }
 
             return result;
