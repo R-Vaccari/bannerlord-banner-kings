@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Xml.Linq;
 using BannerKings.Extensions;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
@@ -23,9 +25,18 @@ namespace BannerKings.Managers.Titles
             this.Vassals = vassals;
             this.deJure = deJure;
             this.deFacto = deFacto;
-            this.FullName = fullName != null ? fullName : new TextObject("{=wMius2i9}{TITLE} of {NAME}")
-                .SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(type, contract.Government, deJure.Culture))
-                .SetTextVariable("NAME", name);
+            if (fullName != null)
+            {
+                FullName = fullName;
+                CustomName = true;
+            }
+            else
+            {
+                FullName = new TextObject("{=wMius2i9}{TITLE} of {NAME}")
+                                .SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(type, contract.Government, deJure.Culture))
+                                .SetTextVariable("NAME", name);
+            }
+
             shortName = name;
             this.Contract = contract;
             DueTax = 0;
@@ -48,13 +59,13 @@ namespace BannerKings.Managers.Titles
         [SaveableProperty(12)] private Dictionary<Hero, CampaignTime> ongoingClaims { get; set; }
         [SaveableProperty(13)] private Dictionary<FeudalTitle, float> deJureDrift { get; set; }
         [SaveableProperty(14)] public string StringId { get; private set; }
+        [SaveableProperty(15)] public bool CustomName { get; private set; }
 
         public Dictionary<FeudalTitle, float> DeJureDrifts
         {
             get
             {
                 deJureDrift ??= new Dictionary<FeudalTitle, float>();
-
                 return deJureDrift.ToDictionary(pair => pair.Key, pair => pair.Value);
             }
         }
@@ -129,6 +140,14 @@ namespace BannerKings.Managers.Titles
         public void PostInitialize()
         {
             Contract.PostInitialize();
+            if (!CustomName)
+            {
+                FullName = new TextObject("{=wMius2i9}{TITLE} of {NAME}")
+                                .SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(TitleType, 
+                                Contract.Government, 
+                                deJure.Culture))
+                                .SetTextVariable("NAME", shortName);
+            }
         }
 
         public override bool Equals(object obj)
