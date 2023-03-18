@@ -3,183 +3,215 @@
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
 	<titles autoGenerate="true">
 		<kingdom faction="vlandia" contract="feudal" deJure="lord_4_1">
-			<duchy name="Sargotha" deJure="lord_4_1" fullName="{=!}Royal Domain">
-				<county settlement="town_V1" deJure="lord_4_1">
-					<barony settlement="castle_V7" deJure="lord_4_1" />
+			<duchy fullName="{=!}Royal Domain" deJure="lord_4_1">
+				<county settlement="town_V8" deJure="lord_4_1">
+					<barony settlement="castle_V4" deJure="lord_4_28" />
+					<barony settlement="castle_EN3" deJure="lord_france_12_1" />
 				</county>
-				<county settlement="town_V7" deJure="lord_4_16">
+				<county settlement="town_V6" deJure="lord_4_1">
+					<barony settlement="castle_V8" deJure="lord_4_6" />
+				</county>
+			</duchy>
+			<duchy name="Bretagne" deJure="lord_4_21">
+				<county settlement="town_V5" deJure="lord_4_21">
+					<barony settlement="castle_V5" deJure="lord_4_3" />
+				</county>
+			</duchy>
+			<duchy name="Bourgogne" deJure="lord_4_23">
+				<county settlement="town_V1" deJure="lord_4_23">
+					<barony settlement="castle_V3" deJure="lord_4_1" />
 					<barony settlement="castle_V1" deJure="lord_V11_l" />
 				</county>
 			</duchy>
-			<duchy name="Biscanend" deJure="lord_4_6">
-				<county settlement="town_V6" deJure="lord_4_6" />
-				<county settlement="town_V5" deJure="lord_4_1">
-					<barony settlement="castle_V2" deJure="lord_4_27" />
-				</county>
-			</duchy>
-			<duchy name="Paravenon" deJure="lord_4_3">
-				<county settlement="town_V3" deJure="lord_4_3">
-					<barony settlement="castle_V3" deJure="lord_4_3" />
-				</county>
-				<county settlement="town_V2" deJure="lord_4_23">
-					<barony settlement="castle_V8" deJure="lord_4_23" />
-				</county>
-			</duchy>
-			<duchy name="Eborend" deJure="lord_4_22">
-				<county settlement="town_V9" deJure="lord_4_22">
-					<barony settlement="castle_V4" deJure="lord_4_28" />
+			<duchy name="Aquitane" deJure="lord_5_1">
+				<county settlement="town_V2" deJure="lord_5_1">
+					<barony settlement="castle_V6" deJure="lord_5_1" />
 					<barony settlement="castle_V6" deJure="lord_4_22" />
 				</county>
-				<county settlement="town_V8" deJure="lord_4_24">
-					<barony settlement="castle_V5" deJure="lord_4_21" />
+			</duchy>
+			<duchy name="Provence" deJure="lord_4_16">
+				<county settlement="town_V7" deJure="lord_4_16">
+				</county>
+			</duchy>
+			<duchy name="Toulouse" deJure="lord_4_22">
+				<county settlement="town_V9" deJure="lord_4_22">
+					<barony settlement="castle_V7" deJure="lord_4_1" />
 				</county>
 			</duchy>
 		</kingdom>
 
-		<kingdom faction="battania" contract="tribal" deJure="lord_5_1">
-			<duchy name="Ardus Dunnath" deJure="lord_5_1">
-				<county settlement="town_B5" deJure="lord_5_16">
-					<barony settlement="castle_B1" deJure="lord_B8_l" />
-					<barony settlement="castle_B2" deJure="lord_5_15" />
-				</county>
-				<county settlement="town_B1" deJure="lord_5_1">
-					<barony settlement="castle_B5" deJure="lord_5_1" />
+		<kingdom faction="battania" contract="feudal" deJure="lord_5_1">
+			<duchy name="Leicester" deJure="lord_5_1">
+					<barony settlement="castle_B8" fullName="{=?}Earldom of Lancaster" deJure="lord_5_14" />
+					<barony settlement="castle_B6" fullName="{=?}Earldom of Lincoln" deJure="lord_5_15" />
+			</duchy>
+			<duchy name="Gloucester" deJure="lord_5_3">
+				<county settlement="town_B3" deJure="lord_5_3">
 				</county>
 			</duchy>
-			<duchy name="Cadd Lenthu" deJure="lord_5_3">
-				<county settlement="town_B2" deJure="lord_5_3">
-					<barony settlement="castle_B7" deJure="lord_5_3" />
-				</county>
-				<county settlement="town_B3" deJure="lord_5_5">
-					<barony settlement="castle_B3" deJure="lord_5_17" />
-					<barony settlement="castle_B4" deJure="lord_5_5" />
-				</county>
-			</duchy>
-			<duchy name="Ardus Lendh" deJure="lord_5_14">
-				<county settlement="town_B4" deJure="lord_5_14">
-					<barony settlement="castle_B7" deJure="lord_5_14" />
+			<duchy name="Essex" deJure="lord_5_14">
+				<county settlement="town_B4" deJure="lord_5_1">
+					<barony settlement="castle_B4" fullName="{=?}Earldom of Suffolk" deJure="lord_5_14" />
 				</county>
 			</duchy>
 		</kingdom>
 
-		<kingdom faction="sturgia" contract="tribal" deJure="lord_2_1">
-			<duchy name="Nordden" deJure="lord_2_1">
-				<county settlement="town_S2"  deJure="lord_2_1">
-					<barony settlement="castle_S6" deJure="lord_2_1"/>
-				</county>
-				<county settlement="town_S3" deJure="lord_2_17">
-					<barony settlement="castle_S5" deJure="lord_2_17"/>
+		<kingdom faction="sturgia" contract="tribal" deJure="lord_2_7">
+			<duchy name="Uppland" deJure="lord_2_7">
+				<county settlement="town_S4"  deJure="lord_2_7">
 				</county>
 			</duchy>
-			<duchy name="Kachyar" deJure="lord_2_17">
-				<county settlement="town_S7" deJure="lord_2_17">
-					<barony settlement="castle_S1" deJure="lord_2_17" />
-					<barony settlement="castle_S3" deJure="lord_2_1" />
-				</county>
-				<county settlement="town_S1" deJure="lord_2_1">
+			<duchy name="Östergötland" deJure="lord_2_1">
 					<barony settlement="castle_S4" deJure="lord_S9_l" />
+			</duchy>
+			<duchy name="Västergötland" deJure="lord_2_7">
+				<county settlement="town_S3" deJure="lord_2_7">
+					<barony settlement="castle_S3" deJure="lord_2_7" />
 				</county>
 			</duchy>
-			<duchy name="Chertyg" deJure="lord_2_16">
-				<county settlement="town_S4" deJure="lord_2_16">
-					<barony settlement="castle_S8" deJure="lord_2_16" />
-				</county>
+			<duchy name="Bergslagen" deJure="lord_2_15">
+					<barony settlement="castle_S5" deJure="lord_2_15" />
+					<barony settlement="castle_S6" deJure="lord_2_20" />
+			</duchy>
+			<duchy name="Hälsingland" deJure="lord_2_18">
 				<county settlement="town_S6" deJure="lord_2_18">
 				</county>
 			</duchy>
-			<duchy name="Iltan" deJure="lord_2_5">
-				<county settlement="town_S5" deJure="lord_2_5">
+			<duchy name="Denmark" deJure="lord_2_17">
+				<county settlement="town_S7" deJure="lord_2_17">
 					<barony settlement="castle_S7" deJure="lord_2_5" />
-					<barony settlement="castle_K6" deJure="lord_2_5" />
 				</county>
+			</duchy>
+			<duchy name="Norway" deJure="lord_2_3">
+				<county settlement="town_S2" deJure="lord_2_3">
+				</county>
+				<county settlement="town_S1" deJure="lord_2_16">
+					<barony settlement="castle_S1" deJure="lord_2_17" />
+				</county>
+				<county settlement="town_S5" deJure="lord_2_5">
+					<barony settlement="castle_S2" deJure="lord_2_3" />
+				</county>
+			</duchy>
+			<duchy name="Gotland" deJure="lord_S9_l">
+					<barony settlement="castle_S8" deJure="lord_S9_l" />
 			</duchy>
 		</kingdom>
 
 
-		<kingdom faction="empire" contract="republic" deJure="lord_1_1">
-			<duchy name="Lakonia" deJure="lord_1_3">
-				<county settlement="town_EN1" deJure="lord_1_3">
-					<barony settlement="castle_EN9" deJure="lord_1_1" />
-					<barony settlement="castle_EN6" deJure="lord_1_3" />
-				</county>
-				<county settlement="town_EN2" deJure="lord_1_1">
-					<barony settlement="castle_EN3" deJure="lord_NE9_l" />
-				</county>
+		<kingdom faction="empire" contract="feudal_elective" deJure="lord_1_1">
+			<duchy name="Baiern" deJure="lord_1_50">
+					<barony settlement="castle_EN4" deJure="lord_1_50" />
 			</duchy>
-			<duchy name="Nevys" deJure="lord_1_1">
-				<county settlement="town_EN3" deJure="lord_1_5">
-					<barony settlement="castle_EN1" deJure="lord_1_5" />
-				</county>
-				<county settlement="town_EN4" deJure="lord_1_1">
-					<barony settlement="castle_EN5" deJure="lord_1_1" />
-				</county>
-			</duchy>
-			<duchy name="Myzead" deJure="lord_1_64">
+			<duchy name="Böhmen" deJure="lord_1_50">
 				<county settlement="town_EN5" deJure="lord_1_50">
-					<barony settlement="castle_EN4" deJure="lord_1_5" />
+					<barony settlement="castle_EN8" deJure="lord_NE8_l" />
 				</county>
-				<county settlement="town_EN6" deJure="lord_1_64">
-					<barony settlement="castle_EN2" deJure="lord_1_51" />
-					<barony settlement="castle_EN7" deJure="lord_1_58" />
+			</duchy>
+			<duchy name="Kerntene" deJure="lord_1_20">
+				<county settlement="town_EN4" deJure="lord_1_20">
+					<barony settlement="castle_EN7" deJure="lord_1_51" />
 				</county>
+			</duchy>
+			<duchy name="Schwaben" deJure="lord_1_1">
+				<county settlement="town_EN6" deJure="lord_1_1">
+					<barony settlement="castle_EN6" deJure="lord_1_1" />
+				</county>
+			</duchy>
+			<duchy name="Oberlutringen" deJure="lord_NE9_l">
+				<county settlement="town_V3" deJure="lord_NE9_l">
+				</county>
+				<county settlement="town_EN3" deJure="lord_1_3">
+				</county>
+			</duchy>
+			<duchy name="Sachsen" deJure="lord_1_1">
+				<county settlement="town_EN2" deJure="lord_1_1">
+					<barony settlement="castle_EN9" deJure="lord_1_1" />
+				</county>
+			</duchy>
+			<duchy name="Pommern" deJure="lord_1_5">
+					<barony settlement="castle_EN2" deJure="lord_1_5" />
+			</duchy>
+			<duchy name="Thüringen" deJure="lord_1_58">
+					<barony settlement="castle_EN5" deJure="lord_1_58" />
 			</duchy>
 		</kingdom>
 
-		<kingdom faction="empire_w" contract="imperial" deJure="lord_1_7">
-			<duchy name="Gavys" deJure="lord_1_9">
-				<county settlement="town_EW4" deJure="lord_1_9">
+		<kingdom faction="empire_w" contract="feudal" deJure="lord_1_7">
+			<duchy name="Castiella" deJure="lord_1_7">
 					<barony settlement="castle_EW1" deJure="lord_1_9" />
+			</duchy>
+			<duchy name="León" deJure="lord_1_7">
+					<barony settlement="castle_EW5" deJure="lord_1_7" />
+			</duchy>
+			<duchy name="Toledo" deJure="lord_1_7">
+				<county settlement="town_EW6" deJure="lord_1_7">
+					<barony settlement="castle_EW7" deJure="lord_WE9_l" />
+				</county>
+			</duchy>
+			<duchy name="Aragón" deJure="lord_1_9">
+				<county settlement="town_EW4" deJure="lord_1_9">
+					<barony settlement="castle_EW8" deJure="lord_1_52" />
+				</county>
+			</duchy>
+			<duchy name="Valencia" deJure="lord_1_11">
+				<county settlement="town_EW1" deJure="lord_1_11">
 					<barony settlement="castle_EW4" deJure="lord_1_11" />
 				</county>
-				<county settlement="town_EW1" deJure="lord_1_11">
+			</duchy>
+			<duchy name="Badajoz" deJure="lord_1_45">
+				<county settlement="town_EW2" deJure="lord_1_45">
+					<barony settlement="castle_EW3" deJure="lord_1_53" />
+				</county>
+			</duchy>
+			<duchy name="Portugal" deJure="lord_1_7">
+				<county settlement="town_EW3" deJure="lord_1_7">
 					<barony settlement="castle_EW6" deJure="lord_1_71" />
 				</county>
 			</duchy>
-			<duchy name="Perassica" deJure="lord_1_7">
-				<county settlement="town_EW3" deJure="lord_1_7">
-					<barony settlement="castle_EW7" deJure="lord_WE9_l" />
-				</county>
-				<county settlement="town_EW2" deJure="lord_1_7">
-					<barony settlement="castle_EW3" deJure="lord_1_7" />
-				</county>
-			</duchy>
-			<duchy name="Aria" deJure="lord_1_40">
-				<county settlement="town_EW6" deJure="lord_1_45">
-					<barony settlement="castle_EW8" deJure="lord_1_52" />
-				</county>
+			<duchy name="Gallizia" deJure="lord_1_40">
 				<county settlement="town_EW5" deJure="lord_1_40">
 					<barony settlement="castle_EW2" deJure="lord_1_40" />
 				</county>
 			</duchy>
 		</kingdom>
 
-		<kingdom faction="empire_s" contract="imperial" deJure="lord_1_14">
-			<duchy name="Ornia" deJure="lord_1_14">
-				<county settlement="town_ES4" deJure="lord_1_14">
-					<barony settlement="castle_ES6" deJure="lord_1_14" />
+		<kingdom faction="empire_s" contract="feudal" deJure="lord_1_14">
+			<duchy name="Sicily" deJure="lord_1_14">
+				<county settlement="town_ES3" deJure="lord_1_14">
+					<barony settlement="castle_ES5" deJure="lord_1_14" />
 				</county>
 				<county settlement="Poros" deJure="lord_1_15" />
 			</duchy>
-			<duchy name="Sethys" deJure="lord_1_54">
-				<county settlement="town_ES6" deJure="lord_1_54">
-					<barony settlement="castle_ES8" deJure="lord_1_14" />
-				</county>
-				<county settlement="town_ES2" deJure="lord_1_30">
-					<barony settlement="castle_ES5" deJure="lord_1_72" />
-				</county>
+			<duchy name="Calabria" deJure="lord_1_63">
+					<barony settlement="castle_ES8" deJure="lord_1_63" />
+					<barony settlement="castle_ES3" deJure="lord_1_17" />
 			</duchy>
-			<duchy name="Calsea" deJure="lord_1_17">
-				<county settlement="town_ES1" deJure="lord_1_17">
-					<barony settlement="castle_ES4" deJure="lord_1_17" />
-					<barony settlement="castle_ES1" deJure="lord_1_17" />
-				</county>
+			<duchy name="Capua" deJure="lord_1_14">
 				<county settlement="town_ES5" deJure="lord_1_14">
-					<barony settlement="castle_ES2" deJure="lord_1_63" />
 				</county>
 			</duchy>
-			<duchy name="Tanaesis" deJure="lord_1_63">
+			<duchy name="Latium" deJure="lord_1_72">
+				<county settlement="town_ES4" deJure="lord_1_15">
+				</county>
+				<county settlement="town_ES1" deJure="lord_1_72">
+				</county>
+			</duchy>
+			<duchy name="Sardinia" deJure="lord_1_63">
 				<county settlement="town_ES7" deJure="lord_1_63">
-					<barony settlement="castle_ES3" deJure="lord_1_55" />
+					<barony settlement="castle_ES4" deJure="lord_1_72" />
+				</county>
+			</duchy>
+			<duchy name="Genoa" deJure="lord_1_54">
+				<county settlement="town_ES6" deJure="lord_1_54">
+					<barony settlement="castle_ES1" deJure="lord_1_72" />
+				</county>
+			</duchy>
+			<duchy name="Milan" deJure="lord_1_55">
+					<barony settlement="castle_ES6" deJure="lord_1_55" />
+					<barony settlement="castle_ES2" deJure="lord_1_55" />
+			</duchy>
+			<duchy name="Verona" deJure="lord_1_30">
+				<county settlement="town_ES2" deJure="lord_1_30">
 					<barony settlement="castle_ES7" deJure="lord_SE9_l" />
 				</county>
 			</duchy>
@@ -187,71 +219,144 @@
 
 
 		<kingdom faction="aserai" contract="feudal" deJure="lord_3_1">
-			<duchy name="Perassia" deJure="lord_3_1">
-				<county settlement="town_A1" deJure="lord_3_1">
-					<barony settlement="castle_A1" deJure="lord_3_1" />
+			<duchy name="Fes" deJure="lord_3_1">
+				<county settlement="town_A8" deJure="lord_3_1">
+					<barony settlement="castle_A8" deJure="lord_3_22" />
 				</county>
-				<county settlement="town_A6" deJure="lord_3_1">
-					<barony settlement="castle_A7" deJure="lord_3_19" />
+				<county settlement="town_A7" deJure="lord_3_17">
+					<barony settlement="castle_A7" deJure="lord_3_17" />
+				</county>
+			</duchy>
+			<duchy name="Marrakech" deJure="lord_3_16">
+				<county settlement="town_A3" deJure="lord_3_16">
 					<barony settlement="castle_A3" deJure="lord_3_19" />
 				</county>
 			</duchy>
-			<duchy name="Jarjarys" deJure="lord_3_16">
-				<county settlement="town_A7" deJure="lord_3_17">
-					<barony settlement="castle_A9" deJure="lord_A9_l" />
-				</county>
-				<county settlement="town_A3" deJure="lord_3_16">
-					<barony settlement="castle_A5" deJure="lord_3_16" />
-				</county>
-			</duchy>
-			<duchy name="Retana" deJure="lord_3_5">
-				<county settlement="town_A8" deJure="lord_3_18">
-					<barony settlement="castle_A4" deJure="lord_3_3" />
-				</county>
-				<county settlement="town_A5" deJure="lord_3_5">
-					<barony settlement="castle_A2" deJure="lord_3_5" />
-				</county>
-			</duchy>
-			<duchy name="Caldea" deJure="lord_3_3">
-				<county settlement="town_A4" deJure="lord_3_3">
-					<barony settlement="castle_A8" deJure="lord_3_22" />
-				</county>
-				<county settlement="town_A2" deJure="lord_3_3">
+			<duchy name="Tahert" deJure="lord_3_5">
+				<county settlement="town_A2" deJure="lord_3_5">
 					<barony settlement="castle_A6" deJure="lord_3_5" />
+					<barony settlement="castle_A2" deJure="lord_3_3" />
+				</county>
+			</duchy>
+			<duchy name="Ashir" deJure="lord_3_1">
+				<county settlement="town_A5" deJure="lord_3_1">
 				</county>
 			</duchy>
 		</kingdom>
 
-		<kingdom faction="khuzait" contract="tribal" deJure="lord_6_1">
-			<duchy name="Kohi Rohini" deJure="lord_6_17">
-				<county settlement="town_K6" deJure="lord_6_17">
-					<barony settlement="castle_K7" deJure="lord_6_19" />
-				</county>
-				<county settlement="town_K2" deJure="lord_6_16">
-					<barony settlement="castle_K8" deJure="lord_K9_l" />
+		<kingdom faction="khuzait" contract="feudal" deJure="lord_6_1">
+			<duchy name="Lesser Poland" deJure="lord_6_1">
+				<county settlement="town_K6" deJure="lord_6_1">
+					<barony settlement="castle_K3" deJure="lord_6_5" />
 				</county>
 			</duchy>
-			<duchy name="Tanaz Baikal" deJure="lord_6_1">
-				<county settlement="town_K5" deJure="lord_6_1">
-					<barony settlement="castle_K1" deJure="lord_6_5" />
-				</county>
-				<county settlement="town_K3" deJure="lord_6_1">
-					<barony settlement="castle_K4" deJure="lord_6_1" />
+			<duchy name="Mazovia" deJure="lord_6_13">
+				<county settlement="town_K4" deJure="lord_6_1">
+					<barony settlement="castle_K4" deJure="lord_6_20" />
 				</county>
 			</duchy>
-			<duchy name="Devseg" deJure="lord_6_5">
-				<county settlement="town_K4" deJure="lord_6_5">
-					<barony settlement="castle_K3" deJure="lord_6_20" />
-					<barony settlement="castle_K5" deJure="lord_6_19" />
+			<duchy name="Pomeralia" deJure="lord_6_16">
+				<county settlement="town_EN1" deJure="lord_6_16">
+				</county>
+				<county settlement="town_K3" deJure="lord_6_19">
 				</county>
 			</duchy>
-			<duchy name="Bars Dagan" deJure="lord_6_4">
-				<county settlement="town_K1" deJure="lord_6_4">
-					<barony settlement="castle_K9" deJure="lord_6_18" />
+			<duchy name="Kuyavia" deJure="lord_6_17">
+					<barony settlement="castle_EN1" deJure="lord_6_17" />
+			</duchy>
+			<duchy name="Slavonia" deJure="lord_6_20">
+				<county settlement="town_K5" deJure="lord_6_20">
+					<barony settlement="castle_K1" deJure="lord_6_20" />
+				</county>
+			</duchy>
+			<duchy name="Balaton" deJure="lord_6_4">
+					<barony settlement="castle_K7" deJure="lord_6_4" />
+			</duchy>
+			<duchy name="Pest" deJure="lord_6_18">
 					<barony settlement="castle_K6" deJure="lord_6_18" />
+					<barony settlement="castle_K5" deJure="lord_6_1" />
+					<barony settlement="castle_K9" deJure="lord_6_18" />
+			</duchy>
+			<duchy name="Bosnia" deJure="lord_6_4">
+				<county settlement="town_K1" deJure="lord_6_4">
+				</county>
+			</duchy>
+			<duchy name="Arbanon" deJure="lord_K9_l">
+				<county settlement="town_K2" deJure="lord_K9_l">
+				</county>
+			</duchy>
+			<duchy name="Serbia" deJure="lord_K9_l">
+					<barony settlement="castle_K8" deJure="lord_K9_l" />
+					<barony settlement="castle_K2" deJure="lord_6_16" />
+			</duchy>
+		</kingdom>
+
+		<kingdom faction="crusader" contract="feudal" deJure="lord_crusaderstates_1_2">
+			<duchy fullName="{=!}Kingdom of Jerusalem" deJure="lord_crusaderstates_1_2">
+				<county settlement="Ayyubid_town_A2" fullName="{=!}Lordship of Acre" deJure="lord_crusaderstates_1_2">
+				</county>
+				<county settlement="Ayyubid_town_A7" fullName="{=!}Lordship of Saphet" deJure="lord_crusaderstates_2_1">
+				</county>
+			</duchy>
+			<duchy fullName="{=!}Principality of Antioch" deJure="lord_crusaderstates_3_1">
+				<county settlement="Ayyubid_town_A5" fullName="{=!}Lordship of Antioch" deJure="lord_crusaderstates_3_1">
+					<barony settlement="Ayyubid_castle_A7" deJure="lord_crusaderstates_1_2" />
 				</county>
 			</duchy>
 		</kingdom>
+
+		<kingdom faction="mamluk" contract="feudal_elective" deJure="lord_mamluk_1_1">
+			<duchy name="Cyrenaica" deJure="lord_mamluk_5_1">
+				<county settlement="Ayyubid_town_A3" deJure="lord_mamluk_5_1">
+				</county>
+				<county settlement="Ayyubid_castle_A4" deJure="lord_mamluk_6_1">
+				</county>
+			</duchy>
+			<duchy name="Egypt" deJure="lord_mamluk_1_1">
+				<county settlement="Ayyubid_town_A4" deJure="lord_mamluk_1_1">
+					<barony settlement="Ayyubid_castle_A8" deJure="lord_mamluk_1_1" />
+				</county>
+				<county settlement="Ayyubid_town_A8" deJure="lord_mamluk_1_1">
+				</county>
+			</duchy>
+			<duchy name="Asyūt" deJure="lord_mamluk_2_1">
+				<county settlement="Ayyubid_town_A6" deJure="lord_mamluk_2_1">
+					<barony settlement="Ayyubid_castle_A6" deJure="lord_mamluk_2_1" />
+				</county>
+			</duchy>
+			<duchy name="Sinai" deJure="lord_mamluk_6_1">
+					<barony settlement="Ayyubid_castle_A5" deJure="lord_mamluk_6_1" />
+			</duchy>
+			<duchy name="Hijaz" deJure="lord_mamluk_4_1">
+				<county settlement="Ayyubid_town_A1" deJure="lord_mamluk_4_1">
+					<barony settlement="Ayyubid_castle_A1" deJure="lord_mamluk_4_1" />
+					<barony settlement="Ayyubid_castle_A2" deJure="lord_mamluk_3_1" />
+				</county>
+			</duchy>
+		</kingdom>
+
+		<kingdom faction="hafsid" contract="feudal" deJure="lord_hafsid_1_1">
+			<duchy name="Tunis" deJure="lord_hafsid_1_1">
+				<county settlement="town_A4" deJure="lord_hafsid_1_1">
+					<barony settlement="castle_A4" deJure="lord_hafsid_1_1" />
+				</county>
+			</duchy>
+			<duchy name="Alger" deJure="lord_hafsid_1_1">
+				<county settlement="town_A6" deJure="lord_hafsid_1_1">
+				</county>
+			</duchy>
+			<duchy name="Jerid" deJure="lord_hafsid_2_1">
+				<county settlement="town_A1" deJure="lord_hafsid_2_1">
+					<barony settlement="castle_A9" deJure="lord_hafsid_2_1" />
+				</county>
+			</duchy>
+			<duchy name="Tripolitania" deJure="lord_hafsid_3_1">
+					<barony settlement="castle_A1" deJure="lord_hafsid_4_1" />
+					<barony settlement="Ayyubid_castle_A3" deJure="lord_hafsid_3_1" />
+					<barony settlement="Ayyubid_castle_A9" deJure="lord_hafsid_3_1" />
+			</duchy>
+		</kingdom>
+
 
 	</titles>
 </base>
