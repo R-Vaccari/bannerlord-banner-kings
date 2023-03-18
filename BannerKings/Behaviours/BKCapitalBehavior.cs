@@ -113,7 +113,7 @@ namespace BannerKings.Behaviours
                 }
 
                 var title = BannerKingsConfig.Instance.TitleManager.GetTitle(town.Settlement);
-                if (sovereign != null && title.sovereign != sovereign)
+                if (sovereign != null && title.Sovereign != sovereign)
                 {
                     score -= 150f;
                 }

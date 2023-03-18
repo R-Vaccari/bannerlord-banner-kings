@@ -63,7 +63,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var kingdom = fulfiller.Clan.Kingdom;
             var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
 
-            foreach (var law in title.contract.DemesneLaws)
+            foreach (var law in title.Contract.DemesneLaws)
             {
                 var decision = new BKDemesneLawDecision(fulfiller.Clan, title, law);
                 var list = new List<InquiryElement>();

@@ -79,7 +79,7 @@ namespace BannerKings.UI
                         title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
                     }
 
-                    return (new DemesneHierarchyVM(title.sovereign ?? title, Clan.PlayerClan.Kingdom),
+                    return (new DemesneHierarchyVM(title.Sovereign ?? title, Clan.PlayerClan.Kingdom),
                         "TitlesWindow");
                 }
                 case "religions":

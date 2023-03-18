@@ -61,7 +61,7 @@ namespace BannerKings.Models.Vanilla
 
             foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
             {
-                result.Add(500 / ((int)title.type * 8f), title.FullName);
+                result.Add(500 / ((int)title.TitleType * 8f), title.FullName);
             }
 
             if (clan.Kingdom != null)
@@ -247,7 +247,7 @@ namespace BannerKings.Models.Vanilla
             if (data.TitleData != null && data.TitleData.Title != null)
             {
                 var title = data.TitleData.Title;
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
+                if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
                 {
                     factor = 0.011f;
                 }

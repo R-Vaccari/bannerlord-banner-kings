@@ -385,8 +385,8 @@ namespace BannerKings.Managers.Court.Members
                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                        if (sovereign != null)
                        {
-                           return data.IsRoyal && (sovereign.contract.Government == Titles.GovernmentType.Feudal || 
-                           sovereign.contract.Government == Titles.GovernmentType.Imperial);
+                           return data.IsRoyal && (sovereign.Contract.Government == Titles.GovernmentType.Feudal || 
+                           sovereign.Contract.Government == Titles.GovernmentType.Imperial);
                        }
                    }
                    

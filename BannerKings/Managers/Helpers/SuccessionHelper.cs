@@ -16,12 +16,12 @@ namespace BannerKings.Managers.Helpers
     {
         public static void ApplySovereignSuccession(FeudalTitle title, Hero victim, Kingdom kingdom)
         {
-            if (title.sovereign != null)
+            if (title.Sovereign != null)
             {
                 return;
             }
 
-            var succession = title.contract.Succession;
+            var succession = title.Contract.Succession;
             if (succession != SuccessionType.Hereditary_Monarchy && succession != SuccessionType.Imperial)
             {
                 if (!kingdom.IsEliminated)

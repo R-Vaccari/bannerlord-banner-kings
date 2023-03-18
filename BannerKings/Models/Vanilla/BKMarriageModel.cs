@@ -150,7 +150,7 @@ namespace BannerKings.Models.Vanilla
 
             if (title != null)
             {
-                result.Add(500f / (1.5f * (float)title.type), new TextObject("{=KaxKgMg1}{CLAN} holds {TITLE}")
+                result.Add(500f / (1.5f * (float)title.TitleType), new TextObject("{=KaxKgMg1}{CLAN} holds {TITLE}")
                     .SetTextVariable("CLAN", clan.Name)
                     .SetTextVariable("TITLE", title.FullName));
             }

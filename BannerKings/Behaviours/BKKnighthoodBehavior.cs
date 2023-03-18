@@ -48,7 +48,7 @@ namespace BannerKings.Behaviours
                 }
 
                 var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
-                if (title == null || title.type != TitleType.Lordship || title.fief.Village == null)
+                if (title == null || title.TitleType != TitleType.Lordship || title.Fief.Village == null)
                 {
                     return;
                 }
@@ -74,7 +74,7 @@ namespace BannerKings.Behaviours
                 }
                 else
                 {
-                    var clanName = ClanActions.CanCreateNewClan(hero.Culture, title.fief);
+                    var clanName = ClanActions.CanCreateNewClan(hero.Culture, title.Fief);
                     if (clanName == null)
                     {
                         return;
@@ -130,7 +130,7 @@ namespace BannerKings.Behaviours
 
         private void CreateClan(Hero hero, Clan originalClan, FeudalTitle title, TextObject name = null)
         {
-            var newClan = ClanActions.CreateNewClan(hero, title.fief, hero.StringId + "_knight_clan", name, 150f, true);
+            var newClan = ClanActions.CreateNewClan(hero, title.Fief, hero.StringId + "_knight_clan", name, 150f, true);
             if (newClan != null)
             {
                 MBInformationManager.AddQuickInformation(
@@ -270,7 +270,7 @@ namespace BannerKings.Behaviours
             var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero);
             foreach (var title in titles)
             {
-                if (title.type != TitleType.Lordship || title.fief == null || title.deJure != Hero.MainHero)
+                if (title.TitleType != TitleType.Lordship || title.Fief == null || title.deJure != Hero.MainHero)
                 {
                     continue;
                 }
@@ -289,13 +289,13 @@ namespace BannerKings.Behaviours
             var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero);
             foreach (var title in titles)
             {
-                if (title.type != TitleType.Lordship || title.fief == null || title.deJure != Hero.MainHero)
+                if (title.TitleType != TitleType.Lordship || title.Fief == null || title.deJure != Hero.MainHero)
                 {
                     continue;
                 }
 
                 
-                var settlement = title.fief;
+                var settlement = title.Fief;
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 if (data.EstateData != null)
                 {
@@ -585,28 +585,28 @@ namespace BannerKings.Behaviours
                 {
                     var desc = "";
                     FeudalTitle current = null;
-                    var finalList = titles.OrderBy(x => (int) x.type).ToList();
+                    var finalList = titles.OrderBy(x => (int) x.TitleType).ToList();
                     var government = GovernmentType.Feudal;
                     foreach (var title in finalList)
                     {
-                        if (title.contract != null)
+                        if (title.Contract != null)
                         {
-                            government = title.contract.Government;
+                            government = title.Contract.Government;
                         }
 
                         if (current == null)
                         {
                             desc += string.Format("{0} of {1}",
-                                Utils.Helpers.GetTitleHonorary(title.type, government, false), title.shortName);
+                                Utils.Helpers.GetTitleHonorary(title.TitleType, government, false), title.shortName);
                         }
-                        else if (current.type == title.type)
+                        else if (current.TitleType == title.TitleType)
                         {
                             desc += ", " + title.shortName;
                         }
-                        else if (current.type != title.type)
+                        else if (current.TitleType != title.TitleType)
                         {
                             desc += string.Format(" and {0} of {1}",
-                                Utils.Helpers.GetTitleHonorary(title.type, government, false), title.shortName);
+                                Utils.Helpers.GetTitleHonorary(title.TitleType, government, false), title.shortName);
                         }
 
                         current = title;

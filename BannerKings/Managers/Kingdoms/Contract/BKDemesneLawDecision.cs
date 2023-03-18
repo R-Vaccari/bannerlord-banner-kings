@@ -127,7 +127,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         public override TextObject GetSupportTitle() => new TextObject("{=c7niULaT}Vote for the next {LAW} demesne law")
             .SetTextVariable("LAW", GameTexts.FindText("str_bk_demesne_law", CurrentLaw.LawType.ToString()));
 
-        public override bool IsAllowed() => Title.contract != null && !ProposedLaw.Equals(CurrentLaw);
+        public override bool IsAllowed() => Title.Contract != null && !ProposedLaw.Equals(CurrentLaw);
 
         public override void DetermineSponsors(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {

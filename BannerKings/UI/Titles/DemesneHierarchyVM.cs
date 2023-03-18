@@ -145,7 +145,7 @@ namespace BannerKings.UI.Titles
             Decisions.Clear();
             TitleInfo.Clear();
 
-            if (title?.contract == null)
+            if (title?.Contract == null)
             {
                 return;
             }
@@ -163,18 +163,18 @@ namespace BannerKings.UI.Titles
                 Population.ToString(), string.Empty));
 
             TitleInfo.Add(new InformationElement(new TextObject("{=aoZYxUYV}Government Type:").ToString(),
-             title.contract.Government.ToString(),
+             title.Contract.Government.ToString(),
              new TextObject("{=BvJb2QSM}The dukedom this settlement is associated with.").ToString()));
             TitleInfo.Add(new InformationElement(new TextObject("{=HJcuXO5J}Succession Type:").ToString(),
-                title.contract.Succession.ToString().Replace("_", " "),
+                title.Contract.Succession.ToString().Replace("_", " "),
                 new TextObject("{=qMmbExKv}The clan succession form associated with this title. Successions only apply to factions.")
                     .ToString()));
             TitleInfo.Add(new InformationElement(new TextObject("{=OTuRSNZ5}Inheritance Type:").ToString(),
-                title.contract.Inheritance.ToString(),
+                title.Contract.Inheritance.ToString(),
                 new TextObject("{=Y3mAnDLj}The inheritance form associated with this settlement's title. Inheritance dictates who leads the clan after the leader's death.")
                     .ToString()));
             TitleInfo.Add(new InformationElement(new TextObject("{=vCryQjBB}Gender Law:").ToString(),
-                title.contract.GenderLaw.ToString(),
+                title.Contract.GenderLaw.ToString(),
                 new TextObject("{=ArvZcS5p}The gender law associated with this settlement's title. Gender law affects how inheritance and other aspects of rule work.")
                     .ToString()));
         }

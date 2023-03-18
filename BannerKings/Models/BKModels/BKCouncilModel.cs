@@ -279,7 +279,7 @@ namespace BannerKings.Models.BKModels
             var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(candidate);
             if (title != null)
             {
-                titleWeight = 4 - (int) title.type;
+                titleWeight = 4 - (int) title.TitleType;
             }
 
             return (titleWeight + competence + relation) / 3f;

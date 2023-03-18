@@ -124,7 +124,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var laws = new List<InquiryElement>();
             foreach (var type in BannerKingsConfig.Instance.TitleManager.GetGenderLawTypes())
             {
-                if (kingdom != null && type != title.contract.GenderLaw)
+                if (kingdom != null && type != title.Contract.GenderLaw)
                 {
                     var decision = new BKGenderDecision(Clan.PlayerClan, type, title);
                     var text = new TextObject("{=F7iMS7Tz}{LAW} - ({SUPPORT}% support)");
@@ -143,7 +143,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var laws = new List<InquiryElement>();
             foreach (var type in BannerKingsConfig.Instance.TitleManager.GetInheritanceTypes())
             {
-                if (kingdom != null && type != title.contract.Inheritance)
+                if (kingdom != null && type != title.Contract.Inheritance)
                 {
                     var decision = new BKInheritanceDecision(Clan.PlayerClan, type, title);
                     var text = new TextObject("{=F7iMS7Tz}{LAW} - ({SUPPORT}% support)");
@@ -160,9 +160,9 @@ namespace BannerKings.Managers.Goals.Decisions
         private List<InquiryElement> GetSuccessions(Kingdom kingdom, FeudalTitle title)
         {
             var laws = new List<InquiryElement>();
-            foreach (var type in SuccessionHelper.GetValidSuccessions(title.contract.Government))
+            foreach (var type in SuccessionHelper.GetValidSuccessions(title.Contract.Government))
             {
-                if (kingdom != null && type != title.contract.Succession)
+                if (kingdom != null && type != title.Contract.Succession)
                 {
                     var decision = new BKSuccessionDecision(Clan.PlayerClan, type, title);
                     var text = new TextObject("{=F7iMS7Tz}{LAW} - ({SUPPORT}% support)");
@@ -181,7 +181,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var laws = new List<InquiryElement>();
             foreach (var type in BannerKingsConfig.Instance.TitleManager.GetGovernmentTypes())
             {
-                if (kingdom != null && type != title.contract.Government)
+                if (kingdom != null && type != title.Contract.Government)
                 {
                     var decision = new BKGovernmentDecision(Clan.PlayerClan, type, title);
                     var text = new TextObject("{=F7iMS7Tz}{LAW} - ({SUPPORT}% support)");
