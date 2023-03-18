@@ -420,7 +420,21 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             List<InquiryElement> candidates = new List<InquiryElement>();
             foreach (var member in Group.Members)
             {
-                var competence = BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(member, position, true);
+                var competence = position.ProjectedCompetence;
+                TextObject hint;
+                if (member == Hero.MainHero)
+                {
+                    hint = new TextObject("{=!}Vote on yourself as beneficiary to this demand.");
+                }
+                else
+                {
+                    hint = new TextObject("{=!}Vote on {HERO}{HERO_TEXT} as beneficiary for the {POSITION} position. Their opinion of you is ({RELATION}).")
+                        .SetTextVariable("RELATION", member.GetRelationWithPlayer())
+                        .SetTextVariable("HERO", member.Name)
+                        .SetTextVariable("HERO_TEXT", GetHeroRoleText(member))
+                        .SetTextVariable("POSITION", position.Name);
+                }
+
                 candidates.Add(new InquiryElement(member,
                     new TextObject("{=!}{HERO} - {COMPETENCE}% competence")
                     .SetTextVariable("HERO", member.Name)
@@ -462,7 +476,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                             },
                             null));
                     },
-                    null));
+                    null), 
+                    true);
             }
             else
             {
@@ -478,7 +493,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                        {
                             ChooseBenefactor(Group.Leader, playerLead);
                        },
-                       null));
+                       null), 
+                       true);
             }
         }
 
