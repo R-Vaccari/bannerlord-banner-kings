@@ -57,7 +57,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         {
             Attacker = attacker;
             Defender = defender;
-            Fief = title.fief;
+            Fief = title.Fief;
             Title = title;
             Claimant = claimant;
         }
