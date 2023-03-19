@@ -2,7 +2,6 @@
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles.Laws;
-using BannerKings.Utils.Models;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -10,6 +9,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 using static BannerKings.Behaviours.Diplomacy.Groups.Demands.Demand;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups
@@ -18,6 +18,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
     {
         public InterestGroup(string stringId) : base(stringId)
         {
+            Members = new List<Hero>();
+            RecentOucomes = new List<DemandOutcome>();
         }
 
         public void Initialize(TextObject name, TextObject description, TraitObject mainTrait,
@@ -37,22 +39,18 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             SupportedLaws = supportedLaws;
             ShunnedLaws = shunnedLaws;
             SupportedCasusBelli = supportedCasusBelli;
-            List<Demand> demands = new List<Demand>();
-            foreach (var demand in possibleDemands)
+            if (PossibleDemands == null)
             {
-                demands.Add(demand.GetCopy(this));
+                List<Demand> demands = new List<Demand>();
+                foreach (var demand in possibleDemands)
+                {
+                    demands.Add(demand.GetCopy(this));
+                }
+                PossibleDemands = demands;
             }
-            PossibleDemands = demands;
+          
             FavoredPosition = favoredPosition;
-
-            Members = new List<Hero>();
-            RecentOucomes = new List<DemandOutcome>();
         }
-
-        public KingdomDiplomacy KingdomDiplomacy { get; private set; }
-        public Hero FactionLeader => KingdomDiplomacy.Kingdom.Leader;
-
-        public CouncilMember FavoredPosition { get; private set; }
 
         public InterestGroup GetCopy(KingdomDiplomacy diplomacy)
         {
@@ -64,14 +62,41 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             return result;
         }
 
-        public void SetName(TextObject name) => this.name = name;
+        public void PostInitialize()
+        {
+            InterestGroup i = DefaultInterestGroup.Instance.GetById(this);
+            Initialize(i.Name, i.Description, i.MainTrait, i.DemandsCouncil, i.AllowsCommoners,
+                i.AllowsNobles, i.PreferredOccupations, i.SupportedPolicies, i.ShunnedPolicies, i.SupportedLaws,
+                i.ShunnedLaws, i.SupportedCasusBelli, null, i.FavoredPosition);
+            foreach (var demand in PossibleDemands)
+            {
+                demand.SetTexts();
+            }
+        }
 
+        [SaveableProperty(10)] public KingdomDiplomacy KingdomDiplomacy { get; private set; }
+        [SaveableProperty(11)] public Hero Leader { get; private set; }
+        [SaveableProperty(12)] public List<Hero> Members { get; private set; }
+        [SaveableProperty(13)] public List<Demand> PossibleDemands { get; private set; }
+        [SaveableProperty(14)] public List<DemandOutcome> RecentOucomes { get; private set; }
+
+        public Hero FactionLeader => KingdomDiplomacy.Kingdom.Leader;
+        public CouncilMember FavoredPosition { get; private set; }
         public bool IsInterestGroup { get; private set; }
         public bool IsRadicalGroup => !IsInterestGroup;
-        public Kingdom Kingdom { get; private set; }
         public TraitObject MainTrait { get; private set; }
-        public Hero Leader { get; private set; }
-        public List<Hero> Members { get; private set; }
+        public Demand CurrentDemand => PossibleDemands.FirstOrDefault(x => x.Active);
+        public bool DemandsCouncil { get; private set; }
+        public bool AllowsCommoners { get; private set; }
+        public bool AllowsNobles { get; private set; }
+        public List<Occupation> PreferredOccupations { get; private set; }
+        public List<PolicyObject> SupportedPolicies { get; private set; }
+        public List<PolicyObject> ShunnedPolicies { get; private set; }
+        public List<DemesneLaw> SupportedLaws { get; private set; }
+        public List<DemesneLaw> ShunnedLaws { get; private set; }
+        public List<CasusBelli> SupportedCasusBelli { get; private set; }
+
+        public void SetName(TextObject name) => this.name = name;
 
         public bool CanHeroJoin(Hero hero, KingdomDiplomacy diplomacy) => hero.MapFaction == diplomacy.Kingdom && 
             hero.MapFaction.Leader != hero && diplomacy.GetHeroGroup(hero) == null;
@@ -204,35 +229,21 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             return demand.IsDemandCurrentlyAdequate();
         }
 
-        public Demand CurrentDemand => PossibleDemands.FirstOrDefault(x => x.Active);
-
-        public bool DemandsCouncil { get; private set; }
-        public bool AllowsCommoners { get; private set; }
-        public bool AllowsNobles { get; private set; }
-        public List<Occupation> PreferredOccupations { get; private set; }
-        public List<PolicyObject> SupportedPolicies { get; private set; }
-        public List<PolicyObject> ShunnedPolicies { get; private set; }
-        public List<DemesneLaw> SupportedLaws { get; private set; }
-        public List<DemesneLaw> ShunnedLaws { get; private set; }
-        public List<CasusBelli> SupportedCasusBelli { get; private set; }
-        public List<Demand> PossibleDemands { get; private set; }
-        public List<DemandOutcome> RecentOucomes { get; private set; }
-
         public override bool Equals(object obj)
         {
             if (obj is InterestGroup)
             {
-                return (obj as InterestGroup).StringId == StringId;
+                return (obj as InterestGroup).StringId == StringId && KingdomDiplomacy == (obj as InterestGroup).KingdomDiplomacy;
             }
             return base.Equals(obj);
         }
 
         public class DemandOutcome
         {
-            public Demand Demand { get; private set; }
-            public CampaignTime EndDate { get; private set; }
-            public TextObject Explanation { get; private set; }
-            public bool Success { get; private set; }
+            [SaveableProperty(1)] public Demand Demand { get; private set; }
+            [SaveableProperty(2)] public CampaignTime EndDate { get; private set; }
+            [SaveableProperty(3)] public TextObject Explanation { get; private set; }
+            [SaveableProperty(4)] public bool Success { get; private set; }
 
             public DemandOutcome(Demand demand, CampaignTime endDate, TextObject explanation, bool success)
             {

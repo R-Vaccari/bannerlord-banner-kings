@@ -113,23 +113,13 @@ namespace BannerKings.UI.Kingdoms
                 string.Empty,
                 new BasicTooltipViewModel(() => UIHelper.GetGroupEndorsed(Group))));
 
-            TextObject demandsExplanation = new TextObject("{=!}Possible demands\n{DEMANDS}")
-                .SetTextVariable("DEMANDS", Group.PossibleDemands.Aggregate("", (current, law) =>
-                current + Environment.NewLine + law.Name));
-
             TertiaryHeaders.Add(new StringPairItemVM(new TextObject("{=!}Demands").ToString(),
                 string.Empty,
-                new BasicTooltipViewModel(() => demandsExplanation.ToString())));
-
-            TextObject shunnedExplanation = new TextObject("{=!}Laws\n{LAWS}\n\n\nPolicies\n{POLICIES}")
-                .SetTextVariable("LAWS", Group.SupportedLaws.Aggregate("", (current, law) =>
-                current + Environment.NewLine + law.Name))
-                .SetTextVariable("POLICIES", Group.SupportedPolicies.Aggregate("", (current, policy) =>
-                current + Environment.NewLine + policy.Name));
+                new BasicTooltipViewModel(() => UIHelper.GetGroupDemands(Group))));
 
             TertiaryHeaders.Add(new StringPairItemVM(new TextObject("{=!}Shunned Acts").ToString(),
                 string.Empty,
-                new BasicTooltipViewModel(() => shunnedExplanation.ToString())));
+                new BasicTooltipViewModel(() => UIHelper.GetGroupShunned(Group))));
 
             DemandName = new TextObject("{=!}Push Demand").ToString();
             IsDemandEnabled = Group.Leader == Hero.MainHero;

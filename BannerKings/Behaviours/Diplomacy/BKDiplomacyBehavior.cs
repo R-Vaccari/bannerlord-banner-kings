@@ -75,10 +75,13 @@ namespace BannerKings.Behaviours.Diplomacy
             CampaignEvents.AiHourlyTickEvent.AddNonSerializedListener(this, OnAiHourlyTick);
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
             CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
+            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
         }
 
         public override void SyncData(IDataStore dataStore)
         {
+            dataStore.SyncData("bannerkings-kingdom-diplomacies", ref kingdomDiplomacies);
+
             if (kingdomDiplomacies == null)
             {
                 kingdomDiplomacies = new Dictionary<Kingdom, KingdomDiplomacy>();
@@ -87,6 +90,14 @@ namespace BannerKings.Behaviours.Diplomacy
             if (wars == null)
             {
                 wars = new List<War>();
+            }
+        }
+
+        private void OnGameLoaded(CampaignGameStarter starter)
+        {
+            foreach (var diplomacy in kingdomDiplomacies.Values)
+            {
+                diplomacy.PostInitialize();
             }
         }
 

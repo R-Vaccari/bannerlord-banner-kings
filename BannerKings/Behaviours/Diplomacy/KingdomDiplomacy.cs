@@ -6,23 +6,34 @@ using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Diplomacy
 {
     public class KingdomDiplomacy
     {
-        public Kingdom Kingdom { get; }
+        [SaveableProperty(1)] public Kingdom Kingdom { get; private set; }
+        [SaveableProperty(2)] public Religion Religion { get; private set; }
+        [SaveableProperty(3)] public List<InterestGroup> Groups { get; private set; }
         public List<Kingdom> TradePacts { get; private set; }
         public Dictionary<Kingdom, CampaignTime> Truces { get; private set; }
-        public Religion Religion { get; private set; } 
-        public List<InterestGroup> Groups { get; private set; }
-
+      
         public KingdomDiplomacy(Kingdom kingdom)
         {
             Kingdom = kingdom;
             TradePacts = new List<Kingdom>();
             Truces = new Dictionary<Kingdom, CampaignTime>();
             Groups = new List<InterestGroup>();
+        }
+
+        public void PostInitialize()
+        {
+            foreach (var group in Groups)
+            {
+                group.PostInitialize();
+            }
+            TradePacts = new List<Kingdom>();
+            Truces = new Dictionary<Kingdom, CampaignTime>();
         }
 
         public bool HasValidTruce(Kingdom kingdom)

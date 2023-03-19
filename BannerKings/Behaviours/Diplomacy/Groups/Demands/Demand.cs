@@ -14,6 +14,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         {
         }
 
+        public abstract void SetTexts();
+
         public abstract Demand GetCopy(InterestGroup group);
 
         public InterestGroup Group { get; protected set; }

@@ -9,15 +9,21 @@ using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 {
     public class CouncilPositionDemand : Demand
     {
-        private CouncilMember position;
-        private Hero benefactor;
+        [SaveableProperty(1)] private CouncilMember position { get; set; }
+        [SaveableProperty(2)] private Hero benefactor { get; set; }
 
         public CouncilPositionDemand() : base("CouncilPosition")
+        {
+            SetTexts();
+        }
+
+        public override void SetTexts()
         {
             Initialize(new TextObject("{=!}Council Position"),
                 new TextObject());
@@ -414,7 +420,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     Fulfill(response, Hero.MainHero);
                 },
                 null,
-                Utils.Helpers.GetKingdomDecisionSound()));
+                Utils.Helpers.GetKingdomDecisionSound()),
+                true);
         }
 
         public override void ShowPlayerDemandOptions()

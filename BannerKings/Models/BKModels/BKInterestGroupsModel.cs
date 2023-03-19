@@ -85,7 +85,7 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            if (group.Equals(DefaultInterestGroup.Instance.Commoners))
+            if (group.StringId == DefaultInterestGroup.Instance.Commoners.StringId)
             {
                 foreach (var fief in diplomacy.Kingdom.Fiefs)
                 {
@@ -233,7 +233,7 @@ namespace BannerKings.Models.BKModels
                     .SetTextVariable("COUNT", shunnedLawsCount));
             }
 
-            if (group.Equals(DefaultInterestGroup.Instance.Traditionalists))
+            if (group.StringId == DefaultInterestGroup.Instance.Traditionalists.StringId)
             {
                 if (group.FactionLeader.Culture == group.KingdomDiplomacy.Kingdom.Culture)
                 {
