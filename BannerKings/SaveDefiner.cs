@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using BannerKings.Behaviours.Diplomacy;
+using BannerKings.Behaviours.Diplomacy.Groups;
+using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
 using BannerKings.Behaviours.Workshops;
@@ -6,7 +9,6 @@ using BannerKings.Components;
 using BannerKings.Managers;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Court;
-using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Duties;
@@ -37,10 +39,12 @@ using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.SaveSystem;
+using static BannerKings.Behaviours.Diplomacy.Groups.InterestGroup;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
 using static BannerKings.Managers.Policies.BKGarrisonPolicy;
@@ -176,7 +180,12 @@ namespace BannerKings
             AddClassDefinition(typeof(TreeloreFaith), 115);
             AddClassDefinition(typeof(CouncilTask), 116);
             AddClassDefinition(typeof(TargetedCouncilTask<>), 117);
-            AddClassDefinition(typeof(OverseeSanitation), 118); 
+            AddClassDefinition(typeof(OverseeSanitation), 118);
+            AddClassDefinition(typeof(KingdomDiplomacy), 119);
+            AddClassDefinition(typeof(InterestGroup), 120);
+            AddClassDefinition(typeof(DemandOutcome), 121);
+            AddClassDefinition(typeof(Demand), 122);
+            AddClassDefinition(typeof(CouncilPositionDemand), 123);
         }
 
         protected override void DefineContainerDefinitions()
@@ -224,6 +233,11 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Town, Feast>)); 
             ConstructContainerDefinition(typeof(Dictionary<Hero, List<Estate>>));
             ConstructContainerDefinition(typeof(Dictionary<Workshop, WorkshopData>));
+
+            ConstructContainerDefinition(typeof(List<InterestGroup>));
+            ConstructContainerDefinition(typeof(List<Demand>));
+            ConstructContainerDefinition(typeof(List<DemandOutcome>));
+            ConstructContainerDefinition(typeof(Dictionary<Kingdom, KingdomDiplomacy>));
         }
     }
 }
