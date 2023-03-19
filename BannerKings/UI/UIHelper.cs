@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions.Faiths;
@@ -17,7 +18,6 @@ using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static System.Collections.Specialized.BitVector32;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.UI
@@ -131,6 +131,114 @@ namespace BannerKings.UI
                 ref result);
             explanation.RemoveAt(0);
             properties.AddRange(explanation);
+
+            return properties;
+        }
+
+        public static List<TooltipProperty> GetGroupEndorsed(InterestGroup group)
+        {
+            List<TooltipProperty> properties = new List<TooltipProperty>();
+            properties.Add(new TooltipProperty(group.Name.ToString() + "        ",
+                string.Empty,
+                0,
+                onlyShowWhenExtended: false,
+                TooltipProperty.TooltipPropertyFlags.Title));
+
+            properties.Add(new TooltipProperty(string.Empty,
+                new TextObject("{=!}Acts endorsed by this group. Promoting any of these laws, policies or engaging in wars with these justifications (Casus Belli) will evoke the group's support.").ToString(),
+                0,
+                false,
+                TooltipProperty.TooltipPropertyFlags.MultiLine));
+
+            TooltipAddEmptyLine(properties);
+            properties.Add(new TooltipProperty(new TextObject("{=!}Laws").ToString(), " ", 0));
+            properties.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
+
+            foreach (var law in group.SupportedLaws)
+            {
+                properties.Add(new TooltipProperty(law.Name.ToString(), " ", 0));
+            }
+
+            TooltipAddEmptyLine(properties);
+            properties.Add(new TooltipProperty(new TextObject("{=!}Policies").ToString(), " ", 0));
+            properties.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
+
+            foreach (var policy in group.SupportedPolicies)
+            {
+                properties.Add(new TooltipProperty(policy.Name.ToString(), " ", 0));
+            }
+
+            TooltipAddEmptyLine(properties);
+            properties.Add(new TooltipProperty(new TextObject("{=!}Casus Belli").ToString(), " ", 0));
+            properties.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
+
+            foreach (var justification in group.SupportedCasusBelli)
+            {
+                properties.Add(new TooltipProperty(justification.Name.ToString(), " ", 0));
+            }
+
+            return properties;
+        }
+
+        public static List<TooltipProperty> GetGroupShunned(InterestGroup group)
+        {
+            List<TooltipProperty> properties = new List<TooltipProperty>();
+            properties.Add(new TooltipProperty(group.Name.ToString() + "        ",
+                string.Empty,
+                0,
+                onlyShowWhenExtended: false,
+                TooltipProperty.TooltipPropertyFlags.Title));
+
+            properties.Add(new TooltipProperty(string.Empty,
+                new TextObject("{=!}Acts shunned by this group. Promoting any of these laws or policies reduce the group's support.").ToString(),
+                0,
+                false,
+                TooltipProperty.TooltipPropertyFlags.MultiLine));
+
+            TooltipAddEmptyLine(properties);
+            properties.Add(new TooltipProperty(new TextObject("{=!}Laws").ToString(), " ", 0));
+            properties.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
+
+            foreach (var law in group.ShunnedLaws)
+            {
+                properties.Add(new TooltipProperty(law.Name.ToString(), " ", 0));
+            }
+
+            TooltipAddEmptyLine(properties);
+            properties.Add(new TooltipProperty(new TextObject("{=!}Policies").ToString(), " ", 0));
+            properties.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
+
+            foreach (var policy in group.ShunnedPolicies)
+            {
+                properties.Add(new TooltipProperty(policy.Name.ToString(), " ", 0));
+            }
+
+            return properties;
+        }
+
+        public static List<TooltipProperty> GetGroupDemands(InterestGroup group)
+        {
+            List<TooltipProperty> properties = new List<TooltipProperty>();
+            properties.Add(new TooltipProperty(group.Name.ToString() + "        ",
+                string.Empty,
+                0,
+                onlyShowWhenExtended: false,
+                TooltipProperty.TooltipPropertyFlags.Title));
+
+            properties.Add(new TooltipProperty(string.Empty,
+                new TextObject("{=!}Every group is capable of pushing demands for the ruler. Each demand requires a certain level of group influence. Supportive groups will push for less demands. Thus, high-support, low-influence groups are the least likely to push for any demands.").ToString(),
+                0,
+                false,
+                TooltipProperty.TooltipPropertyFlags.MultiLine));
+
+            TooltipAddEmptyLine(properties);
+            properties.Add(new TooltipProperty(new TextObject("{=!}Demands").ToString(), " ", 0));
+            properties.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
+
+            foreach (var demand in group.PossibleDemands)
+            {
+                properties.Add(new TooltipProperty(demand.Name.ToString(), " ", 0));
+            }
 
             return properties;
         }

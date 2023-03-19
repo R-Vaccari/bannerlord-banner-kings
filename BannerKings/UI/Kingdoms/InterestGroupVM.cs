@@ -72,7 +72,7 @@ namespace BannerKings.UI.Kingdoms
             {
                 if (member != Leader.Hero)
                 {
-                    Members.Add(new GroupMemberVM(member));
+                    Members.Add(new GroupMemberVM(member, true));
                 }
             }
 
@@ -109,17 +109,9 @@ namespace BannerKings.UI.Kingdoms
             int lords = Group.Members.FindAll(x => x.IsLord).Count;
             int notables = Group.Members.FindAll(x => x.IsNotable).Count;
 
-            TextObject endorsedExplanation = new TextObject("{=!}Laws -----\n{LAWS}\n\n\nPolicies -----\n{POLICIES}\n\n\nCasus Belli -----\n{CASUS}")
-                .SetTextVariable("LAWS", Group.SupportedLaws.Aggregate("", (current, law) => 
-                current + Environment.NewLine + law.Name))
-                .SetTextVariable("POLICIES", Group.SupportedPolicies.Aggregate("", (current, policy) =>
-                current + Environment.NewLine + policy.Name))
-                .SetTextVariable("CASUS", Group.SupportedCasusBelli.Aggregate("", (current, casus) =>
-                current + Environment.NewLine + casus.Name));
-
             TertiaryHeaders.Add(new StringPairItemVM(new TextObject("{=!}Endorsed Acts").ToString(), 
                 string.Empty,
-                new BasicTooltipViewModel(() => endorsedExplanation.ToString())));
+                new BasicTooltipViewModel(() => UIHelper.GetGroupEndorsed(Group))));
 
             TextObject demandsExplanation = new TextObject("{=!}Possible demands\n{DEMANDS}")
                 .SetTextVariable("DEMANDS", Group.PossibleDemands.Aggregate("", (current, law) =>

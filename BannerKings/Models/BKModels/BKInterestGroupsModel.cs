@@ -3,6 +3,7 @@ using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Managers.Titles;
 using BannerKings.Utils.Extensions;
 using BannerKings.Utils.Models;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -45,23 +46,35 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
+            Dictionary<Clan, float> clanInfluences = new Dictionary<Clan, float>();
             float totalClanInfluence = 0f;
             foreach (var clan in diplomacy.Kingdom.Clans)
             {
-                totalClanInfluence += CalculateClanInfluence(clan, diplomacy).ResultNumber;
+                float f = CalculateClanInfluence(clan, diplomacy).ResultNumber;
+                totalClanInfluence += f;
+                clanInfluences.Add(clan, f);
             }
 
+            int notables = 0;
+            float notableInfluence = 0f;
             foreach (var member in group.Members)
             {
                 if (member.IsNotable)
                 {
-                    result.Add(0.25f * (member.Power / totalPower), member.Name);
+                    notableInfluence += 0.25f * (member.Power / totalPower);
+                    notables++;
                 }
 
                 if (member.Clan != null && member.IsClanLeader())
                 {
-                    result.Add(0.75f * (CalculateClanInfluence(member.Clan, diplomacy).ResultNumber / totalClanInfluence), member.Clan.Name);
+                    result.Add(0.75f * (clanInfluences[member.Clan] / totalClanInfluence), member.Clan.Name);
                 }
+            }
+
+            if (notables > 0)
+            {
+                result.Add(notableInfluence, new TextObject("{=!}Dignataries (x{MEMBERS})")
+                    .SetTextVariable("MEMBERS", notables));
             }
 
             foreach (var outcome in group.RecentOucomes)
@@ -154,7 +167,7 @@ namespace BannerKings.Models.BKModels
 
             if (otherMembers > 0)
             {
-                result.Add(approval, new TextObject("{=!}Approval by group members (x{MEMBERS})")
+                result.Add(approval, new TextObject("{=!}Approval by members (x{MEMBERS})")
                     .SetTextVariable("MEMBERS", otherMembers));
             }
 
@@ -220,6 +233,25 @@ namespace BannerKings.Models.BKModels
                     .SetTextVariable("COUNT", shunnedLawsCount));
             }
 
+            if (group.Equals(DefaultInterestGroup.Instance.Traditionalists))
+            {
+                if (group.FactionLeader.Culture == group.KingdomDiplomacy.Kingdom.Culture)
+                {
+                    result.Add(0.12f, new TextObject("{=!}{HERO} is of traditional culture")
+                        .SetTextVariable("HERO", group.FactionLeader.Name));
+                }
+
+                var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(group.FactionLeader);
+                if (group.KingdomDiplomacy.Religion != null)
+                {
+                    if (rel != null && rel.Equals(group.KingdomDiplomacy.Religion.Faith))
+                    {
+                        result.Add(0.12f, new TextObject("{=!}{HERO} is of traditional faith")
+                            .SetTextVariable("HERO", group.FactionLeader.Name));
+                    }
+                }
+            }
+
             return result;
         }
 
@@ -241,12 +273,12 @@ namespace BannerKings.Models.BKModels
 
             if (hero.IsNotable)
             {
-                result.Add((hero.Power / totalPower));
+                result.Add((hero.Power / totalPower), GameTexts.FindText("str_notable_power"));
             }
 
             if (hero.Clan != null)
             {
-                result.Add((hero.IsClanLeader() ? 1f : 0.1f) * CalculateClanInfluence(hero.Clan, diplomacy).ResultNumber);
+                result.Add((hero.IsClanLeader() ? 1f : 0.1f) * CalculateClanInfluence(hero.Clan, diplomacy).ResultNumber, hero.Clan.Name);
             }
 
             return result;
