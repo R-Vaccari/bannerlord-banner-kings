@@ -176,11 +176,11 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         {
             RecentOucomes.Add(new DemandOutcome(demand,
                 CampaignTime.YearsFromNow(1f),
-                response.Explanation,
+                response.Explanation.SetTextVariable("DATE", CampaignTime.Now.ToString()),
                 success));
         }
 
-        public (bool, TextObject) CanPushDemand(Demand demand)
+        public (bool, TextObject) CanPushDemand(Demand demand, float influence)
         {
             DemandOutcome outcome = RecentOucomes.FirstOrDefault(x => x.Demand == demand);
             if (outcome != null)
@@ -188,9 +188,14 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 return new(false, outcome.Explanation);
             }
 
-            BKExplainedNumber influence = BannerKingsConfig.Instance.InterestGroupsModel
-               .CalculateGroupInfluence(this, false);
-            if (influence.ResultNumber < demand.MinimumGroupInfluence)
+            Demand active = CurrentDemand;
+            if (active != null)
+            {
+                return new(false, new TextObject("{=!}The {DEMAND} demand is already being pushed.")
+                    .SetTextVariable("DEMAND", active.Name));
+            }
+
+            if (influence < demand.MinimumGroupInfluence)
             {
                 return new(false, new TextObject("{=!}This demand requires at least {INFLUENCE}% group influence.")
                     .SetTextVariable("INFLUENCE", (demand.MinimumGroupInfluence * 100f).ToString("0.0")));
@@ -198,6 +203,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
             return demand.IsDemandCurrentlyAdequate();
         }
+
+        public Demand CurrentDemand => PossibleDemands.FirstOrDefault(x => x.Active);
 
         public bool DemandsCouncil { get; private set; }
         public bool AllowsCommoners { get; private set; }

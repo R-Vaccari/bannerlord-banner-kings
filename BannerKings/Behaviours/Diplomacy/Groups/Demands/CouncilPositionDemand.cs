@@ -27,7 +27,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     new TextObject("{=!}Accept the demand to put {BENEFACTOR} in charge of the {POSITION} position. They will be satisfied with this outcome.")
                     .SetTextVariable("BENEFACTOR", benefactor.Name)
                     .SetTextVariable("POSITION", position.Name),
-                    new TextObject("{=!}"),
+                    new TextObject("{=!}On {DATE}, the {GROUP} were conceded their {DEMAND} demand.")
+                    .SetTextVariable("GROUP", Group.Name)
+                    .SetTextVariable("DEMAND", Name),
                     6,
                     250,
                     1000,
@@ -58,7 +60,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                    new TextObject("{=!}Deny the demand to put {BENEFACTOR} in charge of the {POSITION} position. They will not like this outcome.")
                    .SetTextVariable("BENEFACTOR", benefactor.Name)
                    .SetTextVariable("POSITION", position.Name),
-                   new TextObject("{=!}"),
+                   new TextObject("{=!}On {DATE}, the {GROUP} were rejected their {DEMAND} demand.")
+                   .SetTextVariable("GROUP", Group.Name)
+                   .SetTextVariable("DEMAND", Name),
                    6,
                    250,
                    1000,
@@ -100,7 +104,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                    .SetTextVariable("LEADER", Group.Leader.Name)
                    .SetTextVariable("DENARS", MBRandom.RoundRandomized(BannerKingsConfig.Instance.InterestGroupsModel
                    .CalculateFinancialCompromiseCost(Hero.MainHero, 10000, 1f).ResultNumber)),
-                   new TextObject("{=!}"),
+                   new TextObject("{=!}On {DATE}, a financial compromise was made with {GROUP} due to their {DEMAND} demand.")
+                   .SetTextVariable("GROUP", Group.Name)
+                   .SetTextVariable("DEMAND", Name),
                    5,
                    300,
                    300,
@@ -114,6 +120,10 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                    },
                    (Hero fulfiller) =>
                    {
+                       int denars = MBRandom.RoundRandomized(BannerKingsConfig.Instance.InterestGroupsModel
+                       .CalculateFinancialCompromiseCost(fulfiller, 10000, 1f).ResultNumber);
+                       fulfiller.ChangeHeroGold(-denars);
+
                        LoseRelationsWithGroup(fulfiller, -6, 0.2f);
                        if (fulfiller == Hero.MainHero)
                        {
@@ -132,7 +142,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                    .SetTextVariable("LEADER", Group.Leader.Name)
                    .SetTextVariable("INFLUENCE", MBRandom.RoundRandomized(BannerKingsConfig.Instance.InterestGroupsModel
                    .CalculateLeverageInfluenceCost(Hero.MainHero, 100, 1f).ResultNumber)),
-                   new TextObject("{=!}"),
+                   new TextObject("{=!}On {DATE}, the {GROUP} were politically influenced to abandon their {DEMAND} demand.")
+                   .SetTextVariable("GROUP", Group.Name)
+                   .SetTextVariable("DEMAND", Name),
                    -8,
                    500,
                    200,
@@ -157,7 +169,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                                Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
                        }
                        
-                       ChangeClanInfluenceAction.Apply(fulfiller.Clan, BannerKingsConfig.Instance.InterestGroupsModel
+                       ChangeClanInfluenceAction.Apply(fulfiller.Clan, -BannerKingsConfig.Instance.InterestGroupsModel
                            .CalculateLeverageInfluenceCost(fulfiller, 100, 1f).ResultNumber);
                        return true;
                    });
@@ -166,7 +178,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                    new TextObject("{=!}Use your diplomatic and charm skills to convince {LEADER} out of this idea. This option may or may not work. The chance of working depends on your Charm and how much {LEADER} likes you - its unlikely you will charm an enemy. Whether the group is satisfied or not depends on the leader being convinced.\nMinimum Charm: {CHARM}")
                    .SetTextVariable("LEADER", Group.Leader.Name)
                    .SetTextVariable("CHARM", 150),
-                   new TextObject("{=!}"),
+                   new TextObject("{=!}On {DATE}, the {GROUP} were appeased to forfeit their {DEMAND} demand.")
+                   .SetTextVariable("GROUP", Group.Name)
+                   .SetTextVariable("DEMAND", Name),
                    0,
                    500,
                    100,
@@ -221,7 +235,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                    .SetTextVariable("LEADER_LORDSHIP", Group.Leader.GetSkillValue(BKSkills.Instance.Lordship))
                    .SetTextVariable("PLAYER_LORDSHIP", Hero.MainHero.GetSkillValue(BKSkills.Instance.Lordship))
                    .SetTextVariable("LORDSHIP", 100),
-                   new TextObject("{=!}"),
+                   new TextObject("{=!}On {DATE}, the {GROUP} were defeated on legal grounds over the {DEMAND} demand.")
+                   .SetTextVariable("GROUP", Group.Name)
+                   .SetTextVariable("DEMAND", Name),
                    -5,
                    1000,
                    100,
@@ -542,7 +558,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override void Tick()
         {
-            if (Active && DueDate.GetDayOfYear == CampaignTime.Now.GetDayOfYear && DueDate.GetYear == CampaignTime.Now.GetYear)
+            if (IsDueDate)
             {
                 if (position.Member == benefactor)
                 {

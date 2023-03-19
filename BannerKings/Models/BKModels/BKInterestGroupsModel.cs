@@ -64,6 +64,14 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
+            foreach (var outcome in group.RecentOucomes)
+            {
+                if (outcome.Success)
+                {
+                    result.Add(-0.1f, outcome.Explanation);
+                }
+            }
+
             if (group.Equals(DefaultInterestGroup.Instance.Commoners))
             {
                 foreach (var fief in diplomacy.Kingdom.Fiefs)
@@ -118,14 +126,43 @@ namespace BannerKings.Models.BKModels
             }
 
             float approval = 0f;
+            float notableApproval = 0f;
+            int notables = 0;
+            int otherMembers = 0;
             foreach (var member in group.Members)
             {
                 if (member != group.Leader)
                 {
-                    approval += (0.25f / group.Members.Count) * member.GetRelation(sovereign) * 0.01f;
+                    float approvalResult = (0.25f / group.Members.Count) * member.GetRelation(sovereign) * 0.01f;
+                    if (member.IsNotable)
+                    {
+                        notableApproval += approvalResult;
+                        notables++;
+                    }
+                    else
+                    {
+                        approval += approvalResult;
+                        otherMembers++;
+                    }
                 }
             }
-            result.Add(approval, new TextObject("{=!}Approval by group members"));
+
+            foreach (var outcome in group.RecentOucomes)
+            {
+                result.Add(outcome.Success ? 0.15f : -0.15f, outcome.Explanation);
+            }
+
+            if (otherMembers > 0)
+            {
+                result.Add(approval, new TextObject("{=!}Approval by group members (x{MEMBERS})")
+                    .SetTextVariable("MEMBERS", otherMembers));
+            }
+
+            if (notables > 0)
+            {
+                result.Add(notableApproval, new TextObject("{=!}Approval by dignataries (x{MEMBERS})")
+                    .SetTextVariable("MEMBERS", notables));
+            }
 
             float supportedPolicies = 0f;
             int supportedPoliciesCount = 0;
@@ -160,7 +197,7 @@ namespace BannerKings.Models.BKModels
                 int supportedLawsCount = 0;
                 foreach (var law in group.SupportedLaws)
                 {
-                    if (title.contract.IsLawEnacted(law))
+                    if (title.Contract.IsLawEnacted(law))
                     {
                         supportedLaws += 0.25f / group.SupportedLaws.Count;
                         supportedLawsCount++;
@@ -173,7 +210,7 @@ namespace BannerKings.Models.BKModels
                 int shunnedLawsCount = 0;
                 foreach (var law in group.ShunnedLaws)
                 {
-                    if (title.contract.IsLawEnacted(law))
+                    if (title.Contract.IsLawEnacted(law))
                     {
                         shunnedLaws += 0.25f / group.ShunnedLaws.Count;
                         shunnedLawsCount++;
@@ -270,7 +307,7 @@ namespace BannerKings.Models.BKModels
                 var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
                 if (title != null)
                 {
-                    result.Add((5f - (int)title.type) * 0.25f);
+                    result.Add((5f - (int)title.TitleType) * 0.25f);
                 }
             }
 
@@ -294,13 +331,13 @@ namespace BannerKings.Models.BKModels
             var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(diplomacy.Kingdom);
             if (title != null)
             {
-                if (group.Equals(DefaultInterestGroup.Instance.Royalists) && (title.contract.Government == GovernmentType.Feudal 
-                    || title.contract.Government == GovernmentType.Imperial))
+                if (group.Equals(DefaultInterestGroup.Instance.Royalists) && (title.Contract.Government == GovernmentType.Feudal 
+                    || title.Contract.Government == GovernmentType.Imperial))
                 {
                     return true;
                 }
 
-                if (group.Equals(DefaultInterestGroup.Instance.Traditionalists) && title.contract.Government == GovernmentType.Tribal)
+                if (group.Equals(DefaultInterestGroup.Instance.Traditionalists) && title.Contract.Government == GovernmentType.Tribal)
                 {
                     return true;
                 }

@@ -139,22 +139,40 @@ namespace BannerKings.UI.Kingdoms
                 string.Empty,
                 new BasicTooltipViewModel(() => shunnedExplanation.ToString())));
 
+            DemandName = new TextObject("{=!}Push Demand").ToString();
+            IsDemandEnabled = Group.Leader == Hero.MainHero;
+            DemandHint = new HintViewModel(new TextObject("{=!}Deliver a demand to {SUZERAIN}. As the leader of this group, you are able to dictate what to demand from your ruler. Once a demand is made you can not disclaim the consequences, be them positive or otherwise.")
+                .SetTextVariable("SUZERAIN", Group.FactionLeader.Name));
+
             if (Group.Members.Contains(Hero.MainHero))
             {
                 ActionName = new TextObject("{=3sRdGQou}Leave").ToString();
                 IsActionEnabled = true;
-                ActionHint = new HintViewModel(new TextObject("{=!}Leave this group. This will break any ties to their interests and demands. Leaving a group will hurt your relations with it's members, mainly the group leader. If you are the leader yourself, this impact will be increased."));
-
-                DemandName = new TextObject("{=!}Push Demand").ToString();
-                IsDemandEnabled = Group.Leader == Hero.MainHero;
-                DemandHint = new HintViewModel(new TextObject("{=!}Deliver a demand to {SUZERAIN}. As the leader of this group, you are able to dictate what to demand from your ruler. Once a demand is made you can not disclaim the consequences, be them positive or otherwise.")
-                    .SetTextVariable("SUZERAIN", Group.FactionLeader.Name));
+                ActionHint = new HintViewModel(new TextObject("{=!}Leave this group. This will break any ties to their interests and demands. Leaving a group will hurt your relations with it's members, mainly the group leader. If you are the leader yourself, this impact will be increased."));  
             }
             else
             {
                 ActionName = new TextObject("{=es0Y3Bxc}Join").ToString();
                 IsActionEnabled = Group.CanHeroJoin(Hero.MainHero, KingdomDiplomacy);
                 ActionHint = new HintViewModel(new TextObject("{=!}Join this group. Being a group member means you will be aligned with their interests and demands. The group leader will be responsible for the group's interaction with the realm's sovereign, and their actions will impact the entire group. For example, a malcontent group leader may make pressure for a member of the group to be awarded a title or property and thus increase the group's influence."));
+
+                if (Group.FactionLeader == Hero.MainHero)
+                {
+                    var currentDemand = Group.CurrentDemand;
+                    DemandName = new TextObject("{=!}Resolve Demand").ToString();
+                    IsDemandEnabled = currentDemand != null;
+                    TextObject demandText = new TextObject("{=!}The {GROUP} is currently not pushing for any demands.")
+                        .SetTextVariable("GROUP", Group.Name);
+                    if (IsDemandEnabled)
+                    {
+                        demandText = new TextObject("{=!}The {GROUP} is currently pushing for the {DEMAND} demand.")
+                        .SetTextVariable("GROUP", Group.Name)
+                        .SetTextVariable("DEMAND", currentDemand.Name);
+                    }
+                    DemandHint = new HintViewModel(new TextObject("{=!}As the sovereign of your realm, you are responsible for resolving demands of groups. {DEMAND_TEXT}")
+                        .SetTextVariable("SUZERAIN", Group.FactionLeader.Name)
+                        .SetTextVariable("DEMAND_TEXT", demandText));
+                }
             }
         }
 
@@ -175,9 +193,11 @@ namespace BannerKings.UI.Kingdoms
         private void ExecuteDemand()
         {
             var list = new List<InquiryElement>();
+            BKExplainedNumber influence = BannerKingsConfig.Instance.InterestGroupsModel
+                .CalculateGroupInfluence(Group, true);
             foreach (Demand demand in Group.PossibleDemands)
             {
-                var possible = Group.CanPushDemand(demand);
+                var possible = Group.CanPushDemand(demand, influence.ResultNumber);
                 list.Add(new InquiryElement(demand,
                     demand.Name.ToString(),
                     null,

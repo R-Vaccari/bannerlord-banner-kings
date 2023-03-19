@@ -19,6 +19,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         public InterestGroup Group { get; protected set; }
         public CampaignTime DueDate { get; protected set; }
 
+        public bool IsDueDate => Active && DueDate.GetDayOfYear == CampaignTime.Now.GetDayOfYear && DueDate.GetYear == CampaignTime.Now.GetYear;
+
         public abstract DemandResponse PositiveAnswer { get; }
         public abstract DemandResponse NegativeAnswer { get; }
 

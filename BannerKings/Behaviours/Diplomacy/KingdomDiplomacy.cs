@@ -158,11 +158,26 @@ namespace BannerKings.Behaviours.Diplomacy
 
             foreach (var group in Groups)
             {
-                Demand demand = group.PossibleDemands.GetRandomElement();
-
-                if (demand.IsDemandCurrentlyAdequate().Item1 && !demand.Active)
+                var current = group.CurrentDemand;
+                if (current != null)
                 {
-                    demand.SetUp();
+                    current.Tick();
+                    continue;
+                }
+
+                if (group.Leader == Hero.MainHero)
+                {
+                    continue;
+                }
+
+                var influence = BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(group);
+                var support = BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(group);
+                foreach (Demand demand in group.PossibleDemands)
+                {
+                    if (group.CanPushDemand(demand, influence.ResultNumber).Item1 && MBRandom.RandomFloat < MBRandom.RandomFloat)
+                    {
+                        demand.SetUp();
+                    }
                 }
             }
 
@@ -175,7 +190,6 @@ namespace BannerKings.Behaviours.Diplomacy
                     if (copy.Equals(DefaultInterestGroup.Instance.Zealots))
                     {
                         copy.SetName(Religion.Faith.GetZealotsGroupName());
-                        
                     }
 
                     Groups.Add(copy);
