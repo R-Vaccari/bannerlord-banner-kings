@@ -74,6 +74,49 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             }
         }
 
+        public void Tick()
+        {
+            if (Leader == null)
+            {
+                SetNewLeader(KingdomDiplomacy);
+            }
+
+            var toRemove = new List<Hero>();
+            foreach (var hero in Members)
+            {
+                if (hero.IsDead)
+                {
+                    toRemove.Add(hero);
+                }
+            }
+
+            foreach (var hero in toRemove)
+            {
+                Members.Remove(hero);
+            }
+
+            var current = CurrentDemand;
+            if (current != null)
+            {
+                current.Tick();
+            }
+
+            if (Leader == Hero.MainHero || Leader == null)
+            {
+                return;
+            }
+
+            var influence = BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(this);
+            var support = BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(this);
+            foreach (Demand demand in PossibleDemands)
+            {
+                if (CanPushDemand(demand, influence.ResultNumber).Item1 && MBRandom.RandomFloat < MBRandom.RandomFloat)
+                {
+                    demand.SetUp();
+                }
+            }
+        }
+
         [SaveableProperty(10)] public KingdomDiplomacy KingdomDiplomacy { get; private set; }
         [SaveableProperty(11)] public Hero Leader { get; private set; }
         [SaveableProperty(12)] public List<Hero> Members { get; private set; }
