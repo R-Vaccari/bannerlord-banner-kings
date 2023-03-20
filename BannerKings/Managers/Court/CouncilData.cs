@@ -354,7 +354,6 @@ namespace BannerKings.Managers.Court
 
         public CouncilMember GetHeroPosition(Hero hero)
         {
-            PostInitialize();
             foreach (var councilMember in Positions)
             {
                 if (councilMember.Member == hero)
@@ -365,22 +364,6 @@ namespace BannerKings.Managers.Court
 
             return null;
         }
-    }
-
-    public enum CouncilPosition
-    {
-        Marshall,
-        Chancellor,
-        Steward,
-        Spymaster,
-        Spiritual,
-        Prince,
-        Castellan,
-        Druzina,
-        Elder,
-        Constable,
-        Philosopher,
-        None
     }
 
     public enum CouncilPrivileges

@@ -169,27 +169,7 @@ namespace BannerKings.Behaviours.Diplomacy
 
             foreach (var group in Groups)
             {
-                var current = group.CurrentDemand;
-                if (current != null)
-                {
-                    current.Tick();
-                    continue;
-                }
-
-                if (group.Leader == Hero.MainHero)
-                {
-                    continue;
-                }
-
-                var influence = BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(group);
-                var support = BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(group);
-                foreach (Demand demand in group.PossibleDemands)
-                {
-                    if (group.CanPushDemand(demand, influence.ResultNumber).Item1 && MBRandom.RandomFloat < MBRandom.RandomFloat)
-                    {
-                        demand.SetUp();
-                    }
-                }
+                group.Tick();
             }
 
             foreach (var group in DefaultInterestGroup.Instance.All)

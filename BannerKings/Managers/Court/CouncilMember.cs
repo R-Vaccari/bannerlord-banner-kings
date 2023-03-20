@@ -38,19 +38,19 @@ namespace BannerKings.Managers.Court
 
         public void PostInitialize()
         {
-            CouncilMember c = DefaultCouncilPositions.Instance.GetById(this);
-            Initialize(c.PrimarySkill, c.SecondarySkill, c.Tasks, c.Privileges,
-                c.isAdequate, c.isValidCandidateInternal, c.getCulturalName);
-            SetStrings();
-            foreach (var task in Tasks)
-            {
-                task.PostInitialize();
-            }
-            CurrentTask.PostInitialize();
-            if (!Tasks.Any(x => x.StringId == CurrentTask.StringId))
-            {
-                SetTask(Tasks[0]);
-            }
+                CouncilMember c = DefaultCouncilPositions.Instance.GetById(this);
+                Initialize(c.PrimarySkill, c.SecondarySkill, c.Tasks, c.Privileges,
+                    c.isAdequate, c.isValidCandidateInternal, c.getCulturalName);
+                SetStrings();
+                foreach (var task in Tasks)
+                {
+                    task.PostInitialize();
+                }
+                CurrentTask.PostInitialize();
+                if (!Tasks.Any(x => x.StringId == CurrentTask.StringId))
+                {
+                    SetTask(Tasks[0]);
+                }
         }
 
         public CouncilMember GetCopy(Clan clan)
