@@ -11,6 +11,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -245,6 +246,22 @@ namespace BannerKings.Behaviours
                 volunteerTypes[num3 + 1 + num2] = characterObject2;
             }
         }
+        private bool NotableArtisanOrMerchant() // Check if Artisan or Merchant
+        {
+            return (Hero.OneToOneConversationHero.IsMerchant || Hero.OneToOneConversationHero.IsArtisan) && Hero.MainHero.Clan.IsMapFaction;
+        }
+        private static bool SetDynamicStrings() // Set dynamic strings
+        {
+            var clickableCurrentSettlement = Settlement.CurrentSettlement.EncyclopediaLinkWithName;
+            var clickableCurrentLord = Settlement.CurrentSettlement.Owner.EncyclopediaLinkWithName;
+            var clickableCurrentClan = Settlement.CurrentSettlement.OwnerClan.EncyclopediaLinkWithName;
+            var currentKingdom = Settlement.CurrentSettlement.MapFaction.Name;
+            MBTextManager.SetTextVariable("CLICKABLE_CURRENT_SETTLEMENT", clickableCurrentSettlement);
+            MBTextManager.SetTextVariable("CLICKABLE_CURRENT_LORD", clickableCurrentLord);
+            MBTextManager.SetTextVariable("CLICKABLE_CURRENT_CLAN", clickableCurrentClan);
+            MBTextManager.SetTextVariable("CURRENT_KINGDOM", currentKingdom);
+            return true;
+        }
 
         private void AddDialogue(CampaignGameStarter starter)
         {
@@ -296,6 +313,50 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_convert_faith_confirm", "bk_convert_faith_confirm", "hero_main_options",
                 "{=G4ALCxaA}Never mind.",
                 null, null);
+
+            // Extra Flavor dialogue for artisans and merchants.
+            starter.AddPlayerLine( // I got questions
+                "bk_notable_lore_1", "hero_main_options", "bk_notable_lore_menu_intro",
+                "{=X8BYEeQM}I have a question regarding your affairs.",
+                new ConversationSentence.OnConditionDelegate(NotableArtisanOrMerchant), null, 90, null
+            );
+            starter.AddDialogLine( // First time on menu 
+                "bk_notable_lore_2", "bk_notable_lore_menu_intro", "bk_notable_lore_menu",
+                "{=geHc5ju2}I do not mind clearing up any confusions, what is it?",
+                new ConversationSentence.OnConditionDelegate(SetDynamicStrings), null, 90, null
+            );
+            starter.AddDialogLine( // Repeat menu
+                "bk_notable_lore_3", "bk_notable_lore_menu_repeat", "bk_notable_lore_menu",
+                "{=HCvjJGUu}Any other question you have for me?", null, null
+            );
+            starter.AddPlayerLine( // That is all
+                "bk_notable_lore_4", "bk_notable_lore_menu", "lord_pretalk",
+                "{=xwOdlLYB}That is all I wanted to know.", null, null, 1, null
+            );
+            starter.AddPlayerLine( // What You Do? QUESTION
+                "bk_notable_lore_5", "bk_notable_lore_menu", "bk_notable_lore_menu_whatyoudo",
+                "{=nE6bRfxU}What do you do here?", null, null, 10, null
+            );
+            starter.AddDialogLine( // What You Do? RESPONSE
+                "bk_notable_lore_6", "bk_notable_lore_menu_whatyoudo", "bk_notable_lore_menu_repeat",
+                "{=LYAFl9Yc}Well you could say that I am one of the leaders of the good people of {CLICKABLE_CURRENT_SETTLEMENT}. Although occasionally we will also need help from groups who brandish swords that you might be familiar with. So that we can keep our streets and roads safe.", null, null
+            );
+            starter.AddPlayerLine( // Who Rules? QUESTION
+                "bk_notable_lore_7", "bk_notable_lore_menu", "bk_notable_lore_menu_whorules",
+                "{=FWGs8p44}Who rules this town?", null, null, 9, null
+            );
+            starter.AddDialogLine( // Who Rules? RESPONSE
+                "bk_notable_lore_8", "bk_notable_lore_menu_whorules", "bk_notable_lore_menu_repeat",
+                "{=zCEQWQwg}Our protector {CLICKABLE_CURRENT_LORD} of house {CLICKABLE_CURRENT_CLAN}, owns the nearby castle and sometimes resides there to handle personal affairs and collect taxes. However we regulate ourselves in most of the matters that concern ourselves, and I have the authority to decide those things.", null, null
+            );
+            starter.AddPlayerLine( // Politics? QUESTION
+                "bk_notable_lore_9", "bk_notable_lore_menu", "bk_notable_lore_menu_politics",
+                "{=NPE4y17D}How much are you involved with the affairs of the realm?", null, null, 8, null
+            );
+            starter.AddDialogLine( // Politics? RESPONSE
+                "bk_notable_lore_10", "bk_notable_lore_menu_politics", "bk_notable_lore_menu_repeat",
+                "{=hDWPMP4s}Well generally our guilds have nothing to do with politics... We are loyal servants of {CLICKABLE_CURRENT_LORD}, who's humble town is a mere title in {CURRENT_KINGDOM}. We merely govern our own affairs, and pass on the townspeopole's concerns to our lords and masters, and maybe warn them from time to time against evil advice.", null, null
+            );
         }
 
         public void ApplyNotableCultureConversion(Hero notable, Hero converter, bool councilConversion = false)

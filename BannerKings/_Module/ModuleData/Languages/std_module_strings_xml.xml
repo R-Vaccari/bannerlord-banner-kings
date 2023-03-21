@@ -97,6 +97,16 @@
     <string id="2Q6R8xum" text="Perform a rite such as an offering in exchange for piety." />
     <string id="eV3uOZCw" text="{FAITH} teaches us that we may perform {RITES}." />
     <string id="1b08dLC7" text="Certainly, {HERO}. Remember that proving your devotion is a life-long process. Once a rite is done, some time is needed before it may be consummated again. {RITES}" />
+	<string id="X8BYEeQM" text="I have a question regarding your affairs." />
+	<string id="geHc5ju2" text="I do not mind clearing up any confusions, what is it?" />
+	<string id="HCvjJGUu" text="Any other question you have for me?" />
+	<string id="xwOdlLYB" text="That is all I wanted to know." />
+	<string id="nE6bRfxU" text="What do you do here?" />
+	<string id="LYAFl9Yc" text="Well you could say that I am one of the leaders of the good people of {CLICKABLE_CURRENT_SETTLEMENT}. Although occasionally we will also need help from groups who brandish swords that you might be familiar with. So that we can keep our streets and roads safe." />
+	<string id="FWGs8p44" text="Who rules this town?" />
+	<string id="zCEQWQwg" text="Our protector {CLICKABLE_CURRENT_LORD} of house {CLICKABLE_CURRENT_CLAN}, owns the nearby castle and sometimes resides there to handle personal affairs and collect taxes. However we regulate ourselves in most of the matters that concern ourselves, and I have the authority to decide those things." />
+	<string id="NPE4y17D" text="How much are you involved with the affairs of the realm?" />
+	<string id="hDWPMP4s" text="Well generally our guilds have nothing to do with politics... We are loyal servants of {CLICKABLE_CURRENT_LORD}, who's humble town is a mere title in {CURRENT_KINGDOM}. We merely govern our own affairs, and pass on the townspeopole's concerns to our lords and masters, and maybe warn them from time to time against evil advice." />
     <string id="HJL6rSZ9" text="You are serving as a guard in {CURRENT_SETTLEMENT}." />
     <string id="1kJ3hNWg" text="Leave" />
     <string id="nATj4Nc1" text="You are training the guards in {CURRENT_SETTLEMENT}." />
@@ -274,18 +284,18 @@
     <string id="dwMA32rq" text="Lordship" />
     <string id="0VSP2ghD" text="Adventurer" />
     <string id="wTcCEBLB" text="A free spirit, you are roaming the continent without constraints, or a clear objective. The world is for the taking, will you take your share?" />
-    <string id="2fcEecjz" text="Vanilla start. No troops, goods or any benefits." />
+    <string id="2fcEecjz" text="Standard Start. No positive or negative circumstances." />
     <string id="2VoYzCNj" text="Indebted Lord" />
     <string id="P1rwCkZJ" text="After a series of inherited problems and bad decisions, you find yourself in debt. Thankfuly, you are a landed lord, with income from your Lordship. A food supply and a small retinue accompany you, though their loyalty will be tested by the lack of denars..." />
     <string id="kLHXZnLY" text="Mercenary" />
     <string id="wcWg3KPt" text="You serve as a free mercenary company, roaming around the continent in search of employment. After a long period of joblessness, you find your company in the verge of collapse, with little morale, food and finances." />
-    <string id="G2yNVZ9R" text="Start with a mercenary band, in desperate need for plundering gold and food. Party morale reduced for 5 years. Mercenary lifestyle is kickstarted as part of your education." />
+    <string id="G2yNVZ9R" text="Start with a Mercenary Band with the desire to plunder gold and food, along with a kickstarted Mercenary Lifestyle. Party morale reduced for the next 5 years." />
     <string id="GTYYnH9E" text="Outlaw" />
     <string id="YLxp50Ln" text="Lacking in morals, you assemble a party of like-minded brigands, making a living out stealing and plundering. Your efforts, however, have not gone unnoticed by the local authorities." />
-    <string id="rSAjO3Qg" text="Start with a outlaw band, in desperate need for plundering gold and food. Criminal rating does not reduce for 5 years. Outlaw lifestyle is kickstarted as part of your education." />
+    <string id="rSAjO3Qg" text="Start with a mob of hungry Outlaws seeking more plunder, along with a kickstarted Outlaw Lifestyle. Criminal Rating does not reduce for the next 5 years." />
     <string id="2FW79uHM" text="Robbed Caravaneer" />
     <string id="L1QFOwvp" text="Your caravan has been recently harassed by criminals - most of your belongings are lost, and certainly all your denars. A few goods, mules and wounded soldiers remain." />
-    <string id="dSJsWjyR" text="Start with a wounded caravan, some food, mules and goods. Party speed is reduced by 5% for 5 years. Caravaneer lifestyle is kickstarted as part of your education." />
+    <string id="dSJsWjyR" text="Start with a wounded caravan, mules, some supplies and goods, along with a kickstarted Caravaneer Lifestyle. Party Speed is reduced by 5% for the next 5 years." />
     <string id="rLgCZZDO" text="You improved relations with {HERO} due to {PERK} lifestyle perk." />
     <string id="gVG6uhKS" text="Foreigners that refuse to assimilate will be gradually forced to leave the settlement" />
     <string id="RERzNEww" text="Ban foreigners" />
@@ -1252,7 +1262,7 @@
     <string id="sjy26XtU" text="{HERO} has converted to the {FAITH} faith." />
     <string id="wTyw0yfR" text="Gladiator" />
     <string id="ScHHoM2v" text="You are an promising athlete, roaming the world looking for a good fight, gold and glory." />
-    <string id="uUjoaben" text="Start with a couple mercenaries and food. Party size is reduced by 40% for 5 years. Gladiator lifestyle is kickstarted as part of your education." />
+    <string id="uUjoaben" text="Start with a couple mercenaries and supplies, along with a kickstarted Gladiator Lifestyle. Party Size is reduced by 40% for the next 5 years." />
     <string id="x04LSOuu" text="Iron Horses" />
     <string id="DrdTH6yF" text="Oathbound" />
     <string id="5LgkGVPg" text="Every season, get a chance of improving relations with your suzerain." />
@@ -2047,7 +2057,7 @@
     <string id="VFRd9aNe" text="Affects the volume of settlement taxes. May SEVERELY impact AI and it's ability to recruit/keep troops. Default: 100%." />
     <string id="2yDhJfgh" text="Troop Upgrade Xp" />
     <string id="xvNKsFbW" text="How much Xp troops need to upgrade. Vanilla is 100%. Default: 200%." />
-    <string id="CiWCMaQV" text="Start as a lord in a kingdom, with a Lordship title. Redcued influence for 5 years. The village you own can be managed by you. Gain Scholarship skill." />
+    <string id="CiWCMaQV" text="Start as a lesser lord in a kingdom with a Lordship Villige Title that you can manage, along with a Scholarship Skill. Reduced influence gain for the next 5 years." />
     <string id="pwcJeEaS" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, {HERO} has converted to your culture!" />
     <string id="ZwwfKpGu" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, {NOTABLE} is now more favorable to us." />
     <string id="6vgsdLQp" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, the hideout near {FIEF} was exterminated." />
