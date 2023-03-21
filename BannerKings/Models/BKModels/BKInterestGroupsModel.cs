@@ -289,6 +289,11 @@ namespace BannerKings.Models.BKModels
             var result = new BKExplainedNumber(0f, false);
             result.LimitMin(-1f);
             result.LimitMax(1f);
+            if (diplomacy.Kingdom != hero.MapFaction)
+            {
+                return result;
+            }
+
             if (hero.IsLord && !group.AllowsNobles)
             {
                 return result;

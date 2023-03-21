@@ -3,6 +3,7 @@ using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Institutions.Religions;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -175,7 +176,7 @@ namespace BannerKings.Behaviours.Diplomacy
             foreach (var group in DefaultInterestGroup.Instance.All)
             {
                 bool adequate = BannerKingsConfig.Instance.InterestGroupsModel.IsGroupAdequateForKingdom(this, group);
-                if (adequate && !Groups.Contains(group))
+                if (adequate && !Groups.Any(x => group.StringId == x.StringId))
                 {
                     var copy = group.GetCopy(this);
                     if (copy.Equals(DefaultInterestGroup.Instance.Zealots))
