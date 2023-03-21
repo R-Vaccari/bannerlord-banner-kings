@@ -76,6 +76,7 @@ namespace BannerKings.Behaviours.Diplomacy
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
             CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
+            CampaignEvents.RulingClanChanged.AddNonSerializedListener(this, OnRulerChanged);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -132,6 +133,15 @@ namespace BannerKings.Behaviours.Diplomacy
                 {
                     kingdomDiplomacies.Add(kingdom, new KingdomDiplomacy(kingdom));
                 }
+            }
+        }
+
+        private void OnRulerChanged(Kingdom kingdom, Clan clan)
+        {
+            if (kingdomDiplomacies.ContainsKey(kingdom))
+            {
+                var group = kingdomDiplomacies[kingdom].GetHeroGroup(clan.Leader);
+                group.RemoveMember(clan.Leader);
             }
         }
 

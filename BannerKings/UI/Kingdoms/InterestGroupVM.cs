@@ -3,7 +3,6 @@ using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Utils.Models;
 using Bannerlord.UIExtenderEx.Attributes;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -123,14 +122,24 @@ namespace BannerKings.UI.Kingdoms
 
             DemandName = new TextObject("{=!}Push Demand").ToString();
             IsDemandEnabled = Group.Leader == Hero.MainHero;
-            DemandHint = new HintViewModel(new TextObject("{=!}Deliver a demand to {SUZERAIN}. As the leader of this group, you are able to dictate what to demand from your ruler. Once a demand is made you can not disclaim the consequences, be them positive or otherwise.")
-                .SetTextVariable("SUZERAIN", Group.FactionLeader.Name));
+            DemandHint = new HintViewModel(new TextObject("{=!}Group leaders are able to push demands to their suzerain. You are not part of this group, and therefore have no say in its matters."));
 
             if (Group.Members.Contains(Hero.MainHero))
             {
                 ActionName = new TextObject("{=3sRdGQou}Leave").ToString();
                 IsActionEnabled = true;
                 ActionHint = new HintViewModel(new TextObject("{=!}Leave this group. This will break any ties to their interests and demands. Leaving a group will hurt your relations with it's members, mainly the group leader. If you are the leader yourself, this impact will be increased."));  
+
+                if (!IsDemandEnabled)
+                {
+                    DemandHint = new HintViewModel(new TextObject("{=!}As a member of this group you are not able to push demands. You may vote on the demand specifications once the group leader pushes them. To become leader, be the most influential member of the group.")
+                        .SetTextVariable("SUZERAIN", Group.FactionLeader.Name));
+                }
+                else
+                {
+                    DemandHint = new HintViewModel(new TextObject("{=!}Deliver a demand to {SUZERAIN}. As the leader of this group, you are able to dictate what to demand from your ruler. Once a demand is made you can not disclaim the consequences, be them positive or otherwise.")
+                        .SetTextVariable("SUZERAIN", Group.FactionLeader.Name));
+                }
             }
             else
             {
@@ -163,49 +172,59 @@ namespace BannerKings.UI.Kingdoms
         {
             if (Group.Members.Contains(Hero.MainHero))
             {
-                Group.RemoveMember(Hero.MainHero, KingdomDiplomacy);
+                Group.RemoveMember(Hero.MainHero);
             }
             else
             {
                 Group.AddMember(Hero.MainHero);
             }
+            RefreshValues();
         }
 
         [DataSourceMethod]
         private void ExecuteDemand()
         {
             var list = new List<InquiryElement>();
-            BKExplainedNumber influence = BannerKingsConfig.Instance.InterestGroupsModel
-                .CalculateGroupInfluence(Group, true);
-            foreach (Demand demand in Group.PossibleDemands)
+            if (Group.FactionLeader == Hero.MainHero)
             {
-                var possible = Group.CanPushDemand(demand, influence.ResultNumber);
-                list.Add(new InquiryElement(demand,
-                    demand.Name.ToString(),
-                    null,
-                    possible.Item1,
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
-                    .SetTextVariable("TEXT", demand.Description)
-                    .SetTextVariable("EXPLANATIONS", possible.Item2)
-                    .ToString()));
+                Group.CurrentDemand.ShowPlayerPrompt();
+            }
+            else
+            {
+                BKExplainedNumber influence = BannerKingsConfig.Instance.InterestGroupsModel
+                                .CalculateGroupInfluence(Group, true);
+                foreach (Demand demand in Group.PossibleDemands)
+                {
+                    var possible = Group.CanPushDemand(demand, influence.ResultNumber);
+                    list.Add(new InquiryElement(demand,
+                        demand.Name.ToString(),
+                        null,
+                        possible.Item1,
+                        new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                        .SetTextVariable("TEXT", demand.Description)
+                        .SetTextVariable("EXPLANATIONS", possible.Item2)
+                        .ToString()));
+                }
+
+                MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Push Demand").ToString(),
+                    new TextObject("{=!}As the representative of the {GROUP}, you are able to push demands to {SUZERAIN} in the group's name. Pushing for a demand will often harm your relationship with your suzerain. How the group will respond will feel about it will depend entirely on the suzerain's response. Once a demand is pushed, the group is both unable to press the same kind of request and its influence is lowered, temporarily.")
+                    .SetTextVariable("GROUP", GroupName)
+                    .SetTextVariable("SUZERAIN", Group.FactionLeader.Name)
+                    .ToString(),
+                    list,
+                    true,
+                    1,
+                    GameTexts.FindText("str_accept").ToString(),
+                    GameTexts.FindText("str_cancel").ToString(),
+                    (List<InquiryElement> list) =>
+                    {
+                        Demand demand = (Demand)list.First().Identifier;
+                        demand.SetUp();
+                    },
+                    null));
             }
 
-            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Push Demand").ToString(),
-                new TextObject("{=!}As the representative of the {GROUP}, you are able to push demands to {SUZERAIN} in the group's name. Pushing for a demand will often harm your relationship with your suzerain. How the group will respond will feel about it will depend entirely on the suzerain's response. Once a demand is pushed, the group is both unable to press the same kind of request and its influence is lowered, temporarily.")
-                .SetTextVariable("GROUP", GroupName)
-                .SetTextVariable("SUZERAIN", Group.FactionLeader.Name)
-                .ToString(),
-                list,
-                true,
-                1,
-                GameTexts.FindText("str_accept").ToString(),
-                GameTexts.FindText("str_cancel").ToString(),
-                (List<InquiryElement> list) =>
-                {
-                    Demand demand = (Demand)list.First().Identifier;
-                    demand.SetUp();
-                },
-                null));
+            RefreshValues();
         }
 
         [DataSourceProperty]
@@ -221,7 +240,6 @@ namespace BannerKings.UI.Kingdoms
                 }
             }
         }
-
 
         [DataSourceProperty]
         public bool IsActionEnabled
@@ -251,7 +269,6 @@ namespace BannerKings.UI.Kingdoms
             }
         }
 
-
         [DataSourceProperty]
         public HintViewModel ActionHint
         {
@@ -265,7 +282,6 @@ namespace BannerKings.UI.Kingdoms
                 }
             }
         }
-
 
         [DataSourceProperty]
         public bool IsDemandEnabled
@@ -294,7 +310,6 @@ namespace BannerKings.UI.Kingdoms
                 }
             }
         }
-
 
         [DataSourceProperty]
         public HintViewModel DemandHint

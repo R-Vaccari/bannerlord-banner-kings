@@ -161,7 +161,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             }
         }
 
-        public void RemoveMember(Hero hero, KingdomDiplomacy diplomacy, bool forced = false)
+        public void RemoveMember(Hero hero, bool forced = false)
         {
             if (hero != null && Members.Contains(hero))
             {
@@ -189,7 +189,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                         ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, member, -10, false);
                     }
 
-                    SetNewLeader(diplomacy);
+                    SetNewLeader(KingdomDiplomacy);
                 }
                 else
                 {
