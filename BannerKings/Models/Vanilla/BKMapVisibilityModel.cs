@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Skills;
+using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -23,6 +24,11 @@ namespace BannerKings.Models.Vanilla
             }
 
             return result;
+        }
+
+        public override float GetHideoutSpottingDistance()
+        {
+            return base.GetHideoutSpottingDistance() / BannerKingsSettings.Instance.HideoutSpotDifficulty;
         }
     }
 }

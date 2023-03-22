@@ -112,6 +112,7 @@ namespace BannerKings
             campaignStarter.AddModel(new BKPartyFoodBuyingModel());
             campaignStarter.AddModel(new BKPregnancyModel());
             campaignStarter.AddModel(new BKPartyHealingModel());
+            campaignStarter.AddModel(new BKBanditModel());
             //campaignStarter.AddModel(new BKPrisonerRecruitmentModel());
             //campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
 

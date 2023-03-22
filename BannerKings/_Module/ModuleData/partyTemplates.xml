@@ -12,5 +12,19 @@
 			<PartyTemplateStack min_value="6" max_value="10" troop="NPCCharacter.mercenary_6" />
 		</stacks>
 	</MBPartyTemplate>
+	
+	<MBPartyTemplate id="bandits_rogue_knights">
+		<stacks>
+			<PartyTemplateStack min_value="1" max_value="1" troop="NPCCharacter.vlandian_champion" />
+			<PartyTemplateStack min_value="5" max_value="5" troop="NPCCharacter.vlandian_knight" />
+		</stacks>
+	</MBPartyTemplate>
+	
+	<MBPartyTemplate id="bandits_caravan_robbers" >
+		<stacks>
+		  <PartyTemplateStack min_value="8" max_value="8" troop="NPCCharacter.mounted_ransacker" />
+		  <PartyTemplateStack min_value="16" max_value="16" troop="NPCCharacter.mounted_pillager" />
+		</stacks>
+  </MBPartyTemplate>
 
 </partyTemplates>
