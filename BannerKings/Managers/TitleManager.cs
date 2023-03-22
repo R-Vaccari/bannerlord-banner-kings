@@ -12,6 +12,7 @@ using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.BKModels;
 using BannerKings.UI.Cutscenes;
+using Newtonsoft.Json.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -991,7 +992,13 @@ namespace BannerKings.Managers
 
                         var vassalsDuchy = new List<FeudalTitle>();
                         var dukedomName = new TextObject(duchy.Attributes["name"].Value);
-                        var dukedomFullName = new TextObject(duchy.Attributes["fullName"].Value);
+                        TextObject dukedomFullName = null;
+                        XmlAttribute dukedomFullNameAttribute = duchy.Attributes["fullName"];
+                        if (dukedomFullNameAttribute != null)
+                        {
+                            dukedomFullName = new TextObject(dukedomFullNameAttribute.Value);
+                        }
+
                         var deJureNameDuchy = duchy.Attributes["deJure"].Value;
                         var deJureDuchy = GetDeJure(deJureNameDuchy, null);
 
@@ -1006,7 +1013,13 @@ namespace BannerKings.Managers
 
                                 var settlementNameCounty = county.Attributes["settlement"].Value;
                                 var deJureNameCounty = county.Attributes["deJure"].Value;
-                                var countyName = new TextObject(county.Attributes["fullName"].Value);
+                                TextObject countyName = null;
+                                XmlAttribute countyFullNameAttribute = duchy.Attributes["fullName"];
+                                if (countyFullNameAttribute != null)
+                                {
+                                    countyName = new TextObject(countyFullNameAttribute.Value);
+                                }
+
                                 var settlementCounty = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameCounty);
                                 if (settlementCounty == null)
                                 {
@@ -1025,7 +1038,13 @@ namespace BannerKings.Managers
                                             return;
                                         }
 
-                                        var baronyName = new TextObject(barony.Attributes["fullName"].Value);
+                                        TextObject baronyName = null;
+                                        XmlAttribute barnyFullNameAttribute = duchy.Attributes["fullName"];
+                                        if (barnyFullNameAttribute != null)
+                                        {
+                                            baronyName = new TextObject(barnyFullNameAttribute.Value);
+                                        }
+ 
                                         var settlementNameBarony = barony.Attributes["settlement"].Value;
                                         var deJureIdBarony = barony.Attributes["deJure"].Value;
                                         var settlementBarony = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameBarony);
@@ -1037,15 +1056,24 @@ namespace BannerKings.Managers
                                         var deJureBarony = GetDeJure(deJureIdBarony, settlementBarony);
                                         if (settlementBarony != null)
                                         {
-                                            vassalsCounty.Add(CreateLandedTitle(settlementBarony, deJureBarony, TitleType.Barony, contract, null, baronyName));
+                                            vassalsCounty.Add(CreateLandedTitle(settlementBarony, 
+                                                deJureBarony, 
+                                                TitleType.Barony, 
+                                                contract, 
+                                                null, 
+                                                baronyName));
                                         }
                                     }
                                 }
 
                                 if (settlementCounty != null)
                                 {
-                                    vassalsDuchy.Add(CreateLandedTitle(settlementCounty, deJureCounty, TitleType.County, contract, 
-                                        vassalsCounty, countyName));
+                                    vassalsDuchy.Add(CreateLandedTitle(settlementCounty, 
+                                        deJureCounty, 
+                                        TitleType.County, 
+                                        contract, 
+                                        vassalsCounty, 
+                                        countyName));
                                 }
                             }
                         }
