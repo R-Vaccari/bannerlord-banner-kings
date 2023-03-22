@@ -398,13 +398,17 @@ namespace BannerKings.Managers.Titles
             }
         }
 
-        public void EnactLaw(DemesneLaw law, Hero enactor = null)
+        public void EnactLaw(DemesneLaw law, Hero enactor = null, bool costInfluence = true)
         {
             if (enactor != null)
             {
                 law = law.GetCopy();
                 law.SetIssueDate(CampaignTime.Now);
-                GainKingdomInfluenceAction.ApplyForDefault(enactor, -law.InfluenceCost);
+                if (costInfluence)
+                {
+                    GainKingdomInfluenceAction.ApplyForDefault(enactor, -law.InfluenceCost);
+                }
+               
                 if (enactor.MapFaction == Hero.MainHero.MapFaction)
                 {
                     MBInformationManager.AddQuickInformation(new TextObject("{=fvbLMV0a}The {LAW} has been enacted in the {TITLE}.")
@@ -412,7 +416,7 @@ namespace BannerKings.Managers.Titles
                         .SetTextVariable("TITLE", FullName),
                         0,
                         null,
-                        "event:/ui/notification/relation");
+                        Utils.Helpers.GetKingdomDecisionSound());
                 }
             }
 
