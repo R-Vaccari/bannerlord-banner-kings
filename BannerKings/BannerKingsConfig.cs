@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Behaviours.Diplomacy.Groups;
+using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers;
 using BannerKings.Managers.AI;
 using BannerKings.Managers.Court;
@@ -18,6 +20,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Managers.Traits;
 using BannerKings.Models.BKModels;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
@@ -28,8 +31,8 @@ namespace BannerKings
 {
     public class BannerKingsConfig
     {
-        public const string VersionNumber = "1.2.6.6";
-        public const string VersionEdition = "Standard";
+        public const string VersionNumber = "1.2.6.1";
+        public const string VersionEdition = "Development";
         public string VersionName => VersionNumber + VersionEdition;
 
         private List<ITypeInitializer> modInitializers = new List<ITypeInitializer>();
@@ -48,6 +51,7 @@ namespace BannerKings
         public InnovationsManager InnovationsManager { get; private set; }
         public GoalManager GoalManager { get; private set; }
 
+        public BKInterestGroupsModel InterestGroupsModel { get; } = new();
         public BKConstructionModel ConstructionModel { get; } = new();
         public BKInfluenceModel InfluenceModel { get; } = new();
         public BKTitleModel TitleModel { get; } = new();
@@ -73,6 +77,7 @@ namespace BannerKings
         public BKEstatesModel EstatesModel { get; } = new();
         public BKMarriageModel MarriageModel { get; } = new();
         public BKArmyManagementModel ArmyManagementModel { get; } = new();
+        public BKWarModel WarModel { get; } = new();
 
         static BannerKingsConfig()
         {
@@ -127,6 +132,9 @@ namespace BannerKings
             {
                 init.Initialize();
             }
+            DefaultCasusBelli.Instance.Initialize();
+            BKTraits.Instance.Initialize();
+            DefaultInterestGroup.Instance.Initialize();
         }
 
         public void InitManagers()

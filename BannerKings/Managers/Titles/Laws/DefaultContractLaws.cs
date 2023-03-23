@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -77,8 +76,8 @@ namespace BannerKings.Managers.Titles.Laws
         public List<DemesneLaw> GetAdequateLaws(FeudalTitle title)
         {
             var list = new List<DemesneLaw>();
-            var government = title.contract.Government;
-            var faction = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title.sovereign != null ? title.sovereign : title);
+            var government = title.Contract.Government;
+            var faction = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title.Sovereign != null ? title.Sovereign : title);
             CultureObject culture = null;
             if (faction != null)
             {
@@ -166,7 +165,7 @@ namespace BannerKings.Managers.Titles.Laws
 
             #region NobleDuties
 
-            NoblesMilitaryServiceDuties.Initialize(new TextObject("{=SOjZv8Yk}Military Duties"),
+            NoblesMilitaryServiceDuties.Initialize(new TextObject("{=!}Military Duties (Nobles)"),
                new TextObject("{=VNP7PvXs}Tailor the duty laws of {CLASS} towards military service. Extensive requirements of service ensure a bigger manpower pool to protect the realm. Increased class militarism and militia service.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Nobles, Hero.MainHero.Culture)),
                new TextObject("{=Jc476i8S}Nobles militarism +4% flat%\nMilitia quality +15%"),
@@ -177,7 +176,7 @@ namespace BannerKings.Managers.Titles.Laws
                300,
                0);
 
-            NoblesTaxDuties.Initialize(new TextObject("{=aTqOs6gr}Tax Duties"),
+            NoblesTaxDuties.Initialize(new TextObject("{=!}Tax Duties (Nobles)"),
                new TextObject("{=wutCVGJU}Tailor the duty laws of {CLASS} towards taxation. Stricter tax collection and more taxation forms squeeze more denarii out of {CLASS}. Increases tax output.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Nobles, Hero.MainHero.Culture)),
                new TextObject("{=pzP0OzbV}Increased nobles tax output by 25%"),
@@ -188,7 +187,7 @@ namespace BannerKings.Managers.Titles.Laws
                300,
                1);
 
-            NoblesLaxDuties.Initialize(new TextObject("{=qGvM38At}Lax Duties"),
+            NoblesLaxDuties.Initialize(new TextObject("{=!}Lax Duties (Nobles)"),
                new TextObject("{=QR8cTK3Y}Lessen the duty burdens of {CLASS}. Reduced duties makes the populace more content and gives them room for prosperity. Reduces output and military contribution.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Nobles, Hero.MainHero.Culture)),
                new TextObject("{=qhLeBUWB}Increased settlement research and influence outputs\nCraftsmen militarism -2% flat\nNobles tax output -40%"),
@@ -203,7 +202,7 @@ namespace BannerKings.Managers.Titles.Laws
 
             #region CraftsmenDuties
 
-            CraftsmenMilitaryServiceDuties.Initialize(new TextObject("{=SOjZv8Yk}Military Duties"),
+            CraftsmenMilitaryServiceDuties.Initialize(new TextObject("{=!}Military Duties (Craftsmen)"),
                new TextObject("{=VNP7PvXs}Tailor the duty laws of {CLASS} towards military service. Extensive requirements of service ensure a bigger manpower pool to protect the realm. Increased class militarism and militia service.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Craftsmen, Hero.MainHero.Culture)),
                new TextObject("{=TkTHTJDm}Craftsmen militarism +3% flat\nMilitia quality +10%"),
@@ -214,7 +213,7 @@ namespace BannerKings.Managers.Titles.Laws
                300,
                0);
 
-            CraftsmenTaxDuties.Initialize(new TextObject("{=aTqOs6gr}Tax Duties"),
+            CraftsmenTaxDuties.Initialize(new TextObject("{=!}Tax Duties (Craftsmen)"),
                new TextObject("{=wutCVGJU}Tailor the duty laws of {CLASS} towards taxation. Stricter tax collection and more taxation forms squeeze more denarii out of {CLASS}. Increases tax output.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Craftsmen, Hero.MainHero.Culture)),
                new TextObject("{=1UikMUyy}Increased nobles tax output by 35%"),
@@ -225,7 +224,7 @@ namespace BannerKings.Managers.Titles.Laws
                300,
                1);
 
-            CraftsmenLaxDuties.Initialize(new TextObject("{=qGvM38At}Lax Duties"),
+            CraftsmenLaxDuties.Initialize(new TextObject("{=!}Lax Duties (Craftsmen)"),
                new TextObject("{=QR8cTK3Y}Lessen the duty burdens of {CLASS}. Reduced duties makes the populace more content and gives them room for prosperity. Reduces output and military contribution.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Craftsmen, Hero.MainHero.Culture)),
                new TextObject("{=u9xEHrAe}Increased craftsmen prosperity and loyalty\nIncreased production quality +5%\nCraftsmen militarism -1.5% flat\nCraftsmen tax output -40%"),
@@ -240,7 +239,7 @@ namespace BannerKings.Managers.Titles.Laws
 
             #region SerfDuties
 
-            SerfsMilitaryServiceDuties.Initialize(new TextObject("{=SOjZv8Yk}Military Duties"),
+            SerfsMilitaryServiceDuties.Initialize(new TextObject("{=!}Military Duties (Serfs)"),
                new TextObject("{=VNP7PvXs}Tailor the duty laws of {CLASS} towards military service. Extensive requirements of service ensure a bigger manpower pool to protect the realm. Increased class militarism and militia service.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Serfs, Hero.MainHero.Culture)),
                new TextObject("{=51Kro6UV}Serf militarism +3% flat\nSerf militia contribution +20%"),
@@ -251,7 +250,7 @@ namespace BannerKings.Managers.Titles.Laws
                300,
                0);
 
-            SerfsAgricultureDuties.Initialize(new TextObject("{=vt2Sq2aG}Agricultural Duties"),
+            SerfsAgricultureDuties.Initialize(new TextObject("{=!}Agricultural Duties (Serfs)"),
                new TextObject("{=NXk9mSNW}Tailor the duty laws of {CLASS} towards agriculture. Labor requirements and movement restriction tie the {CLASS} to the land and its productivity. Increased agricultural output.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Serfs, Hero.MainHero.Culture)),
                new TextObject("{=tXvBhS3n}Increased production of farm goods in villages and food in castles and towns"),
@@ -262,7 +261,7 @@ namespace BannerKings.Managers.Titles.Laws
                300,
                1);
 
-            SerfsLaxDuties.Initialize(new TextObject("{=qGvM38At}Lax Duties"),
+            SerfsLaxDuties.Initialize(new TextObject("{=!}Lax Duties (Serfs)"),
                new TextObject("{=QR8cTK3Y}Lessen the duty burdens of {CLASS}. Reduced duties makes the populace more content and gives them room for prosperity. Reduces output and military contribution.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Serfs, Hero.MainHero.Culture)),
                new TextObject("{=jyMc8X74}Increased settlement prosperity (or Hearths) and loyalty\nReduced agricultural output\nSerf militarism -1.5% flat\nSerf militia contribution -10%"),

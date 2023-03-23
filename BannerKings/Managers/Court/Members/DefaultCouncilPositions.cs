@@ -228,14 +228,14 @@ namespace BannerKings.Managers.Court.Members
 
                         if (id == "battania") return new TextObject("{=PkQ9BKTk}Ard Draoidh");
                         if (id == "sturgia") return new TextObject("{=ogAzFznn}Volkhvs");
-                        if (id == "aserai") return new TextObject("Murshid");
+                        if (id == "aserai") return new TextObject("{=!}Murshid");
 
                         return new TextObject("{=rhL4NnWR}High Seneschal");
                     }
 
                     if (id == "battania") return new TextObject("{=ELf8YFXe}Draoidh");
                     if (id == "sturgia") return new TextObject("{=ogAzFznn}Volkhvs");
-                    if (id == "aserai") return new TextObject("Murshid");
+                    if (id == "aserai") return new TextObject("{=!}Murshid");
 
                     return new TextObject("{=ZNzX7SKR}Seneschal");
                 });
@@ -385,8 +385,8 @@ namespace BannerKings.Managers.Court.Members
                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                        if (sovereign != null)
                        {
-                           return data.IsRoyal && (sovereign.contract.Government == Titles.GovernmentType.Feudal || 
-                           sovereign.contract.Government == Titles.GovernmentType.Imperial);
+                           return data.IsRoyal && (sovereign.Contract.Government == Titles.GovernmentType.Feudal || 
+                           sovereign.Contract.Government == Titles.GovernmentType.Imperial);
                        }
                    }
                    

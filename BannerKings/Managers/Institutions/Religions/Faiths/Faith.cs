@@ -106,6 +106,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             return null;
         }
 
+        public abstract TextObject GetZealotsGroupName();
         public abstract TextObject GetInductionExplanationText();
         public abstract bool IsCultureNaturalFaith(CultureObject culture);
         public abstract bool IsHeroNaturalFaith(Hero hero);

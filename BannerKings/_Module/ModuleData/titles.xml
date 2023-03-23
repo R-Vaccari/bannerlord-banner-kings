@@ -3,7 +3,7 @@
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
 	<titles autoGenerate="true">
 		<kingdom faction="vlandia" contract="feudal" deJure="lord_4_1">
-			<duchy name="Sargotha" deJure="lord_4_1">
+			<duchy name="Sargotha" deJure="lord_4_1" fullName="{=!}Royal Domain">
 				<county settlement="town_V1" deJure="lord_4_1">
 					<barony settlement="castle_V7" deJure="lord_4_1" />
 				</county>

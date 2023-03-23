@@ -80,7 +80,7 @@ namespace BannerKings.UI.Extensions
                 var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(member);
                 if (title != null)
                 {
-                    if (member != member.Clan.Leader && title.type == TitleType.Lordship)
+                    if (member != member.Clan.Leader && title.TitleType == TitleType.Lordship)
                     {
                         knights.Add(new HeroVM(member));
                         if (clanPageVM.Members.Any(x => x.Hero == member))
@@ -91,8 +91,8 @@ namespace BannerKings.UI.Extensions
                     }
                     else if (member == member.Clan.Leader)
                     {
-                        highestTitle = Utils.Helpers.GetTitlePrefix(title.type,
-                            title.contract.Government, member.MapFaction.Culture);
+                        highestTitle = Utils.Helpers.GetTitlePrefix(title.TitleType,
+                            title.Contract.Government, member.MapFaction.Culture);
                     }
                 }
             }

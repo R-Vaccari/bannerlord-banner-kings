@@ -18,14 +18,18 @@
 						<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight" HorizontalAlignment="Center">
 							<Children>
 
-								<Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="300" HorizontalAlignment="Left">
+								<Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="400" HorizontalAlignment="Left">
 									<Children>
 
 										<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="700" Sprite="StdAssets\Popup\canvas_gradient" IsEnabled="false" VerticalFlip="true"/>
 										<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="300" Sprite="StdAssets\Popup\canvas_gradient" IsEnabled="false" MarginTop="700" />
 
-										<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="300" MarginTop="10" StackLayout.LayoutMethod="VerticalBottomToTop">
+										<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="400" MarginTop="10" 
+												   HorizontalAlignment="Center"	StackLayout.LayoutMethod="VerticalBottomToTop">
 											<Children>
+											
+												<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{Selector}" MarginTop="10" 
+																								HorizontalAlignment="Center" IsEnabled="@Enabled"/>
 
 												<MaskedTextureWidget DataSource="{Banner}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" ImageTypeCode="@ImageTypeCode" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="243" SuggestedHeight="398" HorizontalAlignment="Center" Brush="Encyclopedia.Faction.Banner" OverlayTextureScale="1.5"/>
 												<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginLeft="50" MarginRight="50" Brush="Encyclopedia.SubPage.Title.Text" Brush.TextHorizontalAlignment="Center" Text="@Name" />
@@ -36,8 +40,6 @@
 														<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="@ButtonName" />
 													</Children>
 												</ButtonWidget>
-
-	
 
 												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="25" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
 													<Children>

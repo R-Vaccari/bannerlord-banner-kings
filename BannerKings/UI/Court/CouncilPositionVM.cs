@@ -55,9 +55,25 @@ namespace BannerKings.UI.Court
             PositionInfo = new MBBindingList<InformationElement>();
             if (position.Member != null)
             {
+                var competence = position.Competence;
+                var projected = position.ProjectedCompetence;
+                string currentText = (competence.ResultNumber * 100f).ToString("0.00");
+                string projectedText = (projected.ResultNumber * 100f).ToString("0.00");
+                TextObject explanations = new TextObject("{=!}Current competence ({CURRENT}%):\n{CURRENT_EXPLANATION}\n\nProjected competence ({PROJECTED}%):\n{PROJECTED_EXPLANATION}")
+                    .SetTextVariable("CURRENT", currentText)
+                    .SetTextVariable("CURRENT_EXPLANATION", competence.GetExplanations())
+                    .SetTextVariable("PROJECTED", projectedText)
+                    .SetTextVariable("PROJECTED_EXPLANATION", projected.GetExplanations());
+
                 PositionInfo.Add(new InformationElement(new TextObject("{=Oy8rn07Z}Competence:").ToString(),
-                                (position.Competence.ResultNumber * 100f).ToString("0.00") + '%',
-                                new TextObject("{=hdbcAeax}This councillor's competence in their position. The more competent they are, the more likely they are to trigger the tasks' effects and often with better results.").ToString()));
+                                new TextObject("{=!}{CURRENT}% / {PROJECTED}%")
+                                .SetTextVariable("CURRENT", currentText)
+                                .SetTextVariable("PROJECTED", projectedText)
+                                .ToString(),
+                                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                                .SetTextVariable("TEXT", new TextObject("{=hdbcAeax}This councillor's competence in their position. The more competent they are, the more likely they are to trigger the tasks' effects and often with better results."))
+                                .SetTextVariable("EXPLANATIONS", explanations)
+                                .ToString()));
 
                 PositionInfo.Add(new InformationElement(new TextObject("{=hrGvzpLz}Efficiency:").ToString(),
                                 (position.CurrentTask.Efficiency * 100f).ToString("0.00") + '%',

@@ -944,7 +944,7 @@ namespace BannerKings.Behaviours
                 }
 
                 CharacterObject template;
-                var genderLaw = title.contract.GenderLaw;
+                var genderLaw = title.Contract.GenderLaw;
                 if (genderLaw == GenderLaw.Agnatic)
                 {
                     template = (from e in clan.Culture.NotableAndWandererTemplates
@@ -1173,18 +1173,18 @@ namespace BannerKings.Behaviours
                             {
                                 var title =
                                     BannerKingsConfig.Instance.TitleManager.GetHighestTitle(partyComponent.Leader);
-                                if (title is {fief: { }})
+                                if (title is {Fief: { }})
                                 {
                                     knights++;
                                     var limit = 0f;
-                                    if (title.fief.IsVillage)
+                                    if (title.Fief.IsVillage)
                                     {
-                                        limit = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(title.fief.Village).ResultNumber;
+                                        limit = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(title.Fief.Village).ResultNumber;
                                     }
-                                    else if (title.fief.Town != null)
+                                    else if (title.Fief.Town != null)
                                     {
                                         limit = Campaign.Current.Models.SettlementTaxModel
-                                            .CalculateTownTax(title.fief.Town).ResultNumber;
+                                            .CalculateTownTax(title.Fief.Town).ResultNumber;
                                     }
 
                                     partyComponent.MobileParty.SetWagePaymentLimit((int)(50f + limit));
@@ -1244,8 +1244,8 @@ namespace BannerKings.Behaviours
                 if (BannerKingsConfig.Instance.TitleManager != null)
                 {
                     var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                    return title is {contract: { }} &&
-                           title.contract.Rights.Contains(FeudalRights.Assistance_Rights);
+                    return title is {Contract: { }} &&
+                           title.Contract.Rights.Contains(FeudalRights.Assistance_Rights);
                 }
 
                 return true;

@@ -15,7 +15,7 @@ namespace BannerKings.Models.BKModels
             return new ExplainedNumber();
         }
 
-        public ExplainedNumber CalculateHeroCompetence(Hero hero, CouncilMember position, bool explanations = false)
+        public ExplainedNumber CalculateHeroCompetence(Hero hero, CouncilMember position, bool ignoreTask = false, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0f, explanations);
             result.LimitMin(0f);
@@ -25,10 +25,10 @@ namespace BannerKings.Models.BKModels
                 return result;
             }
 
-            result.Add(hero.GetSkillValue(position.PrimarySkill) / 300f, position.PrimarySkill.Name);
+            result.Add(hero.GetSkillValue(position.PrimarySkill) / 200f, position.PrimarySkill.Name);
             if (position.SecondarySkill != null)
             {
-                result.Add(hero.GetSkillValue(position.SecondarySkill) / 600f, position.SecondarySkill.Name);
+                result.Add(hero.GetSkillValue(position.SecondarySkill) / 400f, position.SecondarySkill.Name);
             }
 
             result.AddFactor(0.15f * (hero.GetAttributeValue(DefaultCharacterAttributes.Intelligence) - 4), 
@@ -42,9 +42,12 @@ namespace BannerKings.Models.BKModels
                     .SetTextVariable("LANGUAGE", courtLanguage.Name));
             }
 
-            if (position.CurrentTask != null && position.CurrentTask.Efficiency != 1f)
+            if (!ignoreTask)
             {
-                result.AddFactor(position.CurrentTask.Efficiency - 1f, new TextObject("{=ARQYxT6t}Task Efficiency"));
+                if (position.CurrentTask != null && position.CurrentTask.Efficiency != 1f)
+                {
+                    result.AddFactor(position.CurrentTask.Efficiency - 1f, new TextObject("{=ARQYxT6t}Task Efficiency"));
+                }
             }
 
             return result;
@@ -276,7 +279,7 @@ namespace BannerKings.Models.BKModels
             var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(candidate);
             if (title != null)
             {
-                titleWeight = 4 - (int) title.type;
+                titleWeight = 4 - (int) title.TitleType;
             }
 
             return (titleWeight + competence + relation) / 3f;

@@ -30,7 +30,7 @@ namespace BannerKings.Models.BKModels
             {
                 if (data.TitleData != null && data.TitleData.Title != null)
                 {
-                    bool boost = data.TitleData.Title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties);
+                    bool boost = data.TitleData.Title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties);
                     result.Add(nobles / (boost ? 90000f : 100000f), new TextObject("{=pJAF5pzO}Nobles"));
                 }
             }

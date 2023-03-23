@@ -174,7 +174,7 @@ namespace BannerKings.Behaviours
             {
                 var diff = current - limit;
                 var title = BannerKingsConfig.Instance.AI.ChooseTitleToGive(hero, diff, false);
-                if (title == null || title.type != TitleType.Dukedom)
+                if (title == null || title.TitleType != TitleType.Dukedom)
                 {
                     return;
                 }
@@ -221,7 +221,7 @@ namespace BannerKings.Behaviours
                     continue;
                 }
 
-                var currentSovereign = duchy.sovereign;
+                var currentSovereign = duchy.Sovereign;
                 var currentFactionSovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
                 if (currentSovereign == null || currentFactionSovereign == null ||
                     currentSovereign == currentFactionSovereign)
@@ -248,7 +248,7 @@ namespace BannerKings.Behaviours
 
             BannerKingsConfig.Instance.TitleManager.RemoveKnights(victim);
             var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(victim.Clan.Kingdom);
-            if (sovereign?.contract == null)
+            if (sovereign?.Contract == null)
             {
                 return;
             }
@@ -296,12 +296,12 @@ namespace BannerKings.Behaviours
             }
 
             var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-            if (sovereign?.contract == null)
+            if (sovereign?.Contract == null)
             {
                 return;
             }
 
-            if (sovereign.contract.Rights.Contains(FeudalRights.Conquest_Rights))
+            if (sovereign.Contract.Rights.Contains(FeudalRights.Conquest_Rights))
             {
                 var decisions = kingdom.UnresolvedDecisions.ToList();
                 var bkDecision = decisions.FirstOrDefault(x =>
@@ -473,11 +473,11 @@ namespace BannerKings.Behaviours
                         }
                     }
 
-                    if (title.sovereign != null)
+                    if (title.Sovereign != null)
                     {
-                        if (title.sovereign.deJure != title.deJure && title.sovereign.deJure.IsAlive)
+                        if (title.Sovereign.deJure != title.deJure && title.Sovereign.deJure.IsAlive)
                         {
-                            BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, title.sovereign.deJure, title);
+                            BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, title.Sovereign.deJure, title);
                             continue;
                         }
                     }
@@ -521,7 +521,7 @@ namespace BannerKings.Behaviours
                 }
 
                 var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-                if (sovereign?.contract == null)
+                if (sovereign?.Contract == null)
                 {
                     return;
                 }
@@ -531,7 +531,7 @@ namespace BannerKings.Behaviours
                 if (detail == ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.BySiege)
                 {
                     var absoluteRightGranted = false;
-                    if (sovereign.contract.Rights.Contains(FeudalRights.Absolute_Land_Rights))
+                    if (sovereign.Contract.Rights.Contains(FeudalRights.Absolute_Land_Rights))
                     {
                         foreach (var clan in kingdom.Clans)
                         {
@@ -553,7 +553,7 @@ namespace BannerKings.Behaviours
                         settlement.Town.IsOwnerUnassigned = false;
                     }
 
-                    if (!absoluteRightGranted && sovereign.contract.Rights.Contains(FeudalRights.Conquest_Rights))
+                    if (!absoluteRightGranted && sovereign.Contract.Rights.Contains(FeudalRights.Conquest_Rights))
                     {
                         var decisions = kingdom.UnresolvedDecisions.ToList();
                         var decision = decisions.FirstOrDefault(x =>

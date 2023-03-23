@@ -16,7 +16,7 @@ namespace BannerKings.Managers.Helpers
             }
 
             FeudalTitle highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(victim);
-            var mainHeir = GetHeirInternal(victim, highest != null ? highest.contract : null);
+            var mainHeir = GetHeirInternal(victim, highest != null ? highest.Contract : null);
             if (mainHeir != null)
             {
                 foreach (var t in titles)
@@ -86,7 +86,7 @@ namespace BannerKings.Managers.Helpers
             var inheritanceDic = new Dictionary<Hero, List<FeudalTitle>>();
             foreach (var title in titles)
             {
-                var heir = GetHeirInternal(leader, title.contract);
+                var heir = GetHeirInternal(leader, title.Contract);
                 if (!inheritanceDic.ContainsKey(heir))
                 {
                     inheritanceDic.Add(heir, new List<FeudalTitle>() { title });

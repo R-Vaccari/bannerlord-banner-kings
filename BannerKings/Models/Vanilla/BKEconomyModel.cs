@@ -32,7 +32,7 @@ namespace BannerKings.Models.Vanilla
             var title = BannerKingsConfig.Instance.TitleManager.GetSovereignFromSettlement(settlement);
             if (title != null)
             {
-                var government = title.contract.Government;
+                var government = title.Contract.Government;
                 switch (government)
                 {
                     case GovernmentType.Republic:

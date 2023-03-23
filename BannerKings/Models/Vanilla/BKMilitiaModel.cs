@@ -60,11 +60,11 @@ namespace BannerKings.Models.Vanilla
                     var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(settlement.OwnerClan.Kingdom);
                     if (sovereign != null)
                     {
-                        if (sovereign.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsMilitaryServiceDuties))
+                        if (sovereign.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsMilitaryServiceDuties))
                         {
                             serfs *= 1.2f;
                         }
-                        else if (sovereign.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                        else if (sovereign.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
                         {
                             serfs *= 0.9f;
                         }
@@ -156,20 +156,20 @@ namespace BannerKings.Models.Vanilla
                 var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
                 if (title != null)
                 {
-                    if (title.contract.Government == GovernmentType.Tribal)
+                    if (title.Contract.Government == GovernmentType.Tribal)
                     {
                         result.Add(0.08f, new TextObject("{=PSrEtF5L}Government"));
                     }
 
-                    var sovereign = title.sovereign;
+                    var sovereign = title.Sovereign;
                     if (sovereign != null)
                     {
-                        if (sovereign.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesMilitaryServiceDuties))
+                        if (sovereign.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesMilitaryServiceDuties))
                         {
                             result.AddFactor(0.15f, DefaultDemesneLaws.Instance.NoblesMilitaryServiceDuties.Name);
                         }
 
-                        if (sovereign.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties))
+                        if (sovereign.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties))
                         {
                             result.AddFactor(0.1f, DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties.Name);
                         }

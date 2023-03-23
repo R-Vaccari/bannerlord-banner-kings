@@ -13,21 +13,21 @@ namespace BannerKings.UI.Titles
             Branch = new MBBindingList<TitleElementVM>();
             Title = new TitleVM(title);
 
-            if (title.fief != null)
+            if (title.Fief != null)
             {
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(title.fief);
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(title.Fief);
                 hierarchy.Population += data.TotalPop;
             }
 
-            if (title.vassals != null)
+            if (title.Vassals != null)
             {
-                foreach (var vassal in title.vassals)
+                foreach (var vassal in title.Vassals)
                 {
                     Branch.Add(new TitleElementVM(vassal, hierarchy));
 
-                    if (vassal.fief != null)
+                    if (vassal.Fief != null)
                     {
-                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(vassal.fief);
+                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(vassal.Fief);
                         hierarchy.Population += data.TotalPop;
                     }
                 }

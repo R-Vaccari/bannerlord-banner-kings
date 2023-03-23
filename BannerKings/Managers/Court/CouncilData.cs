@@ -250,9 +250,9 @@ namespace BannerKings.Managers.Court
             var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Owner);
             foreach (var title in titles)
             {
-                if (title.type == TitleType.Lordship && title.fief.MapFaction == Owner.MapFaction)
+                if (title.TitleType == TitleType.Lordship && title.Fief.MapFaction == Owner.MapFaction)
                 {
-                    foreach (var notable in title.fief.Notables)
+                    foreach (var notable in title.Fief.Notables)
                     {
                         if (!heroes.Contains(notable))
                         {
@@ -354,7 +354,6 @@ namespace BannerKings.Managers.Court
 
         public CouncilMember GetHeroPosition(Hero hero)
         {
-            PostInitialize();
             foreach (var councilMember in Positions)
             {
                 if (councilMember.Member == hero)
@@ -365,22 +364,6 @@ namespace BannerKings.Managers.Court
 
             return null;
         }
-    }
-
-    public enum CouncilPosition
-    {
-        Marshall,
-        Chancellor,
-        Steward,
-        Spymaster,
-        Spiritual,
-        Prince,
-        Castellan,
-        Druzina,
-        Elder,
-        Constable,
-        Philosopher,
-        None
     }
 
     public enum CouncilPrivileges

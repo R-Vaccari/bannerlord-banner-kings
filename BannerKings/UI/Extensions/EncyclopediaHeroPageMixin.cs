@@ -87,7 +87,7 @@ namespace BannerKings.UI.Extensions
                 }
 
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
-                if (title != null && title.type == TitleType.Lordship && hero.Clan != null && !hero.IsClanLeader() && !hero.IsPlayer() &&
+                if (title != null && title.TitleType == TitleType.Lordship && hero.Clan != null && !hero.IsClanLeader() && !hero.IsPlayer() &&
                     !Utils.Helpers.IsCloseFamily(hero, hero.Clan.Leader))
                 {
                     float progress = BannerKingsConfig.Instance.TitleManager.GetKnightInfluence(hero) / 350f;

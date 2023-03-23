@@ -513,5 +513,10 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         }
 
         public override TextObject GetInductionExplanationText() => new TextObject("{=CrfLUm3F}You must be part of Aserai, Imperial or Khuzait cultures, or have relations with village notables (Faqir), have an Aserai spouse (Imam) or clan tier above 2 (Murshid).");
+
+        public override TextObject GetZealotsGroupName()
+        {
+            return new TextObject("{=!}Heirs of Asera");
+        }
     }
 }

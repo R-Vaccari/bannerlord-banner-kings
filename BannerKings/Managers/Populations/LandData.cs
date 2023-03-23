@@ -346,18 +346,18 @@ namespace BannerKings.Managers.Populations
                 var title = data.TitleData.Title;
                 if (populationClass == PopType.Serfs)
                 {
-                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsAgricultureDuties))
+                    if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsAgricultureDuties))
                     {
                         result *= 1.1f;
                     }
-                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                    else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
                     {
                         result *= 0.95f;
                     }
                 }
                 else if (populationClass == PopType.Slaves)
                 {
-                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesAgricultureDuties))
+                    if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesAgricultureDuties))
                     {
                         result *= 1.1f;
                     }

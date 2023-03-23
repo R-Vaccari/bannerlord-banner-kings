@@ -1,4 +1,6 @@
 ﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours.Diplomacy;
+using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
 using BannerKings.Behaviours.Mercenary;
@@ -61,6 +63,7 @@ namespace BannerKings
             
             campaignStarter.AddBehavior(new BKWorkshopBehavior());
             campaignStarter.AddBehavior(new BKGentryBehavior());
+            campaignStarter.AddBehavior(new BKDiplomacyBehavior());
             campaignStarter.AddBehavior(new BKMercenaryCareerBehavior());
             //campaignStarter.AddBehavior(new BKCombatBehavior());
 
@@ -109,12 +112,13 @@ namespace BannerKings
             campaignStarter.AddModel(new BKCombatXpModel());
             campaignStarter.AddModel(new BKBattleMoraleModel());
             campaignStarter.AddModel(new BKLearningModel());
-            campaignStarter.AddModel(new BKKingodmDecsionModel());
+            campaignStarter.AddModel(new BKKingdomDecisionModel());
             campaignStarter.AddModel(new BKDiplomacyModel());
             campaignStarter.AddModel(new BKPartyFoodBuyingModel());
             campaignStarter.AddModel(new BKPregnancyModel());
             campaignStarter.AddModel(new BKPartyHealingModel());
             //campaignStarter.AddModel(new BKPrisonerRecruitmentModel());
+            campaignStarter.AddModel(new BKTargetScoreModel());
             //campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
 
             BKAttributes.Instance.Initialize();

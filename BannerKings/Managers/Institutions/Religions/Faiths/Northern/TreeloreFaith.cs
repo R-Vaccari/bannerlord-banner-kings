@@ -8,6 +8,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
 {
     public class TreeloreFaith : PolytheisticFaith
     {
+        public override TextObject GetZealotsGroupName()
+        {
+            return new TextObject("{=!}Scions of the Great Oak");
+        }
+
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {
             if (culture.StringId == "sturgia" || culture.StringId == "vakken")

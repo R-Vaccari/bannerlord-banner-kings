@@ -73,9 +73,9 @@ namespace BannerKings.Managers.Kingdoms.Contract
                       2f * clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
             var num2 = 0f;
             var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Kingdom);
-            if (sovereign is {contract: { }})
+            if (sovereign is {Contract: { }})
             {
-                var government = sovereign.contract.Government;
+                var government = sovereign.Contract.Government;
                 if (government is GovernmentType.Tribal or GovernmentType.Republic)
                 {
                     num2++;
@@ -126,7 +126,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             textObject.SetTextVariable("POLICY_DESCRIPTION",
                 newGovernment 
                     ? genderLaw.ToString() 
-                    : Title.contract.Succession.ToString());
+                    : Title.Contract.Succession.ToString());
             if (isShortVersion || IsSingleClanDecision())
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", TextObject.Empty);
@@ -171,7 +171,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
             textObject.SetTextVariable("CURRENT",
-                Utils.Helpers.GetGovernmentString(Title.contract.Government, Kingdom.Culture));
+                Utils.Helpers.GetGovernmentString(Title.Contract.Government, Kingdom.Culture));
             textObject.SetTextVariable("PROPOSED", genderLaw.ToString());
             return textObject;
         }
