@@ -71,7 +71,7 @@
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
-			<XmlName id="NPCCharacters" path="civillians" />
+			<XmlName id="NPCCharacters" path="Characters" />
 			<IncludedGameTypes>
 				<GameType value="Campaign" />
 				<GameType value="CampaignStoryMode" />

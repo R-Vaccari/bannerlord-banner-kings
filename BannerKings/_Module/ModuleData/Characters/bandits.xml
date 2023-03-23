@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NPCCharacters>
+   <NPCCharacter id="bk_bandit_nordling_2"
+                default_group="Infantry"
+                level="26"
+                name="{=!}Nordling Húskarl"
+                occupation="Soldier"
+                culture="Culture.sturgia">
+    <face>
+      <face_key_template value="BodyProperty.fighter_sturgia" />
+    </face>
+    <skills>
+      <skill id="Athletics"
+             value="140" />
+      <skill id="Riding"
+             value="45" />
+      <skill id="OneHanded"
+             value="160" />
+      <skill id="TwoHanded"
+             value="60" />
+      <skill id="Polearm"
+             value="70" />
+      <skill id="Bow"
+             value="30" />
+      <skill id="Crossbow"
+             value="15" />
+      <skill id="Throwing"
+             value="110" />
+    </skills>
+    <upgrade_targets></upgrade_targets>
+    <Equipments>
+      <EquipmentRoster>
+	     <equipment slot="Item0" id="Item.northern_throwing_axe_1_t1" />
+	     <equipment slot="Item1" id="Item.heavy_round_shield" />
+	     <equipment slot="Item2" id="Item.battania_axe_3_t5" />
+		 <equipment slot="Head" id="Item.closed_goggled_helmet" />
+		 <equipment slot="Body" id="Item.sturgian_lamellar_base" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.plated_strip_boots" />
+	  </EquipmentRoster>
+	   <EquipmentRoster>
+	     <equipment slot="Item0" id="Item.northern_throwing_axe_1_t1" />
+	     <equipment slot="Item1" id="Item.heavy_round_shield" />
+	     <equipment slot="Item2" id="Item.sturgia_axe_5_t5" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_full_mail" />
+		 <equipment slot="Body" id="Item.sturgian_chainmale_longsleeve" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.plated_strip_boots" />
+		 <equipment slot="Cape" id="Item.female_scarf" />
+	  </EquipmentRoster>
+	   <EquipmentRoster>
+	     <equipment slot="Item0" id="Item.northern_throwing_axe_1_t1" />
+	     <equipment slot="Item1" id="Item.heavy_round_shield" />
+	     <equipment slot="Item2" id="Item.sturgia_axe_5_t5" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_full_mail" />
+		 <equipment slot="Body" id="Item.sturgian_chainmale_longsleeve" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.plated_strip_boots" />
+		 <equipment slot="Cape" id="Item.wolf_shoulder" />
+	  </EquipmentRoster>
+	   <EquipmentRoster>
+	     <equipment slot="Item0" id="Item.northern_throwing_axe_1_t1" />
+	     <equipment slot="Item1" id="Item.heavy_round_shield" />
+	     <equipment slot="Item2" id="Item.sturgia_sword_4_t4" />
+		 <equipment slot="Item3" id="Item.wide_leaf_spear_t4" />
+		 <equipment slot="Head" id="Item.closed_goggled_helmet" />
+		 <equipment slot="Body" id="Item.nordic_sloven_over_mail" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.plated_strip_boots" />
+		 <equipment slot="Cape" id="Item.battania_civil_cape" />
+	  </EquipmentRoster>
+	   <EquipmentRoster>
+	     <equipment slot="Item0" id="Item.northern_throwing_axe_1_t1" />
+	     <equipment slot="Item1" id="Item.heavy_round_shield" />
+	     <equipment slot="Item2" id="Item.sturgia_sword_5_t5" />
+		 <equipment slot="Item3" id="Item.wide_leaf_spear_t4" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_mail" />
+		 <equipment slot="Body" id="Item.decorated_nordic_hauberk" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.plated_strip_boots" />
+	  </EquipmentRoster>
+      <EquipmentSet id="sturgia_troop_civilian_template_t2"
+                    civilian="true" />
+    </Equipments>
+  </NPCCharacter>
+  
+  <NPCCharacter id="bk_bandit_nordling_1"
+                default_group="Infantry"
+                level="21"
+                name="{=!}Nordling Húskarl"
+                occupation="Soldier"
+                culture="Culture.sturgia">
+    <face>
+      <face_key_template value="BodyProperty.fighter_sturgia" />
+    </face>
+    <skills>
+      <skill id="Athletics"
+             value="120" />
+      <skill id="Riding"
+             value="45" />
+      <skill id="OneHanded"
+             value="130" />
+      <skill id="TwoHanded"
+             value="50" />
+      <skill id="Polearm"
+             value="60" />
+      <skill id="Bow"
+             value="20" />
+      <skill id="Crossbow"
+             value="15" />
+      <skill id="Throwing"
+             value="90" />
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.bk_bandit_nordling_2" />
+    </upgrade_targets>
+    <Equipments>
+      <EquipmentRoster>
+		 <equipment slot="Item0" id="Item.sturgia_axe_4_t4" />
+		 <equipment slot="Item1" id="Item.viking_round_shield" />
+		 <equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+	     <equipment slot="Item3" id="Item.triangluar_spear_t3" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <equipment slot="Cape" id="Item.female_scarf" />
+		 <equipment slot="Body" id="Item.sturgian_lamellar_gambeson_heavy" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.leather_boots" />
+	  </EquipmentRoster>
+	  <EquipmentRoster>
+		 <equipment slot="Item0" id="Item.battania_axe_2_t4" />
+		 <equipment slot="Item1" id="Item.viking_round_shield" />
+		 <equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+     	 <equipment slot="Item3" id="Item.triangluar_spear_t3" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <equipment slot="Cape" id="Item.female_scarf" />
+		 <equipment slot="Body" id="Item.sturgian_chainmale_shortsleeve" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.leather_boots" />
+	  </EquipmentRoster>
+	  <EquipmentRoster>
+		 <equipment slot="Item0" id="Item.sturgia_sword_4_t4" />
+		 <equipment slot="Item1" id="Item.sturgia_old_shield_c" />
+		 <equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <equipment slot="Cape" id="Item.female_scarf" />
+		 <equipment slot="Body" id="Item.sturgian_chainmale_shortsleeve" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.leather_boots" />
+	  </EquipmentRoster>
+	  <EquipmentRoster>
+		 <equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+		 <equipment slot="Item1" id="Item.sturgia_old_shield_a" />
+		 <equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <equipment slot="Body" id="Item.leather_and_iron_plate_armor" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.plated_strip_boots" />
+	  </EquipmentRoster>
+	  <EquipmentRoster>
+		 <equipment slot="Item0" id="Item.battle_axe_t4" />
+		 <equipment slot="Item1" id="Item.sturgia_old_shield_a" />
+		 <equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <equipment slot="Body" id="Item.sturgian_lamellar_gambeson" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.plated_strip_boots" />
+	  </EquipmentRoster>
+      <EquipmentSet id="sturgia_troop_civilian_template_t2"
+                    civilian="true" />
+    </Equipments>
+  </NPCCharacter>
+</NPCCharacters>
