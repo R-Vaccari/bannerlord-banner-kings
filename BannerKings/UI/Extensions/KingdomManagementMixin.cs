@@ -1,5 +1,4 @@
 using BannerKings.Behaviours.Diplomacy;
-using BannerKings.Behaviours.Mercenary;
 using BannerKings.UI.Court;
 using BannerKings.UI.Kingdoms;
 using BannerKings.UI.Mercenary;
@@ -17,7 +16,7 @@ namespace BannerKings.UI.Extensions
     {
         private readonly KingdomManagementVM kingdomManagement;
         private bool courtSelected, courtEnabled, demesneSelected, demesneEnabled, groupsEnabled,
-            groupsSelected;
+            groupsSelected, showCareer, careerSelected;
         private CourtVM courtVM;
         private KingdomDemesneVM demesneVM;
         private KingdomGroupsVM groupsVM;
@@ -38,7 +37,6 @@ namespace BannerKings.UI.Extensions
             var diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(vm.Kingdom);
             Groups = new KingdomGroupsVM(diplomacy);
             GroupsEnabled = diplomacy != null;
-        }
 
             ShowCareer = false;
             Career = new MercenaryCareerVM();
