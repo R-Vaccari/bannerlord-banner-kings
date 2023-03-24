@@ -2,6 +2,45 @@
 
 <EquipmentRosters>
 
+	<EquipmentRoster id="bannerkings_bandithero_looters" culture="Culture.looters">
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.vlandia_axe_1_t3" />
+		  <Equipment slot="Item1" id="Item.western_javelin_2_t3" />
+		  <Equipment slot="Item2" id="Item.western_kite_shield" />
+		  <Equipment slot="Head" id="Item.leatherlame_roundkettle_over_imperial_leather" />
+		  <Equipment slot="Body" id="Item.studded_leather_over_aketon" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.hooked_axe_t4" />
+		  <Equipment slot="Item1" id="Item.northern_throwing_axe_1_t1" />
+		  <Equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+		  <Equipment slot="Head" id="Item.kettle_helmet_over_mail" />
+		  <Equipment slot="Body" id="Item.woven_leather_coat" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Cape" id="Item.armored_bearskin" />
+		  <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.bone_crusher_mace_t3" />
+		  <Equipment slot="Item1" id="Item.highland_spear_4_t4" />
+		  <Equipment slot="Item2" id="Item.ironrim_kite_shield" />
+		  <Equipment slot="Head" id="Item.ironlame_roundkettle_over_imperial_mail" />
+		  <Equipment slot="Body" id="Item.buckled_wildsman_armor" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Cape" id="Item.hood" />
+		  <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.vlandia_polearm_1_t5" />
+		  <Equipment slot="Item1" id="Item.lowland_throwing_knife" />
+		  <Equipment slot="Head" id="Item.leatherlame_roundkettle_over_imperial_mail" />
+		  <Equipment slot="Body" id="Item.leather_scale_armor" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Gloves" id="Item.padded_mitten" />
+		</EquipmentSet>
+	</EquipmentRoster>
+
 	<EquipmentRoster id="bannerkings_companion_vlandia" culture="Culture.vlandia">
 		<EquipmentSet>
 		  <Equipment slot="Item0" id="Item.vlandia_sword_2_t3" />

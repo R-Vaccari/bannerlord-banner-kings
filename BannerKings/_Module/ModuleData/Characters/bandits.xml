@@ -1,5 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <NPCCharacters>
+
+	<NPCCharacter id="bannerkings_bandithero_looters_1" name="{=!}{HERO.FIRSTNAME}" voice="softspoken" is_template="true" default_group="Infantry" is_hero="false" 
+				culture="Culture.looters" occupation="Bandit">
+    <face>
+      <face_key_template value="BodyProperty.fighter_battania" />
+    </face>
+    <skills></skills>
+    <Traits>
+      <Trait id="ScoutSkills" value="2" />
+      <Trait id="Commander" value="3" />
+      <Trait id="ArcherFIghtingSkills" value="4" />
+    </Traits>
+    <Equipments>
+      <EquipmentSet id="npc_armed_wanderer_equipment_template_battania" />
+      <EquipmentSet id="npc_wanderer_equipment_template_battania" civilian="true" />
+    </Equipments>
+  </NPCCharacter>
+  
+
    <NPCCharacter id="bk_bandit_nordling_2"
                 default_group="Infantry"
                 level="26"
