@@ -6,6 +6,7 @@ using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -50,6 +51,11 @@ namespace BannerKings.Models.Vanilla
                     {
                         baseResult.AddFactor(0.15f, DefaultLifestyles.Instance.Kheshig.Name);
                     }
+                }
+
+                if (party.MobileParty.IsBandit && party.MobileParty.PartyComponent is BanditHeroComponent)
+                {
+                    baseResult.Add(150f, new TextObject("{=!}Bandit horde"));
                 }
             }
 

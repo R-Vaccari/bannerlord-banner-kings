@@ -34,5 +34,19 @@
 		  <PartyTemplateStack min_value="10" max_value="26" troop="NPCCharacter.bk_bandit_nordling_1" />
 		</stacks>
     </MBPartyTemplate>
+	
+	<MBPartyTemplate id="bandits_hero_looters" >
+		<stacks>
+		  <PartyTemplateStack min_value="20" max_value="40" troop="NPCCharacter.mounted_ransacker" />
+		  <PartyTemplateStack min_value="20" max_value="40" troop="NPCCharacter.mounted_pillager" />
+		  <PartyTemplateStack min_value="90" max_value="120" troop="NPCCharacter.looter" />
+		  <PartyTemplateStack min_value="25" max_value="50" troop="NPCCharacter.mountain_bandits_bandit" />
+		  <PartyTemplateStack min_value="15" max_value="30" troop="NPCCharacter.mountain_bandits_raider" />
+		  <PartyTemplateStack min_value="25" max_value="50" troop="NPCCharacter.forest_bandits_bandit" />
+		  <PartyTemplateStack min_value="15" max_value="30" troop="NPCCharacter.forest_bandits_raider" />
+		  <PartyTemplateStack min_value="3" max_value="8" troop="NPCCharacter.mountain_bandits_boss" />
+		  <PartyTemplateStack min_value="3" max_value="8" troop="NPCCharacter.forest_bandits_boss" />
+		</stacks>
+    </MBPartyTemplate>
 
 </partyTemplates>

@@ -1,8 +1,14 @@
 ﻿using BannerKings.Components;
+using HarmonyLib;
 using Helpers;
+using SandBox.CampaignBehaviors;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -14,13 +20,31 @@ namespace BannerKings.Behaviours
 {
     public class BKBanditBehavior : BannerKingsBehavior
     {
+        private Dictionary<Hero, MobileParty> bandits = new Dictionary<Hero, MobileParty>();
         public override void RegisterEvents()
         {
             CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnClanTick);
+            CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTickHero);
+            CampaignEvents.OnSettlementLeftEvent.AddNonSerializedListener(this, OnSettlementLeft);
+            CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, OnPartyHourlyTick);
+            CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnPartyDailyTick);
         }
 
         public override void SyncData(IDataStore dataStore)
         {
+            if (bandits == null)
+            {
+                bandits = new Dictionary<Hero, MobileParty>();
+            }
+        }
+
+        private void OnDailyTickHero(Hero hero)
+        {
+            if (bandits.ContainsKey(hero) && hero.IsPrisoner && MobileParty.MainParty.Party != hero.PartyBelongedToAsPrisoner &&
+                hero.PartyBelongedToAsPrisoner.LeaderHero != null)
+            {
+                KillCharacterAction.ApplyByExecution(hero, hero.PartyBelongedToAsPrisoner.LeaderHero);
+            }
         }
 
         private void OnClanTick(Clan clan)
@@ -36,7 +60,77 @@ namespace BannerKings.Behaviours
             }
         }
 
-        private void CreateBanditHero(Clan clan)
+        private void OnPartyHourlyTick(MobileParty party)
+        {
+            TickBandits(party);
+            TickBanditHeroes(party);
+        }
+
+        private void OnPartyDailyTick(MobileParty party)
+        {
+            if (!party.IsBandit || party.PartyComponent is not BanditHeroComponent)
+            {
+                return;
+            }
+
+            BanditHeroComponent component = (BanditHeroComponent)party.PartyComponent;
+            component.Tick();
+        }
+
+        public void UpgradeParty(MobileParty party)
+        {
+            int stacks = party.ActualClan.DefaultPartyTemplate.Stacks.Count - 1;
+            var template = party.ActualClan.DefaultPartyTemplate.Stacks[MBRandom.RandomInt(0, stacks)];
+            party.MemberRoster.AddToCounts(template.Character, MBRandom.RandomInt(2, 6));
+        }
+
+        private void OnSettlementLeft(MobileParty party, Settlement settlement)
+        {
+            if (!settlement.IsHideout)
+            {
+                return;
+            }
+        }
+
+        private void TickBandits(MobileParty party)
+        {
+            if (!party.IsBandit || party.PartyComponent is BanditHeroComponent)
+            {
+                return;
+            }
+
+            foreach (var heroParty in bandits.Values)
+            {
+                if (Campaign.Current.Models.MapDistanceModel.GetDistance(party, heroParty) <= 10f)
+                {
+                    SetFollow(heroParty, party);
+                }
+            }
+        }
+
+        private void TickBanditHeroes(MobileParty party)
+        {
+            if (party.PartyComponent is not BanditHeroComponent)
+            {
+                return;
+            }
+
+            float partyLimit = Campaign.Current.Models.PartySizeLimitModel.GetPartyMemberSizeLimit(party.Party).ResultNumber;
+            BanditHeroComponent component = (BanditHeroComponent)party.PartyComponent;
+            if (party.MemberRoster.TotalManCount < partyLimit * 0.2f)
+            {
+                party.Ai.SetMoveGoToSettlement(component.Hideout.Settlement);
+            }
+        }
+
+        public void SetFollow(MobileParty heroParty, MobileParty follower)
+        {
+            follower.Ai.DisableForHours(2);
+            follower.Ai.SetMoveEscortParty(heroParty);
+            follower.Ai.RecalculateShortTermAi();
+        }
+
+        public void CreateBanditHero(Clan clan)
         {
             Hideout hideout = Hideout.All.FirstOrDefault(x => x.Settlement.Culture == clan.Culture);
             Settlement settlement = null;
@@ -50,9 +144,11 @@ namespace BannerKings.Behaviours
                 hideout = Hideout.All.GetRandomElement();
                 settlement = hideout.Settlement;
             }
-            
+
+            Settlement closest = SettlementHelper.FindNearestTown(x => x.IsTown, settlement);
+
             var templates = CharacterObject.All.ToList().FindAll(x =>
-               x.Occupation == Occupation.Bandit && x.StringId.Contains("bannerkings_bandithero") && x.Culture == clan.Culture);
+              x.StringId.Contains("bannerkings_bandithero") && x.Culture == closest.Culture);
             CharacterObject template = templates.GetRandomElement();
             if (template == null)
             {
@@ -71,6 +167,13 @@ namespace BannerKings.Behaviours
                 return;
             }
 
+            var partyTemplates = Campaign.Current.ObjectManager.GetObjectTypeList<PartyTemplateObject>();
+            PartyTemplateObject partyTemplate = partyTemplates.FirstOrDefault(x => x.StringId == "bandits_hero_" + clan.StringId);
+            if (partyTemplate == null)
+            {
+                return;
+            }
+
             var hero = HeroCreator.CreateSpecialHero(template, 
                 settlement, 
                 clan, 
@@ -79,17 +182,71 @@ namespace BannerKings.Behaviours
             EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, roster.AllEquipments.GetRandomElement());
             var mainParty = hero.PartyBelongedTo == MobileParty.MainParty;
 
-            MobileParty mobileParty = BanditHeroComponent.CreateParty(hideout, hero);
+            MobileParty mobileParty = BanditHeroComponent.CreateParty(hideout, hero, partyTemplate);
             AddHeroToPartyAction.Apply(hero, mobileParty, false);
             mobileParty.ChangePartyLeader(hero);
 
-            Settlement closest = SettlementHelper.FindNearestTown(x => x.IsTown, settlement);
+            UpgradeParty(mobileParty);
+            UpgradeParty(mobileParty);
+            UpgradeParty(mobileParty);
+            UpgradeParty(mobileParty);
+
+            bandits.Add(hero, mobileParty);
+            InfestHieout(hideout, clan);
+            EnterSettlementAction.ApplyForParty(mobileParty, hideout.Settlement);
+
             InformationManager.DisplayMessage(new InformationMessage(
                 new TextObject("{=!}A renowned criminal, {HERO}, has arisen among the {CLAN}! They were sighted in the vicinity of {TOWN}...")
                 .SetTextVariable("HERO", hero.Name)
                 .SetTextVariable("CLAN", clan.Name)
                 .SetTextVariable("TOWN", closest.Name)
                 .ToString()));
+        }
+
+        private void InfestHieout(Hideout hideout, Clan clan)
+        {
+            int num = 0;
+            while ((float)num < Campaign.Current.Models.BanditDensityModel.NumberOfMinimumBanditPartiesInAHideoutToInfestIt * 6)
+            {
+                Campaign.Current.GetCampaignBehavior<BanditsCampaignBehavior>()
+                    .AddBanditToHideout(hideout, clan.DefaultPartyTemplate, false);
+                num++;
+            }
+        }
+    }
+
+    namespace Patches
+    {
+        [HarmonyPatch(typeof(LordConversationsCampaignBehavior))]
+        internal class BanditDialoguePatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("conversation_player_wants_to_make_peace_on_condition")]
+            private static bool MakePeacePrefix(ref bool __result)
+            {
+                __result = !Hero.OneToOneConversationHero.MapFaction.IsBanditFaction &&
+                    FactionManager.IsAtWarAgainstFaction(Hero.MainHero.MapFaction, Hero.OneToOneConversationHero.MapFaction);
+
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(CharacterRelationCampaignBehavior))]
+        internal class CharacterRelationCampaignBehaviorPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("conversation_player_wants_to_make_peace_on_condition")]
+            private static bool OnRaidCompleted(BattleSideEnum winnerSide, RaidEventComponent raidEvent)
+            {
+                MapEvent mapEvent = raidEvent.MapEvent;
+                PartyBase leaderParty = mapEvent.AttackerSide.LeaderParty;
+                if (leaderParty != null && leaderParty.LeaderHero != null && leaderParty.MobileParty.PartyComponent is BanditHeroComponent)
+                {
+                    return false;
+                }
+
+                return true;
+            }
         }
     }
 }
