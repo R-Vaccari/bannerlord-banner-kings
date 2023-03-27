@@ -18,6 +18,7 @@
 			<Trait id="Commander" value="6" />
 			<Trait id="Politician" value="6" />
 			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
@@ -42,6 +43,7 @@
 			<Trait id="Commander" value="11" />
 			<Trait id="Politician" value="4" />
 			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
@@ -66,6 +68,7 @@
 			<Trait id="Commander" value="4" />
 			<Trait id="Politician" value="12" />
 			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
@@ -90,6 +93,7 @@
 			<Trait id="Commander" value="5" />
 			<Trait id="Politician" value="1" />
 			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
@@ -114,6 +118,7 @@
 			<Trait id="Commander" value="6" />
 			<Trait id="Politician" value="6" />
 			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
@@ -138,6 +143,7 @@
 			<Trait id="Commander" value="11" />
 			<Trait id="Politician" value="4" />
 			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
@@ -162,6 +168,7 @@
 			<Trait id="Commander" value="4" />
 			<Trait id="Politician" value="12" />
 			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
@@ -186,6 +193,7 @@
 			<Trait id="Commander" value="5" />
 			<Trait id="Politician" value="1" />
 			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
@@ -210,6 +218,7 @@
 			<Trait id="Commander" value="6" />
 			<Trait id="Politician" value="6" />
 			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_sturgia" />
@@ -234,6 +243,7 @@
 			<Trait id="Commander" value="11" />
 			<Trait id="Politician" value="4" />
 			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_sturgia" />
@@ -258,6 +268,7 @@
 			<Trait id="Commander" value="4" />
 			<Trait id="Politician" value="12" />
 			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_sturgia" />
@@ -282,6 +293,7 @@
 			<Trait id="Commander" value="5" />
 			<Trait id="Politician" value="1" />
 			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_sturgia" />
@@ -306,6 +318,7 @@
 			<Trait id="Commander" value="6" />
 			<Trait id="Politician" value="6" />
 			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_aserai" />
@@ -330,6 +343,7 @@
 			<Trait id="Commander" value="11" />
 			<Trait id="Politician" value="4" />
 			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_aserai" />
@@ -354,6 +368,7 @@
 			<Trait id="Commander" value="4" />
 			<Trait id="Politician" value="12" />
 			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_aserai" />
@@ -378,6 +393,7 @@
 			<Trait id="Commander" value="5" />
 			<Trait id="Politician" value="1" />
 			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_aserai" />
@@ -402,6 +418,7 @@
 			<Trait id="Commander" value="6" />
 			<Trait id="Politician" value="6" />
 			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_khuzait" />
@@ -426,6 +443,7 @@
 			<Trait id="Commander" value="11" />
 			<Trait id="Politician" value="4" />
 			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_khuzait" />
@@ -450,6 +468,7 @@
 			<Trait id="Commander" value="4" />
 			<Trait id="Politician" value="12" />
 			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_khuzait" />
@@ -474,6 +493,7 @@
 			<Trait id="Commander" value="5" />
 			<Trait id="Politician" value="1" />
 			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_khuzait" />
@@ -498,6 +518,7 @@
 			<Trait id="Commander" value="6" />
 			<Trait id="Politician" value="6" />
 			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_vlandia" />
@@ -522,6 +543,7 @@
 			<Trait id="Commander" value="11" />
 			<Trait id="Politician" value="4" />
 			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_vlandia" />
@@ -546,6 +568,7 @@
 			<Trait id="Commander" value="4" />
 			<Trait id="Politician" value="12" />
 			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_vlandia" />
@@ -570,6 +593,7 @@
 			<Trait id="Commander" value="5" />
 			<Trait id="Politician" value="1" />
 			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
 		</Traits>
 		<Equipments>
 			<EquipmentSet id="npc_armed_wanderer_equipment_template_vlandia" />

@@ -1,4 +1,5 @@
 ﻿using BannerKings.Components;
+using BannerKings.Settings;
 using HarmonyLib;
 using Helpers;
 using SandBox.CampaignBehaviors;
@@ -28,6 +29,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnSettlementLeftEvent.AddNonSerializedListener(this, OnSettlementLeft);
             CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, OnPartyHourlyTick);
             CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnPartyDailyTick);
+            CampaignEvents.RaidCompletedEvent.AddNonSerializedListener(this, OnRaidCompleted);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -36,6 +38,11 @@ namespace BannerKings.Behaviours
             {
                 bandits = new Dictionary<Hero, MobileParty>();
             }
+        }
+
+        private void OnRaidCompleted(BattleSideEnum winnerSide, RaidEventComponent raidEvent)
+        {
+
         }
 
         private void OnDailyTickHero(Hero hero)
@@ -54,10 +61,15 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            if (!clan.WarPartyComponents.Any(x => x.Leader != null))
+            RunWeekly(() =>
             {
-                CreateBanditHero(clan);
-            }
+                if (!clan.WarPartyComponents.Any(x => x.Leader != null) && MBRandom.RandomFloat < 0.05f)
+                {
+                    CreateBanditHero(clan);
+                }
+            },
+            GetType().Name,
+            false);
         }
 
         private void OnPartyHourlyTick(MobileParty party)
@@ -79,8 +91,12 @@ namespace BannerKings.Behaviours
 
         public void UpgradeParty(MobileParty party)
         {
-            int stacks = party.ActualClan.DefaultPartyTemplate.Stacks.Count - 1;
-            var template = party.ActualClan.DefaultPartyTemplate.Stacks[MBRandom.RandomInt(0, stacks)];
+            string id = GetPartyTemplateId(party.ActualClan);
+            PartyTemplateObject partyTemplate = Campaign.Current.ObjectManager.GetObjectTypeList<PartyTemplateObject>()
+                .FirstOrDefault(x => x.StringId == id);
+
+            int stacks = partyTemplate.Stacks.Count - 1;
+            var template = partyTemplate.Stacks[MBRandom.RandomInt(0, stacks)];
             party.MemberRoster.AddToCounts(template.Character, MBRandom.RandomInt(2, 6));
         }
 
@@ -168,7 +184,8 @@ namespace BannerKings.Behaviours
             }
 
             var partyTemplates = Campaign.Current.ObjectManager.GetObjectTypeList<PartyTemplateObject>();
-            PartyTemplateObject partyTemplate = partyTemplates.FirstOrDefault(x => x.StringId == "bandits_hero_" + clan.StringId);
+            string id = GetPartyTemplateId(clan);
+            PartyTemplateObject partyTemplate = partyTemplates.FirstOrDefault(x => x.StringId == id);
             if (partyTemplate == null)
             {
                 return;
@@ -203,6 +220,20 @@ namespace BannerKings.Behaviours
                 .ToString()));
         }
 
+        private string GetPartyTemplateId(Clan clan)
+        {
+            string id = "bandits_hero_{0}{1}";
+            if (BannerKingsSettings.Instance.DRMBandits)
+            {
+                id = string.Format(id, clan.StringId, "_drm");
+            }
+            else
+            {
+                id = string.Format(id, clan.StringId, "");
+            }
+            return id;
+        }
+
         private void InfestHieout(Hideout hideout, Clan clan)
         {
             int num = 0;
@@ -235,7 +266,7 @@ namespace BannerKings.Behaviours
         internal class CharacterRelationCampaignBehaviorPatches
         {
             [HarmonyPrefix]
-            [HarmonyPatch("conversation_player_wants_to_make_peace_on_condition")]
+            [HarmonyPatch("OnRaidCompleted")]
             private static bool OnRaidCompleted(BattleSideEnum winnerSide, RaidEventComponent raidEvent)
             {
                 MapEvent mapEvent = raidEvent.MapEvent;

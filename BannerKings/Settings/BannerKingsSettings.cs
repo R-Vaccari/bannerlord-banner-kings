@@ -90,6 +90,12 @@ namespace BannerKings.Settings
             }
         }
 
+        [SettingProperty("{=!}De Re Militari Bandits", 
+            RequireRestart = false, 
+            HintText = "{=!}If you have De Re Militari (DRM) mod, enabling this allows bandit heroes and parties to use DRM's new bandits. Enabling it without DRM will break your game. Default: false.")]
+        [SettingPropertyGroup("{=!}Bandits")]
+        public bool DRMBandits { get; set; } = false;
+
         [SettingPropertyInteger("{=!}Hieout Spotting Difficulty", 1, 10, "{=!}Difficulty 0",
             Order = 1,
             RequireRestart = false,
