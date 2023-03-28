@@ -37,6 +37,7 @@ using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
@@ -225,6 +226,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Town, Feast>)); 
             ConstructContainerDefinition(typeof(Dictionary<Hero, List<Estate>>));
             ConstructContainerDefinition(typeof(Dictionary<Workshop, WorkshopData>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, MobileParty>)); 
         }
     }
 }
