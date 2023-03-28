@@ -40,6 +40,50 @@
 		  <Equipment slot="Gloves" id="Item.padded_mitten" />
 		</EquipmentSet>
 	</EquipmentRoster>
+	
+	<EquipmentRoster id="bannerkings_bandithero_desert_bandits" culture="Culture.desert_bandits">
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.vlandia_axe_1_t3" />
+		  <Equipment slot="Item1" id="Item.western_javelin_2_t3" />
+		  <Equipment slot="Item2" id="Item.large_adarga" />
+		  <Equipment slot="Head" id="Item.closed_head_scarf" />
+		  <Equipment slot="Body" id="Item.studded_leather_over_aketon" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Horse" id="Item.camel" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.hooked_axe_t4" />
+		  <Equipment slot="Item1" id="Item.northern_throwing_axe_1_t1" />
+		  <Equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+		  <Equipment slot="Head" id="Item.aserai_civil_hscarf_b" />
+		  <Equipment slot="Body" id="Item.woven_leather_coat" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Cape" id="Item.wrapped_scarf" />
+		  <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		  <Equipment slot="Horse" id="Item.camel" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.bone_crusher_mace_t3" />
+		  <Equipment slot="Item1" id="Item.highland_spear_4_t4" />
+		  <Equipment slot="Item2" id="Item.large_adarga" />
+		  <Equipment slot="Head" id="Item.open_desert_helmet" />
+		  <Equipment slot="Body" id="Item.buckled_wildsman_armor" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Cape" id="Item.wrapped_scarf" />
+		  <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		  <Equipment slot="Horse" id="Item.camel" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.aserai_lance_1_t5" />
+		  <Equipment slot="Item1" id="Item.lowland_throwing_knife" />
+		  <Equipment slot="Item2" id="Item.large_adarga" />
+		  <Equipment slot="Head" id="Item.closed_desert_helmet" />
+		  <Equipment slot="Body" id="Item.aserai_armor_02" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Gloves" id="Item.padded_mitten" />
+		  <Equipment slot="Horse" id="Item.camel" />
+		</EquipmentSet>
+	</EquipmentRoster>
 
 	<EquipmentRoster id="bannerkings_companion_vlandia" culture="Culture.vlandia">
 		<EquipmentSet>
