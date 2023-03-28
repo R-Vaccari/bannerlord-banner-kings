@@ -189,6 +189,11 @@ namespace BannerKings.Managers
         public List<Estate> GetEstates(Hero owner)
         {
             var list = new List<Estate>();
+            if (owner == null)
+            {
+                return list;
+            }
+
             if (Estates.ContainsKey(owner))
             {
                 list = Estates[owner];

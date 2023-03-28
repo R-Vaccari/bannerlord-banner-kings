@@ -1,4 +1,5 @@
-﻿using BannerKings.Behaviours.Mercenary;
+﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours.Mercenary;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -122,6 +123,15 @@ namespace BannerKings
             }
 
             return "No mercenary career found.";
+        }
+
+        [CommandLineFunctionality.CommandLineArgumentFunction("spawn_bandit_hero", "bannerkings")]
+        public static string SpawnBanditHero(List<string> strings)
+        {
+            BKBanditBehavior behavior = Campaign.Current.GetCampaignBehavior<BKBanditBehavior>();
+            behavior.CreateBanditHero(Clan.All.First(x => x.StringId == "looters"));
+
+            return "Hero spawned.";
         }
 
         [CommandLineFunctionality.CommandLineArgumentFunction("disable_knighthood", "bannerkings")]

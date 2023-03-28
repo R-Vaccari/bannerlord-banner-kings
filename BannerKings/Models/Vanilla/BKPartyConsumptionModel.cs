@@ -19,6 +19,11 @@ namespace BannerKings.Models.Vanilla
                 {
                     return false;
                 }
+
+                /*if (type != null && mobileParty.PartyComponent is BanditHeroComponent)
+                {
+                    return false;
+                }*/
             }
 
             return base.DoesPartyConsumeFood(mobileParty);

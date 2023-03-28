@@ -63,6 +63,7 @@ namespace BannerKings
             
             campaignStarter.AddBehavior(new BKWorkshopBehavior());
             campaignStarter.AddBehavior(new BKGentryBehavior());
+            campaignStarter.AddBehavior(new BKBanditBehavior());
             campaignStarter.AddBehavior(new BKDiplomacyBehavior());
             campaignStarter.AddBehavior(new BKMercenaryCareerBehavior());
             //campaignStarter.AddBehavior(new BKCombatBehavior());
@@ -117,6 +118,7 @@ namespace BannerKings
             campaignStarter.AddModel(new BKPartyFoodBuyingModel());
             campaignStarter.AddModel(new BKPregnancyModel());
             campaignStarter.AddModel(new BKPartyHealingModel());
+            campaignStarter.AddModel(new BKBanditModel());
             //campaignStarter.AddModel(new BKPrisonerRecruitmentModel());
             campaignStarter.AddModel(new BKTargetScoreModel());
             //campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");

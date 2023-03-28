@@ -77,7 +77,6 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public bool CraftingWaitingTime { get; set; } = true;
 
-        // Value is displayed as "X Denars"
         [SettingPropertyInteger("{=iLmmsgFE}Volunteers Limit", 6, 20, "{=Bm4KO72P}0 Volunteers",
             Order = 1, RequireRestart = false, HintText = "{=2AsFpOok}The number of volunteers that notables may have. Requires reloading. Vanilla is 6, default for BK is 10. The recruitable amount is calculated on percentages and thus is always balanced. Recruits will be lost when changing to a smaller limit. Limits can be changed at any point during campaigns.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
@@ -90,5 +89,25 @@ namespace BannerKings.Settings
                 OnPropertyChanged();
             }
         }
+
+        [SettingProperty("{=!}De Re Militari Bandits", 
+            RequireRestart = false, 
+            HintText = "{=!}If you have De Re Militari (DRM) mod, enabling this allows bandit heroes and parties to use DRM's new bandits. Enabling it without DRM will break your game. Default: false.")]
+        [SettingPropertyGroup("{=!}Bandits")]
+        public bool DRMBandits { get; set; } = false;
+
+        [SettingPropertyInteger("{=!}Hieout Spotting Difficulty", 1, 10, "{=!}Difficulty 0",
+            Order = 1,
+            RequireRestart = false,
+            HintText = "{=!}Despite being supposed to be hidden, 'Hideouts' can be spotted past the player's actual seeing range, and are not difficult at all to find. Spotting range is divided by the difficulty factor here: 1 is vanilla, 10 means a spotting range 10 times shorter.")]
+        [SettingPropertyGroup("{=!}Bandits")]
+        public int HideoutSpotDifficulty { get; set; } = 5;
+
+        [SettingPropertyInteger("{=!}Bandit Parties Limit", 150, 600, "{=!}0 Parties ",
+            Order = 1,
+            RequireRestart = false,
+            HintText = "{=!}Maximum number of bandit parties in the world map. Vanilla is 150. Default: 300.")]
+        [SettingPropertyGroup("{=!}Bandits")]
+        public int BanditPartiesLimit { get; set; } = 300;
     }
 }

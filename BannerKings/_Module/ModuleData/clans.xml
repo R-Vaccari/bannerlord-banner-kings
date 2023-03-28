@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Factions>
+
+   <Faction id="caravan_robbers"
+           banner_key="24.193.116.1536.1536.768.768.1.0.0"
+           label_color="FF8B7C73"
+           color="FF8B7C73"
+           color2="FF8B7C73"
+           alternative_color="FF8B7C73"
+           alternative_color2="FF8B7C73"
+           culture="Culture.looters"
+           default_party_template="PartyTemplate.bandits_caravan_robbers"
+           settlement_banner_mesh="none"
+           is_bandit="true"
+           is_outlaw="true"
+           name="{=!}Caravan Robbers"
+           tier="1"></Faction>
+
+   <Faction id="rogue_knights"
+           banner_key="20.101.116.1536.1536.768.768.1.0.0"
+           label_color="FF8B7C73"
+           color="FF8B7C73"
+           color2="FF8B7C73"
+           alternative_color="FF8B7C73"
+           alternative_color2="FF8B7C73"
+           culture="Culture.mountain_bandits"
+           default_party_template="PartyTemplate.bandits_rogue_knights"
+           settlement_banner_mesh="none"
+           is_bandit="true"
+           is_outlaw="true"
+           name="{=!}Rogue Knights"
+           tier="1"></Faction>
+		   
+    <Faction id="nordling_invaders"
+           banner_key="20.190.116.1536.1536.768.768.1.0.0"
+           label_color="FF8B7C73"
+           color="FF8B7C73"
+           color2="FF8B7C73"
+           alternative_color="FF8B7C73"
+           alternative_color2="FF8B7C73"
+           culture="Culture.sea_raiders"
+           default_party_template="PartyTemplate.bandits_nordlings"
+           settlement_banner_mesh="none"
+           is_bandit="true"
+           is_outlaw="true"
+           name="{=!}Nordlings"
+           tier="1"></Faction>
+</Factions>

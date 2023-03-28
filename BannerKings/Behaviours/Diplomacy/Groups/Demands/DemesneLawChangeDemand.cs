@@ -1,4 +1,6 @@
 ﻿using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Laws;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +13,12 @@ using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 {
-    public class PolicyChangeDemand : Demand
+    public class DemesneLawChangeDemand : Demand
     {
-        [SaveableProperty(10)] private PolicyObject Policy { get; set; }
-        [SaveableProperty(11)] private bool Enact { get; set; }
+        [SaveableProperty(10)] private DemesneLaw Law { get; set; }
+        [SaveableProperty(11)] private FeudalTitle Title { get; set; }
 
-        public PolicyChangeDemand() : base("PolicyChange")
+        public DemesneLawChangeDemand() : base("DemesneLawChange")
         {
             SetTexts();
         }
@@ -28,8 +30,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         }
 
         public override DemandResponse PositiveAnswer => new DemandResponse(new TextObject("{=!}Concede"),
-                    new TextObject("{=!}Accept the demand to change the current state of the {POLICY} policy. They will be satisfied with this outcome.")
-                    .SetTextVariable("POLICY", Policy.Name),
+                    new TextObject("{=!}Accept the demand to pass the {LAW} law. They will be satisfied with this outcome.")
+                    .SetTextVariable("LAW", Law.Name),
                     new TextObject("{=!}On {DATE}, the {GROUP} were conceded their {DEMAND} demand.")
                     .SetTextVariable("GROUP", Group.Name)
                     .SetTextVariable("DEMAND", Name),
@@ -49,29 +51,20 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                         if (fulfiller == Hero.MainHero)
                         {
                             InformationManager.DisplayMessage(new InformationMessage(
-                                new TextObject("{=!}The {GROUP} is satisfied! {POLICY} is now {ENACTED} in the realm.")
+                                new TextObject("{=!}The {GROUP} is satisfied! {LAW} is now enacted in the realm.")
                                 .SetTextVariable("GROUP", Group.Name)
-                                .SetTextVariable("POLICY", Policy.Name)
-                                .SetTextVariable("ENACTED", Enact ? new TextObject("{=!}enacted") : new TextObject("{=!}repealed"))
+                                .SetTextVariable("LAW", Law.Name)
                                 .ToString(),
                                 Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
                         }
 
-                        Kingdom kingdom = Group.FactionLeader.MapFaction as Kingdom;
-                        if (Enact)
-                        {
-                            kingdom.AddPolicy(Policy);
-                        }
-                        else
-                        {
-                            kingdom.RemovePolicy(Policy);
-                        }
+                        Title.EnactLaw(Law, fulfiller, false);
 
                         return true;
                     });
         public override DemandResponse NegativeAnswer => new DemandResponse(new TextObject("{=!}Reject"),
-                   new TextObject("{=!}Deny the demand to change the state of the {POLICY} policy. They will not like this outcome.")
-                   .SetTextVariable("POLICY", Policy.Name),
+                   new TextObject("{=!}Deny the demand to pass the {LAW} law. They will not like this outcome.")
+                   .SetTextVariable("LAW", Law.Name),
                    new TextObject("{=!}On {DATE}, the {GROUP} were rejected their {DEMAND} demand.")
                    .SetTextVariable("GROUP", Group.Name)
                    .SetTextVariable("DEMAND", Name),
@@ -101,7 +94,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                        return false;
                    });
 
-        public override bool Active => Policy != null;
+        public override bool Active => Law != null && Title != null;
 
         public override float MinimumGroupInfluence => 0.2f;
 
@@ -300,7 +293,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override Demand GetCopy(InterestGroup group)
         {
-            PolicyChangeDemand demand = new PolicyChangeDemand();
+            DemesneLawChangeDemand demand = new DemesneLawChangeDemand();
             demand.Group = group;
             return demand;
         }
@@ -308,15 +301,22 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         public override void SetUp()
         {
             Kingdom kingdom = Group.FactionLeader.MapFaction as Kingdom;
-            Policy = Group.SupportedPolicies.GetRandomElementWithPredicate(x => !kingdom.ActivePolicies.Contains(x));
-            if (Policy == null)
+            Law = Group.SupportedLaws.GetRandomElementWithPredicate(x => !Title.Contract.DemesneLaws.Contains(x));
+            if (Law == null)
             {
-                Policy = Group.ShunnedPolicies.GetRandomElementWithPredicate(x => kingdom.ActivePolicies.Contains(x));
+                var options = new List<DemesneLaw>();
+                foreach (var law in DefaultDemesneLaws.Instance.All)
+                {
+                    if (!Group.ShunnedLaws.Contains(law) && !Title.Contract.DemesneLaws.Contains(law))
+                    {
+                        options.Add(law);
+                    }
+                }
+                Law = options.GetRandomElement();
             }
 
-            if (Policy != null)
+            if (Law != null)
             {
-                Enact = Group.SupportedPolicies.Contains(Policy);
                 if (Group.Members.Contains(Hero.MainHero))
                 {
                     ShowPlayerDemandOptions();
@@ -357,21 +357,10 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override void ShowPlayerPrompt()
         {
-            TextObject enactText;
-            if (Enact)
-            {
-                enactText = new TextObject("{=!}As a policy supported by the group, they demand it to be enacted.");
-            }
-            else
-            {
-                enactText = new TextObject("{=!}As a policy shunned by the group, they demand it to be repealed.");
-            }
-
             InformationManager.ShowInquiry(new InquiryData(Name.ToString(),
-                new TextObject("{=!}The {GROUP} group is demanding the chane of state to the {POLICY} policy. {ENACT_TEXT} You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
+                new TextObject("{=!}The {GROUP} group is demanding the enactment of the {LAW} law. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
                 .SetTextVariable("GROUP", Group.Name)
-                .SetTextVariable("POLICY", Policy.Name)
-                .SetTextVariable("ENACT_TEXT", enactText)
+                .SetTextVariable("LAW", Law.Name)
                 .ToString(),
                 true,
                 true,
@@ -402,24 +391,13 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     answer.Description.ToString()));
             }
 
-            TextObject enactText;
-            if (Enact)
-            {
-                enactText = new TextObject("{=!}As a policy supported by the group, they demand it to be enacted.");
-            }
-            else
-            {
-                enactText = new TextObject("{=!}As a policy shunned by the group, they demand it to be repealed.");
-            }
-
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
-                new TextObject("{=!}The {GROUP} is pushing for the state of {POLICY} to be changed. {POLICY_TEXT} The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
+                new TextObject("{=!}The {GROUP} is pushing for the enactment of the {LAW} law. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
                 .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(Group).ResultNumber * 100f).ToString("0.00"))
                 .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(Group).ResultNumber * 100f).ToString("0.00"))
                 .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
                 .SetTextVariable("LEADER", Group.Leader.Name)
-                .SetTextVariable("POLICY", Policy.Name)
-                .SetTextVariable("POLICY_TEXT", enactText)
+                .SetTextVariable("LAW", Law.Name)
                 .SetTextVariable("GROUP", Group.Name)
                 .ToString(),
                 options,
@@ -441,31 +419,17 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         {
             Kingdom kingdom = Group.FactionLeader.MapFaction as Kingdom;
             List<InquiryElement> policies = new List<InquiryElement>();
-            foreach (var policy in Group.SupportedPolicies)
+            foreach (var law in Group.SupportedLaws)
             {
-                if (!kingdom.ActivePolicies.Contains(policy))
+                if (!Title.Contract.DemesneLaws.Contains(Law))
                 {
-                    policies.Add(new InquiryElement(policy,
-                        new TextObject("{=!}Enact {POLICY}")
-                        .SetTextVariable("POLICY", policy.Name)
+                    policies.Add(new InquiryElement(law,
+                        new TextObject("{=!}Enact {LAW}")
+                        .SetTextVariable("LAW", law.Name)
                         .ToString(),
                         null,
                         true,
-                        policy.Description.ToString()));
-                }
-            }
-
-            foreach (var policy in Group.ShunnedPolicies)
-            {
-                if (kingdom.ActivePolicies.Contains(policy))
-                {
-                    policies.Add(new InquiryElement(policy,
-                        new TextObject("{=!}Repeal {POLICY}")
-                        .SetTextVariable("POLICY", policy.Name)
-                        .ToString(),
-                        null,
-                        true,
-                        policy.Description.ToString()));
+                        law.Description.ToString()));
                 }
             }
 
@@ -474,7 +438,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
             description = new TextObject("{=!}Choose the benefactor for the {POSITION} position.");
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString() + " (1/2)",
-                new TextObject("{=!}As a leader of your group you can decide what policy ought to be changed. These can be policies supported by the group that are currently inactive, or active policies that are shunned by the group.").ToString(),
+                new TextObject("{=!}As a leader of your group you can decide what demesne law you will be pushing for..").ToString(),
                 policies,
                 true,
                 1,
@@ -482,28 +446,24 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 String.Empty,
                 (List<InquiryElement> list) =>
                 {
-                    PolicyObject policy = (PolicyObject)list[0].Identifier;
-                    this.Policy = policy;
+                    DemesneLaw law = (DemesneLaw)list[0].Identifier;
+                    this.Law = law;
                 },
                 null), 
                 true);
         }
-       
+
         public override void Finish()
         {
-            Policy = null;
+            Law = null;
+            Title = null;
             DueDate = CampaignTime.Never;
         }
 
         public override void Tick()
         {
             Kingdom kingdom = Group.FactionLeader.MapFaction as Kingdom;
-            if (Enact && kingdom.ActivePolicies.Contains(Policy))
-            {
-                PositiveAnswer.Fulfill(Group.FactionLeader);
-            }
-
-            if (!Enact && !kingdom.ActivePolicies.Contains(Policy))
+            if (Title.Contract.DemesneLaws.Contains(Law))
             {
                 PositiveAnswer.Fulfill(Group.FactionLeader);
             }

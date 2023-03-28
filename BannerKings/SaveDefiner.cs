@@ -180,16 +180,16 @@ namespace BannerKings
             AddClassDefinition(typeof(WorkshopData), 114);
             AddClassDefinition(typeof(TreeloreFaith), 115);
             AddClassDefinition(typeof(CouncilTask), 116);
-            AddClassDefinition(typeof(TargetedCouncilTask<>), 117);
+            AddClassDefinition(typeof(TargetedCouncilTask<>), 117);     
             AddClassDefinition(typeof(OverseeSanitation), 118);
             AddClassDefinition(typeof(KingdomDiplomacy), 119);
             AddClassDefinition(typeof(InterestGroup), 120);
             AddClassDefinition(typeof(DemandOutcome), 121);
             AddClassDefinition(typeof(Demand), 122);
             AddClassDefinition(typeof(CouncilPositionDemand), 123);
-            AddClassDefinition(typeof(OverseeSanitation), 118); 
-
-
+            AddClassDefinition(typeof(BanditHeroComponent), 124);
+            AddClassDefinition(typeof(PolicyChangeDemand), 125);
+            AddClassDefinition(typeof(DemesneLawChangeDemand), 126);
             AddClassDefinition(typeof(MercenaryCareer), 1000);
             AddClassDefinition(typeof(MercenaryPrivilege), 1001);
             AddClassDefinition(typeof(CustomTroop), 1002);
