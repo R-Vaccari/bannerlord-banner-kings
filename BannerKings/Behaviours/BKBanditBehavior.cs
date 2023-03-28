@@ -34,6 +34,7 @@ namespace BannerKings.Behaviours
 
         public override void SyncData(IDataStore dataStore)
         {
+            dataStore.SyncData("bannerkings-bandit-heroes", ref bandits);
             if (bandits == null)
             {
                 bandits = new Dictionary<Hero, MobileParty>();
@@ -95,9 +96,17 @@ namespace BannerKings.Behaviours
             PartyTemplateObject partyTemplate = Campaign.Current.ObjectManager.GetObjectTypeList<PartyTemplateObject>()
                 .FirstOrDefault(x => x.StringId == id);
 
-            int stacks = partyTemplate.Stacks.Count - 1;
-            var template = partyTemplate.Stacks[MBRandom.RandomInt(0, stacks)];
-            party.MemberRoster.AddToCounts(template.Character, MBRandom.RandomInt(2, 6));
+            if (partyTemplate == null)
+            {
+                partyTemplate = party.ActualClan.DefaultPartyTemplate;
+            }
+
+            if (partyTemplate != null)
+            {
+                int stacks = partyTemplate.Stacks.Count - 1;
+                var template = partyTemplate.Stacks[MBRandom.RandomInt(0, stacks)];
+                party.MemberRoster.AddToCounts(template.Character, MBRandom.RandomInt(2, 6));
+            }
         }
 
         private void OnSettlementLeft(MobileParty party, Settlement settlement)
