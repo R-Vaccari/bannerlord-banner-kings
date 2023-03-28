@@ -67,6 +67,11 @@ namespace BannerKings.Models.BKModels
 
                 if (member.Clan != null && member.IsClanLeader())
                 {
+                    if (!clanInfluences.ContainsKey(member.Clan))
+                    {
+                        continue;
+                    }
+
                     result.Add(0.75f * (clanInfluences[member.Clan] / totalClanInfluence), member.Clan.Name);
                 }
             }
