@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Skills;
+using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -23,6 +24,22 @@ namespace BannerKings.Models.Vanilla
             }
 
             return result;
+        }
+
+        public override ExplainedNumber GetPartySpottingRange(MobileParty party, bool includeDescriptions = false)
+        {
+            ExplainedNumber result = base.GetPartySpottingRange(party, includeDescriptions);
+            if (Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace) == TerrainType.Forest)
+            {
+                result.AddFactor(-0.4f);
+            }
+
+            return result;
+        }
+
+        public override float GetHideoutSpottingDistance()
+        {
+            return base.GetHideoutSpottingDistance() / BannerKingsSettings.Instance.HideoutSpotDifficulty;
         }
     }
 }

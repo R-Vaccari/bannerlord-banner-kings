@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Behaviours;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -107,6 +108,15 @@ namespace BannerKings
             }
 
             return $"{piety} piety added to Main player.";
+        }
+
+        [CommandLineFunctionality.CommandLineArgumentFunction("spawn_bandit_hero", "bannerkings")]
+        public static string SpawnBanditHero(List<string> strings)
+        {
+            BKBanditBehavior behavior = Campaign.Current.GetCampaignBehavior<BKBanditBehavior>();
+            behavior.CreateBanditHero(Clan.All.First(x => x.StringId == "looters"));
+
+            return "Hero spawned.";
         }
 
         [CommandLineFunctionality.CommandLineArgumentFunction("disable_knighthood", "bannerkings")]

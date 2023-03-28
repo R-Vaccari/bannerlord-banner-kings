@@ -56,6 +56,13 @@
                 <GameType value="CustomGame"/>
             </IncludedGameTypes>
         </XmlNode>
+		<XmlNode>                
+			<XmlName id="Factions" path="clans"/>
+			<IncludedGameTypes>
+				<GameType value = "Campaign"/>
+				<GameType value = "CampaignStoryMode"/>
+			</IncludedGameTypes>
+		</XmlNode>  
 		<XmlNode>
 			<XmlName id="EquipmentRosters" path="equipment_sets" />
 			<IncludedGameTypes>
@@ -64,7 +71,7 @@
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
-			<XmlName id="NPCCharacters" path="civillians" />
+			<XmlName id="NPCCharacters" path="Characters" />
 			<IncludedGameTypes>
 				<GameType value="Campaign" />
 				<GameType value="CampaignStoryMode" />
