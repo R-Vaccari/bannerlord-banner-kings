@@ -474,7 +474,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
             description = new TextObject("{=!}Choose the benefactor for the {POSITION} position.");
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString() + " (1/2)",
-                new TextObject("{=!}As a leader of your group you can decide what council position to demand. Only positions from the Privy Council are suitable.").ToString(),
+                new TextObject("{=!}As a leader of your group you can decide what policy ought to be changed. These can be policies supported by the group that are currently inactive, or active policies that are shunned by the group.").ToString(),
                 policies,
                 true,
                 1,
@@ -488,44 +488,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 null), 
                 true);
         }
-
-        private void ChooseBenefactor(PolicyObject playerChoice = null, bool leader = false)
-        {
-            Dictionary<PolicyObject, int> votes = new Dictionary<Hero, int>();
-            if (playerChoice != null)
-            {
-                votes.Add(playerChoice, leader ? 5 : 1);
-            }
-
-
-
-            foreach (Hero member in Group.Members)
-            {
-                if (member == Hero.MainHero) continue;
-                List<ValueTuple<Hero, float>> options = new List<(Hero, float)>();
-                foreach (Hero option in Group.Members)
-                {
-                    if (option == member) continue;
-                    float value = member.GetRelation(option) / 100f;
-                    value += BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(option, position, false)
-                        .ResultNumber / 100f;
-                    options.Add(new(option, value));
-                }
-
-                Hero result = MBRandom.ChooseWeighted(options);
-                if (votes.ContainsKey(result))
-                {
-                    votes[result] += 1;
-                }
-                else
-                {
-                    votes.Add(result, member == Group.Leader ? 5 : 1);
-                }
-            }
-
-            benefactor = votes.FirstOrDefault(x => x.Value == votes.Values.Max()).Key;
-        }
-
+       
         public override void Finish()
         {
             Policy = null;
