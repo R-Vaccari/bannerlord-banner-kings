@@ -10,15 +10,16 @@ using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Components
 {
     public class BanditHeroComponent : BanditPartyComponent
     {
-        private Hero leader;
-        private Village raidTarget;
-        private Settlement robbingTarget;
-        private CampaignTime lastDecision;
+        [SaveableField(10)] private Hero leader;
+        [SaveableField(11)] private Village raidTarget;
+        [SaveableField(12)] private Settlement robbingTarget;
+        [SaveableField(13)] private CampaignTime lastDecision;
 
         protected internal BanditHeroComponent(Hideout hideout, Hero leader) : base(hideout, false)
         {

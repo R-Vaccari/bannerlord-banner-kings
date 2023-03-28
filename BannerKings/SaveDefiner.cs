@@ -176,7 +176,8 @@ namespace BannerKings
             AddClassDefinition(typeof(TreeloreFaith), 115);
             AddClassDefinition(typeof(CouncilTask), 116);
             AddClassDefinition(typeof(TargetedCouncilTask<>), 117);
-            AddClassDefinition(typeof(OverseeSanitation), 118); 
+            AddClassDefinition(typeof(OverseeSanitation), 118);
+            AddClassDefinition(typeof(BanditHeroComponent), 119);
         }
 
         protected override void DefineContainerDefinitions()
