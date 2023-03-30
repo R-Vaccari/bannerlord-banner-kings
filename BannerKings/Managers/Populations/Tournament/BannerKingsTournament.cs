@@ -18,7 +18,7 @@ namespace BannerKings.Managers.Populations.Tournament
         {
             var popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(Town.Settlement);
             var tournament = popData.TournamentData;
-            if (tournament != null)
+            if (tournament != null && tournament.Prize != null)
             {
                 data = tournament;
                 return tournament.Prize;
