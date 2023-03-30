@@ -4,7 +4,6 @@ using HarmonyLib;
 using Helpers;
 using SandBox.CampaignBehaviors;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -30,6 +29,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, OnPartyHourlyTick);
             CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnPartyDailyTick);
             CampaignEvents.RaidCompletedEvent.AddNonSerializedListener(this, OnRaidCompleted);
+            CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -44,6 +44,15 @@ namespace BannerKings.Behaviours
         private void OnRaidCompleted(BattleSideEnum winnerSide, RaidEventComponent raidEvent)
         {
 
+        }
+
+        private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail,
+           bool showNotification = true)
+        {
+            if (bandits.ContainsKey(victim))
+            {
+                bandits.Remove(victim);
+            }
         }
 
         private void OnDailyTickHero(Hero hero)

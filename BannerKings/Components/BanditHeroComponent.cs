@@ -37,11 +37,27 @@ namespace BannerKings.Components
 
         public override Hero PartyOwner => leader;
 
-        public override TextObject Name => new TextObject("{=!}Brigands of {HERO}")
-            .SetTextVariable("HERO", leader.Name);
+        public override TextObject Name
+        {
+            get
+            {
+                if (Leader != null)
+                {
+                    return new TextObject("{=!}Brigands of {HERO}").SetTextVariable("HERO", leader.Name);
+                }
+
+                return new TextObject("{=!}Bandit Horde");
+            }
+        }
 
         public void Tick()
         {
+            if (Leader == null)
+            {
+                DisbandPartyAction.StartDisband(MobileParty);
+                return;
+            }
+
             MobileParty party = MobileParty;
             ConsiderLeaveHideout(party);
 

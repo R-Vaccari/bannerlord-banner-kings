@@ -67,6 +67,7 @@ namespace BannerKings.Behaviours.Diplomacy
 
         public override void RegisterEvents()
         {
+            CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
             CampaignEvents.WarDeclared.AddNonSerializedListener(this, OnWarDeclared);
             CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnDailyTickClan);
             CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnNewGameCreated);
@@ -104,6 +105,7 @@ namespace BannerKings.Behaviours.Diplomacy
 
         private void OnDailyTick()
         {
+            InitializeDiplomacies();
             foreach (War war in wars)
             {
                 war.Update();
