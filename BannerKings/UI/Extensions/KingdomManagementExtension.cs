@@ -12,14 +12,16 @@ namespace BannerKings.UI.Extensions
 
         public KingdomManagementExtension()
         {
-            var firstChild = new XmlDocument();
-            XmlDocument secondChild = new XmlDocument();
+            var court = new XmlDocument();
+            XmlDocument demesne = new XmlDocument();
             XmlDocument career = new XmlDocument();
-            firstChild.LoadXml(
+            XmlDocument groups = new XmlDocument();
+            court.LoadXml(
                 "<KingdomCourt Id=\"CourtPanel\" DataSource=\"{Court}\" MarginTop=\"188\" MarginBottom=\"75\" />");
-            secondChild.LoadXml("<KingdomDemesne Id=\"DemesnePanel\" DataSource=\"{Demesne}\" MarginTop=\"188\" MarginBottom=\"75\" />");
+            demesne.LoadXml("<KingdomDemesne Id=\"DemesnePanel\" DataSource=\"{Demesne}\" MarginTop=\"188\" MarginBottom=\"75\" />");
             career.LoadXml("<MercenaryCareer Id=\"CareerPanel\" DataSource=\"{Career}\" MarginTop=\"188\" MarginBottom=\"75\" />");
-            nodes = new List<XmlNode> { firstChild, secondChild, career };
+            groups.LoadXml("<KingdomGroups Id=\"GroupsPanel\" DataSource=\"{Groups}\" MarginTop=\"188\" MarginBottom=\"75\" />");
+            nodes = new List<XmlNode> { court, groups, demesne, career };
         }
 
         public override InsertType Type => InsertType.Child;
