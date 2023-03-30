@@ -1,5 +1,4 @@
 ﻿using BannerKings.Behaviours.Diplomacy.Groups;
-using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Institutions.Religions;
 using System.Collections.Generic;
