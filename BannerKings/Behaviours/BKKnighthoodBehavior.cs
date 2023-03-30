@@ -362,12 +362,6 @@ namespace BannerKings.Behaviours
                 return false;
             }
 
-            if (titles.Count == 0)
-            {
-                reason = new TextObject("{=D4PoLUwH}You currently do not lawfully own a lordship.");
-                return false;
-            }
-
             if (estates.Any(x => x.IsEnabled))
             {
                 reason = new TextObject("{=OMJDisYX}Bestowing knighthood is possible.");
