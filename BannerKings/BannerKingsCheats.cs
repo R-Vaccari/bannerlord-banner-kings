@@ -1,10 +1,12 @@
 ﻿using BannerKings.Behaviours;
+using BannerKings.Managers.Court;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
 namespace BannerKings
@@ -108,6 +110,16 @@ namespace BannerKings
             }
 
             return $"{piety} piety added to Main player.";
+        }
+
+        [CommandLineFunctionality.CommandLineArgumentFunction("give_player_full_peerage", "bannerkings")]
+        public static string GrantPeerage(List<string> strings)
+        {
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
+            council.SetPeerage(new Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"), true,
+                                true, true, true, true, false));
+
+            return "Full Peerage set.";
         }
 
         [CommandLineFunctionality.CommandLineArgumentFunction("spawn_bandit_hero", "bannerkings")]
