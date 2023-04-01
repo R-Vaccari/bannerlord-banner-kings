@@ -33,6 +33,11 @@ namespace BannerKings.Behaviours
             }
 
             var lord = party.LeaderHero;
+            if (lord.Occupation != Occupation.Lord || lord.Clan == null)
+            {
+                return;
+            }
+
             var kingdom = lord.Clan.Kingdom;
             if (lord == Hero.MainHero || kingdom == null || target.OwnerClan == null ||
                 target.OwnerClan.Kingdom != kingdom ||
