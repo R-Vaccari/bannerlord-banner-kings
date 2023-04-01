@@ -323,7 +323,14 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 }
                 else
                 {
-                    ChooseBenefactor();
+                    if (Group.Members.Count > 5)
+                    {
+                        ChooseBenefactor();
+                    }
+                    else
+                    {
+                        benefactor = Group.Leader;
+                    }
                 }
 
                 if (Group.FactionLeader == Hero.MainHero)
@@ -553,6 +560,10 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 }
 
                 Hero result = MBRandom.ChooseWeighted(options);
+                if (result == null)
+                {
+                    result = member;
+                }
                 if (votes.ContainsKey(result))
                 {
                     votes[result] += 1;
