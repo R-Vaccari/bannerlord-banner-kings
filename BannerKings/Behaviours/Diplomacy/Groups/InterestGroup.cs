@@ -101,7 +101,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 current.Tick();
             }
 
-            if (Leader == Hero.MainHero || Leader == null)
+            if (Leader == Hero.MainHero || Leader == null || FactionLeader == null)
             {
                 return;
             }

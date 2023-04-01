@@ -1,8 +1,10 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Skills;
+using BannerKings.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
@@ -337,27 +339,35 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override (bool, TextObject) IsDemandCurrentlyAdequate()
         {
-            CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Group.FactionLeader.Clan);
-            CouncilMember currentPosition = council.Positions.FirstOrDefault(x => x.IsCorePosition(x.StringId) && Group.Leader == x.Member);
-            if (currentPosition != null)
+            (bool, TextObject) result = new(false, null);
+            ExceptionUtils.TryCatch(() =>
             {
-                return new(false, new TextObject("{=!}{HERO} already occupies the {POSITION} position.")
-                    .SetTextVariable("HERO", currentPosition.Member.Name)
-                    .SetTextVariable("POSITION", currentPosition.Name));
-            }
+                CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Group.FactionLeader.Clan);
+                CouncilMember currentPosition = council.Positions.FirstOrDefault(x => x.IsCorePosition(x.StringId) && Group.Leader == x.Member);
+                if (currentPosition != null && currentPosition.Member != null)
+                {
+                    result = new(false, new TextObject("{=!}{HERO} already occupies the {POSITION} position.")
+                        .SetTextVariable("HERO", currentPosition.Member.Name)
+                        .SetTextVariable("POSITION", currentPosition.Name));
+                }
 
-            if (council.Positions.FindAll(x => x.IsCorePosition(x.StringId)
-            && x.IsValidCandidate(Group.Leader)).Count == 0)
-            {
-                return new(false, new TextObject("{=!}No adequate positions were found."));
-            }
+                if (council.Positions.FindAll(x => x.IsCorePosition(x.StringId)
+                && x.IsValidCandidate(Group.Leader)).Count == 0)
+                {
+                    result = new(false, new TextObject("{=!}No adequate positions were found."));
+                }
 
-            if (Active)
-            {
-                return new(false, new TextObject("{=!}This demand is already under revision by the ruler."));
-            }
+                if (Active)
+                {
+                    result = new(false, new TextObject("{=!}This demand is already under revision by the ruler."));
+                }
 
-            return new(true, new TextObject("{=!}This demand is possible."));
+                result = new(true, new TextObject("{=!}This demand is possible."));
+            },
+            GetType().Name,
+            false);
+
+            return result;
         }
 
         public override void ShowPlayerPrompt()
