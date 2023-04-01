@@ -2,6 +2,7 @@
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Groups.Demands;
+using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
 using BannerKings.Behaviours.Mercenary;
@@ -55,6 +56,7 @@ using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Populations.Estates.Estate;
+using CasusBelli = BannerKings.Behaviours.Diplomacy.Wars.CasusBelli;
 
 namespace BannerKings
 {
@@ -191,6 +193,8 @@ namespace BannerKings
             AddClassDefinition(typeof(BanditHeroComponent), 124);
             AddClassDefinition(typeof(PolicyChangeDemand), 125);
             AddClassDefinition(typeof(DemesneLawChangeDemand), 126);
+            AddClassDefinition(typeof(War), 127);
+            AddClassDefinition(typeof(CasusBelli), 128);
             AddClassDefinition(typeof(MercenaryCareer), 1000);
             AddClassDefinition(typeof(MercenaryPrivilege), 1001);
             AddClassDefinition(typeof(CustomTroop), 1002);
@@ -248,6 +252,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(List<Demand>));
             ConstructContainerDefinition(typeof(List<DemandOutcome>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, KingdomDiplomacy>));
+            ConstructContainerDefinition(typeof(List<War>));
 
             ConstructContainerDefinition(typeof(List<MercenaryPrivilege>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, List<MercenaryPrivilege>>));

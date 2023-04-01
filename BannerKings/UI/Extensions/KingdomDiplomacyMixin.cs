@@ -12,7 +12,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.UI.Extensions
 {
-    [ViewModelMixin("OnSetWarItem")]
+    [ViewModelMixin("OnSetCurrentDiplomacyItem")]
     internal class KingdomDiplomacyMixin : BaseViewModelMixin<KingdomDiplomacyVM>
     {
         private readonly KingdomDiplomacyVM kingdomDiplomacy;
@@ -86,6 +86,10 @@ namespace BannerKings.UI.Extensions
                 BKExplainedNumber enemyFatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, enemyFaction, true);
                 EnemyFatigueText = (enemyFatigue.ResultNumber * 100f).ToString("0.00") + '%';
                 EnemyFatigueHint = new HintViewModel(new TextObject("{=!}" + enemyFatigue.GetFormattedPercentage()));
+            }
+            else if (kingdomDiplomacy.CurrentSelectedDiplomacyItem is KingdomTruceItemVM)
+            {
+
             }
         }
 
