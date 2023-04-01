@@ -23,7 +23,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             get
             {
                 yield return ImperialReconquest;
-                yield return ImperialReconquest;
+                yield return ImperialSuperiority;
                 yield return CulturalLiberation;
                 yield return GreatRaid;
                 yield return Invasion;
@@ -42,10 +42,14 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 5000f,
                 (War war) =>
                 {
-                    return war.CasusBelli.Fief.MapFaction == war.Attacker;
+                    return war.CasusBelli.Fief != null && war.CasusBelli.Fief.MapFaction == war.Attacker;
                 },
                 (War war) =>
                 {
+                    if (war.CasusBelli.Fief == null) 
+                    {
+                        return true;
+                    }
                     var targetFaction = war.CasusBelli.Fief.MapFaction;
                     return targetFaction != war.Defender && targetFaction != war.Attacker;
                 },

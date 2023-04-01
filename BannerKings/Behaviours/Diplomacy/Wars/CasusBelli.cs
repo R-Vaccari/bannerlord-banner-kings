@@ -5,6 +5,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Diplomacy.Wars
 {
@@ -71,6 +72,13 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             Claimant = claimant;
         }
 
+        [SaveableProperty(10)] public Kingdom Attacker { get; private set; }
+        [SaveableProperty(11)] public Kingdom Defender { get; private set; }
+        [SaveableProperty(12)] public Settlement Fief { get; private set; }   
+        [SaveableProperty(13)] public Hero Claimant { get; private set; }
+        [SaveableProperty(14)] public FeudalTitle Title { get; private set; }
+        public TextObject ObjectiveText { get; private set; }
+
         public TextObject GetDescriptionWithModifers() => new TextObject("{=!}{DESCRIPTION}\n\nConquest Modifier: {CONQUEST}%\nHostage Modifier: {HOSTAGE}%\nRaiding Modifier: {RAID}%")
             .SetTextVariable("DESCRIPTION", Description)
             .SetTextVariable("CONQUEST", ConquestWeight * 100)
@@ -101,13 +109,6 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
             return result;
         }
-
-        public Hero Claimant { get; private set; }
-        public FeudalTitle Title { get; private set; }
-        public Settlement Fief { get; private set; }
-        public Kingdom Attacker { get; private set; }
-        public Kingdom Defender { get; private set; }
-        public TextObject ObjectiveText { get; private set; }
 
         public bool IsFulfilled(War war) => isFulfilled(war);
         public bool IsInvalid(War war) => isInvalid(war);
