@@ -46,6 +46,15 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             return copy;
         }
 
+        public void PostInitialize()
+        {
+            var copy = DefaultCasusBelli.Instance.GetById(this);
+            Initialize(copy.name, copy.description, copy.ObjectiveText, copy.ConquestWeight,
+                copy.RaidWeight, copy.CaptureWeight, copy.DeclareWarScore, copy.isFulfilled,
+                copy.isInvalid, copy.isAdequate, copy.showAsOption, copy.TraitWeights,
+                copy.WarDeclaredText);
+        }
+
         public void SetInstanceData(Kingdom attacker, Kingdom defender, Settlement fief = null)
         {
             Attacker = attacker;

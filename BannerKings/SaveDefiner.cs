@@ -2,6 +2,7 @@
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Groups.Demands;
+using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
 using BannerKings.Behaviours.Workshops;
@@ -54,6 +55,7 @@ using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Populations.Estates.Estate;
+using CasusBelli = BannerKings.Behaviours.Diplomacy.Wars.CasusBelli;
 
 namespace BannerKings
 {
@@ -190,6 +192,8 @@ namespace BannerKings
             AddClassDefinition(typeof(BanditHeroComponent), 124);
             AddClassDefinition(typeof(PolicyChangeDemand), 125);
             AddClassDefinition(typeof(DemesneLawChangeDemand), 126);
+            AddClassDefinition(typeof(War), 127);
+            AddClassDefinition(typeof(CasusBelli), 128);
         }
 
         protected override void DefineContainerDefinitions()
@@ -243,6 +247,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(List<Demand>));
             ConstructContainerDefinition(typeof(List<DemandOutcome>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, KingdomDiplomacy>));
+            ConstructContainerDefinition(typeof(List<War>));
         }
     }
 }

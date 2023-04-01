@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Diplomacy.Wars
 {
@@ -62,14 +63,19 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             AttackerFront = defenderDic.FirstOrDefault(x => x.Value == defenderDic.Values.Max()).Key;
         }
 
-        public IFaction Attacker { get; }
-        public IFaction Defender { get; }
-        public CasusBelli CasusBelli { get; }
-        public Kingdom Sovereign { get; }
-        public Town AttackerFront { get; private set; }
-        public Town DefenderFront { get; private set; }
-        public int DaysAttackerHeldObjective { get; private set; }
-        public int DaysDefenderHeldObjective { get; private set; }
+        public void PostInitialize()
+        {
+            CasusBelli.PostInitialize();
+        }
+
+        [SaveableProperty(1)] public IFaction Attacker { get; private set; }
+        [SaveableProperty(2)] public IFaction Defender { get; private set; }
+        [SaveableProperty(3)] public CasusBelli CasusBelli { get; private set; }
+        [SaveableProperty(4)] public Kingdom Sovereign { get; private set; }
+        [SaveableProperty(5)] public Town AttackerFront { get; private set; }
+        [SaveableProperty(6)] public Town DefenderFront { get; private set; }
+        [SaveableProperty(7)] public int DaysAttackerHeldObjective { get; private set; }
+        [SaveableProperty(8)] public int DaysDefenderHeldObjective { get; private set; }
 
         public bool IsOriginalFront(Town town) => town == AttackerFront || town == DefenderFront;
 

@@ -18,7 +18,18 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         public CasusBelli GreatRaid { get; } = new CasusBelli("great_raid");
         public CasusBelli Invasion { get; } = new CasusBelli("invasion");
         public CasusBelli FiefClaim { get; } = new CasusBelli("fief_claim");
-        public override IEnumerable<CasusBelli> All => throw new NotImplementedException();
+        public override IEnumerable<CasusBelli> All
+        {
+            get
+            {
+                yield return ImperialReconquest;
+                yield return ImperialReconquest;
+                yield return CulturalLiberation;
+                yield return GreatRaid;
+                yield return Invasion;
+                yield return FiefClaim;
+            }
+        }
 
         public override void Initialize()
         {

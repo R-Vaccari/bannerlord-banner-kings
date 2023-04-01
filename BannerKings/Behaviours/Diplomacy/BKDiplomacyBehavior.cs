@@ -83,6 +83,7 @@ namespace BannerKings.Behaviours.Diplomacy
         public override void SyncData(IDataStore dataStore)
         {
             dataStore.SyncData("bannerkings-kingdom-diplomacies", ref kingdomDiplomacies);
+            dataStore.SyncData("bannerkings-kingdom-wars", ref wars);
 
             if (kingdomDiplomacies == null)
             {
@@ -100,6 +101,11 @@ namespace BannerKings.Behaviours.Diplomacy
             foreach (var diplomacy in kingdomDiplomacies.Values)
             {
                 diplomacy.PostInitialize();
+            }
+
+            foreach (var war in wars)
+            {
+                war.PostInitialize();
             }
         }
 
