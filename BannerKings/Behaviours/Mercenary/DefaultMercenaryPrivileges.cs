@@ -1,6 +1,8 @@
 ﻿using BannerKings.Managers;
 using BannerKings.Managers.Court;
+using System;
 using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -165,7 +167,35 @@ namespace BannerKings.Behaviours.Mercenary
                     Peerage peerage = council.Peerage;
                     return peerage == null || !peerage.IsFullPeerage;
                 },
-                (MercenaryCareer career) => false);
+                (MercenaryCareer career) =>
+                {
+                    var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
+                    if (council.Peerage == null || !council.Peerage.IsFullPeerage)
+                    {
+                        council.SetPeerage(new Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"), true,
+                                        true, true, true, true, false));
+                        if (career.Clan == Clan.PlayerClan)
+                        {
+                            var peerage = council.Peerage;
+                            InformationManager.ShowInquiry(new InquiryData(
+                                peerage.Name.ToString(),
+                                new TextObject("{=!}A a privilege for your loyal service, the {CLAN} is now considered to have {PEERAGE}. {TEXT}")
+                                .SetTextVariable("CLAN", Clan.PlayerClan.Name)
+                                .SetTextVariable("PEERAGE", peerage.Name)
+                                .SetTextVariable("TEXT", peerage.PeerageGrantedText())
+                                .ToString(),
+                                true,
+                                false,
+                                GameTexts.FindText("str_ok").ToString(),
+                                String.Empty,
+                                null,
+                                null));
+                        }
+
+                        return true;
+                    }
+                    return false;
+                });
         }
     }
 }
