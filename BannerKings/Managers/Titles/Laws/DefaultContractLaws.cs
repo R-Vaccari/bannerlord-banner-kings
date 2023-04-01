@@ -368,7 +368,7 @@ namespace BannerKings.Managers.Titles.Laws
                 300, 0);
 
             DraftingFreeContracts.Initialize(new TextObject("{=WtxLpuAU}Free Contracts"),
-              new TextObject("{=ZWmNxRMn}The Imperial or Calradic law stablishes the legal existance of slaves and their ownership. Though they may not be harmed or killed without just cause, the slave trade is rampant and devoid of restrictions. Any person found in debt or captured in battle may be enslaved, and slaves compose the labor force across all settlements."),
+              new TextObject("{=!}Free contracts allows levies to serve whoever they wish. No strict duty relationship is set between levies and their suzerains. However, foreigner contractors pay a premium for their services."),
               new TextObject("{=KDRmz1zo}Notables provide volunteers to any neutral or allied lord\nRecruitment prices increased by 100%"),
               DemesneLawTypes.Drafting,
               0.1f,
@@ -378,7 +378,7 @@ namespace BannerKings.Managers.Titles.Laws
               1);
 
             DraftingVassalage.Initialize(new TextObject("{=92A5YP2x}Vassalage"),
-              new TextObject("{=ZWmNxRMn}The Imperial or Calradic law stablishes the legal existance of slaves and their ownership. Though they may not be harmed or killed without just cause, the slave trade is rampant and devoid of restrictions. Any person found in debt or captured in battle may be enslaved, and slaves compose the labor force across all settlements."),
+              new TextObject("{=!}Under Vassalage, levies are bound to their most direct suzerain. The de facto and de jure ownerships of fiefs set the precedence for acces to levies."),
               new TextObject("{=i4Y6Sg9k}Notables provide volunteers to their suzerain and armies\nRural volunteers are restricted to the kingdom's lords\nInfluence from settlements reduced by 20%"),
               DemesneLawTypes.Drafting,
               0.5f,
