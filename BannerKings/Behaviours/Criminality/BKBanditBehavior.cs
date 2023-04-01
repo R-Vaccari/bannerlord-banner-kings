@@ -266,6 +266,22 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
+        [HarmonyPatch(typeof(RansomOfferCampaignBehavior))]
+        internal class RansomOfferCampaignBehaviorPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("ConsiderRansomPrisoner")]
+            private static bool ConsiderRansomPrisonerPrefix(Hero hero)
+            {
+                if (hero.Occupation == Occupation.Bandit)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
         [HarmonyPatch(typeof(LordConversationsCampaignBehavior))]
         internal class BanditDialoguePatches
         {
