@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using System;
@@ -147,7 +147,7 @@ namespace BannerKings.Managers.Court
         {
             if (candidate.Clan is { IsUnderMercenaryService: true })
             {
-                return new (false, new TextObject("{=!}The clan is under mercenary service."));
+                return new (false, new TextObject("{=CY32Qr0W}The clan is under mercenary service."));
             }
 
             var clanReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Clan.Leader);
@@ -156,14 +156,14 @@ namespace BannerKings.Managers.Court
                 var candidateReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(candidate);
                 if (candidateReligion == null || candidateReligion != clanReligion)
                 {
-                    return new(false, new TextObject("{=!}The {FAITH} requires councilors of same faith due to it's Legalism.")
+                    return new(false, new TextObject("{=MZuuw80X}The {FAITH} requires councilors of same faith due to it's Legalism.")
                         .SetTextVariable("FAITH", clanReligion.Faith.GetFaithName()));
                 }
             }
 
             if (IsRoyal && IsCorePosition(StringId) && candidate.Occupation != Occupation.Lord)
             {
-                return new(false, new TextObject("{=!}This privy council position requires a noble."));
+                return new(false, new TextObject("{=f3yxaXA3}This privy council position requires a noble."));
             }
 
             return IsValidCandidateInternal(candidate);

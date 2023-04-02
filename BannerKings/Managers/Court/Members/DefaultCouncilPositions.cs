@@ -219,7 +219,7 @@ namespace BannerKings.Managers.Court.Members
                     }
 
                     return new (BannerKingsConfig.Instance.ReligionsManager.IsPreacher(hero) && matchingFaith, 
-                        new TextObject("{=!}The candidate must be a preacher of matching faith with the council leader."));
+                        new TextObject("{=1A5Q6wHM}The candidate must be a preacher of matching faith with the council leader."));
                 },
                 (CouncilMember member) =>
                 {
@@ -229,14 +229,14 @@ namespace BannerKings.Managers.Court.Members
 
                         if (id == "battania") return new TextObject("{=PkQ9BKTk}Ard Draoidh");
                         if (id == "sturgia") return new TextObject("{=ogAzFznn}Volkhvs");
-                        if (id == "aserai") return new TextObject("{=!}Murshid");
+                        if (id == "aserai") return new TextObject("Murshid");
 
                         return new TextObject("{=rhL4NnWR}High Seneschal");
                     }
 
                     if (id == "battania") return new TextObject("{=ELf8YFXe}Draoidh");
                     if (id == "sturgia") return new TextObject("{=ogAzFznn}Volkhvs");
-                    if (id == "aserai") return new TextObject("{=!}Murshid");
+                    if (id == "aserai") return new TextObject("Murshid");
 
                     return new TextObject("{=ZNzX7SKR}Seneschal");
                 });
@@ -255,7 +255,7 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    return new (hero.Spouse == position.Clan.Leader, new TextObject("{=!}The candidate must be a/the spouse of the council leader."));
+                    return new (hero.Spouse == position.Clan.Leader, new TextObject("{=ZQujL7sW}The candidate must be a/the spouse of the council leader."));
                 },
                 (CouncilMember member) =>
                 {
