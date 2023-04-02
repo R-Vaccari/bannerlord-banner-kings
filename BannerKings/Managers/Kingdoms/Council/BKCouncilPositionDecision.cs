@@ -68,7 +68,7 @@ namespace BannerKings.Managers.Kingdoms.Council
         {
             foreach (var hero in Data.GetAvailableHeroes())
             {
-                if (Position.IsValidCandidate(hero))
+                if (Position.IsValidCandidate(hero).Item1)
                 {
                     yield return new CouncilPositionDecisionOutcome(hero);
                 }

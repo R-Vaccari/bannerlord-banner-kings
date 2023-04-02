@@ -14,7 +14,7 @@ namespace BannerKings.Managers.Court
     public class CouncilMember : BannerKingsObject
     {
         private Func<CouncilData, bool> isAdequate;
-        private Func<CouncilMember, Hero, bool> isValidCandidateInternal;
+        private Func<CouncilMember, Hero, ValueTuple<bool, TextObject>> isValidCandidateInternal;
         private Func<CouncilMember, TextObject> getCulturalName;
 
         public CouncilMember(string id) : base(id)
@@ -24,7 +24,7 @@ namespace BannerKings.Managers.Court
 
         public void Initialize(SkillObject primary, SkillObject secondary,
             List<CouncilTask> tasks, IEnumerable<CouncilPrivileges> privileges,
-            Func<CouncilData, bool> isAdequate, Func<CouncilMember, Hero, bool> isValidCandidateInternal,
+            Func<CouncilData, bool> isAdequate, Func<CouncilMember, Hero, ValueTuple<bool, TextObject>> isValidCandidateInternal,
             Func<CouncilMember, TextObject> getCulturalName)
         {
             PrimarySkill = primary;
@@ -38,6 +38,8 @@ namespace BannerKings.Managers.Court
 
         public void PostInitialize()
         {
+            if (this.PrimarySkill == null)
+            {
                 CouncilMember c = DefaultCouncilPositions.Instance.GetById(this);
                 Initialize(c.PrimarySkill, c.SecondarySkill, c.Tasks, c.Privileges,
                     c.isAdequate, c.isValidCandidateInternal, c.getCulturalName);
@@ -51,6 +53,7 @@ namespace BannerKings.Managers.Court
                 {
                     SetTask(Tasks[0]);
                 }
+            }
         }
 
         public CouncilMember GetCopy(Clan clan)
@@ -69,7 +72,7 @@ namespace BannerKings.Managers.Court
         {
             if (Member != null)
             {
-                if (Member.IsDead || Member.IsDisabled || !courtiers.Contains(Member) || !IsValidCandidate(Member))
+                if (Member.IsDead || Member.IsDisabled || !courtiers.Contains(Member) || !IsValidCandidate(Member).Item1)
                 {
                     Member = null;
                     return;
@@ -99,7 +102,7 @@ namespace BannerKings.Managers.Court
         public SkillObject SecondarySkill { get; private set; }
         public TextObject GetCulturalName() => getCulturalName(this);
 
-        protected bool IsValidCandidateInternal(Hero candidate) => isValidCandidateInternal(this, candidate);
+        protected ValueTuple<bool, TextObject> IsValidCandidateInternal(Hero candidate) => isValidCandidateInternal(this, candidate);
         public bool IsAdequate(CouncilData data) => isAdequate(data);
 
         public void SetMember(Hero hero)
@@ -137,14 +140,14 @@ namespace BannerKings.Managers.Court
 
         public ExplainedNumber Competence => BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(Member, this);
         public ExplainedNumber ProjectedCompetence => BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(Member, this, true, true);
-        public ExplainedNumber CalculateCandidateCompetence(Hero candidate, bool projected = false) => BannerKingsConfig.Instance.CouncilModel
+        public ExplainedNumber CalculateCandidateCompetence(Hero candidate, bool projected = true) => BannerKingsConfig.Instance.CouncilModel
             .CalculateHeroCompetence(candidate, this, projected);
 
-        public bool IsValidCandidate(Hero candidate)
+        public ValueTuple<bool, TextObject> IsValidCandidate(Hero candidate)
         {
             if (candidate.Clan is { IsUnderMercenaryService: true })
             {
-                return false;
+                return new (false, new TextObject("{=!}The clan is under mercenary service."));
             }
 
             var clanReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Clan.Leader);
@@ -153,13 +156,14 @@ namespace BannerKings.Managers.Court
                 var candidateReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(candidate);
                 if (candidateReligion == null || candidateReligion != clanReligion)
                 {
-                    return false;
+                    return new(false, new TextObject("{=!}The {FAITH} requires councilors of same faith due to it's Legalism.")
+                        .SetTextVariable("FAITH", clanReligion.Faith.GetFaithName()));
                 }
             }
 
             if (IsRoyal && IsCorePosition(StringId) && candidate.Occupation != Occupation.Lord)
             {
-                return false;
+                return new(false, new TextObject("{=!}This privy council position requires a noble."));
             }
 
             return IsValidCandidateInternal(candidate);

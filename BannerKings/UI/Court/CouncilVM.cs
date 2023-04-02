@@ -38,7 +38,7 @@ namespace BannerKings.UI.Court
             foreach (var hero in courtMembers)
             {
                 if (!currentCouncil.Contains(hero) && hero.IsAlive && !hero.IsChild &&
-                    councilPosition.IsValidCandidate(hero))
+                    councilPosition.IsValidCandidate(hero).Item1)
                 {
                     newList.Add(new CouncilCandidateVM(hero, OnSelection,
                         Position, council.GetCompetence(hero, Position)));
