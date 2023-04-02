@@ -191,7 +191,7 @@
 		<Production conversion_speed="0.8">
 		  <Inputs></Inputs>
 		  <Outputs>
-			<Output output="ItemCategory.arrows" output_count="1" />
+			<Output output="ItemCategory.arrows" output_count="2" />
 		  </Outputs>
 		</Production>
 		<Production conversion_speed="1.2">
