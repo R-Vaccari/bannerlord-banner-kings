@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers;
 using BannerKings.Managers.AI;
@@ -28,7 +27,7 @@ namespace BannerKings
 {
     public class BannerKingsConfig
     {
-        public const string VersionNumber = "1.2.6.6";
+        public const string VersionNumber = "1.2.6.8";
         public const string VersionEdition = "Standard";
         public string VersionName => VersionNumber + VersionEdition;
 
