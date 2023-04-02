@@ -5,7 +5,6 @@ using BannerKings.Utils.Extensions;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.Pages;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Generic;
@@ -47,26 +46,12 @@ namespace BannerKings.UI.Extensions
 
         public override void OnRefresh()
         {
-            heroPageVM.Stats.Clear();
-            Marriage.Clear();
+            //heroPageVM.Stats.Clear();
+            //Marriage.Clear();
             Hero hero = (Hero)heroPageVM.Obj;
 
             if (!addedFields)
             {
-                if (hero.Culture != null)
-                {
-                    string definition = GameTexts.FindText("str_enc_sf_culture", null).ToString();
-                    heroPageVM.Stats.Add(new StringPairItemVM(definition, hero.Culture.Name.ToString(), null));
-                }
-                string definition2 = GameTexts.FindText("str_enc_sf_age", null).ToString();
-                heroPageVM.Stats.Add(new StringPairItemVM(definition2, ((int)hero.Age).ToString(), null));
-                string heroOccupationName = CampaignUIHelper.GetHeroOccupationName(hero);
-                if (!string.IsNullOrEmpty(heroOccupationName))
-                {
-                    string definition3 = GameTexts.FindText("str_enc_sf_occupation", null).ToString();
-                    heroPageVM.Stats.Add(new StringPairItemVM(definition3, heroOccupationName, null));
-                }
-
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
                 var languages = education.Languages.Keys;
                 heroPageVM.Stats.Add(new StringPairItemVM(new TextObject("{=yCaxpVGh}Languages:").ToString(),
@@ -78,12 +63,6 @@ namespace BannerKings.UI.Extensions
                     heroPageVM.Stats.Add(new StringPairItemVM(new TextObject("{=tYO5xwVe}Lifestyle").ToString(),
                         education.Lifestyle.Name.ToString(),
                         new BasicTooltipViewModel(() => education.Lifestyle.Description.ToString())));
-                }
-
-                if (hero != Hero.MainHero)
-                {
-                    string definition4 = GameTexts.FindText("str_enc_sf_relation", null).ToString();
-                    heroPageVM.Stats.Add(new StringPairItemVM(definition4, hero.GetRelationWithPlayer().ToString(), null));
                 }
 
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);

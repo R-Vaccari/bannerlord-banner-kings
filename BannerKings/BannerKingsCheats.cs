@@ -6,6 +6,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
@@ -141,9 +142,10 @@ namespace BannerKings
         public static string SpawnBanditHero(List<string> strings)
         {
             BKBanditBehavior behavior = Campaign.Current.GetCampaignBehavior<BKBanditBehavior>();
-            behavior.CreateBanditHero(Clan.All.First(x => x.StringId == "looters"));
+            Clan clan = Clan.BanditFactions.GetRandomElementInefficiently();
+            behavior.CreateBanditHero(clan);
 
-            return "Hero spawned.";
+            return $"Attempting to spawn hero for bandit faction {clan.Name}";
         }
 
         [CommandLineFunctionality.CommandLineArgumentFunction("disable_knighthood", "bannerkings")]

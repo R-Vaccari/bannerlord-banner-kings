@@ -460,7 +460,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             List<InquiryElement> candidates = new List<InquiryElement>();
             foreach (var member in Group.Members)
             {
-                var competence = position.ProjectedCompetence;
+                var competence = position.CalculateCandidateCompetence(member, true);
                 TextObject hint;
                 if (member == Hero.MainHero)
                 {
@@ -521,7 +521,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
             else
             {
-                description = new TextObject("{=!}Cast your vote on who should be the benefactor for the {POSITION} position.");
+                description = new TextObject("{=!}Cast your vote on who should be the benefactor for the {POSITION} position.")
+                    .SetTextVariable("POSITION", position.Name);
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
                        description.ToString(),
                        candidates,
