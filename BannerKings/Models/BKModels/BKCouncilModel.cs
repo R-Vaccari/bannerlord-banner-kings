@@ -105,7 +105,6 @@ namespace BannerKings.Models.BKModels
             };
         }
 
-
         private CouncilAction GetSwap(CouncilActionType type, CouncilData council, Hero requester,
             CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
         {
@@ -121,10 +120,11 @@ namespace BannerKings.Models.BKModels
                 return action;
             }
 
-            if (!targetPosition.IsValidCandidate(requester))
+            var adequate = targetPosition.IsValidCandidate(requester);
+            if (!adequate.Item1)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=iEe6ndpp}Not a valid candidate.");
+                action.Reason = adequate.Item2;
                 return action;
             }
 
@@ -214,10 +214,11 @@ namespace BannerKings.Models.BKModels
                 return action;
             }
 
-            if (!targetPosition.IsValidCandidate(requester))
+            var adequate = targetPosition.IsValidCandidate(requester);
+            if (!adequate.Item1)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=iEe6ndpp}Not a valid candidate.");
+                action.Reason = adequate.Item2;
                 return action;
             }
 
@@ -227,7 +228,6 @@ namespace BannerKings.Models.BKModels
                 action.Reason = new TextObject("{=hVJNXynE}Not enough influence.");
                 return action;
             }
-
 
             if (!appointed)
             {

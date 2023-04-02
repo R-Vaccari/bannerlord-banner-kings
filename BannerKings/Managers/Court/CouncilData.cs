@@ -197,7 +197,7 @@ namespace BannerKings.Managers.Court
             var list = new List<ValueTuple<Hero, float>>();
             foreach (var hero in GetAvailableHeroes())
             {
-                if (position.IsValidCandidate(hero))
+                if (position.IsValidCandidate(hero).Item1)
                 {
                     list.Add((hero, GetCompetence(hero, position) +
                         Clan.Leader.GetRelation(hero) * 0.001f));

@@ -64,7 +64,7 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    return true;
+                    return new (true, null);
                 },
                 (CouncilMember member) =>
                 {
@@ -101,7 +101,7 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    return true;
+                    return new(true, null);
                 },
                 (CouncilMember member) =>
                 {
@@ -136,7 +136,7 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    return true;
+                    return new(true, null);
                 },
                 (CouncilMember member) =>
                 {
@@ -170,7 +170,7 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    return true;
+                    return new(true, null);
                 },
                 (CouncilMember member) =>
                 {
@@ -218,7 +218,8 @@ namespace BannerKings.Managers.Court.Members
                         matchingFaith = heroReligion != null && heroReligion.Equals(clanReligion);
                     }
 
-                    return BannerKingsConfig.Instance.ReligionsManager.IsPreacher(hero) && matchingFaith;
+                    return new (BannerKingsConfig.Instance.ReligionsManager.IsPreacher(hero) && matchingFaith, 
+                        new TextObject("{=!}The candidate must be a preacher of matching faith with the council leader."));
                 },
                 (CouncilMember member) =>
                 {
@@ -254,7 +255,7 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    return hero.Spouse == position.Clan.Leader;
+                    return new (hero.Spouse == position.Clan.Leader, new TextObject("{=!}The candidate must be a/the spouse of the council leader."));
                 },
                 (CouncilMember member) =>
                 {
@@ -275,7 +276,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember position, Hero hero) =>
                {
-                   return true;
+                   return new(true, null);
                },
                (CouncilMember member) =>
                {
@@ -298,7 +299,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember position, Hero hero) =>
                {
-                   return true;
+                   return new(true, null);
                },
                (CouncilMember member) =>
                {
@@ -319,7 +320,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember position, Hero hero) =>
                {
-                   return true;
+                   return new(true, null);
                },
                (CouncilMember member) =>
                {
@@ -340,7 +341,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember position, Hero hero) =>
                {
-                   return true;
+                   return new(true, null);
                },
                (CouncilMember member) =>
                {
@@ -362,7 +363,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember position, Hero hero) =>
                {
-                   return true;
+                   return new(true, null);
                },
                (CouncilMember member) =>
                {
@@ -394,7 +395,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember position, Hero hero) =>
                {
-                   return true;
+                   return new(true, null);
                },
                (CouncilMember member) =>
                {
