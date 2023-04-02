@@ -80,7 +80,7 @@ namespace BannerKings.Managers.Court
         {
             if (hero != null && position != null)
             {
-                return position.CalculateCandidateCompetence(hero).ResultNumber;
+                return position.CalculateCandidateCompetence(hero, false).ResultNumber;
             }
 
             return 0f;
