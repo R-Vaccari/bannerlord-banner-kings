@@ -12,6 +12,7 @@ using BannerKings.Managers.Titles;
 using BannerKings.Settings;
 using BannerKings.UI.Court;
 using BannerKings.Utils;
+using BannerKings.Utils.Extensions;
 using HarmonyLib;
 using Helpers;
 using SandBox.CampaignBehaviors;
@@ -1342,6 +1343,11 @@ namespace BannerKings.Behaviours
 
                         if (applyWithdrawals)
                         {
+                            if (party.LeaderHero != null && party.LeaderHero.IsClanLeader())
+                            {
+                                continue;
+                            }
+
                             bool needsExtra = false;
                             if (party.IsLordParty && party.LeaderHero != null)
                             {

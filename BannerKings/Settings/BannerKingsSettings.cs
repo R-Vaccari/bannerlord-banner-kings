@@ -90,24 +90,24 @@ namespace BannerKings.Settings
             }
         }
 
-        [SettingProperty("{=!}De Re Militari Bandits", 
+        [SettingProperty("{=CHVW1U24}De Re Militari Bandits", 
             RequireRestart = false, 
-            HintText = "{=!}If you have De Re Militari (DRM) mod, enabling this allows bandit heroes and parties to use DRM's new bandits. Enabling it without DRM will break your game. Default: false.")]
-        [SettingPropertyGroup("{=!}Bandits")]
+            HintText = "{=bAt2AWmj}If you have De Re Militari (DRM) mod, enabling this allows bandit heroes and parties to use DRM's new bandits. Enabling it without DRM will break your game. Default: false.")]
+        [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
         public bool DRMBandits { get; set; } = false;
 
-        [SettingPropertyInteger("{=!}Hieout Spotting Difficulty", 1, 10, "{=!}Difficulty 0",
+        [SettingPropertyInteger("{=tx1tsrx0}Hieout Spotting Difficulty", 1, 10, "{=rn4pdZCU}Difficulty 0",
             Order = 1,
             RequireRestart = false,
-            HintText = "{=!}Despite being supposed to be hidden, 'Hideouts' can be spotted past the player's actual seeing range, and are not difficult at all to find. Spotting range is divided by the difficulty factor here: 1 is vanilla, 10 means a spotting range 10 times shorter.")]
-        [SettingPropertyGroup("{=!}Bandits")]
+            HintText = "{=gsnBrnud}Despite being supposed to be hidden, 'Hideouts' can be spotted past the player's actual seeing range, and are not difficult at all to find. Spotting range is divided by the difficulty factor here: 1 is vanilla, 10 means a spotting range 10 times shorter.")]
+        [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
         public int HideoutSpotDifficulty { get; set; } = 5;
 
-        [SettingPropertyInteger("{=!}Bandit Parties Limit", 150, 600, "{=!}0 Parties ",
+        [SettingPropertyInteger("{=00bG9Ube}Bandit Parties Limit", 150, 600, "{=4tnEdJNu}0 Parties ",
             Order = 1,
             RequireRestart = false,
-            HintText = "{=!}Maximum number of bandit parties in the world map. Vanilla is 150. Default: 300.")]
-        [SettingPropertyGroup("{=!}Bandits")]
+            HintText = "{=O3MXc6GM}Maximum number of bandit parties in the world map. Vanilla is 150. Default: 300.")]
+        [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
         public int BanditPartiesLimit { get; set; } = 300;
     }
 }

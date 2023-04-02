@@ -65,7 +65,7 @@ namespace BannerKings.Managers.Duties
                 GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, influence);
                 var relation = MBRandom.RandomInt(5, 10);
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, suzerain, relation, false);
-                result = new TextObject("{=!}{SUZERAIN} holds your duty of military aid fulfilled. You have gained {INFLUENCE}{INFLUENCE_ICON} and {RELATION} relation with your suzerain.");
+                result = new TextObject("{=uPR7ENhu}{SUZERAIN} holds your duty of military aid fulfilled. You have gained {INFLUENCE}{INFLUENCE_ICON} and {RELATION} relation with your suzerain.");
                 result.SetTextVariable("INFLUENCE", influence);
                 result.SetTextVariable("SUZERAIN", suzerain.Name);
                 result.SetTextVariable("RELATION", relation);

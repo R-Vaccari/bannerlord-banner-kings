@@ -87,7 +87,7 @@ namespace BannerKings.Models.Vanilla
             var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
             if (position != null)
             {
-                result.AddFactor(position.InfluenceCosts(), new TextObject("{=!}{POSITION} in {OWNER}'s council")
+                result.AddFactor(position.InfluenceCosts(), new TextObject("{=yfBEQUdh}{POSITION} in {OWNER}'s council")
                     .SetTextVariable("POSITION", position.Name)
                     .SetTextVariable("OWNER", position.Clan.Leader.Name));
             }
