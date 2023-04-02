@@ -307,7 +307,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             if (Group.FavoredPosition == null)
             {
                 position = council.Positions.FindAll(x => x.IsCorePosition(x.StringId)
-                          && x.IsValidCandidate(Group.Leader)).GetRandomElement();
+                          && x.IsValidCandidate(Group.Leader).Item1).GetRandomElement();
             }
             else
             {
@@ -359,7 +359,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 }
 
                 if (council.Positions.FindAll(x => x.IsCorePosition(x.StringId)
-                && x.IsValidCandidate(Group.Leader)).Count == 0)
+                && x.IsValidCandidate(Group.Leader).Item1).Count == 0)
                 {
                     result = new(false, new TextObject("{=!}No adequate positions were found."));
                 }
