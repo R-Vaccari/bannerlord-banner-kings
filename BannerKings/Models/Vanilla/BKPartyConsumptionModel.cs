@@ -45,7 +45,7 @@ namespace BannerKings.Models.Vanilla
                     var cow = Game.Current.ObjectManager.GetObject<ItemObject>("cow");
                     int cattleHeads = party.ItemRoster.GetItemNumber(cow);
 
-                    result.Add(cattleHeads * -0.06f, BKPerks.Instance.KheshigRaider.Name);
+                    result.Add(cattleHeads * 0.06f, BKPerks.Instance.KheshigRaider.Name);
                 }
 
                 if (party.Army != null && party.SiegeEvent != null)
