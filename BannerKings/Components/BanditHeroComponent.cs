@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours;
 using Helpers;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,10 +43,10 @@ namespace BannerKings.Components
             {
                 if (Leader != null)
                 {
-                    return new TextObject("{=!}Brigands of {HERO}").SetTextVariable("HERO", leader.Name);
+                    return new TextObject("{=pYnDCZfv}Brigands of {HERO}").SetTextVariable("HERO", leader.Name);
                 }
 
-                return new TextObject("{=!}Bandit Horde");
+                return new TextObject("{=zbaC8VGZ}Bandit Horde");
             }
         }
 

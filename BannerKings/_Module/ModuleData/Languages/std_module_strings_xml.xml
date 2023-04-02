@@ -527,7 +527,6 @@
     <string id="RWoYaSfD" text="Not the ruling clan." />
     <string id="CGOqUHZb" text="Does not hold faction's sovereign title." />
     <string id="RpBzpEfz" text="Not part of the council." />
-    <string id="iEe6ndpp" text="Not a valid candidate." />
     <string id="hVJNXynE" text="Not enough influence." />
     <string id="nCwf2baA" text="Not trustworthy enough for this position." />
     <string id="opYJzphN" text="Not competent enough for this position." />
@@ -1338,7 +1337,6 @@
     <string id="eT2e7JHu" text="Your lordships do not have any vacant estates to be granted away." />
     <string id="6oR14vwH" text="The {CLAN} does not have adequate Peerage to grant knighthood." />
     <string id="gYPtXGDA" text="You currently do not lawfully own a lordship that could be given away." />
-    <string id="ekEphQLc" text="Select the Lordship you would like to give away. Grating a lordship also requires a 5000 {GOLD_ICON} payment." />
     <string id="tVvXpPdF" text="Select the estate you would like to grant." />
     <string id="EYH5bgdS" text="Not possible to dismiss a knight with property under your service." />
     <string id="HGHxECuY" text="Workshop Acquisition" />
@@ -2057,7 +2055,6 @@
     <string id="pht4SLHe" text="Conquest Right" />
     <string id="gxcgWiwh" text="Knight Clan Creation Speed" />
     <string id="yTkU621N" text="Knight AI heroes can eventually form their own clans, even those in the player clan. Increasing this setting increases their speed of doing so. Setting it to 0% will stop knights from creating clans altogether. Default: 100%." />
-    <string id="fQVyeiJb" text="Capital" />
     <string id="HsgYtcxu" text="Competence(s)" />
     <string id="PcM7JDMu" text="Primary" />
     <string id="sPsERGcn" text="Secondary" />
@@ -2070,7 +2067,6 @@
     <string id="doEjziQe" text="Workshop Seizure" />
     <string id="eQbfxno4" text="The {WORKSHOP} has been seized from the {OWNER} at {TOWN} due to war between your realms." />
     <string id="jvVup6nx" text="Workshop Grant" />
-    <string id="vnOgsWMq" text="{SUZERAIN} holds your duty of military aid fulfilled. You have gained {INFLUENCE} and {RELATION} relation with your suzerain." />
     <string id="okUMw3Df" text="Due to abscence of other candidates, {HEIR} has inherited the {TITLE} uncontested." />
     <string id="vWDgQWUh" text="Due to abscence of {CLAN} candidates, the {TITLE} succession will be voted on by the Peers of the realm." />
     <string id="ARQYxT6t" text="Task Efficiency" />
@@ -2138,7 +2134,6 @@
     <string id="ZJ8eRkS2" text="Spymaster" />
     <string id="PkQ9BKTk" text="Ard Draoidh" />
     <string id="ogAzFznn" text="Volkhvs" />
-    <string id="SQq0eH3Z" text="Murshid" />
     <string id="rhL4NnWR" text="High Seneschal" />
     <string id="ELf8YFXe" text="Draoidh" />
     <string id="ZNzX7SKR" text="Seneschal" />
@@ -2222,5 +2217,34 @@
     <string id="RQq8tssi" text="Oversee the enforcement of law through force or otherwise. Improved enforcement of laws provides a prosperous habitat for trade." />
     <string id="o27axaVY" text="Improved security\nImproved caravan attractiveness" />
     <string id="9D4AgMLu" text="Although the spirits accept many kinds of offerings, iron has been the staple option in the Uchalion plateau. Due to it's vast usefulness, it is prized as a gft worthy of the Gods, despite its raw nature." />
+    <string id="9pXXkYBB" text="I aim to grant you an additional property." />
+    <string id="DLx4qCTY" text="{TITLE}, that would be a generous gift. Additional properties would allow me to field a bigger retinue." />
+    <string id="YWw9LkmQ" text="It is decided then." />
+    <string id="BOhrKJtw" text="You have properties available to be granted." />
+    <string id="LxC6xyv4" text="Select the Lordship you would like to give away." />
+    <string id="pYnDCZfv" text="Brigands of {HERO}" />
+    <string id="zbaC8VGZ" text="Bandit Horde" />
+    <string id="CHVW1U24" text="De Re Militari Bandits" />
+    <string id="bAt2AWmj" text="If you have De Re Militari (DRM) mod, enabling this allows bandit heroes and parties to use DRM's new bandits. Enabling it without DRM will break your game. Default: false." />
+    <string id="k2Vw7iNm" text="Bandits" />
+    <string id="tx1tsrx0" text="Hieout Spotting Difficulty" />
+    <string id="rn4pdZCU" text="Difficulty 0" />
+    <string id="gsnBrnud" text="Despite being supposed to be hidden, 'Hideouts' can be spotted past the player's actual seeing range, and are not difficult at all to find. Spotting range is divided by the difficulty factor here: 1 is vanilla, 10 means a spotting range 10 times shorter." />
+    <string id="00bG9Ube" text="Bandit Parties Limit" />
+    <string id="4tnEdJNu" text="0 Parties " />
+    <string id="O3MXc6GM" text="Maximum number of bandit parties in the world map. Vanilla is 150. Default: 300." />
+    <string id="0BQP6L5G" text="A renowned criminal, {HERO}, has arisen among the {CLAN}! They were sighted in the vicinity of {TOWN}..." />
+    <string id="CY32Qr0W" text="The clan is under mercenary service." />
+    <string id="MZuuw80X" text="The {FAITH} requires councilors of same faith due to it's Legalism." />
+    <string id="f3yxaXA3" text="This privy council position requires a noble." />
+    <string id="uPR7ENhu" text="{SUZERAIN} holds your duty of military aid fulfilled. You have gained {INFLUENCE}{INFLUENCE_ICON} and {RELATION} relation with your suzerain." />
+    <string id="yfBEQUdh" text="{POSITION} in {OWNER}'s council" />
+    <string id="C0MCMXZ1" text="Bandit horde" />
+    <string id="L2tDXJrq" text="Current competence ({CURRENT}%):\n{CURRENT_EXPLANATION}\n\nProjected competence ({PROJECTED}%):\n{PROJECTED_EXPLANATION}" />
+    <string id="Y9JAa2S8" text="{CURRENT}% / {PROJECTED}%" />
+    <string id="1A5Q6wHM" text="The candidate must be a preacher of matching faith with the council leader." />
+    <string id="ZQujL7sW" text="The candidate must be a/the spouse of the council leader." />
+    <string id="0ZwNdeWq" text="Free contracts allows levies to serve whoever they wish. No strict duty relationship is set between levies and their suzerains. However, foreigner contractors pay a premium for their services." />
+    <string id="zWqQMdHK" text="Under Vassalage, levies are bound to their most direct suzerain. The de facto and de jure ownerships of fiefs set the precedence for acces to levies." />
   </strings>
 </base>

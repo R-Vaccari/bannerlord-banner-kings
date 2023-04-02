@@ -1,4 +1,4 @@
-﻿using BannerKings.Components;
+using BannerKings.Components;
 using BannerKings.Settings;
 using HarmonyLib;
 using Helpers;
@@ -231,7 +231,7 @@ namespace BannerKings.Behaviours
             EnterSettlementAction.ApplyForParty(mobileParty, hideout.Settlement);
 
             InformationManager.DisplayMessage(new InformationMessage(
-                new TextObject("{=!}A renowned criminal, {HERO}, has arisen among the {CLAN}! They were sighted in the vicinity of {TOWN}...")
+                new TextObject("{=0BQP6L5G}A renowned criminal, {HERO}, has arisen among the {CLAN}! They were sighted in the vicinity of {TOWN}...")
                 .SetTextVariable("HERO", hero.Name)
                 .SetTextVariable("CLAN", clan.Name)
                 .SetTextVariable("TOWN", closest.Name)

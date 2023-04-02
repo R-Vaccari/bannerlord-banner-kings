@@ -265,7 +265,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("companion_grant_additional_property",
                 "companion_role",
                 "companion_grant_additional_property_response",
-                "{=!}I aim to grant you an additional property.",
+                "{=9pXXkYBB}I aim to grant you an additional property.",
                 IsPlayerKnight,
                 null,
                 100);
@@ -288,7 +288,7 @@ namespace BannerKings.Behaviours
 
             starter.AddDialogLine("companion_grant_additional_property_accepted", "companion_grant_additional_property_accepted",
                 "companion_grant_additional_property_finish",
-                new TextObject("{=!}{TITLE}, that would be a generous gift. Additional properties would allow me to field a bigger retinue.")
+                new TextObject("{=DLx4qCTY}{TITLE}, that would be a generous gift. Additional properties would allow me to field a bigger retinue.")
                 .SetTextVariable("TITLE", Hero.MainHero.IsFemale ? GameTexts.FindText("str_my_lady") : GameTexts.FindText("str_my_lord"))
                 .ToString(),
                 null,
@@ -296,7 +296,7 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("companion_grant_additional_property_finish", "companion_grant_additional_property_finish",
                 "close_window",
-               new TextObject("{=!}It is decided then.").ToString(),
+               new TextObject("{=YWw9LkmQ}It is decided then.").ToString(),
                null,
                GrantProperty);
 
@@ -568,7 +568,7 @@ namespace BannerKings.Behaviours
 
             if (lordships.Any(x => x.IsEnabled))
             {
-                hintText = new TextObject("{=!}You have properties available to be granted.");
+                hintText = new TextObject("{=BOhrKJtw}You have properties available to be granted.");
                 return true;
             }
 
@@ -590,7 +590,7 @@ namespace BannerKings.Behaviours
 
             if (estates.Any(x => x.IsEnabled))
             {
-                hintText = new TextObject("{=!}You have properties available to be granted.");
+                hintText = new TextObject("{=BOhrKJtw}You have properties available to be granted.");
                 return true;
             }
 
@@ -643,7 +643,7 @@ namespace BannerKings.Behaviours
         {
             MBInformationManager
                 .ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                    new TextObject("{=!}Select the Lordship you would like to give away.").ToString(),
+                    new TextObject("{=LxC6xyv4}Select the Lordship you would like to give away.").ToString(),
                     string.Empty, 
                     lordshipsToGive, 
                     false,

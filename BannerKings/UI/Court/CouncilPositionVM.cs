@@ -59,14 +59,14 @@ namespace BannerKings.UI.Court
                 var projected = position.ProjectedCompetence;
                 string currentText = (competence.ResultNumber * 100f).ToString("0.00");
                 string projectedText = (projected.ResultNumber * 100f).ToString("0.00");
-                TextObject explanations = new TextObject("{=!}Current competence ({CURRENT}%):\n{CURRENT_EXPLANATION}\n\nProjected competence ({PROJECTED}%):\n{PROJECTED_EXPLANATION}")
+                TextObject explanations = new TextObject("{=L2tDXJrq}Current competence ({CURRENT}%):\n{CURRENT_EXPLANATION}\n\nProjected competence ({PROJECTED}%):\n{PROJECTED_EXPLANATION}")
                     .SetTextVariable("CURRENT", currentText)
                     .SetTextVariable("CURRENT_EXPLANATION", competence.GetExplanations())
                     .SetTextVariable("PROJECTED", projectedText)
                     .SetTextVariable("PROJECTED_EXPLANATION", projected.GetExplanations());
 
                 PositionInfo.Add(new InformationElement(new TextObject("{=Oy8rn07Z}Competence:").ToString(),
-                                new TextObject("{=!}{CURRENT}% / {PROJECTED}%")
+                                new TextObject("{=Y9JAa2S8}{CURRENT}% / {PROJECTED}%")
                                 .SetTextVariable("CURRENT", currentText)
                                 .SetTextVariable("PROJECTED", projectedText)
                                 .ToString(),
