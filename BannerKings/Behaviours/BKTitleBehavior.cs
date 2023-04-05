@@ -58,7 +58,7 @@ namespace BannerKings.Behaviours
             //CampaignEvents.RulingCLanChanged.AddNonSerializedListener(this, new Action<Kingdom, Clan>(this.OnRulingClanChanged));
             CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTickHero);
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
-            CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
+            CampaignEvents.BeforeHeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, OnDailyTickSettlement);
             CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, OnClanChangedKingdom);
             CampaignEvents.OnClanDestroyedEvent.AddNonSerializedListener(this, OnClanDestroyed);
@@ -241,44 +241,24 @@ namespace BannerKings.Behaviours
         private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail,
             bool showNotification = true)
         {
-            if (victim?.Clan == null || BannerKingsConfig.Instance.TitleManager == null)
+            if (victim?.Clan == null || BannerKingsConfig.Instance.TitleManager == null || victim == Hero.MainHero)
             {
                 return;
             }
 
             BannerKingsConfig.Instance.TitleManager.RemoveKnights(victim);
-            var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(victim.Clan.Kingdom);
-            if (sovereign?.Contract == null)
-            {
-                return;
-            }
-
             var titles = new List<FeudalTitle>(BannerKingsConfig.Instance.TitleManager.GetAllDeJure(victim));
-            if (titles.Count == 0)
-            {
-                return;
-            }
-
-            if (victim == Hero.MainHero)
-            {
-                return;
-            }
-
-            bool applySuccession = false;
-            if (sovereign != null)
+            var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(victim.Clan.Kingdom);
+            if (sovereign != null && sovereign.Contract != null)
             {
                 if (titles.Contains(sovereign))
                 {
-                    applySuccession = true;
                     titles.Remove(sovereign);
+                    SuccessionHelper.ApplySovereignSuccession(sovereign, victim, victim.Clan.Kingdom);
                 }
             }
 
             InheritanceHelper.ApplyInheritanceAllTitles(titles, victim);
-            if (sovereign != null && applySuccession)
-            {
-                SuccessionHelper.ApplySovereignSuccession(sovereign, victim, victim.Clan.Kingdom);
-            }
         }
 
         public void OnDailyTickSettlement(Settlement settlement)
