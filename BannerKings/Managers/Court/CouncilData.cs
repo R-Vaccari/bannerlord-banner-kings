@@ -32,6 +32,11 @@ namespace BannerKings.Managers.Court
                     }
                 }
             }
+
+            foreach (var pos in Positions)
+            {
+                pos.PostInitialize();
+            }
         }
 
         public void PostInitialize()
