@@ -7,9 +7,21 @@ using TaleWorlds.CampaignSystem;
 
 namespace BannerKings.Behaviours.Criminality
 {
-    public class Crime
+    public class Crime : BannerKingsObject
     {
+        public Crime(string stringId) : base(stringId)
+        {
+        }
+
         public Hero Hero { get; private set; }
         public Kingdom Kingdom { get; private set; }
+        public CrimeSeverity Severity { get; private set; }
+
+        public enum CrimeSeverity
+        {
+            Transgression,
+            Blasphemy,
+            Treason
+        }
     }
 }

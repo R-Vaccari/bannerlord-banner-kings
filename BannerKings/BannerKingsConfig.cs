@@ -77,6 +77,7 @@ namespace BannerKings
         public BKMarriageModel MarriageModel { get; } = new();
         public BKArmyManagementModel ArmyManagementModel { get; } = new();
         public BKWarModel WarModel { get; } = new();
+        public BKCrimeModel CrimeModel { get; } = new();
 
         static BannerKingsConfig()
         {
