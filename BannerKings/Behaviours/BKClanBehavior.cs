@@ -10,7 +10,6 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Settings;
-using BannerKings.UI.Court;
 using BannerKings.Utils;
 using BannerKings.Utils.Extensions;
 using HarmonyLib;
@@ -21,7 +20,6 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
-using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
@@ -361,6 +359,45 @@ namespace BannerKings.Behaviours
             EvaluateRecruitCompanion(clan);
             SetCompanionParty(clan);
             RunCouncilTasks(clan);
+            DismissParties(clan);
+        }
+
+        private void DismissParties(Clan clan)
+        {
+            Kingdom kingdom = clan.Kingdom;
+            if ( kingdom == null)
+            {
+                return;
+            }
+
+            if (FactionManager.GetEnemyKingdoms(kingdom).Count() == 0)
+            {
+                List<MobileParty> toDismiss = new List<MobileParty>();
+                foreach (var party in clan.WarPartyComponents)
+                {
+                    if (party.Leader != null && party.MobileParty.MapEvent == null && (!party.Leader.IsClanLeader() && 
+                        BannerKingsConfig.Instance.TitleManager.GetAllDeJure(party.Leader).Count == 0) &&
+                        party.MobileParty.Army == null)
+                    {
+                        toDismiss.Add(party.MobileParty);
+                    }
+                }
+
+                Settlement nearest = SettlementHelper.FindNearestFortification(x => x.OwnerClan == clan);
+                if (nearest == null)
+                {
+                    Town town = clan.Kingdom.Fiefs.GetRandomElement();
+                    nearest = town?.Settlement;
+                }
+
+                if (nearest != null)
+                {
+                    foreach (var party in toDismiss)
+                    {
+                        DestroyPartyAction.ApplyForDisbanding(party, nearest);
+                    }
+                }
+            }
         }
 
         private void RunCouncilTasks(Clan clan)
@@ -1052,10 +1089,10 @@ namespace BannerKings.Behaviours
             [HarmonyPatch("conversation_wanderer_meet_player_on_condition")]
             private static bool MeetCompanionPrefix(ref bool __result)
             {
-                __result = CharacterObject.OneToOneConversationCharacter != null && 
-                    CharacterObject.OneToOneConversationCharacter.IsHero && 
-                    CharacterObject.OneToOneConversationCharacter.Occupation == Occupation.Wanderer && 
-                    CharacterObject.OneToOneConversationCharacter.HeroObject.HeroState != Hero.CharacterStates.Prisoner && 
+                __result = CharacterObject.OneToOneConversationCharacter != null &&
+                    CharacterObject.OneToOneConversationCharacter.IsHero &&
+                    CharacterObject.OneToOneConversationCharacter.Occupation == Occupation.Wanderer &&
+                    CharacterObject.OneToOneConversationCharacter.HeroObject.HeroState != Hero.CharacterStates.Prisoner &&
                     Hero.OneToOneConversationHero.Clan == null;
 
                 return false;
@@ -1082,6 +1119,26 @@ namespace BannerKings.Behaviours
             }
         }
 
+        [HarmonyPatch(typeof(HeroSpawnCampaignBehavior))]
+        internal class HeroSpawnCampaignBehaviorPatches
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("GetBestAvailableCommander")]
+            private static void GetBestAvailableCommanderPrefix(Clan clan, ref Hero __result)
+            {
+                if (__result != null)
+                {
+                    Kingdom kingdom = clan.Kingdom;
+                    if (clan != Clan.PlayerClan && kingdom != null && FactionManager.GetEnemyKingdoms(kingdom).Count() == 0)
+                    {
+                        if (!__result.IsClanLeader() && BannerKingsConfig.Instance.TitleManager.GetAllDeJure(__result).Count == 0)
+                        {
+                            __result = null;
+                        }
+                    }
+                }
+            }
+        }
         [HarmonyPatch(typeof(ClanVariablesCampaignBehavior), "MakeClanFinancialEvaluation")]
         internal class MakeClanFinancialEvaluationPatch
         {
@@ -1091,7 +1148,6 @@ namespace BannerKings.Behaviours
                 {
                     return true;
                 }
-
                 if (BannerKingsConfig.Instance.TitleManager != null)
                 {
                     var war = false;
@@ -1099,9 +1155,8 @@ namespace BannerKings.Behaviours
                     {
                         war = FactionManager.GetEnemyKingdoms(clan.Kingdom).Any();
                     }
-
                     var income = Campaign.Current.Models.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber *
-                                 (war ? 0.45f : 0.15f);
+                    (war ? 0.45f : 0.15f);
                     if (war)
                     {
                         income += clan.Gold * 0.005f;
@@ -1137,7 +1192,7 @@ namespace BannerKings.Behaviours
 
                         foreach (var partyComponent in clan.WarPartyComponents)
                         {
-                            var share = income / clan.WarPartyComponents.Count - knights;
+                            var share = MathF.Min(8000f, income / clan.WarPartyComponents.Count - knights);
                             partyComponent.MobileParty.SetWagePaymentLimit((int) (300f + share));
                         }
 
