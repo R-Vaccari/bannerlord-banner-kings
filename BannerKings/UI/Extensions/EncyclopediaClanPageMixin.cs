@@ -218,13 +218,19 @@ namespace BannerKings.UI.Extensions
                         council.Peerage.Name.ToString(), new BasicTooltipViewModel(() => council.Peerage.GetRights().ToString())));
                 }
 
-                var income = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(clan, true);
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=43UgU7C4}Income:").ToString(),
-                    income.ResultNumber.ToString(), new BasicTooltipViewModel(() => income.GetExplanations())));
+                if (clan.MapFaction == Clan.PlayerClan.MapFaction)
+                {
+                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}War Parties:").ToString(),
+                                        clan.WarPartyComponents.Count.ToString(), null));
 
-                var expenses = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanExpenses(clan, true);
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=Locuup55}Expenses:").ToString(),
-                    expenses.ResultNumber.ToString(), new BasicTooltipViewModel(() => expenses.GetExplanations())));
+                    var income = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(clan, true);
+                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=43UgU7C4}Income:").ToString(),
+                        income.ResultNumber.ToString(), new BasicTooltipViewModel(() => income.GetExplanations())));
+
+                    var expenses = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanExpenses(clan, true);
+                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=Locuup55}Expenses:").ToString(),
+                        expenses.ResultNumber.ToString(), new BasicTooltipViewModel(() => expenses.GetExplanations())));
+                }
 
                 addedFields = true;
             }
