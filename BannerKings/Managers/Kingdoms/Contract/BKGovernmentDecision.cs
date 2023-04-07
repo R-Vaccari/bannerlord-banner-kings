@@ -8,7 +8,6 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
-
 namespace BannerKings.Managers.Kingdoms.Contract
 {
     public class BKGovernmentDecision : BKContractDecision
@@ -197,17 +196,17 @@ namespace BannerKings.Managers.Kingdoms.Contract
             var num2 = weights[1] * oligarchic;
             var num3 = weights[2] * egalitarian;
 
-            var num4 = num + num3 + num2;
+            var num4 = num + num3 + num2 + GetCulturePreference(clan.Culture);
 
             if (clan == Kingdom.RulingClan)
             {
                 switch (governmentType)
                 {
                     case GovernmentType.Imperial when policyDecisionOutcome.ShouldDecisionBeEnforced:
-                        num4 += 2f;
+                        num4 += 50f;
                         break;
                     case GovernmentType.Republic when policyDecisionOutcome.ShouldDecisionBeEnforced:
-                        num4 -= 2f;
+                        num4 -= 50f;
                         break;
                 }
             }
@@ -225,13 +224,78 @@ namespace BannerKings.Managers.Kingdoms.Contract
             return num4 * num5;
         }
 
+        private float GetCulturePreference(CultureObject culture)
+        {
+            float result = 0f;
+            string id = culture.StringId;
+            if (governmentType == GovernmentType.Imperial)
+            {
+                switch (id)
+                {
+                    case "empire":
+                        result = 30f;
+                        break;
+                    default:
+                        result = -5f;
+                        break;
+                }
+            }
+
+            if (governmentType == GovernmentType.Republic)
+            {
+                switch (id)
+                {
+                    case "empire":
+                        result = 15f;
+                        break;
+                    default:
+                        result = -20f;
+                        break;
+                }
+            }
+
+            if (governmentType == GovernmentType.Feudal)
+            {
+                switch (id)
+                {
+                    case "vlandia" or "aserai":
+                        result = 20f;
+                        break;
+                    case "sturgia" or "empire":
+                        result = 5f;
+                        break;
+                    default:
+                        result = -10f;
+                        break;
+                }
+            }
+
+            if (governmentType == GovernmentType.Tribal)
+            {
+                switch (id)
+                {
+                    case "battania" or "khuzait":
+                        result = 30f;
+                        break;
+                    case "sturgia":
+                        result = 20f;
+                        break;
+                    default:
+                        result = -30f;
+                        break;
+                }
+            }
+
+            return result;
+        }
+
         private float[] GetWeights()
         {
             return governmentType switch
             {
-                GovernmentType.Imperial => new[] {3f, 1f, -2f},
-                GovernmentType.Tribal => new[] {-1f, 2f, -1f},
-                GovernmentType.Feudal => new[] {1f, 2f, -1f},
+                GovernmentType.Imperial => new[] {30f, 10f, -20f},
+                GovernmentType.Tribal => new[] {-10f, 20f, -10f},
+                GovernmentType.Feudal => new[] {10f, 20f, -10f},
                 _ => new[] {-3f, 1.5f, 3f}
             };
         }

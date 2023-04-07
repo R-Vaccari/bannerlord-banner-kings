@@ -16,7 +16,6 @@ namespace BannerKings.Managers.Kingdoms.Contract
         public BKGenderDecision(Clan proposerClan, GenderLaw genderLaw, FeudalTitle title) : base(proposerClan, title)
         {
             this.genderLaw = genderLaw;
-            ;
         }
 
         [SaveableProperty(100)] private GenderLaw genderLaw { get; set; }
@@ -69,27 +68,63 @@ namespace BannerKings.Managers.Kingdoms.Contract
         public override float DetermineSupport(Clan clan, DecisionOutcome possibleOutcome)
         {
             var policyDecisionOutcome = possibleOutcome as GenderLawDecisionOutcome;
-            var num = 2f * clan.Leader.GetTraitLevel(DefaultTraits.Egalitarian) -
-                      2f * clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
-            var num2 = 0f;
+            var num = 0f;
+
+            bool egalitarian = (genderLaw == GenderLaw.Cognatic && policyDecisionOutcome.ShouldDecisionBeEnforced)
+                || (genderLaw == GenderLaw.Agnatic && !policyDecisionOutcome.ShouldDecisionBeEnforced);
+            if (egalitarian)
+            {
+                num = 5f * clan.Leader.GetTraitLevel(DefaultTraits.Egalitarian) -
+                      2f * clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian) -
+                      2f * clan.Leader.GetTraitLevel(DefaultTraits.Oligarchic);
+
+                if (clan.Leader.IsFemale)
+                {
+                    num += 30f;
+                }
+                else
+                {
+                    num -= 15f;
+                }
+            }
+            else
+            {
+                num =  2f * clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian) +
+                      2f * clan.Leader.GetTraitLevel(DefaultTraits.Oligarchic) -
+                      5f * clan.Leader.GetTraitLevel(DefaultTraits.Egalitarian);
+                if (!clan.Leader.IsFemale)
+                {
+                    num += 20f;
+                }
+                else
+                {
+                    num -= 35f;
+                }
+            }
+ 
             var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Kingdom);
-            if (sovereign is {Contract: { }})
+            if (sovereign != null && sovereign.Contract != null)
             {
                 var government = sovereign.Contract.Government;
                 if (government is GovernmentType.Tribal or GovernmentType.Republic)
                 {
-                    num2++;
-                }
-                else
-                {
-                    num--;
+                    if (egalitarian)
+                    {
+                        num *= 1.5f;
+                    }
                 }
             }
 
+            if (!policyDecisionOutcome.ShouldDecisionBeEnforced)
+            {
+                num *= -100f;
+            }
+            else
+            {
+                num *= 60f;
+            }
 
-            return genderLaw == GenderLaw.Cognatic && policyDecisionOutcome.ShouldDecisionBeEnforced
-                ? (num + num2) * 60f
-                : (num + num2) * -100f;
+            return num;
         }
 
         public override TextObject GetChooseDescription()
