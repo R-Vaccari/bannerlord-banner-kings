@@ -479,6 +479,10 @@ namespace BannerKings.Behaviours
                         notable.AddPower(10f);
                     }
                 }
+                else if (town.Gold > 100000)
+                {
+                    town.ChangeGold((int)(town.Gold * 0.01f));
+                }
             }, GetType().Name);
         }
 
