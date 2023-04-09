@@ -6,6 +6,7 @@ namespace BannerKings.Managers.Goals
         Kingdom,
         Personal,
         Unique,
-        Religious
+        Religious,
+        Criminal
     }
 }
