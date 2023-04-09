@@ -372,22 +372,6 @@ namespace BannerKings.Managers.Court
         }
     }
 
-    public enum CouncilPosition
-    {
-        Marshall,
-        Chancellor,
-        Steward,
-        Spymaster,
-        Spiritual,
-        Prince,
-        Castellan,
-        Druzina,
-        Elder,
-        Constable,
-        Philosopher,
-        None
-    }
-
     public enum CouncilPrivileges
     {
         LOW_WAGE,
