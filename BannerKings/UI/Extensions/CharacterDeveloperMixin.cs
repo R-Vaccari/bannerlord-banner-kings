@@ -126,6 +126,7 @@ namespace BannerKings.UI.Extensions
             var personalDecisions = new List<InquiryElement>();
             var kingdomDecisions = new List<InquiryElement>();
             var religiousDecisions = new List<InquiryElement>();
+            var criminalDecisions = new List<InquiryElement>();
             var uniqueDecisions = new List<InquiryElement>();
 
             foreach (var goal in DefaultGoals.Instance.All)
@@ -157,6 +158,10 @@ namespace BannerKings.UI.Extensions
                     else if (goal.goalType == GoalCategory.Religious)
                     {
                         religiousDecisions.Add(element);
+                    }
+                    else if (goal.goalType == GoalCategory.Criminal)
+                    {
+                        criminalDecisions.Add(element);
                     }
                     else
                     {
@@ -194,6 +199,17 @@ namespace BannerKings.UI.Extensions
             null,
             religiousDecisions.Count > 0,
             new TextObject("{=8uURr54W}Religious decisions are ways for you interact with the world through your faith.").ToString()));*/
+
+            options.Add(new InquiryElement(
+            new DecisionCategoryOption(
+                new TextObject("{=!}Criminal"),
+                new TextObject("{=!}Criminal decisions relate to carrying out sentences or crimes. Captured criminals can be sentenced with a criminal decision."),
+                criminalDecisions),
+            new TextObject("{=!}Criminal").ToString(),
+            null,
+            criminalDecisions.Count > 0,
+            new TextObject("{=!}Criminal decisions relate to carrying out sentences or crimes. Captured criminals can be sentenced with a criminal decision.").ToString()));
+
 
             options.Add(new InquiryElement(
             new DecisionCategoryOption(

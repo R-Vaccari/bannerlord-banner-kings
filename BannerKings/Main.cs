@@ -1,4 +1,5 @@
 ﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours.Criminality;
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Behaviours.Feasts;
@@ -65,6 +66,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKGentryBehavior());
             campaignStarter.AddBehavior(new BKBanditBehavior());
             campaignStarter.AddBehavior(new BKDiplomacyBehavior());
+            campaignStarter.AddBehavior(new BKCriminalityBehavior());
             campaignStarter.AddBehavior(new BKMercenaryCareerBehavior());
             //campaignStarter.AddBehavior(new BKCombatBehavior());
 
@@ -107,7 +109,7 @@ namespace BannerKings
             campaignStarter.AddModel(new BKInventoryCapacityModel());
             campaignStarter.AddModel(new BKMapVisibilityModel());
             campaignStarter.AddModel(new BKPartyImpairmentModel());
-            campaignStarter.AddModel(new BKCrimeModel());
+            campaignStarter.AddModel(BannerKingsConfig.Instance.CrimeModel);
             campaignStarter.AddModel(new BKTroopUpgradeModel());
             campaignStarter.AddModel(new BKBattleRewardModel());
             campaignStarter.AddModel(new BKCombatXpModel());
@@ -119,9 +121,7 @@ namespace BannerKings
             campaignStarter.AddModel(new BKPregnancyModel());
             campaignStarter.AddModel(new BKPartyHealingModel());
             campaignStarter.AddModel(new BKBanditModel());
-            //campaignStarter.AddModel(new BKPrisonerRecruitmentModel());
             campaignStarter.AddModel(new BKTargetScoreModel());
-            //campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
 
             BKAttributes.Instance.Initialize();
             BKSkills.Instance.Initialize();

@@ -69,7 +69,6 @@ namespace BannerKings.Managers.Goals.Decisions
 
         internal override void ShowInquiry()
         {
-            IsFulfilled(out var failedReasons);
             var options = new List<InquiryElement>();
 
             foreach (var culture in GetCultureOptions())
