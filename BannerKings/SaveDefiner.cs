@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BannerKings.Behaviours.Criminality;
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Groups.Demands;
@@ -40,7 +41,6 @@ using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -194,6 +194,7 @@ namespace BannerKings
             AddClassDefinition(typeof(DemesneLawChangeDemand), 126);
             AddClassDefinition(typeof(War), 127);
             AddClassDefinition(typeof(CasusBelli), 128);
+            AddClassDefinition(typeof(Crime), 129);
         }
 
         protected override void DefineContainerDefinitions()
@@ -242,12 +243,13 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Hero, List<Estate>>));
             ConstructContainerDefinition(typeof(Dictionary<Workshop, WorkshopData>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, MobileParty>)); 
-
             ConstructContainerDefinition(typeof(List<InterestGroup>));
             ConstructContainerDefinition(typeof(List<Demand>));
             ConstructContainerDefinition(typeof(List<DemandOutcome>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, KingdomDiplomacy>));
             ConstructContainerDefinition(typeof(List<War>));
+            ConstructContainerDefinition(typeof(List<Crime>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, List<Crime>>));
         }
     }
 }

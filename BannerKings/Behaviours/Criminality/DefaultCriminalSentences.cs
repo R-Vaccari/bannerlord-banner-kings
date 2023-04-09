@@ -1,9 +1,8 @@
 ﻿using BannerKings.Managers.Titles;
-using BannerKings.Utils.Extensions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -19,7 +18,15 @@ namespace BannerKings.Behaviours.Criminality
         public CriminalSentence Gelding { get; } = new CriminalSentence("gelding");
         public CriminalSentence Beheading { get; } = new CriminalSentence("beheading");
 
-        public override IEnumerable<CriminalSentence> All => throw new NotImplementedException();
+        public override IEnumerable<CriminalSentence> All
+        {
+            get
+            {
+                yield return Fine;
+                yield return RevokeTitle;
+                yield return Beheading;
+            }
+        }
 
         public override void Initialize()
         {
@@ -45,7 +52,7 @@ namespace BannerKings.Behaviours.Criminality
                 {
                     return false;
                 },
-                (Crime crime, Hero executor) =>
+                (Crime crime, Hero executor, CriminalSentence sentence) =>
                 {
                     Hero hero = crime.Hero;
                     int cost = MBRandom.RoundRandomized(BannerKingsConfig.Instance.CrimeModel.GetMonetaryFine(crime).ResultNumber);
@@ -61,23 +68,17 @@ namespace BannerKings.Behaviours.Criminality
                     executor.ChangeHeroGold(cost);
                 });
 
-            Beheading.Initialize(new TextObject("{=!}Monetary Fine"),
+            Beheading.Initialize(new TextObject("{=!}Beheading"),
                new TextObject(),
                (Crime crime) =>
                {
                    Hero hero = crime.Hero;
                    if (hero.Occupation == Occupation.Bandit)
                    {
-                       return false;
+                       return true;
                    }
 
-                   int cost = MBRandom.RoundRandomized(BannerKingsConfig.Instance.CrimeModel.GetMonetaryFine(crime).ResultNumber);
-                   if (hero.Clan != null)
-                   {
-                       return hero.Gold >= cost || hero.Clan.Gold >= cost;
-                   }
-
-                   return hero.Gold >= cost;
+                   return true;
                },
                (Crime crime, Hero executor) =>
                {
@@ -86,22 +87,50 @@ namespace BannerKings.Behaviours.Criminality
                        return false;
                    }
 
-                   return crime.Severity != Crime.CrimeSeverity.Treason;
-               },
-               (Crime crime, Hero executor) =>
-               {
                    Hero hero = crime.Hero;
-                   int cost = MBRandom.RoundRandomized(BannerKingsConfig.Instance.CrimeModel.GetMonetaryFine(crime).ResultNumber);
-                   if (hero.Gold >= cost)
+                   if (hero.MapFaction == crime.Kingdom.MapFaction)
                    {
-                       hero.ChangeHeroGold(-cost);
-                   }
-                   else if (hero.Clan != null)
-                   {
-                       hero.Clan.Leader.ChangeHeroGold(-cost);
+                       return crime.Severity == Crime.CrimeSeverity.Treason;
                    }
 
-                   executor.ChangeHeroGold(cost);
+                   return crime.Severity != Crime.CrimeSeverity.Treason;
+               },
+               (Crime crime, Hero executor, CriminalSentence sentence) =>
+               {
+                   Hero hero = crime.Hero;
+                   if (sentence.IsSentenceTyranical(crime, executor))
+                   {
+                       foreach (Hero friend in Hero.AllAliveHeroes)
+                       {
+                           if (friend.IsFriend(hero))
+                           {
+                               bool affectRelatives;
+                               int relationChangeForExecutingHero = Campaign.Current.Models.ExecutionRelationModel
+                                   .GetRelationChangeForExecutingHero(hero, friend, out affectRelatives);
+                               if (relationChangeForExecutingHero != 0)
+                               {
+                                   ChangeRelationAction.ApplyRelationChangeBetweenHeroes(executor,
+                                       friend,
+                                       relationChangeForExecutingHero,
+                                       true);
+                               }
+                           }
+                       }
+                   }
+
+                   KillCharacterAction.ApplyByMurder(hero, executor, false);
+                   uint color = Utils.TextHelper.COLOR_LIGHT_YELLOW;
+                   if (hero.Clan == Clan.PlayerClan || Hero.MainHero.IsFriend(hero))
+                   {
+                       color = Utils.TextHelper.COLOR_LIGHT_RED;
+                   }
+
+                   InformationManager.DisplayMessage(new InformationMessage(
+                       new TextObject("{=!}{HERO} has been beheaded as sentence to the {CRIME} crime.")
+                       .SetTextVariable("HERO", hero.Name)
+                       .SetTextVariable("CRIME", crime.Name)
+                       .ToString(),
+                       Color.FromUint(color)));
                });
 
             RevokeTitle.Initialize(new TextObject("{=!}Revoke Title"),
@@ -115,7 +144,7 @@ namespace BannerKings.Behaviours.Criminality
                {
                    return crime.Severity != Crime.CrimeSeverity.Treason;
                },
-               (Crime crime, Hero executor) =>
+               (Crime crime, Hero executor, CriminalSentence sentence) =>
                {
                    Hero hero = crime.Hero;
                    var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero);

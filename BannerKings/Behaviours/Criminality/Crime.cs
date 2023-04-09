@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Criminality
 {
@@ -13,15 +9,36 @@ namespace BannerKings.Behaviours.Criminality
         {
         }
 
-        public Hero Hero { get; private set; }
-        public Kingdom Kingdom { get; private set; }
-        public CrimeSeverity Severity { get; private set; }
+        public Crime GetCopy(Hero criminal, Kingdom kingdom, CrimeSeverity severity)
+        {
+            Crime c = new Crime(StringId);
+            c.Hero = criminal;
+            c.Kingdom = kingdom;
+            c.Severity = severity;
+            c.Date = CampaignTime.Now;
+            return c;
+        }
+
+        [SaveableProperty(10)] public Hero Hero { get; private set; }
+        [SaveableProperty(11)] public Kingdom Kingdom { get; private set; }
+        [SaveableProperty(12)] public CrimeSeverity Severity { get; private set; }
+        [SaveableProperty(13)] public CampaignTime Date { get; private set; }
 
         public enum CrimeSeverity
         {
             Transgression,
             Blasphemy,
             Treason
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Crime)
+            {
+                Crime c = (Crime)obj;
+                return c.StringId == StringId && Hero == c.Hero && Kingdom == c.Kingdom;
+            }
+            return base.Equals(obj);
         }
     }
 }

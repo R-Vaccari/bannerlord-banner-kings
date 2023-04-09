@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Behaviours.Criminality;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers;
@@ -128,13 +129,15 @@ namespace BannerKings
             DefaultReligions.Instance.Initialize();
             DefaultCouncilTasks.Instance.Initialize();
             DefaultCouncilPositions.Instance.Initialize();
+            DefaultCasusBelli.Instance.Initialize();
+            BKTraits.Instance.Initialize();
+            DefaultInterestGroup.Instance.Initialize();
+            DefaultCriminalSentences.Instance.Initialize();
+            DefaultCrimes.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();
             }
-            DefaultCasusBelli.Instance.Initialize();
-            BKTraits.Instance.Initialize();
-            DefaultInterestGroup.Instance.Initialize();
         }
 
         public void InitManagers()
