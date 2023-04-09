@@ -17,6 +17,8 @@ namespace BannerKings.Managers.Goals.Decisions
         public SentenceCriminalDecision(Hero fulfiller = null) : base("goal_sentence_criminal", 
             GoalCategory.Criminal, GoalUpdateType.Hero, fulfiller)
         {
+            Initialize(new TextObject("{=!}Sentence Criminal"), 
+                new TextObject("{=!}As a Peer within a realm, you are able to sentence those found to be criminals that you hold within your dungeons."));
         }
 
         public override void DoAiDecision()
