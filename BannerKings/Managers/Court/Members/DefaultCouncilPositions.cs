@@ -284,8 +284,8 @@ namespace BannerKings.Managers.Court.Members
                });
 
             CourtSmith.Initialize(
-               DefaultSkills.Medicine,
-               BKSkills.Instance.Scholarship,
+               DefaultSkills.Crafting,
+               null,
                new List<CouncilTask>()
                {
                     DefaultCouncilTasks.Instance.SmithWeapons.GetCopy(),
