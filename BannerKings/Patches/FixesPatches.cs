@@ -12,11 +12,24 @@ using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 
 namespace BannerKings.Patches
 {
     internal class FixesPatches
     {
+        [HarmonyPatch(typeof(CraftingCampaignBehavior))]
+        internal class CraftingCampaignBehaviorPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("GetMaxHeroCraftingStamina")]
+            private static bool GetMaxHeroCraftingStaminaPrefix(Hero hero, ref int __result)
+            {
+                __result = 50 + MathF.Round((float)hero.GetSkillValue(DefaultSkills.Crafting) * 1f);
+                return false;
+            }
+        }
+
         [HarmonyPatch(typeof(MobileParty))]
         internal class MobilePartyPatches
         {
