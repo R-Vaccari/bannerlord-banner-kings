@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
@@ -19,13 +20,14 @@ namespace BannerKings.Managers.Court
 
         public CouncilMember(string id) : base(id)
         {
-            DueWage = 0;   
+            DueWage = 0;
+            Traits = new Dictionary<TraitObject, float>();
         }
 
         public void Initialize(SkillObject primary, SkillObject secondary,
             List<CouncilTask> tasks, IEnumerable<CouncilPrivileges> privileges,
             Func<CouncilData, bool> isAdequate, Func<CouncilMember, Hero, ValueTuple<bool, TextObject>> isValidCandidateInternal,
-            Func<CouncilMember, TextObject> getCulturalName)
+            Func<CouncilMember, TextObject> getCulturalName, Dictionary<TraitObject, float> traits = null)
         {
             PrimarySkill = primary;
             SecondarySkill = secondary;
@@ -34,6 +36,10 @@ namespace BannerKings.Managers.Court
             this.isAdequate = isAdequate;
             this.isValidCandidateInternal = isValidCandidateInternal;
             this.getCulturalName = getCulturalName;
+            if (traits != null)
+            {
+                Traits = traits;
+            }
         }
 
         public void PostInitialize()
@@ -75,6 +81,7 @@ namespace BannerKings.Managers.Court
                     return;
                 }
 
+                CurrentTask.Tick();
                 if (SecondarySkill != null)
                 {
                     Member.AddSkillXp(PrimarySkill, 10);
@@ -104,6 +111,7 @@ namespace BannerKings.Managers.Court
 
         public  SkillObject PrimarySkill { get; private set; }
         public SkillObject SecondarySkill { get; private set; }
+        public Dictionary<TraitObject, float> Traits { get; private set; }
         public TextObject GetCulturalName() => getCulturalName(this);
 
         protected ValueTuple<bool, TextObject> IsValidCandidateInternal(Hero candidate) => isValidCandidateInternal(this, candidate);
