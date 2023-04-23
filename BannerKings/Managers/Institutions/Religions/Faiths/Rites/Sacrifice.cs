@@ -27,8 +27,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                 if (element.Character.IsHero)
                 {
                     var hero = element.Character.HeroObject;
-                    options.Add(new InquiryElement(hero, hero.Name.ToString(),
-                        new ImageIdentifier(CampaignUIHelper.GetCharacterCode(element.Character))));
+                    TextObject description;
+                    bool available = MeetsCondition(hero, out description);
+                    options.Add(new InquiryElement(hero, 
+                        hero.Name.ToString(),
+                        new ImageIdentifier(CampaignUIHelper.GetCharacterCode(element.Character)),
+                        available,
+                        description.ToString()));
                 }
             }
 
