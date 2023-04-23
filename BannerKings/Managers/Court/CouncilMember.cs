@@ -75,8 +75,15 @@ namespace BannerKings.Managers.Court
                     return;
                 }
 
-                Member.AddSkillXp(PrimarySkill, 10);
-                Member.AddSkillXp(SecondarySkill, 5);
+                if (SecondarySkill != null)
+                {
+                    Member.AddSkillXp(PrimarySkill, 10);
+                }
+                   
+                if (SecondarySkill != null)
+                {
+                    Member.AddSkillXp(SecondarySkill, 5);
+                }
             }
         }
 
