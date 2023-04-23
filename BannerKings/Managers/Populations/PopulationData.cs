@@ -12,6 +12,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
+using static HarmonyLib.Code;
 
 namespace BannerKings.Managers.Populations
 {
@@ -297,6 +298,8 @@ namespace BannerKings.Managers.Populations
                 UpdatePopType(targetType, pops);
             }
         }
+
+        public void UpdatePopFromSoldiers(CharacterObject character, int count) => MilitaryData.AddManpowerFromSoldiers(this, count, character);    
 
         public void UpdatePopType(PopType type, int count, bool stateSlaves = false)
         {
