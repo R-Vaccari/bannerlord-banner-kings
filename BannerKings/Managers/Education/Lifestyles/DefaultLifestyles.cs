@@ -137,7 +137,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.CivilManufacturer, 
                     BKPerks.Instance.CivilOverseer
                 },
-                new TextObject("{=sCxt8vV7}Reduced demesne weight of towns by {EFFECT1}%\nParty size reduced by {EFFECT2}"),
+                new TextObject("{=!}Reduced demesne weight of towns by {EFFECT1}%\nParty size reduced by {EFFECT2}%"),
                 20f,
                 15f);
 
