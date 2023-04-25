@@ -6,6 +6,7 @@ using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Traits;
 using BannerKings.Models.Vanilla;
 using BannerKings.Settings;
 using BannerKings.UI;
@@ -61,7 +62,6 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKWorkshopBehavior());
             campaignStarter.AddBehavior(new BKGentryBehavior());
             campaignStarter.AddBehavior(new BKBanditBehavior());
-            //campaignStarter.AddBehavior(new BKCombatBehavior());
 
             campaignStarter.AddModel(new BKPrisonerModel());
             campaignStarter.AddModel(new BKCompanionPrices());
@@ -114,8 +114,6 @@ namespace BannerKings
             campaignStarter.AddModel(new BKPregnancyModel());
             campaignStarter.AddModel(new BKPartyHealingModel());
             campaignStarter.AddModel(new BKBanditModel());
-            //campaignStarter.AddModel(new BKPrisonerRecruitmentModel());
-            //campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
 
             BKAttributes.Instance.Initialize();
             BKSkills.Instance.Initialize();
@@ -123,6 +121,7 @@ namespace BannerKings
             BKPolicies.Instance.Initialize();
             DefaultInnovations.Instance.Initialize();
             BKBuildings.Instance.Initialize();
+            BKTraits.Instance.Initialize();
 
             UIManager.Instance.SetScreen(new BannerKingsScreen());
         }
@@ -142,8 +141,6 @@ namespace BannerKings
             {
                 UIManager.Instance.BKScreen.OnFinalize();
             }
-            
-            //ScreenManager.RemoveGlobalLayer(UIManager.Instance.BKScreen);
         }
     }
 }

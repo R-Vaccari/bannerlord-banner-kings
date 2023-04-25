@@ -42,11 +42,14 @@ namespace BannerKings.Models.BKModels
                     .SetTextVariable("LANGUAGE", courtLanguage.Name));
             }
 
-            foreach (var pair in position.Traits)
+            if (position.Traits != null)
             {
-                int trait = hero.GetTraitLevel(pair.Key);
-                result.AddFactor(trait * pair.Value, pair.Key.Name);
-            }
+                foreach (var pair in position.Traits)
+                {
+                    int trait = hero.GetTraitLevel(pair.Key);
+                    result.AddFactor(trait * pair.Value, pair.Key.Name);
+                }
+            }   
 
             if (!ignoreTask)
             {
