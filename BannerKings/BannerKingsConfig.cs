@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Behaviours.Criminality;
 using BannerKings.Managers;
 using BannerKings.Managers.AI;
 using BannerKings.Managers.Court;
@@ -72,6 +73,7 @@ namespace BannerKings
         public BKEstatesModel EstatesModel { get; } = new();
         public BKMarriageModel MarriageModel { get; } = new();
         public BKArmyManagementModel ArmyManagementModel { get; } = new();
+        public BKCrimeModel CrimeModel { get; } = new();
 
         static BannerKingsConfig()
         {
@@ -122,6 +124,8 @@ namespace BannerKings
             DefaultReligions.Instance.Initialize();
             DefaultCouncilTasks.Instance.Initialize();
             DefaultCouncilPositions.Instance.Initialize();
+            DefaultCrimes.Instance.Initialize();
+            DefaultCriminalSentences.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();

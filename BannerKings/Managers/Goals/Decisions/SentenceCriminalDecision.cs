@@ -40,7 +40,7 @@ namespace BannerKings.Managers.Goals.Decisions
             failedReasons = new List<TextObject>();
 
             BKCriminalityBehavior behavior = Campaign.Current.GetCampaignBehavior<BKCriminalityBehavior>();
-            Dictionary<Hero, List<Crime>> criminals = behavior.GetCriminals(Fulfiller);
+            Dictionary<Hero, List<Crime>> criminals = behavior.GetCriminals(GetFulfiller());
             if (criminals.Count == 0)
             {
                 failedReasons.Add(new TextObject("{=!}You do not have any criminals within your settlement prisons."));
@@ -53,7 +53,7 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             var crimes = new List<InquiryElement>();
             BKCriminalityBehavior behavior = Campaign.Current.GetCampaignBehavior<BKCriminalityBehavior>();
-            Dictionary<Hero, List<Crime>> criminals = behavior.GetCriminals(Fulfiller);
+            Dictionary<Hero, List<Crime>> criminals = behavior.GetCriminals(GetFulfiller());
 
             foreach (var pair in criminals)
             {
