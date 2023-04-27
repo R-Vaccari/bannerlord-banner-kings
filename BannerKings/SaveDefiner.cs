@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BannerKings.Behaviours.Criminality;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
 using BannerKings.Behaviours.Workshops;
@@ -179,6 +180,8 @@ namespace BannerKings
             AddClassDefinition(typeof(TargetedCouncilTask<>), 117);
             AddClassDefinition(typeof(OverseeSanitation), 118);
             AddClassDefinition(typeof(BanditHeroComponent), 124);
+
+            AddClassDefinition(typeof(Crime), 129);
         }
 
         protected override void DefineContainerDefinitions()
@@ -226,7 +229,9 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Town, Feast>)); 
             ConstructContainerDefinition(typeof(Dictionary<Hero, List<Estate>>));
             ConstructContainerDefinition(typeof(Dictionary<Workshop, WorkshopData>));
-            ConstructContainerDefinition(typeof(Dictionary<Hero, MobileParty>)); 
+            ConstructContainerDefinition(typeof(Dictionary<Hero, MobileParty>));
+            ConstructContainerDefinition(typeof(List<Crime>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, List<Crime>>));
         }
     }
 }

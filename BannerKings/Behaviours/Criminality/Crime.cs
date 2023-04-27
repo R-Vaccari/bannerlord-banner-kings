@@ -12,6 +12,7 @@ namespace BannerKings.Behaviours.Criminality
         public Crime GetCopy(Hero criminal, Kingdom kingdom, CrimeSeverity severity)
         {
             Crime c = new Crime(StringId);
+            c.Initialize(Name, Description);
             c.Hero = criminal;
             c.Kingdom = kingdom;
             c.Severity = severity;

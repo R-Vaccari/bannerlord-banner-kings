@@ -104,7 +104,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                         new TextObject("{=!}Sentence Criminal (2/2)").ToString(),
                         new TextObject("{=!}{HERO} will be sentenced for the crime of {CRIME}. Tyrannical sentences will impact your standing with your peers.").ToString(),
-                        crimes,
+                        sentences,
                         true,
                        1,
                         GameTexts.FindText("str_done").ToString(),
