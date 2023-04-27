@@ -26,12 +26,12 @@ namespace BannerKings.Models.Vanilla
             {
                 0 => 1,
                 1 => 2,
-                2 => 4,
-                3 => 6,
-                4 => 16,
-                5 => 32,
-                6 => 45,
-                _ => 60
+                2 => 6,
+                3 => 10,
+                4 => 22,
+                5 => 40,
+                6 => 60,
+                _ => 80
             };
 
             return result;
@@ -44,7 +44,6 @@ namespace BannerKings.Models.Vanilla
                 garrisonWageReductionMultiplier.AddFactor(isSecondaryEffect ? (perk.SecondaryBonus * troopRatio) : (perk.PrimaryBonus * troopRatio), perk.Name);
             }
         }
-
 
         private ExplainedNumber GetVanillaWage(MobileParty mobileParty, bool includeDescriptions = false)
         {
@@ -335,8 +334,8 @@ namespace BannerKings.Models.Vanilla
 
         public override int GetTroopRecruitmentCost(CharacterObject troop, Hero buyerHero, bool withoutItemCost = false)
         {
-            var result = new ExplainedNumber(base.GetTroopRecruitmentCost(troop, buyerHero, withoutItemCost) * 1.4f);
-            result.LimitMin(GetCharacterWage(troop) * 2f);
+            var result = new ExplainedNumber(base.GetTroopRecruitmentCost(troop, buyerHero, withoutItemCost) * 2.5f);
+            result.LimitMin(GetCharacterWage(troop) * 10f);
 
             ExceptionUtils.TryCatch(() =>
             {
