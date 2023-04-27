@@ -196,6 +196,10 @@ namespace BannerKings.Managers.Court
                 {
                     toRemove.Add(guest);
                 }
+                else if (MBRandom.RandomFloat < 0.14f && MBRandom.RandomFloat < 0.1f)
+                {
+                    toRemove.Add(guest);
+                }
             }
 
             foreach (Hero guest in toRemove)
