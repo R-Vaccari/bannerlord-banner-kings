@@ -15,7 +15,7 @@ namespace BannerKings
         public TextObject Name => name;
         public TextObject Description => description;
 
-        protected void Initialize(TextObject name, TextObject description)
+        public void Initialize(TextObject name, TextObject description)
         {
             this.name = name;
             this.description = description;
