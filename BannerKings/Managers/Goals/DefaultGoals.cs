@@ -43,6 +43,7 @@ namespace BannerKings.Managers.Goals
         internal Goal OrganizeFeastDecision { get; private set; }
         internal Goal CallBannersGoal { get; private set; }
         public Goal RelocateCourtGoal { get; } = new MoveCourtDecision();
+        public Goal SentenceCriminal { get} = new SentenceCriminalDecision();
 
         public override void Initialize()
         {
