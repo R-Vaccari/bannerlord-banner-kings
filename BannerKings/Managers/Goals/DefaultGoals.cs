@@ -26,6 +26,7 @@ namespace BannerKings.Managers.Goals
                 yield return FoundKingdomGoal;
                 yield return CalradicEmpireGoal;
                 yield return GreaterBattania;
+                yield return RelocateCourtGoal;
             }
         }
 
@@ -41,6 +42,7 @@ namespace BannerKings.Managers.Goals
         internal Goal RequestPeerageDecision { get; private set; }
         internal Goal OrganizeFeastDecision { get; private set; }
         internal Goal CallBannersGoal { get; private set; }
+        public Goal RelocateCourtGoal { get; } = new MoveCourtDecision();
 
         public override void Initialize()
         {

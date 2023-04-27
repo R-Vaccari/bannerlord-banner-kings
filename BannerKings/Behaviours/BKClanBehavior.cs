@@ -36,6 +36,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
             CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, OnClanChangedKingdom);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
+            CampaignEvents.AfterSettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -164,6 +165,23 @@ namespace BannerKings.Behaviours
             }
             
             return IsCompanionOfAnotherClan();
+        }
+
+        private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
+        {
+            if (hero != Hero.MainHero || target.Town == null)
+            {
+                return;
+            }
+
+            CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
+            if (council.Location == target.Town)
+            {
+                foreach (var guest in council.Guests)
+                {
+                    Utils.Helpers.AddNotableToKeep(guest, target);
+                }
+            }
         }
 
         private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, ChangeKingdomAction.ChangeKingdomActionDetail detail, bool showNotification = true)

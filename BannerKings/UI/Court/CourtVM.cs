@@ -22,7 +22,7 @@ namespace BannerKings.UI.Court
         private CouncilVM councilVM;
         private MBBindingList<InformationElement> courtInfo, privilegesInfo, courtierInfo;
         private CharacterVM currentCharacter;
-        private MBBindingList<ClanLordItemVM> family, courtiers;
+        private MBBindingList<ClanLordItemVM> family, courtiers, guests;
         private bool isRoyal, hasExtraPositions;
         private string positionName, positionDescription, positionEffects;
 
@@ -47,12 +47,14 @@ namespace BannerKings.UI.Court
             courtInfo = new MBBindingList<InformationElement>();
             courtierInfo = new MBBindingList<InformationElement>();
             privilegesInfo = new MBBindingList<InformationElement>();
+            guests = new MBBindingList<ClanLordItemVM>();
             isRoyal = royal;
             currentCharacter = new CharacterVM(Hero.MainHero, null);
         }
 
         [DataSourceProperty] public string FamilyText => new TextObject("{=QCw05MZN}Household").ToString();
         [DataSourceProperty] public string CourtiersText => new TextObject("{=PykdjcGm}Courtiers").ToString();
+        [DataSourceProperty] public string GuestsText => new TextObject("{=!}Guests").ToString();
         [DataSourceProperty] public string EffectsText => new TextObject("{=K7df68TT}Effects").ToString();
         [DataSourceProperty] public string PrivilegesText => new TextObject("{=77D4i3pG}Privileges").ToString();
         [DataSourceProperty] public string PrivyCouncilText => new TextObject("{=7NeZtxVP}Privy Council").ToString();
@@ -70,6 +72,7 @@ namespace BannerKings.UI.Court
             ExtraPositions.Clear();
             CourtierInfo.Clear();
             PrivilegesInfo.Clear();
+            Guests.Clear();
            
             if (councilPosition == null)
             {
@@ -95,6 +98,12 @@ namespace BannerKings.UI.Court
                     Courtiers.Add(new ClanLordItemVM(hero, teleportationBehavior, null, SetCurrentCharacter,
                         OnRequestRecall, OnRequestRecall));
                 }
+            }
+
+            foreach (var guest in council.Guests)
+            {
+                Guests.Add(new ClanLordItemVM(guest, teleportationBehavior, null, SetCurrentCharacter,
+                        OnRequestRecall, OnRequestRecall));
             }
 
             CourtInfo.Add(new InformationElement(new TextObject("{=7OQ7dN1T}Administrative costs:").ToString(), 
@@ -346,6 +355,20 @@ namespace BannerKings.UI.Court
                 }
             }
         }
+
+        [DataSourceProperty]
+        public MBBindingList<ClanLordItemVM> Guests
+        {
+            get => guests;
+            set
+            {
+                if (value != guests)
+                {
+                    guests = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        } 
 
         [DataSourceProperty]
         public MBBindingList<ClanLordItemVM> Courtiers

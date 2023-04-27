@@ -15,6 +15,16 @@ namespace BannerKings.Models.BKModels
             return new ExplainedNumber();
         }
 
+        public ExplainedNumber CalculateRelocateCourtPrice(Clan clan, Town target, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber * 5f, 
+                explanations);
+
+            
+
+            return result;
+        }
+
         public ExplainedNumber CalculateHeroCompetence(Hero hero, CouncilMember position, bool ignoreTask = false, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0f, explanations);

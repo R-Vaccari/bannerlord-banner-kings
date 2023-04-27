@@ -133,7 +133,34 @@
 																	</ItemTemplate>
 																</NavigatableListPanel>
 
-																<!--Companion Toggle Button-->
+																<PartyHeaderToggleWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed"
+																	HeightSizePolicy="Fixed" SuggestedWidth="!Clan.Management.Collapser.Width"
+																	SuggestedHeight="!Clan.Management.Collapser.Height"
+																	CollapseIndicator="CompanionCollapser\CompanionCollapseIndicator" ListPanel="..\CompanionsList"
+																	HorizontalAlignment="Left" VerticalAlignment="Top" Brush="Clan.Management.Collapser" RenderLate="true"
+																	WidgetToClose="..\CompanionsList">
+																	<Children>
+																		<ListPanel Id="CompanionCollapser" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																			HorizontalAlignment="Center" VerticalAlignment="Center">
+																			<Children>
+																				<BrushWidget Id="CompanionCollapseIndicator" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+																					SuggestedWidth="!Party.Toggle.ExpandIndicator.Width"
+																					SuggestedHeight="!Party.Toggle.ExpandIndicator.Height" VerticalAlignment="Center"
+																					PositionYOffset="-2" MarginRight="5" Brush="Party.Toggle.ExpandIndicator" />
+																				<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																					Brush="Clan.Management.Collapser.Text" Text="@GuestsText" />
+																			</Children>
+																		</ListPanel>
+																	</Children>
+																</PartyHeaderToggleWidget>
+
+																<NavigatableListPanel Id="CompanionsList" DataSource="{Guests}" WidthSizePolicy="CoverChildren"
+																	HeightSizePolicy="CoverChildren" HorizontalAlignment="Right"
+																	StackLayout.LayoutMethod="VerticalBottomToTop" UseSelfIndexForMinimum="true">
+																	<ItemTemplate>
+																		<ClanLordTuple />
+																	</ItemTemplate>
+																</NavigatableListPanel>
 
 																<PartyHeaderToggleWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed"
 																	HeightSizePolicy="Fixed" SuggestedWidth="!Clan.Management.Collapser.Width"
@@ -156,7 +183,6 @@
 																	</Children>
 																</PartyHeaderToggleWidget>
 
-																<!--Family List-->
 																<NavigatableListPanel Id="CompanionsList" DataSource="{Courtiers}" WidthSizePolicy="CoverChildren"
 																	HeightSizePolicy="CoverChildren" HorizontalAlignment="Right"
 																	StackLayout.LayoutMethod="VerticalBottomToTop" UseSelfIndexForMinimum="true">

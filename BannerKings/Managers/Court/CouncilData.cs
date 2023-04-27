@@ -8,6 +8,7 @@ using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -20,6 +21,7 @@ namespace BannerKings.Managers.Court
         public CouncilData(Clan clan)
         {
             this.Clan = clan;
+            Guests = new List<Hero>();
             Positions = new List<CouncilMember>();
             Peerage = Peerage.GetAdequatePeerage(clan);
             foreach (var pos in DefaultCouncilPositions.Instance.All)
@@ -46,6 +48,27 @@ namespace BannerKings.Managers.Court
                 Positions = new List<CouncilMember>();
             }
 
+            if (Guests == null)
+            {
+                Guests = new List<Hero>();
+            }
+
+            if (Location == null)
+            {
+                float prosp = 0f;
+                Town town = null;
+                foreach (var fief in Clan.Fiefs)
+                {
+                    if (fief.Prosperity > prosp && fief.Culture == Clan.Culture)
+                    {
+                        prosp = fief.Prosperity;
+                        town = fief;
+                    }
+                }
+
+                SetCourtLocation(town);
+            }
+
             foreach (var pos in Positions)
             {
                 pos.PostInitialize();
@@ -53,8 +76,26 @@ namespace BannerKings.Managers.Court
         }
 
         [SaveableProperty(1)] public Clan Clan { get; private set; }
+        [SaveableProperty(2)] public Town Location { get; private set; }
+        [SaveableProperty(3)] public List<Hero> Guests { get; private set; }
         [SaveableProperty(5)] public List<CouncilMember> Positions { get; private set; }
         [SaveableProperty(4)] public Peerage Peerage { get; private set; }
+
+        public void SetCourtLocation(Town town, bool notify = true)
+        {
+            Location = town;
+            if (Clan == Clan.PlayerClan && notify)
+            {
+                TextObject text = new TextObject("{=!}Your court no longer has a place to gather!");
+                if (town != null)
+                {
+                    text = new TextObject("{=!}Your court will now gather at {TOWN}!")
+                        .SetTextVariable("TOWN", town.Name);
+                }
+
+                InformationManager.DisplayMessage(new InformationMessage(text.ToString()));
+            }
+        }
 
         public void SetPeerage(Peerage peerage)
         {
@@ -94,6 +135,25 @@ namespace BannerKings.Managers.Court
         public float GetCompetence(CouncilMember position) => position.Competence.ResultNumber;
         public CouncilMember GetCouncilPosition(CouncilMember position) => Positions.FirstOrDefault(x => x.StringId == position.StringId);
 
+        public void AddGuest(Hero hero)
+        {
+            if (hero == null || hero.CurrentSettlement == null || hero.CurrentSettlement.Town == null ||
+                hero.CurrentSettlement.Town != Location)
+            {
+                return;
+            }
+
+            Guests.Add(hero);
+            if (Clan == Clan.PlayerClan)
+            {
+                InformationManager.DisplayMessage(new InformationMessage(
+                    new TextObject("{=!}{HERO} is now a guest in your court at {TOWN}.")
+                    .SetTextVariable("TOWN", Location.Name)
+                    .SetTextVariable("HERO", hero.Name)
+                    .ToString()));
+            }
+        }
+
         internal override void Update(PopulationData data)
         {
             var courtiers = GetCourtMembers();
@@ -110,6 +170,37 @@ namespace BannerKings.Managers.Court
                 {
                     Positions.Remove(pos);
                 }
+            }
+
+            if (Location != null && Location.OwnerClan != Clan)
+            {
+                SetCourtLocation(null, false);
+            }
+
+            if (Location != null)
+            {
+                var template = Clan.Culture.NotableAndWandererTemplates.GetRandomElementWithPredicate(x => x.Occupation == Occupation.Wanderer);
+                Hero guest = HeroCreator.CreateSpecialHero(template, 
+                    Location.Settlement, 
+                    null, 
+                    null, 
+                    Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
+                EnterSettlementAction.ApplyForCharacterOnly(guest, Location.Settlement);
+                AddGuest(guest);
+            }
+
+            List<Hero> toRemove = new List<Hero>();
+            foreach (Hero guest in Guests)
+            {
+                if (guest.IsDead || guest.CurrentSettlement == null || guest.CurrentSettlement != Location?.Settlement)
+                {
+                    toRemove.Add(guest);
+                }
+            }
+
+            foreach (Hero guest in toRemove)
+            {
+                Guests.Remove(guest);
             }
 
             foreach (var position in Positions)
@@ -329,7 +420,7 @@ namespace BannerKings.Managers.Court
 
         public List<CouncilMember> GetOccupiedPositions()
         {
-            PostInitialize();
+            //PostInitialize();
             var heroes = new List<CouncilMember>();
             foreach (var councilMember in Positions)
             {
@@ -344,7 +435,7 @@ namespace BannerKings.Managers.Court
 
         public List<Hero> GetMembers()
         {
-            PostInitialize();
+            //PostInitialize();
             var heroes = new List<Hero>();
             foreach (var councilMember in Positions)
             {
@@ -359,7 +450,7 @@ namespace BannerKings.Managers.Court
 
         public CouncilMember GetHeroPosition(Hero hero)
         {
-            PostInitialize();
+            //PostInitialize();
             foreach (var councilMember in Positions)
             {
                 if (councilMember.Member == hero)
