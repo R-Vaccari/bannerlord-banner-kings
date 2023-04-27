@@ -73,7 +73,7 @@ namespace BannerKings.Behaviours
 
             RunWeekly(() =>
             {
-                if (!clan.WarPartyComponents.Any(x => x.Leader != null) && MBRandom.RandomFloat < 0.05f)
+                if (!clan.WarPartyComponents.Any(x => x.Leader != null) && MBRandom.RandomFloat < 0.025f)
                 {
                     CreateBanditHero(clan);
                 }
