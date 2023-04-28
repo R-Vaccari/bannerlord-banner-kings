@@ -13,12 +13,11 @@ namespace BannerKings.Managers.Goals.Decisions
 {
     internal class RequestPeerageDecision : Goal
     {
-
-        public RequestPeerageDecision() : base("goal_request_peerage_decision", GoalCategory.Kingdom, GoalUpdateType.Manual)
+        public RequestPeerageDecision(Hero fulfiller = null) : base("goal_request_peerage_decision", GoalCategory.Kingdom, GoalUpdateType.Manual)
         {
             var name = new TextObject("{=sdpM1PD3}Request Full Peerage");
             var description = new TextObject("{=O7LLRFEX}Request the recognition of your family as a full Peer of the realm. A full Peer does not have legal restrictions on voting, starting elections, granting knighthood, hosting a council or being awarded fiefs. They are the very top of the realm's nobility. Successfully requesting Peerage will require renown (clan tier 4 minimum is recommended) and having good relations with full Peers. Holding property (caravans, workshops, estates, lordships) is a good positive factor as well.\n");
-
+            Fulfiller = fulfiller;
             Initialize(name, description);
         }
 
@@ -33,18 +32,14 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             failedReasons = new List<TextObject>();
 
-            if (!IsAvailable())
-            {
-                return false;
-            }
-
-            if (Clan.PlayerClan.IsUnderMercenaryService)
+            Clan clan = GetFulfiller().Clan;
+            if (clan.IsUnderMercenaryService)
             {
                 failedReasons.Add(new TextObject("{=SjBky9Op}Mercenaries cannot request Peerage"));
             }
 
-            var decision = new PeerageKingdomDecision(Clan.PlayerClan.Kingdom.RulingClan, Clan.PlayerClan);
-            if (Clan.PlayerClan.Influence < decision.GetProposalInfluenceCost())
+            var decision = new PeerageKingdomDecision(clan.Kingdom.RulingClan, clan);
+            if (clan.Influence < decision.GetProposalInfluenceCost())
             {
                 failedReasons.Add(GameTexts.FindText("str_decision_not_enough_influence"));
             }
@@ -85,7 +80,21 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public override void DoAiDecision()
         {
-            throw new NotImplementedException();
+            List<TextObject> reasons;
+            if (!IsFulfilled(out reasons))
+            {
+                return;
+            }
+
+            Clan clan = GetFulfiller().Clan;
+            var decision = new PeerageKingdomDecision(clan.Kingdom.RulingClan, clan);
+            var election = new KingdomElection(decision);
+            if (election.GetLikelihoodForOutcome(0) < 0.4f)
+            {
+                return;
+            }
+
+            clan.Kingdom.AddDecision(decision, false);
         }
     }
 }

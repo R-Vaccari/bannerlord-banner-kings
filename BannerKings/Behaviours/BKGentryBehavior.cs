@@ -1,4 +1,5 @@
 using BannerKings.Actions;
+using BannerKings.Managers.Goals.Decisions;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Utils;
 using HarmonyLib;
@@ -69,6 +70,9 @@ namespace BannerKings.Behaviours
                 {
                     return;
                 }
+
+                RequestPeerageDecision decision = new RequestPeerageDecision(clan.Leader);
+                decision.DoAiDecision();
 
                 var villageSettlement = gentryTuple.Item2.EstatesData.Settlement;
                 foreach (var member in clan.Heroes)
