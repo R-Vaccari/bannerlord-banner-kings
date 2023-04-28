@@ -236,10 +236,25 @@ namespace BannerKings.Managers
 
             if (villageData.Village.IsFarmingVillage())
             {
+                float poultry = 1f;
+                string culture = villageData.Village.Settlement.Culture.StringId;
+                if (culture is "aserai")
+                {
+                    poultry = 0.15f;
+                }
+                else if (culture is "sturgia" or "khuzait")
+                {
+                    poultry = 0.45f;
+                }
+                else if (culture is "empire" or "battania")
+                {
+                    poultry = 0.75f;
+                }
+
                 productions.Add(
-                    new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("chicken"), 1f));
+                    new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("chicken"), poultry));
                 productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("goose"),
-                    1f));
+                    poultry));
             }
 
             if (type == DefaultVillageTypes.OliveTrees)
