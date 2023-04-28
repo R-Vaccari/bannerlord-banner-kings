@@ -27,7 +27,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
         internal override void ApplyGoal()
         {
-            sentence.ExecuteSentence(crime, Fulfiller);
+            sentence.ExecuteSentence(crime, GetFulfiller());
         }
 
         internal override bool IsAvailable()
