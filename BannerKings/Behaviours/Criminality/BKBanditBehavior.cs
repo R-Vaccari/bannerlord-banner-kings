@@ -58,7 +58,7 @@ namespace BannerKings.Behaviours
         private void OnDailyTickHero(Hero hero)
         {
             if (bandits.ContainsKey(hero) && hero.IsPrisoner && MobileParty.MainParty.Party != hero.PartyBelongedToAsPrisoner &&
-                hero.PartyBelongedToAsPrisoner.LeaderHero != null)
+                hero.PartyBelongedToAsPrisoner != null && hero.PartyBelongedToAsPrisoner.LeaderHero != null)
             {
                 KillCharacterAction.ApplyByExecution(hero, hero.PartyBelongedToAsPrisoner.LeaderHero);
             }
