@@ -97,7 +97,7 @@ namespace BannerKings.Behaviours
         private void HandleCultureConversions(Settlement settlement)
         {
             var owner = settlement.OwnerClan?.Leader;
-            if (owner == null || settlement.Notables == null)
+            if (owner == null || settlement.Notables == null || owner.Clan == Clan.PlayerClan)
             {
                 return;
             }
@@ -115,7 +115,10 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            ApplyNotableCultureConversion(notable, owner);
+            if (MBRandom.RandomFloat < 0.05f)
+            {
+                ApplyNotableCultureConversion(notable, owner);
+            }
         }
 
         private void HandleNotableGovernor(Settlement settlement)
