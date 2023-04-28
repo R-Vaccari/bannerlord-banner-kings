@@ -12,7 +12,6 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -236,11 +235,10 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
 
-                result.Add((acres * landData.GetAcreOutput("pasture")) / 
-                    (Math.Max(item.HorseComponent.MeatCount, 1) + item.Tierf));
+                result.Add((acres * landData.GetAcreOutput("pasture")) / Math.Max(item.HorseComponent.MeatCount, 1));
                 if (item.IsMountable)
                 {
-                    result.AddFactor(item.Tierf * -0.12f);
+                    result.AddFactor(item.Tierf * -0.24f);
                 }
             }
 
