@@ -715,29 +715,7 @@ namespace BannerKings.Patches
                     return true;
                 }
 
-                var category = outputItem.Item.ItemCategory;
-                ItemModifierGroup modifierGroup = null;
-                if (outputItem.Item.ArmorComponent != null)
-                {
-                    modifierGroup = outputItem.Item.ArmorComponent.ItemModifierGroup;
-                }
-                else if (outputItem.Item.WeaponComponent != null)
-                {
-                    modifierGroup = outputItem.Item.WeaponComponent.ItemModifierGroup;
-                }
-                else if (outputItem.Item.IsFood)
-                {
-                    modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("consumables");
-                }
-                else if (outputItem.Item.IsAnimal)
-                {
-                    modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("animals");
-                }
-                else if (!outputItem.Item.HasHorseComponent && category != DefaultItemCategories.Iron)
-                {
-                    modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("goods");
-                }
-
+                ItemModifierGroup modifierGroup = Utils.Helpers.GetItemModifierGroup(outputItem.Item);
                 if (workshop.WorkshopType.StringId == "artisans")
                 {
                     float prosperityFactor = town.Prosperity / 10000f;
@@ -1039,7 +1017,6 @@ namespace BannerKings.Patches
                 if (BannerKingsConfig.Instance.PopulationManager != null)
                 {
                     var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
-
                     if (data == null)
                     {
                         return true;
@@ -1048,24 +1025,34 @@ namespace BannerKings.Patches
                     var productions = BannerKingsConfig.Instance.PopulationManager.GetProductions(data);
                     foreach (var valueTuple in productions)
                     {
-                        var item = valueTuple.Item1;
+                        ItemObject item = valueTuple.Item1;
                         var result = Campaign.Current.Models.VillageProductionCalculatorModel.CalculateDailyProductionAmount(
                                 village, item);
+
                         var num = MathF.Floor(result);
                         var diff = result - num;
                         num += GetDifferential(village, item, diff);
 
                         if (num > 0)
                         {
+                            ItemModifierGroup modifierGroup = Utils.Helpers.GetItemModifierGroup(item);
+                            ItemModifier modifier = null;
+                            if (modifierGroup != null)
+                            {
+                                modifier = modifierGroup.GetRandomModifierWithTarget(data.EconomicData.ProductionQuality.ResultNumber, 
+                                    0.2f);
+                            }
+
+                            EquipmentElement element = new EquipmentElement(item, modifier);
                             if (!initialProductionForTowns)
                             {
-                                village.Owner.ItemRoster.AddToCounts(item, num);
+                                village.Owner.ItemRoster.AddToCounts(element, num);
                                 CampaignEventDispatcher.Instance.OnItemProduced(item, village.Owner.Settlement,
                                     num);
                             }
                             else
                             {
-                                village.Bound.ItemRoster.AddToCounts(item, num);
+                                village.Bound.ItemRoster.AddToCounts(element, num);
                             }
                         }
                     }

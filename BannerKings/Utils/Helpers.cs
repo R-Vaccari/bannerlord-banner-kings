@@ -18,6 +18,33 @@ namespace BannerKings.Utils
 {
     public static class Helpers
     {
+        public static ItemModifierGroup GetItemModifierGroup(ItemObject item)
+        {
+            ItemModifierGroup modifierGroup = null;
+            if (item.ArmorComponent != null)
+            {
+                modifierGroup = item.ArmorComponent.ItemModifierGroup;
+            }
+            else if (item.WeaponComponent != null)
+            {
+                modifierGroup = item.WeaponComponent.ItemModifierGroup;
+            }
+            else if (item.IsFood)
+            {
+                modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("consumables");
+            }
+            else if (item.IsAnimal)
+            {
+                modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("animals");
+            }
+            else if (!item.HasHorseComponent && item.ItemCategory != DefaultItemCategories.Iron)
+            {
+                modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("goods");
+            }
+
+            return modifierGroup;
+        }
+
         public static void SetAlliance(IFaction faction1, IFaction faction2)
         {
             var stance = Clan.PlayerClan.GetStanceWith(Hero.OneToOneConversationHero.Clan);
