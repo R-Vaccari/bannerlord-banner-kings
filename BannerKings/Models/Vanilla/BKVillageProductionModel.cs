@@ -2,6 +2,7 @@
 using BannerKings.Extensions;
 using BannerKings.Managers;
 using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
@@ -11,6 +12,7 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -167,8 +169,8 @@ namespace BannerKings.Models.Vanilla
                 slaves = 1f;
             }
 
-            bool woodland = AddWoodlandProcution(ref result, serfs, slaves, item, data.LandData);
-            bool animal = AddAnimalProcution(ref result, item, data.LandData);
+            bool woodland = AddWoodlandProcution(ref result, serfs, slaves, item, data);
+            bool animal = AddAnimalProcution(ref result, item, data);
             bool farm = AddFarmProcution(ref result, serfs, slaves, item, data);
             if (!woodland && !animal && !farm)
             {
@@ -204,10 +206,12 @@ namespace BannerKings.Models.Vanilla
             if (valid)
             {
                 var acres = data.LandData.Farmland;
-                var maxWorkforce = (int)(acres * data.LandData.GetRequiredLabor("farmland"));
-                if (maxWorkforce < (serfs + slaves))
+                if (data.EstateData != null)
                 {
-                    // TODO
+                    foreach (Estate estate in data.EstateData.Estates)
+                    {
+                        acres += estate.Farmland;
+                    }
                 }
 
                 result.Add(serfs * data.LandData.GetAcreClassOutput("farmland", PopulationManager.PopType.Serfs));
@@ -217,13 +221,23 @@ namespace BannerKings.Models.Vanilla
             return valid;
         }
 
-        private bool AddAnimalProcution(ref ExplainedNumber result, ItemObject item, LandData data)
+        private bool AddAnimalProcution(ref ExplainedNumber result, ItemObject item, PopulationData data)
         {
+            LandData landData = data.LandData;
             bool valid = item.IsAnimal || item.IsMountable;
             if (valid)
             {
-                var acres = data.Pastureland;
-                result.Add((acres * data.GetAcreOutput("pasture")) / Math.Max(item.HorseComponent.MeatCount, 1));
+                var acres = landData.Pastureland;
+                if (data.EstateData != null)
+                {
+                    foreach (Estate estate in data.EstateData.Estates)
+                    {
+                        acres += estate.Pastureland;
+                    }
+                }
+
+                result.Add((acres * landData.GetAcreOutput("pasture")) / 
+                    (Math.Max(item.HorseComponent.MeatCount, 1) + item.Tierf));
                 if (item.IsMountable)
                 {
                     result.AddFactor(item.Tierf * -0.12f);
@@ -233,15 +247,24 @@ namespace BannerKings.Models.Vanilla
             return valid;
         }
 
-        private bool AddWoodlandProcution(ref ExplainedNumber result, float serfs, float slaves, ItemObject item, LandData data)
+        private bool AddWoodlandProcution(ref ExplainedNumber result, float serfs, float slaves, ItemObject item, PopulationData data)
         {
             bool valid = item.StringId is "hardwood" or "fur";
             if (valid)
             {
-                var acres = data.Woodland;
-                var maxWorkforce = acres * data.GetRequiredLabor("wood");
+                LandData landData = data.LandData;
+                var acres = landData.Woodland;
+                if (data.EstateData != null)
+                {
+                    foreach (Estate estate in data.EstateData.Estates)
+                    {
+                        acres += estate.Woodland;
+                    }
+                }
+
+                var maxWorkforce = acres * landData.GetRequiredLabor("wood");
                 var workforce = Math.Min(maxWorkforce, serfs + slaves);
-                result.Add(workforce * data.GetAcreOutput("wood") * (item.StringId is "hardwood" ? 30f : 15f));
+                result.Add(workforce * landData.GetAcreOutput("wood") * (item.StringId is "hardwood" ? 30f : 15f));
                 var serfFactor = serfs / slaves;
                 if (serfFactor > 0f)
                 {
