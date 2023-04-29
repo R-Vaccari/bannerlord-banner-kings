@@ -992,7 +992,6 @@ namespace BannerKings.Patches
             }
         }
 
-
         // Impact prosperity
         [HarmonyPatch(typeof(ChangeOwnerOfWorkshopAction), "ApplyInternal")]
         internal class BankruptcyPatch

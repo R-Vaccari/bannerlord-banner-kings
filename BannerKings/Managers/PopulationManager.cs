@@ -278,7 +278,6 @@ namespace BannerKings.Managers
                 productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Honey, honey));
             }
 
-
             var grainTuple = productions.FirstOrDefault(x => x.Item1 == DefaultItems.Grain);
             if (grainTuple.Item1 != null)
             {
