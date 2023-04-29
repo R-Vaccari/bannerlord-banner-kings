@@ -192,7 +192,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
         private float GetInfluenceCost(Hero fulfiller, Hero banner, Estate estate = null)
         {
-            if (banner.IsPartyLeader)
+            if (banner.IsPartyLeader && fulfiller.IsPartyLeader)
             {
                 return BannerKingsConfig.Instance.ArmyManagementModel.CalculatePartyInfluenceCost(fulfiller.PartyBelongedTo,
                     banner.PartyBelongedTo) * 0.75f;

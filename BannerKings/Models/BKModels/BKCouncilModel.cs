@@ -15,6 +15,16 @@ namespace BannerKings.Models.BKModels
             return new ExplainedNumber();
         }
 
+        public ExplainedNumber CalculateRelocateCourtPrice(Clan clan, Town target, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber * 5f, 
+                explanations);
+
+            
+
+            return result;
+        }
+
         public ExplainedNumber CalculateHeroCompetence(Hero hero, CouncilMember position, bool ignoreTask = false, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0f, explanations);
@@ -41,6 +51,15 @@ namespace BannerKings.Models.BKModels
                 result.AddFactor(-0.3f * fluency, new TextObject("{=vRMD0fdw}{LANGUAGE} fluency")
                     .SetTextVariable("LANGUAGE", courtLanguage.Name));
             }
+
+            if (position.Traits != null)
+            {
+                foreach (var pair in position.Traits)
+                {
+                    int trait = hero.GetTraitLevel(pair.Key);
+                    result.AddFactor(trait * pair.Value, pair.Key.Name);
+                }
+            }   
 
             if (!ignoreTask)
             {

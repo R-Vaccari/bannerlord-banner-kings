@@ -91,6 +91,14 @@ namespace BannerKings.Managers
                 }
 
                 title.PostInitialize();
+
+                foreach (var law in DefaultDemesneLaws.Instance.GetAdequateLaws(title))
+                {
+                    if (!title.Contract.DemesneLaws.Any(x => x.LawType == law.LawType))
+                    {
+                        title.Contract.DemesneLaws.Add(law);
+                    }
+                }
             }
         }
 

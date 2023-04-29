@@ -12,6 +12,7 @@ using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 
 namespace BannerKings.Patches
 {
@@ -135,6 +136,14 @@ namespace BannerKings.Patches
                     list = null;
                 }
 
+                return false;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("GetMaxHeroCraftingStamina")]
+            private static bool GetMaxHeroCraftingStaminaPrefix(Hero hero, ref int __result)
+            {
+                __result = 50 + MathF.Round((float)hero.GetSkillValue(DefaultSkills.Crafting) * 1f);
                 return false;
             }
         }

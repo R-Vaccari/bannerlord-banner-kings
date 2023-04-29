@@ -58,7 +58,7 @@ namespace BannerKings.Behaviours
         private void OnDailyTickHero(Hero hero)
         {
             if (bandits.ContainsKey(hero) && hero.IsPrisoner && MobileParty.MainParty.Party != hero.PartyBelongedToAsPrisoner &&
-                hero.PartyBelongedToAsPrisoner.LeaderHero != null)
+                hero.PartyBelongedToAsPrisoner != null && hero.PartyBelongedToAsPrisoner.LeaderHero != null)
             {
                 KillCharacterAction.ApplyByExecution(hero, hero.PartyBelongedToAsPrisoner.LeaderHero);
             }
@@ -73,7 +73,7 @@ namespace BannerKings.Behaviours
 
             RunWeekly(() =>
             {
-                if (!clan.WarPartyComponents.Any(x => x.Leader != null) && MBRandom.RandomFloat < 0.05f)
+                if (!clan.WarPartyComponents.Any(x => x.Leader != null) && MBRandom.RandomFloat < 0.025f)
                 {
                     CreateBanditHero(clan);
                 }

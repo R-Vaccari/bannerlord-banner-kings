@@ -1,122 +1,118 @@
-using Helpers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.ObjectSystem;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
     internal class RecruitCompanionDecision : Goal
     {
-        private readonly List<CompanionType> companionTypes;
+        private List<CompanionType> companionTypes;
         private CompanionType selectedCompanionType;
+        private CultureObject selectedCulture;
 
         public RecruitCompanionDecision() : base("goal_recruit_companion_decision", GoalCategory.Personal, GoalUpdateType.Manual)
         {
-            var name = new TextObject("{=FMuDf3DM}Recruit Companion");
-            var description = new TextObject("{=fG0AXwff}Select a type of companion to recruit.");
+            var name = new TextObject("{=!}Seek Guests");
+            var description = new TextObject("{=!}Invite guests to your court. They will live within your court for some time, where you can reliably find them. Seeking out guests costs influence relative to your House's position. Guests of different cultures and expertises can be sought out, for different costs.");
 
             Initialize(name, description);
+            companionTypes = new List<CompanionType>();
+        }
 
-            var income = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(Clan.PlayerClan).ResultNumber;
+        private void UpdateTypes()
+        {
+            var cap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(GetFulfiller().Clan).ResultNumber;
             companionTypes = new List<CompanionType>
             {
-                new("commander", "Commander", "A companion that meets the criteria for a Commander.", 
-                    (int)(5000 + income * CampaignTime.DaysInYear), 
-                    50,
-                    new List<TraitObject>
-                    {
-                        DefaultTraits.Commander,
-                        DefaultTraits.Manager,
-                        DefaultTraits.SergeantCommandSkills
-                    },
-                    new List<PerkObject>(),
-                    new List<SkillObject>
-                    {
-                        DefaultSkills.Leadership, 
-                        DefaultSkills.Tactics
-                    }),
-                new("thief", "Thief", "A companion that meets the criteria for a Thief.",
-                    (int)(5000 + income * CampaignTime.DaysInYear / 2), 
-                    30,
-                    new List<TraitObject>
-                    {
-                        DefaultTraits.Thief,
-                        DefaultTraits.RogueSkills
-                    },
-                    new List<PerkObject>(),
-                    new List<SkillObject>
-                    {
-                        DefaultSkills.Roguery
-                    }),
-                new("surgeon", "Surgeon", "A companion that meets the criteria for a Surgeon.",
-                    (int)(5000 + income * CampaignTime.DaysInYear / 2),
-                    30,
-                    new List<TraitObject>
-                    {
-                        DefaultTraits.Surgery
-                    },
-                    new List<PerkObject>(),
-                    new List<SkillObject>
-                    {
-                        DefaultSkills.Medicine
-                    }),
-                new("caravaneer", "Caravaneer", "A companion that meets the criteria for a Caravaneer.",
-                    (int)(5000 + income * CampaignTime.DaysInYear / 2),
-                    50,
-                    new List<TraitObject>
-                    {
-                        DefaultTraits.Manager,
-                        DefaultTraits.ScoutSkills,
-                    },
-                    new List<PerkObject>(),
-                    new List<SkillObject> { DefaultSkills.Steward, DefaultSkills.Scouting }),
-                new("warrior", "Warrior", "A companion that meets the criteria for a Warrior.",
-                    (int)(5000 + income * CampaignTime.DaysInYear / 2),
-                    30,
-                    new List<TraitObject>
-                    {
-                        DefaultTraits.Fighter
-                    },
-                    new List<PerkObject>(),
-                    new List<SkillObject>
-                    { 
-                        DefaultSkills.OneHanded, 
-                        DefaultSkills.TwoHanded, 
-                        DefaultSkills.Polearm,
-                        DefaultSkills.Bow, 
-                        DefaultSkills.Crossbow, 
-                        DefaultSkills.Throwing, 
-                        DefaultSkills.Riding,
-                        DefaultSkills.Athletics
-                    })
+                new CompanionType(new TextObject("{=!}Commander"),
+                new TextObject("{=!}A guest adept as a commander. An expensive service given the constant need for quality leadership. A commander will likely have at least 60 proficiency in leadership."),
+                MathF.Max(cap * 0.14f, 60f),
+                new List<TraitObject>()
+                {
+                    DefaultTraits.Commander,
+                    DefaultTraits.SergeantCommandSkills
+                }),
+
+                new CompanionType(new TextObject("{=!}Soldier"),
+                new TextObject("{=!}A guest adept as a soldier, regardless of their fighting style. A solder will likely have at least 60 proficiency in several combat skills."),
+                MathF.Max(cap * 0.06f, 20f),
+                new List<TraitObject>()
+                {
+                    DefaultTraits.ArcherFIghtingSkills,
+                    DefaultTraits.CavalryFightingSkills,
+                    DefaultTraits.HopliteFightingSkills,
+                    DefaultTraits.HorseArcherFightingSkills,
+                    DefaultTraits.HuscarlFightingSkills,
+                    DefaultTraits.KnightFightingSkills,
+                    DefaultTraits.PeltastFightingSkills
+                }),
+
+                new CompanionType(new TextObject("{=!}Healer"),
+                new TextObject("{=!}A guest adept in the healing arts. Due to their high demand, their services are expensive. A healder will likely have at least 60 proficiency in medical skill."),
+                MathF.Max(cap * 0.09f, 35f),
+                new List<TraitObject>()
+                {
+                    DefaultTraits.Surgery
+                }),
+
+                new CompanionType(new TextObject("{=!}Engineer"),
+                new TextObject("{=!}A guest adept in the engineering fields. An engineer will likely have at least 60 proficiency in siegecraft."),
+                MathF.Max(cap * 0.1f, 40f),
+                new List<TraitObject>()
+                {
+                    DefaultTraits.Siegecraft
+                }),
+
+                new CompanionType(new TextObject("{=!}Rogue"),
+                new TextObject("{=!}A guest adept in roguery. A rogue will likely have at least 60 proficiency in roguery."),
+                MathF.Max(cap * 0.07f, 25f),
+                new List<TraitObject>()
+                {
+                    DefaultTraits.RogueSkills
+                }),
+
+                new CompanionType(new TextObject("{=!}Scout"),
+                new TextObject("{=!}A guest adept of scouting regardless of the terrain. A necessity for any warband of significant size. A scout will likely have at least 60 proficiency in scouting."),
+                MathF.Max(cap * 0.07f, 25f),
+                new List<TraitObject>()
+                {
+                    DefaultTraits.ScoutSkills
+                }),
+
+                new CompanionType(new TextObject("{=!}Trader"),
+                new TextObject("{=!}A guest adept in the art of trading. Exceptional caravaneers when paired with scouting abilities. A trader will likely have at least 60 proficiency in trading."),
+                MathF.Max(cap * 0.08f, 30f),
+                new List<TraitObject>()
+                {
+                    DefaultTraits.Trader
+                }),
+
+                new CompanionType(new TextObject("{=!}Steward"),
+                new TextObject("{=!}A guest adept in stewardship. Stewards make for good governors to handle your demesne, as well as capable quartermasters. A rare gift that comes for a premium price. A steward will likely have at least 60 proficiency in stewardship."),
+                MathF.Max(cap * 0.11f, 45f),
+                new List<TraitObject>()
+                {
+                    DefaultTraits.Manager
+                })
             };
         }
 
         internal override bool IsAvailable()
         {
-            return true;
+            var clan = GetFulfiller().Clan;
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+            return council.Location != null;
         }
 
         internal override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
-
-            var gold = GetFulfiller().Gold;
-            var influence = GetFulfiller().Clan?.Influence ?? 0f;
-
-            if (companionTypes.All(ct => gold < ct.GoldCost && influence < ct.InfluenceCost))
-            {
-                failedReasons.Add(new TextObject("{=hkUJWHgi}You can't afford any companion."));
-            }
 
             var clan = GetFulfiller().Clan;
             if (clan.Companions.Count >= clan.CompanionLimit)
@@ -125,169 +121,144 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             return failedReasons.Count == 0;
-            //return failedReasons.IsEmpty();
         }
 
         internal override void ShowInquiry()
         {
-            IsFulfilled(out var failedReasons);
-
-            var gold = GetFulfiller().Gold;
+            UpdateTypes();
             var influence = GetFulfiller().Clan?.Influence ?? 0f;
 
-            var options = new List<InquiryElement>();
-            foreach (var companionType in companionTypes)
+            var cultureOptions = new List<InquiryElement>();
+            foreach (var culture in Campaign.Current.ObjectManager.GetObjectTypeList<CultureObject>())
             {
-                var enabled = gold >= companionType.GoldCost && influence >= companionType.InfluenceCost;
-                var hint = companionType.Description;
-
-                var template = GetAdequateCharacter(companionType);
-                if (template is null) 
+                if (culture.NotableAndWandererTemplates != null && culture.NotableAndWandererTemplates.Count > 0 ||
+                    culture.CanHaveSettlement && !culture.IsBandit && culture.IsMainCulture)
                 {
-                    enabled = false;
-                    hint = new TextObject("{=t6Q3wrwm}No candidates of this type available.").ToString();
+                    cultureOptions.Add(new InquiryElement(culture,
+                        culture.Name.ToString(),
+                        null,
+                        true,
+                        culture.EncyclopediaText.ToString()));
                 }
-                else if (!enabled)
-                {
-                    hint = new TextObject("{=79UWwjoT}You can't afford the cost: {GOLD}{GOLD_ICON} + {INFLUENCE}{INFLUENCE_ICON}")
-                        .SetTextVariable("GOLD", $"{companionType.GoldCost:n0}")
-                        .SetTextVariable("INFLUENCE", $"{companionType.InfluenceCost:n0}")
-                        .SetTextVariable("INFLUENCE_ICON", "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
-                        .ToString();
-                }
-
-                options.Add(new InquiryElement(companionType, companionType.Name, null, enabled, hint));
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=a3G31iZ0}Companions").ToString(),
-                new TextObject("{=9Jtopk6b}Choose a companion to recruit").ToString(),
-                options, 
-                true, 
-                1, 
+                new TextObject("{=!}Guests (1/2)").ToString(),
+                new TextObject("{=!}Determine the cultural origin of the guests you would entertain. Beware foreigners will often be more expensive.").ToString(),
+                cultureOptions,
+                true,
+                1,
                 GameTexts.FindText("str_done").ToString(),
                 GameTexts.FindText("str_cancel").ToString(),
                 delegate (List<InquiryElement> selectedOptions)
                 {
-                    selectedCompanionType = (CompanionType)selectedOptions.First().Identifier;
-                    ApplyGoal();
-                }, 
-                null, 
+                    selectedCulture = (CultureObject)selectedOptions.First().Identifier;
+
+                    var companionOptions = new List<InquiryElement>();
+                    foreach (var companionType in companionTypes)
+                    {
+                        var hint = companionType.Description;
+                        var template = GetAdequateCharacter(companionType);
+                        float influence = companionType.InfluenceCost;
+                        if (selectedCulture != GetFulfiller().Culture)
+                        {
+                            influence *= 1.3f;
+                        }
+
+                        companionOptions.Add(new InquiryElement(companionType, 
+                            new TextObject("{=!}{TYPE} - {INFLUENCE}{INFLUENCE_ICON}")
+                            .SetTextVariable("TYPE", companionType.Name)
+                            .SetTextVariable("INFLUENCE", MBRandom.RoundRandomized(influence))
+                            .SetTextVariable("INFLUENCE_ICON", "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
+                            .ToString(), 
+                            null,
+                            influence >= companionType.InfluenceCost, 
+                            hint.ToString()));
+                    }
+
+                    MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                       new TextObject("{=!}Guests (2/2)").ToString(),
+                       new TextObject("{=!}Determine what kind of guest your court will receive.").ToString(),
+                       companionOptions,
+                       true,
+                       1,
+                       GameTexts.FindText("str_done").ToString(),
+                       GameTexts.FindText("str_cancel").ToString(),
+                       delegate (List<InquiryElement> selectedOptions)
+                       {
+                           selectedCompanionType = (CompanionType)selectedOptions.First().Identifier;
+                           ApplyGoal();
+                       },
+                       null,
+                       string.Empty));
+                },
+                null,
                 string.Empty));
         }
 
-        private CharacterObject GetAdequateCharacter(CompanionType type)
+        private List<CharacterObject> GetAdequateCharacter(CompanionType type)
         {
-            var possibleTemplates = new List<(CharacterObject template, float weight)>();
-            foreach (var template in GetFulfiller().Culture.NotableAndWandererTemplates.Where(t => t.Occupation == Occupation.Wanderer))
+            var possibleTemplates = new List<CharacterObject>();
+            foreach (var template in selectedCulture.NotableAndWandererTemplates.Where(t => t.Occupation == Occupation.Wanderer))
             {
-                var weight = 0f;
-
-                foreach (var trait in type.Traits.Where(trait => template.GetTraitLevel(trait) >= 1))
+                foreach (var trait in type.Trait)
                 {
-                    weight += template.GetTraitLevel(trait);
-                }
-
-                foreach (var perk in type.Perks.Where(perk => template.GetPerkValue(perk)))
-                {
-                    weight++;
-                }
-
-                foreach (var skill in type.Skills.Where(skill => template.GetSkillValue(skill) >= 50))
-                {
-                    weight += (int)(template.GetSkillValue(skill) / 10f);
-                }
-
-                if (weight > 1f)
-                {
-                    possibleTemplates.Add(new (template, weight));
+                    if (template.GetTraitLevel(trait) > 4)
+                    {
+                        possibleTemplates.Add(template);
+                        break;
+                    }
                 }
             }
 
-            possibleTemplates = possibleTemplates.OrderByDescending(pt => pt.weight).ToList();
-
-            return possibleTemplates.Any()
-                ? possibleTemplates.First().template
-                : null;
+            return possibleTemplates;
         }
 
         internal override void ApplyGoal()
         {
             var hero = GetFulfiller();
-            var characterTemplate = GetAdequateCharacter(selectedCompanionType);
+            var characterTemplate = GetAdequateCharacter(selectedCompanionType).GetRandomElement();
 
-            var possibleEquipmentRosters = MBObjectManager.Instance.GetObjectTypeList<MBEquipmentRoster>()
-                .Where(e => e.EquipmentCulture == hero.Culture)
-                .ToList();
+            var bornSettlement = Settlement.All.GetRandomElementWithPredicate(s => s.Culture == selectedCulture);
+            var companion = HeroCreator.CreateSpecialHero(characterTemplate, 
+                bornSettlement, 
+                null,
+                null, 
+                Campaign.Current.Models.AgeModel.HeroComesOfAge + MBRandom.RandomInt(32));
 
-            var equipmentRoster = possibleEquipmentRosters.Where(e => e.EquipmentCulture == hero.Culture).ToList().GetRandomElementWithPredicate(x => x.StringId.Contains("bannerkings_companion"))
-                                  ?? possibleEquipmentRosters.Where(e => e.EquipmentCulture == hero.Culture).ToList().GetRandomElementWithPredicate(x => x.HasEquipmentFlags(EquipmentFlags.IsMediumTemplate));
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero.Clan);
+            TeleportHeroAction.ApplyImmediateTeleportToSettlement(companion, council.Location.Settlement);
+            council.AddGuest(companion);
 
-            var bornSettlement = Settlement.All.GetRandomElementWithPredicate(s => s.Culture == hero.Culture) 
-                                 ?? hero.Clan.Settlements.GetRandomElement() 
-                                 ?? Settlement.All.GetRandomElement();
-
-            var companion = HeroCreator.CreateSpecialHero(characterTemplate, bornSettlement, null, null, Campaign.Current.Models.AgeModel.HeroComesOfAge + MBRandom.RandomInt(12));
-            EquipmentHelper.AssignHeroEquipmentFromEquipment(companion, equipmentRoster.AllEquipments.GetRandomElement());
-            companion.CompanionOf = hero.Clan;
-
-            var companionFoundMessage = new TextObject("{COMPANION.LINK} was discovered and joined you as companion.");
-            companionFoundMessage.SetCharacterProperties("COMPANION", companion.CharacterObject);
-            InformationManager.ShowInquiry
-            (
-                new InquiryData
-                (
-                    "Companion Recruitment",
-                    companionFoundMessage.ToString(),
-                    true, 
-                    false, 
-                    GameTexts.FindText("str_accept").ToString(), 
-                    null, 
-                    () =>
-                    {
-                        Hero.MainHero.ChangeHeroGold(-selectedCompanionType.GoldCost);
-                        GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -selectedCompanionType.InfluenceCost);
-                    }, 
-                    null
-                ),
-                true
-            );
+            float influence = selectedCompanionType.InfluenceCost;
+            if (selectedCulture != GetFulfiller().Culture)
+            {
+                influence *= 1.3f;
+            }
+            ChangeClanInfluenceAction.Apply(hero.Clan, -influence);
+            selectedCompanionType = null;
+            selectedCulture = null;
         }
 
         public override void DoAiDecision()
         {
-            throw new NotImplementedException();
+
         }
 
         private class CompanionType
         {
-            public CompanionType(string stringId, string name, string description, int goldCost, int influenceCost, List<TraitObject> traits, List<PerkObject> perks, List<SkillObject> skills)
+            public CompanionType(TextObject name, TextObject description, float influenceCost, List<TraitObject> trait)
             {
-                StringId = stringId;
                 Name = name;
                 Description = description;
-                GoldCost = goldCost;
                 InfluenceCost = influenceCost;
-                Traits = traits;
-                Perks = perks;
-                Skills = skills;
+                Trait = trait;
             }
 
-            public string StringId { get; set; }
-
-            public string Name { get; set; } 
-
-            public string Description { get; set; } 
-
-            public int GoldCost { get; set; }
-
-            public int InfluenceCost { get; set; }
-
-            public List<TraitObject> Traits { get; set; }
-
-            public List<PerkObject> Perks { get; set; }
-
-            public List<SkillObject> Skills { get; set; }
+            public TextObject Name { get; set; } 
+            public TextObject Description { get; set; } 
+            public float InfluenceCost { get; set; }
+            public List<TraitObject> Trait { get; set; }
         }
     }
 }

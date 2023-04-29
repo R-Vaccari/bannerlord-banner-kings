@@ -70,6 +70,7 @@ namespace BannerKings.Managers.Titles.Laws
         CraftsmenDuties,
         SlaveDuties,
         NobleDuties,
-        EstateTenure
+        EstateTenure,
+        Tenancy
     }
 }

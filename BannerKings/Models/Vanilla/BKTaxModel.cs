@@ -23,11 +23,11 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKTaxModel : DefaultSettlementTaxModel
     {
-        public static readonly float SERF_OUTPUT = 0.33f;
+        public static readonly float SERF_OUTPUT = 0.2f;
 
         public float GetNobleOutput(FeudalTitle title)
         {
-            float result = 3.2f;
+            float result = 2.2f;
 
             if (title != null)
             {
@@ -46,7 +46,7 @@ namespace BannerKings.Models.Vanilla
 
         public float GetCraftsmenOutput(FeudalTitle title)
         {
-            float result = 1.2f;
+            float result = 0.8f;
 
             if (title != null)
             {
@@ -65,7 +65,7 @@ namespace BannerKings.Models.Vanilla
 
         public float GetSlaveOutput(FeudalTitle title)
         {
-            float result = 0.4f;
+            float result = 0.24f;
 
             if (title != null)
             {
@@ -93,9 +93,10 @@ namespace BannerKings.Models.Vanilla
                         BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_slaves_tax");
 
                     float nobles = data.GetTypeCount(PopType.Nobles);
-                    float craftsmen = data.GetTypeCount(PopType.Nobles);
-                    float serfs = data.GetTypeCount(PopType.Nobles);
+                    float craftsmen = data.GetTypeCount(PopType.Craftsmen);
+                    float serfs = data.GetTypeCount(PopType.Serfs);
                     float slaves = data.GetTypeCount(PopType.Slaves);
+                    float tenants = data.GetTypeCount(PopType.Tenants);
 
                     if (craftsmen > 0)
                     {
@@ -132,6 +133,12 @@ namespace BannerKings.Models.Vanilla
                     {
                         baseResult.Add(MBMath.ClampFloat(slaves * GetSlaveOutput(title), 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
                             new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=pop_class_slaves}Slaves")));
+                    }
+
+                    if (tenants > 0f)
+                    {
+                        baseResult.Add(MBMath.ClampFloat(slaves * GetSlaveOutput(title), 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
+                                                   new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=pop_class_slaves}Slaves")));
                     }
 
                     var mining = Campaign.Current.GetCampaignBehavior<BKBuildingsBehavior>().GetMiningRevenue(town);

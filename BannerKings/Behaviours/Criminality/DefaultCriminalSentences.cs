@@ -45,7 +45,7 @@ namespace BannerKings.Behaviours.Criminality
                     {
                         return hero.Gold >= cost || hero.Clan.Gold >= cost;
                     }
-                    
+
                     return hero.Gold >= cost;
                 },
                 (Crime crime, Hero executor) =>
@@ -82,12 +82,12 @@ namespace BannerKings.Behaviours.Criminality
                },
                (Crime crime, Hero executor) =>
                {
-                   if (executor.Occupation == Occupation.Bandit)
+                   Hero hero = crime.Hero;
+                   if (hero.Occupation == Occupation.Bandit)
                    {
                        return false;
                    }
-
-                   Hero hero = crime.Hero;
+                   
                    if (hero.MapFaction == crime.Kingdom.MapFaction)
                    {
                        return crime.Severity == Crime.CrimeSeverity.Treason;

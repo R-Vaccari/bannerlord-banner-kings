@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Helpers;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
@@ -514,6 +515,64 @@ namespace BannerKings.Patches
                 }
 
                 return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(SettlementClaimantDecision))]
+        internal class FiefOwnerPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("DetermineInitialCandidates")]
+            private static bool DetermineInitialCandidatesPrefix(SettlementClaimantDecision __instance,
+                ref IEnumerable<DecisionOutcome> __result)
+            {
+                Kingdom kingdom = (Kingdom)__instance.Settlement.MapFaction;
+                List<SettlementClaimantDecision.ClanAsDecisionOutcome> list = new List<SettlementClaimantDecision.ClanAsDecisionOutcome>();
+                foreach (Clan clan in kingdom.Clans)
+                {
+                    if (clan != __instance.ClanToExclude && !clan.IsUnderMercenaryService && !clan.IsEliminated && !clan.Leader.IsDead)
+                    {
+                        var peerage = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan).Peerage;
+                        if (peerage == null || !peerage.CanHaveFief) continue;
+
+                        list.Add(new SettlementClaimantDecision.ClanAsDecisionOutcome(clan));
+                    }
+                }
+                __result = list;
+                return false;
+            }
+
+            [HarmonyPostfix]
+            [HarmonyPatch("CalculateMeritOfOutcome")]
+            private static void CalculateMeritOfOutcomePostfix(SettlementClaimantDecision __instance,
+               DecisionOutcome candidateOutcome, ref float __result)
+            {
+                if (BannerKingsConfig.Instance.TitleManager != null)
+                {
+                    __result *= 100f;
+                    SettlementClaimantDecision.ClanAsDecisionOutcome clanAsDecisionOutcome = (SettlementClaimantDecision.ClanAsDecisionOutcome)candidateOutcome;
+                    Clan clan = clanAsDecisionOutcome.Clan;
+
+                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, DefaultDivinities.Instance.AseraMain))
+                    {
+                        __result *= 0.2f;
+                    }
+
+                    var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(clan.Leader).ResultNumber;
+                    var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(clan).ResultNumber;
+                    float factor = current / limit;
+                    __result *= 1f - factor;
+                }
+            }
+
+            [HarmonyPostfix]
+            [HarmonyPatch("ShouldBeCancelledInternal")]
+            private static void ShouldBeCancelledInternalPostfix(SettlementClaimantDecision __instance, ref bool __result)
+            {
+                if (!__instance.Settlement.Town.IsOwnerUnassigned)
+                {
+                    __result = true;
+                }
             }
         }
     }

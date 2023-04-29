@@ -10,6 +10,7 @@ using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Traits;
 using BannerKings.Models.Vanilla;
 using BannerKings.Settings;
 using BannerKings.UI;
@@ -129,6 +130,7 @@ namespace BannerKings
             BKPolicies.Instance.Initialize();
             DefaultInnovations.Instance.Initialize();
             BKBuildings.Instance.Initialize();
+            BKTraits.Instance.Initialize();
 
             DefaultMercenaryPrivileges.Instance.Initialize();
             DefaultCustomTroopPresets.Instance.Initialize();
@@ -151,8 +153,6 @@ namespace BannerKings
             {
                 UIManager.Instance.BKScreen.OnFinalize();
             }
-            
-            //ScreenManager.RemoveGlobalLayer(UIManager.Instance.BKScreen);
         }
     }
 }

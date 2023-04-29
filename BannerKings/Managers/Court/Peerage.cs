@@ -45,6 +45,7 @@ namespace BannerKings.Managers.Court
         }
 
         public bool IsLesserPeerage => CanVote && !CanStartElection && !CanGrantKnighthood && !CanHaveFief && CanHaveCouncil;
+        public bool IsFullPeerage => CanVote && CanStartElection && CanGrantKnighthood && CanHaveFief && CanHaveCouncil;
 
         public bool IsFullPeerage => CanVote && CanStartElection && CanGrantKnighthood && CanHaveFief && CanHaveCouncil;
 

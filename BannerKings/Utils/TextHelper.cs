@@ -10,6 +10,7 @@ namespace BannerKings.Utils
         public static uint COLOR_LIGHT_BLUE = 3468224;
         public static uint COLOR_LIGHT_RED = 13582400;
         public static uint COLOR_LIGHT_YELLOW = 16246615;
+
         public static TextObject GetPrinceTitles(GovernmentType government, bool isFemale, CultureObject culture = null)
         {
             TextObject result = null;

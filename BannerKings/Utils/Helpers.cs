@@ -18,6 +18,33 @@ namespace BannerKings.Utils
 {
     public static class Helpers
     {
+        public static ItemModifierGroup GetItemModifierGroup(ItemObject item)
+        {
+            ItemModifierGroup modifierGroup = null;
+            if (item.ArmorComponent != null)
+            {
+                modifierGroup = item.ArmorComponent.ItemModifierGroup;
+            }
+            else if (item.WeaponComponent != null)
+            {
+                modifierGroup = item.WeaponComponent.ItemModifierGroup;
+            }
+            else if (item.IsFood)
+            {
+                modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("consumables");
+            }
+            else if (item.IsAnimal)
+            {
+                modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("animals");
+            }
+            else if (!item.HasHorseComponent && item.ItemCategory != DefaultItemCategories.Iron)
+            {
+                modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("goods");
+            }
+
+            return modifierGroup;
+        }
+
         public static void SetAlliance(IFaction faction1, IFaction faction2)
         {
             var stance = Clan.PlayerClan.GetStanceWith(Hero.OneToOneConversationHero.Clan);
@@ -150,73 +177,89 @@ namespace BannerKings.Utils
 
         public static TextObject GetClassName(PopType type, CultureObject culture)
         {
-            var cultureModifier = '_' + culture.StringId;
-            var id = $"pop_class_{type.ToString().ToLower()}{cultureModifier}";
-            var text = type.ToString();
-            switch (type)
+            string cultureId = culture.StringId;
+            TextObject text;
+
+            if (type == PopType.Serfs)
             {
-                case PopType.Serfs when culture.StringId == "sturgia":
-                    text = "Lowmen";
-                    break;
-                case PopType.Serfs when culture.StringId is "empire" or "aserai":
-                    text = "Commoners";
-                    break;
-                case PopType.Serfs when culture.StringId == "battania":
-                    text = "Freemen";
-                    break;
-                case PopType.Serfs:
+                switch (cultureId) 
                 {
-                    if (culture.StringId == "khuzait")
-                    {
-                        text = "Nomads";
-                    }
-
-                    break;
+                    case "empire":
+                        text = new TextObject("{=!}Coloni");
+                        break;
+                    case "aserai" or "battania":
+                        text = new TextObject("{=!}Commoners");
+                        break;
+                    default:
+                        text = new TextObject("{=!}Serfs");
+                        break;
                 }
-                case PopType.Slaves when culture.StringId == "sturgia":
-                    text = "Thralls";
-                    break;
-                case PopType.Slaves:
+            }
+            else if (type == PopType.Tenants)
+            {
+                switch (cultureId)
                 {
-                    if (culture.StringId == "aserai")
-                    {
-                        text = "Mameluke";
-                    }
-
-                    break;
+                    case "khuzait":
+                        text = new TextObject("{=!}Nomads");
+                        break;
+                    case "sturgia" or "battania":
+                        text = new TextObject("{=!}Freemen");
+                        break;
+                    default:
+                        text = new TextObject("{=!}Tenants");
+                        break;
                 }
-                case PopType.Craftsmen:
+            }
+            else if (type == PopType.Slaves)
+            {
+                switch (cultureId)
                 {
-                    if (culture.StringId is "khuzait" or "battania")
-                    {
-                        text = "Artisans";
-                    }
-
-                    break;
+                    case "empire":
+                        text = new TextObject("{=!}Sclavi");
+                        break;
+                    case "sturgia":
+                        text = new TextObject("{=!}Thralls");
+                        break;
+                    case "aserai":
+                        text = new TextObject("{=!}Mameluke");
+                        break;
+                    default:
+                        text = new TextObject("{=!}Slaves");
+                        break;
                 }
-                case PopType.Nobles when culture.StringId == "empire":
-                    text = "Nobiles";
-                    break;
-                case PopType.Nobles when culture.StringId == "sturgia":
-                    text = "Knyaz";
-                    break;
-                case PopType.Nobles:
+            }
+            else if (type == PopType.Craftsmen)
+            {
+                switch (cultureId)
                 {
-                    if (culture.StringId == "vlandia")
-                    {
-                        text = "Ealdormen";
-                    }
-
-                    break;
+                    case "empire":
+                        text = new TextObject("{=!}Cives");
+                        break;
+                    case "sturgia" or "battania" or "khuzait":
+                        text = new TextObject("{=!}Artisans");
+                        break;
+                    default:
+                        text = new TextObject("{=!}Craftsmen");
+                        break;
                 }
-                case PopType.None:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+            else
+            {
+                switch (cultureId)
+                {
+                    case "empire":
+                        text = new TextObject("{=!}Nobiles");
+                        break;
+                    case "vlandia":
+                        text = new TextObject("{=!}Ealdormen");
+                        break;
+                    default:
+                        text = new TextObject("{=!}Nobles");
+                        break;
+                }
             }
 
-            var finalResult = $"{{={id}}}{text}";
-            return new TextObject(finalResult);
+            return text;
         }
 
         public static string GetGovernmentDescription(GovernmentType type)
@@ -282,15 +325,16 @@ namespace BannerKings.Utils
         public static string GetClassHint(PopType type, CultureObject culture)
         {
             var name = GetClassName(type, culture).ToString();
-            var description = type switch
+            TextObject description = type switch
             {
-                PopType.Nobles => " represent the free, wealthy and influential members of society. They pay very high taxes and increase your influence as a lord.",
-                PopType.Craftsmen => " are free people of trade, such as merchants, engineers and blacksmiths. Somewhat wealthy, free but not high status people. Craftsmen pay a significant amount of taxes and their presence boosts economical development. Their skills can also be hired to significantly boost construction projects.",
-                PopType.Serfs => " are the lowest class that possess some sort of freedom. Unable to attain specialized skills such as those of craftsmen, these people represent the agricultural workforce. They also pay tax over the profit of their production excess.",
-                _ => " are those destituted: criminals, prisioners unworthy of a ransom, and those unlucky to be born into slavery. Slaves do the hard manual labor across settlements, such as building and mining. They themselves pay no tax as they are unable to have posessions, but their labor generates income gathered as tax from their masters."
+                PopType.Nobles => new TextObject("{=!}The {CLASS} represent the free, wealthy and influential members of society. They pay very high taxes and increase your influence as a lord or lady"),
+                PopType.Craftsmen => new TextObject("{=!}The {CLASS} are free people of trade, such as merchants, engineers and blacksmiths. Somewhat wealthy, free but not high status people. Craftsmen pay a significant amount of taxes and their presence boosts economical development. Their skills can also be hired to significantly boost construction projects."),
+                PopType.Serfs => new TextObject("{=!}The {CLASS} are the lowest class that possess some sort of freedom. Unable to attain specialized skills such as those of craftsmen, these people represent the agricultural workforce. They also pay tax over the profit of their production excess."),
+                PopType.Tenants => new TextObject("{=!}The {CLASS} are a step above the serfs. These peasants are free to move and often have rights to protect themselves. Though less taxable than serfs, {CLASS} are more prone to stable and prosperous fiefs due to such rights and the ability to accumulate more wealth."),
+                _ => new TextObject("{=!}The {CLASS} are those destituted: criminals, prisioners unworthy of a ransom, and those unlucky to be born into slavery. Slaves do the hard manual labor across settlements, such as building and mining. They themselves pay no tax as they are unable to have posessions, but their labor generates income gathered as tax from their masters.")
             };
 
-            return name + description;
+            return description.SetTextVariable("CLASS", name).ToString();
         }
 
         public static string GetConsumptionHint(ConsumptionType type)

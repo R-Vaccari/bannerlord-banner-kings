@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -14,10 +13,10 @@ namespace BannerKings.Managers.Goals.Decisions
         private CriminalSentence sentence;
         private Crime crime;
 
-        public SentenceCriminalDecision(Hero fulfiller = null) : base("goal_sentence_criminal", 
-            GoalCategory.Criminal, GoalUpdateType.Hero, fulfiller)
+        public SentenceCriminalDecision(Hero fulfiller = null) : base("goal_sentence_criminal",
+            GoalCategory.Kingdom, GoalUpdateType.Hero, fulfiller)
         {
-            Initialize(new TextObject("{=!}Sentence Criminal"), 
+            Initialize(new TextObject("{=!}Sentence Criminal"),
                 new TextObject("{=!}As a Peer within a realm, you are able to sentence those found to be criminals that you hold within your dungeons."));
         }
 
@@ -28,7 +27,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
         internal override void ApplyGoal()
         {
-            sentence.ExecuteSentence(crime, Fulfiller);
+            sentence.ExecuteSentence(crime, GetFulfiller());
         }
 
         internal override bool IsAvailable()
@@ -41,7 +40,7 @@ namespace BannerKings.Managers.Goals.Decisions
             failedReasons = new List<TextObject>();
 
             BKCriminalityBehavior behavior = Campaign.Current.GetCampaignBehavior<BKCriminalityBehavior>();
-            Dictionary<Hero, List<Crime>> criminals = behavior.GetCriminals(Fulfiller);
+            Dictionary<Hero, List<Crime>> criminals = behavior.GetCriminals(GetFulfiller());
             if (criminals.Count == 0)
             {
                 failedReasons.Add(new TextObject("{=!}You do not have any criminals within your settlement prisons."));
@@ -54,7 +53,7 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             var crimes = new List<InquiryElement>();
             BKCriminalityBehavior behavior = Campaign.Current.GetCampaignBehavior<BKCriminalityBehavior>();
-            Dictionary<Hero, List<Crime>> criminals = behavior.GetCriminals(Fulfiller);
+            Dictionary<Hero, List<Crime>> criminals = behavior.GetCriminals(GetFulfiller());
 
             foreach (var pair in criminals)
             {
@@ -105,7 +104,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                         new TextObject("{=!}Sentence Criminal (2/2)").ToString(),
                         new TextObject("{=!}{HERO} will be sentenced for the crime of {CRIME}. Tyrannical sentences will impact your standing with your peers.").ToString(),
-                        crimes,
+                        sentences,
                         true,
                        1,
                         GameTexts.FindText("str_done").ToString(),

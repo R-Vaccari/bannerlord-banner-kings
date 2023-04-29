@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -129,7 +130,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     var decision = new BKGenderDecision(Clan.PlayerClan, type, title);
                     var text = new TextObject("{=F7iMS7Tz}{LAW} - ({SUPPORT}% support)");
                     text.SetTextVariable("LAW", type.ToString());
-                    text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
+                    text.SetTextVariable("SUPPORT", new KingdomElection(decision).GetLikelihoodForOutcome(0).ToString("0.00"));
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
                         Utils.Helpers.GetGenderLawDescription(type)));
                 }
@@ -148,7 +149,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     var decision = new BKInheritanceDecision(Clan.PlayerClan, type, title);
                     var text = new TextObject("{=F7iMS7Tz}{LAW} - ({SUPPORT}% support)");
                     text.SetTextVariable("LAW", type.ToString());
-                    text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
+                    text.SetTextVariable("SUPPORT", new KingdomElection(decision).GetLikelihoodForOutcome(0).ToString("0.00"));
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
                         Utils.Helpers.GetInheritanceDescription(type)));
                 }
@@ -167,7 +168,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     var decision = new BKSuccessionDecision(Clan.PlayerClan, type, title);
                     var text = new TextObject("{=F7iMS7Tz}{LAW} - ({SUPPORT}% support)");
                     text.SetTextVariable("LAW", Utils.Helpers.GetSuccessionTypeName(type));
-                    text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
+                    text.SetTextVariable("SUPPORT", new KingdomElection(decision).GetLikelihoodForOutcome(0).ToString("0.00"));
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
                         Utils.Helpers.GetSuccessionTypeDescription(type)));
                 }
@@ -186,7 +187,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     var decision = new BKGovernmentDecision(Clan.PlayerClan, type, title);
                     var text = new TextObject("{=F7iMS7Tz}{LAW} - ({SUPPORT}% support)");
                     text.SetTextVariable("LAW", type.ToString());
-                    text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
+                    text.SetTextVariable("SUPPORT", new KingdomElection(decision).GetLikelihoodForOutcome(0).ToString("0.00"));
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
                         Utils.Helpers.GetGovernmentDescription(type)));
                 }

@@ -46,11 +46,11 @@ namespace BannerKings.Behaviours.Criminality
                     Hero hero = prisoner.HeroObject;
                     if (crimes.ContainsKey(hero))
                     {
-                        foreach (var crime in crimes[hero]) 
-                        { 
+                        foreach (var crime in crimes[hero])
+                        {
                             if (!dic.ContainsKey(hero))
                             {
-                                dic.Add(hero, new List<Crime>());   
+                                dic.Add(hero, new List<Crime>());
                             }
 
                             if (crime.Kingdom == jailor.Clan.Kingdom)

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
@@ -19,13 +20,14 @@ namespace BannerKings.Managers.Court
 
         public CouncilMember(string id) : base(id)
         {
-            DueWage = 0;   
+            DueWage = 0;
+            Traits = new Dictionary<TraitObject, float>();
         }
 
         public void Initialize(SkillObject primary, SkillObject secondary,
             List<CouncilTask> tasks, IEnumerable<CouncilPrivileges> privileges,
             Func<CouncilData, bool> isAdequate, Func<CouncilMember, Hero, ValueTuple<bool, TextObject>> isValidCandidateInternal,
-            Func<CouncilMember, TextObject> getCulturalName)
+            Func<CouncilMember, TextObject> getCulturalName, Dictionary<TraitObject, float> traits = null)
         {
             PrimarySkill = primary;
             SecondarySkill = secondary;
@@ -34,25 +36,26 @@ namespace BannerKings.Managers.Court
             this.isAdequate = isAdequate;
             this.isValidCandidateInternal = isValidCandidateInternal;
             this.getCulturalName = getCulturalName;
+            if (traits != null)
+            {
+                Traits = traits;
+            }
         }
 
         public void PostInitialize()
         {
-            if (this.PrimarySkill == null)
+            CouncilMember c = DefaultCouncilPositions.Instance.GetById(this);
+            Initialize(c.PrimarySkill, c.SecondarySkill, c.Tasks, c.Privileges,
+                c.isAdequate, c.isValidCandidateInternal, c.getCulturalName);
+            SetStrings();
+            foreach (var task in Tasks)
             {
-                CouncilMember c = DefaultCouncilPositions.Instance.GetById(this);
-                Initialize(c.PrimarySkill, c.SecondarySkill, c.Tasks, c.Privileges,
-                    c.isAdequate, c.isValidCandidateInternal, c.getCulturalName);
-                SetStrings();
-                foreach (var task in Tasks)
-                {
-                    task.PostInitialize();
-                }
-                CurrentTask.PostInitialize();
-                if (!Tasks.Any(x => x.StringId == CurrentTask.StringId))
-                {
-                    SetTask(Tasks[0]);
-                }
+                task.PostInitialize();
+            }
+            CurrentTask.PostInitialize();
+            if (!Tasks.Any(x => x.StringId == CurrentTask.StringId))
+            {
+                SetTask(Tasks[0]);
             }
         }
 
@@ -78,8 +81,16 @@ namespace BannerKings.Managers.Court
                     return;
                 }
 
-                Member.AddSkillXp(PrimarySkill, 10);
-                Member.AddSkillXp(SecondarySkill, 5);
+                CurrentTask.Tick();
+                if (SecondarySkill != null)
+                {
+                    Member.AddSkillXp(PrimarySkill, 10);
+                }
+                   
+                if (SecondarySkill != null)
+                {
+                    Member.AddSkillXp(SecondarySkill, 5);
+                }
             }
         }
 
@@ -100,6 +111,7 @@ namespace BannerKings.Managers.Court
 
         public  SkillObject PrimarySkill { get; private set; }
         public SkillObject SecondarySkill { get; private set; }
+        public Dictionary<TraitObject, float> Traits { get; private set; }
         public TextObject GetCulturalName() => getCulturalName(this);
 
         protected ValueTuple<bool, TextObject> IsValidCandidateInternal(Hero candidate) => isValidCandidateInternal(this, candidate);

@@ -1,30 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using BannerKings.Extensions;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Settings;
-using BannerKings.UI.Court;
 using BannerKings.Utils;
 using BannerKings.Utils.Extensions;
-using HarmonyLib;
 using Helpers;
-using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.Conversation;
-using TaleWorlds.CampaignSystem.Election;
-using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -45,6 +36,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
             CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, OnClanChangedKingdom);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
+            CampaignEvents.AfterSettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -173,6 +165,23 @@ namespace BannerKings.Behaviours
             }
             
             return IsCompanionOfAnotherClan();
+        }
+
+        private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
+        {
+            if (hero != Hero.MainHero || target.Town == null)
+            {
+                return;
+            }
+
+            CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
+            if (council.Location == target.Town)
+            {
+                foreach (var guest in council.Guests)
+                {
+                    Utils.Helpers.AddNotableToKeep(guest, target);
+                }
+            }
         }
 
         private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, ChangeKingdomAction.ChangeKingdomActionDetail detail, bool showNotification = true)
@@ -361,6 +370,56 @@ namespace BannerKings.Behaviours
             EvaluateRecruitCompanion(clan);
             SetCompanionParty(clan);
             RunCouncilTasks(clan);
+            DismissParties(clan);
+        }
+
+        private void DismissParties(Clan clan)
+        {
+            Kingdom kingdom = clan.Kingdom;
+            if ( kingdom == null)
+            {
+                return;
+            }
+
+            if (FactionManager.GetEnemyKingdoms(kingdom).Count() == 0)
+            {
+                List<MobileParty> toDismiss = new List<MobileParty>();
+                foreach (var party in clan.WarPartyComponents)
+                {
+                    if (party.Leader != null && party.MobileParty.MapEvent == null && (!party.Leader.IsClanLeader() && 
+                        BannerKingsConfig.Instance.TitleManager.GetAllDeJure(party.Leader).Count == 0) &&
+                        party.MobileParty.Army == null)
+                    {
+                        toDismiss.Add(party.MobileParty);
+                    }
+                }
+
+                Settlement nearest = SettlementHelper.FindNearestFortification(x => x.OwnerClan == clan);
+                if (nearest == null)
+                {
+                    Town town = clan.Kingdom.Fiefs.GetRandomElement();
+                    nearest = town?.Settlement;
+                }
+
+                if (nearest != null)
+                {
+                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(nearest);
+                    foreach (var party in toDismiss)
+                    {
+                        Hero leader = party.LeaderHero;
+                        foreach (var element in party.MemberRoster.GetTroopRoster())
+                        {
+                            if (element.Character.Occupation == Occupation.Soldier && !element.Character.IsHero && element.Character.Culture ==
+                                nearest.Culture)
+                            {
+                                data.UpdatePopFromSoldiers(element.Character, element.Number);
+                            }
+                        }
+                        DestroyPartyAction.Apply(null, party);
+                        TeleportHeroAction.ApplyImmediateTeleportToSettlement(leader, nearest);
+                    }
+                }
+            }
         }
 
         private void RunCouncilTasks(Clan clan)
@@ -1023,460 +1082,6 @@ namespace BannerKings.Behaviours
             }
 
             return price * 0.5f;
-        }
-    }
-
-    namespace Patches
-    {
-        [HarmonyPatch(typeof(SettlementClaimantDecision))]
-        internal class FiefOwnerPatches
-        {
-            [HarmonyPrefix]
-            [HarmonyPatch("DetermineInitialCandidates")]
-            private static bool DetermineInitialCandidatesPrefix(SettlementClaimantDecision __instance, 
-                ref IEnumerable<DecisionOutcome> __result)
-            {
-                Kingdom kingdom = (Kingdom)__instance.Settlement.MapFaction;
-                List<SettlementClaimantDecision.ClanAsDecisionOutcome> list = new List<SettlementClaimantDecision.ClanAsDecisionOutcome>();
-                foreach (Clan clan in kingdom.Clans)
-                {
-                    if (clan != __instance.ClanToExclude && !clan.IsUnderMercenaryService && !clan.IsEliminated && !clan.Leader.IsDead)
-                    {
-                        var peerage = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan).Peerage;
-                        if (peerage == null || !peerage.CanHaveFief) continue;
-
-                        list.Add(new SettlementClaimantDecision.ClanAsDecisionOutcome(clan));
-                    }
-                }
-                __result = list;
-                return false;
-            }
-
-            [HarmonyPostfix]
-            [HarmonyPatch("CalculateMeritOfOutcome")]
-            private static void CalculateMeritOfOutcomePostfix(SettlementClaimantDecision __instance,
-               DecisionOutcome candidateOutcome, ref float __result)
-            {
-                if (BannerKingsConfig.Instance.TitleManager != null)
-                {
-                    SettlementClaimantDecision.ClanAsDecisionOutcome clanAsDecisionOutcome = (SettlementClaimantDecision.ClanAsDecisionOutcome)candidateOutcome;
-                    Clan clan = clanAsDecisionOutcome.Clan;
-
-                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, DefaultDivinities.Instance.AseraMain))
-                    {
-                        __result *= 0.2f;
-                    }
-
-                    var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(clan.Leader).ResultNumber;
-                    var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(clan).ResultNumber;
-                    float factor = current / limit;
-                    __result *= 1f - factor;
-
-                }
-            }
-
-            [HarmonyPostfix]
-            [HarmonyPatch("ShouldBeCancelledInternal")]
-            private static void ShouldBeCancelledInternalPostfix(SettlementClaimantDecision __instance, ref bool __result)
-            {
-                if (!__instance.Settlement.Town.IsOwnerUnassigned)
-                {
-                    __result = true;
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(LordConversationsCampaignBehavior))]
-        internal class LordDialoguePatches
-        {
-            [HarmonyPrefix]
-            [HarmonyPatch("conversation_player_ask_prisoners_on_consequence")]
-            private static bool LordPrisonersPrefix()
-            {
-                List<Hero> list = new List<Hero>();
-                foreach (TroopRosterElement troopRosterElement in Hero.OneToOneConversationHero.PartyBelongedTo.PrisonRoster.GetTroopRoster())
-                {
-                    if (troopRosterElement.Character.IsHero && troopRosterElement.Character.HeroObject.IsLord)
-                    {
-                        list.Add(troopRosterElement.Character.HeroObject);
-                    }
-                }
-                ConversationSentence.SetObjectsToRepeatOver(list, 5);
-
-                return false;
-            }
-
-            [HarmonyPrefix]
-            [HarmonyPatch("conversation_wanderer_meet_player_on_condition")]
-            private static bool MeetCompanionPrefix(ref bool __result)
-            {
-                __result = CharacterObject.OneToOneConversationCharacter != null && 
-                    CharacterObject.OneToOneConversationCharacter.IsHero && 
-                    CharacterObject.OneToOneConversationCharacter.Occupation == Occupation.Wanderer && 
-                    CharacterObject.OneToOneConversationCharacter.HeroObject.HeroState != Hero.CharacterStates.Prisoner && 
-                    Hero.OneToOneConversationHero.Clan == null;
-
-                return false;
-            }
-
-            [HarmonyPostfix]
-            [HarmonyPatch("conversation_wanderer_preintroduction_on_condition")]
-            private static void PreIntroductionPostfix(ref bool __result)
-            {
-                if (Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan)
-                {
-                    __result = false;
-                }
-            }
-
-            [HarmonyPostfix]
-            [HarmonyPatch("conversation_companion_hire_gold_on_condition")]
-            private static void HirePostfix(ref bool __result)
-            {
-                if (Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan)
-                {
-                    __result = false;
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(ClanVariablesCampaignBehavior), "MakeClanFinancialEvaluation")]
-        internal class MakeClanFinancialEvaluationPatch
-        {
-            private static bool Prefix(Clan clan)
-            {
-                if (clan.IsMinorFaction)
-                {
-                    return true;
-                }
-
-                if (BannerKingsConfig.Instance.TitleManager != null)
-                {
-                    var war = false;
-                    if (clan.Kingdom != null)
-                    {
-                        war = FactionManager.GetEnemyKingdoms(clan.Kingdom).Any();
-                    }
-
-                    var income = Campaign.Current.Models.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber *
-                                 (war ? 0.45f : 0.15f);
-                    if (war)
-                    {
-                        income += clan.Gold * 0.005f;
-                    }
-
-                    if (income > 0f)
-                    {
-                        var knights = 0f;
-                        foreach (var partyComponent in clan.WarPartyComponents)
-                        {
-                            if (partyComponent.Leader != null && partyComponent.Leader != clan.Leader)
-                            {
-                                var title =
-                                    BannerKingsConfig.Instance.TitleManager.GetHighestTitle(partyComponent.Leader);
-                                if (title is {Fief: { }})
-                                {
-                                    knights++;
-                                    var limit = 0f;
-                                    if (title.Fief.IsVillage)
-                                    {
-                                        limit = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(title.Fief.Village).ResultNumber;
-                                    }
-                                    else if (title.Fief.Town != null)
-                                    {
-                                        limit = Campaign.Current.Models.SettlementTaxModel
-                                            .CalculateTownTax(title.Fief.Town).ResultNumber;
-                                    }
-
-                                    partyComponent.MobileParty.SetWagePaymentLimit((int)(50f + limit));
-                                }
-                            }
-                        }
-
-                        foreach (var partyComponent in clan.WarPartyComponents)
-                        {
-                            var share = income / clan.WarPartyComponents.Count - knights;
-                            partyComponent.MobileParty.SetWagePaymentLimit((int) (300f + share));
-                        }
-
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-        }
-
-        [HarmonyPatch(typeof(ClanVariablesCampaignBehavior))]
-        internal class AutoRecruitmentPatch
-        {
-            [HarmonyPrefix]
-            [HarmonyPatch("UpdateClanSettlementAutoRecruitment", MethodType.Normal)]
-            private static bool Prefix1(Clan clan)
-            {
-                if (clan.MapFaction is {IsKingdomFaction: true})
-                {
-                    var enemies = FactionManager.GetEnemyKingdoms(clan.Kingdom);
-                    foreach (var settlement in clan.Settlements)
-                    {
-                        if (settlement.IsFortification && settlement.Town.GarrisonParty != null)
-                        {
-                            if (enemies.Count() >= 0 && settlement.Town.GarrisonParty.MemberRoster.TotalManCount < 500)
-                            {
-                                settlement.Town.GarrisonAutoRecruitmentIsEnabled = true;
-                            }
-
-                            settlement.Town.GarrisonAutoRecruitmentIsEnabled = false;
-                        }
-                    }
-                }
-
-                return false;
-            }
-        }
-
-        [HarmonyPatch(typeof(DefaultClanFinanceModel))]
-        internal class ClanFinancesPatches
-        {
-            [HarmonyPrefix]
-            [HarmonyPatch("AddIncomeFromKingdomBudget", MethodType.Normal)]
-            private static bool KingdomBudgetPrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
-            {
-                if (BannerKingsConfig.Instance.TitleManager != null)
-                {
-                    var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                    return title is {Contract: { }} &&
-                           title.Contract.Rights.Contains(FeudalRights.Assistance_Rights);
-                }
-
-                return true;
-            }
-
-            [HarmonyPrefix]
-            [HarmonyPatch("AddIncomeFromParty", MethodType.Normal)]
-            private static bool AddIncomeFromPartyPrefix(MobileParty party, Clan clan, ref ExplainedNumber goldChange,
-                bool applyWithdrawals)
-            {
-                if (BannerKingsConfig.Instance.TitleManager != null && party.LeaderHero != null &&
-                    party.LeaderHero != clan.Leader)
-                {
-                    return BannerKingsConfig.Instance.TitleManager.GetHighestTitle(party.LeaderHero) == null;
-                }
-
-                if (party.IsCaravan)
-                {
-                    return !BannerKingsSettings.Instance.RealisticCaravanIncome;
-                }
-
-                return true;
-            }
-
-            [HarmonyPrefix]
-            [HarmonyPatch("AddExpensesFromPartiesAndGarrisons", MethodType.Normal)]
-            private static bool PartyExpensesPrefix(Clan clan, ref ExplainedNumber goldChange,
-                bool applyWithdrawals, bool includeDetails)
-            {
-                if (BannerKingsConfig.Instance.TitleManager != null)
-                {
-                    ExplainedNumber explainedNumber = new ExplainedNumber(0f, goldChange.IncludeDescriptions, null);
-                    var list = new List<MobileParty>();
-                    foreach (var hero in clan.Lords)
-                    foreach (var caravanPartyComponent in hero.OwnedCaravans)
-                    {
-                        list.Add(caravanPartyComponent.MobileParty);
-                    }
-
-                    foreach (var hero2 in clan.Companions)
-                    foreach (var caravanPartyComponent2 in hero2.OwnedCaravans)
-                    {
-                        list.Add(caravanPartyComponent2.MobileParty);
-                    }
-
-                    foreach (var warPartyComponent in clan.WarPartyComponents)
-                    {
-                        list.Add(warPartyComponent.MobileParty);
-                    }
-
-                    foreach (Town town in clan.Fiefs)
-                    {
-                        if (town.GarrisonParty != null && town.GarrisonParty.IsActive)
-                        {
-                            list.Add(town.GarrisonParty);
-                        }
-                    }
-
-                    var model = new DefaultClanFinanceModel();
-                    var getWage = model.GetType()
-                        .GetMethod("CalculatePartyWage", BindingFlags.Instance | BindingFlags.NonPublic);
-                    foreach (var party in list)
-                    {
-                        int budget = clan.Gold + (int)goldChange.ResultNumber + (int)goldChange.ResultNumber;
-                        object[] array = {party, budget, applyWithdrawals};
-                        int expense = (int)getWage.Invoke(model, array);
-
-                        if (applyWithdrawals)
-                        {
-                            if (party.IsLordParty)
-                            {
-                                if (party.LeaderHero != null)
-                                {
-                                    party.LeaderHero.Gold -= expense;
-                                }
-                                else
-                                {
-                                    party.ActualClan.Leader.Gold -= expense;
-                                }
-                            }
-                            else
-                            {
-                                party.PartyTradeGold -= expense;
-                            }
-                        }
-
-                        if (party.LeaderHero != null && party.LeaderHero != clan.Leader)
-                        {
-                            if (BannerKingsConfig.Instance.TitleManager.GetHighestTitle(party.LeaderHero) != null)
-                            {
-                                continue;
-                            }
-                        }
-
-                        if (applyWithdrawals)
-                        {
-                            if (party.LeaderHero != null && party.LeaderHero.IsClanLeader())
-                            {
-                                continue;
-                            }
-
-                            bool needsExtra = false;
-                            if (party.IsLordParty && party.LeaderHero != null)
-                            {
-                                needsExtra = party.LeaderHero.Gold < 5000;
-                            }
-                            else
-                            {
-                                needsExtra = party.PartyTradeGold< 5000;
-                            }
-
-                            if (needsExtra && (expense + 200) < budget)
-                            {
-                                expense += 200;
-                            }
-
-                            int refund = MathF.Min(expense, budget);
-                            if (party.IsLordParty)
-                            {
-                                if (party.LeaderHero != null)
-                                {
-                                    party.LeaderHero.Gold += refund;
-                                }
-                                else
-                                {
-                                    party.ActualClan.Leader.Gold += refund;
-                                }
-                            }
-                            else
-                            {
-                                party.PartyTradeGold += refund;
-                            }
-                        }
-
-                        explainedNumber.Add(-expense,new TextObject("{=tqCSk7ya}Party wages {A0}"), party.Name);
-                    }
-
-                    if (!includeDetails)
-                    {
-                        goldChange.Add(explainedNumber.ResultNumber, new TextObject("{=ChUDSiJw}Garrison and Party Expense", null), null);
-                        return false;
-                    }
-
-                    goldChange.AddFromExplainedNumber(explainedNumber, new TextObject("{=ChUDSiJw}Garrison and Party Expense", null));
-                    return false;
-                }
-
-                return true;
-            }
-
-            [HarmonyPrefix]
-            [HarmonyPatch("AddSettlementIncome", MethodType.Normal)]
-            private static bool VillageIncomePrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals, bool includeDetails)
-            {
-                if (BannerKingsConfig.Instance.TitleManager != null)
-                {
-                    ExplainedNumber explainedNumber = new ExplainedNumber(0f, goldChange.IncludeDescriptions, null);
-                    foreach (Town town in clan.Fiefs)
-                    {
-                        ExplainedNumber explainedNumber2 = new ExplainedNumber((float)((int)((float)town.TradeTaxAccumulated / 5f)), false, null);
-                        int num = MathF.Round(explainedNumber2.ResultNumber);
-                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.ContentTrades, town, ref explainedNumber2);
-                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Crossbow.Steady, town, ref explainedNumber2);
-                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Roguery.SaltTheEarth, town, ref explainedNumber2);
-                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.GivingHands, town, ref explainedNumber2);
-                        if (applyWithdrawals)
-                        {
-                            town.TradeTaxAccumulated -= num;
-                            if (clan == Clan.PlayerClan)
-                            {
-                                CampaignEventDispatcher.Instance.OnPlayerEarnedGoldFromAsset(DefaultClanFinanceModel.AssetIncomeType.Taxes, (int)explainedNumber2.ResultNumber);
-                            }
-                        }
-                        int num2 = (int)Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(town, false).ResultNumber;
-                        explainedNumber.Add((float)num2, new TextObject("{=TLuaPAIO}{A0} Taxes", null), town.Name);
-                        explainedNumber.Add(explainedNumber2.ResultNumber, new TextObject("{=wVMPdc8J}{A0}'s tariff", null), town.Name);
-                        if (town.CurrentDefaultBuilding != null && town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Engineering.ArchitecturalCommisions))
-                        {
-                            explainedNumber.Add(DefaultPerks.Engineering.ArchitecturalCommisions.SecondaryBonus, new TextObject("{=uixuohBp}Settlement Projects", null), null);
-                        }
-                    }
-
-                    int villageTotal = 0;
-                    foreach (Village village in clan.GetActualVillages())
-                    {
-                        FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
-                        var income = CalculateVillageIncome(village);
-                        if (title != null && title.deJure != clan.Leader && applyWithdrawals)
-                        {
-                            ApplyWithdrawal(village, income, title.deJure);
-                        }
-                        else
-                        {
-                            villageTotal += income;
-                            if (applyWithdrawals)
-                            {
-                                ApplyWithdrawal(village, income);
-                            }
-                        }
-                    }
-
-                    goldChange.Add(villageTotal, new TextObject("{=GikQuojv}Village Demesnes"));
-                    if (!includeDetails)
-                    {
-                        goldChange.Add(explainedNumber.ResultNumber, new TextObject("{=AewK9qME}Settlement Income", null), null);
-                        return false;
-                    }
-                    goldChange.AddFromExplainedNumber(explainedNumber, new TextObject("{=AewK9qME}Settlement Income", null));
-                    return false;
-                }
-
-                return true;
-            }
-
-            private static void ApplyWithdrawal(Village village, int income, Hero payTo = null)
-            {
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
-                data.VillageData.LastPayment = income;
-                village.TradeTaxAccumulated -= MathF.Min(village.TradeTaxAccumulated, income);
-                if (payTo != null)
-                {
-                    payTo.Gold += income;
-                }
-            }
-
-            private static int CalculateVillageIncome(Village village) => (int)BannerKingsConfig.Instance.TaxModel
-                .CalculateVillageTaxFromIncome(village,
-                    false,
-                    false)
-                    .ResultNumber;
         }
     }
 }

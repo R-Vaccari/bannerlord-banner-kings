@@ -380,6 +380,7 @@ namespace BannerKings.Models.Vanilla
         {
             var list = new List<ValueTuple<PopType, float>>();
             float serfFactor = 0.1f;
+            float tenantsFactor = 0.09f;
             float craftsmenFactor = 0.04f;
             float nobleFactor = 0.12f;
 
@@ -425,19 +426,9 @@ namespace BannerKings.Models.Vanilla
             list.Add(new(PopType.Serfs, serfFactor));
             list.Add(new(PopType.Craftsmen, craftsmenFactor));
             list.Add(new(PopType.Nobles, nobleFactor));
+            list.Add(new(PopType.Tenants, tenantsFactor));
 
             return list;
-        }
-
-        public float GetClassMilitarism(PopType type)
-        {
-            return type switch
-            {
-                PopType.Serfs => 0.1f,
-                PopType.Craftsmen => 0.03f,
-                PopType.Nobles => 0.12f,
-                _ => 0
-            };
         }
     }
 }

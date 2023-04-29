@@ -206,7 +206,7 @@ namespace BannerKings.Behaviours
                             {
                                 town.Owner.ItemRoster.AddToCounts(item, quantity);
                                 town.ChangeGold(-finalPrice);
-                                AddRevenue(town, finalPrice);
+                                AddRevenue(town, (int)(finalPrice * 0.5f));
                             }
                             else
                             {

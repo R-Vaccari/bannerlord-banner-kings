@@ -1,7 +1,9 @@
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Traits;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -281,11 +283,15 @@ namespace BannerKings.Managers.Court.Members
                (CouncilMember member) =>
                {
                    return new TextObject("{=Gc1CyVPk}Court Physician");
+               },
+               new Dictionary<TraitObject, float>()
+               {
+                   { BKTraits.Instance.Erudite, 0.1f }
                });
 
             CourtSmith.Initialize(
-               DefaultSkills.Medicine,
-               BKSkills.Instance.Scholarship,
+               DefaultSkills.Crafting,
+               null,
                new List<CouncilTask>()
                {
                     DefaultCouncilTasks.Instance.SmithWeapons.GetCopy(),
@@ -325,6 +331,10 @@ namespace BannerKings.Managers.Court.Members
                (CouncilMember member) =>
                {
                    return new TextObject("{=O951oUMh}Court Musician");
+               },
+               new Dictionary<TraitObject, float>()
+               {
+                   { BKTraits.Instance.Musician, 0.8f }
                });
 
             Antiquarian.Initialize(
@@ -346,6 +356,10 @@ namespace BannerKings.Managers.Court.Members
                (CouncilMember member) =>
                {
                    return new TextObject("{=KfZ29QpZ}Antiquarian");
+               },
+               new Dictionary<TraitObject, float>()
+               {
+                   { BKTraits.Instance.Erudite, 0.2f }
                });
 
             Castellan.Initialize(

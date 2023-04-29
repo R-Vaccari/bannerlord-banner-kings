@@ -36,6 +36,10 @@ namespace BannerKings.Managers.Titles.Laws
         public DemesneLaw DraftingVassalage { get; private set; } = new DemesneLaw("drafting_vassalage");
         public DemesneLaw DraftingFreeContracts { get; private set; } = new DemesneLaw("drafting_free_contracts");
 
+        public DemesneLaw TenancyFull { get; private set; } = new DemesneLaw("tenancy_full");
+        public DemesneLaw TenancyMixed { get; private set; } = new DemesneLaw("tenancy_mixed");
+        public DemesneLaw TenancyNone { get; private set; } = new DemesneLaw("tenancy_none");
+
         public override IEnumerable<DemesneLaw> All
         {
             get
@@ -62,6 +66,9 @@ namespace BannerKings.Managers.Titles.Laws
                 yield return DraftingHidage;
                 yield return DraftingFreeContracts;
                 yield return DraftingVassalage;
+                yield return TenancyFull;
+                yield return TenancyMixed;
+                yield return TenancyNone;
             }
         }
 
@@ -111,16 +118,20 @@ namespace BannerKings.Managers.Titles.Laws
                         list.Add(SlaveryAserai.GetCopy());
                     }
                 }
+
+                list.Add(TenancyNone.GetCopy());
             } 
             else if (government == GovernmentType.Tribal)
             {
                 list.Add(DraftingHidage.GetCopy());
                 list.Add(EstateTenureAllodial.GetCopy());
+                list.Add(TenancyFull.GetCopy());
             }
             else
             {
                 list.Add(DraftingFreeContracts.GetCopy());
                 list.Add(EstateTenureFeeTail.GetCopy());
+                list.Add(TenancyMixed.GetCopy());
             }
 
             return list;
@@ -387,6 +398,40 @@ namespace BannerKings.Managers.Titles.Laws
               2);
 
             #endregion Drafting
+
+            #region Tenancy
+
+            TenancyFull.Initialize(new TextObject("{=!}Full Tenancy"),
+              new TextObject("{=!}Under Full Tenancy, serfdom does not thrive anymore. Instead, all non-slave commoners will tend to be free tenants, who rent their land under contracts of goods or monetary taxation. Tenants are of higher class than serfs and are not boun to their land, and so have more mobility and are less exploitable for taxes."),
+              new TextObject("{=!}Serfs will tend to be 100% replaced by tenants\nTenants pay less taxes but are more stable and prosperous"),
+              DemesneLawTypes.Tenancy,
+              -0.5f,
+              1f,
+              -0.8f,
+              900,
+              0);
+
+            TenancyMixed.Initialize(new TextObject("{=!}Mixed Tenure"),
+              new TextObject("{=!}Mixed tenure allows the coexistence of both tenants and serfs. Their compositions will tend to be similar."),
+              new TextObject("{=!}Serfs will tend to be 50% replaced by tenants"),
+              DemesneLawTypes.Tenancy,
+              0.2f,
+              -0.3f,
+              0.4f,
+              900,
+              1);
+
+            TenancyNone.Initialize(new TextObject("{=!}Full Serfdom"),
+              new TextObject("{=!}When bound by serfdom, a commoner is unable to leave their suzerain's land without permission. Though their status is above a slave's, they often miss the rights of free men."),
+              new TextObject("{=!}Tenants will tend to be 0% of population\nSerfs yield more taxes, but are more unhappy and produce less economic prosperity"),
+              DemesneLawTypes.Tenancy,
+              0.8f,
+              -1f,
+              1f,
+              900,
+              2);
+
+            #endregion Tenancy
         }
     }
 }

@@ -46,9 +46,9 @@ namespace BannerKings.Behaviours.Criminality
                             .GetRelationChangeForExecutingHero(crime.Hero, clan.Leader, out affectRelatives);
                         if (relationChangeForExecutingHero != 0)
                         {
-                            ChangeRelationAction.ApplyPlayerRelation(clan.Leader, 
-                                relationChangeForExecutingHero, 
-                                affectRelatives, 
+                            ChangeRelationAction.ApplyPlayerRelation(clan.Leader,
+                                relationChangeForExecutingHero,
+                                affectRelatives,
                                 true);
                         }
                     }

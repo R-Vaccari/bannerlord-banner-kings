@@ -26,12 +26,39 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKInfluenceModel : DefaultClanPoliticsModel
     {
-        public float GetClanInfluencePercentage(Clan clan)
+        public ExplainedNumber GetBequeathPeerageCost(Kingdom kingdom, bool explanations = false)
         {
-            float result = 0f;
+            ExplainedNumber result = new ExplainedNumber(200f, explanations);
+            float cap = CalculateInfluenceCap(kingdom.RulingClan).ResultNumber;
+            result.Add(cap * 0.1f, new TextObject("{=wwYABLRd}Clan Influence Limit"));
 
             return result;
         }
+
+        public int GetCurrentPeers(Kingdom kingdom)
+        {
+            int peers = 0;
+            foreach (Clan kingdomClan in kingdom.Clans)
+            {
+                var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdomClan);
+                if (council.Peerage != null && council.Peerage.IsFullPeerage)
+                {
+                    peers++;
+                }
+            }
+
+            return peers;
+        }
+
+        public ExplainedNumber GetMinimumPeersQuantity(Kingdom kingdom, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(1f, explanations);
+            result.Add(MathF.Floor(kingdom.Fiefs.Count / 2f), new TextObject("{=LBNzsqyb}Fiefs"));
+            result.LimitMax(kingdom.Clans.Count);
+
+            return result;
+        }
+
         public float GetRejectKnighthoodCost(Clan clan)
         {
             return 10f + MathF.Max(CalculateInfluenceChange(clan).ResultNumber, 5f) * 0.025f * CampaignTime.DaysInYear;
@@ -70,6 +97,16 @@ namespace BannerKings.Models.Vanilla
                 if (clan == clan.Kingdom.RulingClan)
                 {
                     result.Add(350, new TextObject("{=IcgVKFxZ}Ruler"));
+                    int peers = GetCurrentPeers(clan.Kingdom);
+
+                    int minimum = (int)GetMinimumPeersQuantity(clan.Kingdom).ResultNumber;
+                    if (peers < minimum)
+                    {
+                        float diff = minimum - peers;
+                        result.AddFactor(diff * -0.2f, new TextObject("{=!}{COUNT} full Peers out of {MINIMUM} minimum within the realm")
+                            .SetTextVariable("COUNT", peers)
+                            .SetTextVariable("MINIMUM", minimum));
+                    }
                 }
 
                 if (clan.Culture != clan.Kingdom.Culture)

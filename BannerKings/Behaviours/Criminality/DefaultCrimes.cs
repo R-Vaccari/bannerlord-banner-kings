@@ -5,7 +5,7 @@ namespace BannerKings.Behaviours.Criminality
 {
     public class DefaultCrimes : DefaultTypeInitializer<DefaultCrimes, Crime>
     {
-        public Crime Banditry { get; } = new Crime("bandity");
+        public Crime Banditry { get; } = new Crime("banditry");
         public override IEnumerable<Crime> All
         {
             get
