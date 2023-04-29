@@ -34,6 +34,21 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
+        public int GetCurrentPeers(Kingdom kingdom)
+        {
+            int peers = 0;
+            foreach (Clan kingdomClan in kingdom.Clans)
+            {
+                var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdomClan);
+                if (council.Peerage != null && council.Peerage.IsFullPeerage)
+                {
+                    peers++;
+                }
+            }
+
+            return peers;
+        }
+
         public ExplainedNumber GetMinimumPeersQuantity(Kingdom kingdom, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(1f, explanations);
@@ -81,21 +96,13 @@ namespace BannerKings.Models.Vanilla
                 if (clan == clan.Kingdom.RulingClan)
                 {
                     result.Add(350, new TextObject("{=IcgVKFxZ}Ruler"));
-                    int peers = 0;
-                    foreach (Clan kingdomClan in clan.Kingdom.Clans)
-                    {
-                        var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdomClan);
-                        if (council.Peerage != null && council.Peerage.IsFullPeerage)
-                        {
-                            peers++;
-                        }
-                    }
+                    int peers = GetCurrentPeers(clan.Kingdom);
 
                     int minimum = (int)GetMinimumPeersQuantity(clan.Kingdom).ResultNumber;
                     if (peers < minimum)
                     {
                         float diff = minimum - peers;
-                        result.AddFactor(diff * -0.1f, new TextObject("{=!}{COUNT} full Peers out of {MINIMUM} minimum within the realm")
+                        result.AddFactor(diff * -0.2f, new TextObject("{=!}{COUNT} full Peers out of {MINIMUM} minimum within the realm")
                             .SetTextVariable("COUNT", peers)
                             .SetTextVariable("MINIMUM", minimum));
                     }

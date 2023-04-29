@@ -107,8 +107,16 @@ namespace BannerKings.UI.Titles
 
             Contract = contractButton;
 
-            TitleInfo.Add(new InformationElement(new TextObject("{=bLbvfBnb}Total Population").ToString(),
-                Population.ToString(), string.Empty));
+            TitleInfo.Add(new InformationElement(new TextObject("{=!}Total Population:").ToString(),
+                Population.ToString(), 
+                new TextObject("{=!}The total population within the fiefs in this hierarchy regardless of who controls them.").ToString()));
+
+            var peerResult = BannerKingsConfig.Instance.InfluenceModel.GetMinimumPeersQuantity(kingdom);
+            int peers = (int)peerResult.ResultNumber;
+            TitleInfo.Add(new InformationElement(new TextObject("{=!}Minimum Peers:").ToString(),
+                peers.ToString(), 
+                new TextObject("{=!}The minimum amount of full Peerage noble houses this realm requires. A minimum amount of Peers is required to maintain the power equilibrium in the realm, so that the ruler does not monopolize voting and fief rights.\n\n{EXPLANATION}")
+                .SetTextVariable("EXPLANATION", peerResult.GetExplanations()).ToString()));
 
             TitleInfo.Add(new InformationElement(new TextObject("{=aoZYxUYV}Government Type:").ToString(),
              title.Contract.Government.ToString(),
