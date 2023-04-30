@@ -173,6 +173,7 @@ namespace BannerKings.Behaviours
         private void OnHeroCreated(Hero hero, bool bornNaturally)
         {
             InitPersonalityTraits(hero);
+            InitNonPersonalityTraits(hero);
         }
     }
 }
