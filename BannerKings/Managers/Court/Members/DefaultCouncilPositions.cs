@@ -286,7 +286,6 @@ namespace BannerKings.Managers.Court.Members
                },
                new Dictionary<TraitObject, float>()
                {
-                   { BKTraits.Instance.Erudite, 0.1f }
                });
 
             CourtSmith.Initialize(
@@ -359,7 +358,6 @@ namespace BannerKings.Managers.Court.Members
                },
                new Dictionary<TraitObject, float>()
                {
-                   { BKTraits.Instance.Erudite, 0.2f }
                });
 
             Castellan.Initialize(

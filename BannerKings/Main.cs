@@ -64,6 +64,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKGentryBehavior());
             campaignStarter.AddBehavior(new BKBanditBehavior());
             campaignStarter.AddBehavior(new BKCriminalityBehavior());
+            campaignStarter.AddBehavior(new BKTraitBehavior());
 
             campaignStarter.AddModel(new BKPrisonerModel());
             campaignStarter.AddModel(new BKCompanionPrices());

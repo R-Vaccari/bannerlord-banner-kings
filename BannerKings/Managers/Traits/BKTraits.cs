@@ -12,13 +12,15 @@ namespace BannerKings.Managers.Traits
 
         public TraitObject Just { get; } = new TraitObject("Just");
         public TraitObject Humble { get; } = new TraitObject("Humble");
-        public TraitObject Patient { get; } = new TraitObject("Patient");
         public TraitObject Diligent { get; } = new TraitObject("Diligent");
         public TraitObject Seductive { get; } = new TraitObject("Seductive");
         public TraitObject Deceitful { get; } = new TraitObject("Deceitful");
         public TraitObject Ambitious { get; } = new TraitObject("Ambitious");
-        public TraitObject Erudite { get; } = new TraitObject("Erudite");
         public TraitObject Zealous { get; } = new TraitObject("Zealous");
+
+        public TraitObject AptitudeViolence { get; } = new TraitObject("AptitudeViolence");
+        public TraitObject AptitudeErudition { get; } = new TraitObject("AptitudeErudition");
+        public TraitObject AptitudeSocializing { get; } = new TraitObject("AptitudeSocializing");
 
         public TraitObject Musician { get; } = new TraitObject("Musician");
 
@@ -34,19 +36,41 @@ namespace BannerKings.Managers.Traits
             }
         }
 
+        public IEnumerable<TraitObject> PoliticalTraits
+        {
+            get
+            {
+                yield return DefaultTraits.Oligarchic;
+                yield return DefaultTraits.Authoritarian;
+                yield return DefaultTraits.Egalitarian;
+            }
+        }
+
         public IEnumerable<TraitObject> PersonalityTraits
         {
             get
             {
+                yield return DefaultTraits.Honor;
+                yield return DefaultTraits.Calculating;
+                yield return DefaultTraits.Mercy;
+                yield return DefaultTraits.Valor;
+                yield return DefaultTraits.Generosity;
                 yield return Just;
                 yield return Humble;
-                yield return Patient;
                 yield return Diligent;
-                yield return Seductive;
                 yield return Deceitful;
                 yield return Ambitious;
-                yield return Erudite;
                 yield return Zealous;
+            }
+        }
+
+        public IEnumerable<TraitObject> AptitudeTraits
+        {
+            get
+            {
+                yield return AptitudeViolence;
+                yield return AptitudeErudition;
+                yield return AptitudeSocializing;
             }
         }
 
@@ -68,8 +92,56 @@ namespace BannerKings.Managers.Traits
 
         public override void Initialize()
         {
-            Just.Initialize(new TextObject("{=!}Just"),
+            Just.Initialize(new TextObject("{=!}Justice"),
                 new TextObject("{=!}Justice is the appropriate punishment and reward for a given deed. Just rulers are often respected by their vassals for delivering appropriate sentences, but also adequately rewarding loyalty."),
+                true,
+                -2,
+                2);
+
+            Humble.Initialize(new TextObject("{=!}Humility"),
+                new TextObject("{=!}Justice is the appropriate punishment and reward for a given deed. Just rulers are often respected by their vassals for delivering appropriate sentences, but also adequately rewarding loyalty."),
+                true,
+                -2,
+                2);
+
+            Diligent.Initialize(new TextObject("{=!}Diligence"),
+                new TextObject("{=!}Justice is the appropriate punishment and reward for a given deed. Just rulers are often respected by their vassals for delivering appropriate sentences, but also adequately rewarding loyalty."),
+                true,
+                -2,
+                2);
+
+            Deceitful.Initialize(new TextObject("{=!}Deceitfulness"),
+                new TextObject("{=!}Justice is the appropriate punishment and reward for a given deed. Just rulers are often respected by their vassals for delivering appropriate sentences, but also adequately rewarding loyalty."),
+                true,
+                -2,
+                2);
+
+            Ambitious.Initialize(new TextObject("{=!}Ambition"),
+                new TextObject("{=!}Justice is the appropriate punishment and reward for a given deed. Just rulers are often respected by their vassals for delivering appropriate sentences, but also adequately rewarding loyalty."),
+                true,
+                -2,
+                2);
+
+            Zealous.Initialize(new TextObject("{=!}Zealotry"),
+                new TextObject("{=!}Justice is the appropriate punishment and reward for a given deed. Just rulers are often respected by their vassals for delivering appropriate sentences, but also adequately rewarding loyalty."),
+                true,
+                -2,
+                2);
+
+            AptitudeViolence.Initialize(new TextObject("{=!}Violence"),
+                new TextObject("{=!}Aptitude for violence describes how inclined one is towards hurting others. Violent persons are more inclined to learn combat skills."),
+                true,
+                -2,
+                2);
+
+            AptitudeErudition.Initialize(new TextObject("{=!}Erudition"),
+                new TextObject("{=!}Aptitude for erudition describes how inclined one is towards intellectual tasks. Erudite persons are more inclined to learn intellectual skills such as Medicine, Scholarship, and others."),
+                true,
+                -2,
+                2);
+
+            AptitudeSocializing.Initialize(new TextObject("{=!}Socializing"),
+                new TextObject("{=!}Aptitude for socializing describes how apt one is in expressing themselves and resolving conflicts. Social persons are more inclined to learn Leadership, Charm and Trade skills."),
                 true,
                 -2,
                 2);
