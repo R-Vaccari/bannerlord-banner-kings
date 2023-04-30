@@ -14,7 +14,6 @@ namespace BannerKings.Managers.Traits
         public TraitObject Humble { get; } = new TraitObject("Humble");
         public TraitObject Diligent { get; } = new TraitObject("Diligent");
         public TraitObject Seductive { get; } = new TraitObject("Seductive");
-        public TraitObject Deceitful { get; } = new TraitObject("Deceitful");
         public TraitObject Ambitious { get; } = new TraitObject("Ambitious");
         public TraitObject Zealous { get; } = new TraitObject("Zealous");
 
@@ -58,7 +57,6 @@ namespace BannerKings.Managers.Traits
                 yield return Just;
                 yield return Humble;
                 yield return Diligent;
-                yield return Deceitful;
                 yield return Ambitious;
                 yield return Zealous;
             }
@@ -105,12 +103,6 @@ namespace BannerKings.Managers.Traits
                 2);
 
             Diligent.Initialize(new TextObject("{=!}Diligence"),
-                new TextObject("{=!}Justice is the appropriate punishment and reward for a given deed. Just rulers are often respected by their vassals for delivering appropriate sentences, but also adequately rewarding loyalty."),
-                true,
-                -2,
-                2);
-
-            Deceitful.Initialize(new TextObject("{=!}Deceitfulness"),
                 new TextObject("{=!}Justice is the appropriate punishment and reward for a given deed. Just rulers are often respected by their vassals for delivering appropriate sentences, but also adequately rewarding loyalty."),
                 true,
                 -2,

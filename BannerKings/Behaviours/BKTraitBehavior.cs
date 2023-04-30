@@ -52,37 +52,46 @@ namespace BannerKings.Behaviours
             }
 
             int honor = hero.GetTraitLevel(DefaultTraits.Honor);
-            if (MBRandom.RandomFloat < MathF.Abs(honor) * 0.1f)
+            if (MBRandom.RandomFloat < MathF.Abs(honor) * 0.3f)
             {
                 socialAptitude += honor;
-                oligarchic += MBRandom.RandomInt(1, 2) * (float)honor;
             }
 
+            oligarchic += MBRandom.RandomInt(1, 3) * (float)honor;
+
             int calculating = hero.GetTraitLevel(DefaultTraits.Calculating);
-            if (MBRandom.RandomFloat < MathF.Abs(honor) * 0.1f)
+            if (MBRandom.RandomFloat < MathF.Abs(calculating) * 0.3f)
             {
                 eruditeAptitude += calculating;
             }
 
+            oligarchic += MBRandom.RandomInt(1, 5) * (float)calculating;
+
             int mercy = hero.GetTraitLevel(DefaultTraits.Mercy);
-            if (MBRandom.RandomFloat < MathF.Abs(honor) * 0.1f)
+            if (MBRandom.RandomFloat < MathF.Abs(mercy) * 0.3f)
             {
                 violentAptitude += mercy;
             }
 
+            egalitarian += MBRandom.RandomInt(1, 5) * (float)mercy;
+            authoritarian -= MBRandom.RandomInt(1, 2) * (float)mercy;
+
             int generosity = hero.GetTraitLevel(DefaultTraits.Generosity);
-            if (MBRandom.RandomFloat < MathF.Abs(honor) * 0.1f)
+            if (MBRandom.RandomFloat < MathF.Abs(generosity) * 0.3f)
             {
                 socialAptitude += generosity;
-                egalitarian += MBRandom.RandomInt(1, 4) * (float)honor;
             }
 
+            egalitarian += MBRandom.RandomInt(1, 5) * (float)generosity;
+            oligarchic -= MBRandom.RandomInt(1, 2) * (float)generosity;
+
             int valor = hero.GetTraitLevel(DefaultTraits.Valor);
-            if (MBRandom.RandomFloat < MathF.Abs(honor) * 0.1f)
+            if (MBRandom.RandomFloat < MathF.Abs(valor) * 0.3f)
             {
                 violentAptitude += valor;
-                authoritarian += MBRandom.RandomInt(1, 4) * (float)honor;
             }
+
+            authoritarian += MBRandom.RandomInt(1, 5) * (float)valor;
 
             hero.SetTraitLevel(BKTraits.Instance.AptitudeViolence, (int)MathF.Clamp(violentAptitude, -2, 2));
             hero.SetTraitLevel(BKTraits.Instance.AptitudeErudition, (int)MathF.Clamp(eruditeAptitude, -2, 2));
@@ -130,12 +139,6 @@ namespace BannerKings.Behaviours
 
                 if (hero.IsGangLeader)
                 {
-                    if (trait == BKTraits.Instance.Deceitful)
-                    {
-                        chance += 0.09f;
-                        level += 1;
-                    }
-
                     if (trait == BKTraits.Instance.Just)
                     {
                         level -= 2;

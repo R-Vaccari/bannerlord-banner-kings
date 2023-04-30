@@ -7,25 +7,45 @@
 	<strings>
 		<string id="gaJDVkvHA" text="Placeholder" />
 		
-		<string id="str_trait_name_Just.0" text="Tyrant" />
-		<string id="str_trait_name_Just.1" text="Unjust" />
-		<string id="str_trait_name_Just.3" text="Just" />
-		<string id="str_trait_name_Just.4" text="Unbiased" />
+		<string id="trait_tyrant" text="Tyrant" />
+		<string id="trait_unjust" text="Unjust" />
+		<string id="trait_just" text="Just" />
+		<string id="trait_unbiased" text="Unbiased" />
 		
-		<string id="str_trait_name_AptitudeViolence.0" text="Tender" />
-		<string id="str_trait_name_AptitudeViolence.1" text="Mild" />
-		<string id="str_trait_name_AptitudeViolence.3" text="Violent" />
-		<string id="str_trait_name_AptitudeViolence.4" text="Vicious" />
+		<string id="trait_pacifist" text="Pacifist" />
+		<string id="trait_mild" text="Mild" />
+		<string id="trait_violent" text="Violent" />
+		<string id="trait_vicious" text="Vicious" />
 		
-		<string id="str_trait_name_aptitudeerudition.0" text="Oblivious" />
-		<string id="str_trait_name_aptitudeerudition.1" text="Distracted" />
-		<string id="str_trait_name_aptitudeerudition.3" text="Studious" />
-		<string id="str_trait_name_aptitudeerudition.4" text="Erudite" />
+		<string id="trait_oblivious" text="Oblivious" />
+		<string id="trait_distracted" text="Distracted" />
+		<string id="trait_studious" text="Studious" />
+		<string id="trait_erudite" text="Erudite" />
 		
-		<string id="str_trait_name_aptitudesocializing.0" text="Reclusive" />
-		<string id="str_trait_name_aptitudesocializing.1" text="Introspective" />
-		<string id="str_trait_name_aptitudesocializing.3" text="Social" />
-		<string id="str_trait_name_aptitudesocializing.4" text="Gregarious" />
+		<string id="trait_reclusive" text="Reclusive" />
+		<string id="trait_introspective" text="Introspective" />
+		<string id="trait_sociable" text="Sociable" />
+		<string id="trait_gregarious" text="Gregarious" />
+
+		<string id="trait_satisfied" text="Satisfied" />
+		<string id="trait_content" text="Content" />
+		<string id="trait_ambitious" text="Ambitious" />
+		<string id="trait_relentless" text="Relentless" />
+		
+		<string id="trait_arrogant" text="Arrogant" />
+		<string id="trait_pretentious" text="Pretentious" />
+		<string id="trait_modest" text="Modest" />
+		<string id="trait_humble" text="Humble" />
+		
+		<string id="trait_lazy" text="Lazy" />
+		<string id="trait_weary" text="Weary" />
+		<string id="trait_diligent" text="Diligent" />
+		<string id="trait_tireless" text="Tireless" />
+		
+		<string id="trait_cynic" text="Cynic" />
+		<string id="trait_skeptic" text="Skeptic" />
+		<string id="trait_faithful" text="Faithful" />
+		<string id="trait_zealot" text="Zealot" />
 		
 		<string id="bk_law_slave_duties" text="Slave Duties" />
 		<string id="bk_law_serf_duties" text="Serf Duties" />
