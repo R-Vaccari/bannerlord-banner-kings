@@ -185,13 +185,13 @@ namespace BannerKings.Utils
                 switch (cultureId) 
                 {
                     case "empire":
-                        text = new TextObject("{=!}Coloni");
+                        text = new TextObject("{=GThkJp2s}Coloni");
                         break;
                     case "aserai" or "battania":
-                        text = new TextObject("{=!}Commoners");
+                        text = new TextObject("{=vSMPBzue}Commoners");
                         break;
                     default:
-                        text = new TextObject("{=!}Serfs");
+                        text = new TextObject("Serfs");
                         break;
                 }
             }
@@ -200,13 +200,13 @@ namespace BannerKings.Utils
                 switch (cultureId)
                 {
                     case "khuzait":
-                        text = new TextObject("{=!}Nomads");
+                        text = new TextObject("{=tUzhQHAh}Nomads");
                         break;
                     case "sturgia" or "battania":
-                        text = new TextObject("{=!}Freemen");
+                        text = new TextObject("{=TEYb57Wo}Freemen");
                         break;
                     default:
-                        text = new TextObject("{=!}Tenants");
+                        text = new TextObject("{=h9UDWQcM}Tenants");
                         break;
                 }
             }
@@ -215,16 +215,16 @@ namespace BannerKings.Utils
                 switch (cultureId)
                 {
                     case "empire":
-                        text = new TextObject("{=!}Sclavi");
+                        text = new TextObject("{=B9hAxxuo}Sclavi");
                         break;
                     case "sturgia":
-                        text = new TextObject("{=!}Thralls");
+                        text = new TextObject("{=j6UDXO39}Thralls");
                         break;
                     case "aserai":
-                        text = new TextObject("{=!}Mameluke");
+                        text = new TextObject("{=TASERbwx}Mameluke");
                         break;
                     default:
-                        text = new TextObject("{=!}Slaves");
+                        text = new TextObject("Slaves");
                         break;
                 }
             }
@@ -233,13 +233,13 @@ namespace BannerKings.Utils
                 switch (cultureId)
                 {
                     case "empire":
-                        text = new TextObject("{=!}Cives");
+                        text = new TextObject("{=6hrBerHd}Cives");
                         break;
                     case "sturgia" or "battania" or "khuzait":
-                        text = new TextObject("{=!}Artisans");
+                        text = new TextObject("{=2ogRjAuf}Artisans");
                         break;
                     default:
-                        text = new TextObject("{=!}Craftsmen");
+                        text = new TextObject("Craftsmen");
                         break;
                 }
             }
@@ -248,13 +248,13 @@ namespace BannerKings.Utils
                 switch (cultureId)
                 {
                     case "empire":
-                        text = new TextObject("{=!}Nobiles");
+                        text = new TextObject("{=Uv29oSQT}Nobiles");
                         break;
                     case "vlandia":
-                        text = new TextObject("{=!}Ealdormen");
+                        text = new TextObject("{=FVuW8Y4j}Ealdormen");
                         break;
                     default:
-                        text = new TextObject("{=!}Nobles");
+                        text = new TextObject("Nobles");
                         break;
                 }
             }
@@ -327,11 +327,11 @@ namespace BannerKings.Utils
             var name = GetClassName(type, culture).ToString();
             TextObject description = type switch
             {
-                PopType.Nobles => new TextObject("{=!}The {CLASS} represent the free, wealthy and influential members of society. They pay very high taxes and increase your influence as a lord or lady"),
-                PopType.Craftsmen => new TextObject("{=!}The {CLASS} are free people of trade, such as merchants, engineers and blacksmiths. Somewhat wealthy, free but not high status people. Craftsmen pay a significant amount of taxes and their presence boosts economical development. Their skills can also be hired to significantly boost construction projects."),
-                PopType.Serfs => new TextObject("{=!}The {CLASS} are the lowest class that possess some sort of freedom. Unable to attain specialized skills such as those of craftsmen, these people represent the agricultural workforce. They also pay tax over the profit of their production excess."),
-                PopType.Tenants => new TextObject("{=!}The {CLASS} are a step above the serfs. These peasants are free to move and often have rights to protect themselves. Though less taxable than serfs, {CLASS} are more prone to stable and prosperous fiefs due to such rights and the ability to accumulate more wealth."),
-                _ => new TextObject("{=!}The {CLASS} are those destituted: criminals, prisioners unworthy of a ransom, and those unlucky to be born into slavery. Slaves do the hard manual labor across settlements, such as building and mining. They themselves pay no tax as they are unable to have posessions, but their labor generates income gathered as tax from their masters.")
+                PopType.Nobles => new TextObject("{=NvDPFtJ3}The {CLASS} represent the free, wealthy and influential members of society. They pay very high taxes and increase your influence as a lord or lady"),
+                PopType.Craftsmen => new TextObject("{=y1LusnZS}The {CLASS} are free people of trade, such as merchants, engineers and blacksmiths. Somewhat wealthy, free but not high status people. Craftsmen pay a significant amount of taxes and their presence boosts economical development. Their skills can also be hired to significantly boost construction projects."),
+                PopType.Serfs => new TextObject("{=QwugjxJo}The {CLASS} are the lowest class that possess some sort of freedom. Unable to attain specialized skills such as those of craftsmen, these people represent the agricultural workforce. They also pay tax over the profit of their production excess."),
+                PopType.Tenants => new TextObject("{=SY5K6vfd}The {CLASS} are a step above the serfs. These peasants are free to move and often have rights to protect themselves. Though less taxable than serfs, {CLASS} are more prone to stable and prosperous fiefs due to such rights and the ability to accumulate more wealth."),
+                _ => new TextObject("{=t6Ez6fZm}The {CLASS} are those destituted: criminals, prisioners unworthy of a ransom, and those unlucky to be born into slavery. Slaves do the hard manual labor across settlements, such as building and mining. They themselves pay no tax as they are unable to have posessions, but their labor generates income gathered as tax from their masters.")
             };
 
             return description.SetTextVariable("CLASS", name).ToString();

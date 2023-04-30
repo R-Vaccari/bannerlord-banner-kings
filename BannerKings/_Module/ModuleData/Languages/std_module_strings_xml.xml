@@ -776,7 +776,6 @@
     <string id="wAPqOuBe" text="August" />
     <string id="H1igmZMn" text="1 knight less is counted towards vassal limit\nTrade penalty increased by {EFFECT2}%" />
     <string id="EJEkuBZ4" text="Civil Administrator" />
-    <string id="sCxt8vV7" text="Reduced demesne weight of towns by {EFFECT1}%\nParty size reduced by {EFFECT2}" />
     <string id="F5aAvvhD" text="Caravaneer" />
     <string id="1UEN6xUV" text="Reduced trade penalty by {EFFECT1}%\nReduced speed during nighttime by {EFFECT2}%" />
     <string id="RUtaPqBv" text="Artisan" />
@@ -799,12 +798,6 @@
     <string id="BLugLsWR" text="Unite Greater Battania" />
     <string id="jHzaifoJ" text="This title is already founded! de Jure is {DE_JURE.LINK} and de Facto is {DE_FACTO.LINK}." />
     <string id="NVcg68Lz" text="You do not adhere to the {RELIGION} faith." />
-    <string id="FMuDf3DM" text="Recruit Companion" />
-    <string id="fG0AXwff" text="Select a type of companion to recruit." />
-    <string id="hkUJWHgi" text="You can't afford any companion." />
-    <string id="t6Q3wrwm" text="No candidates of this type available." />
-    <string id="79UWwjoT" text="You can't afford the cost: {GOLD}{GOLD_ICON} + {INFLUENCE}{INFLUENCE_ICON}" />
-    <string id="9Jtopk6b" text="Choose a companion to recruit" />
     <string id="z69WpCc8" text="Merchants Guild" />
     <string id="qLVinLay" text="Masons Guild" />
     <string id="VPDXcJu7" text="Metalsmiths Guild" />
@@ -2246,5 +2239,111 @@
     <string id="ZQujL7sW" text="The candidate must be a/the spouse of the council leader." />
     <string id="0ZwNdeWq" text="Free contracts allows levies to serve whoever they wish. No strict duty relationship is set between levies and their suzerains. However, foreigner contractors pay a premium for their services." />
     <string id="zWqQMdHK" text="Under Vassalage, levies are bound to their most direct suzerain. The de facto and de jure ownerships of fiefs set the precedence for acces to levies." />
+    <string id="kXhuEU9i" text="Would thou be interested in becoming a Peer?" />
+    <string id="5sZzoU2N" text="Your kingdom is not associated with a sovereign title. Found a title for your kingdom first." />
+    <string id="FgnD58fo" text="You need {INFLUENCE} influence in order to bequeath full Peerage to a lesser Peer." />
+    <string id="DwBAhKQG" text="Bequeathing Peerage will cost {INFLUENCE} influence." />
+    <string id="Yk6qb6ZT" text="{PEERAGE_RESPONSE}" />
+    <string id="fVz0vWBu" text="Very well. I bequeath thee parity within the {KINGDOM_NAME}." />
+    <string id="9hmdku7t" text="As part of creating a realm, the {CLAN} is now considered to have {PEERAGE}. {TEXT}" />
+    <string id="zTJaW41m" text="Your Highness" />
+    <string id="14rSS8Bv" text="Your Eminence" />
+    <string id="cTaDYMvK" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, you honor the {CLAN} with your proposal." />
+    <string id="GThkJp2s" text="Coloni" />
+    <string id="vSMPBzue" text="Commoners" />
+    <string id="jH7cWD5r" text="Serfs" />
+    <string id="tUzhQHAh" text="Nomads" />
+    <string id="TEYb57Wo" text="Freemen" />
+    <string id="h9UDWQcM" text="Tenants" />
+    <string id="B9hAxxuo" text="Sclavi" />
+    <string id="j6UDXO39" text="Thralls" />
+    <string id="TASERbwx" text="Mameluke" />
+    <string id="8xhVr4rK" text="Slaves" />
+    <string id="6hrBerHd" text="Cives" />
+    <string id="2ogRjAuf" text="Artisans" />
+    <string id="d0YJZ6Z1" text="Craftsmen" />
+    <string id="Uv29oSQT" text="Nobiles" />
+    <string id="FVuW8Y4j" text="Ealdormen" />
+    <string id="pJAF5pzO" text="Nobles" />
+    <string id="NvDPFtJ3" text="The {CLASS} represent the free, wealthy and influential members of society. They pay very high taxes and increase your influence as a lord or lady" />
+    <string id="y1LusnZS" text="The {CLASS} are free people of trade, such as merchants, engineers and blacksmiths. Somewhat wealthy, free but not high status people. Craftsmen pay a significant amount of taxes and their presence boosts economical development. Their skills can also be hired to significantly boost construction projects." />
+    <string id="QwugjxJo" text="The {CLASS} are the lowest class that possess some sort of freedom. Unable to attain specialized skills such as those of craftsmen, these people represent the agricultural workforce. They also pay tax over the profit of their production excess." />
+    <string id="SY5K6vfd" text="The {CLASS} are a step above the serfs. These peasants are free to move and often have rights to protect themselves. Though less taxable than serfs, {CLASS} are more prone to stable and prosperous fiefs due to such rights and the ability to accumulate more wealth." />
+    <string id="t6Ez6fZm" text="The {CLASS} are those destituted: criminals, prisioners unworthy of a ransom, and those unlucky to be born into slavery. Slaves do the hard manual labor across settlements, such as building and mining. They themselves pay no tax as they are unable to have posessions, but their labor generates income gathered as tax from their masters." />
+    <string id="m9LxGgmd" text="{HERO} has been found guilty of the {CRIME} crime." />
+    <string id="6cGMoYAZ" text="Bandity" />
+    <string id="ma7sx96C" text="Monetary Fine" />
+    <string id="VsAvikWv" text="Beheading" />
+    <string id="WH4jmWgv" text="{HERO} has been beheaded as sentence to the {CRIME} crime." />
+    <string id="wbOepT0V" text="Revoke Title" />
+    <string id="5pOghsyn" text="Sentence {HERO} to lose his title properties to pay for the {CRIME} crime. 20% of their titles may be ceased, at a minimum of 1." />
+    <string id="CJbZf05V" text="Your court no longer has a place to gather!" />
+    <string id="FVzfdaxP" text="Your court will now gather at {TOWN}!" />
+    <string id="3M6VwcXC" text="{HERO} is now a guest in your court at {TOWN}." />
+    <string id="1q03XzNp" text="Justice" />
+    <string id="g2YTeU2e" text="Humility" />
+    <string id="18oVwc0j" text="Diligence" />
+    <string id="vZizAC8R" text="Ambition" />
+    <string id="HLML3UUw" text="Zealotry" />
+    <string id="6Az4EDih" text="Violence" />
+    <string id="yVBYM231" text="Aptitude for violence describes how inclined one is towards hurting others. Violent persons are more inclined to learn combat skills." />
+    <string id="b7tgia5e" text="Erudition" />
+    <string id="3GMTHrkh" text="Aptitude for erudition describes how inclined one is towards intellectual tasks. Erudite persons are more inclined to learn intellectual skills such as Medicine, Scholarship, and others." />
+    <string id="o2Zvo6fr" text="Socializing" />
+    <string id="1ABqAjFQ" text="Aptitude for socializing describes how apt one is in expressing themselves and resolving conflicts. Social persons are more inclined to learn Leadership, Charm and Trade skills." />
+    <string id="SVt6kyNg" text="{COUNT} full Peers out of {MINIMUM} minimum within the realm" />
+    <string id="FVA72PZG" text="Guests" />
+    <string id="udvUcHNf" text="War Parties:" />
+    <string id="cBqiYPdT" text="Personality" />
+    <string id="B5Bx8p70" text="{TRAIT}:" />
+    <string id="p2qS5hym" text="Aptitudes" />
+    <string id="m45gzwyL" text="Neutral" />
+    <string id="HOeiJpH0" text="Political" />
+    <string id="1s67OmJE" text="Transfer all the gear from all heroes back to your inventory." />
+    <string id="9s1iC4kE" text="Total Population:" />
+    <string id="g4pjb4j4" text="The total population within the fiefs in this hierarchy regardless of who controls them." />
+    <string id="OD6eU7dQ" text="Minimum Peers:" />
+    <string id="H1pvLYrA" text="The minimum amount of full Peerage noble houses this realm requires. A minimum amount of Peers is required to maintain the power equilibrium in the realm, so that the ruler does not monopolize voting and fief rights.\n\n{EXPLANATION}" />
+    <string id="v0bOk0Y9" text="Reduced demesne weight of towns by {EFFECT1}%\nParty size reduced by {EFFECT2}%" />
+    <string id="v094GOtN" text="Relocate Court" />
+    <string id="ojVEsng4" text="Relocate your House's court to a different castle or town." />
+    <string id="Or0X6Y4J" text="Your court is already located in the only available location." />
+    <string id="NpzmdWTX" text="{TOWN} - {GOLD}{GOLD_ICON}" />
+    <string id="q6td7iJ3" text="Move your court to a different castle or town. Moving your court costs according to your income and the court's amenities." />
+    <string id="HcGkCnSH" text="Seek Guests" />
+    <string id="Ug94AACX" text="Invite guests to your court. They will live within your court for some time, where you can reliably find them. Seeking out guests costs influence relative to your House's position. Guests of different cultures and expertises can be sought out, for different costs." />
+    <string id="q6cxgOou" text="Commander" />
+    <string id="61scYHtR" text="A guest adept as a commander. An expensive service given the constant need for quality leadership. A commander will likely have at least 60 proficiency in leadership." />
+    <string id="Q8Zv4D7p" text="Soldier" />
+    <string id="h6QeRUFk" text="A guest adept as a soldier, regardless of their fighting style. A solder will likely have at least 60 proficiency in several combat skills." />
+    <string id="XrR7XZWp" text="Healer" />
+    <string id="4WhG1re9" text="A guest adept in the healing arts. Due to their high demand, their services are expensive. A healder will likely have at least 60 proficiency in medical skill." />
+    <string id="t0UENgOQ" text="Engineer" />
+    <string id="jUWDvhFm" text="A guest adept in the engineering fields. An engineer will likely have at least 60 proficiency in siegecraft." />
+    <string id="vGEs0w41" text="Rogue" />
+    <string id="mu1hg1y0" text="A guest adept in roguery. A rogue will likely have at least 60 proficiency in roguery." />
+    <string id="cQwb9BX0" text="Scout" />
+    <string id="dBYCCT4W" text="A guest adept of scouting regardless of the terrain. A necessity for any warband of significant size. A scout will likely have at least 60 proficiency in scouting." />
+    <string id="R5VvmxJ7" text="Trader" />
+    <string id="5dcdprut" text="A guest adept in the art of trading. Exceptional caravaneers when paired with scouting abilities. A trader will likely have at least 60 proficiency in trading." />
+    <string id="k4oyM9dT" text="Steward" />
+    <string id="gfmewont" text="A guest adept in stewardship. Stewards make for good governors to handle your demesne, as well as capable quartermasters. A rare gift that comes for a premium price. A steward will likely have at least 60 proficiency in stewardship." />
+    <string id="zfQkfCPp" text="Determine the cultural origin of the guests you would entertain. Beware foreigners will often be more expensive." />
+    <string id="Hyfgj4Mw" text="{TYPE} - {INFLUENCE}{INFLUENCE_ICON}" />
+    <string id="TmBXiTjD" text="Determine what kind of guest your court will receive." />
+    <string id="pKoKaKNd" text="Sentence Criminal" />
+    <string id="R6X7JFKz" text="As a Peer within a realm, you are able to sentence those found to be criminals that you hold within your dungeons." />
+    <string id="CcisWSka" text="You do not have any criminals within your settlement prisons." />
+    <string id="5oS3A1Gy" text="{CRIME} - {NAME}" />
+    <string id="Pb2ZQBVH" text="{HERO} has been found guilty of the {CRIME} crime on {DATE}" />
+    <string id="cNVFv1sW" text="Choose a criminal to be sentenced. The possible sentences are contextual. Sentences can be considered tyrannical also depending on context, and will negatively impact your standing with your peers." />
+    <string id="iOOx1Tca" text="{SENTENCE} (Tyrannical)" />
+    <string id="GaQTC0YT" text="{HERO} will be sentenced for the crime of {CRIME}. Tyrannical sentences will impact your standing with your peers." />
+    <string id="JEbygACX" text="Full Tenancy" />
+    <string id="uf1BxiQJ" text="Under Full Tenancy, serfdom does not thrive anymore. Instead, all non-slave commoners will tend to be free tenants, who rent their land under contracts of goods or monetary taxation. Tenants are of higher class than serfs and are not boun to their land, and so have more mobility and are less exploitable for taxes." />
+    <string id="oT9UmZUt" text="Mixed Tenure" />
+    <string id="z5ox1p40" text="Mixed tenure allows the coexistence of both tenants and serfs. Their compositions will tend to be similar." />
+    <string id="LGuO56aW" text="Full Serfdom" />
+    <string id="FuKNBsvU" text="When bound by serfdom, a commoner is unable to leave their suzerain's land without permission. Though their status is above a slave's, they often miss the rights of free men." />
   </strings>
 </base>

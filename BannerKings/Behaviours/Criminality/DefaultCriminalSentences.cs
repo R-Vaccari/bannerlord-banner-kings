@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -30,7 +30,7 @@ namespace BannerKings.Behaviours.Criminality
 
         public override void Initialize()
         {
-            Fine.Initialize(new TextObject("{=!}Monetary Fine"),
+            Fine.Initialize(new TextObject("{=ma7sx96C}Monetary Fine"),
                 new TextObject(),
                 (Crime crime) =>
                 {
@@ -68,7 +68,7 @@ namespace BannerKings.Behaviours.Criminality
                     executor.ChangeHeroGold(cost);
                 });
 
-            Beheading.Initialize(new TextObject("{=!}Beheading"),
+            Beheading.Initialize(new TextObject("{=VsAvikWv}Beheading"),
                new TextObject(),
                (Crime crime) =>
                {
@@ -126,14 +126,14 @@ namespace BannerKings.Behaviours.Criminality
                    }
 
                    InformationManager.DisplayMessage(new InformationMessage(
-                       new TextObject("{=!}{HERO} has been beheaded as sentence to the {CRIME} crime.")
+                       new TextObject("{=WH4jmWgv}{HERO} has been beheaded as sentence to the {CRIME} crime.")
                        .SetTextVariable("HERO", hero.Name)
                        .SetTextVariable("CRIME", crime.Name)
                        .ToString(),
                        Color.FromUint(color)));
                });
 
-            RevokeTitle.Initialize(new TextObject("{=!}Revoke Title"),
+            RevokeTitle.Initialize(new TextObject("{=wbOepT0V}Revoke Title"),
                new TextObject(),
                (Crime crime) =>
                {
@@ -161,8 +161,8 @@ namespace BannerKings.Behaviours.Criminality
                        }
 
                        MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                           new TextObject("{=!}Revoke Title").ToString(),
-                           new TextObject("{=!}Sentence {HERO} to lose his title properties to pay for the {CRIME} crime. 20% of their titles may be ceased, at a minimum of 1.")
+                           new TextObject("{=wbOepT0V}Revoke Title").ToString(),
+                           new TextObject("{=5pOghsyn}Sentence {HERO} to lose his title properties to pay for the {CRIME} crime. 20% of their titles may be ceased, at a minimum of 1.")
                            .SetTextVariable("HERO", hero.Name)
                            .SetTextVariable("CRIME", crime.Name)
                            .ToString(),

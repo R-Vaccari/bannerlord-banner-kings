@@ -22,7 +22,7 @@ namespace BannerKings.UI.Extensions
         public InventoryMixin(SPInventoryVM vm) : base(vm)
         {
             inventoryVM = vm;
-            ClearGearHint = new BasicTooltipViewModel(() => new TextObject("{=!}Transfer all the gear from all heroes back to your inventory."));
+            ClearGearHint = new BasicTooltipViewModel(() => new TextObject("{=1s67OmJE}Transfer all the gear from all heroes back to your inventory."));
         }
 
         [DataSourceProperty] public BasicTooltipViewModel ClearGearHint

@@ -534,7 +534,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_offer_peerage",
               "lord_talk_speak_diplomacy_2",
               "bk_peerage_offered",
-              "{=!}Would thou be interested in becoming a Peer?",
+              "{=kXhuEU9i}Would thou be interested in becoming a Peer?",
               () =>
               {
                   if (Hero.OneToOneConversationHero == null || Hero.OneToOneConversationHero.Clan == null)
@@ -563,19 +563,19 @@ namespace BannerKings.Behaviours
                   {
                       if (BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom) == null)
                       {
-                          reason = new TextObject("{=!}Your kingdom is not associated with a sovereign title. Found a title for your kingdom first.");
+                          reason = new TextObject("{=5sZzoU2N}Your kingdom is not associated with a sovereign title. Found a title for your kingdom first.");
                           return false;
                       }
 
                       float cost = BannerKingsConfig.Instance.InfluenceModel.GetBequeathPeerageCost(kingdom).ResultNumber;
                       if (Clan.PlayerClan.Influence < cost)
                       {
-                          reason = new TextObject("{=!}You need {INFLUENCE} influence in order to bequeath full Peerage to a lesser Peer.")
+                          reason = new TextObject("{=FgnD58fo}You need {INFLUENCE} influence in order to bequeath full Peerage to a lesser Peer.")
                           .SetTextVariable("INFLUENCE", cost);
                           return false;
                       }
 
-                      reason = new TextObject("{=!}Bequeathing Peerage will cost {INFLUENCE} influence.")
+                      reason = new TextObject("{=DwBAhKQG}Bequeathing Peerage will cost {INFLUENCE} influence.")
                       .SetTextVariable("INFLUENCE", cost);
                   }
 
@@ -585,7 +585,7 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("bk_peerage_offered",
               "bk_peerage_offered",
               "bk_peerage_accepted",
-              "{=!}{PEERAGE_RESPONSE}",
+              "{=Yk6qb6ZT}{PEERAGE_RESPONSE}",
               () =>
               {
                   Hero hero = Hero.OneToOneConversationHero;
@@ -599,7 +599,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_peerage_accepted",
               "bk_peerage_accepted",
               "close_window",
-              "{=!}Very well. I bequeath thee parity within the {KINGDOM_NAME}.",
+              "{=fVz0vWBu}Very well. I bequeath thee parity within the {KINGDOM_NAME}.",
               () =>
               {
                   var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
@@ -613,7 +613,7 @@ namespace BannerKings.Behaviours
               {
                   Kingdom kingdom = Clan.PlayerClan.Kingdom;
                   float cost = BannerKingsConfig.Instance.InfluenceModel.GetBequeathPeerageCost(kingdom).ResultNumber;
-                  reason = new TextObject("{=!}Bequeathing Peerage will cost {INFLUENCE} influence.")
+                  reason = new TextObject("{=DwBAhKQG}Bequeathing Peerage will cost {INFLUENCE} influence.")
                   .SetTextVariable("INFLUENCE", cost);
                   return true;
               });
@@ -649,7 +649,7 @@ namespace BannerKings.Behaviours
                 var peerage = council.Peerage;
                 InformationManager.ShowInquiry(new InquiryData(
                     peerage.Name.ToString(),
-                    new TextObject("{=!}As part of creating a realm, the {CLAN} is now considered to have {PEERAGE}. {TEXT}")
+                    new TextObject("As part of creating a realm, the {CLAN} is now considered to have {PEERAGE}. {TEXT}")
                     .SetTextVariable("CLAN", Clan.PlayerClan.Name)
                     .SetTextVariable("PEERAGE", peerage.Name)
                     .SetTextVariable("TEXT", peerage.PeerageGrantedText())

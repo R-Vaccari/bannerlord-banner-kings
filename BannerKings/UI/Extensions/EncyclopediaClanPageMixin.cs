@@ -220,7 +220,7 @@ namespace BannerKings.UI.Extensions
 
                 if (clan.MapFaction == Clan.PlayerClan.MapFaction)
                 {
-                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}War Parties:").ToString(),
+                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=udvUcHNf}War Parties:").ToString(),
                                         clan.WarPartyComponents.Count.ToString(), null));
 
                     var income = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(clan, true);

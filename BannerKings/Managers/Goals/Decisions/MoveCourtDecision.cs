@@ -14,8 +14,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public MoveCourtDecision() : base("goal_move_court", GoalCategory.Personal, GoalUpdateType.Manual)
         {
-            var name = new TextObject("{=!}Relocate Court");
-            var description = new TextObject("{=!}Relocate your House's court to a different castle or town.");
+            var name = new TextObject("{=v094GOtN}Relocate Court");
+            var description = new TextObject("{=ojVEsng4}Relocate your House's court to a different castle or town.");
 
             Initialize(name, description);
         }
@@ -42,7 +42,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 list.Remove(council.Location);
                 if (list.Count == 0)
                 {
-                    failedReasons.Add(new TextObject("{=!}Your court is already located in the only available location."));
+                    failedReasons.Add(new TextObject("{=Or0X6Y4J}Your court is already located in the only available location."));
                 }
             }
 
@@ -60,7 +60,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 if (fief != council.Location)
                 {
                     options.Add(new InquiryElement(fief,
-                        new TextObject("{=!}{TOWN} - {GOLD}{GOLD_ICON}")
+                        new TextObject("{=NpzmdWTX}{TOWN} - {GOLD}{GOLD_ICON}")
                         .SetTextVariable("TOWN", fief.Name)
                         .SetTextVariable("GOLD", gold)
                         .ToString(),
@@ -71,8 +71,8 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Relocate Court").ToString(),
-                new TextObject("{=!}Move your court to a different castle or town. Moving your court costs according to your income and the court's amenities.").ToString(),
+                new TextObject("{=v094GOtN}Relocate Court").ToString(),
+                new TextObject("{=q6td7iJ3}Move your court to a different castle or town. Moving your court costs according to your income and the court's amenities.").ToString(),
                 options, 
                 true, 
                 1, 

@@ -103,7 +103,7 @@ namespace BannerKings.Models.Vanilla
                     if (peers < minimum)
                     {
                         float diff = minimum - peers;
-                        result.AddFactor(diff * -0.2f, new TextObject("{=!}{COUNT} full Peers out of {MINIMUM} minimum within the realm")
+                        result.AddFactor(diff * -0.2f, new TextObject("{=SVt6kyNg}{COUNT} full Peers out of {MINIMUM} minimum within the realm")
                             .SetTextVariable("COUNT", peers)
                             .SetTextVariable("MINIMUM", minimum));
                     }

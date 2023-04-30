@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Criminality;
+using BannerKings.Behaviours.Criminality;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +16,8 @@ namespace BannerKings.Managers.Goals.Decisions
         public SentenceCriminalDecision(Hero fulfiller = null) : base("goal_sentence_criminal",
             GoalCategory.Kingdom, GoalUpdateType.Hero, fulfiller)
         {
-            Initialize(new TextObject("{=!}Sentence Criminal"),
-                new TextObject("{=!}As a Peer within a realm, you are able to sentence those found to be criminals that you hold within your dungeons."));
+            Initialize(new TextObject("{=pKoKaKNd}Sentence Criminal"),
+                new TextObject("{=R6X7JFKz}As a Peer within a realm, you are able to sentence those found to be criminals that you hold within your dungeons."));
         }
 
         public override void DoAiDecision()
@@ -43,7 +43,7 @@ namespace BannerKings.Managers.Goals.Decisions
             Dictionary<Hero, List<Crime>> criminals = behavior.GetCriminals(GetFulfiller());
             if (criminals.Count == 0)
             {
-                failedReasons.Add(new TextObject("{=!}You do not have any criminals within your settlement prisons."));
+                failedReasons.Add(new TextObject("{=CcisWSka}You do not have any criminals within your settlement prisons."));
             }
 
             return failedReasons.IsEmpty();
@@ -60,13 +60,13 @@ namespace BannerKings.Managers.Goals.Decisions
                 foreach (var crime in pair.Value)
                 {
                     crimes.Add(new InquiryElement(crime,
-                       new TextObject("{=!}{CRIME} - {NAME}")
+                       new TextObject("{=5oS3A1Gy}{CRIME} - {NAME}")
                        .SetTextVariable("CRIME", crime.Name)
                        .SetTextVariable("NAME", crime.Hero.Name)
                        .ToString(),
                        null,
                        true,
-                       new TextObject("{=!}{HERO} has been found guilty of the {CRIME} crime on {DATE}")
+                       new TextObject("{=Pb2ZQBVH}{HERO} has been found guilty of the {CRIME} crime on {DATE}")
                        .SetTextVariable("HERO", crime.Hero.Name)
                        .SetTextVariable("CRIME", crime.Name)
                        .SetTextVariable("DATE", crime.Date.ToString())
@@ -75,8 +75,8 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Sentence Criminal (1/2)").ToString(),
-                new TextObject("{=!}Choose a criminal to be sentenced. The possible sentences are contextual. Sentences can be considered tyrannical also depending on context, and will negatively impact your standing with your peers.").ToString(),
+                new TextObject("{=pKoKaKNd}Sentence Criminal (1/2)").ToString(),
+                new TextObject("{=cNVFv1sW}Choose a criminal to be sentenced. The possible sentences are contextual. Sentences can be considered tyrannical also depending on context, and will negatively impact your standing with your peers.").ToString(),
                 crimes,
                 true,
                 1,
@@ -91,7 +91,7 @@ namespace BannerKings.Managers.Goals.Decisions
                         TextObject name = sentence.Name;
                         if (sentence.IsSentenceTyranical(crime, Hero.MainHero))
                         {
-                            name = new TextObject("{=!}{SENTENCE} (Tyrannical)")
+                            name = new TextObject("{=iOOx1Tca}{SENTENCE} (Tyrannical)")
                             .SetTextVariable("SENTENCE", sentence.Name);
                         }
                         sentences.Add(new InquiryElement(sentence,
@@ -102,8 +102,8 @@ namespace BannerKings.Managers.Goals.Decisions
                     }
 
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                        new TextObject("{=!}Sentence Criminal (2/2)").ToString(),
-                        new TextObject("{=!}{HERO} will be sentenced for the crime of {CRIME}. Tyrannical sentences will impact your standing with your peers.").ToString(),
+                        new TextObject("{=pKoKaKNd}Sentence Criminal (2/2)").ToString(),
+                        new TextObject("{=GaQTC0YT}{HERO} will be sentenced for the crime of {CRIME}. Tyrannical sentences will impact your standing with your peers.").ToString(),
                         sentences,
                         true,
                        1,

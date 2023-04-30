@@ -45,11 +45,11 @@ namespace BannerKings.Dialogue
             {
                 if (cultureId == "vlandia")
                 {
-                    result = new TextObject("{=!}Your Highness");
+                    result = new TextObject("{=zTJaW41m}Your Highness");
                 }
                 else if (cultureId == "empire")
                 {
-                    result = new TextObject("{=!}Your Eminence");
+                    result = new TextObject("{=14rSS8Bv}Your Eminence");
                 }
             }
 
@@ -60,7 +60,7 @@ namespace BannerKings.Dialogue
         {
             List<DialogueOption> result = new List<DialogueOption>();
             result.Add(new DialogueOption(
-                new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, you honor the {CLAN} with your proposal.")
+                new TextObject("{=cTaDYMvK}{?PLAYER.GENDER}My lady{?}My lord{\\?}, you honor the {CLAN} with your proposal.")
                 .SetTextVariable("CLAN", newPeer.Clan.Name),
                 -0.2f,
                 0.2f,

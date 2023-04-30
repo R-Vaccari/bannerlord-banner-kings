@@ -18,8 +18,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public RecruitCompanionDecision() : base("goal_recruit_companion_decision", GoalCategory.Personal, GoalUpdateType.Manual)
         {
-            var name = new TextObject("{=!}Seek Guests");
-            var description = new TextObject("{=!}Invite guests to your court. They will live within your court for some time, where you can reliably find them. Seeking out guests costs influence relative to your House's position. Guests of different cultures and expertises can be sought out, for different costs.");
+            var name = new TextObject("{=HcGkCnSH}Seek Guests");
+            var description = new TextObject("{=Ug94AACX}Invite guests to your court. They will live within your court for some time, where you can reliably find them. Seeking out guests costs influence relative to your House's position. Guests of different cultures and expertises can be sought out, for different costs.");
 
             Initialize(name, description);
             companionTypes = new List<CompanionType>();
@@ -30,8 +30,8 @@ namespace BannerKings.Managers.Goals.Decisions
             var cap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(GetFulfiller().Clan).ResultNumber;
             companionTypes = new List<CompanionType>
             {
-                new CompanionType(new TextObject("{=!}Commander"),
-                new TextObject("{=!}A guest adept as a commander. An expensive service given the constant need for quality leadership. A commander will likely have at least 60 proficiency in leadership."),
+                new CompanionType(new TextObject("Commander"),
+                new TextObject("{=61scYHtR}A guest adept as a commander. An expensive service given the constant need for quality leadership. A commander will likely have at least 60 proficiency in leadership."),
                 MathF.Max(cap * 0.14f, 60f),
                 new List<TraitObject>()
                 {
@@ -39,8 +39,8 @@ namespace BannerKings.Managers.Goals.Decisions
                     DefaultTraits.SergeantCommandSkills
                 }),
 
-                new CompanionType(new TextObject("{=!}Soldier"),
-                new TextObject("{=!}A guest adept as a soldier, regardless of their fighting style. A solder will likely have at least 60 proficiency in several combat skills."),
+                new CompanionType(new TextObject("{=Q8Zv4D7p}Soldier"),
+                new TextObject("{=h6QeRUFk}A guest adept as a soldier, regardless of their fighting style. A solder will likely have at least 60 proficiency in several combat skills."),
                 MathF.Max(cap * 0.06f, 20f),
                 new List<TraitObject>()
                 {
@@ -53,48 +53,48 @@ namespace BannerKings.Managers.Goals.Decisions
                     DefaultTraits.PeltastFightingSkills
                 }),
 
-                new CompanionType(new TextObject("{=!}Healer"),
-                new TextObject("{=!}A guest adept in the healing arts. Due to their high demand, their services are expensive. A healder will likely have at least 60 proficiency in medical skill."),
+                new CompanionType(new TextObject("{=XrR7XZWp}Healer"),
+                new TextObject("{=4WhG1re9}A guest adept in the healing arts. Due to their high demand, their services are expensive. A healder will likely have at least 60 proficiency in medical skill."),
                 MathF.Max(cap * 0.09f, 35f),
                 new List<TraitObject>()
                 {
                     DefaultTraits.Surgery
                 }),
 
-                new CompanionType(new TextObject("{=!}Engineer"),
-                new TextObject("{=!}A guest adept in the engineering fields. An engineer will likely have at least 60 proficiency in siegecraft."),
+                new CompanionType(new TextObject("{=t0UENgOQ}Engineer"),
+                new TextObject("{=jUWDvhFm}A guest adept in the engineering fields. An engineer will likely have at least 60 proficiency in siegecraft."),
                 MathF.Max(cap * 0.1f, 40f),
                 new List<TraitObject>()
                 {
                     DefaultTraits.Siegecraft
                 }),
 
-                new CompanionType(new TextObject("{=!}Rogue"),
-                new TextObject("{=!}A guest adept in roguery. A rogue will likely have at least 60 proficiency in roguery."),
+                new CompanionType(new TextObject("{=vGEs0w41}Rogue"),
+                new TextObject("{=mu1hg1y0}A guest adept in roguery. A rogue will likely have at least 60 proficiency in roguery."),
                 MathF.Max(cap * 0.07f, 25f),
                 new List<TraitObject>()
                 {
                     DefaultTraits.RogueSkills
                 }),
 
-                new CompanionType(new TextObject("{=!}Scout"),
-                new TextObject("{=!}A guest adept of scouting regardless of the terrain. A necessity for any warband of significant size. A scout will likely have at least 60 proficiency in scouting."),
+                new CompanionType(new TextObject("{=cQwb9BX0}Scout"),
+                new TextObject("{=dBYCCT4W}A guest adept of scouting regardless of the terrain. A necessity for any warband of significant size. A scout will likely have at least 60 proficiency in scouting."),
                 MathF.Max(cap * 0.07f, 25f),
                 new List<TraitObject>()
                 {
                     DefaultTraits.ScoutSkills
                 }),
 
-                new CompanionType(new TextObject("{=!}Trader"),
-                new TextObject("{=!}A guest adept in the art of trading. Exceptional caravaneers when paired with scouting abilities. A trader will likely have at least 60 proficiency in trading."),
+                new CompanionType(new TextObject("{=R5VvmxJ7}Trader"),
+                new TextObject("{=5dcdprut}A guest adept in the art of trading. Exceptional caravaneers when paired with scouting abilities. A trader will likely have at least 60 proficiency in trading."),
                 MathF.Max(cap * 0.08f, 30f),
                 new List<TraitObject>()
                 {
                     DefaultTraits.Trader
                 }),
 
-                new CompanionType(new TextObject("{=!}Steward"),
-                new TextObject("{=!}A guest adept in stewardship. Stewards make for good governors to handle your demesne, as well as capable quartermasters. A rare gift that comes for a premium price. A steward will likely have at least 60 proficiency in stewardship."),
+                new CompanionType(new TextObject("Steward"),
+                new TextObject("{=gfmewont}A guest adept in stewardship. Stewards make for good governors to handle your demesne, as well as capable quartermasters. A rare gift that comes for a premium price. A steward will likely have at least 60 proficiency in stewardship."),
                 MathF.Max(cap * 0.11f, 45f),
                 new List<TraitObject>()
                 {
@@ -143,8 +143,8 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Guests (1/2)").ToString(),
-                new TextObject("{=!}Determine the cultural origin of the guests you would entertain. Beware foreigners will often be more expensive.").ToString(),
+                new TextObject("{=FVA72PZG}Guests (1/2)").ToString(),
+                new TextObject("{=zfQkfCPp}Determine the cultural origin of the guests you would entertain. Beware foreigners will often be more expensive.").ToString(),
                 cultureOptions,
                 true,
                 1,
@@ -166,7 +166,7 @@ namespace BannerKings.Managers.Goals.Decisions
                         }
 
                         companionOptions.Add(new InquiryElement(companionType, 
-                            new TextObject("{=!}{TYPE} - {INFLUENCE}{INFLUENCE_ICON}")
+                            new TextObject("{=Hyfgj4Mw}{TYPE} - {INFLUENCE}{INFLUENCE_ICON}")
                             .SetTextVariable("TYPE", companionType.Name)
                             .SetTextVariable("INFLUENCE", MBRandom.RoundRandomized(influence))
                             .SetTextVariable("INFLUENCE_ICON", "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
@@ -177,8 +177,8 @@ namespace BannerKings.Managers.Goals.Decisions
                     }
 
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                       new TextObject("{=!}Guests (2/2)").ToString(),
-                       new TextObject("{=!}Determine what kind of guest your court will receive.").ToString(),
+                       new TextObject("{=FVA72PZG}Guests (2/2)").ToString(),
+                       new TextObject("{=TmBXiTjD}Determine what kind of guest your court will receive.").ToString(),
                        companionOptions,
                        true,
                        1,
