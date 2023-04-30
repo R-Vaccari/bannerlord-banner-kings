@@ -81,7 +81,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
             Traditionalists.Initialize(new TextObject("{=!}Traditionalists"),
                new TextObject("{=!}Traditionalists support the status quo and the way of the ancestors. More than anything, they believe in strength. While they recognize the necessity for a strong ruler, they also do the necessity of liberty for the noble classes. They aim for a balance of power between the sovereign and their vassals, a continuation of old traditions and exerting power through force."),
-               BKTraits.Instance.Conservative,
+               BKTraits.Instance.Diligent,
                true,
                true,
                true,
@@ -244,7 +244,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
             Commoners.Initialize(new TextObject("{=!}Commoners"),
                 new TextObject(),
-                DefaultTraits.Generosity,
+                BKTraits.Instance.Just,
                 false,
                 true,
                 false,
