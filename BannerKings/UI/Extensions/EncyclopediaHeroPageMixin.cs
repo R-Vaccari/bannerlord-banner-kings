@@ -1,10 +1,12 @@
 using System;
 using System.Linq;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Traits;
 using BannerKings.Utils.Extensions;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.Pages;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Generic;
@@ -19,26 +21,26 @@ namespace BannerKings.UI.Extensions
     {
         private bool addedFields;
         private readonly EncyclopediaHeroPageVM heroPageVM;
-        private MBBindingList<StringPairItemVM> marriage;
+        private MBBindingList<TraitGroupVM> traitGroups;
 
         public EncyclopediaHeroPageMixin(EncyclopediaHeroPageVM vm) : base(vm)
         {
             heroPageVM = vm;
-            Marriage = new MBBindingList<StringPairItemVM>();
+            TraitGroups = new MBBindingList<TraitGroupVM>();
         }
 
         [DataSourceProperty] public string CultureText => GameTexts.FindText("str_culture").ToString();
         [DataSourceProperty] public string MarriageText => new TextObject("{=mxVj1euY}Marriage").ToString();
 
         [DataSourceProperty]
-        public MBBindingList<StringPairItemVM> Marriage
+        public MBBindingList<TraitGroupVM> TraitGroups
         {
-            get => marriage;
+            get => traitGroups;
             set
             {
-                if (value != marriage)
+                if (value != traitGroups)
                 {
-                    marriage = value;
+                    traitGroups = value;
                     ViewModel!.OnPropertyChangedWithValue(value);
                 }
             }
@@ -46,8 +48,7 @@ namespace BannerKings.UI.Extensions
 
         public override void OnRefresh()
         {
-            //heroPageVM.Stats.Clear();
-            //Marriage.Clear();
+            TraitGroups.Clear();
             Hero hero = (Hero)heroPageVM.Obj;
 
             if (!addedFields)
@@ -77,7 +78,94 @@ namespace BannerKings.UI.Extensions
                         .ToString())));
                 }
 
+                var personality = new TraitGroupVM(new TextObject("{=!}Personality"));
+                TraitGroups.Add(personality);
+                foreach (TraitObject trait in BKTraits.Instance.PersonalityTraits)
+                {
+                    int level = hero.GetTraitLevel(trait);
+                    if (level == 0)
+                    {
+                        continue;
+                    }
+
+                    string value = GameTexts.FindText("str_trait_name_" + trait.StringId.ToLower(), (level + MathF.Abs(trait.MinValue)).ToString()).ToString();
+                    personality.Traits.Add(new StringPairItemVM(new TextObject("{=!}{TRAIT}:")
+                        .SetTextVariable("TRAIT", trait.Name.ToString()).ToString(),
+                        value,
+                        new BasicTooltipViewModel(() => trait.Description.ToString())));
+                }
+
+                var aptitudes = new TraitGroupVM(new TextObject("{=!}Aptitudes"));
+                TraitGroups.Add(aptitudes);
+                foreach (TraitObject trait in BKTraits.Instance.AptitudeTraits)
+                {
+                    int level = hero.GetTraitLevel(trait);
+                    string value = GameTexts.FindText("str_trait_name_" + trait.StringId.ToLower(), (level + MathF.Abs(trait.MinValue)).ToString()).ToString();
+                    if (level == 0)
+                    {
+                        value = new TextObject("{=!}Neutral").ToString();
+                    }
+
+                    aptitudes.Traits.Add(new StringPairItemVM(new TextObject("{=!}{TRAIT}:")
+                        .SetTextVariable("TRAIT", trait.Name.ToString()).ToString(),
+                        value,
+                        new BasicTooltipViewModel(() => trait.Description.ToString())));
+                }
+
+                var political = new TraitGroupVM(new TextObject("{=!}Political"));
+                TraitGroups.Add(political);
+                foreach (TraitObject trait in BKTraits.Instance.PoliticalTraits)
+                {
+                    float level = hero.GetTraitLevel(trait);
+                    float result = level / trait.MaxValue;
+
+                    political.Traits.Add(new StringPairItemVM(new TextObject("{=!}{TRAIT}:")
+                        .SetTextVariable("TRAIT", trait.Name.ToString()).ToString(),
+                        (result * 100f).ToString("0.0") + '%',
+                        new BasicTooltipViewModel(() => trait.Description.ToString())));
+                }
+
                 addedFields = true;
+            }
+        }
+
+        internal class TraitGroupVM : ViewModel
+        {
+            private string title;
+            private MBBindingList<StringPairItemVM> traits;
+
+            internal TraitGroupVM(TextObject title)
+            {
+                this.title = title.ToString();
+                traits = new MBBindingList<StringPairItemVM>();
+            }
+
+            [DataSourceProperty]
+            public string Title
+            {
+                get => title;
+                set
+                {
+                    if (value != title)
+                    {
+                        title = value;
+                        OnPropertyChangedWithValue(value);
+                    }
+                }
+            }
+
+            [DataSourceProperty]
+            public MBBindingList<StringPairItemVM> Traits
+            {
+                get => traits;
+                set
+                {
+                    if (value != traits)
+                    {
+                        traits = value;
+                        OnPropertyChangedWithValue(value);
+                    }
+                }
             }
         }
     }

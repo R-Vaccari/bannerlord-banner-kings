@@ -2,6 +2,45 @@
 
 <strings>
 
+	<string id="str_trait_name_just.0" text="{=trait_tyrant}Tyrant" />
+	<string id="str_trait_name_just.1" text="{=trait_unjust}Unjust" />
+	<string id="str_trait_name_just.3" text="{=trait_just}Just" />
+	<string id="str_trait_name_just.4" text="{=trait_unbiased}Unbiased" />
+
+    <string id="str_trait_name_ambitious.0" text="{=trait_satisfied}Satisfied" />
+	<string id="str_trait_name_ambitious.1" text="{=trait_content}Content" />
+	<string id="str_trait_name_ambitious.3" text="{=trait_ambitious}Ambitious" />
+	<string id="str_trait_name_ambitious.4" text="{=trait_relentless}Relentless" />
+	
+	<string id="str_trait_name_humble.0" text="{=trait_arrogant}Arrogant" />
+	<string id="str_trait_name_humble.1" text="{=trait_pretentious}Pretentious" />
+	<string id="str_trait_name_humble.3" text="{=trait_modest}Modest" />
+	<string id="str_trait_name_humble.4" text="{=trait_humble}Humble" />
+	
+	<string id="str_trait_name_diligent.0" text="{=trait_lazy}Lazy" />
+	<string id="str_trait_name_diligent.1" text="{=trait_weary}Weary" />
+	<string id="str_trait_name_diligent.3" text="{=trait_diligent}Diligent" />
+	<string id="str_trait_name_diligent.4" text="{=trait_tireless}Tireless" />
+	
+	<string id="str_trait_name_zealous.0" text="{=trait_cynic}Cynic" />
+	<string id="str_trait_name_zealous.1" text="{=trait_skeptic}Skeptic" />
+	<string id="str_trait_name_zealous.3" text="{=trait_faithful}Faithful" />
+	<string id="str_trait_name_zealous.4" text="{=trait_zealot}Zealot" />
+	
+	<string id="str_trait_name_aptitudeviolence.0" text="{=trait_pacifist}Pacifist" />
+	<string id="str_trait_name_aptitudeviolence.1" text="{=trait_mild}Mild" />
+	<string id="str_trait_name_aptitudeviolence.3" text="{=trait_violent}Violent" />
+	<string id="str_trait_name_aptitudeviolence.4" text="{=trait_vicious}Vicious" />
+	
+	<string id="str_trait_name_aptitudesocializing.0" text="{=trait_reclusive}Reclusive" />
+	<string id="str_trait_name_aptitudesocializing.1" text="{=trait_introspective}Introspective" />
+	<string id="str_trait_name_aptitudesocializing.3" text="{=trait_sociable}Sociable" />
+	<string id="str_trait_name_aptitudesocializing.4" text="{=trait_gregarious}Gregarious" />
+	
+	<string id="str_trait_name_aptitudeerudition.0" text="{=trait_oblivious}Oblivious" />
+	<string id="str_trait_name_aptitudeerudition.1" text="{=trait_distracted}Distracted" />
+	<string id="str_trait_name_aptitudeerudition.3" text="{=trait_studious}Studious" />
+	<string id="str_trait_name_aptitudeerudition.4" text="{=trait_erudite}Erudite" />
 
 	<string id="str_bk_demesne_law.Slavery" text="{=bk_slavery}Slavery" />
 	<string id="str_bk_demesne_law.Drafting" text="{=bk_drafting}Drafting" />
