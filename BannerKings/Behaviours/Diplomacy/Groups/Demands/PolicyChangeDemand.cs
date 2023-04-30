@@ -510,7 +510,14 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
             if (IsDueDate)
             {
-                ShowPlayerDemandAnswers();
+                if (Group.Leader == Hero.MainHero)
+                {
+                    ShowPlayerDemandAnswers();
+                }
+                else
+                {
+                    DoAiChoice();
+                }
             }
         }
     }

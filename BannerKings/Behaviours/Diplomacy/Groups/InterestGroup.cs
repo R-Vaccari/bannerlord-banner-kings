@@ -76,15 +76,10 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
         public void Tick()
         {
-            if (Leader == null)
-            {
-                SetNewLeader(KingdomDiplomacy);
-            }
-
             var toRemove = new List<Hero>();
             foreach (var hero in Members)
             {
-                if (hero.IsDead)
+                if (hero.IsDead || hero.MapFaction != KingdomDiplomacy.Kingdom)
                 {
                     toRemove.Add(hero);
                 }
@@ -93,6 +88,11 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             foreach (var hero in toRemove)
             {
                 Members.Remove(hero);
+            }
+
+            if (Leader == null)
+            {
+                SetNewLeader(KingdomDiplomacy);
             }
 
             var current = CurrentDemand;

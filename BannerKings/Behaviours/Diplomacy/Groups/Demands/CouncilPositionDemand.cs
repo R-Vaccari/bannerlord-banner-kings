@@ -4,7 +4,6 @@ using BannerKings.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
@@ -593,9 +592,13 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 {
                     PositiveAnswer.Fulfill(Group.FactionLeader);
                 }
-                else
+                else if (Group.Leader == Hero.MainHero)
                 {
                     ShowPlayerDemandAnswers();
+                }
+                else
+                {
+                    DoAiChoice();
                 }
             }
         }
