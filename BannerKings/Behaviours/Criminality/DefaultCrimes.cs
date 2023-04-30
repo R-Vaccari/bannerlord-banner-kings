@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Criminality
@@ -16,7 +16,7 @@ namespace BannerKings.Behaviours.Criminality
 
         public override void Initialize()
         {
-            Banditry.Initialize(new TextObject("{=!}Bandity"),
+            Banditry.Initialize(new TextObject("{=6cGMoYAZ}Bandity"),
                 new TextObject("{=!}"));
 
         }

@@ -54,7 +54,7 @@ namespace BannerKings.UI.Court
 
         [DataSourceProperty] public string FamilyText => new TextObject("{=QCw05MZN}Household").ToString();
         [DataSourceProperty] public string CourtiersText => new TextObject("{=PykdjcGm}Courtiers").ToString();
-        [DataSourceProperty] public string GuestsText => new TextObject("{=!}Guests").ToString();
+        [DataSourceProperty] public string GuestsText => new TextObject("{=FVA72PZG}Guests").ToString();
         [DataSourceProperty] public string EffectsText => new TextObject("{=K7df68TT}Effects").ToString();
         [DataSourceProperty] public string PrivilegesText => new TextObject("{=77D4i3pG}Privileges").ToString();
         [DataSourceProperty] public string PrivyCouncilText => new TextObject("{=7NeZtxVP}Privy Council").ToString();

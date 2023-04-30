@@ -78,7 +78,7 @@ namespace BannerKings.UI.Extensions
                         .ToString())));
                 }
 
-                var personality = new TraitGroupVM(new TextObject("{=!}Personality"));
+                var personality = new TraitGroupVM(new TextObject("{=cBqiYPdT}Personality"));
                 TraitGroups.Add(personality);
                 foreach (TraitObject trait in BKTraits.Instance.PersonalityTraits)
                 {
@@ -89,13 +89,13 @@ namespace BannerKings.UI.Extensions
                     }
 
                     string value = GameTexts.FindText("str_trait_name_" + trait.StringId.ToLower(), (level + MathF.Abs(trait.MinValue)).ToString()).ToString();
-                    personality.Traits.Add(new StringPairItemVM(new TextObject("{=!}{TRAIT}:")
+                    personality.Traits.Add(new StringPairItemVM(new TextObject("{=B5Bx8p70}{TRAIT}:")
                         .SetTextVariable("TRAIT", trait.Name.ToString()).ToString(),
                         value,
                         new BasicTooltipViewModel(() => trait.Description.ToString())));
                 }
 
-                var aptitudes = new TraitGroupVM(new TextObject("{=!}Aptitudes"));
+                var aptitudes = new TraitGroupVM(new TextObject("{=p2qS5hym}Aptitudes"));
                 TraitGroups.Add(aptitudes);
                 foreach (TraitObject trait in BKTraits.Instance.AptitudeTraits)
                 {
@@ -103,23 +103,23 @@ namespace BannerKings.UI.Extensions
                     string value = GameTexts.FindText("str_trait_name_" + trait.StringId.ToLower(), (level + MathF.Abs(trait.MinValue)).ToString()).ToString();
                     if (level == 0)
                     {
-                        value = new TextObject("{=!}Neutral").ToString();
+                        value = new TextObject("{=m45gzwyL}Neutral").ToString();
                     }
 
-                    aptitudes.Traits.Add(new StringPairItemVM(new TextObject("{=!}{TRAIT}:")
+                    aptitudes.Traits.Add(new StringPairItemVM(new TextObject("{=B5Bx8p70}{TRAIT}:")
                         .SetTextVariable("TRAIT", trait.Name.ToString()).ToString(),
                         value,
                         new BasicTooltipViewModel(() => trait.Description.ToString())));
                 }
 
-                var political = new TraitGroupVM(new TextObject("{=!}Political"));
+                var political = new TraitGroupVM(new TextObject("{=HOeiJpH0}Political"));
                 TraitGroups.Add(political);
                 foreach (TraitObject trait in BKTraits.Instance.PoliticalTraits)
                 {
                     float level = hero.GetTraitLevel(trait);
                     float result = level / trait.MaxValue;
 
-                    political.Traits.Add(new StringPairItemVM(new TextObject("{=!}{TRAIT}:")
+                    political.Traits.Add(new StringPairItemVM(new TextObject("{=B5Bx8p70}{TRAIT}:")
                         .SetTextVariable("TRAIT", trait.Name.ToString()).ToString(),
                         (result * 100f).ToString("0.0") + '%',
                         new BasicTooltipViewModel(() => trait.Description.ToString())));

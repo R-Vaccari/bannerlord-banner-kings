@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -78,7 +78,7 @@ namespace BannerKings.Behaviours.Criminality
                 if (Hero.MainHero.MapFaction == crime.Kingdom.MapFaction)
                 {
                     InformationManager.DisplayMessage(new InformationMessage(
-                        new TextObject("{=!}{HERO} has been found guilty of the {CRIME} crime.")
+                        new TextObject("{=m9LxGgmd}{HERO} has been found guilty of the {CRIME} crime.")
                         .SetTextVariable("HERO", hero.Name)
                         .SetTextVariable("CRIME", crime.Name)
                         .ToString(),

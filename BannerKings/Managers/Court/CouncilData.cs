@@ -86,10 +86,10 @@ namespace BannerKings.Managers.Court
             Location = town;
             if (Clan == Clan.PlayerClan && notify)
             {
-                TextObject text = new TextObject("{=!}Your court no longer has a place to gather!");
+                TextObject text = new TextObject("{=CJbZf05V}Your court no longer has a place to gather!");
                 if (town != null)
                 {
-                    text = new TextObject("{=!}Your court will now gather at {TOWN}!")
+                    text = new TextObject("{=FVzfdaxP}Your court will now gather at {TOWN}!")
                         .SetTextVariable("TOWN", town.Name);
                 }
 
@@ -147,7 +147,7 @@ namespace BannerKings.Managers.Court
             if (Clan == Clan.PlayerClan)
             {
                 InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=!}{HERO} is now a guest in your court at {TOWN}.")
+                    new TextObject("{=3M6VwcXC}{HERO} is now a guest in your court at {TOWN}.")
                     .SetTextVariable("TOWN", Location.Name)
                     .SetTextVariable("HERO", hero.Name)
                     .ToString()));
