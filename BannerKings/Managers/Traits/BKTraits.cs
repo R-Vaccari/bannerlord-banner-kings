@@ -13,7 +13,6 @@ namespace BannerKings.Managers.Traits
         public TraitObject Just { get; } = new TraitObject("Just");
         public TraitObject Humble { get; } = new TraitObject("Humble");
         public TraitObject Diligent { get; } = new TraitObject("Diligent");
-        public TraitObject Seductive { get; } = new TraitObject("Seductive");
         public TraitObject Ambitious { get; } = new TraitObject("Ambitious");
         public TraitObject Zealous { get; } = new TraitObject("Zealous");
 

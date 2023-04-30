@@ -13,7 +13,6 @@ using TaleWorlds.Core.ViewModelCollection.Generic;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static BannerKings.UI.Extensions.EncyclopediaHeroPageMixin;
 
 namespace BannerKings.UI.Extensions
 {

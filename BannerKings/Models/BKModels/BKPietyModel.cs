@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Traits;
 using BannerKings.UI.Court;
 using BannerKings.Utils;
 using System.Collections.Generic;
@@ -70,6 +71,8 @@ namespace BannerKings.Models.BKModels
                             }
                         }
                     }
+
+                    result.Add(hero.GetTraitLevel(BKTraits.Instance.Zealous) * 0.2f, BKTraits.Instance.Zealous.Name);
 
                     if (rel.FavoredCultures.Contains(hero.Culture))
                     {
