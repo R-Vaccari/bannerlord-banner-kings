@@ -89,9 +89,7 @@ namespace BannerKings.Patches
             {
                 EquipmentElement equipmentElement = itemRosterElement.EquipmentElement;
                 int meatCount = equipmentElement.Item.HorseComponent.MeatCount;
-                int hideCount = equipmentElement.Item.HorseComponent.HideCount;
-
-                if (meatCount == 0 || hideCount == 0)
+                if (meatCount == 0)
                 {
                     return false;
                 }
@@ -201,6 +199,40 @@ namespace BannerKings.Patches
                         party.Party.OnConsumedFood();
                     }
                 }
+                return false;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("SlaughterLivestock")]
+            private static bool SlaughterLivestockPrefix(MobileParty party, int partyRemainingFoodPercentage, ref bool __result)
+            {
+                int num = 0;
+                ItemRoster itemRoster = party.ItemRoster;
+                foreach (var element in itemRoster)
+                {
+                    ItemObject itemAtIndex = element.EquipmentElement.Item;
+                    HorseComponent horseComponent = itemAtIndex.HorseComponent;
+                    if (horseComponent != null && horseComponent.IsLiveStock)
+                    {
+                        while (num * 100 < -partyRemainingFoodPercentage)
+                        {
+                            itemRoster.AddToCounts(itemAtIndex, -1);
+                            num += itemAtIndex.HorseComponent.MeatCount;
+                            if (itemRoster.FindIndexOfItem(itemAtIndex) == -1)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (num > 0)
+                {
+                    itemRoster.AddToCounts(DefaultItems.Meat, num);
+                    __result = true;
+                }
+                else __result = false;
+
                 return false;
             }
         }
