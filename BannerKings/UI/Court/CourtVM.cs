@@ -234,7 +234,6 @@ namespace BannerKings.UI.Court
 
         private void SetCouncilMember(Hero member)
         {
-            council.GetCouncilPosition(councilPosition).SetMember(member);
             RefreshValues();
         }
 

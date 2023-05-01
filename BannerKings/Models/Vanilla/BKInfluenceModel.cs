@@ -67,6 +67,7 @@ namespace BannerKings.Models.Vanilla
         {
             ExplainedNumber result = new ExplainedNumber(50f, includeDescriptions);
             result.Add(clan.Tier * 150f, GameTexts.FindText("str_clan_tier_bonus"));
+            result.LimitMin(clan.Tier * 50f);
 
             foreach (var fief in clan.Fiefs)
             {

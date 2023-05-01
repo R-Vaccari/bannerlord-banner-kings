@@ -1,5 +1,9 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Kingdoms.Council;
+using BannerKings.Managers.Titles.Laws;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Court
 {
@@ -20,14 +24,41 @@ namespace BannerKings.Managers.Court
         public CouncilActionType Type { get; }
         public CouncilData Council { get; }
 
-
         public override void TakeAction(Hero receiver = null)
         {
             switch (Type)
             {
                 case CouncilActionType.REQUEST:
-                    BannerKingsConfig.Instance.CourtManager.AddHeroToCouncil(this);
-                    break;
+                    {
+                        Kingdom kingdom = Council.Clan.Kingdom;
+                        if (kingdom != null && Council.Clan == kingdom.RulingClan)
+                        {
+                            var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                            if (title != null && title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.CouncilElected))
+                            {
+                                var decision = new BKCouncilPositionDecision(kingdom.RulingClan,
+                                    Council,
+                                    TargetPosition,
+                                    ActionTaker);
+                                if (!decision.IsAllowed())
+                                {
+                                    if (Council.Clan == Clan.PlayerClan)
+                                    {
+                                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}A council election is already in place.").ToString(),
+                                       Color.UIntToColorString(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
+                                    }
+                                }
+                                else
+                                {
+                                    kingdom.AddDecision(decision);
+                                }
+                               
+                                break;
+                            }
+                        }
+                        BannerKingsConfig.Instance.CourtManager.AddHeroToCouncil(this);
+                        break;
+                    }
                 case CouncilActionType.SWAP:
                     BannerKingsConfig.Instance.CourtManager.SwapCouncilPositions(this);
                     break;

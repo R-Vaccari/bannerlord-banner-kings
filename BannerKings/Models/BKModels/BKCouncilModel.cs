@@ -233,6 +233,13 @@ namespace BannerKings.Models.BKModels
                 return action;
             }
 
+            if (!targetPosition.CanMemberChange())
+            {
+                action.Possible = false;
+                action.Reason = new TextObject("{=!}This position's councillor has recently been changed.");
+                return action;
+            }
+
             var adequate = targetPosition.IsValidCandidate(requester);
             if (!adequate.Item1)
             {
