@@ -22,6 +22,7 @@ namespace BannerKings.Managers.Court
         {
             DueWage = 0;
             Traits = new Dictionary<TraitObject, float>();
+            LastChange = CampaignTime.Zero;
         }
 
         public void Initialize(SkillObject primary, SkillObject secondary,
@@ -56,6 +57,11 @@ namespace BannerKings.Managers.Court
             if (!Tasks.Any(x => x.StringId == CurrentTask.StringId))
             {
                 SetTask(Tasks[0]);
+            }
+
+            if (LastChange == null)
+            {
+                LastChange = CampaignTime.Zero;
             }
         }
 
@@ -99,6 +105,9 @@ namespace BannerKings.Managers.Court
         [SaveableProperty(102)] public Clan Clan { get; private set; }
         [SaveableProperty(103)] public int DueWage { get; set; }
         [SaveableProperty(104)] public CouncilTask CurrentTask { get; private set; }
+        [SaveableProperty(105)] public CampaignTime LastChange { get; private set; }
+
+        public bool CanMemberChange() => LastChange.ElapsedYearsUntilNow >= 1f;
 
         public void SetTask(CouncilTask task)
         {

@@ -177,7 +177,7 @@ namespace BannerKings.Managers.Court
                 SetCourtLocation(null, false);
             }
 
-            if (Location != null)
+            if (Location != null && MBRandom.RandomFloat < 0.02f)
             {
                 var template = Clan.Culture.NotableAndWandererTemplates.GetRandomElementWithPredicate(x => x.Occupation == Occupation.Wanderer);
                 Hero guest = HeroCreator.CreateSpecialHero(template, 
@@ -200,11 +200,19 @@ namespace BannerKings.Managers.Court
                 {
                     toRemove.Add(guest);
                 }
+                else if (Guests.Count > 5)
+                {
+                    toRemove.Add(guest);
+                }
             }
 
             foreach (Hero guest in toRemove)
             {
                 Guests.Remove(guest);
+                if (guest.IsWanderer)
+                {
+                    KillCharacterAction.ApplyByRemove(guest);
+                }
             }
 
             foreach (var position in Positions)
@@ -334,8 +342,7 @@ namespace BannerKings.Managers.Court
                 }
             }
 
-            var highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(Owner);
-            if (highest is { IsSovereignLevel: true } && Clan.Kingdom != null)
+            if (Clan.Kingdom != null && Clan == Clan.Kingdom.RulingClan)
             {
                 foreach (var clan in Clan.Kingdom.Clans)
                 {

@@ -71,6 +71,7 @@ namespace BannerKings.Managers.Titles.Laws
         SlaveDuties,
         NobleDuties,
         EstateTenure,
-        Tenancy
+        Tenancy,
+        HighCouncil
     }
 }
