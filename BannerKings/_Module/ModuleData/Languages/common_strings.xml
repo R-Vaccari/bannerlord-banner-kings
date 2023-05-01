@@ -54,6 +54,7 @@
 		<string id="bk_law_estate_tenure" text="Estate Tenure" />
 		<string id="bk_slavery" text="Slavery" />
 		<string id="bk_law_tenancy" text="Commoners Tenure" />
+		<string id="bk_law_high_council" text="High Council" />
 		
 		<string id="bk_rich" text="Rich" />
 		<string id="bk_adequate" text="Adequate" />

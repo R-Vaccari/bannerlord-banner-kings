@@ -40,6 +40,9 @@ namespace BannerKings.Managers.Titles.Laws
         public DemesneLaw TenancyMixed { get; private set; } = new DemesneLaw("tenancy_mixed");
         public DemesneLaw TenancyNone { get; private set; } = new DemesneLaw("tenancy_none");
 
+        public DemesneLaw CouncilAppointed { get; private set; } = new DemesneLaw("council_appointed");
+        public DemesneLaw CouncilElected { get; private set; } = new DemesneLaw("council_elected");
+
         public override IEnumerable<DemesneLaw> All
         {
             get
@@ -69,6 +72,8 @@ namespace BannerKings.Managers.Titles.Laws
                 yield return TenancyFull;
                 yield return TenancyMixed;
                 yield return TenancyNone;
+                yield return CouncilAppointed;
+                yield return CouncilElected;
             }
         }
 
@@ -132,6 +137,15 @@ namespace BannerKings.Managers.Titles.Laws
                 list.Add(DraftingFreeContracts.GetCopy());
                 list.Add(EstateTenureFeeTail.GetCopy());
                 list.Add(TenancyMixed.GetCopy());
+            }
+
+            if (government == GovernmentType.Republic)
+            {
+                list.Add(CouncilElected.GetCopy());
+            }
+            else
+            {
+                list.Add(CouncilAppointed.GetCopy());
             }
 
             return list;
@@ -403,7 +417,7 @@ namespace BannerKings.Managers.Titles.Laws
 
             TenancyFull.Initialize(new TextObject("{=JEbygACX}Full Tenancy"),
               new TextObject("{=uf1BxiQJ}Under Full Tenancy, serfdom does not thrive anymore. Instead, all non-slave commoners will tend to be free tenants, who rent their land under contracts of goods or monetary taxation. Tenants are of higher class than serfs and are not boun to their land, and so have more mobility and are less exploitable for taxes."),
-              new TextObject("Serfs will tend to be 100% replaced by tenants\nTenants pay less taxes but are more stable and prosperous"),
+              new TextObject("{=!}Serfs will tend to be 100% replaced by tenants\nTenants pay less taxes but are more stable and prosperous"),
               DemesneLawTypes.Tenancy,
               -0.5f,
               1f,
@@ -413,7 +427,7 @@ namespace BannerKings.Managers.Titles.Laws
 
             TenancyMixed.Initialize(new TextObject("{=oT9UmZUt}Mixed Tenure"),
               new TextObject("{=z5ox1p40}Mixed tenure allows the coexistence of both tenants and serfs. Their compositions will tend to be similar."),
-              new TextObject("Serfs will tend to be 50% replaced by tenants"),
+              new TextObject("{=!}Serfs will tend to be 50% replaced by tenants"),
               DemesneLawTypes.Tenancy,
               0.2f,
               -0.3f,
@@ -432,6 +446,30 @@ namespace BannerKings.Managers.Titles.Laws
               2);
 
             #endregion Tenancy
+
+            #region Council
+
+            CouncilAppointed.Initialize(new TextObject("{=!}Appointed Council"),
+              new TextObject("{=!}The realm's high council is appointed by the ruler. They are free to chose their councillors as they please."),
+              new TextObject("{=!}Ruler's privy council can be altered at will\nAll non-ruling clans have influence cap increased by 5%"),
+              DemesneLawTypes.HighCouncil,
+              1f,
+              -0.3f,
+              -0.6f,
+              1000,
+              1);
+
+            CouncilElected.Initialize(new TextObject("{=!}Elected Council"),
+             new TextObject("{=!}The realm's high council is elected by the Peers. The election result will determine the next occupant of the position in question."),
+             new TextObject("{=!}Ruler's privy council can only be altered by elections\nRuler's influence cap is increased by 8%"),
+             DemesneLawTypes.HighCouncil,
+             -0.7f,
+             0.1f,
+             0.6f,
+             1000,
+             2);
+
+            #endregion Council
         }
     }
 }
