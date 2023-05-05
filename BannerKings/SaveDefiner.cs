@@ -31,6 +31,7 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Vlandia;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Kingdoms.Contract;
+using BannerKings.Managers.Kingdoms.Council;
 using BannerKings.Managers.Kingdoms.Peerage;
 using BannerKings.Managers.Kingdoms.Succession;
 using BannerKings.Managers.Policies;
@@ -47,6 +48,7 @@ using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.SaveSystem;
+using static BannerKings.Managers.Kingdoms.Council.BKCouncilPositionDecision;
 using static BannerKings.Behaviours.Diplomacy.Groups.InterestGroup;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
@@ -200,6 +202,8 @@ namespace BannerKings
             AddClassDefinition(typeof(MercenaryPrivilege), 1001);
             AddClassDefinition(typeof(CustomTroop), 1002);
             AddClassDefinition(typeof(CustomTroopPreset), 1003);
+
+            AddClassDefinition(typeof(BKCouncilPositionDecision), 140);
         }
 
         protected override void DefineContainerDefinitions()

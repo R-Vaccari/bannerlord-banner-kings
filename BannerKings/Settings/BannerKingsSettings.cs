@@ -56,6 +56,9 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public bool RealisticCaravanIncome { get; set; } = true;
 
+        [SettingProperty("{=!}AI Dismiss Parties", RequireRestart = false, HintText = "{=!}AI clan leaders will dismiss parties from their family members during peace in order to save more money. Default: true.")]
+        [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
+        public bool DismissParties { get; set; } = true;
 
         [SettingPropertyFloatingInteger("{=2yDhJfgh}Troop Upgrade Xp", minValue: 1f, maxValue: 10f, "#0%", RequireRestart = false, HintText = "{=xvNKsFbW}How much Xp troops need to upgrade. Vanilla is 100%. Default: 200%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]

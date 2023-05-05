@@ -178,12 +178,15 @@ namespace BannerKings.Components
                 {
                     Settlement target = SettlementHelper.FindNearestVillage(x => x.Village.VillageState == Village.VillageStates.Normal &&
                                 x.Village.Hearth > 100f && x.Village.Militia < party.MemberRoster.TotalManCount * 0.5f, party);
-                    party.Ai.SetMoveRaidSettlement(target);
-                    party.Ai.RecalculateShortTermAi();
-                    raidTarget = target.Village;
-                    lastDecision = CampaignTime.Now;
-                    party.Ai.DisableAi();
-                    party.Aggressiveness = 0f;
+                    if (target != null)
+                    {
+                        party.Ai.SetMoveRaidSettlement(target);
+                        party.Ai.RecalculateShortTermAi();
+                        raidTarget = target.Village;
+                        lastDecision = CampaignTime.Now;
+                        party.Ai.DisableAi();
+                        party.Aggressiveness = 0f;
+                    } 
                 }
                 else if (raidTarget != null && 
                     (raidTarget.VillageState == Village.VillageStates.Looted || raidTarget.VillageState == Village.VillageStates.BeingRaided))
