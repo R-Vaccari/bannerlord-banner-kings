@@ -6,7 +6,6 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
-using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -68,8 +67,6 @@ namespace BannerKings.Managers.Populations
                 var serfs = data.GetTypeCount(PopulationManager.PopType.Serfs) * (data.Settlement.IsVillage ? 0.85f : 0.5f);
                 int toSubtract = 0;
 
-                var town = data.Settlement.Town;
-
                 if (!data.Settlement.IsVillage)
                 {
                     if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
@@ -81,7 +78,7 @@ namespace BannerKings.Managers.Populations
                     else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
                                  (int)BKWorkforcePolicy.WorkforcePolicy.Land_Expansion))
                     {
-                        toSubtract += LandExpansionWorkforce;
+                        toSubtract += LandExpansionWorkforce / 2;
                     }
                     else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
                                  (int)BKWorkforcePolicy.WorkforcePolicy.Construction))
@@ -91,6 +88,37 @@ namespace BannerKings.Managers.Populations
                 }
 
                 return Math.Max((int)(serfs - toSubtract), 0);
+            }
+        }
+
+        public int AvailableTenantsWorkForce
+        {
+            get
+            {
+                var tenants = data.GetTypeCount(PopulationManager.PopType.Tenants) * (data.Settlement.IsVillage ? 0.85f : 0.5f);
+                int toSubtract = 0;
+
+                if (!data.Settlement.IsVillage)
+                {
+                    if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+                            (int)BKWorkforcePolicy.WorkforcePolicy.Martial_Law))
+                    {
+                        var militia = data.Settlement.Town.Militia / 2;
+                        tenants -= militia / 2f;
+                    }
+                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+                                 (int)BKWorkforcePolicy.WorkforcePolicy.Land_Expansion))
+                    {
+                        toSubtract += LandExpansionWorkforce / 2;
+                    }
+                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+                                 (int)BKWorkforcePolicy.WorkforcePolicy.Construction))
+                    {
+                        tenants *= 0.85f;
+                    }
+                }
+
+                return Math.Max((int)(tenants - toSubtract), 0);
             }
         }
 
@@ -112,7 +140,7 @@ namespace BannerKings.Managers.Populations
                     if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
                                 (int)BKWorkforcePolicy.WorkforcePolicy.Land_Expansion))
                     {
-                        toSubtract += LandExpansionWorkforce;
+                        toSubtract += LandExpansionWorkforce / 2;
                     }
                     else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
                                  (int)BKWorkforcePolicy.WorkforcePolicy.Construction))
@@ -125,56 +153,17 @@ namespace BannerKings.Managers.Populations
             }
         }
 
-        public int AvailableWorkForce
-        {
-            get
-            {
-                var serfs = data.GetTypeCount(PopulationManager.PopType.Serfs) * (data.Settlement.IsVillage ? 0.85f : 0.5f);
-                float slaves = data.GetTypeCount(PopulationManager.PopType.Slaves);
-                int toSubtract = 0;
-
-                var town = data.Settlement.Town;
-                if (town != null && town.BuildingsInProgress.Count > 0)
-                {
-                    slaves -= slaves * data.EconomicData.StateSlaves * 0.5f;
-                }
-
-                if (!data.Settlement.IsVillage)
-                {
-                    if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
-                            (int) BKWorkforcePolicy.WorkforcePolicy.Martial_Law))
-                    {
-                        var militia = data.Settlement.Town.Militia / 2;
-                        serfs -= militia / 2f;
-                    }
-                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
-                                 (int) BKWorkforcePolicy.WorkforcePolicy.Land_Expansion))
-                    {
-                        toSubtract += LandExpansionWorkforce;
-                    }
-                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
-                                 (int) BKWorkforcePolicy.WorkforcePolicy.Construction))
-                    {
-                        serfs *= 0.85f;
-                        slaves -= slaves * data.EconomicData.StateSlaves * 0.5f;
-                    }
-                }
-
-                return Math.Max((int) (serfs + slaves - toSubtract), 0);
-            }
-        }
+        public int AvailableWorkForce => AvailableTenantsWorkForce + AvailableSlavesWorkForce + AvailableSerfsWorkForce;
 
         public int LandExpansionWorkforce
         {
             get
             {
-                var serfs = data.GetTypeCount(PopulationManager.PopType.Serfs) * (data.Settlement.IsVillage ? 0.85f : 0.5f);
+                float serfs = data.GetTypeCount(PopulationManager.PopType.Serfs) * (data.Settlement.IsVillage ? 0.85f : 0.5f);
                 float slaves = data.GetTypeCount(PopulationManager.PopType.Slaves);
+                float tenants = data.GetTypeCount(PopulationManager.PopType.Tenants);
 
-                serfs *= 0.2f;
-                slaves *= 0.2f;
-
-                return Math.Max((int)(serfs + slaves), 0);
+                return Math.Max((int)((serfs + slaves + tenants) * 0.2f), 0);
             }
         }
 

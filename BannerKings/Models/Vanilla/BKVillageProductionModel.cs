@@ -42,8 +42,8 @@ namespace BannerKings.Models.Vanilla
                 var explainedNumber = new ExplainedNumber(0f);
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
                 var villageData = data.VillageData;
-                var serfs = data.GetTypeCount(PopulationManager.PopType.Serfs) * 0.85f;
-                float slaves = data.GetTypeCount(PopulationManager.PopType.Slaves);
+                var serfs = data.LandData.AvailableSerfsWorkForce + data.LandData.AvailableTenantsWorkForce;
+                var slaves = data.LandData.AvailableSlavesWorkForce;
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(village.Settlement.OwnerClan.Leader);
 
                 var productions = BannerKingsConfig.Instance.PopulationManager.GetProductions(data);
