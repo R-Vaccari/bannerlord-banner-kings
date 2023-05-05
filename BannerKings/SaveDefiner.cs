@@ -27,6 +27,7 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Vlandia;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Kingdoms.Contract;
+using BannerKings.Managers.Kingdoms.Council;
 using BannerKings.Managers.Kingdoms.Peerage;
 using BannerKings.Managers.Kingdoms.Succession;
 using BannerKings.Managers.Policies;
@@ -43,6 +44,7 @@ using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.SaveSystem;
+using static BannerKings.Managers.Kingdoms.Council.BKCouncilPositionDecision;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
 using static BannerKings.Managers.Policies.BKGarrisonPolicy;
@@ -182,6 +184,8 @@ namespace BannerKings
             AddClassDefinition(typeof(BanditHeroComponent), 124);
 
             AddClassDefinition(typeof(Crime), 129);
+
+            AddClassDefinition(typeof(BKCouncilPositionDecision), 140);
         }
 
         protected override void DefineContainerDefinitions()

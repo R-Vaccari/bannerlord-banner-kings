@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Kingdoms.Council;
 using BannerKings.Managers.Titles.Laws;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Library;
@@ -45,12 +46,20 @@ namespace BannerKings.Managers.Court
                                     if (Council.Clan == Clan.PlayerClan)
                                     {
                                         InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}A council election is already in place.").ToString(),
-                                       Color.UIntToColorString(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
+                                            Color.UIntToColorString(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
                                     }
                                 }
                                 else
                                 {
-                                    kingdom.AddDecision(decision);
+                                    if (decision.DetermineInitialCandidates().Count() >= 3)
+                                    {
+                                        kingdom.AddDecision(decision);
+                                    }
+                                    else if (Council.Clan == Clan.PlayerClan)
+                                    {
+                                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}Not enough candidates for this position.").ToString(),
+                                            Color.UIntToColorString(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
+                                    }
                                 }
                                
                                 break;
