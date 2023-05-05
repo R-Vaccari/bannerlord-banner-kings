@@ -375,6 +375,11 @@ namespace BannerKings.Behaviours
 
         private void DismissParties(Clan clan)
         {
+            if (!BannerKingsSettings.Instance.DismissParties)
+            {
+                return;
+            }
+
             Kingdom kingdom = clan.Kingdom;
             if ( kingdom == null)
             {
@@ -416,7 +421,10 @@ namespace BannerKings.Behaviours
                             }
                         }
                         DestroyPartyAction.Apply(null, party);
-                        TeleportHeroAction.ApplyImmediateTeleportToSettlement(leader, nearest);
+                        if (leader != null)
+                        {
+                            TeleportHeroAction.ApplyImmediateTeleportToSettlement(leader, nearest);
+                        }
                     }
                 }
             }
