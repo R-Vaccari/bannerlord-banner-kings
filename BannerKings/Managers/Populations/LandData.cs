@@ -83,7 +83,7 @@ namespace BannerKings.Managers.Populations
                     else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
                                  (int)BKWorkforcePolicy.WorkforcePolicy.Construction))
                     {
-                        serfs *= 0.85f;
+                        serfs -= SerfsConstructionForce;
                     }
                 }
 
@@ -114,7 +114,7 @@ namespace BannerKings.Managers.Populations
                     else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
                                  (int)BKWorkforcePolicy.WorkforcePolicy.Construction))
                     {
-                        tenants *= 0.85f;
+                        tenants -= TenantsConstructionForce;
                     }
                 }
 
@@ -145,13 +145,33 @@ namespace BannerKings.Managers.Populations
                     else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
                                  (int)BKWorkforcePolicy.WorkforcePolicy.Construction))
                     {
-                        slaves -= slaves * data.EconomicData.StateSlaves * 0.5f;
+                        slaves -= SlavesConstructionForce;
                     }
                 }
 
                 return Math.Max((int)(slaves - toSubtract), 0);
             }
         }
+
+        public int SerfsConstructionForce
+        {
+            get
+            {
+                var serfs = data.GetTypeCount(PopulationManager.PopType.Serfs) * (data.Settlement.IsVillage ? 0.85f : 0.5f);
+                return Math.Max((int)(serfs * 0.15), 0);
+            }
+        }
+
+        public int TenantsConstructionForce
+        {
+            get
+            {
+                var tenants = data.GetTypeCount(PopulationManager.PopType.Tenants) * (data.Settlement.IsVillage ? 0.85f : 0.5f);
+                return Math.Max((int)(tenants * 0.15), 0);
+            }
+        }
+
+        public int SlavesConstructionForce => Math.Max((int)(data.EconomicData.StateSlaves * 0.5), 0);
 
         public int AvailableWorkForce => AvailableTenantsWorkForce + AvailableSlavesWorkForce + AvailableSerfsWorkForce;
 
