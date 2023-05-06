@@ -5,6 +5,7 @@ using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
+using BannerKings.UI.TownManagement;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -17,7 +18,6 @@ using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static System.Collections.Specialized.BitVector32;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.UI
@@ -95,6 +95,50 @@ namespace BannerKings.UI
             }
 
             return text;
+        }
+
+        public static List<TooltipProperty> GetTownMaterialTooltip(MaterialItemVM material)
+        {
+            List<TooltipProperty> properties = new List<TooltipProperty>();
+            properties.Add(new TooltipProperty(material.Material.Name.ToString() + "        ",
+                string.Empty,
+                0,
+                onlyShowWhenExtended: false,
+                TooltipProperty.TooltipPropertyFlags.Title));
+
+            properties.Add(new TooltipProperty(string.Empty,
+                GameTexts.FindText("str_bk_description", material.Material.StringId).ToString(),
+                0,
+                false,
+                TooltipProperty.TooltipPropertyFlags.MultiLine));
+
+            TooltipAddEmptyLine(properties);
+            properties.Add(new TooltipProperty(new TextObject("{=!}Availability").ToString(), " ", 0));
+            TooltipAddSeperator(properties);
+
+            properties.Add(new TooltipProperty(new TextObject("{=!}Stash").ToString(),
+                material.StashAmount.ToString(),
+                0));
+
+            properties.Add(new TooltipProperty(new TextObject("{=!}Market").ToString(),
+                material.MarketAmount.ToString(),
+                0));
+
+            Settlement source = SettlementHelper.FindNearestVillage(village =>
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village);
+                return BannerKingsConfig.Instance.PopulationManager.GetProductions(data)
+                .Any(production => production.Item1 == material.Material);
+            });
+
+            if (source != null)
+            {
+                properties.Add(new TooltipProperty(new TextObject("{=!}Closest source").ToString(),
+                               source.Name.ToString(),
+                               0));
+            }
+
+            return properties;
         }
 
         public static List<TooltipProperty> GetEncyclopediaWorkshopTooltip(Workshop workshop)

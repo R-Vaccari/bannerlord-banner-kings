@@ -36,13 +36,20 @@
 														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" MarginTop="5" StackLayout.LayoutMethod="VerticalBottomToTop">
 															<Children>
 															
-																<!--<ListPanel DataSource="{Materials}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="50">
+																<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="TownManagement.Queue.Index.Text" IsVisible="@MissingPolicy" Text="@MissingPolicyText" MarginTop="30" />
+																
+																<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="TownManagement.Queue.Index.Text" IsVisible="@MissingMaterials" Text="@MissingMaterialsText" MarginTop="30" />
+															
+																<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="TownManagement.BottomPart.Title.Text" Text="Materials" MarginTop="50" />
+
+																<ListPanel Id="AvailableMaterials" DataSource="{..\Materials}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" 
+																		   MarginTop="20" MarginLeft="150"  MarginRight="100" StackLayout.LayoutMethod="HorizontalLeftToRight">
 																	<ItemTemplate>
-																		<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="95" SuggestedHeight="96" VerticalAlignment="Bottom" DoNotPassEventsToChildren="true">
+																		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedWidth="95" SuggestedHeight="96" VerticalAlignment="Bottom" DoNotPassEventsToChildren="true">
 																			<Children>
 																				<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop">
 																					<Children>
-																						<ImageIdentifierWidget DataSource="{Visual}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="90" SuggestedHeight="55" HorizontalAlignment="Center" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode"/>
+																						<ImageIdentifierWidget DataSource="{Visual}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="85" SuggestedHeight="45" HorizontalAlignment="Center" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode"/>
 																						<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="90" SuggestedHeight="24" VerticalAlignment="Bottom" Sprite="Crafting\number_background" Color="#EFAB6BFF" >
 																							<Children>
 																								<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="Refinement.Amount.Text" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="5" IntText="@ResourceAmount" />
@@ -55,14 +62,13 @@
 																			</Children>
 																		</Widget>
 																	</ItemTemplate>
-																</ListPanel> -->
-															
+																</ListPanel>					
 															
 																<!--Projects Title-->
 																<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="TownManagement.BottomPart.Title.Text" Text="@ProjectsText" MarginTop="50" />
 
 																<NavigationScopeTargeter ScopeID="AvailableProjectsScope" ScopeParent="..\AvailableProjects" ScopeMovements="Horizontal" AlternateScopeMovements="Vertical" AlternateMovementStepSize="6" HasCircularMovement="false" />
-																<NavigatableGridWidget Id="AvailableProjects" DataSource="{AvailableProjects}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="15" DefaultCellWidth="160" DefaultCellHeight="145" ColumnCount="6" MarginTop="5" LayoutImp.VerticalLayoutMethod="TopToBottom" StepSize="10">
+																<NavigatableGridWidget Id="AvailableProjects" DataSource="{AvailableProjects}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="20" MarginLeft="15" DefaultCellWidth="160" DefaultCellHeight="145" ColumnCount="6" LayoutImp.VerticalLayoutMethod="TopToBottom" StepSize="10">
 																	<ItemTemplate>
 																		<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteSetAsCurrent" Command.HoverEnd="ExecuteResetCurrent" UpdateChildrenStates="true">
 																			<Children>
@@ -74,10 +80,10 @@
 																</NavigatableGridWidget>
 
 																<!--Daily Defaults Title-->
-																<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" PositionYOffset="-4" Brush="TownManagement.BottomPart.Title.Text" Text="@DailyDefaultsText" />
+																<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" PositionYOffset="-4" Brush="TownManagement.BottomPart.Title.Text" Text="@DailyDefaultsText" MarginTop="50"/>
 
 																<NavigationScopeTargeter ScopeID="DailyDefaultsScope" ScopeParent="..\DailyDefaults" ScopeMovements="Horizontal" AlternateScopeMovements="Vertical" AlternateMovementStepSize="6" HasCircularMovement="false" />
-																<NavigatableGridWidget Id="DailyDefaults" DataSource="{DailyDefaultList}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" DefaultCellWidth="160" DefaultCellHeight="145" ColumnCount="6" MarginTop="5" LayoutImp.VerticalLayoutMethod="TopToBottom">
+																<NavigatableGridWidget Id="DailyDefaults" DataSource="{DailyDefaultList}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="20" HorizontalAlignment="Center" DefaultCellWidth="160" DefaultCellHeight="145" ColumnCount="6" LayoutImp.VerticalLayoutMethod="TopToBottom">
 																	<ItemTemplate>
 																		<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" PositionYOffset="-5" Command.Click="ExecuteSetAsActiveDevelopment" Command.HoverBegin="ExecuteSetAsCurrent" Command.HoverEnd="ExecuteResetCurrent" IsSelected="@IsDefault" UpdateChildrenStates="true">
 																			<Children>

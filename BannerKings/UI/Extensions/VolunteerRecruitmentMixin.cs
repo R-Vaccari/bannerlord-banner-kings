@@ -44,11 +44,6 @@ namespace BannerKings.UI.Extensions
         {
             Materials.Clear();
             var settlement = Settlement.CurrentSettlement;
-
-            Materials.Add(new MaterialItemVM(DefaultItems.HardWood, settlement));
-            Materials.Add(new MaterialItemVM(Campaign.Current.ObjectManager.GetObject<ItemObject>("clay"), settlement));
-            Materials.Add(new MaterialItemVM(BKItems.Instance.Limestone, settlement));
-            Materials.Add(new MaterialItemVM(BKItems.Instance.Marble, settlement));
         }
     }
 }
