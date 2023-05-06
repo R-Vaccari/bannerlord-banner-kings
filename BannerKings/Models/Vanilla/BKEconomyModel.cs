@@ -3,6 +3,7 @@ using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Innovations;
+using BannerKings.Managers.Items;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -254,6 +255,7 @@ namespace BannerKings.Models.Vanilla
             float nobles = data.GetTypeCount(PopType.Nobles);
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             float serfs = data.GetTypeCount(PopType.Serfs);
+            float tenants = data.GetTypeCount(PopType.Tenants);
             var type = Utils.Helpers.GetTradeGoodConsumptionType(category);
 
             var baseResult = 0f;
@@ -266,11 +268,13 @@ namespace BannerKings.Models.Vanilla
                 case ConsumptionType.Industrial:
                     baseResult += craftsmen * 1.2f;
                     baseResult += serfs * 0.2f;
+                    baseResult += tenants * 0.20f;
                     break;
                 default:
                     baseResult += nobles * 1f;
                     baseResult += craftsmen * 1f;
                     baseResult += serfs * 0.20f;
+                    baseResult += tenants * 0.20f;
                     break;
             }
 
@@ -282,7 +286,24 @@ namespace BannerKings.Models.Vanilla
             {
                 num *= 3f;
             }
-            var num3 = category.BaseDemand * num;
+
+            float baseDemand = category.BaseDemand;
+            if (settlement.IsTown && settlement.Town.CurrentBuilding != null)
+            {
+                if (category == DefaultItemCategories.Wood || category == DefaultItemCategories.Clay || category == BKItemCategories.Instance.Limestone ||
+                    category == DefaultItemCategories.Iron || category == BKItemCategories.Instance.Marble)
+                {
+                    foreach (var requirement in BannerKingsConfig.Instance.ConstructionModel.GetMaterialRequirements(settlement.Town.CurrentBuilding))
+                    {
+                        if (requirement.Item1.ItemCategory == category)
+                        {
+                            baseDemand += requirement.Item2;
+                        }
+                    }
+                }
+            }
+
+            var num3 = baseDemand * num;
             var num4 = category.LuxuryDemand * num2;
             var result = num3 + num4;
             if (category.BaseDemand < 1E-08f)

@@ -1,8 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Innovations;
+using BannerKings.Managers.Items;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -58,23 +62,159 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
+        public List<ValueTuple<ItemObject, int>> GetMaterialRequirements(Building project)
+        {
+            List<ValueTuple<ItemObject, int>> list = new List<(ItemObject, int)>();
+            if (project.BuildingType.IsDefaultProject)
+            {
+                return list;
+            }
+
+            int totalItems = (int)(project.GetConstructionCost() / 20f);
+            float woodProportion = 0f;
+            float clayProportion = 0f;
+            float ironProportion = 0f;
+            float toolsProportion = 0f;
+            float limeProportion = 0f;
+            float marbleProportion = 0f;
+
+            BuildingType type = project.BuildingType;
+            int level = project.CurrentLevel;
+            if (type == DefaultBuildingTypes.Wall || type == DefaultBuildingTypes.Fortifications)
+            {
+                toolsProportion = 0.1f;
+                if (level != 0)
+                {
+                    woodProportion = 0.1f;
+                    limeProportion = 0.8f;
+                }
+            }
+            else if (type == DefaultBuildingTypes.CastleBarracks || type == DefaultBuildingTypes.CastleMilitiaBarracks ||
+                type == DefaultBuildingTypes.SettlementGarrisonBarracks || type == DefaultBuildingTypes.SettlementMilitiaBarracks ||
+                type == DefaultBuildingTypes.CastleFairgrounds || type == DefaultBuildingTypes.SettlementFairgrounds ||
+                type == DefaultBuildingTypes.SettlementMarketplace)
+            {
+                if (level == 0)
+                {
+                    woodProportion = 0.9f;
+                }
+                else if (level == 1)
+                {
+                    woodProportion = 0.7f;
+                    clayProportion = 0.15f;
+                    toolsProportion = 0.05f;
+                }
+                else
+                {
+                    woodProportion = 0.7f;
+                    ironProportion = 0.1f;
+                    limeProportion = 0.05f;
+                    toolsProportion = 0.1f;
+                }
+            }
+            else if (type == DefaultBuildingTypes.SettlementForum || type == DefaultBuildingTypes.SettlementAquaducts ||
+                type == BKBuildings.Instance.Theater)
+            {
+                if (level == 0)
+                {
+                    limeProportion = 0.4f;
+                    woodProportion = 0.2f;
+                    clayProportion = 0.2f;
+                    toolsProportion = 0.1f;
+                }
+                else if (level == 1)
+                {
+                    limeProportion = 0.5f;
+                    woodProportion = 0.2f;
+                    ironProportion = 0.1f;
+                    toolsProportion = 0.15f;
+                }
+                else
+                {
+                    marbleProportion = 0.5f;
+                    ironProportion = 0.2f;
+                    toolsProportion = 0.2f;
+                }
+            }
+            else if (type == BKBuildings.Instance.Mines || type == BKBuildings.Instance.CastleMines)
+            {
+                if (level == 0)
+                {
+                    woodProportion = 0.4f;
+                    toolsProportion = 0.05f;
+                }
+                else if (level == 1)
+                {
+                    woodProportion = 0.5f;
+                    toolsProportion = 0.1f;
+                }
+                else
+                {
+                    woodProportion = 0.3f;
+                    ironProportion = 0.2f;
+                    toolsProportion = 0.15f;
+                }
+            }
+            else
+            {
+                if (level == 0)
+                {
+                    woodProportion = 0.7f;
+                    clayProportion = 0.2f;
+                }
+                else if (level == 1)
+                {
+                    woodProportion = 0.5f;
+                    clayProportion = 0.2f;
+                    ironProportion = 0.1f;
+                    toolsProportion = 0.05f;
+                }
+                else
+                {
+                    woodProportion = 0.4f;
+                    limeProportion = 0.1f;
+                    ironProportion = 0.15f;
+                    toolsProportion = 0.1f;
+                }
+            }
+
+            if (woodProportion > 0f)
+            {
+                list.Add(new(DefaultItems.HardWood, (int)(totalItems * woodProportion)));
+            }
+
+            if (clayProportion > 0f)
+            {
+                list.Add(new(Campaign.Current.ObjectManager.GetObject<ItemObject>("clay"), (int)(totalItems * clayProportion)));
+            }
+
+            if (ironProportion > 0f)
+            {
+                list.Add(new(DefaultItems.IronOre, (int)(totalItems * ironProportion)));
+            }
+
+            if (toolsProportion > 0f)
+            {
+                list.Add(new(DefaultItems.Tools, (int)(totalItems * toolsProportion)));
+            }
+
+            if (limeProportion > 0f)
+            {
+                list.Add(new(BKItems.Instance.Limestone, (int)(totalItems * limeProportion)));
+            }
+
+            if (marbleProportion > 0f)
+            {
+                list.Add(new(BKItems.Instance.Marble, (int)(totalItems * marbleProportion)));
+            }
+
+            return list;
+        }
+
         public ExplainedNumber CalculateVillageConstruction(Settlement settlement)
         {
             var result = new ExplainedNumber(0f, true);
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            var serfs = data.GetTypeCount(PopType.Serfs);
-            var slaves = data.GetTypeCount(PopType.Slaves);
-            result.Add(CalculateWorkforceConstruction(serfs, slaves).ResultNumber, new TextObject("{=8EX6VriS}Workforce"));
-
-            return result;
-        }
-
-        public ExplainedNumber CalculateWorkforceConstruction(float serfs, float slaves)
-        {
-            var result = new ExplainedNumber(0f, false);
-            result.Add(serfs * SERF_CONSTRUCTION);
-            result.Add(slaves * SLAVE_CONSTRUCTION);
-
+            result.Add(GetWorkforce(settlement), new TextObject("{=8EX6VriS}Workforce"));
             return result;
         }
 
@@ -91,10 +231,11 @@ namespace BannerKings.Models.Vanilla
 
         public override ExplainedNumber CalculateDailyConstructionPower(Town town, bool includeDescriptions = false)
         {
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager != null)
             {
                 var result = new ExplainedNumber(0f, includeDescriptions);
+                result.LimitMin(0f);
+                result.LimitMax(100f);
                 CalculateDailyConstructionPowerInternal(town, ref result, includeDescriptions);
                 return result;
             }
@@ -104,8 +245,7 @@ namespace BannerKings.Models.Vanilla
 
         public override int CalculateDailyConstructionPowerWithoutBoost(Town town)
         {
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager != null)
             {
                 var result = new ExplainedNumber(0f);
                 return CalculateDailyConstructionPowerInternal(town, ref result, true);
@@ -148,21 +288,53 @@ namespace BannerKings.Models.Vanilla
         private float GetWorkforce(Settlement settlement)
         {
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            var construction = BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+            bool construction = BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
                 (int) WorkforcePolicy.Construction);
-            var slaves = data.GetTypeCount(PopType.Slaves) * data.EconomicData.StateSlaves * (construction ? 1f : 0.5f);
-            var serfs = data.GetTypeCount(PopType.Slaves) * (construction ? 0.15f : 0.1f);
-            var slaveTotal = slaves > 0 ? slaves * SLAVE_CONSTRUCTION : 0f;
-            var serfTotal = serfs * SERF_CONSTRUCTION;
-            return slaveTotal + serfTotal;
+            if (!construction)
+            {
+                return 0f;
+            }
+
+            float slaves = data.LandData.SlavesConstructionForce * SLAVE_CONSTRUCTION;
+            if (data.TitleData != null && data.TitleData.Title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesHardLabor))
+            {
+                slaves *= 1.2f;
+            }
+
+            float serfs = data.LandData.SerfsConstructionForce * SERF_CONSTRUCTION;
+            float tenants = data.LandData.TenantsConstructionForce * SERF_CONSTRUCTION;
+
+            return serfs + tenants + slaves;
+        }
+
+        public int GetMaterialSupply(ItemObject material, Town town)
+        {
+            int result = 0;
+
+            foreach (ItemRosterElement element in town.Settlement.Stash)
+            {
+                if (element.EquipmentElement.Item == material)
+                {
+                    result += element.Amount;
+                }
+            }
+
+            foreach (ItemRosterElement element in town.Settlement.ItemRoster)
+            {
+                if (element.EquipmentElement.Item == material)
+                {
+                    result += element.Amount;
+                }
+            }
+
+            return result;
         }
 
         private int CalculateDailyConstructionPowerInternal(Town town, ref ExplainedNumber result, bool omitBoost = false)
         {
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
             result.Add(GetWorkforce(town.Settlement), new TextObject("{=8EX6VriS}Workforce"));
-            result.Add(3f, new TextObject("{=AaNeOd9n}Base"));
-
+           
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(town.OwnerClan.Leader);
             if (education.Perks.Contains(BKPerks.Instance.CivilEngineer))
             {
@@ -190,7 +362,6 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
             }
-
 
             if (!omitBoost && town.BoostBuildingProcess > 0)
             {
@@ -261,7 +432,6 @@ namespace BannerKings.Models.Vanilla
                 result.Add(0.25f * num5, ProductionFromMarketText);
             }
 
-
             var buildingType = town.BuildingsInProgress.IsEmpty() ? null : town.BuildingsInProgress.Peek().BuildingType;
             if (DefaultBuildingTypes.MilitaryBuildings.Contains(buildingType))
             {
@@ -286,28 +456,43 @@ namespace BannerKings.Models.Vanilla
                 result.AddFactor(DefaultCulturalFeats.BattanianConstructionFeat.EffectBonus, CultureText);
             }
 
+            float loyaltyFactor = 0f;
+            TextObject loyaltyText = VeryLowLoyaltyPenaltyText;
             switch (town.Loyalty)
             {
                 case >= 75f:
                 {
-                    var num6 = MBMath.Map(town.Loyalty, 75f, 100f, 0f, 20f);
-                    var value2 = result.ResultNumber * (num6 / 100f);
-                    result.Add(value2, HighLoyaltyBonusText);
+                    loyaltyFactor = MBMath.Map(town.Loyalty, 75f, 100f, 0f, 0.12f);
+                    loyaltyText = HighLoyaltyBonusText;
                     break;
                 }
-                case > 25f and <= 50f:
+                case > 15f and <= 50f:
                 {
-                    var num7 = MBMath.Map(town.Loyalty, 25f, 50f, 50f, 0f);
-                    var num8 = result.ResultNumber * (num7 / 100f);
-                    result.Add(-num8, LowLoyaltyPenaltyText);
+                    loyaltyFactor = MBMath.Map(town.Loyalty, 25f, 50f, -1f, 0f);
+                    loyaltyText = LowLoyaltyPenaltyText;
                     break;
                 }
-                case <= 25f:
-                    result.Add(-result.ResultNumber, VeryLowLoyaltyPenaltyText);
+                case <= 15f:
+                    loyaltyFactor = -1f;
                     break;
             }
 
-            result.LimitMin(0f);
+            result.AddFactor(loyaltyFactor, loyaltyText);
+            Building project = town.CurrentBuilding;
+            if (project != null)
+            {
+                foreach (var requirement in GetMaterialRequirements(project))
+                {
+                    if (GetMaterialSupply(requirement.Item1, town) < requirement.Item2)
+                    {
+                        result.Add(-result.ResultNumber, new TextObject("{=!}Missing {MATERIAL} for project {PROJECT}")
+                            .SetTextVariable("MATERIAL", requirement.Item1.Name)
+                            .SetTextVariable("PROJECT", project.Name));
+                        break;
+                    }
+                }
+            }
+
             return (int) result.ResultNumber;
         }
     }
