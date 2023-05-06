@@ -211,7 +211,7 @@ namespace BannerKings.Models.Vanilla
                         return;
                     }
 
-                    explainedNumber.Add(result * (town.Governor.Culture == town.Culture ? 0.1f : -0.1f), GovernorCultureText);
+                    explainedNumber.Add(MathF.Abs(result) * (town.Governor.Culture == town.Culture ? 0.1f : -0.1f), GovernorCultureText);
 
                     var lordshipAdaptivePerk = BKPerks.Instance.LordshipAdaptive;
                     if (town.Culture != town.Governor.Culture && town.Governor.GetPerkValue(lordshipAdaptivePerk))
