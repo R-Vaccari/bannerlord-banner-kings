@@ -21,7 +21,7 @@ namespace BannerKings.UI.Extensions
     {
         private readonly TownManagementVM townManagement;
         private MBBindingList<MaterialItemVM> materials;
-        private bool missingPolicy, missingMaterials;
+        private bool missingPolicy, missingMaterials, missingGovernor;
         private PopulationData data;
 
         public TownManagementMixin(TownManagementVM vm) : base(vm)
@@ -32,11 +32,9 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty] public string ArmorText => new TextObject("{=h40bm0cG}Craft").ToString();
-
-        [DataSourceProperty] public string MissingPolicyText => new TextObject("{=!}Missing construction policy! Edit your workforce policy under Demesne Management, Demesne tab.").ToString();
-
-        [DataSourceProperty]
-        public string MissingMaterialsText => new TextObject("{=!}Missing materials! Bring materials into the Stash or let caravans bring them naturally.").ToString();
+        [DataSourceProperty] public string MissingPolicyText => new TextObject("{=!}Missing construction policy!\nEdit your workforce policy under Demesne Management, Demesne tab.").ToString();
+        [DataSourceProperty] public string MissingMaterialsText => new TextObject("{=!}Missing materials!\nBring materials into the Stash or let caravans bring them naturally.").ToString();
+        [DataSourceProperty] public string MissingGovernorText => new TextObject("{=!}Missing Governor!\nA governor will buy necessary materials for projects without your intervention.").ToString();
 
         public override void OnRefresh()
         {
@@ -62,6 +60,8 @@ namespace BannerKings.UI.Extensions
 
             ItemObject clay = Campaign.Current.ObjectManager.GetObject<ItemObject>("clay");
             var settlement = data.Settlement;
+            MissingGovernor = settlement.Town.Governor == null;
+
             Materials.Add(new MaterialItemVM(DefaultItems.HardWood, settlement, -demands.GetValueSafe(DefaultItems.HardWood)));
             Materials.Add(new MaterialItemVM(clay, settlement, -demands.GetValueSafe(clay)));
             Materials.Add(new MaterialItemVM(DefaultItems.IronOre, settlement, -demands.GetValueSafe(DefaultItems.IronOre)));
@@ -80,6 +80,20 @@ namespace BannerKings.UI.Extensions
                 {
                     materials = value;
                     ViewModel!.OnPropertyChangedWithValue(value, "Materials");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool MissingGovernor
+        {
+            get => missingGovernor;
+            set
+            {
+                if (value != missingGovernor)
+                {
+                    missingGovernor = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
                 }
             }
         }

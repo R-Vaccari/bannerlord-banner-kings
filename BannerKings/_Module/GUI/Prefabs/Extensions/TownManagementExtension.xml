@@ -36,9 +36,11 @@
 														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" MarginTop="5" StackLayout.LayoutMethod="VerticalBottomToTop">
 															<Children>
 															
-																<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="TownManagement.Queue.Index.Text" IsVisible="@MissingPolicy" Text="@MissingPolicyText" MarginTop="30" />
+																<RichTextWidget DataSource="{..}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="TownManagement.Queue.Index.Text" IsVisible="@MissingPolicy" Text="@MissingPolicyText" MarginTop="30" />
 																
-																<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="TownManagement.Queue.Index.Text" IsVisible="@MissingMaterials" Text="@MissingMaterialsText" MarginTop="30" />
+																<RichTextWidget DataSource="{..}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="TownManagement.Queue.Index.Text" IsVisible="@MissingMaterials" Text="@MissingMaterialsText" MarginTop="30" />
+															
+																<RichTextWidget DataSource="{..}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="TownManagement.Queue.Index.Text" IsVisible="@MissingGovernor" Text="@MissingGovernorText" MarginTop="30" />
 															
 																<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="TownManagement.BottomPart.Title.Text" Text="Materials" MarginTop="50" />
 
@@ -55,9 +57,11 @@
 																								<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="Refinement.Amount.Text" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="5" IntText="@ResourceAmount" />
 																							</Children>
 																						</Widget>
+																						<ChangeAmountTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" 
+																												Brush="Crafting.Material.Text" Amount="@ResourceChangeAmount" NegativeBrushName="Crafting.Material.NegativeChange.Text" 
+																												PositiveBrushName="Crafting.Material.PositiveChange.Text" />
 																					</Children>
-																				</ListPanel>
-																				<ChangeAmountTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" PositionYOffset="-20" Brush="Crafting.Material.Text" Amount="@ResourceChangeAmount" NegativeBrushName="Crafting.Material.NegativeChange.Text" PositiveBrushName="Crafting.Material.PositiveChange.Text" />
+																				</ListPanel>									
 																				<HintWidget DataSource="{ResourceHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsDisabled="true" />
 																			</Children>
 																		</Widget>
