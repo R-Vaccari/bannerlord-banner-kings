@@ -137,14 +137,22 @@ namespace BannerKings.Models.Vanilla
 
                     if (tenants > 0f)
                     {
-                        baseResult.Add(MBMath.ClampFloat(slaves * GetSlaveOutput(title), 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
-                                                   new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=pop_class_slaves}Slaves")));
+                        baseResult.Add(MBMath.ClampFloat(tenants * SERF_OUTPUT, 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
+                                                   new TextObject("{=5mCY3JCP}{CLASS} output")
+                                                   .SetTextVariable("CLASS", new TextObject("{=pop_class_tenants}Tenants")));
                     }
 
-                    var mining = Campaign.Current.GetCampaignBehavior<BKBuildingsBehavior>().GetMiningRevenue(town);
+                    var buildingBehavior = Campaign.Current.GetCampaignBehavior<BKBuildingsBehavior>();
+                    int mining = buildingBehavior.GetMiningRevenue(town);
                     if (mining > 0)
                     {
                         baseResult.Add(mining, BKBuildings.Instance.Mines.Name);
+                    }
+
+                    int materials = buildingBehavior.GetMaterialExpenses(town);
+                    if (materials > 0)
+                    {
+                        baseResult.Add(-materials, new TextObject("{=!}Project material expenses"));
                     }
 
                     var ownerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(town.OwnerClan.Leader);

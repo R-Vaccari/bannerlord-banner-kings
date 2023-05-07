@@ -163,6 +163,7 @@
 		<string id="pop_class_craftsmen" text="Craftsmen" />
 		<string id="pop_class_serfs" text="Serfs" />
 		<string id="pop_class_slaves" text="Slaves" />
+		<string id="pop_class_tenants" text="Tenants" />
 
 		<string id="pop_class_serfs_sturgia" text="Lowmen" />
 		<string id="pop_class_serfs_empire" text="Coloni" />

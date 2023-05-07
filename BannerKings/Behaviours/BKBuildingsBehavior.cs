@@ -7,16 +7,19 @@ using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours
 {
     public class BKBuildingsBehavior : CampaignBehaviorBase
     {
         private Dictionary<Town, int> miningRevenues;
+        private Dictionary<Town, int> materialExpenses;
 
         public override void RegisterEvents()
         {
@@ -24,6 +27,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCreationOver);
             CampaignEvents.DailyTickTownEvent.AddNonSerializedListener(this, OnTownDailyTick);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
+            CampaignEvents.OnBuildingLevelChangedEvent.AddNonSerializedListener(this, OnBuildingChanged);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -31,13 +35,40 @@ namespace BannerKings.Behaviours
             if (BannerKingsConfig.Instance.wipeData)
             {
                 miningRevenues = null;
+                materialExpenses = null;
             }
 
             dataStore.SyncData("bannerkings-mining-revenues", ref miningRevenues);
+            dataStore.SyncData("bannerkings-material-expenses", ref materialExpenses);
 
             if (miningRevenues == null)
             {
                 miningRevenues = new Dictionary<Town, int>();
+                materialExpenses = new Dictionary<Town, int>();
+            }
+        }
+
+          private void AddRevenue(Town town, int revenue)
+        {
+            if (miningRevenues.ContainsKey(town))
+            {
+                miningRevenues[town] += revenue;
+            }
+            else
+            {
+                miningRevenues.Add(town, revenue);
+            }
+        }
+
+        private void AddExpense(Town town, int expense)
+        {
+            if (materialExpenses.ContainsKey(town))
+            {
+                materialExpenses[town] += expense;
+            }
+            else
+            {
+                materialExpenses.Add(town, expense);
             }
         }
 
@@ -61,29 +92,118 @@ namespace BannerKings.Behaviours
             return 0;
         }
 
+        public int GetMaterialExpenses(Town town)
+        {
+            if (materialExpenses == null)
+            {
+                materialExpenses = new Dictionary<Town, int>();
+            }
+
+            if (town == null)
+            {
+                return 0;
+            }
+
+            if (materialExpenses.ContainsKey(town))
+            {
+                return materialExpenses[town];
+            }
+
+            return 0;
+        }
+
         private void OnCreationOver()
         {
             miningRevenues = new Dictionary<Town, int>();
+            materialExpenses = new Dictionary<Town, int>();
+        }
+
+        private void OnBuildingChanged(Town town, Building building, int levelChange)
+        {
+            if (levelChange > 0)
+            {
+                float totalCost = 0;
+                var requirements = BannerKingsConfig.Instance.ConstructionModel.GetMaterialRequirements(building);
+                foreach (var requirement in requirements)
+                {
+                    int consumed = 0;
+                    foreach (ItemRosterElement element in town.Settlement.Stash)
+                    {
+                        if (consumed < requirement.Item2 && element.EquipmentElement.Item == requirement.Item1)
+                        {
+                            int toConsume = MathF.Min(element.Amount, requirement.Item2 - consumed);
+                            consumed += toConsume;
+                        }
+                    }
+
+                    town.Settlement.Stash.AddToCounts(requirement.Item1, -consumed);
+
+                    if (consumed < requirement.Item2)
+                    {
+                        int diff = requirement.Item2 - consumed;
+                        int bought = 0;
+                        foreach (ItemRosterElement element in town.Settlement.ItemRoster)
+                        {
+                            if (diff > 0 && element.EquipmentElement.Item == requirement.Item1)
+                            {
+                                int toBuy = MathF.Min(element.Amount, diff);
+                                diff -= toBuy;
+                                bought += toBuy;
+                                totalCost += town.GetItemPrice(element.EquipmentElement) * (float)toBuy;
+                            }
+                        }
+
+                        town.Settlement.Stash.AddToCounts(requirement.Item1, -bought);
+                    }
+                }
+
+                int toDeduct = MathF.Min((int)totalCost, town.OwnerClan.Gold);
+                town.OwnerClan.Leader.ChangeHeroGold(-toDeduct);
+                if (town.OwnerClan == Clan.PlayerClan && toDeduct > 0)
+                {
+                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}The {PROJECT} project at {TOWN} has finished and the remaining materials costed {DENARS}{GOLD_ICON}.")
+                        .SetTextVariable("PROJECT", building.BuildingType.Name)
+                        .SetTextVariable("TOWN", town.Name)
+                        .SetTextVariable("DENARS", toDeduct.ToString())
+                        .ToString(),
+                        Color.UIntToColorString(TextHelper.COLOR_LIGHT_YELLOW)));
+                }
+
+                if (toDeduct < totalCost)
+                {
+                    float influence = toDeduct * 0.5f;
+                    ChangeClanInfluenceAction.Apply(town.OwnerClan, -influence);
+                    if (town.OwnerClan == Clan.PlayerClan && influence > 0f)
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}You did not have all the denars to pay for materials, and thus lost {INFLUENCE} influence.")
+                           .SetTextVariable("INFLUENCE", influence.ToString("0.00"))
+                           .ToString(),
+                           Color.UIntToColorString(TextHelper.COLOR_LIGHT_RED)));
+                    }
+                }
+            }
         }
 
         private void OnDailyTickSettlement(Settlement settlement)
         {
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            if (data == null)
+            {
+                return;
+            }
+
+            HandleVillage(data);
+        }
+
+        private void HandleVillage(PopulationData data)
+        {
+            Settlement settlement = data.Settlement;
             if (!settlement.IsVillage || settlement.Village.VillageState != Village.VillageStates.Normal)
             {
                 return;
             }
 
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            if (data == null || data.VillageData == null)
-            {
-                return;
-            }
-
-            RunMarketplace(settlement.Village, data);
-        }
-
-        private void RunMarketplace(Village village, PopulationData data)
-        {
+            Village village = settlement.Village;
             ExceptionUtils.TryCatch(() =>
             {
                 var villageData = data.VillageData;
@@ -134,6 +254,53 @@ namespace BannerKings.Behaviours
         {
             RunMines(town);
             RunStuds(town);
+            RunMaterials(town);
+        }
+
+        private void RunMaterials(Town town)
+        {
+            if (materialExpenses.ContainsKey(town))
+            {
+                materialExpenses[town] = 0;
+            }
+
+            if (town.Governor != null && town.CurrentBuilding != null)
+            {
+                var requirements = BannerKingsConfig.Instance.ConstructionModel.GetMaterialRequirements(town.CurrentBuilding);
+                foreach (var requirement in requirements)
+                {
+                    int stashCount = 0;
+                    foreach (ItemRosterElement element in town.Settlement.Stash)
+                    {
+                        if (element.EquipmentElement.Item == requirement.Item1)
+                        {
+                            stashCount += element.Amount;
+                        }
+                    }
+
+                    if (stashCount < requirement.Item2)
+                    {
+                        int toBuy = MathF.Min(requirement.Item2 - stashCount, 5);
+                        int available = 0;
+                        int cost = 0;
+
+                        foreach (ItemRosterElement element in town.Settlement.ItemRoster)
+                        {
+                            if (element.EquipmentElement.Item == requirement.Item1)
+                            {
+                                int bought = MathF.Min(toBuy, element.Amount);
+                                toBuy -= bought;
+                                town.Settlement.Stash.AddToCounts(element.EquipmentElement, bought);
+                                town.Settlement.ItemRoster.AddToCounts(element.EquipmentElement, -bought);
+
+                                int price = (int)(town.GetItemPrice(element.EquipmentElement) * (float)bought);
+                                AddExpense(town, price);
+                                town.ChangeGold(price);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void RunStuds(Town town)
@@ -218,18 +385,6 @@ namespace BannerKings.Behaviours
             },
             GetType().Name,
             false);
-        }
-
-        private void AddRevenue(Town town, int revenue)
-        {
-            if (miningRevenues.ContainsKey(town))
-            {
-                miningRevenues[town] += revenue;
-            }
-            else
-            {
-                miningRevenues.Add(town, revenue);
-            }
         }
 
         private void OnGameLoaded(CampaignGameStarter starter)
