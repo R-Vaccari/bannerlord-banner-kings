@@ -1,8 +1,10 @@
 ﻿using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Items;
 using BannerKings.Managers.Skills;
-using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
@@ -36,26 +38,31 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        /*private float GetConsumptionFactor(ConsumptionType consumption, float value)
+        public override int GetPrice(EquipmentElement itemRosterElement, MobileParty clientParty, PartyBase merchant, bool isSelling, float inStoreValue, float supply, float demand)
         {
-            float diff = value - 1f;
-            float factor;
-            switch (consumption)
+            if (merchant != null && merchant.Settlement != null)
             {
-                case ConsumptionType.Luxury:
-                    factor = 1.5f;
-                    break;
-                case ConsumptionType.Industrial:
-                    factor = 1.5f;
-                    break;
-                case ConsumptionType.Food:
-                    factor = 1.5f;
-                    break;
-                default:
-                    factor = 1.5f;
-                    break;
+                Settlement settlement = merchant.Settlement;
+                if (settlement.Town != null && settlement.Town.CurrentBuilding != null)
+                {
+                    ItemCategory category = itemRosterElement.Item.GetItemCategory();
+                    if (category == DefaultItemCategories.Wood || category == DefaultItemCategories.Clay || category == BKItemCategories.Instance.Limestone ||
+                        category == DefaultItemCategories.Iron || category == BKItemCategories.Instance.Marble)
+                    {
+                        foreach (var requirement in BannerKingsConfig.Instance.ConstructionModel.GetMaterialRequirements(settlement.Town.CurrentBuilding))
+                        {
+                            if (requirement.Item1.ItemCategory == category)
+                            {
+                                demand += requirement.Item2;
+                            }
+                        }
+                    }
+                }
             }
-        }*/
+
+            int price = base.GetPrice(itemRosterElement, clientParty, merchant, isSelling, inStoreValue, supply, demand);
+            return price;
+        }
 
         public override float GetBasePriceFactor(ItemCategory itemCategory, float inStoreValue, float supply, float demand,
             bool isSelling, int transferValue)
