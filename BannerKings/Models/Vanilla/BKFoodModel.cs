@@ -185,13 +185,16 @@ namespace BannerKings.Models.Vanilla
                 var landData = data.LandData;
                 var serfName = Utils.Helpers.GetClassName(PopType.Serfs, town.Culture);
                 var slaveName = Utils.Helpers.GetClassName(PopType.Slaves, town.Culture);
+                var tenantsName = Utils.Helpers.GetClassName(PopType.Tenants, town.Culture);
 
                 float serfs = data.LandData.AvailableSerfsWorkForce;
                 float slaves = data.LandData.AvailableSlavesWorkForce;
-                float totalWorkforce = serfs + slaves;
+                float tenants = data.LandData.AvailableTenantsWorkForce;
+                float totalWorkforce = serfs + slaves + tenants;
 
                 float serfProportion = serfs / totalWorkforce;
                 float slaveProportion = slaves / totalWorkforce;
+                float tenantsProportion = tenants / totalWorkforce;
 
                 result.Add((landData.Farmland * serfProportion) * landData.GetAcreClassOutput("farmland", PopType.Serfs),
                     new TextObject("{=8Wuxnwnf}Farmlands ({CLASS})")
@@ -200,6 +203,11 @@ namespace BannerKings.Models.Vanilla
                 result.Add((landData.Farmland * slaveProportion) * landData.GetAcreClassOutput("farmland", PopType.Slaves),
                     new TextObject("{=8Wuxnwnf}Farmlands ({CLASS})")
                     .SetTextVariable("CLASS", slaveName));
+
+                result.Add((landData.Farmland * tenantsProportion) * landData.GetAcreClassOutput("farmland", PopType.Tenants),
+                   new TextObject("{=8Wuxnwnf}Farmlands ({CLASS})")
+                   .SetTextVariable("CLASS", tenantsName));
+
 
                 result.Add(landData.Pastureland * landData.GetAcreOutput("pasture"), new TextObject("{=ngRhXYj1}Pasturelands"));
                 result.Add(landData.Woodland * landData.GetAcreOutput("wood"), new TextObject("{=qPQ7HKgG}Woodlands"));
