@@ -311,21 +311,6 @@ namespace BannerKings.Models.Vanilla
             }
 
             float baseDemand = category.BaseDemand;
-            if (settlement.IsTown && settlement.Town.CurrentBuilding != null)
-            {
-                if (category == DefaultItemCategories.Wood || category == DefaultItemCategories.Clay || category == BKItemCategories.Instance.Limestone ||
-                    category == DefaultItemCategories.Iron || category == BKItemCategories.Instance.Marble)
-                {
-                    foreach (var requirement in BannerKingsConfig.Instance.ConstructionModel.GetMaterialRequirements(settlement.Town.CurrentBuilding))
-                    {
-                        if (requirement.Item1.ItemCategory == category)
-                        {
-                            baseDemand += requirement.Item2;
-                        }
-                    }
-                }
-            }
-
             var num3 = baseDemand * num;
             var num4 = category.LuxuryDemand * num2;
             var result = num3 + num4;
