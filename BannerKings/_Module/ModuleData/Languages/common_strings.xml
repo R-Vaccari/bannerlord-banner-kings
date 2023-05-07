@@ -71,6 +71,10 @@
 		<string id="bk_description_hardwood" text="The quintessential building material, one that is used far before man could write about his deeds. Hardwood Serves to build entire structures, but also complement structures made of stronger bases such as clay or limestone bases." />
 		<string id="bk_description_limestone" text="Limestone is a common mineral that serves as a strong material for stone buildings, walls and roads. Despite being common, it's extraction and transportation are significantly more costly than simply using wood or clay." />
 		
+		<string id="bk_description_iron" text="Iron is the essential material for tools and supporting structures of buildings. Most advanced buildings use iron to some extent." />
+		<string id="bk_description_tools" text="Anything but the crudest constructions require specialized tools. As buildings become more advanced, the more tools they require, specially stone buildings due to the exceptionally hard nature of stone." />
+		
+		
 		<string id="bk_limestone" text="Limestone{@Plural}blocks of limestone{\@}" />
 		<string id="bk_gold" text="Gold{@Plural}loads of gold{\@}" />
 		<string id="bk_mead" text="Mead{@Plural}barrels of mead{\@}" />
@@ -163,6 +167,7 @@
 		<string id="pop_class_craftsmen" text="Craftsmen" />
 		<string id="pop_class_serfs" text="Serfs" />
 		<string id="pop_class_slaves" text="Slaves" />
+		<string id="pop_class_tenants" text="Tenants" />
 
 		<string id="pop_class_serfs_sturgia" text="Lowmen" />
 		<string id="pop_class_serfs_empire" text="Coloni" />

@@ -385,6 +385,18 @@ namespace BannerKings.UI.Management
                     .SetTextVariable("EXPLANATIONS", admCost.GetExplanations())
                     .ToString()));
 
+            if (settlement.Town != null)
+            {
+                var taxes = BannerKingsConfig.Instance.TaxModel.CalculateTownTax(settlement.Town, true);
+                RevenueInfo.Add(new InformationElement(new TextObject("{=!}Tax Revenues:").ToString(),
+                    $"{taxes.ResultNumber:P}",
+                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                        .SetTextVariable("TEXT",
+                            new TextObject("{=!}Taxes levied on local population, and other local expenses and revenues. To maximize your revenues, increase local stability and reduce administrative costs."))
+                        .SetTextVariable("EXPLANATIONS", taxes.GetExplanations())
+                        .ToString()));
+            }
+
             taxItem = (BKTaxPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tax");
             TaxSelector = GetSelector(taxItem, taxItem.OnChange);
             TaxSelector.SelectedIndex = taxItem.Selected;

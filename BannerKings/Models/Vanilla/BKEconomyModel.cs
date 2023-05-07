@@ -1,5 +1,4 @@
 using BannerKings.Behaviours;
-using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Innovations;
@@ -132,6 +131,15 @@ namespace BannerKings.Models.Vanilla
                 DefaultCouncilTasks.Instance.OverseeProduction,
                 .15f, true);
 
+            if (settlement.Town != null)
+            {
+                Hero governor = settlement.Town.Governor;
+                if (governor != null && governor.IsArtisan)
+                {
+                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Crafting) * 0.08f, new TextObject("{=!}Artisan Governor"));
+                }
+            }
+
             return result;
         }
 
@@ -165,6 +173,15 @@ namespace BannerKings.Models.Vanilla
                 DefaultCouncilTasks.Instance.OverseeProduction,
                 .085f, true);
 
+            if (settlement.Town != null)
+            {
+                Hero governor = settlement.Town.Governor;
+                if (governor != null && governor.IsArtisan)
+                {
+                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Crafting) * 0.04f, new TextObject("{=!}Artisan Governor"));
+                }
+            }
+           
             return result;
         }
 
@@ -235,6 +252,12 @@ namespace BannerKings.Models.Vanilla
                    DefaultCouncilTasks.Instance.EnforceLaw,
                    0.05f, 
                    true);
+
+                Hero governor = settlement.Town.Governor;
+                if (governor != null && governor.IsMerchant)
+                {
+                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Trade) * 0.1f, new TextObject("{=!}Merchant Governor"));
+                }
             }
 
             return result;
@@ -254,6 +277,7 @@ namespace BannerKings.Models.Vanilla
             float nobles = data.GetTypeCount(PopType.Nobles);
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             float serfs = data.GetTypeCount(PopType.Serfs);
+            float tenants = data.GetTypeCount(PopType.Tenants);
             var type = Utils.Helpers.GetTradeGoodConsumptionType(category);
 
             var baseResult = 0f;
@@ -266,11 +290,13 @@ namespace BannerKings.Models.Vanilla
                 case ConsumptionType.Industrial:
                     baseResult += craftsmen * 1.2f;
                     baseResult += serfs * 0.2f;
+                    baseResult += tenants * 0.20f;
                     break;
                 default:
                     baseResult += nobles * 1f;
                     baseResult += craftsmen * 1f;
                     baseResult += serfs * 0.20f;
+                    baseResult += tenants * 0.20f;
                     break;
             }
 
@@ -282,7 +308,9 @@ namespace BannerKings.Models.Vanilla
             {
                 num *= 3f;
             }
-            var num3 = category.BaseDemand * num;
+
+            float baseDemand = category.BaseDemand;
+            var num3 = baseDemand * num;
             var num4 = category.LuxuryDemand * num2;
             var result = num3 + num4;
             if (category.BaseDemand < 1E-08f)
@@ -341,10 +369,10 @@ namespace BannerKings.Models.Vanilla
                 };
             }
 
-            var efficiency = data.EconomicData.ProductionEfficiency.ResultNumber * 1.25f;
+            var efficiency = data.EconomicData.ProductionEfficiency.ResultNumber;
             if (privateSlaves > 0f)
             {
-                return (int) ((privateSlaves * tax * efficiency) + 5000 + (town.Prosperity / 2f));
+                return (int) ((privateSlaves * tax * efficiency) + (town.Prosperity / 2f));
             }
 
             return 0;

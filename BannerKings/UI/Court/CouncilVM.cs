@@ -86,7 +86,7 @@ namespace BannerKings.UI.Court
                 }
 
                 TextObject description;
-                if (councilPosition.SecondarySkill != null)
+                if (councilPosition.SecondarySkill == null)
                 {
                     description = new TextObject("{=HiA9DHMi}Select who you would like to fill this position. The {POSITION} requires competency in {PRIMARY} and {SECONDARY} skills. {CURRENT}")
                         .SetTextVariable("SECONDARY", councilPosition.SecondarySkill.Name)

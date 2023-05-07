@@ -1,19 +1,17 @@
-using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
-using TaleWorlds.Localization;
 
 namespace BannerKings.UI.TownManagement
 {
     public class MaterialItemVM : ViewModel
     {
-        private HintViewModel hint;
+        private BasicTooltipViewModel hint;
         private int resourceChange, resourceAmount;
         private ImageIdentifierVM visual;
 
-        public MaterialItemVM(ItemObject material, Settlement settlement)
+        public MaterialItemVM(ItemObject material, Settlement settlement, int demand)
         {
             Material = material;
             Visual = new ImageIdentifierVM(material);
@@ -36,17 +34,18 @@ namespace BannerKings.UI.TownManagement
                     market += element.Amount;
                 }
             }
-            ResourceHint = new HintViewModel(new TextObject("{=cBhrSfro}{MATERIAL}\n{DESCRIPTION}\nStash: {STASH}\nMarket: {MARKET}")
-                .SetTextVariable("MATERIAL", material.Name)
-                .SetTextVariable("STASH", stash)
-                .SetTextVariable("MARKET", market)
-                .SetTextVariable("DESCRIPTION", GameTexts.FindText("str_bk_description", material.StringId)));
+            MarketAmount = market;
+            StashAmount = stash;
+            ResourceChangeAmount = demand;
+            ResourceHint = new BasicTooltipViewModel(() => UIHelper.GetTownMaterialTooltip(this));
         }
 
         public ItemObject Material { get; }
+        public int StashAmount { get; }
+        public int MarketAmount { get; }
 
         [DataSourceProperty]
-        public HintViewModel ResourceHint
+        public BasicTooltipViewModel ResourceHint
         {
             get => hint;
             set

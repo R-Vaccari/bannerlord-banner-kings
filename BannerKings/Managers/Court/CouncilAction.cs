@@ -51,14 +51,22 @@ namespace BannerKings.Managers.Court
                                 }
                                 else
                                 {
-                                    if (decision.DetermineInitialCandidates().Count() >= 3)
+                                    var candidates = decision.DetermineInitialCandidates();
+                                    if (candidates.Count() >= 3)
                                     {
                                         kingdom.AddDecision(decision);
                                     }
-                                    else if (Council.Clan == Clan.PlayerClan)
+                                    else 
                                     {
-                                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}Not enough candidates for this position.").ToString(),
-                                            Color.UIntToColorString(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
+                                        if (candidates.Count() == 1)
+                                        {
+                                            BannerKingsConfig.Instance.CourtManager.AddHeroToCouncil(this);
+                                        }
+                                        else if (Council.Clan == Clan.PlayerClan)
+                                        {
+                                            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}Not enough candidates for this position.").ToString(),
+                                                                                        Color.UIntToColorString(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
+                                        }  
                                     }
                                 }
                                
