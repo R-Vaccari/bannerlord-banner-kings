@@ -1,5 +1,4 @@
 using BannerKings.Behaviours;
-using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Innovations;
@@ -133,6 +132,15 @@ namespace BannerKings.Models.Vanilla
                 DefaultCouncilTasks.Instance.OverseeProduction,
                 .15f, true);
 
+            if (settlement.Town != null)
+            {
+                Hero governor = settlement.Town.Governor;
+                if (governor != null && governor.IsArtisan)
+                {
+                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Crafting) * 0.8f, new TextObject("{=!}Artisan Governor"));
+                }
+            }
+
             return result;
         }
 
@@ -166,6 +174,15 @@ namespace BannerKings.Models.Vanilla
                 DefaultCouncilTasks.Instance.OverseeProduction,
                 .085f, true);
 
+            if (settlement.Town != null)
+            {
+                Hero governor = settlement.Town.Governor;
+                if (governor != null && governor.IsArtisan)
+                {
+                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Crafting) * 0.4f, new TextObject("{=!}Artisan Governor"));
+                }
+            }
+           
             return result;
         }
 
@@ -236,6 +253,12 @@ namespace BannerKings.Models.Vanilla
                    DefaultCouncilTasks.Instance.EnforceLaw,
                    0.05f, 
                    true);
+
+                Hero governor = settlement.Town.Governor;
+                if (governor != null && governor.IsMerchant)
+                {
+                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Trade) * 0.1f, new TextObject("{=!}Merchant Governor"));
+                }
             }
 
             return result;
@@ -362,10 +385,10 @@ namespace BannerKings.Models.Vanilla
                 };
             }
 
-            var efficiency = data.EconomicData.ProductionEfficiency.ResultNumber * 1.25f;
+            var efficiency = data.EconomicData.ProductionEfficiency.ResultNumber;
             if (privateSlaves > 0f)
             {
-                return (int) ((privateSlaves * tax * efficiency) + 5000 + (town.Prosperity / 2f));
+                return (int) ((privateSlaves * tax * efficiency) + (town.Prosperity / 2f));
             }
 
             return 0;
