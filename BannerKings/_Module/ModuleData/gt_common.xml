@@ -62,6 +62,8 @@
 	<string id="str_bk_description.marble" text="{=bk_description_marble}A rarer and more valuable material than limestone. Marble was discovered by the Imperials as a material soft enough to be carved into sculptures. This trait combined with the material's natural beauty made it very sought after. It is commonly used in more elaborate buildings to convey wealth and power, such as palaces and forums." />
 	<string id="str_bk_description.hardwood" text="{=bk_description_hardwood}The quintessential building material, one that is used far before man could write about his deeds. Hardwood Serves to build entire structures, but also complement structures made of stronger bases such as clay or limestone bases." />
 	<string id="str_bk_description.limestone" text="{=bk_description_limestone}Limestone is a common mineral that serves as a strong material for stone buildings, walls and roads. Despite being common, it's extraction and transportation are significantly more costly than simply using wood or clay." />
+	<string id="str_bk_description.iron" text="{=bk_description_iron}Iron is the essential material for tools and supporting structures of buildings. Most advanced buildings use iron to some extent." />
+	<string id="str_bk_description.tools" text="{=bk_description_tools}Anything but the crudest constructions require specialized tools. As buildings become more advanced, the more tools they require, specially stone buildings due to the exceptionally hard nature of stone." />
 
 	<string id="str_bk_mineral_richness.rich" text="{=bk_rich}Rich" />
 	<string id="str_bk_mineral_richness.adequate" text="{=bk_adequate}Adequate" />
@@ -159,6 +161,14 @@
 	        text="{=bk_council_description_constable}The {NAME} administrates law enforcement and criminal cases in settlements. Their purpose is to act as a supervisor to guarantee stability of the realm, being a mediator between the crown and governors." />
 	<string id="str_bk_council_description_philosopher"
 	        text="{=bk_council_description_philosopher}The {NAME} is responsible for the advancement of the culture and general education of the family. These studied individuals research into innovations, as well as teach their sponsoring family's members subjects such as reading, writting and history." />
+	<string id="str_bk_council_description_courtphysician"
+	        text="{=bk_council_description_courtphysician}The {NAME} is responsible for the health of their suzerain's household. Medicine being a scarce skill, noble households will often reward handsomely such an expert, to whom they will trust their lives." />
+	<string id="str_bk_council_description_courtmusician"
+	        text="{=bk_council_description_courtmusician}The {NAME} is responsible for entertaining's a noble household as well as their guests, mostly on feasts. As feasts are a common way for the high society to interact amongst themselves, many expensive amenities are to be expected, including dedicated entertainers." />
+	<string id="str_bk_council_description_spouse"
+	        text="{=bk_council_description_spouse}The {NAME} is responsible for aiding the household leader with tasks that concern their family and property. A good spouse understands legal subjects in order to adequately handle important matters the household leader cannot attend to." />	
+	<string id="str_bk_council_description_courtsmith"
+	        text="{=bk_council_description_courtsmith}The {NAME} is responsible for arming the household. A dedicated wage allows them to focus their craft on high quality equipment that befit a noble household." />
 
 
 

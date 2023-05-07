@@ -2,7 +2,6 @@ using BannerKings.Behaviours;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Innovations;
-using BannerKings.Managers.Items;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
