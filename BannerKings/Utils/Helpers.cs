@@ -185,13 +185,13 @@ namespace BannerKings.Utils
                 switch (cultureId) 
                 {
                     case "empire":
-                        text = new TextObject("{=GThkJp2s}Coloni");
+                        text = new TextObject("{=!}Servi");
                         break;
                     case "aserai" or "battania":
                         text = new TextObject("{=vSMPBzue}Commoners");
                         break;
                     default:
-                        text = new TextObject("Serfs");
+                        text = new TextObject("{=!}Serfs");
                         break;
                 }
             }
@@ -199,6 +199,9 @@ namespace BannerKings.Utils
             {
                 switch (cultureId)
                 {
+                    case "empire":
+                        text = new TextObject("{=GThkJp2s}Coloni");
+                        break;
                     case "khuzait":
                         text = new TextObject("{=tUzhQHAh}Nomads");
                         break;
@@ -224,7 +227,7 @@ namespace BannerKings.Utils
                         text = new TextObject("{=TASERbwx}Mameluke");
                         break;
                     default:
-                        text = new TextObject("Slaves");
+                        text = new TextObject("{=!}Slaves");
                         break;
                 }
             }
@@ -239,7 +242,7 @@ namespace BannerKings.Utils
                         text = new TextObject("{=2ogRjAuf}Artisans");
                         break;
                     default:
-                        text = new TextObject("Craftsmen");
+                        text = new TextObject("{=!}Craftsmen");
                         break;
                 }
             }
@@ -254,7 +257,7 @@ namespace BannerKings.Utils
                         text = new TextObject("{=FVuW8Y4j}Ealdormen");
                         break;
                     default:
-                        text = new TextObject("Nobles");
+                        text = new TextObject("{=!}Nobles");
                         break;
                 }
             }
