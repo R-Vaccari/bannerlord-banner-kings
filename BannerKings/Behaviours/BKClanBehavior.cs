@@ -37,6 +37,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, OnClanChangedKingdom);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.AfterSettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
+            CampaignEvents.NewCompanionAdded.AddNonSerializedListener(this, OnCompanionAdded);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -165,6 +166,17 @@ namespace BannerKings.Behaviours
             }
             
             return IsCompanionOfAnotherClan();
+        }
+
+        private void OnCompanionAdded(Hero companion)
+        {
+            if (companion.CompanionOf == null)
+            {
+                return;
+            }
+
+            CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(companion.CompanionOf);
+            data.RemoveGuest(companion);
         }
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
