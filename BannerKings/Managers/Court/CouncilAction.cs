@@ -51,7 +51,9 @@ namespace BannerKings.Managers.Court
                                 }
                                 else
                                 {
-                                    var candidates = decision.DetermineInitialCandidates();
+                                    var candidates = decision.NarrowDownCandidates(
+                                        decision.DetermineInitialCandidates().ToMBList(), 
+                                        3);
                                     if (candidates.Count() >= 3)
                                     {
                                         kingdom.AddDecision(decision);
