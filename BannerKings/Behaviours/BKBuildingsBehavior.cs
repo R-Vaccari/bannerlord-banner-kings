@@ -4,6 +4,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Utils;
 using HarmonyLib;
+using Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -276,11 +277,19 @@ namespace BannerKings.Behaviours
 
             if (town.Governor != null && town.CurrentBuilding != null)
             {
+                Town materialSource = town.IsTown ? town : SettlementHelper
+                    .FindNearestTown(x => !x.MapFaction.IsAtWarWith(town.MapFaction)).Town;
+
+                if (materialSource == null)
+                {
+                    return;
+                }
+
                 var requirements = BannerKingsConfig.Instance.ConstructionModel.GetMaterialRequirements(town.CurrentBuilding);
                 foreach (var requirement in requirements)
                 {
                     int stashCount = 0;
-                    foreach (ItemRosterElement element in town.Settlement.Stash)
+                    foreach (ItemRosterElement element in materialSource.Settlement.Stash)
                     {
                         if (element.EquipmentElement.Item == requirement.Item1)
                         {
@@ -291,9 +300,6 @@ namespace BannerKings.Behaviours
                     if (stashCount < requirement.Item2)
                     {
                         int toBuy = MathF.Min(requirement.Item2 - stashCount, 5);
-                        int available = 0;
-                        int cost = 0;
-
                         foreach (ItemRosterElement element in town.Settlement.ItemRoster)
                         {
                             if (element.EquipmentElement.Item == requirement.Item1)
@@ -301,11 +307,16 @@ namespace BannerKings.Behaviours
                                 int bought = MathF.Min(toBuy, element.Amount);
                                 toBuy -= bought;
                                 town.Settlement.Stash.AddToCounts(element.EquipmentElement, bought);
-                                town.Settlement.ItemRoster.AddToCounts(element.EquipmentElement, -bought);
+                                materialSource.Settlement.ItemRoster.AddToCounts(element.EquipmentElement, -bought);
 
-                                int price = (int)(town.GetItemPrice(element.EquipmentElement) * (float)bought);
+                                int price = (int)(materialSource.GetItemPrice(element.EquipmentElement) * (float)bought);
+                                if (materialSource != town)
+                                {
+                                    price = (int)(price * 1.2f);
+                                }
+
                                 AddExpense(town, price);
-                                town.ChangeGold(price);
+                                materialSource.ChangeGold(price);
                             }
                         }
                     }
