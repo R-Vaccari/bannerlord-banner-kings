@@ -154,6 +154,16 @@ namespace BannerKings.Managers.Court
             }
         }
 
+        public void RemoveGuest(Hero hero)
+        {
+            if (hero == null || !Guests.Contains(hero))
+            {
+                return;
+            }
+
+            Guests.Remove(hero);
+        }
+
         internal override void Update(PopulationData data)
         {
             var courtiers = GetCourtMembers();
