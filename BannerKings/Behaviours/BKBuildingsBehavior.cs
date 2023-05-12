@@ -44,6 +44,11 @@ namespace BannerKings.Behaviours
             if (miningRevenues == null)
             {
                 miningRevenues = new Dictionary<Town, int>();
+                
+            }
+
+            if (materialExpenses == null)
+            {
                 materialExpenses = new Dictionary<Town, int>();
             }
         }
@@ -259,6 +264,11 @@ namespace BannerKings.Behaviours
 
         private void RunMaterials(Town town)
         {
+            if (materialExpenses == null)
+            {
+                return;
+            }
+
             if (materialExpenses.ContainsKey(town))
             {
                 materialExpenses[town] = 0;
