@@ -2,6 +2,7 @@
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Utils.Models;
 using System.Linq;
+using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -104,6 +105,15 @@ namespace BannerKings.Models.Vanilla
 
             float relations = attackerStats.RulingClan.GetRelationWithClan(defenderStats.RulingClan);
             result.AddFactor(relations * -0.003f);
+
+            DefaultDiplomacyModel model = new DefaultDiplomacyModel();
+            var getDistanceMethod = model.GetType()
+                .GetMethod("GetDistance", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            float distanceFactor = (float)getDistanceMethod.Invoke(model, new object[] { factionDeclaresWar, factionDeclaredWar });
+            float averageDistance = Campaign.AverageDistanceBetweenTwoFortifications;
+
+            result.Add(MathF.Clamp(averageDistance / averageDistance, -0.9f, 0f));
 
             if (evaluatingPeace)
             {
