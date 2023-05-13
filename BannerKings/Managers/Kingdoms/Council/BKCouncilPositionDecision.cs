@@ -76,7 +76,7 @@ namespace BannerKings.Managers.Kingdoms.Council
             {
                 CouncilAction action = BannerKingsConfig.Instance.CouncilModel.GetAction(CouncilActionType.REQUEST,
                     Data,
-                    Suggested,
+                    hero,
                     Position,
                     null,
                     true);

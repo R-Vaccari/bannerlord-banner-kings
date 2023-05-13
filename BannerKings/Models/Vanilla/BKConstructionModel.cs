@@ -287,12 +287,16 @@ namespace BannerKings.Models.Vanilla
 
         private float GetWorkforce(Settlement settlement)
         {
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            bool construction = BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
-                (int) WorkforcePolicy.Construction);
-            if (!construction)
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement); 
+
+            if (settlement.Town != null)
             {
-                return 0f;
+                bool construction = BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+                               (int)WorkforcePolicy.Construction);
+                if (!construction)
+                {
+                    return 0f;
+                }
             }
 
             float slaves = data.LandData.SlavesConstructionForce * SLAVE_CONSTRUCTION;

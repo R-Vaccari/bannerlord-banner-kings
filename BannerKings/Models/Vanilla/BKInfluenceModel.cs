@@ -52,9 +52,13 @@ namespace BannerKings.Models.Vanilla
 
         public ExplainedNumber GetMinimumPeersQuantity(Kingdom kingdom, bool explanations = false)
         {
-            ExplainedNumber result = new ExplainedNumber(1f, explanations);
-            result.Add(MathF.Floor(kingdom.Fiefs.Count / 2f), new TextObject("{=LBNzsqyb}Fiefs"));
-            result.LimitMax(kingdom.Clans.Count);
+            ExplainedNumber result = new ExplainedNumber(0f, explanations);
+            if (kingdom != null)
+            {
+                result.Add(1f, new TextObject("{=!}Base value"));
+                result.Add(MathF.Floor(kingdom.Fiefs.Count / 2f), new TextObject("{=LBNzsqyb}Fiefs"));
+                result.LimitMax(kingdom.Clans.Count);
+            }
 
             return result;
         }

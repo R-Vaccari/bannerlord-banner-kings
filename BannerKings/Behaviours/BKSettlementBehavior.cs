@@ -128,6 +128,16 @@ namespace BannerKings.Behaviours
 
             BannerKingsConfig.Instance.TitleManager.PostInitialize();
             BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+
+            foreach (var settlement in Settlement.All)
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                var dominant = data.CultureData.DominantCulture;
+                if (dominant.BasicTroop != null)
+                {
+                    data.Settlement.Culture = dominant;
+                }
+            }
         }
 
 
