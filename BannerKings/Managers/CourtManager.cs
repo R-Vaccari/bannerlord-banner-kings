@@ -51,6 +51,11 @@ namespace BannerKings.Managers
 
         internal void RemoveCache(Hero hero)
         {
+            if (hero == null)
+            {
+                return;
+            }
+
             if (PositionsCache.ContainsKey(hero))
             {
                 PositionsCache.Remove(hero);
