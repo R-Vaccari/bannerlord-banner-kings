@@ -198,7 +198,7 @@ namespace BannerKings.Patches
                     int budget = clan.Gold + (int)goldChange.ResultNumber + (int)goldChange.ResultNumber;
                     object[] array = { mainParty, budget, applyWithdrawals };
                     int expense = (int)calculatePartyWageFunction.Invoke(model, array);
-                    explainedNumber.Add(expense, new TextObject("{=YkZKXsIn}Main party wages"));
+                    explainedNumber.Add(-expense, new TextObject("{=YkZKXsIn}Main party wages"));
                 }
 
                 List<MobileParty> list = new List<MobileParty>();
@@ -244,7 +244,8 @@ namespace BannerKings.Patches
 
                     if (party.LeaderHero != null && party.LeaderHero != clan.Leader)
                     {
-                        if (BannerKingsConfig.Instance.TitleManager.GetHighestTitle(party.LeaderHero) != null)
+                        if (BannerKingsConfig.Instance.TitleManager.GetAllDeJure(party.LeaderHero)
+                            .Any(x => x.TitleType == TitleType.Lordship))
                         {
                             continue;
                         }
