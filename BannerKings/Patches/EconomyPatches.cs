@@ -185,125 +185,122 @@ namespace BannerKings.Patches
             private static bool PartyExpensesPrefix(Clan clan, ref ExplainedNumber goldChange,
                 bool applyWithdrawals, bool includeDetails)
             {
-                if (BannerKingsConfig.Instance.TitleManager != null)
+                var model = new DefaultClanFinanceModel();
+                var calculatePartyWageFunction = model.GetType()
+                    .GetMethod("CalculatePartyWage", BindingFlags.Instance | BindingFlags.NonPublic);
+
+                ExplainedNumber explainedNumber = new ExplainedNumber(0f, goldChange.IncludeDescriptions, null);
+
+                Hero leader = clan.Leader;
+                MobileParty mainParty = (leader != null) ? leader.PartyBelongedTo : null;
+                if (mainParty != null)
                 {
-                    ExplainedNumber explainedNumber = new ExplainedNumber(0f, goldChange.IncludeDescriptions, null);
-                    var list = new List<MobileParty>();
-                    foreach (var hero in clan.Lords)
-                        foreach (var caravanPartyComponent in hero.OwnedCaravans)
-                        {
-                            list.Add(caravanPartyComponent.MobileParty);
-                        }
+                    int budget = clan.Gold + (int)goldChange.ResultNumber + (int)goldChange.ResultNumber;
+                    object[] array = { mainParty, budget, applyWithdrawals };
+                    int expense = (int)calculatePartyWageFunction.Invoke(model, array);
+                    explainedNumber.Add(expense, new TextObject("{=YkZKXsIn}Main party wages"));
+                }
 
-                    foreach (var hero2 in clan.Companions)
-                        foreach (var caravanPartyComponent2 in hero2.OwnedCaravans)
-                        {
-                            list.Add(caravanPartyComponent2.MobileParty);
-                        }
+                List<MobileParty> list = new List<MobileParty>();
+                foreach (var hero in clan.Lords)
+                    foreach (var caravanPartyComponent in hero.OwnedCaravans)
+                        list.Add(caravanPartyComponent.MobileParty);
+                        
+                foreach (var hero2 in clan.Companions)
+                    foreach (var caravanPartyComponent2 in hero2.OwnedCaravans)
+                        list.Add(caravanPartyComponent2.MobileParty);     
 
-                    foreach (var warPartyComponent in clan.WarPartyComponents)
+                foreach (var warPartyComponent in clan.WarPartyComponents)
+                    list.Add(warPartyComponent.MobileParty);
+                    
+                foreach (Town town in clan.Fiefs)
+                    if (town.GarrisonParty != null && town.GarrisonParty.IsActive)
+                        list.Add(town.GarrisonParty);
+  
+                foreach (var party in list)
+                {
+                    int budget = clan.Gold + (int)goldChange.ResultNumber + (int)goldChange.ResultNumber;
+                    object[] array = { party, budget, applyWithdrawals };
+                    int expense = (int)calculatePartyWageFunction.Invoke(model, array);
+
+                    if (applyWithdrawals)
                     {
-                        list.Add(warPartyComponent.MobileParty);
-                    }
-
-                    foreach (Town town in clan.Fiefs)
-                    {
-                        if (town.GarrisonParty != null && town.GarrisonParty.IsActive)
+                        if (party.IsLordParty)
                         {
-                            list.Add(town.GarrisonParty);
-                        }
-                    }
-
-                    var model = new DefaultClanFinanceModel();
-                    var getWage = model.GetType()
-                        .GetMethod("CalculatePartyWage", BindingFlags.Instance | BindingFlags.NonPublic);
-                    foreach (var party in list)
-                    {
-                        int budget = clan.Gold + (int)goldChange.ResultNumber + (int)goldChange.ResultNumber;
-                        object[] array = { party, budget, applyWithdrawals };
-                        int expense = (int)getWage.Invoke(model, array);
-
-                        if (applyWithdrawals)
-                        {
-                            if (party.IsLordParty)
+                            if (party.LeaderHero != null)
                             {
-                                if (party.LeaderHero != null)
-                                {
-                                    party.LeaderHero.Gold -= expense;
-                                }
-                                else
-                                {
-                                    party.ActualClan.Leader.Gold -= expense;
-                                }
+                                party.LeaderHero.Gold -= expense;
                             }
                             else
                             {
-                                party.PartyTradeGold -= expense;
+                                party.ActualClan.Leader.Gold -= expense;
                             }
                         }
-
-                        if (party.LeaderHero != null && party.LeaderHero != clan.Leader)
+                        else
                         {
-                            if (BannerKingsConfig.Instance.TitleManager.GetHighestTitle(party.LeaderHero) != null)
-                            {
-                                continue;
-                            }
+                            party.PartyTradeGold -= expense;
                         }
-
-                        if (applyWithdrawals)
-                        {
-                            if (party.LeaderHero != null && party.LeaderHero.IsClanLeader())
-                            {
-                                continue;
-                            }
-
-                            bool needsExtra = false;
-                            if (party.IsLordParty && party.LeaderHero != null)
-                            {
-                                needsExtra = party.LeaderHero.Gold < 5000;
-                            }
-                            else
-                            {
-                                needsExtra = party.PartyTradeGold < 5000;
-                            }
-
-                            if (needsExtra && (expense + 200) < budget)
-                            {
-                                expense += 200;
-                            }
-
-                            int refund = MathF.Min(expense, budget);
-                            if (party.IsLordParty)
-                            {
-                                if (party.LeaderHero != null)
-                                {
-                                    party.LeaderHero.Gold += refund;
-                                }
-                                else
-                                {
-                                    party.ActualClan.Leader.Gold += refund;
-                                }
-                            }
-                            else
-                            {
-                                party.PartyTradeGold += refund;
-                            }
-                        }
-
-                        explainedNumber.Add(-expense, new TextObject("{=tqCSk7ya}Party wages {A0}"), party.Name);
                     }
 
-                    if (!includeDetails)
+                    if (party.LeaderHero != null && party.LeaderHero != clan.Leader)
                     {
-                        goldChange.Add(explainedNumber.ResultNumber, new TextObject("{=ChUDSiJw}Garrison and Party Expense", null), null);
-                        return false;
+                        if (BannerKingsConfig.Instance.TitleManager.GetHighestTitle(party.LeaderHero) != null)
+                        {
+                            continue;
+                        }
                     }
 
-                    goldChange.AddFromExplainedNumber(explainedNumber, new TextObject("{=ChUDSiJw}Garrison and Party Expense", null));
+                    if (applyWithdrawals)
+                    {
+                        if (party.LeaderHero != null && party.LeaderHero.IsClanLeader())
+                        {
+                            continue;
+                        }
+
+                        bool needsExtra = false;
+                        if (party.IsLordParty && party.LeaderHero != null)
+                        {
+                            needsExtra = party.LeaderHero.Gold < 5000;
+                        }
+                        else
+                        {
+                            needsExtra = party.PartyTradeGold < 5000;
+                        }
+
+                        if (needsExtra && (expense + 200) < budget)
+                        {
+                            expense += 200;
+                        }
+
+                        int refund = MathF.Min(expense, budget);
+                        if (party.IsLordParty)
+                        {
+                            if (party.LeaderHero != null)
+                            {
+                                party.LeaderHero.Gold += refund;
+                            }
+                            else
+                            {
+                                party.ActualClan.Leader.Gold += refund;
+                            }
+                        }
+                        else
+                        {
+                            party.PartyTradeGold += refund;
+                        }
+                    }
+
+                    explainedNumber.Add(-expense, new TextObject("{=tqCSk7ya}Party wages {A0}"), party.Name);
+                }
+
+                if (!includeDetails)
+                {
+                    goldChange.Add(explainedNumber.ResultNumber, new TextObject("{=ChUDSiJw}Garrison and Party Expense", null), null);
                     return false;
                 }
 
-                return true;
+                goldChange.AddFromExplainedNumber(explainedNumber, new TextObject("{=ChUDSiJw}Garrison and Party Expense", null));
+                return false;
             }
 
             [HarmonyPrefix]
