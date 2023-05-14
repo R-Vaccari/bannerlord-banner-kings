@@ -211,7 +211,8 @@ namespace BannerKings.Patches
                         list.Add(caravanPartyComponent2.MobileParty);     
 
                 foreach (var warPartyComponent in clan.WarPartyComponents)
-                    list.Add(warPartyComponent.MobileParty);
+                    if (warPartyComponent.MobileParty != mainParty)
+                        list.Add(warPartyComponent.MobileParty);
                     
                 foreach (Town town in clan.Fiefs)
                     if (town.GarrisonParty != null && town.GarrisonParty.IsActive)
