@@ -1,14 +1,18 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Traits;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.AgentOrigins;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Locations;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.PopulationManager;
@@ -18,6 +22,39 @@ namespace BannerKings.Utils
 {
     public static class Helpers
     {
+        public static void AddTraitLevel(Hero hero, TraitObject trait, int level, float chance = 1f)
+        {
+            int current = hero.GetTraitLevel(trait);
+            int final = current + level;
+            if ((final >= trait.MinValue || final <= trait.MaxValue) && MBRandom.RandomFloat < chance)
+            {
+                hero.SetTraitLevel(trait, final);
+                if (hero == Hero.MainHero)
+                {
+                    string value = GameTexts.FindText("str_trait_name_" + trait.StringId.ToLower(), 
+                        (level + MathF.Abs(trait.MinValue)).ToString())
+                        .ToString();
+
+                    if (BKTraits.Instance.PersonalityTraits.Contains(trait))
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage(
+                            new TextObject("{=!}Your sense of {TRAIT} is now perceived by others as {LEVEL}.")
+                            .SetTextVariable("TRAIT", trait.Name)
+                            .SetTextVariable("LEVEL", value).ToString(),
+                            Color.UIntToColorString(TextHelper.COLOR_LIGHT_YELLOW)));
+                    }
+                    else if (BKTraits.Instance.MedicalTraits.Contains(trait))
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage(
+                            new TextObject("{=!}Your sense of {TRAIT} is now perceived by others as {LEVEL}.")
+                            .SetTextVariable("TRAIT", trait.Name)
+                            .SetTextVariable("LEVEL", value).ToString(),
+                            Color.UIntToColorString(TextHelper.COLOR_LIGHT_YELLOW)));
+                    }
+                }
+            }
+        }
+
         public static ItemModifierGroup GetItemModifierGroup(ItemObject item)
         {
             ItemModifierGroup modifierGroup = null;

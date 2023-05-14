@@ -3,27 +3,55 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using static TaleWorlds.CampaignSystem.Issues.LandlordNeedsAccessToVillageCommonsIssueBehavior;
 
 namespace BannerKings.Behaviours
 {
     public class BKTraitBehavior : BannerKingsBehavior
     {
+        private bool traitsInitialized;
         public override void RegisterEvents()
         {
             CampaignEvents.HeroCreated.AddNonSerializedListener(this, OnHeroCreated);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
+            CampaignEvents.OnQuestCompletedEvent.AddNonSerializedListener(this, OnQuestCompleted);
         }
 
         public override void SyncData(IDataStore dataStore)
         {
+            dataStore.SyncData("bannerkings-traits-initialized", ref traitsInitialized);
         }
 
         private void OnGameLoaded(CampaignGameStarter starter)
         {
-            foreach (var hero in Hero.AllAliveHeroes)
+            if (!traitsInitialized)
             {
-                InitPersonalityTraits(hero);
-                InitNonPersonalityTraits(hero);
+                foreach (var hero in Hero.AllAliveHeroes)
+                {
+                    InitPersonalityTraits(hero);
+                    InitNonPersonalityTraits(hero);
+                }
+            }
+        }
+
+        private void OnHeroCreated(Hero hero, bool bornNaturally)
+        {
+            InitPersonalityTraits(hero);
+            InitNonPersonalityTraits(hero);
+        }
+
+        private void OnQuestCompleted(QuestBase quest, QuestBase.QuestCompleteDetails details)
+        {
+            if (quest is LandlordNeedsAccessToVillageCommonsIssueQuest)
+            {
+                if (details == QuestBase.QuestCompleteDetails.Success)
+                {
+                    Utils.Helpers.AddTraitLevel(Hero.MainHero, BKTraits.Instance.Just, 1, 0.4f);
+                }
+                else if (details == QuestBase.QuestCompleteDetails.FailWithBetrayal)
+                {
+                    Utils.Helpers.AddTraitLevel(Hero.MainHero, BKTraits.Instance.Just, -1);
+                }
             }
         }
 
@@ -122,6 +150,7 @@ namespace BannerKings.Behaviours
 
         private void InitPersonalityTraits(Hero hero)
         {
+            traitsInitialized = true;
             foreach (TraitObject trait in BKTraits.Instance.PersonalityTraits)
             {
                 float chance = 0.01f;
@@ -168,12 +197,6 @@ namespace BannerKings.Behaviours
                     hero.SetTraitLevel(trait, level);
                 }
             }
-        }
-
-        private void OnHeroCreated(Hero hero, bool bornNaturally)
-        {
-            InitPersonalityTraits(hero);
-            InitNonPersonalityTraits(hero);
         }
     }
 }
