@@ -227,6 +227,9 @@ namespace BannerKings.Utils
                     case "aserai" or "battania":
                         text = new TextObject("{=vSMPBzue}Commoners");
                         break;
+                    case "sturgia":
+                        text = new TextObject("{=!}Kholops");
+                        break;
                     default:
                         text = new TextObject("{=!}Serfs");
                         break;
@@ -242,7 +245,10 @@ namespace BannerKings.Utils
                     case "khuzait":
                         text = new TextObject("{=tUzhQHAh}Nomads");
                         break;
-                    case "sturgia" or "battania":
+                    case "sturgia":
+                        text = new TextObject("{=!}Smerdy");
+                        break;
+                    case "battania":
                         text = new TextObject("{=TEYb57Wo}Freemen");
                         break;
                     default:
