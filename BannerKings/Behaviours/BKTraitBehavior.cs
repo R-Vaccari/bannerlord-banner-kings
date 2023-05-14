@@ -3,6 +3,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using static TaleWorlds.CampaignSystem.Issues.HeadmanNeedsToDeliverAHerdIssueBehavior;
 using static TaleWorlds.CampaignSystem.Issues.LandlordNeedsAccessToVillageCommonsIssueBehavior;
 
 namespace BannerKings.Behaviours
@@ -42,6 +43,11 @@ namespace BannerKings.Behaviours
 
         private void OnQuestCompleted(QuestBase quest, QuestBase.QuestCompleteDetails details)
         {
+            if (details == QuestBase.QuestCompleteDetails.Timeout)
+            {
+                Utils.Helpers.AddTraitLevel(Hero.MainHero, BKTraits.Instance.Diligent, -1, 0.3f);
+            }
+
             if (quest is LandlordNeedsAccessToVillageCommonsIssueQuest)
             {
                 if (details == QuestBase.QuestCompleteDetails.Success)
@@ -51,6 +57,13 @@ namespace BannerKings.Behaviours
                 else if (details == QuestBase.QuestCompleteDetails.FailWithBetrayal)
                 {
                     Utils.Helpers.AddTraitLevel(Hero.MainHero, BKTraits.Instance.Just, -1);
+                }
+            }
+            else if (quest is HeadmanNeedsToDeliverAHerdIssueQuest)
+            {
+                if (details == QuestBase.QuestCompleteDetails.Success)
+                {
+                    Utils.Helpers.AddTraitLevel(Hero.MainHero, BKTraits.Instance.Diligent, 1, 0.2f);
                 }
             }
         }
