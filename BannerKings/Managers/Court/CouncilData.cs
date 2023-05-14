@@ -162,6 +162,10 @@ namespace BannerKings.Managers.Court
             }
 
             Guests.Remove(hero);
+            if (hero.CompanionOf == null && hero.Clan == null && hero.IsWanderer)
+            {
+                KillCharacterAction.ApplyByRemove(hero);
+            }
         }
 
         internal override void Update(PopulationData data)
@@ -218,11 +222,7 @@ namespace BannerKings.Managers.Court
 
             foreach (Hero guest in toRemove)
             {
-                Guests.Remove(guest);
-                if (guest.IsWanderer)
-                {
-                    KillCharacterAction.ApplyByRemove(guest);
-                }
+                RemoveGuest(guest);
             }
 
             foreach (var position in Positions)
