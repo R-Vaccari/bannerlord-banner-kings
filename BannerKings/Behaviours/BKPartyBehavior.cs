@@ -452,6 +452,7 @@ namespace BannerKings.Behaviours
 
             var name = new TextObject("{=xEwX83aU}Travelling {CLASS} from {ORIGIN}")
                 .SetTextVariable("CLASS", Utils.Helpers.GetClassName(type, origin.Culture))
+                .SetTextVariable("ORIGIN", origin.Name)
                 .ToString();
 
             if (civilian != null)

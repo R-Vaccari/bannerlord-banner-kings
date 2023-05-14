@@ -4,6 +4,7 @@ using BannerKings.Managers.Titles;
 using BannerKings.UI.Court;
 using BannerKings.UI.Cultures;
 using BannerKings.UI.Kingdoms;
+using BannerKings.Utils;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem;
@@ -27,6 +28,7 @@ namespace BannerKings.UI.Extensions
         private MBBindingList<HeroVM> knights, vassals;
         private MBBindingList<HeirVM> heirs;
         private HeirVM mainHeir;
+        private string knightsText;
 
         public EncyclopediaClanPageMixin(EncyclopediaClanPageVM vm) : base(vm)
         {
@@ -39,7 +41,6 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty] public string CultureText => GameTexts.FindText("str_culture").ToString();
-        [DataSourceProperty] public string KnightsText => new TextObject("{=ph4LMn6k}Knights").ToString();
         [DataSourceProperty] public string CompanionsText => new TextObject("{=a3G31iZ0}Companions").ToString();
         [DataSourceProperty] public string CouncilText => new TextObject("{=mUaJDjqO}Council").ToString();
         [DataSourceProperty] public string InheritanceText => new TextObject("{=aELuNrRC}Inheritance").ToString();
@@ -59,12 +60,7 @@ namespace BannerKings.UI.Extensions
             Knights.Clear();
             var caravans = 0;
             var workshops = 0;
-
-            List<Hero> vassals = BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(clan);
-            foreach (Hero hero in vassals)
-            {
-                Vassals.Add(new HeroVM(hero, true));
-            }
+            KnightsText = TextHelper.GetKnightTitle(clan.Culture, false, true).ToString();
 
             string highestTitle = null;
             foreach (var member in clan.Lords)
@@ -94,6 +90,15 @@ namespace BannerKings.UI.Extensions
                         highestTitle = Utils.Helpers.GetTitlePrefix(title.TitleType,
                             title.Contract.Government, member.MapFaction.Culture);
                     }
+                }
+            }
+
+            List<Hero> vassals = BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(clan);
+            foreach (Hero hero in vassals)
+            {
+                if (!Knights.Any(x => x.Hero == hero))
+                {
+                    Vassals.Add(new HeroVM(hero, true));
                 }
             }
 
@@ -233,6 +238,20 @@ namespace BannerKings.UI.Extensions
                 }
 
                 addedFields = true;
+            }
+        }
+
+        [DataSourceProperty]
+        public string KnightsText
+        {
+            get => knightsText;
+            set
+            {
+                if (value != knightsText)
+                {
+                    knightsText = value;
+                    ViewModel!.OnPropertyChangedWithValue(value, "KnightsText");
+                }
             }
         }
 

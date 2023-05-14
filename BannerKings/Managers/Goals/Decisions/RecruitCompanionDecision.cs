@@ -159,6 +159,11 @@ namespace BannerKings.Managers.Goals.Decisions
                     {
                         var hint = companionType.Description;
                         var template = GetAdequateCharacter(companionType);
+                        if (template.Count == 0)
+                        {
+                            hint = new TextObject("{=!}No available guests of this type and culture.");
+                        }
+
                         float influence = companionType.InfluenceCost;
                         if (selectedCulture != GetFulfiller().Culture)
                         {
@@ -172,7 +177,7 @@ namespace BannerKings.Managers.Goals.Decisions
                             .SetTextVariable("INFLUENCE_ICON", "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
                             .ToString(), 
                             null,
-                            influence >= companionType.InfluenceCost, 
+                            influence >= companionType.InfluenceCost && template.Count > 0, 
                             hint.ToString()));
                     }
 
