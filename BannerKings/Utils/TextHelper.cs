@@ -11,6 +11,45 @@ namespace BannerKings.Utils
         public static uint COLOR_LIGHT_RED = 13582400;
         public static uint COLOR_LIGHT_YELLOW = 16246615;
 
+        public static TextObject GetKnightTitle(CultureObject culture, bool female, bool plural)
+        {
+            string id = culture.StringId;
+            if (id == "battania")
+            {
+                if (plural) return new TextObject("{=!}Fianna");
+                return new TextObject("{=!}Fiann");
+            }
+
+            if (id == "sturgia")
+            {
+                if (plural) return new TextObject("{=!}Druzhina");
+                if (female) return new TextObject("{=!}Druzhinnica");
+                return new TextObject("{=!}Druzhinnik");
+            }
+
+            if (id == "empire")
+            {
+                if (plural) return new TextObject("{=!}Pronoiarii");
+                return new TextObject("{=!}Pronoiarius");
+            }
+
+            if (id == "aserai")
+            {
+                if (plural) return new TextObject("{=!}Fursaan");
+                return new TextObject("{=!}Faaris");
+            }
+
+            if (id == "khuzait")
+            {
+                if (plural) return new TextObject("{=!}Kheshignud");
+                return new TextObject("{=!}Kheshig");
+            }
+
+            if (plural) return new TextObject("{=ph4LMn6k}Knights");
+            if (female) return new TextObject("{=!}Knightess");
+            return new TextObject("{=!}Knight");
+        }
+
         public static TextObject GetPrinceTitles(GovernmentType government, bool isFemale, CultureObject culture = null)
         {
             TextObject result = null;
