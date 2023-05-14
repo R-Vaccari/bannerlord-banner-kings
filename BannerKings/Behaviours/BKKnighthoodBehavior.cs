@@ -157,8 +157,19 @@ namespace BannerKings.Behaviours
         private void AddDialog(CampaignGameStarter starter)
         {
             starter.AddPlayerLine("companion_grant_knighthood", "companion_role", "companion_knighthood_question",
-                new TextObject("{=!}I would like thee to serve as my {KNIGHT}.").ToString(),
-                GrantKnighthoodOnCondition,
+                "{=!}I would like thee to serve as my {KNIGHT_TEXT}.",
+                () =>
+                {
+                    var companion = Hero.OneToOneConversationHero;
+                    if (companion != null)
+                    {
+                        MBTextManager.SetTextVariable("KNIGHT_TEXT", Utils.TextHelper.GetKnightTitle(Clan.PlayerClan.Culture,
+                            Hero.OneToOneConversationHero.IsFemale, false));
+                    }
+
+                    return companion != null && companion.Clan == Clan.PlayerClan &&
+                           BannerKingsConfig.Instance.TitleManager.Knighthood;
+                },
                 delegate
                 {
                     InformationManager.ShowInquiry(new InquiryData(new TextObject("{=mMoVoid6}Bestowing Knighthood").ToString(), 
@@ -222,7 +233,7 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("companion_knighthood_finish_fief", "companion_knighthood_finish_fief",
                 "companion_knighthood_finished",
-                new TextObject("{=!}It is decided then. Let it be know thou art a {KNIGHT} of the {PLAYER_CLAN}.").ToString(),
+                "{=!}It is decided then. Let it be know thou art a {KNIGHT} of the {PLAYER_CLAN}.",
                 () =>
                 {
                     MBTextManager.SetTextVariable("KNIGHT", Utils.TextHelper.GetKnightTitle(Clan.PlayerClan.Culture,
@@ -240,8 +251,8 @@ namespace BannerKings.Behaviours
                 null);
 
             starter.AddPlayerLine("companion_knighthood_finish_estate", "companion_knighthood_finish_estate",
-               "companion_knighthood_finished",
-               new TextObject("{=!}It is decided then. Let it be know thou art a {KNIGHT} of the {PLAYER_CLAN}.").ToString(),
+                "companion_knighthood_finished",
+                "{=!}It is decided then. Let it be know thou art a {KNIGHT} of the {PLAYER_CLAN}.",
                 () =>
                 {
                     MBTextManager.SetTextVariable("KNIGHT", Utils.TextHelper.GetKnightTitle(Clan.PlayerClan.Culture,
@@ -325,19 +336,6 @@ namespace BannerKings.Behaviours
                 IsPlayerKnight, 
                 null,
                 100);
-        }
-
-        private bool GrantKnighthoodOnCondition()
-        {
-            var companion = Hero.OneToOneConversationHero;
-            if (companion != null)
-            {
-                MBTextManager.SetTextVariable("KNIGHT", Utils.TextHelper.GetKnightTitle(Clan.PlayerClan.Culture,
-                    Hero.OneToOneConversationHero.IsFemale, false));
-            }
-
-            return companion != null && companion.Clan == Clan.PlayerClan &&
-                   BannerKingsConfig.Instance.TitleManager.Knighthood;
         }
 
         private bool IsPlayerKnight()
