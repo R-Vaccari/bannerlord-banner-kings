@@ -1,5 +1,8 @@
-﻿using BannerKings.Managers.Institutions.Religions.Doctrines;
+﻿using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Traits;
+using BannerKings.UI.Court;
 using BannerKings.Utils;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -69,6 +72,8 @@ namespace BannerKings.Models.BKModels
                         }
                     }
 
+                    result.Add(hero.GetTraitLevel(BKTraits.Instance.Zealous) * 0.2f, BKTraits.Instance.Zealous.Name);
+
                     if (rel.FavoredCultures.Contains(hero.Culture))
                     {
                         result.Add(0.1f, GameTexts.FindText("str_culture"));
@@ -107,6 +112,16 @@ namespace BannerKings.Models.BKModels
                         else if (skill > 100)
                         {
                             result.Add(skill * 0.01f, DefaultDoctrines.Instance.Literalism.Name);
+                        }
+                    }
+
+                    if (hero.Clan != null)
+                    {
+                        if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(hero.Clan,
+                                              DefaultCouncilTasks.Instance.CultivatePiety,
+                                              out float pietyCompetence))
+                        {
+                            result.Add(1f * pietyCompetence, DefaultCouncilTasks.Instance.CultivatePiety.Name);
                         }
                     }
                 },

@@ -16,7 +16,6 @@ namespace BannerKings.Managers.Kingdoms.Contract
         public BKGenderDecision(Clan proposerClan, GenderLaw genderLaw, FeudalTitle title) : base(proposerClan, title)
         {
             this.genderLaw = genderLaw;
-            ;
         }
 
         [SaveableProperty(100)] private GenderLaw genderLaw { get; set; }
@@ -30,7 +29,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             }
         }
 
-        public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
+        public override void ApplySecondaryEffects(MBReadOnlyList<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
         {
         }
 
@@ -50,7 +49,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             yield return new GenderLawDecisionOutcome(false);
         }
 
-        public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
+        public override void DetermineSponsors(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {
             foreach (var decisionOutcome in possibleOutcomes)
             {
@@ -69,27 +68,63 @@ namespace BannerKings.Managers.Kingdoms.Contract
         public override float DetermineSupport(Clan clan, DecisionOutcome possibleOutcome)
         {
             var policyDecisionOutcome = possibleOutcome as GenderLawDecisionOutcome;
-            var num = 2f * clan.Leader.GetTraitLevel(DefaultTraits.Egalitarian) -
-                      2f * clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
-            var num2 = 0f;
-            var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Kingdom);
-            if (sovereign is {contract: { }})
+            var num = 0f;
+
+            bool egalitarian = (genderLaw == GenderLaw.Cognatic && policyDecisionOutcome.ShouldDecisionBeEnforced)
+                || (genderLaw == GenderLaw.Agnatic && !policyDecisionOutcome.ShouldDecisionBeEnforced);
+            if (egalitarian)
             {
-                var government = sovereign.contract.Government;
-                if (government is GovernmentType.Tribal or GovernmentType.Republic)
+                num = 5f * clan.Leader.GetTraitLevel(DefaultTraits.Egalitarian) -
+                      2f * clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian) -
+                      2f * clan.Leader.GetTraitLevel(DefaultTraits.Oligarchic);
+
+                if (clan.Leader.IsFemale)
                 {
-                    num2++;
+                    num += 30f;
                 }
                 else
                 {
-                    num--;
+                    num -= 15f;
+                }
+            }
+            else
+            {
+                num =  2f * clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian) +
+                      2f * clan.Leader.GetTraitLevel(DefaultTraits.Oligarchic) -
+                      5f * clan.Leader.GetTraitLevel(DefaultTraits.Egalitarian);
+                if (!clan.Leader.IsFemale)
+                {
+                    num += 20f;
+                }
+                else
+                {
+                    num -= 35f;
+                }
+            }
+ 
+            var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Kingdom);
+            if (sovereign != null && sovereign.Contract != null)
+            {
+                var government = sovereign.Contract.Government;
+                if (government is GovernmentType.Tribal or GovernmentType.Republic)
+                {
+                    if (egalitarian)
+                    {
+                        num *= 1.5f;
+                    }
                 }
             }
 
+            if (!policyDecisionOutcome.ShouldDecisionBeEnforced)
+            {
+                num *= -100f;
+            }
+            else
+            {
+                num *= 60f;
+            }
 
-            return genderLaw == GenderLaw.Cognatic && policyDecisionOutcome.ShouldDecisionBeEnforced
-                ? (num + num2) * 60f
-                : (num + num2) * -100f;
+            return num;
         }
 
         public override TextObject GetChooseDescription()
@@ -126,7 +161,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             textObject.SetTextVariable("POLICY_DESCRIPTION",
                 newGovernment 
                     ? genderLaw.ToString() 
-                    : Title.contract.Succession.ToString());
+                    : Title.Contract.Succession.ToString());
             if (isShortVersion || IsSingleClanDecision())
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", TextObject.Empty);
@@ -160,7 +195,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             return 150;
         }
 
-        public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
+        public override DecisionOutcome GetQueriedDecisionOutcome(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {
             return possibleOutcomes.FirstOrDefault(t => ((GenderLawDecisionOutcome) t).ShouldDecisionBeEnforced);
         }
@@ -171,7 +206,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
             textObject.SetTextVariable("CURRENT",
-                Utils.Helpers.GetGovernmentString(Title.contract.Government, Kingdom.Culture));
+                Utils.Helpers.GetGovernmentString(Title.Contract.Government, Kingdom.Culture));
             textObject.SetTextVariable("PROPOSED", genderLaw.ToString());
             return textObject;
         }

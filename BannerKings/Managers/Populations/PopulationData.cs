@@ -12,6 +12,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
+using static HarmonyLib.Code;
 
 namespace BannerKings.Managers.Populations
 {
@@ -185,6 +186,7 @@ namespace BannerKings.Managers.Populations
                 {PopType.Nobles, GetCurrentTypeFraction(PopType.Nobles)},
                 {PopType.Craftsmen, GetCurrentTypeFraction(PopType.Craftsmen)},
                 {PopType.Serfs, GetCurrentTypeFraction(PopType.Serfs)},
+                {PopType.Tenants, GetCurrentTypeFraction(PopType.Tenants)},
                 {PopType.Slaves, GetCurrentTypeFraction(PopType.Slaves)}
             };
 
@@ -203,11 +205,44 @@ namespace BannerKings.Managers.Populations
             {
                 var random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, GetTypeCount(PopType.Serfs));
                 UpdatePopType(PopType.Serfs, -random);
-                UpdatePopType(PopType.Craftsmen, random);
+                if (currentDic[PopType.Tenants] < dic[PopType.Tenants][1])
+                {
+                    UpdatePopType(PopType.Tenants, random);
+                }
+                else
+                {
+                    UpdatePopType(PopType.Craftsmen, random);
+                }
+            }
+            
+            if (dic[PopType.Tenants][1] > dic[PopType.Serfs][1] && currentDic[PopType.Tenants] < currentDic[PopType.Serfs])
+            {
+                var random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, GetTypeCount(PopType.Serfs));
+                UpdatePopType(PopType.Serfs, -random);
+                UpdatePopType(PopType.Tenants, random);
+            }
+            else if (dic[PopType.Serfs][1] > dic[PopType.Tenants][1] && currentDic[PopType.Serfs] < currentDic[PopType.Tenants])
+            {
+                var random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, GetTypeCount(PopType.Tenants));
+                UpdatePopType(PopType.Tenants, -random);
+                UpdatePopType(PopType.Serfs, random);
+            }
+
+            if (currentDic[PopType.Tenants] > dic[PopType.Tenants][1])
+            {
+                var random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, GetTypeCount(PopType.Tenants));
+                UpdatePopType(PopType.Tenants, -random);
+                if (currentDic[PopType.Serfs] < dic[PopType.Serfs][1])
+                {
+                    UpdatePopType(PopType.Serfs, random);
+                }
+                else
+                {
+                    UpdatePopType(PopType.Craftsmen, random);
+                }
             }
 
             bool excessNobles = currentDic[PopType.Nobles] > dic[PopType.Nobles][1];
-
             if (currentDic[PopType.Craftsmen] > dic[PopType.Craftsmen][1])
             {
                 var random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, GetTypeCount(PopType.Craftsmen));
@@ -263,6 +298,8 @@ namespace BannerKings.Managers.Populations
                 UpdatePopType(targetType, pops);
             }
         }
+
+        public void UpdatePopFromSoldiers(CharacterObject character, int count) => MilitaryData.AddManpowerFromSoldiers(this, count, character);    
 
         public void UpdatePopType(PopType type, int count, bool stateSlaves = false)
         {

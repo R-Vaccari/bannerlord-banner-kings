@@ -4,12 +4,12 @@ using System.Linq;
 using BannerKings.Components;
 using BannerKings.Managers.Populations;
 using BannerKings.Settings;
-using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Siege;
 using TaleWorlds.Core;
@@ -30,6 +30,40 @@ namespace BannerKings.Behaviours
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, OnSiegeStarted);
+            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
+        }
+
+        private void OnGameLoaded(CampaignGameStarter starter)
+        {
+            foreach (var party in MobileParty.All)
+            {
+                var memberElements = party.MemberRoster.GetTroopRoster();
+                var memberList = new MBList<TroopRosterElement>(memberElements.Count);
+                memberList.AddRange(memberElements);
+                foreach (var element in memberList)
+                {
+                    if (element.Character == null)
+                    {
+                        memberElements.Remove(element);
+                    }
+                }
+
+                var prisonElements = party.PrisonRoster.GetTroopRoster();
+                var prisonList = new MBList<TroopRosterElement>(prisonElements.Count);
+                prisonList.AddRange(prisonElements);
+                foreach (var element in prisonList)
+                {
+                    if (element.Character == null)
+                    {
+                        prisonElements.Remove(element);
+                    }
+                }
+
+                if (party.ActualClan != null && party.LeaderHero != null && party.LeaderHero.Clan == null)
+                {
+                    party.RemovePartyLeader();
+                }
+            }
         }
 
         private void OnSiegeStarted(SiegeEvent siegeEvent) 
@@ -57,7 +91,12 @@ namespace BannerKings.Behaviours
 
         private void HourlyTickParty(MobileParty party)
         {
-            if (party == null || BannerKingsConfig.Instance.PopulationManager == null)
+            if (party.LeaderHero != null && party.LeaderHero.Clan == null)
+            {
+                KillCharacterAction.ApplyByMurder(party.LeaderHero);
+            }
+
+            if (BannerKingsConfig.Instance.PopulationManager == null)
             {
                 return;
             }
@@ -411,8 +450,10 @@ namespace BannerKings.Behaviours
                     break;
             }
 
-            var name = "{=xEwX83aU}Travelling {CLASS} from {ORIGIN}";
-            name = name.Replace("{CLASS}", Utils.Helpers.GetClassName(type, origin.Culture).ToString());
+            var name = new TextObject("{=xEwX83aU}Travelling {CLASS} from {ORIGIN}")
+                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(type, origin.Culture))
+                .SetTextVariable("ORIGIN", origin.Name)
+                .ToString();
 
             if (civilian != null)
             {

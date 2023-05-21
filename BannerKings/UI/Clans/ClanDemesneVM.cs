@@ -39,7 +39,7 @@ namespace BannerKings.UI.Kingdoms
             foreach (Hero hero in candidates)
             {
                 var explanation = BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(Clan.Leader, hero,
-                    Title != null ? Title.contract : null, true);
+                    Title != null ? Title.Contract : null, true);
                 explanations.Add(hero, explanation);
             }
 

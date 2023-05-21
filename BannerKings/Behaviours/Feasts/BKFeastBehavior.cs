@@ -141,7 +141,7 @@ namespace BannerKings.Behaviours.Feasts
             }
         }
 
-        private void OnWarDeclared(IFaction faction1, IFaction faction2)
+        private void OnWarDeclared(IFaction faction1, IFaction faction2, DeclareWarAction.DeclareWarDetail detail)
         {
             List<Feast> toRemove = new List<Feast>();
             if (faction1.IsKingdomFaction)
@@ -212,7 +212,7 @@ namespace BannerKings.Behaviours.Feasts
                     if (party.CurrentSettlement != town.Settlement)
                     {
                         party.Ai.DisableAi();
-                        party.SetMoveGoToSettlement(town.Settlement);
+                        party.Ai.SetMoveGoToSettlement(town.Settlement);
                     }
                 }
             }

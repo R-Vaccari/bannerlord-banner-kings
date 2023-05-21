@@ -150,7 +150,7 @@ namespace BannerKings.Behaviours
 
         private void EvaluateSummonPlayer(FeudalTitle playerTitle, Army army, MobileParty joinningParty = null)
         {
-            var contract = playerTitle.contract;
+            var contract = playerTitle.Contract;
             if (contract == null || !contract.Duties.ContainsKey(FeudalDuties.Auxilium))
             {
                 return;

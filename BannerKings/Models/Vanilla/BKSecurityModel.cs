@@ -1,5 +1,7 @@
 using BannerKings.Behaviours;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Titles;
 using CalradiaExpandedKingdoms.Models;
@@ -27,7 +29,6 @@ namespace BannerKings.Models.Vanilla
             {
                 baseResult.Add(-1f, new TextObject("{=fQVyeiJb}Capital"));
             }
-
 
             if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
@@ -63,10 +64,17 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader,
-                    CouncilPosition.Spymaster, 1f, false);
+                    DefaultCouncilPositions.Instance.Spymaster,
+                    DefaultCouncilTasks.Instance.OverseeSecurity,
+                    1f, false);
+
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult,
+                    town.OwnerClan.Leader, DefaultCouncilPositions.Instance.Constable,
+                    DefaultCouncilTasks.Instance.EnforceLaw,
+                    0.3f, false);
             }
 
-            GetHideoutBonus(town, ref baseResult);
+            //GetHideoutBonus(town, ref baseResult);
             return baseResult;
         }
 

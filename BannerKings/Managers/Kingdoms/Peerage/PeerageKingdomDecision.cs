@@ -76,7 +76,7 @@ namespace BannerKings.Managers.Kingdoms.Peerage
             }
         }
 
-        public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
+        public override void ApplySecondaryEffects(MBReadOnlyList<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
         {
 
         }
@@ -89,7 +89,7 @@ namespace BannerKings.Managers.Kingdoms.Peerage
             yield return new PeerageKingdomDecisionOutcome(Peer);
         }
 
-        public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
+        public override void DetermineSponsors(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {
             foreach (var decisionOutcome in possibleOutcomes)
             {
@@ -156,7 +156,7 @@ namespace BannerKings.Managers.Kingdoms.Peerage
 
         public override int GetProposalInfluenceCost() => 250;
 
-        public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
+        public override DecisionOutcome GetQueriedDecisionOutcome(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {
             possibleOutcomes.Sort((x, y) => x.Merit.CompareTo(y.Merit));
             return possibleOutcomes.First();

@@ -47,7 +47,7 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            var contract = playerTitle.contract;
+            var contract = playerTitle.Contract;
             if (contract == null || !contract.Duties.ContainsKey(FeudalDuties.Ransom))
             {
                 return;

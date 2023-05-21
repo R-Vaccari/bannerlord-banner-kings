@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -37,6 +36,13 @@ namespace BannerKings.Managers.Titles.Laws
         public DemesneLaw DraftingVassalage { get; private set; } = new DemesneLaw("drafting_vassalage");
         public DemesneLaw DraftingFreeContracts { get; private set; } = new DemesneLaw("drafting_free_contracts");
 
+        public DemesneLaw TenancyFull { get; private set; } = new DemesneLaw("tenancy_full");
+        public DemesneLaw TenancyMixed { get; private set; } = new DemesneLaw("tenancy_mixed");
+        public DemesneLaw TenancyNone { get; private set; } = new DemesneLaw("tenancy_none");
+
+        public DemesneLaw CouncilAppointed { get; private set; } = new DemesneLaw("council_appointed");
+        public DemesneLaw CouncilElected { get; private set; } = new DemesneLaw("council_elected");
+
         public override IEnumerable<DemesneLaw> All
         {
             get
@@ -63,6 +69,11 @@ namespace BannerKings.Managers.Titles.Laws
                 yield return DraftingHidage;
                 yield return DraftingFreeContracts;
                 yield return DraftingVassalage;
+                yield return TenancyFull;
+                yield return TenancyMixed;
+                yield return TenancyNone;
+                yield return CouncilAppointed;
+                yield return CouncilElected;
             }
         }
 
@@ -77,8 +88,8 @@ namespace BannerKings.Managers.Titles.Laws
         public List<DemesneLaw> GetAdequateLaws(FeudalTitle title)
         {
             var list = new List<DemesneLaw>();
-            var government = title.contract.Government;
-            var faction = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title.sovereign != null ? title.sovereign : title);
+            var government = title.Contract.Government;
+            var faction = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title.Sovereign != null ? title.Sovereign : title);
             CultureObject culture = null;
             if (faction != null)
             {
@@ -112,16 +123,29 @@ namespace BannerKings.Managers.Titles.Laws
                         list.Add(SlaveryAserai.GetCopy());
                     }
                 }
+
+                list.Add(TenancyNone.GetCopy());
             } 
             else if (government == GovernmentType.Tribal)
             {
                 list.Add(DraftingHidage.GetCopy());
                 list.Add(EstateTenureAllodial.GetCopy());
+                list.Add(TenancyFull.GetCopy());
             }
             else
             {
                 list.Add(DraftingFreeContracts.GetCopy());
                 list.Add(EstateTenureFeeTail.GetCopy());
+                list.Add(TenancyMixed.GetCopy());
+            }
+
+            if (government == GovernmentType.Republic)
+            {
+                list.Add(CouncilElected.GetCopy());
+            }
+            else
+            {
+                list.Add(CouncilAppointed.GetCopy());
             }
 
             return list;
@@ -368,7 +392,7 @@ namespace BannerKings.Managers.Titles.Laws
                 300, 0);
 
             DraftingFreeContracts.Initialize(new TextObject("{=WtxLpuAU}Free Contracts"),
-              new TextObject("{=ZWmNxRMn}The Imperial or Calradic law stablishes the legal existance of slaves and their ownership. Though they may not be harmed or killed without just cause, the slave trade is rampant and devoid of restrictions. Any person found in debt or captured in battle may be enslaved, and slaves compose the labor force across all settlements."),
+              new TextObject("{=0ZwNdeWq}Free contracts allows levies to serve whoever they wish. No strict duty relationship is set between levies and their suzerains. However, foreigner contractors pay a premium for their services."),
               new TextObject("{=KDRmz1zo}Notables provide volunteers to any neutral or allied lord\nRecruitment prices increased by 100%"),
               DemesneLawTypes.Drafting,
               0.1f,
@@ -378,7 +402,7 @@ namespace BannerKings.Managers.Titles.Laws
               1);
 
             DraftingVassalage.Initialize(new TextObject("{=92A5YP2x}Vassalage"),
-              new TextObject("{=ZWmNxRMn}The Imperial or Calradic law stablishes the legal existance of slaves and their ownership. Though they may not be harmed or killed without just cause, the slave trade is rampant and devoid of restrictions. Any person found in debt or captured in battle may be enslaved, and slaves compose the labor force across all settlements."),
+              new TextObject("{=zWqQMdHK}Under Vassalage, levies are bound to their most direct suzerain. The de facto and de jure ownerships of fiefs set the precedence for acces to levies."),
               new TextObject("{=i4Y6Sg9k}Notables provide volunteers to their suzerain and armies\nRural volunteers are restricted to the kingdom's lords\nInfluence from settlements reduced by 20%"),
               DemesneLawTypes.Drafting,
               0.5f,
@@ -388,6 +412,64 @@ namespace BannerKings.Managers.Titles.Laws
               2);
 
             #endregion Drafting
+
+            #region Tenancy
+
+            TenancyFull.Initialize(new TextObject("{=JEbygACX}Full Tenancy"),
+              new TextObject("{=uf1BxiQJ}Under Full Tenancy, serfdom does not thrive anymore. Instead, all non-slave commoners will tend to be free tenants, who rent their land under contracts of goods or monetary taxation. Tenants are of higher class than serfs and are not boun to their land, and so have more mobility and are less exploitable for taxes."),
+              new TextObject("{=!}Serfs will tend to be 100% replaced by tenants\nTenants pay less taxes but are more stable and prosperous"),
+              DemesneLawTypes.Tenancy,
+              -0.5f,
+              1f,
+              -0.8f,
+              900,
+              0);
+
+            TenancyMixed.Initialize(new TextObject("{=oT9UmZUt}Mixed Tenure"),
+              new TextObject("{=z5ox1p40}Mixed tenure allows the coexistence of both tenants and serfs. Their compositions will tend to be similar."),
+              new TextObject("{=!}Serfs will tend to be 50% replaced by tenants"),
+              DemesneLawTypes.Tenancy,
+              0.2f,
+              -0.3f,
+              0.4f,
+              900,
+              1);
+
+            TenancyNone.Initialize(new TextObject("{=LGuO56aW}Full Serfdom"),
+              new TextObject("{=FuKNBsvU}When bound by serfdom, a commoner is unable to leave their suzerain's land without permission. Though their status is above a slave's, they often miss the rights of free men."),
+              new TextObject("{=h9UDWQcM}Tenants will tend to be 0% of population\nSerfs yield more taxes, but are more unhappy and produce less economic prosperity"),
+              DemesneLawTypes.Tenancy,
+              0.8f,
+              -1f,
+              1f,
+              900,
+              2);
+
+            #endregion Tenancy
+
+            #region Council
+
+            CouncilAppointed.Initialize(new TextObject("{=!}Appointed Council"),
+              new TextObject("{=!}The realm's high council is appointed by the ruler. They are free to chose their councillors as they please."),
+              new TextObject("{=!}Ruler's privy council can be altered at will\nAll non-ruling clans have influence cap increased by 5%"),
+              DemesneLawTypes.HighCouncil,
+              1f,
+              -0.3f,
+              -0.6f,
+              1000,
+              1);
+
+            CouncilElected.Initialize(new TextObject("{=!}Elected Council"),
+             new TextObject("{=!}The realm's high council is elected by the Peers. The election result will determine the next occupant of the position in question."),
+             new TextObject("{=!}Ruler's privy council can only be altered by elections\nRuler's influence cap is increased by 8%"),
+             DemesneLawTypes.HighCouncil,
+             -0.7f,
+             0.1f,
+             0.6f,
+             1000,
+             2);
+
+            #endregion Council
         }
     }
 }

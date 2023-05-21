@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -20,40 +22,81 @@ namespace BannerKings.Managers
         public CourtManager(Dictionary<Clan, CouncilData> councils)
         {
             Councils = councils;
+            PositionsCache = new Dictionary<Hero, CouncilMember>();
         }
 
         [SaveableProperty(1)] private Dictionary<Clan, CouncilData> Councils { get; set; }
+        private Dictionary<Hero, CouncilMember> PositionsCache { get; set; }
 
         public void PostInitialize()
         {
+            PositionsCache = new Dictionary<Hero, CouncilMember>();
             foreach (var council in Councils)
             {
+                council.Value.PostInitialize();
                 if (council.Value.Peerage == null)
                 {
                     council.Value.SetPeerage(Peerage.GetAdequatePeerage(council.Key));
                 }
+
+                foreach (var position in council.Value.Positions)
+                {
+                    if (position.Member != null)
+                    {
+                        AddCache(position.Member, position);
+                    }
+                }
             }
         }
 
-        public void ApplyCouncilEffect(ref ExplainedNumber result, Hero settlementOwner, CouncilPosition position,
-            float maxEffect, bool factor)
+        internal void RemoveCache(Hero hero)
         {
-            var council = GetCouncil(settlementOwner);
-            var competence = council.GetCompetence(position);
-            if (competence != 0f)
+            if (hero == null)
             {
-                if (!factor)
+                return;
+            }
+
+            if (PositionsCache.ContainsKey(hero))
+            {
+                PositionsCache.Remove(hero);
+            }
+        }
+
+        internal void AddCache(Hero hero, CouncilMember member)
+        {
+            if (!PositionsCache.ContainsKey(hero))
+            {
+                PositionsCache.Add(hero, member);
+            }
+            else
+            {
+                PositionsCache[hero] = member;
+            }
+        }
+
+        public void ApplyCouncilEffect(ref ExplainedNumber result, Hero councilOwner, CouncilMember position,
+            CouncilTask task, float maxEffect, bool factor)
+        {
+            var council = GetCouncil(councilOwner.Clan);
+            var existingPosition = council.GetCouncilPosition(position);
+            if (existingPosition != null && existingPosition.CurrentTask.StringId == task.StringId)
+            {
+                var competence = existingPosition.Competence.ResultNumber;
+                if (competence != 0f)
                 {
-                    result.Add(maxEffect * competence, new TextObject("{=5TbiMahb}Council effect"));
-                }
-                else
-                {
-                    result.AddFactor(maxEffect * competence, new TextObject("{=5TbiMahb}Council effect"));
+                    if (!factor)
+                    {
+                        result.Add(maxEffect * competence, new TextObject("{=5TbiMahb}Council effect"));
+                    }
+                    else
+                    {
+                        result.AddFactor(maxEffect * competence, new TextObject("{=5TbiMahb}Council effect"));
+                    }
                 }
             }
         }
 
-        public int GetCouncilEffectInteger(Hero settlementOwner, CouncilPosition position, float maxEffect)
+        public int GetCouncilEffectInteger(Hero settlementOwner, CouncilMember position, float maxEffect)
         {
             var council = GetCouncil(settlementOwner);
             var competence = council.GetCompetence(position);
@@ -85,6 +128,11 @@ namespace BannerKings.Managers
 
         public CouncilData GetCouncil(Clan clan)
         {
+            if (clan == null)
+            {
+                return null;
+            }
+
             if (Councils.ContainsKey(clan))
             {
                 return Councils[clan];
@@ -103,6 +151,11 @@ namespace BannerKings.Managers
                 return null;
             }
 
+            if (PositionsCache != null && PositionsCache.ContainsKey(hero))
+            {
+                return PositionsCache[hero];
+            }
+
             Kingdom kingdom = null;
             if ((hero.IsLord || hero.IsWanderer) && hero.Clan != null)
             {
@@ -119,17 +172,15 @@ namespace BannerKings.Managers
                 var clans = Councils.Keys.ToList();
                 foreach (var clan in clans)
                 {
-                    if (Councils[clan].GetMembers().Contains(hero))
+                    if (clan.MapFaction == hero.MapFaction)
                     {
-                        targetClan = clan;
-                        break;
+                        CouncilMember result = Councils[clan].GetHeroPosition(hero);
+                        if (result != null)
+                        {
+                            return result;
+                        }
                     }
                 }
-            }
-
-            if (targetClan != null)
-            {
-                return Councils[targetClan].GetHeroPosition(hero);
             }
 
             return null;
@@ -150,7 +201,7 @@ namespace BannerKings.Managers
         {
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(action.Council.Owner);
             if (rel != null && rel.Leadership.GetType() == typeof(KinshipLeadership) &&
-                action.TargetPosition.Position == CouncilPosition.Spiritual)
+                action.TargetPosition.StringId == DefaultCouncilPositions.Instance.Spiritual.StringId)
             {
                 var currentClergyman = action.TargetPosition.Member;
                 if (currentClergyman != null)
@@ -162,11 +213,12 @@ namespace BannerKings.Managers
                             false));
                 }
 
-                var newClergyman = action.ActionTaker;
-                if (newClergyman != null)
+                var newHero = action.ActionTaker;
+                var newClergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(newHero);
+                if (newHero != null && newClergyman != null)
                 {
                     rel.Leadership.ChangeClergymanRank(rel,
-                        BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(newClergyman),
+                        newClergyman,
                         rel.Faith.GetMaxClergyRank());
                 }
             }
@@ -196,11 +248,11 @@ namespace BannerKings.Managers
                 MBInformationManager.AddQuickInformation(
                     new TextObject("{=f2V1XRaf}{OWNER} has appointed you as their {POSITION}.")
                         .SetTextVariable("OWNER", action.Council.Owner.Name)
-                        .SetTextVariable("POSITION", action.TargetPosition.GetName()),
+                        .SetTextVariable("POSITION", action.TargetPosition.Name),
                     0, action.Council.Owner.CharacterObject, "event:/ui/notification/relation");
             }
 
-            action.TargetPosition.Member = action.ActionTaker;
+            action.TargetPosition.SetMember(action.ActionTaker);
             if (action.ActionTaker.Clan != null)
             {
                 GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
@@ -224,8 +276,8 @@ namespace BannerKings.Managers
             }
 
             var currentCouncilman = action.TargetPosition.Member;
-            action.CurrentPosition.Member = currentCouncilman;
-            action.TargetPosition.Member = action.ActionTaker;
+            action.CurrentPosition.SetMember(currentCouncilman);
+            action.TargetPosition.SetMember(action.ActionTaker);
             if (action.ActionTaker.Clan != null)
             {
                 GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
@@ -250,7 +302,27 @@ namespace BannerKings.Managers
             CheckReligionRankChange(action);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.TargetPosition.Member,
                 ON_FIRED_RELATION);
-            action.TargetPosition.Member = null;
+            action.TargetPosition.SetMember(null);
+        }
+
+        public bool HasCurrentTask(CouncilData council, CouncilTask task, out float competence)
+        {
+            competence = 0f;
+            foreach (var pos in council.Positions)
+            {
+                if (pos.CurrentTask != null && pos.CurrentTask.StringId == task.StringId)
+                {
+                    competence = pos.Competence.ResultNumber;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool HasCurrentTask(Clan clan, CouncilTask task, out float competence)
+        {
+            return HasCurrentTask(GetCouncil(clan), task, out competence);
         }
     }
 }

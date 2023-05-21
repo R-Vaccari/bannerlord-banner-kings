@@ -1,6 +1,10 @@
 using BannerKings.Actions;
+using BannerKings.Dialogue;
+using BannerKings.Managers.Court;
+using BannerKings.Managers.Goals.Decisions;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Utils;
+using BannerKings.Utils.Extensions;
 using HarmonyLib;
 using Helpers;
 using System;
@@ -31,6 +35,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnPartyDailyTick);
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnClanDailyTick);
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -70,6 +75,9 @@ namespace BannerKings.Behaviours
                 {
                     return;
                 }
+
+                RequestPeerageDecision decision = new RequestPeerageDecision(clan.Leader);
+                decision.DoAiDecision();
 
                 var villageSettlement = gentryTuple.Item2.EstatesData.Settlement;
                 foreach (var member in clan.Heroes)
@@ -132,7 +140,7 @@ namespace BannerKings.Behaviours
                 if (!war)
                 {
                     party.Ai.DisableAi();
-                    party.SetMoveGoToSettlement(gentryTuple.Item2.EstatesData.Settlement);
+                    party.Ai.SetMoveGoToSettlement(gentryTuple.Item2.EstatesData.Settlement);
                 }
                 else
                 {
@@ -147,7 +155,7 @@ namespace BannerKings.Behaviours
                     }
 
                     party.Ai.DisableAi();
-                    party.SetMoveGoToSettlement(gentryTuple.Item2.EstatesData.Settlement);
+                    party.Ai.SetMoveGoToSettlement(gentryTuple.Item2.EstatesData.Settlement);
                 }
             },
             GetType().Name);
@@ -463,7 +471,8 @@ namespace BannerKings.Behaviours
             hero.Mother = mother;
             hero.Father = father;
             EquipmentFlags customFlags = EquipmentFlags.IsNobleTemplate | EquipmentFlags.IsChildEquipmentTemplate;
-            MBEquipmentRoster randomElementInefficiently = MBEquipmentRosterExtensions.GetAppropriateEquipmentRostersForHero(hero, customFlags, true).GetRandomElementInefficiently<MBEquipmentRoster>();
+            MBEquipmentRoster randomElementInefficiently = Campaign.Current.Models.EquipmentSelectionModel
+                .GetEquipmentRostersForDeliveredOffspring(hero).GetRandomElementInefficiently<MBEquipmentRoster>();
             if (randomElementInefficiently != null)
             {
                 Equipment randomElementInefficiently2 = randomElementInefficiently.GetCivilianEquipments().GetRandomElementInefficiently<Equipment>();
@@ -518,6 +527,140 @@ namespace BannerKings.Behaviours
             }
 
             return roster.AllEquipments.GetRandomElement();
+        }
+
+        private void OnSessionLaunched(CampaignGameStarter starter)
+        {
+            starter.AddPlayerLine("bk_offer_peerage",
+              "lord_talk_speak_diplomacy_2",
+              "bk_peerage_offered",
+              "{=kXhuEU9i}Would thou be interested in becoming a Peer?",
+              () =>
+              {
+                  if (Hero.OneToOneConversationHero == null || Hero.OneToOneConversationHero.Clan == null)
+                  {
+                      return false;
+                  }
+
+                  Kingdom kingdom = Clan.PlayerClan.Kingdom;
+                  Clan targetClan = Hero.OneToOneConversationHero.Clan;
+                  if (kingdom == null || targetClan.Kingdom != kingdom)
+                  {
+                      return false;
+                  }
+
+                  var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(targetClan);
+                  return council.Peerage != null && council.Peerage.IsLesserPeerage && !targetClan.IsUnderMercenaryService &&
+                  Hero.OneToOneConversationHero.IsClanLeader();
+              },
+              null,
+              100,
+              delegate (out TextObject reason)
+              {
+                  reason = null;
+                  Kingdom kingdom = Clan.PlayerClan.Kingdom;
+                  if (kingdom != null)
+                  {
+                      if (BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom) == null)
+                      {
+                          reason = new TextObject("{=5sZzoU2N}Your kingdom is not associated with a sovereign title. Found a title for your kingdom first.");
+                          return false;
+                      }
+
+                      float cost = BannerKingsConfig.Instance.InfluenceModel.GetBequeathPeerageCost(kingdom).ResultNumber;
+                      if (Clan.PlayerClan.Influence < cost)
+                      {
+                          reason = new TextObject("{=FgnD58fo}You need {INFLUENCE} influence in order to bequeath full Peerage to a lesser Peer.")
+                          .SetTextVariable("INFLUENCE", cost);
+                          return false;
+                      }
+
+                      reason = new TextObject("{=DwBAhKQG}Bequeathing Peerage will cost {INFLUENCE} influence.")
+                      .SetTextVariable("INFLUENCE", cost);
+                  }
+
+                  return true;
+              });
+
+            starter.AddDialogLine("bk_peerage_offered",
+              "bk_peerage_offered",
+              "bk_peerage_accepted",
+              "{=Yk6qb6ZT}{PEERAGE_RESPONSE}",
+              () =>
+              {
+                  Hero hero = Hero.OneToOneConversationHero;
+                  MBTextManager.SetTextVariable("PEERAGE_RESPONSE", DialogueHelper.GetRandomText(hero,
+                      DialogueHelper.GetPeerageOfferedTexts(hero)));
+
+                  return true;
+              },
+              null);
+
+            starter.AddPlayerLine("bk_peerage_accepted",
+              "bk_peerage_accepted",
+              "close_window",
+              "{=fVz0vWBu}Very well. I bequeath thee parity within the {KINGDOM_NAME}.",
+              () =>
+              {
+                  var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
+                  MBTextManager.SetTextVariable("KINGDOM_NAME", title.FullName);
+
+                  return true;
+              },
+              () => GrantePeerage(Hero.MainHero, Hero.OneToOneConversationHero),
+              100,
+              delegate (out TextObject reason)
+              {
+                  Kingdom kingdom = Clan.PlayerClan.Kingdom;
+                  float cost = BannerKingsConfig.Instance.InfluenceModel.GetBequeathPeerageCost(kingdom).ResultNumber;
+                  reason = new TextObject("{=DwBAhKQG}Bequeathing Peerage will cost {INFLUENCE} influence.")
+                  .SetTextVariable("INFLUENCE", cost);
+                  return true;
+              });
+
+            starter.AddPlayerLine("bk_peerage_accepted",
+              "bk_peerage_accepted",
+              "close_window",
+              "{=G4ALCxaA}Never mind.",
+              () =>
+              {
+                  var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
+                  MBTextManager.SetTextVariable("KINGDOM_NAME", title.FullName);
+
+                  return true;
+              },
+              () => ChangeRelationAction.ApplyPlayerRelation(Hero.OneToOneConversationHero, -8));
+        }
+
+        private void GrantePeerage(Hero grantor, Hero granted)
+        {
+            Kingdom kingdom = grantor.Clan.Kingdom;
+            float cost = BannerKingsConfig.Instance.InfluenceModel.GetBequeathPeerageCost(kingdom).ResultNumber;
+
+            ChangeClanInfluenceAction.Apply(grantor.Clan, -cost);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, granted, 15);
+
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(granted);
+            council.SetPeerage(new Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"), true,
+                                true, true, true, true, false));
+
+            if (granted.Clan == Clan.PlayerClan)
+            {
+                var peerage = council.Peerage;
+                InformationManager.ShowInquiry(new InquiryData(
+                    peerage.Name.ToString(),
+                    new TextObject("As part of creating a realm, the {CLAN} is now considered to have {PEERAGE}. {TEXT}")
+                    .SetTextVariable("CLAN", Clan.PlayerClan.Name)
+                    .SetTextVariable("PEERAGE", peerage.Name)
+                    .SetTextVariable("TEXT", peerage.PeerageGrantedText())
+                    .ToString(),
+                    true,
+                    false,
+                    GameTexts.FindText("str_ok").ToString(),
+                    String.Empty,
+                    null,
+                    null));
+            }
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
 using TaleWorlds.Core;
-using System.Linq;
-using TaleWorlds.CampaignSystem.Extensions;
 
 namespace BannerKings.Extensions
 {

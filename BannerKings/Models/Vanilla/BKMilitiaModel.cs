@@ -1,4 +1,3 @@
-using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
@@ -13,6 +12,8 @@ using BannerKings.Managers.Education.Lifestyles;
 using System.Linq;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -59,11 +60,11 @@ namespace BannerKings.Models.Vanilla
                     var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(settlement.OwnerClan.Kingdom);
                     if (sovereign != null)
                     {
-                        if (sovereign.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsMilitaryServiceDuties))
+                        if (sovereign.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsMilitaryServiceDuties))
                         {
                             serfs *= 1.2f;
                         }
-                        else if (sovereign.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                        else if (sovereign.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
                         {
                             serfs *= 0.9f;
                         }
@@ -103,8 +104,12 @@ namespace BannerKings.Models.Vanilla
                     baseResult.Add(1.5f, DefaultLifestyles.Instance.Fian.Name);
                 }
 
-                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, settlement.OwnerClan.Leader,
-                    CouncilPosition.Marshall, 1f, false);
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, 
+                    settlement.OwnerClan.Leader,
+                    DefaultCouncilPositions.Instance.Marshal,
+                    DefaultCouncilTasks.Instance.OrganizeMiltia,
+                    1f, 
+                    false);
             }
 
             return baseResult;
@@ -151,20 +156,20 @@ namespace BannerKings.Models.Vanilla
                 var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
                 if (title != null)
                 {
-                    if (title.contract.Government == GovernmentType.Tribal)
+                    if (title.Contract.Government == GovernmentType.Tribal)
                     {
                         result.Add(0.08f, new TextObject("{=PSrEtF5L}Government"));
                     }
 
-                    var sovereign = title.sovereign;
+                    var sovereign = title.Sovereign;
                     if (sovereign != null)
                     {
-                        if (sovereign.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesMilitaryServiceDuties))
+                        if (sovereign.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesMilitaryServiceDuties))
                         {
                             result.AddFactor(0.15f, DefaultDemesneLaws.Instance.NoblesMilitaryServiceDuties.Name);
                         }
 
-                        if (sovereign.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties))
+                        if (sovereign.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties))
                         {
                             result.AddFactor(0.1f, DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties.Name);
                         }
@@ -189,6 +194,13 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
             }
+
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result,
+                    settlement.OwnerClan.Leader,
+                    DefaultCouncilPositions.Instance.Marshal,
+                    DefaultCouncilTasks.Instance.OrganizeMiltia,
+                    0.2f,
+                    true);
 
             return result;
         }

@@ -8,7 +8,6 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
-
 namespace BannerKings.Managers.Kingdoms.Contract
 {
     public class BKGovernmentDecision : BKContractDecision
@@ -58,12 +57,12 @@ namespace BannerKings.Managers.Kingdoms.Contract
             return MBMath.ClampFloat(support / clans, 0f, 100f);
         }
 
-        public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
+        public override void ApplySecondaryEffects(MBReadOnlyList<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
         {
             var newGovernment = (chosenOutcome as GovernmentDecisionOutcome).ShouldDecisionBeEnforced;
             if (newGovernment)
             {
-                var succession = Title.contract.Succession;
+                var succession = Title.Contract.Succession;
                 switch (governmentType)
                 {
                     case GovernmentType.Imperial:
@@ -104,7 +103,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                     }
                 }
 
-                if (succession != Title.contract.Succession)
+                if (succession != Title.Contract.Succession)
                 {
                     Title.ChangeContract(succession);
                 }
@@ -114,7 +113,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         public override TextObject GetSecondaryEffects()
         {
             TextObject effects = null;
-            var succession = Title.contract.Succession;
+            var succession = Title.Contract.Succession;
             switch (governmentType)
             {
                 case GovernmentType.Imperial:
@@ -169,7 +168,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             yield return new GovernmentDecisionOutcome(false);
         }
 
-        public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
+        public override void DetermineSponsors(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {
             foreach (var decisionOutcome in possibleOutcomes)
             {
@@ -197,17 +196,17 @@ namespace BannerKings.Managers.Kingdoms.Contract
             var num2 = weights[1] * oligarchic;
             var num3 = weights[2] * egalitarian;
 
-            var num4 = num + num3 + num2;
+            var num4 = num + num3 + num2 + GetCulturePreference(clan.Culture);
 
             if (clan == Kingdom.RulingClan)
             {
                 switch (governmentType)
                 {
                     case GovernmentType.Imperial when policyDecisionOutcome.ShouldDecisionBeEnforced:
-                        num4 += 2f;
+                        num4 += 50f;
                         break;
                     case GovernmentType.Republic when policyDecisionOutcome.ShouldDecisionBeEnforced:
-                        num4 -= 2f;
+                        num4 -= 50f;
                         break;
                 }
             }
@@ -225,13 +224,78 @@ namespace BannerKings.Managers.Kingdoms.Contract
             return num4 * num5;
         }
 
+        private float GetCulturePreference(CultureObject culture)
+        {
+            float result = 0f;
+            string id = culture.StringId;
+            if (governmentType == GovernmentType.Imperial)
+            {
+                switch (id)
+                {
+                    case "empire":
+                        result = 30f;
+                        break;
+                    default:
+                        result = -5f;
+                        break;
+                }
+            }
+
+            if (governmentType == GovernmentType.Republic)
+            {
+                switch (id)
+                {
+                    case "empire":
+                        result = 15f;
+                        break;
+                    default:
+                        result = -20f;
+                        break;
+                }
+            }
+
+            if (governmentType == GovernmentType.Feudal)
+            {
+                switch (id)
+                {
+                    case "vlandia" or "aserai":
+                        result = 20f;
+                        break;
+                    case "sturgia" or "empire":
+                        result = 5f;
+                        break;
+                    default:
+                        result = -10f;
+                        break;
+                }
+            }
+
+            if (governmentType == GovernmentType.Tribal)
+            {
+                switch (id)
+                {
+                    case "battania" or "khuzait":
+                        result = 30f;
+                        break;
+                    case "sturgia":
+                        result = 20f;
+                        break;
+                    default:
+                        result = -30f;
+                        break;
+                }
+            }
+
+            return result;
+        }
+
         private float[] GetWeights()
         {
             return governmentType switch
             {
-                GovernmentType.Imperial => new[] {3f, 1f, -2f},
-                GovernmentType.Tribal => new[] {-1f, 2f, -1f},
-                GovernmentType.Feudal => new[] {1f, 2f, -1f},
+                GovernmentType.Imperial => new[] {30f, 10f, -20f},
+                GovernmentType.Tribal => new[] {-10f, 20f, -10f},
+                GovernmentType.Feudal => new[] {10f, 20f, -10f},
                 _ => new[] {-3f, 1.5f, 3f}
             };
         }
@@ -268,7 +332,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             textObject.SetTextVariable("KINGDOM", Kingdom.InformalName);
             textObject.SetTextVariable("POLICY_DESCRIPTION", Utils.Helpers
-                .GetGovernmentString(newGovernment ? governmentType : Title.contract.Government));
+                .GetGovernmentString(newGovernment ? governmentType : Title.Contract.Government));
             if (isShortVersion || IsSingleClanDecision())
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", TextObject.Empty);
@@ -303,7 +367,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             return 300;
         }
 
-        public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
+        public override DecisionOutcome GetQueriedDecisionOutcome(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {
             return possibleOutcomes.FirstOrDefault(t => ((GovernmentDecisionOutcome) t).ShouldDecisionBeEnforced);
         }
@@ -314,7 +378,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
             textObject.SetTextVariable("CURRENT",
-                Utils.Helpers.GetGovernmentString(Title.contract.Government, Kingdom.Culture));
+                Utils.Helpers.GetGovernmentString(Title.Contract.Government, Kingdom.Culture));
             textObject.SetTextVariable("PROPOSED", Utils.Helpers.GetGovernmentString(governmentType, Kingdom.Culture));
             return textObject;
         }

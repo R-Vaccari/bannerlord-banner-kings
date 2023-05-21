@@ -1,7 +1,9 @@
 using System;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Education.Languages;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
@@ -13,6 +15,62 @@ namespace BannerKings.Models.BKModels
             return new ExplainedNumber();
         }
 
+        public ExplainedNumber CalculateRelocateCourtPrice(Clan clan, Town target, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber * 5f, 
+                explanations);
+
+            
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateHeroCompetence(Hero hero, CouncilMember position, bool ignoreTask = false, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(0f, explanations);
+            result.LimitMin(0f);
+
+            if (hero == null)
+            {
+                return result;
+            }
+
+            result.Add(hero.GetSkillValue(position.PrimarySkill) / 200f, position.PrimarySkill.Name);
+            if (position.SecondarySkill != null)
+            {
+                result.Add(hero.GetSkillValue(position.SecondarySkill) / 400f, position.SecondarySkill.Name);
+            }
+
+            result.AddFactor(0.15f * (hero.GetAttributeValue(DefaultCharacterAttributes.Intelligence) - 4), 
+                DefaultCharacterAttributes.Intelligence.Name);
+
+            Language courtLanguage = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(position.Culture);
+            float fluency = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero).GetLanguageFluency(courtLanguage);
+            if (fluency < 1f)
+            {
+                result.AddFactor(-0.3f * fluency, new TextObject("{=vRMD0fdw}{LANGUAGE} fluency")
+                    .SetTextVariable("LANGUAGE", courtLanguage.Name));
+            }
+
+            if (position.Traits != null)
+            {
+                foreach (var pair in position.Traits)
+                {
+                    int trait = hero.GetTraitLevel(pair.Key);
+                    result.AddFactor(trait * pair.Value, pair.Key.Name);
+                }
+            }   
+
+            if (!ignoreTask)
+            {
+                if (position.CurrentTask != null && position.CurrentTask.Efficiency != 1f)
+                {
+                    result.AddFactor(position.CurrentTask.Efficiency - 1f, new TextObject("{=ARQYxT6t}Task Efficiency"));
+                }
+            }
+
+            return result;
+        }
 
         public (bool, string) IsCouncilRoyal(Clan clan)
         {
@@ -66,7 +124,6 @@ namespace BannerKings.Models.BKModels
             };
         }
 
-
         private CouncilAction GetSwap(CouncilActionType type, CouncilData council, Hero requester,
             CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
         {
@@ -82,10 +139,11 @@ namespace BannerKings.Models.BKModels
                 return action;
             }
 
-            if (!targetPosition.IsValidCandidate(requester))
+            var adequate = targetPosition.IsValidCandidate(requester);
+            if (!adequate.Item1)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=iEe6ndpp}Not a valid candidate.");
+                action.Reason = adequate.Item2;
                 return action;
             }
 
@@ -96,7 +154,7 @@ namespace BannerKings.Models.BKModels
                 return action;
             }
 
-            if (targetPosition.IsCorePosition(targetPosition.Position))
+            if (targetPosition.IsCorePosition(targetPosition.StringId))
             {
                 if (requester.Clan != null && !requester.Clan.Kingdom.Leader.IsFriend(requester))
                 {
@@ -105,7 +163,7 @@ namespace BannerKings.Models.BKModels
                     return action;
                 }
 
-                if (council.GetCompetence(requester, targetPosition.Position) < 0.5f)
+                if (council.GetCompetence(requester, targetPosition) < 0.5f)
                 {
                     action.Possible = false;
                     action.Reason = new TextObject("{=opYJzphN}Not competent enough for this position.");
@@ -175,10 +233,18 @@ namespace BannerKings.Models.BKModels
                 return action;
             }
 
-            if (!targetPosition.IsValidCandidate(requester))
+            if (!targetPosition.CanMemberChange())
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=iEe6ndpp}Not a valid candidate.");
+                action.Reason = new TextObject("{=!}This position's councillor has recently been changed.");
+                return action;
+            }
+
+            var adequate = targetPosition.IsValidCandidate(requester);
+            if (!adequate.Item1)
+            {
+                action.Possible = false;
+                action.Reason = adequate.Item2;
                 return action;
             }
 
@@ -189,10 +255,9 @@ namespace BannerKings.Models.BKModels
                 return action;
             }
 
-
             if (!appointed)
             {
-                if (targetPosition.IsCorePosition(targetPosition.Position))
+                if (targetPosition.IsCorePosition(targetPosition.StringId))
                 {
                     if (requester.Clan != null && !requester.Clan.Kingdom.Leader.IsFriend(requester))
                     {
@@ -201,7 +266,7 @@ namespace BannerKings.Models.BKModels
                         return action;
                     }
 
-                    if (council.GetCompetence(requester, targetPosition.Position) < 0.5f)
+                    if (council.GetCompetence(requester, targetPosition) < 0.5f)
                     {
                         action.Possible = false;
                         action.Reason = new TextObject("{=opYJzphN}Not competent enough for this position.");
@@ -230,7 +295,7 @@ namespace BannerKings.Models.BKModels
         public float GetDesirability(Hero candidate, CouncilData council, CouncilMember position)
         {
             float titleWeight = 0;
-            var competence = council.GetCompetence(candidate, position.Position);
+            var competence = council.GetCompetence(candidate, position);
             var relation = council.Owner.GetRelation(candidate) * 0.01f;
             if (candidate.Clan == council.Owner.Clan)
             {
@@ -240,7 +305,7 @@ namespace BannerKings.Models.BKModels
             var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(candidate);
             if (title != null)
             {
-                titleWeight = 4 - (int) title.type;
+                titleWeight = 4 - (int) title.TitleType;
             }
 
             return (titleWeight + competence + relation) / 3f;

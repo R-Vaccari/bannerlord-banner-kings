@@ -1,12 +1,8 @@
 using System.Collections.Generic;
-using System.Linq;
-using BannerKings.Actions;
 using BannerKings.Managers.Titles;
 using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.Library;
-using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Helpers
 {
@@ -20,7 +16,7 @@ namespace BannerKings.Managers.Helpers
             }
 
             FeudalTitle highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(victim);
-            var mainHeir = GetHeirInternal(victim, highest.contract);
+            var mainHeir = GetHeirInternal(victim, highest != null ? highest.Contract : null);
             if (mainHeir != null)
             {
                 foreach (var t in titles)
@@ -90,7 +86,7 @@ namespace BannerKings.Managers.Helpers
             var inheritanceDic = new Dictionary<Hero, List<FeudalTitle>>();
             foreach (var title in titles)
             {
-                var heir = GetHeirInternal(leader, title.contract);
+                var heir = GetHeirInternal(leader, title.Contract);
                 if (!inheritanceDic.ContainsKey(heir))
                 {
                     inheritanceDic.Add(heir, new List<FeudalTitle>() { title });

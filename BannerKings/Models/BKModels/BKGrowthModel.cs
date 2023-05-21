@@ -114,6 +114,7 @@ namespace BannerKings.Models.BKModels
             var faction = settlement.OwnerClan.Kingdom;
             if (faction != null)
             {
+                var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
                 if (type == PopType.Slaves)
                 {
                     if (faction.ActivePolicies.Contains(DefaultPolicies.Serfdom))
@@ -126,23 +127,22 @@ namespace BannerKings.Models.BKModels
                         result.AddFactor(-0.15f, DefaultPolicies.ForgivenessOfDebts.Name);
                     }
 
-                    var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
                     if (title != null)
                     {
-                        if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryManumission))
+                        if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryManumission))
                         {
                             result.AddFactor(-1f, DefaultDemesneLaws.Instance.SlaveryManumission.Name);
                         }
-                        else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryVlandia))
+                        else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryVlandia))
                         {
                             result.AddFactor(-0.3f, DefaultDemesneLaws.Instance.SlaveryVlandia.Name);
                         }
-                        else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryAserai))
+                        else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryAserai))
                         {
                             result.AddFactor(0.5f, DefaultDemesneLaws.Instance.SlaveryAserai.Name);
                         }
 
-                        if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesAgricultureDuties))
+                        if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesAgricultureDuties))
                         {
                             float factor = -0.2f;
                             if (settlement.IsVillage)
@@ -155,7 +155,7 @@ namespace BannerKings.Models.BKModels
 
                             result.Add(result.ResultNumber * factor, DefaultDemesneLaws.Instance.SlavesAgricultureDuties.Name);
                         }
-                        else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesHardLabor)) 
+                        else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesHardLabor)) 
                         {
                             float factor = -0.2f;
                             if (settlement.IsVillage)
@@ -186,6 +186,41 @@ namespace BannerKings.Models.BKModels
                     if (faction.ActivePolicies.Contains(DefaultPolicies.Citizenship))
                     {
                         result.AddFactor(0.1f, DefaultPolicies.Citizenship.Name);
+                    }
+                }
+
+                if (type == PopType.Serfs)
+                {
+                    if (faction.ActivePolicies.Contains(DefaultPolicies.Serfdom))
+                    {
+                        result.Add(0.25f, DefaultPolicies.Serfdom.Name);
+                    }
+
+                    if (title != null)
+                    {
+                        if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.TenancyFull))
+                        {
+                            result.AddFactor(-1f, DefaultDemesneLaws.Instance.TenancyFull.Name);
+                        }
+                        else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.TenancyMixed))
+                        {
+                            result.AddFactor(-0.5f, DefaultDemesneLaws.Instance.TenancyMixed.Name);
+                        }
+                    }
+                }
+
+                if (type == PopType.Tenants)
+                {
+                    if (title != null)
+                    {
+                        if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.TenancyNone))
+                        {
+                            result.AddFactor(-1f, DefaultDemesneLaws.Instance.TenancyNone.Name);
+                        }
+                        else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.TenancyMixed))
+                        {
+                            result.AddFactor(-0.5f, DefaultDemesneLaws.Instance.TenancyMixed.Name);
+                        }
                     }
                 }
             }

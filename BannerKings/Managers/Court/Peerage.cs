@@ -31,7 +31,7 @@ namespace BannerKings.Managers.Court
             if (clan.Kingdom != null)
             {
                 var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
-                if (titles.Any(x => x.type != Titles.TitleType.Lordship) || clan.Fiefs.Count > 0)
+                if (titles.Any(x => x.TitleType != Titles.TitleType.Lordship) || clan.Fiefs.Count > 0)
                 {
                     return new Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"), true, true, true, true, true, false);
                 }
@@ -45,6 +45,7 @@ namespace BannerKings.Managers.Court
         }
 
         public bool IsLesserPeerage => CanVote && !CanStartElection && !CanGrantKnighthood && !CanHaveFief && CanHaveCouncil;
+        public bool IsFullPeerage => CanVote && CanStartElection && CanGrantKnighthood && CanHaveFief && CanHaveCouncil;
 
         [SaveableProperty(1)] public TextObject Name { get; private set; }
         [SaveableProperty(2)] public bool CanVote { get; private set; }

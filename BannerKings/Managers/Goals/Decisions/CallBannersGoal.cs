@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Behaviours;
-using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Utils.Extensions;
@@ -47,18 +46,18 @@ namespace BannerKings.Managers.Goals.Decisions
             {
                 var rulingClan = fulfiller.Clan.Kingdom.RulingClan;
                 var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(rulingClan);
-                var councilMember = council.GetMemberFromPosition(CouncilPosition.Marshall);
+                var councilMember = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Marshal);
 
                 if (fulfiller.Clan.Kingdom.HasPolicy(BKPolicies.Instance.LimitedArmyPrivilege))
                 {
                     failedReasons.Add(new TextObject("{=0Yoz051M}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to County level.")
-                                            .SetTextVariable("MARSHAL", councilMember.GetName())
+                                            .SetTextVariable("MARSHAL", councilMember.Name)
                                             .SetTextVariable("CLAN", rulingClan.Name));
                 }
                 else
                 {
                     failedReasons.Add(new TextObject("{=9ap6ssvZ}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to Lordship level.")
-                    .SetTextVariable("MARSHAL", councilMember.GetName())
+                    .SetTextVariable("MARSHAL", councilMember.Name)
                     .SetTextVariable("CLAN", rulingClan.Name));
                 }
             }
@@ -193,7 +192,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
         private float GetInfluenceCost(Hero fulfiller, Hero banner, Estate estate = null)
         {
-            if (banner.IsPartyLeader)
+            if (banner.IsPartyLeader && fulfiller.IsPartyLeader)
             {
                 return BannerKingsConfig.Instance.ArmyManagementModel.CalculatePartyInfluenceCost(fulfiller.PartyBelongedTo,
                     banner.PartyBelongedTo) * 0.75f;
@@ -259,8 +258,8 @@ namespace BannerKings.Managers.Goals.Decisions
                     new TextObject("{=YZfBWynb}{HERO} has called his banners! {TROOPS} troops are gathering for war.")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("TROOPS", troops).ToString(),
-                    Color.FromUint(4282569842U)));
-                SoundEvent.PlaySound2D(Utils.Helpers.GetKingdomDecisionSound());
+                    Color.FromUint(4282569842U),
+                    Utils.Helpers.GetKingdomDecisionSound()));
             }
         }
 
@@ -268,6 +267,11 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             Hero fulfiller = GetFulfiller();
             if (allBanners.Count < 5 || fulfiller.PartyBelongedTo.HasUnpaidWages > 0 || fulfiller.PartyBelongedTo.GetNumDaysForFoodToLast() < 10)
+            {
+                return;
+            }
+
+            if (IsFulfilled(out List<TextObject> reasons))
             {
                 return;
             }

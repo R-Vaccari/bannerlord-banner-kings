@@ -1,4 +1,6 @@
 using BannerKings.Managers;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
@@ -28,7 +30,7 @@ namespace BannerKings.Models.BKModels
             {
                 if (data.TitleData != null && data.TitleData.Title != null)
                 {
-                    bool boost = data.TitleData.Title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties);
+                    bool boost = data.TitleData.Title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties);
                     result.Add(nobles / (boost ? 90000f : 100000f), new TextObject("{=pJAF5pzO}Nobles"));
                 }
             }
@@ -46,7 +48,9 @@ namespace BannerKings.Models.BKModels
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.Owner,
-                    Managers.Court.CouncilPosition.Philosopher, 0.05f, true);
+                    DefaultCouncilPositions.Instance.Philosopher,
+                    DefaultCouncilTasks.Instance.EncourageMilitarism,
+                    0.05f, true);
             }
 
             return result;

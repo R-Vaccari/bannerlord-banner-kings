@@ -1,14 +1,18 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Traits;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.AgentOrigins;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Locations;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.PopulationManager;
@@ -18,6 +22,66 @@ namespace BannerKings.Utils
 {
     public static class Helpers
     {
+        public static void AddTraitLevel(Hero hero, TraitObject trait, int level, float chance = 1f)
+        {
+            int current = hero.GetTraitLevel(trait);
+            int final = current + level;
+            if ((final >= trait.MinValue || final <= trait.MaxValue) && MBRandom.RandomFloat < chance)
+            {
+                hero.SetTraitLevel(trait, final);
+                if (hero == Hero.MainHero)
+                {
+                    string value = GameTexts.FindText("str_trait_name_" + trait.StringId.ToLower(), 
+                        (level + MathF.Abs(trait.MinValue)).ToString())
+                        .ToString();
+
+                    if (BKTraits.Instance.PersonalityTraits.Contains(trait))
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage(
+                            new TextObject("{=!}Your sense of {TRAIT} is now perceived by others as {LEVEL}.")
+                            .SetTextVariable("TRAIT", trait.Name)
+                            .SetTextVariable("LEVEL", value).ToString(),
+                            Color.UIntToColorString(TextHelper.COLOR_LIGHT_YELLOW)));
+                    }
+                    else if (BKTraits.Instance.MedicalTraits.Contains(trait))
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage(
+                            new TextObject("{=!}Your sense of {TRAIT} is now perceived by others as {LEVEL}.")
+                            .SetTextVariable("TRAIT", trait.Name)
+                            .SetTextVariable("LEVEL", value).ToString(),
+                            Color.UIntToColorString(TextHelper.COLOR_LIGHT_YELLOW)));
+                    }
+                }
+            }
+        }
+
+        public static ItemModifierGroup GetItemModifierGroup(ItemObject item)
+        {
+            ItemModifierGroup modifierGroup = null;
+            if (item.ArmorComponent != null)
+            {
+                modifierGroup = item.ArmorComponent.ItemModifierGroup;
+            }
+            else if (item.WeaponComponent != null)
+            {
+                modifierGroup = item.WeaponComponent.ItemModifierGroup;
+            }
+            else if (item.IsFood)
+            {
+                modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("consumables");
+            }
+            else if (item.IsAnimal)
+            {
+                modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("animals");
+            }
+            else if (!item.HasHorseComponent && item.ItemCategory != DefaultItemCategories.Iron)
+            {
+                modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("goods");
+            }
+
+            return modifierGroup;
+        }
+
         public static void SetAlliance(IFaction faction1, IFaction faction2)
         {
             var stance = Clan.PlayerClan.GetStanceWith(Hero.OneToOneConversationHero.Clan);
@@ -150,73 +214,98 @@ namespace BannerKings.Utils
 
         public static TextObject GetClassName(PopType type, CultureObject culture)
         {
-            var cultureModifier = '_' + culture.StringId;
-            var id = $"pop_class_{type.ToString().ToLower()}{cultureModifier}";
-            var text = type.ToString();
-            switch (type)
+            string cultureId = culture.StringId;
+            TextObject text;
+
+            if (type == PopType.Serfs)
             {
-                case PopType.Serfs when culture.StringId == "sturgia":
-                    text = "Lowmen";
-                    break;
-                case PopType.Serfs when culture.StringId is "empire" or "aserai":
-                    text = "Commoners";
-                    break;
-                case PopType.Serfs when culture.StringId == "battania":
-                    text = "Freemen";
-                    break;
-                case PopType.Serfs:
+                switch (cultureId) 
                 {
-                    if (culture.StringId == "khuzait")
-                    {
-                        text = "Nomads";
-                    }
-
-                    break;
+                    case "empire":
+                        text = new TextObject("{=!}Servi");
+                        break;
+                    case "aserai" or "battania":
+                        text = new TextObject("{=vSMPBzue}Commoners");
+                        break;
+                    case "sturgia":
+                        text = new TextObject("{=!}Kholops");
+                        break;
+                    default:
+                        text = new TextObject("{=!}Serfs");
+                        break;
                 }
-                case PopType.Slaves when culture.StringId == "sturgia":
-                    text = "Thralls";
-                    break;
-                case PopType.Slaves:
+            }
+            else if (type == PopType.Tenants)
+            {
+                switch (cultureId)
                 {
-                    if (culture.StringId == "aserai")
-                    {
-                        text = "Mameluke";
-                    }
-
-                    break;
+                    case "empire":
+                        text = new TextObject("{=GThkJp2s}Coloni");
+                        break;
+                    case "khuzait":
+                        text = new TextObject("{=tUzhQHAh}Nomads");
+                        break;
+                    case "sturgia":
+                        text = new TextObject("{=!}Smerdy");
+                        break;
+                    case "battania":
+                        text = new TextObject("{=TEYb57Wo}Freemen");
+                        break;
+                    default:
+                        text = new TextObject("{=h9UDWQcM}Tenants");
+                        break;
                 }
-                case PopType.Craftsmen:
+            }
+            else if (type == PopType.Slaves)
+            {
+                switch (cultureId)
                 {
-                    if (culture.StringId is "khuzait" or "battania")
-                    {
-                        text = "Artisans";
-                    }
-
-                    break;
+                    case "empire":
+                        text = new TextObject("{=B9hAxxuo}Sclavi");
+                        break;
+                    case "sturgia":
+                        text = new TextObject("{=j6UDXO39}Thralls");
+                        break;
+                    case "aserai":
+                        text = new TextObject("{=TASERbwx}Mameluke");
+                        break;
+                    default:
+                        text = new TextObject("{=!}Slaves");
+                        break;
                 }
-                case PopType.Nobles when culture.StringId == "empire":
-                    text = "Nobiles";
-                    break;
-                case PopType.Nobles when culture.StringId == "sturgia":
-                    text = "Knyaz";
-                    break;
-                case PopType.Nobles:
+            }
+            else if (type == PopType.Craftsmen)
+            {
+                switch (cultureId)
                 {
-                    if (culture.StringId == "vlandia")
-                    {
-                        text = "Ealdormen";
-                    }
-
-                    break;
+                    case "empire":
+                        text = new TextObject("{=6hrBerHd}Cives");
+                        break;
+                    case "sturgia" or "battania" or "khuzait":
+                        text = new TextObject("{=2ogRjAuf}Artisans");
+                        break;
+                    default:
+                        text = new TextObject("{=!}Craftsmen");
+                        break;
                 }
-                case PopType.None:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+            else
+            {
+                switch (cultureId)
+                {
+                    case "empire":
+                        text = new TextObject("{=Uv29oSQT}Nobiles");
+                        break;
+                    case "vlandia":
+                        text = new TextObject("{=FVuW8Y4j}Ealdormen");
+                        break;
+                    default:
+                        text = new TextObject("{=!}Nobles");
+                        break;
+                }
             }
 
-            var finalResult = $"{{={id}}}{text}";
-            return new TextObject(finalResult);
+            return text;
         }
 
         public static string GetGovernmentDescription(GovernmentType type)
@@ -239,6 +328,7 @@ namespace BannerKings.Utils
                 SuccessionType.Elective_Monarchy => new TextObject("{=YSZYZZUw}In elective monarchies, the ruler is chosen from the realm's dynasties, and rules until death or abdication. Elections take place and all dynasties are able to vote when a new leader is required."),
                 SuccessionType.Hereditary_Monarchy => new TextObject("{=9EjsMFJx}In hereditary monarchies, the monarch is always the ruling dynasty's leader. No election takes place, and the realm does not change leadership without extraordinary measures."),
                 SuccessionType.Imperial => new TextObject("{=ag50C9hT}Imperial successions are completely dictated by the emperor/empress. They will choose from most competent members in their family, as well as other family leaders. Imperial succession values age, family prestigy, military and administration skills. No election takes place."),
+                SuccessionType.FeudalElective => new TextObject("{=P3EzcNY0}A feudal elective succession is a compromise between a hereditary monarchy and a fully elective monarchy. Votes will be cast by the Peers, however the main candidates are the former ruler's family. However, title claimants will also be considered. If there is a scarcity of candidates available, strong families in the realm will also be considered candidates. If the chosen heir is from the former ruler's family, they will inherit the clan, regardless of Inheritance laws."),
                 _ => new TextObject("{=ATmtkA1S}Republican successions ensure the power is never concentrated. Each year, a new ruler is chosen from the realm's dynasties. The previous ruler is strickly forbidden to participate. Age, family prestige and administration skills are sought after in candidates.")
             };
 
@@ -251,6 +341,7 @@ namespace BannerKings.Utils
             {
                 SuccessionType.Elective_Monarchy => new TextObject("{=WG9FTePW}Elective Monarchy"),
                 SuccessionType.Hereditary_Monarchy => new TextObject("{=iYzZgP3y}Hereditary Monarchy"),
+                SuccessionType.FeudalElective => new TextObject("{=HZRnRmF8}Feudal Elective"),
                 SuccessionType.Imperial => new TextObject("{=SW29YLBZ}Imperial"),
                 _ => new TextObject("{=vFXFxkM9}Republican")
             };
@@ -280,15 +371,16 @@ namespace BannerKings.Utils
         public static string GetClassHint(PopType type, CultureObject culture)
         {
             var name = GetClassName(type, culture).ToString();
-            var description = type switch
+            TextObject description = type switch
             {
-                PopType.Nobles => " represent the free, wealthy and influential members of society. They pay very high taxes and increase your influence as a lord.",
-                PopType.Craftsmen => " are free people of trade, such as merchants, engineers and blacksmiths. Somewhat wealthy, free but not high status people. Craftsmen pay a significant amount of taxes and their presence boosts economical development. Their skills can also be hired to significantly boost construction projects.",
-                PopType.Serfs => " are the lowest class that possess some sort of freedom. Unable to attain specialized skills such as those of craftsmen, these people represent the agricultural workforce. They also pay tax over the profit of their production excess.",
-                _ => " are those destituted: criminals, prisioners unworthy of a ransom, and those unlucky to be born into slavery. Slaves do the hard manual labor across settlements, such as building and mining. They themselves pay no tax as they are unable to have posessions, but their labor generates income gathered as tax from their masters."
+                PopType.Nobles => new TextObject("{=NvDPFtJ3}The {CLASS} represent the free, wealthy and influential members of society. They pay very high taxes and increase your influence as a lord or lady"),
+                PopType.Craftsmen => new TextObject("{=y1LusnZS}The {CLASS} are free people of trade, such as merchants, engineers and blacksmiths. Somewhat wealthy, free but not high status people. Craftsmen pay a significant amount of taxes and their presence boosts economical development. Their skills can also be hired to significantly boost construction projects."),
+                PopType.Serfs => new TextObject("{=QwugjxJo}The {CLASS} are the lowest class that possess some sort of freedom. Unable to attain specialized skills such as those of craftsmen, these people represent the agricultural workforce. They also pay tax over the profit of their production excess."),
+                PopType.Tenants => new TextObject("{=SY5K6vfd}The {CLASS} are a step above the serfs. These peasants are free to move and often have rights to protect themselves. Though less taxable than serfs, {CLASS} are more prone to stable and prosperous fiefs due to such rights and the ability to accumulate more wealth."),
+                _ => new TextObject("{=t6Ez6fZm}The {CLASS} are those destituted: criminals, prisioners unworthy of a ransom, and those unlucky to be born into slavery. Slaves do the hard manual labor across settlements, such as building and mining. They themselves pay no tax as they are unable to have posessions, but their labor generates income gathered as tax from their masters.")
             };
 
-            return name + description;
+            return description.SetTextVariable("CLASS", name).ToString();
         }
 
         public static string GetConsumptionHint(ConsumptionType type)

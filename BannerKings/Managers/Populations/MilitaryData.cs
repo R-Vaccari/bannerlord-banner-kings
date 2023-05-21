@@ -159,6 +159,15 @@ namespace BannerKings.Managers.Populations
             return MBRandom.ChooseWeighted(options);
         }
 
+        public void AddManpowerFromSoldiers(PopulationData data, int quantity, CharacterObject troop)
+        {
+            InitManpowers();
+            PopType type = GetCharacterManpowerType(troop);
+
+            Manpowers[type] += quantity;
+            data.UpdatePopType(type, quantity);
+        }
+
         public void DeduceManpower(PopulationData data, int quantity, CharacterObject troop, Hero notable)
         {
             InitManpowers();
@@ -173,7 +182,6 @@ namespace BannerKings.Managers.Populations
                     return;
                 }
             }
-
 
             Manpowers[type] -= quantity;
             data.UpdatePopType(type, -quantity);

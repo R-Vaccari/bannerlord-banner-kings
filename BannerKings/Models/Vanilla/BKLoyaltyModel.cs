@@ -1,6 +1,6 @@
-using System;
 using System.Linq;
-using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -130,7 +130,10 @@ namespace BannerKings.Models.Vanilla
 
             baseResult.Add(2f * data.Autonomy, new TextObject("Autonomy"));
 
-            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader, CouncilPosition.Chancellor, 1f, false);
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader,
+                DefaultCouncilPositions.Instance.Chancellor,
+                DefaultCouncilTasks.Instance.OverseeDignataries,
+                1f, false);
 
             return baseResult;
         }
@@ -152,13 +155,12 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        // Token: 0x06002D67 RID: 11623 RVA: 0x000B46D4 File Offset: 0x000B28D4
         private void GetSettlementLoyaltyChangeDueToGovernorPerks(Town town, ref ExplainedNumber explainedNumber)
         {
             PerkHelper.AddPerkBonusForTown(DefaultPerks.Leadership.HeroicLeader, town, ref explainedNumber);
             PerkHelper.AddPerkBonusForTown(DefaultPerks.Charm.NaturalLeader, town, ref explainedNumber);
             PerkHelper.AddPerkBonusForTown(DefaultPerks.Medicine.PhysicianOfPeople, town, ref explainedNumber);
-            PerkHelper.AddPerkBonusForTown(DefaultPerks.Athletics.HealthyCitizens, town, ref explainedNumber);
+            PerkHelper.AddPerkBonusForTown(DefaultPerks.Athletics.Durable, town, ref explainedNumber);
             PerkHelper.AddPerkBonusForTown(DefaultPerks.Bow.Discipline, town, ref explainedNumber);
             if (town.Settlement.Parties.Any(x =>
                     x.LeaderHero != null && x.LeaderHero.Clan == town.Settlement.OwnerClan &&
@@ -168,7 +170,6 @@ namespace BannerKings.Models.Vanilla
             }
         }
 
-        // Token: 0x06002D68 RID: 11624 RVA: 0x000B477C File Offset: 0x000B297C
         private void GetSettlementLoyaltyChangeDueToNotableRelations(Town town, ref ExplainedNumber explainedNumber)
         {
             var num = 0f;
@@ -210,7 +211,7 @@ namespace BannerKings.Models.Vanilla
                         return;
                     }
 
-                    explainedNumber.Add(result * (town.Governor.Culture == town.Culture ? 0.1f : -0.1f), GovernorCultureText);
+                    explainedNumber.Add(MathF.Abs(result) * (town.Governor.Culture == town.Culture ? 0.1f : -0.1f), GovernorCultureText);
 
                     var lordshipAdaptivePerk = BKPerks.Instance.LordshipAdaptive;
                     if (town.Culture != town.Governor.Culture && town.Governor.GetPerkValue(lordshipAdaptivePerk))

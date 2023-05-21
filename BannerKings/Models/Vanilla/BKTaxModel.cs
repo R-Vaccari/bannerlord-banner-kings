@@ -23,19 +23,20 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKTaxModel : CalradiaExpandedKingdoms.Models.CEKSettlementTaxModel
     {
-        public static readonly float SERF_OUTPUT = 0.33f;
+        public static readonly float SERF_OUTPUT = 0.2f;
+        public static readonly float TENANT_OUTPUT = 0.17f;
 
         public float GetNobleOutput(FeudalTitle title)
         {
-            float result = 3.2f;
+            float result = 2.2f;
 
             if (title != null)
             {
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesTaxDuties))
+                if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesTaxDuties))
                 {
                     result *= 1.25f;
                 }
-                else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
+                else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
                 {
                     result *= 0.6f;
                 }
@@ -46,15 +47,15 @@ namespace BannerKings.Models.Vanilla
 
         public float GetCraftsmenOutput(FeudalTitle title)
         {
-            float result = 1.2f;
+            float result = 0.8f;
 
             if (title != null)
             {
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenTaxDuties))
+                if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenTaxDuties))
                 {
                     result *= 1.35f;
                 }
-                else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
+                else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
                 {
                     result *= 0.6f;
                 }
@@ -65,11 +66,11 @@ namespace BannerKings.Models.Vanilla
 
         public float GetSlaveOutput(FeudalTitle title)
         {
-            float result = 0.4f;
+            float result = 0.24f;
 
             if (title != null)
             {
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesDomesticDuties))
+                if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesDomesticDuties))
                 {
                     result *= 1.15f;
                 }
@@ -93,9 +94,10 @@ namespace BannerKings.Models.Vanilla
                         BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_slaves_tax");
 
                     float nobles = data.GetTypeCount(PopType.Nobles);
-                    float craftsmen = data.GetTypeCount(PopType.Nobles);
-                    float serfs = data.GetTypeCount(PopType.Nobles);
+                    float craftsmen = data.GetTypeCount(PopType.Craftsmen);
+                    float serfs = data.GetTypeCount(PopType.Serfs);
                     float slaves = data.GetTypeCount(PopType.Slaves);
+                    float tenants = data.GetTypeCount(PopType.Tenants);
 
                     if (craftsmen > 0)
                     {
@@ -119,25 +121,39 @@ namespace BannerKings.Models.Vanilla
                     if (craftsmen > 0f)
                     {
                         baseResult.Add(MBMath.ClampFloat(craftsmen * GetCraftsmenOutput(title), 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
-                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=pop_class_craftsmen}Craftsmen")));
+                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=!}Craftsmen")));
                     }
 
                     if (serfs > 0f)
                     {
                         baseResult.Add(MBMath.ClampFloat(serfs * SERF_OUTPUT, 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
-                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=pop_class_serfs}Serfs")));
+                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=!}Serfs")));
                     }
 
                     if (slaves > 0f)
                     {
                         baseResult.Add(MBMath.ClampFloat(slaves * GetSlaveOutput(title), 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
-                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=pop_class_slaves}Slaves")));
+                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=!}Slaves")));
                     }
 
-                    var mining = Campaign.Current.GetCampaignBehavior<BKBuildingsBehavior>().GetMiningRevenue(town);
+                    if (tenants > 0f)
+                    {
+                        baseResult.Add(MBMath.ClampFloat(tenants * TENANT_OUTPUT, 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
+                                                   new TextObject("{=5mCY3JCP}{CLASS} output")
+                                                   .SetTextVariable("CLASS", new TextObject("{=!}Tenants")));
+                    }
+
+                    var buildingBehavior = Campaign.Current.GetCampaignBehavior<BKBuildingsBehavior>();
+                    int mining = buildingBehavior.GetMiningRevenue(town);
                     if (mining > 0)
                     {
                         baseResult.Add(mining, BKBuildings.Instance.Mines.Name);
+                    }
+
+                    int materials = buildingBehavior.GetMaterialExpenses(town);
+                    if (materials > 0)
+                    {
+                        baseResult.Add(-materials, new TextObject("{=!}Project material expenses"));
                     }
 
                     var ownerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(town.OwnerClan.Leader);
@@ -346,11 +362,11 @@ namespace BannerKings.Models.Vanilla
                 return;
             }
 
-            var contract = titleData.Title.contract;
+            var contract = titleData.Title.Contract;
             if (contract != null && contract.Duties.ContainsKey(FeudalDuties.Taxation))
             {
                 var factor = MBMath.ClampFloat(contract.Duties[FeudalDuties.Taxation], 0f, 0.8f);
-                titleData.Title.dueTax = result * factor;
+                titleData.Title.DueTax = result * factor;
             }
         }
 

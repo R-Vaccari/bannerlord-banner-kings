@@ -249,7 +249,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override MBReadOnlyList<Divinity> GetSecondaryDivinities()
         {
-            return pantheon.GetReadOnlyList();
+            return new MBReadOnlyList<Divinity>(pantheon);
         }
 
         public override TextObject GetCultsDescription()

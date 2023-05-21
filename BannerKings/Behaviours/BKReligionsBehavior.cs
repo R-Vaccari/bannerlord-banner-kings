@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Security.Policy;
 using System.Text;
 using BannerKings.Managers;
 using BannerKings.Managers.Institutions.Religions;
@@ -140,7 +138,7 @@ namespace BannerKings.Behaviours
             }
         }
 
-        private void OnRaidCompleted(BattleSideEnum winnerSide, MapEvent mapEvent)
+        private void OnRaidCompleted(BattleSideEnum winnerSide, RaidEventComponent mapEvent)
         {
             foreach (var mapEventParty in mapEvent.AttackerSide.Parties)
             {
@@ -314,9 +312,9 @@ namespace BannerKings.Behaviours
                             var bonus = 0f;
                             foreach (var title in titles)
                             {
-                                if (title.sovereign == empireTitle)
+                                if (title.Sovereign == empireTitle)
                                 {
-                                    bonus += 2f / (float)title.type;
+                                    bonus += 2f / (float)title.TitleType;
                                 }
                             }
 

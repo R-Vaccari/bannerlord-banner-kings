@@ -37,7 +37,7 @@ namespace BannerKings.UI.Kingdoms
             if (Title != null)
             {
                 bool isKing = Kingdom.Leader == Hero.MainHero && Title.deJure == Hero.MainHero;
-                foreach (var law in Title.contract.DemesneLaws)
+                foreach (var law in Title.Contract.DemesneLaws)
                 {
                     Laws.Add(new DemesneLawVM(DefaultDemesneLaws.Instance.GetLawsByType(law.LawType),
                         law,
@@ -45,12 +45,12 @@ namespace BannerKings.UI.Kingdoms
                         OnChange));
                 }
 
-                var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(Kingdom.Leader, Title.contract);
+                var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(Kingdom.Leader, Title);
                 var explanations = new Dictionary<Hero, ExplainedNumber>();
 
                 foreach (Hero hero in candidates)
                 {
-                    var explanation = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(Kingdom.Leader, hero, Title.contract, true);
+                    var explanation = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(Kingdom.Leader, hero, Title, true);
                     explanations.Add(hero, explanation);
                 }
 
@@ -83,7 +83,7 @@ namespace BannerKings.UI.Kingdoms
                 var lawType = (DemesneLawTypes)vm.Reference;
 
                 var resultLaw = DefaultDemesneLaws.Instance.All.FirstOrDefault(x => x.LawType == lawType && x.Index == policyIndex);
-                var currentLaw = Title.contract.GetLawByType(lawType);
+                var currentLaw = Title.Contract.GetLawByType(lawType);
                 if (resultLaw != null && !resultLaw.Equals(currentLaw))
                 {
                     InformationManager.ShowInquiry(new InquiryData(new TextObject("{=yAPnOQQQ}Enact Law").ToString(),

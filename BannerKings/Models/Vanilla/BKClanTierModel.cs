@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Court;
+﻿using BannerKings.Managers.Court.Members;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 
@@ -14,7 +14,7 @@ namespace BannerKings.Models.Vanilla
                 var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
                 if (title != null)
                 {
-                    result += 5 - (int) title.type;
+                    result += 5 - (int) title.TitleType;
                 }
             }
 
@@ -26,7 +26,7 @@ namespace BannerKings.Models.Vanilla
             var result = base.GetCompanionLimit(clan);
 
             result += BannerKingsConfig.Instance.CourtManager.GetCouncilEffectInteger(clan.Leader,
-                CouncilPosition.Chancellor, 4f);
+                DefaultCouncilPositions.Instance.Chancellor, 4f);
             return result;
         }
     }

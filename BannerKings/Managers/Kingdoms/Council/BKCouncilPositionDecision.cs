@@ -15,29 +15,34 @@ namespace BannerKings.Managers.Kingdoms.Council
 {
     public class BKCouncilPositionDecision : KingdomDecision
     {
-        public BKCouncilPositionDecision(Clan proposerClan, CouncilData data, CouncilMember position) : base(proposerClan)
+        public BKCouncilPositionDecision(Clan proposerClan, CouncilData data, CouncilMember position, Hero suggested) : base(proposerClan)
         {
             Data = data;
             Position = position;
             Religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(proposerClan.Leader);
             IsEnforced = true;
+            Suggested = suggested;
         }
 
+        [SaveableProperty(100)] protected Hero Suggested { get; set; }
         [SaveableProperty(99)] protected CouncilData Data { get; set; }
-
         [SaveableProperty(98)] protected CouncilMember Position { get; set; }
-
         [SaveableProperty(97)] protected Religion Religion { get; set; }
 
-        public override bool IsKingsVoteAllowed => false;
+        public override bool IsKingsVoteAllowed => true;
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
-            Position.Member = ((CouncilPositionDecisionOutcome) chosenOutcome).Candidate;
+            CouncilAction action = BannerKingsConfig.Instance.CouncilModel.GetAction(CouncilActionType.REQUEST,
+                Data,
+                Suggested,
+                Position,
+                null,
+                true);
+            BannerKingsConfig.Instance.CourtManager.AddHeroToCouncil(action);
         }
 
-
-        public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
+        public override void ApplySecondaryEffects(MBReadOnlyList<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
         {
         }
 
@@ -54,11 +59,11 @@ namespace BannerKings.Managers.Kingdoms.Council
                 case Supporter.SupportWeights.StayNeutral:
                     return 0;
                 case Supporter.SupportWeights.SlightlyFavor:
-                    return 10;
-                case Supporter.SupportWeights.StronglyFavor:
-                    return 30;
-                case Supporter.SupportWeights.FullyPush:
                     return 50;
+                case Supporter.SupportWeights.StronglyFavor:
+                    return 100;
+                case Supporter.SupportWeights.FullyPush:
+                    return 150;
                 default:
                     throw new ArgumentOutOfRangeException("supportWeight", supportWeight, null);
             }
@@ -69,14 +74,20 @@ namespace BannerKings.Managers.Kingdoms.Council
         {
             foreach (var hero in Data.GetAvailableHeroes())
             {
-                if (Position.IsValidCandidate(hero))
+                CouncilAction action = BannerKingsConfig.Instance.CouncilModel.GetAction(CouncilActionType.REQUEST,
+                    Data,
+                    hero,
+                    Position,
+                    null,
+                    true);
+                if (action.Possible)
                 {
                     yield return new CouncilPositionDecisionOutcome(hero);
                 }
             }
         }
 
-        public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
+        public override void DetermineSponsors(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {
             foreach (var decisionOutcome in possibleOutcomes)
             {
@@ -85,15 +96,28 @@ namespace BannerKings.Managers.Kingdoms.Council
                 {
                     decisionOutcome.SetSponsor(candidate.Clan);
                 }
+                else
+                {
+                    decisionOutcome.SetSponsor(ProposerClan);
+                }
             }
         }
 
         public override float DetermineSupport(Clan clan, DecisionOutcome possibleOutcome)
         {
-            var result = 2f;
-            var candidate = ((CouncilPositionDecisionOutcome) possibleOutcome).Candidate;
+            var candidate = ((CouncilPositionDecisionOutcome)possibleOutcome).Candidate;
+            var result = new ExplainedNumber(Position.CalculateCandidateCompetence(candidate).ResultNumber * 100f);
+            if (candidate == Suggested)
+            {
+                float factor = 1f;
+                if (clan != ProposerClan)
+                {
+                    factor = clan.Leader.GetRelation(ProposerClan.Leader) * 0.01f;
+                }
 
-            result += Data.GetCompetence(candidate, Position.Position) * 4f;
+                result.Add(20f * factor);
+            }
+
             if (Religion != null)
             {
                 var candidateReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(candidate);
@@ -108,22 +132,17 @@ namespace BannerKings.Managers.Kingdoms.Council
                     switch (stance)
                     {
                         case FaithStance.Untolerated:
-                            result -= 1.5f;
+                            result.AddFactor(-0.15f);
                             break;
                         case FaithStance.Hostile:
-                            result -= 4f;
+                            result.AddFactor(-0.4f);
                             break;
                     }
                 }
             }
 
-            result += ProposerClan.Leader.GetRelation(candidate) * 0.02f;
-            if (!candidate.IsLord)
-            {
-                result -= 1f;
-            }
-
-            return MathF.Clamp(result, -3f, 8f);
+            result.AddFactor(clan.Leader.GetRelation(candidate) * 0.02f);
+            return result.ResultNumber;
         }
 
         public override TextObject GetChooseDescription()
@@ -136,7 +155,7 @@ namespace BannerKings.Managers.Kingdoms.Council
         public override TextObject GetChooseTitle()
         {
             return new TextObject("{=dqEO1Ug4}Choose the next council member to occupy the position of {POSITION}")
-                .SetTextVariable("POSITION", Position.GetName());
+                .SetTextVariable("POSITION", Position.Name);
         }
 
         public override TextObject GetChosenOutcomeText(DecisionOutcome chosenOutcome, SupportStatus supportStatus,
@@ -152,16 +171,15 @@ namespace BannerKings.Managers.Kingdoms.Council
         public override TextObject GetGeneralTitle()
         {
             return new TextObject("{=mUaJDjqO}Council member for position {POSITION}")
-                .SetTextVariable("POSITION", Position.GetName());
+                .SetTextVariable("POSITION", Position.Name);
         }
-
 
         public override int GetProposalInfluenceCost()
         {
-            return 0;
+            return 100;
         }
 
-        public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
+        public override DecisionOutcome GetQueriedDecisionOutcome(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {
             return (from k in possibleOutcomes
                 orderby k.Merit descending
@@ -182,18 +200,18 @@ namespace BannerKings.Managers.Kingdoms.Council
         {
             return new TextObject("{=Hj6NHtbc}{KINGDOM_NAME} will decide who will occupy the position of {POSITION}. You can pick your stance regarding this decision.")
                 .SetTextVariable("KINGDOM_NAME", Kingdom.Name)
-                .SetTextVariable("POSITION", Position.GetName());
+                .SetTextVariable("POSITION", Position.Name);
         }
 
         public override TextObject GetSupportTitle()
         {
             return new TextObject("{=dqEO1Ug4}Choose the next council member to occupy the position of {POSITION}")
-                .SetTextVariable("POSITION", Position.GetName());
+                .SetTextVariable("POSITION", Position.Name);
         }
 
         public override bool IsAllowed()
         {
-            return Data != null && Position != null;
+            return !Kingdom.UnresolvedDecisions.Any(x => x is BKCouncilPositionDecision && x != this);
         }
 
         public class CouncilPositionDecisionOutcome : DecisionOutcome

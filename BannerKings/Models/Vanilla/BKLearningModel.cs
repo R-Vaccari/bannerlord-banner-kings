@@ -7,6 +7,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using BannerKings.Managers.Traits;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -15,6 +16,10 @@ namespace BannerKings.Models.Vanilla
         public override List<Tuple<SkillObject, int>> GetSkillsDerivedFromTraits(Hero hero, CharacterObject templateCharacter = null, bool isByNaturalGrowth = false)
         {
             List <Tuple<SkillObject, int>> list =  base.GetSkillsDerivedFromTraits(hero, templateCharacter, isByNaturalGrowth);
+            if (hero == null)
+            {
+                return list;
+            }
 
             float scholarship = 0;
             float lordship = 0;
@@ -50,15 +55,28 @@ namespace BannerKings.Models.Vanilla
 
         public override float CalculateLearningRate(Hero hero, SkillObject skill)
         {
-            var level = hero.Level;
-            var attributeValue = hero.GetAttributeValue(skill.CharacterAttribute);
-            var focus = hero.HeroDeveloper.GetFocus(skill);
-            var skillValue = hero.GetSkillValue(skill);
-            return CalculateLearningRate(hero, attributeValue, focus, skillValue, level, skill.CharacterAttribute.Name)
-                .ResultNumber;
+            ExplainedNumber result = CalculateLearningRate(hero, 
+                hero.GetAttributeValue(skill.CharacterAttribute), 
+                hero.HeroDeveloper.GetFocus(skill), hero.GetSkillValue(skill), 
+                skill.CharacterAttribute.Name);
+
+            if (skill.CharacterAttribute == DefaultCharacterAttributes.Vigor || skill.CharacterAttribute == DefaultCharacterAttributes.Control)
+            {
+                result.AddFactor(hero.GetTraitLevel(BKTraits.Instance.AptitudeViolence) * 0.6f);
+            }
+            else if (skill.CharacterAttribute == DefaultCharacterAttributes.Social)
+            {
+                result.AddFactor(hero.GetTraitLevel(BKTraits.Instance.AptitudeSocializing) * 0.6f);
+            }
+            else if (skill.CharacterAttribute == DefaultCharacterAttributes.Intelligence || skill.CharacterAttribute == BKAttributes.Instance.Wisdom)
+            {
+                result.AddFactor(hero.GetTraitLevel(BKTraits.Instance.AptitudeErudition) * 0.6f);
+            }
+
+            return result.ResultNumber;
         }
 
-        public ExplainedNumber CalculateLearningRate(Hero hero, int attributeValue, int focusValue, int skillValue, int characterLevel, TextObject attributeName, bool includeDescriptions = false)
+        public ExplainedNumber CalculateLearningRate(Hero hero, int attributeValue, int focusValue, int skillValue, TextObject attributeName, bool includeDescriptions = false)
         {
             if (skillValue >= 500)
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BannerKings.Behaviours.Criminality;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
 using BannerKings.Behaviours.Workshops;
@@ -6,6 +7,8 @@ using BannerKings.Components;
 using BannerKings.Managers;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Duties;
 using BannerKings.Managers.Education;
@@ -24,7 +27,9 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Vlandia;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Kingdoms.Contract;
+using BannerKings.Managers.Kingdoms.Council;
 using BannerKings.Managers.Kingdoms.Peerage;
+using BannerKings.Managers.Kingdoms.Succession;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
@@ -34,10 +39,12 @@ using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.SaveSystem;
+using static BannerKings.Managers.Kingdoms.Council.BKCouncilPositionDecision;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
 using static BannerKings.Managers.Policies.BKGarrisonPolicy;
@@ -89,7 +96,6 @@ namespace BannerKings
             AddEnumDefinition(typeof(InheritanceType), 30);
             AddEnumDefinition(typeof(GenderLaw), 31);
             AddClassDefinition(typeof(TitleManager), 32);
-            AddEnumDefinition(typeof(CouncilPosition), 33);
             AddClassDefinition(typeof(CouncilMember), 34);
             AddClassDefinition(typeof(CouncilData), 35);
             AddClassDefinition(typeof(CourtManager), 36);
@@ -172,6 +178,14 @@ namespace BannerKings
             AddClassDefinition(typeof(GarrisonPartyComponent), 113);
             AddClassDefinition(typeof(WorkshopData), 114);
             AddClassDefinition(typeof(TreeloreFaith), 115);
+            AddClassDefinition(typeof(CouncilTask), 116);
+            AddClassDefinition(typeof(TargetedCouncilTask<>), 117);
+            AddClassDefinition(typeof(OverseeSanitation), 118);
+            AddClassDefinition(typeof(BanditHeroComponent), 124);
+
+            AddClassDefinition(typeof(Crime), 129);
+
+            AddClassDefinition(typeof(BKCouncilPositionDecision), 140);
         }
 
         protected override void DefineContainerDefinitions()
@@ -219,6 +233,9 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Town, Feast>)); 
             ConstructContainerDefinition(typeof(Dictionary<Hero, List<Estate>>));
             ConstructContainerDefinition(typeof(Dictionary<Workshop, WorkshopData>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, MobileParty>));
+            ConstructContainerDefinition(typeof(List<Crime>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, List<Crime>>));
         }
     }
 }

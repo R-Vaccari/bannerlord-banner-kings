@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours;
 using BannerKings.Components;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
@@ -6,17 +6,13 @@ using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.Core;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Models.Vanilla
 {
     class BKPartyLimitModel : CalradiaExpandedKingdoms.Models.CEKPartySizeLimitModel
     {
-        public override int GetAssumedPartySizeForLordParty(Hero leaderHero, IFaction partyMapFaction, Clan actualClan)
-        {
-            return base.GetAssumedPartySizeForLordParty(leaderHero, partyMapFaction, actualClan);
-        }
-
-
         public override ExplainedNumber GetPartyMemberSizeLimit(PartyBase party, bool includeDescriptions = false)
         {
             var baseResult = base.GetPartyMemberSizeLimit(party, includeDescriptions);
@@ -50,6 +46,13 @@ namespace BannerKings.Models.Vanilla
                     {
                         baseResult.AddFactor(0.15f, DefaultLifestyles.Instance.Kheshig.Name);
                     }
+                }
+
+                if (party.MobileParty.IsBandit && party.MobileParty.PartyComponent is BanditHeroComponent)
+                {
+                    baseResult.Add(150f, new TextObject("{=C0MCMXZ1}Bandit horde"));
+                    baseResult.Add(party.MobileParty.LeaderHero.GetSkillValue(DefaultSkills.Roguery) * 1.5f,
+                        DefaultSkills.Roguery.Name);
                 }
             }
 

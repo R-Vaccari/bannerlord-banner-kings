@@ -242,13 +242,13 @@ namespace BannerKings.Behaviours.Marriage
                     int playerRank = int.MaxValue;
                     if (playerTitle != null)
                     {
-                        playerRank = (int)playerTitle.type;
+                        playerRank = (int)playerTitle.TitleType;
                     }
 
                     int proposedRank = int.MaxValue;
                     if (proposedTitle != null)
                     {
-                        proposedRank = (int)proposedTitle.type;
+                        proposedRank = (int)proposedTitle.TitleType;
                     }
 
                     isPlayerHigherRanking = playerRank < proposedRank;
@@ -473,7 +473,7 @@ namespace BannerKings.Behaviours.Marriage
                            Utils.Helpers.SetAlliance(Clan.PlayerClan, Hero.OneToOneConversationHero.Clan);
                        }
 
-                       if (proposedMarriage.Feast)
+                       if (proposedMarriage.Feast && proposedMarriage.FinalClan.Kingdom != null)
                        {
                            AnnounceBetrothal();
                            var town = proposedMarriage.FinalClan.Fiefs.GetRandomElement();

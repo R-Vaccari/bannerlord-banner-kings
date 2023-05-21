@@ -34,7 +34,8 @@ namespace BannerKings.Managers
             Craftsmen,
             Serfs,
             Slaves,
-            None
+            None,
+            Tenants
         }
 
         public PopulationManager(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans)
@@ -50,7 +51,7 @@ namespace BannerKings.Managers
 
         [SaveableProperty(3)] private Dictionary<Hero, List<Estate>> Estates { get; set; }
 
-        public MBReadOnlyList<MobileParty> AllParties => Caravans.GetReadOnlyList();
+        public MBReadOnlyList<MobileParty> AllParties => new MBReadOnlyList<MobileParty>(Caravans);
 
         public void PostInitialize()
         {
@@ -188,6 +189,11 @@ namespace BannerKings.Managers
         public List<Estate> GetEstates(Hero owner)
         {
             var list = new List<Estate>();
+            if (owner == null)
+            {
+                return list;
+            }
+
             if (Estates.ContainsKey(owner))
             {
                 list = Estates[owner];
@@ -230,10 +236,25 @@ namespace BannerKings.Managers
 
             if (villageData.Village.IsFarmingVillage())
             {
+                float poultry = 1f;
+                string culture = villageData.Village.Settlement.Culture.StringId;
+                if (culture is "aserai")
+                {
+                    poultry = 0.15f;
+                }
+                else if (culture is "sturgia" or "khuzait")
+                {
+                    poultry = 0.45f;
+                }
+                else if (culture is "empire" or "battania")
+                {
+                    poultry = 0.75f;
+                }
+
                 productions.Add(
-                    new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("chicken"), 1f));
+                    new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("chicken"), poultry));
                 productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("goose"),
-                    1f));
+                    poultry));
             }
 
             if (type == DefaultVillageTypes.OliveTrees)
@@ -256,7 +277,6 @@ namespace BannerKings.Managers
 
                 productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Honey, honey));
             }
-
 
             var grainTuple = productions.FirstOrDefault(x => x.Item1 == DefaultItems.Grain);
             if (grainTuple.Item1 != null)
@@ -451,11 +471,15 @@ namespace BannerKings.Managers
         {
             var nobleFactor = 1f;
             var slaveFactor = 1f;
+            float serfFactor = 1f;
+            float tenantFactor = 1f;
            
             if (!firstTime)
             {
                 nobleFactor = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, PopType.Nobles).ResultNumber;
                 slaveFactor = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, PopType.Slaves).ResultNumber;
+                serfFactor = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, PopType.Serfs).ResultNumber;
+                tenantFactor = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, PopType.Tenants).ResultNumber;
             }
 
             if (settlement.IsCastle)
@@ -464,7 +488,8 @@ namespace BannerKings.Managers
                 {
                     {PopType.Nobles, new[] {0.07f * nobleFactor, 0.09f * nobleFactor}},
                     {PopType.Craftsmen, new[] {0.03f, 0.05f}},
-                    {PopType.Serfs, new[] {0.75f, 0.8f}},
+                    {PopType.Serfs, new[] {0.75f * serfFactor, 0.8f * serfFactor}},
+                    {PopType.Tenants, new[] {0.75f * tenantFactor, 0.8f * tenantFactor}},
                     {PopType.Slaves, new[] {0.1f * slaveFactor, 0.15f * slaveFactor}}
                 };
             }
@@ -477,7 +502,8 @@ namespace BannerKings.Managers
                     {
                         {PopType.Nobles, new[] {0.035f * nobleFactor, 0.055f * nobleFactor}},
                         {PopType.Craftsmen, new[] {0.035f, 0.55f}},
-                        {PopType.Serfs, new[] {0.7f, 0.8f}},
+                        {PopType.Serfs, new[] {0.7f * serfFactor, 0.8f * serfFactor}},
+                        {PopType.Tenants, new[] {0.7f * tenantFactor, 0.8f * tenantFactor}},
                         {PopType.Slaves, new[] {0.1f * slaveFactor, 0.2f * slaveFactor}}
                     };
                 }
@@ -488,7 +514,8 @@ namespace BannerKings.Managers
                     {
                         {PopType.Nobles, new[] {0.02f * nobleFactor, 0.04f * nobleFactor}},
                         {PopType.Craftsmen, new[] {0.055f, 0.1f}},
-                        {PopType.Serfs, new[] {0.3f, 0.4f}},
+                        {PopType.Serfs, new[] {0.3f * serfFactor, 0.4f * serfFactor }},
+                        {PopType.Tenants, new[] {0.3f * tenantFactor, 0.4f * tenantFactor}},
                         {PopType.Slaves, new[] {0.6f * slaveFactor, 0.7f * slaveFactor}}
                     };
                 }
@@ -497,7 +524,8 @@ namespace BannerKings.Managers
                 {
                     {PopType.Nobles, new[] {0.025f * nobleFactor, 0.045f * nobleFactor}},
                     {PopType.Craftsmen, new[] {0.45f, 0.65f}},
-                    {PopType.Serfs, new[] {0.5f, 0.7f}},
+                    {PopType.Serfs, new[] {0.5f * serfFactor, 0.7f * serfFactor }},
+                    {PopType.Tenants, new[] {0.5f * tenantFactor, 0.7f * tenantFactor}},
                     {PopType.Slaves, new[] {0.4f * slaveFactor, 0.5f * slaveFactor}}
                 };
             }
@@ -508,7 +536,8 @@ namespace BannerKings.Managers
                 {
                     {PopType.Nobles, new[] {0.01f * nobleFactor, 0.03f * nobleFactor}},
                     {PopType.Craftsmen, new[] {0.06f, 0.08f}},
-                    {PopType.Serfs, new[] {0.6f, 0.7f}},
+                    {PopType.Serfs, new[] {0.6f * serfFactor, 0.7f * serfFactor }},
+                    {PopType.Tenants, new[] {0.6f * tenantFactor, 0.7f * tenantFactor}},
                     {PopType.Slaves, new[] {0.1f * slaveFactor, 0.2f * slaveFactor}}
                 };
             }

@@ -38,7 +38,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             settlements = BannerKingsConfig.Instance.TitleManager.GetAllTitlesByType(TitleType.Dukedom)
                 .Where(t => duchyStringIds.Contains(t.shortName.ToString()))
-                .SelectMany(t => t.vassals.Select(v => v.fief))
+                .SelectMany(t => t.Vassals.Select(v => v.Fief))
                 .ToList();
         }
 
@@ -52,7 +52,12 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             failedReasons = new List<TextObject>();
 
-            var referenceSettlement = settlements.First();
+            var referenceSettlement = settlements.FirstOrDefault();
+            if (referenceSettlement == null)
+            {
+                return false;
+            }
+
             var referenceHero = Hero.MainHero;
             var (gold, influence) = GetCosts(referenceHero);
             var culture = Utils.Helpers.GetCulture("empire");
@@ -105,19 +110,18 @@ namespace BannerKings.Managers.Goals.Decisions
                 var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(referenceHero);
                 if (religion == null || religion.Faith.FaithGroup != DefaultFaiths.Instance.ImperialGroup)
                 {
-                    var amra = BannerKingsConfig.Instance.ReligionsManager.GetReligionById("amra");
                     failedReasons.Add(new TextObject("{=gcdyXvXR}You do not adhere to a faith that is part of the {RELIGION} faith group.")
                         .SetTextVariable("RELIGION", DefaultFaiths.Instance.ImperialGroup.Name));
                 }
 
-                failedReasons.AddRange
-                (
-                    from settlement in settlements
-                    let title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement)
-                    where title.deFacto.MapFaction != referenceHero.MapFaction
-                    select new TextObject("{=btzaJMMD}Your kingdom is not de facto ruler of {SETTLEMENT}")
-                        .SetTextVariable("SETTLEMENT", settlement.EncyclopediaLinkWithName)
-                );
+                foreach (Settlement settlement in settlements)
+                {
+                    if (settlement.MapFaction != referenceHero.MapFaction)
+                    {
+                        failedReasons.Add(new TextObject("{=btzaJMMD}Your kingdom is not de facto ruler of {SETTLEMENT}")
+                        .SetTextVariable("SETTLEMENT", settlement.EncyclopediaLinkWithName));
+                    }
+                }
             }
 
             return failedReasons.IsEmpty();

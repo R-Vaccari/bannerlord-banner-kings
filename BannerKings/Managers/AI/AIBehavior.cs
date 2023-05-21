@@ -23,8 +23,8 @@ namespace BannerKings.Managers.AI
             {
                 switch (landed)
                 {
-                    case true when title.fief == null || title.deFacto != giver:
-                    case false when title.fief != null:
+                    case true when title.Fief == null || title.deFacto != giver:
+                    case false when title.Fief != null:
                         continue;
                 }
 
@@ -34,7 +34,7 @@ namespace BannerKings.Managers.AI
                     continue;
                 }
 
-                if (title.type == TitleType.Lordship &&
+                if (title.TitleType == TitleType.Lordship &&
                     BannerKingsConfig.Instance.StabilityModel.IsHeroOverVassalLimit(giver))
                 {
                     continue;
@@ -65,18 +65,18 @@ namespace BannerKings.Managers.AI
                 score += giver.GetRelation(leader);
                 if (pair.Value.Count > 0)
                 {
-                    var type = titleToGive.type;
+                    var type = titleToGive.TitleType;
                     foreach (var title in pair.Value)
                     {
-                        if (title.type == type)
+                        if (title.TitleType == type)
                         {
                             score -= 60;
                         }
-                        else if (title.type < type)
+                        else if (title.TitleType < type)
                         {
                             score -= 120;
                         }
-                        else if (titleToGive.vassals.Contains(title))
+                        else if (titleToGive.Vassals.Contains(title))
                         {
                             score += 40;
                         }
@@ -96,7 +96,7 @@ namespace BannerKings.Managers.AI
         {
             var candidates = new List<(Hero, float)>();
 
-            if (titleToGive.type != TitleType.Lordship)
+            if (titleToGive.TitleType != TitleType.Lordship)
             {
                 var vassals = BannerKingsConfig.Instance.TitleManager.CalculateVassals(giver.Clan);
                 foreach (var pair in vassals)
@@ -111,18 +111,18 @@ namespace BannerKings.Managers.AI
                     score += giver.GetRelation(leader);
                     if (pair.Value.Count > 0)
                     {
-                        var type = titleToGive.type;
+                        var type = titleToGive.TitleType;
                         foreach (var title in pair.Value)
                         {
-                            if (title.type == type)
+                            if (title.TitleType == type)
                             {
                                 score -= 60;
                             }
-                            else if (title.type < type)
+                            else if (title.TitleType < type)
                             {
                                 score -= 120;
                             }
-                            else if (titleToGive.vassals.Contains(title))
+                            else if (titleToGive.Vassals.Contains(title))
                             {
                                 score += 40;
                             }

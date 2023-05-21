@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -53,10 +54,8 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(new TextObject("{=nsQZHLQf}A contract-altering proposal is already being voted on."));
             }
 
-
             return failedReasons.IsEmpty();
         }
-
 
         internal override void ShowInquiry()
         {
@@ -91,7 +90,6 @@ namespace BannerKings.Managers.Goals.Decisions
                 elements.Add(new InquiryElement(option, option.Name.ToString(), null, true, option.Description.ToString()));
             }
 
-
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=mXhTPXZq}Contract Change").ToString(),
                 new TextObject("{=B5e1fznG}Propose a change to you faction's contract. These changes may be the form of governance, succession, clan inheritance or gender laws.").ToString(),
@@ -102,8 +100,11 @@ namespace BannerKings.Managers.Goals.Decisions
                 GameTexts.FindText("str_cancel").ToString(),
                 delegate (List<InquiryElement> selectedOptions)
                 {
-                    chosenAction = (ContractChangeOption)selectedOptions.First().Identifier;
-                    ApplyGoal();
+                    if (selectedOptions.Count > 0)
+                    {
+                        chosenAction = (ContractChangeOption)selectedOptions.First().Identifier;
+                        ApplyGoal();
+                    }
                 }, 
                 null, 
                 string.Empty));
@@ -124,12 +125,12 @@ namespace BannerKings.Managers.Goals.Decisions
             var laws = new List<InquiryElement>();
             foreach (var type in BannerKingsConfig.Instance.TitleManager.GetGenderLawTypes())
             {
-                if (kingdom != null && type != title.contract.GenderLaw)
+                if (kingdom != null && type != title.Contract.GenderLaw)
                 {
                     var decision = new BKGenderDecision(Clan.PlayerClan, type, title);
                     var text = new TextObject("{=F7iMS7Tz}{LAW} - ({SUPPORT}% support)");
                     text.SetTextVariable("LAW", type.ToString());
-                    text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
+                    text.SetTextVariable("SUPPORT", new KingdomElection(decision).GetLikelihoodForOutcome(0).ToString("0.00"));
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
                         Utils.Helpers.GetGenderLawDescription(type)));
                 }
@@ -143,12 +144,12 @@ namespace BannerKings.Managers.Goals.Decisions
             var laws = new List<InquiryElement>();
             foreach (var type in BannerKingsConfig.Instance.TitleManager.GetInheritanceTypes())
             {
-                if (kingdom != null && type != title.contract.Inheritance)
+                if (kingdom != null && type != title.Contract.Inheritance)
                 {
                     var decision = new BKInheritanceDecision(Clan.PlayerClan, type, title);
                     var text = new TextObject("{=F7iMS7Tz}{LAW} - ({SUPPORT}% support)");
                     text.SetTextVariable("LAW", type.ToString());
-                    text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
+                    text.SetTextVariable("SUPPORT", new KingdomElection(decision).GetLikelihoodForOutcome(0).ToString("0.00"));
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
                         Utils.Helpers.GetInheritanceDescription(type)));
                 }
@@ -160,14 +161,14 @@ namespace BannerKings.Managers.Goals.Decisions
         private List<InquiryElement> GetSuccessions(Kingdom kingdom, FeudalTitle title)
         {
             var laws = new List<InquiryElement>();
-            foreach (var type in SuccessionHelper.GetValidSuccessions(title.contract.Government))
+            foreach (var type in SuccessionHelper.GetValidSuccessions(title.Contract.Government))
             {
-                if (kingdom != null && type != title.contract.Succession)
+                if (kingdom != null && type != title.Contract.Succession)
                 {
                     var decision = new BKSuccessionDecision(Clan.PlayerClan, type, title);
                     var text = new TextObject("{=F7iMS7Tz}{LAW} - ({SUPPORT}% support)");
                     text.SetTextVariable("LAW", Utils.Helpers.GetSuccessionTypeName(type));
-                    text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
+                    text.SetTextVariable("SUPPORT", new KingdomElection(decision).GetLikelihoodForOutcome(0).ToString("0.00"));
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
                         Utils.Helpers.GetSuccessionTypeDescription(type)));
                 }
@@ -181,12 +182,12 @@ namespace BannerKings.Managers.Goals.Decisions
             var laws = new List<InquiryElement>();
             foreach (var type in BannerKingsConfig.Instance.TitleManager.GetGovernmentTypes())
             {
-                if (kingdom != null && type != title.contract.Government)
+                if (kingdom != null && type != title.Contract.Government)
                 {
                     var decision = new BKGovernmentDecision(Clan.PlayerClan, type, title);
                     var text = new TextObject("{=F7iMS7Tz}{LAW} - ({SUPPORT}% support)");
                     text.SetTextVariable("LAW", type.ToString());
-                    text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
+                    text.SetTextVariable("SUPPORT", new KingdomElection(decision).GetLikelihoodForOutcome(0).ToString("0.00"));
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
                         Utils.Helpers.GetGovernmentDescription(type)));
                 }
@@ -194,7 +195,6 @@ namespace BannerKings.Managers.Goals.Decisions
 
             return laws;
         }
-
 
         internal class ContractChangeOption
         {
@@ -229,10 +229,12 @@ namespace BannerKings.Managers.Goals.Decisions
                     string.Empty,
                     delegate (List<InquiryElement> x)
                     {
-                        GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -Influence);
-                        Decision.UpdateDecision((int)x[0].Identifier);
-                        Clan.PlayerClan.Kingdom.AddDecision(Decision, true);
-                        
+                        if (x.Count > 0)
+                        {
+                            GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -Influence);
+                            Decision.UpdateDecision((int)x[0].Identifier);
+                            Clan.PlayerClan.Kingdom.AddDecision(Decision, true);
+                        }
                     }, null, string.Empty));
             }
         }

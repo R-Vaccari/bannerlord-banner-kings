@@ -1,8 +1,10 @@
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Titles;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -15,36 +17,51 @@ namespace BannerKings.UI.Titles
         private DecisionElement foundKingdom;
         private MBBindingList<DecisionElement> decisions;
         private MBBindingList<InformationElement> titleInfo;
-        private readonly Kingdom kingdom;
+        private Kingdom kingdom;
         private string name, demesneText;
-        private readonly FeudalTitle title;
+        private FeudalTitle title;
         private TitleElementVM tree;
+        private BannerKingsSelectorVM<KingdomSelectorItem> selector;
 
         public DemesneHierarchyVM(FeudalTitle title, Kingdom kingdom) : base(null, false)
         {
             this.title = title;
-            if (kingdom == null)
-            {
-                kingdom = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title);
-            }
-            this.kingdom = kingdom;
             decisions = new MBBindingList<DecisionElement>();
-            if (title != null)
-            {
-                Tree = new TitleElementVM(title, this);
-                if (kingdom != null)
-                {
-                    Banner = new ImageIdentifierVM(BannerCode.CreateFrom(kingdom.Banner), true);
-                } 
-                else
-                {
-                    Banner = new ImageIdentifierVM(BannerCode.CreateFrom(title.deJure.Clan.Banner), true);
-                }
-                Name = title.FullName.ToString();
-            }
-
             TitleInfo = new MBBindingList<InformationElement>();
             DemesneText = new TextObject("{=t8gCwGPJ}Demesne Information").ToString();
+
+            Selector = new BannerKingsSelectorVM<KingdomSelectorItem>(true, 0, null);
+
+            int selected = 0;
+            int index = 0;
+            foreach (Kingdom k in Kingdom.All)
+            {
+                var kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(k);
+                if (kingdomTitle == null)
+                {
+                    continue;
+                }
+
+                Selector.AddItem(new KingdomSelectorItem(k));
+                if (k == Hero.MainHero.CurrentSettlement.MapFaction)
+                {
+                    selected = index;
+                }
+
+                index++;
+            }
+
+            Selector.SelectedIndex = selected;
+            Selector.SetOnChangeAction(OnChange);
+        }
+
+        private void OnChange(SelectorVM<KingdomSelectorItem> obj)
+        {
+            if (obj.SelectedItem != null)
+            {
+                title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(obj.SelectedItem.Kingdom);
+                RefreshValues();
+            }
         }
 
         public int Population { get; set; } = 0;
@@ -54,6 +71,84 @@ namespace BannerKings.UI.Titles
 
         [DataSourceProperty]
         public MBBindingList<InformationElement> TitleInfo { get => titleInfo; set => titleInfo = value; }
+
+        public override void RefreshValues()
+        {
+            base.RefreshValues();
+            Decisions.Clear();
+            TitleInfo.Clear();
+
+            Population = 0;
+            if (title != null)
+            {
+                kingdom = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title);
+                Tree = new TitleElementVM(title, this);
+                if (kingdom != null)
+                {
+                    Banner = new ImageIdentifierVM(BannerCode.CreateFrom(kingdom.Banner), true);
+                }
+                else
+                {
+                    Banner = new ImageIdentifierVM(BannerCode.CreateFrom(title.deJure.Clan.Banner), true);
+                }
+                Name = title.FullName.ToString();
+            }
+
+            if (title?.Contract == null)
+            {
+                return;
+            }
+
+            var allSetup = kingdom != null && kingdom == BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title);
+            var contractButton = new DecisionElement().SetAsButtonOption(new TextObject("{=tpH62HBy}Contract").ToString(),
+                () => BannerKingsConfig.Instance.TitleManager.ShowContract(kingdom.Leader,
+                    GameTexts.FindText("str_done").ToString()),
+                new TextObject("{=yRn9AcwU}Review this kingdom's contract, signed by lords that join it."));
+            contractButton.Enabled = allSetup;
+
+            Contract = contractButton;
+
+            TitleInfo.Add(new InformationElement(new TextObject("{=!}Total Population:").ToString(),
+                Population.ToString(), 
+                new TextObject("{=g4pjb4j4}The total population within the fiefs in this hierarchy regardless of who controls them.").ToString()));
+
+            var peerResult = BannerKingsConfig.Instance.InfluenceModel.GetMinimumPeersQuantity(kingdom);
+            int peers = (int)peerResult.ResultNumber;
+            TitleInfo.Add(new InformationElement(new TextObject("{=OD6eU7dQ}Minimum Peers:").ToString(),
+                peers.ToString(), 
+                new TextObject("{=H1pvLYrA}The minimum amount of full Peerage noble houses this realm requires. A minimum amount of Peers is required to maintain the power equilibrium in the realm, so that the ruler does not monopolize voting and fief rights.\n\n{EXPLANATION}")
+                .SetTextVariable("EXPLANATION", peerResult.GetExplanations()).ToString()));
+
+            TitleInfo.Add(new InformationElement(new TextObject("{=aoZYxUYV}Government Type:").ToString(),
+             title.Contract.Government.ToString(),
+             new TextObject("{=BvJb2QSM}The dukedom this settlement is associated with.").ToString()));
+            TitleInfo.Add(new InformationElement(new TextObject("{=HJcuXO5J}Succession Type:").ToString(),
+                title.Contract.Succession.ToString().Replace("_", " "),
+                new TextObject("{=qMmbExKv}The clan succession form associated with this title. Successions only apply to factions.")
+                    .ToString()));
+            TitleInfo.Add(new InformationElement(new TextObject("{=OTuRSNZ5}Inheritance Type:").ToString(),
+                title.Contract.Inheritance.ToString(),
+                new TextObject("{=Y3mAnDLj}The inheritance form associated with this settlement's title. Inheritance dictates who leads the clan after the leader's death.")
+                    .ToString()));
+            TitleInfo.Add(new InformationElement(new TextObject("{=vCryQjBB}Gender Law:").ToString(),
+                title.Contract.GenderLaw.ToString(),
+                new TextObject("{=ArvZcS5p}The gender law associated with this settlement's title. Gender law affects how inheritance and other aspects of rule work.")
+                    .ToString()));
+        }
+
+        [DataSourceProperty]
+        public BannerKingsSelectorVM<KingdomSelectorItem> Selector
+        {
+            get => selector;
+            set
+            {
+                if (value != selector)
+                {
+                    selector = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
 
         [DataSourceProperty]
         public DecisionElement FoundKingdom
@@ -137,46 +232,6 @@ namespace BannerKings.UI.Titles
                     OnPropertyChangedWithValue(value);
                 }
             }
-        }
-
-        public override void RefreshValues()
-        {
-            base.RefreshValues();
-            Decisions.Clear();
-            TitleInfo.Clear();
-
-            if (title?.contract == null)
-            {
-                return;
-            }
-
-            var allSetup = kingdom != null && kingdom == BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title);
-            var contractButton = new DecisionElement().SetAsButtonOption(new TextObject("{=tpH62HBy}Contract").ToString(),
-                () => BannerKingsConfig.Instance.TitleManager.ShowContract(kingdom.Leader,
-                    GameTexts.FindText("str_done").ToString()),
-                new TextObject("{=yRn9AcwU}Review this kingdom's contract, signed by lords that join it."));
-            contractButton.Enabled = allSetup;
-
-            Contract = contractButton;
-
-            TitleInfo.Add(new InformationElement(new TextObject("{=bLbvfBnb}Total Population").ToString(),
-                Population.ToString(), string.Empty));
-
-            TitleInfo.Add(new InformationElement(new TextObject("{=aoZYxUYV}Government Type:").ToString(),
-             title.contract.Government.ToString(),
-             new TextObject("{=BvJb2QSM}The dukedom this settlement is associated with.").ToString()));
-            TitleInfo.Add(new InformationElement(new TextObject("{=HJcuXO5J}Succession Type:").ToString(),
-                title.contract.Succession.ToString().Replace("_", " "),
-                new TextObject("{=qMmbExKv}The clan succession form associated with this title. Successions only apply to factions.")
-                    .ToString()));
-            TitleInfo.Add(new InformationElement(new TextObject("{=OTuRSNZ5}Inheritance Type:").ToString(),
-                title.contract.Inheritance.ToString(),
-                new TextObject("{=Y3mAnDLj}The inheritance form associated with this settlement's title. Inheritance dictates who leads the clan after the leader's death.")
-                    .ToString()));
-            TitleInfo.Add(new InformationElement(new TextObject("{=vCryQjBB}Gender Law:").ToString(),
-                title.contract.GenderLaw.ToString(),
-                new TextObject("{=ArvZcS5p}The gender law associated with this settlement's title. Gender law affects how inheritance and other aspects of rule work.")
-                    .ToString()));
         }
     }
 }

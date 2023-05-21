@@ -1,0 +1,1299 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NPCCharacters>
+
+
+	<NPCCharacter id="bannerkings_bandithero_sea_raiders_sturgia_1" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.sturgia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_sturgia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="3" />
+			<Trait id="Commander" value="6" />
+			<Trait id="Politician" value="6" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="HuscarlFightingSkills" value="3" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_sturgia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_sturgia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_sea_raiders_sturgia_2" name="{=!}{HERO.FIRSTNAME} the Fox" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.sturgia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_sturgia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="2" />
+			<Trait id="Commander" value="11" />
+			<Trait id="Politician" value="4" />
+			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="HuscarlFightingSkills" value="2" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_sturgia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_sturgia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_sea_raiders_sturgia_3" name="{=!}Silver-Tongue {HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.sturgia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_sturgia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="3" />
+			<Trait id="Commander" value="4" />
+			<Trait id="Politician" value="12" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="HuscarlFightingSkills" value="3" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_sturgia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_sturgia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_sea_raiders_sturgia_4" name="{=!}{HERO.FIRSTNAME} the Bear" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.sturgia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_sturgia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="5" />
+			<Trait id="Commander" value="5" />
+			<Trait id="Politician" value="1" />
+			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="HuscarlFightingSkills" value="5" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_sturgia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_sturgia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	
+	<NPCCharacter id="bannerkings_bandithero_forest_bandits_battania_1" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.battania"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_battania" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="3" />
+			<Trait id="Commander" value="6" />
+			<Trait id="Politician" value="6" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="ArcherFIghtingSkills" value="2" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
+			<EquipmentSet id="npc_wanderer_equipment_template_empire" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_forest_bandits_battania_2" name="{=!}{HERO.FIRSTNAME} the Fox" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.battania"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_battania" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="2" />
+			<Trait id="Commander" value="11" />
+			<Trait id="Politician" value="4" />
+			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="ArcherFIghtingSkills" value="2" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
+			<EquipmentSet id="npc_wanderer_equipment_template_empire" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_forest_bandits_battania_3" name="{=!}Sharp-Tongue {HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.battania"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_battania" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="3" />
+			<Trait id="Commander" value="4" />
+			<Trait id="Politician" value="12" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="ArcherFIghtingSkills" value="3" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
+			<EquipmentSet id="npc_wanderer_equipment_template_empire" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_forest_bandits_battania_4" name="{=!}{HERO.FIRSTNAME} the Hog" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.battania"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_battania" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="5" />
+			<Trait id="Commander" value="5" />
+			<Trait id="Politician" value="1" />
+			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="ArcherFIghtingSkills" value="5" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
+			<EquipmentSet id="npc_wanderer_equipment_template_empire" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_desert_bandits_aserai_1" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.aserai"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_aserai" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="3" />
+			<Trait id="Commander" value="6" />
+			<Trait id="Politician" value="6" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="CavalryFightingSkills" value="2" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_aserai" />
+			<EquipmentSet id="npc_wanderer_equipment_template_aserai" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_desert_bandits_aserai_2" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.aserai"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_aserai" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="2" />
+			<Trait id="Commander" value="11" />
+			<Trait id="Politician" value="4" />
+			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="CavalryFightingSkills" value="2" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_aserai" />
+			<EquipmentSet id="npc_wanderer_equipment_template_aserai" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_desert_bandits_aserai_3" name="{=!}Sharp-Tongue {HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.aserai"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_aserai" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="3" />
+			<Trait id="Commander" value="4" />
+			<Trait id="Politician" value="12" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="CavalryFightingSkills" value="3" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_aserai" />
+			<EquipmentSet id="npc_wanderer_equipment_template_aserai" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_desert_bandits_aserai_4" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.aserai"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_aserai" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="5" />
+			<Trait id="Commander" value="5" />
+			<Trait id="Politician" value="1" />
+			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="CavalryFightingSkills" value="5" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_aserai" />
+			<EquipmentSet id="npc_wanderer_equipment_template_aserai" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	
+	<NPCCharacter id="bannerkings_bandithero_steppe_bandits_khuzait_1" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.khuzait"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_khuzait" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="3" />
+			<Trait id="Commander" value="6" />
+			<Trait id="Politician" value="6" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="HorseArcherFightingSkills" value="2" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_khuzait" />
+			<EquipmentSet id="npc_wanderer_equipment_template_khuzait" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_steppe_bandits_khuzait_2" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.khuzait"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_khuzait" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="4" />
+			<Trait id="Commander" value="11" />
+			<Trait id="Politician" value="4" />
+			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="HorseArcherFightingSkills" value="2" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_khuzait" />
+			<EquipmentSet id="npc_wanderer_equipment_template_khuzait" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_steppe_bandits_khuzait_3" name="{=!}Sharp-Tongue {HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.khuzait"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_khuzait" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="3" />
+			<Trait id="Commander" value="4" />
+			<Trait id="Politician" value="12" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="HorseArcherFightingSkills" value="3" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_khuzait" />
+			<EquipmentSet id="npc_wanderer_equipment_template_khuzait" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_steppe_bandits_khuzait_4" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.khuzait"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_khuzait" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="5" />
+			<Trait id="Commander" value="5" />
+			<Trait id="Politician" value="1" />
+			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="HorseArcherFightingSkills" value="5" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_khuzait" />
+			<EquipmentSet id="npc_wanderer_equipment_template_khuzait" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	
+	<NPCCharacter id="bannerkings_bandithero_mountain_bandits_vlandia_1" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.vlandia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_vlandia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="3" />
+			<Trait id="Commander" value="6" />
+			<Trait id="Politician" value="6" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" /> 
+			<Trait id="PeltastFightingSkills" value="2" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_vlandia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_vlandia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_mountain_bandits_vlandia_2" name="{=!}{HERO.FIRSTNAME} the Fox" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.vlandia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_vlandia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="2" />
+			<Trait id="Commander" value="11" />
+			<Trait id="Politician" value="4" />
+			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="PeltastFightingSkills" value="2" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_vlandia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_vlandia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_mountain_bandits_vlandia_3" name="{=!}Sharp-Tongue {HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.vlandia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_vlandia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="3" />
+			<Trait id="Commander" value="4" />
+			<Trait id="Politician" value="12" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="PeltastFightingSkills" value="3" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_vlandia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_vlandia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_mountain_bandits_vlandia_4" name="{=!}Dimwit {HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.vlandia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_vlandia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="5" />
+			<Trait id="Commander" value="5" />
+			<Trait id="Politician" value="1" />
+			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
+			<Trait id="PeltastFightingSkills" value="5" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_vlandia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_vlandia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+
+
+	<NPCCharacter id="bannerkings_bandithero_looters_battania_1" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.battania"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_battania" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="5" />
+			<Trait id="Commander" value="6" />
+			<Trait id="Politician" value="6" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
+			<EquipmentSet id="npc_wanderer_equipment_template_empire" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_battania_2" name="{=!}{HERO.FIRSTNAME} the Fox" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.battania"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_battania" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="4" />
+			<Trait id="Commander" value="11" />
+			<Trait id="Politician" value="4" />
+			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
+			<EquipmentSet id="npc_wanderer_equipment_template_empire" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_battania_3" name="{=!}Sharp-Tongue {HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.battania"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_battania" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="6" />
+			<Trait id="Commander" value="4" />
+			<Trait id="Politician" value="12" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
+			<EquipmentSet id="npc_wanderer_equipment_template_empire" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_battania_4" name="{=!}{HERO.FIRSTNAME} the Hog" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.battania"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_battania" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="10" />
+			<Trait id="Commander" value="5" />
+			<Trait id="Politician" value="1" />
+			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
+			<EquipmentSet id="npc_wanderer_equipment_template_empire" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_empire_1" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.empire"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_empire" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="5" />
+			<Trait id="Commander" value="6" />
+			<Trait id="Politician" value="6" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
+			<EquipmentSet id="npc_wanderer_equipment_template_empire" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_empire_2" name="{=!}{HERO.FIRSTNAME} the Sly" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.empire"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_empire" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="4" />
+			<Trait id="Commander" value="11" />
+			<Trait id="Politician" value="4" />
+			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
+			<EquipmentSet id="npc_wanderer_equipment_template_empire" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_empire_3" name="{=!}Quick-Witted {HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.empire"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_empire" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="6" />
+			<Trait id="Commander" value="4" />
+			<Trait id="Politician" value="12" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
+			<EquipmentSet id="npc_wanderer_equipment_template_empire" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_empire_4" name="{=!}{HERO.FIRSTNAME} the Brute" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.empire"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_empire" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="10" />
+			<Trait id="Commander" value="5" />
+			<Trait id="Politician" value="1" />
+			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_empire" />
+			<EquipmentSet id="npc_wanderer_equipment_template_empire" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_sturgia_1" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.sturgia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_sturgia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="5" />
+			<Trait id="Commander" value="6" />
+			<Trait id="Politician" value="6" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_sturgia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_sturgia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_sturgia_2" name="{=!}{HERO.FIRSTNAME} the Fox" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.sturgia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_sturgia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="4" />
+			<Trait id="Commander" value="11" />
+			<Trait id="Politician" value="4" />
+			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_sturgia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_sturgia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_sturgia_3" name="{=!}Silver-Tongue {HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.sturgia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_sturgia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="6" />
+			<Trait id="Commander" value="4" />
+			<Trait id="Politician" value="12" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_sturgia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_sturgia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_sturgia_4" name="{=!}{HERO.FIRSTNAME} the Bear" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.sturgia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_sturgia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="10" />
+			<Trait id="Commander" value="5" />
+			<Trait id="Politician" value="1" />
+			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_sturgia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_sturgia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_aserai_1" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.aserai"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_aserai" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="5" />
+			<Trait id="Commander" value="6" />
+			<Trait id="Politician" value="6" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_aserai" />
+			<EquipmentSet id="npc_wanderer_equipment_template_aserai" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_aserai_2" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.aserai"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_aserai" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="4" />
+			<Trait id="Commander" value="11" />
+			<Trait id="Politician" value="4" />
+			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_aserai" />
+			<EquipmentSet id="npc_wanderer_equipment_template_aserai" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_aserai_3" name="{=!}Sharp-Tongue {HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.aserai"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_aserai" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="6" />
+			<Trait id="Commander" value="4" />
+			<Trait id="Politician" value="12" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_aserai" />
+			<EquipmentSet id="npc_wanderer_equipment_template_aserai" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_aserai_4" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.aserai"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_aserai" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="10" />
+			<Trait id="Commander" value="5" />
+			<Trait id="Politician" value="1" />
+			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_aserai" />
+			<EquipmentSet id="npc_wanderer_equipment_template_aserai" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_khuzait_1" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.khuzait"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_khuzait" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="5" />
+			<Trait id="Commander" value="6" />
+			<Trait id="Politician" value="6" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_khuzait" />
+			<EquipmentSet id="npc_wanderer_equipment_template_khuzait" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_khuzait_2" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.khuzait"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_khuzait" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="4" />
+			<Trait id="Commander" value="11" />
+			<Trait id="Politician" value="4" />
+			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_khuzait" />
+			<EquipmentSet id="npc_wanderer_equipment_template_khuzait" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_khuzait_3" name="{=!}Sharp-Tongue {HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.khuzait"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_khuzait" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="6" />
+			<Trait id="Commander" value="4" />
+			<Trait id="Politician" value="12" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_khuzait" />
+			<EquipmentSet id="npc_wanderer_equipment_template_khuzait" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_khuzait_4" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.khuzait"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_khuzait" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="10" />
+			<Trait id="Commander" value="5" />
+			<Trait id="Politician" value="1" />
+			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_khuzait" />
+			<EquipmentSet id="npc_wanderer_equipment_template_khuzait" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_vlandia_1" name="{=!}{HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.vlandia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_vlandia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="5" />
+			<Trait id="Commander" value="6" />
+			<Trait id="Politician" value="6" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_vlandia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_vlandia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_vlandia_2" name="{=!}{HERO.FIRSTNAME} the Fox" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.vlandia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_vlandia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="4" />
+			<Trait id="Commander" value="11" />
+			<Trait id="Politician" value="4" />
+			<Trait id="ScoutSkills" value="8" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_vlandia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_vlandia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_vlandia_3" name="{=!}Sharp-Tongue {HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.vlandia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_vlandia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="6" />
+			<Trait id="Commander" value="4" />
+			<Trait id="Politician" value="12" />
+			<Trait id="ScoutSkills" value="5" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_vlandia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_vlandia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bandithero_looters_vlandia_4" name="{=!}Dimwit {HERO.FIRSTNAME}" 
+				voice="softspoken"
+				is_template="true" 
+				default_group="Infantry" 
+				is_hero="false" 
+				culture="Culture.vlandia"
+				is_hidden_encyclopedia="true"			
+				occupation="Bandit">
+		<face>
+			<face_key_template value="BodyProperty.fighter_vlandia" />
+		</face>
+		<skills></skills>
+		<Traits>
+			<Trait id="Fighter" value="10" />
+			<Trait id="Commander" value="5" />
+			<Trait id="Politician" value="1" />
+			<Trait id="ScoutSkills" value="7" />
+			<Trait id="RogueSkills" value="8" />
+		</Traits>
+		<Equipments>
+			<EquipmentSet id="npc_armed_wanderer_equipment_template_vlandia" />
+			<EquipmentSet id="npc_wanderer_equipment_template_vlandia" civilian="true" />
+		</Equipments>
+	</NPCCharacter>
+  
+
+   <NPCCharacter id="bk_bandit_nordling_2"
+                default_group="Infantry"
+                level="26"
+                name="{=!}Nordling Húskarl"
+                occupation="Bandit"
+                culture="Culture.sturgia">
+    <face>
+      <face_key_template value="BodyProperty.fighter_sturgia" />
+    </face>
+    <skills>
+      <skill id="Athletics"
+             value="140" />
+      <skill id="Riding"
+             value="45" />
+      <skill id="OneHanded"
+             value="160" />
+      <skill id="TwoHanded"
+             value="60" />
+      <skill id="Polearm"
+             value="70" />
+      <skill id="Bow"
+             value="30" />
+      <skill id="Crossbow"
+             value="15" />
+      <skill id="Throwing"
+             value="110" />
+    </skills>
+    <upgrade_targets></upgrade_targets>
+    <Equipments>
+      <EquipmentRoster>
+	     <equipment slot="Item0" id="Item.northern_throwing_axe_1_t1" />
+	     <equipment slot="Item1" id="Item.heavy_round_shield" />
+	     <equipment slot="Item2" id="Item.battania_axe_3_t5" />
+		 <equipment slot="Head" id="Item.closed_goggled_helmet" />
+		 <equipment slot="Body" id="Item.sturgian_lamellar_base" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.plated_strip_boots" />
+	  </EquipmentRoster>
+	   <EquipmentRoster>
+	     <equipment slot="Item0" id="Item.northern_throwing_axe_1_t1" />
+	     <equipment slot="Item1" id="Item.heavy_round_shield" />
+	     <equipment slot="Item2" id="Item.sturgia_axe_5_t5" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_full_mail" />
+		 <equipment slot="Body" id="Item.sturgian_chainmale_longsleeve" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.plated_strip_boots" />
+		 <equipment slot="Cape" id="Item.female_scarf" />
+	  </EquipmentRoster>
+	   <EquipmentRoster>
+	     <equipment slot="Item0" id="Item.northern_throwing_axe_1_t1" />
+	     <equipment slot="Item1" id="Item.heavy_round_shield" />
+	     <equipment slot="Item2" id="Item.sturgia_axe_5_t5" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_full_mail" />
+		 <equipment slot="Body" id="Item.sturgian_chainmale_longsleeve" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.plated_strip_boots" />
+		 <equipment slot="Cape" id="Item.wolf_shoulder" />
+	  </EquipmentRoster>
+	   <EquipmentRoster>
+	     <equipment slot="Item0" id="Item.northern_throwing_axe_1_t1" />
+	     <equipment slot="Item1" id="Item.heavy_round_shield" />
+	     <equipment slot="Item2" id="Item.sturgia_sword_4_t4" />
+		 <equipment slot="Item3" id="Item.wide_leaf_spear_t4" />
+		 <equipment slot="Head" id="Item.closed_goggled_helmet" />
+		 <equipment slot="Body" id="Item.nordic_sloven_over_mail" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.plated_strip_boots" />
+		 <equipment slot="Cape" id="Item.battania_civil_cape" />
+	  </EquipmentRoster>
+	   <EquipmentRoster>
+	     <equipment slot="Item0" id="Item.northern_throwing_axe_1_t1" />
+	     <equipment slot="Item1" id="Item.heavy_round_shield" />
+	     <equipment slot="Item2" id="Item.sturgia_sword_5_t5" />
+		 <equipment slot="Item3" id="Item.wide_leaf_spear_t4" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_mail" />
+		 <equipment slot="Body" id="Item.decorated_nordic_hauberk" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.plated_strip_boots" />
+	  </EquipmentRoster>
+      <EquipmentSet id="sturgia_troop_civilian_template_t2"
+                    civilian="true" />
+    </Equipments>
+  </NPCCharacter>
+  
+  <NPCCharacter id="bk_bandit_nordling_1"
+                default_group="Infantry"
+                level="21"
+                name="{=!}Nordling Húskarl"
+                occupation="Bandit"
+                culture="Culture.sturgia">
+    <face>
+      <face_key_template value="BodyProperty.fighter_sturgia" />
+    </face>
+    <skills>
+      <skill id="Athletics"
+             value="120" />
+      <skill id="Riding"
+             value="45" />
+      <skill id="OneHanded"
+             value="130" />
+      <skill id="TwoHanded"
+             value="50" />
+      <skill id="Polearm"
+             value="60" />
+      <skill id="Bow"
+             value="20" />
+      <skill id="Crossbow"
+             value="15" />
+      <skill id="Throwing"
+             value="90" />
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.bk_bandit_nordling_2" />
+    </upgrade_targets>
+    <Equipments>
+      <EquipmentRoster>
+		 <equipment slot="Item0" id="Item.sturgia_axe_4_t4" />
+		 <equipment slot="Item1" id="Item.viking_round_shield" />
+		 <equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+	     <equipment slot="Item3" id="Item.triangluar_spear_t3" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <equipment slot="Cape" id="Item.female_scarf" />
+		 <equipment slot="Body" id="Item.sturgian_lamellar_gambeson_heavy" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.leather_boots" />
+	  </EquipmentRoster>
+	  <EquipmentRoster>
+		 <equipment slot="Item0" id="Item.battania_axe_2_t4" />
+		 <equipment slot="Item1" id="Item.viking_round_shield" />
+		 <equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+     	 <equipment slot="Item3" id="Item.triangluar_spear_t3" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <equipment slot="Cape" id="Item.female_scarf" />
+		 <equipment slot="Body" id="Item.sturgian_chainmale_shortsleeve" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.leather_boots" />
+	  </EquipmentRoster>
+	  <EquipmentRoster>
+		 <equipment slot="Item0" id="Item.sturgia_sword_4_t4" />
+		 <equipment slot="Item1" id="Item.sturgia_old_shield_c" />
+		 <equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <equipment slot="Cape" id="Item.female_scarf" />
+		 <equipment slot="Body" id="Item.sturgian_chainmale_shortsleeve" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.leather_boots" />
+	  </EquipmentRoster>
+	  <EquipmentRoster>
+		 <equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+		 <equipment slot="Item1" id="Item.sturgia_old_shield_a" />
+		 <equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <equipment slot="Body" id="Item.leather_and_iron_plate_armor" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.plated_strip_boots" />
+	  </EquipmentRoster>
+	  <EquipmentRoster>
+		 <equipment slot="Item0" id="Item.battle_axe_t4" />
+		 <equipment slot="Item1" id="Item.sturgia_old_shield_a" />
+		 <equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+		 <equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <equipment slot="Body" id="Item.sturgian_lamellar_gambeson" />
+		 <equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <equipment slot="Leg" id="Item.plated_strip_boots" />
+	  </EquipmentRoster>
+      <EquipmentSet id="sturgia_troop_civilian_template_t2"
+                    civilian="true" />
+    </Equipments>
+  </NPCCharacter>
+</NPCCharacters>

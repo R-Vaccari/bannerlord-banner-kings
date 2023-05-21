@@ -36,6 +36,42 @@ namespace BannerKings.Dialogue
             return result.Text;
         }
 
+        public static TextObject GetAppropriateAddressing(Hero addressee, Hero speaker)
+        {
+            TextObject result = addressee.IsFemale ? new TextObject("{=3FUaZk5A}My lady") : new TextObject("{=icmyseoo}My lord");
+            string cultureId = addressee.MapFaction.Culture.StringId;
+            bool addresseeSovereign = addressee.MapFaction.IsKingdomFaction && addressee.MapFaction.Leader == addressee;
+            if (addresseeSovereign)
+            {
+                if (cultureId == "vlandia")
+                {
+                    result = new TextObject("{=zTJaW41m}Your Highness");
+                }
+                else if (cultureId == "empire")
+                {
+                    result = new TextObject("{=14rSS8Bv}Your Eminence");
+                }
+            }
+
+            return result;
+        }
+
+        internal static List<DialogueOption> GetPeerageOfferedTexts(Hero newPeer)
+        {
+            List<DialogueOption> result = new List<DialogueOption>();
+            result.Add(new DialogueOption(
+                new TextObject("{=cTaDYMvK}{?PLAYER.GENDER}My lady{?}My lord{\\?}, you honor the {CLAN} with your proposal.")
+                .SetTextVariable("CLAN", newPeer.Clan.Name),
+                -0.2f,
+                0.2f,
+                0f,
+                0f,
+                0f,
+                true));
+
+            return result;
+        }
+
         internal static List<DialogueOption> GetMarriageInadequateTexts(MarriageContract contract)
         {
             List<DialogueOption> result = new List<DialogueOption>();

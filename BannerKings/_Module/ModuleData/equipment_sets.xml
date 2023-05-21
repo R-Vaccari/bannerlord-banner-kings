@@ -2,6 +2,308 @@
 
 <EquipmentRosters>
 
+	<EquipmentRoster id="bannerkings_bandithero_looters" culture="Culture.looters">
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.vlandia_axe_1_t3" />
+		  <Equipment slot="Item1" id="Item.western_javelin_2_t3" />
+		  <Equipment slot="Item2" id="Item.western_kite_shield" />
+		  <Equipment slot="Head" id="Item.leatherlame_roundkettle_over_imperial_leather" />
+		  <Equipment slot="Body" id="Item.studded_leather_over_aketon" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.hooked_axe_t4" />
+		  <Equipment slot="Item1" id="Item.northern_throwing_axe_1_t1" />
+		  <Equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+		  <Equipment slot="Head" id="Item.kettle_helmet_over_mail" />
+		  <Equipment slot="Body" id="Item.woven_leather_coat" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Cape" id="Item.armored_bearskin" />
+		  <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.bone_crusher_mace_t3" />
+		  <Equipment slot="Item1" id="Item.highland_spear_4_t4" />
+		  <Equipment slot="Item2" id="Item.ironrim_kite_shield" />
+		  <Equipment slot="Head" id="Item.ironlame_roundkettle_over_imperial_mail" />
+		  <Equipment slot="Body" id="Item.buckled_wildsman_armor" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Cape" id="Item.hood" />
+		  <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.vlandia_polearm_1_t5" />
+		  <Equipment slot="Item1" id="Item.lowland_throwing_knife" />
+		  <Equipment slot="Head" id="Item.leatherlame_roundkettle_over_imperial_mail" />
+		  <Equipment slot="Body" id="Item.leather_scale_armor" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Gloves" id="Item.padded_mitten" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.empire_polearm_1_t4" />
+		  <Equipment slot="Item1" id="Item.lowland_throwing_knife" />
+		  <Equipment slot="Head" id="Item.leatherlame_roundkettle_over_imperial_mail" />
+		  <Equipment slot="Body" id="Item.empire_horseman_armor" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Gloves" id="Item.padded_mitten" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.empire_sword_4_t4" />
+		  <Equipment slot="Item1" id="Item.highland_spear_4_t4" />
+		  <Equipment slot="Item2" id="Item.ironrim_kite_shield" />
+		  <Equipment slot="Head" id="Item.ironlame_feathered_spangenhelm" />
+		  <Equipment slot="Body" id="Item.banded_leather_over_mail" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Cape" id="Item.hood" />
+		  <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		</EquipmentSet>
+	</EquipmentRoster>
+	
+	<EquipmentRoster id="bannerkings_bandithero_mountain_bandits" culture="Culture.mountain_bandits">
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.vlandia_axe_1_t3" />
+		  <Equipment slot="Item1" id="Item.western_javelin_2_t3" />
+		  <Equipment slot="Item2" id="Item.western_kite_shield" />
+		  <Equipment slot="Head" id="Item.leatherlame_roundkettle_over_imperial_leather" />
+		  <Equipment slot="Body" id="Item.studded_leather_over_aketon" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.hooked_axe_t4" />
+		  <Equipment slot="Item1" id="Item.northern_throwing_axe_1_t1" />
+		  <Equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+		  <Equipment slot="Head" id="Item.kettle_helmet_over_mail" />
+		  <Equipment slot="Body" id="Item.woven_leather_coat" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Cape" id="Item.armored_bearskin" />
+		  <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.bone_crusher_mace_t3" />
+		  <Equipment slot="Item1" id="Item.highland_spear_4_t4" />
+		  <Equipment slot="Item2" id="Item.ironrim_kite_shield" />
+		  <Equipment slot="Head" id="Item.ironlame_roundkettle_over_imperial_mail" />
+		  <Equipment slot="Body" id="Item.buckled_wildsman_armor" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Cape" id="Item.hood" />
+		  <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.vlandia_polearm_1_t5" />
+		  <Equipment slot="Item1" id="Item.lowland_throwing_knife" />
+		  <Equipment slot="Head" id="Item.leatherlame_roundkettle_over_imperial_mail" />
+		  <Equipment slot="Body" id="Item.leather_scale_armor" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Gloves" id="Item.padded_mitten" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.empire_polearm_1_t4" />
+		  <Equipment slot="Item1" id="Item.lowland_throwing_knife" />
+		  <Equipment slot="Head" id="Item.leatherlame_roundkettle_over_imperial_mail" />
+		  <Equipment slot="Body" id="Item.empire_horseman_armor" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Gloves" id="Item.padded_mitten" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.empire_sword_4_t4" />
+		  <Equipment slot="Item1" id="Item.highland_spear_4_t4" />
+		  <Equipment slot="Item2" id="Item.ironrim_kite_shield" />
+		  <Equipment slot="Head" id="Item.ironlame_feathered_spangenhelm" />
+		  <Equipment slot="Body" id="Item.banded_leather_over_mail" />
+		  <Equipment slot="Leg" id="Item.leather_boots" />
+		  <Equipment slot="Cape" id="Item.hood" />
+		  <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		</EquipmentSet>
+	</EquipmentRoster>
+
+	<EquipmentRoster id="bannerkings_bandithero_forest_bandits" culture="Culture.forest_bandits">
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.glen_ranger_bow" />
+		  <Equipment slot="Item1" id="Item.barbed_arrows" />
+		  <Equipment slot="Item2" id="Item.barbed_arrows" />
+		  <Equipment slot="Item3" id="Item.woodland_axe_t3" />
+		  <Equipment slot="Head" id="Item.pilgrim_hood" />
+		  <Equipment slot="Cape" id="Item.battania_civil_cloak" />
+		  <Equipment slot="Body" id="Item.battania_light_armor_a" />
+		  <Equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.glen_ranger_bow" />
+		  <Equipment slot="Item1" id="Item.barbed_arrows" />
+		  <Equipment slot="Item2" id="Item.battania_sword_3_t3" />
+		  <Equipment slot="Item3" id="Item.battania_large_shield_b" />
+		  <Equipment slot="Head" id="Item.ridged_northernhelm" />
+		  <Equipment slot="Cape" id="Item.battania_cloak_b" />
+		  <Equipment slot="Body" id="Item.buckled_wildsman_armor" />
+		  <Equipment slot="Gloves" id="Item.rough_tied_bracers" />
+		  <Equipment slot="Leg" id="Item.highland_leg_wrappings" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.glen_ranger_bow" />
+		  <Equipment slot="Item1" id="Item.barbed_arrows" />
+		  <Equipment slot="Item2" id="Item.battania_2hsword_2_t3" />
+		  <Equipment slot="Head" id="Item.battania_earmuff_helmet_d" />
+		  <Equipment slot="Cape" id="Item.battania_scarf_a" />
+		  <Equipment slot="Body" id="Item.battanian_scale_armor_b" />
+		  <Equipment slot="Gloves" id="Item.rough_tied_bracers" />
+		  <Equipment slot="Leg" id="Item.highland_leg_wrappings" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.northern_javelin_2_t3" />
+		  <Equipment slot="Item1" id="Item.northern_javelin_2_t3" />
+		  <Equipment slot="Item2" id="Item.woodland_axe_t3" />
+		  <Equipment slot="Item3" id="Item.battania_targe_b" />
+		  <Equipment slot="Head" id="Item.roughscale_helmet" />
+		  <Equipment slot="Cape" id="Item.battania_cloak" />
+		  <Equipment slot="Body" id="Item.battanian_chainmail_armor_b" />
+		  <Equipment slot="Gloves" id="Item.rough_tied_bracers" />
+		  <Equipment slot="Leg" id="Item.highland_leg_wrappings" />
+		</EquipmentSet>
+	</EquipmentRoster>
+	
+	<EquipmentRoster id="bannerkings_bandithero_sea_raiders" culture="Culture.sea_raiders">
+		<EquipmentSet>
+		 <Equipment slot="Item0" id="Item.sturgia_axe_4_t4" />
+		 <Equipment slot="Item1" id="Item.viking_round_shield" />
+		 <Equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+	     <Equipment slot="Item3" id="Item.triangluar_spear_t3" />
+		 <Equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <Equipment slot="Cape" id="Item.female_scarf" />
+		 <Equipment slot="Body" id="Item.sturgian_lamellar_gambeson_heavy" />
+		 <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <Equipment slot="Leg" id="Item.leather_boots" />
+	  </EquipmentSet>
+	  <EquipmentSet>
+		 <Equipment slot="Item0" id="Item.battania_axe_2_t4" />
+		 <Equipment slot="Item1" id="Item.viking_round_shield" />
+		 <Equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+     	 <Equipment slot="Item3" id="Item.triangluar_spear_t3" />
+		 <Equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <Equipment slot="Cape" id="Item.female_scarf" />
+		 <Equipment slot="Body" id="Item.sturgian_chainmale_shortsleeve" />
+		 <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <Equipment slot="Leg" id="Item.leather_boots" />
+	  </EquipmentSet>
+	  <EquipmentSet>
+		 <Equipment slot="Item0" id="Item.sturgia_sword_4_t4" />
+		 <Equipment slot="Item1" id="Item.sturgia_old_shield_c" />
+		 <Equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+		 <Equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <Equipment slot="Cape" id="Item.female_scarf" />
+		 <Equipment slot="Body" id="Item.sturgian_chainmale_shortsleeve" />
+		 <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <Equipment slot="Leg" id="Item.leather_boots" />
+	  </EquipmentSet>
+	  <EquipmentSet>
+		 <Equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+		 <Equipment slot="Item1" id="Item.sturgia_old_shield_a" />
+		 <Equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+		 <Equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <Equipment slot="Body" id="Item.leather_and_iron_plate_armor" />
+		 <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <Equipment slot="Leg" id="Item.plated_strip_boots" />
+	  </EquipmentSet>
+	  <EquipmentSet>
+		 <Equipment slot="Item0" id="Item.battle_axe_t4" />
+		 <Equipment slot="Item1" id="Item.sturgia_old_shield_a" />
+		 <Equipment slot="Item2" id="Item.northern_throwing_axe_1_t1" />
+		 <Equipment slot="Head" id="Item.goggled_helmet_over_leather" />
+		 <Equipment slot="Body" id="Item.sturgian_lamellar_gambeson" />
+		 <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		 <Equipment slot="Leg" id="Item.plated_strip_boots" />
+	  </EquipmentSet>
+	</EquipmentRoster>
+	
+	<EquipmentRoster id="bannerkings_bandithero_steppe_bandits" culture="Culture.steppe_bandits">
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.easter_polesword_t4" />
+		  <Equipment slot="Item1" id="Item.steppe_bow" />
+		  <Equipment slot="Item2" id="Item.steppe_arrows" />
+		  <Equipment slot="Head" id="Item.nomad_helmet" />
+		  <Equipment slot="Cape" id="Item.a_khuzait_leather_shoulder_b_a" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Leg" id="Item.khuzait_curved_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse_tournament" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_mace_2_t4" />
+		  <Equipment slot="Item1" id="Item.steppe_bow" />
+		  <Equipment slot="Item2" id="Item.steppe_arrows" />
+		  <Equipment slot="Item3" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Head" id="Item.nomad_helmet" />
+		  <Equipment slot="Body" id="Item.crude_leather_armor" />
+		  <Equipment slot="Leg" id="Item.khuzait_curved_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse_tournament" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.steppe_bow" />
+		  <Equipment slot="Item2" id="Item.steppe_arrows" />
+		  <Equipment slot="Item3" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.khuzait_sturdy_armor" />
+		  <Equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.reinforced_suede_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse_tournament" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_lance_1_t3" />
+		  <Equipment slot="Item1" id="Item.steppe_bow" />
+		  <Equipment slot="Item2" id="Item.steppe_arrows" />
+		  <Equipment slot="Item3" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Cape" id="Item.battania_civil_cape" />
+		  <Equipment slot="Body" id="Item.studded_steppe_leather" />
+		  <Equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.reinforced_suede_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse_tournament" />
+		</EquipmentSet>
+	</EquipmentRoster>
+	
+	<EquipmentRoster id="bannerkings_bandithero_desert_bandits" culture="Culture.desert_bandits">
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.aserai_sword_4_t4" />
+		  <Equipment slot="Item1" id="Item.eastern_javelin_1_t2" />
+		  <Equipment slot="Item2" id="Item.large_adarga" />
+		  <Equipment slot="Head" id="Item.closed_head_scarf" />
+		  <Equipment slot="Body" id="Item.studded_leather_over_aketon" />
+		  <Equipment slot="Leg" id="Item.southern_moccasins" />
+		  <Equipment slot="Horse" id="Item.camel" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.hooked_axe_t4" />
+		  <Equipment slot="Item1" id="Item.eastern_javelin_1_t2" />
+		  <Equipment slot="Item2" id="Item.eastern_javelin_1_t2" />
+		  <Equipment slot="Head" id="Item.aserai_civil_hscarf_b" />
+		  <Equipment slot="Body" id="Item.woven_leather_coat" />
+		  <Equipment slot="Leg" id="Item.southern_moccasins" />
+		  <Equipment slot="Cape" id="Item.wrapped_scarf" />
+		  <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		  <Equipment slot="Horse" id="Item.camel" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.aserai_mace_4_t4" />
+		  <Equipment slot="Item1" id="Item.highland_spear_4_t4" />
+		  <Equipment slot="Item2" id="Item.large_adarga" />
+		  <Equipment slot="Head" id="Item.open_desert_helmet" />
+		  <Equipment slot="Body" id="Item.buckled_wildsman_armor" />
+		  <Equipment slot="Leg" id="Item.southern_moccasins" />
+		  <Equipment slot="Cape" id="Item.wrapped_scarf" />
+		  <Equipment slot="Gloves" id="Item.plated_strip_gauntlets" />
+		  <Equipment slot="Horse" id="Item.camel" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.aserai_lance_1_t5" />
+		  <Equipment slot="Item1" id="Item.eastern_javelin_1_t2" />
+		  <Equipment slot="Item2" id="Item.large_adarga" />
+		  <Equipment slot="Head" id="Item.closed_desert_helmet" />
+		  <Equipment slot="Body" id="Item.aserai_armor_02" />
+		  <Equipment slot="Leg" id="Item.southern_moccasins" />
+		  <Equipment slot="Gloves" id="Item.padded_mitten" />
+		  <Equipment slot="Horse" id="Item.camel" />
+		</EquipmentSet>
+	</EquipmentRoster>
+
 	<EquipmentRoster id="bannerkings_companion_vlandia" culture="Culture.vlandia">
 		<EquipmentSet>
 		  <Equipment slot="Item0" id="Item.vlandia_sword_2_t3" />

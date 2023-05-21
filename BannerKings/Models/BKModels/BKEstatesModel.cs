@@ -105,7 +105,7 @@ namespace BannerKings.Models.BKModels
                     return action;
                 }
 
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureQuiaEmptores))
+                if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureQuiaEmptores))
                 {
                     action.Possible = false;
                     action.Reason = new TextObject("{=BPrmDyZT}Cannot grant estates under {LAW} law.")
@@ -191,7 +191,7 @@ namespace BannerKings.Models.BKModels
                     return action;
                 }
 
-                if (!title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureAllodial))
+                if (!title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureAllodial))
                 {
                     if (owner.MapFaction != actionTaker.MapFaction)
                     {
@@ -314,11 +314,11 @@ namespace BannerKings.Models.BKModels
             var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
             if (title != null)
             {
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureAllodial))
+                if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureAllodial))
                 {
                     result.AddFactor(-1f, DefaultDemesneLaws.Instance.EstateTenureAllodial.Name);
                 }
-                else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureFeeTail) && estate.Duty == EstateDuty.Taxation)
+                else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureFeeTail) && estate.Duty == EstateDuty.Taxation)
                 {
                     result.Add(0.075f, DefaultDemesneLaws.Instance.EstateTenureFeeTail.Name);
                 }

@@ -4,10 +4,9 @@ namespace BannerKings.Extensions
 {
     public static class ItemExtensions
     {
-        public static bool IsMineral(this ItemObject item)
-        {
-            return item.StringId is "clay" or "iron" or "salt" or "silver" or "goldore";
-        }
+        public static bool IsMineral(this ItemObject item) => item.StringId is "clay" or "iron" or "salt" or "silver" or "goldore";
+        
+        public static bool IsPoultry(this ItemObject item) => item.StringId is "chicken" or "goose";
 
         public static bool CanBeConsumedAsFood(this ItemObject item)
         {

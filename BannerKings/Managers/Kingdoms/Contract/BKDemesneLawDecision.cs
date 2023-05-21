@@ -6,6 +6,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -36,10 +37,6 @@ namespace BannerKings.Managers.Kingdoms.Contract
             Title.EnactLaw(outcome.Law);
         }
 
-        public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
-        {
-        }
-
         public override Clan DetermineChooser() => Kingdom.RulingClan;
         
 
@@ -47,22 +44,6 @@ namespace BannerKings.Managers.Kingdoms.Contract
         {
             yield return new DemesneLawDecisionOutcome(ProposedLaw);
             yield return new DemesneLawDecisionOutcome(CurrentLaw, true);
-        }
-
-        public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
-        {
-            foreach (var decisionOutcome in possibleOutcomes)
-            {
-                if (((DemesneLawDecisionOutcome)decisionOutcome).Law == ProposedLaw)
-                {
-                    decisionOutcome.SetSponsor(ProposerClan);
-                }
-
-                else
-                {
-                    AssignDefaultSponsor(decisionOutcome);
-                }
-            }
         }
 
         public override float DetermineSupport(Clan clan, DecisionOutcome possibleOutcome)
@@ -134,9 +115,6 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override int GetProposalInfluenceCost() => ProposedLaw.InfluenceCost;
 
-        public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes) => 
-            (from k in possibleOutcomes orderby k.Merit descending select k).ToList().FirstOrDefault();
-
         public override TextObject GetSecondaryEffects() => new TextObject("{=bdTS2dAa}All supporters gains some relation with each other.", null);
 
         public override TextObject GetSupportDescription() => new TextObject("{=mn9edsZr}The peers of {TITLE} will decide the next {LAW} demesne law. You may pick your stance.")
@@ -149,8 +127,31 @@ namespace BannerKings.Managers.Kingdoms.Contract
         public override TextObject GetSupportTitle() => new TextObject("{=c7niULaT}Vote for the next {LAW} demesne law")
             .SetTextVariable("LAW", GameTexts.FindText("str_bk_demesne_law", CurrentLaw.LawType.ToString()));
 
-        public override bool IsAllowed() => Title.contract != null && !ProposedLaw.Equals(CurrentLaw);
-        
+        public override bool IsAllowed() => Title.Contract != null && !ProposedLaw.Equals(CurrentLaw);
+
+        public override void DetermineSponsors(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
+        {
+            foreach (var decisionOutcome in possibleOutcomes)
+            {
+                if (((DemesneLawDecisionOutcome)decisionOutcome).Law == ProposedLaw)
+                {
+                    decisionOutcome.SetSponsor(ProposerClan);
+                }
+
+                else
+                {
+                    AssignDefaultSponsor(decisionOutcome);
+                }
+            }
+        }
+
+        public override void ApplySecondaryEffects(MBReadOnlyList<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
+        {
+
+        }
+
+        public override DecisionOutcome GetQueriedDecisionOutcome(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
+            => (from k in possibleOutcomes orderby k.Merit descending select k).ToList().FirstOrDefault();
 
         public class DemesneLawDecisionOutcome : DecisionOutcome
         {

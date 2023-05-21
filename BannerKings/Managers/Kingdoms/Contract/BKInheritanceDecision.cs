@@ -59,7 +59,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             return MBMath.ClampFloat(support / clans, 0f, 100f);
         }
 
-        public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
+        public override void ApplySecondaryEffects(MBReadOnlyList<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
         {
         }
 
@@ -79,7 +79,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             yield return new InheritanceDecisionOutcome(false);
         }
 
-        public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
+        public override void DetermineSponsors(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {
             foreach (var decisionOutcome in possibleOutcomes)
             {
@@ -163,7 +163,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             textObject.SetTextVariable("KINGDOM", Kingdom.InformalName);
             textObject.SetTextVariable("POLICY_DESCRIPTION",
-                newGovernment ? inheritanceType.ToString() : Title.contract.Succession.ToString());
+                newGovernment ? inheritanceType.ToString() : Title.Contract.Succession.ToString());
             if (isShortVersion || IsSingleClanDecision())
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", TextObject.Empty);
@@ -197,7 +197,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             return 200;
         }
 
-        public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
+        public override DecisionOutcome GetQueriedDecisionOutcome(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {
             return possibleOutcomes.FirstOrDefault(t => ((InheritanceDecisionOutcome) t).ShouldDecisionBeEnforced);
         }
@@ -208,7 +208,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
             textObject.SetTextVariable("CURRENT",
-                Utils.Helpers.GetGovernmentString(Title.contract.Government, Kingdom.Culture));
+                Utils.Helpers.GetGovernmentString(Title.Contract.Government, Kingdom.Culture));
             textObject.SetTextVariable("PROPOSED", inheritanceType.ToString());
             return textObject;
         }

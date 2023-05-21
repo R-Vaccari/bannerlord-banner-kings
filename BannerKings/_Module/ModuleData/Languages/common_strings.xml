@@ -7,12 +7,54 @@
 	<strings>
 		<string id="gaJDVkvHA" text="Placeholder" />
 		
+		<string id="trait_tyrant" text="Tyrant" />
+		<string id="trait_unjust" text="Unjust" />
+		<string id="trait_just" text="Just" />
+		<string id="trait_unbiased" text="Unbiased" />
+		
+		<string id="trait_pacifist" text="Pacifist" />
+		<string id="trait_mild" text="Mild" />
+		<string id="trait_violent" text="Violent" />
+		<string id="trait_vicious" text="Vicious" />
+		
+		<string id="trait_oblivious" text="Oblivious" />
+		<string id="trait_distracted" text="Distracted" />
+		<string id="trait_studious" text="Studious" />
+		<string id="trait_erudite" text="Erudite" />
+		
+		<string id="trait_reclusive" text="Reclusive" />
+		<string id="trait_introspective" text="Introspective" />
+		<string id="trait_sociable" text="Sociable" />
+		<string id="trait_gregarious" text="Gregarious" />
+
+		<string id="trait_satisfied" text="Satisfied" />
+		<string id="trait_content" text="Content" />
+		<string id="trait_ambitious" text="Ambitious" />
+		<string id="trait_relentless" text="Relentless" />
+		
+		<string id="trait_arrogant" text="Arrogant" />
+		<string id="trait_pretentious" text="Pretentious" />
+		<string id="trait_modest" text="Modest" />
+		<string id="trait_humble" text="Humble" />
+		
+		<string id="trait_lazy" text="Lazy" />
+		<string id="trait_weary" text="Weary" />
+		<string id="trait_diligent" text="Diligent" />
+		<string id="trait_tireless" text="Tireless" />
+		
+		<string id="trait_cynic" text="Cynic" />
+		<string id="trait_skeptic" text="Skeptic" />
+		<string id="trait_faithful" text="Faithful" />
+		<string id="trait_zealot" text="Zealot" />
+		
 		<string id="bk_law_slave_duties" text="Slave Duties" />
 		<string id="bk_law_serf_duties" text="Serf Duties" />
 		<string id="bk_law_craftsmen_duties" text="Craftsmen Duties" />
 		<string id="bk_law_noble_duties" text="Nobility Duties" />
 		<string id="bk_law_estate_tenure" text="Estate Tenure" />
 		<string id="bk_slavery" text="Slavery" />
+		<string id="bk_law_tenancy" text="Commoners Tenure" />
+		<string id="bk_law_high_council" text="High Council" />
 		
 		<string id="bk_rich" text="Rich" />
 		<string id="bk_adequate" text="Adequate" />
@@ -29,8 +71,13 @@
 		<string id="bk_description_hardwood" text="The quintessential building material, one that is used far before man could write about his deeds. Hardwood Serves to build entire structures, but also complement structures made of stronger bases such as clay or limestone bases." />
 		<string id="bk_description_limestone" text="Limestone is a common mineral that serves as a strong material for stone buildings, walls and roads. Despite being common, it's extraction and transportation are significantly more costly than simply using wood or clay." />
 		
+		<string id="bk_description_iron" text="Iron is the essential material for tools and supporting structures of buildings. Most advanced buildings use iron to some extent." />
+		<string id="bk_description_tools" text="Anything but the crudest constructions require specialized tools. As buildings become more advanced, the more tools they require, specially stone buildings due to the exceptionally hard nature of stone." />
+		
+		
 		<string id="bk_limestone" text="Limestone{@Plural}blocks of limestone{\@}" />
 		<string id="bk_gold" text="Gold{@Plural}loads of gold{\@}" />
+		<string id="bk_mead" text="Mead{@Plural}barrels of mead{\@}" />
 		<string id="bk_marble" text="Marble{@Plural}blocks of marble{\@}" />
 
 		<string id="bk_primogeniture" text="Primogeniture" />
@@ -101,110 +148,15 @@
 		        text="The {NAME} administrates law enforcement and criminal cases in settlements. Their purpose is to act as a supervisor to guarantee stability of the realm, being a mediator between the crown and governors." />
 		<string id="bk_council_description_philosopher"
 		        text="The {NAME} is responsible for the advancement of the culture and general education of the family. These studied individuals research into innovations, as well as teach their sponsoring family's members subjects such as reading, writting and history." />
-
-		<string id="bk_spiritual_guide" text="Spiritual Guide" />
-
-		<string id="bk_council_marshall_effects"
-		        text="Settlement militia +1{BREAK}Settlement militarism +1% flat{BREAK}Settlement draft efficiencty +25% flat" />
-		<string id="bk_council_steward_effects"
-		        text="Settlement prosperity +1{BREAK}Settlement production efficiency +15% flat{BREAK}Settlement caravan attractiveness +15% flat" />
-		<string id="bk_council_chancellor_effects"
-		        text="Settlement loyalty +1{BREAK}Vassal limit +1{BREAK}Disagreements impact -20%" />
-		<string id="bk_council_spymaster_effects" text="Settlement security +1{BREAK}Settlement autonomy -3% flat{BREAK}" />
-		<string id="bk_council_spiritual_effects" text="+0.5 piety daily{BREAK}+5% faith presence in settlements" />
-		<string id="bk_council_castellan_effects" text="+1.5 prosperity to castles" />
-		<string id="bk_council_constable_effects" text="Settlement stability +4% flat" />
-		<string id="bk_council_elder_effects" text="Village hearths +0.2 daily" />
-		<string id="bk_council_philosopher_effects" text="Settlements provide +5% innovation progress{BREAK}Clan members get 5 daily Scholarship xp" />
 		
-		<string id="bk_council_constable_empire" text="Constable" />
-		<string id="bk_council_constable_sturgia" text="Constable" />
-		<string id="bk_council_constable_battania" text="Conastabal" />
-		<string id="bk_council_constable_vlandia" text="Constable" />
-		<string id="bk_council_constable_khuzait" text="Constable" />
-		<string id="bk_council_constable_aserai" text="Constable" />
-		
-		<string id="bk_council_castellan_vlandia" text="Castellan" />
-		
-		
-		<string id="bk_council_philosopher_empire" text="Philosophus" />
-		<string id="bk_council_philosopher_sturgia" text="Philosopher" />
-		<string id="bk_council_philosopher_battania" text="Feallsanach" />
-		<string id="bk_council_philosopher_vlandia" text="Philosopher" />
-		<string id="bk_council_philosopher_khuzait" text="Philosopher" />
-		<string id="bk_council_philosopher_aserai" text="Philosopher" />
-
-		<string id="bk_council_marshall_empire" text="Domesticus" />
-		<string id="bk_council_marshall_sturgia" text="Marshal" />
-		<string id="bk_council_marshall_battania" text="Marasgal" />
-		<string id="bk_council_marshall_vlandia" text="Marshal" />
-		<string id="bk_council_marshall_khuzait" text="Jagutu-iin Darga" />
-		<string id="bk_council_marshall_aserai" text="Marshal" />
-
-		<string id="bk_council_marshall_royal_empire" text="Magister Domesticus" />
-		<string id="bk_council_marshall_royal_sturgia" text="Grand Marshal" />
-		<string id="bk_council_marshall_royal_battania" text="Ard Marasgal" />
-		<string id="bk_council_marshall_royal_vlandia" text="Grand Marshal" />
-		<string id="bk_council_marshall_royal_khuzait" text="Tumetu-iin Noyan" />
-		<string id="bk_council_marshall_royal_aserai" text="Grand Marshal" />
-
-		<string id="bk_council_steward_empire" text="Praefectus Largitionum" />
-		<string id="bk_council_steward_sturgia" text="Steward" />
-		<string id="bk_council_steward_battania" text="Sheumarlan" />
-		<string id="bk_council_steward_vlandia" text="Steward" />
-		<string id="bk_council_steward_khuzait" text="Steward" />
-		<string id="bk_council_steward_aserai" text="Steward" />
-
-		<string id="bk_council_steward_royal_empire" text="Magister Sacrarum Largitionum" />
-		<string id="bk_council_steward_royal_sturgia" text="High Steward" />
-		<string id="bk_council_steward_royal_battania" text="Ard Sheumarlan" />
-		<string id="bk_council_steward_royal_vlandia" text="High Steward" />
-		<string id="bk_council_steward_royal_khuzait" text="High Steward" />
-		<string id="bk_council_steward_royal_aserai" text="High Steward" />
-
-		<string id="bk_council_chancellor_empire" text="Cancellarius" />
-		<string id="bk_council_chancellor_sturgia" text="Chancellor" />
-		<string id="bk_council_chancellor_battania" text="Seansalair" />
-		<string id="bk_council_chancellor_vlandia" text="Chancellor" />
-		<string id="bk_council_chancellor_khuzait" text="Chancellor" />
-		<string id="bk_council_chancellor_aserai" text="Chancellor" />
-
-		<string id="bk_council_chancellor_royal_empire" text="Magister Cancellarius" />
-		<string id="bk_council_chancellor_royal_sturgia" text="High Chancellor" />
-		<string id="bk_council_chancellor_royal_battania" text="Ard Seansalair" />
-		<string id="bk_council_chancellor_royal_vlandia" text="High Chancellor" />
-		<string id="bk_council_chancellor_royal_khuzait" text="High Chancellor" />
-		<string id="bk_council_chancellor_royal_aserai" text="High Chancellor" />
-
-		<string id="bk_council_spymaster_empire" text="Custodis" />
-		<string id="bk_council_spymaster_sturgia" text="Spymaster" />
-		<string id="bk_council_spymaster_battania" text="Treòraiche" />
-		<string id="bk_council_spymaster_vlandia" text="Spymaster" />
-		<string id="bk_council_spymaster_khuzait" text="Khevtuul" />
-		<string id="bk_council_spymaster_aserai" text="Spymaster" />
-
-		<string id="bk_council_spymaster_royal_empire" text="Magister Officiorum" />
-		<string id="bk_council_spymaster_royal_sturgia" text="Grand Spymaster" />
-		<string id="bk_council_spymaster_royal_battania" text="Ard Treòraiche" />
-		<string id="bk_council_spymaster_royal_vlandia" text="Grand Spymaster" />
-		<string id="bk_council_spymaster_royal_khuzait" text="Cherbi" />
-		<string id="bk_council_spymaster_royal_aserai" text="Grand Spymaster" />
-
-		<string id="bk_council_spiritual_guide_empire" text="Seneschal" />
-		<string id="bk_council_spiritual_guide_sturgia" text="Volkhvs" />
-		<string id="bk_council_spiritual_guide_battania" text="Draoidh" />
-		<string id="bk_council_spiritual_guide_vlandia" text="Seneschal" />
-		<string id="bk_council_spiritual_guide_khuzait" text="Shaman" />
-		<string id="bk_council_spiritual_guide_aserai" text="Murshid" />
-
-		<string id="bk_council_spiritual_guide_royal_empire" text="High Seneschal" />
-		<string id="bk_council_spiritual_guide_royal_sturgia" text="Volkhvs" />
-		<string id="bk_council_spiritual_guide_royal_battania" text="Ard Draoidh" />
-		<string id="bk_council_spiritual_guide_royal_vlandia" text="High Seneschal" />
-		<string id="bk_council_spiritual_guide_royal_khuzait" text="Shaman" />
-		<string id="bk_council_spiritual_guide_royal_aserai" text="Murshid" />
-
-		<string id="bk_council_elder_royal_battania" text="Seanar" />
+		<string id="bk_council_description_spouse"
+		        text="The {NAME} is responsible for aiding the household leader with tasks that concern their family and property. A good spouse understands legal subjects in order to adequately handle important matters the household leader cannot attend to." />
+		<string id="bk_council_description_courtphysician"
+		        text="The {NAME} is responsible for the health of their suzerain's household. Medicine being a scarce skill, noble households will often reward handsomely such an expert, to whom they will trust their lives." />
+		<string id="bk_council_description_courtsmith"
+		        text="The {NAME} is responsible for arming the household. A dedicated wage allows them to focus their craft on high quality equipment that befit a noble household." />
+		<string id="bk_council_description_courtmusician"
+		        text="The {NAME} is responsible for entertaining's a noble household as well as their guests, mostly on feasts. As feasts are a common way for the high society to interact amongst themselves, many expensive amenities are to be expected, including dedicated entertainers." />
 
 		<string id="bk_skill_scholarship_learn" text="Read books, learn languages, progress in lifestyles. Actively learn with book sellers in their settlements." />
 		<string id="bk_skill_theology_learn"
@@ -215,6 +167,7 @@
 		<string id="pop_class_craftsmen" text="Craftsmen" />
 		<string id="pop_class_serfs" text="Serfs" />
 		<string id="pop_class_slaves" text="Slaves" />
+		<string id="pop_class_tenants" text="Tenants" />
 
 		<string id="pop_class_serfs_sturgia" text="Lowmen" />
 		<string id="pop_class_serfs_empire" text="Coloni" />

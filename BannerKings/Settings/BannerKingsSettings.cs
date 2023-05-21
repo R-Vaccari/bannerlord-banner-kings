@@ -56,8 +56,11 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public bool RealisticCaravanIncome { get; set; } = true;
 
+        [SettingProperty("{=!}AI Dismiss Parties", RequireRestart = false, HintText = "{=!}AI clan leaders will dismiss parties from their family members during peace in order to save more money. Default: true.")]
+        [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
+        public bool DismissParties { get; set; } = true;
 
-        [SettingPropertyFloatingInteger("{=2yDhJfgh}Troop Upgrade Xp", minValue: 1f, maxValue: 5f, "#0%", RequireRestart = false, HintText = "{=xvNKsFbW}How much Xp troops need to upgrade. Vanilla is 100%. Default: 200%.")]
+        [SettingPropertyFloatingInteger("{=2yDhJfgh}Troop Upgrade Xp", minValue: 1f, maxValue: 10f, "#0%", RequireRestart = false, HintText = "{=xvNKsFbW}How much Xp troops need to upgrade. Vanilla is 100%. Default: 200%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float TroopUpgradeXp { get; set; } = 2f;
 
@@ -69,11 +72,14 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float LongerSieges { get; set; } = 0.5f;
 
+        [SettingPropertyFloatingInteger("{=gxcgWiwh}Knight Clan Creation Speed", minValue: 0f, maxValue: 5f, "#0%", RequireRestart = false, HintText = "{=yTkU621N}Knight AI heroes can eventually form their own clans, even those in the player clan. Increasing this setting increases their speed of doing so. Setting it to 0% will stop knights from creating clans altogether. Default: 100%.")]
+        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        public float KnightClanCreationSpeed { get; set; } = 1f;
+
         [SettingProperty("{=DZyyJXRn}Crafting Waiting Time", RequireRestart = false, HintText = "{=pSX0rWGt}When doing any type of work in the smithy, you'll be forced to wait an amount of time correspondent to how much energy was used, as well as pay for that time. Represents a more realistic approach to crafting. Default: true.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public bool CraftingWaitingTime { get; set; } = true;
 
-        // Value is displayed as "X Denars"
         [SettingPropertyInteger("{=iLmmsgFE}Volunteers Limit", 6, 20, "{=Bm4KO72P}0 Volunteers",
             Order = 1, RequireRestart = false, HintText = "{=2AsFpOok}The number of volunteers that notables may have. Requires reloading. Vanilla is 6, default for BK is 10. The recruitable amount is calculated on percentages and thus is always balanced. Recruits will be lost when changing to a smaller limit. Limits can be changed at any point during campaigns.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
@@ -86,5 +92,25 @@ namespace BannerKings.Settings
                 OnPropertyChanged();
             }
         }
+
+        [SettingProperty("{=CHVW1U24}De Re Militari Bandits", 
+            RequireRestart = false, 
+            HintText = "{=bAt2AWmj}If you have De Re Militari (DRM) mod, enabling this allows bandit heroes and parties to use DRM's new bandits. Enabling it without DRM will break your game. Default: false.")]
+        [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
+        public bool DRMBandits { get; set; } = false;
+
+        [SettingPropertyInteger("{=tx1tsrx0}Hieout Spotting Difficulty", 1, 10, "{=rn4pdZCU}Difficulty 0",
+            Order = 1,
+            RequireRestart = false,
+            HintText = "{=gsnBrnud}Despite being supposed to be hidden, 'Hideouts' can be spotted past the player's actual seeing range, and are not difficult at all to find. Spotting range is divided by the difficulty factor here: 1 is vanilla, 10 means a spotting range 10 times shorter.")]
+        [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
+        public int HideoutSpotDifficulty { get; set; } = 5;
+
+        [SettingPropertyInteger("{=00bG9Ube}Bandit Parties Limit", 150, 600, "{=4tnEdJNu}0 Parties ",
+            Order = 1,
+            RequireRestart = false,
+            HintText = "{=O3MXc6GM}Maximum number of bandit parties in the world map. Vanilla is 150. Default: 300.")]
+        [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
+        public int BanditPartiesLimit { get; set; } = 300;
     }
 }

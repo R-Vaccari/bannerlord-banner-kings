@@ -1,5 +1,6 @@
 using BannerKings.Behaviours;
-using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
@@ -30,7 +31,7 @@ namespace BannerKings.Models.Vanilla
             var title = BannerKingsConfig.Instance.TitleManager.GetSovereignFromSettlement(settlement);
             if (title != null)
             {
-                var government = title.contract.Government;
+                var government = title.Contract.Government;
                 switch (government)
                 {
                     case GovernmentType.Republic:
@@ -126,7 +127,18 @@ namespace BannerKings.Models.Vanilla
             }
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
-                CouncilPosition.Steward, 0.15f, true);
+                DefaultCouncilPositions.Instance.Steward,
+                DefaultCouncilTasks.Instance.OverseeProduction,
+                .15f, true);
+
+            if (settlement.Town != null)
+            {
+                Hero governor = settlement.Town.Governor;
+                if (governor != null && governor.IsArtisan)
+                {
+                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Crafting) * 0.08f, new TextObject("{=!}Artisan Governor"));
+                }
+            }
 
             return result;
         }
@@ -156,6 +168,20 @@ namespace BannerKings.Models.Vanilla
                 result.Add(0.1f, BKPerks.Instance.CivilManufacturer.Name);
             }
 
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
+                DefaultCouncilPositions.Instance.Steward,
+                DefaultCouncilTasks.Instance.OverseeProduction,
+                .085f, true);
+
+            if (settlement.Town != null)
+            {
+                Hero governor = settlement.Town.Governor;
+                if (governor != null && governor.IsArtisan)
+                {
+                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Crafting) * 0.04f, new TextObject("{=!}Artisan Governor"));
+                }
+            }
+           
             return result;
         }
 
@@ -169,7 +195,7 @@ namespace BannerKings.Models.Vanilla
                     DefaultCulturalFeats.AseraiTraderFeat.Name);
             }
 
-            if (settlement == null)
+            /*if (settlement == null)
             {
                 settlement = Hero.OneToOneConversationHero.CurrentSettlement;
             }
@@ -183,7 +209,7 @@ namespace BannerKings.Models.Vanilla
                     cost.AddFactor(data.EconomicData.CaravanAttraction.ResultNumber - 1f,
                         new TextObject("{=FK7QzVtM}Caravan attraction"));
                 }
-            }
+            }*/
 
             return cost;
         }
@@ -197,7 +223,9 @@ namespace BannerKings.Models.Vanilla
             result.AddFactor(data.MilitaryData.Militarism.ResultNumber * -1f, new TextObject("{=m66LFb9g}Militarism"));
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
-                CouncilPosition.Steward, 0.15f, true);
+                DefaultCouncilPositions.Instance.Steward,
+                DefaultCouncilTasks.Instance.DevelopEconomy, 
+                0.15f, false);
 
             if (settlement.Town != null)
             {
@@ -216,6 +244,19 @@ namespace BannerKings.Models.Vanilla
                 if (capital == settlement.Town)
                 {
                     result.AddFactor(0.4f, new TextObject("{=fQVyeiJb}Capital"));
+                }
+
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result,
+                   settlement.OwnerClan.Leader, 
+                   DefaultCouncilPositions.Instance.Constable,
+                   DefaultCouncilTasks.Instance.EnforceLaw,
+                   0.05f, 
+                   true);
+
+                Hero governor = settlement.Town.Governor;
+                if (governor != null && governor.IsMerchant)
+                {
+                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Trade) * 0.1f, new TextObject("{=!}Merchant Governor"));
                 }
             }
 
@@ -236,6 +277,7 @@ namespace BannerKings.Models.Vanilla
             float nobles = data.GetTypeCount(PopType.Nobles);
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             float serfs = data.GetTypeCount(PopType.Serfs);
+            float tenants = data.GetTypeCount(PopType.Tenants);
             var type = Utils.Helpers.GetTradeGoodConsumptionType(category);
 
             var baseResult = 0f;
@@ -248,11 +290,13 @@ namespace BannerKings.Models.Vanilla
                 case ConsumptionType.Industrial:
                     baseResult += craftsmen * 1.2f;
                     baseResult += serfs * 0.2f;
+                    baseResult += tenants * 0.20f;
                     break;
                 default:
                     baseResult += nobles * 1f;
                     baseResult += craftsmen * 1f;
                     baseResult += serfs * 0.20f;
+                    baseResult += tenants * 0.20f;
                     break;
             }
 
@@ -264,7 +308,9 @@ namespace BannerKings.Models.Vanilla
             {
                 num *= 3f;
             }
-            var num3 = category.BaseDemand * num;
+
+            float baseDemand = category.BaseDemand;
+            var num3 = baseDemand * num;
             var num4 = category.LuxuryDemand * num2;
             var result = num3 + num4;
             if (category.BaseDemand < 1E-08f)
@@ -323,10 +369,10 @@ namespace BannerKings.Models.Vanilla
                 };
             }
 
-            var efficiency = data.EconomicData.ProductionEfficiency.ResultNumber * 1.25f;
+            var efficiency = data.EconomicData.ProductionEfficiency.ResultNumber;
             if (privateSlaves > 0f)
             {
-                return (int) ((privateSlaves * tax * efficiency) + 5000 + (town.Prosperity / 2f));
+                return (int) ((privateSlaves * tax * efficiency) + (town.Prosperity / 2f));
             }
 
             return 0;

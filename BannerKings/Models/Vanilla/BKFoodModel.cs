@@ -198,13 +198,16 @@ namespace BannerKings.Models.Vanilla
                 var landData = data.LandData;
                 var serfName = Utils.Helpers.GetClassName(PopType.Serfs, town.Culture);
                 var slaveName = Utils.Helpers.GetClassName(PopType.Slaves, town.Culture);
+                var tenantsName = Utils.Helpers.GetClassName(PopType.Tenants, town.Culture);
 
                 float serfs = data.LandData.AvailableSerfsWorkForce;
                 float slaves = data.LandData.AvailableSlavesWorkForce;
-                float totalWorkforce = serfs + slaves;
+                float tenants = data.LandData.AvailableTenantsWorkForce;
+                float totalWorkforce = serfs + slaves + tenants;
 
                 float serfProportion = serfs / totalWorkforce;
                 float slaveProportion = slaves / totalWorkforce;
+                float tenantsProportion = tenants / totalWorkforce;
 
                 result.Add((landData.Farmland * serfProportion) * landData.GetAcreClassOutput("farmland", PopType.Serfs),
                     new TextObject("{=8Wuxnwnf}Farmlands ({CLASS})")
@@ -214,6 +217,11 @@ namespace BannerKings.Models.Vanilla
                     new TextObject("{=8Wuxnwnf}Farmlands ({CLASS})")
                     .SetTextVariable("CLASS", slaveName));
 
+                result.Add((landData.Farmland * tenantsProportion) * landData.GetAcreClassOutput("farmland", PopType.Tenants),
+                   new TextObject("{=8Wuxnwnf}Farmlands ({CLASS})")
+                   .SetTextVariable("CLASS", tenantsName));
+
+
                 result.Add(landData.Pastureland * landData.GetAcreOutput("pasture"), new TextObject("{=ngRhXYj1}Pasturelands"));
                 result.Add(landData.Woodland * landData.GetAcreOutput("wood"), new TextObject("{=qPQ7HKgG}Woodlands"));
                 var fertility = landData.Fertility - 1f;
@@ -221,6 +229,13 @@ namespace BannerKings.Models.Vanilla
                 {
                     var toDeduce = result.ResultNumber * fertility;
                     result.Add(toDeduce, new TextObject("{=KcNcxeMK}Fertility"));
+                }
+
+                var efficiency = data.EconomicData.ProductionEfficiency.ResultNumber - 1f;
+                if (efficiency != 0f)
+                {
+                    var toDeduce = result.ResultNumber * efficiency;
+                    result.Add(toDeduce, new TextObject("{=Q0AgGuB0}Production efficiency"));
                 }
 
                 result.AddFactor(MathF.Clamp(data.LandData.WorkforceSaturation - 1f, -1f, 0f), new TextObject("{=LohssChh}Workforce saturation"));
@@ -244,11 +259,11 @@ namespace BannerKings.Models.Vanilla
                 if (data.TitleData != null && data.TitleData.Title != null)
                 {
                     var title = data.TitleData.Title;
-                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                    if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
                     {
                         result.AddFactor(-0.05f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);
                     }
-                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsAgricultureDuties))
+                    else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsAgricultureDuties))
                     {
                         result.AddFactor(0.1f, DefaultDemesneLaws.Instance.SerfsAgricultureDuties.Name);
                     }

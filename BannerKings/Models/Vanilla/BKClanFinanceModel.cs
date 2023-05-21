@@ -80,9 +80,9 @@ namespace BannerKings.Models.Vanilla
         public override int CalculateOwnerIncomeFromCaravan(MobileParty caravan) => 
             (int)(BannerKingsSettings.Instance.RealisticCaravanIncome ? 0f : MathF.Max(0f, (caravan.PartyTradeGold - 10000) / 2f));
 
-        public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
+        public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false, bool includeDetails = false)
         {
-            var baseResult = base.CalculateClanGoldChange(clan, true, applyWithdrawals);
+            var baseResult = base.CalculateClanGoldChange(clan, true, applyWithdrawals, includeDetails);
             if (BannerKingsConfig.Instance.TitleManager == null)
             {
                 return baseResult;
@@ -94,9 +94,9 @@ namespace BannerKings.Models.Vanilla
             return baseResult;
         }
 
-        public override ExplainedNumber CalculateClanIncome(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
+        public override ExplainedNumber CalculateClanIncome(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false, bool includeDetails = false)
         {
-            var baseResult = base.CalculateClanIncome(clan, includeDescriptions, applyWithdrawals);
+            var baseResult = base.CalculateClanIncome(clan, includeDescriptions, applyWithdrawals, includeDetails);
             if (BannerKingsConfig.Instance.TitleManager != null)
             {
                 AddIncomes(clan, ref baseResult, applyWithdrawals);
@@ -105,9 +105,9 @@ namespace BannerKings.Models.Vanilla
             return baseResult;
         }
 
-        public override ExplainedNumber CalculateClanExpenses(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
+        public override ExplainedNumber CalculateClanExpenses(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false, bool includeDetails = false)
         {
-            var baseResult = base.CalculateClanExpenses(clan, includeDescriptions, applyWithdrawals);
+            var baseResult = base.CalculateClanExpenses(clan, includeDescriptions, applyWithdrawals, includeDetails);
             if (BannerKingsConfig.Instance.TitleManager != null)
             {
                 AddExpenses(clan, ref baseResult, applyWithdrawals);
@@ -202,7 +202,7 @@ namespace BannerKings.Models.Vanilla
                         continue;
                     }
 
-                    var amount = pair.Value.Aggregate(0f, (current, title) => current + (int) title.dueTax);
+                    var amount = pair.Value.Aggregate(0f, (current, title) => current + (int) title.DueTax);
                     result.Add(amount, new TextObject("{=6keRYbQa}Taxes from {CLAN}").SetTextVariable("CLAN", pair.Key.Name));
                 }
             }
@@ -210,8 +210,8 @@ namespace BannerKings.Models.Vanilla
             if (!clan.IsUnderMercenaryService && clan.Kingdom != null && FactionManager.GetEnemyKingdoms(clan.Kingdom).Any())
             {
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-                if (title is {contract: { }} &&
-                    title.contract.Rights.Contains(FeudalRights.Army_Compensation_Rights))
+                if (title is {Contract: { }} &&
+                    title.Contract.Rights.Contains(FeudalRights.Army_Compensation_Rights))
                 {
                     var model = new DefaultClanFinanceModel();
                     var expense = model.GetType().GetMethod("AddExpenseFromLeaderParty", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -303,7 +303,7 @@ namespace BannerKings.Models.Vanilla
             var dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassals(suzerain.deJure.Clan, clan);
             if (dictionary.ContainsKey(clan))
             {
-                var amount = dictionary[clan].Aggregate(0f, (current, title) => current + (int)title.dueTax);
+                var amount = dictionary[clan].Aggregate(0f, (current, title) => current + (int)title.DueTax);
                 result.Add(-amount, new TextObject("{=rU692V1m}Taxes to {SUZERAIN}").SetTextVariable("SUZERAIN", suzerain.deJure.Name));
 
             }

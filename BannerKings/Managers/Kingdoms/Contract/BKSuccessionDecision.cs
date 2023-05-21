@@ -59,7 +59,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         }
 
 
-        public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
+        public override void ApplySecondaryEffects(MBReadOnlyList<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
         {
         }
 
@@ -79,7 +79,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             yield return new SuccessionDecisionOutcome(false);
         }
 
-        public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
+        public override void DetermineSponsors(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {
             foreach (var decisionOutcome in possibleOutcomes)
             {
@@ -177,7 +177,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             textObject.SetTextVariable("KINGDOM", Kingdom.InformalName);
             textObject.SetTextVariable("POLICY_DESCRIPTION",
-                newGovernment ? Utils.TextHelper.GetName(successionType) : Utils.TextHelper.GetName(Title.contract.Succession));
+                newGovernment ? Utils.TextHelper.GetName(successionType) : Utils.TextHelper.GetName(Title.Contract.Succession));
             if (isShortVersion || IsSingleClanDecision())
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", TextObject.Empty);
@@ -211,7 +211,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             return 250;
         }
 
-        public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
+        public override DecisionOutcome GetQueriedDecisionOutcome(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
         {
             return possibleOutcomes.FirstOrDefault(t => ((SuccessionDecisionOutcome) t).ShouldDecisionBeEnforced);
         }
@@ -222,7 +222,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
             textObject.SetTextVariable("CURRENT",
-                Utils.Helpers.GetGovernmentString(Title.contract.Government, Kingdom.Culture));
+                Utils.Helpers.GetGovernmentString(Title.Contract.Government, Kingdom.Culture));
             textObject.SetTextVariable("PROPOSED", Utils.TextHelper.GetName(successionType));
             return textObject;
         }

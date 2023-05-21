@@ -2,6 +2,8 @@ using System;
 using BannerKings.Behaviours;
 using BannerKings.Extensions;
 using BannerKings.Managers.CampaignStart;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
@@ -9,10 +11,12 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Settings;
 using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
@@ -21,9 +25,116 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKInfluenceModel : DefaultClanPoliticsModel
     {
+        public ExplainedNumber GetBequeathPeerageCost(Kingdom kingdom, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(200f, explanations);
+            float cap = CalculateInfluenceCap(kingdom.RulingClan).ResultNumber;
+            result.Add(cap * 0.1f, new TextObject("{=wwYABLRd}Clan Influence Limit"));
+
+            return result;
+        }
+
+        public int GetCurrentPeers(Kingdom kingdom)
+        {
+            int peers = 0;
+            foreach (Clan kingdomClan in kingdom.Clans)
+            {
+                var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdomClan);
+                if (council.Peerage != null && council.Peerage.IsFullPeerage)
+                {
+                    peers++;
+                }
+            }
+
+            return peers;
+        }
+
+        public ExplainedNumber GetMinimumPeersQuantity(Kingdom kingdom, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(0f, explanations);
+            if (kingdom != null)
+            {
+                result.Add(1f, new TextObject("{=!}Base value"));
+                result.Add(MathF.Floor(kingdom.Fiefs.Count / 2f), new TextObject("{=LBNzsqyb}Fiefs"));
+                result.LimitMax(kingdom.Clans.Count);
+            }
+
+            return result;
+        }
+
         public float GetRejectKnighthoodCost(Clan clan)
         {
             return 10f + MathF.Max(CalculateInfluenceChange(clan).ResultNumber, 5f) * 0.025f * CampaignTime.DaysInYear;
+        }
+
+        public ExplainedNumber CalculateInfluenceCap(Clan clan, bool includeDescriptions = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(50f, includeDescriptions);
+            result.Add(clan.Tier * 150f, GameTexts.FindText("str_clan_tier_bonus"));
+            result.LimitMin(clan.Tier * 50f);
+
+            foreach (var fief in clan.Fiefs)
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(fief.Settlement);
+                if (data != null)
+                {
+                    result.Add(CalculateSettlementInfluence(fief.Settlement, data, false).ResultNumber * 20f, fief.Name);
+                }
+            }
+
+            foreach (var village in clan.GetActualVillages())
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
+                if (data != null)
+                {
+                    result.Add(CalculateSettlementInfluence(village.Settlement, data, false).ResultNumber * 25f, village.Name);
+                }
+            }
+
+            foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
+            {
+                result.Add(500 / ((int)title.TitleType * 8f), title.FullName);
+            }
+
+            if (clan.Kingdom != null)
+            {
+                if (clan == clan.Kingdom.RulingClan)
+                {
+                    result.Add(350, new TextObject("{=IcgVKFxZ}Ruler"));
+                    int peers = GetCurrentPeers(clan.Kingdom);
+
+                    int minimum = (int)GetMinimumPeersQuantity(clan.Kingdom).ResultNumber;
+                    if (peers < minimum)
+                    {
+                        float diff = minimum - peers;
+                        result.AddFactor(diff * -0.2f, new TextObject("{=SVt6kyNg}{COUNT} full Peers out of {MINIMUM} minimum within the realm")
+                            .SetTextVariable("COUNT", peers)
+                            .SetTextVariable("MINIMUM", minimum));
+                    }
+                }
+
+                if (clan.Culture != clan.Kingdom.Culture)
+                {
+                    result.AddFactor(-0.2f, new TextObject("{=qW1tnxGu}Kingdom cultural difference"));
+                }
+            }
+
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result,
+                clan.Leader,
+                DefaultCouncilPositions.Instance.Chancellor,
+                DefaultCouncilTasks.Instance.ArbitrateRelations,
+                0.2f,
+                true);
+
+            var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
+            if (position != null)
+            {
+                result.AddFactor(position.InfluenceCosts(), new TextObject("{=yfBEQUdh}{POSITION} in {OWNER}'s council")
+                    .SetTextVariable("POSITION", position.Name)
+                    .SetTextVariable("OWNER", position.Clan.Leader.Name));
+            }
+
+            return result;
         }
 
         public override ExplainedNumber CalculateInfluenceChange(Clan clan, bool includeDescriptions = false)
@@ -33,6 +144,12 @@ namespace BannerKings.Models.Vanilla
             if (clan == Clan.PlayerClan && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().HasDebuff(DefaultStartOptions.Instance.IndebtedLord))
             {
                 baseResult.Add(-2f, DefaultStartOptions.Instance.IndebtedLord.Name);
+            }
+
+            ExplainedNumber cap = CalculateInfluenceCap(clan, includeDescriptions);
+            if (cap.ResultNumber < clan.Influence)
+            {
+                baseResult.Add((clan.Influence / cap.ResultNumber) * -2f, new TextObject("{=wwYABLRd}Clan Influence Limit"));
             }
 
             var generalSupport = 0f;
@@ -88,10 +205,11 @@ namespace BannerKings.Models.Vanilla
             var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
             if (religion != null && clan.Settlements.Count > 0)
             {
-                if (religion.HasDoctrine(DefaultDoctrines.Instance.Druidism) && 
-                    council.GetMemberFromPosition(Managers.Court.CouncilPosition.Spiritual).Member == null) 
+                var spiritual = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spiritual);
+                if (religion.HasDoctrine(DefaultDoctrines.Instance.Druidism) &&
+                    spiritual != null && spiritual.Member == null) 
                 {
-                    baseResult.Add(-5f, DefaultDoctrines.Instance.Druidism.Name);
+                    baseResult.Add(-4f, DefaultDoctrines.Instance.Druidism.Name);
                 }
             }
 
@@ -126,7 +244,8 @@ namespace BannerKings.Models.Vanilla
                     var owner = settlement.Village.GetActualOwner();
                     if (!owner.IsClanLeader() && owner.MapFaction == settlement.MapFaction)
                     {
-                        BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(owner, settlementResult.ResultNumber * 0.1f);
+                        BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(owner, 
+                            settlementResult.ResultNumber * 0.1f * BannerKingsSettings.Instance.KnightClanCreationSpeed);
                         continue;
                     }
                 }
@@ -136,12 +255,6 @@ namespace BannerKings.Models.Vanilla
                 i++;
 
                 baseResult.Add(settlementResult.ResultNumber, settlement.Name);
-            }
-
-            var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
-            if (position != null)
-            {
-                baseResult.Add(position.IsCorePosition(position.Position) ? 1f : 0.5f, new TextObject("{=WvhXhUFS}Councillor role"));
             }
 
             float currentVassals = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentVassals(clan).ResultNumber;
@@ -176,7 +289,7 @@ namespace BannerKings.Models.Vanilla
             if (data.TitleData != null && data.TitleData.Title != null)
             {
                 var title = data.TitleData.Title;
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
+                if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
                 {
                     factor = 0.011f;
                 }

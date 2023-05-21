@@ -1,6 +1,8 @@
 using System.Linq;
 using BannerKings.Extensions;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
@@ -47,12 +49,6 @@ namespace BannerKings.Models.Vanilla
             if (education.HasPerk(BKPerks.Instance.RitterPettySuzerain))
             {
                 baseResult.Add(0.1f, BKPerks.Instance.RitterPettySuzerain.Name);
-            }
-
-            if (owner.Culture.StringId == "battania")
-            {
-                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, owner,
-                          CouncilPosition.Elder, 0.2f, false);
             }
 
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
@@ -103,6 +99,14 @@ namespace BannerKings.Models.Vanilla
                 {
                     baseResult.AddFactor(0.2f, new TextObject("{=HMao8su6}Tax exemption policy"));
                 }
+            }
+
+            if (village.Bound.IsCastle)
+            {
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult,
+                    owner, DefaultCouncilPositions.Instance.Castellan,
+                    DefaultCouncilTasks.Instance.OverseeBaronies,
+                    0.15f, false);
             }
 
             AddDemesneLawEffect(data, ref baseResult);
@@ -181,15 +185,6 @@ namespace BannerKings.Models.Vanilla
                         merchantGold >= 200000f ? MathF.Min(200000f * 0.000005f - 1f, 2f) : 0f;
                     explainedNumber.Add(merchantEffect, new TextObject("{=Crsf0YLd}Merchants wealth"));
                 } 
-                else if (fortification.IsCastle)
-                {
-                    var owner = fortification.OwnerClan.Leader;
-                    if (owner.Culture.StringId == "vlandia")
-                    {
-                        BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, fortification.OwnerClan.Leader,
-                            CouncilPosition.Castellan, 1.5f, false);
-                    }
-                }
 
                 if (fortification.Governor != null)
                 {
@@ -271,7 +266,17 @@ namespace BannerKings.Models.Vanilla
                 GetSettlementProsperityChangeDueToIssues(fortification.Settlement, ref explainedNumber);
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber,
-                    fortification.OwnerClan.Leader, CouncilPosition.Steward, 1f, false);
+                    fortification.OwnerClan.Leader, DefaultCouncilPositions.Instance.Steward,
+                    DefaultCouncilTasks.Instance.DevelopEconomy,
+                    1f, false);
+
+                if (fortification.IsCastle)
+                {
+                    BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber,
+                        fortification.OwnerClan.Leader, DefaultCouncilPositions.Instance.Castellan,
+                        DefaultCouncilTasks.Instance.OverseeBaronies,
+                        0.5f, false);
+                }
 
                 AddDemesneLawEffect(data, ref explainedNumber);
                 return explainedNumber;
@@ -291,15 +296,15 @@ namespace BannerKings.Models.Vanilla
             if (data != null && data.TitleData != null && data.TitleData.Title != null)
             {
                 var title = data.TitleData.Title;
-                if (title.contract != null)
+                if (title.Contract != null)
                 {
-                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                    if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
                     {
                         float proportion = data.GetCurrentTypeFraction(PopType.Serfs);
                         result.AddFactor(proportion * 0.05f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);
                     }
 
-                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
+                    if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
                     {
                         float proportion = data.GetCurrentTypeFraction(PopType.Craftsmen);
                         result.AddFactor(proportion * 0.08f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);

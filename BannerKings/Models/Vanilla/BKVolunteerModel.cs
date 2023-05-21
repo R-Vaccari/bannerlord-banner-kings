@@ -1,4 +1,3 @@
-using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -19,6 +18,8 @@ using BannerKings.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Court.Members.Tasks;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -47,7 +48,7 @@ namespace BannerKings.Models.Vanilla
                 return new ExplainedNumber(base.MaximumIndexHeroCanRecruitFromHero(buyerHero, sellerHero, useValueAsRelation));
             }
 
-            var contract = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement).contract;
+            var contract = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement).Contract;
             if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingVassalage))
             {
                 AddVassalage(ref result, buyerHero, sellerHero);
@@ -298,7 +299,10 @@ namespace BannerKings.Models.Vanilla
                 explainedNumber.AddFactor(DefaultPerks.Riding.CavalryTactics.PrimaryBonus * 0.01f, DefaultPerks.Riding.CavalryTactics.PrimaryDescription);
             }
 
-            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.25f, true);
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader,
+                DefaultCouncilPositions.Instance.Marshal,
+                DefaultCouncilTasks.Instance.EncourageMilitarism,
+                0.25f, true);
             
             var draftPolicy = ((BKDraftPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft")).Policy;
             switch (draftPolicy)
@@ -349,7 +353,10 @@ namespace BannerKings.Models.Vanilla
                 explainedNumber.Add(tuple.Item2 / classes.Count, Utils.Helpers.GetClassName(tuple.Item1, settlement.Culture));
             }
 
-            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.03f, false);
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader,
+                DefaultCouncilPositions.Instance.Marshal,
+                DefaultCouncilTasks.Instance.EncourageMilitarism,
+                0.03f, false);
 
             if (settlement.Culture == settlement.Owner.Culture)
             {
@@ -373,6 +380,7 @@ namespace BannerKings.Models.Vanilla
         {
             var list = new List<ValueTuple<PopType, float>>();
             float serfFactor = 0.1f;
+            float tenantsFactor = 0.09f;
             float craftsmenFactor = 0.04f;
             float nobleFactor = 0.12f;
 
@@ -381,34 +389,34 @@ namespace BannerKings.Models.Vanilla
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(settlement.OwnerClan.Kingdom);
                 if (title != null)
                 {
-                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryAserai))
+                    if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryAserai))
                     {
                         list.Add(new(PopType.Slaves, 0.06f));
                     }
 
-                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsMilitaryServiceDuties))
+                    if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsMilitaryServiceDuties))
                     {
                         serfFactor += 0.03f;
                     }
-                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                    else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
                     {
                         serfFactor -= 0.015f;
                     }
 
-                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties))
+                    if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties))
                     {
                         craftsmenFactor += 0.03f;
                     }
-                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
+                    else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
                     {
                         serfFactor -= 0.015f;
                     }
 
-                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesMilitaryServiceDuties))
+                    if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesMilitaryServiceDuties))
                     {
                         nobleFactor += 0.03f;
                     }
-                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
+                    else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
                     {
                         serfFactor -= 0.015f;
                     }
@@ -418,19 +426,9 @@ namespace BannerKings.Models.Vanilla
             list.Add(new(PopType.Serfs, serfFactor));
             list.Add(new(PopType.Craftsmen, craftsmenFactor));
             list.Add(new(PopType.Nobles, nobleFactor));
+            list.Add(new(PopType.Tenants, tenantsFactor));
 
             return list;
-        }
-
-        public float GetClassMilitarism(PopType type)
-        {
-            return type switch
-            {
-                PopType.Serfs => 0.1f,
-                PopType.Craftsmen => 0.03f,
-                PopType.Nobles => 0.12f,
-                _ => 0
-            };
         }
     }
 }
