@@ -18,10 +18,11 @@ namespace BannerKings.UI.Extensions
         private readonly KingdomDiplomacyVM kingdomDiplomacy;
         private string justificationText, warScoreText, warObjectiveText, playerFrontHeader,
             enemyFrontHeader, playerFatigueHeader, enemyFatigueHeader, playerFrontText,
-            enemyFrontText, playerFatigueText, enemyFatigueText;
+            enemyFrontText, playerFatigueText, enemyFatigueText, tradePactText,
+            truceText, allianceText;
         private HintViewModel justificationHint, warScoreHint, warObjectiveHint, frontHint,
             playerFatigueHint, enemyFatigueHint;
-        private bool warExists;
+        private bool warExists, peaceExists;
         private War war;
 
 
@@ -33,11 +34,15 @@ namespace BannerKings.UI.Extensions
         [DataSourceProperty] public string JustificationHeader => new TextObject("{=!}Casus Belli").ToString();
         [DataSourceProperty] public string WarScoreHeader => new TextObject("{=!}War Score").ToString();
         [DataSourceProperty] public string WarObjectiveHeader => new TextObject("{=!}War Objective").ToString();
+        [DataSourceProperty] public string TradePactHeader => new TextObject("{=!}Trade Pact").ToString();
+        [DataSourceProperty] public string AllianceHeader => new TextObject("{=!}Alliance").ToString();
+        [DataSourceProperty] public string TruceHeader => new TextObject("{=!}Truce").ToString();
 
         public override void OnRefresh()
         {
             war = null;
             WarExists = false;
+            PeaceExists = false;
             if (kingdomDiplomacy.CurrentSelectedDiplomacyItem != null)
             {
                 if (kingdomDiplomacy.CurrentSelectedDiplomacyItem is KingdomWarItemVM)
@@ -89,7 +94,112 @@ namespace BannerKings.UI.Extensions
             }
             else if (kingdomDiplomacy.CurrentSelectedDiplomacyItem is KingdomTruceItemVM)
             {
+                PeaceExists = true;
+                Kingdom currentKingdom = kingdomDiplomacy.CurrentSelectedDiplomacyItem.Faction1 as Kingdom;
+                Kingdom targetKingdom = kingdomDiplomacy.CurrentSelectedDiplomacyItem.Faction2 as Kingdom;
+                var bkDiplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(currentKingdom);
+                
+                if (bkDiplomacy.HasTradePact(targetKingdom))
+                {
+                    TradePactText = new TextObject("{=!}In Effect").ToString();
+                }
+                else
+                {
+                    TradePactText = new TextObject("{=!}Not Present").ToString();
+                }
 
+                if (bkDiplomacy.HasValidTruce(targetKingdom))
+                {
+                    TruceText = bkDiplomacy.Truces[targetKingdom].ToString();
+                }
+                else
+                {
+                    TruceText = new TextObject("{=!}None").ToString();
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string TradePactText
+        {
+            get => tradePactText;
+            set
+            {
+                if (value != tradePactText)
+                {
+                    tradePactText = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string AllianceText
+        {
+            get => allianceText;
+            set
+            {
+                if (value != allianceText)
+                {
+                    allianceText = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string TruceText
+        {
+            get => truceText;
+            set
+            {
+                if (value != truceText)
+                {
+                    truceText = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public HintViewModel TradePactHint
+        {
+            get => justificationHint;
+            set
+            {
+                if (value != justificationHint)
+                {
+                    justificationHint = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public HintViewModel AllianceHint
+        {
+            get => justificationHint;
+            set
+            {
+                if (value != justificationHint)
+                {
+                    justificationHint = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public HintViewModel TruceHint
+        {
+            get => justificationHint;
+            set
+            {
+                if (value != justificationHint)
+                {
+                    justificationHint = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
 
@@ -214,6 +324,20 @@ namespace BannerKings.UI.Extensions
                 if (value != playerFatigueHint)
                 {
                     playerFatigueHint = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool PeaceExists
+        {
+            get => peaceExists;
+            set
+            {
+                if (value != peaceExists)
+                {
+                    peaceExists = value;
                     ViewModel!.OnPropertyChangedWithValue(value);
                 }
             }

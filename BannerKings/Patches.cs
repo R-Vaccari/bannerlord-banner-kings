@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Behaviours.Diplomacy;
+using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
@@ -21,6 +23,7 @@ using TaleWorlds.GauntletUI;
 using TaleWorlds.GauntletUI.BaseTypes;
 using TaleWorlds.GauntletUI.GamepadNavigation;
 using TaleWorlds.Library;
+using TaleWorlds.LinQuick;
 using TaleWorlds.Localization;
 using static TaleWorlds.CampaignSystem.Election.KingSelectionKingdomDecision;
 using static TaleWorlds.CampaignSystem.Issues.CaravanAmbushIssueBehavior;
@@ -462,9 +465,11 @@ namespace BannerKings.Patches
 
     namespace Government
     {
-        [HarmonyPatch(typeof(KingdomPolicyDecision), "IsAllowed")]
-        internal class PolicyIsAllowedPatch
+        [HarmonyPatch(typeof(KingSelectionKingdomDecision))]
+        internal class KingdomPolicyDecisionPatches
         {
+            [HarmonyPostfix]
+            [HarmonyPatch("IsAllowed", MethodType.Normal)]
             private static bool Prefix(ref bool __result, KingdomPolicyDecision __instance)
             {
                 if (BannerKingsConfig.Instance.TitleManager != null)
@@ -479,6 +484,39 @@ namespace BannerKings.Patches
                 }
 
                 return true;
+            }
+
+            [HarmonyPostfix]
+            [HarmonyPatch("DetermineSupport", MethodType.Normal)]
+            private static void OutcomeMeritPostfix(ref float __result, KingdomPolicyDecision __instance,
+                Clan clan, DecisionOutcome possibleOutcome)
+            {
+                KingdomPolicyDecision.PolicyDecisionOutcome policyDecisionOutcome = 
+                    possibleOutcome as KingdomPolicyDecision.PolicyDecisionOutcome;
+                BKDiplomacyBehavior behavior = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>();
+                KingdomDiplomacy diplomacy = behavior.GetKingdomDiplomacy(clan.Kingdom);
+     
+                if (diplomacy != null)
+                {
+                    InterestGroup group = diplomacy.GetHeroGroup(clan.Leader);
+                    if (group != null)
+                    {
+                        bool neutral = true;
+                        bool supports = false;
+                        if (group.SupportedPolicies.Contains(__instance.Policy))
+                        {
+                            neutral = false;
+                            supports = policyDecisionOutcome.ShouldDecisionBeEnforced;
+                        }
+                        else if (group.ShunnedPolicies.Contains(__instance.Policy))
+                        {
+                            neutral = false;
+                            supports = !policyDecisionOutcome.ShouldDecisionBeEnforced;
+                        }
+
+                        if (!neutral) __result += supports ? 80f : -80;
+                    }
+                }
             }
         }
 

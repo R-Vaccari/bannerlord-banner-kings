@@ -1,8 +1,8 @@
 ﻿using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Utils.Models;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -13,19 +13,57 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKDiplomacyModel : DefaultDiplomacyModel
     {
+        public ExplainedNumber GetPactInfluenceCost(Kingdom proposer, Kingdom proposed, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(0, explanations);
+            float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason) / 2f;
+
+            foreach (var clan in proposer.Clans)
+            {
+                if (clan == proposer.RulingClan || clan.IsUnderMercenaryService)
+                {
+                    continue;
+                }
+
+                float relation = clan.Leader.GetRelation(proposer.RulingClan.Leader) / 150f;
+                //result.Add((100000f - peace) * MathF.Sqrt(years), clan.Name);
+            }
+           
+            result.AddFactor(-peace / 100000f, new TextObject("{=!}"));
+            return result;
+        }
+
+        public bool IsTruceAcceptable(Kingdom proposer, Kingdom proposed, bool explanations = false)
+        {
+            float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason);
+            return peace > 0;
+        }
+
+        public ExplainedNumber GetTruceDenarCost(Kingdom proposer, Kingdom proposed, float years = 3f, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(0, explanations);
+            float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason) / 2f;
+            result.Add((100000f - peace) * MathF.Sqrt(years), new TextObject("{=!}Truce duration"));
+
+            float relation = proposed.RulingClan.Leader.GetRelation(proposer.RulingClan.Leader) / 150f;
+            result.AddFactor(-relation, new TextObject("{=BlidMNGT}Relation"));
+
+            return result;
+        }
+
         public override int GetInfluenceCostOfProposingWar(Kingdom proposingKingdom)
         {
             return 100;
         }
         public override float GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan, out TextObject warReason)
         {
-            return GetScoreOfDeclaringWar(factionDeclaresWar, factionDeclaredWar, evaluatingClan, false, out warReason).ResultNumber;
+            return GetScoreOfDeclaringWar(factionDeclaresWar, factionDeclaredWar, evaluatingClan, out warReason).ResultNumber;
         }
 
         public override float GetScoreOfDeclaringPeace(IFaction factionDeclaresPeace, IFaction factionDeclaredPeace, IFaction evaluatingClan, out TextObject peaceReason)
         {
-            ExplainedNumber result = new ExplainedNumber(base.GetScoreOfDeclaringPeace(factionDeclaresPeace, 
-                factionDeclaredPeace, evaluatingClan, out peaceReason));
+            ExplainedNumber result = new ExplainedNumber(-GetScoreOfDeclaringWar(factionDeclaresPeace, 
+                factionDeclaredPeace, evaluatingClan, out peaceReason).ResultNumber);
 
             War war = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetWar(factionDeclaresPeace,factionDeclaredPeace);
             if (war != null)
@@ -38,10 +76,11 @@ namespace BannerKings.Models.Vanilla
         }
 
         public ExplainedNumber GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan,
-            bool evaluatingPeace, out TextObject warReason, bool explanations = false)
+            out TextObject warReason, bool explanations = false)
         {
             warReason = TextObject.Empty;
-            var result = new ExplainedNumber(0f, explanations);
+            var result = new ExplainedNumber(base.GetScoreOfDeclaringWar(factionDeclaresWar, factionDeclaredWar,
+                evaluatingClan, out warReason), explanations);
             result.LimitMin(-50000f);
             result.LimitMax(50000f);
 
@@ -72,6 +111,9 @@ namespace BannerKings.Models.Vanilla
                     return new ExplainedNumber(-50000f);
                 }
 
+                float relations = attackerKingdom.RulingClan.GetRelationWithClan(defenderKingdom.RulingClan);
+                result.AddFactor(relations * -0.003f);
+
                 var tributes = factionDeclaresWar.Stances.ToList().FindAll(x => x.GetDailyTributePaid(x.Faction2) > 0);
                 result.AddFactor(-0.15f * tributes.Count);
    
@@ -83,9 +125,15 @@ namespace BannerKings.Models.Vanilla
                         result.AddFactor(-0.25f);
                     }
 
-                    foreach (var casusBelli in diplomacy.GetAvailableCasusBelli(defenderKingdom))
+                    List<CasusBelli> justifications = diplomacy.GetAvailableCasusBelli(defenderKingdom);
+                    foreach (var casusBelli in justifications)
                     {
                         result.Add(casusBelli.DeclareWarScore);
+                    }
+
+                    if (justifications.Count == 0)
+                    {
+                        result.AddFactor(-0.7f);
                     }
                 }
 
@@ -98,27 +146,10 @@ namespace BannerKings.Models.Vanilla
                 }
             }     
            
-            WarStats defenderStats = CalculateWarStats(factionDeclaredWar, factionDeclaresWar);
+            /*WarStats defenderStats = CalculateWarStats(factionDeclaredWar, factionDeclaresWar);
             float defenderScore = defenderStats.Strength + defenderStats.ValueOfSettlements - (defenderStats.TotalStrengthOfEnemies * 1.25f);
             float scoreProportion = (attackerScore / defenderScore) - 1f;
-            result.AddFactor(scoreProportion);
-
-            float relations = attackerStats.RulingClan.GetRelationWithClan(defenderStats.RulingClan);
-            result.AddFactor(relations * -0.003f);
-
-            DefaultDiplomacyModel model = new DefaultDiplomacyModel();
-            var getDistanceMethod = model.GetType()
-                .GetMethod("GetDistance", BindingFlags.Instance | BindingFlags.NonPublic);
-
-            float distanceFactor = (float)getDistanceMethod.Invoke(model, new object[] { factionDeclaresWar, factionDeclaredWar });
-            float averageDistance = Campaign.AverageDistanceBetweenTwoFortifications;
-
-            result.Add(MathF.Clamp(averageDistance / averageDistance, -0.9f, 0f));
-
-            if (evaluatingPeace)
-            {
-                result.AddFactor(-1f);
-            }
+            result.AddFactor(scoreProportion);*/
 
             return result;
         }

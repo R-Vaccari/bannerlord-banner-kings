@@ -1,3 +1,4 @@
+using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
@@ -41,6 +42,14 @@ namespace BannerKings.Managers.Populations
             {
                 if (caravan.MapFaction != settlement.MapFaction)
                 {
+                    if (caravan.MapFaction.IsKingdomFaction && settlement.MapFaction.IsKingdomFaction)
+                    {
+                        var diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(settlement.MapFaction as Kingdom);
+                        if (diplomacy.HasTradePact(caravan.MapFaction as Kingdom))
+                        {
+                            return 0;
+                        }
+                    }
                     result += caravan.MemberRoster.TotalManCount;
                     result += (int)(200 * Mercantilism.ResultNumber);
                 }

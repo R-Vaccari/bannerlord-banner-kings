@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -16,7 +17,7 @@ namespace BannerKings.Behaviours.Diplomacy
         [SaveableProperty(2)] public Religion Religion { get; private set; }
         [SaveableProperty(3)] public List<InterestGroup> Groups { get; private set; }
         public List<Kingdom> TradePacts { get; private set; }
-        public Dictionary<Kingdom, CampaignTime> Truces { get; private set; }
+        [SaveableProperty(4)] public Dictionary<Kingdom, CampaignTime> Truces { get; private set; }
       
         public KingdomDiplomacy(Kingdom kingdom)
         {
@@ -33,17 +34,37 @@ namespace BannerKings.Behaviours.Diplomacy
                 group.PostInitialize();
             }
             TradePacts = new List<Kingdom>();
-            Truces = new Dictionary<Kingdom, CampaignTime>();
+            if (Truces == null)
+            {
+                Truces = new Dictionary<Kingdom, CampaignTime>();
+            }
         }
 
         public bool HasValidTruce(Kingdom kingdom)
         {
             if (Truces.ContainsKey(kingdom))
             {
-                return Truces[kingdom].ElapsedHoursUntilNow < 0f;
+                return Truces[kingdom].RemainingHoursFromNow > 0f;
             }
 
             return false;
+        }
+
+        public void AddTruce(Kingdom otherKingdom, float years)
+        {
+            if (Truces.ContainsKey(otherKingdom))
+            {
+                Truces.Remove(otherKingdom);
+            }
+
+            Truces.Add(otherKingdom, CampaignTime.YearsFromNow(years));
+            
+        }
+
+        public void OnWar(Kingdom otherKingdom)
+        {
+            DissolveTruce(otherKingdom, new TextObject("{=!}War has broken out!"));
+            DissolveTradePact(otherKingdom, new TextObject("{=!}War has broken out!"));
         }
 
         public List<CasusBelli> GetAvailableCasusBelli(Kingdom targetKingdom = null)
@@ -151,7 +172,7 @@ namespace BannerKings.Behaviours.Diplomacy
             var trucesToDelete = new List<Kingdom>();
             foreach (var truce in Truces)
             {
-                if (truce.Value.ElapsedHoursUntilNow < 0f)
+                if (truce.Value.RemainingDaysFromNow < 1f)
                 {
                     trucesToDelete.Add(truce.Key);
                 }

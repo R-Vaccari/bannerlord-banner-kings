@@ -1,5 +1,7 @@
 ﻿using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Models.Vanilla;
 using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -65,6 +67,28 @@ namespace BannerKings.Behaviours.Diplomacy
             InformationManager.DisplayMessage(new InformationMessage(justification.WarDeclaredText.ToString()));
         }
 
+        public void MakeTruce(Kingdom proposer, Kingdom proposed, float years)
+        {
+            int denars = MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(proposer,
+                    proposed).ResultNumber);
+            proposer.RulingClan.Leader.ChangeHeroGold(-denars);
+
+            var diplomacy1 = GetKingdomDiplomacy(proposer);
+            diplomacy1.AddTruce(proposed, years);
+
+            var diplomacy2 = GetKingdomDiplomacy(proposed);
+            diplomacy2.AddTruce(proposer, years);
+
+            InformationManager.DisplayMessage(new InformationMessage(
+                new TextObject("{=!}The lords of {KINGDOM1} and {KINGDOM2} have settled on a truce until {DATE}.")
+                .SetTextVariable("KINGDOM1", proposer.Name)
+                .SetTextVariable("KINGDOM2", proposed.Name)
+                .SetTextVariable("DATE", CampaignTime.YearsFromNow(years).ToString())
+                .ToString(),
+                Color.FromUint(proposer == Clan.PlayerClan.MapFaction ? Utils.TextHelper.COLOR_LIGHT_BLUE :
+                Utils.TextHelper.COLOR_LIGHT_YELLOW)));
+        }
+
         public override void RegisterEvents()
         {
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
@@ -78,6 +102,7 @@ namespace BannerKings.Behaviours.Diplomacy
             CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.RulingClanChanged.AddNonSerializedListener(this, OnRulerChanged);
+            CampaignEvents.MakePeace.AddNonSerializedListener(this, OnMakePeace);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -229,11 +254,19 @@ namespace BannerKings.Behaviours.Diplomacy
             false);
         }
       
+        private void OnMakePeace(IFaction faction1, IFaction faction2, MakePeaceAction.MakePeaceDetail detail)
+        {
+            if (faction1.IsKingdomFaction && faction2.IsKingdomFaction)
+            {
+                MakeTruce(faction1 as Kingdom, faction2 as Kingdom, 1f);
+            }
+        }
+
         private void OnWarDeclared(IFaction faction1, IFaction faction2, DeclareWarAction.DeclareWarDetail detail)
         {
             if (faction1.IsKingdomFaction && faction2.IsKingdomFaction)
             {
-
+               
             }
         }
     }
@@ -272,28 +305,49 @@ namespace BannerKings.Behaviours.Diplomacy
                 if (kingdom.UnresolvedDecisions.Any(x => x is DeclareWarDecision || x is BKDeclareWarDecision))
                 {
                     InformationManager.DisplayMessage(new InformationMessage(
-                        new TextObject("{=!}War declaration is already being voted upon.").ToString()));
+                        new TextObject("{=!}A war declaration is being voted upon concerning the {FACTION}.")
+                        .SetTextVariable("FACTION", enemyKingdom.Name)
+                        .ToString()));
                 }
                 else
                 {
                     var list = new List<InquiryElement>();
-                    foreach (var casusBelli in diplomacy.GetAvailableCasusBelli(enemyKingdom))
-                    {
-                        float support = new KingdomElection(new BKDeclareWarDecision(casusBelli, Clan.PlayerClan, enemy)).GetLikelihoodForOutcome(0);
-                        list.Add(new InquiryElement(casusBelli,
-                        new TextObject("{=!}{NAME} ({CHANCE}% approval)")
-                        .SetTextVariable("NAME", casusBelli.QueryNameText)
-                        .SetTextVariable("CHANCE", (support * 100).ToString("0.00")).ToString(),
+                    BKKingdomDecisionModel model = new BKKingdomDecisionModel();
+                    Action<KingdomDiplomacy, Kingdom, KingdomDiplomacyVM> makeWar = ShowWarOptions;
+                    TextObject warHint;
+                    bool warPossible = model.IsWarDecisionAllowedBetweenKingdoms(kingdom, enemyKingdom, out warHint);
+                    list.Add(new InquiryElement(makeWar,
+                        new TextObject("{=!}Declare War").ToString(),
                         null,
-                        true,
-                        casusBelli.GetDescriptionWithModifers().ToString()));
-                    }
+                        warPossible,
+                        warHint.ToString()));
 
-                    list.Add(new InquiryElement(null, new TextObject("{=!}No Casus Belli").ToString(), null));
+                    bool playerRuler = Hero.MainHero == Clan.PlayerClan.Kingdom.RulingClan.Leader;
+                    Action<KingdomDiplomacy, Kingdom, KingdomDiplomacyVM> makeTruce = ShowTruce;
+                    TextObject truceHint;
+                    bool trucePossible = model.IsTruceAllowed(kingdom, enemyKingdom, out truceHint);
+                    list.Add(new InquiryElement(makeTruce,
+                        new TextObject("{=!}Propose Truce").ToString(),
+                        null,
+                        trucePossible && playerRuler,
+                        new TextObject("{=!}Propose a truce between both realms. A truce is a period of a certain amount of years in which both realms formally agree to not declare wars upon each other, in mutual benefit. The proposing realm is assumed to be the major beneficiary of this agreement, and thus is required a fee. The proposed realm is more likely to accept and offer better terms relative to how advantageous a truce is for them.\n\n{POSSIBLE}")
+                        .SetTextVariable("POSSIBLE", truceHint)
+                        .ToString()));
+
+                    Action<KingdomDiplomacy, Kingdom, KingdomDiplomacyVM> makePact = ShowWarOptions;
+                    TextObject tradeHint;
+                    bool tradePossible = model.IsTradePactAllowed(kingdom, enemyKingdom, out tradeHint);
+                    list.Add(new InquiryElement(makeWar,
+                        new TextObject("{=!}Propose Trade Pact").ToString(),
+                        null,
+                        false,
+                        new TextObject("{=!}Propose a trade pact between both realms. A trade agreement or pact establishes the exemptions of caravan tariffs between both realms, meaning that their caravans will not pay entry fees in your realm's fiefs, nor will your realm's caravans pay in theirs. The absence of fees stimulates caravans to circulate in these fiefs, strengthening mercantilism, prosperity and supply of different goods between both sides, while also diverging trade from other realms. A trade pact does not necessarily bring any revenue to lords. In fact, it may incur in some revenue loss due to the caravan fee exemptions.\n\n{POSSIBLE}")
+                        .SetTextVariable("POSSIBLE", truceHint)
+                        .ToString()));
 
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                        new TextObject("{=!}Casus Belli").ToString(),
-                        new TextObject("{=!}Select a justification for war.").ToString(),
+                        new TextObject("{=!}Diplomatic Action").ToString(),
+                        new TextObject("{=!}A diplomatic action significantly changes the relationship between your realm and the target realm.").ToString(),
                         list,
                         true,
                         1,
@@ -301,24 +355,83 @@ namespace BannerKings.Behaviours.Diplomacy
                         GameTexts.FindText("str_selection_widget_cancel").ToString(),
                         (List<InquiryElement> list) =>
                         {
-                            object identifier = list[0].Identifier;
-                            if (identifier != null)
-                            {
-                                CasusBelli casusBelli = (CasusBelli)identifier;
-                                var decision = new BKDeclareWarDecision(casusBelli, Clan.PlayerClan, enemy);
-                                Clan.PlayerClan.Kingdom.AddDecision(decision, false);
-                            }
-                            else
-                            {
-                                DeclareWarDecision declareWarDecision = new DeclareWarDecision(Clan.PlayerClan, enemy);
-                                Clan.PlayerClan.Kingdom.AddDecision(declareWarDecision, false);
-                            }
-                            __instance.RefreshValues();
+                            Action<KingdomDiplomacy, Kingdom, KingdomDiplomacyVM> action = (Action<KingdomDiplomacy, Kingdom, KingdomDiplomacyVM>)
+                            list[0].Identifier;
+                            action.Invoke(diplomacy, enemyKingdom, __instance);
                         },
                         null));
                 }
 
                 return false;
+            }
+
+            private static void ShowTruce(KingdomDiplomacy diplomacy, Kingdom enemyKingdom, KingdomDiplomacyVM __instance)
+            {
+                int denars = MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(diplomacy.Kingdom,
+                    enemyKingdom)
+                    .ResultNumber);
+
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Propose Truce").ToString(),
+                    new TextObject("{=!}{LEADER} is interested in accepting a truce proposal of 3 years. In order to formalize it, they request {DENARS}{GOLD_ICON}.")
+                    .SetTextVariable("DENARS", denars)
+                    .SetTextVariable("LEADER", enemyKingdom.RulingClan.Leader.Name)
+                    .ToString(),
+                    Hero.MainHero.Gold >= denars,
+                    true,
+                    GameTexts.FindText("str_policy_propose").ToString(),
+                    GameTexts.FindText("str_selection_widget_cancel").ToString(),
+                    () =>
+                    {
+                        Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().MakeTruce(diplomacy.Kingdom, enemyKingdom, 3f);
+                        __instance.RefreshValues();
+                    },
+                    null));
+            }
+
+            private static void ShowWarOptions(KingdomDiplomacy diplomacy, Kingdom enemyKingdom, KingdomDiplomacyVM __instance)
+            {
+                var list = new List<InquiryElement>();
+                foreach (var casusBelli in diplomacy.GetAvailableCasusBelli(enemyKingdom))
+                {
+                    float support = new KingdomElection(new BKDeclareWarDecision(casusBelli, 
+                        Clan.PlayerClan,
+                        enemyKingdom)).GetLikelihoodForOutcome(0);
+
+                    list.Add(new InquiryElement(casusBelli,
+                    new TextObject("{=!}{NAME} ({CHANCE}% approval)")
+                    .SetTextVariable("NAME", casusBelli.QueryNameText)
+                    .SetTextVariable("CHANCE", (support * 100).ToString("0.00")).ToString(),
+                    null,
+                    true,
+                    casusBelli.GetDescriptionWithModifers().ToString()));
+                }
+
+                list.Add(new InquiryElement(null, new TextObject("{=!}No Casus Belli").ToString(), null));
+                MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                    new TextObject("{=!}Casus Belli").ToString(),
+                    new TextObject("{=!}Select a justification for war.").ToString(),
+                    list,
+                    true,
+                    1,
+                    GameTexts.FindText("str_accept").ToString(),
+                    GameTexts.FindText("str_selection_widget_cancel").ToString(),
+                    (List<InquiryElement> list) =>
+                    {
+                        object identifier = list[0].Identifier;
+                        if (identifier != null)
+                        {
+                            CasusBelli casusBelli = (CasusBelli)identifier;
+                            var decision = new BKDeclareWarDecision(casusBelli, Clan.PlayerClan, enemyKingdom);
+                            Clan.PlayerClan.Kingdom.AddDecision(decision, false);
+                        }
+                        else
+                        {
+                            DeclareWarDecision declareWarDecision = new DeclareWarDecision(Clan.PlayerClan, enemyKingdom);
+                            Clan.PlayerClan.Kingdom.AddDecision(declareWarDecision, false);
+                        }
+                        __instance.RefreshValues();
+                    },
+                    null));
             }
         }
     }
