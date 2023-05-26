@@ -219,6 +219,8 @@ namespace BannerKings.Patches
   
                 foreach (var party in list)
                 {
+                    if (party.IsMainParty) continue;
+                    
                     int budget = clan.Gold + (int)goldChange.ResultNumber + (int)goldChange.ResultNumber;
                     object[] array = { party, budget, applyWithdrawals };
                     int expense = (int)calculatePartyWageFunction.Invoke(model, array);
