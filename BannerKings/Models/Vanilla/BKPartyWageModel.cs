@@ -15,6 +15,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.ObjectSystem;
+using System.Linq;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -234,9 +235,9 @@ namespace BannerKings.Models.Vanilla
             {
                 result.AddFactor(DefaultPerks.Steward.EfficientCampaigner.SecondaryBonus, DefaultPerks.Steward.EfficientCampaigner.Name);
             }
-            if (mobileParty.SiegeEvent != null && mobileParty.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(mobileParty.Party, MapEvent.BattleTypes.Siege) && mobileParty.HasPerk(DefaultPerks.Steward.MasterOfWarcraft, false))
+            if (mobileParty.SiegeEvent != null && Enumerable.Contains<PartyBase>(mobileParty.SiegeEvent.BesiegerCamp.GetInvolvedPartiesForEventType(MapEvent.BattleTypes.Siege), mobileParty.Party) && mobileParty.HasPerk(DefaultPerks.Steward.MasterOfWarcraft, false))
             {
-                result.AddFactor(DefaultPerks.Steward.MasterOfWarcraft.PrimaryBonus, DefaultPerks.Steward.MasterOfWarcraft.Name);
+                result.AddFactor(DefaultPerks.Steward.MasterOfWarcraft.PrimaryBonus * 0.01f, DefaultPerks.Steward.MasterOfWarcraft.Name);
             }
             if (mobileParty.EffectiveQuartermaster != null)
             {

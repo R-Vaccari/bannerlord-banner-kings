@@ -129,7 +129,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override bool IsAllowed() => Title.Contract != null && !ProposedLaw.Equals(CurrentLaw);
 
-        public override void DetermineSponsors(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
+        public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
         {
             foreach (var decisionOutcome in possibleOutcomes)
             {
@@ -145,12 +145,12 @@ namespace BannerKings.Managers.Kingdoms.Contract
             }
         }
 
-        public override void ApplySecondaryEffects(MBReadOnlyList<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
+        public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
         {
 
         }
 
-        public override DecisionOutcome GetQueriedDecisionOutcome(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
+        public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
             => (from k in possibleOutcomes orderby k.Merit descending select k).ToList().FirstOrDefault();
 
         public class DemesneLawDecisionOutcome : DecisionOutcome

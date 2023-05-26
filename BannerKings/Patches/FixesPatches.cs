@@ -41,11 +41,11 @@ namespace BannerKings.Patches
         {
             [HarmonyPrefix]
             [HarmonyPatch("GetSiegeAftermathInfluenceCost")]
-            private static bool GetSiegeAftermathInfluenceCostPrefix(MobileParty attackerParty, Settlement settlement, 
-                SiegeAftermathAction.SiegeAftermath aftermathType, ref float __result)
+            private static bool GetSiegeAftermathInfluenceCostPrefix(MobileParty attackerParty, Settlement settlement,
+                SiegeAftermathCampaignBehavior.SiegeAftermath aftermathType, ref float __result)
             {
                 float result = 0f;
-                if (attackerParty.Army != null && aftermathType != SiegeAftermathAction.SiegeAftermath.Pillage)
+                if (attackerParty.Army != null && aftermathType != SiegeAftermathCampaignBehavior.SiegeAftermath.Pillage)
                 {
                     int num = attackerParty.Army.Parties.Count((MobileParty t) =>
                     {
@@ -65,11 +65,11 @@ namespace BannerKings.Patches
 
                         return false;
                     });
-                    if (aftermathType == SiegeAftermathAction.SiegeAftermath.Devastate)
+                    if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.Devastate)
                     {
                         result = settlement.Prosperity / 400f * (float)num;
                     }
-                    else if (aftermathType == SiegeAftermathAction.SiegeAftermath.ShowMercy && attackerParty.MapFaction.Culture != settlement.Culture)
+                    else if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.ShowMercy && attackerParty.MapFaction.Culture != settlement.Culture)
                     {
                         result = settlement.Prosperity / 400f * (float)num2;
                     }

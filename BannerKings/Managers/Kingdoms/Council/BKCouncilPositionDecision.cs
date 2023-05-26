@@ -42,7 +42,7 @@ namespace BannerKings.Managers.Kingdoms.Council
             BannerKingsConfig.Instance.CourtManager.AddHeroToCouncil(action);
         }
 
-        public override void ApplySecondaryEffects(MBReadOnlyList<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
+        public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
         {
         }
 
@@ -87,7 +87,7 @@ namespace BannerKings.Managers.Kingdoms.Council
             }
         }
 
-        public override void DetermineSponsors(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
+        public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
         {
             foreach (var decisionOutcome in possibleOutcomes)
             {
@@ -179,7 +179,7 @@ namespace BannerKings.Managers.Kingdoms.Council
             return 100;
         }
 
-        public override DecisionOutcome GetQueriedDecisionOutcome(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
+        public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
         {
             return (from k in possibleOutcomes
                 orderby k.Merit descending

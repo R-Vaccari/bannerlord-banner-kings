@@ -42,9 +42,8 @@ namespace BannerKings.Behaviours
             }
         }
 
-        private void OnConversationEnded(IEnumerable<CharacterObject> characters)
+        private void OnConversationEnded(CharacterObject character)
         {
-            CharacterObject character = characters.FirstOrDefault(x => x != Hero.MainHero.CharacterObject);
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
             if (education.Lifestyle == DefaultLifestyles.Instance.Outlaw && character.IsHero)
             {

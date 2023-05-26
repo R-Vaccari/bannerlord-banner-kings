@@ -138,7 +138,7 @@ namespace BannerKings.Behaviours
             }
         }
 
-        private void OnRaidCompleted(BattleSideEnum winnerSide, RaidEventComponent mapEvent)
+        private void OnRaidCompleted(BattleSideEnum winnerSide, MapEvent mapEvent)
         {
             foreach (var mapEventParty in mapEvent.AttackerSide.Parties)
             {

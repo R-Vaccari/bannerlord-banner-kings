@@ -11,6 +11,7 @@ using TaleWorlds.Library;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using HarmonyLib;
 using TaleWorlds.SaveSystem;
+using System.Linq;
 
 namespace BannerKings.Behaviours.Workshops
 {
@@ -84,7 +85,7 @@ namespace BannerKings.Behaviours.Workshops
                             true, ref explainedNumber);
                     }
 
-                    float num = Workshop.GetProductionProgress(i);
+                    float num = Workshop.ProductionProgress[i];
                     if (num > 1f)
                     {
                         num = 1f;

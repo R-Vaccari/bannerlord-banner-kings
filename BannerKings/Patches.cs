@@ -424,7 +424,7 @@ namespace BannerKings.Patches
             {
                 var num = MBMath.ClampFloat(party.ItemRoster.FoodVariety - 5f, -5f, 5f);
                 if (num != 0f && (num >= 0f || party.LeaderHero == null ||
-                                    !party.LeaderHero.GetPerkValue(DefaultPerks.Steward.WarriorsDiet)))
+                                    !party.LeaderHero.GetPerkValue(DefaultPerks.Steward.Spartan)))
                 {
                     if (num > 0f && party.HasPerk(DefaultPerks.Steward.Gourmet))
                     {

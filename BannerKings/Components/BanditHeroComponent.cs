@@ -67,7 +67,7 @@ namespace BannerKings.Components
 
                 if (party.Food < 10)
                 {
-                    party.Ai.SetMoveGoToSettlement(Hideout.Settlement);
+                    party.SetMoveGoToSettlement(Hideout.Settlement);
                     return;
                 }
 
@@ -79,20 +79,20 @@ namespace BannerKings.Components
                     }
                     else
                     {
-                        party.Ai.SetMovePatrolAroundSettlement(Hideout.Settlement);
+                        party.SetMovePatrolAroundSettlement(Hideout.Settlement);
                     }
                 }
 
                 if (raidTarget != null)
                 {
-                    party.Ai.SetMoveRaidSettlement(raidTarget.Settlement);
-                    party.Ai.RecalculateShortTermAi();
+                    party.SetMoveRaidSettlement(raidTarget.Settlement);
+                    party.RecalculateShortTermAi();
                 }
 
                 if (robbingTarget != null)
                 {
-                    party.Ai.SetMovePatrolAroundSettlement(robbingTarget);
-                    party.Ai.RecalculateShortTermAi();
+                    party.SetMovePatrolAroundSettlement(robbingTarget);
+                    party.RecalculateShortTermAi();
                 }
             }
         }
@@ -180,8 +180,8 @@ namespace BannerKings.Components
                                 x.Village.Hearth > 100f && x.Village.Militia < party.MemberRoster.TotalManCount * 0.5f, party);
                     if (target != null)
                     {
-                        party.Ai.SetMoveRaidSettlement(target);
-                        party.Ai.RecalculateShortTermAi();
+                        party.SetMoveRaidSettlement(target);
+                        party.RecalculateShortTermAi();
                         raidTarget = target.Village;
                         lastDecision = CampaignTime.Now;
                         party.Ai.DisableAi();

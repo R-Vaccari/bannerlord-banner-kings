@@ -63,8 +63,8 @@ namespace BannerKings.Models.Vanilla
                             .ResultNumber);
 
                         if (item.IsMountable && item.Tier == ItemObject.ItemTiers.Tier2 &&
-                            PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.Shepherd, village.Bound.Town) &&
-                            MBRandom.RandomFloat < DefaultPerks.Riding.Shepherd.SecondaryBonus * 0.01f)
+                            PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.Horde, village.Bound.Town) &&
+                            MBRandom.RandomFloat < DefaultPerks.Riding.Horde.SecondaryBonus * 0.01f)
                         {
                             explainedNumber.Add(1f);
                         }

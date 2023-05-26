@@ -58,11 +58,11 @@ namespace BannerKings.Components
                 {
                     mobileParty.SetPartyUsedByQuest(true);
                     mobileParty.Party.Visuals.SetMapIconAsDirty();
-                    mobileParty.Ai.SetInitiative(0f, 1f, float.MaxValue);
+                    mobileParty.SetInitiative(0f, 1f, float.MaxValue);
                     mobileParty.ShouldJoinPlayerBattles = false;
                     mobileParty.Aggressiveness = 0f;
                     mobileParty.Ai.DisableAi();
-                    mobileParty.Ai.SetMoveGoToSettlement(target);
+                    mobileParty.SetMoveGoToSettlement(target);
                 });
         }
 
@@ -256,22 +256,22 @@ namespace BannerKings.Components
                     {
                         if (target.Village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided)
                         {
-                            MobileParty.Ai.SetMoveModeHold();
+                            MobileParty.SetMoveModeHold();
                         }
                         else
                         {
-                            MobileParty.Ai.SetMoveGoToSettlement(target);
+                            MobileParty.SetMoveGoToSettlement(target);
                         }
                     }
                     else
                     {
                         if (!target.IsUnderSiege)
                         {
-                            MobileParty.Ai.SetMoveGoToSettlement(target);
+                            MobileParty.SetMoveGoToSettlement(target);
                         }
                         else
                         {
-                            MobileParty.Ai.SetMoveModeHold();
+                            MobileParty.SetMoveModeHold();
                         }
                     }
                 }
@@ -280,7 +280,7 @@ namespace BannerKings.Components
             {
                 if (Home != null && Home.MapFaction == MobileParty.MapFaction && !Home.IsUnderSiege)
                 {
-                    MobileParty.Ai.SetMoveGoToSettlement(Home);
+                    MobileParty.SetMoveGoToSettlement(Home);
                 }
                 else
                 {

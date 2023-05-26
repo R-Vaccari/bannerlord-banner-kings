@@ -90,7 +90,7 @@ namespace BannerKings.Models.Vanilla
                 result *= 1.15f;
             }
 
-            if (workshop.Owner.IsNotable && workshop.Owner.OwnedAlleys.Count == 0)
+            if (workshop.Owner.IsNotable && workshop.Owner.OwnedCommonAreas.Count == 0)
             {
                 result *= 1.15f;
             }
@@ -113,7 +113,7 @@ namespace BannerKings.Models.Vanilla
                     .SetTextVariable("OWNER", workshop.Owner.Name));
             }
 
-            if (workshop.Owner.IsNotable && workshop.Owner.OwnedAlleys.Count == 0 && workshop.Owner.OwnedCaravans.Count == 0)
+            if (workshop.Owner.IsNotable && workshop.Owner.OwnedCommonAreas.Count == 0 && workshop.Owner.OwnedCaravans.Count == 0)
             {
                 result.AddFactor(0.15f, new TextObject("{=uNzd25jE}{OWNER} has no other incomes")
                     .SetTextVariable("OWNER", workshop.Owner.Name));

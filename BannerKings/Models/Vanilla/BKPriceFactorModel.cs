@@ -44,7 +44,7 @@ namespace BannerKings.Models.Vanilla
                 Settlement settlement = merchant.Settlement;
                 if (settlement.Town != null && settlement.Town.CurrentBuilding != null)
                 {
-                    ItemCategory category = itemRosterElement.Item.GetItemCategory();
+                    ItemCategory category = itemRosterElement.Item.ItemCategory;
                     if (category == DefaultItemCategories.Wood || category == DefaultItemCategories.Clay || category == BKItemCategories.Instance.Limestone ||
                         category == DefaultItemCategories.Iron || category == BKItemCategories.Instance.Marble)
                     {

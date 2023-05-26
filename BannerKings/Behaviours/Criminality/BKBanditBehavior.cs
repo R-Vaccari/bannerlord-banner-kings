@@ -41,7 +41,7 @@ namespace BannerKings.Behaviours
             }
         }
 
-        private void OnRaidCompleted(BattleSideEnum winnerSide, RaidEventComponent raidEvent)
+        private void OnRaidCompleted(BattleSideEnum winnerSide, MapEvent raidEvent)
         {
 
         }
@@ -153,15 +153,15 @@ namespace BannerKings.Behaviours
             BanditHeroComponent component = (BanditHeroComponent)party.PartyComponent;
             if (party.MemberRoster.TotalManCount < partyLimit * 0.2f)
             {
-                party.Ai.SetMoveGoToSettlement(component.Hideout.Settlement);
+                party.SetMoveGoToSettlement(component.Hideout.Settlement);
             }
         }
 
         public void SetFollow(MobileParty heroParty, MobileParty follower)
         {
             follower.Ai.DisableForHours(2);
-            follower.Ai.SetMoveEscortParty(heroParty);
-            follower.Ai.RecalculateShortTermAi();
+            follower.SetMoveEscortParty(heroParty);
+            follower.RecalculateShortTermAi();
         }
 
         public void CreateBanditHero(Clan clan)
@@ -301,9 +301,8 @@ namespace BannerKings.Behaviours
         {
             [HarmonyPrefix]
             [HarmonyPatch("OnRaidCompleted")]
-            private static bool OnRaidCompleted(BattleSideEnum winnerSide, RaidEventComponent raidEvent)
+            private static bool OnRaidCompleted(BattleSideEnum winnerSide, MapEvent mapEvent)
             {
-                MapEvent mapEvent = raidEvent.MapEvent;
                 PartyBase leaderParty = mapEvent.AttackerSide.LeaderParty;
                 if (leaderParty != null && leaderParty.LeaderHero != null && leaderParty.MobileParty.PartyComponent is BanditHeroComponent)
                 {

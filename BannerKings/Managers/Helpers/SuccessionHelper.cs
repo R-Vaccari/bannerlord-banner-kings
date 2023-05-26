@@ -71,11 +71,11 @@ namespace BannerKings.Managers.Helpers
             var decision = kingdom.UnresolvedDecisions.FirstOrDefault(x => x is KingSelectionKingdomDecision);
             if (decision != null)
             {
-                kingdom.UnresolvedDecisions.Remove(decision);
+                kingdom.UnresolvedDecisions.ToList().Remove(decision);
             }
 
             var electiveDecision = new FeudalElectiveDecision(victim.Clan, title);
-            kingdom.UnresolvedDecisions.Add(electiveDecision);
+            kingdom.UnresolvedDecisions.ToList().Add(electiveDecision);
             if (!electiveDecision.IsAllowed())
             {
                 ResolveSuccession(title, victim, kingdom);

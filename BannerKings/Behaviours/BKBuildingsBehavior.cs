@@ -178,7 +178,7 @@ namespace BannerKings.Behaviours
                 if (toDeduct < totalCost)
                 {
                     float influence = toDeduct * 0.5f;
-                    ChangeClanInfluenceAction.Apply(town.OwnerClan, -influence);
+                    GainKingdomInfluenceAction.ApplyForDefault(town.OwnerClan.Leader, -influence);
                     if (town.OwnerClan == Clan.PlayerClan && influence > 0f)
                     {
                         InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}You did not have all the denars to pay for materials, and thus lost {INFLUENCE} influence.")

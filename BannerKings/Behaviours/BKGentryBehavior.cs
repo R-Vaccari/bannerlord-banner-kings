@@ -140,7 +140,7 @@ namespace BannerKings.Behaviours
                 if (!war)
                 {
                     party.Ai.DisableAi();
-                    party.Ai.SetMoveGoToSettlement(gentryTuple.Item2.EstatesData.Settlement);
+                    party.SetMoveGoToSettlement(gentryTuple.Item2.EstatesData.Settlement);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace BannerKings.Behaviours
                     }
 
                     party.Ai.DisableAi();
-                    party.Ai.SetMoveGoToSettlement(gentryTuple.Item2.EstatesData.Settlement);
+                    party.SetMoveGoToSettlement(gentryTuple.Item2.EstatesData.Settlement);
                 }
             },
             GetType().Name);
@@ -471,8 +471,9 @@ namespace BannerKings.Behaviours
             hero.Mother = mother;
             hero.Father = father;
             EquipmentFlags customFlags = EquipmentFlags.IsNobleTemplate | EquipmentFlags.IsChildEquipmentTemplate;
-            MBEquipmentRoster randomElementInefficiently = Campaign.Current.Models.EquipmentSelectionModel
-                .GetEquipmentRostersForDeliveredOffspring(hero).GetRandomElementInefficiently<MBEquipmentRoster>();
+            MBEquipmentRoster randomElementInefficiently = MBEquipmentRosterExtensions
+                .GetAppropriateEquipmentRostersForHero(hero, customFlags, true)
+                .GetRandomElementInefficiently<MBEquipmentRoster>();
             if (randomElementInefficiently != null)
             {
                 Equipment randomElementInefficiently2 = randomElementInefficiently.GetCivilianEquipments().GetRandomElementInefficiently<Equipment>();
@@ -637,7 +638,7 @@ namespace BannerKings.Behaviours
             Kingdom kingdom = grantor.Clan.Kingdom;
             float cost = BannerKingsConfig.Instance.InfluenceModel.GetBequeathPeerageCost(kingdom).ResultNumber;
 
-            ChangeClanInfluenceAction.Apply(grantor.Clan, -cost);
+            GainKingdomInfluenceAction.ApplyForDefault(grantor.Clan.Leader, -cost);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, granted, 15);
 
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(granted);

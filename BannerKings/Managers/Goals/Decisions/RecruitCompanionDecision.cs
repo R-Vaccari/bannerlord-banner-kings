@@ -82,7 +82,10 @@ namespace BannerKings.Managers.Goals.Decisions
                 MathF.Max(cap * 0.07f, 25f),
                 new List<TraitObject>()
                 {
-                    DefaultTraits.ScoutSkills
+                    DefaultTraits.DesertScoutSkills,
+                    DefaultTraits.WoodsScoutSkills,
+                    DefaultTraits.HillScoutSkills,
+                    DefaultTraits.SteppeScoutSkills
                 }),
 
                 new CompanionType(new TextObject("{=R5VvmxJ7}Trader"),
@@ -90,7 +93,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 MathF.Max(cap * 0.08f, 30f),
                 new List<TraitObject>()
                 {
-                    DefaultTraits.Trader
+                    DefaultTraits.Manager
                 }),
 
                 new CompanionType(new TextObject("Steward"),
@@ -240,7 +243,7 @@ namespace BannerKings.Managers.Goals.Decisions
             {
                 influence *= 1.3f;
             }
-            ChangeClanInfluenceAction.Apply(hero.Clan, -influence);
+            GainKingdomInfluenceAction.ApplyForDefault(hero.Clan.Leader, -influence);
             selectedCompanionType = null;
             selectedCulture = null;
         }

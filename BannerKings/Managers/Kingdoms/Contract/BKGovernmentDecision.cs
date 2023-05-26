@@ -57,7 +57,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             return MBMath.ClampFloat(support / clans, 0f, 100f);
         }
 
-        public override void ApplySecondaryEffects(MBReadOnlyList<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
+        public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
         {
             var newGovernment = (chosenOutcome as GovernmentDecisionOutcome).ShouldDecisionBeEnforced;
             if (newGovernment)
@@ -168,7 +168,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             yield return new GovernmentDecisionOutcome(false);
         }
 
-        public override void DetermineSponsors(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
+        public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
         {
             foreach (var decisionOutcome in possibleOutcomes)
             {
@@ -367,7 +367,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             return 300;
         }
 
-        public override DecisionOutcome GetQueriedDecisionOutcome(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
+        public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
         {
             return possibleOutcomes.FirstOrDefault(t => ((GovernmentDecisionOutcome) t).ShouldDecisionBeEnforced);
         }

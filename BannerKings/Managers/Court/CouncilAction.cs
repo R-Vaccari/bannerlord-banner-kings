@@ -52,7 +52,7 @@ namespace BannerKings.Managers.Court
                                 else
                                 {
                                     var candidates = decision.NarrowDownCandidates(
-                                        decision.DetermineInitialCandidates().ToMBList(), 
+                                        decision.DetermineInitialCandidates().ToList(), 
                                         3);
                                     if (candidates.Count() >= 3)
                                     {

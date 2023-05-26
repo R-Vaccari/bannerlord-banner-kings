@@ -38,7 +38,7 @@ namespace BannerKings.Behaviours
             foreach (var party in MobileParty.All)
             {
                 var memberElements = party.MemberRoster.GetTroopRoster();
-                var memberList = new MBList<TroopRosterElement>(memberElements.Count);
+                var memberList = new List<TroopRosterElement>(memberElements.Count);
                 memberList.AddRange(memberElements);
                 foreach (var element in memberList)
                 {
@@ -49,7 +49,7 @@ namespace BannerKings.Behaviours
                 }
 
                 var prisonElements = party.PrisonRoster.GetTroopRoster();
-                var prisonList = new MBList<TroopRosterElement>(prisonElements.Count);
+                var prisonList = new List<TroopRosterElement>(prisonElements.Count);
                 prisonList.AddRange(prisonElements);
                 foreach (var element in prisonList)
                 {

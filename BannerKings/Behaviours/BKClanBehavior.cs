@@ -914,7 +914,10 @@ namespace BannerKings.Behaviours
                     PerkRole.Scout,
                     new List<TraitObject>
                     {
-                        DefaultTraits.ScoutSkills
+                        DefaultTraits.DesertScoutSkills,
+                        DefaultTraits.WoodsScoutSkills,
+                        DefaultTraits.HillScoutSkills,
+                        DefaultTraits.SteppeScoutSkills
                     }
                 },
                 {PerkRole.Surgeon, new List<TraitObject> {DefaultTraits.Surgery}},

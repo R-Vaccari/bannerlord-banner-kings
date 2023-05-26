@@ -29,7 +29,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             }
         }
 
-        public override void ApplySecondaryEffects(MBReadOnlyList<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
+        public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
         {
         }
 
@@ -49,7 +49,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             yield return new GenderLawDecisionOutcome(false);
         }
 
-        public override void DetermineSponsors(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
+        public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
         {
             foreach (var decisionOutcome in possibleOutcomes)
             {
@@ -195,7 +195,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             return 150;
         }
 
-        public override DecisionOutcome GetQueriedDecisionOutcome(MBReadOnlyList<DecisionOutcome> possibleOutcomes)
+        public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
         {
             return possibleOutcomes.FirstOrDefault(t => ((GenderLawDecisionOutcome) t).ShouldDecisionBeEnforced);
         }

@@ -37,11 +37,11 @@ namespace BannerKings.Components
                 {
                     mobileParty.SetPartyUsedByQuest(true);
                     mobileParty.Party.Visuals.SetMapIconAsDirty();
-                    mobileParty.Ai.SetInitiative(1f, 0.5f, float.MaxValue);
+                    mobileParty.SetInitiative(1f, 0.5f, float.MaxValue);
                     mobileParty.ShouldJoinPlayerBattles = true;
                     mobileParty.Aggressiveness = 1f;
                     mobileParty.Ai.DisableAi();
-                    mobileParty.Ai.SetMoveEngageParty(target);
+                    mobileParty.SetMoveEngageParty(target);
                 });
             TroopRoster members = new TroopRoster(patrol.Party);
             var garrisonRoster = origin.Town.GarrisonParty.MemberRoster;
@@ -100,6 +100,6 @@ namespace BannerKings.Components
             ReturnHome();
         }
 
-        private void ReturnHome() => MobileParty.Ai.SetMoveGoToSettlement(Home);
+        private void ReturnHome() => MobileParty.SetMoveGoToSettlement(Home);
     }
 }
