@@ -14,15 +14,15 @@ namespace BannerKings.Models.BKModels
         public abstract float WoodPerSoldier { get; }
         public abstract float AnimalProductsPerSoldier { get; }
         public abstract float AlcoholPerSoldier { get; }
-        public ExplainedNumber MinimumSoldiersThreshold(PartyNeeds needs, bool descriptions);
-        public ExplainedNumber CalculateAlcoholNeed(PartyNeeds needs, bool descriptions);
-        public ExplainedNumber CalculateArrowsNeed(PartyNeeds needs, bool descriptions);
-        public ExplainedNumber CalculateShieldsNeed(PartyNeeds needs, bool descriptions);
-        public ExplainedNumber CalculateWeaponsNeed(PartyNeeds needs, bool descriptions);
-        public ExplainedNumber CalculateHorsesNeed(PartyNeeds needs, bool descriptions);
-        public ExplainedNumber CalculateClothNeed(PartyNeeds needs, bool descriptions);
-        public ExplainedNumber CalculateToolsNeed(PartyNeeds needs, bool descriptions);
-        public ExplainedNumber CalculateWoodNeed(PartyNeeds needs, bool descriptions);
-        public ExplainedNumber CalculateAnimalProductsNeed(PartyNeeds needs, bool descriptions);
+        public ExplainedNumber MinimumSoldiersThreshold(PartySupplies needs, bool descriptions);
+        public ExplainedNumber CalculateAlcoholNeed(PartySupplies needs, bool descriptions);
+        public ExplainedNumber CalculateArrowsNeed(PartySupplies needs, bool descriptions);
+        public ExplainedNumber CalculateShieldsNeed(PartySupplies needs, bool descriptions);
+        public ExplainedNumber CalculateWeaponsNeed(PartySupplies needs, bool descriptions);
+        public ExplainedNumber CalculateHorsesNeed(PartySupplies needs, bool descriptions);
+        public ExplainedNumber CalculateClothNeed(PartySupplies needs, bool descriptions);
+        public ExplainedNumber CalculateToolsNeed(PartySupplies needs, bool descriptions);
+        public ExplainedNumber CalculateWoodNeed(PartySupplies needs, bool descriptions);
+        public ExplainedNumber CalculateAnimalProductsNeed(PartySupplies needs, bool descriptions);
     }
 }

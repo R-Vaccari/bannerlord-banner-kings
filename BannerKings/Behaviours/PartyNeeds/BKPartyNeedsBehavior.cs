@@ -6,7 +6,18 @@ namespace BannerKings.Behaviours.PartyNeeds
 {
     public class BKPartyNeedsBehavior : BannerKingsBehavior
     {
-        private Dictionary<MobileParty, PartyNeeds> partyNeeds = new Dictionary<MobileParty, PartyNeeds>();
+        private Dictionary<MobileParty, PartySupplies> partyNeeds = new Dictionary<MobileParty, PartySupplies>();
+
+        public PartySupplies GetPartySupplies(MobileParty party)
+        {
+            PartySupplies supplies;
+            if (!partyNeeds.TryGetValue(party, out supplies))
+            {
+                supplies = null;
+            }
+
+            return supplies;
+        }
 
         public override void RegisterEvents()
         {
@@ -53,7 +64,7 @@ namespace BannerKings.Behaviours.PartyNeeds
 
             if (!partyNeeds.ContainsKey(party))
             {
-                partyNeeds.Add(party, new PartyNeeds(party));
+                partyNeeds.Add(party, new PartySupplies(party));
             }
         }
     }

@@ -26,7 +26,7 @@ namespace BannerKings.Models.BKModels
 
         public float AlcoholPerSoldier => 0.025f;
 
-        public ExplainedNumber MinimumSoldiersThreshold(PartyNeeds needs, bool descriptions)
+        public ExplainedNumber MinimumSoldiersThreshold(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(5f, descriptions);
             if (needs.Party.LeaderHero == null)
@@ -40,7 +40,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateAlcoholNeed(PartyNeeds needs, bool descriptions)
+        public ExplainedNumber CalculateAlcoholNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
@@ -59,7 +59,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateArrowsNeed(PartyNeeds needs, bool descriptions)
+        public ExplainedNumber CalculateArrowsNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
@@ -82,7 +82,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateClothNeed(PartyNeeds needs, bool descriptions)
+        public ExplainedNumber CalculateClothNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
@@ -101,7 +101,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateHorsesNeed(PartyNeeds needs, bool descriptions)
+        public ExplainedNumber CalculateHorsesNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
@@ -123,7 +123,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateAnimalProductsNeed(PartyNeeds needs, bool descriptions)
+        public ExplainedNumber CalculateAnimalProductsNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
@@ -142,7 +142,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateShieldsNeed(PartyNeeds needs, bool descriptions)
+        public ExplainedNumber CalculateShieldsNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
@@ -165,7 +165,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateWeaponsNeed(PartyNeeds needs, bool descriptions)
+        public ExplainedNumber CalculateWeaponsNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
@@ -187,7 +187,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateToolsNeed(PartyNeeds needs, bool descriptions)
+        public ExplainedNumber CalculateToolsNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
@@ -229,7 +229,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateWoodNeed(PartyNeeds needs, bool descriptions)
+        public ExplainedNumber CalculateWoodNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);

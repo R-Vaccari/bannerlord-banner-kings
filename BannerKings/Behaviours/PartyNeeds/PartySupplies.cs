@@ -1,13 +1,14 @@
 ﻿using BannerKings.Managers.Items;
 using BannerKings.Models.BKModels;
 using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
 namespace BannerKings.Behaviours.PartyNeeds
 {
-    public class PartyNeeds
+    public class PartySupplies
     {
         private static readonly List<ItemCategory> alcoholCategories = new List<ItemCategory>(3)
         {
@@ -69,7 +70,7 @@ namespace BannerKings.Behaviours.PartyNeeds
             DefaultItemCategories.Wood
         };
 
-        public PartyNeeds(MobileParty party)
+        public PartySupplies(MobileParty party)
         {
             Party = party;
             AutoBuying = party == MobileParty.MainParty ? false : true;
@@ -90,7 +91,36 @@ namespace BannerKings.Behaviours.PartyNeeds
         public float AnimalProductsNeed { get; private set; }
         public float ShieldsNeed { get; private set; }
 
-        public int MinimumSoldiersThreshold => BannerKingsConfig.Instance.PartyNeedsModel.MinimumSoldiersThreshold(this, false);
+        public int MinimumSoldiersThreshold => (int)BannerKingsConfig.Instance.PartyNeedsModel.MinimumSoldiersThreshold(this, false)
+            .ResultNumber;
+
+        public ExplainedNumber MinimumSoldiersThresholdExplained => BannerKingsConfig.Instance.PartyNeedsModel.MinimumSoldiersThreshold(this, true);
+        public ExplainedNumber GetAlcoholCurrentNeed(bool explained = false) => 
+            BannerKingsConfig.Instance.PartyNeedsModel.CalculateAlcoholNeed(this, explained);
+
+        public ExplainedNumber GetTextileCurrentNeed(bool explained = false) =>
+           BannerKingsConfig.Instance.PartyNeedsModel.CalculateClothNeed(this, explained);
+
+        public ExplainedNumber GetWoodCurrentNeed(bool explained = false) =>
+           BannerKingsConfig.Instance.PartyNeedsModel.CalculateWoodNeed(this, explained);
+
+        public ExplainedNumber GetToolsCurrentNeed(bool explained = false) =>
+           BannerKingsConfig.Instance.PartyNeedsModel.CalculateToolsNeed(this, explained);
+
+        public ExplainedNumber GetAnimalProductsCurrentNeed(bool explained = false) =>
+           BannerKingsConfig.Instance.PartyNeedsModel.CalculateAnimalProductsNeed(this, explained);
+
+        public ExplainedNumber GetMountsCurrentNeed(bool explained = false) =>
+           BannerKingsConfig.Instance.PartyNeedsModel.CalculateHorsesNeed(this, explained);
+
+        public ExplainedNumber GetArrowsCurrentNeed(bool explained = false) =>
+           BannerKingsConfig.Instance.PartyNeedsModel.CalculateArrowsNeed(this, explained);
+
+        public ExplainedNumber GetWeaponsCurrentNeed(bool explained = false) =>
+           BannerKingsConfig.Instance.PartyNeedsModel.CalculateWeaponsNeed(this, explained);
+
+        public ExplainedNumber GetShieldsCurrentNeed(bool explained = false) =>
+           BannerKingsConfig.Instance.PartyNeedsModel.CalculateShieldsNeed(this, explained);
 
         public void Tick()
         {
@@ -121,15 +151,15 @@ namespace BannerKings.Behaviours.PartyNeeds
                 BuyItems(ShieldsNeed * DaysOfProvision, shieldCategories);
             }
 
-            ConsumeItems(AlcoholNeed, alcoholCategories);
-            ConsumeItems(WoodNeed, woodCategories);
-            ConsumeItems(ToolsNeed, toolsCategories);
-            ConsumeItems(ClothNeed, clothCategories);
-            ConsumeItems(ArrowsNeed, ammoCategories);
-            ConsumeItems(WeaponsNeed, weaponCategories);
-            ConsumeItems(HorsesNeed, horseCategories);
-            ConsumeItems(AnimalProductsNeed, animalProductsCategories);
-            ConsumeItems(ShieldsNeed, shieldCategories);
+            AlcoholNeed -= ConsumeItems(AlcoholNeed, alcoholCategories);
+            WoodNeed -= ConsumeItems(WoodNeed, woodCategories);
+            ToolsNeed -= ConsumeItems(ToolsNeed, toolsCategories);
+            ClothNeed -= ConsumeItems(ClothNeed, clothCategories);
+            ArrowsNeed -= ConsumeItems(ArrowsNeed, ammoCategories);
+            WeaponsNeed -= ConsumeItems(WeaponsNeed, weaponCategories);
+            HorsesNeed -= ConsumeItems(HorsesNeed, horseCategories);
+            AnimalProductsNeed -= ConsumeItems(AnimalProductsNeed, animalProductsCategories);
+            ShieldsNeed -= ConsumeItems(ShieldsNeed, shieldCategories);
         }
 
         private void BuyItems(float floatCount, List<ItemCategory> categories)
@@ -185,12 +215,13 @@ namespace BannerKings.Behaviours.PartyNeeds
             }
         }
 
-        private void ConsumeItems(float floatCount, List<ItemCategory> categories)
+        private int ConsumeItems(float floatCount, List<ItemCategory> categories)
         {
+            int finalResult = 0;
             int count = MathF.Floor(floatCount);
             if (count < 1)
             {
-                return;
+                return finalResult;
             }
 
             List<ItemRosterElement> toConsume = new List<ItemRosterElement>();
@@ -208,9 +239,12 @@ namespace BannerKings.Behaviours.PartyNeeds
                 int result = MathF.Min(count, element.Amount);
                 Party.ItemRoster.AddToCounts(element.EquipmentElement, -result);
                 count -= result;
+                finalResult += result;
 
                 if (count < 1) break;
             }
+
+            return finalResult;
         }
     }
 }
