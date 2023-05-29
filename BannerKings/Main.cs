@@ -4,6 +4,7 @@ using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
+using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.Behaviours.Mercenary;
 using BannerKings.Behaviours.Workshops;
 using BannerKings.Managers.Buildings;
@@ -69,6 +70,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKDiplomacyBehavior());
             campaignStarter.AddBehavior(new BKCriminalityBehavior());
             campaignStarter.AddBehavior(new BKTraitBehavior());
+            campaignStarter.AddBehavior(new BKPartyNeedsBehavior());
             campaignStarter.AddBehavior(new BKMercenaryCareerBehavior());
 
             campaignStarter.AddModel(new BKPrisonerModel());

@@ -1,4 +1,5 @@
 ﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
@@ -7,6 +8,8 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -66,6 +69,46 @@ namespace BannerKings.Models.Vanilla
                     }
 
                     result.Add(nonKhuzaits * -0.05f, DefaultLifestyles.Instance.Kheshig.Name);
+                }
+
+                PartySupplies supplies = Campaign.Current.GetCampaignBehavior<BKPartyNeedsBehavior>().GetPartySupplies(mobileParty);
+                if (supplies != null)
+                {
+                    if (mobileParty.MemberRoster.TotalManCount > supplies.MinimumSoldiersThreshold)
+                    {
+                        ExplainedNumber alcohol = supplies.GetAlcoholCurrentNeed();
+                        float alcoholProportion = MBMath.Map(supplies.AlcoholNeed / MathF.Min(alcohol.ResultNumber, 1f),
+                            0f,
+                            supplies.AlcoholNeed * CampaignTime.DaysInSeason,
+                            0f,
+                            0.2f);
+                        result.AddFactor(-alcoholProportion, new TextObject("{=!}Lacking alcohol supplies"));
+
+                        ExplainedNumber animal = supplies.GetAnimalProductsCurrentNeed();
+                        float animalProportion = MBMath.Map(supplies.AnimalProductsNeed / MathF.Min(animal.ResultNumber, 1f),
+                            0f,
+                            supplies.AnimalProductsNeed * CampaignTime.DaysInSeason,
+                            0f,
+                            0.15f);
+                        result.AddFactor(-animalProportion, new TextObject("{=!}Lacking animal products supplies"));
+
+                        ExplainedNumber textiles = supplies.GetTextileCurrentNeed();
+                        float textilesProportion = MBMath.Map(supplies.ClothNeed / MathF.Min(textiles.ResultNumber, 1f),
+                            0f,
+                            supplies.ClothNeed * CampaignTime.DaysInSeason,
+                            0f,
+                            0.1f);
+                        result.AddFactor(-textilesProportion, new TextObject("{=!}Lacking textiles supplies"));
+
+                        ExplainedNumber wood = supplies.GetWoodCurrentNeed();
+                        float woodProportion = MBMath.Map(supplies.WoodNeed / MathF.Min(wood.ResultNumber, 1f),
+                            0f,
+                            supplies.WoodNeed * CampaignTime.DaysInSeason,
+                            0f,
+                            0.1f);
+                        result.AddFactor(-woodProportion, new TextObject("{=!}Lacking wood supplies"));
+
+                    }
                 }
             }
 

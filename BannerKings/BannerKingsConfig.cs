@@ -79,6 +79,7 @@ namespace BannerKings
         public BKArmyManagementModel ArmyManagementModel { get; } = new();
         public BKWarModel WarModel { get; } = new();
         public BKCrimeModel CrimeModel { get; } = new();
+        public IPartyNeedsModel PartyNeedsModel { get; } = new BKPartyNeedsModel();
         public BKDiplomacyModel DiplomacyModel { get; } = new();
 
         static BannerKingsConfig()
