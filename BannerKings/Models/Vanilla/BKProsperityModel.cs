@@ -134,9 +134,16 @@ namespace BannerKings.Models.Vanilla
 
                 var factor = data.Stability - 1f + data.Stability;
                 var stabilityImpact = STABILITY_FACTOR * factor;
-                explainedNumber.Add(stabilityImpact, new TextObject("Stability impact"));
+                explainedNumber.Add(stabilityImpact, new TextObject("{=!}Stability"));
 
-                var foodLimitForBonus = (int) (fortification.FoodStocksUpperLimit() * 0.8f);
+                for (var i = 0; i < 4; i++)
+                {
+                    float satisfaction = data.EconomicData.Satisfactions[i];
+                    explainedNumber.Add(-MBMath.Map(satisfaction, 0f, 0.85f, 0.5f, 0f),
+                        Utils.TextHelper.GetConsumptionSatisfactionText((ConsumptionType)i));
+                }
+
+                int foodLimitForBonus = (int) (fortification.FoodStocksUpperLimit() * 0.8f);
                 if (fortification.FoodStocks >= foodLimitForBonus)
                 {
                     explainedNumber.Add(0.5f, new TextObject("{=9Jyv5XNX}Well fed populace"));
