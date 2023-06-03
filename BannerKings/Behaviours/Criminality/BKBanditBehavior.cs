@@ -71,6 +71,15 @@ namespace BannerKings.Behaviours
                 return;
             }
 
+            if (clan.StringId == "caravan_robbers")
+            {
+                if (clan.WarPartyComponents.Count > BannerKingsSettings.Instance.BanditPartiesLimit * 0.1f)
+                {
+                    var random = clan.WarPartyComponents.GetRandomElementWithPredicate(x => x.Leader == null);
+                    DestroyPartyAction.Apply(null, random.MobileParty);
+                }
+            }
+
             RunWeekly(() =>
             {
                 if (!clan.WarPartyComponents.Any(x => x.Leader != null) && MBRandom.RandomFloat < 0.025f)
