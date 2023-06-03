@@ -266,7 +266,8 @@ namespace BannerKings.Managers.Goals.Decisions
         public override void DoAiDecision()
         {
             Hero fulfiller = GetFulfiller();
-            if (allBanners.Count < 5 || fulfiller.PartyBelongedTo.HasUnpaidWages > 0 || fulfiller.PartyBelongedTo.GetNumDaysForFoodToLast() < 10)
+            if (allBanners.Count < 5 || fulfiller.PartyBelongedTo == null ||
+                fulfiller.PartyBelongedTo.HasUnpaidWages > 0 || fulfiller.PartyBelongedTo.GetNumDaysForFoodToLast() < 10)
             {
                 return;
             }
