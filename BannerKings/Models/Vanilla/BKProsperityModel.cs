@@ -132,6 +132,9 @@ namespace BannerKings.Models.Vanilla
                     explainedNumber.Add(slaves * -0.0003f, new TextObject("{=y9jGiPQw}Slave surplus"));
                 }
 
+                var serfs = data.GetTypeCount(PopType.Serfs);
+                explainedNumber.Add(serfs * -0.00004f, new TextObject("{=!}Serf population"));
+
                 var factor = data.Stability - 1f + data.Stability;
                 var stabilityImpact = STABILITY_FACTOR * factor;
                 explainedNumber.Add(stabilityImpact, new TextObject("{=!}Stability"));

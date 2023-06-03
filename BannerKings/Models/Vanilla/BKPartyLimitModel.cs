@@ -1,4 +1,5 @@
 using BannerKings.Behaviours;
+using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.Components;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
@@ -7,6 +8,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.Vanilla
@@ -53,6 +55,37 @@ namespace BannerKings.Models.Vanilla
                     baseResult.Add(150f, new TextObject("{=C0MCMXZ1}Bandit horde"));
                     baseResult.Add(party.MobileParty.LeaderHero.GetSkillValue(DefaultSkills.Roguery) * 1.5f,
                         DefaultSkills.Roguery.Name);
+                }
+
+                PartySupplies supplies = Campaign.Current.GetCampaignBehavior<BKPartyNeedsBehavior>().GetPartySupplies(party.MobileParty);
+                if (supplies != null)
+                {
+                    if (party.MobileParty.MemberRoster.TotalManCount > supplies.MinimumSoldiersThreshold)
+                    {
+                        ExplainedNumber weapons = supplies.GetWeaponsCurrentNeed();
+                        float weaponPropotion = MBMath.Map(supplies.WeaponsNeed / MathF.Min(weapons.ResultNumber, 1f),
+                            0f,
+                            supplies.WeaponsNeed * CampaignTime.DaysInSeason,
+                            0f,
+                            0.2f);
+                        baseResult.AddFactor(-weaponPropotion, new TextObject("{=!}Lacking weapon supplies"));
+
+                        ExplainedNumber ammo = supplies.GetArrowsCurrentNeed();
+                        float ammoPropotion = MBMath.Map(supplies.ArrowsNeed / MathF.Min(ammo.ResultNumber, 1f),
+                            0f,
+                            supplies.ArrowsNeed * CampaignTime.DaysInSeason,
+                            0f,
+                            0.2f);
+                        baseResult.AddFactor(-ammoPropotion, new TextObject("{=!}Lacking ammunition supplies"));
+
+                        ExplainedNumber mounts = supplies.GetMountsCurrentNeed();
+                        float mountsPropotion = MBMath.Map(supplies.HorsesNeed / MathF.Min(mounts.ResultNumber, 1f),
+                            0f,
+                            supplies.HorsesNeed * CampaignTime.DaysInSeason,
+                            0f,
+                            0.2f);
+                        baseResult.AddFactor(-mountsPropotion, new TextObject("{=!}Lacking mount supplies"));
+                    }
                 }
             }
 
