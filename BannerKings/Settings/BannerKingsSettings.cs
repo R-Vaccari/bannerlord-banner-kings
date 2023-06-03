@@ -80,6 +80,10 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public bool CraftingWaitingTime { get; set; } = true;
 
+        [SettingProperty("{=!}Diplomacy Changes", RequireRestart = true, HintText = "{=!}Changes to AI evaluation of declaring war such as not calling wars when the entire kingdom is broke. Slows down the game pace. Default: True.")]
+        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        public bool DiplomacyChanges { get; set; } = true;
+
         [SettingPropertyInteger("{=iLmmsgFE}Volunteers Limit", 6, 20, "{=Bm4KO72P}0 Volunteers",
             Order = 1, RequireRestart = false, HintText = "{=2AsFpOok}The number of volunteers that notables may have. Requires reloading. Vanilla is 6, default for BK is 10. The recruitable amount is calculated on percentages and thus is always balanced. Recruits will be lost when changing to a smaller limit. Limits can be changed at any point during campaigns.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]

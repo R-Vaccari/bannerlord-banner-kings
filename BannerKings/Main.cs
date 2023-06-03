@@ -113,12 +113,15 @@ namespace BannerKings
             campaignStarter.AddModel(new BKCombatXpModel());
             campaignStarter.AddModel(new BKBattleMoraleModel());
             campaignStarter.AddModel(new BKLearningModel());
-            campaignStarter.AddModel(new BKKingodmDecsionModel());
-            campaignStarter.AddModel(new BKDiplomacyModel());
+            campaignStarter.AddModel(new BKKingodmDecsionModel());  
             campaignStarter.AddModel(new BKPartyFoodBuyingModel());
             campaignStarter.AddModel(new BKPregnancyModel());
             campaignStarter.AddModel(new BKPartyHealingModel());
             campaignStarter.AddModel(new BKBanditModel());
+            if (BannerKingsSettings.Instance.DiplomacyChanges)
+            {
+                campaignStarter.AddModel(new BKDiplomacyModel());
+            }
 
             BKAttributes.Instance.Initialize();
             BKSkills.Instance.Initialize();
