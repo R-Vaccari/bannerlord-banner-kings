@@ -99,13 +99,32 @@ namespace BannerKings.Behaviours
 
         private void OnPartyDailyTick(MobileParty party)
         {
-            if (!party.IsBandit || party.PartyComponent is not BanditHeroComponent)
+            if (!party.IsBandit)
             {
                 return;
             }
 
-            BanditHeroComponent component = (BanditHeroComponent)party.PartyComponent;
-            component.Tick();
+            if (party.PartyComponent is not BanditHeroComponent)
+            {
+                if (!party.Ai.IsDisabled && MBRandom.RandomFloat < MBRandom.RandomFloat)
+                {
+                    Settlement town = SettlementHelper.FindNearestFortification(x => 
+                    x.GatePosition.DistanceSquared(party.Position2D) < 50f, party);
+                    if (town != null)
+                    {
+                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town);
+                        if (MBRandom.RandomFloat < data.Stability)
+                        {
+                            DestroyPartyAction.Apply(null, party);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                BanditHeroComponent component = (BanditHeroComponent)party.PartyComponent;
+                component.Tick();
+            }
         }
 
         public void UpgradeParty(MobileParty party)
@@ -147,19 +166,6 @@ namespace BannerKings.Behaviours
                 if (Campaign.Current.Models.MapDistanceModel.GetDistance(party, heroParty) <= 10f)
                 {
                     SetFollow(heroParty, party);
-                }
-            }
-
-            if (!party.Ai.IsDisabled && MBRandom.RandomFloat < MBRandom.RandomFloat)
-            {
-                Settlement town = SettlementHelper.FindNearestFortification(x => true, party);
-                if (town != null)
-                {
-                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town);
-                    if (MBRandom.RandomFloat < data.Stability)
-                    {
-                        DestroyPartyAction.Apply(null, party);
-                    }
                 }
             }
         }
