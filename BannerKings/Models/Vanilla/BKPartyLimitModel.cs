@@ -62,29 +62,21 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (party.MobileParty.MemberRoster.TotalManCount > supplies.MinimumSoldiersThreshold)
                     {
-                        ExplainedNumber weapons = supplies.GetWeaponsCurrentNeed();
-                        float weaponPropotion = MBMath.Map(supplies.WeaponsNeed / MathF.Min(weapons.ResultNumber, 1f),
-                            0f,
-                            supplies.WeaponsNeed * CampaignTime.DaysInSeason,
-                            0f,
-                            0.2f);
-                        baseResult.AddFactor(-weaponPropotion, new TextObject("{=!}Lacking weapon supplies"));
+                        float weapons = MathF.Min(supplies.WeaponsNeed / supplies.GetWeaponsCurrentNeed().ResultNumber, 
+                            supplies.WeaponsNeed);
+                        baseResult.Add(-weapons, new TextObject("{=!}Lacking weapon supplies"));
 
-                        ExplainedNumber ammo = supplies.GetArrowsCurrentNeed();
-                        float ammoPropotion = MBMath.Map(supplies.ArrowsNeed / MathF.Min(ammo.ResultNumber, 1f),
-                            0f,
-                            supplies.ArrowsNeed * CampaignTime.DaysInSeason,
-                            0f,
-                            0.2f);
-                        baseResult.AddFactor(-ammoPropotion, new TextObject("{=!}Lacking ammunition supplies"));
+                        float ammo = MathF.Min(supplies.ArrowsNeed / supplies.GetArrowsCurrentNeed().ResultNumber, 
+                            supplies.ArrowsNeed);
+                        baseResult.Add(-ammo, new TextObject("{=!}Lacking ammunition supplies"));
 
-                        ExplainedNumber mounts = supplies.GetMountsCurrentNeed();
-                        float mountsPropotion = MBMath.Map(supplies.HorsesNeed / MathF.Min(mounts.ResultNumber, 1f),
-                            0f,
-                            supplies.HorsesNeed * CampaignTime.DaysInSeason,
-                            0f,
-                            0.2f);
-                        baseResult.AddFactor(-mountsPropotion, new TextObject("{=!}Lacking mount supplies"));
+                        float mounts = MathF.Min(supplies.HorsesNeed / supplies.GetMountsCurrentNeed().ResultNumber, 
+                            supplies.HorsesNeed);
+                        baseResult.Add(-mounts, new TextObject("{=!}Lacking mount supplies"));
+
+                        float shields = MathF.Min(supplies.ShieldsNeed / supplies.GetShieldsCurrentNeed().ResultNumber, 
+                            supplies.ShieldsNeed);
+                        baseResult.Add(-shields, new TextObject("{=!}Lacking shield supplies"));
                     }
                 }
             }

@@ -76,38 +76,21 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (mobileParty.MemberRoster.TotalManCount > supplies.MinimumSoldiersThreshold)
                     {
-                        ExplainedNumber alcohol = supplies.GetAlcoholCurrentNeed();
-                        float alcoholProportion = MBMath.Map(supplies.AlcoholNeed / MathF.Min(alcohol.ResultNumber, 1f),
-                            0f,
-                            supplies.AlcoholNeed * CampaignTime.DaysInSeason,
-                            0f,
-                            0.2f);
-                        result.AddFactor(-alcoholProportion, new TextObject("{=!}Lacking alcohol supplies"));
+                        float alcohol = MathF.Min(supplies.AlcoholNeed / supplies.GetAlcoholCurrentNeed().ResultNumber, 
+                            supplies.AlcoholNeed);
+                        result.Add(-alcohol, new TextObject("{=!}Lacking alcohol supplies"));
 
-                        ExplainedNumber animal = supplies.GetAnimalProductsCurrentNeed();
-                        float animalProportion = MBMath.Map(supplies.AnimalProductsNeed / MathF.Min(animal.ResultNumber, 1f),
-                            0f,
-                            supplies.AnimalProductsNeed * CampaignTime.DaysInSeason,
-                            0f,
-                            0.15f);
-                        result.AddFactor(-animalProportion, new TextObject("{=!}Lacking animal products supplies"));
+                        float animal = MathF.Min(supplies.AnimalProductsNeed / supplies.GetAnimalProductsCurrentNeed().ResultNumber, 
+                            supplies.AnimalProductsNeed);
+                        result.Add(-animal, new TextObject("{=!}Lacking animal products  supplies"));
 
-                        ExplainedNumber textiles = supplies.GetTextileCurrentNeed();
-                        float textilesProportion = MBMath.Map(supplies.ClothNeed / MathF.Min(textiles.ResultNumber, 1f),
-                            0f,
-                            supplies.ClothNeed * CampaignTime.DaysInSeason,
-                            0f,
-                            0.1f);
-                        result.AddFactor(-textilesProportion, new TextObject("{=!}Lacking textiles supplies"));
+                        float textiles = MathF.Min(supplies.ClothNeed / supplies.GetTextileCurrentNeed().ResultNumber, 
+                            supplies.ClothNeed);
+                        result.Add(-textiles, new TextObject("{=!}Lacking textiles supplies"));
 
-                        ExplainedNumber wood = supplies.GetWoodCurrentNeed();
-                        float woodProportion = MBMath.Map(supplies.WoodNeed / MathF.Min(wood.ResultNumber, 1f),
-                            0f,
-                            supplies.WoodNeed * CampaignTime.DaysInSeason,
-                            0f,
-                            0.1f);
-                        result.AddFactor(-woodProportion, new TextObject("{=!}Lacking wood supplies"));
-
+                        float wood = MathF.Min(supplies.WoodNeed / supplies.GetWoodCurrentNeed().ResultNumber,
+                            supplies.WoodNeed);
+                        result.Add(-wood, new TextObject("{=!}Lacking wood supplies"));
                     }
                 }
             }
