@@ -149,6 +149,19 @@ namespace BannerKings.Behaviours
                     SetFollow(heroParty, party);
                 }
             }
+
+            if (!party.Ai.IsDisabled && MBRandom.RandomFloat < MBRandom.RandomFloat)
+            {
+                Settlement town = SettlementHelper.FindNearestFortification(x => true, party);
+                if (town != null)
+                {
+                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town);
+                    if (MBRandom.RandomFloat < data.Stability)
+                    {
+                        DestroyPartyAction.Apply(null, party);
+                    }
+                }
+            }
         }
 
         private void TickBanditHeroes(MobileParty party)
