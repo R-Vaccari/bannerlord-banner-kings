@@ -124,6 +124,10 @@ namespace BannerKings
             campaignStarter.AddModel(new BKPregnancyModel());
             campaignStarter.AddModel(new BKPartyHealingModel());
             campaignStarter.AddModel(new BKBanditModel());
+            if (BannerKingsSettings.Instance.DiplomacyChanges)
+            {
+                campaignStarter.AddModel(new BKDiplomacyModel());
+            }
             campaignStarter.AddModel(new BKTargetScoreModel());
 
             BKAttributes.Instance.Initialize();

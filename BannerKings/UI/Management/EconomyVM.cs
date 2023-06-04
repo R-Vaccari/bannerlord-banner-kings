@@ -322,7 +322,9 @@ namespace BannerKings.UI.Management
                     var value = data.EconomicData.Satisfactions[i];
                     var type = (ConsumptionType) i;
                     var desc = type + " Goods:";
-                    SatisfactionInfo.Add(new InformationElement(desc, FormatValue(value),
+                    SatisfactionInfo.Add(new InformationElement(Utils.TextHelper.GetConsumptionSatisfactionText((ConsumptionType)i)
+                        .ToString(), 
+                        FormatValue(value),
                         Utils.Helpers.GetConsumptionHint(type)));
                 }
 
