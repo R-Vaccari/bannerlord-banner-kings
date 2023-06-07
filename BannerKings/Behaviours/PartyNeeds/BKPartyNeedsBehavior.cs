@@ -28,6 +28,7 @@ namespace BannerKings.Behaviours.PartyNeeds
 
         public override void SyncData(IDataStore dataStore)
         {
+            dataStore.SyncData("bannerkings-party-supplies", ref partyNeeds);
         }
 
         private void OnPartyDailyTick(MobileParty party)

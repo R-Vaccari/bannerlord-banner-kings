@@ -2,6 +2,7 @@
 using BannerKings.Behaviours.Criminality;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
+using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.Behaviours.Workshops;
 using BannerKings.Components;
 using BannerKings.Managers;
@@ -186,6 +187,7 @@ namespace BannerKings
             AddClassDefinition(typeof(Crime), 129);
 
             AddClassDefinition(typeof(BKCouncilPositionDecision), 140);
+            AddClassDefinition(typeof(PartySupplies), 141);
         }
 
         protected override void DefineContainerDefinitions()
@@ -236,6 +238,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Hero, MobileParty>));
             ConstructContainerDefinition(typeof(List<Crime>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, List<Crime>>));
+            ConstructContainerDefinition(typeof(Dictionary<MobileParty, PartySupplies>)); 
         }
     }
 }
