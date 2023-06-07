@@ -90,6 +90,7 @@ namespace BannerKings.Behaviours.PartyNeeds
         [SaveableProperty(8)] public float WeaponsNeed { get; private set; }
         [SaveableProperty(9)] public float HorsesNeed { get; private set; }
         [SaveableProperty(10)] public float AnimalProductsNeed { get; private set; }
+        [SaveableProperty(11)] public float ShieldsNeed { get; private set; }
 
         public int MinimumSoldiersThreshold => (int)BannerKingsConfig.Instance.PartyNeedsModel.MinimumSoldiersThreshold(this, false)
             .ResultNumber;
