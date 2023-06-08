@@ -8,13 +8,13 @@ namespace BannerKings.Models.BKModels
 {
     public class BKPartyNeedsModel : IPartyNeedsModel
     {
-        public float ArrowsPerSoldier => 0.01f;
+        public float ArrowsPerSoldier => 0.003f;
 
-        public float ShieldsPerSoldier => 0.01f;
+        public float ShieldsPerSoldier => 0.003f;
 
-        public float WeaponsPerSoldier => 0.015f;
+        public float WeaponsPerSoldier => 0.006f;
 
-        public float HorsesPerSoldier => 0.01f;
+        public float HorsesPerSoldier => 0.001f;
 
         public float ClothPerSoldier => 0.01f;
 
