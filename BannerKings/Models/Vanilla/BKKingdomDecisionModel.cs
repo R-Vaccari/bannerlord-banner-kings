@@ -38,10 +38,25 @@ namespace BannerKings.Models.Vanilla
                 return false;
             }
 
+            if (!BannerKingsConfig.Instance.DiplomacyModel.IsTradeAcceptable(kingdom1, kingdom2))
+            {
+                reason = new TextObject("{=!}{KINGDOM} is not interested in a trade pact with your realm.")
+                    .SetTextVariable("KINGDOM", kingdom2.Name);
+                return false;
+            }
+
             var diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(kingdom1);
             if (diplomacy != null && diplomacy.HasTradePact(kingdom2))
             {
                 reason = new TextObject("{=!}Kingdoms are already in a trade pact.");
+                return false;
+            }
+
+            float influence = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(kingdom1.RulingClan)
+                .ResultNumber;
+            if (influence < BannerKingsConfig.Instance.DiplomacyModel.TRADE_PACT_INFLUENCE_CAP)
+            {
+                reason = new TextObject("{=!}You do not have enough influence cap to sustain another pact.");
                 return false;
             }
 

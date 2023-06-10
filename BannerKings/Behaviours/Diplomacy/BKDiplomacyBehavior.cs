@@ -67,11 +67,37 @@ namespace BannerKings.Behaviours.Diplomacy
             InformationManager.DisplayMessage(new InformationMessage(justification.WarDeclaredText.ToString()));
         }
 
-        public void MakeTruce(Kingdom proposer, Kingdom proposed, float years)
+        public void ConsiderTruce(Kingdom proposer, Kingdom proposed, float years, bool kingdomBudget = false)
+        {
+            if (proposed.RulingClan == Clan.PlayerClan)
+            {
+                int denars = MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(proposer,
+                    proposed).ResultNumber);
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Truce Offering").ToString(),
+                    new TextObject("{=!}The lords of {KINGDOM} offer a truce with your realm for {YEARS} years. They are willing to pay you {DENARS} denars to prove their commitment. Accepting this offer will bind your realm to not raise arms against them by any means.")
+                    .SetTextVariable("DENARS", denars)
+                    .SetTextVariable("KINGDOM", proposer.Name)
+                    .SetTextVariable("YEARS", years).ToString(),
+                    true,
+                    true,
+                    GameTexts.FindText("str_accept").ToString(),
+                    GameTexts.FindText("str_reject").ToString(),
+                    () => MakeTruce(proposer, proposed, years, kingdomBudget),
+                    null),
+                    true,
+                    true);
+            }
+            else MakeTruce(proposer, proposed, years, kingdomBudget);
+        }
+
+        public void MakeTruce(Kingdom proposer, Kingdom proposed, float years, bool kingdomBudget = false)
         {
             int denars = MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(proposer,
                     proposed).ResultNumber);
-            proposer.RulingClan.Leader.ChangeHeroGold(-denars);
+            if (!kingdomBudget) proposer.RulingClan.Leader.ChangeHeroGold(-denars);
+            else proposer.KingdomBudgetWallet -= denars;
+
+            proposed.RulingClan.Leader.ChangeHeroGold(denars);
 
             var diplomacy1 = GetKingdomDiplomacy(proposer);
             diplomacy1.AddTruce(proposed, years);
@@ -85,7 +111,51 @@ namespace BannerKings.Behaviours.Diplomacy
                 .SetTextVariable("KINGDOM2", proposed.Name)
                 .SetTextVariable("DATE", CampaignTime.YearsFromNow(years).ToString())
                 .ToString(),
-                Color.FromUint(proposer == Clan.PlayerClan.MapFaction ? Utils.TextHelper.COLOR_LIGHT_BLUE :
+                Color.FromUint(proposer == Clan.PlayerClan.MapFaction || proposed == Clan.PlayerClan.MapFaction ? 
+                Utils.TextHelper.COLOR_LIGHT_BLUE :
+                Utils.TextHelper.COLOR_LIGHT_YELLOW)));
+        }
+
+        public void ConsiderTradePact(Kingdom proposer, Kingdom proposed)
+        {
+            if (proposed.RulingClan == Clan.PlayerClan)
+            {
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Trade Access Offering").ToString(),
+                    new TextObject("{=!}The lords of {KINGDOM} offer a trade access pact with your realm. Trade access pacts help develop prosperity on the long term in both kingdoms and set an amicable relation that facilitates future truces and alliances. The pact will not cost or award you any resources, but sustaining the pact will reduce your clan influence cap.")
+                    .SetTextVariable("KINGDOM", proposer.Name)
+                    .ToString(),
+                    true,
+                    true,
+                    GameTexts.FindText("str_accept").ToString(),
+                    GameTexts.FindText("str_reject").ToString(),
+                    () => MakeTradePact(proposer, proposed),
+                    null),
+                    true,
+                    true);
+            }
+            else MakeTradePact(proposer, proposed);
+        }
+
+
+        public void MakeTradePact(Kingdom proposer, Kingdom proposed)
+        {
+            int influence = MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetPactInfluenceCost(proposer,
+                    proposed).ResultNumber);
+            ChangeClanInfluenceAction.Apply(proposed.RulingClan, -influence);
+
+            var diplomacy1 = GetKingdomDiplomacy(proposer);
+            diplomacy1.AddPact(proposed);
+
+            var diplomacy2 = GetKingdomDiplomacy(proposed);
+            diplomacy2.AddPact(proposer);
+
+            InformationManager.DisplayMessage(new InformationMessage(
+                new TextObject("{=!}The lords of {KINGDOM1} and {KINGDOM2} have settled on trade access pact.")
+                .SetTextVariable("KINGDOM1", proposer.Name)
+                .SetTextVariable("KINGDOM2", proposed.Name)
+                .ToString(),
+                Color.FromUint(proposer == Clan.PlayerClan.MapFaction || proposed == Clan.PlayerClan.MapFaction ? 
+                Utils.TextHelper.COLOR_LIGHT_BLUE :
                 Utils.TextHelper.COLOR_LIGHT_YELLOW)));
         }
 
@@ -146,6 +216,43 @@ namespace BannerKings.Behaviours.Diplomacy
             {
                 pair.Value.Update();
             }
+
+            RunWeekly(() =>
+            {
+                foreach (var kingdom in Kingdom.All)
+                {
+                    if (kingdom.RulingClan == Clan.PlayerClan) continue;
+
+                    foreach (var target in Kingdom.All)
+                    {
+                        TextObject pactReason;
+                        if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTradePactAllowed(kingdom, target, out pactReason) &&
+                            MBRandom.RandomFloat < MBRandom.RandomFloat)
+                        {
+                            if (kingdom.RulingClan.Influence >= 
+                            BannerKingsConfig.Instance.DiplomacyModel.GetTradePactInfluenceCost(kingdom, target)
+                                .ResultNumber * 2f)
+                            {
+                                ConsiderTradePact(kingdom, target);
+                            }
+                        }
+                        else
+                        {
+                            TextObject truceReason;
+                            if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTruceAllowed(kingdom, target, out truceReason) &&
+                                MBRandom.RandomFloat < MBRandom.RandomFloat)
+                            {
+                                if (kingdom.RulingClan.Gold >= BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(kingdom, target)
+                                    .ResultNumber * 3f)
+                                {
+                                    ConsiderTruce(kingdom, target, 3f);
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            GetType().Name);
         }
 
         private void OnNewGameCreated(CampaignGameStarter starter)
@@ -334,15 +441,15 @@ namespace BannerKings.Behaviours.Diplomacy
                         .SetTextVariable("POSSIBLE", truceHint)
                         .ToString()));
 
-                    Action<KingdomDiplomacy, Kingdom, KingdomDiplomacyVM> makePact = ShowWarOptions;
+                    Action<KingdomDiplomacy, Kingdom, KingdomDiplomacyVM> makePact = ShowTradePact;
                     TextObject tradeHint;
                     bool tradePossible = model.IsTradePactAllowed(kingdom, enemyKingdom, out tradeHint);
-                    list.Add(new InquiryElement(makeWar,
+                    list.Add(new InquiryElement(makePact,
                         new TextObject("{=!}Propose Trade Pact").ToString(),
                         null,
-                        false,
-                        new TextObject("{=!}Propose a trade pact between both realms. A trade agreement or pact establishes the exemptions of caravan tariffs between both realms, meaning that their caravans will not pay entry fees in your realm's fiefs, nor will your realm's caravans pay in theirs. The absence of fees stimulates caravans to circulate in these fiefs, strengthening mercantilism, prosperity and supply of different goods between both sides, while also diverging trade from other realms. A trade pact does not necessarily bring any revenue to lords. In fact, it may incur in some revenue loss due to the caravan fee exemptions.\n\n{POSSIBLE}")
-                        .SetTextVariable("POSSIBLE", truceHint)
+                        tradePossible && playerRuler,
+                        new TextObject("{=!}Propose a trade pact between both realms. A trade access pact establishes the exemptions of caravan tariffs between both realms, meaning that their caravans will not pay entry fees in your realm's fiefs, nor will your realm's caravans pay in theirs. The absence of fees stimulates caravans to circulate in these fiefs, strengthening mercantilism, prosperity and supply of different goods between both sides, while also diverging trade from other realms. A trade pact does not necessarily bring any revenue to lords. In fact, it may incur in some revenue loss due to the caravan fee exemptions.\n\n{POSSIBLE}")
+                        .SetTextVariable("POSSIBLE", tradeHint)
                         .ToString()));
 
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
@@ -383,6 +490,29 @@ namespace BannerKings.Behaviours.Diplomacy
                     () =>
                     {
                         Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().MakeTruce(diplomacy.Kingdom, enemyKingdom, 3f);
+                        __instance.RefreshValues();
+                    },
+                    null));
+            }
+
+            private static void ShowTradePact(KingdomDiplomacy diplomacy, Kingdom enemyKingdom, KingdomDiplomacyVM __instance)
+            {
+                int influence = MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetTradePactInfluenceCost(diplomacy.Kingdom,
+                    enemyKingdom)
+                    .ResultNumber);
+
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Propose Trade Access").ToString(),
+                    new TextObject("{=!}{LEADER} is interested in accepting a trade pact that provides bilateral access indefinitely. Trading caravans will be allowed access to fiefs without paying tariffs, diverging trade from enemies or competitors while strengthening trade between both realms, likely increasing consumption satisfactions and consequently, overall prosperity. Pressing this proposal would cost {INFLUENCE} influence due to all the Peers within your realm that may be affected due to tariffs loss.\n Sustaining trade access pacts will each also reduce your family's influence cap. Trade pacts faciliate making truces and take effect for an indefinite amount of time so long peace between both sides is upheld.")
+                    .SetTextVariable("INFLUENCE", influence)
+                    .SetTextVariable("LEADER", enemyKingdom.RulingClan.Leader.Name)
+                    .ToString(),
+                    Clan.PlayerClan.Influence >= influence,
+                    true,
+                    GameTexts.FindText("str_policy_propose").ToString(),
+                    GameTexts.FindText("str_selection_widget_cancel").ToString(),
+                    () =>
+                    {
+                        Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().MakeTradePact(diplomacy.Kingdom, enemyKingdom);
                         __instance.RefreshValues();
                     },
                     null));

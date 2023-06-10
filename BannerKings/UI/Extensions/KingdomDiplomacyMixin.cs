@@ -22,6 +22,7 @@ namespace BannerKings.UI.Extensions
             truceText, allianceText;
         private HintViewModel justificationHint, warScoreHint, warObjectiveHint, frontHint,
             playerFatigueHint, enemyFatigueHint;
+        private BasicTooltipViewModel tradePactHint;
         private bool warExists, peaceExists;
         private War war;
 
@@ -116,6 +117,11 @@ namespace BannerKings.UI.Extensions
                 {
                     TruceText = new TextObject("{=!}None").ToString();
                 }
+
+                TradePactHint = new BasicTooltipViewModel(() =>
+                {
+
+                });
             }
         }
 
@@ -162,14 +168,14 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty]
-        public HintViewModel TradePactHint
+        public BasicTooltipViewModel TradePactHint
         {
-            get => justificationHint;
+            get => tradePactHint;
             set
             {
-                if (value != justificationHint)
+                if (value != tradePactHint)
                 {
-                    justificationHint = value;
+                    tradePactHint = value;
                     ViewModel!.OnPropertyChangedWithValue(value);
                 }
             }

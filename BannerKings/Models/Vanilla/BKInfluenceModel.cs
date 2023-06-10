@@ -1,5 +1,6 @@
 using System;
 using BannerKings.Behaviours;
+using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Mercenary;
 using BannerKings.Extensions;
 using BannerKings.Managers.CampaignStart;
@@ -117,6 +118,17 @@ namespace BannerKings.Models.Vanilla
                 if (clan.Culture != clan.Kingdom.Culture)
                 {
                     result.AddFactor(-0.2f, new TextObject("{=qW1tnxGu}Kingdom cultural difference"));
+                }
+
+                var diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(clan.Kingdom);
+                if (diplomacy != null)
+                {
+                    foreach (var pact in diplomacy.TradePacts)
+                    {
+                        result.Add(-BannerKingsConfig.Instance.DiplomacyModel.TRADE_PACT_INFLUENCE_CAP, 
+                            new TextObject("{=!}Trade pact with {KINGDOM}")
+                            .SetTextVariable("KINGDOM", pact.Name));
+                    }
                 }
             }
 

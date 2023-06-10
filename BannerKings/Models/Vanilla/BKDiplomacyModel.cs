@@ -13,6 +13,8 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKDiplomacyModel : DefaultDiplomacyModel
     {
+        public float TRADE_PACT_INFLUENCE_CAP { get;} = 100f;
+
         public ExplainedNumber GetPactInfluenceCost(Kingdom proposer, Kingdom proposed, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
@@ -35,8 +37,20 @@ namespace BannerKings.Models.Vanilla
 
         public bool IsTruceAcceptable(Kingdom proposer, Kingdom proposed, bool explanations = false)
         {
+            if (proposed == proposer) return false;
+            
             float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason);
             return peace > 0;
+        }
+
+        public bool IsTradeAcceptable(Kingdom proposer, Kingdom proposed, bool explanations = false)
+        {
+            if (proposed == proposer) return false;
+
+            float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason);
+            float influence = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(proposed.RulingClan)
+                .ResultNumber;
+            return peace > 0 && influence > TRADE_PACT_INFLUENCE_CAP;
         }
 
         public ExplainedNumber GetTruceDenarCost(Kingdom proposer, Kingdom proposed, float years = 3f, bool explanations = false)
@@ -48,6 +62,24 @@ namespace BannerKings.Models.Vanilla
             float relation = proposed.RulingClan.Leader.GetRelation(proposer.RulingClan.Leader) / 150f;
             result.AddFactor(-relation, new TextObject("{=BlidMNGT}Relation"));
 
+            return result;
+        }
+
+        public ExplainedNumber GetTradePactInfluenceCost(Kingdom proposer, Kingdom proposed, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(100, explanations);
+            foreach (var fief in proposer.Fiefs)
+            {
+                if (fief.IsTown && fief.OwnerClan != proposer.RulingClan)
+                {
+                    result.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateSettlementInfluence(fief.Settlement,
+                        BannerKingsConfig.Instance.PopulationManager.GetPopData(fief.Settlement)).ResultNumber,
+                        fief.Name);
+                }
+            }
+
+            float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason);
+            result.AddFactor(peace / -75000f, new TextObject("{=!}Peace interest"));
             return result;
         }
 

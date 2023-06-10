@@ -58,7 +58,14 @@ namespace BannerKings.Behaviours.Diplomacy
             }
 
             Truces.Add(otherKingdom, CampaignTime.YearsFromNow(years));
-            
+        }
+
+        public void AddPact(Kingdom otherKingdom)
+        {
+            if (!TradePacts.Contains(otherKingdom))
+            {
+                TradePacts.Add(otherKingdom);
+            }
         }
 
         public void OnWar(Kingdom otherKingdom)
