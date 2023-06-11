@@ -357,6 +357,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override void ShowPlayerPrompt()
         {
+            SetTexts();
             InformationManager.ShowInquiry(new InquiryData(Name.ToString(),
                 new TextObject("{=!}The {GROUP} group is demanding the enactment of the {LAW} law. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
                 .SetTextVariable("GROUP", Group.Name)

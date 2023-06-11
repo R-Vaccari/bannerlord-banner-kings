@@ -439,6 +439,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override void ShowPlayerDemandOptions()
         {
+            SetTexts();
             Kingdom kingdom = Group.FactionLeader.MapFaction as Kingdom;
             List<InquiryElement> policies = new List<InquiryElement>();
             foreach (var policy in Group.SupportedPolicies)
