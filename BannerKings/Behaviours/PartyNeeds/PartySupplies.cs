@@ -138,7 +138,21 @@ namespace BannerKings.Behaviours.PartyNeeds
                 AnimalProductsNeed += model.CalculateAnimalProductsNeed(this, false).ResultNumber;
                 ShieldsNeed += model.CalculateShieldsNeed(this, false).ResultNumber;
             }
-           
+
+            BuyItems();
+            AlcoholNeed -= ConsumeItems(AlcoholNeed, alcoholCategories);
+            WoodNeed -= ConsumeItems(WoodNeed, woodCategories);
+            ToolsNeed -= ConsumeItems(ToolsNeed, toolsCategories);
+            ClothNeed -= ConsumeItems(ClothNeed, clothCategories);
+            ArrowsNeed -= ConsumeItems(ArrowsNeed, ammoCategories);
+            WeaponsNeed -= ConsumeItems(WeaponsNeed, weaponCategories);
+            HorsesNeed -= ConsumeItems(HorsesNeed, horseCategories);
+            AnimalProductsNeed -= ConsumeItems(AnimalProductsNeed, animalProductsCategories);
+            ShieldsNeed -= ConsumeItems(ShieldsNeed, shieldCategories);
+        }
+
+        public void BuyItems()
+        {
             if (Party.EffectiveQuartermaster != null && AutoBuying && Party.CurrentSettlement != null)
             {
                 BuyItems(AlcoholNeed * DaysOfProvision, alcoholCategories);
@@ -151,16 +165,6 @@ namespace BannerKings.Behaviours.PartyNeeds
                 BuyItems(AnimalProductsNeed * DaysOfProvision, animalProductsCategories);
                 BuyItems(ShieldsNeed * DaysOfProvision, shieldCategories);
             }
-
-            AlcoholNeed -= ConsumeItems(AlcoholNeed, alcoholCategories);
-            WoodNeed -= ConsumeItems(WoodNeed, woodCategories);
-            ToolsNeed -= ConsumeItems(ToolsNeed, toolsCategories);
-            ClothNeed -= ConsumeItems(ClothNeed, clothCategories);
-            ArrowsNeed -= ConsumeItems(ArrowsNeed, ammoCategories);
-            WeaponsNeed -= ConsumeItems(WeaponsNeed, weaponCategories);
-            HorsesNeed -= ConsumeItems(HorsesNeed, horseCategories);
-            AnimalProductsNeed -= ConsumeItems(AnimalProductsNeed, animalProductsCategories);
-            ShieldsNeed -= ConsumeItems(ShieldsNeed, shieldCategories);
         }
 
         private void BuyItems(float floatCount, List<ItemCategory> categories)
