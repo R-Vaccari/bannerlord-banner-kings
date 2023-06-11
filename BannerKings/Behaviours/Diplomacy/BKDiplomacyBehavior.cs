@@ -234,6 +234,7 @@ namespace BannerKings.Behaviours.Diplomacy
                                 .ResultNumber * 2f)
                             {
                                 ConsiderTradePact(kingdom, target);
+                                break;
                             }
                         }
                         else
@@ -246,6 +247,7 @@ namespace BannerKings.Behaviours.Diplomacy
                                     .ResultNumber * 3f)
                                 {
                                     ConsiderTruce(kingdom, target, 3f);
+                                    break;
                                 }
                             }
                         }
