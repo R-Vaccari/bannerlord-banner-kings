@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Behaviours.PartyNeeds
 {
@@ -24,10 +25,30 @@ namespace BannerKings.Behaviours.PartyNeeds
             CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnPartyDailyTick);
             CampaignEvents.MobilePartyDestroyed.AddNonSerializedListener(this, OnPartyDestroyed);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
+            CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
         }
 
         public override void SyncData(IDataStore dataStore)
         {
+            dataStore.SyncData("bannerkings-party-supplies", ref partyNeeds);
+
+            if (partyNeeds == null)
+            {
+                partyNeeds = new Dictionary<MobileParty, PartySupplies>();
+            }
+        }
+        private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
+        {
+            if (target == null || party == null || hero == null || !party.IsLordParty ||
+                hero == Hero.MainHero || (!target.IsVillage && target.IsFortification))
+            {
+                return;
+            }
+
+            if (partyNeeds.ContainsKey(party))
+            {
+                partyNeeds[party].BuyItems();
+            }
         }
 
         private void OnPartyDailyTick(MobileParty party)

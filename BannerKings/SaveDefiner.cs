@@ -6,6 +6,7 @@ using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
+using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.Behaviours.Mercenary;
 using BannerKings.Behaviours.Workshops;
 using BannerKings.Components;
@@ -204,6 +205,7 @@ namespace BannerKings
             AddClassDefinition(typeof(CustomTroopPreset), 1003);
 
             AddClassDefinition(typeof(BKCouncilPositionDecision), 140);
+            AddClassDefinition(typeof(PartySupplies), 141);
         }
 
         protected override void DefineContainerDefinitions()
@@ -259,6 +261,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(List<War>));
             ConstructContainerDefinition(typeof(List<Crime>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, List<Crime>>));
+            ConstructContainerDefinition(typeof(Dictionary<MobileParty, PartySupplies>)); 
 
             ConstructContainerDefinition(typeof(List<MercenaryPrivilege>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, List<MercenaryPrivilege>>));

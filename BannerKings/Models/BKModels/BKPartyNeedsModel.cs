@@ -1,4 +1,5 @@
 ﻿using BannerKings.Behaviours.PartyNeeds;
+using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
@@ -8,13 +9,13 @@ namespace BannerKings.Models.BKModels
 {
     public class BKPartyNeedsModel : IPartyNeedsModel
     {
-        public float ArrowsPerSoldier => 0.01f;
+        public float ArrowsPerSoldier => 0.003f;
 
-        public float ShieldsPerSoldier => 0.01f;
+        public float ShieldsPerSoldier => 0.003f;
 
-        public float WeaponsPerSoldier => 0.015f;
+        public float WeaponsPerSoldier => 0.006f;
 
-        public float HorsesPerSoldier => 0.01f;
+        public float HorsesPerSoldier => 0.001f;
 
         public float ClothPerSoldier => 0.01f;
 
@@ -51,7 +52,8 @@ namespace BannerKings.Models.BKModels
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
-                result.Add(element.Number * AlcoholPerSoldier, new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                result.Add(element.Number * AlcoholPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
+                    new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
                     .SetTextVariable("TROOP_NAME", element.Character.Name)
                     .SetTextVariable("COUNT", element.Number));
             }
@@ -73,9 +75,10 @@ namespace BannerKings.Models.BKModels
                 FormationClass formation = element.Character.GetFormationClass();
                 if (formation == FormationClass.Ranged || formation == FormationClass.HorseArcher)
                 {
-                    result.Add(element.Number * ArrowsPerSoldier, new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
-                                                       .SetTextVariable("TROOP_NAME", element.Character.Name)
-                                                       .SetTextVariable("COUNT", element.Number));
+                    result.Add(element.Number * ArrowsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
+                        new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                        .SetTextVariable("TROOP_NAME", element.Character.Name)
+                        .SetTextVariable("COUNT", element.Number));
                 }
             }
 
@@ -93,9 +96,10 @@ namespace BannerKings.Models.BKModels
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
-                result.Add(element.Number * ClothPerSoldier, new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
-                                    .SetTextVariable("TROOP_NAME", element.Character.Name)
-                                    .SetTextVariable("COUNT", element.Number));
+                result.Add(element.Number * ClothPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
+                    new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                    .SetTextVariable("TROOP_NAME", element.Character.Name)
+                    .SetTextVariable("COUNT", element.Number));
             }
 
             return result;
@@ -114,9 +118,10 @@ namespace BannerKings.Models.BKModels
             {
                 if (element.Character.IsMounted)
                 {
-                    result.Add(element.Number * HorsesPerSoldier, new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
-                                                        .SetTextVariable("TROOP_NAME", element.Character.Name)
-                                                        .SetTextVariable("COUNT", element.Number));
+                    result.Add(element.Number * HorsesPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
+                        new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                        .SetTextVariable("TROOP_NAME", element.Character.Name)
+                        .SetTextVariable("COUNT", element.Number));
                 }
             }
 
@@ -134,7 +139,8 @@ namespace BannerKings.Models.BKModels
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
-                result.Add(element.Number * AnimalProductsPerSoldier, new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                result.Add(element.Number * AnimalProductsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
+                    new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
                     .SetTextVariable("TROOP_NAME", element.Character.Name)
                     .SetTextVariable("COUNT", element.Number));
             }
@@ -156,9 +162,10 @@ namespace BannerKings.Models.BKModels
                 if (element.Character.Equipment.HasWeaponOfClass(WeaponClass.SmallShield) ||
                     element.Character.Equipment.HasWeaponOfClass(WeaponClass.LargeShield))
                 {
-                    result.Add(element.Number * ShieldsPerSoldier, new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
-                                        .SetTextVariable("TROOP_NAME", element.Character.Name)
-                                        .SetTextVariable("COUNT", element.Number));
+                    result.Add(element.Number * ShieldsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
+                        new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                        .SetTextVariable("TROOP_NAME", element.Character.Name)
+                        .SetTextVariable("COUNT", element.Number));
                 }
             }
 
@@ -178,7 +185,8 @@ namespace BannerKings.Models.BKModels
             {
                 if (!element.Character.IsRanged)
                 {
-                    result.Add(element.Number * WeaponsPerSoldier, new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                    result.Add(element.Number * WeaponsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor,
+                        new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
                         .SetTextVariable("TROOP_NAME", element.Character.Name)
                         .SetTextVariable("COUNT", element.Number));
                 }
@@ -220,7 +228,8 @@ namespace BannerKings.Models.BKModels
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
-                result.Add(element.Number * ToolsPerSoldier, new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                result.Add(element.Number * ToolsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
+                    new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
                     .SetTextVariable("TROOP_NAME", element.Character.Name)
                     .SetTextVariable("COUNT", element.Number));
             }
@@ -262,7 +271,8 @@ namespace BannerKings.Models.BKModels
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
-                result.Add(element.Number * WoodPerSoldier, new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                result.Add(element.Number * WoodPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
+                    new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
                     .SetTextVariable("TROOP_NAME", element.Character.Name)
                     .SetTextVariable("COUNT", element.Number));
             }

@@ -5,6 +5,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.PartyNeeds
 {
@@ -77,19 +78,19 @@ namespace BannerKings.Behaviours.PartyNeeds
             DaysOfProvision = 10;
         }
 
-        public bool AutoBuying { get; private set; }
+        [SaveableProperty(2)] public bool AutoBuying { get; private set; }
         public int DaysOfProvision { get; private set; }
 
-        public MobileParty Party { get; private set; }
-        public float AlcoholNeed { get; private set; }
-        public float WoodNeed { get; private set; }
-        public float ToolsNeed { get; private set; }
-        public float ClothNeed { get; private set; }
-        public float ArrowsNeed { get; private set; }
-        public float WeaponsNeed { get; private set; }
-        public float HorsesNeed { get; private set; }
-        public float AnimalProductsNeed { get; private set; }
-        public float ShieldsNeed { get; private set; }
+        [SaveableProperty(1)] public MobileParty Party { get; private set; }
+        [SaveableProperty(3)] public float AlcoholNeed { get; private set; }
+        [SaveableProperty(4)] public float WoodNeed { get; private set; }
+        [SaveableProperty(5)] public float ToolsNeed { get; private set; }
+        [SaveableProperty(6)] public float ClothNeed { get; private set; }
+        [SaveableProperty(7)] public float ArrowsNeed { get; private set; }
+        [SaveableProperty(8)] public float WeaponsNeed { get; private set; }
+        [SaveableProperty(9)] public float HorsesNeed { get; private set; }
+        [SaveableProperty(10)] public float AnimalProductsNeed { get; private set; }
+        [SaveableProperty(11)] public float ShieldsNeed { get; private set; }
 
         public int MinimumSoldiersThreshold => (int)BannerKingsConfig.Instance.PartyNeedsModel.MinimumSoldiersThreshold(this, false)
             .ResultNumber;
@@ -137,7 +138,21 @@ namespace BannerKings.Behaviours.PartyNeeds
                 AnimalProductsNeed += model.CalculateAnimalProductsNeed(this, false).ResultNumber;
                 ShieldsNeed += model.CalculateShieldsNeed(this, false).ResultNumber;
             }
-           
+
+            BuyItems();
+            AlcoholNeed -= ConsumeItems(AlcoholNeed, alcoholCategories);
+            WoodNeed -= ConsumeItems(WoodNeed, woodCategories);
+            ToolsNeed -= ConsumeItems(ToolsNeed, toolsCategories);
+            ClothNeed -= ConsumeItems(ClothNeed, clothCategories);
+            ArrowsNeed -= ConsumeItems(ArrowsNeed, ammoCategories);
+            WeaponsNeed -= ConsumeItems(WeaponsNeed, weaponCategories);
+            HorsesNeed -= ConsumeItems(HorsesNeed, horseCategories);
+            AnimalProductsNeed -= ConsumeItems(AnimalProductsNeed, animalProductsCategories);
+            ShieldsNeed -= ConsumeItems(ShieldsNeed, shieldCategories);
+        }
+
+        public void BuyItems()
+        {
             if (Party.EffectiveQuartermaster != null && AutoBuying && Party.CurrentSettlement != null)
             {
                 BuyItems(AlcoholNeed * DaysOfProvision, alcoholCategories);
@@ -150,16 +165,6 @@ namespace BannerKings.Behaviours.PartyNeeds
                 BuyItems(AnimalProductsNeed * DaysOfProvision, animalProductsCategories);
                 BuyItems(ShieldsNeed * DaysOfProvision, shieldCategories);
             }
-
-            AlcoholNeed -= ConsumeItems(AlcoholNeed, alcoholCategories);
-            WoodNeed -= ConsumeItems(WoodNeed, woodCategories);
-            ToolsNeed -= ConsumeItems(ToolsNeed, toolsCategories);
-            ClothNeed -= ConsumeItems(ClothNeed, clothCategories);
-            ArrowsNeed -= ConsumeItems(ArrowsNeed, ammoCategories);
-            WeaponsNeed -= ConsumeItems(WeaponsNeed, weaponCategories);
-            HorsesNeed -= ConsumeItems(HorsesNeed, horseCategories);
-            AnimalProductsNeed -= ConsumeItems(AnimalProductsNeed, animalProductsCategories);
-            ShieldsNeed -= ConsumeItems(ShieldsNeed, shieldCategories);
         }
 
         private void BuyItems(float floatCount, List<ItemCategory> categories)
@@ -215,9 +220,9 @@ namespace BannerKings.Behaviours.PartyNeeds
             }
         }
 
-        private int ConsumeItems(float floatCount, List<ItemCategory> categories)
+        private float ConsumeItems(float floatCount, List<ItemCategory> categories)
         {
-            int finalResult = 0;
+            float finalResult = 0;
             int count = MathF.Floor(floatCount);
             if (count < 1)
             {
@@ -239,8 +244,13 @@ namespace BannerKings.Behaviours.PartyNeeds
                 int result = MathF.Min(count, element.Amount);
                 Party.ItemRoster.AddToCounts(element.EquipmentElement, -result);
                 count -= result;
-                finalResult += result;
+                float modifier = 1f;
+                if (element.EquipmentElement.ItemModifier != null)
+                {
+                    modifier = element.EquipmentElement.ItemModifier.PriceMultiplier;
+                }
 
+                finalResult += result * modifier;
                 if (count < 1) break;
             }
 

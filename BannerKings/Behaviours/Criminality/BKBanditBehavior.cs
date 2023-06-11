@@ -75,7 +75,8 @@ namespace BannerKings.Behaviours
             {
                 if (clan.WarPartyComponents.Count > BannerKingsSettings.Instance.BanditPartiesLimit * 0.1f)
                 {
-                    var random = clan.WarPartyComponents.GetRandomElementWithPredicate(x => x.Leader == null);
+                    var random = clan.WarPartyComponents.GetRandomElementWithPredicate(x => x.Leader == null &&
+                    x.MobileParty.MapEvent == null);
                     DestroyPartyAction.Apply(null, random.MobileParty);
                 }
             }
@@ -106,7 +107,7 @@ namespace BannerKings.Behaviours
 
             if (party.PartyComponent is not BanditHeroComponent)
             {
-                if (!party.Ai.IsDisabled && MBRandom.RandomFloat < MBRandom.RandomFloat)
+                if (!party.Ai.IsDisabled && MBRandom.RandomFloat < MBRandom.RandomFloat && party.MapEvent == null)
                 {
                     Settlement town = SettlementHelper.FindNearestFortification(x => 
                     x.GatePosition.DistanceSquared(party.Position2D) < 50f, party);
