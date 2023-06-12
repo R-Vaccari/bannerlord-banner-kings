@@ -11,71 +11,94 @@ namespace BannerKings.Behaviours.PartyNeeds
 {
     public class PartySupplies
     {
-        private static readonly List<ItemCategory> alcoholCategories = new List<ItemCategory>(3)
-        {
-            DefaultItemCategories.Wine,
-            DefaultItemCategories.Beer,
-            BKItemCategories.Instance.Mead
-        };
+        private List<ItemCategory> alcoholCategories;
 
-        private static readonly List<ItemCategory> animalProductsCategories = new List<ItemCategory>(3)
-        {
-            DefaultItemCategories.Meat,
-            DefaultItemCategories.Cheese,
-            DefaultItemCategories.Butter,
-            DefaultItemCategories.Fish
-        };
+        private List<ItemCategory> animalProductsCategories;
 
-        private static readonly List<ItemCategory> toolsCategories = new List<ItemCategory>(1)
-        {
-            DefaultItemCategories.Tools
-        };
+        private List<ItemCategory> toolsCategories;
 
-        private static readonly List<ItemCategory> horseCategories = new List<ItemCategory>(1)
-        {
-            DefaultItemCategories.Horse
-        };
+        private List<ItemCategory> horseCategories;
 
-        private static readonly List<ItemCategory> ammoCategories = new List<ItemCategory>(1)
-        {
-            DefaultItemCategories.Arrows
-        };
+        private List<ItemCategory> ammoCategories;
 
-        private static readonly List<ItemCategory> weaponCategories = new List<ItemCategory>(5)
-        {
-            DefaultItemCategories.MeleeWeapons1,
-            DefaultItemCategories.MeleeWeapons2,
-            DefaultItemCategories.MeleeWeapons3,
-            DefaultItemCategories.MeleeWeapons4,
-            DefaultItemCategories.MeleeWeapons5,
-        };
+        private List<ItemCategory> weaponCategories;
 
-        private static readonly List<ItemCategory> shieldCategories = new List<ItemCategory>(5)
-        {
-            DefaultItemCategories.Shield1,
-            DefaultItemCategories.Shield2,
-            DefaultItemCategories.Shield3,
-            DefaultItemCategories.Shield4,
-            DefaultItemCategories.Shield5
-        };
+        private List<ItemCategory> shieldCategories;
 
-        private static readonly List<ItemCategory> clothCategories = new List<ItemCategory>(3)
-        {
-            DefaultItemCategories.Wool,
-            DefaultItemCategories.Linen,
-            DefaultItemCategories.Flax
-        };
+        private List<ItemCategory> clothCategories;
 
-        private static readonly List<ItemCategory> woodCategories = new List<ItemCategory>(1)
-        {
-            DefaultItemCategories.Wood
-        };
+        private List<ItemCategory> woodCategories;
 
         public PartySupplies(MobileParty party)
         {
             Party = party;
             AutoBuying = party == MobileParty.MainParty ? false : true;
+            
+            PostInitialize();
+        }
+
+        public void PostInitialize()
+        {
             DaysOfProvision = 10;
+            alcoholCategories = new List<ItemCategory>(3)
+            {
+                DefaultItemCategories.Wine,
+                DefaultItemCategories.Beer,
+                BKItemCategories.Instance.Mead
+            };
+
+            animalProductsCategories = new List<ItemCategory>(3)
+            {
+                DefaultItemCategories.Meat,
+                DefaultItemCategories.Cheese,
+                DefaultItemCategories.Butter,
+                DefaultItemCategories.Fish
+            };
+
+            toolsCategories = new List<ItemCategory>(1)
+            {
+                DefaultItemCategories.Tools
+            };
+
+            horseCategories = new List<ItemCategory>(1)
+            {
+                DefaultItemCategories.Horse
+            };
+
+            ammoCategories = new List<ItemCategory>(1)
+            {
+                DefaultItemCategories.Arrows
+            };
+
+            weaponCategories = new List<ItemCategory>(5)
+            {
+                DefaultItemCategories.MeleeWeapons1,
+                DefaultItemCategories.MeleeWeapons2,
+                DefaultItemCategories.MeleeWeapons3,
+                DefaultItemCategories.MeleeWeapons4,
+                DefaultItemCategories.MeleeWeapons5,
+            };
+
+            shieldCategories = new List<ItemCategory>(5)
+            {
+                DefaultItemCategories.Shield1,
+                DefaultItemCategories.Shield2,
+                DefaultItemCategories.Shield3,
+                DefaultItemCategories.Shield4,
+                DefaultItemCategories.Shield5
+            };
+
+            clothCategories = new List<ItemCategory>(3)
+            {
+                DefaultItemCategories.Wool,
+                DefaultItemCategories.Linen,
+                DefaultItemCategories.Flax
+            };
+
+            woodCategories = new List<ItemCategory>(1)
+            {
+                DefaultItemCategories.Wood
+            };
         }
 
         [SaveableProperty(2)] public bool AutoBuying { get; private set; }
