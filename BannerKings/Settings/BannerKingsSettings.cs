@@ -84,7 +84,7 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public bool DiplomacyChanges { get; set; } = true;
 
-        [SettingPropertyFloatingInteger("{=9G8cJYQd}Tax Income", minValue: 0f, maxValue: 2f, "#0%", RequireRestart = false, 
+        [SettingPropertyFloatingInteger("{=!}Party Supplies", minValue: 0f, maxValue: 2f, "#0%", RequireRestart = false, 
             HintText = "{=!}Affects the party supplies requirement factor. 0% means the feature is functionally disabled. 100% is the standard rate of items consumption, 200% means doube the rate, resulting in more expensive parties. May affect AI party limit sizes. Default: 100%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float PartySuppliesFactor { get; set; } = 1f;

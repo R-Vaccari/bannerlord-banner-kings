@@ -74,6 +74,11 @@ namespace BannerKings.Behaviours.PartyNeeds
             {
                 AddPartyNeeds(party);
             }
+
+            foreach (var needs in partyNeeds.Values)
+            {
+                needs.PostInitialize();
+            }
         }
 
         private void AddPartyNeeds(MobileParty party)
