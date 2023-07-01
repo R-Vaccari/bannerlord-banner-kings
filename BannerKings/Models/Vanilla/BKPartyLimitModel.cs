@@ -62,21 +62,21 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (party.MobileParty.MemberRoster.TotalManCount > supplies.MinimumSoldiersThreshold)
                     {
-                        float weapons = MathF.Min(supplies.WeaponsNeed / supplies.GetWeaponsCurrentNeed().ResultNumber, 
+                        float weapons = MathF.Min(supplies.WeaponsNeed / supplies.GetWeaponsCurrentNeed().ResultNumber,
                             supplies.WeaponsNeed);
                         float minValue = baseResult.ResultNumber * 0.15f;
-                        baseResult.Add(-MathF.Clamp(weapons, minValue, 0), 
+                        baseResult.Add(-MathF.Clamp(weapons, minValue, 0),
                             new TextObject("{=!}Lacking weapon supplies"));
 
-                        float ammo = MathF.Min(supplies.ArrowsNeed / supplies.GetArrowsCurrentNeed().ResultNumber, 
+                        float ammo = MathF.Min(supplies.ArrowsNeed / supplies.GetArrowsCurrentNeed().ResultNumber,
                             supplies.ArrowsNeed);
                         baseResult.Add(-MathF.Clamp(ammo, minValue, 0), new TextObject("{=!}Lacking ammunition supplies"));
 
-                        float mounts = MathF.Min(supplies.HorsesNeed / supplies.GetMountsCurrentNeed().ResultNumber, 
+                        float mounts = MathF.Min(supplies.HorsesNeed / supplies.GetMountsCurrentNeed().ResultNumber,
                             supplies.HorsesNeed);
                         baseResult.Add(-MathF.Clamp(mounts, minValue, 0), new TextObject("{=!}Lacking mount supplies"));
 
-                        float shields = MathF.Min(supplies.ShieldsNeed / supplies.GetShieldsCurrentNeed().ResultNumber, 
+                        float shields = MathF.Min(supplies.ShieldsNeed / supplies.GetShieldsCurrentNeed().ResultNumber,
                             supplies.ShieldsNeed);
                         baseResult.Add(-MathF.Clamp(shields, minValue, 0), new TextObject("{=!}Lacking shield supplies"));
                     }

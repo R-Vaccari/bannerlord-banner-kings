@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Populations;
 using BannerKings.Models.BKModels;
 using TaleWorlds.CampaignSystem;
@@ -28,6 +30,12 @@ namespace BannerKings.Managers.Titles
             if (title == null)
             {
                 return;
+            }
+
+            if (title.deJure != null && title.deJure.IsDead)
+            {
+                var list = new List<FeudalTitle>() { Title };
+                InheritanceHelper.ApplyInheritanceAllTitles(list, title.deJure);
             }
 
             title.CleanClaims();
