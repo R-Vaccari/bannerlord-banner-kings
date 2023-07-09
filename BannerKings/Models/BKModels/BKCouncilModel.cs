@@ -1,6 +1,8 @@
 using System;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Grace;
 using BannerKings.Managers.Education.Languages;
+using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -14,13 +16,117 @@ namespace BannerKings.Models.BKModels
         {
             return new ExplainedNumber();
         }
+        public ExplainedNumber CalculateAdmCosts(CouncilData data, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(0, explanations);
+            result.LimitMin(0f);
+            result.LimitMax(0.9f);
+
+            foreach (var councilMember in data.Positions)
+            {
+                if (councilMember.Member != null)
+                {
+                    result.Add(councilMember.AdministrativeCosts(), councilMember.GetCulturalName());
+                }
+            }
+
+            if (data.CourtGrace != null)
+            {
+                foreach (var expense in data.CourtGrace.Expenses)
+                {
+                    result.Add(expense.AdministrativeCost, expense.Name);
+                }
+            }
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateGraceTarget(CouncilData data, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(0, explanations);
+            result.LimitMin(0f);
+            result.LimitMax(1000f);
+            if (data.Location != null)
+            {
+                result.Add(data.Location.Prosperity * 0.05f, data.Location.Name);
+            }
+            
+            var lodgings = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Lodgings);
+            var servants = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Servants);
+            var security = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Security);
+            var extravagance = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Extravagance);
+            var supplies = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Supplies);
+
+            result.Add(lodgings.Grace, lodgings.Name);
+            result.Add(servants.Grace, servants.Name);
+            //result.Add(security.Grace, security.Name);
+            result.Add(extravagance.Grace, extravagance.Name);
+            result.Add(supplies.Grace, supplies.Name);
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateExpectedGrace(CouncilData data, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(0, explanations);
+            result.LimitMin(0f);
+            result.LimitMax(1000f);
+
+            int tier = data.Clan.Tier;
+            float tierGrace = 0f;
+            if (tier == 2) tierGrace = 50f;
+            else if (tier == 3) tierGrace = 100f;
+            else if (tier == 4) tierGrace = 150f;
+            else if (tier == 5) tierGrace = 200f;
+            else if (tier >= 6) tierGrace = 250f;
+            result.Add(tierGrace, new TextObject("{=!}Clan tier"));
+
+            if (data.Clan.Kingdom != null && data.Clan.Kingdom.RulingClan == data.Clan)
+            {
+                result.Add(300f, new TextObject("{=IcgVKFxZ}Ruler"));
+            }
+
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(data.Clan.Leader);
+            TitleType type = title != null ? title.TitleType : TitleType.Lordship;
+            if (type <= TitleType.Barony) result.Add(300f / (float)type, new TextObject(Utils.Helpers.GetTitlePrefix(type,
+                title != null ? title.Contract.Government : GovernmentType.Feudal, data.Clan.Culture)));
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateGuestCapacity(CouncilData council, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(0, explanations);
+
+            if (council.Location != null)
+            {
+                if (council.Location.IsCastle)
+                {
+                    result.Add(1f, new TextObject("{=UPhMZ859}Castle"));
+                }
+                else
+                {
+                    result.Add(2f, new TextObject("{=FO8mvaZJ}Town"));
+                }
+            }
+
+            return result;
+        }
 
         public ExplainedNumber CalculateRelocateCourtPrice(Clan clan, Town target, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber * 5f, 
                 explanations);
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
 
-            
+            if (council.Location != null)
+            {
+                float factor = Campaign.Current.Models.MapDistanceModel.GetDistance(target.Settlement,
+                council.Location.Settlement) / Campaign.AverageDistanceBetweenTwoFortifications;
+                result.AddFactor(factor, new TextObject("{=!}Distance between {TOWN1} and {TOWN2}")
+                    .SetTextVariable("TOWN1", target.Name)
+                    .SetTextVariable("TOWN2", council.Location.Name));
+            }
 
             return result;
         }

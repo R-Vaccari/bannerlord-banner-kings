@@ -134,6 +134,21 @@ namespace BannerKings.Models.Vanilla
                     .SetTextVariable("OWNER", position.Clan.Leader.Name));
             }
 
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+            if (council.CourtGrace != null)
+            {
+                float grace = council.CourtGrace.Grace;
+                float expectedGrace = council.CourtGrace.ExpectedGrace.ResultNumber;
+                float factor = 0f;
+                if (grace < expectedGrace) factor = (MathF.Max(grace, 1f) / expectedGrace) - 0.5f;
+                else if (grace > expectedGrace) factor = MathF.Min(grace / expectedGrace, 1.5f);
+
+                result.AddFactor(factor,
+                    new TextObject("{=!}Grace ({GRACE}) correlation to expected grace ({EXPECTED})")
+                    .SetTextVariable("EXPECTED", expectedGrace.ToString("0.0"))
+                    .SetTextVariable("GRACE", council.CourtGrace.Grace.ToString("0.0")));
+            }
+
             return result;
         }
 

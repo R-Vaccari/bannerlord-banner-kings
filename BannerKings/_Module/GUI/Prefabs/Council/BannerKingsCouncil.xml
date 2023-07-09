@@ -22,8 +22,98 @@
 											</ItemTemplate>
 										</GridWidget>
 										
+										<ListPanel Id="ExpensesList" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+												   StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="40" MarginTop="40" DoNotAcceptEvents="true">
+											<Children>
+												<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+													<Children>
+														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																   StackLayout.LayoutMethod="VerticalBottomToTop">
+															<Children>
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
+																				SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@ExtravaganceText"
+																				MarginTop="25" />
+
+																<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{ExtravaganceSelector}" MarginTop="10"
+																										HorizontalAlignment="Center" />
+															</Children>
+														</ListPanel>
+													</Children>
+												</Widget>
+												
+												<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+													<Children>
+														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																   StackLayout.LayoutMethod="VerticalBottomToTop">
+															<Children>
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
+																				SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@ServantsText"
+																				MarginTop="25" />
+
+																<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{ServantsSelector}" MarginTop="10"
+																										HorizontalAlignment="Center" />
+															</Children>
+														</ListPanel>
+													</Children>
+												</Widget>		
+											</Children>
+										</ListPanel>
+										
+										<ListPanel Id="ExpensesList2" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+												   StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="40" DoNotAcceptEvents="true">
+											<Children>
+												<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+													<Children>
+														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																   StackLayout.LayoutMethod="VerticalBottomToTop">
+															<Children>
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
+																				SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@LodgingsText"
+																				MarginTop="25" />
+
+																<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{LodgingsSelector}" MarginTop="10"
+																										HorizontalAlignment="Center" />
+															</Children>
+														</ListPanel>
+													</Children>
+												</Widget>
+												
+												<!--<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+													<Children>
+														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																   StackLayout.LayoutMethod="VerticalBottomToTop">
+															<Children>
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
+																				SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@SecurityText"
+																				MarginTop="25" />
+
+																<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{SecuritySelector}" MarginTop="10"
+																										HorizontalAlignment="Center" />
+															</Children>
+														</ListPanel>
+													</Children>
+												</Widget> -->
+												
+												<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+													<Children>
+														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																   StackLayout.LayoutMethod="VerticalBottomToTop">
+															<Children>
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
+																				SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@SuppliesText"
+																				MarginTop="25" />
+
+																<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{SuppliesSelector}" MarginTop="10"
+																										HorizontalAlignment="Center" />
+															</Children>
+														</ListPanel>
+													</Children>
+												</Widget>		
+											</Children>
+										</ListPanel>
+	
 										<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
-												   StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="40" MarginLeft="25"
+												   StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="60" MarginLeft="25"
 												   MarginRight="25" DoNotAcceptEvents="true">
 											<Children>
 												<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="25"

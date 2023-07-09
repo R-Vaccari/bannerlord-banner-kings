@@ -170,7 +170,10 @@ namespace BannerKings.UI.Extensions
                 ExplainedNumber influenceCap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(clan, true);
                 clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=bNS2Lg7L}Influence Limit:").ToString(),
                    MBRandom.RoundRandomized(influenceCap.ResultNumber).ToString(),
-                   new BasicTooltipViewModel(() => influenceCap.GetExplanations())));
+                   new BasicTooltipViewModel(() => 
+                   new TextObject("{=!}Influence limit represents how much political power your clan can leverage within the realm. Nobles higher in the title hierarchy or with more demesnes tend to be more relevant within the realm and thus have a higher influence limit. Clan influence will tend down to this limit if it supersedes the limit, meaning that less important families will tend to have less influence overall. Explanations:\n{EXPLANATIONS}")
+                .SetTextVariable("EXPLANATIONS", influenceCap.GetExplanations())
+                .ToString())));
 
                 var currentDemesne = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(clan, true);
                 var demesneCap = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(clan.Leader, true);
