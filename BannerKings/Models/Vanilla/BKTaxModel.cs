@@ -221,7 +221,7 @@ namespace BannerKings.Models.Vanilla
                         }
                     }
 
-                    baseResult.AddFactor(courtCosts * -1f, new TextObject("{=!}Administrative costs (court expenses)"));
+                    baseResult.AddFactor(courtCosts * -1f, new TextObject("{=!}Adm. costs (court expenses)"));
                 }
             }
 
@@ -302,7 +302,7 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
 
-                result.AddFactor(courtCosts * -1f, new TextObject("{=!}Administrative costs (court expenses)"));
+                result.AddFactor(courtCosts * -1f, new TextObject("{=!}Adm. costs (court expenses)"));
             }
 
             if (data != null)
