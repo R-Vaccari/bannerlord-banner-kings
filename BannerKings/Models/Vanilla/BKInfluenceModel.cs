@@ -263,14 +263,19 @@ namespace BannerKings.Models.Vanilla
 
                 if (BannerKingsConfig.Instance.AI.AcceptNotableAid(clan, data))
                 {
+                    float aids = 0f;
+                    int count = 0;
                     foreach (var notable in data.Settlement.Notables)
                     {
                         if (notable.SupporterOf == clan && notable.Gold > 5000)
                         {
-                            baseResult.Add(-1f,
-                                new TextObject("{=WDHTvasY}Aid from {NOTABLE}").SetTextVariable("NOTABLE", notable.Name));
+                            aids -= 1f;
+                            count++;
                         }
                     }
+
+                    baseResult.Add(aids, new TextObject("{=!}Financial aids from supporters (x{COUNT})")
+                                .SetTextVariable("COUNT", count));
                 }
 
                 var settlementResult = CalculateSettlementInfluence(settlement, data, includeDescriptions);
