@@ -6,6 +6,7 @@ using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers;
 using BannerKings.Managers.AI;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Grace;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Decisions;
@@ -137,6 +138,8 @@ namespace BannerKings
             DefaultInterestGroup.Instance.Initialize();
             DefaultCriminalSentences.Instance.Initialize();
             DefaultCrimes.Instance.Initialize();
+            DefaultCriminalSentences.Instance.Initialize();
+            DefaultCourtExpenses.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();

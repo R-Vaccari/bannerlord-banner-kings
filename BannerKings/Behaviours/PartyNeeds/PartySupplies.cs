@@ -151,15 +151,33 @@ namespace BannerKings.Behaviours.PartyNeeds
             if (Party.MemberRoster.Count > MinimumSoldiersThreshold)
             {
                 IPartyNeedsModel model = BannerKingsConfig.Instance.PartyNeedsModel;
-                AlcoholNeed += model.CalculateAlcoholNeed(this, false).ResultNumber;
-                WoodNeed += model.CalculateWoodNeed(this, false).ResultNumber;
-                ToolsNeed += model.CalculateToolsNeed(this, false).ResultNumber;
-                ClothNeed += model.CalculateClothNeed(this, false).ResultNumber;
-                ArrowsNeed += model.CalculateArrowsNeed(this, false).ResultNumber;
-                WeaponsNeed += model.CalculateWeaponsNeed(this, false).ResultNumber;
-                HorsesNeed += model.CalculateHorsesNeed(this, false).ResultNumber;
-                AnimalProductsNeed += model.CalculateAnimalProductsNeed(this, false).ResultNumber;
-                ShieldsNeed += model.CalculateShieldsNeed(this, false).ResultNumber;
+                float alcohol = model.CalculateAlcoholNeed(this, false).ResultNumber;
+                float size = Party.MemberRoster.TotalManCount;
+                AlcoholNeed = MathF.Clamp(AlcoholNeed + alcohol, 0f, size);
+
+                float wood = model.CalculateWoodNeed(this, false).ResultNumber;
+                WoodNeed = MathF.Clamp(WoodNeed + wood, 0f, size);
+
+                float tools = model.CalculateToolsNeed(this, false).ResultNumber;
+                ToolsNeed = MathF.Clamp(ToolsNeed + tools, 0f, size);
+
+                float cloth = model.CalculateClothNeed(this, false).ResultNumber;
+                ClothNeed = MathF.Clamp(ClothNeed + cloth, 0f, size);
+
+                float arrows = model.CalculateArrowsNeed(this, false).ResultNumber;
+                ArrowsNeed = MathF.Clamp(ArrowsNeed + arrows, 0f, size);
+
+                float weapons = model.CalculateWeaponsNeed(this, false).ResultNumber;
+                WeaponsNeed = MathF.Clamp(WeaponsNeed + weapons, 0f, size);
+
+                float horses = model.CalculateHorsesNeed(this, false).ResultNumber;
+                HorsesNeed = MathF.Clamp(HorsesNeed + horses, 0f, size);
+
+                float animal = model.CalculateAnimalProductsNeed(this, false).ResultNumber;
+                AnimalProductsNeed = MathF.Clamp(AnimalProductsNeed + animal, 0f, size);
+
+                float shields = model.CalculateShieldsNeed(this, false).ResultNumber;
+                ShieldsNeed = MathF.Clamp(ShieldsNeed + shields, 0f, size);
             }
 
             BuyItems();

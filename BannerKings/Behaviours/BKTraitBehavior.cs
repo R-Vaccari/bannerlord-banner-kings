@@ -196,12 +196,15 @@ namespace BannerKings.Behaviours
                     }
                 }
 
-                var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
-                if (religion == null)
+                if (BannerKingsConfig.Instance.ReligionsManager != null)
                 {
-                    if (trait == BKTraits.Instance.Zealous)
+                    var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+                    if (religion == null)
                     {
-                        chance = 0f;
+                        if (trait == BKTraits.Instance.Zealous)
+                        {
+                            chance = 0f;
+                        }
                     }
                 }
 

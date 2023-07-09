@@ -249,7 +249,7 @@ namespace BannerKings.Managers.Court
                         break;
                 }
 
-                if (IsCorePosition(StringId) && IsRoyal)
+                if (IsCorePosition(StringId) && IsRoyal && StringId != "Spiritual")
                 {
                     yield return CouncilPrivileges.NOBLE_EXCLUSIVE;
                 }
