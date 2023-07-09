@@ -209,10 +209,19 @@ namespace BannerKings.Models.Vanilla
                         baseResult.AddFactor(-0.6f * data.Autonomy, new TextObject("{=xMsWoSnL}Autonomy"));
                     }
 
+                    CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan);
                     CalculateDueTax(data, baseResult.ResultNumber);
-                    CalculateDueWages(BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan),
-                        baseResult.ResultNumber);
-                    baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
+                    CalculateDueWages(council,baseResult.ResultNumber);
+                    float courtCosts = 0f;
+                    if (council.CourtGrace != null)
+                    {
+                        foreach (var expense in council.CourtGrace.Expenses)
+                        {
+                            courtCosts += expense.AdministrativeCost;
+                        }
+                    }
+
+                    baseResult.AddFactor(courtCosts * -1f, new TextObject("{=!}Administrative costs (court expenses)"));
                 }
             }
 
@@ -284,6 +293,16 @@ namespace BannerKings.Models.Vanilla
             if (council != null)
             {
                 CalculateDueWages(council, (float)result.ResultNumber);
+                float courtCosts = 0f;
+                if (council.CourtGrace != null)
+                {
+                    foreach (var expense in council.CourtGrace.Expenses)
+                    {
+                        courtCosts += expense.AdministrativeCost;
+                    }
+                }
+
+                result.AddFactor(courtCosts * -1f, new TextObject("{=!}Administrative costs (court expenses)"));
             }
 
             if (data != null)
