@@ -41,11 +41,23 @@ namespace BannerKings.Models.BKModels
             var garrison = (BKGarrisonPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison");
             if (garrison.Policy == BKGarrisonPolicy.GarrisonPolicy.Enlistment)
             {
-                baseResult.Add(0.04f, new TextObject("Garrison policy"));
+                baseResult.Add(0.04f, new TextObject("{=!}Garrison policy"));
             }
 
             float decisions = BannerKingsConfig.Instance.PolicyManager.GetActiveCostlyDecisionsNumber(settlement);
             baseResult.Add(0.025f * decisions, new TextObject("{=fBhajAND}Active decisions"));
+
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(settlement.OwnerClan);
+            if (council != null)
+            {
+                if (council.CourtGrace != null)
+                {
+                    foreach (var expense in council.CourtGrace.Expenses)
+                    {
+                        baseResult.Add(expense.AdministrativeCost, expense.Name);
+                    }
+                }
+            }
 
             return baseResult;
         }
