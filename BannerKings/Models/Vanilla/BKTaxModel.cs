@@ -293,16 +293,6 @@ namespace BannerKings.Models.Vanilla
             if (council != null)
             {
                 CalculateDueWages(council, (float)result.ResultNumber);
-                float courtCosts = 0f;
-                if (council.CourtGrace != null)
-                {
-                    foreach (var expense in council.CourtGrace.Expenses)
-                    {
-                        courtCosts += expense.AdministrativeCost;
-                    }
-                }
-
-                result.AddFactor(courtCosts * -1f, new TextObject("{=!}Adm. costs (court expenses)"));
             }
 
             if (data != null)

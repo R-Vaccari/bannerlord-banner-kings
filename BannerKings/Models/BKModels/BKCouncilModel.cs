@@ -72,24 +72,27 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             result.LimitMax(1000f);
 
-            int tier = data.Clan.Tier;
-            float tierGrace = 0f;
-            if (tier == 2) tierGrace = 50f;
-            else if (tier == 3) tierGrace = 100f;
-            else if (tier == 4) tierGrace = 150f;
-            else if (tier == 5) tierGrace = 200f;
-            else if (tier >= 6) tierGrace = 250f;
-            result.Add(tierGrace, new TextObject("{=!}Clan tier"));
-
-            if (data.Clan.Kingdom != null && data.Clan.Kingdom.RulingClan == data.Clan)
+            if (data.Clan.Kingdom != null)
             {
-                result.Add(300f, new TextObject("{=IcgVKFxZ}Ruler"));
-            }
+                int tier = data.Clan.Tier;
+                float tierGrace = 0f;
+                if (tier == 2) tierGrace = 50f;
+                else if (tier == 3) tierGrace = 100f;
+                else if (tier == 4) tierGrace = 150f;
+                else if (tier == 5) tierGrace = 200f;
+                else if (tier >= 6) tierGrace = 250f;
+                result.Add(tierGrace, new TextObject("{=!}Clan tier"));
 
-            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(data.Clan.Leader);
-            TitleType type = title != null ? title.TitleType : TitleType.Lordship;
-            if (type <= TitleType.Barony) result.Add(300f / (float)type, new TextObject(Utils.Helpers.GetTitlePrefix(type,
-                title != null ? title.Contract.Government : GovernmentType.Feudal, data.Clan.Culture)));
+                if (data.Clan.Kingdom != null && data.Clan.Kingdom.RulingClan == data.Clan)
+                {
+                    result.Add(300f, new TextObject("{=IcgVKFxZ}Ruler"));
+                }
+
+                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(data.Clan.Leader);
+                TitleType type = title != null ? title.TitleType : TitleType.Lordship;
+                if (type <= TitleType.Barony) result.Add(300f / (float)type, new TextObject(Utils.Helpers.GetTitlePrefix(type,
+                    title != null ? title.Contract.Government : GovernmentType.Feudal, data.Clan.Culture)));
+            }
 
             return result;
         }

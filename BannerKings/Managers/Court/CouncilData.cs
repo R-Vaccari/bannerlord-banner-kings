@@ -243,13 +243,13 @@ namespace BannerKings.Managers.Court
             }
 
             Owner.AddSkillXp(BKSkills.Instance.Lordship, Positions.Count * 5);
-            CourtGrace?.Update();
-
             if (Clan.IsUnderMercenaryService)
             {
                 return;
             }
-           
+
+            CourtGrace?.Update();
+
             if (Owner == Hero.MainHero)
             {
                 return;
