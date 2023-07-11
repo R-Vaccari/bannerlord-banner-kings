@@ -81,8 +81,8 @@ namespace BannerKings.Models.Vanilla
 
         public override ExplainedNumber CalculateTownTax(Town town, bool includeDescriptions = false)
         {
-            var baseResult = base.CalculateTownTax(town, includeDescriptions);
-
+            ExplainedNumber baseResult = base.CalculateTownTax(town, includeDescriptions);
+            baseResult.LimitMin(0f);
             if (BannerKingsConfig.Instance.PopulationManager != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
@@ -206,22 +206,12 @@ namespace BannerKings.Models.Vanilla
 
                     if (baseResult.ResultNumber > 0f)
                     {
-                        baseResult.AddFactor(-0.6f * data.Autonomy, new TextObject("{=xMsWoSnL}Autonomy"));
+                        baseResult.Add(baseResult.ResultNumber * -0.6f * data.Autonomy, new TextObject("{=xMsWoSnL}Autonomy"));
                     }
 
                     CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan);
                     CalculateDueTax(data, baseResult.ResultNumber);
                     CalculateDueWages(council,baseResult.ResultNumber);
-                    float courtCosts = 0f;
-                    if (council.CourtGrace != null)
-                    {
-                        foreach (var expense in council.CourtGrace.Expenses)
-                        {
-                            courtCosts += expense.AdministrativeCost;
-                        }
-                    }
-
-                    baseResult.AddFactor(courtCosts * -1f, new TextObject("{=!}Adm. costs (court expenses)"));
                 }
             }
 
