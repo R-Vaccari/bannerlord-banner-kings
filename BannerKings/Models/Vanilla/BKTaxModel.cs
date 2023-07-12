@@ -201,9 +201,6 @@ namespace BannerKings.Models.Vanilla
                         baseResult.AddFactor(0.05f, new TextObject("Legitimacy"));
                     }
 
-                    var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
-                    baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
-
                     if (baseResult.ResultNumber > 0f)
                     {
                         baseResult.Add(baseResult.ResultNumber * -0.6f * data.Autonomy, new TextObject("{=xMsWoSnL}Autonomy"));
@@ -212,6 +209,9 @@ namespace BannerKings.Models.Vanilla
                     CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan);
                     CalculateDueTax(data, baseResult.ResultNumber);
                     CalculateDueWages(council,baseResult.ResultNumber);
+
+                    var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
+                    baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
                 }
             }
 
