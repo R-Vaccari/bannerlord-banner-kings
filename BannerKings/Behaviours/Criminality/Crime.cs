@@ -9,10 +9,12 @@ namespace BannerKings.Behaviours.Criminality
         {
         }
 
-        public Crime GetCopy(Hero criminal, Kingdom kingdom, CrimeSeverity severity)
+        public Crime GetCopy(Hero criminal, Kingdom kingdom, CrimeSeverity severity, Hero target = null)
         {
             Crime c = new Crime(StringId);
-            c.Initialize(Name, Description);
+            c.Initialize(Name, Description.SetTextVariable("HERO", criminal.Name)
+                .SetTextVariable("DATE", CampaignTime.Now.ToString())
+                .SetTextVariable("TARGET", target != null ? target.Name.ToString() : ""));
             c.Hero = criminal;
             c.Kingdom = kingdom;
             c.Severity = severity;
