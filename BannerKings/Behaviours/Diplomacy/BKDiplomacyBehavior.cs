@@ -283,7 +283,10 @@ namespace BannerKings.Behaviours.Diplomacy
             if (kingdomDiplomacies.ContainsKey(kingdom))
             {
                 var group = kingdomDiplomacies[kingdom].GetHeroGroup(clan.Leader);
-                group.RemoveMember(clan.Leader);
+                if (group != null)
+                {
+                    group.RemoveMember(clan.Leader);
+                }
             }
         }
 
