@@ -9,13 +9,10 @@ using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
-using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
 using TaleWorlds.Core;
-using TaleWorlds.Core.ViewModelCollection.Generic;
-using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -31,7 +28,7 @@ namespace BannerKings.UI.Court
         private MBBindingList<InformationElement> courtInfo, privilegesInfo, courtierInfo;
         private CharacterVM currentCharacter;
         private MBBindingList<ClanLordItemVM> family, courtiers, guests;
-        private bool isRoyal, hasExtraPositions;
+        private bool isRoyal, hasExtraPositions, selectorsVisible;
         private string positionName, positionDescription, positionEffects;
         private BannerKingsSelectorVM<CourtExpenseSelectorItemVM> extravaganceSelector, servantsSelector,
             suppliesSelector, securitySelector, lodgingsSelector;
@@ -246,6 +243,13 @@ namespace BannerKings.UI.Court
 
         private void RefreshSelectors()
         {
+            if (council.CourtGrace == null || council.Clan != Clan.PlayerClan)
+            {
+                SelectorsHidden = true;
+                return;
+            }
+
+            SelectorsHidden = false;
             ExtravaganceSelector = new BannerKingsSelectorVM<CourtExpenseSelectorItemVM>(true, 0, null);
             int selected = 0;
             int index = 0;
@@ -595,6 +599,20 @@ namespace BannerKings.UI.Court
                 if (value != hasExtraPositions)
                 {
                     hasExtraPositions = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool SelectorsHidden
+        {
+            get => selectorsVisible;
+            set
+            {
+                if (value != selectorsVisible)
+                {
+                    selectorsVisible = value;
                     OnPropertyChangedWithValue(value);
                 }
             }
