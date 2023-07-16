@@ -281,7 +281,7 @@ namespace BannerKings.Managers
             return false;
         }
 
-        private int GetStartingPiety(Religion religion, Hero hero = null)
+        public int GetStartingPiety(Religion religion, Hero hero = null)
         {
             if (hero == null)
             {

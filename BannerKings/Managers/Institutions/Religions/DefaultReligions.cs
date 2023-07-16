@@ -1,9 +1,7 @@
 ﻿using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
 using System.Collections.Generic;
-using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem;
-using System.Linq;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
