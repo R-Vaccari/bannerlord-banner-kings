@@ -1,22 +1,21 @@
 ﻿using BannerKings.Actions;
-using BannerKings.UI.Court;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.Court.Grace.CourtExpense;
 
 namespace BannerKings.Managers.Court.Grace
 {
     public class CourtGrace
     {
-        private CouncilData data;
-        private float grace;
-        private List<CourtExpense> expenses;
+        [SaveableField(1)] private CouncilData data;
+        [SaveableField(2)] private float grace;
+        [SaveableField(3)] private List<CourtExpense> expenses;
 
         public CourtGrace(CouncilData data)
         {
@@ -136,6 +135,26 @@ namespace BannerKings.Managers.Court.Grace
                     .SetTextVariable("DESIRED", totalItems)
                     .ToString(),
                     Color.FromUint(graceChange >= 0f ? Utils.TextHelper.COLOR_LIGHT_BLUE : Utils.TextHelper.COLOR_LIGHT_RED)));
+            }
+            else if (CampaignTime.Now.GetDayOfSeason == 1)
+            {
+                CalculateAIExpense();
+            }
+        }
+
+        private void CalculateAIExpense()
+        {
+            float diff = GraceTarget.ResultNumber - ExpectedGrace.ResultNumber;
+            if (diff <= -10f)
+            {
+                float income = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanGoldChange(data.Clan).ResultNumber;
+                if (income >= 1500)
+                {
+                    CourtExpense random = expenses.GetRandomElement();
+                    CourtExpense upgrade = DefaultCourtExpenses.Instance.All.FirstOrDefault(x => x.Type == random.Type &&
+                    x.Grace > random.Grace);
+                    if (upgrade != null) AddExpense(data.Clan, upgrade);
+                }
             }
         }
 

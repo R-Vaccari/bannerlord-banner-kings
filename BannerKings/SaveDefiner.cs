@@ -8,6 +8,7 @@ using BannerKings.Components;
 using BannerKings.Managers;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Grace;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Duties;
@@ -186,6 +187,8 @@ namespace BannerKings
 
             AddClassDefinition(typeof(BKCouncilPositionDecision), 140);
             AddClassDefinition(typeof(PartySupplies), 141);
+            AddClassDefinition(typeof(CourtGrace), 142);
+            AddClassDefinition(typeof(CourtExpense), 143);
         }
 
         protected override void DefineContainerDefinitions()
@@ -236,7 +239,8 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Hero, MobileParty>));
             ConstructContainerDefinition(typeof(List<Crime>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, List<Crime>>));
-            ConstructContainerDefinition(typeof(Dictionary<MobileParty, PartySupplies>)); 
+            ConstructContainerDefinition(typeof(Dictionary<MobileParty, PartySupplies>));
+            ConstructContainerDefinition(typeof(List<CourtExpense>));
         }
     }
 }

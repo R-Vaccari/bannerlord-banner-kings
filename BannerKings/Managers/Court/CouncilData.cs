@@ -87,7 +87,7 @@ namespace BannerKings.Managers.Court
         [SaveableProperty(3)] public List<Hero> Guests { get; private set; }
         [SaveableProperty(5)] public List<CouncilMember> Positions { get; private set; }
         [SaveableProperty(4)] public Peerage Peerage { get; private set; }
-        public CourtGrace CourtGrace { get; private set; }
+        [SaveableProperty(6)] public CourtGrace CourtGrace { get; private set; }
 
 
         public void SetCourtLocation(Town town, bool notify = true)
