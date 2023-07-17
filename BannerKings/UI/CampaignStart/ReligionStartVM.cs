@@ -1,20 +1,18 @@
-﻿using BannerKings.Behaviours;
-using BannerKings.Managers.CampaignStart;
-using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Institutions.Religions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
 namespace BannerKings.UI.CampaignStart
 {
-    public class CampaignStartVM : BannerKingsViewModel
+    public class ReligionStartVM : BannerKingsViewModel
     {
-        private MBBindingList<StartOptionVM> options;
-        private new StartOptionVM selected;
+        private MBBindingList<ReligionStartOptionVM> options;
+        private new ReligionStartOptionVM selected;
         private bool canFinish;
 
-        public CampaignStartVM() : base(null, false)
+        public ReligionStartVM() : base(null, false)
         {
-            options = new MBBindingList<StartOptionVM>();
+            options = new MBBindingList<ReligionStartOptionVM>();
             CanFinish = false;
             RefreshValues();
         }
@@ -36,7 +34,7 @@ namespace BannerKings.UI.CampaignStart
         }
 
         [DataSourceProperty]
-        public StartOptionVM Selected
+        public ReligionStartOptionVM Selected
         {
             get => selected;
             set
@@ -50,7 +48,7 @@ namespace BannerKings.UI.CampaignStart
         }
 
         [DataSourceProperty]
-        public MBBindingList<StartOptionVM> Options
+        public MBBindingList<ReligionStartOptionVM> Options
         {
             get => options;
             set
@@ -68,21 +66,18 @@ namespace BannerKings.UI.CampaignStart
             base.RefreshValues();
             Options.Clear();
 
-            foreach (var option in DefaultStartOptions.Instance.All)
+            foreach (var option in DefaultReligions.Instance.All)
             {
-                Options.Add(new StartOptionVM(option, OnSelectOption));
+                Options.Add(new ReligionStartOptionVM(option, OnSelectOption));
             }
         }
 
         public void ExecuteFinish()
         {
-            var behavior = Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>();
-            behavior.SetStartOption(Selected.Option);
             ExecuteClose();
-            UIManager.Instance.ShowWindow("religionStart");
         }
 
-        public void OnSelectOption(StartOptionVM option)
+        public void OnSelectOption(ReligionStartOptionVM option)
         {
             if (Selected != null)
             {

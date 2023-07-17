@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.UI;
-using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Extensions;
@@ -278,7 +277,7 @@ namespace BannerKings.Behaviours
                     var result = (LearningElement)list[0].Identifier;
                     ShowInnerInquiry(result);
                 },
-                delegate { BannerKingsConfig.Instance.ReligionsManager.ShowPopup(); }), true);
+                null), true);
         }
 
         private void ShowInnerInquiry(LearningElement element)

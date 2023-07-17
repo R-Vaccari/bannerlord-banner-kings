@@ -1,5 +1,6 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -11,6 +12,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
         {
             return new TextObject("{=!}Keepers of the Flame");
         }
+
+        public override Banner GetBanner() => new Banner("11.35.19.1836.1836.768.788.1.0.-30.521.142.116.393.393.764.764.1.0.0.521.121.116.312.312.764.764.1.0.17.503.22.116.179.179.764.764.1.0.0.443.121.116.175.175.994.764.1.0.0.443.121.116.175.175.534.764.1.1.0.161.121.116.119.119.764.764.1.1.0");
+
 
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {

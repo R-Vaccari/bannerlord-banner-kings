@@ -22,7 +22,7 @@
 											</ItemTemplate>
 										</GridWidget>
 										
-										<ListPanel Id="ExpensesList" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+										<ListPanel Id="ExpensesList" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" IsHidden="@SelectorsHidden"
 												   StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="40" MarginTop="40" DoNotAcceptEvents="true">
 											<Children>
 												<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
@@ -59,7 +59,7 @@
 											</Children>
 										</ListPanel>
 										
-										<ListPanel Id="ExpensesList2" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+										<ListPanel Id="ExpensesList2" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" IsHidden="@SelectorsHidden"
 												   StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="40" DoNotAcceptEvents="true">
 											<Children>
 												<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">

@@ -14,6 +14,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
             return new TextObject("{=!}Wolves of Llyn Tywal");
         }
 
+        public override Banner GetBanner() => new Banner("1.22.22.1836.1836.764.764.1.0.0.500.143.116.393.588.764.764.0.0.90.500.12.116.414.620.764.764.0.0.90.413.2.22.299.299.764.759.0.0.0");
+
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {
             if (culture.StringId == "battania")
