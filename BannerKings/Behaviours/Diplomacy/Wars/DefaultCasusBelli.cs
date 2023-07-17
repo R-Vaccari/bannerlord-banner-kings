@@ -138,10 +138,10 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=!}The {ATTACKER} is launching a large scale invasion on the {DEFENDER}!"));
 
             GreatRaid.Initialize(new TextObject("{=!}Great Raid"),
-                new TextObject("{=!}Pillage and steal from our enemies as our ancestors did. Ruling their lands may be unviable, but it will not stop us from taking what we are owed by the rule of the strongest.\n\nObjective: Raid 12 or more villages of the enemy's culture."),
+                new TextObject("{=!}Pillage and steal from our enemies as our ancestors did. Ruling their lands may be unviable, but it will not stop us from taking what we are owed by the rule of the strongest.\n\nObjective: Raid 8 or more villages of the enemy's culture."),
                 new TextObject("{=!}Mass Raiding"),
+                0.5f,
                 1.5f,
-                0.2f,
                 0.8f,
                 5000f,
                 (War war) =>
@@ -150,7 +150,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     List<Settlement> attackerConquests = DiplomacyHelper.GetRaidsInWar(war.Attacker,
                        attackerLink, null);
 
-                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture).Count >= 12;
+                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture).Count >= 8;
                 },
                 (War war) =>
                 {
@@ -174,11 +174,11 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=!}The {ATTACKER} ride out for a great raid! {DEFENDER} towns and villages will be razed to the ground."));
 
             ImperialSuperiority.Initialize(new TextObject("{=!}Imperial Superiority"),
-                new TextObject("{=!}Subjugate barbarians with our Imperial might as the original Empire once did. Strength is the language that they understand.\n\nObjective: Capture 2 or more fiefs of the enemy's culture."),
+                new TextObject("{=!}Subjugate barbarians with our Imperial might as the original Empire once did. Strength is the language that they understand.\n\nObjective: Capture 1 or more fiefs of the enemy's culture."),
                 new TextObject("{=!}Humiliate in Battle"),
-                1.4f,
-                0.8f,
-                1.2f,
+                1f,
+                0.4f,
+                1.8f,
                 5000f,
                 (War war) =>
                 {

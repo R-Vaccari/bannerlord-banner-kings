@@ -176,8 +176,18 @@ namespace BannerKings.Models.Vanilla
                     float proportion = MathF.Clamp((attackerScore / (enemyScore * 4f)) - 1f, -1f, 0f);
                     result.AddFactor(proportion);
                 }
-            }     
-           
+            }
+
+            War war = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetWar(factionDeclaredWar, factionDeclaresWar);
+            if (war != null)
+            {
+                float score = war.TotalWarScore.ResultNumber;
+                result.AddFactor(war.Attacker == factionDeclaresWar ? -score : score);
+
+                float fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, factionDeclaresWar).ResultNumber;
+                result.AddFactor(-fatigue);
+            }
+
             /*WarStats defenderStats = CalculateWarStats(factionDeclaredWar, factionDeclaresWar);
             float defenderScore = defenderStats.Strength + defenderStats.ValueOfSettlements - (defenderStats.TotalStrengthOfEnemies * 1.25f);
             float scoreProportion = (attackerScore / defenderScore) - 1f;
