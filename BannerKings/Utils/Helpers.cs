@@ -387,10 +387,10 @@ namespace BannerKings.Utils
         {
             return type switch
             {
-                ConsumptionType.Luxury => "Satisfaction over availability of products such as jewelry, velvets and fur.",
-                ConsumptionType.Industrial => "Satisfaction over availability of manufacturing products such as leather, clay and tools.",
-                ConsumptionType.General => "Satisfaction over availability of various products, including military equipment and horses.",
-                _ => "Satisfaction over availability of food types."
+                ConsumptionType.Luxury => new TextObject("{=!}Satisfaction over availability of products such as jewelry, velvets and fur.").ToString(),
+                ConsumptionType.Industrial => new TextObject("{=!}Satisfaction over availability of manufacturing products such as leather, clay and tools.").ToString(),
+                ConsumptionType.General => new TextObject("{=!}Satisfaction over availability of various products, including military equipment and horses.").ToString(),
+                _ => new TextObject("{=!}Satisfaction over availability of food types.").ToString()
             };
         }
 

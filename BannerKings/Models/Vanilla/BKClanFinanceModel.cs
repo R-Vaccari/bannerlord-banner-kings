@@ -137,8 +137,6 @@ namespace BannerKings.Models.Vanilla
 
             int totalWorkshopTaxes = 0;
             int totalNotablesAids = 0;
-            int totalMarketTaxes = 0;
-
             foreach (var town in clan.Fiefs)
             {
                 foreach (var wk in town.Workshops)
@@ -146,16 +144,6 @@ namespace BannerKings.Models.Vanilla
                     if (wk.IsRunning && wk.Owner != clan.Leader && wk.WorkshopType.StringId != "artisans")
                     {
                         totalWorkshopTaxes += GetWorkshopTaxes(wk);
-                    }
-                }
-
-                if (town.Gold >= 150000)
-                {
-                    int marketTax = (int)(town.Gold * 0.008f);
-                    totalMarketTaxes += marketTax;
-                    if (applyWithdrawals)
-                    {
-                        town.ChangeGold(-marketTax);
                     }
                 }
 
@@ -184,12 +172,6 @@ namespace BannerKings.Models.Vanilla
             {
                 result.Add(totalNotablesAids,
                     new TextObject("{=WYDGftvz}Notable aids"));
-            }
-
-            if (totalMarketTaxes > 0)
-            {
-                result.Add(totalMarketTaxes,
-                                    new TextObject("{=y1Jzq1cv}Taxes on Markets"));
             }
 
             var dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassals(clan);

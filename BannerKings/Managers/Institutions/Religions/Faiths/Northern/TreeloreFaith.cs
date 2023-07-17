@@ -1,7 +1,7 @@
 using CalradiaExpandedKingdoms.Helpers;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -9,6 +9,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
 {
     public class TreeloreFaith : PolytheisticFaith
     {
+        public override Banner GetBanner() => new Banner("1.22.22.1836.1836.764.764.1.0.0.203.2.116.427.427.764.638.0.0.0.405.142.116.209.209.764.914.0.0.30.405.116.116.209.209.764.914.0.0.0");
+
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {
             if (CEKHelpers.IsInCultureGroup(culture.StringId, referenceId: "sturgia"))

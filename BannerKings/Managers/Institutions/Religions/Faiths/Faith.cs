@@ -4,6 +4,7 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
@@ -135,6 +136,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract TextObject GetBlessingQuestion();
         public abstract TextObject GetBlessingConfirmQuestion();
         public abstract TextObject GetBlessingQuickInformation();
+        public abstract Banner GetBanner();
 
         public override bool Equals(object obj)
         {

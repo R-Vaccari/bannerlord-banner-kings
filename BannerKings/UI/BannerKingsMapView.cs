@@ -86,6 +86,8 @@ namespace BannerKings.UI
                     return (new ReligionVM(data), "ReligionPopup");
                 case "campaignStart":
                     return new ValueTuple<BannerKingsViewModel, string>(new CampaignStartVM(), "CampaignStartPopup");
+                case "religionStart":
+                    return new ValueTuple<BannerKingsViewModel, string>(new ReligionStartVM(), "ReligionStartPopup");
                 case "marriage":
                     return new ValueTuple<BannerKingsViewModel, string>(new MarriageContractProposalVM(Hero.OneToOneConversationHero),
                         "MarriageProposalWindow");

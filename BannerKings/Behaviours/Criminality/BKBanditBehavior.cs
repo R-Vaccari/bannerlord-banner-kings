@@ -71,6 +71,16 @@ namespace BannerKings.Behaviours
                 return;
             }
 
+            if (clan.StringId == "caravan_robbers")
+            {
+                if (clan.WarPartyComponents.Count > BannerKingsSettings.Instance.BanditPartiesLimit * 0.1f)
+                {
+                    var random = clan.WarPartyComponents.GetRandomElementWithPredicate(x => x.Leader == null &&
+                    x.MobileParty.MapEvent == null);
+                    DestroyPartyAction.Apply(null, random.MobileParty);
+                }
+            }
+
             RunWeekly(() =>
             {
                 if (!clan.WarPartyComponents.Any(x => x.Leader != null) && MBRandom.RandomFloat < 0.025f)
@@ -90,13 +100,32 @@ namespace BannerKings.Behaviours
 
         private void OnPartyDailyTick(MobileParty party)
         {
-            if (!party.IsBandit || party.PartyComponent is not BanditHeroComponent)
+            if (!party.IsBandit)
             {
                 return;
             }
 
-            BanditHeroComponent component = (BanditHeroComponent)party.PartyComponent;
-            component.Tick();
+            if (party.PartyComponent is not BanditHeroComponent)
+            {
+                if (!party.Ai.IsDisabled && MBRandom.RandomFloat < MBRandom.RandomFloat && party.MapEvent == null)
+                {
+                    Settlement town = SettlementHelper.FindNearestFortification(x => 
+                    x.GatePosition.DistanceSquared(party.Position2D) < 50f, party);
+                    if (town != null)
+                    {
+                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town);
+                        if (MBRandom.RandomFloat < data.Stability)
+                        {
+                            DestroyPartyAction.Apply(null, party);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                BanditHeroComponent component = (BanditHeroComponent)party.PartyComponent;
+                component.Tick();
+            }
         }
 
         public void UpgradeParty(MobileParty party)

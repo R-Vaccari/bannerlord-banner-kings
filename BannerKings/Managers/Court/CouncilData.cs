@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Extensions;
+using BannerKings.Managers.Court.Grace;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
@@ -53,6 +54,11 @@ namespace BannerKings.Managers.Court
                 Guests = new List<Hero>();
             }
 
+            if (CourtGrace == null)
+            {
+                CourtGrace = new CourtGrace(this);
+            }
+
             if (Location == null)
             {
                 float prosp = 0f;
@@ -69,6 +75,7 @@ namespace BannerKings.Managers.Court
                 SetCourtLocation(town);
             }
 
+            CourtGrace.PostInitialize();
             foreach (var pos in Positions)
             {
                 pos.PostInitialize();
@@ -80,6 +87,8 @@ namespace BannerKings.Managers.Court
         [SaveableProperty(3)] public List<Hero> Guests { get; private set; }
         [SaveableProperty(5)] public List<CouncilMember> Positions { get; private set; }
         [SaveableProperty(4)] public Peerage Peerage { get; private set; }
+        [SaveableProperty(6)] public CourtGrace CourtGrace { get; private set; }
+
 
         public void SetCourtLocation(Town town, bool notify = true)
         {
@@ -104,23 +113,7 @@ namespace BannerKings.Managers.Court
 
         public Hero Owner => Clan.Leader;
         public bool IsRoyal => BannerKingsConfig.Instance.CouncilModel.IsCouncilRoyal(Clan).Item1;
-
-        public float AdministrativeCosts
-        {
-            get
-            {
-                var costs = 0f;
-                foreach (var councilMember in Positions)
-                {
-                    if (councilMember.Member != null)
-                    {
-                        costs += councilMember.AdministrativeCosts();
-                    }
-                }
-
-                return costs;
-            }
-        }
+        public ExplainedNumber AdministrativeCosts => BannerKingsConfig.Instance.CouncilModel.CalculateAdmCosts(this);
 
         public float GetCompetence(Hero hero, CouncilMember position)
         {
@@ -254,7 +247,9 @@ namespace BannerKings.Managers.Court
             {
                 return;
             }
-           
+
+            CourtGrace?.Update();
+
             if (Owner == Hero.MainHero)
             {
                 return;

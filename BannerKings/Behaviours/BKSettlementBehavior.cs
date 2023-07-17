@@ -494,7 +494,7 @@ namespace BannerKings.Behaviours
                 }
                 else if (town.Gold > 100000)
                 {
-                    town.ChangeGold((int)(town.Gold * 0.01f));
+                    town.ChangeGold((int)(town.Gold * -0.01f));
                 }
             }, GetType().Name);
         }

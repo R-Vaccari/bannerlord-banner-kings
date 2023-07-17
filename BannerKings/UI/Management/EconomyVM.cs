@@ -322,7 +322,9 @@ namespace BannerKings.UI.Management
                     var value = data.EconomicData.Satisfactions[i];
                     var type = (ConsumptionType) i;
                     var desc = type + " Goods:";
-                    SatisfactionInfo.Add(new InformationElement(desc, FormatValue(value),
+                    SatisfactionInfo.Add(new InformationElement(Utils.TextHelper.GetConsumptionSatisfactionText((ConsumptionType)i)
+                        .ToString(), 
+                        FormatValue(value),
                         Utils.Helpers.GetConsumptionHint(type)));
                 }
 
@@ -389,7 +391,7 @@ namespace BannerKings.UI.Management
             {
                 var taxes = BannerKingsConfig.Instance.TaxModel.CalculateTownTax(settlement.Town, true);
                 RevenueInfo.Add(new InformationElement(new TextObject("{=!}Tax Revenues:").ToString(),
-                    $"{taxes.ResultNumber:P}",
+                    MBRandom.RoundRandomized(taxes.ResultNumber).ToString(),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject("{=!}Taxes levied on local population, and other local expenses and revenues. To maximize your revenues, increase local stability and reduce administrative costs."))

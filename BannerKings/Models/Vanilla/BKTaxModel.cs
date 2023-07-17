@@ -81,8 +81,8 @@ namespace BannerKings.Models.Vanilla
 
         public override ExplainedNumber CalculateTownTax(Town town, bool includeDescriptions = false)
         {
-            var baseResult = base.CalculateTownTax(town, includeDescriptions);
-
+            ExplainedNumber baseResult = base.CalculateTownTax(town, includeDescriptions);
+            baseResult.LimitMin(0f);
             if (BannerKingsConfig.Instance.PopulationManager != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
@@ -201,17 +201,16 @@ namespace BannerKings.Models.Vanilla
                         baseResult.AddFactor(0.05f, new TextObject("Legitimacy"));
                     }
 
-                    var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
-                    baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
-
                     if (baseResult.ResultNumber > 0f)
                     {
-                        baseResult.AddFactor(-0.6f * data.Autonomy, new TextObject("{=xMsWoSnL}Autonomy"));
+                        baseResult.Add(baseResult.ResultNumber * -0.6f * data.Autonomy, new TextObject("{=xMsWoSnL}Autonomy"));
                     }
 
+                    CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan);
                     CalculateDueTax(data, baseResult.ResultNumber);
-                    CalculateDueWages(BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan),
-                        baseResult.ResultNumber);
+                    CalculateDueWages(council,baseResult.ResultNumber);
+
+                    var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
                     baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
                 }
             }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
@@ -31,6 +32,7 @@ namespace BannerKings.Behaviours.Workshops
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.WarDeclared.AddNonSerializedListener(this, OnWarDeclared);
             CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
+            CampaignEvents.OnWorkshopChangedEvent.AddNonSerializedListener(this, OnWorkshopChange);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -40,6 +42,26 @@ namespace BannerKings.Behaviours.Workshops
             if (inventories == null)
             {
                 inventories = new Dictionary<Workshop, WorkshopData>();
+            }
+        }
+
+        private void OnWorkshopChange(Workshop wk, Hero oldOwner, WorkshopType type)
+        {
+            foreach (var workshop in wk.Settlement.Town.Workshops)
+            {
+                if (workshop.Owner != wk.Owner && workshop.Owner != oldOwner && workshop.WorkshopType == type &&
+                    workshop.Owner != null)
+                {
+                    float relation = -30f;
+                    relation *= 1f - (workshop.Owner.GetTraitLevel(DefaultTraits.Generosity) * 0.2f);
+                    if (workshop.Owner.IsArtisan)
+                    {
+                        relation *= 1.3f;
+                    }
+
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(wk.Owner, workshop.Owner,
+                        (int)relation);
+                }
             }
         }
 

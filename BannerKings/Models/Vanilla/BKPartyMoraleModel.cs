@@ -1,4 +1,5 @@
 ﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
@@ -7,6 +8,8 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -66,6 +69,29 @@ namespace BannerKings.Models.Vanilla
                     }
 
                     result.Add(nonKhuzaits * -0.05f, DefaultLifestyles.Instance.Kheshig.Name);
+                }
+
+                PartySupplies supplies = Campaign.Current.GetCampaignBehavior<BKPartyNeedsBehavior>().GetPartySupplies(mobileParty);
+                if (supplies != null)
+                {
+                    if (mobileParty.MemberRoster.TotalManCount > supplies.MinimumSoldiersThreshold)
+                    {
+                        float alcohol = MathF.Min(supplies.AlcoholNeed / supplies.GetAlcoholCurrentNeed().ResultNumber, 
+                            supplies.AlcoholNeed);
+                        result.Add(-alcohol, new TextObject("{=!}Lacking alcohol supplies"));
+
+                        float animal = MathF.Min(supplies.AnimalProductsNeed / supplies.GetAnimalProductsCurrentNeed().ResultNumber, 
+                            supplies.AnimalProductsNeed);
+                        result.Add(-animal, new TextObject("{=!}Lacking animal products  supplies"));
+
+                        float textiles = MathF.Min(supplies.ClothNeed / supplies.GetTextileCurrentNeed().ResultNumber, 
+                            supplies.ClothNeed);
+                        result.Add(-textiles, new TextObject("{=!}Lacking textiles supplies"));
+
+                        float wood = MathF.Min(supplies.WoodNeed / supplies.GetWoodCurrentNeed().ResultNumber,
+                            supplies.WoodNeed);
+                        result.Add(-wood, new TextObject("{=!}Lacking wood supplies"));
+                    }
                 }
             }
 

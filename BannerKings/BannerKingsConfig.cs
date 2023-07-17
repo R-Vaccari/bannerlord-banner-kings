@@ -4,6 +4,7 @@ using BannerKings.Behaviours.Criminality;
 using BannerKings.Managers;
 using BannerKings.Managers.AI;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Grace;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Decisions;
@@ -28,7 +29,7 @@ namespace BannerKings
 {
     public class BannerKingsConfig
     {
-        public const string VersionNumber = "1.2.6.6";
+        public const string VersionNumber = "1.2.7.5";
         public const string VersionEdition = "CEK";
         public string VersionName => VersionNumber + VersionEdition;
 
@@ -74,6 +75,7 @@ namespace BannerKings
         public BKMarriageModel MarriageModel { get; } = new();
         public BKArmyManagementModel ArmyManagementModel { get; } = new();
         public BKCrimeModel CrimeModel { get; } = new();
+        public IPartyNeedsModel PartyNeedsModel { get; } = new BKPartyNeedsModel();
 
         static BannerKingsConfig()
         {
@@ -126,6 +128,7 @@ namespace BannerKings
             DefaultCouncilPositions.Instance.Initialize();
             DefaultCrimes.Instance.Initialize();
             DefaultCriminalSentences.Instance.Initialize();
+            DefaultCourtExpenses.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();

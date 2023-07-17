@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions.Faiths;
@@ -523,6 +524,74 @@ namespace BannerKings.UI
                         .SetTextVariable("RENOWN", action.Renown.ToString("0.0"))
                         .ToString(), 0));
             }
+        }
+
+        public static void AddMoraleSuppliesHint(ref List<TooltipProperty> list, PartySupplies supplies)
+        {
+            TooltipAddEmptyLine(list);
+            list.Add(new TooltipProperty(new TextObject("{=!}Supplies").ToString(), " ", 0));
+            TooltipAddSeperator(list);
+            list.Add(new TooltipProperty(string.Empty,
+              new TextObject("{=!}Supplies such as alcohol and wood for firewood are required to preserve your retinue in good mental condition.").ToString(),
+              0,
+              false,
+              TooltipProperty.TooltipPropertyFlags.MultiLine));
+
+            list.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
+            list.Add(new TooltipProperty(new TextObject("{=!}Wood:").ToString(), 
+                MBRandom.RoundRandomized(supplies.WoodNeed).ToString(), 
+                0));
+            list.Add(new TooltipProperty(new TextObject("{=!}Textiles:").ToString(),
+                MBRandom.RoundRandomized(supplies.ClothNeed).ToString(),
+                0));
+            list.Add(new TooltipProperty(new TextObject("{=!}Alcohol:").ToString(),
+               MBRandom.RoundRandomized(supplies.AlcoholNeed).ToString(),
+               0));
+            list.Add(new TooltipProperty(new TextObject("{=!}Animal Products:").ToString(),
+                MBRandom.RoundRandomized(supplies.AnimalProductsNeed).ToString(),
+                0));
+        }
+
+        public static void AddWageSuppliesHint(ref List<TooltipProperty> list, PartySupplies supplies)
+        {
+            TooltipAddEmptyLine(list);
+            list.Add(new TooltipProperty(new TextObject("{=!}Daily Supplies").ToString(), " ", 0));
+            TooltipAddSeperator(list);
+            list.Add(new TooltipProperty(string.Empty,
+              new TextObject("{=!}Supplies are required to preserve your retinue in maximum efficiency. Your quartermaster is able to handle supplies if you instruct them directly.").ToString(),
+              0,
+              false,
+              TooltipProperty.TooltipPropertyFlags.MultiLine));
+
+            list.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
+
+            list.Add(new TooltipProperty(new TextObject("{=!}Weapons:").ToString(),
+                supplies.GetWeaponsCurrentNeed().ResultNumber.ToString("0.00"),
+               0));
+            list.Add(new TooltipProperty(new TextObject("{=!}Ammunition:").ToString(),
+                supplies.GetArrowsCurrentNeed().ResultNumber.ToString("0.00"),
+                0));
+            list.Add(new TooltipProperty(new TextObject("{=!}Mounts:").ToString(),
+                supplies.GetMountsCurrentNeed().ResultNumber.ToString("0.00"),
+              0));
+            list.Add(new TooltipProperty(new TextObject("{=!}Shields:").ToString(),
+                supplies.GetShieldsCurrentNeed().ResultNumber.ToString("0.00"),
+              0));
+            list.Add(new TooltipProperty(new TextObject("{=!}Alcohol:").ToString(),
+                supplies.GetAlcoholCurrentNeed().ResultNumber.ToString("0.00"),
+               0));
+            list.Add(new TooltipProperty(new TextObject("{=!}Animal Products:").ToString(),
+                supplies.GetAnimalProductsCurrentNeed().ResultNumber.ToString("0.00"),
+                0));
+            list.Add(new TooltipProperty(new TextObject("{=!}Wood:").ToString(),
+                supplies.GetWoodCurrentNeed().ResultNumber.ToString("0.00"),
+              0));
+            list.Add(new TooltipProperty(new TextObject("{=!}Textiles:").ToString(),
+                supplies.GetTextileCurrentNeed().ResultNumber.ToString("0.00"),
+                0));
+            list.Add(new TooltipProperty(new TextObject("{=!}Tools:").ToString(),
+                supplies.GetToolsCurrentNeed().ResultNumber.ToString("0.00"),
+                0));
         }
 
         public static List<TooltipProperty> GetHeroCourtTooltip(Hero hero)

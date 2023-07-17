@@ -2,6 +2,7 @@
 using BannerKings.Behaviours.Criminality;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
+using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.Behaviours.Workshops;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Innovations;
@@ -65,6 +66,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKBanditBehavior());
             campaignStarter.AddBehavior(new BKCriminalityBehavior());
             campaignStarter.AddBehavior(new BKTraitBehavior());
+            campaignStarter.AddBehavior(new BKPartyNeedsBehavior());
 
             campaignStarter.AddModel(new BKPrisonerModel());
             campaignStarter.AddModel(new BKCompanionPrices());
@@ -111,12 +113,15 @@ namespace BannerKings
             campaignStarter.AddModel(new BKCombatXpModel());
             campaignStarter.AddModel(new BKBattleMoraleModel());
             campaignStarter.AddModel(new BKLearningModel());
-            campaignStarter.AddModel(new BKKingodmDecsionModel());
-            campaignStarter.AddModel(new BKDiplomacyModel());
+            campaignStarter.AddModel(new BKKingodmDecsionModel());  
             campaignStarter.AddModel(new BKPartyFoodBuyingModel());
             campaignStarter.AddModel(new BKPregnancyModel());
             campaignStarter.AddModel(new BKPartyHealingModel());
             campaignStarter.AddModel(new BKBanditModel());
+            if (BannerKingsSettings.Instance.DiplomacyChanges)
+            {
+                campaignStarter.AddModel(new BKDiplomacyModel());
+            }
 
             BKAttributes.Instance.Initialize();
             BKSkills.Instance.Initialize();

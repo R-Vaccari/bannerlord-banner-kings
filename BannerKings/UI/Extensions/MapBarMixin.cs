@@ -1,6 +1,8 @@
-﻿using Bannerlord.UIExtenderEx.Attributes;
+﻿using BannerKings.Behaviours.PartyNeeds;
+using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Map.MapBar;
 using TaleWorlds.Core.ViewModelCollection.Information;
@@ -11,6 +13,7 @@ namespace BannerKings.UI.Extensions
     [ViewModelMixin("UpdatePlayerInfo")]
     internal class MapBarMixin : BaseViewModelMixin<MapInfoVM>
     {
+        private MapInfoVM vm;
         private int piety;
         private string pietyAbbr;
         private BasicTooltipViewModel pietyHint;
@@ -18,6 +21,7 @@ namespace BannerKings.UI.Extensions
 
         public MapBarMixin(MapInfoVM vm) : base(vm)
         {
+            this.vm = vm;
             Piety = 0;
         }
 
@@ -91,6 +95,19 @@ namespace BannerKings.UI.Extensions
             PietyWithAbbrText = CampaignUIHelper.GetAbbreviatedValueTextFromValue(Piety);
             IsPietyTooltipWarning = Piety < 0f;
             //if (rel == null) return;
+
+            PartySupplies supplies = Campaign.Current.GetCampaignBehavior<BKPartyNeedsBehavior>().GetPartySupplies(MobileParty.MainParty);
+            if (supplies != null)
+            {
+                var moraleHint = CampaignUIHelper.GetPartyMoraleTooltip(MobileParty.MainParty);
+                UIHelper.AddMoraleSuppliesHint(ref moraleHint, supplies);
+                vm.MoraleHint = new BasicTooltipViewModel(() => moraleHint);
+
+                var wageHint = CampaignUIHelper.GetPartyWageTooltip();
+                UIHelper.AddWageSuppliesHint(ref wageHint, supplies);
+                vm.TroopWageHint = new BasicTooltipViewModel(() => wageHint);
+
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 using BannerKings.Behaviours;
+using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.Components;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
@@ -7,6 +8,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.Vanilla
@@ -53,6 +55,31 @@ namespace BannerKings.Models.Vanilla
                     baseResult.Add(150f, new TextObject("{=C0MCMXZ1}Bandit horde"));
                     baseResult.Add(party.MobileParty.LeaderHero.GetSkillValue(DefaultSkills.Roguery) * 1.5f,
                         DefaultSkills.Roguery.Name);
+                }
+
+                PartySupplies supplies = Campaign.Current.GetCampaignBehavior<BKPartyNeedsBehavior>().GetPartySupplies(party.MobileParty);
+                if (supplies != null)
+                {
+                    if (party.MobileParty.MemberRoster.TotalManCount > supplies.MinimumSoldiersThreshold)
+                    {
+                        float weapons = MathF.Min(supplies.WeaponsNeed / supplies.GetWeaponsCurrentNeed().ResultNumber,
+                            supplies.WeaponsNeed);
+                        float minValue = -baseResult.ResultNumber * 0.15f;
+                        baseResult.Add(MathF.Clamp(weapons, minValue, 0),
+                            new TextObject("{=!}Lacking weapon supplies"));
+
+                        float ammo = MathF.Min(supplies.ArrowsNeed / supplies.GetArrowsCurrentNeed().ResultNumber,
+                            supplies.ArrowsNeed);
+                        baseResult.Add(MathF.Clamp(ammo, minValue, 0), new TextObject("{=!}Lacking ammunition supplies"));
+
+                        float mounts = MathF.Min(supplies.HorsesNeed / supplies.GetMountsCurrentNeed().ResultNumber,
+                            supplies.HorsesNeed);
+                        baseResult.Add(MathF.Clamp(mounts, minValue, 0), new TextObject("{=!}Lacking mount supplies"));
+
+                        float shields = MathF.Min(supplies.ShieldsNeed / supplies.GetShieldsCurrentNeed().ResultNumber,
+                            supplies.ShieldsNeed);
+                        baseResult.Add(MathF.Clamp(shields, minValue, 0), new TextObject("{=!}Lacking shield supplies"));
+                    }
                 }
             }
 

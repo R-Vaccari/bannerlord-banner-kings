@@ -180,10 +180,13 @@ namespace BannerKings.Managers
 
         public void ExecuteAddToReligion(Hero hero, Religion religion)
         {
-            Religions[religion].Add(hero, new FaithfulData(0f));
-            if (HeroesCache != null)
+            if (!Religions[religion].ContainsKey(hero))
             {
-                HeroesCache.Add(hero, religion);
+                Religions[religion].Add(hero, new FaithfulData(0f));
+                if (HeroesCache != null)
+                {
+                    HeroesCache.Add(hero, religion);
+                }
             }
         }
 
@@ -278,7 +281,7 @@ namespace BannerKings.Managers
             return false;
         }
 
-        private int GetStartingPiety(Religion religion, Hero hero = null)
+        public int GetStartingPiety(Religion religion, Hero hero = null)
         {
             if (hero == null)
             {
