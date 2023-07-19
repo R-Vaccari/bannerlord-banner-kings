@@ -33,6 +33,21 @@ namespace BannerKings.Models.Vanilla
                     result.Add(3f, BKPerks.Instance.AugustCommander.Name);
                 }
 
+                float foreigners = 0f;
+                foreach (TroopRosterElement element in mobileParty.MemberRoster.GetTroopRoster())
+                {
+                    if (element.Character.Culture != mobileParty.LeaderHero.Culture)
+                    {
+                        if (element.Character.Occupation == Occupation.Mercenary) foreigners += element.Number * 0.5f;
+                        else foreigners += element.Number;
+                    }
+                }
+
+                if (data.Perks.Contains(BKPerks.Instance.CommanderWarband)) 
+                    foreigners *= 0.5f;
+                float foreignersRatio = foreigners / (float)mobileParty.MemberRoster.Count;
+                result.AddFactor(foreignersRatio * -0.5f, new TextObject("{=!}Foreign troops"));
+
                 if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(mobileParty.LeaderHero, 
                     DefaultDivinities.Instance.DarusosianSecondary2))
                 {
