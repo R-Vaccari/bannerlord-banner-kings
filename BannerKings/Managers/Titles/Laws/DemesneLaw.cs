@@ -1,4 +1,5 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using System;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -6,13 +7,14 @@ namespace BannerKings.Managers.Titles.Laws
 {
     public class DemesneLaw : BannerKingsObject
     {
-       
+        private Func<Kingdom, bool> isAdequateForKingdom;
         public DemesneLaw(string stringId) : base(stringId)
         {
         }
 
         public void Initialize(TextObject name, TextObject description, TextObject effects, DemesneLawTypes type,
-            float authoritarian, float egalitarian, float oligarchic, int influenceCost, int index, CultureObject culture = null)
+            float authoritarian, float egalitarian, float oligarchic, int influenceCost, CultureObject culture = null,
+            Func<Kingdom, bool> isAdequateForKingdom = null)
         {
             Initialize(name, description);
             Effects = effects;
@@ -22,7 +24,7 @@ namespace BannerKings.Managers.Titles.Laws
             OligarchicWeight = oligarchic;
             InfluenceCost = influenceCost;
             Culture = culture;
-            Index = index;
+            this.isAdequateForKingdom = isAdequateForKingdom;
         }
 
         public DemesneLaw GetCopy()
@@ -30,13 +32,18 @@ namespace BannerKings.Managers.Titles.Laws
             var law = new DemesneLaw(StringId);
             law.Initialize(Name, Description, Effects, LawType,
                 AuthoritarianWeight, EgalitarianWeight, OligarchicWeight,
-                InfluenceCost, Index, Culture);
+                InfluenceCost, Culture);
             law.SetIssueDate(CampaignTime.Now);
 
             return law;
         }
 
-        public int Index { get; private set; }
+        public bool IsAdequateForKingdom(Kingdom kingdom)
+        {
+            bool culture = Culture != null ? kingdom.Culture == Culture : true;
+            if (isAdequateForKingdom != null) return isAdequateForKingdom(kingdom) && culture;
+            return culture;
+        }
 
         public void SetIssueDate(CampaignTime date) => IssueDate = date;
         [SaveableProperty(100)] public CampaignTime IssueDate { get; private set; }
@@ -72,6 +79,7 @@ namespace BannerKings.Managers.Titles.Laws
         NobleDuties,
         EstateTenure,
         Tenancy,
-        HighCouncil
+        HighCouncil,
+        Army
     }
 }
