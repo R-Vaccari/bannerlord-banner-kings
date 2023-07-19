@@ -1,8 +1,12 @@
-﻿using System;
+﻿using BannerKings.Managers.Court;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Schemes
 {
@@ -17,6 +21,24 @@ namespace BannerKings.Behaviours.Schemes
 
         public override void Initialize()
         {
+            Assassination.Initialize(new TextObject("{=!}Assassination"),
+                new TextObject(),
+                null,
+                DefaultSkills.Roguery,
+                Scheme.SchemeType.Criminal,
+                (CouncilData council) =>
+                {
+                    return true;
+                },
+                (CouncilData council) =>
+                {
+                    List<Hero> targets = new List<Hero>();
+                    return targets;
+                },
+                (CouncilData council, Hero target) =>
+                {
+                    return true;
+                });
         }
     }
 }
