@@ -22,15 +22,15 @@ namespace BannerKings.Managers
         public CourtManager(Dictionary<Clan, CouncilData> councils)
         {
             Councils = councils;
-            PositionsCache = new Dictionary<Hero, CouncilMember>();
+            PositionsCache = new Dictionary<Hero, List<CouncilMember>>();
         }
 
         [SaveableProperty(1)] private Dictionary<Clan, CouncilData> Councils { get; set; }
-        private Dictionary<Hero, CouncilMember> PositionsCache { get; set; }
+        private Dictionary<Hero, List<CouncilMember>> PositionsCache { get; set; }
 
         public void PostInitialize()
         {
-            PositionsCache = new Dictionary<Hero, CouncilMember>();
+            PositionsCache = new Dictionary<Hero, List<CouncilMember>>();
             foreach (var council in Councils)
             {
                 council.Value.PostInitialize();
@@ -66,11 +66,12 @@ namespace BannerKings.Managers
         {
             if (!PositionsCache.ContainsKey(hero))
             {
-                PositionsCache.Add(hero, member);
+                PositionsCache.Add(hero, new List<CouncilMember>() { member });
             }
             else
             {
-                PositionsCache[hero] = member;
+                if (!PositionsCache[hero].Contains(member))
+                    PositionsCache[hero].Add(member);
             }
         }
 
@@ -143,7 +144,7 @@ namespace BannerKings.Managers
             return council;
         }
 
-        public CouncilMember GetHeroPosition(Hero hero)
+        public List<CouncilMember> GetHeroPositions(Hero hero)
         {
             if ((hero.IsLord && hero.Clan?.Kingdom == null) || hero.IsChild ||
                 hero.IsDead)
@@ -174,11 +175,7 @@ namespace BannerKings.Managers
                 {
                     if (clan.MapFaction == hero.MapFaction)
                     {
-                        CouncilMember result = Councils[clan].GetHeroPosition(hero);
-                        if (result != null)
-                        {
-                            return result;
-                        }
+                        return Councils[clan].GetHeroPositions(hero);
                     }
                 }
             }

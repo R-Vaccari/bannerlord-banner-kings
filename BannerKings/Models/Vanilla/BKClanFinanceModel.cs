@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BannerKings.Extensions;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
 using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
@@ -221,10 +222,13 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
-            if (position != null)
+            var positions = BannerKingsConfig.Instance.CourtManager.GetHeroPositions(clan.Leader);
+            if (positions != null)
             {
-                result.Add(position.DueWage, new TextObject("{=WvhXhUFS}Councillor role"));
+                foreach (CouncilMember position in positions)
+                {
+                    result.Add(position.DueWage, new TextObject("{=WvhXhUFS}Councillor role"));
+                }
             }
         }
 

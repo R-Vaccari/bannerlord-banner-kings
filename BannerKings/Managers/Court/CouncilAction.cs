@@ -46,7 +46,7 @@ namespace BannerKings.Managers.Court
                                     if (Council.Clan == Clan.PlayerClan)
                                     {
                                         InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}A council election is already in place.").ToString(),
-                                            Color.UIntToColorString(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
+                                            Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
                                     }
                                 }
                                 else
@@ -57,6 +57,15 @@ namespace BannerKings.Managers.Court
                                     if (candidates.Count() >= 3)
                                     {
                                         kingdom.AddDecision(decision);
+                                        if (Council.Clan == Clan.PlayerClan)
+                                        {
+                                            InformationManager.DisplayMessage(new InformationMessage(
+                                                new TextObject("{=!}The Peers of the realm will now vote for the {POSITION} position, with {HERO} as the main suggestion.")
+                                                .SetTextVariable("POSITION", TargetPosition.GetCulturalName())
+                                                .SetTextVariable("HERO", ActionTaker.Name)
+                                                .ToString(),
+                                                Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
+                                        }
                                     }
                                     else 
                                     {

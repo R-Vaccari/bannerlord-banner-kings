@@ -404,7 +404,7 @@ namespace BannerKings.UI.Court
                     CampaignUIHelper.GetHeroOccupationName(currentCharacter.Hero), string.Empty));
 
                 var positionString = GameTexts.FindText("role", "None").ToString();
-                var heroPosition = council.GetHeroPosition(currentCharacter.Hero);
+                var heroPosition = council.GetHeroPositions(currentCharacter.Hero).FirstOrDefault();
                 if (heroPosition != null)
                 {
                     positionString = heroPosition.Name.ToString();

@@ -66,6 +66,20 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
+        public ExplainedNumber CalculatePositionGrace(CouncilMember position, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(0, explanations);
+            if (position.Member == null)
+            {
+                return result;
+            }
+
+            result.Add(position.InfluenceCosts() * 5f, new TextObject("{=!}Position's influence"));
+            result.AddFactor(position.Competence.ResultNumber, new TextObject("{=!}Competence"));
+
+            return result;
+        }
+
         public ExplainedNumber CalculateExpectedGrace(CouncilData data, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
@@ -357,15 +371,23 @@ namespace BannerKings.Models.BKModels
                 return action;
             }
 
-            if (requester.Clan != null && requester.Clan.Influence < action.Influence)
+            if (!council.GetAvailableHeroes(targetPosition).Contains(requester))
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=hVJNXynE}Not enough influence.");
+                action.Reason = new TextObject("{=!}{HERO} already fulfills a position of this type.")
+                    .SetTextVariable("HERO", requester.Name);
                 return action;
             }
 
             if (!appointed)
             {
+                if (requester.Clan != null && requester.Clan.Influence < action.Influence)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=hVJNXynE}Not enough influence.");
+                    return action;
+                }
+
                 if (targetPosition.IsCorePosition(targetPosition.StringId))
                 {
                     if (requester.Clan != null && !requester.Clan.Kingdom.Leader.IsFriend(requester))

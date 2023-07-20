@@ -2,6 +2,7 @@ using System;
 using BannerKings.Behaviours;
 using BannerKings.Extensions;
 using BannerKings.Managers.CampaignStart;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Education.Lifestyles;
@@ -126,12 +127,15 @@ namespace BannerKings.Models.Vanilla
                 0.2f,
                 true);
 
-            var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
-            if (position != null)
+            var positions = BannerKingsConfig.Instance.CourtManager.GetHeroPositions(clan.Leader);
+            if (positions != null)
             {
-                result.AddFactor(position.InfluenceCosts(), new TextObject("{=yfBEQUdh}{POSITION} in {OWNER}'s council")
+                foreach (CouncilMember position in positions)
+                {
+                    result.AddFactor(position.InfluenceCosts(), new TextObject("{=yfBEQUdh}{POSITION} in {OWNER}'s council")
                     .SetTextVariable("POSITION", position.Name)
                     .SetTextVariable("OWNER", position.Clan.Leader.Name));
+                }
             }
 
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);

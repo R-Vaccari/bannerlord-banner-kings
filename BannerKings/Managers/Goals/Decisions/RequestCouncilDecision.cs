@@ -53,7 +53,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     name = new TextObject("{=oXv9Zi3y}Relinquish {POSITION}")
                        .SetTextVariable("POSITION", member.Name);
                 }
-                else if (council.GetHeroPosition(Hero.MainHero) == null || member.Member == null)
+                else if (council.GetHeroCurrentConflictingPosition(member, Hero.MainHero) == null || member.Member == null)
                 {
                     action = model.GetAction(CouncilActionType.REQUEST, council, Hero.MainHero, member);
                     hint = hint.SetTextVariable("DESCRIPTION", new TextObject("{=dcDs5auK}Request your liege to grant you this position in the council. This action will cost {INFLUENCE}{INFLUENCE_ICON}.\n\n{ACCEPT}")
@@ -64,7 +64,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 else
                 {
                     action = model.GetAction(CouncilActionType.SWAP, council, Hero.MainHero, member,
-                        council.GetHeroPosition(Hero.MainHero));
+                        council.GetHeroCurrentConflictingPosition(member, Hero.MainHero));
                     hint = hint.SetTextVariable("DESCRIPTION", new TextObject("{=ZYyxmOv9}Request to swap your current position with {COUNCILMAN} position of {POSITION}. This action will cost {INFLUENCE}{INFLUENCE_ICON}.")
                                 .SetTextVariable("COUNCILMAN", action.TargetPosition.Member.Name)
                                 .SetTextVariable("POSITION", action.TargetPosition.Name)
