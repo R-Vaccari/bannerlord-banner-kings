@@ -5,6 +5,7 @@ using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -33,9 +34,10 @@ namespace BannerKings.Managers.Kingdoms.Council
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
+            Hero candidate = ((CouncilPositionDecisionOutcome)chosenOutcome).Candidate;
             CouncilAction action = BannerKingsConfig.Instance.CouncilModel.GetAction(CouncilActionType.REQUEST,
                 Data,
-                Suggested,
+                candidate,
                 Position,
                 null,
                 true);
@@ -141,6 +143,16 @@ namespace BannerKings.Managers.Kingdoms.Council
                 }
             }
 
+            float oligarchic = 100f - (MathF.Abs(candidate.GetTraitLevel(DefaultTraits.Oligarchic) -
+                clan.Leader.GetTraitLevel(DefaultTraits.Oligarchic)) * 12f);
+            float egalitarian = 100f - (MathF.Abs(candidate.GetTraitLevel(DefaultTraits.Egalitarian) -
+                clan.Leader.GetTraitLevel(DefaultTraits.Egalitarian)) * 12f);
+            float authoritarian = 100f - (MathF.Abs(candidate.GetTraitLevel(DefaultTraits.Authoritarian) -
+                clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian)) * 12f);
+            result.Add(oligarchic);
+            result.Add(egalitarian);
+            result.Add(authoritarian);
+
             result.AddFactor(clan.Leader.GetRelation(candidate) * 0.02f);
             return result.ResultNumber;
         }
@@ -162,7 +174,7 @@ namespace BannerKings.Managers.Kingdoms.Council
             bool isShortVersion = false)
         {
             var candidate = ((CouncilPositionDecisionOutcome) chosenOutcome).Candidate;
-            var textObject = new TextObject("{=F9pSY7uQ}The{KINGDOM} has chosen {NAME} as their new council member.")
+            var textObject = new TextObject("{=!}The {KINGDOM} has chosen {NAME} as their new council member.")
                 .SetTextVariable("KINGDOM", Kingdom.Name)
                 .SetTextVariable("NAME", candidate.Name);
             return textObject;
