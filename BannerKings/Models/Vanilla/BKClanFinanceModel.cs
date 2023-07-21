@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BannerKings.Behaviours.Retainer;
 using BannerKings.Extensions;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
@@ -119,6 +120,13 @@ namespace BannerKings.Models.Vanilla
 
         public void AddIncomes(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
         {
+            Contract contract = Campaign.Current.GetCampaignBehavior<BKRetainerBehavior>().GetContract();
+            if (contract != null)
+            {
+                result.Add(contract.Wage, new TextObject("{=!}Retainer service for {HERO}")
+                    .SetTextVariable("HERO", contract.Contractor.Name));
+            }
+
             foreach (var hero in clan.Heroes)
             {
                 int estateIncome = CalculateOwnerIncomeFromEstates(hero, applyWithdrawals);

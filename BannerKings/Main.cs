@@ -3,6 +3,7 @@ using BannerKings.Behaviours.Criminality;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
 using BannerKings.Behaviours.PartyNeeds;
+using BannerKings.Behaviours.Retainer;
 using BannerKings.Behaviours.Workshops;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Innovations;
@@ -56,6 +57,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKTradeGoodsFixesBehavior());
             campaignStarter.AddBehavior(new BKCapitalBehavior());
             campaignStarter.AddBehavior(new BKMarriageBehavior());
+            campaignStarter.AddBehavior(new BKRetainerBehavior());
             if (BannerKingsSettings.Instance.Feasts)
             {
                 campaignStarter.AddBehavior(new BKFeastBehavior());
