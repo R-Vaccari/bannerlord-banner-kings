@@ -49,19 +49,24 @@ namespace BannerKings.Models.BKModels
             if (data.Location != null)
             {
                 result.Add(data.Location.Prosperity * 0.05f, data.Location.Name);
+
+                var lodgings = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Lodgings);
+                var servants = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Servants);
+                var security = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Security);
+                var extravagance = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Extravagance);
+                var supplies = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Supplies);
+
+                result.Add(lodgings.Grace, lodgings.Name);
+                result.Add(servants.Grace, servants.Name);
+                //result.Add(security.Grace, security.Name);
+                result.Add(extravagance.Grace, extravagance.Name);
+                result.Add(supplies.Grace, supplies.Name);
             }
             
-            var lodgings = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Lodgings);
-            var servants = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Servants);
-            var security = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Security);
-            var extravagance = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Extravagance);
-            var supplies = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Supplies);
-
-            result.Add(lodgings.Grace, lodgings.Name);
-            result.Add(servants.Grace, servants.Name);
-            //result.Add(security.Grace, security.Name);
-            result.Add(extravagance.Grace, extravagance.Name);
-            result.Add(supplies.Grace, supplies.Name);
+            foreach (var position in data.Positions)
+            {
+                result.Add(CalculatePositionGrace(position).ResultNumber, position.GetCulturalName());
+            }
 
             return result;
         }
@@ -74,7 +79,7 @@ namespace BannerKings.Models.BKModels
                 return result;
             }
 
-            result.Add(position.InfluenceCosts() * 5f, new TextObject("{=!}Position's influence"));
+            result.Add(position.InfluenceCosts() * 150f, new TextObject("{=!}Position's influence"));
             result.AddFactor(position.Competence.ResultNumber, new TextObject("{=!}Competence"));
 
             return result;
