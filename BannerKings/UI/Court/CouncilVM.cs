@@ -135,7 +135,8 @@ namespace BannerKings.UI.Court
 
                             if (!council.GetAvailableHeroes(Position).Contains(requester))
                             {
-                                action = model.GetAction(CouncilActionType.SWAP, council, requester, position);
+                                action = model.GetAction(CouncilActionType.SWAP, council, requester, position,
+                                    council.GetHeroCurrentConflictingPosition(position, requester));
                             }
 
                             if (action != null)
