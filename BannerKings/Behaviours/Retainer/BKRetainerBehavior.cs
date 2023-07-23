@@ -5,6 +5,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Encounters;
+using TaleWorlds.CampaignSystem.GameMenus;
 using TaleWorlds.CampaignSystem.GameState;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
@@ -103,11 +104,17 @@ namespace BannerKings.Behaviours.Retainer
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.TickEvent.AddNonSerializedListener(this, OnTick);
+            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnLoaded);
         }
 
         public override void SyncData(IDataStore dataStore)
         {
             
+        }
+
+        private void OnLoaded(CampaignGameStarter starter)
+        {
+            SetCamera();
         }
 
         private void OnTick(float dt)
@@ -123,6 +130,11 @@ namespace BannerKings.Behaviours.Retainer
                         if (contractor.IsActive)
                         {
                             PartyBase.MainParty.MobileParty.Position2D = contractor.Position2D;
+                            if (Campaign.Current.CurrentMenuContext == null || 
+                                Campaign.Current.CurrentMenuContext.StringId != "bk_retinue_wait")
+                            {
+                                GameMenu.ActivateGameMenu("bk_retinue_wait");
+                            }
                         }
                     }
                     else if (PlayerCaptivity.IsCaptive)
@@ -148,8 +160,106 @@ namespace BannerKings.Behaviours.Retainer
             }
         }
 
+        private void UpdateRetinueMenu()
+        {
+            if (contract != null)
+            {
+                var party = contract.Contractor.PartyBelongedTo;
+                if (party != null)
+                {
+                    MBTextManager.SetTextVariable("RETINUE_PARTY_NAME", party.Name);
+                    MBTextManager.SetTextVariable("MORALE", party.Morale);
+                    MBTextManager.SetTextVariable("MAX", party.LimitedPartySize);
+                    MBTextManager.SetTextVariable("SIZE", party.MemberRoster.TotalManCount);
+                    MBTextManager.SetTextVariable("QUARTERMASTER", party.EffectiveQuartermaster.Name);
+                    MBTextManager.SetTextVariable("ENGINEER", party.EffectiveEngineer.Name);
+                    MBTextManager.SetTextVariable("SCOUT", party.EffectiveScout.Name);
+                    MBTextManager.SetTextVariable("SURGEON", party.EffectiveSurgeon.Name);
+                    MBTextManager.SetTextVariable("FOOD", party.Food);
+                }
+            }
+        }
+
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
+            starter.AddWaitGameMenu("bk_retinue_wait",
+                "{=!}{RETINUE_PARTY_NAME}\nRetinue size: {SIZE}/{MAX}\nMorale: {MORALE}\nFood: {FOOD}\nSurgeon: {SURGEON}\nQuartermaster: {QUARTERMASTER}\nScout: {SCOUT}\nEngineer: {ENGINEER}\n",
+                (MenuCallbackArgs args) =>
+                {
+                    UpdateRetinueMenu();
+                },
+                (MenuCallbackArgs args) => true,
+                null,
+                (MenuCallbackArgs args, CampaignTime time) =>
+                {
+                    if (time.GetHourOfDay == 12)
+                    {
+                        UpdateRetinueMenu();
+                    }
+                },
+                GameMenu.MenuAndOptionType.WaitMenuHideProgressAndHoursOption,
+                TaleWorlds.CampaignSystem.Overlay.GameOverlays.MenuOverlayType.Encounter);
+
+            starter.AddGameMenu("bk_retinue_contract",
+                "{=!}Retainer service for {CONTRACTOR}\nContract type: {TYPE}\nRole: {ROLE}\nWage: {WAGE}{GOLD_ICON}/day\nLeaves: {LEAVES}(+1/season)",
+                (MenuCallbackArgs args) =>
+                {
+                    MBTextManager.SetTextVariable("CONTRACTOR", contract.Contractor.Name);
+                    MBTextManager.SetTextVariable("CONTRACTOR", contract.Contractor.Name);
+
+                    TextObject role = new TextObject("{=koX9okuG}None");
+                    var party = contract.Contractor.PartyBelongedTo;
+                    if (party != null)
+                    {
+                        role = GameTexts.FindText("role", party.GetHeroPerkRole(Hero.MainHero).ToString());
+                    }
+                    
+                    MBTextManager.SetTextVariable("ROLE", contract.IsFreelancer ? role : contract.Template.Name);
+                    MBTextManager.SetTextVariable("WAGE", contract.Wage);
+                    MBTextManager.SetTextVariable("LEAVES", contract.Leaves);
+                });
+
+            starter.AddGameMenuOption("bk_retinue_wait",
+                "bk_retinue_wait_contract",
+                new TextObject("{=!}Review Contract").ToString(),
+                (MenuCallbackArgs args) =>
+                {
+                    args.optionLeaveType = GameMenuOption.LeaveType.Submenu;
+                    return true;
+                },
+                (MenuCallbackArgs args) => GameMenu.SwitchToMenu("bk_retinue_contract"),
+                true);
+
+            starter.AddGameMenuOption("bk_retinue_wait",
+                "bk_retinue_wait_escape",
+                new TextObject("{=!}Take a leave").ToString(),
+                (MenuCallbackArgs args) =>
+                {
+                    args.optionLeaveType = GameMenuOption.LeaveType.Leave;
+                    return true;
+                },
+                (MenuCallbackArgs args) =>
+                {
+                    EndService(true);
+                },
+                true);
+
+            starter.AddGameMenuOption("bk_retinue_wait",
+                "bk_retinue_wait_escape",
+                new TextObject("{=!}Flee your duty").ToString(),
+                (MenuCallbackArgs args) =>
+                {
+                    args.optionLeaveType = GameMenuOption.LeaveType.LeaveTroopsAndFlee;
+                    return true;
+                },
+                (MenuCallbackArgs args) =>
+                {
+                    EndService(true);
+                },
+                true);
+
+            #region Dialogues
+
             starter.AddPlayerLine("bk_retainer_start", 
                 "lord_talk_speak_diplomacy_2",
                 "bk_retainer_reason",
@@ -243,7 +353,7 @@ namespace BannerKings.Behaviours.Retainer
             starter.AddDialogLine("bk_retainer_accepted",
                 "bk_retainer_accepted",
                 "bk_retainer_contract",
-                "{=!}Very well, {PLAYER.NAME}. And how dost thou wish to serve me?", 
+                "{=!}Very well, {PLAYER.NAME}. And how dost thou wish to serve me? Know that any men under your command will go their own way.", 
                 () => true, 
                 null);
 
@@ -346,7 +456,6 @@ namespace BannerKings.Behaviours.Retainer
                 () => true,
                 () =>
                 {
-                    StartService(freelancer);
                     GiveGoldAction.ApplyBetweenCharacters(Hero.OneToOneConversationHero,
                         Hero.MainHero,
                         contract.HiringCost);
@@ -365,10 +474,7 @@ namespace BannerKings.Behaviours.Retainer
                 "bk_retainer_proposal_accepted",
                 "{=!}I swear to you my loyalty, and ask no immediate pay.",
                 () => true,
-                () =>
-                {
-                    StartService(freelancer);
-                });
+                null);
 
             starter.AddPlayerLine("bk_retainer_proposal",
                 "bk_retainer_proposal",
@@ -381,35 +487,18 @@ namespace BannerKings.Behaviours.Retainer
                "bk_retainer_proposal_accepted",
                "close_window",
                "{=!}Then I bid thee welcome, {PLAYER.NAME}.",
-               () =>
-               {
-                   TextObject text;
-                   contract = new Contract(Hero.OneToOneConversationHero, freelancer, template);
-                   if (freelancer)
-                   {
-                       text = new TextObject("{=!}As a freelancer, I offer thee {HIRING}{GOLD_ICON} immediatly for thy service, as well as {WAGE}{GOLD_ICON} on a daily basis, adjusted regularly and accordingly to thy skills.")
-                       .SetTextVariable("WAGE", contract.Wage)
-                       .SetTextVariable("HIRING", contract.HiringCost);
-                   }
-                   else
-                   {
-                       text = new TextObject("{=!}As my servant, under the role of {TROOP}, I offer thee {HIRING}{GOLD_ICON} immediatly for thy service, as well as {WAGE}{GOLD_ICON} on a daily basis, to be adjusted if and when thou deservest betterment.")
-                       .SetTextVariable("TROOP", template.Name)
-                       .SetTextVariable("WAGE", contract.Wage)
-                       .SetTextVariable("HIRING", contract.HiringCost);
-                   }
+               () => true,
+               () => StartService());
 
-                   MBTextManager.SetTextVariable("CONTRACT_TEXT", text);
-                   MBTextManager.SetTextVariable("TIME_TEXT", new TextObject("{=!}This contract will hold until {DATE}, a year from now, given no extraordinary circunstances. At that time, thou mayest renew it with me.")
-                       .SetTextVariable("DATE", CampaignTime.YearsFromNow(1f).ToString()));
-                   MBTextManager.SetTextVariable("FIELTY_TEXT", new TextObject("{=!}Know that thy utmost loyalty is expected. If our covenant were to be violated, know that I shall sentence and punish thee under the law."));
-
-                   return true;
-               },
-               null);
+            #endregion Dialogues
         }
 
-        private void StartService(bool freelancer)
+        private void EndService(bool fled)
+        {
+
+        }
+
+        private void StartService()
         {
             MobileParty newParty = Hero.OneToOneConversationHero.PartyBelongedTo;
             if (PlayerEncounter.Current != null)
@@ -437,7 +526,7 @@ namespace BannerKings.Behaviours.Retainer
                 1, 
                 default(UniqueTroopDescriptor), 
                 0);
-            contract = new Contract(Hero.OneToOneConversationHero, false);
+            contract = new Contract(Hero.OneToOneConversationHero, freelancer, template);
             SetCamera();
         }
     }

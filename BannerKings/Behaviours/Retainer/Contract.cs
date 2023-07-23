@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 
@@ -12,12 +11,14 @@ namespace BannerKings.Behaviours.Retainer
             Contractor = contractor;
             IsFreelancer = isFreelancer;
             Template = template;
+            Leaves = 2;
         }
 
         public Hero Contractor { get; private set; }
         public bool IsFreelancer { get; private set; }
         private ItemRoster LastItems { get; set; }
         public CharacterObject Template { get; private set; }
+        public int Leaves { get; private set; }
         public Equipment Equipment
         {
             get
@@ -38,7 +39,9 @@ namespace BannerKings.Behaviours.Retainer
                 }
                 else
                 {
-                    return BannerKingsConfig.Instance.CompanionModel.GetHiringPrice(Hero.MainHero, false);
+                    return 
+                        MBRandom.RoundRandomized(BannerKingsConfig.Instance.CompanionModel
+                        .GetHiringPrice(Hero.MainHero, false) * 0.12f);
                 }
             }
         }
