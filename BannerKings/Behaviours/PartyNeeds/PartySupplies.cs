@@ -3,6 +3,7 @@ using BannerKings.Models.BKModels;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
@@ -153,31 +154,41 @@ namespace BannerKings.Behaviours.PartyNeeds
                 IPartyNeedsModel model = BannerKingsConfig.Instance.PartyNeedsModel;
                 float alcohol = model.CalculateAlcoholNeed(this, false).ResultNumber;
                 float size = Party.MemberRoster.TotalManCount;
-                AlcoholNeed = MathF.Clamp(AlcoholNeed + alcohol, 0f, size);
+                AlcoholNeed = MathF.Clamp(AlcoholNeed + alcohol, 0f, size * 0.25f);
 
                 float wood = model.CalculateWoodNeed(this, false).ResultNumber;
-                WoodNeed = MathF.Clamp(WoodNeed + wood, 0f, size);
+                WoodNeed = MathF.Clamp(WoodNeed + wood, 0f, size * 0.3f);
 
                 float tools = model.CalculateToolsNeed(this, false).ResultNumber;
-                ToolsNeed = MathF.Clamp(ToolsNeed + tools, 0f, size);
+                ToolsNeed = MathF.Clamp(ToolsNeed + tools, 0f, size * 0.1f);
 
                 float cloth = model.CalculateClothNeed(this, false).ResultNumber;
-                ClothNeed = MathF.Clamp(ClothNeed + cloth, 0f, size);
+                ClothNeed = MathF.Clamp(ClothNeed + cloth, 0f, size * 0.3f);
+
+                int maxRanged = 0;
+                int maxMounted = 0;
+                int maxInfantry = 0;
+                foreach (TroopRosterElement element in Party.MemberRoster.GetTroopRoster())
+                {
+                    if (element.Character.IsMounted) maxMounted++;
+                    if (element.Character.IsRanged) maxRanged++;
+                    else if (element.Character.IsInfantry) maxInfantry++;
+                }
 
                 float arrows = model.CalculateArrowsNeed(this, false).ResultNumber;
-                ArrowsNeed = MathF.Clamp(ArrowsNeed + arrows, 0f, size);
+                ArrowsNeed = MathF.Clamp(ArrowsNeed + arrows, 0f, size * (maxRanged / Party.MemberRoster.TotalManCount));
+
+                float horses = model.CalculateHorsesNeed(this, false).ResultNumber;
+                HorsesNeed = MathF.Clamp(HorsesNeed + horses, 0f, size * (maxMounted / Party.MemberRoster.TotalManCount));
 
                 float weapons = model.CalculateWeaponsNeed(this, false).ResultNumber;
                 WeaponsNeed = MathF.Clamp(WeaponsNeed + weapons, 0f, size);
 
-                float horses = model.CalculateHorsesNeed(this, false).ResultNumber;
-                HorsesNeed = MathF.Clamp(HorsesNeed + horses, 0f, size);
-
                 float animal = model.CalculateAnimalProductsNeed(this, false).ResultNumber;
-                AnimalProductsNeed = MathF.Clamp(AnimalProductsNeed + animal, 0f, size);
+                AnimalProductsNeed = MathF.Clamp(AnimalProductsNeed + animal, 0f, size * 0.25f);
 
                 float shields = model.CalculateShieldsNeed(this, false).ResultNumber;
-                ShieldsNeed = MathF.Clamp(ShieldsNeed + shields, 0f, size);
+                ShieldsNeed = MathF.Clamp(ShieldsNeed + shields, 0f, size * (maxInfantry / Party.MemberRoster.TotalManCount));
             }
 
             BuyItems();
