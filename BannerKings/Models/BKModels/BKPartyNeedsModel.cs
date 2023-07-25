@@ -47,7 +47,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=!}In a town or castle"));
+                return result;
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -67,7 +68,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=!}In a town or castle"));
+                return result;
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -91,7 +93,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=!}In a town or castle"));
+                return result;
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -111,7 +114,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=!}In a town or castle"));
+                return result;
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -134,7 +138,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=!}In a town or castle"));
+                return result;
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -154,7 +159,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=!}In a town or castle"));
+                return result;
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -178,7 +184,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=!}In a town or castle"));
+                return result;
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -201,7 +208,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=!}In a town or castle"));
+                return result;
             }
 
             float siege = 0f;
@@ -224,17 +232,17 @@ namespace BannerKings.Models.BKModels
                         siegeText = new TextObject("{=!}Siege engine under construction");
                     }
                 }
-            }
 
-            foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
-            {
-                result.Add(element.Number * ToolsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
-                    new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
-                    .SetTextVariable("TROOP_NAME", element.Character.Name)
-                    .SetTextVariable("COUNT", element.Number));
-            }
-
-            result.AddFactor(siege, siegeText);
+                result.AddFactor(siege, siegeText);
+                foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
+                {
+                    result.Add(element.Number * ToolsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor,
+                        new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                        .SetTextVariable("TROOP_NAME", element.Character.Name)
+                        .SetTextVariable("COUNT", element.Number));
+                }
+            } 
+           
             return result;
         }
 
@@ -244,7 +252,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=!}In a town or castle"));
+                return result;
             }
 
             float siege = 0f;
