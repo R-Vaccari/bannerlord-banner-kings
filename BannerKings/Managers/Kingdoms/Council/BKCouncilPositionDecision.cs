@@ -74,7 +74,7 @@ namespace BannerKings.Managers.Kingdoms.Council
 
         public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
         {
-            foreach (var hero in Data.GetAvailableHeroes())
+            foreach (var hero in Data.GetCourtMembers())
             {
                 CouncilAction action = BannerKingsConfig.Instance.CouncilModel.GetAction(CouncilActionType.REQUEST,
                     Data,
