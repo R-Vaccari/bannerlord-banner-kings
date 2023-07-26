@@ -9,6 +9,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Eastern
 {
     public class SixWinds : Faith
     {
+        public override TextObject GetDescriptionHint()
+        {
+            return new TextObject("{=!}");
+        }
+
         public override Banner GetBanner() => new Banner("1.74.74.1836.1836.764.764.1.0.0.510.84.116.500.136.764.764.1.0.-315.510.84.116.500.136.739.744.1.0.-315.510.84.116.500.136.789.784.1.0.-315.510.84.116.500.136.764.764.1.1.314.510.84.116.500.136.789.744.1.1.314.510.84.116.500.136.739.784.1.0.314.500.84.116.550.550.764.764.1.0.-91.427.22.116.85.85.614.764.1.0.-91.150.22.116.105.125.915.764.1.0.0.521.84.116.81.73.764.604.1.0.0.145.116.116.95.85.764.924.0.0.0");
 
         public override TextObject GetBlessingAction()

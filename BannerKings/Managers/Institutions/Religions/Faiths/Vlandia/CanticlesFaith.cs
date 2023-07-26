@@ -9,6 +9,10 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 {
     public class CanticlesFaith : PolytheisticFaith
     {
+        public override TextObject GetDescriptionHint()
+        {
+            return new TextObject("{=!}The Canticles is a the history of deeds of the Vlandic peoples. It understands the world as a collection of sagas, of which all people are parts of. It does not discriminate between cultures, nor does it see itself as a 'faith', bur rather, a fact.");
+        }
         public override Banner GetBanner() => new Banner("1.142.142.1836.1836.764.764.1.0.0.301.121.116.89.134.914.604.1.0.315.301.121.116.89.134.764.534.1.0.0.301.121.116.89.134.764.994.1.0.180.301.121.116.89.134.614.604.1.0.45.409.121.116.293.293.764.759.1.0.0.301.121.116.89.134.914.924.1.0.225.301.121.116.89.134.614.924.1.0.135.301.121.116.89.134.534.762.1.0.90.301.121.116.89.134.994.764.1.0.-90");
 
         public override bool IsCultureNaturalFaith(CultureObject culture)

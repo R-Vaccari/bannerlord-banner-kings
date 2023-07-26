@@ -137,6 +137,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract TextObject GetBlessingConfirmQuestion();
         public abstract TextObject GetBlessingQuickInformation();
         public abstract Banner GetBanner();
+        public abstract TextObject GetDescriptionHint();
 
         public override bool Equals(object obj)
         {

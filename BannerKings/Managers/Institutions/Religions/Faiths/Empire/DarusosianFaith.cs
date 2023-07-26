@@ -8,8 +8,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 {
     public class DarusosianFaith : MonotheisticFaith
     {
-        public override Banner GetBanner() => new Banner("11.35.19.1836.1836.768.788.1.0.-30.521.142.116.393.393.764.764.1.0.0.521.121.116.312.312.764.764.1.0.17.503.22.116.179.179.764.764.1.0.0.443.121.116.175.175.994.764.1.0.0.443.121.116.175.175.534.764.1.1.0.161.121.116.119.119.764.764.1.1.0");
+        public override TextObject GetDescriptionHint()
+        {
+            return new TextObject("{=!}Though the Calradic Empire had long possessed an imperial cult to venerate Emperors who were deemed to be “deliverers” and “saviors” of the civilized world, during the latter years prior to the schism and inerrenegrum the practice of viewing all emperors as god-emperors had become vulgorously commonplace. It was during this period that doctrines and reforms attributed to the teenage Emperor Darusos, a figure infamously denied the rite of the divus by the generals who usurped him, were uncovered.");
+        }
 
+        public override Banner GetBanner() => new Banner("11.35.19.1836.1836.768.788.1.0.-30.521.142.116.393.393.764.764.1.0.0.521.121.116.312.312.764.764.1.0.17.503.22.116.179.179.764.764.1.0.0.443.121.116.175.175.994.764.1.0.0.443.121.116.175.175.534.764.1.1.0.161.121.116.119.119.764.764.1.1.0");
 
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {

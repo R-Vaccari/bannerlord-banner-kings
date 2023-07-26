@@ -8,6 +8,10 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
 {
     public class TreeloreFaith : PolytheisticFaith
     {
+        public override TextObject GetDescriptionHint()
+        {
+            return new TextObject("{=!}Pérkenweyd is a native faith of the Calradian continent, stretching from the Kachyar peninsula to the Chertyg mountains. Thus, it is the natural faith of the Vakken and Sturgian peoples. Though the Sturgians have been in contact with different cultures and faiths, the Sturgian populace remains true to their ancestry.");
+        }
         public override Banner GetBanner() => new Banner("1.22.22.1836.1836.764.764.1.0.0.203.2.116.427.427.764.638.0.0.0.405.142.116.209.209.764.914.0.0.30.405.116.116.209.209.764.914.0.0.0");
 
         public override bool IsCultureNaturalFaith(CultureObject culture)
