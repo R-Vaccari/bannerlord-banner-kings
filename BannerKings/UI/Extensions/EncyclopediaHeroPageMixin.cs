@@ -48,11 +48,11 @@ namespace BannerKings.UI.Extensions
 
         public override void OnRefresh()
         {
-            TraitGroups.Clear();
             Hero hero = (Hero)heroPageVM.Obj;
 
             if (!addedFields)
             {
+                TraitGroups.Clear();
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
                 var languages = education.Languages.Keys;
                 heroPageVM.Stats.Add(new StringPairItemVM(new TextObject("{=yCaxpVGh}Languages:").ToString(),
