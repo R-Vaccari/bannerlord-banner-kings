@@ -105,6 +105,9 @@ namespace BannerKings.Behaviours.PartyNeeds
         }
 
         [SaveableProperty(2)] public bool AutoBuying { get; private set; }
+
+        public void SwitchAutoBuying() => AutoBuying = !AutoBuying;
+
         public int DaysOfProvision { get; private set; }
 
         [SaveableProperty(1)] public MobileParty Party { get; private set; }
