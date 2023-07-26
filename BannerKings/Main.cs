@@ -57,7 +57,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKTradeGoodsFixesBehavior());
             campaignStarter.AddBehavior(new BKCapitalBehavior());
             campaignStarter.AddBehavior(new BKMarriageBehavior());
-            //campaignStarter.AddBehavior(new BKRetainerBehavior());
+            campaignStarter.AddBehavior(new BKRetainerBehavior());
             if (BannerKingsSettings.Instance.Feasts)
             {
                 campaignStarter.AddBehavior(new BKFeastBehavior());

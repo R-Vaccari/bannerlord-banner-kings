@@ -173,7 +173,7 @@ namespace BannerKings.UI
                             government = title.Contract.Government;
                         }
 
-                        var honorary = Utils.Helpers.GetTitleHonorary(title.TitleType, government, __instance.IsFemale,
+                        var honorary = Utils.TextHelper.GetTitleHonorary(title.TitleType, government, __instance.IsFemale,
                             kingdom != null ? kingdom.Culture : __instance.Culture);
                         var name = (TextObject) __instance.GetType()
                             .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
@@ -221,7 +221,7 @@ namespace BannerKings.UI
 
                             if (leader == __instance.Spouse)
                             {
-                                var honorary = Utils.Helpers.GetTitleHonorary(leaderTitle.TitleType, government, __instance.IsFemale,
+                                var honorary = Utils.TextHelper.GetTitleHonorary(leaderTitle.TitleType, government, __instance.IsFemale,
                                     kingdom != null ? kingdom.Culture : __instance.Culture);
 
                                 __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
