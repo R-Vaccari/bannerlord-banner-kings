@@ -2319,7 +2319,6 @@
     <string id="E61zQNSt" text="Tax Revenues:" />
     <string id="yZhrtORs" text="Taxes levied on local population, and other local expenses and revenues. To maximize your revenues, increase local stability and reduce administrative costs." />
     <string id="o3Ohk2hA" text="Population" />
-    <string id="9s1iC4kE" text="Total Population:" />
     <string id="n3j1wX9z" text="Destroyed Crops" />
     <string id="qqxppUOY" text="Peasants at {VILLAGE} report that their crops were trampled on by cattle from {ESTATE}, owned by {OWNER}. They refuse any responsability, yet {HEADSMAN} swears the estate is at fault." />
     <string id="LFVNq2Uz" text="Your court has spent {GOLD}{GOLD_ICON} buying {ITEMS} items for its good requirements." />
@@ -2356,7 +2355,6 @@
     <string id="6oCNmffJ" text="Sufficient Security" />
     <string id="sRWDgNgy" text="Good Security" />
     <string id="U41twbPF" text="Excellent Security" />
-    <string id="q6cxgOou" text="Commander" />
     <string id="Z87jdO67" text="Party supplies build up at a {EFFECT1}% slower rate.\nInfluence gain reduced by {EFFECT2}%, other than battle reward" />
     <string id="DRPfGwoK" text="No available guests of this type and culture." />
     <string id="2GMvmKEb" text="The {KINGDOM} has chosen {NAME} as their new council member." />
@@ -2370,5 +2368,30 @@
     <string id="SP01UfQ4" text="Elected Council" />
     <string id="diuCoLDf" text="The realm's high council is elected by the Peers. The election result will determine the next occupant of the position in question." />
     <string id="9KKN4gkP" text="Ruler's privy council can only be altered by elections\nRuler's influence cap is increased by 8%" />
+    <string id="0ymhCPeh" text="Tighearna" />
+    <string id="HGfR1YAx" text="Dominus" />
+    <string id="wc51byvw" text="Gospodin" />
+    <string id="YNNXm6GE" text="Mawlaa" />
+    <string id="YMr5KkWu" text="Erxem" />
+    <string id="hpbLyVY2" text="Toisiche" />
+    <string id="uzYP2iMU" text="Baro" />
+    <string id="DanL6SW3" text="Voivode" />
+    <string id="shJ1hjYg" text="Wali" />
+    <string id="uwuM708D" text="Bey" />
+    <string id="yUowh1Mz" text="Mormaer" />
+    <string id="AW1t8MxQ" text="Conte" />
+    <string id="ShdRMhVL" text="Boyar" />
+    <string id="b2fGz9XO" text="Sheikh" />
+    <string id="ciWnpkW0" text="Khan" />
+    <string id="VU1Lsphi" text="Righ" />
+    <string id="8e3aXr1R" text="Dux" />
+    <string id="1XDPfDim" text="Knyaz" />
+    <string id="9dUqWF9A" text="Emir" />
+    <string id="9oRZ0Lms" text="Baghatur" />
+    <string id="Mn61rKcx" text="Ard-Righ" />
+    <string id="V6HVF70v" text="Rex" />
+    <string id="sFnMQqdQ" text="Velikiy Knyaz" />
+    <string id="U0MEYHty" text="Sultan" />
+    <string id="2MOuvAj0" text="Khagan" />
   </strings>
 </base>

@@ -127,15 +127,15 @@ namespace BannerKings.Utils
             {
                 string id = culture.StringId;
                 if (id == "battania") title = female ? new TextObject("{=tD38koMS}Baintighearna") :
-                    new TextObject("{=8z4dKfDu}Tighearna");
+                    new TextObject("{=0ymhCPeh}Tighearna");
                 else if (id == "empire") title = female ? new TextObject("{=go9MmDKr}Domina") :
-                        new TextObject("{=S5rJfgac}Dominus");
+                        new TextObject("{=HGfR1YAx}Dominus");
                 else if (id == "sturgia") title = female ? new TextObject("{=Ec79HNiF}Gospoda") : 
-                        new TextObject("Gospodin");
+                        new TextObject("{=wc51byvw}Gospodin");
                 else if (id == "aserai") title = female ? new TextObject("{=VGXsX6Ue}Beghum") :
-                        new TextObject("{=jes0Kij8}Mawlaa");
+                        new TextObject("{=YNNXm6GE}Mawlaa");
                 else if (id == "khuzait") title = female ? new TextObject("{=dB9Rfp6W}Khatagtai") :
-                        new TextObject("{=uut6Aqo3}Erxem");
+                        new TextObject("{=YMr5KkWu}Erxem");
             }
 
             return title;
@@ -148,15 +148,15 @@ namespace BannerKings.Utils
             {
                 string id = culture.StringId;
                 if (id == "battania") title = female ? new TextObject("{=811sxLhn}Thaoiseach") :
-                    new TextObject("{=6XmUmfNm}Toisiche");
+                    new TextObject("{=hpbLyVY2}Toisiche");
                 else if (id == "empire") title = female ? new TextObject("{=dYq0qGzZ}Baronessa") :
-                        new TextObject("{=DZ8MWLNZ}Baro");
+                        new TextObject("{=uzYP2iMU}Baro");
                 else if (id == "sturgia") title = female ? new TextObject("{=bYQLoRUt}Voivodina") :
-                        new TextObject("{=P5tZwHtn}Voivode");
+                        new TextObject("{=DanL6SW3}Voivode");
                 else if (id == "aserai") title = female ? new TextObject("{=LYY1ZegU}Walia") :
-                        new TextObject("{=Ry8vAGrA}Wali");
+                        new TextObject("{=shJ1hjYg}Wali");
                 else if (id == "khuzait") title = female ? new TextObject("{=Ajj9ptAU}Begum") :
-                        new TextObject("{=A04x6QXO}Bey");
+                        new TextObject("{=uwuM708D}Bey");
             }
 
             return title;
@@ -169,15 +169,15 @@ namespace BannerKings.Utils
             {
                 string id = culture.StringId;
                 if (id == "battania") title = female ? new TextObject("{=FMWNKESs}Bantiarna") :
-                    new TextObject("{=hGD00EFy}Mormaer");
+                    new TextObject("{=yUowh1Mz}Mormaer");
                 else if (id == "empire") title = female ? new TextObject("{=ex7NjOtr}Cometessa") :
-                        new TextObject("{=o8Cxhcm6}Conte");
+                        new TextObject("{=AW1t8MxQ}Conte");
                 else if (id == "sturgia") title = female ? new TextObject("{=KTxFYNyo}Boyarina") :
-                        new TextObject("{=t8LfQad9}Boyar");
+                        new TextObject("{=ShdRMhVL}Boyar");
                 else if (id == "aserai") title = female ? new TextObject("{=AUoParHT}Shaykah") :
-                        new TextObject("{=if2pPJ6z}Sheikh");
+                        new TextObject("{=b2fGz9XO}Sheikh");
                 else if (id == "khuzait") title = female ? new TextObject("{=cepkCz19}Khanum") :
-                        new TextObject("{=R8N3D1L5}Khan");
+                        new TextObject("{=ciWnpkW0}Khan");
             }
 
             return title;
@@ -190,15 +190,15 @@ namespace BannerKings.Utils
             {
                 string id = culture.StringId;
                 if (id == "battania") title = female ? new TextObject("{=XLAgsQ0J}Banrigh") :
-                    new TextObject("{=f62sQAtH}R�gh");
+                    new TextObject("{=VU1Lsphi}Righ");
                 else if (id == "empire") title = female ? new TextObject("{=5aCrjmFi}Ducissa") :
-                        new TextObject("{=oDRVNajf}Dux");
+                        new TextObject("{=8e3aXr1R}Dux");
                 else if (id == "sturgia") title = female ? new TextObject("{=S3kc2bhW}Knyaginya") : 
-                        new TextObject("{=1XDPfDim}Knyaz");
+                        new TextObject("Knyaz");
                 else if (id == "aserai") title = female ? new TextObject("{=MVjsWtcZ}Emira") :
-                        new TextObject("{=CNgjQs21}Emir");
+                        new TextObject("{=9dUqWF9A}Emir");
                 else if (id == "khuzait") title = female ? new TextObject("{=Mfuxa8SP}Bekhi") :
-                        new TextObject("{=yQvLRfx9}Baghatur");
+                        new TextObject("{=9oRZ0Lms}Baghatur");
             }
 
             return title;
@@ -211,7 +211,7 @@ namespace BannerKings.Utils
             {
                 string id = culture.StringId;
                 if (id == "battania") title = female ? new TextObject("{=25sz3WPn}Ard-Banrigh") :
-                    new TextObject("{=PFQ9jztU}Ard-R�gh");
+                    new TextObject("{=Mn61rKcx}Ard-Righ");
                 else if (id == "empire")
                 {
                     if (government == GovernmentType.Republic)
@@ -224,15 +224,15 @@ namespace BannerKings.Utils
                     {
                         title = female
                             ? new TextObject("{=BJvarzpV}Regina")
-                            : new TextObject("{=fo59CGyy}Rex");
+                            : new TextObject("{=V6HVF70v}Rex");
                     }
                 }
                 else if (id == "sturgia") title = female ? new TextObject("{=LmHWN0vt}Velikaya Knyaginya") : 
-                        new TextObject("{=DA4APi0H}Velikiy Knyaz");
+                        new TextObject("{=sFnMQqdQ}Velikiy Knyaz");
                 else if (id == "aserai") title = female ? new TextObject("{=DQXH6NeY}Sultana") :
-                        new TextObject("{=RSfZQRPy}Sultan");
+                        new TextObject("{=U0MEYHty}Sultan");
                 else if (id == "khuzait") title = female ? new TextObject("{=SdJk1Vpf}Khatun") :
-                        new TextObject("{=oQULc2S8}Khagan");
+                        new TextObject("{=2MOuvAj0}Khagan");
             }
 
             return title;
