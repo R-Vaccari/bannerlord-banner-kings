@@ -743,7 +743,7 @@ namespace BannerKings.Behaviours
         {
             private static void Postfix(ref TextObject __result, Hero o)
             {
-                var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(o);
+                /*var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(o);
                 if (titles is {Count: > 0})
                 {
                     var desc = "";
@@ -760,7 +760,7 @@ namespace BannerKings.Behaviours
                         if (current == null)
                         {
                             desc += string.Format("{0} of {1}",
-                                Utils.Helpers.GetTitleHonorary(title.TitleType, government, false), title.shortName);
+                                Utils.TextHelper.GetTitleHonorary(title.TitleType, government, false), title.shortName);
                         }
                         else if (current.TitleType == title.TitleType)
                         {
@@ -778,7 +778,7 @@ namespace BannerKings.Behaviours
                     __result = new TextObject("{=3Ug0Pp5p}{RESULT}\n{DESCRIPTION}")
                         .SetTextVariable("RESULT", __result.ToString())
                         .SetTextVariable("DESCRIPTION", desc);
-                }
+                }*/
             }
         }
 
