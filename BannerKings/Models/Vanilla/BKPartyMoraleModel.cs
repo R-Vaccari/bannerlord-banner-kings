@@ -43,8 +43,7 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
 
-                if (data.Perks.Contains(BKPerks.Instance.CommanderWarband)) 
-                    foreigners *= 0.5f;
+                if (data.Perks.Contains(BKPerks.Instance.CommanderInspirer)) foreigners *= 0.5f;
                 float foreignersRatio = foreigners / (float)mobileParty.MemberRoster.Count;
                 result.AddFactor(foreignersRatio * -0.5f, new TextObject("{=!}Foreign troops"));
 

@@ -1,4 +1,6 @@
-﻿using BannerKings.Managers.Items;
+﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Items;
 using BannerKings.Models.BKModels;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -152,17 +154,28 @@ namespace BannerKings.Behaviours.PartyNeeds
             if (Party.MemberRoster.Count > MinimumSoldiersThreshold)
             {
                 IPartyNeedsModel model = BannerKingsConfig.Instance.PartyNeedsModel;
-                float alcohol = model.CalculateAlcoholNeed(this, false).ResultNumber;
                 float size = Party.MemberRoster.TotalManCount;
+                float modifier = 1f;
+
+                if (Party.LeaderHero != null)
+                {
+                    EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Party.LeaderHero);
+                    if (DefaultLifestyles.Instance.Commander.Equals(education.Lifestyle))
+                    {
+                        modifier = 0.75f;
+                    }
+                }
+
+                float alcohol = model.CalculateAlcoholNeed(this, false).ResultNumber * modifier;
                 AlcoholNeed = MathF.Clamp(AlcoholNeed + alcohol, 0f, size * 0.25f);
 
-                float wood = model.CalculateWoodNeed(this, false).ResultNumber;
+                float wood = model.CalculateWoodNeed(this, false).ResultNumber * modifier;
                 WoodNeed = MathF.Clamp(WoodNeed + wood, 0f, size * 0.3f);
 
-                float tools = model.CalculateToolsNeed(this, false).ResultNumber;
+                float tools = model.CalculateToolsNeed(this, false).ResultNumber * modifier;
                 ToolsNeed = MathF.Clamp(ToolsNeed + tools, 0f, size * 0.1f);
 
-                float cloth = model.CalculateClothNeed(this, false).ResultNumber;
+                float cloth = model.CalculateClothNeed(this, false).ResultNumber * modifier;
                 ClothNeed = MathF.Clamp(ClothNeed + cloth, 0f, size * 0.3f);
 
                 int maxRanged = 0;
@@ -175,19 +188,19 @@ namespace BannerKings.Behaviours.PartyNeeds
                     else if (element.Character.IsInfantry) maxInfantry++;
                 }
 
-                float arrows = model.CalculateArrowsNeed(this, false).ResultNumber;
+                float arrows = model.CalculateArrowsNeed(this, false).ResultNumber * modifier;
                 ArrowsNeed = MathF.Clamp(ArrowsNeed + arrows, 0f, size * (maxRanged / Party.MemberRoster.TotalManCount));
 
-                float horses = model.CalculateHorsesNeed(this, false).ResultNumber;
+                float horses = model.CalculateHorsesNeed(this, false).ResultNumber * modifier;
                 HorsesNeed = MathF.Clamp(HorsesNeed + horses, 0f, size * (maxMounted / Party.MemberRoster.TotalManCount));
 
-                float weapons = model.CalculateWeaponsNeed(this, false).ResultNumber;
+                float weapons = model.CalculateWeaponsNeed(this, false).ResultNumber * modifier;
                 WeaponsNeed = MathF.Clamp(WeaponsNeed + weapons, 0f, size);
 
-                float animal = model.CalculateAnimalProductsNeed(this, false).ResultNumber;
+                float animal = model.CalculateAnimalProductsNeed(this, false).ResultNumber * modifier;
                 AnimalProductsNeed = MathF.Clamp(AnimalProductsNeed + animal, 0f, size * 0.25f);
 
-                float shields = model.CalculateShieldsNeed(this, false).ResultNumber;
+                float shields = model.CalculateShieldsNeed(this, false).ResultNumber * modifier;
                 ShieldsNeed = MathF.Clamp(ShieldsNeed + shields, 0f, size * (maxInfantry / Party.MemberRoster.TotalManCount));
             }
 

@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Education;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -46,6 +47,21 @@ namespace BannerKings.Models.Vanilla
             }
 
             return false;
+        }
+
+        public override ExplainedNumber CalculateDailyCohesionChange(Army army, bool includeDescriptions = false)
+        {
+            ExplainedNumber result =  base.CalculateDailyCohesionChange(army, includeDescriptions);
+            if (result.ResultNumber < 0f && army.LeaderParty != null && army.LeaderParty.LeaderHero != null)
+            {
+                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(army.LeaderParty.LeaderHero);
+                if (education.HasPerk(BKPerks.Instance.CommanderInspirer))
+                {
+                    result.Add(result.ResultNumber * -0.12f, BKPerks.Instance.CommanderInspirer.Name);
+                }
+            }
+
+            return result;
         }
 
         public override float DailyBeingAtArmyInfluenceAward(MobileParty armyMemberParty)

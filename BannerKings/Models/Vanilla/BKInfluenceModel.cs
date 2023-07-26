@@ -220,6 +220,11 @@ namespace BannerKings.Models.Vanilla
                 baseResult.Add(bandits * 0.1f, BKPerks.Instance.OutlawPlunderer.Name);
             }
 
+            if (DefaultLifestyles.Instance.Commander.Equals(education.Lifestyle))
+            {
+                baseResult.AddFactor(-0.15f, DefaultLifestyles.Instance.Commander.Name);
+            }
+
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
             var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
             if (religion != null && clan.Settlements.Count > 0)
