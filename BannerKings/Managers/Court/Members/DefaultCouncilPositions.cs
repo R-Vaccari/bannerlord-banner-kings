@@ -1,6 +1,8 @@
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
 using BannerKings.Managers.Traits;
+using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -25,6 +27,11 @@ namespace BannerKings.Managers.Court.Members
         public CouncilMember Antiquarian { get; set; } = new CouncilMember("Antiquarian");
         public CouncilMember Elder { get; set; } = new CouncilMember("Elder");
         public CouncilMember Spouse { get; set; } = new CouncilMember("Spouse");
+        public CouncilMember LegionCommander1 { get; set; } = new CouncilMember("LegionCommander1");
+        public CouncilMember LegionCommander2 { get; set; } = new CouncilMember("LegionCommander2");
+        public CouncilMember LegionCommander3 { get; set; } = new CouncilMember("LegionCommander3");
+        public CouncilMember LegionCommander4 { get; set; } = new CouncilMember("LegionCommander4");
+        public CouncilMember LegionCommander5 { get; set; } = new CouncilMember("LegionCommander5");
 
         public override IEnumerable<CouncilMember> All
         {
@@ -42,6 +49,11 @@ namespace BannerKings.Managers.Court.Members
                 yield return CourtSmith;
                 yield return CourtMusician;
                 yield return Antiquarian;
+                yield return LegionCommander1;
+                yield return LegionCommander2;
+                yield return LegionCommander3;
+                yield return LegionCommander4;
+                yield return LegionCommander5;
                 foreach (CouncilMember item in ModAdditions)
                 {
                     yield return item;
@@ -51,6 +63,211 @@ namespace BannerKings.Managers.Court.Members
 
         public override void Initialize()
         {
+            LegionCommander1.Initialize(
+                DefaultSkills.Leadership,
+                DefaultSkills.Tactics,
+                new List<CouncilTask>()
+                {
+                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                },
+                new List<CouncilPrivileges>()
+                {
+                    CouncilPrivileges.ARMY_PRIVILEGE,
+                    CouncilPrivileges.NOBLE_EXCLUSIVE
+                },
+                (CouncilData data) =>
+                 {
+                    var kingdom = data.Clan.Kingdom;
+                    if (kingdom != null)
+                    {
+                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                        if (sovereign != null)
+                        {
+                            return data.IsRoyal && sovereign.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion);
+                        }
+                    }
+
+                    return false;
+                },
+                (CouncilMember position, Hero hero) =>
+                {
+                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=!}Hero must be a clan leader."));
+                    return new(true, null);
+                }, 
+                (CouncilMember member) =>
+                {
+                    var id = member.Culture.StringId;
+                    if (id == "empire") return new TextObject("{=!}Legatus");
+
+                    return new TextObject("{=!}Legate");
+                },
+                null,
+                true);
+
+            LegionCommander2.Initialize(
+                DefaultSkills.Leadership,
+                DefaultSkills.Tactics,
+                new List<CouncilTask>()
+                {
+                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                },
+                new List<CouncilPrivileges>()
+                {
+                    CouncilPrivileges.ARMY_PRIVILEGE,
+                    CouncilPrivileges.NOBLE_EXCLUSIVE
+                },
+                (CouncilData data) =>
+                {
+                    var kingdom = data.Clan.Kingdom;
+                    if (kingdom != null)
+                    {
+                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                        if (sovereign != null)
+                        {
+                            return data.IsRoyal && sovereign.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion);
+                        }
+                    }
+
+                    return false;
+                },
+                (CouncilMember position, Hero hero) =>
+                {
+                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=!}Hero must be a clan leader."));
+                    return new(true, null);
+                },
+                (CouncilMember member) =>
+                {
+                    var id = member.Culture.StringId;
+                    if (id == "empire") return new TextObject("{=!}Legatus");
+
+                    return new TextObject("{=!}Legate");
+                },
+                null,
+                true);
+
+            LegionCommander3.Initialize(
+                DefaultSkills.Leadership,
+                DefaultSkills.Tactics,
+                new List<CouncilTask>()
+                {
+                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                },
+                new List<CouncilPrivileges>()
+                {
+                    CouncilPrivileges.ARMY_PRIVILEGE,
+                    CouncilPrivileges.NOBLE_EXCLUSIVE
+                },
+                (CouncilData data) =>
+                {
+                    var kingdom = data.Clan.Kingdom;
+                    if (kingdom != null)
+                    {
+                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                        if (sovereign != null)
+                        {
+                            return data.IsRoyal && sovereign.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion);
+                        }
+                    }
+
+                    return false;
+                },
+                (CouncilMember position, Hero hero) =>
+                {
+                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=!}Hero must be a clan leader."));
+                    return new(true, null);
+                },
+                (CouncilMember member) =>
+                {
+                    var id = member.Culture.StringId;
+                    if (id == "empire") return new TextObject("{=!}Legatus");
+
+                    return new TextObject("{=!}Legate");
+                },
+                null,
+                true);
+
+            LegionCommander4.Initialize(
+                DefaultSkills.Leadership,
+                DefaultSkills.Tactics,
+                new List<CouncilTask>()
+                {
+                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                },
+                new List<CouncilPrivileges>()
+                {
+                    CouncilPrivileges.ARMY_PRIVILEGE,
+                    CouncilPrivileges.NOBLE_EXCLUSIVE
+                },
+                (CouncilData data) =>
+                {
+                    var kingdom = data.Clan.Kingdom;
+                    if (kingdom != null)
+                    {
+                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                        if (sovereign != null)
+                        {
+                            return data.IsRoyal && sovereign.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion);
+                        }
+                    }
+
+                    return false;
+                },
+                (CouncilMember position, Hero hero) =>
+                {
+                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=!}Hero must be a clan leader."));
+                    return new(true, null);
+                },
+                (CouncilMember member) =>
+                {
+                    var id = member.Culture.StringId;
+                    if (id == "empire") return new TextObject("{=!}Legatus");
+
+                    return new TextObject("{=!}Legate");
+                },
+                null,
+                true);
+
+            LegionCommander5.Initialize(
+                DefaultSkills.Leadership,
+                DefaultSkills.Tactics,
+                new List<CouncilTask>()
+                {
+                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                },
+                new List<CouncilPrivileges>() 
+                { 
+                    CouncilPrivileges.ARMY_PRIVILEGE,
+                    CouncilPrivileges.NOBLE_EXCLUSIVE
+                },
+                (CouncilData data) =>
+                {
+                    var kingdom = data.Clan.Kingdom;
+                    if (kingdom != null)
+                    {
+                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                        if (sovereign != null)
+                        {
+                            return data.IsRoyal && sovereign.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion);
+                        }
+                    }
+
+                    return false;
+                },
+                (CouncilMember position, Hero hero) =>
+                {
+                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=!}Hero must be a clan leader."));
+                    return new(true, null);
+                },
+                (CouncilMember member) =>
+                {
+                    var id = member.Culture.StringId;
+                    if (id == "empire") return new TextObject("{=!}Legatus");
+
+                    return new TextObject("{=!}Legate");
+                },
+                null,
+                true);
+
             Marshal.Initialize(
                 DefaultSkills.Leadership,
                 DefaultSkills.Tactics,

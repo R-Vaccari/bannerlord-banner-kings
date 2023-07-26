@@ -255,10 +255,11 @@ namespace BannerKings.Managers.Court
                 return;
             }
 
-            var vacant = Positions.FirstOrDefault(x => x.Member == null);
+            CouncilMember vacant = Positions.FirstOrDefault(x => x.IsAIPriority && x.Member == null);
             if (vacant == null)
             {
-                return;
+                vacant = Positions.FirstOrDefault(x => !x.IsAIPriority && x.Member == null);
+                if (vacant == null) return;
             }
 
             var hero = MBRandom.ChooseWeighted(GetHeroesForPosition(vacant));
@@ -280,7 +281,6 @@ namespace BannerKings.Managers.Court
 
         public List<Hero> GetAvailableHeroes(CouncilMember position = null, bool lordsOnly = false)
         {
-            var currentMembers = GetOccupiedPositions();
             var available = new List<Hero>();
             foreach (var hero in GetCourtMembers())
             {
@@ -289,17 +289,18 @@ namespace BannerKings.Managers.Court
 
                 if (position == null)
                 {
-                    if (!currentMembers.Any(x => x.Member == hero))
+                    if (!GetOccupiedPositions().Any(x => x.Member == hero))
                         available.Add(hero);
                 }
                 else
                 {
+                    var positions = GetHeroPositions(hero);
                     bool core = position.IsCorePosition(position.StringId);
-                    if (core && !currentMembers.Any(x => x != position && x.IsCorePosition(x.StringId) && x.Member == position.Member))
+                    if (core && !positions.Any(x => !x.Equals(position) && x.IsCorePosition(x.StringId)))
                     {
                         available.Add(hero);
                     }
-                    else if (!core && !currentMembers.Any(x => x != position && !x.IsCorePosition(x.StringId) && x.Member == position.Member))
+                    else if (!core && !positions.Any(x => !x.Equals(position) && !x.IsCorePosition(x.StringId)))
                     {
                         available.Add(hero);
                     }

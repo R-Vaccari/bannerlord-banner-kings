@@ -4,6 +4,10 @@ using BannerKings.Managers.Education;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Laws;
+using BannerKings.Utils.Extensions;
+using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -22,31 +26,60 @@ namespace BannerKings.Models.Vanilla
                     return true;
                 }
 
-                var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
-                CouncilMember position = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Marshal);
-                if (position != null && armyLeader == position.Member)
+                CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
+                var positions = council.GetHeroPositions(armyLeader);
+                return positions.Any(x => x.Privileges.Contains(CouncilPrivileges.ARMY_PRIVILEGE));
+                if (positions.Any(x => x.Privileges.Contains(CouncilPrivileges.ARMY_PRIVILEGE)))
                 {
                     return true;
                 }
 
-                var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(armyLeader);
-                if (title != null)
+                FeudalTitle kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                FeudalTitle heroTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(armyLeader);
+                if (kingdomTitle != null)
                 {
-                    if (kingdom.ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
+                    if (kingdomTitle.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyPrivate) && heroTitle != null)
                     {
-                        if (title.TitleType <= TitleType.Dukedom)
+                        if (kingdom.ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
+                        {
+                            if (heroTitle.TitleType <= TitleType.Dukedom)
+                            {
+                                return true;
+                            }
+                        }
+                        else if (heroTitle.TitleType < TitleType.Lordship)
                         {
                             return true;
                         }
                     }
-                    else if (title.TitleType < TitleType.Lordship)
+                    else if (kingdomTitle.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyHorde))
+                        return armyLeader.IsClanLeader();
+                } else return armyLeader.IsClanLeader();
+            }
+
+            return false;
+        }
+
+        public override List<MobileParty> GetMobilePartiesToCallToArmy(MobileParty leaderParty)
+        {
+            List<MobileParty> results = base.GetMobilePartiesToCallToArmy(leaderParty);
+            var kingdom = leaderParty.LeaderHero?.Clan.Kingdom;
+            if (kingdom != null)
+            {
+                FeudalTitle kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                if (kingdomTitle != null && kingdomTitle.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion))
+                {
+                    foreach (MobileParty p in results)
                     {
-                        return true;
+                        if (p != leaderParty && p.LeaderHero != null && CanCreateArmy(p.LeaderHero))
+                        {
+                            results.Remove(p);
+                        }
                     }
                 }
             }
 
-            return false;
+            return results;
         }
 
         public override ExplainedNumber CalculateDailyCohesionChange(Army army, bool includeDescriptions = false)

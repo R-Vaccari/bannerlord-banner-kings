@@ -165,29 +165,46 @@ namespace BannerKings.Managers.Titles.Laws
         {
             var cultures = Campaign.Current.ObjectManager.GetObjectTypeList<CultureObject>();
             ArmyPrivate.Initialize(new TextObject("{=R9xGiMLf}Private Armies"),
-                new TextObject("{=Y6yoi6pe}Every relevant head of a House, not accounting for army privilege policies, is allowed to form their own army. As such, they are fully"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Every head of a House, beholder of any title superior to a Lordship, not accounting for army privilege policies, is allowed to form their own army."),
+                new TextObject("{=!}Army creation limited by title level (minimum: Barony)"),
                 DemesneLawTypes.Army,
+                -0.1f,
+                -0.7f,
                 0.8f,
-                -0.2f,
-                -0.4f,
                 300);
+
             ArmyHorde.Initialize(new TextObject("{=VYAP7Arh}Hordes"),
-                new TextObject("{=!}"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Every chief of a House is allowed to gather their own horde. Hordes are easier to gather than armies, but harder to maintain."),
+                new TextObject("{=!}Army loses cohesion faster\nInfluence cost to call parties reduced\nBattle renown increased while participating in armies"),
                 DemesneLawTypes.Army,
-                0.8f,
-                -0.2f,
                 -0.4f,
-                300);
+                0.8f,
+                0.2f,
+                300,
+                null,
+                (Kingdom kingdom) =>
+                {
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                    if (title != null) return title.Contract.Government == GovernmentType.Tribal;
+                    return false;
+                });
+
             ArmyLegion.Initialize(new TextObject("{=Qs1qPddP}Legions"),
                 new TextObject("{=!}"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Army creation delegated to Legion Commander council positions\nLegion cohesion lasts longer\nSupply buildup reduced by 10% for armies"),
                 DemesneLawTypes.Army,
                 0.8f,
                 -0.2f,
                 -0.4f,
-                300);
+                300,
+                null,
+                (Kingdom kingdom) =>
+                {
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                    if (title != null) return title.Contract.Government == GovernmentType.Imperial ||
+                        title.Contract.Government == GovernmentType.Republic;
+                    return false;
+                });
 
             #region EstateTenure
 
