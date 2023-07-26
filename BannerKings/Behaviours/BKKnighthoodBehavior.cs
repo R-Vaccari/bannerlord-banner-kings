@@ -87,7 +87,7 @@ namespace BannerKings.Behaviours
                         requestText =
                             new TextObject("{=adCAG0nk}I humbly ask of you to release me of my duties in the {CLAN}. I shall remain as your vassal and loyal friend.");
                     }
-                    else if (hero.IsEnemy(Hero.MainHero))
+                    else if (!hero.IsEnemy(Hero.MainHero))
                     {
                         requestText =
                             new TextObject("{=KwjG1wou}I request of you to release me of my duties in the {CLAN}. It is time for me to lead my own family.");
