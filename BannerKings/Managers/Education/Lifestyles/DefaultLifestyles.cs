@@ -59,7 +59,7 @@ namespace BannerKings.Managers.Education.Lifestyles
         public override void Initialize()
         {
             var cultures = Game.Current.ObjectManager.GetObjectTypeList<CultureObject>();
-            Commander.Initialize(new TextObject("{=!}Commander"),
+            Commander.Initialize(new TextObject("Commander"),
                 new TextObject(),
                 DefaultSkills.Leadership,
                 DefaultSkills.Tactics,
@@ -69,7 +69,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.CommanderInspirer,
                     BKPerks.Instance.CommanderWarband
                 },
-                new TextObject("{=!}Party supplies build up at a {EFFECT1}% slower rate.\nInfluence gain reduced by {EFFECT2}%, other than battle reward"),
+                new TextObject("{=Z87jdO67}Party supplies build up at a {EFFECT1}% slower rate.\nInfluence gain reduced by {EFFECT2}%, other than battle reward"),
                 25f,
                 15f);
 

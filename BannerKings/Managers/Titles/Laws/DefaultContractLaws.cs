@@ -164,15 +164,15 @@ namespace BannerKings.Managers.Titles.Laws
         public override void Initialize()
         {
             var cultures = Campaign.Current.ObjectManager.GetObjectTypeList<CultureObject>();
-            ArmyPrivate.Initialize(new TextObject("{=!}Private Armies"),
-                new TextObject("{=!}Every relevant head of a House, not accounting for army privilege policies, is allowed to form their own army. As such, they are fully"),
+            ArmyPrivate.Initialize(new TextObject("{=R9xGiMLf}Private Armies"),
+                new TextObject("{=Y6yoi6pe}Every relevant head of a House, not accounting for army privilege policies, is allowed to form their own army. As such, they are fully"),
                 new TextObject("{=!}"),
                 DemesneLawTypes.Army,
                 0.8f,
                 -0.2f,
                 -0.4f,
                 300);
-            ArmyHorde.Initialize(new TextObject("{=!}Hordes"),
+            ArmyHorde.Initialize(new TextObject("{=VYAP7Arh}Hordes"),
                 new TextObject("{=!}"),
                 new TextObject("{=!}"),
                 DemesneLawTypes.Army,
@@ -180,7 +180,7 @@ namespace BannerKings.Managers.Titles.Laws
                 -0.2f,
                 -0.4f,
                 300);
-            ArmyLegion.Initialize(new TextObject("{=!}Legions"),
+            ArmyLegion.Initialize(new TextObject("{=Qs1qPddP}Legions"),
                 new TextObject("{=!}"),
                 new TextObject("{=!}"),
                 DemesneLawTypes.Army,
@@ -462,18 +462,18 @@ namespace BannerKings.Managers.Titles.Laws
 
             #region Council
 
-            CouncilAppointed.Initialize(new TextObject("{=!}Appointed Council"),
-              new TextObject("{=!}The realm's high council is appointed by the ruler. They are free to chose their councillors as they please."),
-              new TextObject("{=!}Ruler's privy council can be altered at will\nAll non-ruling clans have influence cap increased by 5%"),
+            CouncilAppointed.Initialize(new TextObject("{=3fSea0Y1}Appointed Council"),
+              new TextObject("{=FuGK7Am5}The realm's high council is appointed by the ruler. They are free to chose their councillors as they please."),
+              new TextObject("{=bsaOK0eQ}Ruler's privy council can be altered at will\nAll non-ruling clans have influence cap increased by 5%"),
               DemesneLawTypes.HighCouncil,
               1f,
               -0.3f,
               -0.6f,
               1000);
 
-            CouncilElected.Initialize(new TextObject("{=!}Elected Council"),
-             new TextObject("{=!}The realm's high council is elected by the Peers. The election result will determine the next occupant of the position in question."),
-             new TextObject("{=!}Ruler's privy council can only be altered by elections\nRuler's influence cap is increased by 8%"),
+            CouncilElected.Initialize(new TextObject("{=SP01UfQ4}Elected Council"),
+             new TextObject("{=diuCoLDf}The realm's high council is elected by the Peers. The election result will determine the next occupant of the position in question."),
+             new TextObject("{=9KKN4gkP}Ruler's privy council can only be altered by elections\nRuler's influence cap is increased by 8%"),
              DemesneLawTypes.HighCouncil,
              -0.7f,
              0.1f,

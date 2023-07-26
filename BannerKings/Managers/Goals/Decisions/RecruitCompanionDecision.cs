@@ -161,7 +161,7 @@ namespace BannerKings.Managers.Goals.Decisions
                         var template = GetAdequateCharacter(companionType);
                         if (template.Count == 0)
                         {
-                            hint = new TextObject("{=!}No available guests of this type and culture.");
+                            hint = new TextObject("{=DRPfGwoK}No available guests of this type and culture.");
                         }
 
                         float influence = companionType.InfluenceCost;

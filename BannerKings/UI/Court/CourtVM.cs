@@ -66,11 +66,11 @@ namespace BannerKings.UI.Court
         [DataSourceProperty] public string PrivilegesText => new TextObject("{=77D4i3pG}Privileges").ToString();
         [DataSourceProperty] public string PrivyCouncilText => new TextObject("{=7NeZtxVP}Privy Council").ToString();
         [DataSourceProperty] public string ExtendedCouncilText => new TextObject("{=BkJbqOWj}Extended Council").ToString();
-        [DataSourceProperty] public string ExtravaganceText => new TextObject("{=!}Extravagance").ToString();
+        [DataSourceProperty] public string ExtravaganceText => new TextObject("{=hYV6dQoP}Extravagance").ToString();
         [DataSourceProperty] public string SuppliesText => new TextObject("{=SaWHeTiw}Supplies").ToString();
         [DataSourceProperty] public string SecurityText => new TextObject("{=MqCH7R4A}Security").ToString();
-        [DataSourceProperty] public string ServantsText => new TextObject("{=!}Servants").ToString();
-        [DataSourceProperty] public string LodgingsText => new TextObject("{=!}Lodgings").ToString();
+        [DataSourceProperty] public string ServantsText => new TextObject("{=BrMCkQMQ}Servants").ToString();
+        [DataSourceProperty] public string LodgingsText => new TextObject("{=TqMRp818}Lodgings").ToString();
         [DataSourceProperty] public bool PlayerOwned => council.Owner == Hero.MainHero;
         [DataSourceProperty] public bool DisableButtons => !PlayerOwned;
      
@@ -121,21 +121,21 @@ namespace BannerKings.UI.Court
             if (council.CourtGrace != null)
             {
                 ExplainedNumber graceTarget = BannerKingsConfig.Instance.CouncilModel.CalculateGraceTarget(council, true);
-                CourtInfo.Add(new InformationElement(new TextObject("{=!}Grace:").ToString(),
-                new TextObject("{=!}{GRACE} / {TOTAL} ({CHANGE} / day)")
+                CourtInfo.Add(new InformationElement(new TextObject("{=PQ9D66GT}Grace:").ToString(),
+                new TextObject("{=FgAWmeXm}{GRACE} / {TOTAL} ({CHANGE} / day)")
                 .SetTextVariable("GRACE", council.CourtGrace.Grace.ToString("0.0"))
                 .SetTextVariable("TOTAL", graceTarget.ResultNumber.ToString("0"))
                 .SetTextVariable("CHANGE", FormatFloatGain(council.CourtGrace.GraceChange))
                 .ToString(),
-                new TextObject("{=!}Grace is the measure of importance attributed to your court by others. A more prestigious court location and higher court expenses are naturally seen as more gracious. A more gracious court allows you more political leverage within the realm.\nGrace Target: {TARGET}\n{EXPLANATIONS}")
+                new TextObject("{=VAOqDMk0}Grace is the measure of importance attributed to your court by others. A more prestigious court location and higher court expenses are naturally seen as more gracious. A more gracious court allows you more political leverage within the realm.\nGrace Target: {TARGET}\n{EXPLANATIONS}")
                 .SetTextVariable("TARGET", graceTarget.ResultNumber.ToString("0"))
                 .SetTextVariable("EXPLANATIONS", graceTarget.GetExplanations())
                 .ToString()));
 
                 ExplainedNumber expectedGrace = BannerKingsConfig.Instance.CouncilModel.CalculateExpectedGrace(council, true);
-                CourtInfo.Add(new InformationElement(new TextObject("{=!}Expected grace:").ToString(),
+                CourtInfo.Add(new InformationElement(new TextObject("{=qU6Zq60j}Expected grace:").ToString(),
                 expectedGrace.ResultNumber.ToString("0"),
-                new TextObject("{=!}Expected grace is the threshold where grace yields positive political leverage. Grace being under this number will instead diminish your influence. As nobles become more important within the realm, , specially through title hierarchy and clan tier, more grace is expected from them.\nExplanations:\n{EXPLANATIONS}")
+                new TextObject("{=gWrNRjSF}Expected grace is the threshold where grace yields positive political leverage. Grace being under this number will instead diminish your influence. As nobles become more important within the realm, , specially through title hierarchy and clan tier, more grace is expected from them.\nExplanations:\n{EXPLANATIONS}")
                 .SetTextVariable("EXPLANATIONS", expectedGrace.GetExplanations())
                 .ToString()));
             }
@@ -143,14 +143,14 @@ namespace BannerKings.UI.Court
             ExplainedNumber influenceCap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(council.Clan, true);
             CourtInfo.Add(new InformationElement(new TextObject("{=bNS2Lg7L}Influence Limit:").ToString(),
                 MBRandom.RoundRandomized(influenceCap.ResultNumber).ToString(),
-                new TextObject("{=!}Influence limit represents how much political power your clan can leverage within the realm. Nobles higher in the title hierarchy or with more demesnes tend to be more relevant within the realm and thus have a higher influence limit. Clan influence will tend down to this limit if it supersedes the limit, meaning that less important families will tend to have less influence overall. Explanations:\n{EXPLANATIONS}")
+                new TextObject("{=j26DQzoz}Influence limit represents how much political power your clan can leverage within the realm. Nobles higher in the title hierarchy or with more demesnes tend to be more relevant within the realm and thus have a higher influence limit. Clan influence will tend down to this limit if it supersedes the limit, meaning that less important families will tend to have less influence overall. Explanations:\n{EXPLANATIONS}")
                 .SetTextVariable("EXPLANATIONS", influenceCap.GetExplanations())
                 .ToString()));
 
             ExplainedNumber admCosts = BannerKingsConfig.Instance.CouncilModel.CalculateAdmCosts(council, true);
             CourtInfo.Add(new InformationElement(new TextObject("{=7OQ7dN1T}Administrative costs:").ToString(),
                 FormatValue(admCosts.ResultNumber),
-                new TextObject("{=!}Costs associated with payment of council members and court expenses. These costs represent a percentage of all your fiefs' revenues, and thus scale as your fiefs yield higher taxes. Explanations:\n{EXPLANATIONS}")
+                new TextObject("{=Tj6ouL4D}Costs associated with payment of council members and court expenses. These costs represent a percentage of all your fiefs' revenues, and thus scale as your fiefs yield higher taxes. Explanations:\n{EXPLANATIONS}")
                 .SetTextVariable("EXPLANATIONS", admCosts.GetExplanations())
                 .ToString()));
 
@@ -177,18 +177,18 @@ namespace BannerKings.UI.Court
                 int total = 0;
                 foreach (var pair in categories) total += pair.Value;
 
-                CourtInfo.Add(new InformationElement(new TextObject("{=!}Goods requirements:").ToString(),
+                CourtInfo.Add(new InformationElement(new TextObject("{=qJXn9rnK}Goods requirements:").ToString(),
                 total.ToString(),
-                new TextObject("{=!}Court expenses require goods to operate, on a seasonal basis, or four times a year. These goods are bought locally or used from the stash (with the exception of the Supplies expense, which only buys but does not consume them). Missing these goods or having them supplied in lower quality will yield negative grace. Higher quality goods will instead yield positive grace.\nGoods:\n{EXPLANATIONS}")
+                new TextObject("{=qazQxKVv}Court expenses require goods to operate, on a seasonal basis, or four times a year. These goods are bought locally or used from the stash (with the exception of the Supplies expense, which only buys but does not consume them). Missing these goods or having them supplied in lower quality will yield negative grace. Higher quality goods will instead yield positive grace.\nGoods:\n{EXPLANATIONS}")
                 .SetTextVariable("EXPLANATIONS", string.Join(Environment.NewLine, categories.Select(x => $"{x.Key}: {x.Value}")))
                 .ToString()));
             }
 
             TextObject locationName = council.Location != null ? council.Location.Name : 
-                new TextObject("{=!}Lacking court location");
-            CourtInfo.Add(new InformationElement(new TextObject("{=!}Court location:").ToString(),
+                new TextObject("{=sJFMPgj1}Lacking court location");
+            CourtInfo.Add(new InformationElement(new TextObject("{=qGGGAMzW}Court location:").ToString(),
                 locationName.ToString(),
-                new TextObject("{=!}The fief in which your court will gather. Having a designated location is crucial for the operations of a court as well as to the image of your grace.")
+                new TextObject("{=bohHNqF2}The fief in which your court will gather. Having a designated location is crucial for the operations of a court as well as to the image of your grace.")
                 .ToString()));
 
             Language language = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(council.Clan.Culture);
@@ -364,7 +364,7 @@ namespace BannerKings.UI.Court
                     TextObject description;
                     if (cost > 0)
                     {
-                        description = new TextObject("{=!}Are you sure that you want to increase your expenses to {EXPENSE}? This change will yield {GRACE} more grace, but cost {GOLD}{GOLD_ICON}, as well as increase your administrative costs by {ADM_COST}%.")
+                        description = new TextObject("{=PxX0AYBK}Are you sure that you want to increase your expenses to {EXPENSE}? This change will yield {GRACE} more grace, but cost {GOLD}{GOLD_ICON}, as well as increase your administrative costs by {ADM_COST}%.")
                             .SetTextVariable("GOLD", cost)
                             .SetTextVariable("EXPENSE", expense.Name)
                             .SetTextVariable("GRACE", (expense.Grace - current.Grace).ToString("0"))
@@ -372,7 +372,7 @@ namespace BannerKings.UI.Court
                     }
                     else
                     {
-                        description = new TextObject("{=!}Are you sure that you want to diminish your expenses to {EXPENSE}? Once reduced, increasing them again will incur financial costs. Reducing this expense will save you {ADM_COST}% in administrative costs, but reduce your grace by {GRACE}.")
+                        description = new TextObject("{=PL6mEtzJ}Are you sure that you want to diminish your expenses to {EXPENSE}? Once reduced, increasing them again will incur financial costs. Reducing this expense will save you {ADM_COST}% in administrative costs, but reduce your grace by {GRACE}.")
                             .SetTextVariable("GOLD", cost)
                             .SetTextVariable("EXPENSE", expense.Name)
                             .SetTextVariable("GRACE", (current.Grace - expense.Grace).ToString("0"))

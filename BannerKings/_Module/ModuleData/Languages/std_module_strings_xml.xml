@@ -50,13 +50,6 @@
     <string id="rFXuWbdQ" text="Bestowing knighthood requires {INFLUENCE} influence to legitimize your new vassal.\n{EXPLANATIONS}" />
     <string id="hN2Eynzu" text="Bestowing knighthood requires {GOLD} gold to give your vassal financial security." />
     <string id="3Ug0Pp5p" text="{RESULT}\n{DESCRIPTION}" />
-    <string id="A2qwGxzR" text="You cannot assign a prisoner member as a new party leader" />
-    <string id="XX95HPvL" text="This hero has just escaped from captors and will be available after some time." />
-    <string id="DKZjQeN1" text="This hero is already leading a party." />
-    <string id="P11B5nA2" text="This hero is already a part of an another party." />
-    <string id="RND66CoK" text="Governors cannot lead a mobile party and be a governor at the same time." />
-    <string id="MiVV06Yo" text="This hero is lost" />
-    <string id="iWxEQVYg" text="This hero is a fugitive and running from their captors. They will be available after some time." />
     <string id="pyhP5yWu" text="Select the Leader of the New Party" />
     <string id="WGo5MzOB" text="There is no one available in your clan who can lead a party right now." />
     <string id="gQYsK1AT" text="The {CLAN} now own {WORKSHOP} at {TOWN}." />
@@ -196,66 +189,37 @@
     <string id="EjVOGKj7" text="Agnatic law favors males. Although females are not completely excluded, they will only be chosen in case a male candidate is not present." />
     <string id="M0MP3ysP" text="Cognatic law sees no distinction between both genders. Candidates are choosen stricly on their merits, as per the context requires." />
     <string id="25sz3WPn" text="Ard-Banrigh" />
-    <string id="Tmq9K61V" text="{MALE}Ard-Rìgh{?}Queen{\\?}" />
     <string id="XLAgsQ0J" text="Banrigh" />
-    <string id="9UcU5h2m" text="{MALE}Rìgh{?}Queen{\\?}" />
     <string id="FMWNKESs" text="Bantiarna" />
-    <string id="Ut4edjyP" text="{MALE}Mormaer{?}Queen{\\?}" />
     <string id="811sxLhn" text="Thaoiseach" />
-    <string id="Fjzj45rw" text="{MALE}Toisiche{?}Queen{\\?}" />
     <string id="tD38koMS" text="Baintighearna" />
-    <string id="3TM8VVpZ" text="{MALE}Tighearna{?}Queen{\\?}" />
     <string id="gNVEqLz4" text="Principissa" />
     <string id="ouHkQtyZ" text="Princeps" />
     <string id="BJvarzpV" text="Regina" />
-    <string id="pjye9jRu" text="{MALE}Rex{?}Queen{\\?}" />
     <string id="5aCrjmFi" text="Ducissa" />
-    <string id="O9U0gmCL" text="{MALE}Dux{?}Queen{\\?}" />
     <string id="ex7NjOtr" text="Cometessa" />
-    <string id="iAZGWV5E" text="{MALE}Conte{?}Queen{\\?}" />
     <string id="dYq0qGzZ" text="Baronessa" />
-    <string id="CNNsfyzD" text="{MALE}Baro{?}Queen{\\?}" />
     <string id="go9MmDKr" text="Domina" />
-    <string id="rWJjN9N3" text="{MALE}Dominus{?}Queen{\\?}" />
     <string id="DQXH6NeY" text="Sultana" />
-    <string id="8hKXBBMu" text="{MALE}Sultan{?}Queen{\\?}" />
     <string id="MVjsWtcZ" text="Emira" />
-    <string id="O8JU8PND" text="{MALE}Emir{?}Queen{\\?}" />
     <string id="AUoParHT" text="Shaykah" />
-    <string id="KkOE3xqq" text="{MALE}Sheikh{?}Queen{\\?}" />
     <string id="LYY1ZegU" text="Walia" />
-    <string id="y847ELZt" text="{MALE}Wali{?}Queen{\\?}" />
     <string id="VGXsX6Ue" text="Beghum" />
-    <string id="NQiveYfa" text="{MALE}Mawlaa{?}Queen{\\?}" />
     <string id="SdJk1Vpf" text="Khatun" />
-    <string id="xTbcwLP8" text="{MALE}Khagan{?}Queen{\\?}" />
     <string id="Mfuxa8SP" text="Bekhi" />
-    <string id="E3oJ6wzZ" text="{MALE}Baghatur{?}Queen{\\?}" />
     <string id="cepkCz19" text="Khanum" />
-    <string id="c14De2tC" text="{MALE}Khan{?}Queen{\\?}" />
     <string id="Ajj9ptAU" text="Begum" />
-    <string id="L4g7rfjB" text="{MALE}Bey{?}Queen{\\?}" />
     <string id="dB9Rfp6W" text="Khatagtai" />
-    <string id="ouUiDOuN" text="{MALE}Erxem{?}Queen{\\?}" />
     <string id="LmHWN0vt" text="Velikaya Knyaginya" />
-    <string id="eVZHT4T6" text="{MALE}Velikiy Knyaz{?}Queen{\\?}" />
     <string id="S3kc2bhW" text="Knyaginya" />
     <string id="KTxFYNyo" text="Boyarina" />
-    <string id="QQxLPzDu" text="{MALE}Boyar{?}Queen{\\?}" />
     <string id="bYQLoRUt" text="Voivodina" />
-    <string id="DvtAe1VC" text="{MALE}Voivode{?}Queen{\\?}" />
     <string id="Ec79HNiF" text="Gospoda" />
-    <string id="E6MmoXHy" text="{MALE}Gospodin{?}Queen{\\?}" />
     <string id="JmdALFU2" text="Queen" />
-    <string id="9DBndyJZ" text="{MALE}King{?}Queen{\\?}" />
     <string id="5uFw1EmO" text="Duchess" />
-    <string id="zLFrEtFr" text="{MALE}Duke{?}Duchess{\\?}" />
     <string id="o513XU29" text="Countess" />
-    <string id="JFAEL6mR" text="{MALE}Count{?}Countess{\\?}" />
     <string id="yxq4RV7E" text="Baroness" />
-    <string id="9PL99nxQ" text="{MALE}Baron{?}Baroness{\\?}" />
     <string id="8V8i6QCm" text="Lady" />
-    <string id="2FowDhD3" text="{MALE}Lord{?}Lady{\\?}" />
     <string id="jz2SCLZS" text="Grand-Principality" />
     <string id="7x3HJ29f" text="Kingdom" />
     <string id="SuG07DUi" text="High Kingship" />
@@ -580,7 +544,6 @@
     <string id="PsLzYkAz" text="Clan tier is insufficient." />
     <string id="2wBj94FG" text="Must be faction leader to usurp highest title in hierarchy." />
     <string id="5ysthcWa" text="No rightful claim." />
-    <string id="WDHTvasY" text="Aid from {NOTABLE}" />
     <string id="6keRYbQa" text="Taxes from {CLAN}" />
     <string id="r1iYHSWx" text="Army compensation rights" />
     <string id="WvhXhUFS" text="Councillor role" />
@@ -852,7 +815,6 @@
     <string id="f5Sz1HSM" text="Vote to change realm clans' inheritance to {GOVERNMENT}" />
     <string id="Sd4K6UiX" text="Vote to change realm's succession to {GOVERNMENT}" />
     <string id="dqEO1Ug4" text="Choose the next council member to occupy the position of {POSITION}" />
-    <string id="F9pSY7uQ" text="The{KINGDOM} has chosen {NAME} as their new council member." />
     <string id="Hj6NHtbc" text="{KINGDOM_NAME} will decide who will occupy the position of {POSITION}. You can pick your stance regarding this decision." />
     <string id="01waap2L" text="{NAME} should be appointed" />
     <string id="YYt2d9xV" text="The privilege of raising armies will be limited to lords of duke level or superior, as well as the crown Marshal." />
@@ -1234,7 +1196,6 @@
     <string id="cCQO7noU" text="{LIFESTYLE} lifestyle" />
     <string id="L0Dwod0e" text="Council wages" />
     <string id="7OQ7dN1T" text="Administrative costs:" />
-    <string id="1zAZjJy9" text="Costs associated with payment of council members, deducted on all your fiefs' revenues." />
     <string id="diqoFxAm" text="{HERO} {RELIGION_TEXT}." />
     <string id="JoZGpNrK" text=" does not follow any faith" />
     <string id="Ckk2iVKQ" text="is following the {FAITH}" />
@@ -1313,7 +1274,6 @@
     <string id="DgUr4orO" text="A quick way of increasing workforce is gathering prisoners and outlaws and turning them into slaves. Keep in mind, slaves are not free, and do not contribute to population growth. Serfs represent the bulk of growth. Increasing population limit and allowing them to grow by themselves is the recommended long term strategy." />
     <string id="L87e0h2a" text="Food production relies on acreage. Each acre of land requires an amount of workforce. If it is met, the acre will produce food. The output depends on acre type - farmlands are the most productive. When town's stocks are filled, the production will be sold to the market. A town only truly runs out of food when the market is empty, as people will buy it off when their own stocks are empty." />
     <string id="UNBcpRLu" text="Villages work exactly the same. They will supply town markets by selling their output and thus generating an income. Increasing workforce through population increase is the main method of increasing general food output. However, if workforce saturation is over 100%, it is recommended to focus on acreage expansion instead, as new laborers will not have land to work on." />
-    <string id="eytEGCnd" text="I would like you to serve as my knight." />
     <string id="mMoVoid6" text="Bestowing Knighthood" />
     <string id="FwXL7yLD" text="Knighting involves granting a Fee (an estate or lordship) to a commoner, in exchange for Knight Service, or military aid. Once granted, their property can not be revoked. Knights granted a Lordship will pay for their own retinue, but will also have full rights to the village's income. Knights will serve under your clan, but eventually will aim to forge their own family." />
     <string id="KfprN5px" text="{TITLE}, it would be my honor. I must ask, what kind of property would you honor me with?" />
@@ -1667,7 +1627,6 @@
     <string id="Yy2s38FQ" text="Rites" />
     <string id="77isPS24" text="{EFFECTS}\nPiety cost: {COST}" />
     <string id="t8gCwGPJ" text="Demesne Information" />
-    <string id="cBhrSfro" text="{MATERIAL}\n{DESCRIPTION}\nStash: {STASH}\nMarket: {MARKET}" />
     <string id="kGCHAdZG" text="Assembled for use by the Calradoi dynasty, Strategikon compiles series of treatises on army maneuvers and tatics. The book deals with diverse formations and battle tactics used by opponents of the Empire, since it's inception by Calradios the Great. The book is treated as basic education for military-minded lords in the empire." />
     <string id="5qh4CNDP" text="Written by Dhashwal of the Nahasa, the treatise compiles a series of reflections on trade routes and trading practices the caravaneer deal with in his lifetime. From the Jawwal nomadic traders, through the Imperial bureaucrats up to the sea-faring nothern traders, Dhashwal writes on his experience of mastering the trade through decades of field experience." />
     <string id="eLyaVrbS" text="Dictionarium Calradium is a compendium of basic words and syntax of the languages in the continent. Used to further the former Empire's influence on different cultures, it serves any language by comparing it to Calradian, the Imperial language." />
@@ -1900,7 +1859,6 @@
     <string id="c0yr2MTu" text="Duty of Military Aid" />
     <string id="KwR84Oew" text="Mead{@Plural}barrels of mead{\\@}" />
     <string id="skP17S9C" text="Garum{@Plural}amphorae of garum{\\@}" />
-    <string id="y1Jzq1cv" text="Taxes on Markets" />
     <string id="EF0OTQ0p" text="Over Vassal Limit" />
     <string id="jb7sCNT2" text="{HERO} is currently courting {COURTING}" />
     <string id="1d2DhozK" text="Spouses are too closely related." />
@@ -1937,7 +1895,6 @@
     <string id="civsKq8g" text="Villages produce income by selling their production outputs. Villages will now produce based on population workforce, as well as available acreage, if fitting. For example, agricultural productions are limited by the amount of acres available and their production capacity - even if you have extra workers, the fields can only produce so much.\nAs a result, villages can produce much more income than before. This is extra relevant for Knighthood, which you can read more about in the articles below." />
     <string id="9G2RkTYh" text="In Banner Kings, legal titles exist in what is called Demesne (domain) Hierarchy. Titles may be landed or not. Landed titles are directly attached to a fief - lordships are village titles, baronies are castle titles, counties are town titles. Above these are unlanded titles, such as dukedoms and kingdoms. The hierarchy stablishes suzerain-vassal relationships between the title holders. Holding a title has several impacts, mainly affecting your Vassal Limit and Demesne Limit, that limit your number of vassal clans &amp; knights, and your limit of fiefs, respectively. Every faction at game start has a kingdom-level title that represents them. This title is passed on to successive leaders of the faction, in different forms, depending on the title's Succession law." />
     <string id="r27hBdeh" text="In Banner Kings, companions are no longer able to raise clan parties. Instead, they can be knighted, a process that involves spending influence and denars. Once knighted, they can raise a party. It also requires a lordship title, who the knight will receive and use it's income to pay their own party - you only pay for those led by your family members. Knights can eventualy grow as lords and found their own clan. Knights are used by the AI, meaning many new lords are travelling on the map, and eventually many new clans sprout. The player may try to stop their own knights from creating clans." />
-    <string id="GLumT6vM" text="It is decided then. I bestow upon you the title of Knight." />
     <string id="rf3QLBok" text="I would like you to convert to my culture ({INFLUENCE} influence)." />
     <string id="TKUCnCtD" text="If that is your bidding, I would not deny it. Folks at {SETTLEMENT} might not like this. Over time however, they may accept it." />
     <string id="8x1gZye8" text="If that is your bidding, I am inclined to accept it. The people {SETTLEMENT} might not like this. Over time however, they may accept it." />
@@ -2210,7 +2167,6 @@
     <string id="RQq8tssi" text="Oversee the enforcement of law through force or otherwise. Improved enforcement of laws provides a prosperous habitat for trade." />
     <string id="o27axaVY" text="Improved security\nImproved caravan attractiveness" />
     <string id="9D4AgMLu" text="Although the spirits accept many kinds of offerings, iron has been the staple option in the Uchalion plateau. Due to it's vast usefulness, it is prized as a gft worthy of the Gods, despite its raw nature." />
-    <string id="9pXXkYBB" text="I aim to grant you an additional property." />
     <string id="DLx4qCTY" text="{TITLE}, that would be a generous gift. Additional properties would allow me to field a bigger retinue." />
     <string id="YWw9LkmQ" text="It is decided then." />
     <string id="BOhrKJtw" text="You have properties available to be granted." />
@@ -2266,7 +2222,6 @@
     <string id="SY5K6vfd" text="The {CLASS} are a step above the serfs. These peasants are free to move and often have rights to protect themselves. Though less taxable than serfs, {CLASS} are more prone to stable and prosperous fiefs due to such rights and the ability to accumulate more wealth." />
     <string id="t6Ez6fZm" text="The {CLASS} are those destituted: criminals, prisioners unworthy of a ransom, and those unlucky to be born into slavery. Slaves do the hard manual labor across settlements, such as building and mining. They themselves pay no tax as they are unable to have posessions, but their labor generates income gathered as tax from their masters." />
     <string id="m9LxGgmd" text="{HERO} has been found guilty of the {CRIME} crime." />
-    <string id="6cGMoYAZ" text="Bandity" />
     <string id="ma7sx96C" text="Monetary Fine" />
     <string id="VsAvikWv" text="Beheading" />
     <string id="WH4jmWgv" text="{HERO} has been beheaded as sentence to the {CRIME} crime." />
@@ -2337,34 +2292,83 @@
     <string id="z5ox1p40" text="Mixed tenure allows the coexistence of both tenants and serfs. Their compositions will tend to be similar." />
     <string id="LGuO56aW" text="Full Serfdom" />
     <string id="FuKNBsvU" text="When bound by serfdom, a commoner is unable to leave their suzerain's land without permission. Though their status is above a slave's, they often miss the rights of free men." />
-    <string id="kS1GtIuD" text="Sargotha" />
-    <string id="pTPcS7UL" text="Biscanend" />
-    <string id="VkkdAZ6s" text="Paravenon" />
-    <string id="l8d0pJII" text="Eborend" />
-    <string id="3QYdOWmI" text="Ardus Dunnath" />
-    <string id="5X65560i" text="Cadd Lenthu" />
-    <string id="dV3xJxVu" text="Ardus Lendh" />
-    <string id="LsKyFaRs" text="Nordden" />
-    <string id="x4IrrVOc" text="Kachyar" />
-    <string id="cHWtzygp" text="Chertyg" />
-    <string id="dcfhVA8L" text="Iltan" />
-    <string id="MZ6IyLe9" text="Lakonia" />
-    <string id="zx85YhOq" text="Nevys" />
-    <string id="bo4PqHJv" text="Myzead" />
-    <string id="Cdf6hJNf" text="Gavys" />
-    <string id="fIsbmmJs" text="Perassica" />
-    <string id="a9gaFIJa" text="Aria" />
-    <string id="deVTg9cJ" text="Ornia" />
-    <string id="9OkLIPRC" text="Sethys" />
-    <string id="YG6kdeqq" text="Calsea" />
-    <string id="IBQMT2FR" text="Tanaesis" />
-    <string id="HPbbd80j" text="Perassia" />
-    <string id="1sClYUoR" text="Jarjarys" />
-    <string id="cRAddvoP" text="Retana" />
-    <string id="AJxv9Eqo" text="Caldea" />
-    <string id="kRXucvyJ" text="Kohi Rohini" />
-    <string id="iuKWscHa" text="Tanaz Baikal" />
-    <string id="b8Ie5P26" text="Devseg" />
-    <string id="krEv7xsL" text="Bars Dagan" />
+    <string id="OcaF5fMN" text="Natural Culture" />
+    <string id="MTBhu6a0" text="Accepted Cultures" />
+    <string id="28PPXPOL" text="Not an official religion in any kingdom" />
+    <string id="G2jQF2Ne" text="{DESCRIPTION}\n\nGrace: {GRACE}\nAdm. Costs: {COSTS}\nGoods requirements:\n{GOODS}" />
+    <string id="hYV6dQoP" text="Extravagance" />
+    <string id="BrMCkQMQ" text="Servants" />
+    <string id="TqMRp818" text="Lodgings" />
+    <string id="PQ9D66GT" text="Grace:" />
+    <string id="FgAWmeXm" text="{GRACE} / {TOTAL} ({CHANGE} / day)" />
+    <string id="VAOqDMk0" text="Grace is the measure of importance attributed to your court by others. A more prestigious court location and higher court expenses are naturally seen as more gracious. A more gracious court allows you more political leverage within the realm.\nGrace Target: {TARGET}\n{EXPLANATIONS}" />
+    <string id="qU6Zq60j" text="Expected grace:" />
+    <string id="gWrNRjSF" text="Expected grace is the threshold where grace yields positive political leverage. Grace being under this number will instead diminish your influence. As nobles become more important within the realm, , specially through title hierarchy and clan tier, more grace is expected from them.\nExplanations:\n{EXPLANATIONS}" />
+    <string id="j26DQzoz" text="Influence limit represents how much political power your clan can leverage within the realm. Nobles higher in the title hierarchy or with more demesnes tend to be more relevant within the realm and thus have a higher influence limit. Clan influence will tend down to this limit if it supersedes the limit, meaning that less important families will tend to have less influence overall. Explanations:\n{EXPLANATIONS}" />
+    <string id="Tj6ouL4D" text="Costs associated with payment of council members and court expenses. These costs represent a percentage of all your fiefs' revenues, and thus scale as your fiefs yield higher taxes. Explanations:\n{EXPLANATIONS}" />
+    <string id="qJXn9rnK" text="Goods requirements:" />
+    <string id="qazQxKVv" text="Court expenses require goods to operate, on a seasonal basis, or four times a year. These goods are bought locally or used from the stash (with the exception of the Supplies expense, which only buys but does not consume them). Missing these goods or having them supplied in lower quality will yield negative grace. Higher quality goods will instead yield positive grace.\nGoods:\n{EXPLANATIONS}" />
+    <string id="sJFMPgj1" text="Lacking court location" />
+    <string id="qGGGAMzW" text="Court location:" />
+    <string id="bohHNqF2" text="The fief in which your court will gather. Having a designated location is crucial for the operations of a court as well as to the image of your grace." />
+    <string id="PxX0AYBK" text="Are you sure that you want to increase your expenses to {EXPENSE}? This change will yield {GRACE} more grace, but cost {GOLD}{GOLD_ICON}, as well as increase your administrative costs by {ADM_COST}%." />
+    <string id="PL6mEtzJ" text="Are you sure that you want to diminish your expenses to {EXPENSE}? Once reduced, increasing them again will incur financial costs. Reducing this expense will save you {ADM_COST}% in administrative costs, but reduce your grace by {GRACE}." />
+    <string id="jg72kgKe" text="Missing construction policy!\nEdit your workforce policy under Demesne Management, Demesne tab." />
+    <string id="mcyKmOiC" text="Missing materials!\nBring materials into the Stash or let caravans bring them naturally." />
+    <string id="CO7bKu1R" text="Missing Governor!\nA governor will buy necessary materials for projects without your intervention." />
+    <string id="E61zQNSt" text="Tax Revenues:" />
+    <string id="yZhrtORs" text="Taxes levied on local population, and other local expenses and revenues. To maximize your revenues, increase local stability and reduce administrative costs." />
+    <string id="o3Ohk2hA" text="Population" />
+    <string id="9s1iC4kE" text="Total Population:" />
+    <string id="n3j1wX9z" text="Destroyed Crops" />
+    <string id="qqxppUOY" text="Peasants at {VILLAGE} report that their crops were trampled on by cattle from {ESTATE}, owned by {OWNER}. They refuse any responsability, yet {HEADSMAN} swears the estate is at fault." />
+    <string id="LFVNq2Uz" text="Your court has spent {GOLD}{GOLD_ICON} buying {ITEMS} items for its good requirements." />
+    <string id="6PxQfUrN" text="Your court has consumed {COUNT} out of {DESIRED} required goods, changing your grace by {GRACE}." />
+    <string id="Y0NWoa6b" text="Minimal Lodgings" />
+    <string id="ZtBCanDT" text="Provide bare minimum accomodations for guests. Increases guest capacity by 1." />
+    <string id="p0WegVVv" text="Sufficient Lodgings" />
+    <string id="ju5hjtTV" text="Provide sufficient accomodations for guests, both in space and quality. Increases guest capacity by 2. Improves feast satisfaction." />
+    <string id="8kQyH2uu" text="Good Lodgings" />
+    <string id="J4x60RZT" text="Provide good accomodations for guests, both in space and quality. Increases guest capacity by 3. Further improves feast satisfaction." />
+    <string id="Lemq7MqD" text="Excellent Lodgings" />
+    <string id="fcx3fZ1r" text="Provide excellent accomodations for guests, both in space and quality. Increases guest capacity by 4. Improves feast satisfaction the most." />
+    <string id="ZqEzWPMx" text="Minimal Supplies" />
+    <string id="FmWniY4S" text="Stock a minimum amount of supplies to be used later during wars. Buys a very small amount of all types of party supplies." />
+    <string id="VmWFHoYw" text="Sufficient Supplies" />
+    <string id="4NTpE1Pt" text="Stock a small amount of supplies to be used later during wars. Buys a small amount of all types of party supplies." />
+    <string id="DGhLNj66" text="Good Supplies" />
+    <string id="SyjW0CfG" text="Stock a good amount of supplies to be used later during wars. Buys a good amount of all types of party supplies." />
+    <string id="hfi3Dviw" text="Excellent Supplies" />
+    <string id="SS4K6gtP" text="Stock an excellent amount of supplies to be used later during wars. Buys an excellent amount of all types of party supplies." />
+    <string id="Wojb1tFw" text="Shoddy Court" />
+    <string id="pZyTEB62" text="Provide bare minimum accomodations for guests.Increases guest capacity by 1." />
+    <string id="sMGjTVpS" text="Modest Court" />
+    <string id="hv34pxAv" text="Noble Court" />
+    <string id="FU9MdDPz" text="Regal Court" />
+    <string id="awPo7QsQ" text="Minimal Servants" />
+    <string id="VCbuZK6B" text="Hire a small amount of servants to operate mundane tasks such as cleaning or cooking within the court." />
+    <string id="8R4F0LH1" text="Sufficient Servants" />
+    <string id="ZDOuCuYp" text="Hire a sufficient amount of servants to operate mundane tasks such as cleaning or cooking within the court. Increases feast satisfaction. Decreases defense against schemes." />
+    <string id="6SJgGAVR" text="Ample Servants" />
+    <string id="DnjmWQV6" text="Hire a good amount of servants to operate mundane tasks such as cleaning or cooking within the court. Further increases feast satisfaction and decreases defense against schemes." />
+    <string id="Y8OMJJ8P" text="Plentiful Servants" />
+    <string id="pxxHAa57" text="Minimal Security" />
+    <string id="6oCNmffJ" text="Sufficient Security" />
+    <string id="sRWDgNgy" text="Good Security" />
+    <string id="U41twbPF" text="Excellent Security" />
+    <string id="q6cxgOou" text="Commander" />
+    <string id="Z87jdO67" text="Party supplies build up at a {EFFECT1}% slower rate.\nInfluence gain reduced by {EFFECT2}%, other than battle reward" />
+    <string id="DRPfGwoK" text="No available guests of this type and culture." />
+    <string id="2GMvmKEb" text="The {KINGDOM} has chosen {NAME} as their new council member." />
+    <string id="R9xGiMLf" text="Private Armies" />
+    <string id="Y6yoi6pe" text="Every relevant head of a House, not accounting for army privilege policies, is allowed to form their own army. As such, they are fully" />
+    <string id="VYAP7Arh" text="Hordes" />
+    <string id="Qs1qPddP" text="Legions" />
+    <string id="3fSea0Y1" text="Appointed Council" />
+    <string id="FuGK7Am5" text="The realm's high council is appointed by the ruler. They are free to chose their councillors as they please." />
+    <string id="bsaOK0eQ" text="Ruler's privy council can be altered at will\nAll non-ruling clans have influence cap increased by 5%" />
+    <string id="SP01UfQ4" text="Elected Council" />
+    <string id="diuCoLDf" text="The realm's high council is elected by the Peers. The election result will determine the next occupant of the position in question." />
+    <string id="9KKN4gkP" text="Ruler's privy council can only be altered by elections\nRuler's influence cap is increased by 8%" />
   </strings>
 </base>

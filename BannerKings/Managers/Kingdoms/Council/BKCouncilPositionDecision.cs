@@ -174,7 +174,7 @@ namespace BannerKings.Managers.Kingdoms.Council
             bool isShortVersion = false)
         {
             var candidate = ((CouncilPositionDecisionOutcome) chosenOutcome).Candidate;
-            var textObject = new TextObject("{=!}The {KINGDOM} has chosen {NAME} as their new council member.")
+            var textObject = new TextObject("{=2GMvmKEb}The {KINGDOM} has chosen {NAME} as their new council member.")
                 .SetTextVariable("KINGDOM", Kingdom.Name)
                 .SetTextVariable("NAME", candidate.Name);
             return textObject;

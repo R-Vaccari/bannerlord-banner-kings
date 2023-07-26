@@ -14,7 +14,7 @@ namespace BannerKings.UI.Court
             Expense = expense;
             StringItem = expense.Name.ToString();
             CanBeSelected = isAvailable;
-            Hint = new HintViewModel(new TextObject("{=!}{DESCRIPTION}\n\nGrace: {GRACE}\nAdm. Costs: {COSTS}\nGoods requirements:\n{GOODS}")
+            Hint = new HintViewModel(new TextObject("{=G2jQF2Ne}{DESCRIPTION}\n\nGrace: {GRACE}\nAdm. Costs: {COSTS}\nGoods requirements:\n{GOODS}")
                 .SetTextVariable("DESCRIPTION", expense.Description)
                 .SetTextVariable("GRACE", expense.Grace)
                 .SetTextVariable("COSTS", (expense.AdministrativeCost * 100f).ToString("0.00") + '%')

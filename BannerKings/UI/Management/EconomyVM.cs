@@ -390,11 +390,11 @@ namespace BannerKings.UI.Management
             if (settlement.Town != null)
             {
                 var taxes = BannerKingsConfig.Instance.TaxModel.CalculateTownTax(settlement.Town, true);
-                RevenueInfo.Add(new InformationElement(new TextObject("{=!}Tax Revenues:").ToString(),
+                RevenueInfo.Add(new InformationElement(new TextObject("{=E61zQNSt}Tax Revenues:").ToString(),
                     MBRandom.RoundRandomized(taxes.ResultNumber).ToString(),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
-                            new TextObject("{=!}Taxes levied on local population, and other local expenses and revenues. To maximize your revenues, increase local stability and reduce administrative costs."))
+                            new TextObject("{=yZhrtORs}Taxes levied on local population, and other local expenses and revenues. To maximize your revenues, increase local stability and reduce administrative costs."))
                         .SetTextVariable("EXPLANATIONS", taxes.GetExplanations())
                         .ToString()));
             }

@@ -61,13 +61,13 @@ namespace BannerKings.UI.CampaignStart
             MBTextManager.SetTextVariable("LEFT", new TextObject("{=eUet83h3}Starting Piety").ToString());
             list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), Piety, 0));
 
-            MBTextManager.SetTextVariable("LEFT", new TextObject("{=!}Natural Culture").ToString());
+            MBTextManager.SetTextVariable("LEFT", new TextObject("{=OcaF5fMN}Natural Culture").ToString());
             list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), Religion.MainCulture.Name.ToString(), 0));
 
             if (Religion.FavoredCultures.Count > 1)
             {
                 UIHelper.TooltipAddEmptyLine(list);
-                list.Add(new TooltipProperty(new TextObject("{=!}Accepted Cultures").ToString(), " ", 0));
+                list.Add(new TooltipProperty(new TextObject("{=MTBhu6a0}Accepted Cultures").ToString(), " ", 0));
                 UIHelper.TooltipAddSeperator(list);
 
                 foreach (var culture in Religion.FavoredCultures)
@@ -94,7 +94,7 @@ namespace BannerKings.UI.CampaignStart
             if (kingdomCount == 0)
             {
                 list.Add(new TooltipProperty("", 
-                    new TextObject("{=!}Not an official religion in any kingdom").ToString(), 0));
+                    new TextObject("{=28PPXPOL}Not an official religion in any kingdom").ToString(), 0));
             }
 
             return list;

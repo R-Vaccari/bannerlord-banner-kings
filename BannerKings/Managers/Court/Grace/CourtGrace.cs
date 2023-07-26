@@ -90,7 +90,7 @@ namespace BannerKings.Managers.Court.Grace
             {
                 TextObject reason = null;
                 if (data.Clan == Clan.PlayerClan) 
-                    reason = new TextObject("{=!}Your court has spent {GOLD}{GOLD_ICON} buying {ITEMS} items for its good requirements.");
+                    reason = new TextObject("{=LFVNq2Uz}Your court has spent {GOLD}{GOLD_ICON} buying {ITEMS} items for its good requirements.");
 
                 Town market = data.Location;
                 if (!market.IsTown)
@@ -138,7 +138,7 @@ namespace BannerKings.Managers.Court.Grace
                 if (data.Clan == Clan.PlayerClan)
                 {
                     InformationManager.DisplayMessage(new InformationMessage(
-                        new TextObject("{=!}Your court has consumed {COUNT} out of {DESIRED} required goods, changing your grace by {GRACE}.")
+                        new TextObject("{=6PxQfUrN}Your court has consumed {COUNT} out of {DESIRED} required goods, changing your grace by {GRACE}.")
                         .SetTextVariable("GRACE", graceChange.ToString("0.0"))
                         .SetTextVariable("COUNT", totalConsumed)
                         .SetTextVariable("DESIRED", totalItems)

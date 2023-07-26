@@ -32,9 +32,9 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty] public string ArmorText => new TextObject("{=h40bm0cG}Craft").ToString();
-        [DataSourceProperty] public string MissingPolicyText => new TextObject("{=!}Missing construction policy!\nEdit your workforce policy under Demesne Management, Demesne tab.").ToString();
-        [DataSourceProperty] public string MissingMaterialsText => new TextObject("{=!}Missing materials!\nBring materials into the Stash or let caravans bring them naturally.").ToString();
-        [DataSourceProperty] public string MissingGovernorText => new TextObject("{=!}Missing Governor!\nA governor will buy necessary materials for projects without your intervention.").ToString();
+        [DataSourceProperty] public string MissingPolicyText => new TextObject("{=jg72kgKe}Missing construction policy!\nEdit your workforce policy under Demesne Management, Demesne tab.").ToString();
+        [DataSourceProperty] public string MissingMaterialsText => new TextObject("{=mcyKmOiC}Missing materials!\nBring materials into the Stash or let caravans bring them naturally.").ToString();
+        [DataSourceProperty] public string MissingGovernorText => new TextObject("{=CO7bKu1R}Missing Governor!\nA governor will buy necessary materials for projects without your intervention.").ToString();
 
         public override void OnRefresh()
         {
