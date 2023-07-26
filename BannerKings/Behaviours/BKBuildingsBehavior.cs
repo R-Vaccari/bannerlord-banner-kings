@@ -1,4 +1,4 @@
-﻿using BannerKings.Extensions;
+using BannerKings.Extensions;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
@@ -167,7 +167,7 @@ namespace BannerKings.Behaviours
                 town.OwnerClan.Leader.ChangeHeroGold(-toDeduct);
                 if (town.OwnerClan == Clan.PlayerClan && toDeduct > 0)
                 {
-                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}The {PROJECT} project at {TOWN} has finished and the remaining materials costed {DENARS}{GOLD_ICON}.")
+                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=G3WXaS0w}The {PROJECT} project at {TOWN} has finished and the remaining materials costed {DENARS}{GOLD_ICON}.")
                         .SetTextVariable("PROJECT", building.BuildingType.Name)
                         .SetTextVariable("TOWN", town.Name)
                         .SetTextVariable("DENARS", toDeduct.ToString())
@@ -181,7 +181,7 @@ namespace BannerKings.Behaviours
                     ChangeClanInfluenceAction.Apply(town.OwnerClan, -influence);
                     if (town.OwnerClan == Clan.PlayerClan && influence > 0f)
                     {
-                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}You did not have all the denars to pay for materials, and thus lost {INFLUENCE} influence.")
+                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=R3MCYNKK}You did not have all the denars to pay for materials, and thus lost {INFLUENCE} influence.")
                            .SetTextVariable("INFLUENCE", influence.ToString("0.00"))
                            .ToString(),
                            Color.UIntToColorString(TextHelper.COLOR_LIGHT_RED)));

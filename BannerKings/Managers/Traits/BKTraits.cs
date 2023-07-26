@@ -114,7 +114,7 @@ namespace BannerKings.Managers.Traits
                 2);
 
             Zealous.Initialize(new TextObject("{=HLML3UUw}Zealotry"),
-                new TextObject("{=!}Zealotry is one's fervor for their faith. Zealots will favor their faith's teachings over the opinions of others, and justify their actions through faith. Zealous persons are seen are more pious within their faith."),
+                new TextObject("{=e18wpkZB}Zealotry is one's fervor for their faith. Zealots will favor their faith's teachings over the opinions of others, and justify their actions through faith. Zealous persons are seen are more pious within their faith."),
                 true,
                 -2,
                 2);

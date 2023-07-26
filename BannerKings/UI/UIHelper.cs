@@ -114,14 +114,14 @@ namespace BannerKings.UI
                 TooltipProperty.TooltipPropertyFlags.MultiLine));
 
             TooltipAddEmptyLine(properties);
-            properties.Add(new TooltipProperty(new TextObject("{=!}Availability").ToString(), " ", 0));
+            properties.Add(new TooltipProperty(new TextObject("{=zyG8TxaZ}Availability").ToString(), " ", 0));
             TooltipAddSeperator(properties);
 
-            properties.Add(new TooltipProperty(new TextObject("{=!}Stash").ToString(),
+            properties.Add(new TooltipProperty(new TextObject("{=iWcM5S0d}Stash").ToString(),
                 material.StashAmount.ToString(),
                 0));
 
-            properties.Add(new TooltipProperty(new TextObject("{=!}Market").ToString(),
+            properties.Add(new TooltipProperty(new TextObject("{=QVOpQQ9V}Market").ToString(),
                 material.MarketAmount.ToString(),
                 0));
 
@@ -134,7 +134,7 @@ namespace BannerKings.UI
 
             if (source != null)
             {
-                properties.Add(new TooltipProperty(new TextObject("{=!}Closest source").ToString(),
+                properties.Add(new TooltipProperty(new TextObject("{=DKd1O8fp}Closest source").ToString(),
                                source.Name.ToString(),
                                0));
             }
@@ -529,25 +529,25 @@ namespace BannerKings.UI
         public static void AddMoraleSuppliesHint(ref List<TooltipProperty> list, PartySupplies supplies)
         {
             TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=!}Supplies").ToString(), " ", 0));
+            list.Add(new TooltipProperty(new TextObject("{=SaWHeTiw}Supplies").ToString(), " ", 0));
             TooltipAddSeperator(list);
             list.Add(new TooltipProperty(string.Empty,
-              new TextObject("{=!}Supplies such as alcohol and wood for firewood are required to preserve your retinue in good mental condition.").ToString(),
+              new TextObject("{=SaWHeTiw}Supplies such as alcohol and wood for firewood are required to preserve your retinue in good mental condition.").ToString(),
               0,
               false,
               TooltipProperty.TooltipPropertyFlags.MultiLine));
 
             list.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
-            list.Add(new TooltipProperty(new TextObject("{=!}Wood:").ToString(), 
+            list.Add(new TooltipProperty(new TextObject("{=ex269b0j}Wood:").ToString(), 
                 MBRandom.RoundRandomized(supplies.WoodNeed).ToString(), 
                 0));
-            list.Add(new TooltipProperty(new TextObject("{=!}Textiles:").ToString(),
+            list.Add(new TooltipProperty(new TextObject("{=yw4KTjMj}Textiles:").ToString(),
                 MBRandom.RoundRandomized(supplies.ClothNeed).ToString(),
                 0));
-            list.Add(new TooltipProperty(new TextObject("{=!}Alcohol:").ToString(),
+            list.Add(new TooltipProperty(new TextObject("{=1y4e5t97}Alcohol:").ToString(),
                MBRandom.RoundRandomized(supplies.AlcoholNeed).ToString(),
                0));
-            list.Add(new TooltipProperty(new TextObject("{=!}Animal Products:").ToString(),
+            list.Add(new TooltipProperty(new TextObject("{=xcEes2qY}Animal Products:").ToString(),
                 MBRandom.RoundRandomized(supplies.AnimalProductsNeed).ToString(),
                 0));
         }
@@ -555,41 +555,41 @@ namespace BannerKings.UI
         public static void AddWageSuppliesHint(ref List<TooltipProperty> list, PartySupplies supplies)
         {
             TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=!}Daily Supplies").ToString(), " ", 0));
+            list.Add(new TooltipProperty(new TextObject("{=qBXbGjp1}Daily Supplies").ToString(), " ", 0));
             TooltipAddSeperator(list);
             list.Add(new TooltipProperty(string.Empty,
-              new TextObject("{=!}Supplies are required to preserve your retinue in maximum efficiency. Your quartermaster is able to handle supplies if you instruct them directly.").ToString(),
+              new TextObject("{=SaWHeTiw}Supplies are required to preserve your retinue in maximum efficiency. Your quartermaster is able to handle supplies if you instruct them directly.").ToString(),
               0,
               false,
               TooltipProperty.TooltipPropertyFlags.MultiLine));
 
             list.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
 
-            list.Add(new TooltipProperty(new TextObject("{=!}Weapons:").ToString(),
+            list.Add(new TooltipProperty(new TextObject("{=j8R1v8fv}Weapons:").ToString(),
                 supplies.GetWeaponsCurrentNeed().ResultNumber.ToString("0.00"),
                0));
-            list.Add(new TooltipProperty(new TextObject("{=!}Ammunition:").ToString(),
+            list.Add(new TooltipProperty(new TextObject("{=x4KhXV25}Ammunition:").ToString(),
                 supplies.GetArrowsCurrentNeed().ResultNumber.ToString("0.00"),
                 0));
-            list.Add(new TooltipProperty(new TextObject("{=!}Mounts:").ToString(),
+            list.Add(new TooltipProperty(new TextObject("{=GgdSMucS}Mounts:").ToString(),
                 supplies.GetMountsCurrentNeed().ResultNumber.ToString("0.00"),
               0));
-            list.Add(new TooltipProperty(new TextObject("{=!}Shields:").ToString(),
+            list.Add(new TooltipProperty(new TextObject("{=JC5JZRjY}Shields:").ToString(),
                 supplies.GetShieldsCurrentNeed().ResultNumber.ToString("0.00"),
               0));
-            list.Add(new TooltipProperty(new TextObject("{=!}Alcohol:").ToString(),
+            list.Add(new TooltipProperty(new TextObject("{=1y4e5t97}Alcohol:").ToString(),
                 supplies.GetAlcoholCurrentNeed().ResultNumber.ToString("0.00"),
                0));
-            list.Add(new TooltipProperty(new TextObject("{=!}Animal Products:").ToString(),
+            list.Add(new TooltipProperty(new TextObject("{=xcEes2qY}Animal Products:").ToString(),
                 supplies.GetAnimalProductsCurrentNeed().ResultNumber.ToString("0.00"),
                 0));
-            list.Add(new TooltipProperty(new TextObject("{=!}Wood:").ToString(),
+            list.Add(new TooltipProperty(new TextObject("{=ex269b0j}Wood:").ToString(),
                 supplies.GetWoodCurrentNeed().ResultNumber.ToString("0.00"),
               0));
-            list.Add(new TooltipProperty(new TextObject("{=!}Textiles:").ToString(),
+            list.Add(new TooltipProperty(new TextObject("{=yw4KTjMj}Textiles:").ToString(),
                 supplies.GetTextileCurrentNeed().ResultNumber.ToString("0.00"),
                 0));
-            list.Add(new TooltipProperty(new TextObject("{=!}Tools:").ToString(),
+            list.Add(new TooltipProperty(new TextObject("{=9C4tmyos}Tools:").ToString(),
                 supplies.GetToolsCurrentNeed().ResultNumber.ToString("0.00"),
                 0));
         }

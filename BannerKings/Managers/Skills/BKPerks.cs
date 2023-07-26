@@ -269,36 +269,36 @@ namespace BannerKings.Managers.Skills
         {
             #region Commander
 
-            CommanderLogistician.Initialize("{=!}Logistician",
+            CommanderLogistician.Initialize("{=dD5S3Lj8}Logistician",
                 null,
                 80,
                 null,
-                "{=!}Duration of disorganized state reduced by 10%.",
+                "{=MaAXE1ZC}Duration of disorganized state reduced by 10%.",
                 SkillEffect.PerkRole.PartyLeader, 0.15f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Party size increased by 5.",
+                "{=zL9p3Rsk}Party size increased by 5.",
                 SkillEffect.PerkRole.PartyLeader, 5,
                 SkillEffect.EffectIncrementType.Add);
 
-            CommanderInspirer.Initialize("{=!}Inspirer",
+            CommanderInspirer.Initialize("{=87ounFBE}Inspirer",
                 null,
                 160,
                 null,
-                "{=!}As army leader, army cohesion loss is 12% slower.",
+                "{=5bjivtCf}As army leader, army cohesion loss is 12% slower.",
                 SkillEffect.PerkRole.PartyLeader, -0.08f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Cultural difference morale impact reduced by 50%.",
+                "{=9z8WsGPr}Cultural difference morale impact reduced by 50%.",
                 SkillEffect.PerkRole.PartyLeader, 0.15f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            CommanderWarband.Initialize("{=!}Warband",
+            CommanderWarband.Initialize("{=3N5dPLiM}Warband",
                 null,
                 240,
                 null,
                 "{=dPo5goLo}{VALUE}% influence gain from winning battles.",
                 SkillEffect.PerkRole.PartyLeader, 0.25f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Party size increased by 8%.",
+                "{=WUT6h0VG}Party size increased by 8%.",
                 SkillEffect.PerkRole.PartyLeader, 0.08f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
@@ -306,36 +306,36 @@ namespace BannerKings.Managers.Skills
 
             #region Courtier
 
-            CourtierAppointee.Initialize("{=!}Appointee", 
+            CourtierAppointee.Initialize("{=Y5boR1SF}Appointee", 
                 null,
                 80,
                 null,
-                "{=!}You are 10% more competent at council positions.",
+                "{=JepDTW31}You are 10% more competent at council positions.",
                 SkillEffect.PerkRole.Personal, 0.1f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Your position yields 15% more influence.",
+                "{=s61aKi0v}Your position yields 15% more influence.",
                 SkillEffect.PerkRole.Personal, 0.15f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            CourtierCompanion.Initialize("{=!}Appointee",
+            CourtierCompanion.Initialize("{=Y5boR1SF}Appointee",
                 null,
                 160,
                 null,
-                "{=!}You are 10% more likely to be accepted for a council position.",
+                "{=2XMaaF8K}You are 10% more likely to be accepted for a council position.",
                 SkillEffect.PerkRole.Personal, 0.1f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Your position yields 15% more influence.",
+                "{=s61aKi0v}Your position yields 15% more influence.",
                 SkillEffect.PerkRole.Personal, 0.15f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            CourtierRoyalCouncillor.Initialize("{=!}Appointee",
+            CourtierRoyalCouncillor.Initialize("{=Y5boR1SF}Appointee",
                 null,
                 240,
                 null,
-                "{=!}You are 10% more likely to be accepted for a council position.",
+                "{=2XMaaF8K}You are 10% more likely to be accepted for a council position.",
                 SkillEffect.PerkRole.Personal, 0.1f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Your position yields 15% more influence.",
+                "{=s61aKi0v}Your position yields 15% more influence.",
                 SkillEffect.PerkRole.Personal, 0.15f,
                 SkillEffect.EffectIncrementType.AddFactor);
 

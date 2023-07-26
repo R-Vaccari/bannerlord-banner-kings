@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Court;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +21,7 @@ namespace BannerKings.Behaviours.Schemes
 
         public override void Initialize()
         {
-            Assassination.Initialize(new TextObject("{=!}Assassination"),
+            Assassination.Initialize(new TextObject("{=TcQMC30r}Assassination"),
                 new TextObject(),
                 null,
                 DefaultSkills.Roguery,

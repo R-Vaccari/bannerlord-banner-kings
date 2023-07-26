@@ -157,7 +157,7 @@ namespace BannerKings.Behaviours
         private void AddDialog(CampaignGameStarter starter)
         {
             starter.AddPlayerLine("companion_grant_knighthood", "companion_role", "companion_knighthood_question",
-                "{=!}I would like thee to serve as my {KNIGHT_TEXT}.",
+                "{=tioEwnbc}I would like thee to serve as my {KNIGHT_TEXT}.",
                 () =>
                 {
                     var companion = Hero.OneToOneConversationHero;
@@ -233,7 +233,7 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("companion_knighthood_finish_fief", "companion_knighthood_finish_fief",
                 "companion_knighthood_finished",
-                "{=!}It is decided then. Let it be know thou art a {KNIGHT} of the {PLAYER_CLAN}.",
+                "{=zOGWqeBx}It is decided then. Let it be know thou art a {KNIGHT} of the {PLAYER_CLAN}.",
                 () =>
                 {
                     MBTextManager.SetTextVariable("KNIGHT", Utils.TextHelper.GetKnightTitle(Clan.PlayerClan.Culture,
@@ -252,7 +252,7 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("companion_knighthood_finish_estate", "companion_knighthood_finish_estate",
                 "companion_knighthood_finished",
-                "{=!}It is decided then. Let it be know thou art a {KNIGHT} of the {PLAYER_CLAN}.",
+                "{=zOGWqeBx}It is decided then. Let it be know thou art a {KNIGHT} of the {PLAYER_CLAN}.",
                 () =>
                 {
                     MBTextManager.SetTextVariable("KNIGHT", Utils.TextHelper.GetKnightTitle(Clan.PlayerClan.Culture,
@@ -288,7 +288,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("companion_grant_additional_property",
                 "companion_role",
                 "companion_grant_additional_property_response",
-                "{=!}I aim to grant thee an additional property.",
+                "{=gNRi219n}I aim to grant thee an additional property.",
                 IsPlayerKnight,
                 null,
                 100);

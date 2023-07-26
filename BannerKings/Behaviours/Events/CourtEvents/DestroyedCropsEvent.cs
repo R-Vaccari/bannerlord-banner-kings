@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Utils.Extensions;
 using System;

@@ -136,7 +136,7 @@ namespace BannerKings.Models.Vanilla
                 Hero governor = settlement.Town.Governor;
                 if (governor != null && governor.IsArtisan)
                 {
-                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Crafting) * 0.08f, new TextObject("{=!}Artisan Governor"));
+                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Crafting) * 0.08f, new TextObject("{=cbL60ObC}Artisan Governor"));
                 }
             }
 
@@ -178,7 +178,7 @@ namespace BannerKings.Models.Vanilla
                 Hero governor = settlement.Town.Governor;
                 if (governor != null && governor.IsArtisan)
                 {
-                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Crafting) * 0.04f, new TextObject("{=!}Artisan Governor"));
+                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Crafting) * 0.04f, new TextObject("{=cbL60ObC}Artisan Governor"));
                 }
             }
            
@@ -256,7 +256,7 @@ namespace BannerKings.Models.Vanilla
                 Hero governor = settlement.Town.Governor;
                 if (governor != null && governor.IsMerchant)
                 {
-                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Trade) * 0.1f, new TextObject("{=!}Merchant Governor"));
+                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Trade) * 0.1f, new TextObject("{=mpuvSCJU}Merchant Governor"));
                 }
             }
 

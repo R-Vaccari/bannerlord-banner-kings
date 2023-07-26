@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Kingdoms.Council;
+using BannerKings.Managers.Kingdoms.Council;
 using BannerKings.Managers.Titles.Laws;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -45,7 +45,7 @@ namespace BannerKings.Managers.Court
                                 {
                                     if (Council.Clan == Clan.PlayerClan)
                                     {
-                                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}A council election is already in place.").ToString(),
+                                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=Uw3CnqA5}A council election is already in place.").ToString(),
                                             Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
                                     }
                                 }
@@ -60,7 +60,7 @@ namespace BannerKings.Managers.Court
                                         if (Council.Clan == Clan.PlayerClan)
                                         {
                                             InformationManager.DisplayMessage(new InformationMessage(
-                                                new TextObject("{=!}The Peers of the realm will now vote for the {POSITION} position, with {HERO} as the main suggestion.")
+                                                new TextObject("{=qjyKwseT}The Peers of the realm will now vote for the {POSITION} position, with {HERO} as the main suggestion.")
                                                 .SetTextVariable("POSITION", TargetPosition.GetCulturalName())
                                                 .SetTextVariable("HERO", ActionTaker.Name)
                                                 .ToString(),
@@ -75,7 +75,7 @@ namespace BannerKings.Managers.Court
                                         }
                                         else if (Council.Clan == Clan.PlayerClan)
                                         {
-                                            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}Not enough candidates for this position.").ToString(),
+                                            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=iSQvpP0c}Not enough candidates for this position.").ToString(),
                                                                                         Color.UIntToColorString(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
                                         }  
                                     }

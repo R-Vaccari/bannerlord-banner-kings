@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -183,7 +183,7 @@ namespace BannerKings.Behaviours.Retainer
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
             starter.AddWaitGameMenu("bk_retinue_wait",
-                "{=!}{RETINUE_PARTY_NAME}\nRetinue size: {SIZE}/{MAX}\nMorale: {MORALE}\nFood: {FOOD}\nSurgeon: {SURGEON}\nQuartermaster: {QUARTERMASTER}\nScout: {SCOUT}\nEngineer: {ENGINEER}\n",
+                "{=Pz1Njwo9}{RETINUE_PARTY_NAME}\nRetinue size: {SIZE}/{MAX}\nMorale: {MORALE}\nFood: {FOOD}\nSurgeon: {SURGEON}\nQuartermaster: {QUARTERMASTER}\nScout: {SCOUT}\nEngineer: {ENGINEER}\n",
                 (MenuCallbackArgs args) =>
                 {
                     UpdateRetinueMenu();
@@ -201,7 +201,7 @@ namespace BannerKings.Behaviours.Retainer
                 TaleWorlds.CampaignSystem.Overlay.GameOverlays.MenuOverlayType.Encounter);
 
             starter.AddGameMenu("bk_retinue_contract",
-                "{=!}Retainer service for {CONTRACTOR}\nContract type: {TYPE}\nRole: {ROLE}\nWage: {WAGE}{GOLD_ICON}/day\nLeaves: {LEAVES}(+1/season)",
+                "{=B0FvvUGf}Retainer service for {CONTRACTOR}\nContract type: {TYPE}\nRole: {ROLE}\nWage: {WAGE}{GOLD_ICON}/day\nLeaves: {LEAVES}(+1/season)",
                 (MenuCallbackArgs args) =>
                 {
                     MBTextManager.SetTextVariable("CONTRACTOR", contract.Contractor.Name);
@@ -221,7 +221,7 @@ namespace BannerKings.Behaviours.Retainer
 
             starter.AddGameMenuOption("bk_retinue_wait",
                 "bk_retinue_wait_contract",
-                new TextObject("{=!}Review Contract").ToString(),
+                new TextObject("{=Pso1RM9e}Review Contract").ToString(),
                 (MenuCallbackArgs args) =>
                 {
                     args.optionLeaveType = GameMenuOption.LeaveType.Submenu;
@@ -232,7 +232,7 @@ namespace BannerKings.Behaviours.Retainer
 
             starter.AddGameMenuOption("bk_retinue_wait",
                 "bk_retinue_wait_escape",
-                new TextObject("{=!}Take a leave").ToString(),
+                new TextObject("{=NgTzQHnJ}Take a leave").ToString(),
                 (MenuCallbackArgs args) =>
                 {
                     args.optionLeaveType = GameMenuOption.LeaveType.Leave;
@@ -246,7 +246,7 @@ namespace BannerKings.Behaviours.Retainer
 
             starter.AddGameMenuOption("bk_retinue_wait",
                 "bk_retinue_wait_escape",
-                new TextObject("{=!}Flee your duty").ToString(),
+                new TextObject("{=BPOGNynF}Flee your duty").ToString(),
                 (MenuCallbackArgs args) =>
                 {
                     args.optionLeaveType = GameMenuOption.LeaveType.LeaveTroopsAndFlee;
@@ -263,7 +263,7 @@ namespace BannerKings.Behaviours.Retainer
             starter.AddPlayerLine("bk_retainer_start", 
                 "lord_talk_speak_diplomacy_2",
                 "bk_retainer_reason",
-                "{=!}I would like to join your service, {?CONVERSATION_NPC.GENDER}my lady{?}my lord{\\?}.", 
+                "{=a48kCRRf}I would like to join your service, {?CONVERSATION_NPC.GENDER}my lady{?}my lord{\\?}.", 
                 () => CharacterObject.OneToOneConversationCharacter.HeroObject != null && 
                 CharacterObject.OneToOneConversationCharacter.HeroObject.PartyBelongedTo != null && 
                 CharacterObject.OneToOneConversationCharacter.HeroObject.PartyBelongedTo.LeaderHero == CharacterObject.OneToOneConversationCharacter.HeroObject && 
@@ -275,7 +275,7 @@ namespace BannerKings.Behaviours.Retainer
             starter.AddDialogLine("bk_retainer_reason",
                 "bk_retainer_reason",
                 "bk_retainer_reason_response",
-                "{=!}And why would I take thee, {PLAYER.NAME}, under my banner?",
+                "{=wPpWea6C}And why would I take thee, {PLAYER.NAME}, under my banner?",
                 () => true,
                 delegate ()
                 {
@@ -286,7 +286,7 @@ namespace BannerKings.Behaviours.Retainer
             starter.AddPlayerLine("bk_retainer_reason_response1",
                 "bk_retainer_reason_response",
                 "bk_retainer_accepted",
-                "{=!}I am an expert fighter, my blade will be yours to command.",
+                "{=0X9Cdyt3}I am an expert fighter, my blade will be yours to command.",
                 () => true,
                 null,
                 100,
@@ -297,14 +297,14 @@ namespace BannerKings.Behaviours.Retainer
                     main.GetSkillValue(DefaultSkills.TwoHanded) >= 75 ||
                     main.GetSkillValue(DefaultSkills.Polearm) >= 75;
 
-                    explanation = new TextObject("{=!}You need at least 75 levels in any melee skill.");
+                    explanation = new TextObject("{=N6ugF9Ta}You need at least 75 levels in any melee skill.");
                     return skill;
                 });
 
             starter.AddPlayerLine("bk_retainer_reason_response2",
                 "bk_retainer_reason_response",
                 "bk_retainer_accepted",
-                "{=!}My eyes are sharp and my aim is true.",
+                "{=FibXNYb6}My eyes are sharp and my aim is true.",
                 () => true,
                 null,
                 100,
@@ -315,28 +315,28 @@ namespace BannerKings.Behaviours.Retainer
                     main.GetSkillValue(DefaultSkills.Crossbow) >= 75 ||
                     main.GetSkillValue(DefaultSkills.Throwing) >= 75;
 
-                    explanation = new TextObject("{=!}You need at least 75 levels in any ranged skill.");
+                    explanation = new TextObject("{=QxCBcQok}You need at least 75 levels in any ranged skill.");
                     return skill;
                 });
 
             starter.AddPlayerLine("bk_retainer_reason_response3",
                 "bk_retainer_reason_response",
                 "bk_retainer_accepted",
-                "{=!}My loyalty and word are not fickle. I give you my unwavering alliegance.",
+                "{=SMRzyknm}My loyalty and word are not fickle. I give you my unwavering alliegance.",
                 () => true,
                 null,
                 100,
                 delegate (out TextObject explanation)
                 {
                     Hero main = Hero.MainHero;
-                    explanation = new TextObject("{=!}You must be known for a positive sense of Honor.");
+                    explanation = new TextObject("{=LEYFhuax}You must be known for a positive sense of Honor.");
                     return main.GetTraitLevel(DefaultTraits.Honor) > 0;
                 });
 
             starter.AddPlayerLine("bk_retainer_reason_response4",
                 "bk_retainer_reason_response",
                 "bk_retainer_accepted",
-                "{=!}I am known for good service in the {REALM}.",
+                "{=6PR69j0c}I am known for good service in the {REALM}.",
                 () => true,
                 null,
                 100,
@@ -345,7 +345,7 @@ namespace BannerKings.Behaviours.Retainer
                     IFaction faction = Hero.OneToOneConversationHero.MapFaction;
                     MBTextManager.SetTextVariable("REALM", faction.Name);
                     Hero main = Hero.MainHero;
-                    explanation = new TextObject("{=!}You must have a friendly notable in the {REALM}.")
+                    explanation = new TextObject("{=5Dwqvsa7}You must have a friendly notable in the {REALM}.")
                     .SetTextVariable("REALM", faction.Name);
                     return faction.Settlements.Any(x => x.Notables.Any(x => x.IsFriend(Hero.MainHero)));
                 });
@@ -353,14 +353,14 @@ namespace BannerKings.Behaviours.Retainer
             starter.AddDialogLine("bk_retainer_accepted",
                 "bk_retainer_accepted",
                 "bk_retainer_contract",
-                "{=!}Very well, {PLAYER.NAME}. And how dost thou wish to serve me? Know that any men under your command will go their own way.", 
+                "{=SJO4tdme}Very well, {PLAYER.NAME}. And how dost thou wish to serve me? Know that any men under your command will go their own way.", 
                 () => true, 
                 null);
 
             starter.AddPlayerLine("bk_retainer_contract",
                 "bk_retainer_contract",
                 "bk_retainer_troop_options",
-                "{=!}As your servant.",
+                "{=5zMJAWZf}As your servant.",
                 () => true,
                 () => 
                 {
@@ -371,28 +371,28 @@ namespace BannerKings.Behaviours.Retainer
                 delegate (out TextObject explanation)
                 {
                     Hero main = Hero.MainHero;
-                    explanation = new TextObject("{=!}As a servant, you serve as a troop. Your equipment and wage are on par with standard troops, and you may be promoted with time and good service.");
+                    explanation = new TextObject("{=XQFO8smt}As a servant, you serve as a troop. Your equipment and wage are on par with standard troops, and you may be promoted with time and good service.");
                     return AdequateTroopOptions.Count > 0;
                 });
 
             starter.AddPlayerLine("bk_retainer_contract",
                 "bk_retainer_contract",
                 "bk_retainer_finish",
-                "{=!}As a freelancer.",
+                "{=Vy4vy61d}As a freelancer.",
                 () => true,
                 () => freelancer = true,
                 100,
                 delegate (out TextObject explanation)
                 {
                     Hero main = Hero.MainHero;
-                    explanation = new TextObject("{=!}As a freelancer, you serve as a companion. Your wage is determined by your qualifications and your equipment is your responsibility.");
+                    explanation = new TextObject("{=oayYgfEc}As a freelancer, you serve as a companion. Your wage is determined by your qualifications and your equipment is your responsibility.");
                     return true;
                 });
 
             starter.AddDialogLine("bk_retainer_troop_options",
                 "bk_retainer_troop_options",
                 "bk_retainer_troop_options_select",
-                "{=!}What position?",
+                "{=nwALXrcj}What position?",
                 () =>
                 {
                     return true;
@@ -402,7 +402,7 @@ namespace BannerKings.Behaviours.Retainer
             starter.AddRepeatablePlayerLine("bk_retainer_troop_options_select",
                 "bk_retainer_troop_options_select",
                 "bk_retainer_finish",
-                "{=!}{TROOP} - Level: ({LEVEL}), Upgrades: ({UPGRADES})",
+                "{=pQTfmN8k}{TROOP} - Level: ({LEVEL}), Upgrades: ({UPGRADES})",
                 "A different option",
                 "bk_retainer_troop_options",
                 delegate
@@ -421,29 +421,29 @@ namespace BannerKings.Behaviours.Retainer
             starter.AddDialogLine("bk_retainer_finish",
                 "bk_retainer_finish",
                 "bk_retainer_proposal",
-                "{=!}Very well, {PLAYER.NAME}. {CONTRACT_TEXT} {TIME_TEXT} {FIELTY_TEXT}",
+                "{=gei4i1r9}Very well, {PLAYER.NAME}. {CONTRACT_TEXT} {TIME_TEXT} {FIELTY_TEXT}",
                 () => 
                 {
                     TextObject text;
                     contract = new Contract(Hero.OneToOneConversationHero, freelancer, template);
                     if (freelancer)
                     {
-                        text = new TextObject("{=!}As a freelancer, I offer thee {HIRING}{GOLD_ICON} immediatly for thy service, as well as {WAGE}{GOLD_ICON} on a daily basis, adjusted regularly and accordingly to thy skills.")
+                        text = new TextObject("{=8tejhA91}As a freelancer, I offer thee {HIRING}{GOLD_ICON} immediatly for thy service, as well as {WAGE}{GOLD_ICON} on a daily basis, adjusted regularly and accordingly to thy skills.")
                         .SetTextVariable("WAGE", contract.Wage)
                         .SetTextVariable("HIRING", contract.HiringCost);
                     }
                     else
                     {
-                        text = new TextObject("{=!}As my servant, under the role of {TROOP}, I offer thee {HIRING}{GOLD_ICON} immediatly for thy service, as well as {WAGE}{GOLD_ICON} on a daily basis, to be adjusted if and when thou deservest betterment.")
+                        text = new TextObject("{=MnmMrbWo}As my servant, under the role of {TROOP}, I offer thee {HIRING}{GOLD_ICON} immediatly for thy service, as well as {WAGE}{GOLD_ICON} on a daily basis, to be adjusted if and when thou deservest betterment.")
                         .SetTextVariable("TROOP", template.Name)
                         .SetTextVariable("WAGE", contract.Wage)
                         .SetTextVariable("HIRING", contract.HiringCost);
                     }
 
                     MBTextManager.SetTextVariable("CONTRACT_TEXT", text);
-                    MBTextManager.SetTextVariable("TIME_TEXT", new TextObject("{=!}This contract will hold until {DATE}, a year from now, given no extraordinary circunstances. At that time, thou mayest renew it with me.")
+                    MBTextManager.SetTextVariable("TIME_TEXT", new TextObject("{=WVGhoW1b}This contract will hold until {DATE}, a year from now, given no extraordinary circunstances. At that time, thou mayest renew it with me.")
                         .SetTextVariable("DATE", CampaignTime.YearsFromNow(1f).ToString()));
-                    MBTextManager.SetTextVariable("FIELTY_TEXT", new TextObject("{=!}Know that thy utmost loyalty is expected. If our covenant were to be violated, know that I shall sentence and punish thee under the law."));
+                    MBTextManager.SetTextVariable("FIELTY_TEXT", new TextObject("{=cO1B7K4v}Know that thy utmost loyalty is expected. If our covenant were to be violated, know that I shall sentence and punish thee under the law."));
 
                     return true;
                 },
@@ -452,7 +452,7 @@ namespace BannerKings.Behaviours.Retainer
             starter.AddPlayerLine("bk_retainer_proposal",
                 "bk_retainer_proposal",
                 "bk_retainer_proposal_accepted",
-                "{=!}I accept your terms, and swear to you my loyalty.",
+                "{=FBMpN2Bo}I accept your terms, and swear to you my loyalty.",
                 () => true,
                 () =>
                 {
@@ -463,7 +463,7 @@ namespace BannerKings.Behaviours.Retainer
                 100,
                 (out TextObject reason) =>
                 {
-                    reason = new TextObject("{=!}{HERO} needs to have at least {HIRING} in money to pay you.")
+                    reason = new TextObject("{=RcT8kw4F}{HERO} needs to have at least {HIRING} in money to pay you.")
                     .SetTextVariable("HERO", Hero.OneToOneConversationHero.Name)
                     .SetTextVariable("HIRING", contract.HiringCost);
                     return Hero.OneToOneConversationHero.Gold >= contract.HiringCost;
@@ -472,21 +472,21 @@ namespace BannerKings.Behaviours.Retainer
             starter.AddPlayerLine("bk_retainer_proposal",
                 "bk_retainer_proposal",
                 "bk_retainer_proposal_accepted",
-                "{=!}I swear to you my loyalty, and ask no immediate pay.",
+                "{=J4hOvKWn}I swear to you my loyalty, and ask no immediate pay.",
                 () => true,
                 null);
 
             starter.AddPlayerLine("bk_retainer_proposal",
                 "bk_retainer_proposal",
                 "lord_talk_speak_diplomacy_2",
-                "{=!}I must refuse, for now.",
+                "{=1CGUK73B}I must refuse, for now.",
                 () => true,
                 () => contract = null);
 
             starter.AddDialogLine("bk_retainer_proposal_accepted",
                "bk_retainer_proposal_accepted",
                "close_window",
-               "{=!}Then I bid thee welcome, {PLAYER.NAME}.",
+               "{=t0GpPrbd}Then I bid thee welcome, {PLAYER.NAME}.",
                () => true,
                () => StartService());
 

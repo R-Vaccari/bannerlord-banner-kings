@@ -17,20 +17,20 @@ namespace BannerKings.Utils
         {
             if (type == ConsumptionType.Luxury)
             {
-                return new TextObject("{=!}Luxury Goods");
+                return new TextObject("{=FU9JZQuP}Luxury Goods");
             }
 
             if (type == ConsumptionType.Industrial)
             {
-                return new TextObject("{=!}Industrial Goods");
+                return new TextObject("{=GsJWKW0o}Industrial Goods");
             }
 
             if (type == ConsumptionType.Food)
             {
-                return new TextObject("{=!}Food Goods");
+                return new TextObject("{=SuHW6rM5}Food Goods");
             }
 
-            return new TextObject("{=!}General Goods");
+            return new TextObject("{=HoU7ZObZ}General Goods");
         }
 
         public static TextObject GetKnightTitle(CultureObject culture, bool female, bool plural)
@@ -38,38 +38,38 @@ namespace BannerKings.Utils
             string id = culture.StringId;
             if (id == "battania")
             {
-                if (plural) return new TextObject("{=!}Fianna");
-                return new TextObject("{=!}Fiann");
+                if (plural) return new TextObject("{=4b5WsUZ7}Fianna");
+                return new TextObject("{=V7fYyS93}Fiann");
             }
 
             if (id == "sturgia")
             {
-                if (plural) return new TextObject("{=!}Druzhina");
-                if (female) return new TextObject("{=!}Druzhinnica");
-                return new TextObject("{=!}Druzhinnik");
+                if (plural) return new TextObject("{=TOWzCa0Y}Druzhina");
+                if (female) return new TextObject("{=HEAw5x03}Druzhinnica");
+                return new TextObject("{=Qucsad67}Druzhinnik");
             }
 
             if (id == "empire")
             {
-                if (plural) return new TextObject("{=!}Pronoiarii");
-                return new TextObject("{=!}Pronoiarius");
+                if (plural) return new TextObject("{=VLB8LyH0}Pronoiarii");
+                return new TextObject("{=oapL1nXd}Pronoiarius");
             }
 
             if (id == "aserai")
             {
-                if (plural) return new TextObject("{=!}Fursaan");
-                return new TextObject("{=!}Faaris");
+                if (plural) return new TextObject("{=kgPoTnBi}Fursaan");
+                return new TextObject("{=GmHEzRcz}Faaris");
             }
 
             if (id == "khuzait")
             {
-                if (plural) return new TextObject("{=!}Kheshignud");
-                return new TextObject("{=!}Kheshig");
+                if (plural) return new TextObject("{=RYd2Z1OU}Kheshignud");
+                return new TextObject("Kheshig");
             }
 
             if (plural) return new TextObject("{=ph4LMn6k}Knights");
-            if (female) return new TextObject("{=!}Knightess");
-            return new TextObject("{=!}Knight");
+            if (female) return new TextObject("{=6LHeHpCo}Knightess");
+            return new TextObject("{=W9G4PTpt}Knight");
         }
 
         public static TextObject GetPrinceTitles(GovernmentType government, bool isFemale, CultureObject culture = null)
@@ -122,20 +122,20 @@ namespace BannerKings.Utils
 
         private static TextObject GetLordshipTitle(bool female, CultureObject culture = null)
         {
-            TextObject title = female ? new TextObject("{=8V8i6QCm}Lady") : new TextObject("{=!}Lord"); ;
+            TextObject title = female ? new TextObject("{=8V8i6QCm}Lady") : new TextObject("{=Jd1iqDAX}Lord"); ;
             if (culture != null) 
             {
                 string id = culture.StringId;
                 if (id == "battania") title = female ? new TextObject("{=tD38koMS}Baintighearna") :
-                    new TextObject("{=!}Tighearna");
+                    new TextObject("{=8z4dKfDu}Tighearna");
                 else if (id == "empire") title = female ? new TextObject("{=go9MmDKr}Domina") :
-                        new TextObject("{=!}Dominus");
+                        new TextObject("{=S5rJfgac}Dominus");
                 else if (id == "sturgia") title = female ? new TextObject("{=Ec79HNiF}Gospoda") : 
-                        new TextObject("{=!}Gospodin");
+                        new TextObject("Gospodin");
                 else if (id == "aserai") title = female ? new TextObject("{=VGXsX6Ue}Beghum") :
-                        new TextObject("{=!}Mawlaa");
+                        new TextObject("{=jes0Kij8}Mawlaa");
                 else if (id == "khuzait") title = female ? new TextObject("{=dB9Rfp6W}Khatagtai") :
-                        new TextObject("{=!}Erxem");
+                        new TextObject("{=uut6Aqo3}Erxem");
             }
 
             return title;
@@ -143,20 +143,20 @@ namespace BannerKings.Utils
 
         private static TextObject GetBaronyTitle(bool female, CultureObject culture = null)
         {
-            TextObject title = female ? new TextObject("{=yxq4RV7E}Baroness") : new TextObject("{=!}Baron");
+            TextObject title = female ? new TextObject("{=yxq4RV7E}Baroness") : new TextObject("{=LvgTvjd1}Baron");
             if (culture != null)
             {
                 string id = culture.StringId;
                 if (id == "battania") title = female ? new TextObject("{=811sxLhn}Thaoiseach") :
-                    new TextObject("{=!}Toisiche");
+                    new TextObject("{=6XmUmfNm}Toisiche");
                 else if (id == "empire") title = female ? new TextObject("{=dYq0qGzZ}Baronessa") :
-                        new TextObject("{=!}Baro");
+                        new TextObject("{=DZ8MWLNZ}Baro");
                 else if (id == "sturgia") title = female ? new TextObject("{=bYQLoRUt}Voivodina") :
-                        new TextObject("{=!}Voivode");
+                        new TextObject("{=P5tZwHtn}Voivode");
                 else if (id == "aserai") title = female ? new TextObject("{=LYY1ZegU}Walia") :
-                        new TextObject("{=!}Wali");
+                        new TextObject("{=Ry8vAGrA}Wali");
                 else if (id == "khuzait") title = female ? new TextObject("{=Ajj9ptAU}Begum") :
-                        new TextObject("{=!}Bey");
+                        new TextObject("{=A04x6QXO}Bey");
             }
 
             return title;
@@ -164,20 +164,20 @@ namespace BannerKings.Utils
 
         private static TextObject GetCountyTitle(bool female, CultureObject culture = null)
         {
-            TextObject title = female ? new TextObject("{=o513XU29}Countess") : new TextObject("{=!}Count");
+            TextObject title = female ? new TextObject("{=o513XU29}Countess") : new TextObject("{=hG2krbg9}Count");
             if (culture != null)
             {
                 string id = culture.StringId;
                 if (id == "battania") title = female ? new TextObject("{=FMWNKESs}Bantiarna") :
-                    new TextObject("{=!}Mormaer");
+                    new TextObject("{=hGD00EFy}Mormaer");
                 else if (id == "empire") title = female ? new TextObject("{=ex7NjOtr}Cometessa") :
-                        new TextObject("{=!}Conte");
+                        new TextObject("{=o8Cxhcm6}Conte");
                 else if (id == "sturgia") title = female ? new TextObject("{=KTxFYNyo}Boyarina") :
-                        new TextObject("{=!}Boyar");
+                        new TextObject("{=t8LfQad9}Boyar");
                 else if (id == "aserai") title = female ? new TextObject("{=AUoParHT}Shaykah") :
-                        new TextObject("{=!}Sheikh");
+                        new TextObject("{=if2pPJ6z}Sheikh");
                 else if (id == "khuzait") title = female ? new TextObject("{=cepkCz19}Khanum") :
-                        new TextObject("{=!}Khan");
+                        new TextObject("{=R8N3D1L5}Khan");
             }
 
             return title;
@@ -185,20 +185,20 @@ namespace BannerKings.Utils
 
         private static TextObject GetDuchyTitle(bool female, CultureObject culture = null)
         {
-            TextObject title = female ? new TextObject("{=5uFw1EmO}Duchess") : new TextObject("{=!}Duke");
+            TextObject title = female ? new TextObject("{=5uFw1EmO}Duchess") : new TextObject("{=vFJ7NjqE}Duke");
             if (culture != null)
             {
                 string id = culture.StringId;
                 if (id == "battania") title = female ? new TextObject("{=XLAgsQ0J}Banrigh") :
-                    new TextObject("{=!}Rìgh");
+                    new TextObject("{=f62sQAtH}Rï¿½gh");
                 else if (id == "empire") title = female ? new TextObject("{=5aCrjmFi}Ducissa") :
-                        new TextObject("{=!}Dux");
+                        new TextObject("{=oDRVNajf}Dux");
                 else if (id == "sturgia") title = female ? new TextObject("{=S3kc2bhW}Knyaginya") : 
                         new TextObject("{=1XDPfDim}Knyaz");
                 else if (id == "aserai") title = female ? new TextObject("{=MVjsWtcZ}Emira") :
-                        new TextObject("{=!}Emir");
+                        new TextObject("{=CNgjQs21}Emir");
                 else if (id == "khuzait") title = female ? new TextObject("{=Mfuxa8SP}Bekhi") :
-                        new TextObject("{=!}Baghatur");
+                        new TextObject("{=yQvLRfx9}Baghatur");
             }
 
             return title;
@@ -206,12 +206,12 @@ namespace BannerKings.Utils
 
         private static TextObject GetKingdomTitle(bool female, GovernmentType government, CultureObject culture = null)
         {
-            TextObject title = female ? new TextObject("{=JmdALFU2}Queen") : new TextObject("{=!}King");
+            TextObject title = female ? new TextObject("{=JmdALFU2}Queen") : new TextObject("{=zyKSROjQ}King");
             if (culture != null)
             {
                 string id = culture.StringId;
                 if (id == "battania") title = female ? new TextObject("{=25sz3WPn}Ard-Banrigh") :
-                    new TextObject("{=!}Ard-Rìgh");
+                    new TextObject("{=PFQ9jztU}Ard-Rï¿½gh");
                 else if (id == "empire")
                 {
                     if (government == GovernmentType.Republic)
@@ -224,15 +224,15 @@ namespace BannerKings.Utils
                     {
                         title = female
                             ? new TextObject("{=BJvarzpV}Regina")
-                            : new TextObject("{=!}Rex");
+                            : new TextObject("{=fo59CGyy}Rex");
                     }
                 }
                 else if (id == "sturgia") title = female ? new TextObject("{=LmHWN0vt}Velikaya Knyaginya") : 
-                        new TextObject("{=!}Velikiy Knyaz");
+                        new TextObject("{=DA4APi0H}Velikiy Knyaz");
                 else if (id == "aserai") title = female ? new TextObject("{=DQXH6NeY}Sultana") :
-                        new TextObject("{=!}Sultan");
+                        new TextObject("{=RSfZQRPy}Sultan");
                 else if (id == "khuzait") title = female ? new TextObject("{=SdJk1Vpf}Khatun") :
-                        new TextObject("{=!}Khagan");
+                        new TextObject("{=oQULc2S8}Khagan");
             }
 
             return title;
@@ -240,7 +240,7 @@ namespace BannerKings.Utils
 
         private static TextObject GetEmpireTitle(bool female, GovernmentType government, CultureObject culture = null)
         {
-            TextObject title = female ? new TextObject("{=!}Empress") : new TextObject("{=!}Emperor");
+            TextObject title = female ? new TextObject("{=gbpokx6s}Empress") : new TextObject("{=9WOQTiBr}Emperor");
             if (culture != null)
             {
                 string id = culture.StringId;

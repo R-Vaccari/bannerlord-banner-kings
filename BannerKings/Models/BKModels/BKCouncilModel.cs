@@ -79,8 +79,8 @@ namespace BannerKings.Models.BKModels
                 return result;
             }
 
-            result.Add(position.InfluenceCosts() * 150f, new TextObject("{=!}Position's influence"));
-            result.AddFactor(position.Competence.ResultNumber, new TextObject("{=!}Competence"));
+            result.Add(position.InfluenceCosts() * 150f, new TextObject("{=5zVvff39}Position's influence"));
+            result.AddFactor(position.Competence.ResultNumber, new TextObject("Competence"));
 
             return result;
         }
@@ -100,7 +100,7 @@ namespace BannerKings.Models.BKModels
                 else if (tier == 4) tierGrace = 150f;
                 else if (tier == 5) tierGrace = 200f;
                 else if (tier >= 6) tierGrace = 250f;
-                result.Add(tierGrace, new TextObject("{=!}Clan tier"));
+                result.Add(tierGrace, new TextObject("{=bbOk856z}Clan tier"));
 
                 if (data.Clan.Kingdom != null && data.Clan.Kingdom.RulingClan == data.Clan)
                 {
@@ -145,7 +145,7 @@ namespace BannerKings.Models.BKModels
             {
                 float factor = Campaign.Current.Models.MapDistanceModel.GetDistance(target.Settlement,
                 council.Location.Settlement) / Campaign.AverageDistanceBetweenTwoFortifications;
-                result.AddFactor(factor, new TextObject("{=!}Distance between {TOWN1} and {TOWN2}")
+                result.AddFactor(factor, new TextObject("{=Frw4p1qD}Distance between {TOWN1} and {TOWN2}")
                     .SetTextVariable("TOWN1", target.Name)
                     .SetTextVariable("TOWN2", council.Location.Name));
             }
@@ -364,7 +364,7 @@ namespace BannerKings.Models.BKModels
             if (!targetPosition.CanMemberChange())
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}This position's councillor has recently been changed.");
+                action.Reason = new TextObject("{=gfjbYGNH}This position's councillor has recently been changed.");
                 return action;
             }
 
@@ -379,7 +379,7 @@ namespace BannerKings.Models.BKModels
             if (!council.GetAvailableHeroes(targetPosition).Contains(requester))
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}{HERO} already fulfills a position of this type.")
+                action.Reason = new TextObject("{=gzeVOEPX}{HERO} already fulfills a position of this type.")
                     .SetTextVariable("HERO", requester.Name);
                 return action;
             }

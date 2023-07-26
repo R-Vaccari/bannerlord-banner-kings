@@ -55,10 +55,10 @@ namespace BannerKings.UI.CampaignStart
             };
 
             UIHelper.TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=!}Details").ToString(), " ", 0));
+            list.Add(new TooltipProperty(new TextObject("{=kAZdhRKo}Details").ToString(), " ", 0));
             UIHelper.TooltipAddSeperator(list);
 
-            MBTextManager.SetTextVariable("LEFT", new TextObject("{=!}Starting Piety").ToString());
+            MBTextManager.SetTextVariable("LEFT", new TextObject("{=eUet83h3}Starting Piety").ToString());
             list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), Piety, 0));
 
             MBTextManager.SetTextVariable("LEFT", new TextObject("{=!}Natural Culture").ToString());
@@ -77,7 +77,7 @@ namespace BannerKings.UI.CampaignStart
             }
 
             UIHelper.TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=!}Kingdoms").ToString(), " ", 0));
+            list.Add(new TooltipProperty(new TextObject("{=zyKSROjQ}Kingdoms").ToString(), " ", 0));
             UIHelper.TooltipAddSeperator(list);
 
             int kingdomCount = 0;

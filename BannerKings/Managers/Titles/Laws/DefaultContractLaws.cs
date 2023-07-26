@@ -7,41 +7,45 @@ namespace BannerKings.Managers.Titles.Laws
 {
     public class DefaultDemesneLaws : DefaultTypeInitializer<DefaultDemesneLaws, DemesneLaw>
     {
-        public DemesneLaw EstateTenureFeeTail { get; private set; } = new DemesneLaw("estate_tenure_fee_tail");
-        public DemesneLaw EstateTenureQuiaEmptores { get; private set; } = new DemesneLaw("estate_tenure_quia_emptores");
-        public DemesneLaw EstateTenureAllodial { get; private set; } = new DemesneLaw("estate_tenure_allodial");
+        public DemesneLaw EstateTenureFeeTail { get; } = new DemesneLaw("estate_tenure_fee_tail");
+        public DemesneLaw EstateTenureQuiaEmptores { get; } = new DemesneLaw("estate_tenure_quia_emptores");
+        public DemesneLaw EstateTenureAllodial { get; } = new DemesneLaw("estate_tenure_allodial");
 
         public DemesneLaw NoblesMilitaryServiceDuties { get; private set; } = new DemesneLaw("nobles_military_service_duties");
-        public DemesneLaw NoblesTaxDuties { get; private set; } = new DemesneLaw("nobles_tax_duties");
-        public DemesneLaw NoblesLaxDuties { get; private set; } = new DemesneLaw("nobles_lax_duties");
+        public DemesneLaw NoblesTaxDuties { get; } = new DemesneLaw("nobles_tax_duties");
+        public DemesneLaw NoblesLaxDuties { get; } = new DemesneLaw("nobles_lax_duties");
 
         public DemesneLaw CraftsmenMilitaryServiceDuties { get; private set; } = new DemesneLaw("craftsmen_military_service_duties");
-        public DemesneLaw CraftsmenTaxDuties { get; private set; } = new DemesneLaw("craftsmen_tax_duties");
-        public DemesneLaw CraftsmenLaxDuties { get; private set; } = new DemesneLaw("craftsmen_lax_duties");
+        public DemesneLaw CraftsmenTaxDuties { get; } = new DemesneLaw("craftsmen_tax_duties");
+        public DemesneLaw CraftsmenLaxDuties { get; } = new DemesneLaw("craftsmen_lax_duties");
 
-        public DemesneLaw SerfsMilitaryServiceDuties { get; private set; } = new DemesneLaw("serfs_military_service_duties");
-        public DemesneLaw SerfsAgricultureDuties { get; private set; } = new DemesneLaw("serfs_agriculture_duties");
-        public DemesneLaw SerfsLaxDuties { get; private set; } = new DemesneLaw("serfs_lax_duties");
+        public DemesneLaw SerfsMilitaryServiceDuties { get; } = new DemesneLaw("serfs_military_service_duties");
+        public DemesneLaw SerfsAgricultureDuties { get; } = new DemesneLaw("serfs_agriculture_duties");
+        public DemesneLaw SerfsLaxDuties { get; } = new DemesneLaw("serfs_lax_duties");
 
-        public DemesneLaw SlavesHardLabor { get; private set; } = new DemesneLaw("slaves_hard_labor_duties");
-        public DemesneLaw SlavesAgricultureDuties { get; private set; } = new DemesneLaw("slaves_agriculture_duties");
-        public DemesneLaw SlavesDomesticDuties { get; private set; } = new DemesneLaw("slaves_domestic_duties");
+        public DemesneLaw SlavesHardLabor { get; } = new DemesneLaw("slaves_hard_labor_duties");
+        public DemesneLaw SlavesAgricultureDuties { get; } = new DemesneLaw("slaves_agriculture_duties");
+        public DemesneLaw SlavesDomesticDuties { get; } = new DemesneLaw("slaves_domestic_duties");
 
-        public DemesneLaw SlaveryVlandia { get; private set; } = new DemesneLaw("slavery_vlandia");
-        public DemesneLaw SlaveryAserai { get; private set; } = new DemesneLaw("slavery_aserai");
-        public DemesneLaw SlaveryStandard { get; private set; } = new DemesneLaw("slavery_standard");
-        public DemesneLaw SlaveryManumission { get; private set; } = new DemesneLaw("slavery_manumission");
+        public DemesneLaw SlaveryVlandia { get; } = new DemesneLaw("slavery_vlandia");
+        public DemesneLaw SlaveryAserai { get; } = new DemesneLaw("slavery_aserai");
+        public DemesneLaw SlaveryStandard { get; } = new DemesneLaw("slavery_standard");
+        public DemesneLaw SlaveryManumission { get; } = new DemesneLaw("slavery_manumission");
 
-        public DemesneLaw DraftingHidage { get; private set; } = new DemesneLaw("drafting_hidage");
-        public DemesneLaw DraftingVassalage { get; private set; } = new DemesneLaw("drafting_vassalage");
-        public DemesneLaw DraftingFreeContracts { get; private set; } = new DemesneLaw("drafting_free_contracts");
+        public DemesneLaw DraftingHidage { get; } = new DemesneLaw("drafting_hidage");
+        public DemesneLaw DraftingVassalage { get; } = new DemesneLaw("drafting_vassalage");
+        public DemesneLaw DraftingFreeContracts { get; } = new DemesneLaw("drafting_free_contracts");
 
-        public DemesneLaw TenancyFull { get; private set; } = new DemesneLaw("tenancy_full");
-        public DemesneLaw TenancyMixed { get; private set; } = new DemesneLaw("tenancy_mixed");
-        public DemesneLaw TenancyNone { get; private set; } = new DemesneLaw("tenancy_none");
+        public DemesneLaw TenancyFull { get; } = new DemesneLaw("tenancy_full");
+        public DemesneLaw TenancyMixed { get; } = new DemesneLaw("tenancy_mixed");
+        public DemesneLaw TenancyNone { get; } = new DemesneLaw("tenancy_none");
 
-        public DemesneLaw CouncilAppointed { get; private set; } = new DemesneLaw("council_appointed");
-        public DemesneLaw CouncilElected { get; private set; } = new DemesneLaw("council_elected");
+        public DemesneLaw CouncilAppointed { get; } = new DemesneLaw("council_appointed");
+        public DemesneLaw CouncilElected { get; } = new DemesneLaw("council_elected");
+
+        public DemesneLaw ArmyPrivate { get; } = new DemesneLaw("ArmyPrivate");
+        public DemesneLaw ArmyHorde { get; } = new DemesneLaw("ArmyHorde");
+        public DemesneLaw ArmyLegion { get; } = new DemesneLaw("ArmyLegion");
 
         public override IEnumerable<DemesneLaw> All
         {
@@ -74,6 +78,9 @@ namespace BannerKings.Managers.Titles.Laws
                 yield return TenancyNone;
                 yield return CouncilAppointed;
                 yield return CouncilElected;
+                yield return ArmyPrivate;
+                yield return ArmyHorde;
+                yield return ArmyLegion;
             }
         }
 
@@ -81,7 +88,7 @@ namespace BannerKings.Managers.Titles.Laws
 
         public DemesneLaw GetLawByIndex(DemesneLawTypes type, int index)
         {
-            var law = All.FirstOrDefault(x => x.LawType == type && x.Index == index);
+            var law = All.FirstOrDefault(x => x.LawType == type);
             return law;
         }
 
@@ -125,18 +132,21 @@ namespace BannerKings.Managers.Titles.Laws
                 }
 
                 list.Add(TenancyNone.GetCopy());
+                list.Add(ArmyPrivate.GetCopy());
             } 
             else if (government == GovernmentType.Tribal)
             {
                 list.Add(DraftingHidage.GetCopy());
                 list.Add(EstateTenureAllodial.GetCopy());
                 list.Add(TenancyFull.GetCopy());
+                list.Add(ArmyHorde.GetCopy());
             }
             else
             {
                 list.Add(DraftingFreeContracts.GetCopy());
                 list.Add(EstateTenureFeeTail.GetCopy());
                 list.Add(TenancyMixed.GetCopy());
+                list.Add(ArmyLegion.GetCopy());
             }
 
             if (government == GovernmentType.Republic)
@@ -154,6 +164,31 @@ namespace BannerKings.Managers.Titles.Laws
         public override void Initialize()
         {
             var cultures = Campaign.Current.ObjectManager.GetObjectTypeList<CultureObject>();
+            ArmyPrivate.Initialize(new TextObject("{=!}Private Armies"),
+                new TextObject("{=!}Every relevant head of a House, not accounting for army privilege policies, is allowed to form their own army. As such, they are fully"),
+                new TextObject("{=!}"),
+                DemesneLawTypes.Army,
+                0.8f,
+                -0.2f,
+                -0.4f,
+                300);
+            ArmyHorde.Initialize(new TextObject("{=!}Hordes"),
+                new TextObject("{=!}"),
+                new TextObject("{=!}"),
+                DemesneLawTypes.Army,
+                0.8f,
+                -0.2f,
+                -0.4f,
+                300);
+            ArmyLegion.Initialize(new TextObject("{=!}Legions"),
+                new TextObject("{=!}"),
+                new TextObject("{=!}"),
+                DemesneLawTypes.Army,
+                0.8f,
+                -0.2f,
+                -0.4f,
+                300);
+
             #region EstateTenure
 
             EstateTenureQuiaEmptores.Initialize(new TextObject("{=nDrgvaMa}Quia Emptores"),
@@ -163,8 +198,7 @@ namespace BannerKings.Managers.Titles.Laws
                 0.8f,
                 -0.2f,
                 -0.4f,
-                300,
-                0);
+                300);
 
             EstateTenureAllodial.Initialize(new TextObject("{=GLXtp5wp}Allodial Tenure"),
                 new TextObject("{=noWN9WJB}The allodial tenure represents the absolute ownership of land. Estate owners have no duties towards fief lords. The absence of taxation and military requirements draws in tenants to these estates."),
@@ -173,8 +207,7 @@ namespace BannerKings.Managers.Titles.Laws
                 -0.2f,
                 0.3f,
                 0.1f,
-                300,
-                1);
+                300);
 
             EstateTenureFeeTail.Initialize(new TextObject("{=esrBR5f3}Fee Tail"),
                 new TextObject("{=SCZjCdwq}The fee tail tenure dictates that property is inherited exclusively through lawful inheritance or grant."),
@@ -183,8 +216,7 @@ namespace BannerKings.Managers.Titles.Laws
                 0.1f,
                 -0.6f,
                 0.7f,
-                300,
-                2);
+                300);
 
             #endregion EstateTenure
 
@@ -198,8 +230,7 @@ namespace BannerKings.Managers.Titles.Laws
                0.8f,
                -0.4f,
                0.6f,
-               300,
-               0);
+               300);
 
             NoblesTaxDuties.Initialize(new TextObject("{=aTqOs6gr}Tax Duties"),
                new TextObject("{=wutCVGJU}Tailor the duty laws of {CLASS} towards taxation. Stricter tax collection and more taxation forms squeeze more denarii out of {CLASS}. Increases tax output.")
@@ -209,8 +240,7 @@ namespace BannerKings.Managers.Titles.Laws
                0.4f,
                -0.4f,
                0.5f,
-               300,
-               1);
+               300);
 
             NoblesLaxDuties.Initialize(new TextObject("{=qGvM38At}Lax Duties"),
                new TextObject("{=QR8cTK3Y}Lessen the duty burdens of {CLASS}. Reduced duties makes the populace more content and gives them room for prosperity. Reduces output and military contribution.")
@@ -220,8 +250,7 @@ namespace BannerKings.Managers.Titles.Laws
                -0.5f,
                0.8f,
                -0.2f,
-               300,
-               2);
+               300);
 
             #endregion NobleDuties
 
@@ -235,8 +264,7 @@ namespace BannerKings.Managers.Titles.Laws
                0.8f,
                -0.4f,
                0.6f,
-               300,
-               0);
+               300);
 
             CraftsmenTaxDuties.Initialize(new TextObject("{=aTqOs6gr}Tax Duties"),
                new TextObject("{=wutCVGJU}Tailor the duty laws of {CLASS} towards taxation. Stricter tax collection and more taxation forms squeeze more denarii out of {CLASS}. Increases tax output.")
@@ -246,8 +274,7 @@ namespace BannerKings.Managers.Titles.Laws
                0.4f,
                -0.4f,
                0.5f,
-               300,
-               1);
+               300);
 
             CraftsmenLaxDuties.Initialize(new TextObject("{=qGvM38At}Lax Duties"),
                new TextObject("{=QR8cTK3Y}Lessen the duty burdens of {CLASS}. Reduced duties makes the populace more content and gives them room for prosperity. Reduces output and military contribution.")
@@ -257,8 +284,7 @@ namespace BannerKings.Managers.Titles.Laws
                -0.5f,
                0.8f,
                -0.2f,
-               300,
-               2);
+               300);
 
             #endregion CraftsmenDuties
 
@@ -272,8 +298,7 @@ namespace BannerKings.Managers.Titles.Laws
                0.8f,
                -0.4f,
                0.6f,
-               300,
-               0);
+               300);
 
             SerfsAgricultureDuties.Initialize(new TextObject("{=vt2Sq2aG}Agricultural Duties"),
                new TextObject("{=NXk9mSNW}Tailor the duty laws of {CLASS} towards agriculture. Labor requirements and movement restriction tie the {CLASS} to the land and its productivity. Increased agricultural output.")
@@ -283,8 +308,7 @@ namespace BannerKings.Managers.Titles.Laws
                0.4f,
                -0.4f,
                0.5f,
-               300,
-               1);
+               300);
 
             SerfsLaxDuties.Initialize(new TextObject("{=qGvM38At}Lax Duties"),
                new TextObject("{=QR8cTK3Y}Lessen the duty burdens of {CLASS}. Reduced duties makes the populace more content and gives them room for prosperity. Reduces output and military contribution.")
@@ -294,8 +318,7 @@ namespace BannerKings.Managers.Titles.Laws
                -0.5f,
                0.8f,
                -0.2f,
-               300,
-               2);
+               300);
 
             #endregion SerfDuties
 
@@ -309,7 +332,7 @@ namespace BannerKings.Managers.Titles.Laws
                0.4f,
                -0.8f,
                0.5f,
-               300, 0);
+               300);
 
             SlavesAgricultureDuties.Initialize(new TextObject("{=vt2Sq2aG}Agricultural Duties"),
                new TextObject("{=NXk9mSNW}Tailor the duty laws of {CLASS} towards agriculture. Labor requirements and movement restriction tie the {CLASS} to the land and its productivity. Increased agricultural output.")
@@ -319,8 +342,7 @@ namespace BannerKings.Managers.Titles.Laws
                0.4f,
                -0.6f,
                0.5f,
-               300,
-               1);
+               300);
 
             SlavesDomesticDuties.Initialize(new TextObject("{=0Ps1q7J0}Domestic Duties"),
                new TextObject("{=Zq8Zcv3N}Tailor the duty laws of {CLASS} towards domestic and skilled labor. Citizen households will often have or want to have slaves for various domestic labors. Enslaved shopkeepers, artisans and professionals provide tax benefits to their owners.")
@@ -330,8 +352,7 @@ namespace BannerKings.Managers.Titles.Laws
                0.6f,
                -0.2f,
                0.3f,
-               300,
-               2);
+               300);
 
             #endregion SlaveDuties
 
@@ -344,7 +365,7 @@ namespace BannerKings.Managers.Titles.Laws
                 0.4f,
                 -0.6f,
                 0.3f,
-                300, 0);
+                300);
 
             SlaveryVlandia.Initialize(new TextObject("{=hBVZCcL3}Vlandic Law"),
                 new TextObject("{=4vBS06Ds}The Vlandic tradition on slavery stipulates that Vlandians shall not enslave each other. Slaves are present in small quantities in rural estates. Though Vlandian individuals may become or be born slaves, Vlandian lords are prohibited from purposefuly enslaving them."),
@@ -354,7 +375,6 @@ namespace BannerKings.Managers.Titles.Laws
                 -0.2f,
                 0.5f,
                 300,
-                1,
                 cultures.First(x => x.StringId == "vlandia"));
 
             SlaveryAserai.Initialize(new TextObject("{=7Q9FJrZ8}Aseran Law"),
@@ -365,7 +385,6 @@ namespace BannerKings.Managers.Titles.Laws
                -0.6f,
                0.6f,
                300,
-               1,
                cultures.First(x => x.StringId == "aserai"));
 
             SlaveryManumission.Initialize(new TextObject("{=T4doWFdj}Manumission"),
@@ -375,8 +394,7 @@ namespace BannerKings.Managers.Titles.Laws
                 -0.5f,
                 0.9f,
                 -0.1f,
-                300,
-                2);
+                300);
 
             #endregion Slavery
 
@@ -389,7 +407,7 @@ namespace BannerKings.Managers.Titles.Laws
                 0.3f,
                 0.1f,
                 0.2f,
-                300, 0);
+                300);
 
             DraftingFreeContracts.Initialize(new TextObject("{=WtxLpuAU}Free Contracts"),
               new TextObject("{=0ZwNdeWq}Free contracts allows levies to serve whoever they wish. No strict duty relationship is set between levies and their suzerains. However, foreigner contractors pay a premium for their services."),
@@ -398,8 +416,7 @@ namespace BannerKings.Managers.Titles.Laws
               0.1f,
               0.5f,
               -0.2f,
-              300,
-              1);
+              300);
 
             DraftingVassalage.Initialize(new TextObject("{=92A5YP2x}Vassalage"),
               new TextObject("{=zWqQMdHK}Under Vassalage, levies are bound to their most direct suzerain. The de facto and de jure ownerships of fiefs set the precedence for acces to levies."),
@@ -408,8 +425,7 @@ namespace BannerKings.Managers.Titles.Laws
               0.5f,
               -0.5f,
               1f,
-              300,
-              2);
+              300);
 
             #endregion Drafting
 
@@ -417,23 +433,21 @@ namespace BannerKings.Managers.Titles.Laws
 
             TenancyFull.Initialize(new TextObject("{=JEbygACX}Full Tenancy"),
               new TextObject("{=uf1BxiQJ}Under Full Tenancy, serfdom does not thrive anymore. Instead, all non-slave commoners will tend to be free tenants, who rent their land under contracts of goods or monetary taxation. Tenants are of higher class than serfs and are not boun to their land, and so have more mobility and are less exploitable for taxes."),
-              new TextObject("{=!}Serfs will tend to be 100% replaced by tenants\nTenants pay less taxes but are more stable and prosperous"),
+              new TextObject("Serfs will tend to be 100% replaced by tenants\nTenants pay less taxes but are more stable and prosperous"),
               DemesneLawTypes.Tenancy,
               -0.5f,
               1f,
               -0.8f,
-              900,
-              0);
+              900);
 
             TenancyMixed.Initialize(new TextObject("{=oT9UmZUt}Mixed Tenure"),
               new TextObject("{=z5ox1p40}Mixed tenure allows the coexistence of both tenants and serfs. Their compositions will tend to be similar."),
-              new TextObject("{=!}Serfs will tend to be 50% replaced by tenants"),
+              new TextObject("Serfs will tend to be 50% replaced by tenants"),
               DemesneLawTypes.Tenancy,
               0.2f,
               -0.3f,
               0.4f,
-              900,
-              1);
+              900);
 
             TenancyNone.Initialize(new TextObject("{=LGuO56aW}Full Serfdom"),
               new TextObject("{=FuKNBsvU}When bound by serfdom, a commoner is unable to leave their suzerain's land without permission. Though their status is above a slave's, they often miss the rights of free men."),
@@ -442,8 +456,7 @@ namespace BannerKings.Managers.Titles.Laws
               0.8f,
               -1f,
               1f,
-              900,
-              2);
+              900);
 
             #endregion Tenancy
 
@@ -456,8 +469,7 @@ namespace BannerKings.Managers.Titles.Laws
               1f,
               -0.3f,
               -0.6f,
-              1000,
-              1);
+              1000);
 
             CouncilElected.Initialize(new TextObject("{=!}Elected Council"),
              new TextObject("{=!}The realm's high council is elected by the Peers. The election result will determine the next occupant of the position in question."),
@@ -466,8 +478,7 @@ namespace BannerKings.Managers.Titles.Laws
              -0.7f,
              0.1f,
              0.6f,
-             1000,
-             2);
+             1000);
 
             #endregion Council
         }

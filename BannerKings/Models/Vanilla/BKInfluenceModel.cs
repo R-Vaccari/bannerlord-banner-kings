@@ -55,7 +55,7 @@ namespace BannerKings.Models.Vanilla
             ExplainedNumber result = new ExplainedNumber(0f, explanations);
             if (kingdom != null)
             {
-                result.Add(1f, new TextObject("{=!}Base value"));
+                result.Add(1f, new TextObject("{=grgaF5Mc}Base value"));
                 result.Add(MathF.Floor(kingdom.Fiefs.Count / 2f), new TextObject("{=LBNzsqyb}Fiefs"));
                 result.LimitMax(kingdom.Clans.Count);
             }
@@ -148,7 +148,7 @@ namespace BannerKings.Models.Vanilla
                 else if (grace > expectedGrace) factor = MathF.Min(grace / expectedGrace, 1.5f);
 
                 result.AddFactor(factor,
-                    new TextObject("{=!}Grace ({GRACE}) correlation to expected grace ({EXPECTED})")
+                    new TextObject("{=FFr56V5A}Grace ({GRACE}) correlation to expected grace ({EXPECTED})")
                     .SetTextVariable("EXPECTED", expectedGrace.ToString("0.0"))
                     .SetTextVariable("GRACE", council.CourtGrace.Grace.ToString("0.0")));
             }
@@ -263,7 +263,7 @@ namespace BannerKings.Models.Vanilla
                         }
                     }
 
-                    baseResult.Add(aids, new TextObject("{=!}Financial aids from supporters (x{COUNT})")
+                    baseResult.Add(aids, new TextObject("{=yDr9aqLO}Financial aids from supporters (x{COUNT})")
                                 .SetTextVariable("COUNT", count));
                 }
 

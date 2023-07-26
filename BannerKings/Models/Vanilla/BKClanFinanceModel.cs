@@ -123,7 +123,7 @@ namespace BannerKings.Models.Vanilla
             Contract contract = Campaign.Current.GetCampaignBehavior<BKRetainerBehavior>().GetContract();
             if (contract != null)
             {
-                result.Add(contract.Wage, new TextObject("{=!}Retainer service for {HERO}")
+                result.Add(contract.Wage, new TextObject("{=cYac1rMJ}Retainer service for {HERO}")
                     .SetTextVariable("HERO", contract.Contractor.Name));
             }
 

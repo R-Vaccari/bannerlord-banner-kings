@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Court.Grace;
+using BannerKings.Managers.Court.Grace;
 using System;
 using System.Linq;
 using TaleWorlds.Core.ViewModelCollection.Information;

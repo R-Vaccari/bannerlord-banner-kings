@@ -67,7 +67,7 @@ namespace BannerKings.UI.Court
         [DataSourceProperty] public string PrivyCouncilText => new TextObject("{=7NeZtxVP}Privy Council").ToString();
         [DataSourceProperty] public string ExtendedCouncilText => new TextObject("{=BkJbqOWj}Extended Council").ToString();
         [DataSourceProperty] public string ExtravaganceText => new TextObject("{=!}Extravagance").ToString();
-        [DataSourceProperty] public string SuppliesText => new TextObject("{=!}Supplies").ToString();
+        [DataSourceProperty] public string SuppliesText => new TextObject("{=SaWHeTiw}Supplies").ToString();
         [DataSourceProperty] public string SecurityText => new TextObject("{=MqCH7R4A}Security").ToString();
         [DataSourceProperty] public string ServantsText => new TextObject("{=!}Servants").ToString();
         [DataSourceProperty] public string LodgingsText => new TextObject("{=!}Lodgings").ToString();

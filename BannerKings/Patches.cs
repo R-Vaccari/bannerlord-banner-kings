@@ -253,11 +253,11 @@ namespace BannerKings.Patches
                 {
                     if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyHorde))
                     {
-                        result = new TextObject("{=!}{LEADER_NAME}{.o} Horde");
+                        result = new TextObject("{=HCWYbPOa}{LEADER_NAME}{.o} Horde");
                     }
                     else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion))
                     {
-                        result = new TextObject("{=!}{LEADER_NAME}{.o} Legion");
+                        result = new TextObject("{=4ubaOxe2}{LEADER_NAME}{.o} Legion");
                     }
                 }
 

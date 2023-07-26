@@ -38,7 +38,7 @@ namespace BannerKings.Utils
                     if (BKTraits.Instance.PersonalityTraits.Contains(trait))
                     {
                         InformationManager.DisplayMessage(new InformationMessage(
-                            new TextObject("{=!}Your sense of {TRAIT} is now perceived by others as {LEVEL}.")
+                            new TextObject("{=fmoNZHeO}Your sense of {TRAIT} is now perceived by others as {LEVEL}.")
                             .SetTextVariable("TRAIT", trait.Name)
                             .SetTextVariable("LEVEL", value).ToString(),
                             Color.UIntToColorString(TextHelper.COLOR_LIGHT_YELLOW)));
@@ -46,7 +46,7 @@ namespace BannerKings.Utils
                     else if (BKTraits.Instance.MedicalTraits.Contains(trait))
                     {
                         InformationManager.DisplayMessage(new InformationMessage(
-                            new TextObject("{=!}Your sense of {TRAIT} is now perceived by others as {LEVEL}.")
+                            new TextObject("{=fmoNZHeO}Your sense of {TRAIT} is now perceived by others as {LEVEL}.")
                             .SetTextVariable("TRAIT", trait.Name)
                             .SetTextVariable("LEVEL", value).ToString(),
                             Color.UIntToColorString(TextHelper.COLOR_LIGHT_YELLOW)));
@@ -222,16 +222,16 @@ namespace BannerKings.Utils
                 switch (cultureId) 
                 {
                     case "empire":
-                        text = new TextObject("{=!}Servi");
+                        text = new TextObject("{=5Ym25L00}Servi");
                         break;
                     case "aserai" or "battania":
                         text = new TextObject("{=vSMPBzue}Commoners");
                         break;
                     case "sturgia":
-                        text = new TextObject("{=!}Kholops");
+                        text = new TextObject("{=f9tsDXWf}Kholops");
                         break;
                     default:
-                        text = new TextObject("{=!}Serfs");
+                        text = new TextObject("Serfs");
                         break;
                 }
             }
@@ -246,7 +246,7 @@ namespace BannerKings.Utils
                         text = new TextObject("{=tUzhQHAh}Nomads");
                         break;
                     case "sturgia":
-                        text = new TextObject("{=!}Smerdy");
+                        text = new TextObject("{=VviUbJTS}Smerdy");
                         break;
                     case "battania":
                         text = new TextObject("{=TEYb57Wo}Freemen");
@@ -270,7 +270,7 @@ namespace BannerKings.Utils
                         text = new TextObject("{=TASERbwx}Mameluke");
                         break;
                     default:
-                        text = new TextObject("{=!}Slaves");
+                        text = new TextObject("Slaves");
                         break;
                 }
             }
@@ -285,7 +285,7 @@ namespace BannerKings.Utils
                         text = new TextObject("{=2ogRjAuf}Artisans");
                         break;
                     default:
-                        text = new TextObject("{=!}Craftsmen");
+                        text = new TextObject("Craftsmen");
                         break;
                 }
             }
@@ -300,7 +300,7 @@ namespace BannerKings.Utils
                         text = new TextObject("{=FVuW8Y4j}Ealdormen");
                         break;
                     default:
-                        text = new TextObject("{=!}Nobles");
+                        text = new TextObject("Nobles");
                         break;
                 }
             }
@@ -387,10 +387,10 @@ namespace BannerKings.Utils
         {
             return type switch
             {
-                ConsumptionType.Luxury => new TextObject("{=!}Satisfaction over availability of products such as jewelry, velvets and fur.").ToString(),
-                ConsumptionType.Industrial => new TextObject("{=!}Satisfaction over availability of manufacturing products such as leather, clay and tools.").ToString(),
-                ConsumptionType.General => new TextObject("{=!}Satisfaction over availability of various products, including military equipment and horses.").ToString(),
-                _ => new TextObject("{=!}Satisfaction over availability of food types.").ToString()
+                ConsumptionType.Luxury => new TextObject("{=2wwjFQ2A}Satisfaction over availability of products such as jewelry, velvets and fur.").ToString(),
+                ConsumptionType.Industrial => new TextObject("{=irOAqrdy}Satisfaction over availability of manufacturing products such as leather, clay and tools.").ToString(),
+                ConsumptionType.General => new TextObject("{=NENnF6oJ}Satisfaction over availability of various products, including military equipment and horses.").ToString(),
+                _ => new TextObject("{=QJ1pjKxw}Satisfaction over availability of food types.").ToString()
             };
         }
 
