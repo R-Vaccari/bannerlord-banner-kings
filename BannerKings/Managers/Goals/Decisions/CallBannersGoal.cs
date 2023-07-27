@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Behaviours;
-using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Utils.Extensions;
@@ -11,7 +10,6 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -44,27 +42,16 @@ namespace BannerKings.Managers.Goals.Decisions
             Hero fulfiller = GetFulfiller();
             if (!BannerKingsConfig.Instance.ArmyManagementModel.CanCreateArmy(fulfiller))
             {
-                var rulingClan = fulfiller.Clan.Kingdom.RulingClan;
-                var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(rulingClan);
-                var councilMember = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Marshal);
-
                 if (fulfiller.Clan.Kingdom.HasPolicy(BKPolicies.Instance.LimitedArmyPrivilege))
                 {
-                    failedReasons.Add(new TextObject("{=0Yoz051M}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to County level.")
-                                            .SetTextVariable("MARSHAL", councilMember.Name)
-                                            .SetTextVariable("CLAN", rulingClan.Name));
-                }
-                else
-                {
-                    failedReasons.Add(new TextObject("{=9ap6ssvZ}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to Lordship level.")
-                    .SetTextVariable("MARSHAL", councilMember.Name)
-                    .SetTextVariable("CLAN", rulingClan.Name));
+                    failedReasons.Add(new TextObject("{=!}You are not allowed to gather an army under the demesne laws of {REALM}")
+                        .SetTextVariable("REALM", fulfiller.Clan.Kingdom.Name));
                 }
             }
 
             if (fulfiller.IsPrisoner)
             {
-                failedReasons.Add(new TextObject("{=!}"));
+                failedReasons.Add(new TextObject("{=!}Cannot gather an army as a prisoner."));
             }
 
             if (!fulfiller.IsClanLeader())
