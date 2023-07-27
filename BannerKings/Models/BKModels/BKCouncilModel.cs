@@ -462,7 +462,7 @@ namespace BannerKings.Models.BKModels
 
                 if (targetPosition.IsCorePosition(targetPosition.StringId))
                 {
-                    result.AddFactor(0.25f, new TextObject("{=!}Privy council position"));
+                    result.AddFactor(0.25f, new TextObject("{=au6DBvKf}Privy council position"));
                 }
 
                 if (privileges.Contains(CouncilPrivileges.ARMY_PRIVILEGE))

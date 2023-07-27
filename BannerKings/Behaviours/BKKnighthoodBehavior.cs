@@ -392,7 +392,7 @@ namespace BannerKings.Behaviours
                         {
                             var action = BannerKingsConfig.Instance.EstatesModel.GetGrant(estate, Hero.MainHero, Hero.OneToOneConversationHero);
                             result.Add(new InquiryElement(estate,
-                                new TextObject("{=!}{VILLAGE} - {ACREAGE} acres")
+                                new TextObject("{=68m3U2ey}{VILLAGE} - {ACREAGE} acres")
                                 .SetTextVariable("VILLAGE", settlement.Name)
                                 .SetTextVariable("ACREAGE", estate.Acreage.ToString("0.00"))
                                 .ToString(),
@@ -655,7 +655,7 @@ namespace BannerKings.Behaviours
             MBInformationManager
                 .ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     new TextObject("{=LxC6xyv4}Select the Lordship you would like to give away.").ToString(),
-                    new TextObject("{=!}Lordships with more population and acreage will yield more income to their holder, and thus allow a vassal to field a bigger and better retinue.").ToString(), 
+                    new TextObject("{=tujsZ1Mu}Lordships with more population and acreage will yield more income to their holder, and thus allow a vassal to field a bigger and better retinue.").ToString(), 
                     lordshipsToGive, 
                     false,
                     1,
@@ -673,7 +673,7 @@ namespace BannerKings.Behaviours
             MBInformationManager
                 .ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     new TextObject("{=tVvXpPdF}Select the estate you would like to grant.").ToString(),
-                    new TextObject("{=!}Estates with bigger acreage are likely to yield more income to their holder.").ToString(), 
+                    new TextObject("{=CN94YRec}Estates with bigger acreage are likely to yield more income to their holder.").ToString(), 
                     estatesToGive, 
                     false, 
                     1,

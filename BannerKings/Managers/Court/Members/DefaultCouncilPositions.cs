@@ -91,15 +91,15 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=!}Hero must be a clan leader."));
+                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
                     return new(true, null);
                 }, 
                 (CouncilMember member) =>
                 {
                     var id = member.Culture.StringId;
-                    if (id == "empire") return new TextObject("{=!}Legatus");
+                    if (id == "empire") return new TextObject("{=507REJPh}Legatus");
 
-                    return new TextObject("{=!}Legate");
+                    return new TextObject("{=dYPtzd3b}Legate");
                 },
                 new Dictionary<TraitObject, float>()
                 {
@@ -136,15 +136,15 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=!}Hero must be a clan leader."));
+                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
                     return new(true, null);
                 },
                 (CouncilMember member) =>
                 {
                     var id = member.Culture.StringId;
-                    if (id == "empire") return new TextObject("{=!}Legatus");
+                    if (id == "empire") return new TextObject("{=507REJPh}Legatus");
 
-                    return new TextObject("{=!}Legate");
+                    return new TextObject("{=dYPtzd3b}Legate");
                 },
                 new Dictionary<TraitObject, float>()
                 {
@@ -181,15 +181,15 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=!}Hero must be a clan leader."));
+                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
                     return new(true, null);
                 },
                 (CouncilMember member) =>
                 {
                     var id = member.Culture.StringId;
-                    if (id == "empire") return new TextObject("{=!}Legatus");
+                    if (id == "empire") return new TextObject("{=507REJPh}Legatus");
 
-                    return new TextObject("{=!}Legate");
+                    return new TextObject("{=dYPtzd3b}Legate");
                 },
                 new Dictionary<TraitObject, float>()
                 {
@@ -226,15 +226,15 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=!}Hero must be a clan leader."));
+                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
                     return new(true, null);
                 },
                 (CouncilMember member) =>
                 {
                     var id = member.Culture.StringId;
-                    if (id == "empire") return new TextObject("{=!}Legatus");
+                    if (id == "empire") return new TextObject("{=507REJPh}Legatus");
 
-                    return new TextObject("{=!}Legate");
+                    return new TextObject("{=dYPtzd3b}Legate");
                 },
                 new Dictionary<TraitObject, float>()
                 {
@@ -271,15 +271,15 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=!}Hero must be a clan leader."));
+                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
                     return new(true, null);
                 },
                 (CouncilMember member) =>
                 {
                     var id = member.Culture.StringId;
-                    if (id == "empire") return new TextObject("{=!}Legatus");
+                    if (id == "empire") return new TextObject("{=507REJPh}Legatus");
 
-                    return new TextObject("{=!}Legate");
+                    return new TextObject("{=dYPtzd3b}Legate");
                 },
                 new Dictionary<TraitObject, float>()
                 {
@@ -485,7 +485,7 @@ namespace BannerKings.Managers.Court.Members
 
                     if (id == "battania") return new TextObject("{=ELf8YFXe}Draoidh");
                     if (id == "sturgia") return new TextObject("{=ogAzFznn}Volkhvs");
-                    if (id == "aserai") return new TextObject("{=!}Murshid");
+                    if (id == "aserai") return new TextObject("Murshid");
 
                     return new TextObject("{=ZNzX7SKR}Seneschal");
                 });

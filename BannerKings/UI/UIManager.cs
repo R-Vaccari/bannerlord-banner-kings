@@ -667,7 +667,7 @@ namespace BannerKings.UI
                     {
                         if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion))
                         {
-                            reason = new TextObject("{=!}You must be faction leader, {MARSHAL} or a {LEGATE} for the {CLAN} to raise a legion.")
+                            reason = new TextObject("{=xE7gruuP}You must be faction leader, {MARSHAL} or a {LEGATE} for the {CLAN} to raise a legion.")
                                 .SetTextVariable("MARSHAL", marshal.GetCulturalName())
                                 .SetTextVariable("LEGATE", legate.GetCulturalName())
                                 .SetTextVariable("CLAN", rulingClan.Name);

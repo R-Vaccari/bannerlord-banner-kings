@@ -165,8 +165,8 @@ namespace BannerKings.Managers.Titles.Laws
         {
             var cultures = Campaign.Current.ObjectManager.GetObjectTypeList<CultureObject>();
             ArmyPrivate.Initialize(new TextObject("{=R9xGiMLf}Private Armies"),
-                new TextObject("{=!}Every head of a House, beholder of any title superior to a Lordship, not accounting for army privilege policies, is allowed to form their own army."),
-                new TextObject("{=!}Army creation limited by title level (minimum: Barony)"),
+                new TextObject("{=n1ck3HDs}Every head of a House, beholder of any title superior to a Lordship, not accounting for army privilege policies, is allowed to form their own army."),
+                new TextObject("{=Lotmzsso}Army creation limited by title level (minimum: Barony)"),
                 DemesneLawTypes.Army,
                 -0.1f,
                 -0.7f,
@@ -174,8 +174,8 @@ namespace BannerKings.Managers.Titles.Laws
                 300);
 
             ArmyHorde.Initialize(new TextObject("{=VYAP7Arh}Hordes"),
-                new TextObject("{=!}Every chief of a House is allowed to gather their own horde. Hordes are easier to gather than armies, but harder to maintain."),
-                new TextObject("{=!}Army loses cohesion faster\nInfluence cost to call parties reduced\nBattle renown increased while participating in armies"),
+                new TextObject("{=jwdDWjKF}Every chief of a House is allowed to gather their own horde. Hordes are easier to gather than armies, but harder to maintain."),
+                new TextObject("{=vOPRVto1}Army loses cohesion faster\nInfluence cost to call parties reduced\nBattle renown increased while participating in armies"),
                 DemesneLawTypes.Army,
                 -0.4f,
                 0.8f,
@@ -190,8 +190,8 @@ namespace BannerKings.Managers.Titles.Laws
                 });
 
             ArmyLegion.Initialize(new TextObject("{=Qs1qPddP}Legions"),
-                new TextObject("{=!}A concept developed by the Calradoi, legions are armies with the purpose of serving the state, and their leadership, Imperium, is granted to select commanders. More so than any other armies, legions are highly organized and efficient, the results of centuries of continuous and methodical improvement."),
-                new TextObject("{=!}Army creation delegated to Legion Commander council positions\nLegion cohesion lasts longer\nSupply buildup reduced for armies\nReduced influence for army participation"),
+                new TextObject("{=eW400qSp}A concept developed by the Calradoi, legions are armies with the purpose of serving the state, and their leadership, Imperium, is granted to select commanders. More so than any other armies, legions are highly organized and efficient, the results of centuries of continuous and methodical improvement."),
+                new TextObject("{=6DeupBLw}Army creation delegated to Legion Commander council positions\nLegion cohesion lasts longer\nSupply buildup reduced for armies\nReduced influence for army participation"),
                 DemesneLawTypes.Army,
                 0.5f,
                 0.4f,

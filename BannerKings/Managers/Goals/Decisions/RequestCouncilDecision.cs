@@ -55,7 +55,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 else if (council.GetHeroCurrentConflictingPosition(member, Hero.MainHero) == null || member.Member == null)
                 {
                     action = model.GetAction(CouncilActionType.REQUEST, council, Hero.MainHero, member);
-                    hint = hint.SetTextVariable("DESCRIPTION", new TextObject("{=!}Request your liege to grant you this position in the council. This action will cost {INFLUENCE} influence.")
+                    hint = hint.SetTextVariable("DESCRIPTION", new TextObject("{=ehHLy3bN}Request your liege to grant you this position in the council. This action will cost {INFLUENCE} influence.")
                                 .SetTextVariable("INFLUENCE", action.Influence));
                     name = new TextObject("{=DwfLTc6R}Request {POSITION}")
                        .SetTextVariable("POSITION", member.Name);

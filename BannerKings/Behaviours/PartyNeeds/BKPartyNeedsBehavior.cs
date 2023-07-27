@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -46,7 +46,7 @@ namespace BannerKings.Behaviours.PartyNeeds
             starter.AddPlayerLine("bk_supplies_autobuy",
                 "companion_role",
                 "bk_supplies_autobuy_response",
-                "{=!}{SUPPLIES_BUY_TEXT}",
+                "{=JvZaNHAE}{SUPPLIES_BUY_TEXT}",
                 () =>
                 {
                     var companion = Hero.OneToOneConversationHero;
@@ -54,8 +54,8 @@ namespace BannerKings.Behaviours.PartyNeeds
                     if (companion != null && supplies != null)
                     {
                         MBTextManager.SetTextVariable("SUPPLIES_BUY_TEXT", supplies.AutoBuying ?
-                            new TextObject("{=!}Stop buying our supply provisions.") :
-                            new TextObject("{=!}Make sure to stock up our supplies when possible."));
+                            new TextObject("{=cc2YQhwT}Stop buying our supply provisions.") :
+                            new TextObject("{=ot9SY8Vp}Make sure to stock up our supplies when possible."));
 
                         return companion == MobileParty.MainParty.EffectiveQuartermaster;
                     }
@@ -75,10 +75,10 @@ namespace BannerKings.Behaviours.PartyNeeds
                     {
                         
                         MBTextManager.SetTextVariable("SUPPLIES_RESPONSE_TEXT", supplies.AutoBuying ?
-                            new TextObject("{=!}As you wish, {TITLE}. I shall leave our provisioning to you.")
+                            new TextObject("{=eJGP57G9}As you wish, {TITLE}. I shall leave our provisioning to you.")
                             .SetTextVariable("TITLE", Hero.MainHero.IsFemale ? GameTexts.FindText("str_player_salutation_my_lady") : GameTexts.FindText("str_player_salutation_my_lord")) 
                             :
-                            new TextObject("{=!}As you wish, {TITLE}. I shall supply our retinue whenever possible, with provisions for {DAYS} days.")
+                            new TextObject("{=9Uipcvh4}As you wish, {TITLE}. I shall supply our retinue whenever possible, with provisions for {DAYS} days.")
                             .SetTextVariable("TITLE", Hero.MainHero.IsFemale ? GameTexts.FindText("str_player_salutation_my_lady") : GameTexts.FindText("str_player_salutation_my_lord"))
                             .SetTextVariable("DAYS", supplies.DaysOfProvision));
 
@@ -91,7 +91,7 @@ namespace BannerKings.Behaviours.PartyNeeds
             starter.AddPlayerLine("bk_supplies_overview",
                 "companion_role",
                 "bk_supplies_overview_response",
-                "{=!}Quartermaster, give me an overview of our supplies.",
+                "{=N4b5ZFNQ}Quartermaster, give me an overview of our supplies.",
                 () =>
                 {
                     var companion = Hero.OneToOneConversationHero;
@@ -99,8 +99,8 @@ namespace BannerKings.Behaviours.PartyNeeds
                     if (companion != null && supplies != null)
                     {
                         MBTextManager.SetTextVariable("SUPPLIES_BUY_TEXT", supplies.AutoBuying ?
-                            new TextObject("{=!}Stop buying our supply provisions.") :
-                            new TextObject("{=!}Make sure to stock up our supplies when possible."));
+                            new TextObject("{=cc2YQhwT}Stop buying our supply provisions.") :
+                            new TextObject("{=ot9SY8Vp}Make sure to stock up our supplies when possible."));
 
                         return companion == MobileParty.MainParty.EffectiveQuartermaster;
                     }
@@ -119,7 +119,7 @@ namespace BannerKings.Behaviours.PartyNeeds
                     if (companion != null && supplies != null)
                     {
                         MBTextManager.SetTextVariable("SUPPLIES_OVERVIEW_TEXT",
-                            new TextObject("{=!}{TITLE}, our retinue requireth, with {MEMBERS} members and over the course of {DAYS} days, {TEXTITLE} textiles, {ALCOHOL} alcohol, {ANIMAL} animal products and {WOOD} wood for its morale upkeep. In terms of equipment, {ARROWS} arrows, {SHIELDS}, {WEAPONS} weapons and {MOUNTS} mounts are needed. In the case of a siege, we also require additional tools and wood for optimal efficiency at building our camp and siege engines.")
+                            new TextObject("{=So38uc1L}{TITLE}, our retinue requireth, with {MEMBERS} members and over the course of {DAYS} days, {TEXTITLE} textiles, {ALCOHOL} alcohol, {ANIMAL} animal products and {WOOD} wood for its morale upkeep. In terms of equipment, {ARROWS} arrows, {SHIELDS}, {WEAPONS} weapons and {MOUNTS} mounts are needed. In the case of a siege, we also require additional tools and wood for optimal efficiency at building our camp and siege engines.")
                             .SetTextVariable("TITLE", Hero.MainHero.IsFemale ? GameTexts.FindText("str_my_lady") : GameTexts.FindText("str_my_lord"))
                             .SetTextVariable("MOUNTS", MBRandom.RoundRandomized(supplies.GetMountsCurrentNeed().ResultNumber * supplies.DaysOfProvision))
                             .SetTextVariable("WEAPONS", MBRandom.RoundRandomized(supplies.GetWeaponsCurrentNeed().ResultNumber * supplies.DaysOfProvision))

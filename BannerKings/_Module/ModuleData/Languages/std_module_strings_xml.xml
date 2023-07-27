@@ -153,7 +153,6 @@
     <string id="6hY9WysN" text="Claim" />
     <string id="6cxTA139" text="Press your claim and usurp this title from it's owner, making you the lawful ruler of this title. Usurping from lords within your kingdom degrades your clan's reputation." />
     <string id="L3Jzg76z" text="Usurp" />
-    <string id="dcDs5auK" text="Request your liege to grant you this position in the council. This action will cost {INFLUENCE} influence.\n\n{ACCEPT}" />
     <string id="ZYyxmOv9" text="Request" />
     <string id="yYVE3O3p" text="Relinquish your position in the council. It will cost no influence and exempt you of any council privileges.\n\n{ACCEPT}" />
     <string id="uUmEcuV8" text="Age" />
@@ -1127,7 +1126,6 @@
     <string id="y9jGiPQw" text="Slave surplus" />
     <string id="Crsf0YLd" text="Merchants wealth" />
     <string id="UnxSzSGt" text="Castle security" />
-    <string id="Zy76yFyk" text="No hideouts nearby" />
     <string id="L7QhNa6a" text="Tax policy" />
     <string id="y1sBiOKa" text="Administrative costs" />
     <string id="zGx6c77M" text="Cantons kingdom policy" />
@@ -1282,7 +1280,6 @@
     <string id="uEX33Axr" text="{TITLE}, a Lordship would be very generous. Its income would allow me to raise a retinue and be fully independent to pay for it. Of course, the more rent a village produces, the more troops I can provide us." />
     <string id="op5kY5Qq" text="{TITLE}, an estate would be generous. Its income would help pay a retinue, and it's manpower allow us more access to volunteers. Estates with more acres generate more income and provide more manpower." />
     <string id="g09DXXBc" text="Thank you {TITLE}!" />
-    <string id="oQzd5fKm" text="{VILLAGE} - {ACREAGE}" />
     <string id="t37Hiw4V" text="{HERO} already holds property or a title and is considered a knight." />
     <string id="xfcQrgtb" text="{HERO} is close family and in your clan. Their social status mirrors yours as head of family." />
     <string id="OMJDisYX" text="Bestowing knighthood is possible." />
@@ -1478,7 +1475,6 @@
     <string id="fvbLMV0a" text="The {LAW} has been enacted in the {TITLE}." />
     <string id="W1hEDOFT" text="Missing {CULTURE} governor" />
     <string id="njD4zXuM" text="Unlawful owner" />
-    <string id="dkSBAC2Z" text="You don't own this settlement." />
     <string id="OyXbUQN0" text="Cannot grant to notables." />
     <string id="kpGgQCZP" text="Cannot grant to foreign lords." />
     <string id="EUizJXQJ" text="No defined target for granting." />
@@ -2359,7 +2355,6 @@
     <string id="DRPfGwoK" text="No available guests of this type and culture." />
     <string id="2GMvmKEb" text="The {KINGDOM} has chosen {NAME} as their new council member." />
     <string id="R9xGiMLf" text="Private Armies" />
-    <string id="Y6yoi6pe" text="Every relevant head of a House, not accounting for army privilege policies, is allowed to form their own army. As such, they are fully" />
     <string id="VYAP7Arh" text="Hordes" />
     <string id="Qs1qPddP" text="Legions" />
     <string id="3fSea0Y1" text="Appointed Council" />
@@ -2370,7 +2365,6 @@
     <string id="9KKN4gkP" text="Ruler's privy council can only be altered by elections\nRuler's influence cap is increased by 8%" />
     <string id="0ymhCPeh" text="Tighearna" />
     <string id="HGfR1YAx" text="Dominus" />
-    <string id="wc51byvw" text="Gospodin" />
     <string id="YNNXm6GE" text="Mawlaa" />
     <string id="YMr5KkWu" text="Erxem" />
     <string id="hpbLyVY2" text="Toisiche" />
@@ -2385,7 +2379,6 @@
     <string id="ciWnpkW0" text="Khan" />
     <string id="VU1Lsphi" text="Righ" />
     <string id="8e3aXr1R" text="Dux" />
-    <string id="1XDPfDim" text="Knyaz" />
     <string id="9dUqWF9A" text="Emir" />
     <string id="9oRZ0Lms" text="Baghatur" />
     <string id="Mn61rKcx" text="Ard-Righ" />
@@ -2393,5 +2386,40 @@
     <string id="sFnMQqdQ" text="Velikiy Knyaz" />
     <string id="U0MEYHty" text="Sultan" />
     <string id="2MOuvAj0" text="Khagan" />
+    <string id="68m3U2ey" text="{VILLAGE} - {ACREAGE} acres" />
+    <string id="tujsZ1Mu" text="Lordships with more population and acreage will yield more income to their holder, and thus allow a vassal to field a bigger and better retinue." />
+    <string id="CN94YRec" text="Estates with bigger acreage are likely to yield more income to their holder." />
+    <string id="xE7gruuP" text="You must be faction leader, {MARSHAL} or a {LEGATE} for the {CLAN} to raise a legion." />
+    <string id="JvZaNHAE" text="{SUPPLIES_BUY_TEXT}" />
+    <string id="cc2YQhwT" text="Stop buying our supply provisions." />
+    <string id="ot9SY8Vp" text="Make sure to stock up our supplies when possible." />
+    <string id="eJGP57G9" text="As you wish, {TITLE}. I shall leave our provisioning to you." />
+    <string id="9Uipcvh4" text="As you wish, {TITLE}. I shall supply our retinue whenever possible, with provisions for {DAYS} days." />
+    <string id="N4b5ZFNQ" text="Quartermaster, give me an overview of our supplies." />
+    <string id="So38uc1L" text="{TITLE}, our retinue requireth, with {MEMBERS} members and over the course of {DAYS} days, {TEXTITLE} textiles, {ALCOHOL} alcohol, {ANIMAL} animal products and {WOOD} wood for its morale upkeep. In terms of equipment, {ARROWS} arrows, {SHIELDS}, {WEAPONS} weapons and {MOUNTS} mounts are needed. In the case of a siege, we also require additional tools and wood for optimal efficiency at building our camp and siege engines." />
+    <string id="au6DBvKf" text="Privy council position" />
+    <string id="W2Y58H12" text="You don't de facto hold {FIEF} and thus lack control over its estates." />
+    <string id="qyjqPWxJ" text="Criminal policy" />
+    <string id="MEEdhZQY" text="Hero must be a clan leader." />
+    <string id="507REJPh" text="Legatus" />
+    <string id="dYPtzd3b" text="Legate" />
+    <string id="SQq0eH3Z" text="Murshid" />
+    <string id="v5jhrSRL" text="You are not allowed to gather an army under the demesne laws of {REALM}" />
+    <string id="xAwqXXnA" text="Cannot gather an army as a prisoner." />
+    <string id="ehHLy3bN" text="Request your liege to grant you this position in the council. This action will cost {INFLUENCE} influence." />
+    <string id="n1ck3HDs" text="Every head of a House, beholder of any title superior to a Lordship, not accounting for army privilege policies, is allowed to form their own army." />
+    <string id="Lotmzsso" text="Army creation limited by title level (minimum: Barony)" />
+    <string id="jwdDWjKF" text="Every chief of a House is allowed to gather their own horde. Hordes are easier to gather than armies, but harder to maintain." />
+    <string id="vOPRVto1" text="Army loses cohesion faster\nInfluence cost to call parties reduced\nBattle renown increased while participating in armies" />
+    <string id="eW400qSp" text="A concept developed by the Calradoi, legions are armies with the purpose of serving the state, and their leadership, Imperium, is granted to select commanders. More so than any other armies, legions are highly organized and efficient, the results of centuries of continuous and methodical improvement." />
+    <string id="6DeupBLw" text="Army creation delegated to Legion Commander council positions\nLegion cohesion lasts longer\nSupply buildup reduced for armies\nReduced influence for army participation" />
+    <string id="0ekBZX1C" text="Gather Legion" />
+    <string id="rW0p3wWb" text="Harness the state-granted power to gather a legion. Under the legions demesne law, legates are capable of gathering armies, a privilege otherwise usually restricted to the ruler and their marshal." />
+    <string id="91Hdy1y3" text="Increased chance of gathering a legion" />
+    <string id="ezGSFaau" text="Founded by the immediate sons of the legendary patriarch of the Southlands, the Code of Asera forms the basis of philosophy, art and law among the members of the confederated Aserai tribes." />
+    <string id="Ccb1JncG" text="The creed of the Amra Ollamh, “that which is wondrous and great” - is the long-standing folkloric tradition of the people who dwell up the Uchalion plateau. Though outsiders are wont to confuse the Amra Ollamh as little more than tales of goblins, sprites, fair folk and woodland monsters - the creed itself is in fact a deeply involved cultural institution meant to instill the youth of Battania with the lessons of their forebears by way of colloquial metaphor." />
+    <string id="f1Jd0nwL" text="Though the Calradic Empire had long possessed an imperial cult to venerate Emperors who were deemed to be “deliverers” and “saviors” of the civilized world, during the latter years prior to the schism and inerrenegrum the practice of viewing all emperors as god-emperors had become vulgorously commonplace. It was during this period that doctrines and reforms attributed to the teenage Emperor Darusos, a figure infamously denied the rite of the divus by the generals who usurped him, were uncovered." />
+    <string id="sCvx3s88" text="Pérkenweyd is a native faith of the Calradian continent, stretching from the Kachyar peninsula to the Chertyg mountains. Thus, it is the natural faith of the Vakken and Sturgian peoples. Though the Sturgians have been in contact with different cultures and faiths, the Sturgian populace remains true to their ancestry." />
+    <string id="qrhkRi7R" text="The Canticles is a the history of deeds of the Vlandic peoples. It understands the world as a collection of sagas, of which all people are parts of. It does not discriminate between cultures, nor does it see itself as a 'faith', bur rather, a fact." />
   </strings>
 </base>

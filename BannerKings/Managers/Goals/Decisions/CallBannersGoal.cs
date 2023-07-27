@@ -44,14 +44,14 @@ namespace BannerKings.Managers.Goals.Decisions
             {
                 if (fulfiller.Clan.Kingdom.HasPolicy(BKPolicies.Instance.LimitedArmyPrivilege))
                 {
-                    failedReasons.Add(new TextObject("{=!}You are not allowed to gather an army under the demesne laws of {REALM}")
+                    failedReasons.Add(new TextObject("{=v5jhrSRL}You are not allowed to gather an army under the demesne laws of {REALM}")
                         .SetTextVariable("REALM", fulfiller.Clan.Kingdom.Name));
                 }
             }
 
             if (fulfiller.IsPrisoner)
             {
-                failedReasons.Add(new TextObject("{=!}Cannot gather an army as a prisoner."));
+                failedReasons.Add(new TextObject("{=xAwqXXnA}Cannot gather an army as a prisoner."));
             }
 
             if (!fulfiller.IsClanLeader())

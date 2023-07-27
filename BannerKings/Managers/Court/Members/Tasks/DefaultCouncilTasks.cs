@@ -67,9 +67,9 @@ namespace BannerKings.Managers.Court.Members.Tasks
 
         public override void Initialize()
         {
-            GatherLegion.Initialize(new TextObject("{=!}Gather Legion"),
-                new TextObject("{=!}Harness the state-granted power to gather a legion. Under the legions demesne law, legates are capable of gathering armies, a privilege otherwise usually restricted to the ruler and their marshal."),
-                new TextObject("{=!}Increased chance of gathering a legion"),
+            GatherLegion.Initialize(new TextObject("{=0ekBZX1C}Gather Legion"),
+                new TextObject("{=rW0p3wWb}Harness the state-granted power to gather a legion. Under the legions demesne law, legates are capable of gathering armies, a privilege otherwise usually restricted to the ruler and their marshal."),
+                new TextObject("{=91Hdy1y3}Increased chance of gathering a legion"),
                 1f);
 
             OrganizeMiltia.Initialize(new TextObject("{=WQRibYcW}Organize Militia"),

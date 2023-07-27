@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
     {
         public override TextObject GetDescriptionHint()
         {
-            return new TextObject("{=!}The creed of the Amra Ollamh, “that which is wondrous and great” - is the long-standing folkloric tradition of the people who dwell up the Uchalion plateau. Though outsiders are wont to confuse the Amra Ollamh as little more than tales of goblins, sprites, fair folk and woodland monsters - the creed itself is in fact a deeply involved cultural institution meant to instill the youth of Battania with the lessons of their forebears by way of colloquial metaphor.");
+            return new TextObject("{=Ccb1JncG}The creed of the Amra Ollamh, “that which is wondrous and great” - is the long-standing folkloric tradition of the people who dwell up the Uchalion plateau. Though outsiders are wont to confuse the Amra Ollamh as little more than tales of goblins, sprites, fair folk and woodland monsters - the creed itself is in fact a deeply involved cultural institution meant to instill the youth of Battania with the lessons of their forebears by way of colloquial metaphor.");
         }
         public override Banner GetBanner() => new Banner("1.22.22.1836.1836.764.764.1.0.0.500.143.116.393.588.764.764.0.0.90.500.12.116.414.620.764.764.0.0.90.413.2.22.299.299.764.759.0.0.0");
 
