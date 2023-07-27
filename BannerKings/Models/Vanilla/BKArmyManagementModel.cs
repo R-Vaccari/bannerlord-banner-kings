@@ -27,9 +27,7 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
-                var positions = council.GetHeroPositions(armyLeader);
-                return positions.Any(x => x.Privileges.Contains(CouncilPrivileges.ARMY_PRIVILEGE));
-                if (positions.Any(x => x.Privileges.Contains(CouncilPrivileges.ARMY_PRIVILEGE)))
+                if (council.GetHeroPositions(armyLeader).Any(x => x.Privileges.Contains(CouncilPrivileges.ARMY_PRIVILEGE)))
                 {
                     return true;
                 }
@@ -94,17 +92,45 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
+            if (army.MapFaction != null)
+            {
+                FeudalTitle kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(army.MapFaction);
+                if (kingdomTitle != null)
+                {
+                    if (kingdomTitle.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyHorde))
+                    {
+                        result.Add(-0.5f, DefaultDemesneLaws.Instance.ArmyHorde.Name);
+                    }
+                    else if (kingdomTitle.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion))
+                    {
+                        result.Add(0.5f, DefaultDemesneLaws.Instance.ArmyLegion.Name);
+                    }
+                }
+            }
+
             return result;
         }
 
         public override float DailyBeingAtArmyInfluenceAward(MobileParty armyMemberParty)
         {
             var result = base.DailyBeingAtArmyInfluenceAward(armyMemberParty);
-            if (armyMemberParty.MapFaction.IsKingdomFaction &&
-                (armyMemberParty.MapFaction as Kingdom).ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
+            if (armyMemberParty.MapFaction.IsKingdomFaction)
             {
-                result *= 1.5f;
-            }
+                Kingdom kingdom = (armyMemberParty.MapFaction as Kingdom);
+                if (kingdom.ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
+                {
+                    result *= 1.5f;
+                }
+
+                FeudalTitle kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                if (kingdomTitle != null)
+                {
+                    if (kingdomTitle.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion))
+                    {
+                        result *= 0.7f;
+                    }
+                }
+            } 
 
             if (armyMemberParty.LeaderHero != null)
             {

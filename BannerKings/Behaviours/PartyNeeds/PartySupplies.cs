@@ -1,6 +1,8 @@
 ﻿using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Items;
+using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.BKModels;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -165,7 +167,16 @@ namespace BannerKings.Behaviours.PartyNeeds
                     EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Party.LeaderHero);
                     if (DefaultLifestyles.Instance.Commander.Equals(education.Lifestyle))
                     {
-                        modifier = 0.75f;
+                        modifier -= 0.25f;
+                    }
+                }
+
+                if (Party.MapFaction.IsKingdomFaction)
+                {
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Party.MapFaction as Kingdom);
+                    if (title != null && title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion))
+                    {
+                        modifier -= 0.15f;
                     }
                 }
 

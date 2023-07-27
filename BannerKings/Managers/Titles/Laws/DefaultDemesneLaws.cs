@@ -190,12 +190,12 @@ namespace BannerKings.Managers.Titles.Laws
                 });
 
             ArmyLegion.Initialize(new TextObject("{=Qs1qPddP}Legions"),
-                new TextObject("{=!}"),
-                new TextObject("{=!}Army creation delegated to Legion Commander council positions\nLegion cohesion lasts longer\nSupply buildup reduced by 10% for armies"),
+                new TextObject("{=!}A concept developed by the Calradoi, legions are armies with the purpose of serving the state, and their leadership, Imperium, is granted to select commanders. More so than any other armies, legions are highly organized and efficient, the results of centuries of continuous and methodical improvement."),
+                new TextObject("{=!}Army creation delegated to Legion Commander council positions\nLegion cohesion lasts longer\nSupply buildup reduced for armies\nReduced influence for army participation"),
                 DemesneLawTypes.Army,
-                0.8f,
-                -0.2f,
-                -0.4f,
+                0.5f,
+                0.4f,
+                -0.7f,
                 300,
                 null,
                 (Kingdom kingdom) =>
