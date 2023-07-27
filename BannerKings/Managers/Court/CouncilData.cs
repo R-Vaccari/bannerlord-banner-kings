@@ -294,13 +294,8 @@ namespace BannerKings.Managers.Court
                 }
                 else
                 {
-                    var positions = GetHeroPositions(hero);
-                    bool core = position.IsCorePosition(position.StringId);
-                    if (core && !positions.Any(x => !x.Equals(position) && x.IsCorePosition(x.StringId)))
-                    {
-                        available.Add(hero);
-                    }
-                    else if (!core && !positions.Any(x => !x.Equals(position) && !x.IsCorePosition(x.StringId)))
+                    CouncilMember conflicting = GetHeroCurrentConflictingPosition(position, hero);
+                    if (conflicting == null)
                     {
                         available.Add(hero);
                     }
