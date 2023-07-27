@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Grace;
 using BannerKings.Managers.Education.Languages;
@@ -257,7 +258,7 @@ namespace BannerKings.Models.BKModels
         {
             var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
             {
-                Influence = GetInfluenceCost(type, targetPosition)
+                Influence = GetInfluenceCost(type, targetPosition, requester, false).ResultNumber
             };
 
             if (currentPosition == null || currentPosition.Member != requester)
@@ -321,7 +322,7 @@ namespace BannerKings.Models.BKModels
         {
             var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
             {
-                Influence = GetInfluenceCost(type, targetPosition)
+                Influence = GetInfluenceCost(type, targetPosition, requester).ResultNumber
             };
 
             if (requester != null)
@@ -351,7 +352,7 @@ namespace BannerKings.Models.BKModels
         {
             var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
             {
-                Influence = appointed ? 0f : GetInfluenceCost(type, targetPosition)
+                Influence = appointed ? 0f : GetInfluenceCost(type, targetPosition, requester).ResultNumber
             };
 
             if (currentPosition != null && currentPosition.Member == requester)
@@ -447,24 +448,31 @@ namespace BannerKings.Models.BKModels
             return (titleWeight + competence + relation) / 3f;
         }
 
-        public int GetInfluenceCost(CouncilActionType type, CouncilMember targetPosition)
+        public ExplainedNumber GetInfluenceCost(CouncilActionType type, CouncilMember targetPosition, Hero requester, bool descriptions = false)
         {
-            switch (type)
+            ExplainedNumber result = new ExplainedNumber(0f, descriptions);
+            if (type == CouncilActionType.RELINQUISH) return result;
+
+            result.Add(50f, new TextObject("{=AaNeOd9n}Base"));
+            var privileges = targetPosition.AllPrivileges;
+            if (privileges.Contains(CouncilPrivileges.NOBLE_EXCLUSIVE) && requester.Clan != null)
             {
-                case CouncilActionType.REQUEST when targetPosition.Member != null:
-                    return 100;
-                case CouncilActionType.REQUEST:
-                    return 50;
-                case CouncilActionType.RELINQUISH:
-                    return 0;
+                float cap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(requester.Clan).ResultNumber;
+                result.Add(cap * 0.1f, new TextObject("{=wwYABLRd}Clan Influence Limit"));
+
+                if (targetPosition.IsCorePosition(targetPosition.StringId))
+                {
+                    result.AddFactor(0.25f, new TextObject("{=!}Privy council position"));
+                }
+
+                if (privileges.Contains(CouncilPrivileges.ARMY_PRIVILEGE))
+                {
+                    result.AddFactor(0.1f, GameTexts.FindText("str_bk_council_privilege",
+                        CouncilPrivileges.ARMY_PRIVILEGE.ToString().ToLower()));
+                }
             }
 
-            if (targetPosition.Member != null)
-            {
-                return 50;
-            }
-
-            return 10;
+            return result;
         }
     }
 }
