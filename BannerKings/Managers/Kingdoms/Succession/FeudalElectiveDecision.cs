@@ -1,6 +1,5 @@
 ﻿using BannerKings.Managers.Titles;
 using BannerKings.Utils.Extensions;
-using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -25,33 +24,6 @@ namespace BannerKings.Managers.Kingdoms.Succession
             {
                 yield return new KingSelectionDecisionOutcome(candidate.Key);
             }
-        }
-
-        public override float CalculateMeritOfOutcome(DecisionOutcome candidateOutcome)
-        {
-            float merit = 0f;
-            foreach (Clan clan in Kingdom.Clans)
-            {
-                if (clan.Leader != Hero.MainHero)
-                {
-                    merit += CalculateMeritOfOutcomeForClan(clan, candidateOutcome);
-                }
-            }
-
-            return merit;
-        }
-
-        public new float CalculateMeritOfOutcomeForClan(Clan clan, DecisionOutcome outcome)
-        {
-            float result = 0f;
-            Hero candidate = ((KingSelectionDecisionOutcome)outcome).King;
-            result += BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(PreviousRuler, candidate, Title).ResultNumber;
-            if (clan.Leader != candidate)
-            {
-                result *= 2f * (clan.Leader.GetRelation(candidate) / 100f);
-            }
-
-            return result;
         }
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)

@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -12,7 +10,8 @@ namespace BannerKings.Managers.Kingdoms.Succession
 {
     public class RepublicElectionDecision : BKKingElectionDecision
     {
-        public RepublicElectionDecision(Clan proposerClan, Clan clanToExclude = null) : base(proposerClan, clanToExclude)
+        public RepublicElectionDecision(Clan proposerClan, Clan clanToExclude = null) : base(proposerClan, clanToExclude,
+            BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(proposerClan.Kingdom))
         {
             toExclude = clanToExclude;
         }
@@ -69,37 +68,18 @@ namespace BannerKings.Managers.Kingdoms.Succession
             var merit = 0f;
             foreach (var clan in Kingdom.Clans)
             {
-                merit += CalculateMeritInternal(clan, candidateOutcome);
+                var result = new ExplainedNumber(DetermineSupport(clan, candidateOutcome));
+
+                Hero candidate = ((KingSelectionDecisionOutcome)candidateOutcome).King;
+                result.Add(candidate.GetSkillValue(DefaultSkills.Charm));
+                result.Add(candidate.GetSkillValue(DefaultSkills.Leadership));
+                result.Add(candidate.GetSkillValue(DefaultSkills.Steward));
+                result.AddFactor(candidate.Clan.Tier / 10f);
+
+                merit += result.ResultNumber;
             }
 
             return merit;
-        }
-
-        private float CalculateMeritInternal(Clan clan, DecisionOutcome candidateOutcome)
-        {
-            var merit = 0f;
-            var leader = clan.Leader;
-            if (leader != Hero.MainHero)
-            {
-                if (clan == Kingdom.RulingClan)
-                {
-                    merit -= 5f;
-                }
-
-                merit += leader.Age / 10f;
-                merit += clan.Tier / 2f;
-                merit += MBRandom.RandomFloat;
-                merit -= MBRandom.RandomFloat * 2f;
-                merit += leader.GetSkillValue(DefaultSkills.Charm) * 0.01f;
-                merit += leader.GetSkillValue(DefaultSkills.Steward) * 0.01f;
-
-                if (leader.GetTraitLevel(DefaultTraits.Authoritarian) > 0)
-                {
-                    merit -= 1f;
-                }
-            }
-
-            return MathF.Clamp(merit, -3f, 8f);
         }
     }
 }
