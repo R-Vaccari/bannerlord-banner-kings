@@ -1,9 +1,9 @@
 ﻿using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Election;
-using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 using TaleWorlds.TwoDimension;
@@ -20,6 +20,14 @@ namespace BannerKings.Managers.Kingdoms.Succession
         {
             Title = title;
             PreviousRuler = previousRuler;
+        }
+
+        public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
+        {
+            foreach (var candidate in BannerKingsConfig.Instance.TitleModel.CalculateSuccessionLine(Title, PreviousRuler.Clan, PreviousRuler, 3))
+            {
+                yield return new KingSelectionDecisionOutcome(candidate.Key);
+            }
         }
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)

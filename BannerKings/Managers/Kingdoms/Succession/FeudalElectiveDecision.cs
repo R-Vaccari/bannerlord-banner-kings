@@ -1,6 +1,5 @@
 ﻿using BannerKings.Managers.Titles;
 using BannerKings.Utils.Extensions;
-using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Election;
@@ -16,14 +15,6 @@ namespace BannerKings.Managers.Kingdoms.Succession
         public override bool IsAllowed()
         {
             return BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(PreviousRuler, Title).Count > 1;
-        }
-
-        public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
-        {
-            foreach (var candidate in BannerKingsConfig.Instance.TitleModel.CalculateSuccessionLine(Title, PreviousRuler.Clan, PreviousRuler, 3))
-            {
-                yield return new KingSelectionDecisionOutcome(candidate.Key);
-            }
         }
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
