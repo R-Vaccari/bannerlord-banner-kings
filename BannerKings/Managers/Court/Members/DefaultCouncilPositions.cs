@@ -68,7 +68,7 @@ namespace BannerKings.Managers.Court.Members
                 DefaultSkills.Tactics,
                 new List<CouncilTask>()
                 {
-                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                    DefaultCouncilTasks.Instance.GatherLegion.GetCopy()
                 },
                 new List<CouncilPrivileges>()
                 {
@@ -101,7 +101,11 @@ namespace BannerKings.Managers.Court.Members
 
                     return new TextObject("{=!}Legate");
                 },
-                null,
+                new Dictionary<TraitObject, float>()
+                {
+                    { DefaultTraits.Valor, 0.05f },
+                    { DefaultTraits.Calculating, 0.05f }
+                },
                 true);
 
             LegionCommander2.Initialize(
@@ -109,7 +113,7 @@ namespace BannerKings.Managers.Court.Members
                 DefaultSkills.Tactics,
                 new List<CouncilTask>()
                 {
-                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                    DefaultCouncilTasks.Instance.GatherLegion.GetCopy()
                 },
                 new List<CouncilPrivileges>()
                 {
@@ -142,7 +146,11 @@ namespace BannerKings.Managers.Court.Members
 
                     return new TextObject("{=!}Legate");
                 },
-                null,
+                new Dictionary<TraitObject, float>()
+                {
+                    { DefaultTraits.Valor, 0.05f },
+                    { DefaultTraits.Calculating, 0.05f }
+                },
                 true);
 
             LegionCommander3.Initialize(
@@ -150,7 +158,7 @@ namespace BannerKings.Managers.Court.Members
                 DefaultSkills.Tactics,
                 new List<CouncilTask>()
                 {
-                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                    DefaultCouncilTasks.Instance.GatherLegion.GetCopy()
                 },
                 new List<CouncilPrivileges>()
                 {
@@ -183,7 +191,11 @@ namespace BannerKings.Managers.Court.Members
 
                     return new TextObject("{=!}Legate");
                 },
-                null,
+                new Dictionary<TraitObject, float>()
+                {
+                    { DefaultTraits.Valor, 0.05f },
+                    { DefaultTraits.Calculating, 0.05f }
+                },
                 true);
 
             LegionCommander4.Initialize(
@@ -191,7 +203,7 @@ namespace BannerKings.Managers.Court.Members
                 DefaultSkills.Tactics,
                 new List<CouncilTask>()
                 {
-                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                    DefaultCouncilTasks.Instance.GatherLegion.GetCopy()
                 },
                 new List<CouncilPrivileges>()
                 {
@@ -224,7 +236,11 @@ namespace BannerKings.Managers.Court.Members
 
                     return new TextObject("{=!}Legate");
                 },
-                null,
+                new Dictionary<TraitObject, float>()
+                {
+                    { DefaultTraits.Valor, 0.05f },
+                    { DefaultTraits.Calculating, 0.05f }
+                },
                 true);
 
             LegionCommander5.Initialize(
@@ -232,7 +248,7 @@ namespace BannerKings.Managers.Court.Members
                 DefaultSkills.Tactics,
                 new List<CouncilTask>()
                 {
-                    DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy()
+                    DefaultCouncilTasks.Instance.GatherLegion.GetCopy()
                 },
                 new List<CouncilPrivileges>() 
                 { 
@@ -265,7 +281,11 @@ namespace BannerKings.Managers.Court.Members
 
                     return new TextObject("{=!}Legate");
                 },
-                null,
+                new Dictionary<TraitObject, float>()
+                {
+                    { DefaultTraits.Valor, 0.05f },
+                    { DefaultTraits.Calculating, 0.05f }
+                },
                 true);
 
             Marshal.Initialize(
@@ -337,6 +357,11 @@ namespace BannerKings.Managers.Court.Members
                     if (id == "empire") return new TextObject("{=uP0GHCjS}Praefectus Largitionum");
 
                     return new TextObject("{=k4oyM9dT}Steward");
+                },
+                new Dictionary<TraitObject, float>()
+                {
+                    { DefaultTraits.Generosity, -0.05f },
+                    { DefaultTraits.Calculating, 0.1f }
                 });
 
             Chancellor.Initialize(
@@ -408,6 +433,11 @@ namespace BannerKings.Managers.Court.Members
                     if (id == "empire") return new TextObject("{=bZCeizLU}Custodis");
 
                     return new TextObject("{=ZJ8eRkS2}Spymaster");
+                },
+                 new Dictionary<TraitObject, float>()
+                {
+                    { DefaultTraits.Mercy, -0.1f },
+                    { DefaultTraits.Calculating, 0.1f }
                 });
 
             Spiritual.Initialize(
@@ -448,14 +478,14 @@ namespace BannerKings.Managers.Court.Members
 
                         if (id == "battania") return new TextObject("{=PkQ9BKTk}Ard Draoidh");
                         if (id == "sturgia") return new TextObject("{=ogAzFznn}Volkhvs");
-                        if (id == "aserai") return new TextObject("Murshid");
+                        if (id == "aserai") return new TextObject("{=!Murshid");
 
                         return new TextObject("{=rhL4NnWR}High Seneschal");
                     }
 
                     if (id == "battania") return new TextObject("{=ELf8YFXe}Draoidh");
                     if (id == "sturgia") return new TextObject("{=ogAzFznn}Volkhvs");
-                    if (id == "aserai") return new TextObject("Murshid");
+                    if (id == "aserai") return new TextObject("{=!}Murshid");
 
                     return new TextObject("{=ZNzX7SKR}Seneschal");
                 });
