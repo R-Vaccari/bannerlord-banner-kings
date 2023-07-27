@@ -51,6 +51,7 @@
 	<string id="str_bk_demesne_law.EstateTenure" text="{=bk_law_estate_tenure}Estate Tenure" />
 	<string id="str_bk_demesne_law.Tenancy" text="{=bk_law_tenancy}Commoners Tenure" />
 	<string id="str_bk_demesne_law.HighCouncil" text="{=bk_law_high_council}High Council" />
+	<string id="str_bk_demesne_law.Army" text="{=bk_law_high_army}Army" />
 
 	<string id="str_bk_estate_task.Land_Expansion" text="{=bk_land_expansion}Land Expansion" />
 	<string id="str_bk_estate_task.Prodution" text="{=bk_production}Production" />

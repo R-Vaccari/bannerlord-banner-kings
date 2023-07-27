@@ -1,5 +1,4 @@
 using BannerKings.Managers.Court;
-using BannerKings.Models.BKModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,10 +35,10 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             IsFulfilled(out var failedReasons);
             var options = new List<InquiryElement>();
-            var leadingClan = Clan.PlayerClan.Kingdom.RulingClan;
-            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(leadingClan);
+            Clan leadingClan = Clan.PlayerClan.Kingdom.RulingClan;
+            CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(leadingClan);
 
-            foreach (var member in council.Positions)
+            foreach (CouncilMember member in council.Positions)
             {
                 TextObject name = null;
                 var hint = new TextObject("{=DX1iCyKA}{DESCRIPTION}\n\n{REASON}\n\nYour competence is {COMPETENCE}%:\n{EXPLANATION}");
@@ -56,7 +55,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 else if (council.GetHeroCurrentConflictingPosition(member, Hero.MainHero) == null || member.Member == null)
                 {
                     action = model.GetAction(CouncilActionType.REQUEST, council, Hero.MainHero, member);
-                    hint = hint.SetTextVariable("DESCRIPTION", new TextObject("{=dcDs5auK}Request your liege to grant you this position in the council. This action will cost {INFLUENCE}{INFLUENCE_ICON}.\n\n{ACCEPT}")
+                    hint = hint.SetTextVariable("DESCRIPTION", new TextObject("{=!}Request your liege to grant you this position in the council. This action will cost {INFLUENCE} influence.")
                                 .SetTextVariable("INFLUENCE", action.Influence));
                     name = new TextObject("{=DwfLTc6R}Request {POSITION}")
                        .SetTextVariable("POSITION", member.Name);
@@ -79,7 +78,9 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
 
                 ExplainedNumber competence = BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(Hero.MainHero,
-                        member, true);
+                        member, 
+                        true,
+                        true);
                 hint = hint.SetTextVariable("COMPETENCE", (competence.ResultNumber * 100f).ToString("0.00"))
                     .SetTextVariable("EXPLANATION", competence.GetExplanations());
 
