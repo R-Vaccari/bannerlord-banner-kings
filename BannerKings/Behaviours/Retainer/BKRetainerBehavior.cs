@@ -182,6 +182,7 @@ namespace BannerKings.Behaviours.Retainer
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
+            return;
             starter.AddWaitGameMenu("bk_retinue_wait",
                 "{=Pz1Njwo9}{RETINUE_PARTY_NAME}\nRetinue size: {SIZE}/{MAX}\nMorale: {MORALE}\nFood: {FOOD}\nSurgeon: {SURGEON}\nQuartermaster: {QUARTERMASTER}\nScout: {SCOUT}\nEngineer: {ENGINEER}\n",
                 (MenuCallbackArgs args) =>
