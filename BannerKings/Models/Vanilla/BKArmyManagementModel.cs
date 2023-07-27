@@ -66,12 +66,18 @@ namespace BannerKings.Models.Vanilla
                 FeudalTitle kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                 if (kingdomTitle != null && kingdomTitle.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion))
                 {
+                    List<MobileParty> toRemove = new List<MobileParty>();
                     foreach (MobileParty p in results)
                     {
                         if (p != leaderParty && p.LeaderHero != null && CanCreateArmy(p.LeaderHero))
                         {
-                            results.Remove(p);
+                            toRemove.Add(p);
                         }
+                    }
+
+                    foreach (MobileParty p in toRemove)
+                    {
+                        results.Remove(p);
                     }
                 }
             }
