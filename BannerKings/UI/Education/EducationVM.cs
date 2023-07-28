@@ -469,10 +469,17 @@ namespace BannerKings.UI.Education
                 if (book != data.CurrentBook && book.Use != BookUse.Dictionary)
                 {
                     elements.Add(new InquiryElement(book,
-                        book.Item.Name + " - " + book.Language.Name,
+                        book.Item.Name.ToString(),
                         null,
                         BannerKingsConfig.Instance.EducationManager.CanRead(book, hero),
-                        book.Description.ToString()));
+                        new TextObject("{=!}{DESCRIPTION}\nLanguage: {LANGUAGE}\n{SKILL}\n{TRAIT}")
+                        .SetTextVariable("DESCRIPTION", book.Description)
+                        .SetTextVariable("LANGUAGE", book.Language.Name)
+                        .SetTextVariable("SKILL", book.Skill != null ? new TextObject("{=!}Skill: {SKILL}").SetTextVariable("SKILL", book.Skill.Name) 
+                        : TextObject.Empty)
+                        .SetTextVariable("TRAIT", book.Trait != null ? new TextObject("{=!}Trait: {TRAIT}").SetTextVariable("TRAIT", book.Trait.Name)
+                        : TextObject.Empty)
+                        .ToString()));
                 }
             }
 
