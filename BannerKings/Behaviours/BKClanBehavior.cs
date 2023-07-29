@@ -8,6 +8,7 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Traits;
 using BannerKings.Settings;
 using BannerKings.Utils;
 using BannerKings.Utils.Extensions;
@@ -15,6 +16,7 @@ using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -140,6 +142,143 @@ namespace BannerKings.Behaviours
                     return Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan;
                 },
                 null, 100, null);
+
+            starter.AddPlayerLine("bk_convert_family",
+                "lord_talk_speak_diplomacy_2",
+                "bk_convert_family_response",
+                "{=!}I want you to be inducted into the {FAITH} faith.",
+                () =>
+                {
+                    Hero conversation = Hero.OneToOneConversationHero;
+                    if (conversation != null && conversation.Clan == Clan.PlayerClan)
+                    {
+                        Religion playerRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
+                        if (playerRel != null)
+                        {
+                            MBTextManager.SetTextVariable("FAITH", playerRel.Faith.GetFaithName());
+                            Religion conversationRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(conversation);
+                            if (playerRel != conversationRel) return true;
+                        }
+                    }
+
+                    return false;
+                },
+                null,
+                100,
+                (out TextObject reason) =>
+                {
+                    reason = new TextObject("{=!}{HERO} may or may not accept this according to their values in comparison to the faith's values, their zealotry and their opinion of you.")
+                    .SetTextVariable("HERO", Hero.OneToOneConversationHero.Name);
+                    return true;
+                });
+
+            starter.AddDialogLine("bk_convert_family_response",
+               "bk_convert_family_response",
+               "bk_convert_family_response_denied",
+               "{=!}{CONVERSION_DENIED_TEXT}",
+               () =>
+               {
+                   MBTextManager.SetTextVariable("CONVERSION_DENIED_TEXT", 
+                       new TextObject("{=!}{TITLE}, I must refuse your request. Your faith does not represent my beliefs.")
+                       .SetTextVariable("TITLE", ConversationHelper.HeroRefersToHero(Hero.OneToOneConversationHero, Hero.MainHero, true))
+                       );
+                   return BannerKingsConfig.Instance.ReligionModel.GetConversionLikelihood(Hero.MainHero,
+                       Hero.OneToOneConversationHero).ResultNumber < 0;
+               },
+               null);
+
+            starter.AddPlayerLine("bk_convert_family_response_denied",
+                "bk_convert_family_response_denied",
+                "close_window",
+                "{=!}No, I think you will.",
+                () => true,
+                () =>
+                {
+                    BannerKingsConfig.Instance.ReligionsManager.AddToReligion(Hero.OneToOneConversationHero,
+                        BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero));
+                    float factor = -BannerKingsConfig.Instance.ReligionModel.GetConversionLikelihood(Hero.MainHero,
+                       Hero.OneToOneConversationHero).ResultNumber;
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero,
+                        Hero.OneToOneConversationHero,
+                        MBRandom.RoundRandomized(25 * (1f + factor)));
+                },
+                100,
+                (out TextObject reason) =>
+                {
+                    bool unjust = Hero.MainHero.GetTraitLevel(BKTraits.Instance.Just) <= 0;
+                    reason = new TextObject("{=!}{HERO} will be forced to take this action, but will not appreciate it.")
+                    .SetTextVariable("HERO", Hero.OneToOneConversationHero.Name);
+
+                    if (!unjust)
+                    {
+                        reason = new TextObject("{=!}You must not be of Just personality.");
+                    }
+
+                    int piety = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionsManager.GetPiety(Hero.MainHero));
+                    int cost = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero, Hero.MainHero).ResultNumber);
+                    reason = TextObject.Empty;
+                    if (piety < cost)
+                    {
+                        reason = new TextObject("{=!}{TEXT} ({PIETY})")
+                        .SetTextVariable("TEXT",  "{=dxwTedS0}Not enough piety.")
+                        .SetTextVariable("PIETY", piety);
+                    }
+
+                    return unjust && piety >= cost;
+                });
+
+            starter.AddPlayerLine("bk_convert_family_response_denied",
+                "bk_convert_family_response_denied",
+                "lord_talk_speak_diplomacy_2",
+                "{=G4ALCxaA}Never mind.",
+                () => true,
+                null);
+
+            starter.AddDialogLine("bk_convert_family_response",
+               "bk_convert_family_response",
+               "bk_convert_family_response_accepted",
+               "{=!}{CONVERSION_ACCEPTED_TEXT}",
+               () =>
+               {
+                   MBTextManager.SetTextVariable("CONVERSION_ACCEPTED_TEXT",
+                       new TextObject("{=!}I am willing to do that, {TITLE}. If you can make the arrangements for my induction, I am glad to accept.")
+                       .SetTextVariable("TITLE", ConversationHelper.HeroRefersToHero(Hero.OneToOneConversationHero, Hero.MainHero, false))
+                       );
+                   return BannerKingsConfig.Instance.ReligionModel.GetConversionLikelihood(Hero.MainHero,
+                       Hero.OneToOneConversationHero).ResultNumber >= 0;
+               },
+               null);
+
+            starter.AddPlayerLine("bk_convert_family_response_accepted",
+                "bk_convert_family_response_accepted",
+                "close_window",
+                "{=!}Very well, I shall see to it.",
+                () => true,
+                () =>
+                {
+                    BannerKingsConfig.Instance.ReligionsManager.AddToReligion(Hero.OneToOneConversationHero,
+                        BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero));
+                },
+                100,
+                (out TextObject reason) =>
+                {
+                    int piety = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionsManager.GetPiety(Hero.MainHero));
+                    int cost = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero, Hero.MainHero).ResultNumber);
+                    reason = TextObject.Empty;
+                    if (piety < cost)
+                    {
+                        reason = new TextObject("{=dxwTedS0}Not enough piety.");
+                    }
+
+                    return piety >= cost;
+                });
+
+            starter.AddPlayerLine("bk_convert_family_response_accepted",
+                "bk_convert_family_response_accepted",
+                "lord_talk_speak_diplomacy_2",
+                "{=G4ALCxaA}Never mind.",
+                () => true,
+                null);
         }
 
         private bool IsCompanionOfAnotherClan() => CharacterObject.OneToOneConversationCharacter != null && CharacterObject.OneToOneConversationCharacter.IsHero && 
