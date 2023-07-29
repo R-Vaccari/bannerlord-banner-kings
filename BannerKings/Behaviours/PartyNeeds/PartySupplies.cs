@@ -4,6 +4,7 @@ using BannerKings.Managers.Items;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.BKModels;
+using BannerKings.Settings;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
@@ -156,6 +157,19 @@ namespace BannerKings.Behaviours.PartyNeeds
 
         public void Tick()
         {
+            if (BannerKingsSettings.Instance.ResetPartySupplyDemand)
+            {
+                AlcoholNeed = 0f;
+                WoodNeed = 0f;
+                ToolsNeed = 0f;
+                ClothNeed = 0f;
+                ArrowsNeed = 0f;
+                WeaponsNeed = 0f;
+                HorsesNeed = 0f;
+                AnimalProductsNeed = 0f;
+                ShieldsNeed = 0f;
+            }
+
             if (Party.MemberRoster.Count > MinimumSoldiersThreshold)
             {
                 IPartyNeedsModel model = BannerKingsConfig.Instance.PartyNeedsModel;
