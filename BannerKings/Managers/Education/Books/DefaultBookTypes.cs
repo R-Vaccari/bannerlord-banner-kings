@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Items;
+using BannerKings.Managers.Skills;
+using BannerKings.Managers.Traits;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -22,6 +25,15 @@ namespace BannerKings.Managers.Education.Books
         public BookType Bow { get; private set; }
         public BookType Throwing { get; private set; }
         public BookType Medicine { get; private set; }
+        public BookType SkullsEleftheroi { get; } = new BookType("book_SkullsEleftheroi");
+        public BookType WestGemynt { get; } = new BookType("book_WestGemynt");
+        public BookType IrkBitig { get; } = new BookType("book_IrkBitig");
+        public BookType FabulaeAquilae { get; } = new BookType("book_FabulaeAquilae");
+        public BookType NakedFingers { get; } = new BookType("book_NakedFingers");
+        public BookType GardenArgument { get; } = new BookType("book_GardenArgument");
+        public BookType HelgeredKara { get; } = new BookType("book_HelgeredKara");
+        public BookType KaisLayala { get; } = new BookType("book_KaisLayala");
+        public BookType LoveCastle { get; } = new BookType("book_LoveCastle");
 
         public override IEnumerable<BookType> All
         {
@@ -41,6 +53,15 @@ namespace BannerKings.Managers.Education.Books
                 yield return Bow;
                 yield return Throwing;
                 yield return Medicine;
+                yield return SkullsEleftheroi;
+                yield return WestGemynt;
+                yield return IrkBitig;
+                yield return FabulaeAquilae;
+                yield return NakedFingers;
+                yield return GardenArgument;
+                yield return HelgeredKara;
+                yield return KaisLayala;
+                yield return LoveCastle;
                 foreach (BookType item in ModAdditions)
                 {
                     yield return item;
@@ -50,10 +71,71 @@ namespace BannerKings.Managers.Education.Books
 
         public override void Initialize()
         {
+            SkullsEleftheroi.Initialize(BKItems.Instance.BookSkullsEleftheroi,
+                new TextObject("{=!}Subtitled “slaves, servants, soldiers”, this book styles itself as a scientific study of the skull shapes and sizes of the Eleftheroi. Its anonymous author claims that the form of the skulls shows that they are perfect “human livestock”. He argues that runaway slaves have lost all rights and the fact that they return to Imperial lands only to enlist as servants and soldiers is proof that they are less than human. As a biological study, its methods of measuring body parts and collecting data has some limited merits."),
+                DefaultLanguages.Instance.Khuzait,
+                BookUse.Focusbook,
+                DefaultSkills.Medicine);
+
+            WestGemynt.Initialize(BKItems.Instance.BookWestGemynt,
+                new TextObject("{=!}Documented interviews with the last surviving immigrants from the Wilunding homeland. The book is over a century old and has become a major source for both romantic tales and academic debate. Yet, for many of the current Wilunding, a generation was entirely born within Calradia, their homeland has since become a distant memory, a myth."),
+                DefaultLanguages.Instance.Vlandic,
+                BookUse.Focusbook,
+                BKSkills.Instance.Scholarship);
+
+            FabulaeAquilae.Initialize(BKItems.Instance.BookFabulaeAquilae,
+                new TextObject("{=!}Collected by several great theologians, poets and even senator scholars - “tales of the Eagle”, or “the books of tales” as it is colloquially called has become the standard popular versions of old folklore. Nearly all the stories are historical allegories or degraded myths of Calrados and other gods on their shapeshifting adventures as eagle, wolf or dragon. For the Calradoi, these tales are their history, faith and nation."),
+                DefaultLanguages.Instance.Calradian,
+                BookUse.Focusbook,
+                BKSkills.Instance.Theology);
+
+            NakedFingers.Initialize(BKItems.Instance.BookNakedFingers,
+                new TextObject("{=!}Written in prison by a former boss and informant in the Hidden Hand criminal organization, the book claims to expose tactics and methods of the Hidden Hand mafia. It also exposes many of the weaknesses in the imperial justice system."),
+                DefaultLanguages.Instance.Calradian,
+                BookUse.Focusbook,
+                DefaultSkills.Roguery);
+
+            IrkBitig.Initialize(BKItems.Instance.BookIrkBitig,
+                new TextObject("{=!}The Book of Visions is a collection of tales from the Devseg peoples, written down in poetic form. The book describes various small stories that serve to depict omens, be them beningn or not. The poems provide invaluable insight into the Devseg culture and theology."),
+                DefaultLanguages.Instance.Khuzait,
+                BookUse.Focusbook,
+                BKSkills.Instance.Theology);
+
+            GardenArgument.Initialize(BKItems.Instance.BookGardenArgument,
+                new TextObject("{=!}A comedic Vlandic story that criticizes the conventions of courtly love. A lover steals into a garden in Sargot, and plies her with lots of witty lines to persuade his lover to submit to his embraces. She shoots down all of his advances one by one, them when he is downcast, she takes him in her arms and tell him that she wanted him all along, except on her terms, not his. “All the silks of Sargot, all the furs of Varcheg...”"),
+                DefaultLanguages.Instance.Vlandic,
+                BookUse.Skillbook,
+                DefaultSkills.Charm,
+                BKTraits.Instance.Diligent);
+
+            HelgeredKara.Initialize(BKItems.Instance.BookHelgeredKara,
+                new TextObject("{=!}An action story, full of battle. The shieldmaiden Kara chooses the warrior Helgered as her lover, as he is the only man who can defeat her in combat. Her father, who pledged her to another, comes with his sons and his huscarls to kill Helgered. They fight, and Helgered and Kars slaughter the entire host except for Kara's beloved younger -- who, alas, growing up to avenge his father by slaying Helgered. “A light pierced the gloom over Varcheg cliffs...”"),
+                DefaultLanguages.Instance.Sturgian,
+                BookUse.Skillbook,
+                DefaultSkills.OneHanded,
+                DefaultTraits.Valor);
+
+            KaisLayala.Initialize(BKItems.Instance.BookKaisLayala,
+                new TextObject("{=!}A sad story that reminds many of their powerlesness towards the ways of the world. The shepherd boy Kais and the nobleman's daughter Layala love each other, but they can never marry. The poem is Kais's lament as he wanders alone, unwilling to forget his true love, driving himself mad with longing. “The wind that blows the dry steppe dust...”"),
+                DefaultLanguages.Instance.Khuzait,
+                BookUse.Skillbook,
+                DefaultSkills.Charm,
+                BKTraits.Instance.Humble);
+
+            LoveCastle.Initialize(BKItems.Instance.BookLoveCastle,
+                new TextObject("{=!}An allegoric Vlandic tale. It describes how a brave but rough warrior wins the heart of his lady by learning the virtues of chivalry, becoming a true and noble knight."),
+                DefaultLanguages.Instance.Calradian,
+                BookUse.Skillbook,
+                BKSkills.Instance.Lordship,
+                DefaultTraits.Honor);
+
             HeatsDesire = new BookType("book_heartsDesire");
             HeatsDesire.Initialize(BKItems.Instance.BookHeartsDesire, 
-                new TextObject("{=!}"), 
-                DefaultLanguages.Instance.Vlandic, BookUse.Skillbook, DefaultSkills.Charm);
+                new TextObject("{=!}A vlandic tale of love that can be interpreted either erotically or spiritually. The lover realizes the majesty of the divine by gazing upon the body of his beloved. The appeal to love through the naked body is offensive to the highly moralistic, yet compelling to those of more relaxed morals. “You are the first and the last...”"), 
+                DefaultLanguages.Instance.Vlandic, 
+                BookUse.Skillbook, 
+                DefaultSkills.Charm,
+                BKTraits.Instance.Seductive);
 
             Siege = new BookType("book_siege");
             Siege.Initialize(BKItems.Instance.BookSiege, 

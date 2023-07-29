@@ -7,52 +7,39 @@ namespace BannerKings.Managers.Items
     public class BKItems : DefaultTypeInitializer<BKItems, ItemObject>
     {
         public ItemObject BookHeartsDesire { get; private set; }
-
         public ItemObject BookSiege { get; private set; }
-
         public ItemObject BookStrategikon { get; private set; }
-
         public ItemObject BookLeadership { get; private set; }
-
         public ItemObject BookTrade { get; private set; }
-
         public ItemObject BookDictionary { get; private set; }
-
         public ItemObject BookMounted { get; private set; }
-
         public ItemObject BookOneHanded { get; private set; }
-
         public ItemObject BookTwoHanded { get; private set; }
-
         public ItemObject BookPolearm { get; private set; }
-
         public ItemObject BookCrossbow { get; private set; }
-
         public ItemObject BookBow { get; private set; }
-
         public ItemObject BookThrowing { get; private set; }
         public ItemObject BookMedicine { get; private set; }
+        public ItemObject BookLoveCastle { get; private set; }
+        public ItemObject BookKaisLayala { get; private set; }
+        public ItemObject BookHelgeredKara { get; private set; }
+        public ItemObject BookGardenArgument { get; private set; }
+        public ItemObject BookIrkBitig { get; private set; }
+        public ItemObject BookNakedFingers { get; private set; }
+        public ItemObject BookFabulaeAquilae { get; private set; }
+        public ItemObject BookWestGemynt { get; private set; }
+        public ItemObject BookSkullsEleftheroi { get; private set; }
 
         public ItemObject Apple { get; private set; }
-
         public ItemObject Bread { get; private set; }
-
         public ItemObject Pie { get; private set; }
-
         public ItemObject Carrot { get; private set; }
-
         public ItemObject Orange { get; private set; }
-
         public ItemObject Honey { get; private set; }
-
         public ItemObject Limestone { get; private set; }
-
         public ItemObject Marble { get; private set; }
-
         public ItemObject GoldOre { get; private set; }
-
         public ItemObject GoldIngot { get; private set; }
-
         public ItemObject Gems { get; private set; }
         public ItemObject Mead { get; private set; }
         public ItemObject Garum { get; private set; }
@@ -154,6 +141,87 @@ namespace BannerKings.Managers.Items
                 new TextObject("{=skP17S9C}Garum{@Plural}amphorae of garum{\\@}"), "amphora_slim",
                 BKItemCategories.Instance.Garum, 35, 10f, ItemObject.ItemTypeEnum.Goods);
 
+
+            BookIrkBitig = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_irk_bitig"));
+            InitializeTradeGood(BookIrkBitig,
+                new TextObject("{=!}Irk Bitig{@Plural}collection of Irk Bitig books{\\@}"),
+                "lib_book_closed_b",
+                BKItemCategories.Instance.Book, 
+                1000, 
+                1.5f, 
+                ItemObject.ItemTypeEnum.Goods);
+
+            BookNakedFingers = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_naked_fingers"));
+            InitializeTradeGood(BookNakedFingers,
+                new TextObject("{=!}Naked Fingers{@Plural}collection of Naked Fingers books{\\@}"),
+                "lib_book_closed_b",
+                BKItemCategories.Instance.Book,
+                1000,
+                1.5f,
+                ItemObject.ItemTypeEnum.Goods);
+
+            BookWestGemynt = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_west_gemynt"));
+            InitializeTradeGood(BookWestGemynt,
+                new TextObject("{=!}West Gemynt{@Plural}collection of West Gemynt books{\\@}"),
+                "lib_book_closed_b",
+                BKItemCategories.Instance.Book,
+                1000,
+                1.5f,
+                ItemObject.ItemTypeEnum.Goods);
+
+            BookFabulaeAquilae = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_fabulae_aquilae"));
+            InitializeTradeGood(BookFabulaeAquilae,
+                new TextObject("{=!}Fabulae Aquilae{@Plural}collection of Fabulae Aquilae books{\\@}"),
+                "lib_book_closed_b",
+                BKItemCategories.Instance.Book,
+                1000,
+                1.5f,
+                ItemObject.ItemTypeEnum.Goods);
+
+            BookSkullsEleftheroi = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_skulls_eleftheroi"));
+            InitializeTradeGood(BookSkullsEleftheroi,
+                new TextObject("{=!}Skulls of the Eleftheroi{@Plural}collection of Skulls of the Eleftheroi books{\\@}"),
+                "lib_book_closed_b",
+                BKItemCategories.Instance.Book,
+                1000,
+                1.5f,
+                ItemObject.ItemTypeEnum.Goods);
+
+            BookLoveCastle = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_love_castle"));
+            InitializeTradeGood(BookLoveCastle,
+                new TextObject("{=!}The Storming of the Castle of Love{@Plural}collection of The Storming of the Castle of Love books{\\@}"), 
+                "lib_book_closed_a",
+                BKItemCategories.Instance.Book, 
+                750, 
+                1f, 
+                ItemObject.ItemTypeEnum.Goods);
+
+            BookGardenArgument = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_garden_argument"));
+            InitializeTradeGood(BookGardenArgument,
+                new TextObject("{=!}An Argument in the Garden{@Plural}collection of An Argument in the Garden books{\\@}"),
+                "lib_book_closed_a",
+                BKItemCategories.Instance.Book,
+                750,
+                1f,
+                ItemObject.ItemTypeEnum.Goods);
+
+            BookHelgeredKara = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_helgered_kara"));
+            InitializeTradeGood(BookHelgeredKara,
+                new TextObject("{=!}Helgerad and Kara{@Plural}collection of Helgerad and Kara books{\\@}"),
+                "lib_book_closed_a",
+                BKItemCategories.Instance.Book,
+                750,
+                1f,
+                ItemObject.ItemTypeEnum.Goods);
+
+            BookKaisLayala = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_kais_layala"));
+            InitializeTradeGood(BookKaisLayala,
+                new TextObject("{=!}Kais and Layala{@Plural}collection of Kais and Layala books{\\@}"),
+                "lib_book_closed_a",
+                BKItemCategories.Instance.Book,
+                750,
+                1f,
+                ItemObject.ItemTypeEnum.Goods);
 
             BookHeartsDesire = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_hearts_desire"));
             InitializeTradeGood(BookHeartsDesire,
