@@ -161,6 +161,11 @@ namespace BannerKings.Models.Vanilla
                 return base.AverageCallToArmyCost;
             }
 
+            if (armyLeaderParty.ActualClan == party.ActualClan)
+            {
+                return 0;
+            }
+
             float result = base.CalculatePartyInfluenceCost(armyLeaderParty, party);
             if (!party.ActualClan.IsUnderMercenaryService)
             {
