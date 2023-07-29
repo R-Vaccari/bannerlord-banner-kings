@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Education.Languages;
+using BannerKings.Managers.Education.Languages;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
@@ -65,9 +65,9 @@ namespace BannerKings.Managers.Education.Books
                 if (hero == Hero.MainHero)
                 {
                     InformationManager.ShowInquiry(new InquiryData(
-                        new TextObject("{=!}Inspiration from {BOOK}")
+                        new TextObject("{=NW1i6iTM}Inspiration from {BOOK}")
                         .SetTextVariable("BOOK", Name).ToString(),
-                        new TextObject("{=!}Upon finishing the {BOOK}, you feel inspired by the text to change your sense of {TRAIT}. Will you adopt these teachings?")
+                        new TextObject("{=2nLT27xe}Upon finishing the {BOOK}, you feel inspired by the text to change your sense of {TRAIT}. Will you adopt these teachings?")
                         .SetTextVariable("BOOK", Name)
                         .SetTextVariable("TRAIT", Trait.Name).ToString(),
                         true,

@@ -472,12 +472,12 @@ namespace BannerKings.UI.Education
                         book.Item.Name.ToString(),
                         null,
                         BannerKingsConfig.Instance.EducationManager.CanRead(book, hero),
-                        new TextObject("{=!}{DESCRIPTION}\nLanguage: {LANGUAGE}\n{SKILL}\n{TRAIT}")
+                        new TextObject("{=u2yXrnLc}{DESCRIPTION}\nLanguage: {LANGUAGE}\n{SKILL}\n{TRAIT}")
                         .SetTextVariable("DESCRIPTION", book.Description)
                         .SetTextVariable("LANGUAGE", book.Language.Name)
-                        .SetTextVariable("SKILL", book.Skill != null ? new TextObject("{=!}Skill: {SKILL}").SetTextVariable("SKILL", book.Skill.Name) 
+                        .SetTextVariable("SKILL", book.Skill != null ? new TextObject("{=NrQdJeJU}Skill: {SKILL}").SetTextVariable("SKILL", book.Skill.Name) 
                         : TextObject.Empty)
-                        .SetTextVariable("TRAIT", book.Trait != null ? new TextObject("{=!}Trait: {TRAIT}").SetTextVariable("TRAIT", book.Trait.Name)
+                        .SetTextVariable("TRAIT", book.Trait != null ? new TextObject("{=1P5txvhk}Trait: {TRAIT}").SetTextVariable("TRAIT", book.Trait.Name)
                         : TextObject.Empty)
                         .ToString()));
                 }

@@ -146,7 +146,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_convert_family",
                 "lord_talk_speak_diplomacy_2",
                 "bk_convert_family_response",
-                "{=!}I want you to be inducted into the {FAITH} faith.",
+                "{=tGVFzJNr}I want you to be inducted into the {FAITH} faith.",
                 () =>
                 {
                     Hero conversation = Hero.OneToOneConversationHero;
@@ -167,7 +167,7 @@ namespace BannerKings.Behaviours
                 100,
                 (out TextObject reason) =>
                 {
-                    reason = new TextObject("{=!}{HERO} may or may not accept this according to their values in comparison to the faith's values, their zealotry and their opinion of you.")
+                    reason = new TextObject("{=VqS3E7Jp}{HERO} may or may not accept this according to their values in comparison to the faith's values, their zealotry and their opinion of you.")
                     .SetTextVariable("HERO", Hero.OneToOneConversationHero.Name);
                     return true;
                 });
@@ -175,11 +175,11 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("bk_convert_family_response",
                "bk_convert_family_response",
                "bk_convert_family_response_denied",
-               "{=!}{CONVERSION_DENIED_TEXT}",
+               "{=14vM4nv3}{CONVERSION_DENIED_TEXT}",
                () =>
                {
                    MBTextManager.SetTextVariable("CONVERSION_DENIED_TEXT", 
-                       new TextObject("{=!}{TITLE}, I must refuse your request. Your faith does not represent my beliefs.")
+                       new TextObject("{=9pat8jeH}{TITLE}, I must refuse your request. Your faith does not represent my beliefs.")
                        .SetTextVariable("TITLE", ConversationHelper.HeroRefersToHero(Hero.OneToOneConversationHero, Hero.MainHero, true))
                        );
                    return BannerKingsConfig.Instance.ReligionModel.GetConversionLikelihood(Hero.MainHero,
@@ -190,7 +190,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_convert_family_response_denied",
                 "bk_convert_family_response_denied",
                 "close_window",
-                "{=!}No, I think you will.",
+                "{=H1cBDKh6}No, I think you will.",
                 () => true,
                 () =>
                 {
@@ -206,12 +206,12 @@ namespace BannerKings.Behaviours
                 (out TextObject reason) =>
                 {
                     bool unjust = Hero.MainHero.GetTraitLevel(BKTraits.Instance.Just) <= 0;
-                    reason = new TextObject("{=!}{HERO} will be forced to take this action, but will not appreciate it.")
+                    reason = new TextObject("{=gx23V52s}{HERO} will be forced to take this action, but will not appreciate it.")
                     .SetTextVariable("HERO", Hero.OneToOneConversationHero.Name);
 
                     if (!unjust)
                     {
-                        reason = new TextObject("{=!}You must not be of Just personality.");
+                        reason = new TextObject("{=ZKGQaMVF}You must not be of Just personality.");
                     }
 
                     int piety = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionsManager.GetPiety(Hero.MainHero));
@@ -219,7 +219,7 @@ namespace BannerKings.Behaviours
                     reason = TextObject.Empty;
                     if (piety < cost)
                     {
-                        reason = new TextObject("{=!}{TEXT} ({PIETY})")
+                        reason = new TextObject("{=WbFLsesv}{TEXT} ({PIETY})")
                         .SetTextVariable("TEXT",  "{=dxwTedS0}Not enough piety.")
                         .SetTextVariable("PIETY", piety);
                     }
@@ -237,11 +237,11 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("bk_convert_family_response",
                "bk_convert_family_response",
                "bk_convert_family_response_accepted",
-               "{=!}{CONVERSION_ACCEPTED_TEXT}",
+               "{=LLwOeHmr}{CONVERSION_ACCEPTED_TEXT}",
                () =>
                {
                    MBTextManager.SetTextVariable("CONVERSION_ACCEPTED_TEXT",
-                       new TextObject("{=!}I am willing to do that, {TITLE}. If you can make the arrangements for my induction, I am glad to accept.")
+                       new TextObject("{=WzpHv2iE}I am willing to do that, {TITLE}. If you can make the arrangements for my induction, I am glad to accept.")
                        .SetTextVariable("TITLE", ConversationHelper.HeroRefersToHero(Hero.OneToOneConversationHero, Hero.MainHero, false))
                        );
                    return BannerKingsConfig.Instance.ReligionModel.GetConversionLikelihood(Hero.MainHero,
@@ -252,7 +252,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_convert_family_response_accepted",
                 "bk_convert_family_response_accepted",
                 "close_window",
-                "{=!}Very well, I shall see to it.",
+                "{=wtUzdPs5}Very well, I shall see to it.",
                 () => true,
                 () =>
                 {

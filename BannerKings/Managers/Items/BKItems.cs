@@ -144,7 +144,7 @@ namespace BannerKings.Managers.Items
 
             BookIrkBitig = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_irk_bitig"));
             InitializeTradeGood(BookIrkBitig,
-                new TextObject("{=!}Irk Bitig{@Plural}collection of Irk Bitig books{\\@}"),
+                new TextObject("{=gWqmDXOC}Irk Bitig{@Plural}collection of Irk Bitig books{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book, 
                 1000, 
@@ -153,7 +153,7 @@ namespace BannerKings.Managers.Items
 
             BookNakedFingers = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_naked_fingers"));
             InitializeTradeGood(BookNakedFingers,
-                new TextObject("{=!}Naked Fingers{@Plural}collection of Naked Fingers books{\\@}"),
+                new TextObject("{=EGsKJpNS}Naked Fingers{@Plural}collection of Naked Fingers books{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book,
                 1000,
@@ -162,7 +162,7 @@ namespace BannerKings.Managers.Items
 
             BookWestGemynt = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_west_gemynt"));
             InitializeTradeGood(BookWestGemynt,
-                new TextObject("{=!}West Gemynt{@Plural}collection of West Gemynt books{\\@}"),
+                new TextObject("{=ia3kgNVe}West Gemynt{@Plural}collection of West Gemynt books{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book,
                 1000,
@@ -171,7 +171,7 @@ namespace BannerKings.Managers.Items
 
             BookFabulaeAquilae = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_fabulae_aquilae"));
             InitializeTradeGood(BookFabulaeAquilae,
-                new TextObject("{=!}Fabulae Aquilae{@Plural}collection of Fabulae Aquilae books{\\@}"),
+                new TextObject("{=3BY8K3S5}Fabulae Aquilae{@Plural}collection of Fabulae Aquilae books{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book,
                 1000,
@@ -180,7 +180,7 @@ namespace BannerKings.Managers.Items
 
             BookSkullsEleftheroi = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_skulls_eleftheroi"));
             InitializeTradeGood(BookSkullsEleftheroi,
-                new TextObject("{=!}Skulls of the Eleftheroi{@Plural}collection of Skulls of the Eleftheroi books{\\@}"),
+                new TextObject("{=c0sJc9o9}Skulls of the Eleftheroi{@Plural}collection of Skulls of the Eleftheroi books{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book,
                 1000,
@@ -189,7 +189,7 @@ namespace BannerKings.Managers.Items
 
             BookLoveCastle = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_love_castle"));
             InitializeTradeGood(BookLoveCastle,
-                new TextObject("{=!}The Storming of the Castle of Love{@Plural}collection of The Storming of the Castle of Love books{\\@}"), 
+                new TextObject("{=mnCoKY5H}The Storming of the Castle of Love{@Plural}collection of The Storming of the Castle of Love books{\\@}"), 
                 "lib_book_closed_a",
                 BKItemCategories.Instance.Book, 
                 750, 
@@ -198,7 +198,7 @@ namespace BannerKings.Managers.Items
 
             BookGardenArgument = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_garden_argument"));
             InitializeTradeGood(BookGardenArgument,
-                new TextObject("{=!}An Argument in the Garden{@Plural}collection of An Argument in the Garden books{\\@}"),
+                new TextObject("{=gCQCWHYT}An Argument in the Garden{@Plural}collection of An Argument in the Garden books{\\@}"),
                 "lib_book_closed_a",
                 BKItemCategories.Instance.Book,
                 750,
@@ -207,7 +207,7 @@ namespace BannerKings.Managers.Items
 
             BookHelgeredKara = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_helgered_kara"));
             InitializeTradeGood(BookHelgeredKara,
-                new TextObject("{=!}Helgerad and Kara{@Plural}collection of Helgerad and Kara books{\\@}"),
+                new TextObject("{=BMtB9P3L}Helgerad and Kara{@Plural}collection of Helgerad and Kara books{\\@}"),
                 "lib_book_closed_a",
                 BKItemCategories.Instance.Book,
                 750,
@@ -216,7 +216,7 @@ namespace BannerKings.Managers.Items
 
             BookKaisLayala = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_kais_layala"));
             InitializeTradeGood(BookKaisLayala,
-                new TextObject("{=!}Kais and Layala{@Plural}collection of Kais and Layala books{\\@}"),
+                new TextObject("{=zwsT7Dzj}Kais and Layala{@Plural}collection of Kais and Layala books{\\@}"),
                 "lib_book_closed_a",
                 BKItemCategories.Instance.Book,
                 750,

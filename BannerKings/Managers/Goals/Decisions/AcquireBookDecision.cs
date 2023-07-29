@@ -57,13 +57,13 @@ namespace BannerKings.Managers.Goals.Decisions
                 var book = allBooks.FirstOrDefault(x => x.Item == element.EquipmentElement.Item);
                 var price = book.Item.Value * 1000;
 
-                TextObject hint = new TextObject("{=!}{DESCRIPTION}\n{GOLD_AMOUNT}{GOLD_ICON}\nLanguage: {LANGUAGE}\n{SKILL}\n{TRAIT}")
+                TextObject hint = new TextObject("{=jAdG0wG9}{DESCRIPTION}\n{GOLD_AMOUNT}{GOLD_ICON}\nLanguage: {LANGUAGE}\n{SKILL}\n{TRAIT}")
                         .SetTextVariable("DESCRIPTION", book.Description)
                         .SetTextVariable("GOLD_AMOUNT", price)
                         .SetTextVariable("LANGUAGE", book.Language.Name)
-                        .SetTextVariable("SKILL", book.Skill != null ? new TextObject("{=!}Skill: {SKILL}").SetTextVariable("SKILL", book.Skill.Name)
+                        .SetTextVariable("SKILL", book.Skill != null ? new TextObject("{=NrQdJeJU}Skill: {SKILL}").SetTextVariable("SKILL", book.Skill.Name)
                         : TextObject.Empty)
-                        .SetTextVariable("TRAIT", book.Trait != null ? new TextObject("{=!}Trait: {TRAIT}").SetTextVariable("TRAIT", book.Trait.Name)
+                        .SetTextVariable("TRAIT", book.Trait != null ? new TextObject("{=1P5txvhk}Trait: {TRAIT}").SetTextVariable("TRAIT", book.Trait.Name)
                         : TextObject.Empty);
 
                 elements.Add(new InquiryElement(book, new TextObject("{=e8KTkKtX}{BOOK} ({LANGUAGE})")

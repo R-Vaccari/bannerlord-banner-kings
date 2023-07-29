@@ -91,7 +91,7 @@ namespace BannerKings.Managers.Traits
 
         public override void Initialize()
         {
-            Seductive.Initialize(new TextObject("{=!}Seductiveness"),
+            Seductive.Initialize(new TextObject("{=x384LrUe}Seductiveness"),
                 new TextObject("{=!}"),
                 true,
                 -2,
@@ -110,7 +110,7 @@ namespace BannerKings.Managers.Traits
                 2);
 
             Diligent.Initialize(new TextObject("{=18oVwc0j}Diligence"),
-                new TextObject("{=!}Diligence is one's willingness to work tirelessly towards their goal."),
+                new TextObject("{=GQcHnPjV}Diligence is one's willingness to work tirelessly towards their goal."),
                 true,
                 -2,
                 2);

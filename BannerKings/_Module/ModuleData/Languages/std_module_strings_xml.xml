@@ -2399,20 +2399,16 @@
     <string id="So38uc1L" text="{TITLE}, our retinue requireth, with {MEMBERS} members and over the course of {DAYS} days, {TEXTITLE} textiles, {ALCOHOL} alcohol, {ANIMAL} animal products and {WOOD} wood for its morale upkeep. In terms of equipment, {ARROWS} arrows, {SHIELDS}, {WEAPONS} weapons and {MOUNTS} mounts are needed. In the case of a siege, we also require additional tools and wood for optimal efficiency at building our camp and siege engines." />
     <string id="au6DBvKf" text="Privy council position" />
     <string id="W2Y58H12" text="You don't de facto hold {FIEF} and thus lack control over its estates." />
-    <string id="qyjqPWxJ" text="Criminal policy" />
     <string id="MEEdhZQY" text="Hero must be a clan leader." />
     <string id="507REJPh" text="Legatus" />
     <string id="dYPtzd3b" text="Legate" />
-    <string id="SQq0eH3Z" text="Murshid" />
     <string id="v5jhrSRL" text="You are not allowed to gather an army under the demesne laws of {REALM}" />
     <string id="xAwqXXnA" text="Cannot gather an army as a prisoner." />
     <string id="ehHLy3bN" text="Request your liege to grant you this position in the council. This action will cost {INFLUENCE} influence." />
     <string id="n1ck3HDs" text="Every head of a House, beholder of any title superior to a Lordship, not accounting for army privilege policies, is allowed to form their own army." />
-    <string id="Lotmzsso" text="Army creation limited by title level (minimum: Barony)" />
     <string id="jwdDWjKF" text="Every chief of a House is allowed to gather their own horde. Hordes are easier to gather than armies, but harder to maintain." />
     <string id="vOPRVto1" text="Army loses cohesion faster\nInfluence cost to call parties reduced\nBattle renown increased while participating in armies" />
     <string id="eW400qSp" text="A concept developed by the Calradoi, legions are armies with the purpose of serving the state, and their leadership, Imperium, is granted to select commanders. More so than any other armies, legions are highly organized and efficient, the results of centuries of continuous and methodical improvement." />
-    <string id="6DeupBLw" text="Army creation delegated to Legion Commander council positions\nLegion cohesion lasts longer\nSupply buildup reduced for armies\nReduced influence for army participation" />
     <string id="0ekBZX1C" text="Gather Legion" />
     <string id="rW0p3wWb" text="Harness the state-granted power to gather a legion. Under the legions demesne law, legates are capable of gathering armies, a privilege otherwise usually restricted to the ruler and their marshal." />
     <string id="91Hdy1y3" text="Increased chance of gathering a legion" />
@@ -2421,5 +2417,46 @@
     <string id="f1Jd0nwL" text="Though the Calradic Empire had long possessed an imperial cult to venerate Emperors who were deemed to be “deliverers” and “saviors” of the civilized world, during the latter years prior to the schism and inerrenegrum the practice of viewing all emperors as god-emperors had become vulgorously commonplace. It was during this period that doctrines and reforms attributed to the teenage Emperor Darusos, a figure infamously denied the rite of the divus by the generals who usurped him, were uncovered." />
     <string id="sCvx3s88" text="Pérkenweyd is a native faith of the Calradian continent, stretching from the Kachyar peninsula to the Chertyg mountains. Thus, it is the natural faith of the Vakken and Sturgian peoples. Though the Sturgians have been in contact with different cultures and faiths, the Sturgian populace remains true to their ancestry." />
     <string id="qrhkRi7R" text="The Canticles is a the history of deeds of the Vlandic peoples. It understands the world as a collection of sagas, of which all people are parts of. It does not discriminate between cultures, nor does it see itself as a 'faith', bur rather, a fact." />
+    <string id="tGVFzJNr" text="I want you to be inducted into the {FAITH} faith." />
+    <string id="VqS3E7Jp" text="{HERO} may or may not accept this according to their values in comparison to the faith's values, their zealotry and their opinion of you." />
+    <string id="14vM4nv3" text="{CONVERSION_DENIED_TEXT}" />
+    <string id="9pat8jeH" text="{TITLE}, I must refuse your request. Your faith does not represent my beliefs." />
+    <string id="H1cBDKh6" text="No, I think you will." />
+    <string id="gx23V52s" text="{HERO} will be forced to take this action, but will not appreciate it." />
+    <string id="ZKGQaMVF" text="You must not be of Just personality." />
+    <string id="WbFLsesv" text="{TEXT} ({PIETY})" />
+    <string id="LLwOeHmr" text="{CONVERSION_ACCEPTED_TEXT}" />
+    <string id="WzpHv2iE" text="I am willing to do that, {TITLE}. If you can make the arrangements for my induction, I am glad to accept." />
+    <string id="wtUzdPs5" text="Very well, I shall see to it." />
+    <string id="gWqmDXOC" text="Irk Bitig{@Plural}collection of Irk Bitig books{\\@}" />
+    <string id="EGsKJpNS" text="Naked Fingers{@Plural}collection of Naked Fingers books{\\@}" />
+    <string id="ia3kgNVe" text="West Gemynt{@Plural}collection of West Gemynt books{\\@}" />
+    <string id="3BY8K3S5" text="Fabulae Aquilae{@Plural}collection of Fabulae Aquilae books{\\@}" />
+    <string id="c0sJc9o9" text="Skulls of the Eleftheroi{@Plural}collection of Skulls of the Eleftheroi books{\\@}" />
+    <string id="mnCoKY5H" text="The Storming of the Castle of Love{@Plural}collection of The Storming of the Castle of Love books{\\@}" />
+    <string id="gCQCWHYT" text="An Argument in the Garden{@Plural}collection of An Argument in the Garden books{\\@}" />
+    <string id="BMtB9P3L" text="Helgerad and Kara{@Plural}collection of Helgerad and Kara books{\\@}" />
+    <string id="zwsT7Dzj" text="Kais and Layala{@Plural}collection of Kais and Layala books{\\@}" />
+    <string id="x384LrUe" text="Seductiveness" />
+    <string id="GQcHnPjV" text="Diligence is one's willingness to work tirelessly towards their goal." />
+    <string id="bYHRQmAW" text="Willingness to convert" />
+    <string id="u2yXrnLc" text="{DESCRIPTION}\nLanguage: {LANGUAGE}\n{SKILL}\n{TRAIT}" />
+    <string id="NrQdJeJU" text="Skill: {SKILL}" />
+    <string id="1P5txvhk" text="Trait: {TRAIT}" />
+    <string id="NW1i6iTM" text="Inspiration from {BOOK}" />
+    <string id="2nLT27xe" text="Upon finishing the {BOOK}, you feel inspired by the text to change your sense of {TRAIT}. Will you adopt these teachings?" />
+    <string id="F9468GN7" text="Subtitled “slaves, servants, soldiers”, this book styles itself as a scientific study of the skull shapes and sizes of the Eleftheroi. Its anonymous author claims that the form of the skulls shows that they are perfect “human livestock”. He argues that runaway slaves have lost all rights and the fact that they return to Imperial lands only to enlist as servants and soldiers is proof that they are less than human. As a biological study, its methods of measuring body parts and collecting data has some limited merits." />
+    <string id="QxZBqSj8" text="Documented interviews with the last surviving immigrants from the Wilunding homeland. The book is over a century old and has become a major source for both romantic tales and academic debate. Yet, for many of the current Wilunding, a generation was entirely born within Calradia, their homeland has since become a distant memory, a myth." />
+    <string id="UOKVvnfo" text="Collected by several great theologians, poets and even senator scholars - “tales of the Eagle”, or “the books of tales” as it is colloquially called has become the standard popular versions of old folklore. Nearly all the stories are historical allegories or degraded myths of Calrados and other gods on their shapeshifting adventures as eagle, wolf or dragon. For the Calradoi, these tales are their history, faith and nation." />
+    <string id="XEkfTzb4" text="Written in prison by a former boss and informant in the Hidden Hand criminal organization, the book claims to expose tactics and methods of the Hidden Hand mafia. It also exposes many of the weaknesses in the imperial justice system." />
+    <string id="bbox1mnG" text="The Book of Visions is a collection of tales from the Devseg peoples, written down in poetic form. The book describes various small stories that serve to depict omens, be them beningn or not. The poems provide invaluable insight into the Devseg culture and theology." />
+    <string id="J3SKKSfk" text="A comedic Vlandic story that criticizes the conventions of courtly love. A lover steals into a garden in Sargot, and plies her with lots of witty lines to persuade his lover to submit to his embraces. She shoots down all of his advances one by one, them when he is downcast, she takes him in her arms and tell him that she wanted him all along, except on her terms, not his. “All the silks of Sargot, all the furs of Varcheg...”" />
+    <string id="CN8pxctd" text="An action story, full of battle. The shieldmaiden Kara chooses the warrior Helgered as her lover, as he is the only man who can defeat her in combat. Her father, who pledged her to another, comes with his sons and his huscarls to kill Helgered. They fight, and Helgered and Kars slaughter the entire host except for Kara's beloved younger -- who, alas, growing up to avenge his father by slaying Helgered. “A light pierced the gloom over Varcheg cliffs...”" />
+    <string id="eQi3froa" text="A sad story that reminds many of their powerlesness towards the ways of the world. The shepherd boy Kais and the nobleman's daughter Layala love each other, but they can never marry. The poem is Kais's lament as he wanders alone, unwilling to forget his true love, driving himself mad with longing. “The wind that blows the dry steppe dust...”" />
+    <string id="WfjPoxGs" text="An allegoric Vlandic tale. It describes how a brave but rough warrior wins the heart of his lady by learning the virtues of chivalry, becoming a true and noble knight." />
+    <string id="kDM2UWeE" text="A vlandic tale of love that can be interpreted either erotically or spiritually. The lover realizes the majesty of the divine by gazing upon the body of his beloved. The appeal to love through the naked body is offensive to the highly moralistic, yet compelling to those of more relaxed morals. “You are the first and the last...”" />
+    <string id="jAdG0wG9" text="{DESCRIPTION}\n{GOLD_AMOUNT}{GOLD_ICON}\nLanguage: {LANGUAGE}\n{SKILL}\n{TRAIT}" />
+    <string id="sLTkCtmc" text="Army creation limited by title level (minimum: Barony)\nCalling potential army leaders costs twice as much" />
+    <string id="P1yotQ6Q" text="Army creation delegated to Legion Commander council positions\nLegion cohesion lasts longer\nSupply buildup reduced for armies\nReduced influence for army participation\nCalling potential army leaders costs 5 times as much" />
   </strings>
 </base>

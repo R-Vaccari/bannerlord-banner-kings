@@ -105,7 +105,7 @@ namespace BannerKings.Models.BKModels
             }
 
             result.Add(MathF.Clamp(40f * -GetConversionLikelihood(converter, converted).ResultNumber, -10f, 40f),
-                new TextObject("{=!}Willingness to convert"));
+                new TextObject("{=bYHRQmAW}Willingness to convert"));
 
             if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(converter,
                 DefaultDivinities.Instance.DarusosianMain))
