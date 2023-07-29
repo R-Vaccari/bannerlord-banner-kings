@@ -15,6 +15,7 @@ namespace BannerKings.Managers.Traits
         public TraitObject Diligent { get; } = new TraitObject("Diligent");
         public TraitObject Ambitious { get; } = new TraitObject("Ambitious");
         public TraitObject Zealous { get; } = new TraitObject("Zealous");
+        public TraitObject Seductive { get; } = new TraitObject("Seductive");
 
         public TraitObject AptitudeViolence { get; } = new TraitObject("AptitudeViolence");
         public TraitObject AptitudeErudition { get; } = new TraitObject("AptitudeErudition");
@@ -58,6 +59,7 @@ namespace BannerKings.Managers.Traits
                 yield return Diligent;
                 yield return Ambitious;
                 yield return Zealous;
+                yield return Seductive;
             }
         }
 
@@ -89,6 +91,12 @@ namespace BannerKings.Managers.Traits
 
         public override void Initialize()
         {
+            Seductive.Initialize(new TextObject("{=!}Seductiveness"),
+                new TextObject("{=!}"),
+                true,
+                -2,
+                2);
+
             Just.Initialize(new TextObject("{=1q03XzNp}Justice"),
                 new TextObject("{=1q03XzNp}Justice is the appropriate punishment and reward for a given deed. Just rulers are often respected by their vassals for delivering appropriate sentences, but also adequately rewarding loyalty."),
                 true,
@@ -102,7 +110,7 @@ namespace BannerKings.Managers.Traits
                 2);
 
             Diligent.Initialize(new TextObject("{=18oVwc0j}Diligence"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Diligence is one's willingness to work tirelessly towards their goal."),
                 true,
                 -2,
                 2);
