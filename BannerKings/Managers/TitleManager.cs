@@ -183,6 +183,7 @@ namespace BannerKings.Managers
                         .ToString()));
             }
 
+            grantor.AddSkillXp(BKSkills.Instance.Lordship, 300f);
             AddKnightInfluence(knight, 0f);
         }
 
@@ -203,6 +204,7 @@ namespace BannerKings.Managers
                         .ToString()));
             }
 
+            grantor.AddSkillXp(BKSkills.Instance.Lordship, 600f);
             AddKnightInfluence(knight, 0f);
         }
 

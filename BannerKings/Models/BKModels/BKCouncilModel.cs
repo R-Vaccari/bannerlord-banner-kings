@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Grace;
 using BannerKings.Managers.Education.Languages;
@@ -49,19 +50,38 @@ namespace BannerKings.Models.BKModels
             if (data.Location != null)
             {
                 result.Add(data.Location.Prosperity * 0.05f, data.Location.Name);
+
+                var lodgings = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Lodgings);
+                var servants = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Servants);
+                var security = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Security);
+                var extravagance = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Extravagance);
+                var supplies = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Supplies);
+
+                result.Add(lodgings.Grace, lodgings.Name);
+                result.Add(servants.Grace, servants.Name);
+                //result.Add(security.Grace, security.Name);
+                result.Add(extravagance.Grace, extravagance.Name);
+                result.Add(supplies.Grace, supplies.Name);
             }
             
-            var lodgings = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Lodgings);
-            var servants = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Servants);
-            var security = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Security);
-            var extravagance = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Extravagance);
-            var supplies = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Supplies);
+            foreach (var position in data.Positions)
+            {
+                result.Add(CalculatePositionGrace(position).ResultNumber, position.GetCulturalName());
+            }
 
-            result.Add(lodgings.Grace, lodgings.Name);
-            result.Add(servants.Grace, servants.Name);
-            //result.Add(security.Grace, security.Name);
-            result.Add(extravagance.Grace, extravagance.Name);
-            result.Add(supplies.Grace, supplies.Name);
+            return result;
+        }
+
+        public ExplainedNumber CalculatePositionGrace(CouncilMember position, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(0, explanations);
+            if (position.Member == null)
+            {
+                return result;
+            }
+
+            result.Add(position.InfluenceCosts() * 150f, new TextObject("{=5zVvff39}Position's influence"));
+            result.AddFactor(position.Competence.ResultNumber, new TextObject("Competence"));
 
             return result;
         }
@@ -81,7 +101,7 @@ namespace BannerKings.Models.BKModels
                 else if (tier == 4) tierGrace = 150f;
                 else if (tier == 5) tierGrace = 200f;
                 else if (tier >= 6) tierGrace = 250f;
-                result.Add(tierGrace, new TextObject("{=!}Clan tier"));
+                result.Add(tierGrace, new TextObject("{=bbOk856z}Clan tier"));
 
                 if (data.Clan.Kingdom != null && data.Clan.Kingdom.RulingClan == data.Clan)
                 {
@@ -126,7 +146,7 @@ namespace BannerKings.Models.BKModels
             {
                 float factor = Campaign.Current.Models.MapDistanceModel.GetDistance(target.Settlement,
                 council.Location.Settlement) / Campaign.AverageDistanceBetweenTwoFortifications;
-                result.AddFactor(factor, new TextObject("{=!}Distance between {TOWN1} and {TOWN2}")
+                result.AddFactor(factor, new TextObject("{=Frw4p1qD}Distance between {TOWN1} and {TOWN2}")
                     .SetTextVariable("TOWN1", target.Name)
                     .SetTextVariable("TOWN2", council.Location.Name));
             }
@@ -238,7 +258,7 @@ namespace BannerKings.Models.BKModels
         {
             var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
             {
-                Influence = GetInfluenceCost(type, targetPosition)
+                Influence = GetInfluenceCost(type, targetPosition, requester, false).ResultNumber
             };
 
             if (currentPosition == null || currentPosition.Member != requester)
@@ -302,7 +322,7 @@ namespace BannerKings.Models.BKModels
         {
             var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
             {
-                Influence = GetInfluenceCost(type, targetPosition)
+                Influence = GetInfluenceCost(type, targetPosition, requester).ResultNumber
             };
 
             if (requester != null)
@@ -332,7 +352,7 @@ namespace BannerKings.Models.BKModels
         {
             var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
             {
-                Influence = appointed ? 0f : GetInfluenceCost(type, targetPosition)
+                Influence = appointed ? 0f : GetInfluenceCost(type, targetPosition, requester).ResultNumber
             };
 
             if (currentPosition != null && currentPosition.Member == requester)
@@ -345,7 +365,7 @@ namespace BannerKings.Models.BKModels
             if (!targetPosition.CanMemberChange())
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}This position's councillor has recently been changed.");
+                action.Reason = new TextObject("{=gfjbYGNH}This position's councillor has recently been changed.");
                 return action;
             }
 
@@ -357,15 +377,23 @@ namespace BannerKings.Models.BKModels
                 return action;
             }
 
-            if (requester.Clan != null && requester.Clan.Influence < action.Influence)
+            if (!council.GetAvailableHeroes(targetPosition).Contains(requester))
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=hVJNXynE}Not enough influence.");
+                action.Reason = new TextObject("{=gzeVOEPX}{HERO} already fulfills a position of this type.")
+                    .SetTextVariable("HERO", requester.Name);
                 return action;
             }
 
             if (!appointed)
             {
+                if (requester.Clan != null && requester.Clan.Influence < action.Influence)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=hVJNXynE}Not enough influence.");
+                    return action;
+                }
+
                 if (targetPosition.IsCorePosition(targetPosition.StringId))
                 {
                     if (requester.Clan != null && !requester.Clan.Kingdom.Leader.IsFriend(requester))
@@ -420,24 +448,31 @@ namespace BannerKings.Models.BKModels
             return (titleWeight + competence + relation) / 3f;
         }
 
-        public int GetInfluenceCost(CouncilActionType type, CouncilMember targetPosition)
+        public ExplainedNumber GetInfluenceCost(CouncilActionType type, CouncilMember targetPosition, Hero requester, bool descriptions = false)
         {
-            switch (type)
+            ExplainedNumber result = new ExplainedNumber(0f, descriptions);
+            if (type == CouncilActionType.RELINQUISH) return result;
+
+            result.Add(50f, new TextObject("{=AaNeOd9n}Base"));
+            var privileges = targetPosition.AllPrivileges;
+            if (privileges.Contains(CouncilPrivileges.NOBLE_EXCLUSIVE) && requester.Clan != null)
             {
-                case CouncilActionType.REQUEST when targetPosition.Member != null:
-                    return 100;
-                case CouncilActionType.REQUEST:
-                    return 50;
-                case CouncilActionType.RELINQUISH:
-                    return 0;
+                float cap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(requester.Clan).ResultNumber;
+                result.Add(cap * 0.1f, new TextObject("{=wwYABLRd}Clan Influence Limit"));
+
+                if (targetPosition.IsCorePosition(targetPosition.StringId))
+                {
+                    result.AddFactor(0.25f, new TextObject("{=au6DBvKf}Privy council position"));
+                }
+
+                if (privileges.Contains(CouncilPrivileges.ARMY_PRIVILEGE))
+                {
+                    result.AddFactor(0.1f, GameTexts.FindText("str_bk_council_privilege",
+                        CouncilPrivileges.ARMY_PRIVILEGE.ToString().ToLower()));
+                }
             }
 
-            if (targetPosition.Member != null)
-            {
-                return 50;
-            }
-
-            return 10;
+            return result;
         }
     }
 }

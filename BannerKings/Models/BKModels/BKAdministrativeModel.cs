@@ -41,7 +41,7 @@ namespace BannerKings.Models.BKModels
             var garrison = (BKGarrisonPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison");
             if (garrison.Policy == BKGarrisonPolicy.GarrisonPolicy.Enlistment)
             {
-                baseResult.Add(0.04f, new TextObject("{=!}Garrison policy"));
+                baseResult.Add(0.04f, new TextObject("Garrison policy"));
             }
 
             float decisions = BannerKingsConfig.Instance.PolicyManager.GetActiveCostlyDecisionsNumber(settlement);

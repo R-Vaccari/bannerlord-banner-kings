@@ -3,6 +3,7 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Skills;
 using System.Linq;
+using BannerKings.Managers.Traits;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -42,6 +43,46 @@ namespace BannerKings.Models.BKModels
 
             return DefaultReligions.Instance.All.FirstOrDefault(x => x.Faith.IsCultureNaturalFaith(kingdom.Culture));
         }
+        public ExplainedNumber GetConversionLikelihood(Hero converter, Hero converted)
+        {
+            var result = new ExplainedNumber(15f, false);
+            result.LimitMin(-1f);
+            result.LimitMax(1f);
+
+            Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(converter);
+            if (rel != null)
+            {
+                foreach (var virtue in rel.Faith.Traits)
+                {
+                    int level = converted.GetTraitLevel(virtue.Key);
+                    result.Add(0.2f * level * (virtue.Value ? 1f : -1f), virtue.Key.Name);
+                }
+
+                result.Add(converted.GetTraitLevel(BKTraits.Instance.Zealous) * -0.33f, BKTraits.Instance.Zealous.Name);
+                result.AddFactor(converted.GetRelation(converter) * 0.005f, new TextObject("{=BlidMNGT}Relation"));
+
+                Religion convertedRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(converted);
+                if (convertedRel != null)
+                {
+                    FaithStance stance = convertedRel.Faith.GetStance(rel.Faith);
+                    if (stance == FaithStance.Untolerated)
+                    {
+                        result.Add(-0.3f, new TextObject("{=gyHK87NL}Faith differences"));
+                    }
+                    else if (stance == FaithStance.Hostile)
+                    {
+                        result.Add(-0.9f, new TextObject("{=gyHK87NL}Faith differences"));
+                    }
+                }
+
+                if (rel.FavoredCultures.Contains(converted.Culture))
+                {
+                    result.AddFactor(0.15f, new TextObject("{=PUjDWe5j}Culture"));
+                }
+            } 
+
+            return result;
+        }
 
         public ExplainedNumber GetConversionInfluenceCost(Hero notable, Hero converter)
         {
@@ -73,21 +114,28 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber GetConversionPietyCost(Hero notable, Hero converter)
+        public ExplainedNumber GetConversionPietyCost(Hero converted, Hero converter)
         {
             var result = new ExplainedNumber(40f, false);
             result.LimitMin(40f);
             result.LimitMax(150f);
 
-            result.Add(notable.GetRelation(converter) * -0.1f);
-            result.Add(GetNotableFactor(notable, notable.CurrentSettlement));
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
+            result.Add(converted.GetRelation(converter) * -0.1f);
 
-            if (data != null && data.ReligionData != null)
+            if (converted.IsNotable)
             {
-                var tension = data.ReligionData.Tension;
-                result.AddFactor(tension.ResultNumber);
+                result.Add(GetNotableFactor(converted, converted.CurrentSettlement));
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(converted.CurrentSettlement);
+
+                if (data != null && data.ReligionData != null)
+                {
+                    var tension = data.ReligionData.Tension;
+                    result.AddFactor(tension.ResultNumber);
+                }
             }
+
+            result.Add(MathF.Clamp(40f * -GetConversionLikelihood(converter, converted).ResultNumber, -10f, 40f),
+                new TextObject("{=bYHRQmAW}Willingness to convert"));
 
             if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(converter,
                 DefaultDivinities.Instance.DarusosianMain))
@@ -196,7 +244,6 @@ namespace BannerKings.Models.BKModels
                     continue;
                 }
 
-
                 var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
                 if (rel != null && rel == religion)
                 {
@@ -291,7 +338,6 @@ namespace BannerKings.Models.BKModels
             }
 
             result.AddFactor(religion.Fervor.ResultNumber, new TextObject("{=AfsRi9wL}Fervor"));
-
             return result;
         }
 
@@ -322,7 +368,6 @@ namespace BannerKings.Models.BKModels
             }
 
             result.Add(religion.Fervor.ResultNumber, new TextObject("{=AfsRi9wL}Fervor"));
-
             Hero owner = null;
             if (settlement.OwnerClan != null)
             {

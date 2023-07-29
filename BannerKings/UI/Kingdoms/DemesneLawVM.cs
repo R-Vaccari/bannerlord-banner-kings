@@ -11,27 +11,19 @@ namespace BannerKings.UI.Kingdoms
 {
     public class DemesneLawVM : ViewModel
     {
-        private BannerKingsSelectorVM<BKItemVM> selector;
-        private Action<SelectorVM<BKItemVM>> onChange;
+        private BannerKingsSelectorVM<BKDemesneLawItemVM> selector;
         private string nameText, descriptionText, dateText;
        
 
-        public DemesneLawVM(List<DemesneLaw> options, DemesneLaw law, bool isKing, Action<SelectorVM<BKItemVM>> onChange)
+        public DemesneLawVM(List<DemesneLaw> options, DemesneLaw law, bool isKing, Action<SelectorVM<BKDemesneLawItemVM>> onChange)
         {
             NameText = GameTexts.FindText("str_bk_demesne_law", law.LawType.ToString()).ToString();
-            this.onChange = onChange;
-            Selector = new BannerKingsSelectorVM<BKItemVM>(isKing && law.AvailableForVoting, 0, null);
+            Selector = new BannerKingsSelectorVM<BKDemesneLawItemVM>(isKing && law.AvailableForVoting, 0, null);
 
             int selected = 0;
             foreach (DemesneLaw option in options)
             {
-                Selector.AddItem(new BKItemVM(option.Index,
-                    option.LawType,
-                    !option.Equals(law),
-                    new TextObject("{=0bet1Am4}{TEXT}\n\n{EXPLANATIONS}")
-                        .SetTextVariable("TEXT", option.Description)
-                        .SetTextVariable("EXPLANATIONS", option.Effects),
-                    option.Name));
+                Selector.AddItem(new BKDemesneLawItemVM(option));
 
                 if (option.Equals(law))
                 {
@@ -96,7 +88,7 @@ namespace BannerKings.UI.Kingdoms
         }
 
         [DataSourceProperty]
-        public BannerKingsSelectorVM<BKItemVM> Selector
+        public BannerKingsSelectorVM<BKDemesneLawItemVM> Selector
         {
             get => selector;
             set

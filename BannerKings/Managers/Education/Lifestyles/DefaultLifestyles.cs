@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -25,6 +26,9 @@ namespace BannerKings.Managers.Education.Lifestyles
         public Lifestyle Gladiator { get; private set; }
         public Lifestyle Ritter { get; private set; }
         public Lifestyle Jawwal { get; private set; }
+        public Lifestyle Commander { get; } = new Lifestyle("lifestyle_commander");
+        public Lifestyle Courtier { get; } = new Lifestyle("lifestyle_courtier");
+        public Lifestyle Scholar { get; } = new Lifestyle("lifestyle_scholar");
 
         public override IEnumerable<Lifestyle> All
         {
@@ -43,6 +47,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 yield return August;
                 yield return SiegeEngineer;
                 yield return CivilAdministrator;
+                yield return Artisan;
+                yield return Commander;
                 foreach (Lifestyle item in ModAdditions)
                 {
                     yield return item;
@@ -53,6 +59,19 @@ namespace BannerKings.Managers.Education.Lifestyles
         public override void Initialize()
         {
             var cultures = Game.Current.ObjectManager.GetObjectTypeList<CultureObject>();
+            Commander.Initialize(new TextObject("Commander"),
+                new TextObject(),
+                DefaultSkills.Leadership,
+                DefaultSkills.Tactics,
+                new List<PerkObject>()
+                {
+                    BKPerks.Instance.CommanderLogistician,
+                    BKPerks.Instance.CommanderInspirer,
+                    BKPerks.Instance.CommanderWarband
+                },
+                new TextObject("{=Z87jdO67}Party supplies build up at a {EFFECT1}% slower rate.\nInfluence gain reduced by {EFFECT2}%, other than battle reward"),
+                25f,
+                15f);
 
             Fian = new Lifestyle("lifestyle_fian");
             Fian.Initialize(new TextObject("{=of43diPd}Fian"), 

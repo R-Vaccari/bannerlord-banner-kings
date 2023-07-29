@@ -1,5 +1,4 @@
 using BannerKings.Managers.Court;
-using BannerKings.Models.BKModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,10 +35,10 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             IsFulfilled(out var failedReasons);
             var options = new List<InquiryElement>();
-            var leadingClan = Clan.PlayerClan.Kingdom.RulingClan;
-            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(leadingClan);
+            Clan leadingClan = Clan.PlayerClan.Kingdom.RulingClan;
+            CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(leadingClan);
 
-            foreach (var member in council.Positions)
+            foreach (CouncilMember member in council.Positions)
             {
                 TextObject name = null;
                 var hint = new TextObject("{=DX1iCyKA}{DESCRIPTION}\n\n{REASON}\n\nYour competence is {COMPETENCE}%:\n{EXPLANATION}");
@@ -53,10 +52,10 @@ namespace BannerKings.Managers.Goals.Decisions
                     name = new TextObject("{=oXv9Zi3y}Relinquish {POSITION}")
                        .SetTextVariable("POSITION", member.Name);
                 }
-                else if (council.GetHeroPosition(Hero.MainHero) == null || member.Member == null)
+                else if (council.GetHeroCurrentConflictingPosition(member, Hero.MainHero) == null || member.Member == null)
                 {
                     action = model.GetAction(CouncilActionType.REQUEST, council, Hero.MainHero, member);
-                    hint = hint.SetTextVariable("DESCRIPTION", new TextObject("{=dcDs5auK}Request your liege to grant you this position in the council. This action will cost {INFLUENCE}{INFLUENCE_ICON}.\n\n{ACCEPT}")
+                    hint = hint.SetTextVariable("DESCRIPTION", new TextObject("{=ehHLy3bN}Request your liege to grant you this position in the council. This action will cost {INFLUENCE} influence.")
                                 .SetTextVariable("INFLUENCE", action.Influence));
                     name = new TextObject("{=DwfLTc6R}Request {POSITION}")
                        .SetTextVariable("POSITION", member.Name);
@@ -64,7 +63,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 else
                 {
                     action = model.GetAction(CouncilActionType.SWAP, council, Hero.MainHero, member,
-                        council.GetHeroPosition(Hero.MainHero));
+                        council.GetHeroCurrentConflictingPosition(member, Hero.MainHero));
                     hint = hint.SetTextVariable("DESCRIPTION", new TextObject("{=ZYyxmOv9}Request to swap your current position with {COUNCILMAN} position of {POSITION}. This action will cost {INFLUENCE}{INFLUENCE_ICON}.")
                                 .SetTextVariable("COUNCILMAN", action.TargetPosition.Member.Name)
                                 .SetTextVariable("POSITION", action.TargetPosition.Name)
@@ -79,7 +78,9 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
 
                 ExplainedNumber competence = BannerKingsConfig.Instance.CouncilModel.CalculateHeroCompetence(Hero.MainHero,
-                        member, true);
+                        member, 
+                        true,
+                        true);
                 hint = hint.SetTextVariable("COMPETENCE", (competence.ResultNumber * 100f).ToString("0.00"))
                     .SetTextVariable("EXPLANATION", competence.GetExplanations());
 

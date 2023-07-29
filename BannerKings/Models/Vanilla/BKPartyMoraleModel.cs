@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours;
 using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
@@ -32,6 +32,20 @@ namespace BannerKings.Models.Vanilla
                 {
                     result.Add(3f, BKPerks.Instance.AugustCommander.Name);
                 }
+
+                float foreigners = 0f;
+                foreach (TroopRosterElement element in mobileParty.MemberRoster.GetTroopRoster())
+                {
+                    if (element.Character.Culture != mobileParty.LeaderHero.Culture)
+                    {
+                        if (element.Character.Occupation == Occupation.Mercenary) foreigners += element.Number * 0.5f;
+                        else foreigners += element.Number;
+                    }
+                }
+
+                if (data.Perks.Contains(BKPerks.Instance.CommanderInspirer)) foreigners *= 0.5f;
+                float foreignersRatio = foreigners / (float)mobileParty.MemberRoster.Count;
+                result.AddFactor(foreignersRatio * -0.5f, new TextObject("{=fScrE9fp}Foreign troops"));
 
                 if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(mobileParty.LeaderHero, 
                     DefaultDivinities.Instance.DarusosianSecondary2))
@@ -78,19 +92,19 @@ namespace BannerKings.Models.Vanilla
                     {
                         float alcohol = MathF.Min(supplies.AlcoholNeed / supplies.GetAlcoholCurrentNeed().ResultNumber, 
                             supplies.AlcoholNeed);
-                        result.Add(-alcohol, new TextObject("{=!}Lacking alcohol supplies"));
+                        result.Add(-alcohol, new TextObject("{=PaDvmMT6}Lacking alcohol supplies"));
 
                         float animal = MathF.Min(supplies.AnimalProductsNeed / supplies.GetAnimalProductsCurrentNeed().ResultNumber, 
                             supplies.AnimalProductsNeed);
-                        result.Add(-animal, new TextObject("{=!}Lacking animal products  supplies"));
+                        result.Add(-animal, new TextObject("{=HKuszarc}Lacking animal products  supplies"));
 
                         float textiles = MathF.Min(supplies.ClothNeed / supplies.GetTextileCurrentNeed().ResultNumber, 
                             supplies.ClothNeed);
-                        result.Add(-textiles, new TextObject("{=!}Lacking textiles supplies"));
+                        result.Add(-textiles, new TextObject("{=SkcOem5t}Lacking textiles supplies"));
 
                         float wood = MathF.Min(supplies.WoodNeed / supplies.GetWoodCurrentNeed().ResultNumber,
                             supplies.WoodNeed);
-                        result.Add(-wood, new TextObject("{=!}Lacking wood supplies"));
+                        result.Add(-wood, new TextObject("{=R3NZZPcQ}Lacking wood supplies"));
                     }
                 }
             }

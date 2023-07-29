@@ -133,11 +133,11 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 var serfs = data.GetTypeCount(PopType.Serfs);
-                explainedNumber.Add(serfs * -0.00004f, new TextObject("{=!}Serf population"));
+                explainedNumber.Add(serfs * -0.00004f, new TextObject("{=NMeGcUoi}Serf population"));
 
                 var factor = data.Stability - 1f + data.Stability;
                 var stabilityImpact = STABILITY_FACTOR * factor;
-                explainedNumber.Add(stabilityImpact, new TextObject("{=!}Stability"));
+                explainedNumber.Add(stabilityImpact, new TextObject("Stability"));
 
                 for (var i = 0; i < 4; i++)
                 {

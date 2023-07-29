@@ -1,4 +1,6 @@
-﻿using BannerKings.Managers.Duties;
+﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Duties;
 using BannerKings.Managers.Goals.Decisions;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.Vanilla;
@@ -86,11 +88,24 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            if (kingdom.Armies.Count == 0 && FactionManager.GetEnemyKingdoms(kingdom).Count() > 0 &&
-                MBRandom.RandomFloat <= 0.5f)
+            bool war = FactionManager.GetEnemyKingdoms(kingdom).Count() > 0;
+            if (war)
             {
-                var decision = new CallBannersGoal(leader);
-                decision.DoAiDecision();
+                CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
+                if (council.GetHeroPositions(leader).Any(x => x.CurrentTask.Equals(DefaultCouncilTasks.Instance.GatherLegion)))
+                {
+                    if (BannerKingsConfig.Instance.ArmyManagementModel.GetMobilePartiesToCallToArmy(party).Count > 3)
+                    {
+                        var decision = new CallBannersGoal(leader);
+                        decision.DoAiDecision();
+                    }
+                }
+
+                if (kingdom.Armies.Count == 0 && MBRandom.RandomFloat <= 0.5f)
+                {
+                    var decision = new CallBannersGoal(leader);
+                    decision.DoAiDecision();
+                }
             }
         }
 

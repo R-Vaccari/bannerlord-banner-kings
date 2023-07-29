@@ -121,26 +121,26 @@ namespace BannerKings.Models.Vanilla
                     if (craftsmen > 0f)
                     {
                         baseResult.Add(MBMath.ClampFloat(craftsmen * GetCraftsmenOutput(title), 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
-                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=!}Craftsmen")));
+                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("Craftsmen")));
                     }
 
                     if (serfs > 0f)
                     {
                         baseResult.Add(MBMath.ClampFloat(serfs * SERF_OUTPUT, 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
-                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=!}Serfs")));
+                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("Serfs")));
                     }
 
                     if (slaves > 0f)
                     {
                         baseResult.Add(MBMath.ClampFloat(slaves * GetSlaveOutput(title), 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
-                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=!}Slaves")));
+                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("Slaves")));
                     }
 
                     if (tenants > 0f)
                     {
                         baseResult.Add(MBMath.ClampFloat(tenants * TENANT_OUTPUT, 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
                                                    new TextObject("{=5mCY3JCP}{CLASS} output")
-                                                   .SetTextVariable("CLASS", new TextObject("{=!}Tenants")));
+                                                   .SetTextVariable("CLASS", new TextObject("Tenants")));
                     }
 
                     var buildingBehavior = Campaign.Current.GetCampaignBehavior<BKBuildingsBehavior>();
@@ -153,7 +153,7 @@ namespace BannerKings.Models.Vanilla
                     int materials = buildingBehavior.GetMaterialExpenses(town);
                     if (materials > 0)
                     {
-                        baseResult.Add(-materials, new TextObject("{=!}Project material expenses"));
+                        baseResult.Add(-materials, new TextObject("{=a9HMZMAF}Project material expenses"));
                     }
 
                     var ownerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(town.OwnerClan.Leader);

@@ -18,6 +18,11 @@ namespace BannerKings.Models.Vanilla
                 {
                     result *= 0.7f;
                 }
+
+                if (data.HasPerk(BKPerks.Instance.CommanderLogistician))
+                {
+                    result *= 0.9f;
+                }
             }
 
             return result;

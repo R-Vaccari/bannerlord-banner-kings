@@ -1,6 +1,5 @@
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
-using BannerKings.UI.Items;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -39,7 +38,8 @@ namespace BannerKings.UI.Kingdoms
                 bool isKing = Kingdom.Leader == Hero.MainHero && Title.deJure == Hero.MainHero;
                 foreach (var law in Title.Contract.DemesneLaws)
                 {
-                    Laws.Add(new DemesneLawVM(DefaultDemesneLaws.Instance.GetLawsByType(law.LawType),
+                    Laws.Add(new DemesneLawVM(DefaultDemesneLaws.Instance.GetLawsByType(law.LawType)
+                        .Where(x => x.IsAdequateForKingdom(Kingdom)).ToList(),
                         law,
                         isKing,
                         OnChange));
@@ -74,17 +74,13 @@ namespace BannerKings.UI.Kingdoms
             }
         }
 
-        private void OnChange(SelectorVM<BKItemVM> obj)
+        private void OnChange(SelectorVM<BKDemesneLawItemVM> obj)
         {
             if (obj.SelectedItem != null)
             {
                 var vm = obj.GetCurrentItem();
-                var policyIndex = vm.Value;
-                var lawType = (DemesneLawTypes)vm.Reference;
-
-                var resultLaw = DefaultDemesneLaws.Instance.All.FirstOrDefault(x => x.LawType == lawType && x.Index == policyIndex);
-                var currentLaw = Title.Contract.GetLawByType(lawType);
-                if (resultLaw != null && !resultLaw.Equals(currentLaw))
+                var resultLaw = DefaultDemesneLaws.Instance.All.FirstOrDefault(x => x.Equals(vm.DemesneLaw));
+                if (resultLaw != null && !resultLaw.Equals(vm.DemesneLaw))
                 {
                     InformationManager.ShowInquiry(new InquiryData(new TextObject("{=yAPnOQQQ}Enact Law").ToString(),
                         new TextObject("{=RSWao3jU}Enact the {LAW} law thoughtout the demesne of {TITLE}. The law will be enacted for every title in the hierarchy.\n\nCost: {INFLUENCE} {INFLUENCE_ICON}")

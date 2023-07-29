@@ -28,7 +28,8 @@ namespace BannerKings.Managers.Court
         public void Initialize(SkillObject primary, SkillObject secondary,
             List<CouncilTask> tasks, IEnumerable<CouncilPrivileges> privileges,
             Func<CouncilData, bool> isAdequate, Func<CouncilMember, Hero, ValueTuple<bool, TextObject>> isValidCandidateInternal,
-            Func<CouncilMember, TextObject> getCulturalName, Dictionary<TraitObject, float> traits = null)
+            Func<CouncilMember, TextObject> getCulturalName, Dictionary<TraitObject, float> traits = null,
+            bool isAiPriority = false)
         {
             PrimarySkill = primary;
             SecondarySkill = secondary;
@@ -41,6 +42,7 @@ namespace BannerKings.Managers.Court
             {
                 Traits = traits;
             }
+            IsAIPriority = isAiPriority;
         }
 
         public void PostInitialize()
@@ -53,8 +55,8 @@ namespace BannerKings.Managers.Court
             {
                 task.PostInitialize();
             }
-            CurrentTask.PostInitialize();
-            if (!Tasks.Any(x => x.StringId == CurrentTask.StringId))
+            CurrentTask?.PostInitialize();
+            if (!Tasks.Any(x => x.StringId == CurrentTask?.StringId))
             {
                 SetTask(Tasks[0]);
             }
@@ -63,6 +65,8 @@ namespace BannerKings.Managers.Court
             {
                 LastChange = CampaignTime.Zero;
             }
+
+            IsAIPriority = c.IsAIPriority;
         }
 
         public CouncilMember GetCopy(Clan clan)
@@ -70,7 +74,9 @@ namespace BannerKings.Managers.Court
             CouncilMember member = new CouncilMember(StringId);
             member.Initialize(PrimarySkill, SecondarySkill,
                 Tasks, Privileges, isAdequate, isValidCandidateInternal,
-                getCulturalName);
+                getCulturalName,
+                Traits,
+                IsAIPriority);
             member.Clan = clan;
             member.SetStrings();
             member.CurrentTask = member.Tasks.FirstOrDefault();
@@ -99,6 +105,8 @@ namespace BannerKings.Managers.Court
                 }
             }
         }
+
+        public bool IsAIPriority { get; private set; }
 
         [SaveableProperty(100)] public Hero Member { get; private set; }
         [SaveableProperty(101)] public bool IsRoyal { get; private set; }

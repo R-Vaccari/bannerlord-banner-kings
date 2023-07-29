@@ -1,6 +1,8 @@
-﻿using BannerKings.Managers.Education.Languages;
+using BannerKings.Managers.Education.Languages;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Education.Books
@@ -18,8 +20,11 @@ namespace BannerKings.Managers.Education.Books
         public SkillObject Skill { get; private set; }
 
         public BookUse Use { get; private set; }
+        public TraitObject Trait { get; private set; }
 
-        public void Initialize(ItemObject bookItem, TextObject description, Language language, BookUse bookUse, SkillObject skill = null)
+        public void Initialize(ItemObject bookItem, TextObject description, Language language, BookUse bookUse, 
+            SkillObject skill = null,
+            TraitObject trait = null)
         {
             Initialize(null, description);
             Item = bookItem;
@@ -27,6 +32,7 @@ namespace BannerKings.Managers.Education.Books
             Language = language;
             Use = bookUse;
             Skill = skill;
+            Trait = trait;
         }
 
         public void FinishBook(Hero hero)
@@ -51,6 +57,26 @@ namespace BannerKings.Managers.Education.Books
                 else
                 {
                     hero.AddSkillXp(Skill, 1000f);
+                }
+            }
+
+            if (Trait != null)
+            {
+                if (hero == Hero.MainHero)
+                {
+                    InformationManager.ShowInquiry(new InquiryData(
+                        new TextObject("{=NW1i6iTM}Inspiration from {BOOK}")
+                        .SetTextVariable("BOOK", Name).ToString(),
+                        new TextObject("{=2nLT27xe}Upon finishing the {BOOK}, you feel inspired by the text to change your sense of {TRAIT}. Will you adopt these teachings?")
+                        .SetTextVariable("BOOK", Name)
+                        .SetTextVariable("TRAIT", Trait.Name).ToString(),
+                        true,
+                        true,
+                        GameTexts.FindText("str_selection_widget_accept").ToString(),
+                        GameTexts.FindText("str_selection_widget_cancel").ToString(),
+                        () => hero.SetTraitLevel(Trait, hero.GetTraitLevel(Trait) + 1),
+                        null), 
+                        true);
                 }
             }
         }

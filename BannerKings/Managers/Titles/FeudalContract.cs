@@ -39,7 +39,7 @@ namespace BannerKings.Managers.Titles
             {
                 var type = DefaultDemesneLaws.Instance.GetById(law);
                 law.Initialize(type.Name, type.Description, type.Effects, type.LawType, type.AuthoritarianWeight,
-                    type.EgalitarianWeight, type.OligarchicWeight, type.InfluenceCost, type.Index, type.Culture);
+                    type.EgalitarianWeight, type.OligarchicWeight, type.InfluenceCost, type.Culture, type.IsAdequateForKingdom);
             }
         }
 
