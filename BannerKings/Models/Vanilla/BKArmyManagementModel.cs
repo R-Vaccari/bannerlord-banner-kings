@@ -162,12 +162,31 @@ namespace BannerKings.Models.Vanilla
             }
 
             float result = base.CalculatePartyInfluenceCost(armyLeaderParty, party);
-            if (BannerKingsConfig.Instance.TitleManager != null && !party.ActualClan.IsUnderMercenaryService)
+            if (!party.ActualClan.IsUnderMercenaryService)
             {
                 var vassals = BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(armyLeaderParty.ActualClan);
                 if (!vassals.Contains(party.LeaderHero))
                 {
-                    result *= 2f;
+                    result *= 1.5f;
+                }
+            }
+
+            result += BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(armyLeaderParty.LeaderHero.Clan).ResultNumber * 0.03f;
+
+            var kingdom = armyLeaderParty.LeaderHero?.Clan.Kingdom;
+            if (kingdom != null)
+            {
+                FeudalTitle kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                if (kingdomTitle != null)
+                {
+                    if (kingdomTitle.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyPrivate))
+                    {
+                        result *= 2f;
+                    }
+                    else if (kingdomTitle.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion))
+                    {
+                        result *= 5f;
+                    }
                 }
             }
 
