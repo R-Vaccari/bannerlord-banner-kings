@@ -7,6 +7,11 @@
 	<strings>
 		<string id="gaJDVkvHA" text="Placeholder" />
 		
+		<string id="trait_obtuse" text="Obtuse" />
+		<string id="trait_blunt" text="Blunt" />
+		<string id="trait_provocative" text="Provocative" />
+		<string id="trait_seductive" text="Seductive" />
+		
 		<string id="trait_tyrant" text="Tyrant" />
 		<string id="trait_unjust" text="Unjust" />
 		<string id="trait_just" text="Just" />
