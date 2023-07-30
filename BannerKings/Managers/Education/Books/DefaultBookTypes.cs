@@ -34,6 +34,7 @@ namespace BannerKings.Managers.Education.Books
         public BookType HelgeredKara { get; } = new BookType("book_HelgeredKara");
         public BookType KaisLayala { get; } = new BookType("book_KaisLayala");
         public BookType LoveCastle { get; } = new BookType("book_LoveCastle");
+        public BookType GreenKnight { get; } = new BookType("book_GreenKnight");
 
         public override IEnumerable<BookType> All
         {
@@ -62,6 +63,7 @@ namespace BannerKings.Managers.Education.Books
                 yield return HelgeredKara;
                 yield return KaisLayala;
                 yield return LoveCastle;
+                yield return GreenKnight;
                 foreach (BookType item in ModAdditions)
                 {
                     yield return item;
@@ -130,57 +132,66 @@ namespace BannerKings.Managers.Education.Books
                 DefaultTraits.Honor);
 
             HeatsDesire = new BookType("book_heartsDesire");
-            HeatsDesire.Initialize(BKItems.Instance.BookHeartsDesire, 
-                new TextObject("{=kDM2UWeE}A vlandic tale of love that can be interpreted either erotically or spiritually. The lover realizes the majesty of the divine by gazing upon the body of his beloved. The appeal to love through the naked body is offensive to the highly moralistic, yet compelling to those of more relaxed morals. “You are the first and the last...”"), 
-                DefaultLanguages.Instance.Vlandic, 
-                BookUse.Skillbook, 
+            HeatsDesire.Initialize(BKItems.Instance.BookHeartsDesire,
+                new TextObject("{=kDM2UWeE}A vlandic tale of love that can be interpreted either erotically or spiritually. The lover realizes the majesty of the divine by gazing upon the body of his beloved. The appeal to love through the naked body is offensive to the highly moralistic, yet compelling to those of more relaxed morals. “You are the first and the last...”"),
+                DefaultLanguages.Instance.Vlandic,
+                BookUse.Skillbook,
                 DefaultSkills.Charm,
                 BKTraits.Instance.Seductive);
 
             Siege = new BookType("book_siege");
-            Siege.Initialize(BKItems.Instance.BookSiege, 
-                new TextObject("{=!}"), 
+            Siege.Initialize(BKItems.Instance.BookSiege,
+                new TextObject("{=!}A Calradic, illustrated treatise on siege warfare, also known as poliorcetics. The manuscript goes over all the main topics of sieges: building appropriate engines, bringing men upon the enemy's walls, as well as keeping the enemy off yours. All those in Calradia can attest that none can match the Calradoi in terms of siege warfare."),
                 DefaultLanguages.Instance.Calradian, BookUse.Focusbook, DefaultSkills.Engineering);
 
             Strategikon = new BookType("book_tactics");
-            Strategikon.Initialize(BKItems.Instance.BookStrategikon, 
-                new TextObject("{=kGCHAdZG}Assembled for use by the Calradoi dynasty, Strategikon compiles series of treatises on army maneuvers and tatics. The book deals with diverse formations and battle tactics used by opponents of the Empire, since it's inception by Calradios the Great. The book is treated as basic education for military-minded lords in the empire."), 
+            Strategikon.Initialize(BKItems.Instance.BookStrategikon,
+                new TextObject("{=kGCHAdZG}Assembled for use by the Calradoi dynasty, Strategikon compiles series of treatises on army maneuvers and tatics. The book deals with diverse formations and battle tactics used by opponents of the Empire, since it's inception by Calradios the Great. The book is treated as basic education for military-minded lords in the empire."),
                 DefaultLanguages.Instance.Calradian, BookUse.Focusbook, DefaultSkills.Tactics);
 
             Trade = new BookType("book_trade");
-            Trade.Initialize(BKItems.Instance.BookTrade, 
-                new TextObject("{=5qh4CNDP}Written by Dhashwal of the Nahasa, the treatise compiles a series of reflections on trade routes and trading practices the caravaneer deal with in his lifetime. From the Jawwal nomadic traders, through the Imperial bureaucrats up to the sea-faring nothern traders, Dhashwal writes on his experience of mastering the trade through decades of field experience."), 
+            Trade.Initialize(BKItems.Instance.BookTrade,
+                new TextObject("{=5qh4CNDP}Written by Dhashwal of the Nahasa, the treatise compiles a series of reflections on trade routes and trading practices the caravaneer deal with in his lifetime. From the Jawwal nomadic traders, through the Imperial bureaucrats up to the sea-faring nothern traders, Dhashwal writes on his experience of mastering the trade through decades of field experience."),
                 DefaultLanguages.Instance.Aseran, BookUse.Focusbook, DefaultSkills.Trade);
 
             Dictionary = new BookType("book_dictionary");
-            Dictionary.Initialize(BKItems.Instance.BookDictionary, 
-                new TextObject("{=eLyaVrbS}Dictionarium Calradium is a compendium of basic words and syntax of the languages in the continent. Used to further the former Empire's influence on different cultures, it serves any language by comparing it to Calradian, the Imperial language."), 
-                DefaultLanguages.Instance.Calradian, 
+            Dictionary.Initialize(BKItems.Instance.BookDictionary,
+                new TextObject("{=eLyaVrbS}Dictionarium Calradium is a compendium of basic words and syntax of the languages in the continent. Used to further the former Empire's influence on different cultures, it serves any language by comparing it to Calradian, the Imperial language."),
+                DefaultLanguages.Instance.Calradian,
                 BookUse.Dictionary);
 
+            GreenKnight.Initialize(BKItems.Instance.BookGreenKnight,
+                new TextObject("{=!}A Vlandic tale that explores the themes of chivalry, honor and sacrifice. A knight is made an offer by this mysterious, green knight figure, at the possible cost of his life. Believing the danger to be absurd and the offer purely benefitial to himself, he makes a pledge. A year later, the terms of the offer come due, and the knight's honor and integrity are challenged: will he keep his word and risk his life?"),
+                DefaultLanguages.Instance.Vlandic,
+                BookUse.Skillbook,
+                DefaultSkills.Riding,
+                DefaultTraits.Honor);
+
             Mounted = new BookType("book_riding");
-            Mounted.Initialize(BKItems.Instance.BookMounted, 
-                new TextObject("{=!}"), 
-                DefaultLanguages.Instance.Vlandic, BookUse.Focusbook, DefaultSkills.Riding);
+            Mounted.Initialize(BKItems.Instance.BookArtHorsemanship,
+                new TextObject("{=!}An ancient Calradic treatise concerning the trainning, care and art of mounting horses. The treatise is the staple manuscript on the long Calradic equestrian tradition, an art developed by its nobility and culminated into the cataphract doctrice."),
+                DefaultLanguages.Instance.Calradian,
+                BookUse.Focusbook,
+                DefaultSkills.Riding);
 
             Leadership = new BookType("book_leadership");
-            Leadership.Initialize(BKItems.Instance.BookLeadership, 
-                new TextObject("{=!}"), 
+            Leadership.Initialize(BKItems.Instance.BookLeadership,
+                new TextObject("{=!}"),
                 DefaultLanguages.Instance.Calradian, BookUse.Focusbook, DefaultSkills.Leadership);
 
             OneHanded = new BookType("book_oneHanded");
-            OneHanded.Initialize(BKItems.Instance.BookOneHanded, 
-                new TextObject("{=qJ30OzLa}\"Royal Armouries Ms. I.33\" is the earliest known Calradian combat manual. The text provides guidance on the use of a single-handed swords. The fencing system is based on number of wards which are answered by defensive postures for each one of them. The treatise expound a martial system of defensive and offensive techniques between a master and a pupil, each armed with a sword and a shield, drawn in ink and watercolour and accompanied with text in Calradian, interspersed by Vlandian fencing terms. On the last two pages, the pupil is replaced by a woman called Walpurgis."), 
+            OneHanded.Initialize(BKItems.Instance.BookOneHanded,
+                new TextObject("{=qJ30OzLa}\"Royal Armouries Ms. I.33\" is the earliest known Calradian combat manual. The text provides guidance on the use of a single-handed swords. The fencing system is based on number of wards which are answered by defensive postures for each one of them. The treatise expound a martial system of defensive and offensive techniques between a master and a pupil, each armed with a sword and a shield, drawn in ink and watercolour and accompanied with text in Calradian, interspersed by Vlandian fencing terms. On the last two pages, the pupil is replaced by a woman called Walpurgis."),
                 DefaultLanguages.Instance.Vlandic, BookUse.Focusbook, DefaultSkills.OneHanded);
 
             TwoHanded = new BookType("book_twoHanded");
-            TwoHanded.Initialize(BKItems.Instance.BookTwoHanded, 
-                new TextObject("{=iuQ1bZ8c}The book presents the legend of Llewellyn the Green, mythical ruler of Seonon, who went on a pilgrimage around Llyn Tywal to seek aid from Derwyddon spirits to improve Battanian army. He met Lady of Caldera, who gifted him the Crusher, first two handed sword in Battania. Soon, Llewellyn the Green has found many smithies in his domain, that supplied Battanian archers with two hand swords, creating army of Fian Champions and became first king of the highlands. Fian Champions were a nightmare for Imperial army for centuries, not only because of very well known archery skills, but also because of exceptional swordmanship. Ever since, Llewellyn was since knwon as R�ghf�nnid, king of the Fians."), 
+            TwoHanded.Initialize(BKItems.Instance.BookTwoHanded,
+                new TextObject("{=iuQ1bZ8c}The book presents the legend of Llewellyn the Green, mythical ruler of Seonon, who went on a pilgrimage around Llyn Tywal to seek aid from Derwyddon spirits to improve Battanian army. He met Lady of Caldera, who gifted him the Crusher, first two handed sword in Battania. Soon, Llewellyn the Green has found many smithies in his domain, that supplied Battanian archers with two hand swords, creating army of Fian Champions and became first king of the highlands. Fian Champions were a nightmare for Imperial army for centuries, not only because of very well known archery skills, but also because of exceptional swordmanship. Ever since, Llewellyn was since knwon as R�ghf�nnid, king of the Fians."),
                 DefaultLanguages.Instance.Battanian, BookUse.Focusbook, DefaultSkills.TwoHanded);
 
             Crossbow = new BookType("book_crossbow");
-            Crossbow.Initialize(BKItems.Instance.BookCrossbow, 
-                new TextObject("{=R5GJQu3Q}Written by Leonhardth of Ocspool, this monumental work is considered a founding text of Vlandia, as it popularized usage of crossbows and siege engines among Vlandian lords during the rule of King Osrac Iron-arm. Thanks to clear descirption of crossbow and balista constuction and simple explanations of physics behind the contraption even lords of a single village were able to supply their peasants with deadly weapons. It is said that Vlandia is build on crossbow and lance and this work is a proof, that Leonhardth of Ocspool deserves at least half of credit for Vlandian indpendence."), 
+            Crossbow.Initialize(BKItems.Instance.BookCrossbow,
+                new TextObject("{=R5GJQu3Q}Written by Leonhardth of Ocspool, this monumental work is considered a founding text of Vlandia, as it popularized usage of crossbows and siege engines among Vlandian lords during the rule of King Osrac Iron-arm. Thanks to clear descirption of crossbow and balista constuction and simple explanations of physics behind the contraption even lords of a single village were able to supply their peasants with deadly weapons. It is said that Vlandia is build on crossbow and lance and this work is a proof, that Leonhardth of Ocspool deserves at least half of credit for Vlandian indpendence."),
                 DefaultLanguages.Instance.Calradian, BookUse.Focusbook, DefaultSkills.Crossbow);
 
             Bow = new BookType("book_bow");

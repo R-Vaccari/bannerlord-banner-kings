@@ -12,7 +12,8 @@ namespace BannerKings.Managers.Items
         public ItemObject BookLeadership { get; private set; }
         public ItemObject BookTrade { get; private set; }
         public ItemObject BookDictionary { get; private set; }
-        public ItemObject BookMounted { get; private set; }
+        public ItemObject BookArtHorsemanship { get; private set; }
+        public ItemObject BookGreenKnight { get; private set; }
         public ItemObject BookOneHanded { get; private set; }
         public ItemObject BookTwoHanded { get; private set; }
         public ItemObject BookPolearm { get; private set; }
@@ -54,7 +55,7 @@ namespace BannerKings.Managers.Items
                 yield return BookLeadership;
                 yield return BookTrade;
                 yield return BookDictionary;
-                yield return BookMounted;
+                yield return BookGreenKnight;
                 yield return BookOneHanded;
                 yield return BookTwoHanded;
                 yield return BookPolearm;
@@ -146,9 +147,9 @@ namespace BannerKings.Managers.Items
             InitializeTradeGood(BookIrkBitig,
                 new TextObject("{=gWqmDXOC}Irk Bitig{@Plural}collection of Irk Bitig books{\\@}"),
                 "lib_book_closed_b",
-                BKItemCategories.Instance.Book, 
-                1000, 
-                1.5f, 
+                BKItemCategories.Instance.Book,
+                1000,
+                1.5f,
                 ItemObject.ItemTypeEnum.Goods);
 
             BookNakedFingers = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_naked_fingers"));
@@ -189,11 +190,11 @@ namespace BannerKings.Managers.Items
 
             BookLoveCastle = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_love_castle"));
             InitializeTradeGood(BookLoveCastle,
-                new TextObject("{=mnCoKY5H}The Storming of the Castle of Love{@Plural}collection of The Storming of the Castle of Love books{\\@}"), 
+                new TextObject("{=mnCoKY5H}The Storming of the Castle of Love{@Plural}collection of The Storming of the Castle of Love books{\\@}"),
                 "lib_book_closed_a",
-                BKItemCategories.Instance.Book, 
-                750, 
-                1f, 
+                BKItemCategories.Instance.Book,
+                750,
+                1f,
                 ItemObject.ItemTypeEnum.Goods);
 
             BookGardenArgument = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_garden_argument"));
@@ -250,11 +251,17 @@ namespace BannerKings.Managers.Items
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book, 1000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 
-            BookMounted = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_mounted"));
-            InitializeTradeGood(BookMounted,
-                new TextObject("{=SRUPiSKM}The Green Knight{@Plural}collection of The Green Knight books{\\@}"),
+            BookArtHorsemanship = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_mounted"));
+            InitializeTradeGood(BookArtHorsemanship,
+                new TextObject("{=!}The Art of Horsemanship{@Plural}collection of The Art of Horsemanship books{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book, 1000, 1.5f, ItemObject.ItemTypeEnum.Goods);
+
+            BookGreenKnight = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_green_knight"));
+            InitializeTradeGood(BookGreenKnight,
+                new TextObject("{=SRUPiSKM}The Green Knight{@Plural}collection of The Green Knight books{\\@}"),
+                "lib_book_closed_b",
+                BKItemCategories.Instance.Book, 750, 1f, ItemObject.ItemTypeEnum.Goods);
 
             BookDictionary = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_dictionary"));
             InitializeTradeGood(BookDictionary,
