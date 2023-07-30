@@ -155,5 +155,10 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Eastern
         {
             throw new NotImplementedException();
         }
+
+        public override TextObject GetZealotsGroupName()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
