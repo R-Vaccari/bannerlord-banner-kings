@@ -14,6 +14,7 @@ using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using BannerKings.Behaviours.Retainer;
 using TaleWorlds.ObjectSystem;
 using System.Linq;
 
@@ -23,15 +24,20 @@ namespace BannerKings.Models.Vanilla
     {
         public override int GetCharacterWage(CharacterObject character)
         {
-            var result = character.Tier switch
+            return GetCharacterLevelWage(character);
+        }
+
+        public int GetCharacterLevelWage(CharacterObject character)
+        {
+            var result = character.Level switch
             {
-                0 => 1,
-                1 => 2,
-                2 => 6,
-                3 => 10,
-                4 => 22,
-                5 => 40,
-                6 => 60,
+                <= 1 => 1,
+                <= 6 => 2,
+                <= 11 => 6,
+                <= 16 => 10,
+                <= 21 => 22,
+                <= 26 => 40,
+                <= 31 => 60,
                 _ => 80
             };
 
@@ -273,24 +279,25 @@ namespace BannerKings.Models.Vanilla
 
                     if (elementCopyAtIndex.Character.IsHero)
                     {
-                        if (elementCopyAtIndex.Character.HeroObject == mobileParty.LeaderHero)
+                        Hero hero = elementCopyAtIndex.Character.HeroObject;
+                        if (hero == mobileParty.LeaderHero)
                         {
                             continue;
                         }
 
-                        var skills = MBObjectManager.Instance.GetObjectTypeList<SkillObject>();
-                        var companionModel = new BKCompanionPrices();
-                        var totalCost = 0f;
-                        foreach (var skill in skills)
+                        if (hero == Hero.MainHero)
                         {
-                            float skillValue = elementCopyAtIndex.Character.GetSkillValue(skill);
-                            if (skillValue > 30)
+                            Contract contract = Campaign.Current.GetCampaignBehavior<BKRetainerBehavior>().GetContract();
+                            if (contract != null && contract.Contractor == leader)
                             {
-                                totalCost += skillValue * companionModel.GetCostFactor(skill);
+                                result.Add(contract.Wage);
                             }
                         }
-
-                        result.Add(totalCost * 0.005f, elementCopyAtIndex.Character.Name);
+                        else
+                        {
+                            result.Add(BannerKingsConfig.Instance.CompanionModel.GetHeroWage(hero), 
+                                elementCopyAtIndex.Character.Name);
+                        }
                     }
                 }
 

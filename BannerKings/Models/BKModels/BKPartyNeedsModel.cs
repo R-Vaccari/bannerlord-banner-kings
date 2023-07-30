@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.PartyNeeds;
+using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Roster;
@@ -47,13 +47,14 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+                return result;
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
                 result.Add(element.Number * AlcoholPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
-                    new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                    new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
                     .SetTextVariable("TROOP_NAME", element.Character.Name)
                     .SetTextVariable("COUNT", element.Number));
             }
@@ -67,7 +68,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+                return result;
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -76,7 +78,7 @@ namespace BannerKings.Models.BKModels
                 if (formation == FormationClass.Ranged || formation == FormationClass.HorseArcher)
                 {
                     result.Add(element.Number * ArrowsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
-                        new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                        new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
                         .SetTextVariable("TROOP_NAME", element.Character.Name)
                         .SetTextVariable("COUNT", element.Number));
                 }
@@ -91,13 +93,14 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+                return result;
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
                 result.Add(element.Number * ClothPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
-                    new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                    new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
                     .SetTextVariable("TROOP_NAME", element.Character.Name)
                     .SetTextVariable("COUNT", element.Number));
             }
@@ -111,7 +114,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+                return result;
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -119,7 +123,7 @@ namespace BannerKings.Models.BKModels
                 if (element.Character.IsMounted)
                 {
                     result.Add(element.Number * HorsesPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
-                        new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                        new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
                         .SetTextVariable("TROOP_NAME", element.Character.Name)
                         .SetTextVariable("COUNT", element.Number));
                 }
@@ -134,13 +138,14 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+                return result;
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
                 result.Add(element.Number * AnimalProductsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
-                    new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                    new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
                     .SetTextVariable("TROOP_NAME", element.Character.Name)
                     .SetTextVariable("COUNT", element.Number));
             }
@@ -154,7 +159,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+                return result;
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -163,7 +169,7 @@ namespace BannerKings.Models.BKModels
                     element.Character.Equipment.HasWeaponOfClass(WeaponClass.LargeShield))
                 {
                     result.Add(element.Number * ShieldsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
-                        new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                        new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
                         .SetTextVariable("TROOP_NAME", element.Character.Name)
                         .SetTextVariable("COUNT", element.Number));
                 }
@@ -178,7 +184,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+                return result;
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -186,7 +193,7 @@ namespace BannerKings.Models.BKModels
                 if (!element.Character.IsRanged)
                 {
                     result.Add(element.Number * WeaponsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor,
-                        new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                        new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
                         .SetTextVariable("TROOP_NAME", element.Character.Name)
                         .SetTextVariable("COUNT", element.Number));
                 }
@@ -201,7 +208,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+                return result;
             }
 
             float siege = 0f;
@@ -213,7 +221,7 @@ namespace BannerKings.Models.BKModels
                     if (!needs.Party.BesiegerCamp.IsPreparationComplete)
                     {
                         siege = 5f;
-                        siegeText = new TextObject("{=!}Camp under construction");
+                        siegeText = new TextObject("{=KRPA6cmU}Camp under construction");
                     }
 
                     var engines = needs.Party.BesiegerCamp.SiegeEngines;
@@ -221,20 +229,20 @@ namespace BannerKings.Models.BKModels
                     if (preparations != null && !preparations.IsConstructed)
                     {
                         siege = 10f;
-                        siegeText = new TextObject("{=!}Siege engine under construction");
+                        siegeText = new TextObject("{=PGEJammA}Siege engine under construction");
                     }
                 }
-            }
 
-            foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
-            {
-                result.Add(element.Number * ToolsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
-                    new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
-                    .SetTextVariable("TROOP_NAME", element.Character.Name)
-                    .SetTextVariable("COUNT", element.Number));
-            }
-
-            result.AddFactor(siege, siegeText);
+                result.AddFactor(siege, siegeText);
+                foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
+                {
+                    result.Add(element.Number * ToolsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor,
+                        new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
+                        .SetTextVariable("TROOP_NAME", element.Character.Name)
+                        .SetTextVariable("COUNT", element.Number));
+                }
+            } 
+           
             return result;
         }
 
@@ -244,7 +252,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.AddFactor(-1f, new TextObject("{=!}In a town or castle"));
+                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+                return result;
             }
 
             float siege = 0f;
@@ -256,7 +265,7 @@ namespace BannerKings.Models.BKModels
                     if (!needs.Party.BesiegerCamp.IsPreparationComplete)
                     {
                         siege = 5f;
-                        siegeText = new TextObject("{=!}Camp under construction");
+                        siegeText = new TextObject("{=KRPA6cmU}Camp under construction");
                     }
 
                     var engines = needs.Party.BesiegerCamp.SiegeEngines;
@@ -264,7 +273,7 @@ namespace BannerKings.Models.BKModels
                     if (preparations != null && !preparations.IsConstructed)
                     {
                         siege = 10f;
-                        siegeText = new TextObject("{=!}Siege engine under construction");
+                        siegeText = new TextObject("{=PGEJammA}Siege engine under construction");
                     }
                 }
             }
@@ -272,7 +281,7 @@ namespace BannerKings.Models.BKModels
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
                 result.Add(element.Number * WoodPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
-                    new TextObject("{=!}{TROOP_NAME}(x{COUNT})")
+                    new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
                     .SetTextVariable("TROOP_NAME", element.Character.Name)
                     .SetTextVariable("COUNT", element.Number));
             }

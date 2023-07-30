@@ -255,10 +255,11 @@ namespace BannerKings.Managers.Court
                 return;
             }
 
-            var vacant = Positions.FirstOrDefault(x => x.Member == null);
+            CouncilMember vacant = Positions.FirstOrDefault(x => x.IsAIPriority && x.Member == null);
             if (vacant == null)
             {
-                return;
+                vacant = Positions.FirstOrDefault(x => !x.IsAIPriority && x.Member == null);
+                if (vacant == null) return;
             }
 
             var hero = MBRandom.ChooseWeighted(GetHeroesForPosition(vacant));
@@ -278,24 +279,23 @@ namespace BannerKings.Managers.Court
             }
         }
 
-        public List<Hero> GetAvailableHeroes(bool lordsOnly = false)
+        public List<Hero> GetAvailableHeroes(CouncilMember position = null, bool lordsOnly = false)
         {
-            var currentMembers = GetMembers();
             var available = new List<Hero>();
             foreach (var hero in GetCourtMembers())
             {
-                if (hero == null)
-                {
-                    continue;
-                }
+                if (hero == null || !hero.IsAlive || hero.IsChild) continue;
+                if (lordsOnly && !hero.IsLord) continue;
 
-                if (!currentMembers.Contains(hero) && hero.IsAlive && !hero.IsChild)
+                if (position == null)
                 {
-                    if (lordsOnly && hero.IsLord)
-                    {
+                    if (!GetOccupiedPositions().Any(x => x.Member == hero))
                         available.Add(hero);
-                    }
-                    else
+                }
+                else
+                {
+                    CouncilMember conflicting = GetHeroCurrentConflictingPosition(position, hero);
+                    if (conflicting == null)
                     {
                         available.Add(hero);
                     }
@@ -436,7 +436,6 @@ namespace BannerKings.Managers.Court
 
         public List<CouncilMember> GetOccupiedPositions()
         {
-            //PostInitialize();
             var heroes = new List<CouncilMember>();
             foreach (var councilMember in Positions)
             {
@@ -449,33 +448,26 @@ namespace BannerKings.Managers.Court
             return heroes;
         }
 
-        public List<Hero> GetMembers()
+        public CouncilMember GetHeroCurrentConflictingPosition(CouncilMember desiredPosition, Hero hero)
         {
-            //PostInitialize();
-            var heroes = new List<Hero>();
-            foreach (var councilMember in Positions)
-            {
-                if (councilMember.Member != null)
-                {
-                    heroes.Add(councilMember.Member);
-                }
-            }
+            if (desiredPosition.IsCorePosition(desiredPosition.StringId))
+                return GetHeroPositions(hero).FirstOrDefault(x => x.IsCorePosition(x.StringId));
 
-            return heroes;
+            return GetHeroPositions(hero).FirstOrDefault(x => !x.IsCorePosition(x.StringId));
         }
 
-        public CouncilMember GetHeroPosition(Hero hero)
+        public List<CouncilMember> GetHeroPositions(Hero hero)
         {
-            //PostInitialize();
+            List<CouncilMember> positions = new List<CouncilMember>();
             foreach (var councilMember in Positions)
             {
                 if (councilMember.Member == hero)
                 {
-                    return councilMember;
+                    positions.Add(councilMember);
                 }
             }
 
-            return null;
+            return positions;
         }
     }
 

@@ -8,6 +8,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 {
     public class AseraFaith : MonotheisticFaith
     {
+        public override TextObject GetDescriptionHint()
+        {
+            return new TextObject("{=ezGSFaau}Founded by the immediate sons of the legendary patriarch of the Southlands, the Code of Asera forms the basis of philosophy, art and law among the members of the confederated Aserai tribes.");
+        }
+
         public override Banner GetBanner() => new Banner("1.143.143.1836.1836.764.764.1.0.0.463.116.116.234.234.764.639.1.0.0.321.116.116.316.316.764.919.0.0.0.428.116.116.162.162.964.649.1.0.-91.428.116.116.162.162.564.649.1.0.90");
 
         public override bool IsCultureNaturalFaith(CultureObject culture)

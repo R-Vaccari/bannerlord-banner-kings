@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BannerKings.Behaviours.Retainer;
 using BannerKings.Extensions;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
 using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
@@ -118,6 +120,13 @@ namespace BannerKings.Models.Vanilla
 
         public void AddIncomes(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
         {
+            Contract contract = Campaign.Current.GetCampaignBehavior<BKRetainerBehavior>().GetContract();
+            if (contract != null)
+            {
+                result.Add(contract.Wage, new TextObject("{=cYac1rMJ}Retainer service for {HERO}")
+                    .SetTextVariable("HERO", contract.Contractor.Name));
+            }
+
             foreach (var hero in clan.Heroes)
             {
                 int estateIncome = CalculateOwnerIncomeFromEstates(hero, applyWithdrawals);
@@ -221,10 +230,13 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
-            if (position != null)
+            var positions = BannerKingsConfig.Instance.CourtManager.GetHeroPositions(clan.Leader);
+            if (positions != null)
             {
-                result.Add(position.DueWage, new TextObject("{=WvhXhUFS}Councillor role"));
+                foreach (CouncilMember position in positions)
+                {
+                    result.Add(position.DueWage, new TextObject("{=WvhXhUFS}Councillor role"));
+                }
             }
         }
 

@@ -3,6 +3,7 @@ using BannerKings.Behaviours.Criminality;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
 using BannerKings.Behaviours.PartyNeeds;
+using BannerKings.Behaviours.Retainer;
 using BannerKings.Behaviours.Workshops;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Innovations;
@@ -56,6 +57,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKTradeGoodsFixesBehavior());
             campaignStarter.AddBehavior(new BKCapitalBehavior());
             campaignStarter.AddBehavior(new BKMarriageBehavior());
+            campaignStarter.AddBehavior(new BKRetainerBehavior());
             if (BannerKingsSettings.Instance.Feasts)
             {
                 campaignStarter.AddBehavior(new BKFeastBehavior());
@@ -69,11 +71,11 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKPartyNeedsBehavior());
 
             campaignStarter.AddModel(new BKPrisonerModel());
-            campaignStarter.AddModel(new BKCompanionPrices());
+            campaignStarter.AddModel(BannerKingsConfig.Instance.CompanionModel);
             campaignStarter.AddModel(BannerKingsConfig.Instance.ProsperityModel);
             campaignStarter.AddModel(BannerKingsConfig.Instance.TaxModel);
             campaignStarter.AddModel(new BKFoodModel());
-            campaignStarter.AddModel(new BKConstructionModel());
+            campaignStarter.AddModel(BannerKingsConfig.Instance.ConstructionModel);
             campaignStarter.AddModel(new BKMilitiaModel());
             campaignStarter.AddModel(BannerKingsConfig.Instance.InfluenceModel);
             campaignStarter.AddModel(new BKLoyaltyModel());
@@ -84,7 +86,7 @@ namespace BannerKings
             campaignStarter.AddModel(new BKPriceFactorModel());
             campaignStarter.AddModel(BannerKingsConfig.Instance.WorkshopModel);
             campaignStarter.AddModel(BannerKingsConfig.Instance.ClanFinanceModel);
-            campaignStarter.AddModel(new BKArmyManagementModel());
+            campaignStarter.AddModel(BannerKingsConfig.Instance.ArmyManagementModel);
             campaignStarter.AddModel(new BKSiegeEventModel());
             campaignStarter.AddModel(new BKTournamentModel());
             campaignStarter.AddModel(new BKRaidModel());
@@ -112,12 +114,13 @@ namespace BannerKings
             campaignStarter.AddModel(new BKBattleRewardModel());
             campaignStarter.AddModel(new BKCombatXpModel());
             campaignStarter.AddModel(new BKBattleMoraleModel());
-            campaignStarter.AddModel(new BKLearningModel());
-            campaignStarter.AddModel(new BKKingodmDecsionModel());  
+            campaignStarter.AddModel(BannerKingsConfig.Instance.LearningModel);
+            campaignStarter.AddModel(BannerKingsConfig.Instance.KingdomDecisionModel);  
             campaignStarter.AddModel(new BKPartyFoodBuyingModel());
             campaignStarter.AddModel(new BKPregnancyModel());
             campaignStarter.AddModel(new BKPartyHealingModel());
             campaignStarter.AddModel(new BKBanditModel());
+            campaignStarter.AddModel(new BKPartyTrainningModel());
             if (BannerKingsSettings.Instance.DiplomacyChanges)
             {
                 campaignStarter.AddModel(new BKDiplomacyModel());

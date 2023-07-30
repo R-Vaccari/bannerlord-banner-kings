@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -61,8 +61,8 @@ namespace BannerKings.Managers.Court.Grace
 
         public override void Initialize()
         {
-            MinimalLodgings.Initialize(new TextObject("{=!}Minimal Lodgings"),
-                new TextObject("{=!}Provide bare minimum accomodations for guests. Increases guest capacity by 1."),
+            MinimalLodgings.Initialize(new TextObject("{=Y0NWoa6b}Minimal Lodgings"),
+                new TextObject("{=ZtBCanDT}Provide bare minimum accomodations for guests. Increases guest capacity by 1."),
                 -25f,
                 0f,
                 new Dictionary<ItemCategory, int>()
@@ -72,8 +72,8 @@ namespace BannerKings.Managers.Court.Grace
                 true,
                 CourtExpense.ExpenseType.Lodgings);
 
-            SufficientLodgings.Initialize(new TextObject("{=!}Sufficient Lodgings"),
-                new TextObject("{=!}Provide sufficient accomodations for guests, both in space and quality. Increases guest capacity by 2. Improves feast satisfaction."),
+            SufficientLodgings.Initialize(new TextObject("{=p0WegVVv}Sufficient Lodgings"),
+                new TextObject("{=ju5hjtTV}Provide sufficient accomodations for guests, both in space and quality. Increases guest capacity by 2. Improves feast satisfaction."),
                 10f,
                 0.02f,
                 new Dictionary<ItemCategory, int>()
@@ -84,8 +84,8 @@ namespace BannerKings.Managers.Court.Grace
                 true,
                 CourtExpense.ExpenseType.Lodgings);
 
-            GoodLodgings.Initialize(new TextObject("{=!}Good Lodgings"),
-                new TextObject("{=!}Provide good accomodations for guests, both in space and quality. Increases guest capacity by 3. Further improves feast satisfaction."),
+            GoodLodgings.Initialize(new TextObject("{=8kQyH2uu}Good Lodgings"),
+                new TextObject("{=J4x60RZT}Provide good accomodations for guests, both in space and quality. Increases guest capacity by 3. Further improves feast satisfaction."),
                 40f,
                 0.04f,
                 new Dictionary<ItemCategory, int>()
@@ -97,8 +97,8 @@ namespace BannerKings.Managers.Court.Grace
                 true,
                 CourtExpense.ExpenseType.Lodgings);
 
-            ExcellentLodgings.Initialize(new TextObject("{=!}Excellent Lodgings"),
-                new TextObject("{=!}Provide excellent accomodations for guests, both in space and quality. Increases guest capacity by 4. Improves feast satisfaction the most."),
+            ExcellentLodgings.Initialize(new TextObject("{=Lemq7MqD}Excellent Lodgings"),
+                new TextObject("{=fcx3fZ1r}Provide excellent accomodations for guests, both in space and quality. Increases guest capacity by 4. Improves feast satisfaction the most."),
                 80f,
                 0.06f,
                 new Dictionary<ItemCategory, int>()
@@ -111,8 +111,8 @@ namespace BannerKings.Managers.Court.Grace
                 true,
                 CourtExpense.ExpenseType.Lodgings);
 
-            MinimalSupplies.Initialize(new TextObject("{=!}Minimal Supplies"),
-               new TextObject("{=!}Stock a minimum amount of supplies to be used later during wars. Buys a very small amount of all types of party supplies."),
+            MinimalSupplies.Initialize(new TextObject("{=ZqEzWPMx}Minimal Supplies"),
+               new TextObject("{=FmWniY4S}Stock a minimum amount of supplies to be used later during wars. Buys a very small amount of all types of party supplies."),
                -25f,
                0f,
                new Dictionary<ItemCategory, int>()
@@ -130,8 +130,8 @@ namespace BannerKings.Managers.Court.Grace
                false,
                CourtExpense.ExpenseType.Supplies);
 
-            SufficientSupplies.Initialize(new TextObject("{=!}Sufficient Supplies"),
-                new TextObject("{=!}Stock a small amount of supplies to be used later during wars. Buys a small amount of all types of party supplies."),
+            SufficientSupplies.Initialize(new TextObject("{=VmWFHoYw}Sufficient Supplies"),
+                new TextObject("{=4NTpE1Pt}Stock a small amount of supplies to be used later during wars. Buys a small amount of all types of party supplies."),
                 10f,
                 0.02f,
                 new Dictionary<ItemCategory, int>()
@@ -149,8 +149,8 @@ namespace BannerKings.Managers.Court.Grace
                 false,
                 CourtExpense.ExpenseType.Supplies);
 
-            GoodSupplies.Initialize(new TextObject("{=!}Good Supplies"),
-                new TextObject("{=!}Stock a good amount of supplies to be used later during wars. Buys a good amount of all types of party supplies."),
+            GoodSupplies.Initialize(new TextObject("{=DGhLNj66}Good Supplies"),
+                new TextObject("{=SyjW0CfG}Stock a good amount of supplies to be used later during wars. Buys a good amount of all types of party supplies."),
                 40f,
                 0.04f,
                 new Dictionary<ItemCategory, int>()
@@ -168,8 +168,8 @@ namespace BannerKings.Managers.Court.Grace
                 false,
                 CourtExpense.ExpenseType.Supplies);
 
-            ExcellentSupplies.Initialize(new TextObject("{=!}Excellent Supplies"),
-                new TextObject("{=!}Stock an excellent amount of supplies to be used later during wars. Buys an excellent amount of all types of party supplies."),
+            ExcellentSupplies.Initialize(new TextObject("{=hfi3Dviw}Excellent Supplies"),
+                new TextObject("{=SS4K6gtP}Stock an excellent amount of supplies to be used later during wars. Buys an excellent amount of all types of party supplies."),
                 80f,
                 0.06f,
                 new Dictionary<ItemCategory, int>()
@@ -187,8 +187,8 @@ namespace BannerKings.Managers.Court.Grace
                 false,
                 CourtExpense.ExpenseType.Supplies);
 
-            MinimalExtravagance.Initialize(new TextObject("{=!}Shoddy Court"),
-               new TextObject("{=!}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+            MinimalExtravagance.Initialize(new TextObject("{=Wojb1tFw}Shoddy Court"),
+               new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
                -50f,
                0.02f,
                new Dictionary<ItemCategory, int>()
@@ -201,8 +201,8 @@ namespace BannerKings.Managers.Court.Grace
                true,
                CourtExpense.ExpenseType.Extravagance);
 
-            SufficientExtravagance.Initialize(new TextObject("{=!}Modest Court"),
-                new TextObject("{=!}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+            SufficientExtravagance.Initialize(new TextObject("{=sMGjTVpS}Modest Court"),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
                 50f,
                 0.06f,
                 new Dictionary<ItemCategory, int>()
@@ -216,8 +216,8 @@ namespace BannerKings.Managers.Court.Grace
                 true,
                 CourtExpense.ExpenseType.Extravagance);
 
-            GoodExtravagance.Initialize(new TextObject("{=!}Noble Court"),
-                new TextObject("{=!}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+            GoodExtravagance.Initialize(new TextObject("{=hv34pxAv}Noble Court"),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
                 150f,
                 0.1f,
                 new Dictionary<ItemCategory, int>()
@@ -232,8 +232,8 @@ namespace BannerKings.Managers.Court.Grace
                 true,
                 CourtExpense.ExpenseType.Extravagance);
 
-            ExcellentExtravagance.Initialize(new TextObject("{=!}Regal Court"),
-                new TextObject("{=!}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+            ExcellentExtravagance.Initialize(new TextObject("{=FU9MdDPz}Regal Court"),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
                 250f,
                 0.14f,
                 new Dictionary<ItemCategory, int>()
@@ -249,8 +249,8 @@ namespace BannerKings.Managers.Court.Grace
                 true,
                 CourtExpense.ExpenseType.Extravagance);
 
-            MinimalServants.Initialize(new TextObject("{=!}Minimal Servants"),
-               new TextObject("{=!}Hire a small amount of servants to operate mundane tasks such as cleaning or cooking within the court."),
+            MinimalServants.Initialize(new TextObject("{=awPo7QsQ}Minimal Servants"),
+               new TextObject("{=VCbuZK6B}Hire a small amount of servants to operate mundane tasks such as cleaning or cooking within the court."),
                -25f,
                0.02f,
                new Dictionary<ItemCategory, int>()
@@ -261,8 +261,8 @@ namespace BannerKings.Managers.Court.Grace
                true,
                CourtExpense.ExpenseType.Servants);
 
-            SufficientServants.Initialize(new TextObject("{=!}Sufficient Servants"),
-                new TextObject("{=!}Hire a sufficient amount of servants to operate mundane tasks such as cleaning or cooking within the court. Increases feast satisfaction. Decreases defense against schemes."),
+            SufficientServants.Initialize(new TextObject("{=8R4F0LH1}Sufficient Servants"),
+                new TextObject("{=ZDOuCuYp}Hire a sufficient amount of servants to operate mundane tasks such as cleaning or cooking within the court. Increases feast satisfaction. Decreases defense against schemes."),
                 20f,
                 0.04f,
                 new Dictionary<ItemCategory, int>()
@@ -273,8 +273,8 @@ namespace BannerKings.Managers.Court.Grace
                 true,
                 CourtExpense.ExpenseType.Servants);
 
-            AmpleServants.Initialize(new TextObject("{=!}Ample Servants"),
-                new TextObject("{=!}Hire a good amount of servants to operate mundane tasks such as cleaning or cooking within the court. Further increases feast satisfaction and decreases defense against schemes."),
+            AmpleServants.Initialize(new TextObject("{=6SJgGAVR}Ample Servants"),
+                new TextObject("{=DnjmWQV6}Hire a good amount of servants to operate mundane tasks such as cleaning or cooking within the court. Further increases feast satisfaction and decreases defense against schemes."),
                 80f,
                 0.7f,
                 new Dictionary<ItemCategory, int>()
@@ -285,8 +285,8 @@ namespace BannerKings.Managers.Court.Grace
                 true,
                 CourtExpense.ExpenseType.Servants);
 
-            PlentifulServants.Initialize(new TextObject("{=!}Plentiful Servants"),
-                new TextObject("{=!}Hire a small amount of servants to operate mundane tasks such as cleaning or cooking within the court. Increases feast satisfaction and decreases defense against schemes the most."),
+            PlentifulServants.Initialize(new TextObject("{=Y8OMJJ8P}Plentiful Servants"),
+                new TextObject("{=VCbuZK6B}Hire a small amount of servants to operate mundane tasks such as cleaning or cooking within the court. Increases feast satisfaction and decreases defense against schemes the most."),
                 120f,
                 0.1f,
                 new Dictionary<ItemCategory, int>()
@@ -297,8 +297,8 @@ namespace BannerKings.Managers.Court.Grace
                 true,
                 CourtExpense.ExpenseType.Servants);
 
-            MinimalSecurity.Initialize(new TextObject("{=!}Minimal Security"),
-                new TextObject("{=!}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+            MinimalSecurity.Initialize(new TextObject("{=pxxHAa57}Minimal Security"),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
                 -25f,
                 0f,
                 new Dictionary<ItemCategory, int>()
@@ -308,8 +308,8 @@ namespace BannerKings.Managers.Court.Grace
                 true,
                 CourtExpense.ExpenseType.Security);
 
-            SufficientSecurity.Initialize(new TextObject("{=!}Sufficient Security"),
-                new TextObject("{=!}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+            SufficientSecurity.Initialize(new TextObject("{=6oCNmffJ}Sufficient Security"),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
                 10f,
                 0.02f,
                 new Dictionary<ItemCategory, int>()
@@ -319,8 +319,8 @@ namespace BannerKings.Managers.Court.Grace
                 true,
                 CourtExpense.ExpenseType.Security);
 
-            GoodSecurity.Initialize(new TextObject("{=!}Good Security"),
-                new TextObject("{=!}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+            GoodSecurity.Initialize(new TextObject("{=sRWDgNgy}Good Security"),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
                 40f,
                 0.04f,
                 new Dictionary<ItemCategory, int>()
@@ -331,8 +331,8 @@ namespace BannerKings.Managers.Court.Grace
                 true,
                 CourtExpense.ExpenseType.Security);
 
-            ExcellentSecurity.Initialize(new TextObject("{=!}Excellent Security"),
-                new TextObject("{=!}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+            ExcellentSecurity.Initialize(new TextObject("{=U41twbPF}Excellent Security"),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
                 80f,
                 0.06f,
                 new Dictionary<ItemCategory, int>()

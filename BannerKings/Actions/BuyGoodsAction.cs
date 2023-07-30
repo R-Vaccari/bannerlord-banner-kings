@@ -76,6 +76,7 @@ namespace BannerKings.Actions
         public static void BuyBestToWorst(ItemRoster buyerInventory, Town market, Hero buyer, Dictionary<ItemCategory, int> goods,
             int budget = -1, TextObject reason = null)
         {
+            if (market == null) return;
             BuyGoods(buyerInventory, market, buyer, goods, market.Settlement.ItemRoster.Count - 1,
                 -1, -1, budget, reason);
         }

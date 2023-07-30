@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Utils.Extensions;
 using System;
@@ -22,7 +22,7 @@ namespace BannerKings.Behaviours.Events.CourtEvents
         }
 
 
-        public override TextObject Name => new TextObject("{=!}Destroyed Crops");
+        public override TextObject Name => new TextObject("{=n3j1wX9z}Destroyed Crops");
 
         public override BannerKingsEvent GetCopy(Hero hero)
         {
@@ -74,7 +74,7 @@ namespace BannerKings.Behaviours.Events.CourtEvents
 
         protected override void SetTexts()
         {
-            Description = new TextObject("{=!}Peasants at {VILLAGE} report that their crops were trampled on by cattle from {ESTATE}, owned by {OWNER}. They refuse any responsability, yet {HEADSMAN} swears the estate is at fault.")
+            Description = new TextObject("{=qqxppUOY}Peasants at {VILLAGE} report that their crops were trampled on by cattle from {ESTATE}, owned by {OWNER}. They refuse any responsability, yet {HEADSMAN} swears the estate is at fault.")
                 .SetTextVariable("HEADSMAN", village.Settlement.Notables.FirstOrDefault(x => x.IsHeadman).Name)
                 .SetTextVariable("ESTATE", estate.Name)
                 .SetTextVariable("VILLAGE", village.Name)

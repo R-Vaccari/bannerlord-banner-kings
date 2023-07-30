@@ -507,7 +507,7 @@ namespace BannerKings.Models.BKModels
                 case GovernmentType.Republic:
                 {
                     var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
-                    if (revoker != sovereign.deJure)
+                    if (sovereign == null || revoker != sovereign.deJure)
                     {
                         revokeAction.Possible = false;
                         revokeAction.Reason = new TextObject("{=w7b5SE48}Not de Jure faction leader.");
@@ -558,7 +558,6 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-
             var revokerHighest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(revoker);
             var targetHighest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(title.deJure);
 
@@ -571,7 +570,6 @@ namespace BannerKings.Models.BKModels
                     return revokeAction;
                 }
             }
-            
 
             revokeAction.Possible = true;
             revokeAction.Reason = new TextObject("{=f5Be67QF}You may grant away this title.");

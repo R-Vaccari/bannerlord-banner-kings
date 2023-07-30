@@ -32,13 +32,12 @@ namespace BannerKings.UI.Court
         public override void RefreshValues()
         {
             base.RefreshValues();
-            var currentCouncil = council.GetMembers();
             var newList = new MBBindingList<SettlementGovernorSelectionItemVM> {AvailableGovernors[0]};
             var councilPosition = council.GetCouncilPosition(Position);
+            var validCandidates = council.GetAvailableHeroes(Position);
             foreach (var hero in courtMembers)
             {
-                if (!currentCouncil.Contains(hero) && hero.IsAlive && !hero.IsChild &&
-                    councilPosition.IsValidCandidate(hero).Item1)
+                if (validCandidates.Contains(hero))
                 {
                     newList.Add(new CouncilCandidateVM(hero, OnSelection,
                         Position, council.GetCompetence(hero, Position)));
@@ -59,6 +58,7 @@ namespace BannerKings.UI.Court
                     ImageIdentifier image = null;
                     var name = new TextObject("{=koX9okuG}None");
                     var hint = "";
+                    bool enabled = true;
                     if (vm.Governor != null)
                     {
                         image = new ImageIdentifier(CampaignUIHelper.GetCharacterCode(vm.Governor.CharacterObject));
@@ -69,12 +69,22 @@ namespace BannerKings.UI.Court
                             .SetTextVariable("HERO", name);
 
                         hint = textObject.ToString();
+
+                        var action = BannerKingsConfig.Instance.CouncilModel
+                            .GetAction(CouncilActionType.REQUEST,
+                            council,
+                            vm.Governor,
+                            Position,
+                            null,
+                            true);
+                        enabled = action.Possible;
+                        if (!enabled) hint = action.Reason.ToString();
                     }
 
                     options.Add(new InquiryElement(vm.Governor, 
                         name.ToString(), 
-                        image, 
-                        true, 
+                        image,
+                        enabled, 
                         hint));
                 }
                 TextObject current = new TextObject();
@@ -121,6 +131,12 @@ namespace BannerKings.UI.Court
                             else if (position.Member != null)
                             {
                                 action = model.GetAction(CouncilActionType.RELINQUISH, council, requester, position);
+                            }
+
+                            if (!council.GetAvailableHeroes(Position).Contains(requester))
+                            {
+                                action = model.GetAction(CouncilActionType.SWAP, council, requester, position,
+                                    council.GetHeroCurrentConflictingPosition(position, requester));
                             }
 
                             if (action != null)

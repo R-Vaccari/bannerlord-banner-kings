@@ -60,7 +60,8 @@ namespace BannerKings.Models.BKModels
             if (actionTaker != owner)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=dkSBAC2Z}You don't own this settlement.");
+                action.Reason = new TextObject("{=W2Y58H12}You don't de facto hold {FIEF} and thus lack control over its estates.")
+                    .SetTextVariable("FIEF", settlement.Name);
                 return action;
             }
 

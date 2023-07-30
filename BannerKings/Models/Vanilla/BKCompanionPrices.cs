@@ -1,6 +1,7 @@
 ﻿using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.ObjectSystem;
@@ -9,42 +10,49 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKCompanionPrices : DefaultCompanionHiringPriceCalculationModel
     {
-        public override int GetCompanionHiringPrice(Hero companion)
+        public override int GetCompanionHiringPrice(Hero companion) => GetHiringPrice(companion, true);
+        
+
+        public int GetHiringPrice(Hero companion, bool addGearCosts)
         {
             var explainedNumber = new ExplainedNumber(0f);
             var currentSettlement = companion.CurrentSettlement;
-            var town = currentSettlement?.Town;
-            if (town == null)
-            {
-                town = SettlementHelper.FindNearestTown().Town;
-            }
 
-            var num = 0f;
-            for (var equipmentIndex = EquipmentIndex.WeaponItemBeginSlot;
-                 equipmentIndex < EquipmentIndex.NumEquipmentSetSlots;
-                 equipmentIndex++)
+            if (addGearCosts)
             {
-                var itemRosterElement = companion.CharacterObject.Equipment[equipmentIndex];
-                if (itemRosterElement.Item != null)
+                var town = currentSettlement?.Town;
+                if (town == null)
                 {
-                    num += town.GetItemPrice(itemRosterElement);
+                    town = SettlementHelper.FindNearestTown().Town;
                 }
-            }
 
-            for (var equipmentIndex2 = EquipmentIndex.WeaponItemBeginSlot;
-                 equipmentIndex2 < EquipmentIndex.NumEquipmentSetSlots;
-                 equipmentIndex2++)
-            {
-                var itemRosterElement2 = companion.CharacterObject.FirstCivilianEquipment[equipmentIndex2];
-                if (itemRosterElement2.Item != null)
+                var num = 0f;
+                for (var equipmentIndex = EquipmentIndex.WeaponItemBeginSlot;
+                     equipmentIndex < EquipmentIndex.NumEquipmentSetSlots;
+                     equipmentIndex++)
                 {
-                    num += town.GetItemPrice(itemRosterElement2);
+                    var itemRosterElement = companion.CharacterObject.Equipment[equipmentIndex];
+                    if (itemRosterElement.Item != null)
+                    {
+                        num += town.GetItemPrice(itemRosterElement);
+                    }
                 }
-            }
 
-            explainedNumber.Add(num / 2f);
+                for (var equipmentIndex2 = EquipmentIndex.WeaponItemBeginSlot;
+                     equipmentIndex2 < EquipmentIndex.NumEquipmentSetSlots;
+                     equipmentIndex2++)
+                {
+                    var itemRosterElement2 = companion.CharacterObject.FirstCivilianEquipment[equipmentIndex2];
+                    if (itemRosterElement2.Item != null)
+                    {
+                        num += town.GetItemPrice(itemRosterElement2);
+                    }
+                }
+
+                explainedNumber.Add(num / 2f);
+            }
+            
             explainedNumber.Add(companion.CharacterObject.Level * 10);
-
             var skills = MBObjectManager.Instance.GetObjectTypeList<SkillObject>();
             foreach (var skill in skills)
             {
@@ -54,7 +62,6 @@ namespace BannerKings.Models.Vanilla
                     explainedNumber.Add(skillValue * GetCostFactor(skill));
                 }
             }
-
 
             if (Hero.MainHero.IsPartyLeader && Hero.MainHero.GetPerkValue(DefaultPerks.Steward.PaidInPromise))
             {
@@ -67,7 +74,22 @@ namespace BannerKings.Models.Vanilla
                     ref explainedNumber);
             }
 
-            return (int) explainedNumber.ResultNumber;
+            return (int)explainedNumber.ResultNumber;
+        }
+
+        public int GetHeroWage(Hero hero)
+        {
+            var totalCost = 0f;
+            foreach (var skill in MBObjectManager.Instance.GetObjectTypeList<SkillObject>())
+            {
+                float skillValue = hero.GetSkillValue(skill);
+                if (skillValue > 30)
+                {
+                    totalCost += skillValue * GetCostFactor(skill);
+                }
+            }
+
+            return MBRandom.RoundRandomized(totalCost * 0.005f);
         }
 
         public int GetCostFactor(SkillObject skill)

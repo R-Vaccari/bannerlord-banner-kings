@@ -1,4 +1,7 @@
+using BannerKings.Managers.Goals.Decisions;
 using BannerKings.Utils.Extensions;
+using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -58,7 +61,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                     .SetTextVariable("SEASON", GameTexts.FindText("str_season_" + SeasonOfTheYear.ToString()));
             }
 
-            return hasFief && date;
+            var decision = new OrganizeFeastDecision(Hero.MainHero);
+            List<TextObject> reasons;
+            bool feastPossible = decision.IsFulfilled(out reasons);
+            if (reasons.FirstOrDefault() != null) reason = reasons.First();
+
+            return hasFief && date && feastPossible;
         }
     }
 }

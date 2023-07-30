@@ -3,6 +3,8 @@ using System.Linq;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Laws;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
@@ -230,6 +232,37 @@ namespace BannerKings.Patches
 
                  disabledReason = TextObject.Empty;
                 __result = true;
+                return false;
+            }
+        }
+    }
+
+    namespace Armies
+    {
+        [HarmonyPatch(typeof(Army), "UpdateName")]
+        internal class ArmyUpdateNamePatch
+        {
+            private static bool Prefix(Army __instance)
+            {
+                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
+                TextObject leaderName = __instance.ArmyOwner != null ? 
+                    __instance.ArmyOwner.Name : ((__instance.LeaderParty.PartyComponent.PartyOwner != null) ?
+                    __instance.LeaderParty.PartyComponent.PartyOwner.Name : TextObject.Empty);
+                TextObject result = new TextObject("{=nbmctMLk}{LEADER_NAME}{.o} Army");
+                if (title != null)
+                {
+                    if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyHorde))
+                    {
+                        result = new TextObject("{=HCWYbPOa}{LEADER_NAME}{.o} Horde");
+                    }
+                    else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion))
+                    {
+                        result = new TextObject("{=4ubaOxe2}{LEADER_NAME}{.o} Legion");
+                    }
+                }
+
+                AccessTools.Property(__instance.GetType(), "Name").SetValue(__instance,
+                    result.SetTextVariable("LEADER_NAME", leaderName));
                 return false;
             }
         }

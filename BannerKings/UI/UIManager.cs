@@ -8,6 +8,7 @@ using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.Vanilla;
 using BannerKings.Settings;
 using BannerKings.UI.Notifications;
@@ -173,7 +174,7 @@ namespace BannerKings.UI
                             government = title.Contract.Government;
                         }
 
-                        var honorary = Utils.Helpers.GetTitleHonorary(title.TitleType, government, __instance.IsFemale,
+                        var honorary = Utils.TextHelper.GetTitleHonorary(title.TitleType, government, __instance.IsFemale,
                             kingdom != null ? kingdom.Culture : __instance.Culture);
                         var name = (TextObject) __instance.GetType()
                             .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
@@ -221,7 +222,7 @@ namespace BannerKings.UI
 
                             if (leader == __instance.Spouse)
                             {
-                                var honorary = Utils.Helpers.GetTitleHonorary(leaderTitle.TitleType, government, __instance.IsFemale,
+                                var honorary = Utils.TextHelper.GetTitleHonorary(leaderTitle.TitleType, government, __instance.IsFemale,
                                     kingdom != null ? kingdom.Culture : __instance.Culture);
 
                                 __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
@@ -657,17 +658,34 @@ namespace BannerKings.UI
                 {
                     var rulingClan = Clan.PlayerClan.Kingdom.RulingClan;
                     var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(rulingClan);
-                    var councilMember = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Marshal);
-                    TextObject reason = new TextObject("{=9ap6ssvZ}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to Lordship level.")
-                        .SetTextVariable("MARSHAL", councilMember.Name)
-                        .SetTextVariable("CLAN", rulingClan.Name);
+                    var marshal = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Marshal);
+                    var legate = council.GetCouncilPosition(DefaultCouncilPositions.Instance.LegionCommander1);
 
-                    if (Clan.PlayerClan.Kingdom.HasPolicy(BKPolicies.Instance.LimitedArmyPrivilege))
+                    var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
+                    TextObject reason = null;
+                    if (title != null)
                     {
-                        reason = new TextObject("{=0Yoz051M}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to County level.")
-                                                .SetTextVariable("MARSHAL", councilMember.Name)
-                                                .SetTextVariable("CLAN", rulingClan.Name);
-                    }
+                        if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion))
+                        {
+                            reason = new TextObject("{=xE7gruuP}You must be faction leader, {MARSHAL} or a {LEGATE} for the {CLAN} to raise a legion.")
+                                .SetTextVariable("MARSHAL", marshal.GetCulturalName())
+                                .SetTextVariable("LEGATE", legate.GetCulturalName())
+                                .SetTextVariable("CLAN", rulingClan.Name);
+                        }
+                        else
+                        {
+                            reason = new TextObject("{=9ap6ssvZ}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to Lordship level.")
+                                                                           .SetTextVariable("MARSHAL", marshal.Name)
+                                                                           .SetTextVariable("CLAN", rulingClan.Name);
+
+                            if (Clan.PlayerClan.Kingdom.HasPolicy(BKPolicies.Instance.LimitedArmyPrivilege))
+                            {
+                                reason = new TextObject("{=0Yoz051M}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to County level.")
+                                                        .SetTextVariable("MARSHAL", marshal.Name)
+                                                        .SetTextVariable("CLAN", rulingClan.Name);
+                            }
+                        }
+                    }      
 
                     MBInformationManager.AddQuickInformation(reason, 0);
                 }

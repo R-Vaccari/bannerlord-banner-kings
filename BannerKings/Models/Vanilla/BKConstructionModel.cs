@@ -489,7 +489,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (GetMaterialSupply(requirement.Item1, town) < requirement.Item2)
                     {
-                        result.Add(-result.ResultNumber, new TextObject("{=!}Missing {MATERIAL} for project {PROJECT}")
+                        result.Add(-result.ResultNumber, new TextObject("{=TAfQZOSB}Missing {MATERIAL} for project {PROJECT}")
                             .SetTextVariable("MATERIAL", requirement.Item1.Name)
                             .SetTextVariable("PROJECT", project.Name));
                         break;

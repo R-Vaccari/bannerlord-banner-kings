@@ -92,12 +92,24 @@ namespace BannerKings.Managers.Skills
         #region Artisan
 
         public PerkObject ArtisanSmith { get; private set; }
-
         public PerkObject ArtisanCraftsman { get; private set; }
-
         public PerkObject ArtisanEntrepeneur { get; private set; }
 
         #endregion Artisan
+
+        #region Courtier
+        public PerkObject CourtierAppointee { get; } = new PerkObject("LifestyleCourtierAppointee");
+        public PerkObject CourtierCompanion { get; } = new PerkObject("LifestyleCourtierCompanion");
+        public PerkObject CourtierRoyalCouncillor { get; } = new PerkObject("LifestyleCourtierRoyalCouncillor");
+
+        #endregion Courtier
+
+        #region Commander
+        public PerkObject CommanderLogistician { get; } = new PerkObject("LifestyleCommanderLogistician");
+        public PerkObject CommanderInspirer { get; } = new PerkObject("LifestyleCommanderInspirer");
+        public PerkObject CommanderWarband { get; } = new PerkObject("LifestyleCommanderWarband");
+
+        #endregion Commander
 
         #region Outlaw
 
@@ -255,6 +267,80 @@ namespace BannerKings.Managers.Skills
 
         private void InitializeLifestylePerks()
         {
+            #region Commander
+
+            CommanderLogistician.Initialize("{=dD5S3Lj8}Logistician",
+                null,
+                80,
+                null,
+                "{=MaAXE1ZC}Duration of disorganized state reduced by 10%.",
+                SkillEffect.PerkRole.PartyLeader, 0.15f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=zL9p3Rsk}Party size increased by 5.",
+                SkillEffect.PerkRole.PartyLeader, 5,
+                SkillEffect.EffectIncrementType.Add);
+
+            CommanderInspirer.Initialize("{=87ounFBE}Inspirer",
+                null,
+                160,
+                null,
+                "{=5bjivtCf}As army leader, army cohesion loss is 12% slower.",
+                SkillEffect.PerkRole.PartyLeader, -0.08f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=9z8WsGPr}Cultural difference morale impact reduced by 50%.",
+                SkillEffect.PerkRole.PartyLeader, 0.15f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            CommanderWarband.Initialize("{=3N5dPLiM}Warband",
+                null,
+                240,
+                null,
+                "{=dPo5goLo}{VALUE}% influence gain from winning battles.",
+                SkillEffect.PerkRole.PartyLeader, 0.25f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=WUT6h0VG}Party size increased by 8%.",
+                SkillEffect.PerkRole.PartyLeader, 0.08f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            #endregion Commander
+
+            #region Courtier
+
+            CourtierAppointee.Initialize("{=Y5boR1SF}Appointee", 
+                null,
+                80,
+                null,
+                "{=JepDTW31}You are 10% more competent at council positions.",
+                SkillEffect.PerkRole.Personal, 0.1f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=s61aKi0v}Your position yields 15% more influence.",
+                SkillEffect.PerkRole.Personal, 0.15f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            CourtierCompanion.Initialize("{=Y5boR1SF}Appointee",
+                null,
+                160,
+                null,
+                "{=2XMaaF8K}You are 10% more likely to be accepted for a council position.",
+                SkillEffect.PerkRole.Personal, 0.1f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=s61aKi0v}Your position yields 15% more influence.",
+                SkillEffect.PerkRole.Personal, 0.15f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            CourtierRoyalCouncillor.Initialize("{=Y5boR1SF}Appointee",
+                null,
+                240,
+                null,
+                "{=2XMaaF8K}You are 10% more likely to be accepted for a council position.",
+                SkillEffect.PerkRole.Personal, 0.1f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=s61aKi0v}Your position yields 15% more influence.",
+                SkillEffect.PerkRole.Personal, 0.15f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            #endregion Courtier
+
             #region Fian
 
             FianHighlander = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleFianHighlander"));

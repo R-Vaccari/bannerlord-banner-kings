@@ -170,6 +170,7 @@ namespace BannerKings.Managers.AI
                     hero.GetTraitLevel(DefaultTraits.Politician) + hero.GetTraitLevel(DefaultTraits.Commander);
 
                 var merchantWeight = hero.GetTraitLevel(DefaultTraits.Blacksmith) + hero.GetTraitLevel(DefaultTraits.Manager);
+                var artisanWeight = hero.GetTraitLevel(DefaultTraits.Blacksmith) * 3f;
 
                 var siegeWeight = hero.GetTraitLevel(DefaultTraits.Siegecraft);
 
@@ -220,6 +221,16 @@ namespace BannerKings.Managers.AI
                                     rogueWeight += 2;
                                 }
 
+                                if (occupation == Occupation.Artisan)
+                                {
+                                    artisanWeight += 2;
+                                }
+
+                                if (occupation == Occupation.Merchant)
+                                {
+                                    merchantWeight += 2;
+                                }
+
                                 politicianWeight = 0;
                                 warriorWeight = 0;
                                 mercenaryWeight = 0;
@@ -265,6 +276,10 @@ namespace BannerKings.Managers.AI
                         }
 
                         tuple.Item2 += rogueWeight;
+                    }
+                    else if (first == DefaultSkills.Crafting || second == DefaultSkills.Crafting)
+                    {
+                        tuple.Item2 += artisanWeight;
                     }
                     else
                     {

@@ -56,7 +56,7 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public bool RealisticCaravanIncome { get; set; } = true;
 
-        [SettingProperty("{=!}AI Dismiss Parties", RequireRestart = false, HintText = "{=!}AI clan leaders will dismiss parties from their family members during peace in order to save more money. Default: true.")]
+        [SettingProperty("{=4pJUkbew}AI Dismiss Parties", RequireRestart = false, HintText = "{=FhNxraXd}AI clan leaders will dismiss parties from their family members during peace in order to save more money. Default: true.")]
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public bool DismissParties { get; set; } = true;
 
@@ -80,12 +80,12 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public bool CraftingWaitingTime { get; set; } = true;
 
-        [SettingProperty("{=!}Diplomacy Changes", RequireRestart = true, HintText = "{=!}Changes to AI evaluation of declaring war such as not calling wars when the entire kingdom is broke. Slows down the game pace. Default: True.")]
+        [SettingProperty("{=b4hNMeGx}Diplomacy Changes", RequireRestart = true, HintText = "{=2YgM5mR1}Changes to AI evaluation of declaring war such as not calling wars when the entire kingdom is broke. Slows down the game pace. Default: True.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public bool DiplomacyChanges { get; set; } = true;
 
-        [SettingPropertyFloatingInteger("{=!}Party Supplies", minValue: 0f, maxValue: 2f, "#0%", RequireRestart = false, 
-            HintText = "{=!}Affects the party supplies requirement factor. 0% means the feature is functionally disabled. 100% is the standard rate of items consumption, 200% means doube the rate, resulting in more expensive parties. May affect AI party limit sizes. Default: 100%.")]
+        [SettingPropertyFloatingInteger("{=iBLGdG1Y}Party Supplies", minValue: 0f, maxValue: 2f, "#0%", RequireRestart = false, 
+            HintText = "{=uURHROGF}Affects the party supplies requirement factor. 0% means the feature is functionally disabled. 100% is the standard rate of items consumption, 200% means doube the rate, resulting in more expensive parties. May affect AI party limit sizes. Default: 100%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float PartySuppliesFactor { get; set; } = 1f;
 

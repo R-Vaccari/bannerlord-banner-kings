@@ -11,6 +11,22 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKBattleRewardModel : DefaultBattleRewardModel
     {
+        public override ExplainedNumber CalculateInfluenceGain(PartyBase party, float influenceValueOfBattle, float contributionShare)
+        {
+            ExplainedNumber result = base.CalculateInfluenceGain(party, influenceValueOfBattle, contributionShare);
+            var leader = party.LeaderHero;
+            if (leader != null)
+            {
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+                if (education.HasPerk(BKPerks.Instance.CommanderWarband))
+                {
+                    result.AddFactor(0.25f, BKPerks.Instance.CommanderWarband.Name);
+                }
+            }
+
+            return result;
+        }
+
         public override ExplainedNumber CalculateRenownGain(PartyBase party, float renownValueOfBattle, float contributionShare)
         {
             var result = base.CalculateRenownGain(party, renownValueOfBattle, contributionShare);

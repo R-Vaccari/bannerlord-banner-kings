@@ -1,8 +1,10 @@
-﻿using BannerKings.Actions;
+using BannerKings.Actions;
+using Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -88,57 +90,65 @@ namespace BannerKings.Managers.Court.Grace
             {
                 TextObject reason = null;
                 if (data.Clan == Clan.PlayerClan) 
-                    reason = new TextObject("{=!}Your court has spent {GOLD}{GOLD_ICON} buying {ITEMS} items for its good requirements.");
+                    reason = new TextObject("{=LFVNq2Uz}Your court has spent {GOLD}{GOLD_ICON} buying {ITEMS} items for its good requirements.");
+
+                Town market = data.Location;
+                if (!market.IsTown)
+                {
+                    market = SettlementHelper.FindNearestTown(x => x.MapFaction == market.MapFaction)?.Town;
+                }
+
                 BuyGoodsAction.BuyBestToWorst(data.Location.Settlement.Stash,
                     data.Location,
                     data.Clan.Leader,
                     toBuy,
                     data.Clan.Leader.Gold,
                     reason);
-            }
 
-            float graceChange = 0f;
-            int totalItems = 0;
-            int totalConsumed = 0;
-            foreach (var pair in toConsume)
-            {
-                int consumed = 0;
-                totalItems += pair.Value;
-                graceChange -= 2f * pair.Value;
-                if (data.Location != null)
+                float graceChange = 0f;
+                int totalItems = 0;
+                int totalConsumed = 0;
+                foreach (var pair in toConsume)
                 {
-                    ItemRoster roster = data.Location.Settlement.Stash;
-                    foreach (ItemRosterElement element in roster)
+                    int consumed = 0;
+                    totalItems += pair.Value;
+                    graceChange -= 2f * pair.Value;
+                    if (data.Location != null)
                     {
-                        if (consumed >= pair.Value) break;
-
-                        if (element.EquipmentElement.Item.ItemCategory == pair.Key)
+                        ItemRoster roster = data.Location.Settlement.Stash;
+                        foreach (ItemRosterElement element in roster)
                         {
-                            int max = MathF.Min(pair.Value - consumed, element.Amount);
-                            roster.AddToCounts(element.EquipmentElement, -max);
-                            consumed += max;
-                            float priceModifier = element.EquipmentElement.ItemModifier != null ?
-                                element.EquipmentElement.ItemModifier.PriceMultiplier : 1f;
-                            graceChange += max * 2f * priceModifier;
-                            totalConsumed += max;
+                            if (consumed >= pair.Value) break;
+
+                            if (element.EquipmentElement.Item.ItemCategory == pair.Key)
+                            {
+                                int max = MathF.Min(pair.Value - consumed, element.Amount);
+                                roster.AddToCounts(element.EquipmentElement, -max);
+                                consumed += max;
+                                float priceModifier = element.EquipmentElement.ItemModifier != null ?
+                                    element.EquipmentElement.ItemModifier.PriceMultiplier : 1f;
+                                graceChange += max * 2f * priceModifier;
+                                totalConsumed += max;
+                            }
                         }
                     }
                 }
-            }
 
-            if (data.Clan == Clan.PlayerClan)
-            {
-                InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=!}Your court has consumed {COUNT} out of {DESIRED} required goods, changing your grace by {GRACE}.")
-                    .SetTextVariable("GRACE", graceChange.ToString("0.0"))
-                    .SetTextVariable("COUNT", totalConsumed)
-                    .SetTextVariable("DESIRED", totalItems)
-                    .ToString(),
-                    Color.FromUint(graceChange >= 0f ? Utils.TextHelper.COLOR_LIGHT_BLUE : Utils.TextHelper.COLOR_LIGHT_RED)));
-            }
-            else if (CampaignTime.Now.GetDayOfSeason == 1)
-            {
-                CalculateAIExpense();
+                graceChange += graceChange;
+                if (data.Clan == Clan.PlayerClan)
+                {
+                    InformationManager.DisplayMessage(new InformationMessage(
+                        new TextObject("{=6PxQfUrN}Your court has consumed {COUNT} out of {DESIRED} required goods, changing your grace by {GRACE}.")
+                        .SetTextVariable("GRACE", graceChange.ToString("0.0"))
+                        .SetTextVariable("COUNT", totalConsumed)
+                        .SetTextVariable("DESIRED", totalItems)
+                        .ToString(),
+                        Color.FromUint(graceChange >= 0f ? Utils.TextHelper.COLOR_LIGHT_BLUE : Utils.TextHelper.COLOR_LIGHT_RED)));
+                }
+                else if (CampaignTime.Now.GetDayOfSeason == 1)
+                {
+                    CalculateAIExpense();
+                }
             }
         }
 

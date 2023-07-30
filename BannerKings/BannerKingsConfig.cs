@@ -29,7 +29,7 @@ namespace BannerKings
 {
     public class BannerKingsConfig
     {
-        public const string VersionNumber = "1.2.7.5";
+        public const string VersionNumber = "1.2.7.6";
         public const string VersionEdition = "CEK";
         public string VersionName => VersionNumber + VersionEdition;
 
@@ -75,6 +75,8 @@ namespace BannerKings
         public BKMarriageModel MarriageModel { get; } = new();
         public BKArmyManagementModel ArmyManagementModel { get; } = new();
         public BKCrimeModel CrimeModel { get; } = new();
+        public BKCompanionPrices CompanionModel { get; } = new();
+        public BKKingodmDecsionModel KingdomDecisionModel { get; } = new();
         public IPartyNeedsModel PartyNeedsModel { get; } = new BKPartyNeedsModel();
 
         static BannerKingsConfig()

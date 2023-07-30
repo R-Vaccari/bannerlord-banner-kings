@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 
@@ -24,6 +25,7 @@ namespace BannerKings.Managers.Helpers
                     list.Add(DefaultPolicies.Cantons);
                     list.Add(DefaultPolicies.CouncilOfTheCommons);
                     list.Add(DefaultPolicies.NobleRetinues);
+                    list.Add(BKPolicies.Instance.LimitedArmyPrivilege);
                     break;
                 case GovernmentType.Republic:
                     list.Add(DefaultPolicies.SacredMajesty);
@@ -38,6 +40,7 @@ namespace BannerKings.Managers.Helpers
                     list.Add(DefaultPolicies.StateMonopolies);
                     list.Add(DefaultPolicies.DebasementOfTheCurrency);
                     list.Add(DefaultPolicies.LandTax);
+                    list.Add(BKPolicies.Instance.LimitedArmyPrivilege);
                     break;
                 case GovernmentType.Feudal:
                     list.Add(DefaultPolicies.ImperialTowns);
@@ -66,6 +69,7 @@ namespace BannerKings.Managers.Helpers
                     list.Add(DefaultPolicies.Magistrates);
                     list.Add(DefaultPolicies.FeudalInheritance);
                     list.Add(DefaultPolicies.PrecarialLandTenure);
+                    list.Add(BKPolicies.Instance.LimitedArmyPrivilege);
                     break;
             }
 

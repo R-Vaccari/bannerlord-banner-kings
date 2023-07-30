@@ -108,7 +108,7 @@ namespace BannerKings.UI.Titles
 
             Contract = contractButton;
 
-            TitleInfo.Add(new InformationElement(new TextObject("{=!}Total Population:").ToString(),
+            TitleInfo.Add(new InformationElement(new TextObject("Total Population:").ToString(),
                 Population.ToString(), 
                 new TextObject("{=g4pjb4j4}The total population within the fiefs in this hierarchy regardless of who controls them.").ToString()));
 

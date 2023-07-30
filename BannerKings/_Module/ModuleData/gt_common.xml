@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <strings>
+	<string id="str_trait_name_seductive.0" text="{=trait_obtuse}Obtuse" />
+	<string id="str_trait_name_seductive.1" text="{=trait_blunt}Blunt" />
+	<string id="str_trait_name_seductive.3" text="{=trait_provocative}Provocative" />
+	<string id="str_trait_name_seductive.4" text="{=trait_seductive}Seductive" />
 
 	<string id="str_trait_name_just.0" text="{=trait_tyrant}Tyrant" />
 	<string id="str_trait_name_just.1" text="{=trait_unjust}Unjust" />
@@ -51,6 +55,7 @@
 	<string id="str_bk_demesne_law.EstateTenure" text="{=bk_law_estate_tenure}Estate Tenure" />
 	<string id="str_bk_demesne_law.Tenancy" text="{=bk_law_tenancy}Commoners Tenure" />
 	<string id="str_bk_demesne_law.HighCouncil" text="{=bk_law_high_council}High Council" />
+	<string id="str_bk_demesne_law.Army" text="{=bk_law_high_army}Army" />
 
 	<string id="str_bk_estate_task.Land_Expansion" text="{=bk_land_expansion}Land Expansion" />
 	<string id="str_bk_estate_task.Prodution" text="{=bk_production}Production" />

@@ -340,7 +340,6 @@ namespace BannerKings.Models.Vanilla
             }
         }
 
-
         private void GetSettlementLoyaltyChangeDueToIssues(Town town, ref ExplainedNumber explainedNumber)
         {
             Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementLoyalty,

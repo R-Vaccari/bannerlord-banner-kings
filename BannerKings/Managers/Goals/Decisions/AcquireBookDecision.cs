@@ -57,23 +57,20 @@ namespace BannerKings.Managers.Goals.Decisions
                 var book = allBooks.FirstOrDefault(x => x.Item == element.EquipmentElement.Item);
                 var price = book.Item.Value * 1000;
 
-                var hint = $"{book.Description}";
-
-                if (book.Skill != null)
-                {
-                    hint += Environment.NewLine + book.Skill.Name.ToString();
-                }
-
-                hint += Environment.NewLine + new TextObject("{=1c9TOPzH}{GOLD_AMOUNT}{GOLD_ICON}")
-                    .SetTextVariable("GOLD_AMOUNT", price)
-                    .ToString();
-
+                TextObject hint = new TextObject("{=jAdG0wG9}{DESCRIPTION}\n{GOLD_AMOUNT}{GOLD_ICON}\nLanguage: {LANGUAGE}\n{SKILL}\n{TRAIT}")
+                        .SetTextVariable("DESCRIPTION", book.Description)
+                        .SetTextVariable("GOLD_AMOUNT", price)
+                        .SetTextVariable("LANGUAGE", book.Language.Name)
+                        .SetTextVariable("SKILL", book.Skill != null ? new TextObject("{=NrQdJeJU}Skill: {SKILL}").SetTextVariable("SKILL", book.Skill.Name)
+                        : TextObject.Empty)
+                        .SetTextVariable("TRAIT", book.Trait != null ? new TextObject("{=1P5txvhk}Trait: {TRAIT}").SetTextVariable("TRAIT", book.Trait.Name)
+                        : TextObject.Empty);
 
                 elements.Add(new InquiryElement(book, new TextObject("{=e8KTkKtX}{BOOK} ({LANGUAGE})")
                     .SetTextVariable("BOOK", item.Name)
                     .SetTextVariable("LANGUAGE", book.Language.Name).ToString(), 
                     null, fulfiller.Gold >= price,
-                    hint));
+                    hint.ToString()));
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(

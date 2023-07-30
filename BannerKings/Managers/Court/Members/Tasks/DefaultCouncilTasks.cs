@@ -8,39 +8,28 @@ namespace BannerKings.Managers.Court.Members.Tasks
         public CouncilTask OrganizeMiltia { get; } = new CouncilTask("OrganizeMilitia");
         public CouncilTask EncourageMilitarism { get; } = new CouncilTask("EncourageMilitarism");
         public CouncilTask SuperviseGarrisons { get; } = new CouncilTask("SuperviseGarrisons");
-
         public CouncilTask OverseeSecurity { get; } = new CouncilTask("OverseeSecurity");
         public CouncilTask RepressCriminality { get; } = new CouncilTask("RepressCriminality");
-
         public CouncilTask DevelopEconomy { get; } = new CouncilTask("DevelopEconomy");
         public CouncilTask OverseeProduction { get; } = new CouncilTask("OverseeProduction");
         public CouncilTask PromoteCulture { get; } = new CouncilTask("PromoteCulture");
-
         public CouncilTask ManageVassals { get; } = new CouncilTask("ManageVassals");
         public CouncilTask OverseeDignataries { get; } = new CouncilTask("OverseeDignataries");
         public CouncilTask ArbitrateRelations { get; } = new CouncilTask("ArbitrateRelations");
         public CouncilTask IntegrateTitles { get; } = new CouncilTask("IntegrateTitles");
-
         public CouncilTask PromoteFaith { get; } = new CouncilTask("PromoteFaith");
         public CouncilTask CultivatePiety { get; } = new CouncilTask("CultivatePiety");
-
         public CouncilTask ManageDemesne { get; } = new CouncilTask("ManageDemesne");
-
         public CouncilTask EntertainFeastsMusician { get; } = new CouncilTask("EntertainFeastsMusician");
-
         public CouncilTask SmithWeapons { get; } = new CouncilTask("SmithWeapons");
         public CouncilTask SmithArmors { get; } = new CouncilTask("SmithArmors");
         public CouncilTask SmithBardings { get; } = new CouncilTask("SmithBardings");
-
         public CouncilTask EducateFamilyAntiquarian { get; } = new CouncilTask("EducateFamilyAntiquarian");
-
         public CouncilTask OverseeBaronies { get; } = new CouncilTask("OverseeBaronies");
-
         public CouncilTask EnforceLaw { get; } = new CouncilTask("EnforceLaw");
-
-
         public CouncilTask FamilyCare { get; } = new CouncilTask("FamilyCare");
         public OverseeSanitation OverseeSanitation { get; } = new OverseeSanitation();
+        public CouncilTask GatherLegion { get; } = new CouncilTask("GatherLegion");
 
         public override IEnumerable<CouncilTask> All
         {
@@ -68,6 +57,7 @@ namespace BannerKings.Managers.Court.Members.Tasks
                 yield return OverseeBaronies;
                 yield return EnforceLaw;
                 yield return FamilyCare;
+                yield return GatherLegion;
                 foreach (CouncilTask item in ModAdditions)
                 {
                     yield return item;
@@ -77,6 +67,11 @@ namespace BannerKings.Managers.Court.Members.Tasks
 
         public override void Initialize()
         {
+            GatherLegion.Initialize(new TextObject("{=0ekBZX1C}Gather Legion"),
+                new TextObject("{=rW0p3wWb}Harness the state-granted power to gather a legion. Under the legions demesne law, legates are capable of gathering armies, a privilege otherwise usually restricted to the ruler and their marshal."),
+                new TextObject("{=91Hdy1y3}Increased chance of gathering a legion"),
+                1f);
+
             OrganizeMiltia.Initialize(new TextObject("{=WQRibYcW}Organize Militia"),
                 new TextObject("{=ZVXnyVN3}Enact militia trainning drills and the obligation of households owning arms. Through stimulation of the state, more workforce members become active part of fief militias, as well as with generally improved trainning and equipment."),
                 new TextObject("{=5sazP1rU}Increased militia production\nImproved militia quality"),
