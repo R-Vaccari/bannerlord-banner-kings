@@ -147,9 +147,9 @@ namespace BannerKings.Managers.Items
             InitializeTradeGood(BookIrkBitig,
                 new TextObject("{=gWqmDXOC}Irk Bitig{@Plural}collection of Irk Bitig books{\\@}"),
                 "lib_book_closed_b",
-                BKItemCategories.Instance.Book, 
-                1000, 
-                1.5f, 
+                BKItemCategories.Instance.Book,
+                1000,
+                1.5f,
                 ItemObject.ItemTypeEnum.Goods);
 
             BookNakedFingers = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_naked_fingers"));
@@ -190,11 +190,11 @@ namespace BannerKings.Managers.Items
 
             BookLoveCastle = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_love_castle"));
             InitializeTradeGood(BookLoveCastle,
-                new TextObject("{=mnCoKY5H}The Storming of the Castle of Love{@Plural}collection of The Storming of the Castle of Love books{\\@}"), 
+                new TextObject("{=mnCoKY5H}The Storming of the Castle of Love{@Plural}collection of The Storming of the Castle of Love books{\\@}"),
                 "lib_book_closed_a",
-                BKItemCategories.Instance.Book, 
-                750, 
-                1f, 
+                BKItemCategories.Instance.Book,
+                750,
+                1f,
                 ItemObject.ItemTypeEnum.Goods);
 
             BookGardenArgument = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_garden_argument"));
