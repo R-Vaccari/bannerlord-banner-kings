@@ -74,7 +74,7 @@ namespace BannerKings.Managers.Helpers
                 kingdom.UnresolvedDecisions.Remove(decision);
             }
 
-            var electiveDecision = new FeudalElectiveDecision(victim.Clan, title);
+            var electiveDecision = new FeudalElectiveDecision(victim.Clan, title, victim);
             kingdom.UnresolvedDecisions.Add(electiveDecision);
             if (!electiveDecision.IsAllowed())
             {

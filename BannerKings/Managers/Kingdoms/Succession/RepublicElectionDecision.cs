@@ -6,8 +6,11 @@ namespace BannerKings.Managers.Kingdoms.Succession
 {
     public class RepublicElectionDecision : BKKingElectionDecision
     {
-        public RepublicElectionDecision(Clan proposerClan, Clan clanToExclude = null) : base(proposerClan, clanToExclude,
-            BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(proposerClan.Kingdom))
+        public RepublicElectionDecision(Clan proposerClan, Clan clanToExclude = null) : base(proposerClan,
+            BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(proposerClan.Kingdom),
+            proposerClan.Leader,
+            clanToExclude
+            )
         {
             toExclude = clanToExclude;
         }
