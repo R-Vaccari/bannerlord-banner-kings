@@ -196,11 +196,11 @@ namespace BannerKings.Behaviours
                 {
                     BannerKingsConfig.Instance.ReligionsManager.AddToReligion(Hero.OneToOneConversationHero,
                         BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero));
-                    float factor = -BannerKingsConfig.Instance.ReligionModel.GetConversionLikelihood(Hero.MainHero,
+                    float factor = BannerKingsConfig.Instance.ReligionModel.GetConversionLikelihood(Hero.MainHero,
                        Hero.OneToOneConversationHero).ResultNumber;
                     ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero,
                         Hero.OneToOneConversationHero,
-                        MBRandom.RoundRandomized(25 * (1f + factor)));
+                        MBRandom.RoundRandomized(25 * (-1f + factor)));
                 },
                 100,
                 (out TextObject reason) =>
