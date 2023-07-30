@@ -8,7 +8,7 @@ namespace BannerKings.Managers.Kingdoms.Succession
 {
     public class FeudalElectiveDecision : BKKingElectionDecision
     {
-        public FeudalElectiveDecision(Clan proposerClan, FeudalTitle title) : base(proposerClan, null, title)
+        public FeudalElectiveDecision(Clan proposerClan, FeudalTitle title, Hero ruler) : base(proposerClan, title, ruler, null)
         {
         }
 

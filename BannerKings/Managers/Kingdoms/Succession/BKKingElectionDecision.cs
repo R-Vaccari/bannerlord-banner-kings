@@ -15,11 +15,16 @@ namespace BannerKings.Managers.Kingdoms.Succession
         [SaveableProperty(100)] protected FeudalTitle Title { get; set; }
         [SaveableProperty(101)] protected Hero PreviousRuler { get; set; }
 
-        public BKKingElectionDecision(Clan proposerClan, Clan clanToExclude = null, FeudalTitle title = null, Hero previousRuler = null) 
+        public BKKingElectionDecision(Clan proposerClan, FeudalTitle title, Hero previousRuler, Clan clanToExclude = null) 
             : base(proposerClan, clanToExclude)
         {
             Title = title;
             PreviousRuler = previousRuler;
+        }
+
+        public override bool IsAllowed()
+        {
+            return Title != null && PreviousRuler != null;
         }
 
         public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()

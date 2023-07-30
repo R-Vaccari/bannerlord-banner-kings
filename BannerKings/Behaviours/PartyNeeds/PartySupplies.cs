@@ -162,6 +162,11 @@ namespace BannerKings.Behaviours.PartyNeeds
                 float size = Party.MemberRoster.TotalManCount;
                 float modifier = 1f;
 
+                if (size == 0)
+                {
+                    return;
+                }
+
                 if (Party.LeaderHero != null)
                 {
                     EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Party.LeaderHero);
