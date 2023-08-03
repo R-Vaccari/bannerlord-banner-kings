@@ -89,7 +89,7 @@ namespace BannerKings.Models.Vanilla
         }
         public override float GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan, out TextObject warReason)
         {
-            return GetScoreOfDeclaringWar(factionDeclaresWar, factionDeclaredWar, evaluatingClan, out warReason).ResultNumber;
+            return GetScoreOfDeclaringWar(factionDeclaresWar, factionDeclaredWar, evaluatingClan, out warReason).ResultNumber * 10f;
         }
 
         public override float GetScoreOfDeclaringPeace(IFaction factionDeclaresPeace, IFaction factionDeclaredPeace, IFaction evaluatingClan, out TextObject peaceReason)
@@ -104,15 +104,14 @@ namespace BannerKings.Models.Vanilla
                 result.AddFactor(fatigue.ResultNumber);
             }
 
-            return result.ResultNumber;
+            return result.ResultNumber * 10f;
         }
 
         public ExplainedNumber GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan,
             out TextObject warReason, bool explanations = false)
         {
             warReason = TextObject.Empty;
-            var result = new ExplainedNumber(base.GetScoreOfDeclaringWar(factionDeclaresWar, factionDeclaredWar,
-                evaluatingClan, out warReason), explanations);
+            var result = new ExplainedNumber(0f, explanations);
             result.LimitMin(-50000f);
             result.LimitMax(50000f);
 
@@ -175,6 +174,15 @@ namespace BannerKings.Models.Vanilla
                     float enemyScore = enemyStats.Strength + enemyStats.ValueOfSettlements - (enemyStats.TotalStrengthOfEnemies * 1.25f);
                     float proportion = MathF.Clamp((attackerScore / (enemyScore * 4f)) - 1f, -1f, 0f);
                     result.AddFactor(proportion);
+                }
+
+                War possibleWar = new War(attackerKingdom, defenderKingdom, null, null);
+                if (possibleWar.DefenderFront != null && possibleWar.AttackerFront != null)
+                {
+                    float distance = Campaign.Current.Models.MapDistanceModel.GetDistance(possibleWar.DefenderFront.Settlement,
+                        possibleWar.AttackerFront.Settlement) * 3f;
+                    float factor = (Campaign.AverageDistanceBetweenTwoFortifications / distance) - 1f;
+                    result.AddFactor(factor);
                 }
             }
 

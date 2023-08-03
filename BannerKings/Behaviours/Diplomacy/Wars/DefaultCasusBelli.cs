@@ -39,7 +39,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 1.3f,
                 0.5f,
                 1f,
-                5000f,
+                10000f,
                 (War war) =>
                 {
                     return war.CasusBelli.Fief != null && war.CasusBelli.Fief.MapFaction == war.Attacker;
@@ -74,7 +74,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 1.2f,
                 0.7f,
                 1f,
-                5000f,
+                7500f,
                 (War war) =>
                 {
                     return war.CasusBelli.Fief.MapFaction == war.Attacker;
@@ -107,7 +107,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 1.5f,
                 0.2f,
                 0.8f,
-                5000f,
+                8000f,
                 (War war) =>
                 {
                     StanceLink attackerLink = war.Attacker.GetStanceWith(war.Defender);
@@ -143,7 +143,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 0.5f,
                 1.5f,
                 0.8f,
-                5000f,
+                8000f,
                 (War war) =>
                 {
                     StanceLink attackerLink = war.Attacker.GetStanceWith(war.Defender);
@@ -247,7 +247,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 1.5f,
                 0.1f,
                 0.8f,
-                5000f,
+                8000f,
                 (War war) =>
                 {
                     StanceLink attackerLink = war.Attacker.GetStanceWith(war.Defender);
