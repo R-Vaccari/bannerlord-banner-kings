@@ -1,8 +1,11 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BannerKings.Components;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
+using BannerKings.Managers.Recruits;
 using BannerKings.Models.Vanilla;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
@@ -225,8 +228,19 @@ namespace BannerKings.UI.Management
 
             ManpowerInfo.Add(new InformationElement(new TextObject("{=nkk8no8d}Peasant Manpower:").ToString(), 
                 $"{data.MilitaryData.PeasantManpower:n0}",
-                new TextObject("{=uaEXD3tE}Manpower from serf and craftsmen classes. These are drafted as cultural non-noble recruits.")
+                new TextObject("{=!}Manpower from every non-noble population class. Available classes are affected by kingdom demesne laws. Peasant manpower compromises the majority of military forces.")
                     .ToString()));
+
+            List<RecruitSpawn> recruits = DefaultRecruitSpawns.Instance.GetPossibleSpawns(settlement.Culture, settlement);
+            ManpowerInfo.Add(new InformationElement(new TextObject("{=!}Possible Recruits:").ToString(),
+                recruits.Count.ToString(),
+                recruits.Aggregate(new TextObject("{=!}These are the troops the notables may directly muster, not accounting for further trainning. The chance of each one is correlated to its population class' manpower in relation to the overall manpower.\n\n").ToString(), 
+                (current, recruit) => current + Environment.NewLine + new TextObject("{=!}{TROOP} ({TYPE}): {CHANCE}")
+                .SetTextVariable("TROOP", recruit.Troop.Name)
+                .SetTextVariable("TYPE", Utils.Helpers.GetClassName(recruit.PopType, recruit.Culture))
+                .SetTextVariable("CHANCE", FormatValue(BannerKingsConfig.Instance.VolunteerModel
+                .GetPopTypeSpawnChance(data, recruit.PopType) * recruit.Chance))
+                .ToString())));
 
             ManpowerInfo.Add(new InformationElement(new TextObject("{=4gnA3tsw}Militarism:").ToString(), 
                 $"{data.MilitaryData.Militarism.ResultNumber:P}",
