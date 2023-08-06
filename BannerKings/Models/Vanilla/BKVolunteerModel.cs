@@ -20,6 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Populations;
+using BannerKings.Managers.Recruits;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -229,42 +231,62 @@ namespace BannerKings.Models.Vanilla
         public override CharacterObject GetBasicVolunteer(Hero sellerHero)
         {
             var settlement = sellerHero.CurrentSettlement;
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            if (data == null) return base.GetBasicVolunteer(sellerHero);
+
+            if (sellerHero.IsPreacher && data.ReligionData != null)
             {
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                var power = sellerHero.Power;
-                var chance = settlement.IsTown ? power * 0.03f : power * 0.05f;
-                var random = MBRandom.RandomFloatRanged(1f, 100f);
-
-                var ownerEducation = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.OwnerClan.Leader);
-                if (ownerEducation.HasPerk(BKPerks.Instance.RitterPettySuzerain))
+                var religion = data.ReligionData.DominantReligion;
+                if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Druidism) &&
+                    data.MilitaryData.NobleManpower > 0)
                 {
-                    chance *= 1.2f;
+                    return sellerHero.Culture.EliteBasicTroop;
                 }
-
-                if (data.MilitaryData.NobleManpower > 0)
-                {
-
-                    if (sellerHero.IsPreacher && data.ReligionData != null)
-                    {
-                        var religion = data.ReligionData.DominantReligion;
-                        if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Druidism))
-                        {
-                            return sellerHero.Culture.EliteBasicTroop;
-                        }
-                    }
-
-                    if (chance >= random)
-                    {
-                        return sellerHero.Culture.EliteBasicTroop;
-                    }
-                }
-
-                return sellerHero.Culture.BasicTroop;
             }
 
-            return base.GetBasicVolunteer(sellerHero);
+            List<(PopType, float)> options = new List<(PopType, float)>(4);
+            foreach ((PopType, float) militaryClass in GetMilitaryClasses(data.Settlement))
+            {
+                float chance = GetPopTypeSpawnChance(data, militaryClass.Item1);
+                if (chance > 0f) options.Add(new(militaryClass.Item1, chance));
+            }
+
+            return GetPopTypeRecruit(sellerHero, MBRandom.ChooseWeighted(options), settlement);
+        }
+
+        public CharacterObject GetPopTypeRecruit(Hero sellerHero, PopType popType, Settlement settlement)
+        {
+            List<RecruitSpawn> options = DefaultRecruitSpawns.Instance.GetPossibleSpawns(sellerHero.Culture, popType, settlement);
+            if (options.Count > 0)
+            {
+                if (options.Count == 1) return options.First().Troop;
+                while(true) 
+                { 
+                    foreach (RecruitSpawn spawn in options)
+                    {
+                        if (MBRandom.RandomFloat <= spawn.Chance)
+                        {
+                            return spawn.Troop;
+                        }
+                    }
+                }
+            }
+            else return base.GetBasicVolunteer(sellerHero);
+        }
+
+        public float GetPopTypeSpawnChance(PopulationData data, PopType popType)
+        {
+            float popFactor = data.MilitaryData.GetManpower(popType);
+            if (popType == PopType.Nobles)
+            {
+                var ownerEducation = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(data.Settlement.OwnerClan.Leader);
+                if (ownerEducation.HasPerk(BKPerks.Instance.RitterPettySuzerain))
+                {
+                    popFactor *= 1.2f;
+                }
+            }
+
+            return MathF.Max(popFactor, 0f) / (float)data.MilitaryData.Manpower;
         }
 
         public ExplainedNumber GetDraftEfficiency(Hero hero, int index, Settlement settlement)
@@ -378,7 +400,7 @@ namespace BannerKings.Models.Vanilla
 
         public List<ValueTuple<PopType, float>> GetMilitaryClasses(Settlement settlement)
         {
-            var list = new List<ValueTuple<PopType, float>>();
+            var list = new List<ValueTuple<PopType, float>>(4);
             float serfFactor = 0.1f;
             float tenantsFactor = 0.09f;
             float craftsmenFactor = 0.04f;
