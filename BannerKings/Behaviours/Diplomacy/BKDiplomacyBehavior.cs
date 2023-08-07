@@ -395,10 +395,29 @@ namespace BannerKings.Behaviours.Diplomacy
             }
         }
 
-        [HarmonyPatch(typeof(KingdomDiplomacyVM), "OnDeclareWar")]
+        [HarmonyPatch(typeof(KingdomDiplomacyVM))]
         internal class DeclareWarVMPatch
         {
-            private static bool Prefix(KingdomDiplomacyVM __instance, KingdomTruceItemVM item)
+            [HarmonyPrefix]
+            [HarmonyPatch("GetActionStatusForDiplomacyItemWithReason")]
+            private static bool ButtonCLickable(KingdomDiplomacyVM __instance, KingdomDiplomacyItemVM item, bool isResolve, 
+                 out TextObject disabledReason, ref bool __result)
+            {
+                KingdomTruceItemVM kingdomTruceItemVM;
+                if (__result == false && (kingdomTruceItemVM = (item as KingdomTruceItemVM)) != null)
+                {
+                    disabledReason = TextObject.Empty;
+                    __result = true;
+                    return false;
+                }
+
+                disabledReason = TextObject.Empty;
+                return true;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("OnDeclareWar")]
+            private static bool ButtonPopup(KingdomDiplomacyVM __instance, KingdomTruceItemVM item)
             {
                 IFaction enemy = item.Faction2;
                 if (!enemy.IsKingdomFaction)
