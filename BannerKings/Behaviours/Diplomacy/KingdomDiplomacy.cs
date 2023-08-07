@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -16,7 +15,7 @@ namespace BannerKings.Behaviours.Diplomacy
         [SaveableProperty(1)] public Kingdom Kingdom { get; private set; }
         [SaveableProperty(2)] public Religion Religion { get; private set; }
         [SaveableProperty(3)] public List<InterestGroup> Groups { get; private set; }
-        public List<Kingdom> TradePacts { get; private set; }
+        [SaveableProperty(5)] public List<Kingdom> TradePacts { get; private set; }
         [SaveableProperty(4)] public Dictionary<Kingdom, CampaignTime> Truces { get; private set; }
       
         public KingdomDiplomacy(Kingdom kingdom)
@@ -33,7 +32,12 @@ namespace BannerKings.Behaviours.Diplomacy
             {
                 group.PostInitialize();
             }
-            TradePacts = new List<Kingdom>();
+
+            if (TradePacts == null)
+            {
+                TradePacts = new List<Kingdom>();
+            }
+
             if (Truces == null)
             {
                 Truces = new Dictionary<Kingdom, CampaignTime>();
