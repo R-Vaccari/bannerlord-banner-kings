@@ -144,16 +144,6 @@ namespace BannerKings.Patches
                 return false;
             }
         }
-
-        [HarmonyPatch(typeof(DefaultVolunteerModel), "GetDailyVolunteerProductionProbability")]
-        internal class GetDailyVolunteerProductionProbabilityPatch
-        {
-            private static bool Prefix(Hero hero, int index, Settlement settlement, ref float __result)
-            {
-                __result = BannerKingsConfig.Instance.VolunteerModel.GetDraftEfficiency(hero, index, settlement).ResultNumber;
-                return false;
-            }
-        }
     }
 
     namespace Peerage

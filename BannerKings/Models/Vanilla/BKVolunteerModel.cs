@@ -135,7 +135,6 @@ namespace BannerKings.Models.Vanilla
 
         private void AddPerks(ref ExplainedNumber result, Hero buyerHero, Hero sellerHero, int useValueAsRelation = -101)
         {
-
             Settlement currentSettlement = sellerHero.CurrentSettlement;
             if (sellerHero.IsGangLeader && currentSettlement != null && currentSettlement.OwnerClan == buyerHero.Clan)
             {
@@ -189,9 +188,9 @@ namespace BannerKings.Models.Vanilla
 
         private int GetRelationImpact(int relation)
         {
-            int result = 0;
+            int result;
             float divided = relation / 50f;
-            result = (int)(BannerKingsSettings.Instance.VolunteersLimit * (divided * 0.15f));
+            result = (int)(BannerKingsSettings.Instance.VolunteersLimit * (divided * 0.25f));
 
             return result;
         }
@@ -289,6 +288,12 @@ namespace BannerKings.Models.Vanilla
             return MathF.Max(popFactor, 0f) / (float)data.MilitaryData.Manpower;
         }
 
+
+        public override float GetDailyVolunteerProductionProbability(Hero hero, int index, Settlement settlement)
+        {
+            return GetDraftEfficiency(hero, index, settlement).ResultNumber;
+        }
+
         public ExplainedNumber GetDraftEfficiency(Hero hero, int index, Settlement settlement)
         {
             if (hero == null)
@@ -296,29 +301,22 @@ namespace BannerKings.Models.Vanilla
                 return new ExplainedNumber(0f);
             }
 
-            var num = 0.7f;
-            var num2 = 0;
-            foreach (var town in hero.CurrentSettlement.MapFaction.Fiefs)
-            {
-                num2 += town.IsTown
-                    ? (town.Settlement.Prosperity < 3000f ? 1 : town.Settlement.Prosperity < 6000f ? 2 : 3) +
-                      town.Villages.Count
-                    : town.Villages.Count;
-            }
+            ExplainedNumber explainedNumber = new ExplainedNumber(0.5f);
+            explainedNumber.AddFactor(hero.Power / 150f, new TextObject("{=!}Power"));
 
-            var num3 = num2 < 46 ? num2 / 46f * (num2 / 46f) : 1f;
-            num += hero.CurrentSettlement != null && num3 < 1f ? (1f - num3) * 0.2f : 0f;
-            var baseNumber = 0.75f * MathF.Clamp(MathF.Pow(num, index + 1), 0f, 1f);
-            var explainedNumber = new ExplainedNumber(baseNumber, true);
-            var clan = hero.Clan;
-            if (clan?.Kingdom != null && hero.Clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.Cantons))
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            if (data != null)
             {
-                explainedNumber.AddFactor(0.2f, new TextObject("{=zGx6c77M}Cantons kingdom policy"));
-            }
-
-            if (hero.VolunteerTypes?[index] != null && hero.VolunteerTypes[index].IsMounted && PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.CavalryTactics, settlement.IsVillage ? settlement.Village.Bound.Town : settlement.Town))
-            {
-                explainedNumber.AddFactor(DefaultPerks.Riding.CavalryTactics.PrimaryBonus * 0.01f, DefaultPerks.Riding.CavalryTactics.PrimaryDescription);
+                explainedNumber.AddFactor(data.Stability - 0.5f, new TextObject("{=!}Settlement Stability"));
+                var religionData = data.ReligionData;
+                if (religionData != null)
+                {
+                    var religion = religionData.DominantReligion;
+                    if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Pastoralism))
+                    {
+                        explainedNumber.Add(-0.2f, DefaultDoctrines.Instance.Pastoralism.Name);
+                    }
+                }
             }
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader,
@@ -347,20 +345,6 @@ namespace BannerKings.Models.Vanilla
             if (settlement.Owner.GetPerkValue(lordshipMilitaryAdministration))
             {
                 explainedNumber.AddFactor(0.2f, lordshipMilitaryAdministration.Name);
-            }
-
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            if (data != null)
-            {
-                var religionData = data.ReligionData;
-                if (religionData != null)
-                {
-                    var religion = religionData.DominantReligion;
-                    if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Pastoralism))
-                    {
-                        explainedNumber.Add(-0.2f, DefaultDoctrines.Instance.Pastoralism.Name);
-                    }
-                }
             }
 
             return explainedNumber;
