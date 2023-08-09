@@ -35,13 +35,15 @@ namespace BannerKings.Managers.Innovations
             if (Fascination != null)
             {
                 var fasc = DefaultInnovations.Instance.GetById(Fascination);
-                Fascination.Initialize(fasc.Name, fasc.Description, fasc.Effects, fasc.RequiredProgress, fasc.Culture, fasc.Requirement);
+                Fascination.Initialize(fasc.Name, fasc.Description, fasc.Effects,
+                    fasc.Era, fasc.RequiredProgress, fasc.Culture, fasc.Requirement);
             }
 
             foreach (var innovation in innovations)
             {
                 var innov = DefaultInnovations.Instance.GetById(innovation);
-                innovation.Initialize(innov.Name, innov.Description, innov.Effects, innov.RequiredProgress, innov.Culture, innov.Requirement);
+                innovation.Initialize(innov.Name, innov.Description, innov.Effects, innov.Era,
+                    innov.RequiredProgress, innov.Culture, innov.Requirement);
             }
         }
 
