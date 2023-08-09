@@ -25,7 +25,7 @@ namespace BannerKings.Models.Vanilla
             bkRequireXp[0] = num;
             for (int i = 1; i < 1024; i++)
             {
-                bkRequireXp[i] = bkRequireXp[i - 1] + (int)(10 * (1 + (i * 0.02f)));
+                bkRequireXp[i] = bkRequireXp[i - 1] + (int)(20 * (1 + (i * 0.02f)));
             }
         }
 
