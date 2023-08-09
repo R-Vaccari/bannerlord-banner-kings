@@ -10,14 +10,14 @@ namespace BannerKings.Managers.Goals
         public readonly GoalCategory goalType;
         protected Hero Fulfiller;
 
-        internal Goal(string stringId, GoalCategory goalType, GoalUpdateType goalUpdateType, Hero fulfiller = null) : base(stringId)
+        public Goal(string stringId, GoalCategory goalType, GoalUpdateType goalUpdateType, Hero fulfiller = null) : base(stringId)
         {
             this.goalType = goalType;
             this.goalUpdateType = goalUpdateType;
             Fulfiller = fulfiller;
         }
 
-        internal List<TextObject> FailedReasons
+        public List<TextObject> FailedReasons
         {
             get
             {
@@ -26,20 +26,16 @@ namespace BannerKings.Managers.Goals
             }
         }
 
-        internal abstract bool IsAvailable();
-
-        internal abstract bool IsFulfilled(out List<TextObject> failedReasons);
-
-        internal Hero GetFulfiller()
+        public abstract bool IsAvailable();
+        public abstract bool IsFulfilled(out List<TextObject> failedReasons);
+        public Hero GetFulfiller()
         {
             if (Fulfiller != null) return Fulfiller;
             return Hero.MainHero;
         }
 
-        internal abstract void ShowInquiry();
-
-        internal abstract void ApplyGoal();
-
+        public abstract void ShowInquiry();
+        public abstract void ApplyGoal();
         public abstract void DoAiDecision();
     }
 }

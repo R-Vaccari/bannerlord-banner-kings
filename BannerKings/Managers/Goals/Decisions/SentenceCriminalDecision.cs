@@ -25,17 +25,17 @@ namespace BannerKings.Managers.Goals.Decisions
             throw new NotImplementedException();
         }
 
-        internal override void ApplyGoal()
+        public override void ApplyGoal()
         {
             sentence.ExecuteSentence(crime, GetFulfiller());
         }
 
-        internal override bool IsAvailable()
+        public override bool IsAvailable()
         {
             return Clan.PlayerClan.Kingdom != null;
         }
 
-        internal override bool IsFulfilled(out List<TextObject> failedReasons)
+        public override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
 
@@ -49,7 +49,7 @@ namespace BannerKings.Managers.Goals.Decisions
             return failedReasons.IsEmpty();
         }
 
-        internal override void ShowInquiry()
+        public override void ShowInquiry()
         {
             var crimes = new List<InquiryElement>();
             BKCriminalityBehavior behavior = Campaign.Current.GetCampaignBehavior<BKCriminalityBehavior>();

@@ -21,14 +21,14 @@ namespace BannerKings.Managers.Goals.Decisions
             Initialize(name, description);
         }
 
-        internal override bool IsAvailable()
+        public override bool IsAvailable()
         {
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
             return Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom.Leader != Hero.MainHero &&
                 (council.Peerage == null || !council.Peerage.CanStartElection);
         }
 
-        internal override bool IsFulfilled(out List<TextObject> failedReasons)
+        public override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
 
@@ -47,12 +47,12 @@ namespace BannerKings.Managers.Goals.Decisions
             return failedReasons.Count == 0;
         }
 
-        internal override void ShowInquiry()
+        public override void ShowInquiry()
         {
             ApplyGoal();
         }
 
-        internal override void ApplyGoal()
+        public override void ApplyGoal()
         {
             var decision = new PeerageKingdomDecision(Clan.PlayerClan.Kingdom.RulingClan, Clan.PlayerClan);
             InformationManager.ShowInquiry(new InquiryData(new TextObject("{=sdpM1PD3}Request Full Peerage").ToString(),

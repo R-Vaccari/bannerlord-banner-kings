@@ -20,18 +20,18 @@ namespace BannerKings.Managers.Goals.Decisions
             Initialize(name, description);
         }
 
-        internal override bool IsAvailable()
+        public override bool IsAvailable()
         {
             return Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom.Leader != Hero.MainHero;
         }
 
-        internal override bool IsFulfilled(out List<TextObject> failedReasons)
+        public override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
             return true;
         }
 
-        internal override void ShowInquiry()
+        public override void ShowInquiry()
         {
             IsFulfilled(out var failedReasons);
             var options = new List<InquiryElement>();
@@ -108,7 +108,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 string.Empty));
         }
 
-        internal override void ApplyGoal()
+        public override void ApplyGoal()
         {
             chosenAction.TakeAction();
         }

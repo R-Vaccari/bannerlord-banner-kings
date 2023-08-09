@@ -24,9 +24,9 @@ namespace BannerKings.Managers.Goals.Decisions
             behavior = Campaign.Current.GetCampaignBehavior<BKEducationBehavior>();
         }
 
-        internal override bool IsAvailable() => true;
+        public override bool IsAvailable() => true;
 
-        internal override bool IsFulfilled(out List<TextObject> failedReasons)
+        public override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
             var fulfiller = GetFulfiller();
@@ -45,7 +45,7 @@ namespace BannerKings.Managers.Goals.Decisions
             return failedReasons.Count == 0;
         }
 
-        internal override void ShowInquiry()
+        public override void ShowInquiry()
         {
             var elements = new List<InquiryElement>();
             var fulfiller = GetFulfiller();
@@ -91,7 +91,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 string.Empty));
         }
 
-        internal override void ApplyGoal()
+        public override void ApplyGoal()
         {
             var fulfiller = GetFulfiller();
             fulfiller.ChangeHeroGold(-book.Item.Value * 1000);

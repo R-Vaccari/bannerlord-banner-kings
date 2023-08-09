@@ -30,12 +30,12 @@ namespace BannerKings.Managers.Goals.Decisions
             Refresh();
         }
 
-        internal override bool IsAvailable()
+        public override bool IsAvailable()
         {
             return Clan.PlayerClan.Kingdom != null;
         }
 
-        internal override bool IsFulfilled(out List<TextObject> failedReasons)
+        public override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
 
@@ -152,7 +152,7 @@ namespace BannerKings.Managers.Goals.Decisions
             }
         }
 
-        internal override void ShowInquiry()
+        public override void ShowInquiry()
         {
             Refresh();
 
@@ -196,7 +196,7 @@ namespace BannerKings.Managers.Goals.Decisions
             }
         }
 
-        internal override void ApplyGoal()
+        public override void ApplyGoal()
         {
             var hero = GetFulfiller();
             var mobileParty = hero.PartyBelongedTo;

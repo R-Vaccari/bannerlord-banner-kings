@@ -43,12 +43,12 @@ namespace BannerKings.Managers.Goals.Decisions
             settlements = Campaign.Current.Settlements.Where(s => settlementStringIds.Contains(s.StringId)).ToList();
         }
 
-        internal override bool IsAvailable()
+        public override bool IsAvailable()
         {
             return BannerKingsConfig.Instance.TitleManager.GetTitleByStringId("title_greater_battania") == null;
         }
 
-        internal override bool IsFulfilled(out List<TextObject> failedReasons)
+        public override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
 
@@ -133,7 +133,7 @@ namespace BannerKings.Managers.Goals.Decisions
             return failedReasons.IsEmpty();
         }
 
-        internal override void ShowInquiry()
+        public override void ShowInquiry()
         {
             var (gold, influence) = GetCosts(GetFulfiller());
             
@@ -160,7 +160,7 @@ namespace BannerKings.Managers.Goals.Decisions
             );
         }
 
-        internal override void ApplyGoal()
+        public override void ApplyGoal()
         {
             var founder = Hero.MainHero;
             var (gold, influence) = GetCosts(founder);

@@ -20,7 +20,7 @@ namespace BannerKings.Managers.Goals.Decisions
             Initialize(name, description);
         }
 
-        internal override bool IsAvailable()
+        public override bool IsAvailable()
         {
             Hero hero = GetFulfiller();
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero.Clan);
@@ -28,7 +28,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 hero.Clan.Fiefs.Count > 0;
         }
 
-        internal override bool IsFulfilled(out List<TextObject> failedReasons)
+        public override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
             Hero hero = GetFulfiller();
@@ -49,7 +49,7 @@ namespace BannerKings.Managers.Goals.Decisions
             return failedReasons.IsEmpty();
         }
 
-        internal override void ShowInquiry()
+        public override void ShowInquiry()
         {
             var options = new List<InquiryElement>();
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
@@ -87,7 +87,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 string.Empty));
         }
 
-        internal override void ApplyGoal()
+        public override void ApplyGoal()
         {
             Clan clan = GetFulfiller().Clan;
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
