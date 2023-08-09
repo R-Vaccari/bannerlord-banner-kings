@@ -142,7 +142,7 @@ namespace BannerKings.Models.Vanilla
             if (council.CourtGrace != null)
             {
                 float grace = council.CourtGrace.Grace;
-                float expectedGrace = council.CourtGrace.ExpectedGrace.ResultNumber;
+                float expectedGrace = MathF.Max(1f, council.CourtGrace.ExpectedGrace.ResultNumber);
                 float factor = 0f;
                 if (grace < expectedGrace) factor = (MathF.Max(grace, 1f) / expectedGrace) - 0.5f;
                 else if (grace > expectedGrace) factor = MathF.Min(grace / expectedGrace, 1.5f);
