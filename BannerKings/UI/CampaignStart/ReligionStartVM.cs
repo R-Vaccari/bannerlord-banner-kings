@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Institutions.Religions;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
@@ -74,6 +75,8 @@ namespace BannerKings.UI.CampaignStart
 
         public void ExecuteFinish()
         {
+            BannerKingsConfig.Instance.ReligionsManager.AddToReligion(Hero.MainHero,
+                Selected.Religion);
             ExecuteClose();
         }
 
