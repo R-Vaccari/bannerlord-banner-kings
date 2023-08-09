@@ -8,11 +8,45 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using BannerKings.Managers.Traits;
+using BannerKings.Settings;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKLearningModel : DefaultCharacterDevelopmentModel
     {
+        private readonly int[] bkRequireXp = new int[1024];
+        public BKLearningModel()
+        {
+            InitializeXpRequiredForSkillLevel();
+        }
+        private void InitializeXpRequiredForSkillLevel()
+        {
+            int num = 1000;
+            bkRequireXp[0] = num;
+            for (int i = 1; i < 1024; i++)
+            {
+                bkRequireXp[i] = bkRequireXp[i - 1] + (int)(10 * (1 + (i * 0.02f)));
+            }
+        }
+
+        public override int GetXpRequiredForSkillLevel(int skillLevel)
+        {
+            if (BannerKingsSettings.Instance.AlternateLeveling)
+            {
+                if (skillLevel > 1024)
+                {
+                    skillLevel = 1024;
+                }
+                if (skillLevel <= 0)
+                {
+                    return 0;
+                }
+                return bkRequireXp[skillLevel - 1];
+            }
+
+            return base.GetXpRequiredForSkillLevel(skillLevel);
+        }
+
         public override List<Tuple<SkillObject, int>> GetSkillsDerivedFromTraits(Hero hero, CharacterObject templateCharacter = null, bool isByNaturalGrowth = false)
         {
             List <Tuple<SkillObject, int>> list =  base.GetSkillsDerivedFromTraits(hero, templateCharacter, isByNaturalGrowth);
@@ -24,11 +58,6 @@ namespace BannerKings.Models.Vanilla
             float scholarship = 0;
             float lordship = 0;
             float theology = 0;
-            if (hero.IsLord)
-            {
-                scholarship += 30;
-                theology += 15;
-            }
 
             if (hero.IsPreacher)
             {
