@@ -101,8 +101,7 @@ namespace BannerKings.Models.Vanilla
         {
             ExplainedNumber result =  base.CalculateDailyCohesionChange(army, includeDescriptions);
             result.LimitMax(-0.1f);
-            result.LimitMin(-2f);
-            result.Add(result.ResultNumber * -BannerKingsSettings.Instance.CohesionBoost, new TaleWorlds.Localization.TextObject("{=!}Army Cohesion Boost"));
+            
             if (result.ResultNumber < 0f && army.LeaderParty != null && army.LeaderParty.LeaderHero != null)
             {
                 EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(army.LeaderParty.LeaderHero);
@@ -128,6 +127,8 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
+            result.Add(result.ResultNumber * -BannerKingsSettings.Instance.CohesionBoost, 
+                new TaleWorlds.Localization.TextObject("{=!}Army Cohesion Boost"));
             return result;
         }
 
