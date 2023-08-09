@@ -45,12 +45,12 @@ namespace BannerKings.Managers.Goals.Decisions
             return options;
         }
 
-        internal override bool IsAvailable()
+        public override bool IsAvailable()
         {
             return true;
         }
 
-        internal override bool IsFulfilled(out List<TextObject> failedReasons)
+        public override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
 
@@ -67,7 +67,7 @@ namespace BannerKings.Managers.Goals.Decisions
             return failedReasons.IsEmpty();
         }
 
-        internal override void ShowInquiry()
+        public override void ShowInquiry()
         {
             var options = new List<InquiryElement>();
 
@@ -95,7 +95,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 string.Empty));
         }
 
-        internal override void ApplyGoal()
+        public override void ApplyGoal()
         {
             var fulfiller = GetFulfiller();
             foreach (var hero in fulfiller.Clan.Heroes)

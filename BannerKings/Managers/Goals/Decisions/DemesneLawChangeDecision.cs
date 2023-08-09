@@ -21,12 +21,12 @@ namespace BannerKings.Managers.Goals.Decisions
             Initialize(name, description);
         }
 
-        internal override bool IsAvailable()
+        public override bool IsAvailable()
         {
             return Clan.PlayerClan.Kingdom != null;
         }
 
-        internal override bool IsFulfilled(out List<TextObject> failedReasons)
+        public override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
 
@@ -55,7 +55,7 @@ namespace BannerKings.Managers.Goals.Decisions
             return failedReasons.IsEmpty();
         }
 
-        internal override void ShowInquiry()
+        public override void ShowInquiry()
         {
             var elements = new List<InquiryElement>();
             var options = new List<LawChangeOption>();
@@ -109,7 +109,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 string.Empty));
         }
 
-        internal override void ApplyGoal()
+        public override void ApplyGoal()
         {
             chosenAction.Execute();
         }
@@ -118,7 +118,6 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             throw new NotImplementedException();
         }
-
 
         internal class LawChangeOption
         {

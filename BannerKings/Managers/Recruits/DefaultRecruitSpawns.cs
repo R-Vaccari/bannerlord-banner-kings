@@ -28,10 +28,9 @@ namespace BannerKings.Managers.Recruits
             {
                 if (culture != spawn.Culture) continue;
 
-                if (spawn.Fief != null)
+                if (spawn.FiefString != null)
                 {
-                    if (settlement == spawn.Fief.Settlement || (settlement.Village != null && 
-                        spawn.Fief.Villages.Contains(settlement.Village)))
+                    if (settlement.StringId == spawn.FiefString)
                     {
                         spawns.Add(spawn);
                     }

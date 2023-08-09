@@ -107,6 +107,7 @@ namespace BannerKings.Behaviours
         private void OnGameCreated(CampaignGameStarter starter)
         {
             BannerKingsConfig.Instance.InitializeManagersFirstTime();
+            BannerKingsConfig.Instance.TitleManager.PostInitialize();
             BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
         }
 

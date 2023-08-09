@@ -4,7 +4,7 @@ using BannerKings.Settings;
 
 namespace BannerKings.Managers.Goals
 {
-    internal class DefaultGoals : DefaultTypeInitializer<DefaultGoals, Goal>
+    public class DefaultGoals : DefaultTypeInitializer<DefaultGoals, Goal>
     {
         public override IEnumerable<Goal> All
         {
@@ -28,6 +28,10 @@ namespace BannerKings.Managers.Goals
                 yield return GreaterBattania;
                 yield return RelocateCourtGoal;
                 yield return SentenceCriminal;
+                foreach (Goal item in ModAdditions)
+                {
+                    yield return item;
+                }
             }
         }
 

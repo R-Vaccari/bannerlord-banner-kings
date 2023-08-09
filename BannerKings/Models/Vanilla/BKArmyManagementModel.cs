@@ -1,9 +1,11 @@
-﻿using BannerKings.Managers.Court;
+﻿using BannerKings.Extensions;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Education;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Settings;
 using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,6 +82,16 @@ namespace BannerKings.Models.Vanilla
                         results.Remove(p);
                     }
                 }
+
+                foreach (var party in leaderParty.LeaderHero.Clan.WarPartyComponents)
+                {
+                    if (!results.Contains(party.MobileParty) && 
+                        party.MobileParty != leaderParty && 
+                        party.MobileParty.IsAvailableForArmies())
+                    {
+                        results.Add(party.MobileParty);
+                    }
+                }
             }
 
             return results;
@@ -88,6 +100,8 @@ namespace BannerKings.Models.Vanilla
         public override ExplainedNumber CalculateDailyCohesionChange(Army army, bool includeDescriptions = false)
         {
             ExplainedNumber result =  base.CalculateDailyCohesionChange(army, includeDescriptions);
+            result.LimitMax(-0.1f);
+            
             if (result.ResultNumber < 0f && army.LeaderParty != null && army.LeaderParty.LeaderHero != null)
             {
                 EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(army.LeaderParty.LeaderHero);
@@ -113,6 +127,8 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
+            result.Add(result.ResultNumber * -BannerKingsSettings.Instance.CohesionBoost, 
+                new TaleWorlds.Localization.TextObject("{=!}Army Cohesion Boost"));
             return result;
         }
 
@@ -176,7 +192,7 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            result += BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(armyLeaderParty.LeaderHero.Clan).ResultNumber * 0.03f;
+            //result += BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(armyLeaderParty.LeaderHero.Clan).ResultNumber * 0.01f;
 
             var kingdom = armyLeaderParty.LeaderHero?.Clan.Kingdom;
             if (kingdom != null)

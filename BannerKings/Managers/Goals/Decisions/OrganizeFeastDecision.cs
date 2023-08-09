@@ -27,12 +27,12 @@ namespace BannerKings.Managers.Goals.Decisions
             Initialize(name, description);
         }
 
-        internal override bool IsAvailable()
+        public override bool IsAvailable()
         {
             return Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Fiefs.Count > 0;
         }
 
-        internal override bool IsFulfilled(out List<TextObject> failedReasons)
+        public override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
 
@@ -88,7 +88,7 @@ namespace BannerKings.Managers.Goals.Decisions
             return cost;
         }
 
-        internal override void ShowInquiry()
+        public override void ShowInquiry()
         {
             var list = new List<InquiryElement>();
             foreach (var town in Clan.PlayerClan.Fiefs)
@@ -165,7 +165,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 null));
         }
 
-        internal override void ApplyGoal()
+        public override void ApplyGoal()
         {
             if (guests.Count < 3)
             {

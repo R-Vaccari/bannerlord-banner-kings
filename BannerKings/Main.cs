@@ -21,6 +21,7 @@ using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
+using BannerKings.Managers.Innovations.Eras;
 
 namespace BannerKings
 {
@@ -136,6 +137,7 @@ namespace BannerKings
             BKSkills.Instance.Initialize();
             BKPerks.Instance.Initialize();   
             BKPolicies.Instance.Initialize();
+            DefaultEras.Instance.Initialize();
             DefaultInnovations.Instance.Initialize();
             BKBuildings.Instance.Initialize();
             BKTraits.Instance.Initialize();

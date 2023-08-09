@@ -522,6 +522,35 @@ namespace BannerKings.Behaviours
             SetCompanionParty(clan);
             RunCouncilTasks(clan);
             DismissParties(clan);
+            JoinArmies(clan);
+        }
+
+        private void JoinArmies(Clan clan)
+        {
+            foreach (Hero lord in clan.Lords)
+            {
+                if (lord == clan.Leader || lord.IsChild || lord.IsPrisoner || !lord.IsPartyLeader) continue;
+
+                MobileParty party = lord.PartyBelongedTo;
+                if (party.Army != null || party.TargetParty != null || party.MapEvent != null ||
+                    party.MemberRoster.TotalManCount < (party.LimitedPartySize * 0.7f) ||
+                    party.TotalFoodAtInventory < (party.MemberRoster.TotalManCount * 0.5f)) continue;
+
+                if (FactionManager.GetEnemyKingdoms(clan.Kingdom).Count() > 0)
+                {
+                    if (BannerKingsConfig.Instance.ArmyManagementModel.CanCreateArmy(lord)) continue;
+
+                    int valor = lord.GetTraitLevel(DefaultTraits.Valor);
+                    int violence = lord.GetTraitLevel(BKTraits.Instance.AptitudeViolence);
+                    if ((valor + violence) < 1) continue;
+
+                    Army army = clan.Kingdom.Armies.GetRandomElement();
+                    if (army != null)
+                    {
+                        SetPartyAiAction.GetActionForEscortingParty(party, army.LeaderParty);
+                    }
+                }
+            }
         }
 
         private void DismissParties(Clan clan)

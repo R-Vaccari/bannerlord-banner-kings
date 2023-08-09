@@ -30,7 +30,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var cap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(GetFulfiller().Clan).ResultNumber;
             companionTypes = new List<CompanionType>
             {
-                new CompanionType(new TextObject("Commander"),
+                new CompanionType(new TextObject("{=!}Commander"),
                 new TextObject("{=61scYHtR}A guest adept as a commander. An expensive service given the constant need for quality leadership. A commander will likely have at least 60 proficiency in leadership."),
                 MathF.Max(cap * 0.14f, 60f),
                 new List<TraitObject>()
@@ -93,7 +93,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     DefaultTraits.Trader
                 }),
 
-                new CompanionType(new TextObject("Steward"),
+                new CompanionType(new TextObject("{=!}Steward"),
                 new TextObject("{=gfmewont}A guest adept in stewardship. Stewards make for good governors to handle your demesne, as well as capable quartermasters. A rare gift that comes for a premium price. A steward will likely have at least 60 proficiency in stewardship."),
                 MathF.Max(cap * 0.11f, 45f),
                 new List<TraitObject>()
@@ -103,14 +103,14 @@ namespace BannerKings.Managers.Goals.Decisions
             };
         }
 
-        internal override bool IsAvailable()
+        public override bool IsAvailable()
         {
             var clan = GetFulfiller().Clan;
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
             return council.Location != null;
         }
 
-        internal override bool IsFulfilled(out List<TextObject> failedReasons)
+        public override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
 
@@ -123,7 +123,7 @@ namespace BannerKings.Managers.Goals.Decisions
             return failedReasons.Count == 0;
         }
 
-        internal override void ShowInquiry()
+        public override void ShowInquiry()
         {
             UpdateTypes();
             var influence = GetFulfiller().Clan?.Influence ?? 0f;
@@ -219,7 +219,7 @@ namespace BannerKings.Managers.Goals.Decisions
             return possibleTemplates;
         }
 
-        internal override void ApplyGoal()
+        public override void ApplyGoal()
         {
             var hero = GetFulfiller();
             var characterTemplate = GetAdequateCharacter(selectedCompanionType).GetRandomElement();
@@ -247,7 +247,6 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public override void DoAiDecision()
         {
-
         }
 
         private class CompanionType

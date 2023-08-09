@@ -15,6 +15,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using BannerKings.Behaviours.Retainer;
+using BannerKings.Settings;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -31,15 +32,15 @@ namespace BannerKings.Models.Vanilla
             {
                 <= 1 => 1,
                 <= 6 => 2,
-                <= 11 => 6,
-                <= 16 => 10,
-                <= 21 => 22,
-                <= 26 => 40,
-                <= 31 => 60,
+                <= 11 => 4,
+                <= 16 => 8,
+                <= 21 => 14,
+                <= 26 => 26,
+                <= 31 => 40,
                 _ => 80
             };
 
-            return result;
+            return (int)(result * BannerKingsSettings.Instance.BaseWage);
         }
 
         private void CalculatePartialGarrisonWageReduction(float troopRatio, MobileParty mobileParty, PerkObject perk, ref ExplainedNumber garrisonWageReductionMultiplier, bool isSecondaryEffect)
@@ -340,7 +341,7 @@ namespace BannerKings.Models.Vanilla
 
         public override int GetTroopRecruitmentCost(CharacterObject troop, Hero buyerHero, bool withoutItemCost = false)
         {
-            var result = new ExplainedNumber(base.GetTroopRecruitmentCost(troop, buyerHero, withoutItemCost) * 2.5f);
+            var result = new ExplainedNumber(base.GetTroopRecruitmentCost(troop, buyerHero, withoutItemCost));
             result.LimitMin(GetCharacterWage(troop) * 10f);
 
             ExceptionUtils.TryCatch(() =>
