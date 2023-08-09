@@ -4,6 +4,7 @@ using BannerKings.Components;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
+using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -22,6 +23,8 @@ namespace BannerKings.Models.Vanilla
             {
                 return baseResult;
             }
+
+            baseResult.AddFactor(BannerKingsSettings.Instance.PartySizes, new TextObject("{=!}Party Size Scaling"));
 
             var leader = party.MobileParty.LeaderHero;
             if (leader != null)
