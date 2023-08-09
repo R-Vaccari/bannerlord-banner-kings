@@ -91,6 +91,8 @@ namespace BannerKings.Behaviours
             bool war = FactionManager.GetEnemyKingdoms(kingdom).Count() > 0;
             if (war)
             {
+                if (!BannerKingsConfig.Instance.ArmyManagementModel.CanCreateArmy(leader)) return;
+
                 CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
                 if (council.GetHeroPositions(leader).Any(x => x.CurrentTask.Equals(DefaultCouncilTasks.Instance.GatherLegion)))
                 {
@@ -101,7 +103,10 @@ namespace BannerKings.Behaviours
                     }
                 }
 
-                if (kingdom.Armies.Count == 0 && MBRandom.RandomFloat <= 0.5f)
+                Clan clan = leader.Clan;
+                if (clan.Influence >= BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(clan).ResultNumber * 0.5f &&
+                    party.TotalFoodAtInventory > party.MemberRoster.TotalManCount * 0.5f &&
+                    BannerKingsConfig.Instance.ArmyManagementModel.GetMobilePartiesToCallToArmy(party).Count > 3)
                 {
                     var decision = new CallBannersGoal(leader);
                     decision.DoAiDecision();
