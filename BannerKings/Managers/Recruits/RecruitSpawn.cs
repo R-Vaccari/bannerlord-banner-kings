@@ -26,7 +26,7 @@ namespace BannerKings.Managers.Recruits
         }
 
         public CharacterObject Troop { get; private set; }
-        private string FiefString { get; set; }
+        public string FiefString { get; set; }
         public Town Fief => Town.AllFiefs.FirstOrDefault(x => x.StringId == FiefString);
         public Kingdom Kingdom { get; private set; }
         public CultureObject Culture { get; private set; }
