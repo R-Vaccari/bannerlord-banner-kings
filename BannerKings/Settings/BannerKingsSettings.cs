@@ -64,7 +64,7 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public float BaseWage { get; set; } = 1f;
 
-        [SettingPropertyFloatingInteger("{=!}Party Size Scaling", minValue: 1f, maxValue: 3f, "#0%", RequireRestart = false, HintText = "{=!}The scale of party sizes on the map. Vanilla is 100%. Default: 200%.")]
+        [SettingPropertyFloatingInteger("{=!}Party Size Scaling", minValue: 1f, maxValue: 3f, "#0%", RequireRestart = false, HintText = "{=!}The scale of party sizes on the map. Applies in half to parties of heroes not leading their clan. Vanilla is 100%. Default: 200%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float PartySizes { get; set; } = 2f;
 

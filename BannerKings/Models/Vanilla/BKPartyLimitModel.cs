@@ -5,6 +5,7 @@ using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using BannerKings.Settings;
+using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -24,11 +25,14 @@ namespace BannerKings.Models.Vanilla
                 return baseResult;
             }
 
-            baseResult.AddFactor(BannerKingsSettings.Instance.PartySizes, new TextObject("{=!}Party Size Scaling"));
-
             var leader = party.MobileParty.LeaderHero;
             if (leader != null)
             {
+                if (leader.IsClanLeader()) baseResult.AddFactor(BannerKingsSettings.Instance.PartySizes, 
+                    new TextObject("{=!}Party Size Scaling"));
+                else baseResult.AddFactor(BannerKingsSettings.Instance.PartySizes * 0.5f, 
+                    new TextObject("{=!}Party Size Scaling"));
+
                 var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
                 if (data.Perks.Contains(BKPerks.Instance.AugustCommander))
                 {
