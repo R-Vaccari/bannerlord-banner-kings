@@ -34,6 +34,8 @@ namespace BannerKings.UI.Court
 
             int selected = 0;
             int index = 0;
+            if (position.Tasks == null) position.PostInitialize();
+
             foreach (CouncilTask option in position.Tasks)
             {
                 Selector.AddItem(new BKItemVM(index,
