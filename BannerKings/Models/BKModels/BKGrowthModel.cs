@@ -215,7 +215,7 @@ namespace BannerKings.Models.BKModels
                     {
                         if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.TenancyNone))
                         {
-                            result.AddFactor(-1f, DefaultDemesneLaws.Instance.TenancyNone.Name);
+                            result.AddFactor(-0.9f, DefaultDemesneLaws.Instance.TenancyNone.Name);
                         }
                         else if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.TenancyMixed))
                         {
