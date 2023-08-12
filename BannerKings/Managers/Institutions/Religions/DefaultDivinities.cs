@@ -20,6 +20,11 @@ namespace BannerKings.Managers.Institutions.Religions
         public Divinity VlandiaSecondary2 { get; private set; }
         public Divinity TreeloreMain { get; private set; } = new Divinity("treelore_main");
         public Divinity TreeloreMoon { get; private set; } = new Divinity("treelore_moon");
+        public Divinity Osric { get; } = new Divinity("Osric");
+        public Divinity Wilund { get; } = new Divinity("Wilund");
+        public Divinity Oca { get; } = new Divinity("Oca");
+        public Divinity Horsa { get; } = new Divinity("Horsa");
+        public Divinity Grunwald { get; } = new Divinity("Grunwald");
 
         public override IEnumerable<Divinity> All
         {
@@ -49,6 +54,43 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public override void Initialize()
         {
+            Wilund.Initialize(new TextObject("{=!}Wilund"),
+                new TextObject("{=!}Wilund is known to non-Vlandians as the first Vlandic warlord to come to the continent. Yet the Vlandic tales tell the story of not a mercenary warlord, but a celestial smith, whose foundry is the world. The stories of how kingdoms rise and fall - that is the craft of Wilund. As such, hestawicks will assure he came to Calradia to make way for the Vlandians to carve their kingdom, or perhaps, kingdoms..."),
+                new TextObject("{=!}Double renown and influence from battles"),
+                new TextObject("{=!}Smith-God"),
+                200,
+                new TextObject("{=!}Wilund is the celestial smith. The world is his foundry. The thunder of the storm and the thunder of hooves are the song of his hammer. The black rain of a thousand arrows of war are the sparks upon his anvil. When he tempers life, a thousand men die and a thousand more are born."),
+                new TextObject("{=!}We, the Wilunding, owe him a great debt. The Smith came onto this land so that we may forge it into our kingdom. We shall repay him with a thousand years more of conquest."));
+
+            Osric.Initialize(new TextObject("{=!}Osric Iron-Arm"),
+                new TextObject("{=!}Deemed to be the first Vlandic king in Calradia, Osric is responsible for the conquest of Pravend, formerly an imperial capital. While they see it as a trivial game of conquest from a petty tribal warlord, Osric's achievements, in the minds of the Wilunding, prove the prophecy that they are, indeed, promised this fertile land for their taking. Osric is said to have killed the Calradic gods so that the Wilunding instead prosper, and so many among these now call themselves Osrickin."),
+                new TextObject("{=!}"),
+                new TextObject("{=!}"),
+                300,
+                new TextObject("{=!}Osric, as he is known in this land, came to us, the Wilunding, to fulfill the prophecy of Horsa, which we so dearly desired. As vengeance for burning the silk and wine laden homes of the Calradoi, Osric's golden shield, the Sun, was struck and removed from him. With the bones of his lost arm, he promised us a new city. And so it was that Wilund forged him an arm of dark iron and said unto him “If they will not love thee when thou canst not carry gold, then I shall give thee iron to cast a shadow upon the world. And the shadow shall be called conquest.”"),
+                new TextObject("{=!}Osric gathered great host of lances and bolts, with which he turned the sky above Paravenos dark. It was the dawn of the winter solstice. The imperials were terrified and opened the gates to flee the city. Then the arrows ceased and the bright sun shone once more, blinding the defenders. Seizing their chance, the good men rode into the city rallying under Osrac’s holy name and cut down the Calradoi in the streets. And so it is said to this day that the empire paid in red blood what they would not pay in black soil."));
+
+            Horsa.Initialize(new TextObject("{=!}Horsa"),
+                new TextObject("{=!}The warrior Horse-God, Horsa landed near the lordship of Horsger and planted his spear in the beach. He has since become a prophet-like figure to the Vlandic peoples, foretelling the settlement and rise of Vlandic kingdoms. Though man and warrior, he is also depicted as a horse, a Vlandic symbol of both prosperity through the plough and war though the lance."),
+                new TextObject("{=!}Improved village prosperity\nIncreased farmland acreage output"),
+                new TextObject("{=!}Horse-God"),
+                300,
+                new TextObject("{=!}When the first of us Wilundings came to Calradia from west-over-sea, we rode inland from Ostican and saw how it was good and green. We buried our weapons to Horsa, the horse god, and asked him to let us leave the life of war behind us, and to turn the saddle to a yoke and set the horse to plough. Yet, the gods of stone that dwell in this land would not let us live in frith. Regarldess, Horsa took our pledge and called more of us from over the sea, and so we came riding."),
+                new TextObject("{=!}When we came across the sea, Horsa said unto us: “Ye have buried your spears to me in this soil, and they shall grow again like crops whenever ye need them. And your harvest shall be war, and your bread shall be conquest.” On Horsa's name, we plant our seeds in the fields and our spears into the flesh of our foes. From battle flows the red wellspring that blesses this land. It makes the crops to grow and feeds both gods and men."));
+
+            Oca.Initialize(new TextObject("{=!}Oca"),
+                new TextObject("{=!}D"),
+                new TextObject("{=!}"),
+                new TextObject("{=!}"),
+                300,
+                new TextObject("{=!}Long before the building of Ocs Hall, Orm, a grape farmer, lived in the region."),
+                new TextObject());
+
+            Grunwald.Initialize(new TextObject("{=!}Kronvalt"),
+                new TextObject("{=!}D"),
+                new TextObject("{=!}"),
+                new TextObject("{=!}"));
+
             AseraMain = new Divinity("asera-main");
             AseraMain.Initialize(new TextObject("{=7BJOY24H}Asera the Patriarch"),
                 new TextObject("{=AzD0sa65}First of his line, the legendary patriarch united the various badw tribes of the Nahasa and the coastal Behr al-Yeshm into the lawful confederacy of the Aserai Sultanate. Asera was deified by his deeds and the codes of law which allowed him to establish dominion and settle his people from the Jabal Tamar to the Jabal Ashab. Asera is that which all followers of his Code seek to live up to; though most followers will accept that the words of Asera are transcribed to benefit the bloodlines which followed him. Thus one can only ever seek to live as Asera did, and to know only their success upon arrival in Paradise."),
@@ -79,13 +121,16 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=zYHZu2OC}Constituting the major heavenly divine of the Battanians are those known as the Slaugh Aos’An - the Host of Noble Folk who reign between darkened clouds and watch over humanity with starlight torches. Seldom petitioned, as they are viewed as capricious entities; the Slaugh Aos’An are said to visit Battania during the changing of the seasons and to witness the birth of those ordained by fate to bring about weal and doom to the land. To make an oath under the auspices of the Slaugh Aos’An is to be bound to the letter or the spirit of one’s words; never more and never both. To break such an oath is to invite all of fate to conspire towards your end, and to know no peace in Heaven nor Hell."),
                 new TextObject("{=iNvtNtoK}Increased prosperity of cattle, hog and forestry villages"),
                 new TextObject("{=iYqD0kQM}Great Spirits"),
-                200);
+                200,
+                new TextObject("{=!}Test 1"));
 
             AmraSecondary1 = new Divinity("amra-secondary-1");
             AmraSecondary1.Initialize(new TextObject("{=SgShtGNw}Na Sidhfir"),
                 new TextObject("{=oF7u5Z29}Those deemed to have won the favor of the Slaugh Aos’An and the love of the Battanian people for more than a generation may be vaunted into the ranks of the Na Sidhfir - the Immortal Men of the Woods. Occupying a position equally heroic and tragic, the grand figures of the Na Sidhfir are claimed to be tireless and exhausted entities - unable to rest so long as they are remembered, but too self-absorbed to allow their songs to go unsung. Derwyddon practitioners claim the Na Sidhfir possess the bodies of Wolfskins, allowing them to rest and ravage away from the heavenly realms."),
                 new TextObject("{=GgVizsVd}Bonus in forest autosimulated battles\nAbility to recruit forest bandit parties under 20 men into your own"),
-                new TextObject("{=oWpMWLs8}Ancestor Spirits"));
+                new TextObject("{=oWpMWLs8}Ancestor Spirits"),
+                300,
+                new TextObject("{=!}Test 2"));
 
             AmraSecondary2 = new Divinity("amra-secondary-2");
             AmraSecondary2.Initialize(new TextObject("{=KkYfAdjp}Dymhna Sidset"),
