@@ -10,6 +10,7 @@ using HarmonyLib;
 using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.MapEvents;
@@ -436,6 +437,69 @@ namespace BannerKings.Behaviours
                 "hero_main_options",
                 "{=6d9H5id0}{CLERGYMAN_INDUCTION_LAST}",
                 IsPreacher, InductionOnConsequence);
+
+            starter.AddPlayerLine("bk_question_induction", "hero_main_options", "bk_preacher_asked_topics",
+               "{=!}Can I learn about specific topics?",
+               IsPreacher,
+               () =>
+               {
+                   Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(
+                   BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero));
+
+                   List<Divinity> divinities = new List<Divinity>(4);
+                   divinities.Add(rel.Faith.MainGod);
+                   foreach (var god in rel.Faith.GetSecondaryDivinities()) divinities.Add(god);
+                   ConversationSentence.SetObjectsToRepeatOver(divinities, 5);
+               });
+
+            starter.AddDialogLine("bk_answer_induction_1", "bk_preacher_asked_topics",
+                "bk_preacher_asked_topics_options",
+                "{=!}{CLERGYMAN_TOPICS}",
+                () =>
+                {
+                    MBTextManager.SetTextVariable("CLERGYMAN_TOPICS",
+                       new TextObject("{=!}Certainly, {PLAYER.NAME}. What can I help you with?"));
+                    return true;
+                },
+                null);
+
+            starter.AddRepeatablePlayerLine("bk_preacher_asked_topics_options",
+                "bk_preacher_asked_topics_options",
+                "bk_preacher_asked_topics_answer",
+                "{=!}{DIVINITY_NAME}",
+                "{=!}I was thinking of another option",
+                "bk_preacher_asked_topics_options",
+                () =>
+                {
+                    Divinity divinity = ConversationSentence.CurrentProcessedRepeatObject as Divinity;
+                    ConversationSentence.SelectedRepeatLine.SetTextVariable("DIVINITY_NAME", divinity.Name);
+                    return divinity.Dialogue != null;
+                },
+                () =>
+                {
+                    Divinity divinity = ConversationSentence.SelectedRepeatObject as Divinity;
+                    MBTextManager.SetTextVariable("DIVINITY_TEXT", divinity.Dialogue);
+                }, 100,
+                null);
+
+            starter.AddPlayerLine("bk_preacher_asked_topics_options_cancel",
+                "bk_preacher_asked_topics_options",
+                "hero_main_options",
+                "{=D33fIGQe}Never mind.",
+                () => true,
+                null);
+
+            starter.AddDialogLine("bk_preacher_asked_topics_answer", "bk_preacher_asked_topics_answer",
+                "bk_preacher_asked_topics_answer_last",
+                "{=!}{DIVINITY_TEXT}",
+                IsPreacher,
+                InductionOnConsequence);
+
+            starter.AddDialogLine("bk_preacher_asked_topics_answer_last", "bk_preacher_asked_topics_answer_last",
+               "bk_preacher_asked_topics_options",
+               "{=!}{DIVINITY_LAST_TEXT}",
+               IsPreacher,
+               InductionOnConsequence);
 
             starter.AddPlayerLine("bk_question_boon", "hero_main_options", "bk_preacher_asked_boon",
                 "{=H9E58HNp}{CLERGYMAN_BLESSING_ACTION}",
