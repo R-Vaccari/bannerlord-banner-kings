@@ -296,7 +296,10 @@ namespace BannerKings.Managers.Court.Members
                     DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy(),
                     DefaultCouncilTasks.Instance.EncourageMilitarism.GetCopy()
                 },
-                new List<CouncilPrivileges>() { },
+                new List<CouncilPrivileges>() 
+                {
+                    CouncilPrivileges.ARMY_PRIVILEGE
+                },
                 (CouncilData data) =>
                 {
                     return true;
