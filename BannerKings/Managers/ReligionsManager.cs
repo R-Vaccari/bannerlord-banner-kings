@@ -367,6 +367,8 @@ namespace BannerKings.Managers
             Religion result = null;
             foreach(var religion in Religions.Keys.ToList())
             {
+                if (!religion.Faith.Active) continue;
+
                 if (religion.Faith.IsCultureNaturalFaith(culture))
                 {
                     result = religion;
