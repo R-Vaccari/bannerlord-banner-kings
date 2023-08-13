@@ -19,12 +19,12 @@ namespace BannerKings.Managers.Institutions.Religions
         {
             get
             {
+                yield return Osfeyd;
                 yield return AseraCode;
                 yield return Amra;
                 yield return Martyrdom;
                 yield return Canticles;
-                yield return Treelore;
-                yield return Osfeyd;
+                yield return Treelore;     
                 foreach (Religion item in ModAdditions)
                 {
                     yield return item;
@@ -95,7 +95,7 @@ namespace BannerKings.Managers.Institutions.Religions
                 },
                 null);
 
-            Osfeyd.Initialize(DefaultFaiths.Instance.Treelore,
+            Osfeyd.Initialize(DefaultFaiths.Instance.Osfeyd,
                 new AutonomousLeadership(),
                 new List<CultureObject> { vlandia, vakken },
                 new List<Doctrine>

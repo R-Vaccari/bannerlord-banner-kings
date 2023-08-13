@@ -9,7 +9,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 {
     public class Osfeyd : PolytheisticFaith
     {
-        public override Banner GetBanner() => new Banner("11.141.145.1836.1836.768.774.1.0.0.535.40.149.175.155.864.924.0.1.225.530.84.149.175.155.574.764.0.0.89.525.40.149.175.155.619.608.0.0.45.510.6.149.69.83.770.602.0.0.-52.510.6.149.59.83.766.563.0.0.44.510.6.149.59.83.766.534.0.0.320.510.6.149.133.87.748.572.0.0.-90.533.145.149.175.155.614.904.0.0.315.510.145.149.133.87.885.605.0.0.235.510.145.149.59.83.922.583.0.0.284.131.40.149.207.208.764.764.0.1.0.510.84.149.133.87.944.764.0.0.0.510.84.149.115.87.944.764.0.0.-50.510.6.149.133.87.756.963.0.0.90.510.6.149.59.83.741.1007.0.0.135.510.6.149.59.83.770.1008.0.0.45");
+        public override Banner GetBanner() => new Banner("11.148.145.1836.1836.768.774.1.0.0.535.40.149.175.155.874.918.0.1.225.530.22.149.175.155.584.758.0.0.89.525.40.149.175.155.629.602.0.0.45.510.22.149.69.83.780.596.0.0.-52.510.22.149.59.83.776.557.0.0.44.510.22.149.59.83.776.528.0.0.320.510.22.149.133.87.758.566.0.0.-90.533.22.149.175.155.624.898.0.0.315.510.22.149.133.87.895.599.0.0.235.510.22.149.59.83.932.577.0.0.284.131.40.149.207.208.774.758.0.1.0.510.22.149.133.87.954.758.0.0.0.510.22.149.115.87.954.758.0.0.-50.510.22.149.133.87.766.957.0.0.90.510.22.149.59.83.751.1001.0.0.135.510.22.149.59.83.780.1002.0.0.45");
 
         public override TextObject GetBlessingAction() => new TextObject("{=!}I would like to pledge myself to one of the gods.");
 
@@ -17,25 +17,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetBlessingConfirmQuestion() => new TextObject("{=!}Confirm to me your devotion, lest have your name forgotten.");
 
-        public override TextObject GetBlessingQuestion()
-        {
-            return new TextObject("{=!}And to which of our hallowed, renowned gods to you pledge yourself today?");
-        }
+        public override TextObject GetBlessingQuestion() => new TextObject("{=!}And to which of our hallowed, renowned gods to you pledge yourself today?");
+        
+        public override TextObject GetBlessingQuickInformation() => new TextObject("{=!}{HERO} is now pledged to {DIVINITY}.");
 
-        public override TextObject GetBlessingQuickInformation()
-        {
-            return new TextObject("{=!}{HERO} is now pledged to {DIVINITY}.");
-        }
-
-        public override TextObject GetClergyForbiddenAnswer(int rank)
-        {
-            return new TextObject("{=!}Forbidden? Cravenness, of course. In the light of our ancestors, among which rank our gods - Wilund, the Smith; Horsa, the Prophet; Osric, the Conqueror - what kind of man is one who escapes in the face of the enemy? No man, I say.");
-        }
-
-        public override TextObject GetClergyForbiddenAnswerLast(int rank)
-        {
-            return new TextObject("{=!}Take heed: you need not look for answers too long. Ask yourself: what would your father do? Your grandfather? Your ancestors? There lies the answer. Great feats have they acomplished. Riding the sea, mounting their warhorses and flourishing their fields. If they have not done so - then do them yourself, each teach your sons to do so.");
-        }
+        public override TextObject GetClergyForbiddenAnswer(int rank) => new TextObject("{=!}Forbidden? Cravenness, of course. In the light of our ancestors, among which rank our gods - Wilund, the Smith; Horsa, the Prophet; Osric, the Conqueror - what kind of man is one who escapes in the face of the enemy? No man, I say.");
+        
+        public override TextObject GetClergyForbiddenAnswerLast(int rank) => new TextObject("{=!}Take heed: you need not look for answers too long. Ask yourself: what would your father do? Your grandfather? Your ancestors? There lies the answer. Great feats have they acomplished. Riding the sea, mounting their warhorses and flourishing their fields. If they have not done so - then do them yourself, each teach your sons to do so.");
 
         public override TextObject GetClergyGreeting(int rank)
         {
@@ -43,10 +31,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
             else return new TextObject("{=!}Hail, foreigner.");
         }
 
-        public override TextObject GetClergyGreetingInducted(int rank)
-        {
-            return new TextObject("{=!}Be welcome, {?PLAYER.GENDER}sister{?}brother{\\?}. Our community");
-        }
+        public override TextObject GetClergyGreetingInducted(int rank) => new TextObject("{=!}Be welcome, {?PLAYER.GENDER}sister{?}brother{\\?}. We have a community here of good folks such as yourself.");
 
         public override TextObject GetClergyInduction(int rank)
         {
@@ -72,29 +57,17 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
             }
         }
 
-        public override TextObject GetClergyPreachingAnswer(int rank)
-        {
-            return new TextObject("{=!}I preach the canticles of our peoples, the Wilunding. From west-over-sea we came, with the promise to seize ourselves new fertile land. Our ancestors, along our hallowed gods, have so achieved, as Horse, the prophet, has foretold.");
-        }
+        public override TextObject GetClergyPreachingAnswer(int rank) => new TextObject("{=!}I preach the canticles of our peoples, the Wilunding. From west-over-sea we came, with the promise to seize ourselves new fertile land. Our ancestors, along our hallowed gods, have so achieved, as Horsa, the prophet, has foretold.");   
 
-        public override TextObject GetClergyPreachingAnswerLast(int rank)
-        {
-            return new TextObject("{=!}The Calradoi will tell you we are usurpers, for they are arrogant and ignorant. We have merely taken ourselves what was promised us. In their ways of silk and wine, they tried to shame and fool us. We have taken up the horse and lance, and taken it for ourselves.");
-        }
+        public override TextObject GetClergyPreachingAnswerLast(int rank) => new TextObject("{=!}The Calradoi will tell you we are usurpers, for they are arrogant and ignorant. We have merely taken ourselves what was promised us. In their ways of silk and wine, they tried to shame and fool us. We have taken up the horse and lance, and conquered it for ourselves."); 
 
-        public override TextObject GetClergyProveFaith(int rank) => new TextObject("{=!}");
+        public override TextObject GetClergyProveFaith(int rank) => new TextObject("{=!}Find a barrow. At evening,leave your unshod horses or a worthy blade. Sleep upon the grave mound and on the morrow your hands will be blessed with craft to create kingdoms. Or to pull them down.");
 
-        public override TextObject GetClergyProveFaithLast(int rank)
-        {
-            return new TextObject("{=!}Mount your horse and ready your lance. That is the way of the Wilunding. We shall plant the land with our spears and carve from it our kingdoms. The wights will be witness to your resolve.");
-        }
+        public override TextObject GetClergyProveFaithLast(int rank) => new TextObject("{=!}Mount your horse and ready your lance. That is the way of the Wilunding. We shall plant the land with our spears and carve from it our kingdoms. The wights will be witness to your resolve.");
 
         public override TextObject GetCultsDescription() => new TextObject("{=!}Gods");
 
-        public override TextObject GetDescriptionHint()
-        {
-            return new TextObject("{=!}Osfeyd, or 'faith in the gods' in the Vlandic tongue, is the combined beliefs brought by the various Vlandic peoples, woven together by the prophecy of Horsa, made true by Osric Iron-Arm. In search of new fertile farmland, the Wilunding have killed the Calradic gods in the west.");
-        }
+        public override TextObject GetDescriptionHint() => new TextObject("{=!}Osfeyd, or 'faith in the gods' in the Vlandic tongue, is the combined beliefs brought by the various Vlandic peoples, woven together by the prophecy of Horsa, made true by Osric Iron-Arm. In search of new fertile farmland, the Wilunding have killed the Calradic gods in the west.");  
 
         public override TextObject GetFaithDescription() => new TextObject("{=!}Osfeyd, or 'faith in the gods' in the Vlandic tongue, is the combined beliefs brought by the various Vlandic peoples, woven together by the prophecy of Horsa, made true by Osric Iron-Arm. In search of new fertile farmland, the Wilunding have killed the Calradic gods in the west. Their gods make sure they are not but mere farmers - many a man have died, pierced by their lances and bolts, such that their kingdom may thrive. This is the tale of their mighty canticle.");
 
