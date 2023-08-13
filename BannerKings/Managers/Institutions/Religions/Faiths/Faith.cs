@@ -35,6 +35,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public FaithGroup FaithGroup => faithGroup;
         public Divinity MainGod => mainGod;
         public FeastType FeastType { get; private set; }
+        public bool Active { get; internal set; } = true;
 
         protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup, List<Rite> rites = null,
             FeastType feastType = FeastType.None)

@@ -3,7 +3,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
+namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Southern
 {
     public class Zabiha : Offering
     {

@@ -5,8 +5,12 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Empire;
 using BannerKings.Managers.Institutions.Religions.Faiths.Northern;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Battania;
+using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Empire;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Northern;
+using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Southern;
+using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Vlandia;
 using BannerKings.Managers.Institutions.Religions.Faiths.Vlandia;
+using BannerKings.Managers.Traits;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Localization;
 
@@ -21,6 +25,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public MonotheisticFaith Darusosian { get; private set; }
         public PolytheisticFaith Canticles { get; private set; }
         public PolytheisticFaith Treelore { get; private set; }
+        public PolytheisticFaith Osfeyd { get; private set; } = new Osfeyd();
 
         public FaithGroup ImperialGroup => imperialGroup;
 
@@ -33,6 +38,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 yield return Darusosian;
                 yield return Canticles;
                 yield return Treelore;
+                yield return Osfeyd;
             }
         }
 
@@ -103,6 +109,24 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     {DefaultTraits.Valor, true}
                 },
                 vlandiaGroup, new List<Rite>());
+            Canticles.Active = false;
+
+            Osfeyd.Initialize(DefaultDivinities.Instance.Wilund,
+                new List<Divinity>
+                {
+                   DefaultDivinities.Instance.Osric, 
+                   DefaultDivinities.Instance.Horsa
+                },
+                new Dictionary<TraitObject, bool>
+                {
+                    { DefaultTraits.Mercy, false} ,
+                    { DefaultTraits.Valor, true }
+                },
+                vlandiaGroup,
+                new List<Rite>()
+                {
+                    new VlandiaHorse()
+                });
 
             sturgiaGroup = new FaithGroup(new TextObject(),
                 new TextObject());

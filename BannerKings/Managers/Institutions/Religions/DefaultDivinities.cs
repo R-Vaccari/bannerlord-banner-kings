@@ -45,6 +45,9 @@ namespace BannerKings.Managers.Institutions.Religions
                 yield return VlandiaSecondary2;
                 yield return TreeloreMain;
                 yield return TreeloreMoon;
+                yield return Wilund;
+                yield return Osric;
+                yield return Horsa;
                 foreach (Divinity item in ModAdditions)
                 {
                     yield return item;
