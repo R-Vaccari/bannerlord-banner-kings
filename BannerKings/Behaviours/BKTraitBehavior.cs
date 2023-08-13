@@ -16,6 +16,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.HeroCreated.AddNonSerializedListener(this, OnHeroCreated);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.OnQuestCompletedEvent.AddNonSerializedListener(this, OnQuestCompleted);
+            CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameLoaded);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -32,6 +33,7 @@ namespace BannerKings.Behaviours
                     InitPersonalityTraits(hero);
                     InitNonPersonalityTraits(hero);
                 }
+                traitsInitialized = true;
             }
         }
 
@@ -163,7 +165,6 @@ namespace BannerKings.Behaviours
 
         private void InitPersonalityTraits(Hero hero)
         {
-            traitsInitialized = true;
             foreach (TraitObject trait in BKTraits.Instance.PersonalityTraits)
             {
                 float chance = 0.01f;
