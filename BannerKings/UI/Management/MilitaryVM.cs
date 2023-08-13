@@ -258,12 +258,13 @@ namespace BannerKings.UI.Management
                     .SetTextVariable("EXPLANATIONS", data.MilitaryData.Militarism.GetExplanations())
                     .ToString()));
 
+            ExplainedNumber draftEfficiency = data.MilitaryData.DraftEfficiency;
             ManpowerInfo.Add(new InformationElement(new TextObject("{=AJMjhhVL}Draft Efficiency:").ToString(),
-                $"{data.MilitaryData.DraftEfficiency.ResultNumber:P}",
+                FormatValue(draftEfficiency.ResultNumber),
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=g5NdEeBX}How quickly volunteer availability in notables replenishes."))
-                    .SetTextVariable("EXPLANATIONS", data.MilitaryData.DraftEfficiency.GetExplanations())
+                    .SetTextVariable("EXPLANATIONS", draftEfficiency.GetExplanations())
                     .ToString()));
 
             var decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);

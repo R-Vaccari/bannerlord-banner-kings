@@ -8,7 +8,7 @@ using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
+namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Empire
 {
     public class DarusosianExecution : ContextualRite
     {
@@ -34,9 +34,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                     GetName().ToString(),
                     GetDescription().ToString(),
                     options, false, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
-                    delegate(List<InquiryElement> x)
+                    delegate (List<InquiryElement> x)
                     {
-                        input = (Hero?) x[0].Identifier;
+                        input = (Hero)x[0].Identifier;
                         SetDialogue();
                     }, null, string.Empty));
         }
@@ -87,7 +87,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         private List<Hero> GetAdequateSacrifices(Hero hero)
         {
-            var list = new List<Hero>();    
+            var list = new List<Hero>();
             if (hero.IsPartyLeader && hero.PartyBelongedTo.PrisonRoster.TotalHeroes > 0)
             {
                 foreach (TroopRosterElement element in hero.PartyBelongedTo.PrisonRoster.GetTroopRoster())
@@ -114,7 +114,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             bool baseResult = hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
                              data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero));
             var hasTarget = GetAdequateSacrifices(hero).Count > 0;
-            
+
             if (!baseResult)
             {
                 reason = new TextObject("{=NZyz0ChH}Not enough time ({YEARS} years) have passed since the last rite of this type was performed.")
@@ -129,7 +129,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                     .SetTextVariable("KINGDOM", name);
             }
 
-            bool southernEmpire = hero.Clan.Kingdom != null &&hero.Clan.Kingdom.StringId == "empire_s";
+            bool southernEmpire = hero.Clan.Kingdom != null && hero.Clan.Kingdom.StringId == "empire_s";
             if (!southernEmpire)
             {
                 var kingdom = Kingdom.All.FirstOrDefault(x => x.StringId == "empire_s");
