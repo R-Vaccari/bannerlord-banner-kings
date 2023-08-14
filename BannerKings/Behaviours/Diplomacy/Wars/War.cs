@@ -76,6 +76,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         [SaveableProperty(6)] public Town DefenderFront { get; private set; }
         [SaveableProperty(7)] public int DaysAttackerHeldObjective { get; private set; }
         [SaveableProperty(8)] public int DaysDefenderHeldObjective { get; private set; }
+        [SaveableProperty(9)] public CampaignTime StartDate { get; private set; }
 
         public bool IsOriginalFront(Town town) => town == AttackerFront || town == DefenderFront;
 
@@ -140,6 +141,8 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             {
                 DaysDefenderHeldObjective++;
             }
+
+            if (StartDate == default(CampaignTime)) StartDate = CampaignTime.Now;
         }
 
         public void EndWar()
