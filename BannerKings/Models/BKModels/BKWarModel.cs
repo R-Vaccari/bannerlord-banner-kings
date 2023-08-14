@@ -82,7 +82,7 @@ namespace BannerKings.Models.BKModels
                 .SetTextVariable("FACTION", defender.Name)
                 .SetTextVariable("CASUALTIES", defenderCasualties));
 
-            int attackerCasualties = attackerLink.GetCasualties(defender);
+            int attackerCasualties = attackerLink.GetCasualties(attacker);
             result.Add(-attackerCasualties / totalWarScore,
                 new TextObject("{=!}{FACTION} suffered {CASUALTIES} casualties")
                 .SetTextVariable("FACTION", attacker.Name)
@@ -306,8 +306,12 @@ namespace BannerKings.Models.BKModels
 
             float yearsPassed = stance.WarStartDate.ElapsedYearsUntilNow;
             result.Add(yearsPassed * 0.04f, new TextObject("{=!}War duration"));
-            float daysPassed = MathF.Max(1f, yearsPassed * CampaignTime.DaysInYear);
-            result.AddFactor(-war.GetDaysHeldObjective(faction) / daysPassed, new TextObject("{=!}Time controlling objective"));
+
+            if (war.CasusBelli.Fief != null)
+            {
+                float daysPassed = MathF.Max(1f, yearsPassed * CampaignTime.DaysInYear);
+                result.AddFactor(-war.GetDaysHeldObjective(faction) / daysPassed, new TextObject("{=!}Time controlling objective"));
+            }
 
             return result;
         }
