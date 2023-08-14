@@ -1,9 +1,11 @@
 ﻿using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Managers.Traits;
 using BannerKings.Utils.Models;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
@@ -159,7 +161,7 @@ namespace BannerKings.Models.Vanilla
                     List<CasusBelli> justifications = diplomacy.GetAvailableCasusBelli(defenderKingdom);
                     foreach (var casusBelli in justifications)
                     {
-                        result.Add(casusBelli.DeclareWarScore);
+                        result.Add(casusBelli.DeclareWarScore * 2f);
                     }
 
                     if (justifications.Count == 0)
@@ -170,30 +172,67 @@ namespace BannerKings.Models.Vanilla
 
                 foreach (Kingdom enemyKingdom in FactionManager.GetEnemyKingdoms(attackerKingdom))
                 {
-                    WarStats enemyStats = CalculateWarStats(factionDeclaredWar, factionDeclaresWar);
-                    float enemyScore = enemyStats.Strength + enemyStats.ValueOfSettlements - (enemyStats.TotalStrengthOfEnemies * 1.25f);
-                    float proportion = MathF.Clamp((attackerScore / (enemyScore * 4f)) - 1f, -1f, 0f);
-                    result.AddFactor(proportion);
+                    if (enemyKingdom != attackerKingdom && enemyKingdom != defenderKingdom)
+                    {
+                        WarStats enemyStats = CalculateWarStats(factionDeclaresWar, enemyKingdom);
+                        float enemyScore = enemyStats.Strength + enemyStats.ValueOfSettlements - (enemyStats.TotalStrengthOfEnemies * 1.25f);
+                        float proportion = MathF.Clamp((attackerScore / (enemyScore * 4f)) - 1f, -1f, 0f);
+                        result.Add(result.ResultNumber * proportion);
+                    }
                 }
 
-                War possibleWar = new War(attackerKingdom, defenderKingdom, null, null);
-                if (possibleWar.DefenderFront != null && possibleWar.AttackerFront != null)
+                War war = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetWar(factionDeclaredWar, factionDeclaresWar);
+                if (war != null)
                 {
-                    float distance = Campaign.Current.Models.MapDistanceModel.GetDistance(possibleWar.DefenderFront.Settlement,
-                        possibleWar.AttackerFront.Settlement) * 3f;
-                    float factor = (Campaign.AverageDistanceBetweenTwoFortifications / distance) - 1f;
-                    result.AddFactor(factor);
+                    if (war.StartDate.ElapsedYearsUntilNow < 1f) result.Add(50000f);
+
+                    float score = MathF.Clamp(war.CalculateWarScore(war.Attacker, false).ResultNumber /
+                        war.TotalWarScore.ResultNumber, -1f, 1f);
+                    result.AddFactor(war.Attacker == factionDeclaresWar ? -score : score);
+
+                    float fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, factionDeclaresWar).ResultNumber;
+                    result.AddFactor(-fatigue);
+                }
+                else
+                {
+                    War possibleWar = new War(attackerKingdom, defenderKingdom, null, null);
+                    if (possibleWar.DefenderFront != null && possibleWar.AttackerFront != null)
+                    {
+                        float distance = Campaign.Current.Models.MapDistanceModel.GetDistance(possibleWar.DefenderFront.Settlement,
+                            possibleWar.AttackerFront.Settlement) * 3f;
+                        float factor = (Campaign.AverageDistanceBetweenTwoFortifications / distance) - 1f;
+                        result.AddFactor(factor);
+                    }
+
+                    //WarStats enemyStats = CalculateWarStats(factionDeclaresWar, enemyKingdom);
+                    //float enemyScore = enemyStats.Strength + enemyStats.ValueOfSettlements - (enemyStats.TotalStrengthOfEnemies * 1.25f);
                 }
             }
 
-            War war = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetWar(factionDeclaredWar, factionDeclaresWar);
-            if (war != null)
+            if (evaluatingClan is Clan)
             {
-                float score = war.TotalWarScore.ResultNumber;
-                result.AddFactor(war.Attacker == factionDeclaresWar ? -score : score);
+                Clan evaluating = (Clan)evaluatingClan;
+                Hero leader = evaluating.Leader;
+                float traits = leader.GetTraitLevel(DefaultTraits.Valor) - leader.GetTraitLevel(DefaultTraits.Mercy) +
+                    leader.GetTraitLevel(BKTraits.Instance.AptitudeViolence);
+                result.Add(result.ResultNumber * ((traits / 6f) * 0.5f));
 
-                float fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, factionDeclaresWar).ResultNumber;
-                result.AddFactor(-fatigue);
+                float enemies = 1f;
+                if (evaluating.Kingdom != null) enemies = FactionManager.GetEnemyKingdoms(evaluating.Kingdom).Count();
+
+                int gold = (int)(leader.Gold / enemies);
+                if (gold < 50000)
+                {
+                    result.Add(-10000);
+                }
+                else if (gold < 100000)
+                {
+                    result.Add(-5000);
+                }
+                else
+                {
+                    result.Add(5000);
+                }
             }
 
             /*WarStats defenderStats = CalculateWarStats(factionDeclaredWar, factionDeclaresWar);
