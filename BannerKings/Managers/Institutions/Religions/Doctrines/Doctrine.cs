@@ -1,23 +1,30 @@
 ﻿using System.Collections.Generic;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Doctrines
 {
     public class Doctrine : BannerKingsObject
     {
-        public Doctrine(string id, TextObject name, TextObject description, TextObject effects, List<string> incompatibleDoctrines) : base(id)
+        public Doctrine(string id, TextObject name, TextObject description, TextObject effects, 
+            List<Doctrine> incompatibleDoctrines, bool permanent = false) : base(id)
         {
-            this.name = name;
-            this.description = description;
-            this.effects = effects;
-            this.incompatibleDoctrines = incompatibleDoctrines;
+            Initialize(name, description);
+            Effects = effects;
+            IncompatibleDoctrines = incompatibleDoctrines;
+            Permanent = permanent;
         }
 
-        private TextObject effects { get; }
-        private List<string> incompatibleDoctrines { get; }
+        public bool Permanent { get; private set; }
+        private List<Doctrine> IncompatibleDoctrines { get; }
+        public TextObject Effects { get; private set; }
 
-        public TextObject Effects => effects;
-        public MBReadOnlyList<string> IncompatibleDoctrines => new MBReadOnlyList<string>(incompatibleDoctrines);
+        public override bool Equals(object obj)
+        {
+            if (obj is Doctrine)
+            {
+                return (obj as Doctrine).StringId == StringId;
+            }
+            return base.Equals(obj);
+        }
     }
 }

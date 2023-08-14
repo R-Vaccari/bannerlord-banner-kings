@@ -17,55 +17,34 @@ namespace BannerKings.Managers.Institutions.Religions
 {
     public class Religion : LandedInstitution
     {
-        [SaveableField(1)] private readonly Dictionary<Settlement, Clergyman> clergy;
-
-        [SaveableField(5)] private List<string> doctrineIds;
-
-        [SaveableField(4)] private List<CultureObject> favoredCultures;
-
+        [SaveableField(4)] private Dictionary<Settlement, Clergyman> clergy; 
+        [field: SaveableField(3)] public Faith Faith { get; private set; }
+        
         public Religion(string id) : base(id)
         {
             clergy = new Dictionary<Settlement, Clergyman>();
+            Doctrines = new List<Doctrine>();
         }
 
         public void Initialize(Faith faith, ReligiousLeadership leadership, List<CultureObject> favoredCultures, 
-            List<string> doctrineIds, Settlement settlement)
+            List<Doctrine> doctrines, Settlement settlement)
         {
             Leadership = leadership;
             Faith = faith;
             this.favoredCultures = favoredCultures;
-            this.doctrineIds = doctrineIds;
+            Doctrines = doctrines;
             leadership.Initialize(this);
             base.settlement = settlement;
         }
 
-        public MBReadOnlyList<Rite> Rites
-        {
-            get
-            {
-                var list = new List<Rite>();
-                list.AddRange(Faith.Rites);
-                if (doctrineIds.Contains("sacrifice"))
-                {
-                    list.Add(new Sacrifice());
-                }
-
-                return new MBReadOnlyList<Rite>(list);
-            }
-        }
-
+        private List<CultureObject> favoredCultures;
+        public ReligiousLeadership Leadership { get; private set; }
+        public MBReadOnlyList<Rite> Rites => new MBReadOnlyList<Rite>(Faith.Rites);
+        public List<Doctrine> Doctrines { get; private set; }
         public CultureObject MainCulture => favoredCultures[0];
-        [field: SaveableField(2)] public ReligiousLeadership Leadership { get; private set; }
-
         public Divinity MainGod => Faith.MainGod;
-        [field: SaveableField(3)] public Faith Faith { get; private set; }
 
-        public MBReadOnlyList<string> Doctrines => new MBReadOnlyList<string>(doctrineIds);
-
-        public bool HasDoctrine(Doctrine doctrine)
-        {
-            return doctrineIds.Contains(doctrine.StringId);
-        }
+        public bool HasDoctrine(Doctrine doctrine) => Doctrines.Contains(doctrine);
 
         public void RemoveClergyman(Clergyman clergyman)
         {
@@ -95,24 +74,18 @@ namespace BannerKings.Managers.Institutions.Religions
 
         internal void PostInitialize(Faith faith)
         {
+            StringId = faith.GetId();
+            if (clergy == null) clergy = new Dictionary<Settlement, Clergyman>();
+            Religion rel = DefaultReligions.Instance.GetById(this);
+            Doctrines = rel.Doctrines;
+            favoredCultures = rel.favoredCultures;
+            Leadership = rel.Leadership;
             Faith = faith;
         }
 
         public void AddClergyman(Settlement settlement, Hero hero)
         {
             var clergyman = new Clergyman(hero, Faith.GetIdealRank(settlement, settlement == this.settlement));
-            if (clergy.ContainsKey(settlement))
-            {
-                clergy[settlement] = clergyman;
-            }
-            else
-            {
-                clergy.Add(settlement, clergyman);
-            }
-        }
-
-        public void AddClergyman(Settlement settlement, Clergyman clergyman)
-        {
             if (clergy.ContainsKey(settlement))
             {
                 clergy[settlement] = clergyman;
@@ -196,11 +169,6 @@ namespace BannerKings.Managers.Institutions.Religions
                 .SetTextVariable("NAME", firstName);
             hero.SetName(fullName, firstName);
             return hero;
-        }
-
-        public bool IsFavoredCulture(CultureObject culture)
-        {
-            return favoredCultures.Contains(culture);
         }
 
         public override void Destroy()

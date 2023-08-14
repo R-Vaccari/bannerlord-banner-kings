@@ -39,14 +39,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetClergyGreeting(int rank)
         {
-            if (IsCultureNaturalFaith(Hero.MainHero.Culture)) return new TextObject("{=!}Hail, {?PLAYER.GENDER}madam{?}sir{\\?}.");
-            else return new TextObject("{=!}Hail, foreigner.");
+            if (IsCultureNaturalFaith(Hero.MainHero.Culture)) return new TextObject("{=!}Hail, {?PLAYER.GENDER}madam{?}sir{\\?}. I see you are one of us, yet you do not follow our ancestors? A strange choice.. which I can help you remedy. As the local Hestawick, I speak four our peoples here, we who came from west-over-seas.");
+            else return new TextObject("{=!}Hail, foreigner. Know that I speak for those of us here - the Wilunding - and not for your kind. The good folk here trust me to speak for them.");
         }
 
-        public override TextObject GetClergyGreetingInducted(int rank)
-        {
-            return new TextObject("{=!}Be welcome, {?PLAYER.GENDER}sister{?}brother{\\?}. Our community");
-        }
+        public override TextObject GetClergyGreetingInducted(int rank) => new TextObject("{=!}Be welcome, {?PLAYER.GENDER}sister{?}brother{\\?}. We have a community of goods folks here such as yourself, living off the land. As their Hestawick, I guide folks on living according to our ancestors.");
 
         public override TextObject GetClergyInduction(int rank)
         {

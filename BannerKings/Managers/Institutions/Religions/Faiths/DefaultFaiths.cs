@@ -10,7 +10,6 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Northern;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Southern;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Vlandia;
 using BannerKings.Managers.Institutions.Religions.Faiths.Vlandia;
-using BannerKings.Managers.Traits;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Localization;
 
@@ -20,11 +19,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
     {
         private FaithGroup aseraGroup, battaniaGroup, imperialGroup, vlandiaGroup, sturgiaGroup;
 
-        public MonotheisticFaith AseraCode { get; private set; }
-        public PolytheisticFaith AmraOllahm { get; private set; }
-        public MonotheisticFaith Darusosian { get; private set; }
-        public PolytheisticFaith Canticles { get; private set; }
-        public PolytheisticFaith Treelore { get; private set; }
+        public MonotheisticFaith AseraCode { get; private set; } = new AseraFaith();
+        public PolytheisticFaith AmraOllahm { get; private set; } = new AmraFaith();
+        public MonotheisticFaith Darusosian { get; private set; } = new DarusosianFaith();
+        public PolytheisticFaith Canticles { get; private set; } = new CanticlesFaith();
+        public PolytheisticFaith Treelore { get; private set; } = new TreeloreFaith();
         public PolytheisticFaith Osfeyd { get; private set; } = new Osfeyd();
 
         public FaithGroup ImperialGroup => imperialGroup;
@@ -48,9 +47,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         {
             aseraGroup = new FaithGroup(new TextObject("{=UAeorLSO}Aseran Faiths"),
                 new TextObject("{=9bKowx3B}Those that believe in Asera as the true and only prohpet."));
-            AseraCode = new AseraFaith();
 
-            ContextualRite zabiha = new Zabiha();
             AseraCode.Initialize(DefaultDivinities.Instance.AseraMain,
                 new List<Divinity>
                 {
@@ -62,11 +59,14 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     {DefaultTraits.Honor, true},
                     {DefaultTraits.Valor, true}
                 },
-                aseraGroup, new List<Rite> {zabiha});
+                aseraGroup, 
+                new List<Rite> 
+                {
+                    new Zabiha() 
+                });
 
             battaniaGroup = new FaithGroup(new TextObject("{=GbQpgQat}Derwyddon Faiths"),
                 new TextObject("{=ZonhX1rf}The faiths in the true old Calradian gods."));
-            AmraOllahm = new AmraFaith();
             AmraOllahm.Initialize(DefaultDivinities.Instance.AmraMain,
                 new List<Divinity> {DefaultDivinities.Instance.AmraSecondary1, DefaultDivinities.Instance.AmraSecondary2},
                 new Dictionary<TraitObject, bool>
@@ -82,8 +82,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 });
 
             imperialGroup = new FaithGroup(new TextObject("{=NWqkTdMt}Calradian Faiths"),
-                new TextObject("{=eqvyNpT8}The Imperial Calradian faiths."));
-            Darusosian = new DarusosianFaith();
+                new TextObject("{=!}The Imperial Calradoi faiths."));
+             
             DarusosianExecution darusosianExecution = new DarusosianExecution();
             Darusosian.Initialize(DefaultDivinities.Instance.DarusosianMain,
                 new List<Divinity>
@@ -99,7 +99,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
             vlandiaGroup = new FaithGroup(new TextObject("{=6FGQ31TM}Vlandic Faiths"),
                 new TextObject("{=U4yTbB0J}The faiths brought through the seas by the Vlandic peoples."));
-            Canticles = new CanticlesFaith();
             Canticles.Initialize(DefaultDivinities.Instance.VlandiaMain,
                 new List<Divinity>
                     {DefaultDivinities.Instance.VlandiaSecondary1, DefaultDivinities.Instance.VlandiaSecondary2},
@@ -128,9 +127,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     new VlandiaHorse()
                 });
 
-            sturgiaGroup = new FaithGroup(new TextObject(),
-                new TextObject());
-            Treelore = new TreeloreFaith();
+            sturgiaGroup = new FaithGroup(new TextObject("{=!}Northern Faiths"),
+                new TextObject("{=!}"));
+
             Treelore.Initialize(DefaultDivinities.Instance.TreeloreMain,
                 new List<Divinity>
                 {

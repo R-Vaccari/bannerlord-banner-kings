@@ -391,7 +391,7 @@ namespace BannerKings.Behaviours
                 IsPreacher, null);
 
             starter.AddDialogLine("bk_answer_preaching_2", "bk_preacher_asked_preaching_last",
-                "hero_main_options",
+                "lord_pretalk",
                 "{=KdVPngCa}{CLERGYMAN_PREACHING_LAST}",
                 IsPreacher, null);
 
@@ -403,7 +403,7 @@ namespace BannerKings.Behaviours
                 "{=Oa86My4f}{CLERGYMAN_FAITH}",
                 IsPreacher, null);
 
-            starter.AddDialogLine("bk_answer_faith_2", "bk_preacher_asked_faith_last", "hero_main_options",
+            starter.AddDialogLine("bk_answer_faith_2", "bk_preacher_asked_faith_last", "lord_pretalk",
                 "{=Pv6nVzD1}{CLERGYMAN_FAITH_LAST}",
                 IsPreacher, null);
 
@@ -418,7 +418,7 @@ namespace BannerKings.Behaviours
                 IsPreacher, null);
 
             starter.AddDialogLine("bk_answer_faith_forbidden_2", "bk_preacher_asked_faith_forbidden_last",
-                "hero_main_options",
+                "lord_pretalk",
                 "{=hZ06pC5W}{CLERGYMAN_FAITH__FORBIDDEN_LAST}",
                 IsPreacher, null);
 
@@ -434,7 +434,7 @@ namespace BannerKings.Behaviours
                 IsPreacher, null);
 
             starter.AddDialogLine("bk_answer_induction_2", "bk_preacher_asked_induction_last",
-                "hero_main_options",
+                "lord_pretalk",
                 "{=6d9H5id0}{CLERGYMAN_INDUCTION_LAST}",
                 IsPreacher, InductionOnConsequence);
 
@@ -452,7 +452,8 @@ namespace BannerKings.Behaviours
                    ConversationSentence.SetObjectsToRepeatOver(divinities, 5);
                });
 
-            starter.AddDialogLine("bk_answer_induction_1", "bk_preacher_asked_topics",
+            starter.AddDialogLine("bk_answer_induction_1", 
+                "bk_preacher_asked_topics",
                 "bk_preacher_asked_topics_options",
                 "{=!}{CLERGYMAN_TOPICS}",
                 () =>
@@ -479,12 +480,13 @@ namespace BannerKings.Behaviours
                 {
                     Divinity divinity = ConversationSentence.SelectedRepeatObject as Divinity;
                     MBTextManager.SetTextVariable("DIVINITY_TEXT", divinity.Dialogue);
+                    MBTextManager.SetTextVariable("DIVINITY_LAST_TEXT", divinity.LastDialogue);
                 }, 100,
                 null);
 
             starter.AddPlayerLine("bk_preacher_asked_topics_options_cancel",
                 "bk_preacher_asked_topics_options",
-                "hero_main_options",
+                "lord_pretalk",
                 "{=D33fIGQe}Never mind.",
                 () => true,
                 null);
@@ -492,14 +494,15 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("bk_preacher_asked_topics_answer", "bk_preacher_asked_topics_answer",
                 "bk_preacher_asked_topics_answer_last",
                 "{=!}{DIVINITY_TEXT}",
-                IsPreacher,
-                InductionOnConsequence);
+                () => true,
+                null
+                );
 
             starter.AddDialogLine("bk_preacher_asked_topics_answer_last", "bk_preacher_asked_topics_answer_last",
                "bk_preacher_asked_topics_options",
                "{=!}{DIVINITY_LAST_TEXT}",
-               IsPreacher,
-               InductionOnConsequence);
+               () => true,
+               null);
 
             starter.AddPlayerLine("bk_question_boon", "hero_main_options", "bk_preacher_asked_boon",
                 "{=H9E58HNp}{CLERGYMAN_BLESSING_ACTION}",
@@ -517,7 +520,7 @@ namespace BannerKings.Behaviours
                 null);
 
             starter.AddPlayerLine("bk_preacher_asked_boon_answer", "bk_preacher_asked_boon_answer",
-                "hero_main_options",
+                "lord_pretalk",
                 "{=G4ALCxaA}Never mind.", null, null);
 
             starter.AddDialogLine("bk_boon_confirm", "bk_boon_confirm", "bk_boon_confirm",
@@ -527,7 +530,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_boon_confirm", "bk_boon_confirm", "hero_main_options", "{=LPVNjXpT}See it done.",
                 () => selectedDivinity != null, BlessingConfirmOnConsequence);
 
-            starter.AddPlayerLine("bk_boon_confirm", "bk_boon_confirm", "hero_main_options",
+            starter.AddPlayerLine("bk_boon_confirm", "bk_boon_confirm", "lord_pretalk",
                 "{=G4ALCxaA}Never mind.",
                 null, null);
 
@@ -543,7 +546,7 @@ namespace BannerKings.Behaviours
                 null,
                 RitesPositiveAnswerOnConsequence);
 
-            starter.AddDialogLine("bk_answer_rite_impossible", "bk_preacher_asked_rites", "hero_main_options",
+            starter.AddDialogLine("bk_answer_rite_impossible", "bk_preacher_asked_rites", "lord_pretalk",
                 "{=rfjH2WMz}I am afraid that won't be possible.",
                 IsPreacher,
                 null);
@@ -553,7 +556,7 @@ namespace BannerKings.Behaviours
                 null);
 
             starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer",
-                "hero_main_options",
+                "lord_pretalk",
                 "{=G4ALCxaA}Never mind.", null,
                 null);
 
@@ -565,7 +568,7 @@ namespace BannerKings.Behaviours
                 {
                     selectedRite?.Complete(Hero.MainHero);
                 });
-            starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "hero_main_options",
+            starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_pretalk",
                 "{=G4ALCxaA}Never mind.",
                 null, null);
 

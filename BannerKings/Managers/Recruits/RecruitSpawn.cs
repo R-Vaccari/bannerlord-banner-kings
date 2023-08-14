@@ -1,6 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 
@@ -11,22 +10,25 @@ namespace BannerKings.Managers.Recruits
         public RecruitSpawn() : base("") 
         {
             Initialize(TextObject.Empty, TextObject.Empty);
+            FiefStrings = new HashSet<string>(1);
         }
 
-        public void Initialize(CharacterObject troop, CultureObject culture, float chance, PopType popType,
-            string fief = null, Kingdom kingdom = null)
+        public void Initialize(CharacterObject troop, CultureObject culture, float chance, PopType popType, Kingdom kingdom = null)
         {
             Troop = troop;
             PopType = popType;
-            FiefString = fief;
             Culture = culture;
             Chance = chance;
             Kingdom = kingdom;
         }
+        
+        public void AddFiefString(string id)
+        {
+            FiefStrings.Add(id);
+        }
 
         public CharacterObject Troop { get; private set; }
-        public string FiefString { get; set; }
-        public Town Fief => Town.AllFiefs.FirstOrDefault(x => x.StringId == FiefString);
+        public HashSet<string> FiefStrings { get; set; }
         public Kingdom Kingdom { get; private set; }
         public CultureObject Culture { get; private set; }
         public float Chance { get; private set; }
