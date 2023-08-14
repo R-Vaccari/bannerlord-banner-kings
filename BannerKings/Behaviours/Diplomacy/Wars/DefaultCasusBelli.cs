@@ -141,7 +141,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=!}Pillage and steal from our enemies as our ancestors did. Ruling their lands may be unviable, but it will not stop us from taking what we are owed by the rule of the strongest.\n\nObjective: Raid 8 or more villages of the enemy's culture."),
                 new TextObject("{=!}Mass Raiding"),
                 0.5f,
-                1.5f,
+                3f,
                 0.8f,
                 8000f,
                 (War war) =>
