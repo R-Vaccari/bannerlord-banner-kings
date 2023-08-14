@@ -189,6 +189,7 @@ namespace BannerKings
             AddClassDefinition(typeof(PartySupplies), 141);
             AddClassDefinition(typeof(CourtGrace), 142);
             AddClassDefinition(typeof(CourtExpense), 143);
+            AddClassDefinition(typeof(Osfeyd), 144);
         }
 
         protected override void DefineContainerDefinitions()
