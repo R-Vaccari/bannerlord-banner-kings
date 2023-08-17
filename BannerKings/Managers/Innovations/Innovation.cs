@@ -11,7 +11,8 @@ namespace BannerKings.Managers.Innovations
         {
         }
 
-        public void Initialize(TextObject name, TextObject description, TextObject effects, Era era, float requiredProgress = 1000f, CultureObject culture = null, Innovation requirement = null)
+        public void Initialize(TextObject name, TextObject description, TextObject effects, Era era, InnovationType type,
+            float requiredProgress = 1000f, CultureObject culture = null, Innovation requirement = null)
         {
             Initialize(name, description);
             Effects = effects;
@@ -19,10 +20,29 @@ namespace BannerKings.Managers.Innovations
             Culture = culture;
             Requirement = requirement;
             Era = era;
+            Type = type;
         } 
+
+        public Innovation GetCopy()
+        {
+            Innovation innovation = DefaultInnovations.Instance.GetById(this);
+            var newInnovation = new Innovation(innovation.StringId);
+            newInnovation.Initialize(innovation.Name, innovation.Description, innovation.Effects, innovation.Era,
+                innovation.Type, innovation.RequiredProgress, innovation.Culture, innovation.Requirement);
+
+            return newInnovation;
+        }
+
+        public void PostInitialize()
+        {
+            Innovation innovation = DefaultInnovations.Instance.GetById(this);
+            Initialize(innovation.Name, innovation.Description, innovation.Effects, innovation.Era,
+                innovation.Type, innovation.RequiredProgress, innovation.Culture, innovation.Requirement);
+        }
 
         public bool Finished => CurrentProgress >= RequiredProgress;
         public Era Era { get; private set; }
+        public InnovationType Type { get; private set; }
         public Innovation Requirement { get; private set; }
         public float RequiredProgress { get; private set; }
         [field: SaveableField(100)] public float CurrentProgress { get; private set; }
@@ -32,6 +52,15 @@ namespace BannerKings.Managers.Innovations
         public void AddProgress(float points)
         {
             CurrentProgress += points;
+        }
+
+        public enum InnovationType
+        {
+            Civic,
+            Agriculture,
+            Military,
+            Technology,
+            Building
         }
     }
 }
