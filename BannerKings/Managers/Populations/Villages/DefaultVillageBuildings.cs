@@ -1,4 +1,5 @@
 using BannerKings.Extensions;
+using BannerKings.Managers.Innovations;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -11,48 +12,28 @@ namespace BannerKings.Managers.Populations.Villages
     public class DefaultVillageBuildings : DefaultTypeInitializer<DefaultVillageBuildings, BuildingType>
     {
         public BuildingType Manor { get; private set; }
-
         public BuildingType Palisade { get; private set; }
-
         public BuildingType TrainningGrounds { get; private set; }
-
         public BuildingType Warehouse { get; private set; }
-
         public BuildingType Courier { get; private set; }
-
         public BuildingType Bakery { get; private set; }
-
         public BuildingType Mining { get; private set; }
-
         public BuildingType Farming { get; private set; }
-
         public BuildingType Sawmill { get; private set; }
-
         public BuildingType AnimalHousing { get; private set; }
-
         public BuildingType Butter { get; private set; }
-
         public BuildingType FishFarm { get; private set; }
-
         public BuildingType Tannery { get; private set; }
-
         public BuildingType Blacksmith { get; private set; }
-
         public BuildingType Mines { get; private set; }
-
         public BuildingType Skeps { get; private set; }
-
         public BuildingType Marketplace { get; private set; }
-
         public BuildingType TaxOffice { get; private set; }
-
         public BuildingType DailyProduction { get; private set; }
-
         public BuildingType DailyFarm { get; private set; }
-
         public BuildingType DailyPasture { get; private set; }
-
         public BuildingType DailyWoods { get; private set; }
+        public BuildingType Mill { get; } = new BuildingType("bk_Mill");
 
         public override IEnumerable<BuildingType> All
         {
@@ -83,6 +64,17 @@ namespace BannerKings.Managers.Populations.Villages
 
         public override void Initialize()
         {
+            Mill.Initialize(new TextObject("{=!}Mill"),
+                new TextObject("{=!}Construct a mill, used to grind grains for breadmaking. Increases bread production (50%, 100%, 150%)."),
+                new[]
+                {
+                    1800,
+                    2600,
+                    3500
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
+
             Manor = new BuildingType("bannerkings_manor");
             Game.Current.ObjectManager.RegisterPresumedObject(Manor);
             Manor.Initialize(new TextObject("{=UHyznyEy}Manor"),
@@ -358,6 +350,12 @@ namespace BannerKings.Managers.Populations.Villages
             yield return Instance.Bakery;
             yield return Instance.Marketplace;
             yield return Instance.TaxOffice;
+
+            InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(village.Settlement.Culture);
+            if (data.HasFinishedInnovation(DefaultInnovations.Instance.Mills))
+            {
+                yield return Instance.Mill;
+            }
 
             if (village.IsMiningVillage())
             {
