@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Guilds
@@ -19,6 +21,36 @@ namespace BannerKings.Managers.Institutions.Guilds
                 yield return Masons;
                 yield return Metalsmiths;
             }
+        }
+
+        public Guild GetTownIdealGuild(Town town)
+        {
+            List<(Guild, float)> options = new List<(Guild, float)>(All.Count());
+            foreach (var guild in All)
+            {
+                float chance = 1f;
+                foreach (VillageType villageType in guild.VillageTypes)
+                {
+                    foreach (Village village in town.Villages)
+                    {
+                        if (village.VillageType.StringId == villageType.StringId)
+                            chance++;
+                    }
+                }
+
+                foreach (WorkshopType workshopType in guild.WorkshopTypes)
+                {
+                    foreach (Workshop workshop in town.Workshops)
+                    {
+                        if (workshop.WorkshopType.StringId == workshopType.StringId)
+                            chance++;
+                    }
+                }
+
+                options.Add(new(guild, chance));
+            }
+
+            return MBRandom.ChooseWeighted(options);
         }
 
         public override void Initialize()
