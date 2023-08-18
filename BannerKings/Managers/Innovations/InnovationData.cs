@@ -61,6 +61,11 @@ namespace BannerKings.Managers.Innovations
                 buildings.Remove(DefaultBuildingTypes.SettlementForum);
             }
 
+            if (!HasFinishedInnovation(DefaultInnovations.Instance.Theater))
+            {
+                buildings.Remove(BKBuildings.Instance.Theater);
+            }
+
             return buildings;
         }
 
