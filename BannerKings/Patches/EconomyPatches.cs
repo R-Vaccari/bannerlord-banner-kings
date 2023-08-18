@@ -24,6 +24,7 @@ using BannerKings.Settings;
 using BannerKings.Utils.Extensions;
 using System.Reflection;
 using TaleWorlds.CampaignSystem.GameComponents;
+using BannerKings.Managers.Innovations;
 
 namespace BannerKings.Patches
 {
@@ -47,6 +48,22 @@ namespace BannerKings.Patches
                             __result = null;
                         }
                     }
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(WorkshopsCampaignBehavior), "IsItemPreferredForTown")]
+        class IsItemPreferredPatch
+        {
+            public static void Postfix(ref bool __result, ItemObject item, Town townComponent)
+            {
+                if (!__result) return;
+
+                InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(townComponent.Settlement.Culture);
+                if (item.HasWeaponComponent && (item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Crossbow ||
+                    item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Bolt)) 
+                {
+                    __result = data.HasFinishedInnovation(DefaultInnovations.Instance.Crossbows);
                 }
             }
         }
