@@ -31,7 +31,7 @@ namespace BannerKings.Behaviours.Mercenary
         public void PostInitialize()
         {
             var copy = DefaultCustomTroopPresets.Instance.GetById(StringId);
-            Initialize(copy.Name, copy.Description, copy.Formation copy.Level, copy.OneHanded, copy.TwoHanded, copy.Polearm,
+            Initialize(copy.Name, copy.Description, copy.Formation, copy.Level, copy.OneHanded, copy.TwoHanded, copy.Polearm,
                 copy.Riding, copy.Athletics, copy.Throwing, copy.Bow, copy.Crossbow, copy.ItemId);
         }
 
