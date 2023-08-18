@@ -291,7 +291,7 @@ namespace BannerKings.Managers
                 float mill = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Mill);
                 if (mill > 0)
                 {
-                    bread *= (0.5f * mill);
+                    bread *= (1f + (0.5f * mill));
                 }
 
                 productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Bread, bread));
