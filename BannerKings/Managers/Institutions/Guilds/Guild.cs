@@ -1,32 +1,43 @@
-﻿using BannerKings.Managers.Institutions.Religions.Faiths;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Guilds
 {
-    public class Guild : LandedInstitution
+    public class Guild : BannerKingsObject
     {
-        private Hero guildMaster;
-        protected List<Hero> members;
-
-        public Guild(string id, Settlement settlement, Hero guildMaster, GuildTrade trade) : base(id)
+        public Guild(string id) : base(id)
         {
-            this.guildMaster = guildMaster;
-            members = new List<Hero>();
-            GuildType = new GuildType(trade);
-            base.settlement = settlement;
+        }
+
+        public Town Town { get; private set; }
+        public Hero GuildMaster { get; private set; }
+        public List<WorkshopType> WorkshopTypes { get; private set; }
+        public List<VillageType> VillageTypes { get; private set; }
+
+        public void Initialize(TextObject name, TextObject description, List<WorkshopType> workshopTypes,
+            List<VillageType> villageTypes)
+        {
+            Initialize(name, description);
+            WorkshopTypes = workshopTypes;
+            VillageTypes = villageTypes;
+        }
+
+        public Guild MakeGuild(Town town)
+        {
+            return new Guild(StringId);
         }
 
         public int Income
         {
             get
             {
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Town.Settlement);
                 return (int) MBMath.ClampFloat(data.GetTypeCount(PopulationManager.PopType.Craftsmen) *
                     data.EconomicData.Mercantilism.ResultNumber * Influence * 0.82f
                     * 1f + data.Autonomy, 0f, 10000f);
@@ -37,17 +48,10 @@ namespace BannerKings.Managers.Institutions.Guilds
         {
             get
             {
-                var power = guildMaster.Power;
-                foreach (var hero in members)
-                {
-                    if (settlement.Notables.Contains(hero))
-                    {
-                        power += hero.Power;
-                    }
-                }
+                var power = GuildMaster.Power;
 
                 var settlementPower = 0f;
-                foreach (var hero in settlement.Notables)
+                foreach (var hero in Town.Settlement.Notables)
                 {
                     settlementPower += hero.Power;
                 }
@@ -56,55 +60,7 @@ namespace BannerKings.Managers.Institutions.Guilds
             }
         }
 
-        public int Capital => guildMaster.Gold;
-        public GuildType GuildType { get; }
-
-        public MBReadOnlyList<Hero> Members => new MBReadOnlyList<Hero>(members);
-
-        public Hero Leader
-        {
-            get
-            {
-                if (guildMaster == null || !guildMaster.IsAlive || !guildMaster.IsActive)
-                {
-                    guildMaster = EvaluateNewLeader(settlement);
-                }
-
-                if (guildMaster == null)
-                {
-                    Destroy();
-                }
-
-                return guildMaster;
-            }
-        }
-
-        public override void Destroy()
-        {
-            if (guildMaster != null)
-            {
-                KillCharacterAction.ApplyByRemove(guildMaster);
-            }
-
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement);
-            data.EconomicData.RemoveGuild();
-        }
-
-        public void AddMemer(Hero hero)
-        {
-            if (!members.Contains(hero))
-            {
-                members.Add(hero);
-            }
-        }
-
-        public void RemoveMember(Hero hero)
-        {
-            if (members.Contains(hero))
-            {
-                members.Remove(hero);
-            }
-        }
+        public int Capital => GuildMaster.Gold;
 
         public static Hero EvaluateNewLeader(Settlement settlement)
         {
@@ -126,10 +82,10 @@ namespace BannerKings.Managers.Institutions.Guilds
         public static bool IsSuitable(Hero notable)
         {
             return notable.Occupation is Occupation.Merchant or Occupation.Artisan
-                   && notable.Power >= 400f;
+                   && notable.Power >= 200f;
         }
 
-        public static GuildTrade GetSuitableTrade(Settlement settlement, Hero guildMaster)
+        /*public static GuildTrade GetSuitableTrade(Settlement settlement, Hero guildMaster)
         {
             var list = new List<(GuildTrade, float)>();
             var hasClay = settlement.BoundVillages.Any(v => v.VillageType == DefaultVillageTypes.ClayMine);
@@ -141,6 +97,6 @@ namespace BannerKings.Managers.Institutions.Guilds
             list.Add((GuildTrade.Merchants, (hasSalt ? 3f : 1f) + merchantBonus));
             list.Add((GuildTrade.Metalworkers, (hasIron ? 3f : 1f) + artisanBonus));
             return MBRandom.ChooseWeighted(list);
-        }
+        } */
     }
 }
