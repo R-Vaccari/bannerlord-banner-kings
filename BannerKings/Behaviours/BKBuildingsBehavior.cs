@@ -460,25 +460,4 @@ namespace BannerKings.Behaviours
             }
         }
     }
-
-    namespace Patches
-    {
-        [HarmonyPatch(typeof(BuildingType), "All", MethodType.Getter)]
-        internal class BuildingsPatch
-        {
-            private static bool Prefix(ref MBReadOnlyList<BuildingType> __result)
-            {
-                var list = new List<BuildingType>(BKBuildings.AllBuildings);
-                foreach (var type in DefaultVillageBuildings.Instance.All)
-                {
-                    if (list.Contains(type))
-                    {
-                        list.Remove(type);
-                    }
-                }
-                __result = new MBReadOnlyList<BuildingType>(list);
-                return false;
-            }
-        }
-    }
 }
