@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using BannerKings.Extensions;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Helpers;
+using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -87,6 +87,26 @@ namespace BannerKings.UI
 
     namespace Patches
     {
+        [HarmonyPatch(typeof(SettlementProjectSelectionVM), "Refresh")]
+        internal class AvailableBuildingsPatch
+        {
+            private static void Postfix(SettlementProjectSelectionVM __instance)
+            {
+                InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(Settlement.CurrentSettlement.Culture);
+                var buildings = data.GetAvailableBuildings();
+
+                var unwanted = new List<SettlementBuildingProjectVM>();
+                foreach (var available in __instance.AvailableProjects)
+                {
+                    if (!buildings.Any(type => type.StringId == available.Building.BuildingType.StringId))
+                        unwanted.Add(available);
+                }
+
+                foreach (var toRemove in unwanted)
+                    __instance.AvailableProjects.Remove(toRemove);
+            }
+        }
+
 
         [HarmonyPatch(typeof(MapNotificationVM), "PopulateTypeDictionary")]
         internal class PopulateNotificationsPatch
