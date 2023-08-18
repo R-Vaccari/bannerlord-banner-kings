@@ -123,6 +123,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override MBReadOnlyList<Divinity> GetSecondaryDivinities() => new MBReadOnlyList<Divinity>(pantheon);
 
+        public override TextObject GetZealotsGroupName() => new TextObject("{=!}Knights of Osric");
+
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {
             string id = culture.StringId;
