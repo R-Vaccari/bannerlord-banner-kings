@@ -268,6 +268,12 @@ namespace BannerKings.Behaviours
                 MenuTitlesCondition,
                 MenuTitlesConsequence);
 
+            campaignGameStarter.AddGameMenuOption("bannerkings", 
+                "manage_titles", 
+                "{=!}Cultural information",
+                MenuTitlesCondition, 
+                (MenuCallbackArgs args) => UIManager.Instance.ShowWindow("cultures"));
+
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_demesne", "Estates",
                 MenuEstatesManageCondition,
                 MenuEstatesManageConsequence);
@@ -739,7 +745,7 @@ namespace BannerKings.Behaviours
                 hasGuild = guild != null;
                 if (hasGuild)
                 {
-                    GameTexts.SetVariable("GUILD_NAME", guild.GuildType.Name.ToString());
+                    GameTexts.SetVariable("GUILD_NAME", guild.Name);
                 }
             }
 

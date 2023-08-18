@@ -21,7 +21,7 @@ namespace BannerKings.Models.Vanilla
         }
         private void InitializeXpRequiredForSkillLevel()
         {
-            int num = 1000;
+            int num = 4000;
             bkRequireXp[0] = num;
             for (int i = 1; i < 1024; i++)
             {

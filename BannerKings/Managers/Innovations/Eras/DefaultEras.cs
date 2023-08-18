@@ -5,9 +5,8 @@ namespace BannerKings.Managers.Innovations.Eras
 {
     public class DefaultEras : DefaultTypeInitializer<DefaultEras, Era>
     {
-        public Era FirstEra { get; } = new Era("first_era");
-        public Era SecondEra { get; } = new Era("second_era");
-        public Era ThirdEra { get; } = new Era("third_era");
+        public Era FirstEra { get; } = new Era("FirstEra");
+        public Era SecondEra { get; } = new Era("SecondEra");
 
         public override IEnumerable<Era> All
         {
@@ -15,22 +14,18 @@ namespace BannerKings.Managers.Innovations.Eras
             {
                 yield return FirstEra;
                 yield return SecondEra;
-                yield return ThirdEra;
             }
         }
 
         public override void Initialize()
         {
-            FirstEra.Initialize(new TextObject("{=!}Calradoi Age"),
-                new TextObject(""));
+            FirstEra.Initialize(new TextObject("{=!}Internecine Age"),
+               new TextObject(""),
+               null);
 
-            SecondEra.Initialize(new TextObject("{=!}Internecine Age"),
+            SecondEra.Initialize(new TextObject("{=!} Age"),
                new TextObject(""),
                FirstEra);
-
-            ThirdEra.Initialize(new TextObject("{=!}Internecine Age"),
-               new TextObject(""),
-               SecondEra);
         }
     }
 }

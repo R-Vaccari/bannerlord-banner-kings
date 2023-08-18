@@ -285,7 +285,13 @@ namespace BannerKings.Managers
                 float bakery = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Bakery);
                 if (bakery > 0)
                 {
-                    bread += grainTuple.Item2 * 0.15f;
+                    bread += grainTuple.Item2 * (0.15f * bakery);
+                }
+
+                float mill = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Mill);
+                if (mill > 0)
+                {
+                    bread *= (1f + (0.5f * mill));
                 }
 
                 productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Bread, bread));
@@ -302,11 +308,11 @@ namespace BannerKings.Managers
             {
                 if (!factor)
                 {
-                    result.Add(effect, guild.GuildType.Name);
+                    result.Add(effect, guild.Name);
                 }
                 else
                 {
-                    result.AddFactor(effect, guild.GuildType.Name);
+                    result.AddFactor(effect, guild.Name);
                 }
             }
         }

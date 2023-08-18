@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Managers.Buildings;
+using BannerKings.Managers.Innovations.Eras;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -25,8 +28,8 @@ namespace BannerKings.Managers.Innovations
         }
 
         [field: SaveableField(2)] public Clan CulturalHead { get; private set; }
-
         [field: SaveableField(3)] public Innovation Fascination { get; private set; }
+        public Era Era { get; private set; }
 
         public MBReadOnlyList<Innovation> Innovations => new MBReadOnlyList<Innovation>(innovations);
 
@@ -34,17 +37,36 @@ namespace BannerKings.Managers.Innovations
         {
             if (Fascination != null)
             {
-                var fasc = DefaultInnovations.Instance.GetById(Fascination);
-                Fascination.Initialize(fasc.Name, fasc.Description, fasc.Effects,
-                    fasc.Era, fasc.RequiredProgress, fasc.Culture, fasc.Requirement);
+                Fascination.PostInitialize();
             }
 
             foreach (var innovation in innovations)
             {
-                var innov = DefaultInnovations.Instance.GetById(innovation);
-                innovation.Initialize(innov.Name, innov.Description, innov.Effects, innov.Era,
-                    innov.RequiredProgress, innov.Culture, innov.Requirement);
+                innovation.PostInitialize();
             }
+        }
+
+        public List<BuildingType> GetAvailableBuildings()
+        {
+            List<BuildingType> buildings = new List<BuildingType>(20);
+            buildings.AddRange(BKBuildings.AllBuildings);
+
+            if (!HasFinishedInnovation(DefaultInnovations.Instance.Aqueducts))
+            {
+                buildings.Remove(DefaultBuildingTypes.SettlementAquaducts);
+            }
+
+            if (!HasFinishedInnovation(DefaultInnovations.Instance.Forum))
+            {
+                buildings.Remove(DefaultBuildingTypes.SettlementForum);
+            }
+
+            if (!HasFinishedInnovation(DefaultInnovations.Instance.Theater))
+            {
+                buildings.Remove(BKBuildings.Instance.Theater);
+            }
+
+            return buildings;
         }
 
         public bool HasFinishedInnovation(Innovation innovation)

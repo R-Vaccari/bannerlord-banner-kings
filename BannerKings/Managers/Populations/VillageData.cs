@@ -119,7 +119,6 @@ namespace BannerKings.Managers.Populations
 
         internal override void Update(PopulationData data)
         {
-
             foreach (var type in DefaultVillageBuildings.VillageBuildings(village))
             {
                 if (buildings.FirstOrDefault(x => x.BuildingType.StringId == type.StringId) == null)

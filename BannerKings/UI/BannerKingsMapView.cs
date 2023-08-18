@@ -2,11 +2,9 @@
 using BannerKings.Managers.Populations;
 using BannerKings.UI.CampaignStart;
 using BannerKings.UI.Estates;
-using BannerKings.UI.Management;
 using BannerKings.UI.Management.BannerKings.UI.Panels;
 using BannerKings.UI.Management.Villages;
 using BannerKings.UI.Marriages;
-using BannerKings.UI.Panels;
 using BannerKings.UI.Titles;
 using SandBox.View.Map;
 using TaleWorlds.CampaignSystem;
@@ -67,8 +65,6 @@ namespace BannerKings.UI
                     return (new PopulationVM(data), "PopulationWindow");
                 case "estates":
                     return (new EstatesVM(data), "EstatesWindow");
-                case "guild":
-                    return (new GuildVM(data), "GuildWindow");
                 case "vilage_project":
                     return (new VillageProjectVM(data), "VillageProjectWindow");
                 case "titles":
@@ -82,6 +78,8 @@ namespace BannerKings.UI
                     return (new DemesneHierarchyVM(title.Sovereign ?? title, Clan.PlayerClan.Kingdom),
                         "TitlesWindow");
                 }
+                case "cultures":
+                    return (new CultureTabVM(), "CultureTabWindow");
                 case "religions":
                     return (new ReligionVM(data), "ReligionPopup");
                 case "campaignStart":

@@ -52,7 +52,7 @@ namespace BannerKings.Behaviours.PartyNeeds
                 BKItemCategories.Instance.Mead
             };
 
-            animalProductsCategories = new List<ItemCategory>(3)
+            animalProductsCategories = new List<ItemCategory>(4)
             {
                 DefaultItemCategories.Meat,
                 DefaultItemCategories.Cheese,
@@ -77,20 +77,14 @@ namespace BannerKings.Behaviours.PartyNeeds
 
             weaponCategories = new List<ItemCategory>(5)
             {
-                DefaultItemCategories.MeleeWeapons1,
                 DefaultItemCategories.MeleeWeapons2,
-                DefaultItemCategories.MeleeWeapons3,
-                DefaultItemCategories.MeleeWeapons4,
-                DefaultItemCategories.MeleeWeapons5,
+                DefaultItemCategories.MeleeWeapons3
             };
 
             shieldCategories = new List<ItemCategory>(5)
             {
-                DefaultItemCategories.Shield1,
                 DefaultItemCategories.Shield2,
-                DefaultItemCategories.Shield3,
-                DefaultItemCategories.Shield4,
-                DefaultItemCategories.Shield5
+                DefaultItemCategories.Shield3
             };
 
             clothCategories = new List<ItemCategory>(3)

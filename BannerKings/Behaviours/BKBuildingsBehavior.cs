@@ -1,5 +1,6 @@
 using BannerKings.Extensions;
 using BannerKings.Managers.Buildings;
+using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Utils;
@@ -433,28 +434,29 @@ namespace BannerKings.Behaviours
                             buildings.Add(new Building(type, settlement.Town));
                         }
                     }
-                }
-            }
-        }
-    }
 
-    namespace Patches
-    {
-        [HarmonyPatch(typeof(BuildingType), "All", MethodType.Getter)]
-        internal class BuildingsPatch
-        {
-            private static bool Prefix(ref MBReadOnlyList<BuildingType> __result)
-            {
-                var list = new List<BuildingType>(BKBuildings.AllBuildings);
-                foreach (var type in DefaultVillageBuildings.Instance.All)
-                {
-                    if (list.Contains(type))
+                    InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(settlement.Culture);
+                    var availableBuildings = data.GetAvailableBuildings();
+
+                    var toRemove = new List<BuildingType>();
+                    foreach (var building in settlement.Town.Buildings)
                     {
-                        list.Remove(type);
+                        if (!availableBuildings.Any(x => x.StringId == building.BuildingType.StringId))
+                        {
+                            toRemove.Add(building.BuildingType);
+                        }
+                    }
+
+                    foreach (var building in toRemove)
+                    {
+                        settlement.Town.Buildings.RemoveAll(x => x.BuildingType.StringId == building.StringId);
+                        settlement.Town.Buildings.Add(new Building(building, settlement.Town));
+                        if (settlement.Town.BuildingsInProgress.Any(x => x.BuildingType.StringId == building.StringId))
+                        {
+                            settlement.Town.BuildingsInProgress.Clear();
+                        }
                     }
                 }
-                __result = new MBReadOnlyList<BuildingType>(list);
-                return false;
             }
         }
     }

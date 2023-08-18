@@ -31,11 +31,7 @@ namespace BannerKings.Managers
                         continue;
                     }
 
-                    var newInnovation = new Innovation(innovation.StringId);
-                    newInnovation.Initialize(innovation.Name, innovation.Description, innovation.Effects, innovation.Era,
-                        innovation.RequiredProgress, innovation.Culture, innovation.Requirement);
-
-                    Innovations[culture].AddInnovation(newInnovation);
+                    Innovations[culture].AddInnovation(innovation.GetCopy());
                 }
             }
         }
