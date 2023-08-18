@@ -1,4 +1,5 @@
-﻿using TaleWorlds.Localization;
+﻿using TaleWorlds.Core;
+using TaleWorlds.Localization;
 using static TaleWorlds.CampaignSystem.CharacterDevelopment.DefaultPerks;
 
 namespace BannerKings.Behaviours.Mercenary
@@ -9,10 +10,12 @@ namespace BannerKings.Behaviours.Mercenary
         {
         }
 
-        public void Initialize(TextObject name, TextObject description, int level, int oneHanded, int twoHanded,
+        public void Initialize(TextObject name, TextObject description, FormationClass formation,
+            int level, int oneHanded, int twoHanded,
             int polearm, int riding, int athletics, int throwing, int bow, int crossbow, string itemId)
         {
             Initialize(name, description);
+            Formation = formation;
             Level = level;
             OneHanded = oneHanded;
             TwoHanded = twoHanded;
@@ -28,7 +31,7 @@ namespace BannerKings.Behaviours.Mercenary
         public void PostInitialize()
         {
             var copy = DefaultCustomTroopPresets.Instance.GetById(StringId);
-            Initialize(copy.Name, copy.Description, copy.Level, copy.OneHanded, copy.TwoHanded, copy.Polearm,
+            Initialize(copy.Name, copy.Description, copy.Formation copy.Level, copy.OneHanded, copy.TwoHanded, copy.Polearm,
                 copy.Riding, copy.Athletics, copy.Throwing, copy.Bow, copy.Crossbow, copy.ItemId);
         }
 
@@ -44,6 +47,7 @@ namespace BannerKings.Behaviours.Mercenary
             .SetTextVariable("BOW", Bow)
             .SetTextVariable("CROSSBOW", Crossbow);
 
+        public FormationClass Formation { get; private set; }
         public int Level { get; private set; }
         public int OneHanded { get; private set; }
         public int TwoHanded { get; private set; }

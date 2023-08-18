@@ -67,6 +67,7 @@ namespace BannerKings.Behaviours.Mercenary
         {
             SargeantLevy.Initialize(new TextObject("{=!}Sargeant"),
                 new TextObject("{=!}The backbone of infantry armies, the sargeant specializes in one-handed combat and foot movement. Handles well an extra polearm but poorly any type of ranged weapons. Better with a shield."),
+                TaleWorlds.Core.FormationClass.Infantry,
                 16,
                 120,
                 40,
@@ -80,6 +81,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             LineBreakerLevy.Initialize(new TextObject("{=!}Line Breaker"),
                 new TextObject("{=!}In opposition to the sargeant, line breakers focus on two-handed combat and thus are better off without shields. Their role is maximum damage output, but are vulnerable to cavalry or ranged attacks. Handles well secondary throwing weapons."),
+                TaleWorlds.Core.FormationClass.Infantry,
                 16,
                 40,
                 100,
@@ -93,6 +95,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             DefenderLevy.Initialize(new TextObject("{=!}Defender"),
                 new TextObject("{=!}The defender is a slow moving infantry, that focuses on polearm combat, but also capable with one-handed and throwing. They are best equipped with a good shield."),
+                TaleWorlds.Core.FormationClass.Infantry,
                 16,
                 70,
                 40,
@@ -106,6 +109,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             SkirmisherLevy.Initialize(new TextObject("{=s9oED1IR}Skirmisher"),
                 new TextObject("{=!}Skirmishers specialize in moving fast and hitting hard with thrown weapons. Their close-combat skills are just enough to give them a chance to defend themselves if needed."),
+                TaleWorlds.Core.FormationClass.Infantry,
                 16,
                 60,
                 20,
@@ -119,6 +123,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             ArcherLevy.Initialize(new TextObject("{=!}Archer"),
                 new TextObject("{=!}Archers have strong ranged skills focused on Bows, while maintaining decent speed and ability to defend themselves in close quarters."),
+                TaleWorlds.Core.FormationClass.Ranged,
                 16,
                 70,
                 10,
@@ -132,6 +137,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             CrossbowmanLevy.Initialize(new TextObject("{=!}Crossbowman"),
                 new TextObject("{=!}Crossbowmen have strong ranged skills focused on Crossbows, while maintaining decent speed and ability to defend themselves in close quarters."),
+                TaleWorlds.Core.FormationClass.Ranged,
                 16,
                 70,
                 10,
@@ -145,6 +151,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             HorsemanLevy.Initialize(new TextObject("{=!}Horseman"),
                 new TextObject("{=!}Quite similar to the Sargeant, but mounted. Horseman focuses on polearm and riding trainning, with a good amount of one-handed for melee combat. Slowest cavalry, but with the strongest melee."),
+                TaleWorlds.Core.FormationClass.Cavalry,
                 16,
                 100,
                 20,
@@ -158,6 +165,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             HorseArcherLevy.Initialize(new TextObject("{=ugJfuabA}Horse Archer"),
                 new TextObject("{=!}Ranged cavalry, mainly focused on Bows, but also capable with Crossbows. Very limited melee capacities."),
+                TaleWorlds.Core.FormationClass.HorseArcher,
                 16,
                 50,
                 10,
@@ -171,6 +179,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             MountedSkirmisherLevy.Initialize(new TextObject("{=!}Mounted Skirmisher"),
                 new TextObject("{=!}The nimblest form of cavalry, made for hit-and-run combat with javelins. Sub-par melee capabilities."),
+                TaleWorlds.Core.FormationClass.Cavalry,
                 26,
                 70,
                 10,
@@ -185,6 +194,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             SargeantProfessional.Initialize(new TextObject("{=!}Sargeant"),
                 new TextObject("{=!}The backbone of infantry armies, the sargeant specializes in one-handed combat and foot movement. Handles well an extra polearm but poorly any type of ranged weapons. Better with a shield."),
+                TaleWorlds.Core.FormationClass.Infantry,
                 26,
                 120,
                 40,
@@ -198,6 +208,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             LineBreakerProfessional.Initialize(new TextObject("{=!}Line Breaker"),
                 new TextObject("{=!}In opposition to the sargeant, line breakers focus on two-handed combat and thus are better off without shields. Their role is maximum damage output, but are vulnerable to cavalry or ranged attacks. Handles well secondary throwing weapons."),
+                TaleWorlds.Core.FormationClass.Infantry,
                 26,
                 40,
                 100,
@@ -211,6 +222,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             DefenderProfessional.Initialize(new TextObject("{=!}Defender"),
                 new TextObject("{=!}The defender is a slow moving infantry, that focuses on polearm combat, but also capable with one-handed and throwing. They are best equipped with a good shield."),
+                TaleWorlds.Core.FormationClass.Infantry,
                 26,
                 70,
                 40,
@@ -224,6 +236,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             SkirmisherProfessional.Initialize(new TextObject("{=s9oED1IR}Skirmisher"),
                 new TextObject("{=!}Skirmishers specialize in moving fast and hitting hard with thrown weapons. Their close-combat skills are just enough to give them a chance to defend themselves if needed."),
+                TaleWorlds.Core.FormationClass.Infantry,
                 26,
                 60,
                 20,
@@ -237,6 +250,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             ArcherProfessional.Initialize(new TextObject("{=!}Archer"),
                 new TextObject("{=!}Archers have strong ranged skills focused on Bows, while maintaining decent speed and ability to defend themselves in close quarters."),
+                TaleWorlds.Core.FormationClass.Ranged,
                 26,
                 70,
                 10,
@@ -250,6 +264,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             CrossbowmanProfessional.Initialize(new TextObject("{=!}Crossbowman"),
                 new TextObject("{=!}Crossbowmen have strong ranged skills focused on Crossbows, while maintaining decent speed and ability to defend themselves in close quarters."),
+                TaleWorlds.Core.FormationClass.Ranged,
                 26,
                 70,
                 10,
@@ -263,6 +278,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             HorsemanProfessional.Initialize(new TextObject("{=!}Horseman"),
                 new TextObject("{=!}Quite similar to the Sargeant, but mounted. Horseman focuses on polearm and riding trainning, with a good amount of one-handed for melee combat. Slowest cavalry, but with the strongest melee."),
+                TaleWorlds.Core.FormationClass.Cavalry,
                 26,
                 100,
                 20,
@@ -276,6 +292,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             HorseArcherProfessional.Initialize(new TextObject("{=ugJfuabA}Horse Archer"),
                 new TextObject("{=!}Ranged cavalry, mainly focused on Bows, but also capable with Crossbows. Very limited melee capacities."),
+                TaleWorlds.Core.FormationClass.HorseArcher,
                 26,
                 50,
                 10,
@@ -289,6 +306,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             MountedSkirmisherProfessional.Initialize(new TextObject("{=!}Mounted Skirmisher"),
                 new TextObject("{=!}The nimblest form of cavalry, made for hit-and-run combat with javelins. Sub-par melee capabilities."),
+                TaleWorlds.Core.FormationClass.Cavalry,
                 26,
                 70,
                 10,

@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -79,9 +80,22 @@ namespace BannerKings.Behaviours.Mercenary
 
                 AccessTools.Field((character as BasicCharacterObject).GetType(), "CharacterSkills")
                         .SetValue(character, skills);
+                character.DefaultFormationGroup = FetchDefaultFormationGroup(preset.Formation.ToString());
+                AccessTools.Field((character as BasicCharacterObject).GetType(), "DefaultFormationClass")
+                        .SetValue(character, preset.Formation); 
 
                 Skills = preset;
             }
+        }
+
+        protected int FetchDefaultFormationGroup(string innerText)
+        {
+            FormationClass result;
+            if (Enum.TryParse<FormationClass>(innerText, true, out result))
+            {
+                return (int)result;
+            }
+            return -1;
         }
 
         public void CreateEquipments()
