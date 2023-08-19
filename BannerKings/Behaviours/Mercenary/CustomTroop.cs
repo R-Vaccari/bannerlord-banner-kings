@@ -81,7 +81,7 @@ namespace BannerKings.Behaviours.Mercenary
                 AccessTools.Field((character as BasicCharacterObject).GetType(), "CharacterSkills")
                         .SetValue(character, skills);
                 character.DefaultFormationGroup = FetchDefaultFormationGroup(preset.Formation.ToString());
-                AccessTools.Field((character as BasicCharacterObject).GetType(), "DefaultFormationClass")
+                AccessTools.Property((character as BasicCharacterObject).GetType(), "DefaultFormationClass")
                         .SetValue(character, preset.Formation); 
 
                 Skills = preset;
