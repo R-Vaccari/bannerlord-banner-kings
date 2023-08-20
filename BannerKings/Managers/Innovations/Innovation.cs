@@ -62,5 +62,14 @@ namespace BannerKings.Managers.Innovations
             Technology,
             Building
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Innovation)
+            {
+                return (obj as Innovation).StringId == StringId;
+            }
+            return base.Equals(obj);
+        }
     }
 }

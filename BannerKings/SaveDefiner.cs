@@ -17,6 +17,7 @@ using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Innovations;
+using BannerKings.Managers.Innovations.Eras;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Institutions.Religions.Faiths.Asera;
@@ -190,6 +191,7 @@ namespace BannerKings
             AddClassDefinition(typeof(CourtGrace), 142);
             AddClassDefinition(typeof(CourtExpense), 143);
             AddClassDefinition(typeof(Osfeyd), 144);
+            AddClassDefinition(typeof(Era), 145);
         }
 
         protected override void DefineContainerDefinitions()
