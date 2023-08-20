@@ -91,13 +91,13 @@ namespace BannerKings.Models.Vanilla
         }
         public override float GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan, out TextObject warReason)
         {
-            return GetScoreOfDeclaringWar(factionDeclaresWar, factionDeclaredWar, evaluatingClan, out warReason).ResultNumber * 10f;
+            return GetScoreOfDeclaringWar(factionDeclaresWar, factionDeclaredWar, evaluatingClan, out warReason, null).ResultNumber * 10f;
         }
 
         public override float GetScoreOfDeclaringPeace(IFaction factionDeclaresPeace, IFaction factionDeclaredPeace, IFaction evaluatingClan, out TextObject peaceReason)
         {
             ExplainedNumber result = new ExplainedNumber(-GetScoreOfDeclaringWar(factionDeclaresPeace, 
-                factionDeclaredPeace, evaluatingClan, out peaceReason).ResultNumber);
+                factionDeclaredPeace, evaluatingClan, out peaceReason, null).ResultNumber);
 
             War war = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetWar(factionDeclaresPeace,factionDeclaredPeace);
             if (war != null)
@@ -110,7 +110,7 @@ namespace BannerKings.Models.Vanilla
         }
 
         public ExplainedNumber GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan,
-            out TextObject warReason, bool explanations = false)
+           out TextObject warReason, CasusBelli casusBelli = null, bool explanations = false)
         {
             warReason = TextObject.Empty;
             var result = new ExplainedNumber(0f, explanations);
@@ -127,6 +127,8 @@ namespace BannerKings.Models.Vanilla
             {
                 return new ExplainedNumber(-50000f);
             }
+
+            float baseNumber = 0f;
 
             WarStats attackerStats = CalculateWarStats(factionDeclaresWar, factionDeclaredWar);
             float attackerScore = attackerStats.Strength + attackerStats.ValueOfSettlements - (attackerStats.TotalStrengthOfEnemies * 1.25f);
@@ -158,16 +160,16 @@ namespace BannerKings.Models.Vanilla
                         result.AddFactor(-0.25f);
                     }
 
-                    List<CasusBelli> justifications = diplomacy.GetAvailableCasusBelli(defenderKingdom);
-                    foreach (var casusBelli in justifications)
+                    if (casusBelli == null)
                     {
-                        result.Add(casusBelli.DeclareWarScore * 2f);
+                        List<CasusBelli> justifications = diplomacy.GetAvailableCasusBelli(defenderKingdom);
+                        foreach (var justification in justifications)
+                        {
+                            result.Add(justification.DeclareWarScore / justifications.Count);
+                        }
                     }
-
-                    if (justifications.Count == 0)
-                    {
-                        result.AddFactor(-0.7f);
-                    }
+                    else result.Add(casusBelli.DeclareWarScore * 2f);
+                    baseNumber = result.BaseNumber;
                 }
 
                 foreach (Kingdom enemyKingdom in FactionManager.GetEnemyKingdoms(attackerKingdom))
@@ -177,7 +179,7 @@ namespace BannerKings.Models.Vanilla
                         WarStats enemyStats = CalculateWarStats(factionDeclaresWar, enemyKingdom);
                         float enemyScore = enemyStats.Strength + enemyStats.ValueOfSettlements - (enemyStats.TotalStrengthOfEnemies * 1.25f);
                         float proportion = MathF.Clamp((attackerScore / (enemyScore * 4f)) - 1f, -1f, 0f);
-                        result.Add(result.ResultNumber * proportion);
+                        result.Add(baseNumber * proportion);
                     }
                 }
 
@@ -188,20 +190,27 @@ namespace BannerKings.Models.Vanilla
 
                     float score = MathF.Clamp(war.CalculateWarScore(war.Attacker, false).ResultNumber /
                         war.TotalWarScore.ResultNumber, -1f, 1f);
-                    result.AddFactor(war.Attacker == factionDeclaresWar ? -score : score);
+                    result.Add(baseNumber * (war.Attacker == factionDeclaresWar ? -score : score));
 
                     float fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, factionDeclaresWar).ResultNumber;
-                    result.AddFactor(-fatigue);
+                    result.Add(baseNumber * - fatigue);
                 }
                 else
                 {
-                    War possibleWar = new War(attackerKingdom, defenderKingdom, null, null);
-                    if (possibleWar.DefenderFront != null && possibleWar.AttackerFront != null)
+                    if (stance.IsAtWar)
                     {
-                        float distance = Campaign.Current.Models.MapDistanceModel.GetDistance(possibleWar.DefenderFront.Settlement,
-                            possibleWar.AttackerFront.Settlement) * 3f;
-                        float factor = (Campaign.AverageDistanceBetweenTwoFortifications / distance) - 1f;
-                        result.AddFactor(factor);
+                        result.Add(-50000f);
+                    }
+                    else
+                    {
+                        War possibleWar = new War(attackerKingdom, defenderKingdom, null, null);
+                        if (possibleWar.DefenderFront != null && possibleWar.AttackerFront != null)
+                        {
+                            float distance = Campaign.Current.Models.MapDistanceModel.GetDistance(possibleWar.DefenderFront.Settlement,
+                                possibleWar.AttackerFront.Settlement) * 3f;
+                            float factor = (Campaign.AverageDistanceBetweenTwoFortifications / distance) - 1f;
+                            result.Add(baseNumber * factor);
+                        }
                     }
 
                     //WarStats enemyStats = CalculateWarStats(factionDeclaresWar, enemyKingdom);
@@ -215,23 +224,19 @@ namespace BannerKings.Models.Vanilla
                 Hero leader = evaluating.Leader;
                 float traits = leader.GetTraitLevel(DefaultTraits.Valor) - leader.GetTraitLevel(DefaultTraits.Mercy) +
                     leader.GetTraitLevel(BKTraits.Instance.AptitudeViolence);
-                result.Add(result.ResultNumber * ((traits / 6f) * 0.5f));
+                result.Add(baseNumber * (traits / 4f));
 
                 float enemies = 1f;
-                if (evaluating.Kingdom != null) enemies = FactionManager.GetEnemyKingdoms(evaluating.Kingdom).Count();
+                if (evaluating.Kingdom != null) enemies += FactionManager.GetEnemyKingdoms(evaluating.Kingdom).Count();
 
                 int gold = (int)(leader.Gold / enemies);
                 if (gold < 50000)
                 {
-                    result.Add(-10000);
+                    result.Add(result.BaseNumber * -0.8f);
                 }
                 else if (gold < 100000)
                 {
-                    result.Add(-5000);
-                }
-                else
-                {
-                    result.Add(5000);
+                    result.Add(result.BaseNumber * -0.4f);
                 }
             }
 
