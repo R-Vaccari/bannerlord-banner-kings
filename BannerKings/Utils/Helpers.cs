@@ -293,9 +293,6 @@ namespace BannerKings.Utils
             {
                 switch (cultureId)
                 {
-                    case "empire":
-                        text = new TextObject("{=Uv29oSQT}Nobiles");
-                        break;
                     case "vlandia":
                         text = new TextObject("{=FVuW8Y4j}Ealdormen");
                         break;
@@ -366,21 +363,6 @@ namespace BannerKings.Utils
             return type == GenderLaw.Agnatic 
                 ? new TextObject("{=EjVOGKj7}Agnatic law favors males. Although females are not completely excluded, they will only be chosen in case a male candidate is not present.").ToString() 
                 : new TextObject("{=M0MP3ysP}Cognatic law sees no distinction between both genders. Candidates are choosen stricly on their merits, as per the context requires.").ToString();
-        }
-
-        public static string GetClassHint(PopType type, CultureObject culture)
-        {
-            var name = GetClassName(type, culture).ToString();
-            TextObject description = type switch
-            {
-                PopType.Nobles => new TextObject("{=NvDPFtJ3}The {CLASS} represent the free, wealthy and influential members of society. They pay very high taxes and increase your influence as a lord or lady"),
-                PopType.Craftsmen => new TextObject("{=y1LusnZS}The {CLASS} are free people of trade, such as merchants, engineers and blacksmiths. Somewhat wealthy, free but not high status people. Craftsmen pay a significant amount of taxes and their presence boosts economical development. Their skills can also be hired to significantly boost construction projects."),
-                PopType.Serfs => new TextObject("{=QwugjxJo}The {CLASS} are the lowest class that possess some sort of freedom. Unable to attain specialized skills such as those of craftsmen, these people represent the agricultural workforce. They also pay tax over the profit of their production excess."),
-                PopType.Tenants => new TextObject("{=SY5K6vfd}The {CLASS} are a step above the serfs. These peasants are free to move and often have rights to protect themselves. Though less taxable than serfs, {CLASS} are more prone to stable and prosperous fiefs due to such rights and the ability to accumulate more wealth."),
-                _ => new TextObject("{=t6Ez6fZm}The {CLASS} are those destituted: criminals, prisioners unworthy of a ransom, and those unlucky to be born into slavery. Slaves do the hard manual labor across settlements, such as building and mining. They themselves pay no tax as they are unable to have posessions, but their labor generates income gathered as tax from their masters.")
-            };
-
-            return description.SetTextVariable("CLASS", name).ToString();
         }
 
         public static string GetConsumptionHint(ConsumptionType type)

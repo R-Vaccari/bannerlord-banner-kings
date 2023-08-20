@@ -1,3 +1,4 @@
+using BannerKings.Managers.Cultures;
 using BannerKings.Managers.Populations;
 using BannerKings.Models.BKModels;
 using BannerKings.UI.Items;
@@ -118,11 +119,10 @@ namespace BannerKings.UI.Management
             data.Classes.ForEach(popClass => PopList
                 .Add(new PopulationInfoVM(Utils.Helpers.GetClassName(popClass.type, settlement.Culture).ToString(),
                     popClass.count,
-                    Utils.Helpers.GetClassHint(popClass.type, settlement.Culture))));
+                    DefaultCulturalNames.Instance.GetPopulationName(settlement.Culture, popClass.type).Description.ToString())));
 
             data.CultureData.Cultures.ForEach(culture => CultureList
                 .Add(new CultureElementVM(data, culture)));
-
 
             var totalCultureWeight = 0f;
             foreach (var culture in data.CultureData.Cultures)
