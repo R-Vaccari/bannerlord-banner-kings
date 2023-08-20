@@ -9,6 +9,7 @@ namespace BannerKings.Behaviours.Diplomacy.Barterable
     {
         public BKWarBarterable(CasusBelli justification, IFaction declaringFaction, IFaction otherFaction) : base(declaringFaction, otherFaction)
         {
+            CasusBelli = justification;
         }
 
         public CasusBelli CasusBelli { get; private set; }
