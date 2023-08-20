@@ -107,7 +107,7 @@ namespace BannerKings.Managers.Innovations
             PublicWorks.Initialize(new TextObject("{=d3aY0Bbb}Public Works"),
                new TextObject("{=!}Focused efforts on public infrastructure by the state, such as roads and bridges, allow better development of the economy."),
                new TextObject("{=!}Increased town prosperity and adm. costs"),
-               null,
+               DefaultEras.Instance.FirstEra,
                Innovation.InnovationType.Civic,
                2000f,
                null,

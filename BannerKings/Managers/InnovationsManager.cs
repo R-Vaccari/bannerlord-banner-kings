@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using BannerKings.Managers.Innovations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -40,6 +41,16 @@ namespace BannerKings.Managers
         {
             foreach (var data in Innovations.Values)
             {
+                foreach (var innovation in DefaultInnovations.Instance.All)
+                {
+                    if (innovation.Culture != null && data.CulturalHead != null && innovation.Culture != data.CulturalHead.Culture)
+                    {
+                        continue;
+                    }
+
+                    data.AddInnovation(innovation.GetCopy());
+                }
+
                 data.PostInitialize();
             }
         }

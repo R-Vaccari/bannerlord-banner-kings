@@ -1,6 +1,7 @@
 ﻿using System;
 using BannerKings.Managers.Populations;
 using BannerKings.UI.CampaignStart;
+using BannerKings.UI.Cultures;
 using BannerKings.UI.Estates;
 using BannerKings.UI.Management.BannerKings.UI.Panels;
 using BannerKings.UI.Management.Villages;

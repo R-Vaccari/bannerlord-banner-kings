@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Innovations.Eras
@@ -16,12 +17,35 @@ namespace BannerKings.Managers.Innovations.Eras
             PreviousEra = previousEra;
         }
 
+        public void PostInitialize()
+        {
+            Era e = DefaultEras.Instance.GetById(this);
+            Initialize(e.Name, e.Description, e.PreviousEra);
+        }
+
         public Era PreviousEra { get; private set; }
         private List<BKTroopAdvancement> Advancements { get; set; }
 
-        public void TriggerEra()
-        {
+        public void AddTroopAdvancement(BKTroopAdvancement advancement) => Advancements.Add(advancement);
 
+        public void TriggerEra(CultureObject culture)
+        {
+            foreach (var advancement in Advancements)
+            {
+                if (advancement.Culture == culture)
+                {
+                    advancement.SetEquipment();
+                }
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Era)
+            {
+                return (obj as Era).StringId == StringId;
+            }
+            return base.Equals(obj);
         }
     }
 }

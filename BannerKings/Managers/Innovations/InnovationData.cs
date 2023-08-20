@@ -25,11 +25,12 @@ namespace BannerKings.Managers.Innovations
         {
             this.innovations = innovations;
             this.culture = culture;
+            Era = DefaultEras.Instance.FirstEra;
         }
 
         [field: SaveableField(2)] public Clan CulturalHead { get; private set; }
         [field: SaveableField(3)] public Innovation Fascination { get; private set; }
-        public Era Era { get; private set; }
+        [field: SaveableField(6)] public Era Era { get; private set; }
 
         public MBReadOnlyList<Innovation> Innovations => new MBReadOnlyList<Innovation>(innovations);
 
@@ -44,7 +45,15 @@ namespace BannerKings.Managers.Innovations
             {
                 innovation.PostInitialize();
             }
+
+            if (Era == null)
+            {
+                Era = DefaultEras.Instance.FirstEra;
+            }
+            else Era.PostInitialize();
         }
+
+        public List<Innovation> GetEraInnovations(Era era) => innovations.FindAll(x => x.Era.Equals(era));
 
         public List<BuildingType> GetAvailableBuildings()
         {
@@ -121,12 +130,20 @@ namespace BannerKings.Managers.Innovations
 
         public void AddInnovation(Innovation innov)
         {
-            innovations.Add(innov);
+            if (!innovations.Any(x => x.StringId == innov.StringId)) 
+                innovations.Add(innov);
         }
 
         public void AddResearch(float points)
         {
             research += points;
+        }
+
+        public bool CanResearch(Innovation innovation)
+        {
+            bool era = innovation.Era.Equals(Era);
+            if (innovation.Requirement != null) return HasFinishedInnovation(innovation.Requirement) && era;
+            return era;
         }
 
         internal override void Update(PopulationData data = null)
@@ -147,7 +164,7 @@ namespace BannerKings.Managers.Innovations
                 return;
             }
 
-            var unfinished = innovations.FindAll(x => !x.Finished);
+            var unfinished = innovations.FindAll(x => !x.Finished && CanResearch(x));
             if (unfinished.Count > 0)
             {
                 if (Fascination == null)
@@ -161,7 +178,7 @@ namespace BannerKings.Managers.Innovations
                     var result = research * 0.1f;
                     if (random == Fascination)
                     {
-                        var toAdd = 1.1f;
+                        var toAdd = 1.25f;
                         if (CulturalHead.Leader.GetPerkValue(BKPerks.Instance.ScholarshipWellRead))
                         {
                             toAdd += 0.2f;
