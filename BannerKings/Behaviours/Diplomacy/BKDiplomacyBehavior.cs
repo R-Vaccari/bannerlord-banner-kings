@@ -219,36 +219,33 @@ namespace BannerKings.Behaviours.Diplomacy
 
             RunWeekly(() =>
             {
-                foreach (var kingdom in Kingdom.All)
-                {
-                    if (kingdom.RulingClan == Clan.PlayerClan) continue;
+                Kingdom kingdom = Kingdom.All.GetRandomElementWithPredicate(x => x.RulingClan != Clan.PlayerClan);
 
-                    foreach (var target in Kingdom.All)
+                foreach (var target in Kingdom.All)
+                {
+                    TextObject pactReason;
+                    if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTradePactAllowed(kingdom, target, out pactReason) &&
+                        MBRandom.RandomFloat < MBRandom.RandomFloat)
                     {
-                        TextObject pactReason;
-                        if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTradePactAllowed(kingdom, target, out pactReason) &&
+                        if (kingdom.RulingClan.Influence >= 
+                        BannerKingsConfig.Instance.DiplomacyModel.GetTradePactInfluenceCost(kingdom, target)
+                            .ResultNumber * 2f)
+                        {
+                            ConsiderTradePact(kingdom, target);
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        TextObject truceReason;
+                        if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTruceAllowed(kingdom, target, out truceReason) &&
                             MBRandom.RandomFloat < MBRandom.RandomFloat)
                         {
-                            if (kingdom.RulingClan.Influence >= 
-                            BannerKingsConfig.Instance.DiplomacyModel.GetTradePactInfluenceCost(kingdom, target)
-                                .ResultNumber * 2f)
+                            if (kingdom.RulingClan.Gold >= BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(kingdom, target)
+                                .ResultNumber * 3f)
                             {
-                                ConsiderTradePact(kingdom, target);
+                                ConsiderTruce(kingdom, target, 3f);
                                 break;
-                            }
-                        }
-                        else
-                        {
-                            TextObject truceReason;
-                            if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTruceAllowed(kingdom, target, out truceReason) &&
-                                MBRandom.RandomFloat < MBRandom.RandomFloat)
-                            {
-                                if (kingdom.RulingClan.Gold >= BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(kingdom, target)
-                                    .ResultNumber * 3f)
-                                {
-                                    ConsiderTruce(kingdom, target, 3f);
-                                    break;
-                                }
                             }
                         }
                     }
@@ -398,6 +395,15 @@ namespace BannerKings.Behaviours.Diplomacy
         [HarmonyPatch(typeof(KingdomDiplomacyVM))]
         internal class DeclareWarVMPatch
         {
+            [HarmonyPrefix]
+            [HarmonyPatch("CalculateWarSupport")]
+            private static bool CalculateWarSupportText(KingdomDiplomacyVM __instance, IFaction faction, ref int __result)
+            {
+                __result = MathF.Round(new KingdomElection(
+                    new BKDeclareWarDecision(null, Clan.PlayerClan, faction)).GetLikelihoodForSponsor(Clan.PlayerClan) * 100f);
+                return false;
+            }
+
             [HarmonyPrefix]
             [HarmonyPatch("GetActionStatusForDiplomacyItemWithReason")]
             private static bool ButtonCLickable(KingdomDiplomacyVM __instance, KingdomDiplomacyItemVM item, bool isResolve, 
