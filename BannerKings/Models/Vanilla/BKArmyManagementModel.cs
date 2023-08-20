@@ -195,7 +195,7 @@ namespace BannerKings.Models.Vanilla
             //result += BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(armyLeaderParty.LeaderHero.Clan).ResultNumber * 0.01f;
 
             var kingdom = armyLeaderParty.LeaderHero?.Clan.Kingdom;
-            if (kingdom != null)
+            if (kingdom != null && CanCreateArmy(party.LeaderHero))
             {
                 FeudalTitle kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                 if (kingdomTitle != null)

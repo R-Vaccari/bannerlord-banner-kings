@@ -35,6 +35,12 @@ namespace BannerKings
         public const string VersionNumber = "1.2.7.6";
         public const string VersionEdition = "Development";
         public string VersionName => VersionNumber + VersionEdition;
+        public const string EmpireCulture = "empire";
+        public const string AseraiCulture = "aserai";
+        public const string SturgiaCulture = "sturgia";
+        public const string VlandiaCulture = "vlandia";
+        public const string KhuzaitCulture = "khuzait";
+        public const string BattaniaCulture = "battania";
 
         private List<ITypeInitializer> modInitializers = new List<ITypeInitializer>();
 
