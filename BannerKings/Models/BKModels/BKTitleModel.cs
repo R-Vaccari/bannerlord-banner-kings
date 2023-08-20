@@ -789,6 +789,12 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
+            FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(title);
+            if (suzerain != null && suzerain.deJure != null)
+            {
+                claimants.Add(suzerain.deJure, new TextObject("{=!}De jure suzerain of this title"));
+            }
+
             return claimants;
         }
 
