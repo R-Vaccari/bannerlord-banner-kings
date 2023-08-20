@@ -214,57 +214,5 @@ namespace BannerKings.UI.Cultures
                 }
             }
         }
-
-        [DataSourceMethod]
-        private void AssumeCultureHead()
-        {
-            var innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
-            if (innovationData != null)
-            {
-                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=e12LxgBp}Culture Head").ToString(),
-                    new TextObject("{=1WXxCssM}Assume the position of culture head.").ToString(), true, true,
-                    GameTexts.FindText("str_accept").ToString(),
-                    GameTexts.FindText("str_cancel").ToString(),
-                    () => innovationData.AssumeCulturalHead(Clan.PlayerClan),
-                    null
-                ));
-            }
-        }
-
-        [DataSourceMethod]
-        private void ChangeFascination()
-        {
-            var innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
-            if (innovationData != null)
-            {
-                var elements = new List<InquiryElement>();
-                foreach (var innovation in innovationData.Innovations)
-                {
-                    elements.Add(new InquiryElement(innovation,
-                        innovation.Name.ToString(),
-                        null,
-                        innovationData.CanChangeFascination(Clan.PlayerClan, innovation),
-                        innovation.Description.ToString()));
-                }
-
-                MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                    new TextObject("{=QkJA3Qjb}Choose Fascination").ToString(),
-                    new TextObject("{=mJzOVNJn}The cultural fascination is an innovation that progresses faster than others.")
-                        .ToString(),
-                    elements, true, 1,
-                    GameTexts.FindText("str_done").ToString(), string.Empty,
-                    delegate(List<InquiryElement> x)
-                    {
-                        var innov = (Innovation) x[0].Identifier;
-                        if (innov == null)
-                        {
-                            return;
-                        }
-
-                        innovationData.ChangeFascination(innov);
-                        RefreshValues();
-                    }, null));
-            }
-        }
     }
 }

@@ -10,16 +10,16 @@ namespace BannerKings.UI.Titles
         private MBBindingList<InnovationElementVM> branch;
         private Innovation innovation;
 
-        public InnovationElementVM(Innovation innovation) : base(null, true)
+        public InnovationElementVM(Innovation innovation, InnovationData data) : base(null, true)
         {
             Branch = new MBBindingList<InnovationElementVM>();
             this.innovation = innovation;
 
-            foreach (var i in DefaultInnovations.Instance.All)
+            foreach (var i in data.GetEraInnovations(data.Era))
             {
-                if (i.Requirement == innovation)
+                if (i.Requirement != null && i.Requirement.Equals(innovation))
                 {
-                    Branch.Add(new InnovationElementVM(i));
+                    Branch.Add(new InnovationElementVM(i, data));
                 }
             }
         }
