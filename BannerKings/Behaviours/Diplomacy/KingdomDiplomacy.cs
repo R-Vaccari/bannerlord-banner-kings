@@ -17,6 +17,7 @@ namespace BannerKings.Behaviours.Diplomacy
         [SaveableProperty(3)] public List<InterestGroup> Groups { get; private set; }
         [SaveableProperty(5)] public List<Kingdom> TradePacts { get; private set; }
         [SaveableProperty(4)] public Dictionary<Kingdom, CampaignTime> Truces { get; private set; }
+        public float Fatigue { get; private set; }
       
         public KingdomDiplomacy(Kingdom kingdom)
         {
@@ -126,6 +127,13 @@ namespace BannerKings.Behaviours.Diplomacy
             if (superiority.IsAdequate(Kingdom, targetKingdom, superiority))
             {
                 list.Add(superiority);
+            }
+
+            CasusBelli reconquest = DefaultCasusBelli.Instance.ImperialReconquest.GetCopy();
+            reconquest.SetInstanceData(Kingdom, targetKingdom);
+            if (reconquest.IsAdequate(Kingdom, targetKingdom, reconquest))
+            {
+                list.Add(reconquest);
             }
 
             return list;
