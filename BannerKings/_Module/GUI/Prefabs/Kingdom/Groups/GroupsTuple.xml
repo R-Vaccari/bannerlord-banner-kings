@@ -1,0 +1,69 @@
+<Prefab>
+  <Constants>
+
+    <Constant Name="Kingdom.Item.Tuple.Width" BrushLayer="Default" BrushName="Kingdom.Item.Tuple" BrushValueType="Width" />
+    <Constant Name="Kingdom.Item.Tuple.Height" BrushLayer="Default" BrushName="Kingdom.Item.Tuple" BrushValueType="Height" />
+	
+	<Constant Name="Kingdom.Fiefs.Sort.1.Width" BrushLayer="Default" BrushName="Kingdom.Fiefs.Sort.1" BrushValueType="Width" />
+
+    <Constant Name="Kingdom.Fiefs.Sort.2.Width" BrushLayer="Default" BrushName="Kingdom.Fiefs.Sort.2" BrushValueType="Width" />
+
+    <Constant Name="Kingdom.Fiefs.Sort.3.Width" BrushLayer="Default" BrushName="Kingdom.Fiefs.Sort.3" BrushValueType="Width" />
+
+    <Constant Name="Kingdom.Fiefs.Sort.4.Width" BrushLayer="Default" BrushName="Kingdom.Fiefs.Sort.4" BrushValueType="Width" />
+
+    <Constant Name="Kingdom.Fiefs.Sort.5.Width" BrushLayer="Default" BrushName="Kingdom.Fiefs.Sort.5" BrushValueType="Width" />
+
+    <Constant Name="Banner.Width" BrushLayer="Default" BrushName="Flat.Tuple.Banner.Small" BrushValueType="Width" />
+    <Constant Name="Banner.Height" BrushLayer="Default" BrushName="Flat.Tuple.Banner.Small" BrushValueType="Height" />
+
+    <Constant Name="Banner.Width.Scaled" MultiplyResult="0.43" Value="!Banner.Width" />
+    <Constant Name="Banner.Height.Scaled" MultiplyResult="0.43" Value="!Banner.Height"/>
+  </Constants>
+  <Window>
+    <ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!Kingdom.Item.Tuple.Width" SuggestedHeight="!Kingdom.Item.Tuple.Height" Brush="Kingdom.Wars.AtPeace.Tuple" Command.Click="SetGroup" IsSelected="@IsSelected" DoNotPassEventsToChildren="true">
+      <Children>
+
+        <ListPanel DoNotAcceptEvents="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="20" MarginRight="20">
+          <Children>
+
+            <!--Faction1 Banner>
+            <MaskedTextureWidget DataSource="{Faction1Visual}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!Banner.Width.Scaled" SuggestedHeight="!Banner.Height.Scaled" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="9" Brush="Flat.Tuple.Banner.Small" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" IsDisabled="true" OverlayTextureScale="2.5" PositionYOffset="-1"/-->
+
+            <!--Faction 1 Name>
+            <RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="ArmyManagement.Army.Tuple.Name" IsEnabled="false" Text="@Faction1Name" /-->
+
+            <!--Faction2 Banner-->
+            <Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="!Kingdom.Fiefs.Sort.3.Width" VerticalAlignment="Center" IsEnabled="false">
+              <Children>
+
+                <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center">
+                  <Children>
+
+                    <ButtonWidget DataSource="{Leader}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="112" SuggestedHeight="81" VerticalAlignment="Center" Command.Click="ExecuteLink">
+                      <Children>
+                        <!--Settlement Owner Clan Banner-->
+                        <MaskedTextureWidget DataSource="{..\ClanBanner}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!Banner.Width.Scaled" SuggestedHeight="!Banner.Height.Scaled" HorizontalAlignment="Right" VerticalAlignment="Top" PositionYOffset="-4" Brush="Flat.Tuple.Banner.Small.Hero" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" IsDisabled="true" OverlayTextureScale="2.2" />
+
+                        <ImageIdentifierWidget DataSource="{ImageIdentifier}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="100" SuggestedHeight="74" HorizontalAlignment="Center" VerticalAlignment="Center" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
+                        <HintWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsEnabled="false" />
+                      </Children>
+                    </ButtonWidget>
+                  </Children>
+                </ListPanel>
+
+              </Children>
+            </Widget>
+
+            <Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="39" MarginLeft="15" />
+
+            <!--Faction 2 Name-->
+            <RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="ArmyManagement.Army.Tuple.Name" IsEnabled="false" Text="@GroupName" />
+
+          </Children>
+        </ListPanel>
+
+      </Children>
+    </ButtonWidget>
+  </Window>
+</Prefab>
