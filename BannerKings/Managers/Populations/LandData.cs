@@ -333,12 +333,22 @@ namespace BannerKings.Managers.Populations
                 {
                     if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.HeavyPlough))
                     {
-                        result *= 1.08f;
+                        result *= 1.12f;
+                    }
+
+                    if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.HorseCollar))
+                    {
+                        result *= 1.25f;
+                    }
+
+                    if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.HeavyPlough))
+                    {
+                        result *= 1.12f;
                     }
 
                     if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.ThreeFieldsSystem))
                     {
-                        result *= 1.25f;
+                        result *= 1.4f;
                     }
                 }
             }
