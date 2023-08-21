@@ -7,6 +7,7 @@ using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Grace;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Cultures;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
@@ -137,6 +138,8 @@ namespace BannerKings
             DefaultCrimes.Instance.Initialize();
             DefaultCriminalSentences.Instance.Initialize();
             DefaultCourtExpenses.Instance.Initialize();
+            DefaultPopulationNames.Instance.Initialize();
+            DefaultTitleNames.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();

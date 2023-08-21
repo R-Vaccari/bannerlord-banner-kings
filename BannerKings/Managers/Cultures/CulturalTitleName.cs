@@ -13,11 +13,10 @@ namespace BannerKings.Managers.Cultures
         public CultureObject Culture { get; private set; }
         public TextObject Female { get; private set; }
         public TitleType TitleType { get; private set; }
-
-        public TextObject GetName(bool female) => female ? Female : Name;
         public bool IsKnightsName { get; private set; }
         public bool IsPrinceName { get; private set; }
-
+        public TextObject GetName(bool female) => female ? Female : Name;
+        
         public static CulturalTitleName CreateEmpire(string id, CultureObject culture, TextObject name, TextObject female, TextObject description)
         {
             CulturalTitleName result = InitTitle(id,

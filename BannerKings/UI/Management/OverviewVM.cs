@@ -115,11 +115,14 @@ namespace BannerKings.UI.Management
             {
                 return;
             }
-
-            data.Classes.ForEach(popClass => PopList
-                .Add(new PopulationInfoVM(Utils.Helpers.GetClassName(popClass.type, settlement.Culture).ToString(),
-                    popClass.count,
-                    DefaultCulturalNames.Instance.GetPopulationName(settlement.Culture, popClass.type).Description.ToString())));
+          
+            data.Classes.ForEach(popClass => 
+            {
+                CulturalPopulationName popName = DefaultPopulationNames.Instance.GetPopulationName(settlement.Culture, popClass.type);
+                PopList.Add(new PopulationInfoVM(popName.Name.ToString(),
+                        popClass.count,
+                        popName.Description.ToString()));
+            });
 
             data.CultureData.Cultures.ForEach(culture => CultureList
                 .Add(new CultureElementVM(data, culture)));
