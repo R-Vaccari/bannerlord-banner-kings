@@ -6,7 +6,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Managers.Cultures
 {
-    public class DefaultCulturalNames : DefaultTypeInitializer<DefaultCulturalNames, CulturalPopulationName>
+    public class DefaultPopulationNames : DefaultTypeInitializer<DefaultPopulationNames, CulturalPopulationName>
     {
         public CulturalPopulationName DefaultNobles { get; private set; }
         public CulturalPopulationName DefaultCraftsmen { get; private set; }

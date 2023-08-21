@@ -42,7 +42,7 @@ namespace BannerKings.Behaviours
                 memberList.AddRange(memberElements);
                 foreach (var element in memberList)
                 {
-                    if (element.Character == null)
+                    if (element.Character == null || element.Character.Culture == null)
                     {
                         memberElements.Remove(element);
                     }
@@ -53,7 +53,7 @@ namespace BannerKings.Behaviours
                 prisonList.AddRange(prisonElements);
                 foreach (var element in prisonList)
                 {
-                    if (element.Character == null)
+                    if (element.Character == null || element.Character.Culture == null)
                     {
                         prisonElements.Remove(element);
                     }

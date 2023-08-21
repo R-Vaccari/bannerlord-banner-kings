@@ -90,7 +90,6 @@ namespace BannerKings.Managers.Skills
         #endregion Caravaneer
 
         #region Artisan
-
         public PerkObject ArtisanSmith { get; private set; }
         public PerkObject ArtisanCraftsman { get; private set; }
         public PerkObject ArtisanEntrepeneur { get; private set; }
@@ -105,9 +104,9 @@ namespace BannerKings.Managers.Skills
         #endregion Courtier
 
         #region Commander
-        public PerkObject CommanderLogistician { get; } = new PerkObject("LifestyleCommanderLogistician");
-        public PerkObject CommanderInspirer { get; } = new PerkObject("LifestyleCommanderInspirer");
-        public PerkObject CommanderWarband { get; } = new PerkObject("LifestyleCommanderWarband");
+        public PerkObject CommanderLogistician { get; private set; }
+        public PerkObject CommanderInspirer { get; private set; }
+        public PerkObject CommanderWarband { get; private set; }
 
         #endregion Commander
 
@@ -269,6 +268,7 @@ namespace BannerKings.Managers.Skills
         {
             #region Commander
 
+            CommanderLogistician = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCommanderLogistician"));
             CommanderLogistician.Initialize("{=dD5S3Lj8}Logistician",
                 null,
                 80,
@@ -280,6 +280,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.PartyLeader, 5,
                 SkillEffect.EffectIncrementType.Add);
 
+            CommanderInspirer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCommanderInspirer"));
             CommanderInspirer.Initialize("{=87ounFBE}Inspirer",
                 null,
                 160,
@@ -291,6 +292,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.PartyLeader, 0.15f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
+            CommanderWarband = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCommanderWarband"));
             CommanderWarband.Initialize("{=3N5dPLiM}Warband",
                 null,
                 240,

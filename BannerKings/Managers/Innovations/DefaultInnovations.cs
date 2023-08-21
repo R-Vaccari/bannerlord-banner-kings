@@ -1,6 +1,5 @@
 using BannerKings.Managers.Innovations.Eras;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;

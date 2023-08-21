@@ -112,17 +112,22 @@ namespace BannerKings.Models.Vanilla
             {
                 if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.Wheelbarrow))
                 {
-                    result.AddFactor(0.06f, DefaultInnovations.Instance.Wheelbarrow.Name);
+                    result.AddFactor(0.1f, DefaultInnovations.Instance.Wheelbarrow.Name);
                 }
 
                 if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.BlastFurnace))
                 {
-                    result.AddFactor(0.15f, DefaultInnovations.Instance.BlastFurnace.Name);
+                    result.AddFactor(0.2f, DefaultInnovations.Instance.BlastFurnace.Name);
+                }
+
+                if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.Cogs))
+                {
+                    result.AddFactor(0.06f, DefaultInnovations.Instance.BlastFurnace.Name);
                 }
 
                 if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.Cranes))
                 {
-                    result.AddFactor(0.06f, DefaultInnovations.Instance.Cranes.Name);
+                    result.AddFactor(0.12f, DefaultInnovations.Instance.Cranes.Name);
                 }
             }
 

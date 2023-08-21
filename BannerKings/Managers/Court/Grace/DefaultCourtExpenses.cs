@@ -276,7 +276,7 @@ namespace BannerKings.Managers.Court.Grace
             AmpleServants.Initialize(new TextObject("{=6SJgGAVR}Ample Servants"),
                 new TextObject("{=DnjmWQV6}Hire a good amount of servants to operate mundane tasks such as cleaning or cooking within the court. Further increases feast satisfaction and decreases defense against schemes."),
                 80f,
-                0.7f,
+                0.07f,
                 new Dictionary<ItemCategory, int>()
                 {
                     { DefaultItemCategories.Garment, 20 },
