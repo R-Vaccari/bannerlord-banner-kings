@@ -259,7 +259,7 @@ namespace BannerKings.UI.Court
                 ExtravaganceSelector.AddItem(new CourtExpenseSelectorItemVM(expense,
                     true));
 
-                if (current == expense)
+                if (current.Equals(expense))
                 {
                     selected = index;
                 }
@@ -279,7 +279,7 @@ namespace BannerKings.UI.Court
                 ServantsSelector.AddItem(new CourtExpenseSelectorItemVM(expense,
                     true));
 
-                if (current == expense)
+                if (current.Equals(expense))
                 {
                     selected = index;
                 }
@@ -299,7 +299,7 @@ namespace BannerKings.UI.Court
                 LodgingsSelector.AddItem(new CourtExpenseSelectorItemVM(expense,
                     true));
 
-                if (current == expense)
+                if (current.Equals(expense))
                 {
                     selected = index;
                 }
@@ -319,7 +319,7 @@ namespace BannerKings.UI.Court
                 SecuritySelector.AddItem(new CourtExpenseSelectorItemVM(expense,
                     true));
 
-                if (current == expense)
+                if (current.Equals(expense))
                 {
                     selected = index;
                 }
@@ -339,7 +339,7 @@ namespace BannerKings.UI.Court
                 SuppliesSelector.AddItem(new CourtExpenseSelectorItemVM(expense,
                     true));
 
-                if (current == expense)
+                if (current.Equals(expense))
                 {
                     selected = index;
                 }
