@@ -88,7 +88,7 @@ namespace BannerKings.Models.Vanilla
                         }
                     }
                 }
-                else
+                else if (character.Culture != null)
                 {
                     if (character.Tier < 4)
                     {
