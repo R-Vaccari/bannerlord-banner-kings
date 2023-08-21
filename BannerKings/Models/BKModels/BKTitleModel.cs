@@ -764,18 +764,18 @@ namespace BannerKings.Models.BKModels
                 {
                     if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(deFacto))
                     {
-                        claimants.Add(deFacto, new TextObject("{=XRMMs6QY}De facto title holder"));
+                        claimants[deFacto] = new TextObject("{=XRMMs6QY}De facto title holder");
                     }
                 }
                 else
                 {
-                    claimants.Add(deFacto, new TextObject("{=TqfaGy3U}De facto fief holder"));
+                    claimants[deFacto] = new TextObject("{=TqfaGy3U}De facto fief holder");
                 }
             }
 
             if (title.Sovereign != null && title.Sovereign.deJure != title.deJure && !claimants.ContainsKey(title.Sovereign.deJure))
             {
-                claimants.Add(title.Sovereign.deJure, new TextObject("{=pkZ0J4Fo}De jure sovereign of this title"));
+                claimants[title.Sovereign.deJure] = new TextObject("{=pkZ0J4Fo}De jure sovereign of this title");
             }
 
             if (title.Vassals is {Count: > 0})
@@ -784,7 +784,7 @@ namespace BannerKings.Models.BKModels
                 {
                     if (vassal.deJure != null && vassal.deJure != title.deJure && !claimants.ContainsKey(vassal.deJure))
                     {
-                        claimants.Add(vassal.deJure, new TextObject("{=J07mQQ6k}De jure vassal of this title"));
+                        claimants[vassal.deJure] = new TextObject("{=J07mQQ6k}De jure vassal of this title");
                     }
                 }
             }
@@ -792,7 +792,7 @@ namespace BannerKings.Models.BKModels
             FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(title);
             if (suzerain != null && suzerain.deJure != null)
             {
-                claimants.Add(suzerain.deJure, new TextObject("{=!}De jure suzerain of this title"));
+                claimants[suzerain.deJure] = new TextObject("{=!}De jure suzerain of this title");
             }
 
             return claimants;
