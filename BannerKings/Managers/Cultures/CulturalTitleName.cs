@@ -15,6 +15,8 @@ namespace BannerKings.Managers.Cultures
         public TitleType TitleType { get; private set; }
 
         public TextObject GetName(bool female) => female ? Female : Name;
+        public bool IsKnightsName { get; private set; }
+        public bool IsPrinceName { get; private set; }
 
         public static CulturalTitleName CreateEmpire(string id, CultureObject culture, TextObject name, TextObject female, TextObject description)
         {
@@ -79,6 +81,28 @@ namespace BannerKings.Managers.Cultures
                 female,
                 description);
             result.TitleType = TitleType.Lordship;
+            return result;
+        }
+
+        public static CulturalTitleName CreateKnight(string id, CultureObject culture, TextObject name, TextObject female, TextObject plural)
+        {
+            CulturalTitleName result = InitTitle(id,
+                culture,
+                name,
+                female,
+                plural);
+            result.IsKnightsName = true;
+            return result;
+        }
+
+        public static CulturalTitleName CreatePrince(string id, CultureObject culture, TextObject name, TextObject female, TextObject plural)
+        {
+            CulturalTitleName result = InitTitle(id,
+                culture,
+                name,
+                female,
+                plural);
+            result.IsPrinceName = true;
             return result;
         }
 
