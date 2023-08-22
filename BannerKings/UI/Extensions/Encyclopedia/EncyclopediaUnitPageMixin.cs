@@ -54,7 +54,7 @@ namespace BannerKings.UI.Extensions.Encyclopedia
         private void SetTroopEra(Era era)
         {
             BKTroopAdvancement adv = era.GetTroopAdvancement(ViewModel.Obj as CharacterObject);
-            if (adv != null)
+            if (adv != null && adv.UpgradeEquipment != null)
             {
                 SetEquipment(adv.UpgradeEquipment.AllEquipments);
             }
