@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
@@ -38,6 +39,8 @@ namespace BannerKings.Managers.Innovations.Eras
                 }
             }
         }
+
+        public BKTroopAdvancement GetTroopAdvancement(CharacterObject character) => Advancements.FirstOrDefault(x => x.Character == character);
 
         public override bool Equals(object obj)
         {

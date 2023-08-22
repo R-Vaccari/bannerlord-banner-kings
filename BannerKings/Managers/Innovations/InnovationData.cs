@@ -25,7 +25,7 @@ namespace BannerKings.Managers.Innovations
         {
             this.innovations = innovations;
             this.culture = culture;
-            Era = DefaultEras.Instance.FirstEra;
+            Era = DefaultEras.Instance.SecondEra;
         }
 
         [field: SaveableField(2)] public Clan CulturalHead { get; private set; }
@@ -48,7 +48,7 @@ namespace BannerKings.Managers.Innovations
 
             if (Era == null)
             {
-                Era = DefaultEras.Instance.FirstEra;
+                Era = DefaultEras.Instance.SecondEra;
             }
             else Era.PostInitialize();
         }
@@ -144,6 +144,24 @@ namespace BannerKings.Managers.Innovations
             bool era = innovation.Era.Equals(Era);
             if (innovation.Requirement != null) return HasFinishedInnovation(innovation.Requirement) && era;
             return era;
+        }
+
+        public void SetEra(Era era)
+        {
+            InformationManager.DisplayMessage(new InformationMessage(
+                new TextObject("{=!}The {CULTURE} culture is now on the {ERA}!")
+                .SetTextVariable("CULTURE", culture.Name)
+                .SetTextVariable("ERA", era.Name)
+                .ToString(),
+                Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
+            Era = era;
+            Era.TriggerEra(culture);
+        }
+
+        public Era FindNextEra()
+        {
+            if (Era == null) return DefaultEras.Instance.SecondEra;
+            return DefaultEras.Instance.All.First(x => x.PreviousEra != null && x.PreviousEra.Equals(Era));
         }
 
         internal override void Update(PopulationData data = null)

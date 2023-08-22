@@ -1,4 +1,5 @@
 ﻿using BannerKings.Behaviours;
+using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Court;
 using BannerKings.Behaviours.Mercenary;
 using System.Collections.Generic;
@@ -99,7 +100,7 @@ namespace BannerKings
         {
             if (strings == null || strings.Count == 0)
             {
-                return "Format is \"bannerkings.add_piety [Quantity]";
+                return "Format is \"bannerkings.add_piety [Quantity\"]";
             }
 
             if (float.TryParse(strings[0], out var piety))
@@ -146,6 +147,31 @@ namespace BannerKings
             behavior.CreateBanditHero(clan);
 
             return $"Attempting to spawn hero for bandit faction {clan.Name}";
+        }
+
+        [CommandLineFunctionality.CommandLineArgumentFunction("advance_era", "bannerkings")]
+        public static string AdvanceEra(List<string> strings)
+        {
+            if (strings == null || strings.Count == 0)
+            {
+                return "Format is \"bannerkings.add_piety [Quantity\"]";
+            }
+
+            CultureObject culture = MBObjectManager.Instance.GetObject<CultureObject>(strings[0]);
+            if (culture == null)
+            {
+                return "Invalid culture id";
+            }
+
+            InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
+            if (data == null)
+            {
+                return "Innovations dont exist for this culture";
+            }
+
+            data.SetEra(data.FindNextEra());
+
+            return "Knighthood requirements for player companions disabled.";
         }
 
         [CommandLineFunctionality.CommandLineArgumentFunction("disable_knighthood", "bannerkings")]

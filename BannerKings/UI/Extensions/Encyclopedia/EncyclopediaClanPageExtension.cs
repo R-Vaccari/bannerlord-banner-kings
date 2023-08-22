@@ -3,7 +3,7 @@ using System.Xml;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.Prefabs2;
 
-namespace BannerKings.UI.Extensions
+namespace BannerKings.UI.Extensions.Encyclopedia
 {
     [PrefabExtension("EncyclopediaClanPage",
         "descendant::ListPanel[@Id='RightSideList']/Children/Widget[1]/Children/ListPanel[1]/Children",

@@ -187,6 +187,14 @@ namespace BannerKings.Managers.Populations
             data.UpdatePopType(type, -quantity);
         }
 
+        public void DeduceManpower(PopulationData data, int quantity, PopType type)
+        {
+            InitManpowers();
+
+            Manpowers[type] -= quantity;
+            data.UpdatePopType(type, -quantity);
+        }
+
         internal override void Update(PopulationData data)
         {
             InitManpowers();

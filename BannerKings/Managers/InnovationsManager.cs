@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using BannerKings.Managers.Innovations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers
@@ -84,19 +82,6 @@ namespace BannerKings.Managers
             }
 
             return data;
-        }
-
-        public MBReadOnlyList<Innovation> GetInnovations(CultureObject culture)
-        {
-            var list = new List<Innovation>();
-            if (!Innovations.ContainsKey(culture))
-            {
-                return new MBReadOnlyList<Innovation>(list);
-            }
-
-            list.AddRange(Innovations[culture].Innovations);
-
-            return new MBReadOnlyList<Innovation>(list);
         }
     }
 }

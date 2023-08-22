@@ -3,7 +3,7 @@ using System.Xml;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.Prefabs2;
 
-namespace BannerKings.UI.Extensions
+namespace BannerKings.UI.Extensions.Encyclopedia
 {
     [PrefabExtension("EncyclopediaHeroPage",
         "descendant::ListPanel[@Id='RightSideList']/Children/Widget[1]/Children/ListPanel[1]/Children",
@@ -32,5 +32,5 @@ namespace BannerKings.UI.Extensions
         public override int Index => 4;
 
         [PrefabExtensionXmlNodes] public IEnumerable<XmlNode> Nodes => nodes;
-    } 
+    }
 }

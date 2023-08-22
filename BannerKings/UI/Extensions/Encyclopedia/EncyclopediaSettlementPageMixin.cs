@@ -6,7 +6,7 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.Pages;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Extensions
+namespace BannerKings.UI.Extensions.Encyclopedia
 {
     [ViewModelMixin("Refresh")]
     internal class EncyclopediaSettlementPageMixin : BaseViewModelMixin<EncyclopediaSettlementPageVM>

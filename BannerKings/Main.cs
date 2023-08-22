@@ -22,6 +22,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using BannerKings.Managers.Innovations.Eras;
+using BannerKings.Behaviours.Innovations;
 
 namespace BannerKings
 {
