@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Managers.Innovations.Eras;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
@@ -13,13 +14,22 @@ namespace BannerKings.Managers.Recruits
             FiefStrings = new HashSet<string>(1);
         }
 
-        public void Initialize(CharacterObject troop, CultureObject culture, float chance, PopType popType, Kingdom kingdom = null)
+        public void Initialize(CharacterObject troop, 
+            CultureObject culture, 
+            float chance, 
+            PopType popType, 
+            Kingdom kingdom = null)
         {
             Troop = troop;
             PopType = popType;
             Culture = culture;
             Chance = chance;
             Kingdom = kingdom;
+        }
+
+        public void SetTroopAdvancement(Era era, string equipmentId)
+        {
+            era.AddTroopAdvancement(new BKTroopAdvancement(Troop, equipmentId));
         }
         
         public void AddFiefString(string id)

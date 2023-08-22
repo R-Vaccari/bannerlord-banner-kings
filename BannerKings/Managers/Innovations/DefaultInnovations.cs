@@ -70,7 +70,7 @@ namespace BannerKings.Managers.Innovations
                 null);
 
             Theater.Initialize(new TextObject("{=!}Theater"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}It is unclear whether Calradians or Laconians first invented Theaters. More than a building, theaters are a cultural innovation - common folk gather to watch elaborate, classical works of both tragedy and comedy. In many ways, theaters stablish a cultural foundation and promote cultural values through the stories told in them."),
                 new TextObject("{=!}Enables the construction of theaters"),
                 DefaultEras.Instance.FirstEra,
                 Innovation.InnovationType.Building,

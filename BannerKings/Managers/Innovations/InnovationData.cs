@@ -146,6 +146,24 @@ namespace BannerKings.Managers.Innovations
             return era;
         }
 
+        public void SetEra(Era era)
+        {
+            InformationManager.DisplayMessage(new InformationMessage(
+                new TextObject("{=!}The {CULTURE} culture is now on the {ERA}!")
+                .SetTextVariable("CULTURE", culture.Name)
+                .SetTextVariable("ERA", era.Name)
+                .ToString(),
+                Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
+            Era = era;
+            Era.TriggerEra(culture);
+        }
+
+        public Era FindNextEra()
+        {
+            if (Era == null) return DefaultEras.Instance.FirstEra;
+            return DefaultEras.Instance.All.First(x => x.PreviousEra != null && x.PreviousEra.Equals(Era));
+        }
+
         internal override void Update(PopulationData data = null)
         {
             if (CulturalHead == null)

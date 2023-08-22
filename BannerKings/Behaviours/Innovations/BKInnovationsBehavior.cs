@@ -1,7 +1,7 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 
-namespace BannerKings.Behaviours
+namespace BannerKings.Behaviours.Innovations
 {
     public class BKInnovationsBehavior : CampaignBehaviorBase
     {
@@ -28,7 +28,7 @@ namespace BannerKings.Behaviours
 
         private void OnGameLoaded(CampaignGameStarter campaignGameStarter)
         {
-            
+
         }
     }
 }
