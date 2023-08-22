@@ -25,7 +25,7 @@ namespace BannerKings.Managers.Innovations
         {
             this.innovations = innovations;
             this.culture = culture;
-            Era = DefaultEras.Instance.FirstEra;
+            Era = DefaultEras.Instance.SecondEra;
         }
 
         [field: SaveableField(2)] public Clan CulturalHead { get; private set; }
@@ -48,7 +48,7 @@ namespace BannerKings.Managers.Innovations
 
             if (Era == null)
             {
-                Era = DefaultEras.Instance.FirstEra;
+                Era = DefaultEras.Instance.SecondEra;
             }
             else Era.PostInitialize();
         }
@@ -160,7 +160,7 @@ namespace BannerKings.Managers.Innovations
 
         public Era FindNextEra()
         {
-            if (Era == null) return DefaultEras.Instance.FirstEra;
+            if (Era == null) return DefaultEras.Instance.SecondEra;
             return DefaultEras.Instance.All.First(x => x.PreviousEra != null && x.PreviousEra.Equals(Era));
         }
 
