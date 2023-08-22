@@ -16,7 +16,7 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Extensions
+namespace BannerKings.UI.Extensions.Encyclopedia
 {
     [ViewModelMixin("Refresh")]
     internal class EncyclopediaClanPageMixin : BaseViewModelMixin<EncyclopediaClanPageVM>
@@ -44,7 +44,7 @@ namespace BannerKings.UI.Extensions
         [DataSourceProperty] public string CompanionsText => new TextObject("{=a3G31iZ0}Companions").ToString();
         [DataSourceProperty] public string CouncilText => new TextObject("{=mUaJDjqO}Council").ToString();
         [DataSourceProperty] public string InheritanceText => new TextObject("{=aELuNrRC}Inheritance").ToString();
-        [DataSourceProperty] public string VassalsText => new TextObject("{=rN34kLPu}Vassals").ToString(); 
+        [DataSourceProperty] public string VassalsText => new TextObject("{=rN34kLPu}Vassals").ToString();
 
         [DataSourceProperty]
         public string HeirText => new TextObject("{=vArnerHC}Heir").ToString();
@@ -170,7 +170,7 @@ namespace BannerKings.UI.Extensions
                 ExplainedNumber influenceCap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(clan, true);
                 clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=bNS2Lg7L}Influence Limit:").ToString(),
                    MBRandom.RoundRandomized(influenceCap.ResultNumber).ToString(),
-                   new BasicTooltipViewModel(() => 
+                   new BasicTooltipViewModel(() =>
                    new TextObject("{=j26DQzoz}Influence limit represents how much political power your clan can leverage within the realm. Nobles higher in the title hierarchy or with more demesnes tend to be more relevant within the realm and thus have a higher influence limit. Clan influence will tend down to this limit if it supersedes the limit, meaning that less important families will tend to have less influence overall. Explanations:\n{EXPLANATIONS}")
                 .SetTextVariable("EXPLANATIONS", influenceCap.GetExplanations())
                 .ToString())));
@@ -181,7 +181,7 @@ namespace BannerKings.UI.Extensions
                 clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=02REd9mG}Demesne limit:").ToString(),
                    $"{currentDemesne.ResultNumber:n2}/{demesneCap.ResultNumber:n2}",
                    new BasicTooltipViewModel(() => new TextObject("{=dhr9NJoA}{TEXT}\nCurrent demesne:\n{CURRENT}\n \nLimit:\n{LIMIT}")
-                       .SetTextVariable("TEXT",new TextObject("{=oHJ6Y66V}Demesne limit describes how many settlements you may own without negative implications. Different settlement types have different weights, villages being the lowest, towns being the highest. Being over the limit reduces stability across all your settlements. Owning a settlement's title will reduce it's weight."))
+                       .SetTextVariable("TEXT", new TextObject("{=oHJ6Y66V}Demesne limit describes how many settlements you may own without negative implications. Different settlement types have different weights, villages being the lowest, towns being the highest. Being over the limit reduces stability across all your settlements. Owning a settlement's title will reduce it's weight."))
                        .SetTextVariable("CURRENT", currentDemesne.GetExplanations())
                        .SetTextVariable("LIMIT", demesneCap.GetExplanations())
                        .ToString())));

@@ -14,7 +14,7 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Extensions
+namespace BannerKings.UI.Extensions.Encyclopedia
 {
     [ViewModelMixin("Refresh")]
     internal class EncyclopediaHeroPageMixin : BaseViewModelMixin<EncyclopediaHeroPageVM>
@@ -71,8 +71,8 @@ namespace BannerKings.UI.Extensions
                     !Utils.Helpers.IsCloseFamily(hero, hero.Clan.Leader))
                 {
                     float progress = BannerKingsConfig.Instance.TitleManager.GetKnightInfluence(hero) / 350f;
-                    heroPageVM.Stats.Add(new StringPairItemVM(new TextObject("{=MuZ2tL8E}Clan Creation:").ToString(), 
-                        (progress * 100f).ToString("0.00") + '%', 
+                    heroPageVM.Stats.Add(new StringPairItemVM(new TextObject("{=MuZ2tL8E}Clan Creation:").ToString(),
+                        (progress * 100f).ToString("0.00") + '%',
                         new BasicTooltipViewModel(() =>
                         new TextObject("{=2GvHUPV9}As a knight or knightess, this person will eventually attemp to lead their own household. Their progress is determined by the influence of the lordships they hold. This does not apply to direct relatives of the family leader.")
                         .ToString())));
