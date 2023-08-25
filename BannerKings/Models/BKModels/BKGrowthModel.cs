@@ -1,5 +1,6 @@
 using BannerKings.Behaviours;
 using BannerKings.Extensions;
+using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles.Laws;
 using System.Linq;
@@ -89,6 +90,12 @@ namespace BannerKings.Models.BKModels
                 {
                     var walls = settlement.Town.Buildings.First(x => x.BuildingType == DefaultBuildingTypes.Fortifications);
                     result.Add(walls.CurrentLevel * 5000f, DefaultBuildingTypes.Fortifications.Name);
+
+                    InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(settlement.Culture);
+                    if (innovationData.HasFinishedInnovation(DefaultInnovations.Instance.Burgage))
+                    {
+                        result.AddFactor(0.15f, DefaultInnovations.Instance.Burgage.Name);
+                    }
                 }
                 else
                 {
@@ -126,6 +133,15 @@ namespace BannerKings.Models.BKModels
                     if (faction.ActivePolicies.Contains(DefaultPolicies.ForgivenessOfDebts))
                     {
                         result.AddFactor(-0.15f, DefaultPolicies.ForgivenessOfDebts.Name);
+                    }
+
+                    if (settlement.IsVillage)
+                    {
+                        InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(settlement.Culture);
+                        if (innovationData.HasFinishedInnovation(DefaultInnovations.Instance.Manorialism))
+                        {
+                            result.AddFactor(-0.6f, DefaultInnovations.Instance.Manorialism.Name);
+                        }
                     }
 
                     if (title != null)

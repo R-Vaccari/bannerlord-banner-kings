@@ -1,15 +1,14 @@
 using System.Linq;
 using BannerKings.Extensions;
-using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
-using BannerKings.UI.Court;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -286,6 +285,12 @@ namespace BannerKings.Models.Vanilla
                         fortification.OwnerClan.Leader, DefaultCouncilPositions.Instance.Castellan,
                         DefaultCouncilTasks.Instance.OverseeBaronies,
                         0.5f, false);
+                }
+
+                InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(fortification.Culture);
+                if (innovationData.HasFinishedInnovation(DefaultInnovations.Instance.PublicWorks))
+                {
+                    baseResult.Add(1.5f, DefaultInnovations.Instance.PublicWorks.Name);
                 }
 
                 AddDemesneLawEffect(data, ref explainedNumber);

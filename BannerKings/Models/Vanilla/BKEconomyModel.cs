@@ -120,9 +120,14 @@ namespace BannerKings.Models.Vanilla
                     result.AddFactor(0.2f, DefaultInnovations.Instance.BlastFurnace.Name);
                 }
 
+                if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.Stirrups))
+                {
+                    result.AddFactor(0.06f, DefaultInnovations.Instance.Stirrups.Name);
+                }
+
                 if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.Cogs))
                 {
-                    result.AddFactor(0.06f, DefaultInnovations.Instance.BlastFurnace.Name);
+                    result.AddFactor(0.06f, DefaultInnovations.Instance.Cogs.Name);
                 }
 
                 if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.Cranes))

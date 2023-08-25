@@ -133,14 +133,14 @@ namespace BannerKings.Managers.Innovations
                Burgage);
 
             Stirrups.Initialize(new TextObject("{=!}Stirrups"),
-                new TextObject("{=!}"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}A riding application that greatly helps with rider stability. The stirrup provides support for the rider's feet, reducing the risk of a fall and losing control of the animal. In military terms, it means cavalry can be significantly more effective and reliable. For the economy, it is also quite useful as the horse is widely used in agriculture, transportation and communication."),
+                new TextObject("{=!}Increased production efficiency\nBetter cavalry efficiency in sim. battles"),
                 DefaultEras.Instance.FirstEra,
                 Innovation.InnovationType.Military,
                 2000f);
 
             Crossbows.Initialize(new TextObject("{=!}Crossbows"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}A weapon developed by the Calradoi - a crossbow works by launching a bolt across a horizontal frame with the force of its string. The string, rather than drawn and held in place by a hand, is locked into place by a mechanism, allowing the crossbowman to aim the weapon, ready to release, with virtually no restrictions, as opposed to a bow, which requires significant strength to hold while ready."),
                 new TextObject("{=!}Enables the construction of crossbows"),
                 DefaultEras.Instance.FirstEra,
                 Innovation.InnovationType.Military,
