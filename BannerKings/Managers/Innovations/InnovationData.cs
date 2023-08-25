@@ -89,7 +89,17 @@ namespace BannerKings.Managers.Innovations
 
         public bool HasFinishedInnovation(Innovation innovation)
         {
-            return innovations.Contains(innovation) && (from i in innovations where i == innovation select i.Finished).FirstOrDefault();
+            bool result = false;
+            foreach (Innovation i in Innovations)
+            {
+                if (i.Equals(innovation) && i.Finished)
+                {
+                    result = true;
+                    break;
+                }
+            }
+
+            return result;
         }
 
         public bool CanAssumeCulturalHead(Clan clan)
