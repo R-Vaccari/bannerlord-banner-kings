@@ -1,10 +1,10 @@
 using BannerKings.Managers.Innovations;
+using BannerKings.Managers.Innovations.Eras;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using BannerKings.UI.Titles;
 using Bannerlord.UIExtenderEx.Attributes;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -18,27 +18,33 @@ namespace BannerKings.UI.Cultures
     {
         private MBBindingList<InnovationElementVM> innovations;
         private MBBindingList<InformationElement> cultureInfo;
-        private BannerKingsSelectorVM<KingdomSelectorItem> selector;
+        private BannerKingsSelectorVM<EraSelectorItem> selector;
+        private InnovationData innovationData;
+        private ImageIdentifierVM banner;
+
+        private Era Era { get; set; }
 
         public CultureTabVM() : base(null, false)
         {
             Innovations = new MBBindingList<InnovationElementVM>();
             CultureInfo = new MBBindingList<InformationElement>();
-            Selector = new BannerKingsSelectorVM<KingdomSelectorItem>(true, 0, null);
-
+            Selector = new BannerKingsSelectorVM<EraSelectorItem>(true, 0, null);
+            innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(Culture);
             int selected = 0;
             int index = 0;
-            foreach (Kingdom k in Kingdom.All)
-            {
-                var kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(k);
-                if (kingdomTitle == null)
-                {
-                    continue;
-                }
 
-                Selector.AddItem(new KingdomSelectorItem(k));
-                if (k == Hero.MainHero.CurrentSettlement.MapFaction)
+            Managers.Institutions.Religions.Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetIdealReligion(Culture);
+            if (rel != null)
+            {
+                Banner = new ImageIdentifierVM(rel.Faith.GetBanner());
+            }
+
+            foreach (Era era in DefaultEras.Instance.All)
+            {
+                Selector.AddItem(new EraSelectorItem(era));
+                if (era.Equals(innovationData.Era))
                 {
+                    Era = era;
                     selected = index;
                 }
 
@@ -49,11 +55,11 @@ namespace BannerKings.UI.Cultures
             Selector.SetOnChangeAction(OnChange);
         }
 
-        private void OnChange(SelectorVM<KingdomSelectorItem> obj)
+        private void OnChange(SelectorVM<EraSelectorItem> obj)
         {
             if (obj.SelectedItem != null)
             {
-                //title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(obj.SelectedItem.Kingdom);
+                Era = obj.SelectedItem.Era;
                 RefreshValues();
             }
         }
@@ -63,15 +69,16 @@ namespace BannerKings.UI.Cultures
         public override void RefreshValues()
         {
             base.RefreshValues();
+            CultureInfo.Clear();
+            Innovations.Clear();
 
-            var innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(Culture);
             if (innovationData != null)
             {
-                foreach (var i in innovationData.GetEraInnovations(innovationData.Era))
+                foreach (var i in innovationData.GetEraInnovations(Era))
                 {
                     if (i.Requirement == null)
                     {
-                        Innovations.Add(new InnovationElementVM(i, innovationData));
+                        Innovations.Add(new InnovationElementVM(i, innovationData, Era));
                     }
                 }
 
@@ -197,7 +204,21 @@ namespace BannerKings.UI.Cultures
         }
 
         [DataSourceProperty]
-        public BannerKingsSelectorVM<KingdomSelectorItem> Selector
+        public ImageIdentifierVM Banner
+        {
+            get => banner;
+            set
+            {
+                if (value != banner)
+                {
+                    banner = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public BannerKingsSelectorVM<EraSelectorItem> Selector
         {
             get => selector;
             set
