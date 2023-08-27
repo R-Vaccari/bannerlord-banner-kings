@@ -13,14 +13,14 @@ namespace BannerKings.Managers.Education.Languages
         {
         }
 
-        public CultureObject Culture { get; private set; }
+        public List<CultureObject> Cultures { get; private set; }
 
         public MBReadOnlyDictionary<Language, float> Inteligible => inteligible.GetReadOnlyDictionary();
 
-        public void Initialize(TextObject name, TextObject description, CultureObject culture, Dictionary<Language, float> inteligible)
+        public void Initialize(TextObject name, TextObject description, List<CultureObject> cultures, Dictionary<Language, float> inteligible)
         {
             Initialize(name, description);
-            Culture = culture;
+            Cultures = cultures;
             this.inteligible = inteligible;
         }
     }

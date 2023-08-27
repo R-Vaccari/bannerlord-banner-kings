@@ -63,7 +63,8 @@ namespace BannerKings.Managers
 
 
             var languages = new Dictionary<Language, float>();
-            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == hero.Culture) ?? DefaultLanguages.Instance.Calradian;
+            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Cultures.Contains(hero.Culture)) 
+                ?? DefaultLanguages.Instance.Calradian;
 
             languages.Add(native, 1f);
 
@@ -96,7 +97,8 @@ namespace BannerKings.Managers
         {
             Educations.Remove(Hero.MainHero);
             var languages = new Dictionary<Language, float>();
-            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == Hero.MainHero.Culture) ?? DefaultLanguages.Instance.Calradian;
+            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Cultures.Contains(Hero.MainHero.Culture)) ??
+                DefaultLanguages.Instance.Calradian;
 
             languages.Add(native, 1f);
             var data = new EducationData(Hero.MainHero, languages);
@@ -113,7 +115,7 @@ namespace BannerKings.Managers
 
         public Language GetNativeLanguage(CultureObject culture)
         {
-            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == culture);
+            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Cultures.Contains(culture));
             if (native == null)
             {
                 native = DefaultLanguages.Instance.Calradian;

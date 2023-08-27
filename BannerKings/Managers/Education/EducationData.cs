@@ -114,12 +114,11 @@ namespace BannerKings.Managers.Education
                     lf.PassiveEffects, lf.FirstEffect, lf.SecondEffect, this, lf.Culture);
             }
 
-
             foreach (var pair in languages)
             {
                 var language = pair.Key;
                 var l2 = DefaultLanguages.Instance.GetById(language);
-                language.Initialize(l2.Name, l2.Description, l2.Culture, DefaultLanguages.Instance.GetIntelligibles(l2));
+                language.Initialize(l2.Name, l2.Description, l2.Cultures, DefaultLanguages.Instance.GetIntelligibles(l2));
             }
 
             foreach (var pair in books)
@@ -132,7 +131,7 @@ namespace BannerKings.Managers.Education
             var l = DefaultLanguages.Instance.GetById(CurrentLanguage);
             if (l != null)
             {
-                CurrentLanguage.Initialize(l.Name, l.Description, l.Culture, DefaultLanguages.Instance.GetIntelligibles(l));
+                CurrentLanguage.Initialize(l.Name, l.Description, l.Cultures, DefaultLanguages.Instance.GetIntelligibles(l));
             }
         }
 
