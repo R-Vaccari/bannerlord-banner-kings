@@ -237,6 +237,36 @@
 		</Equipments>
 	</NPCCharacter>
 	
+	<NPCCharacter id="bannerkings_preacher_sixWinds_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55"
+	              is_template="true" is_female="false" default_group="Infantry" is_hero="false" culture="Culture.khuzait"
+	              occupation="Preacher">
+		<face>
+			<face_key_template value="BodyProperty.villager_khuzait" />
+		</face>
+		<Traits>
+			<Trait id="WandererEquipment" value="1" />
+			<Trait id="PeltastFightingSkills" value="2" />
+			<Trait id="ScoutSkills" value="1" />
+			<Trait id="Surgeon" value="3" />
+			<Trait id="Calculating" value="1" />
+			<Trait id="Mercy" value="1" />
+		</Traits>
+		<Equipments>
+			<EquipmentRoster civilian="true">
+				<equipment slot="Head" id="Item.TV_wolf_pelt_c" />
+				<equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+				<equipment slot="Body" id="Item.fur_armor_with_strap" />
+				<equipment slot="Leg" id="Item.ao_durkhan_tassled_boots" />
+			</EquipmentRoster>
+			<EquipmentRoster civilian="true">
+				<equipment slot="Head" id="Item.eastern_cap" />
+				<equipment slot="Cape" id="Item.ao_durkhan_tassled_necklace" />
+				<equipment slot="Body" id="Item.khuzait_civil_coat_b" />
+				<equipment slot="Leg" id="Item.ao_durkhan_tassled_boots" />
+			</EquipmentRoster>
+		</Equipments>
+	</NPCCharacter>
+	
 	<NPCCharacter id="bannerkings_preacher_treelore_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55"
 	              is_template="true" is_female="false" default_group="Infantry" is_hero="false" culture="Culture.sturgia"
 	              occupation="Preacher">
