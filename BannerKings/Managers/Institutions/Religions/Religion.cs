@@ -46,6 +46,12 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public bool HasDoctrine(Doctrine doctrine) => Doctrines.Contains(doctrine);
 
+        public FaithStance GetStance(Faith otherFaith)
+        {
+            if (HasDoctrine(DefaultDoctrines.Instance.Tolerant)) return FaithStance.Tolerated;
+            return Faith.GetStance(otherFaith);
+        }
+
         public void RemoveClergyman(Clergyman clergyman)
         {
             Settlement settlement = null;

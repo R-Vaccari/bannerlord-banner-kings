@@ -34,7 +34,7 @@ namespace BannerKings.Models.BKModels
                 Religion convertedRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(converted);
                 if (convertedRel != null)
                 {
-                    FaithStance stance = convertedRel.Faith.GetStance(rel.Faith);
+                    FaithStance stance = convertedRel.GetStance(rel.Faith);
                     if (stance == FaithStance.Untolerated)
                     {
                         result.Add(-0.3f, new TextObject("{=gyHK87NL}Faith differences"));
@@ -139,7 +139,7 @@ namespace BannerKings.Models.BKModels
                     continue;
                 }
 
-                var tensionFactor = GetStanceTensionFactor(dominant.Faith.GetStance(rel.Faith));
+                var tensionFactor = GetStanceTensionFactor(dominant.GetStance(rel.Faith));
                 if (tensionFactor != 0f)
                 {
                     result.AddFactor(tuple.Value * tensionFactor, rel.Faith.GetFaithName());
