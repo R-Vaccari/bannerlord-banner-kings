@@ -324,7 +324,7 @@ namespace BannerKings.Behaviours
             foreach (var book in DefaultBookTypes.Instance.All)
             {
                 var weight = 1f;
-                if (book.Language.Culture == culture)
+                if (book.Language.Cultures.Contains(culture))
                 {
                     weight++;
                 }
