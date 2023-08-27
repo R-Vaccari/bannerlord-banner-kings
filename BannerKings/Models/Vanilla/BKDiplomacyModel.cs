@@ -189,7 +189,7 @@ namespace BannerKings.Models.Vanilla
                     if (war.StartDate.ElapsedYearsUntilNow < 1f) result.Add(50000f);
 
                     float score = MathF.Clamp(war.CalculateWarScore(war.Attacker, false).ResultNumber /
-                        war.TotalWarScore.ResultNumber, -1f, 1f);
+                        war.TotalWarScore.ResultNumber, -1f, 1f) * 2f;
                     result.Add(baseNumber * (war.Attacker == factionDeclaresWar ? -score : score));
 
                     float fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, factionDeclaresWar).ResultNumber;
@@ -207,7 +207,7 @@ namespace BannerKings.Models.Vanilla
                         if (possibleWar.DefenderFront != null && possibleWar.AttackerFront != null)
                         {
                             float distance = Campaign.Current.Models.MapDistanceModel.GetDistance(possibleWar.DefenderFront.Settlement,
-                                possibleWar.AttackerFront.Settlement) * 3f;
+                                possibleWar.AttackerFront.Settlement) * 4f;
                             float factor = (Campaign.AverageDistanceBetweenTwoFortifications / distance) - 1f;
                             result.Add(baseNumber * factor);
                         }
