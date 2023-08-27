@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using BannerKings.Managers.Innovations;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
@@ -313,6 +316,18 @@ namespace BannerKings.Managers.Populations
                     if (type == "farmland" || type == "pasture")
                     {
                         result *= 1.08f;
+                    }
+                }
+
+                if (owner != null)
+                {
+                    var ownerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
+                    if (ownerReligion == religion)
+                    {
+                        if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.Oca, religion))
+                        {
+                            result *= 1.1f;
+                        }
                     }
                 }
             }

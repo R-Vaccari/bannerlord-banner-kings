@@ -6,6 +6,7 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles;
 using HarmonyLib;
 using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
@@ -42,6 +43,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
+            CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
             //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
         }
 
@@ -59,6 +61,20 @@ namespace BannerKings.Behaviours
             if (BannerKingsConfig.Instance.ReligionsManager != null)
             {
                 BannerKingsConfig.Instance.ReligionsManager.InitializeReligions();
+            }
+        }
+
+        private void OnOwnerChanged(Settlement settlement, bool openToClaim, Hero newOwner, Hero oldOwner,
+            Hero capturerHero,
+            ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
+        {
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(capturerHero, DefaultDivinities.Instance.Osric))
+            {
+                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                if (title != null && title.deJure != capturerHero)
+                {
+                    title.AddClaim(capturerHero, ClaimType.Fabricated);
+                }
             }
         }
 
@@ -149,6 +165,8 @@ namespace BannerKings.Behaviours
                     if (mobileParty != null && mobileParty.LeaderHero != null)
                     {
                         var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(mobileParty.LeaderHero);
+                        if (rel == null) continue;
+
                         var settlementCulture = mapEvent.MapEventSettlement.Culture;
                         if (settlementCulture.StringId != "battania")
                         {
@@ -163,6 +181,12 @@ namespace BannerKings.Behaviours
                                 DefaultDivinities.Instance.TreeloreMain, rel) && !rel.FavoredCultures.Contains(settlementCulture))
                         {
                             GainRenownAction.Apply(mobileParty.LeaderHero, 10f);
+                        }
+
+                        if (rel.MainCulture != settlementCulture && rel.HasDoctrine(DefaultDoctrines.Instance.Reavers))
+                        {
+                            BannerKingsConfig.Instance.ReligionsManager.AddPiety(rel, mobileParty.LeaderHero,
+                                mapEvent.MapEventSettlement.Village.Hearth, true);
                         }
                     }
                 }

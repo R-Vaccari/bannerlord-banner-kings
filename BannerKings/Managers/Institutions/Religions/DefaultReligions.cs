@@ -14,6 +14,7 @@ namespace BannerKings.Managers.Institutions.Religions
         public Religion Canticles { get; } = new Religion("canticles");
         public Religion Treelore { get; } = new Religion("treelore");
         public Religion Osfeyd { get; } = new Religion("osfeyd");
+        public Religion SixWinds { get; } = new Religion("sixWinds");
 
         public override IEnumerable<Religion> All
         {
@@ -24,7 +25,8 @@ namespace BannerKings.Managers.Institutions.Religions
                 yield return Amra;
                 yield return Martyrdom;
                 yield return Canticles;
-                yield return Treelore;     
+                yield return Treelore;
+                yield return SixWinds;
                 foreach (Religion item in ModAdditions)
                 {
                     yield return item;
@@ -97,11 +99,23 @@ namespace BannerKings.Managers.Institutions.Religions
 
             Osfeyd.Initialize(DefaultFaiths.Instance.Osfeyd,
                 new AutonomousLeadership(),
-                new List<CultureObject> { vlandia, vakken },
+                new List<CultureObject> { vlandia },
                 new List<Doctrine>
                 {
                     DefaultDoctrines.Instance.OsricsVengeance,
                     DefaultDoctrines.Instance.Animism
+                },
+                null);
+
+            SixWinds.Initialize(DefaultFaiths.Instance.SixWinds,
+                new AutonomousLeadership(),
+                new List<CultureObject> { khuzait },
+                new List<Doctrine>
+                {
+                    DefaultDoctrines.Instance.Animism,
+                    DefaultDoctrines.Instance.Shamanism,
+                    DefaultDoctrines.Instance.Tolerant,
+                    DefaultDoctrines.Instance.Reavers
                 },
                 null);
         }

@@ -113,7 +113,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
             return new ValueTuple<bool, TextObject>(possible, text);
         }
 
-        public override TextObject GetInductionExplanationText() => new TextObject("{=!}You need to be of a Wilunding culture (Vlandia, Osrickin, Swedaz, Rhuthuk)");
+        public override TextObject GetInductionExplanationText() => new TextObject("{=!}You need to be of a Wilunding culture (Vlandia, Osrickin, Swedaz, Rhodok)");
 
         public override Divinity GetMainDivinity() => mainGod;
 
