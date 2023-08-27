@@ -17,6 +17,9 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
         public Doctrine Sacrifice { get; private set; }
         public Doctrine OsricsVengeance { get; private set; }
         public Doctrine Warlike { get; private set; }
+        public Doctrine Reavers { get; private set; }
+        public Doctrine Tolerant { get; private set; }
+        public Doctrine Shamanism { get; private set; }
 
         public override IEnumerable<Doctrine> All
         {
@@ -32,25 +35,57 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
                 yield return HeathenTax;
                 yield return Childbirth;
                 yield return Sacrifice;
+                yield return OsricsVengeance;
+                yield return Reavers;
+                yield return Tolerant;
+                yield return Shamanism;
             }
         }
 
         public override void Initialize()
         {
+            Tolerant = new Doctrine("Tolerant",
+               new TextObject("{=!}Tolerant"),
+               new TextObject("{=!}A tolerant faith considers all faiths to be different interpretations of the Truth, as different paths to the real god(s). Tolerant faiths do not have hostile opinions toward any other faith, facilitating marraiges and decreasing tensions in multiple faith fiefs."),
+               new TextObject("{=!}"),
+               new List<Doctrine>()
+               {
+               },
+               true);
+
+            Shamanism = new Doctrine("Shamanism",
+               new TextObject("{=!}Shamanism"),
+               new TextObject("{=!}Shamans are the intermediaries between manking and the spiritual world. They do not adhere to an organized structure, instead relying on oral tradition and local custom. Shamans often live close to nature, where the spirits lie, and perform rituals to access the spiritual world to communicate with them, acquiring knowledge to guide their people in the mundane plane."),
+               new TextObject("{=!}"),
+               new List<Doctrine>()
+               {
+                   Druidism
+               },
+               true);
+
             OsricsVengeance = new Doctrine("osrics_vengeance", 
                 new TextObject("{=!}Osric's Vengeance"),
-                new TextObject("{=!} politic."),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Osric fulfilled his vengeace against the Calradic gods when the captured Pravend, taking away their power and providing bountiful land to his people. As such, the Wilunding should follow in his path of occupying their enemies."),
+                new TextObject("{=!}Occupying fiefs yields significant piety"),
                 new List<Doctrine>()
                 {
                     Warlike
                 },
                 true);
 
+            Reavers = new Doctrine("Reavers",
+                new TextObject("{=!}Reavers"),
+                new TextObject("{=!}Raiding and pillaging is understood as a pious practice. This faith"),
+                new TextObject("{=!}Piety gain raiding and fief pillaging of different cultures"),
+                new List<Doctrine>()
+                {
+                    OsricsVengeance
+                });
+
             Warlike = new Doctrine("osrics_vengeance",
                 new TextObject("{=!}Warlike"),
-                new TextObject("{=!}This faith glorifies combat such that it is seen as a pious practice."),
-                new TextObject("{=!}"),
+                new TextObject("{=!}This faith understands combat as a pious practice."),
+                new TextObject("{=!}Piety gain as battle reward"),
                 new List<Doctrine>()
                 {
                     OsricsVengeance

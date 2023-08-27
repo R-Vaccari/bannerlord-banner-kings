@@ -22,6 +22,12 @@ namespace BannerKings.Models.Vanilla
                 {
                     result.AddFactor(0.25f, BKPerks.Instance.CommanderWarband.Name);
                 }
+
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader,
+                   DefaultDivinities.Instance.Wilund))
+                {
+                    result.AddFactor(0.3f, DefaultDivinities.Instance.Wilund.Name);
+                }
             }
 
             return result;
@@ -49,6 +55,12 @@ namespace BannerKings.Models.Vanilla
                     DefaultDivinities.Instance.VlandiaMain))
                 {
                     result.AddFactor(0.15f, DefaultDivinities.Instance.VlandiaMain.Name);
+                }
+
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader,
+                    DefaultDivinities.Instance.Wilund))
+                {
+                    result.AddFactor(0.3f, DefaultDivinities.Instance.Wilund.Name);
                 }
             }
 

@@ -32,76 +32,6 @@ namespace BannerKings.UI.Management
             RefreshValues();
         }
 
-        [DataSourceProperty]
-        public DecisionElement ForeignerToogle
-        {
-            get => foreignerToogle;
-            set
-            {
-                if (value != foreignerToogle)
-                {
-                    foreignerToogle = value;
-                    OnPropertyChangedWithValue(value);
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public MBBindingList<CultureElementVM> CultureList
-        {
-            get => culturesList;
-            set
-            {
-                if (value != culturesList)
-                {
-                    culturesList = value;
-                    OnPropertyChangedWithValue(value);
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public MBBindingList<PopulationInfoVM> PopList
-        {
-            get => classesList;
-            set
-            {
-                if (value != classesList)
-                {
-                    classesList = value;
-                    OnPropertyChangedWithValue(value);
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public MBBindingList<InformationElement> CultureInfo
-        {
-            get => cultureInfo;
-            set
-            {
-                if (value != cultureInfo)
-                {
-                    cultureInfo = value;
-                    OnPropertyChangedWithValue(value);
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public MBBindingList<InformationElement> StatsInfo
-        {
-            get => statsInfo;
-            set
-            {
-                if (value != statsInfo)
-                {
-                    statsInfo = value;
-                    OnPropertyChangedWithValue(value);
-                }
-            }
-        }
-
         public override void RefreshValues()
         {
             base.RefreshValues();
@@ -119,9 +49,13 @@ namespace BannerKings.UI.Management
             data.Classes.ForEach(popClass => 
             {
                 CulturalPopulationName popName = DefaultPopulationNames.Instance.GetPopulationName(settlement.Culture, popClass.type);
+                ExplainedNumber demand = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, popClass.type, true);
                 PopList.Add(new PopulationInfoVM(popName.Name.ToString(),
                         popClass.count,
-                        popName.Description.ToString()));
+                        new TextObject("{=!}{DESCRIPTION}\n\nDemand for this class: {DEMAND}\nExplanations:\n{EXPLANATIONS}")
+                        .SetTextVariable("DEMAND", FormatValue(demand.ResultNumber))
+                        .SetTextVariable("EXPLANATIONS", demand.GetExplanations())
+                        .SetTextVariable("DESCRIPTION", popName.Description).ToString()));
             });
 
             data.CultureData.Cultures.ForEach(culture => CultureList
@@ -273,6 +207,76 @@ namespace BannerKings.UI.Management
                     "decision_foreigner_ban" => vm,
                     _ => foreignerToogle
                 };
+            }
+        }
+
+        [DataSourceProperty]
+        public DecisionElement ForeignerToogle
+        {
+            get => foreignerToogle;
+            set
+            {
+                if (value != foreignerToogle)
+                {
+                    foreignerToogle = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<CultureElementVM> CultureList
+        {
+            get => culturesList;
+            set
+            {
+                if (value != culturesList)
+                {
+                    culturesList = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<PopulationInfoVM> PopList
+        {
+            get => classesList;
+            set
+            {
+                if (value != classesList)
+                {
+                    classesList = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<InformationElement> CultureInfo
+        {
+            get => cultureInfo;
+            set
+            {
+                if (value != cultureInfo)
+                {
+                    cultureInfo = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<InformationElement> StatsInfo
+        {
+            get => statsInfo;
+            set
+            {
+                if (value != statsInfo)
+                {
+                    statsInfo = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BannerKings.Managers.Institutions.Religions.Faiths.Asera;
 using BannerKings.Managers.Institutions.Religions.Faiths.Battania;
+using BannerKings.Managers.Institutions.Religions.Faiths.Eastern;
 using BannerKings.Managers.Institutions.Religions.Faiths.Empire;
 using BannerKings.Managers.Institutions.Religions.Faiths.Northern;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
@@ -10,6 +11,7 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Northern;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Southern;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites.Vlandia;
 using BannerKings.Managers.Institutions.Religions.Faiths.Vlandia;
+using BannerKings.Managers.Traits;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Localization;
 
@@ -17,7 +19,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
     public class DefaultFaiths
     {
-        private FaithGroup aseraGroup, battaniaGroup, imperialGroup, vlandiaGroup, sturgiaGroup;
+        private FaithGroup aseraGroup, battaniaGroup, imperialGroup, vlandiaGroup, sturgiaGroup, devsegGroup;
 
         public MonotheisticFaith AseraCode { get; private set; } = new AseraFaith();
         public PolytheisticFaith AmraOllahm { get; private set; } = new AmraFaith();
@@ -25,6 +27,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public PolytheisticFaith Canticles { get; private set; } = new CanticlesFaith();
         public PolytheisticFaith Treelore { get; private set; } = new TreeloreFaith();
         public PolytheisticFaith Osfeyd { get; private set; } = new Osfeyd();
+        public PolytheisticFaith SixWinds { get; } = new SixWinds();
 
         public FaithGroup ImperialGroup => imperialGroup;
 
@@ -32,12 +35,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         {
             get
             {
+                yield return Osfeyd;
                 yield return AseraCode;
                 yield return AmraOllahm;
-                yield return Darusosian;
-                yield return Canticles;
+                yield return Darusosian;    
                 yield return Treelore;
-                yield return Osfeyd;
+                yield return SixWinds;
+                yield return Canticles;
             }
         }
 
@@ -118,8 +122,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 },
                 new Dictionary<TraitObject, bool>
                 {
-                    { DefaultTraits.Mercy, false} ,
-                    { DefaultTraits.Valor, true }
+                    { DefaultTraits.Mercy, false},
+                    { DefaultTraits.Valor, true },
+                    { BKTraits.Instance.Ambitious, true}
                 },
                 vlandiaGroup,
                 new List<Rite>()
@@ -138,7 +143,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 new Dictionary<TraitObject, bool>
                 {
                     {DefaultTraits.Generosity, true},
-                    {DefaultTraits.Valor, true}
+                    {DefaultTraits.Valor, true}     
                 },
                 sturgiaGroup,
                 new List<Rite>()
@@ -146,6 +151,30 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     new TreeloreFestival()
                 },
                 Behaviours.Feasts.Feast.FeastType.Treelore);
+
+            devsegGroup = new FaithGroup(new TextObject("{=!}Devseg Faiths"),
+                new TextObject("{=!}The group of faiths brought by the Devseg hordes from the east."));
+
+            SixWinds.Initialize(DefaultDivinities.Instance.WindHeaven,
+                new List<Divinity>
+                {
+                    DefaultDivinities.Instance.WindHell,
+                    DefaultDivinities.Instance.WindEast,
+                    DefaultDivinities.Instance.WindWest,
+                    DefaultDivinities.Instance.WindNorth,
+                    DefaultDivinities.Instance.WindSouth,
+                    DefaultDivinities.Instance.SheWolf,
+                    DefaultDivinities.Instance.Iltanlar,
+                },
+                new Dictionary<TraitObject, bool>
+                {
+                    {DefaultTraits.Honor, true},
+                    {BKTraits.Instance.Just, true}
+                },
+                devsegGroup,
+                new List<Rite>()
+                {
+                });
         }
 
         public Faith GetById(string id)

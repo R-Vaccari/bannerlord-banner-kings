@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Innovations;
+using BannerKings.Managers.Innovations.Eras;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -10,16 +11,16 @@ namespace BannerKings.UI.Titles
         private MBBindingList<InnovationElementVM> branch;
         private Innovation innovation;
 
-        public InnovationElementVM(Innovation innovation, InnovationData data) : base(null, true)
+        public InnovationElementVM(Innovation innovation, InnovationData data, Era era) : base(null, true)
         {
             Branch = new MBBindingList<InnovationElementVM>();
             this.innovation = innovation;
 
-            foreach (var i in data.GetEraInnovations(data.Era))
+            foreach (var i in data.GetEraInnovations(era))
             {
                 if (i.Requirement != null && i.Requirement.Equals(innovation))
                 {
-                    Branch.Add(new InnovationElementVM(i, data));
+                    Branch.Add(new InnovationElementVM(i, data, era));
                 }
             }
         }

@@ -454,11 +454,6 @@ namespace BannerKings.Behaviours.Marriage
                },
                () =>
                {
-                   if (proposedMarriage.Influence > 0)
-                   {
-                       GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -proposedMarriage.Influence);
-                   }
-
                    var finalClan = proposedMarriage.FinalClan;
 
                    if (!proposedMarriage.ArrangedMarriage)
@@ -472,19 +467,15 @@ namespace BannerKings.Behaviours.Marriage
                        {
                            Utils.Helpers.SetAlliance(Clan.PlayerClan, Hero.OneToOneConversationHero.Clan);
                        }
-
+                       
+                       ApplyMarriageContract();
                        if (proposedMarriage.Feast && proposedMarriage.FinalClan.Kingdom != null)
                        {
-                           AnnounceBetrothal();
                            var town = proposedMarriage.FinalClan.Fiefs.GetRandomElement();
                            var clanCount = MathF.Min(proposedMarriage.FinalClan.Kingdom.Clans.Count, MBRandom.RandomInt(3, 8));
-                           Campaign.Current.GetCampaignBehavior<BKFeastBehavior>().LaunchFeast(town, 
-                               proposedMarriage.FinalClan.Kingdom.Clans.Take(clanCount).ToList(), 
+                           Campaign.Current.GetCampaignBehavior<BKFeastBehavior>().LaunchFeast(town,
+                               proposedMarriage.FinalClan.Kingdom.Clans.Take(clanCount).ToList(),
                                proposedMarriage);
-                       }
-                       else
-                       {
-                           ApplyMarriageContract();
                        }
                    }
 
@@ -497,7 +488,7 @@ namespace BannerKings.Behaviours.Marriage
 
         private void AnnounceBetrothal()
         {
-            MBInformationManager.AddQuickInformation(new TextObject("{=5sPJgrsx}{HERO1} and {HERO2} are now betrothed!")
+            MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO1} and {HERO2} are now betrothed! Romantic action can be pursued.")
                 .SetTextVariable("HERO", proposedMarriage.Proposer.Name)
                 .SetTextVariable("HERO2", proposedMarriage.Proposed.Name),
                 100,
@@ -513,6 +504,7 @@ namespace BannerKings.Behaviours.Marriage
                 var finalClan = proposedMarriage.FinalClan;
                 Hero proposerLeader = proposedMarriage.Proposer.Clan.Leader;
                 Hero proposedLeader = proposedMarriage.Proposed.Clan.Leader;
+                GainKingdomInfluenceAction.ApplyForDefault(proposerLeader, -proposedMarriage.Influence);
                 if (proposedMarriage.Proposer.Clan != finalClan)
                 {
                     GiveGoldAction.ApplyBetweenCharacters(proposedLeader, proposerLeader, proposedMarriage.Dowry);

@@ -54,6 +54,7 @@ namespace BannerKings.Managers.Innovations
                 yield return Aqueducts;
                 yield return HalfPlateArmor;
                 yield return Theater;
+                yield return Manorialism;
             }
         }
 
@@ -62,8 +63,8 @@ namespace BannerKings.Managers.Innovations
             var cultures = Game.Current.ObjectManager.GetObjectTypeList<CultureObject>();
 
             Manorialism.Initialize(new TextObject("{=!}Manorialism"),
-                new TextObject("{=!}Originated from the Calradian Villae, manorialism describes the agrarian relationship of a suzerain and their dependents."),
-                new TextObject("{=!}Enables new village buildings"),
+                new TextObject("{=!}Originated from the Calradian Villae, manorialism describes the agrarian relationship of a suzerain and their dependents. While each peasant may own or rent certain parts of the fields, the entire fields are collectively worked on, and their productions shared, a significant part of which is paid to the overlord as taxes, who often lives in a large habitation - the manor."),
+                new TextObject("{=!}Enables new village buildings\nReduced slave presence in villages"),
                 DefaultEras.Instance.FirstEra,
                 Innovation.InnovationType.Civic,
                 1000f,
@@ -132,14 +133,14 @@ namespace BannerKings.Managers.Innovations
                Burgage);
 
             Stirrups.Initialize(new TextObject("{=!}Stirrups"),
-                new TextObject("{=!}"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}A riding application that greatly helps with rider stability. The stirrup provides support for the rider's feet, reducing the risk of a fall and losing control of the animal. In military terms, it means cavalry can be significantly more effective and reliable. For the economy, it is also quite useful as the horse is widely used in agriculture, transportation and communication."),
+                new TextObject("{=!}Increased production efficiency\nBetter cavalry efficiency in sim. battles"),
                 DefaultEras.Instance.FirstEra,
                 Innovation.InnovationType.Military,
                 2000f);
 
             Crossbows.Initialize(new TextObject("{=!}Crossbows"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}A weapon developed by the Calradoi - a crossbow works by launching a bolt across a horizontal frame with the force of its string. The string, rather than drawn and held in place by a hand, is locked into place by a mechanism, allowing the crossbowman to aim the weapon, ready to release, with virtually no restrictions, as opposed to a bow, which requires significant strength to hold while ready."),
                 new TextObject("{=!}Enables the construction of crossbows"),
                 DefaultEras.Instance.FirstEra,
                 Innovation.InnovationType.Military,
@@ -150,14 +151,14 @@ namespace BannerKings.Managers.Innovations
             Cogs.Initialize(new TextObject("{=!}Cogs"),
                 new TextObject("{=!}These large devices were often made of massive strong wooden blocks shaped into almost perfect circular discs. Metal teeth were then bolted into the disc such that an array of cogs can produce complex axes of motion. They were mainly used in sophisticated mill designs such as watermills or windmills. Such mechanical mills facilitate the process of milling grains to make bread, an extremely important item in the continent's general diet. However, other mills could be essential parts in industrial military forges for producing armour, weapons and horse equipment fit for massive imperial armies."),
                 new TextObject("{=!}Increased production efficiency"),
-                DefaultEras.Instance.SecondEra,
+                DefaultEras.Instance.FirstEra,
                 Innovation.InnovationType.Technology,
                 1000f);
 
             Mills.Initialize(new TextObject("{=!}Mills"),
                 new TextObject("{=!}A large contraption moved by the flow of water, wind or force. Mills largely facilitate the process of milling grains in order to make bread. Different types of mills may be constructed to fit any context - for example, a village with a river stream may use the flow of water to turn the mill. A more complex, but flexible mill could be moved by wind. Ultimately, however, they could simply be moved through slave labor."),
                 new TextObject("{=!}Enables construction of mills"),
-                DefaultEras.Instance.SecondEra,
+                DefaultEras.Instance.FirstEra,
                 Innovation.InnovationType.Building,
                 1500f,
                 null,
@@ -193,9 +194,7 @@ namespace BannerKings.Managers.Innovations
                 new TextObject("{=!}Significantly improved construction speed\nIncreased production efficiency"),
                 DefaultEras.Instance.SecondEra,
                 Innovation.InnovationType.Technology,
-                3000f,
-                null,
-                Cogs);
+                3000f);
 
             Wheelbarrow.Initialize(new TextObject("{=H5EXMMCH}Wheelbarrow"),
                 new TextObject("{=EtdzfFiF}The wheelbarrow is a goods transporting tool that allows a person to carry bigger weights with less efforts. It can be applied in a variety of situations, such as carrying ore out of mines, building material to constructions and grain sacks out of farms."),
@@ -249,6 +248,18 @@ namespace BannerKings.Managers.Innovations
             if (id == "vlandia")
             {
                 list.Add(Burgage);
+                list.Add(HeavyPlough);
+                list.Add(HorseCollar);
+                list.Add(Crossbows);
+            }
+            else if (id == "empire")
+            {
+                list.Add(HeavyPlough);
+                list.Add(HorseCollar);
+                list.Add(Guilds);
+                list.Add(Manorialism);
+                list.Add(Crossbows);
+                list.Add(Stirrups);
             }
 
             return list;

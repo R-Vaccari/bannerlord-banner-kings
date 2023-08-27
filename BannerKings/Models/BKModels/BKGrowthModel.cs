@@ -1,5 +1,6 @@
 using BannerKings.Behaviours;
 using BannerKings.Extensions;
+using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles.Laws;
 using System.Linq;
@@ -89,6 +90,12 @@ namespace BannerKings.Models.BKModels
                 {
                     var walls = settlement.Town.Buildings.First(x => x.BuildingType == DefaultBuildingTypes.Fortifications);
                     result.Add(walls.CurrentLevel * 5000f, DefaultBuildingTypes.Fortifications.Name);
+
+                    InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(settlement.Culture);
+                    if (innovationData.HasFinishedInnovation(DefaultInnovations.Instance.Burgage))
+                    {
+                        result.AddFactor(0.15f, DefaultInnovations.Instance.Burgage.Name);
+                    }
                 }
                 else
                 {
@@ -114,6 +121,7 @@ namespace BannerKings.Models.BKModels
             var faction = settlement.OwnerClan.Kingdom;
             if (faction != null)
             {
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
                 if (type == PopType.Slaves)
                 {
@@ -125,6 +133,15 @@ namespace BannerKings.Models.BKModels
                     if (faction.ActivePolicies.Contains(DefaultPolicies.ForgivenessOfDebts))
                     {
                         result.AddFactor(-0.15f, DefaultPolicies.ForgivenessOfDebts.Name);
+                    }
+
+                    if (settlement.IsVillage)
+                    {
+                        InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(settlement.Culture);
+                        if (innovationData.HasFinishedInnovation(DefaultInnovations.Instance.Manorialism))
+                        {
+                            result.AddFactor(-0.6f, DefaultInnovations.Instance.Manorialism.Name);
+                        }
                     }
 
                     if (title != null)
@@ -187,6 +204,10 @@ namespace BannerKings.Models.BKModels
                     {
                         result.AddFactor(0.1f, DefaultPolicies.Citizenship.Name);
                     }
+
+                    if (settlement.Town != null)
+                        result.AddFactor((settlement.Prosperity - 15000f) / 30000f, 
+                            new TextObject("{=mgK8aZuj}Prosperity"));
                 }
 
                 if (type == PopType.Serfs)
@@ -209,6 +230,17 @@ namespace BannerKings.Models.BKModels
                     }
                 }
 
+                if (type == PopType.Craftsmen)
+                {
+                    if (settlement.Town != null)
+                    {
+                        result.AddFactor(settlement.Prosperity / 30000f, new TextObject("{=mgK8aZuj}Prosperity"));
+
+                        if (settlement.IsTown)
+                            result.AddFactor(data.EconomicData.Mercantilism.ResultNumber * 0.1f, new TextObject("{=5eHCGMEK}Mercantilism"));
+                    }
+                }
+
                 if (type == PopType.Tenants)
                 {
                     if (title != null)
@@ -222,6 +254,9 @@ namespace BannerKings.Models.BKModels
                             result.AddFactor(-0.5f, DefaultDemesneLaws.Instance.TenancyMixed.Name);
                         }
                     }
+
+                    if (settlement.Town != null)
+                        result.AddFactor(settlement.Prosperity / 15000f, new TextObject("{=mgK8aZuj}Prosperity"));
                 }
             }
 

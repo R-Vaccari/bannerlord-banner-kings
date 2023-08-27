@@ -1,9 +1,11 @@
-﻿using BannerKings.Managers.Institutions.Religions;
+﻿using BannerKings.Managers.Innovations;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 
 namespace BannerKings.Models.Vanilla
@@ -13,7 +15,7 @@ namespace BannerKings.Models.Vanilla
         public override int SimulateHit(CharacterObject strikerTroop, CharacterObject struckTroop, PartyBase strikerParty,
             PartyBase struckParty, float strikerAdvantage, MapEvent battle)
         {
-            var result = base.SimulateHit(strikerTroop, struckTroop, strikerParty, struckParty, strikerAdvantage, battle);
+            float result = base.SimulateHit(strikerTroop, struckTroop, strikerParty, struckParty, strikerAdvantage, battle);
             var leader = strikerParty.LeaderHero;
             if (leader != null)
             {
@@ -35,7 +37,16 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            return result;
+            var strikerInnovations = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(strikerTroop.Culture);
+            if (strikerInnovations != null)
+            {
+                if (strikerInnovations.HasFinishedInnovation(DefaultInnovations.Instance.Stirrups))
+                {
+                    result *= 1.2f;
+                }
+            }
+
+            return (int)result;
         }
     }
 }

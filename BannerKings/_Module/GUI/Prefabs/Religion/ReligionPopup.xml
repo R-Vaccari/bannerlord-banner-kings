@@ -242,25 +242,28 @@
 																				<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren"
 																					WidthSizePolicy="StretchToParent" StackLayout.LayoutMethod="VerticalBottomToTop">
 																					<Children>
-																						<EncyclopediaHeroTraitVisualWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
-																							SuggestedWidth="130" SuggestedHeight="130" HorizontalAlignment="Center" TraitId="@TraitId"
-																							TraitValue="@Value">
+																						<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="40"
+																							HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="32" Text="@Name">
 																							<Children>
 																								<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent"
 																									HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint"
 																									Command.HoverEnd="ExecuteEndHint" />
 																							</Children>
-																						</EncyclopediaHeroTraitVisualWidget>
-																						<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																							HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="22" Text="@Name"
-																							MarginBottom="35" />
+																						</RichTextWidget>
+																					
+																						<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="40"
+																							HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="22" Text="@DescriptionText"/>
+																					
+																						<EncyclopediaHeroTraitVisualWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+																							SuggestedWidth="100" SuggestedHeight="100" HorizontalAlignment="Center" TraitId="@TraitId"
+																							TraitValue="@Value" MarginBottom="35"/>														
 																					</Children>
 																				</ListPanel>
 																			</ItemTemplate>
 																		</GridWidget>
 
 
-																		<EncyclopediaDivider MarginTop="50" Parameter.Title="@ClergymenText"
+																		<EncyclopediaDivider MarginTop="70" Parameter.Title="@ClergymenText"
 																			Parameter.ItemList="..\ClergyGrid" />
 
 																		<GridWidget Id="ClergyGrid" DataSource="{Clergymen}" WidthSizePolicy="StretchToParent"

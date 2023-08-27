@@ -826,7 +826,7 @@ namespace BannerKings.Behaviours
                     Enumerable.Union<Hero>(Enumerable.Where<Hero>(____faction.Heroes, (Hero h) => !h.IsDisabled),
                     ____faction.Companions))
                 {
-                    if ((hero.IsActive || hero.IsReleased || hero.IsFugitive) && !hero.IsChild && hero != Hero.MainHero && hero.CanLeadParty())
+                    if ((hero.IsActive || hero.IsNotSpawned || hero.IsReleased || hero.IsFugitive) && !hero.IsChild && hero != Hero.MainHero && hero.CanLeadParty())
                     {
                         bool isEnabled = true;
                         var hintMethod = __instance.GetType().GetMethod("GetPartyLeaderAssignmentSkillsHint",

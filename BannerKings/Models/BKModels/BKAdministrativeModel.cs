@@ -1,3 +1,4 @@
+using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Policies;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -57,6 +58,12 @@ namespace BannerKings.Models.BKModels
                         baseResult.Add(expense.AdministrativeCost, expense.Name);
                     }
                 }
+            }
+
+            InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(settlement.Culture);
+            if (innovationData.HasFinishedInnovation(DefaultInnovations.Instance.PublicWorks))
+            {
+                baseResult.AddFactor(0.05f, DefaultInnovations.Instance.PublicWorks.Name);
             }
 
             return baseResult;
