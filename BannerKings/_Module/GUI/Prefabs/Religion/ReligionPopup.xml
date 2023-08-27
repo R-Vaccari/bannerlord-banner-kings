@@ -237,7 +237,7 @@
 
 																		<GridWidget Id="VirtuesGrid" DataSource="{Virtues}" WidthSizePolicy="StretchToParent"
 																			HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center"
-																			SuggestedHeight="350" DefaultCellWidth="350" DefaultCellHeight="120" ColumnCount="2" MarginTop="10">
+																			SuggestedHeight="350" DefaultCellWidth="350" DefaultCellHeight="120" ColumnCount="3" MarginTop="10">
 																			<ItemTemplate>
 																				<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren"
 																					WidthSizePolicy="StretchToParent" StackLayout.LayoutMethod="VerticalBottomToTop">

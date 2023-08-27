@@ -79,7 +79,7 @@ namespace BannerKings.Managers.Kingdoms.Succession
                     var stance = FaithStance.Untolerated;
                     if (candidateReligion != null)
                     {
-                        stance = religion.Faith.GetStance(candidateReligion.Faith);
+                        stance = religion.GetStance(candidateReligion.Faith);
                     }
 
                     switch (stance)

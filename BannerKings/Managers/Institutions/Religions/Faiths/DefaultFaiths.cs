@@ -118,7 +118,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 new List<Divinity>
                 {
                    DefaultDivinities.Instance.Osric, 
-                   DefaultDivinities.Instance.Horsa
+                   DefaultDivinities.Instance.Horsa,
+                   DefaultDivinities.Instance.Oca
                 },
                 new Dictionary<TraitObject, bool>
                 {
@@ -129,7 +130,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 vlandiaGroup,
                 new List<Rite>()
                 {
-                    new VlandiaHorse()
+                    new VlandiaHorse(),
+                    new LanceOffering()
                 });
 
             sturgiaGroup = new FaithGroup(new TextObject("{=!}Northern Faiths"),

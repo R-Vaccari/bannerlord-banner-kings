@@ -47,7 +47,7 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
             Tolerant = new Doctrine("Tolerant",
                new TextObject("{=!}Tolerant"),
                new TextObject("{=!}A tolerant faith considers all faiths to be different interpretations of the Truth, as different paths to the real god(s). Tolerant faiths do not have hostile opinions toward any other faith, facilitating marraiges and decreasing tensions in multiple faith fiefs."),
-               new TextObject("{=!}"),
+               new TextObject("{=!}Every other faith is consedered Tolerated"),
                new List<Doctrine>()
                {
                },
@@ -56,7 +56,7 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
             Shamanism = new Doctrine("Shamanism",
                new TextObject("{=!}Shamanism"),
                new TextObject("{=!}Shamans are the intermediaries between manking and the spiritual world. They do not adhere to an organized structure, instead relying on oral tradition and local custom. Shamans often live close to nature, where the spirits lie, and perform rituals to access the spiritual world to communicate with them, acquiring knowledge to guide their people in the mundane plane."),
-               new TextObject("{=!}"),
+               new TextObject("{=!}Preachers are able to heal diseases and curses"),
                new List<Doctrine>()
                {
                    Druidism

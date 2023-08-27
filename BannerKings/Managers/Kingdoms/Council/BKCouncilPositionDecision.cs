@@ -128,7 +128,7 @@ namespace BannerKings.Managers.Kingdoms.Council
                     var stance = FaithStance.Untolerated;
                     if (candidateReligion != null)
                     {
-                        stance = Religion.Faith.GetStance(candidateReligion.Faith);
+                        stance = Religion.GetStance(candidateReligion.Faith);
                     }
 
                     switch (stance)

@@ -19,7 +19,7 @@ namespace BannerKings.UI.Items
             TraitId = traitObj.StringId;
             Value = positive ? 2 : -2;
             Hint = new HintViewModel(traitObj.Description);
-            descriptionText = new TextObject("{=!}Being {TRAIT} is considered virtuous")
+            descriptionText = new TextObject("{=!}{TRAIT} is considered virtuous")
                 .SetTextVariable("TRAIT", GameTexts.FindText("str_trait_name_" + traitObj.StringId.ToLower(),
                         (Value + MathF.Abs(traitObj.MinValue)).ToString()))
                 .ToString();

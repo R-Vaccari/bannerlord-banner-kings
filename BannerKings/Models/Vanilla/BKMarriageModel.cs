@@ -41,7 +41,7 @@ namespace BannerKings.Models.Vanilla
                     float factor = -50f;
                     if (proposerReligion != null && proposedReligion != null)
                     {
-                        FaithStance stance = proposedReligion.Faith.GetStance(proposerReligion.Faith);
+                        FaithStance stance = proposedReligion.GetStance(proposerReligion.Faith);
                         if (stance == FaithStance.Hostile)
                         {
                             factor = -100f;
