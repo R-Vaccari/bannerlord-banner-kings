@@ -41,6 +41,65 @@ namespace BannerKings.Behaviours
         {
             InitPersonalityTraits(hero);
             InitNonPersonalityTraits(hero);
+            if (bornNaturally) InitCongenitalTraits(hero);
+            AddAttributes(hero);
+        }
+
+        private void InitCongenitalTraits(Hero hero)
+        {
+            if (hero.Father != null)
+            {
+                foreach (TraitObject congenital in BKTraits.Instance.CongenitalTraits)
+                {
+                    int level = hero.Father.GetTraitLevel(congenital);
+                    if (level != 0)
+                    {
+                        if (MBRandom.RandomFloat < 0.15f * MathF.Abs(level))
+                        {
+                            hero.SetTraitLevel(congenital, level);
+                        }
+                        else if (MBRandom.RandomFloat < 0.3f * MathF.Abs(level))
+                        {
+                            if (level == -2) level++;
+                            else if (level == 2) level--;
+                            hero.SetTraitLevel(congenital, level);
+                        }
+                    }
+                }
+            }
+
+            if (hero.Mother != null)
+            {
+                foreach (TraitObject congenital in BKTraits.Instance.CongenitalTraits)
+                {
+                    int level = hero.Mother.GetTraitLevel(congenital);
+                    if (level != 0)
+                    {
+                        if (MBRandom.RandomFloat < 0.15f * MathF.Abs(level))
+                        {
+                            hero.SetTraitLevel(congenital, level);
+                        }
+                        else if (MBRandom.RandomFloat < 0.3f * MathF.Abs(level))
+                        {
+                            if (level == -2) level++;
+                            else if (level == 2) level--;
+                            hero.SetTraitLevel(congenital, level);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void AddAttributes(Hero hero)
+        {
+            int attractive = hero.GetTraitLevel(BKTraits.Instance.CongenitalAttractive);
+            hero.HeroDeveloper.AddAttribute(DefaultCharacterAttributes.Social, attractive, false);
+
+            int intelect = hero.GetTraitLevel(BKTraits.Instance.CongenitalIntelligent);
+            hero.HeroDeveloper.AddAttribute(DefaultCharacterAttributes.Intelligence, intelect, false);
+
+            int robust = hero.GetTraitLevel(BKTraits.Instance.CongenitalRobust);
+            hero.HeroDeveloper.AddAttribute(DefaultCharacterAttributes.Endurance, robust, false);
         }
 
         private void OnQuestCompleted(QuestBase quest, QuestBase.QuestCompleteDetails details)
