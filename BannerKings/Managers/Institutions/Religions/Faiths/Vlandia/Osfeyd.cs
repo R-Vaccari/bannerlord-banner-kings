@@ -53,7 +53,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
             }
             else
             {
-                return new TextObject("{=!}Induct you? I think not.");
+                return new TextObject("{=!}Induct you? I think not. The way of the Gods is ours alone, and strangers such as yourself should not be trusted. When we first came, the stone gods of the Calradoi tried to kill us. They who appealed for our swords and lances. Liars, all of them.");
             }
         }
 
@@ -65,7 +65,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
             }
             else
             {
-                return new TextObject("{=!}Induct you? I think not.");
+                return new TextObject("{=!}Return to those of your kind. We Wilundings stand for each other. If you wish to prove yourself faithful, then take up lance and warhorse. Carry the lion banner, or sew your own, one that shall be sung in the taverns.");
             }
         }
 

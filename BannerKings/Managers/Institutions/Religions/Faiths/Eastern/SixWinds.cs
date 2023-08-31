@@ -36,11 +36,31 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Eastern
             else return new TextObject("{=!}Welcome, {?PLAYER.GENDER}madam{?}sir{\\?}. I am the local Kam - a shaman as your people say - and speak for the Devseg. We live in harmony with the spirits and Winds, and hope you can do so as well.");
         }
 
-        public override TextObject GetClergyGreetingInducted(int rank) => new TextObject("{=!}");
+        public override TextObject GetClergyGreetingInducted(int rank) => new TextObject("{=!}Be welcome, kin. I can see that you are a faithful of the Heavens, and listener to the Winds. I am the local Kam, if you need to contact the Iye. May good winds guide you.");
 
-        public override TextObject GetClergyInduction(int rank) => new TextObject("{=!}");
+        public override TextObject GetClergyInduction(int rank)
+        {
+            if (GetInductionAllowed(Hero.MainHero, rank).Item1)
+            {
+                return new TextObject("{=!}A Kam has no power to 'induct' one into the Winds. Do you not hear them, whispering into your ear? The words of gods are everywhere. You merely pay attention to them or not.");
+            }
+            else
+            {
+                return new TextObject("{=!}A Kam has no power to 'induct' one into the Winds. Even if I could, I would not. You are not one who is fit to bear the name of our good gods. Your foreign customs are a corruption of nature, which is unacceptable to the Winds.");
+            }
+        }
 
-        public override TextObject GetClergyInductionLast(int rank) => new TextObject("{=!}");
+        public override TextObject GetClergyInductionLast(int rank)
+        {
+            if (GetInductionAllowed(Hero.MainHero, rank).Item1)
+            {
+                return new TextObject("{=!}Go, {?PLAYER.GENDER}madam{?}sir{\\?}, and live according to gods. That is your true induction. Uphold the virtues of the Winds and be in harmony with the Iye. You want to reach Uçmag, do you not? May good winds guide you.");
+            }
+            else
+            {
+                return new TextObject("{=!}If you truly wish to live by our traditions, then take them upon yourself. Become a {?PLAYER.GENDER}woman{?}man{\\?} of the hordes, sleep in a yurt and gaze into the Heavens for enlightenment. Such is the way of our forefathers, the way of the Winds.");
+            }
+        }
 
         public override TextObject GetClergyPreachingAnswer(int rank) => new TextObject("{=!}Leave preaching for the aloof Calradoi. Here, I interpret the Winds. To the Calradoi the world may seem a static, fixed place. But it is not. It is an everflowing current, which flows in 6 directions. These are the Winds that make everything. As a river flows continously downstream, so does everything towards the fate of the gods.");
 
