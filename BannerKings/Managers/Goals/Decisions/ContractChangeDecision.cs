@@ -161,7 +161,7 @@ namespace BannerKings.Managers.Goals.Decisions
         private List<InquiryElement> GetSuccessions(Kingdom kingdom, FeudalTitle title)
         {
             var laws = new List<InquiryElement>();
-            foreach (var type in SuccessionHelper.GetValidSuccessions(title.Contract.Government))
+            /*foreach (var type in SuccessionHelper.GetValidSuccessions(title.Contract.Government))
             {
                 if (kingdom != null && type != title.Contract.Succession)
                 {
@@ -172,7 +172,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
                         Utils.Helpers.GetSuccessionTypeDescription(type)));
                 }
-            }
+            }*/
 
             return laws;
         }
@@ -180,7 +180,7 @@ namespace BannerKings.Managers.Goals.Decisions
         private List<InquiryElement> GetGovernments(Kingdom kingdom, FeudalTitle title)
         {
             var laws = new List<InquiryElement>();
-            foreach (var type in BannerKingsConfig.Instance.TitleManager.GetGovernmentTypes())
+            /*foreach (var type in BannerKingsConfig.Instance.TitleManager.GetGovernmentTypes())
             {
                 if (kingdom != null && type != title.Contract.Government)
                 {
@@ -191,7 +191,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
                         Utils.Helpers.GetGovernmentDescription(type)));
                 }
-            }
+            }*/
 
             return laws;
         }

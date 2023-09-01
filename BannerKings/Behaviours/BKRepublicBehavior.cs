@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Kingdoms.Succession;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 
@@ -35,7 +36,7 @@ namespace BannerKings.Behaviours
                 }
 
                 var government = title.Contract.Government;
-                if (government == GovernmentType.Republic)
+                if (government == DefaultGovernments.Instance.Republic)
                 {
                     var inElection = false;
                     foreach (var decision in kingdom.UnresolvedDecisions)

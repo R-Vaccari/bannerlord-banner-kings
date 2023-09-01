@@ -9,6 +9,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.BKModels;
 using BannerKings.UI.Cutscenes;
@@ -152,11 +153,11 @@ namespace BannerKings.Managers
         public GovernmentType GetSettlementGovernment(Settlement settlement)
         {
             var type = GovernmentType.Feudal;
-            var title = GetTitle(settlement);
+            /*var title = GetTitle(settlement);
             if (title?.Contract != null)
             {
                 type = title.Contract.Government;
-            }
+            }*/
 
             return type;
         }
@@ -1283,28 +1284,28 @@ namespace BannerKings.Managers
                 "feudal_elective" => new FeudalContract(
                     new Dictionary<FeudalDuties, float> { { FeudalDuties.Ransom, 0.20f }, { FeudalDuties.Auxilium, 0.4f } },
                     new List<FeudalRights> { FeudalRights.Absolute_Land_Rights, FeudalRights.Enfoeffement_Rights },
-                    GovernmentType.Feudal, SuccessionType.FeudalElective, InheritanceType.Primogeniture,
+                    DefaultGovernments.Instance.Feudal, DefaultSuccessions.Instance.FeudalElective, InheritanceType.Primogeniture,
                     GenderLaw.Agnatic),
                 "imperial" => new FeudalContract(
                     new Dictionary<FeudalDuties, float> {{FeudalDuties.Ransom, 0.10f}, {FeudalDuties.Taxation, 0.4f}},
                     new List<FeudalRights> {FeudalRights.Assistance_Rights, FeudalRights.Army_Compensation_Rights},
-                    GovernmentType.Imperial, SuccessionType.Imperial, InheritanceType.Primogeniture, GenderLaw.Agnatic),
+                     DefaultGovernments.Instance.Feudal, DefaultSuccessions.Instance.FeudalElective, InheritanceType.Primogeniture, GenderLaw.Agnatic),
                 "tribal" => new FeudalContract(
                     new Dictionary<FeudalDuties, float>
                     {
                         {FeudalDuties.Taxation, 0.125f}, {FeudalDuties.Auxilium, 0.66f}
                     }, new List<FeudalRights> {FeudalRights.Conquest_Rights, FeudalRights.Absolute_Land_Rights},
-                    GovernmentType.Tribal, SuccessionType.Elective_Monarchy, InheritanceType.Seniority,
+                     DefaultGovernments.Instance.Feudal, DefaultSuccessions.Instance.FeudalElective, InheritanceType.Seniority,
                     GenderLaw.Agnatic),
                 "republic" => new FeudalContract(
                     new Dictionary<FeudalDuties, float> {{FeudalDuties.Ransom, 0.10f}, {FeudalDuties.Taxation, 0.4f}},
                     new List<FeudalRights> {FeudalRights.Assistance_Rights, FeudalRights.Army_Compensation_Rights},
-                    GovernmentType.Republic, SuccessionType.Republic, InheritanceType.Primogeniture,
+                     DefaultGovernments.Instance.Republic, DefaultSuccessions.Instance.Republic, InheritanceType.Primogeniture,
                     GenderLaw.Cognatic),
                 _ => new FeudalContract(
                     new Dictionary<FeudalDuties, float> {{FeudalDuties.Ransom, 0.20f}, {FeudalDuties.Auxilium, 0.4f}},
                     new List<FeudalRights> {FeudalRights.Absolute_Land_Rights, FeudalRights.Enfoeffement_Rights},
-                    GovernmentType.Feudal, SuccessionType.Hereditary_Monarchy, InheritanceType.Primogeniture,
+                     DefaultGovernments.Instance.Feudal, DefaultSuccessions.Instance.Hereditary, InheritanceType.Primogeniture,
                     GenderLaw.Agnatic)
             };
 

@@ -55,6 +55,7 @@ using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Populations.Estates.Estate;
 using BannerKings.Managers.Institutions.Religions.Faiths.Eastern;
+using BannerKings.Managers.Titles.Governments;
 
 namespace BannerKings
 {
@@ -194,6 +195,8 @@ namespace BannerKings
             AddClassDefinition(typeof(Osfeyd), 144);
             AddClassDefinition(typeof(Era), 145);
             AddClassDefinition(typeof(SixWinds), 146);
+            AddClassDefinition(typeof(Government), 147);
+            AddClassDefinition(typeof(Succession), 148);
         }
 
         protected override void DefineContainerDefinitions()

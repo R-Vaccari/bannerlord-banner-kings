@@ -119,10 +119,10 @@ namespace BannerKings.UI.Titles
                 .SetTextVariable("EXPLANATION", peerResult.GetExplanations()).ToString()));
 
             TitleInfo.Add(new InformationElement(new TextObject("{=aoZYxUYV}Government Type:").ToString(),
-             title.Contract.Government.ToString(),
+             title.Contract.Government.Name.ToString(),
              new TextObject("{=BvJb2QSM}The dukedom this settlement is associated with.").ToString()));
             TitleInfo.Add(new InformationElement(new TextObject("{=HJcuXO5J}Succession Type:").ToString(),
-                title.Contract.Succession.ToString().Replace("_", " "),
+                title.Contract.Succession.Name.ToString().Replace("_", " "),
                 new TextObject("{=qMmbExKv}The clan succession form associated with this title. Successions only apply to factions.")
                     .ToString()));
             TitleInfo.Add(new InformationElement(new TextObject("{=OTuRSNZ5}Inheritance Type:").ToString(),

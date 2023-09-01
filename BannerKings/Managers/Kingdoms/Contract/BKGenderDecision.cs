@@ -101,19 +101,6 @@ namespace BannerKings.Managers.Kingdoms.Contract
                     num -= 35f;
                 }
             }
- 
-            var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Kingdom);
-            if (sovereign != null && sovereign.Contract != null)
-            {
-                var government = sovereign.Contract.Government;
-                if (government is GovernmentType.Tribal or GovernmentType.Republic)
-                {
-                    if (egalitarian)
-                    {
-                        num *= 1.5f;
-                    }
-                }
-            }
 
             if (!policyDecisionOutcome.ShouldDecisionBeEnforced)
             {
@@ -205,8 +192,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             var textObject = new TextObject("{=JjgGFcCt}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.");
 
             textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
-            textObject.SetTextVariable("CURRENT",
-                Utils.Helpers.GetGovernmentString(Title.Contract.Government, Kingdom.Culture));
+            textObject.SetTextVariable("CURRENT", Title.Contract.Government.Name);
             textObject.SetTextVariable("PROPOSED", genderLaw.ToString());
             return textObject;
         }

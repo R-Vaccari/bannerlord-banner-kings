@@ -33,7 +33,7 @@ namespace BannerKings.Utils
             return new TextObject("{=HoU7ZObZ}General Goods");
         }
 
-        public static TextObject GetTitleHonorary(TitleType type, GovernmentType government, bool female, CultureObject culture = null)
+        public static TextObject GetTitleHonorary(TitleType type, bool female, CultureObject culture = null)
         {
             var name = DefaultTitleNames.Instance.GetTitleName(culture, type);
             return female ? name.Female : name.Name;
@@ -45,7 +45,7 @@ namespace BannerKings.Utils
             return female ? name.Female : name.Name;
         }
 
-        public static TextObject GetPrinceTitles(GovernmentType government, bool female, CultureObject culture = null)
+        public static TextObject GetPrinceTitles(bool female, CultureObject culture = null)
         {
             var name = DefaultTitleNames.Instance.GetPrinceName(culture);
             return female ? name.Female : name.Name;

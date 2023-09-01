@@ -19,7 +19,9 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Managers.Traits;
 using BannerKings.Models.BKModels;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
@@ -124,6 +126,7 @@ namespace BannerKings
 
         private void Initialize()
         {
+            BKTraits.Instance.Initialize();
             DefaultVillageBuildings.Instance.Initialize();
             DefaultDivinities.Instance.Initialize();
             DefaultFaiths.Instance.Initialize();
@@ -140,6 +143,8 @@ namespace BannerKings
             DefaultCourtExpenses.Instance.Initialize();
             DefaultPopulationNames.Instance.Initialize();
             DefaultTitleNames.Instance.Initialize();
+            DefaultSuccessions.Instance.Initialize();
+            DefaultGovernments.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();

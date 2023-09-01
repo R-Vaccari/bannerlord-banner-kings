@@ -402,7 +402,7 @@ namespace BannerKings.Utils
             return title.ToString();
         }
 
-        public static string GetTitlePrefix(TitleType type, GovernmentType government, CultureObject culture = null)
+        public static string GetTitlePrefix(TitleType type, CultureObject culture = null)
         {
             TextObject title = null;
 
@@ -448,7 +448,7 @@ namespace BannerKings.Utils
                         }
                         break;
                     }
-                    case "battania":
+                    /*case "battania":
                     {
                         if (government == GovernmentType.Tribal)
                         {
@@ -461,7 +461,7 @@ namespace BannerKings.Utils
                         }
 
                         break;
-                    }
+                    }*/
                 }
             }
 

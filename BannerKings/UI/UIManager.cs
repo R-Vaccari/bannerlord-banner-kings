@@ -8,6 +8,7 @@ using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.Vanilla;
 using BannerKings.Settings;
@@ -188,13 +189,7 @@ namespace BannerKings.UI
                     var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(__instance);
                     if (title != null)
                     {
-                        var government = GovernmentType.Feudal;
-                        if (title.Contract != null)
-                        {
-                            government = title.Contract.Government;
-                        }
-
-                        var honorary = Utils.TextHelper.GetTitleHonorary(title.TitleType, government, __instance.IsFemale,
+                        var honorary = Utils.TextHelper.GetTitleHonorary(title.TitleType, __instance.IsFemale,
                             kingdom != null ? kingdom.Culture : __instance.Culture);
                         var name = (TextObject) __instance.GetType()
                             .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
@@ -230,19 +225,13 @@ namespace BannerKings.UI
                         var leaderTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(leader);
                         if (leaderTitle != null)
                         {
-                            var government = GovernmentType.Feudal;
-                            if (leaderTitle.Contract != null)
-                            {
-                                government = leaderTitle.Contract.Government;
-                            }
-
                             var name = (TextObject)__instance.GetType()
                                 .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
                                 .GetValue(__instance);
 
                             if (leader == __instance.Spouse)
                             {
-                                var honorary = Utils.TextHelper.GetTitleHonorary(leaderTitle.TitleType, government, __instance.IsFemale,
+                                var honorary = Utils.TextHelper.GetTitleHonorary(leaderTitle.TitleType, __instance.IsFemale,
                                     kingdom != null ? kingdom.Culture : __instance.Culture);
 
                                 __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
@@ -250,10 +239,10 @@ namespace BannerKings.UI
                                     .SetTextVariable("NAME", name);
                                 AddName(__instance, __result);
                             }
-                            else if (government != GovernmentType.Republic && leaderTitle.IsSovereignLevel && 
+                            else if (leaderTitle.Contract.Government != DefaultGovernments.Instance.Republic && leaderTitle.IsSovereignLevel && 
                                 (leader.Children.Contains(__instance) || leader.Siblings.Contains(__instance)))
                             { 
-                                var honorary = Utils.TextHelper.GetPrinceTitles(government, __instance.IsFemale,
+                                var honorary = Utils.TextHelper.GetPrinceTitles(__instance.IsFemale,
                                     kingdom != null ? kingdom.Culture : __instance.Culture);
 
                                 __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
@@ -376,7 +365,7 @@ namespace BannerKings.UI
                     return;
                 }
 
-                var list = PolicyHelper.GetForbiddenGovernmentPolicies(title.Contract.Government);
+                var list = title.Contract.Government.ProhibitedPolicies;
                 __instance.OtherPolicies.Clear();
                 foreach (var policy2 in from p in PolicyObject.All
                          where !(bool) active.Invoke(__instance, new object[] {p}) && !list.Contains(p)

@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Titles.Laws;
+﻿using BannerKings.Managers.Titles.Governments;
+using BannerKings.Managers.Titles.Laws;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.SaveSystem;
@@ -7,8 +8,8 @@ namespace BannerKings.Managers.Titles
 {
     public class FeudalContract
     {
-        public FeudalContract(Dictionary<FeudalDuties, float> duties, List<FeudalRights> rights, GovernmentType government,
-            SuccessionType succession, InheritanceType inheritance, GenderLaw genderLaw)
+        public FeudalContract(Dictionary<FeudalDuties, float> duties, List<FeudalRights> rights, Government government,
+            Succession succession, InheritanceType inheritance, GenderLaw genderLaw)
         {
             Duties = duties;
             Rights = rights;
@@ -20,17 +21,11 @@ namespace BannerKings.Managers.Titles
         }
 
         [SaveableProperty(1)] public Dictionary<FeudalDuties, float> Duties { get; set; }
-
         [SaveableProperty(2)] public List<FeudalRights> Rights { get; set; }
-
-        [SaveableProperty(3)] public GovernmentType Government { get; private set; }
-
-        [SaveableProperty(4)] public SuccessionType Succession { get; private set; }
-
+        [SaveableProperty(3)] public Government Government { get; private set; }
+        [SaveableProperty(4)] public Succession Succession { get; private set; }
         [SaveableProperty(5)] public InheritanceType Inheritance { get; private set; }
-
         [SaveableProperty(6)] public GenderLaw GenderLaw { get; private set; }
-
         [SaveableProperty(7)] public List<DemesneLaw> DemesneLaws { get; private set; }
 
         public void PostInitialize()
@@ -66,12 +61,10 @@ namespace BannerKings.Managers.Titles
 
         public void ChangeGovernment(GovernmentType governmentType)
         {
-            Government = governmentType;
         }
 
         public void ChangeSuccession(SuccessionType successionType)
         {
-            Succession = successionType;
         }
 
         public void ChangeInheritance(InheritanceType inheritanceType)

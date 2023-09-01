@@ -1,5 +1,7 @@
 using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Managers.Goals;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Managers.Traits;
 using BannerKings.Utils.Extensions;
@@ -648,8 +650,8 @@ namespace BannerKings.Managers.Court.Members
                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                        if (sovereign != null)
                        {
-                           return data.IsRoyal && (sovereign.Contract.Government == Titles.GovernmentType.Feudal || 
-                           sovereign.Contract.Government == Titles.GovernmentType.Imperial);
+                           return data.IsRoyal && (sovereign.Contract.Government == DefaultGovernments.Instance.Feudal || 
+                           sovereign.Contract.Government == DefaultGovernments.Instance.Imperial);
                        }
                    }
                    

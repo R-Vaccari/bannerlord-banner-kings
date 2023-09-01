@@ -135,7 +135,6 @@ namespace BannerKings
             DefaultEras.Instance.Initialize();
             DefaultInnovations.Instance.Initialize();
             BKBuildings.Instance.Initialize();
-            BKTraits.Instance.Initialize();
 
             UIManager.Instance.SetScreen(new BannerKingsScreen());
         }

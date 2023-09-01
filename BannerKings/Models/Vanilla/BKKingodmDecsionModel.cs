@@ -1,4 +1,5 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Titles.Governments;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 
 namespace BannerKings.Models.Vanilla
@@ -10,11 +11,7 @@ namespace BannerKings.Models.Vanilla
             if (BannerKingsConfig.Instance.TitleManager != null)
             {
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-                if (title != null)
-                {
-                    var succession = title.Contract.Succession;
-                    return succession == Managers.Titles.SuccessionType.Elective_Monarchy || succession == Managers.Titles.SuccessionType.Republic;
-                }
+                if (title != null) return title.Contract.Succession.ElectedSuccession;         
             }
 
             return base.IsKingSelectionDecisionAllowed(kingdom);

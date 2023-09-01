@@ -14,9 +14,9 @@ namespace BannerKings.Behaviours
         public override void RegisterEvents()
         {
             CampaignEvents.HeroCreated.AddNonSerializedListener(this, OnHeroCreated);
-            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
+            CampaignEvents.OnGameLoadFinishedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.OnQuestCompletedEvent.AddNonSerializedListener(this, OnQuestCompleted);
-            CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameLoaded);
+            //CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameLoaded);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -24,7 +24,7 @@ namespace BannerKings.Behaviours
             dataStore.SyncData("bannerkings-traits-initialized", ref traitsInitialized);
         }
 
-        private void OnGameLoaded(CampaignGameStarter starter)
+        private void OnGameLoaded()
         {
             if (!traitsInitialized)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -20,69 +21,10 @@ namespace BannerKings.Models.BKModels
 
         public ExplainedNumber GetSuccessionHeirScore(Hero currentLeader, Hero candidate, FeudalTitle title, bool explanations = false)
         {
-            var result = new ExplainedNumber(0f, explanations);
-
             FeudalContract contract = title.Contract;
             var succession = contract.Succession;
-            if (succession == SuccessionType.Imperial)
-            {
-                result.Add(currentLeader.GetRelation(candidate) / 3f, new TextObject("{=uYDaqbt6}Approval by {HERO}")
-                    .SetTextVariable("HERO", currentLeader.Name));
 
-                result.Add(candidate.Age / 2f, new TextObject("Age"));
-                result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) * 0.1f, DefaultSkills.Leadership.Name);
-                result.Add(candidate.GetSkillValue(DefaultSkills.Tactics) * 0.1f, DefaultSkills.Tactics.Name);
-                result.Add(candidate.GetSkillValue(BKSkills.Instance.Lordship) * 0.1f, BKSkills.Instance.Lordship.Name);
-                result.Add(candidate.GetSkillValue(DefaultSkills.Charm) * 0.1f, DefaultSkills.Charm.Name);
-
-                if (candidate.Clan == currentLeader.Clan)
-                {
-                    result.Add(0.15f, candidate.Clan.Name);
-                }
-
-                result.AddFactor(candidate.Clan.Tier * 0.05f, GameTexts.FindText("str_clan_tier_bonus"));
-            }
-
-            if (succession == SuccessionType.Republic)
-            {
-                result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 5, GameTexts.FindText("str_notable_power"));
-                result.Add(candidate.Age / 2f, new TextObject("Age"));
-                result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) * 0.1f, DefaultSkills.Leadership.Name);
-                result.Add(candidate.GetSkillValue(DefaultSkills.Charm) * 0.1f, DefaultSkills.Charm.Name);
-                result.Add(candidate.GetSkillValue(DefaultSkills.Steward) * 0.1f, DefaultSkills.Steward.Name);
-
-                result.AddFactor(candidate.Clan.Tier * 0.08f, GameTexts.FindText("str_clan_tier_bonus"));
-            }
-
-            if (succession == SuccessionType.Hereditary_Monarchy)
-            {
-                if (GetInheritanceCandidates(currentLeader).Contains(candidate))
-                {
-                    result = GetInheritanceHeirScore(currentLeader, candidate, contract, explanations);
-                }
-            }
-
-            if (succession == SuccessionType.FeudalElective)
-            {
-                if (GetInheritanceCandidates(currentLeader).Contains(candidate))
-                {
-                    result = GetInheritanceHeirScore(currentLeader, candidate, contract, explanations);
-                    result.Add(300f, new TextObject("{=x5vKZHNN}Former ruler's clan"));
-                }
-
-                if (title.HeroHasValidClaim(candidate))
-                {
-                    result.Add(200f, new TextObject("{=ipGDmaBZ}Claimant"));
-                }
-
-                result.Add(candidate.Clan.Tier * 50f, GameTexts.FindText("str_clan_tier_bonus"));
-            }
-
-            if (succession == SuccessionType.Elective_Monarchy)
-            {
-                result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 2, GameTexts.FindText("str_notable_power"));
-            }
-
+            var result = succession.CalculateHeirScore(currentLeader, candidate, title, explanations);
             if (candidate.Culture != currentLeader.Clan.Kingdom.Culture)
             {
                 result.AddFactor(-0.2f, GameTexts.FindText("str_culture"));
@@ -97,7 +39,9 @@ namespace BannerKings.Models.BKModels
             if (contract == null)
             {
                 contract = new FeudalContract(null, null,
-                    GovernmentType.Feudal, SuccessionType.Elective_Monarchy, InheritanceType.Primogeniture, GenderLaw.Agnatic);
+                    DefaultGovernments.Instance.Feudal, 
+                    DefaultSuccessions.Instance.FeudalElective, 
+                    InheritanceType.Primogeniture, GenderLaw.Agnatic);
             }
 
             GenderLaw genderLaw = contract.GenderLaw;
@@ -186,82 +130,8 @@ namespace BannerKings.Models.BKModels
 
         public HashSet<Hero> GetSuccessionCandidates(Hero currentLeader, FeudalTitle title)
         {
-            var list = new HashSet<Hero>();
-            var succession = title.Contract.Succession;
-
-            if (succession == SuccessionType.Hereditary_Monarchy)
-            {
-                foreach (Hero hero in GetInheritanceCandidates(currentLeader))
-                {
-                    list.Add(hero);
-                }
-            }
-
-            if (succession == SuccessionType.FeudalElective)
-            {
-                foreach (Hero hero in GetInheritanceCandidates(currentLeader))
-                {
-                    list.Add(hero);
-                }
-
-                foreach (var claimant in title.Claims)
-                {
-                    Hero hero = claimant.Key;
-                    if (claimant.Value != ClaimType.Ongoing && claimant.Value != ClaimType.None)
-                    {
-                        if (hero.IsClanLeader() && !list.Contains(hero))
-                        {
-                            list.Add(hero);
-                        }
-                    }
-                }
-
-                if (list.Count < 5)
-                {
-                    int count = list.Count;
-                    while (count < 5)
-                    {
-                        int tier = 6;
-                        foreach (var clan in currentLeader.Clan.Kingdom.Clans)
-                        {
-                            if (clan.Tier >= tier && clan != currentLeader.Clan && !list.Contains(clan.Leader))
-                            {
-                                list.Add(clan.Leader);
-                                count++;
-                            }
-                        }
-
-                        tier--;
-                    }
-                }
-            }
-            else
-            {
-                var clans = new List<Clan>();
-                if (currentLeader.Clan.Kingdom != null)
-                {
-                    clans = (from t in currentLeader.Clan.Kingdom.Clans
-                            where !t.IsEliminated && !t.IsUnderMercenaryService
-                            select t).ToList();
-                }
-
-                foreach (var clan in clans)
-                {
-                    if (clan == currentLeader.Clan && succession == SuccessionType.Imperial)
-                    {
-                        foreach (var candidate in GetInheritanceCandidates(currentLeader))
-                        {
-                            list.Add(candidate);
-                        }
-                    }
-                    else if (clan != currentLeader.Clan)
-                    {
-                        list.Add(clan.Leader);
-                    }
-                }
-            }
-
-            return list;
+            Succession succession = title.Contract.Succession;
+            return succession.GetSuccessionCandidates(currentLeader, title); ;
         }
 
         public List<Hero> GetInheritanceCandidates(Hero currentLeader)
@@ -493,7 +363,7 @@ namespace BannerKings.Models.BKModels
                 return revokeAction;
             }
 
-            var governmentType = title.Contract.Government;
+            /*var governmentType = title.Contract.Government;
             switch (governmentType)
             {
                 case GovernmentType.Tribal:
@@ -556,7 +426,7 @@ namespace BannerKings.Models.BKModels
 
                     break;
                 }
-            }
+            }*/
 
             var revokerHighest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(revoker);
             var targetHighest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(title.deJure);

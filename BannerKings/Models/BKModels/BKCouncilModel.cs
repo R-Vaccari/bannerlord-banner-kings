@@ -110,8 +110,8 @@ namespace BannerKings.Models.BKModels
 
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(data.Clan.Leader);
                 TitleType type = title != null ? title.TitleType : TitleType.Lordship;
-                if (type <= TitleType.Barony) result.Add(300f / (float)type, new TextObject(Utils.Helpers.GetTitlePrefix(type,
-                    title != null ? title.Contract.Government : GovernmentType.Feudal, data.Clan.Culture)));
+                if (type <= TitleType.Barony) result.Add(300f / (float)type, 
+                    new TextObject(Utils.Helpers.GetTitlePrefix(type, data.Clan.Culture)));
             }
 
             return result;
