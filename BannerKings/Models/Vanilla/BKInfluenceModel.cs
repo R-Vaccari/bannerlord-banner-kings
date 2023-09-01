@@ -138,6 +138,11 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, DefaultDivinities.Instance.WindSouth))
+            {
+                result.AddFactor(0.15f, DefaultDivinities.Instance.WindSouth.Name);
+            }
+
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
             if (council.CourtGrace != null)
             {

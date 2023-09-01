@@ -74,7 +74,6 @@ namespace BannerKings.Models.BKModels
             var change = targetAutonomy > autonomy ? 0.005f + random1 - random2 :
                 targetAutonomy < autonomy ? -0.005f - random1 + random2 : 0f;
             result.Add(change);
-           
 
             return result;
         }
@@ -132,7 +131,6 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-
             return result;
         }
 
@@ -181,14 +179,21 @@ namespace BannerKings.Models.BKModels
                         .SetTextVariable("LIFESTYLE", DefaultLifestyles.Instance.Mercenary.Name));
                 }
 
-                var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(town.OwnerClan.Leader);
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(town.OwnerClan.Leader, 
-                    DefaultDivinities.Instance.DarusosianSecondary2, religion))
+                Hero leader = town.OwnerClan.Leader;
+                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(leader);
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader, 
+                    DefaultDivinities.Instance.WindHeaven, religion))
+                {
+                    result.Add(0.08f, DefaultDivinities.Instance.WindHeaven.Name);
+                }
+
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader,
+                   DefaultDivinities.Instance.DarusosianSecondary2, religion))
                 {
                     result.Add(0.04f, DefaultDivinities.Instance.DarusosianSecondary2.Name);
                 }
 
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(town.OwnerClan.Leader,
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader,
                     DefaultDivinities.Instance.TreeloreMain, religion) && religion.FavoredCultures.Contains(town.Culture))
                 {
                     result.Add(0.06f, DefaultDivinities.Instance.DarusosianSecondary2.Name);
@@ -224,7 +229,6 @@ namespace BannerKings.Models.BKModels
 
             return result;
         }
-
 
         public ExplainedNumber CalculateCurrentUnlandedDemesne(Clan clan)
         {

@@ -54,7 +54,6 @@ using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Populations.Estates.Estate;
-using CasusBelli = BannerKings.Behaviours.Diplomacy.Wars.CasusBelli;
 using BannerKings.Managers.Institutions.Religions.Faiths.Eastern;
 
 namespace BannerKings

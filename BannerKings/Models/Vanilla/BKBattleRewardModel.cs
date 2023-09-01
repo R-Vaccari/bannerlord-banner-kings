@@ -62,6 +62,12 @@ namespace BannerKings.Models.Vanilla
                 {
                     result.AddFactor(0.3f, DefaultDivinities.Instance.Wilund.Name);
                 }
+
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader,
+                   DefaultDivinities.Instance.WindEast))
+                {
+                    result.AddFactor(0.4f, DefaultDivinities.Instance.WindWest.Name);
+                }
             }
 
             return result;

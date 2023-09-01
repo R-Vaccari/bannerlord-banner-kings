@@ -85,7 +85,7 @@ namespace BannerKings.Managers.Institutions.Religions
 
             Iltanlar.Initialize(new TextObject("{=!}Iltanlar"),
                 new TextObject("{=!}Iltanlar is the god of a mountain-dwelling Devseg group, who migrated from the Sulun Dag mountain range to mount Iltan, and have since been assimilated by the eastern hordes of their cousins. The Iltanlar people value security above most things, thus they have for long dwelled in the mountains, which they perceive to be bountiful in good, protective spirits. Iltanlar, the god, is said to be an ancient hero, who guided his people to their new promised home, where since the Iltanlar people have founded Baltakhand."),
-                new TextObject("{=!}Improved Devseg town prosperity\nIncreased defensive battle morale"),
+                new TextObject("{=!}Improved Devseg town prosperity\nIncreased troop morale in defensive battles"),
                 new TextObject("{=!}Mountain God"),
                 300,
                 new TextObject("{=!}"),
@@ -125,7 +125,7 @@ namespace BannerKings.Managers.Institutions.Religions
 
             WindWest.Initialize(new TextObject("{=!}Yel Batmag"),
                 new TextObject("{=!}The Western Wind, the harbinger of death. Yel Batmag is in direct opposition to Yel Togmag. He grants death to whom he touches, incuding the Sun, who is again bequeated life by Yel Togmag, in an unending cycle. Death from Yel Batmag, however, is not perceived as sorrowful, or painful, but simply the natural and necessary part of the mundane existance, which the god presides over, as opposed to yield for his ambitions. Devseg shamans, the Kams, were the first to oppose the hordes marching westwards, seeing it as a death sentence."),
-                new TextObject("{=!}Protection against curses\nDouble renown from offensive battles"),
+                new TextObject("{=!}Protection against curses\nSignificant extra renown from battles"),
                 new TextObject("{=!}Western Wind"),
                 300,
                 new TextObject("{=!}"),

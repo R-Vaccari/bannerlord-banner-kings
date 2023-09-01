@@ -1,7 +1,6 @@
 ﻿using SandBox.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using BannerKings.Managers.Skills;
 
@@ -9,6 +8,16 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKBattleMoraleModel : SandboxBattleMoraleModel
     {
+        public override float GetEffectiveInitialMorale(Agent agent, float baseMorale)
+        {
+            float morale = base.GetEffectiveInitialMorale(agent, baseMorale);
+            if (agent.IsHuman && Mission.Current != null && agent.Team != null && agent.Team.IsDefender)
+            {
+                morale *= 1.3f;
+            }
+
+            return morale;
+        }
 
         public override float CalculateMoraleChangeToCharacter(Agent agent, float maxMoraleChange)
         {
