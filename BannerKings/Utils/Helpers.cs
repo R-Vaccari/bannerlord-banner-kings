@@ -305,38 +305,6 @@ namespace BannerKings.Utils
             return text;
         }
 
-        public static string GetGovernmentDescription(GovernmentType type)
-        {
-            var text = type switch
-            {
-                GovernmentType.Imperial => new TextObject("{=Z8ZfKuSX}An Imperial government is a highly centralized one. Policies favor the ruling clan at the expense of vassals. A strong leadership that sees it's vassals more as administrators than lords."),
-                GovernmentType.Tribal => new TextObject("{=mWKXYs2o}The Tribal association is the most descentralized government. Policies to favor the ruling clan are unwelcome, and every lord is a 'king' or 'queen' in their own right."),
-                GovernmentType.Republic => new TextObject("{=v3KydG7F}Republics are firmly setup to avoid the accumulation of power. Every clan is given a chance to rule, and though are able to have a few political advantages, the state is always the priority."),
-                _ => new TextObject("{=3bJSgTAD}Feudal societies can be seen as the midway between tribals and imperials. Although the ruling clan accumulates privileges, and often cannot be easily removed from the throne, lords and their rightful property need to be respected.")
-            };
-
-            return text.ToString();
-        }
-
-        public static string GetInheritanceDescription(InheritanceType type)
-        {
-            var text = type switch
-            {
-                InheritanceType.Primogeniture => new TextObject("{=NSWFGCd6}Primogeniture favors blood family of eldest age. Clan members not related by blood are last resort."),
-                InheritanceType.Seniority => new TextObject("{=SiRpKHww}Seniority favors those of more advanced age in the clan, regardless of blood connections."),
-                _ => new TextObject("{=aybPH14L}Ultimogeniture favors the youngest in the clan, as well as blood family. Clan members not related by blood are last resort.")
-            };
-
-            return text.ToString();
-        }
-
-        public static string GetGenderLawDescription(GenderLaw type)
-        {
-            return type == GenderLaw.Agnatic 
-                ? new TextObject("{=EjVOGKj7}Agnatic law favors males. Although females are not completely excluded, they will only be chosen in case a male candidate is not present.").ToString() 
-                : new TextObject("{=M0MP3ysP}Cognatic law sees no distinction between both genders. Candidates are choosen stricly on their merits, as per the context requires.").ToString();
-        }
-
         public static string GetConsumptionHint(ConsumptionType type)
         {
             return type switch
@@ -347,33 +315,6 @@ namespace BannerKings.Utils
                 _ => new TextObject("{=QJ1pjKxw}Satisfaction over availability of food types.").ToString()
             };
         }
-
-        public static string GetGovernmentString(GovernmentType type, CultureObject culture = null)
-        {
-            TextObject title = null;
-
-            if (culture is {StringId: "sturgia"})
-            {
-                if (type == GovernmentType.Tribal)
-                {
-                    title = new TextObject("{=jz2SCLZS}Grand-Principality");
-                }
-            }
-
-            if (title == null)
-            {
-                title = type switch
-                {
-                    GovernmentType.Feudal => new TextObject("{=7x3HJ29f}Kingdom"),
-                    GovernmentType.Tribal => new TextObject("{=SuG07DUi}High Kingship"),
-                    GovernmentType.Imperial => new TextObject("{=uEBLsMAb}Empire"),
-                    _ => new TextObject("{=MSaLufNx}Republic")
-                };
-            }
-
-            return title.ToString();
-        }
-
         public static string GetTitlePrefix(TitleType type, CultureObject culture = null)
         {
             TextObject title = null;

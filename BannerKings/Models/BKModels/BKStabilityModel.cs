@@ -8,6 +8,7 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -219,7 +220,7 @@ namespace BannerKings.Models.BKModels
                 };
 
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
-                if (government == GovernmentType.Feudal)
+                if (government == DefaultGovernments.Instance.Feudal)
                 {
                     result.Add(0.05f, new TextObject("{=PSrEtF5L}Government"));
                 }

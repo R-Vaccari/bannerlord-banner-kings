@@ -8,6 +8,7 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Traits;
 using BannerKings.Settings;
 using BannerKings.Utils;
@@ -1193,13 +1194,18 @@ namespace BannerKings.Behaviours
 
                 CharacterObject template;
                 var genderLaw = title.Contract.GenderLaw;
-                if (genderLaw == GenderLaw.Agnatic)
+                if (genderLaw == DefaultGenderLaws.Instance.Agnatic)
                 {
                     template = (from e in clan.Culture.NotableAndWandererTemplates
                                 where e.Occupation == Occupation.Wanderer && !e.IsFemale
                                 select e).GetRandomElementInefficiently();
                 }
-
+                else if (genderLaw == DefaultGenderLaws.Instance.Enatic)
+                {
+                    template = (from e in clan.Culture.NotableAndWandererTemplates
+                                where e.Occupation == Occupation.Wanderer && e.IsFemale
+                                select e).GetRandomElementInefficiently();
+                }
                 else
                 {
                     template = (from e in clan.Culture.NotableAndWandererTemplates

@@ -1,4 +1,3 @@
-using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Kingdoms.Contract;
 using BannerKings.Managers.Titles;
 using System;
@@ -65,7 +64,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var kingdom = fulfiller.Clan.Kingdom;
             var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
 
-            var government = new BKGovernmentDecision(fulfiller.Clan, GovernmentType.Feudal, title);
+            /*var government = new BKGovernmentDecision(fulfiller.Clan, GovernmentType.Feudal, title);
             options.Add(new ContractChangeOption(new TextObject("{=PSrEtF5L}Government"),
                 new TextObject("{=jeNEcVGi}Propose a change in government structure, altering the allowed succession forms and aspects of settlement governance. Depending on the government choice, an appropriate succession type will be enforced as well."),
                 300, government, GetGovernments(kingdom, title)));
@@ -83,7 +82,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var gender = new BKGenderDecision(fulfiller.Clan, GenderLaw.Agnatic, title);
             options.Add(new ContractChangeOption(new TextObject("{=LESrJQvC}Gender Law"), 
                 new TextObject("{=kXUWrDRZ}Propose a change in gender laws, dictating whether males and females are viewed equally in various aspects."),
-                150, gender, GetGenderLaws(kingdom, title)));
+                150, gender, GetGenderLaws(kingdom, title)));*/
 
             foreach (var option in options)
             {
@@ -120,7 +119,7 @@ namespace BannerKings.Managers.Goals.Decisions
             throw new NotImplementedException();
         }
 
-        private List<InquiryElement> GetGenderLaws(Kingdom kingdom, FeudalTitle title)
+        /*private List<InquiryElement> GetGenderLaws(Kingdom kingdom, FeudalTitle title)
         {
             var laws = new List<InquiryElement>();
             foreach (var type in BannerKingsConfig.Instance.TitleManager.GetGenderLawTypes())
@@ -161,7 +160,7 @@ namespace BannerKings.Managers.Goals.Decisions
         private List<InquiryElement> GetSuccessions(Kingdom kingdom, FeudalTitle title)
         {
             var laws = new List<InquiryElement>();
-            /*foreach (var type in SuccessionHelper.GetValidSuccessions(title.Contract.Government))
+            foreach (var type in SuccessionHelper.GetValidSuccessions(title.Contract.Government))
             {
                 if (kingdom != null && type != title.Contract.Succession)
                 {
@@ -172,7 +171,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
                         Utils.Helpers.GetSuccessionTypeDescription(type)));
                 }
-            }*/
+            }
 
             return laws;
         }
@@ -180,7 +179,7 @@ namespace BannerKings.Managers.Goals.Decisions
         private List<InquiryElement> GetGovernments(Kingdom kingdom, FeudalTitle title)
         {
             var laws = new List<InquiryElement>();
-            /*foreach (var type in BannerKingsConfig.Instance.TitleManager.GetGovernmentTypes())
+            foreach (var type in BannerKingsConfig.Instance.TitleManager.GetGovernmentTypes())
             {
                 if (kingdom != null && type != title.Contract.Government)
                 {
@@ -191,10 +190,10 @@ namespace BannerKings.Managers.Goals.Decisions
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
                         Utils.Helpers.GetGovernmentDescription(type)));
                 }
-            }*/
+            }
 
             return laws;
-        }
+        }*/
 
         internal class ContractChangeOption
         {

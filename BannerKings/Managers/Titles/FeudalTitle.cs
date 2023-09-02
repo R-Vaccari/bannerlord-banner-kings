@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Extensions;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -137,7 +138,7 @@ namespace BannerKings.Managers.Titles
 
         public void PostInitialize()
         {
-            Contract.PostInitialize();
+            Contract.PostInitialize(deJure.Clan.Kingdom);
             if (!CustomName)
             {
                 FullName = new TextObject("{=wMius2i9}{TITLE} of {NAME}")
@@ -422,7 +423,7 @@ namespace BannerKings.Managers.Titles
             }
         }
 
-        public void ChangeContract(GovernmentType government)
+        public void ChangeContract(Government government)
         {
             Contract.ChangeGovernment(government);
             if (Vassals is {Count: > 0})
@@ -434,7 +435,7 @@ namespace BannerKings.Managers.Titles
             }
         }
 
-        public void ChangeContract(SuccessionType succession)
+        public void ChangeContract(Succession succession)
         {
             Contract.ChangeSuccession(succession);
             if (Vassals is {Count: > 0})
@@ -446,7 +447,7 @@ namespace BannerKings.Managers.Titles
             }
         }
 
-        public void ChangeContract(InheritanceType inheritance)
+        public void ChangeContract(Inheritance inheritance)
         {
             Contract.ChangeInheritance(inheritance);
             if (Vassals is {Count: > 0})

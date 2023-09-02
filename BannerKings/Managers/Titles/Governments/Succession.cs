@@ -33,6 +33,14 @@ namespace BannerKings.Managers.Titles.Governments
             this.isAdequate = isAdequate;
         }
 
+        public void PostInitialize()
+        {
+            Succession s = DefaultSuccessions.Instance.GetById(this);
+            Initialize(s.name, s.description, s.ElectedSuccession, s.Authoritarian, s.Oligarchic,
+                s.Egalitarian, s.CandidatesText, s.ScoreText, s.getSuccessionCandidates,
+                s.calculateHeirScore, s.isAdequate);
+        }
+
         public bool IsKingdomAdequate(Kingdom kingdom)
         {
             if (isAdequate != null) isAdequate(kingdom);

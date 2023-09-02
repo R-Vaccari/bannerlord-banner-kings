@@ -1,6 +1,12 @@
-﻿using BannerKings.Utils.Extensions;
+﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Skills;
+using BannerKings.Managers.Traits;
+using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -16,6 +22,8 @@ namespace BannerKings.Managers.Titles.Governments
         public Succession TheocraticElective { get; } = new Succession("TheocraticElective");
         public Succession Imperial { get; } = new Succession("Imperial");
         public Succession Republic { get; } = new Succession("Republic");
+        public Succession Dictatorship { get; } = new Succession("Dictatorship");
+        public Succession AseraiElective { get; } = new Succession("AseraiElective");
 
         public override IEnumerable<Succession> All
         {
@@ -29,19 +37,106 @@ namespace BannerKings.Managers.Titles.Governments
                 yield return TheocraticElective;
                 yield return Imperial;
                 yield return Republic;
+                yield return Dictatorship;
+                yield return AseraiElective;
             }
+        }
+
+        public Succession GetKingdomIdealSuccession(Kingdom kingdom, Government government)
+        {
+            string id = kingdom.StringId;
+
+            if (id == "vlandia")
+            {
+                return WilundingElective;
+            }
+
+            if (id == "battania")
+            {
+                return BattanianElective;
+            }
+
+            if (id == "empire_w")
+            {
+                return Dictatorship;
+            }
+
+            if (id == "aserai")
+            {
+                return AseraiElective;
+            }
+
+            if (government == DefaultGovernments.Instance.Feudal)
+            {
+                return FeudalElective;
+            }
+            else if (government == DefaultGovernments.Instance.Republic)
+            {
+                return Republic;
+            }
+            else if (government == DefaultGovernments.Instance.Imperial)
+            {
+                return Imperial;
+            }
+            else return TribalElective;
         }
 
         public override void Initialize()
         {
-            Imperial.Initialize(new TextObject("{=!}Imperial"),
-               new TextObject(),
-               false,
-               -0.4f,
+            AseraiElective.Initialize(new TextObject("{=!}Nahawasi Elective"),
+               new TextObject("{=!}The Nahawasi succession is most interested in the economic prosperity of the realm, for trade is the blood that keeps the Nahasa clans alive. A strong leader, the Aserai say, is one both brave, so they may defeat their enemies, and generous, so they may be loved by those under their protection. Moreover, in keeping with the traditions of Banu Asera, the Nahawasi place value in the religious integrity and scholarly tendencies of their leader, or in other words, that they understand and seek Truth. A fool leader is no worse than a craven one."),
+               true,
+               -0.7f,
                1f,
-               0.2f,
+               -0.2f,
+               new TextObject("{=!}- Heir of current ruler\n- Any Full Peerage clan leader"),
+               new TextObject("{=!}++ Skills\n++ Military power\n+ Clan tier\n+ Inheritance score (for clan inheritors)"),
+               (Hero currentLeader, FeudalTitle title) =>
+               {
+                   HashSet<Hero> result = new HashSet<Hero>(3);
+                   foreach (Hero hero in BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(currentLeader).Take(1))
+                   {
+                       result.Add(hero);
+                   }
+
+                   foreach (Clan clan in currentLeader.Clan.Kingdom.Clans)
+                   {
+                       if (clan.IsUnderMercenaryService) continue;
+
+                       CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+                       if (council.Peerage != null && council.Peerage.IsFullPeerage)
+                       {
+                           result.Add(clan.Leader);
+                       }
+                   }
+
+                   if (result.Contains(currentLeader))
+                       result.Remove(currentLeader);
+
+                   return result;
+               },
+               (Hero currentLeader, Hero candidate, FeudalTitle title, bool explanations) =>
+               {
+                   ExplainedNumber result = new ExplainedNumber(0f, explanations);
+
+                   result.Add(candidate.Clan.Gold / 200f, new TextObject("{=!}Gold"));
+
+                   result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 2f, DefaultSkills.Leadership.Name);
+                   result.Add(candidate.GetSkillValue(DefaultSkills.Tactics) / 2f, DefaultSkills.Tactics.Name);
+                   result.Add(candidate.GetSkillValue(DefaultSkills.Charm) / 2f, DefaultSkills.Charm.Name);
+
+                   result.Add(candidate.Clan.Tier * 25f, GameTexts.FindText("str_clan_tier_bonus"));
+                   return result;
+               });
+
+            Dictatorship.Initialize(new TextObject("{=!}Dictatorship"),
+               new TextObject("{=ag50C9hT}Imperial successions are completely dictated by the emperor/empress. They will choose from most competent members in their family, as well as other family leaders. Imperial succession values age, family prestigy, military and administration skills. No election takes place."),
+               false,
+               1f,
+               -0.2f,
+               -0.7f,
                new TextObject("{=!}-Inheritance candidates of current ruler\n- Title claimants\n- Anyone capable of leading an army (marshal, legates)"),
-               new TextObject("{=!}+ Leadership\n+ Tactics\n+ Lordship\n+ Charm\n+ Inheritance score (for clan inheritors)\n+ Title claim"),
+               new TextObject("{=!}++ Inheritance score (for clan inheritors)\n+ Title claim\n+ Skills"),
                (Hero currentLeader, FeudalTitle title) =>
                {
                    HashSet<Hero> result = new HashSet<Hero>(3);
@@ -73,6 +168,9 @@ namespace BannerKings.Managers.Titles.Governments
                        }
                    }
 
+                   if (result.Contains(currentLeader))
+                       result.Remove(currentLeader);
+
                    return result;
                },
                (Hero currentLeader, Hero candidate, FeudalTitle title, bool explanations) =>
@@ -84,19 +182,100 @@ namespace BannerKings.Managers.Titles.Governments
                        result.Add(BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(currentLeader,
                            candidate,
                            title.Contract,
-                           explanations).ResultNumber, new TextObject("{=!}Claim as inheritor of previous ruler"));
+                           explanations).ResultNumber * 1.5f, new TextObject("{=!}{CLAN} inheritor")
+                            .SetTextVariable("CLAN", currentLeader.Clan.Name));
                    }
+
+                   if (title.HeroHasValidClaim(candidate))
+                   {
+                       result.Add(150f, new TextObject("{=ipGDmaBZ}Claimant"));
+                   }
+
+                   result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 3f, DefaultSkills.Leadership.Name);
+                   result.Add(candidate.GetSkillValue(DefaultSkills.Tactics) / 3f, DefaultSkills.Tactics.Name);
+                   result.Add(candidate.GetSkillValue(DefaultSkills.Charm) / 3f, DefaultSkills.Charm.Name);
 
                    result.Add(candidate.Clan.Tier * 75f, GameTexts.FindText("str_clan_tier_bonus"));
                    return result;
                });
 
-            Hereditary.Initialize(new TextObject("{=!}Hereditary"),
-                new TextObject(),
+            Imperial.Initialize(new TextObject("{=SW29YLBZ}Imperial"),
+               new TextObject("{=!}Imperial successions, despite not being elective, can be quite uncertain."),
+               false,
+               1f,
+               -0.2f,
+               -0.7f,
+               new TextObject("{=!}- Inheritance candidates of current ruler\n- Title claimants\n- Any clan leader capable of leading an army (marshal, legates)"),
+               new TextObject("{=!}++ Inheritance score (for clan inheritors)\n++ Influence cap\n+ Title claim\n+ Skills"),
+               (Hero currentLeader, FeudalTitle title) =>
+               {
+                   HashSet<Hero> result = new HashSet<Hero>(3);
+                   foreach (Hero hero in BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(currentLeader))
+                   {
+                       result.Add(hero);
+                   }
+
+                   foreach (var claimant in title.Claims)
+                   {
+                       Hero hero = claimant.Key;
+                       if (claimant.Value != ClaimType.Ongoing && claimant.Value != ClaimType.None)
+                       {
+                           if (hero.IsClanLeader())
+                           {
+                               result.Add(hero);
+                           }
+                       }
+                   }
+
+                   foreach (Clan clan in currentLeader.Clan.Kingdom.Clans)
+                   {
+                       if (clan.IsUnderMercenaryService) continue;
+
+                       if (BannerKingsConfig.Instance.ArmyManagementModel.CanCreateArmy(clan.Leader))
+                       {
+                           result.Add(clan.Leader);
+                       }
+                   }
+
+                   if (result.Contains(currentLeader))
+                       result.Remove(currentLeader);
+
+                   return result;
+               },
+               (Hero currentLeader, Hero candidate, FeudalTitle title, bool explanations) =>
+               {
+                   ExplainedNumber result = new ExplainedNumber(0f, explanations);
+
+                   if (BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(currentLeader).Contains(candidate))
+                   {
+                       result.Add(BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(currentLeader,
+                           candidate,
+                           title.Contract,
+                           explanations).ResultNumber * 1.5f, new TextObject("{=!}{CLAN} inheritor")
+                            .SetTextVariable("CLAN", currentLeader.Clan.Name));
+                   }
+
+                   if (title.HeroHasValidClaim(candidate))
+                   {
+                       result.Add(150f, new TextObject("{=ipGDmaBZ}Claimant"));
+                   }
+
+                   result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 3f, DefaultSkills.Leadership.Name);
+                   result.Add(candidate.GetSkillValue(DefaultSkills.Tactics) / 3f, DefaultSkills.Tactics.Name);
+                   result.Add(candidate.GetSkillValue(DefaultSkills.Charm) / 3f, DefaultSkills.Charm.Name);
+
+                   result.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(candidate.Clan).ResultNumber / 3f,
+                       new TextObject("{=!}Influence cap"));
+
+                   return result;
+               });
+
+            Hereditary.Initialize(new TextObject("{=iYzZgP3y}Hereditary Monarchy"),
+                new TextObject("{=9EjsMFJx}In hereditary monarchies, the monarch is always the ruling dynasty's leader. No election takes place, and the realm does not change leadership without extraordinary measures."),
                 false,
-                -0.4f,
-                1f,
-                0.2f,
+                0.8f,
+                -0.2f,
+                -0.6f,
                 new TextObject("{=!}-Inheritance candidates of current ruler\n- Title claimants\n- Anyone with title of count or higher and clan tier 5 or higher"),
                 new TextObject("{=!}+++ Inheritance score (for clan inheritors)\n++ Title claim\n+ Clan tier"),
                 (Hero currentLeader, FeudalTitle title) =>
@@ -130,6 +309,9 @@ namespace BannerKings.Managers.Titles.Governments
                         }
                     }
 
+                    if (result.Contains(currentLeader))
+                        result.Remove(currentLeader);
+
                     return result;
                 },
                 (Hero currentLeader, Hero candidate, FeudalTitle title, bool explanations) =>
@@ -141,51 +323,44 @@ namespace BannerKings.Managers.Titles.Governments
                         result.Add(BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(currentLeader,
                             candidate,
                             title.Contract,
-                            explanations).ResultNumber, new TextObject("{=!}Claim as inheritor of previous ruler"));
+                            explanations).ResultNumber * 2f, new TextObject("{=!}{CLAN} inheritor")
+                            .SetTextVariable("CLAN", currentLeader.Clan.Name));
                     }
 
-                    result.Add(candidate.Clan.Tier * 75f, GameTexts.FindText("str_clan_tier_bonus"));
+                    if (title.HeroHasValidClaim(candidate))
+                    {
+                        result.Add(300f, new TextObject("{=ipGDmaBZ}Claimant"));
+                    }
+
+                    result.Add(candidate.Clan.Tier * 25f, GameTexts.FindText("str_clan_tier_bonus"));
                     return result;
                 });
 
-            Republic.Initialize(new TextObject("{=!}Republican"),
-               new TextObject(),
+            Republic.Initialize(new TextObject("{=vFXFxkM9}Republican"),
+               new TextObject("{=ATmtkA1S}Republican successions ensure the power is never concentrated. Each year, a new ruler is chosen from the realm's dynasties. The previous ruler is strickly forbidden to participate. Age, family prestige and administration skills are sought after in candidates."),
                true,
-               -0.4f,
-               1f,
-               0.2f,
-               new TextObject("{=!}-Inheritance candidates of current ruler\n- Title claimants\n- Anyone with title of count or higher and clan tier 5 or higher"),
-               new TextObject("{=!}++ Clan tier\n++ Inheritance score (for clan inheritors)\n++ Title claim"),
+               -1f,
+               0.4f,
+               0.9f,
+               new TextObject("{=!}- Any Full Peerage clan leader"),
+               new TextObject("{=!}+++ Political traits\n++ Clan tier\n++ Skills\n+ Age"),
                (Hero currentLeader, FeudalTitle title) =>
                {
                    HashSet<Hero> result = new HashSet<Hero>(3);
-                   foreach (Hero hero in BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(currentLeader))
-                   {
-                       result.Add(hero);
-                   }
-
-                   foreach (var claimant in title.Claims)
-                   {
-                       Hero hero = claimant.Key;
-                       if (claimant.Value != ClaimType.Ongoing && claimant.Value != ClaimType.None)
-                       {
-                           if (hero.IsClanLeader())
-                           {
-                               result.Add(hero);
-                           }
-                       }
-                   }
 
                    foreach (Clan clan in currentLeader.Clan.Kingdom.Clans)
                    {
                        if (clan.IsUnderMercenaryService) continue;
 
-                       FeudalTitle highestTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                       if (highestTitle.TitleType <= TitleType.County)
+                       CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+                       if (council.Peerage != null && council.Peerage.IsFullPeerage)
                        {
                            result.Add(clan.Leader);
                        }
                    }
+
+                   if (result.Contains(currentLeader))
+                       result.Remove(currentLeader);
 
                    return result;
                },
@@ -193,56 +368,48 @@ namespace BannerKings.Managers.Titles.Governments
                {
                    ExplainedNumber result = new ExplainedNumber(0f, explanations);
 
-                   if (BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(currentLeader).Contains(candidate))
-                   {
-                       result.Add(BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(currentLeader,
-                           candidate,
-                           title.Contract,
-                           explanations).ResultNumber, new TextObject("{=!}Claim as inheritor of previous ruler"));
-                   }
+                   result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 3f, DefaultSkills.Leadership.Name);
+                   result.Add(candidate.GetSkillValue(DefaultSkills.Tactics) / 3f, DefaultSkills.Tactics.Name);
+                   result.Add(candidate.GetSkillValue(DefaultSkills.Charm) / 3f, DefaultSkills.Charm.Name);
+                   result.Add(candidate.GetSkillValue(BKSkills.Instance.Lordship) / 3f, DefaultSkills.Charm.Name);
+                   result.Add(candidate.Age * 3f, new TextObject("{=!}Age"));
 
-                   result.Add(candidate.Clan.Tier * 75f, GameTexts.FindText("str_clan_tier_bonus"));
+                   result.Add(candidate.Clan.Tier * 50f, GameTexts.FindText("str_clan_tier_bonus"));
+
+                   //foreach (Clan clan in currentLeader.Clan.Kingdom.Clans)
+                   //{
+
+                   //}
+                   
                    return result;
                });
 
             TheocraticElective.Initialize(new TextObject("{=!}Theocratic Elective"),
                 new TextObject(),
                 true,
-                -0.4f,
-                1f,
-                0.2f,
-                new TextObject("{=!}-Inheritance candidates of current ruler\n- Title claimants\n- Anyone with title of count or higher and clan tier 5 or higher"),
-                new TextObject("{=!}++ Clan tier\n++ Inheritance score (for clan inheritors)\n++ Title claim"),
+                -0.2f,
+                -0.5f,
+                0.7f,
+                new TextObject("{=!}-Every clan leader of same faith as current ruler"),
+                new TextObject("{=!}++ Piety\n++ Virtues\n++ Zealotry\n+ Skills\n+ Clan tier"),
                 (Hero currentLeader, FeudalTitle title) =>
                 {
                     HashSet<Hero> result = new HashSet<Hero>(3);
-                    foreach (Hero hero in BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(currentLeader))
-                    {
-                        result.Add(hero);
-                    }
 
-                    foreach (var claimant in title.Claims)
-                    {
-                        Hero hero = claimant.Key;
-                        if (claimant.Value != ClaimType.Ongoing && claimant.Value != ClaimType.None)
-                        {
-                            if (hero.IsClanLeader())
-                            {
-                                result.Add(hero);
-                            }
-                        }
-                    }
-
+                    Religion leaderReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(currentLeader);
                     foreach (Clan clan in currentLeader.Clan.Kingdom.Clans)
                     {
                         if (clan.IsUnderMercenaryService) continue;
 
-                        FeudalTitle highestTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                        if (highestTitle.TitleType <= TitleType.County)
+                        Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
+                        if (religion != null && religion.Equals(leaderReligion))
                         {
                             result.Add(clan.Leader);
                         }
                     }
+
+                    if (result.Contains(currentLeader))
+                        result.Remove(currentLeader);
 
                     return result;
                 },
@@ -250,26 +417,37 @@ namespace BannerKings.Managers.Titles.Governments
                 {
                     ExplainedNumber result = new ExplainedNumber(0f, explanations);
 
-                    if (BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(currentLeader).Contains(candidate))
+                    Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(candidate);
+                    result.Add(BannerKingsConfig.Instance.ReligionsManager.GetPiety(religion, candidate) / 2f, 
+                        new TextObject("{=!}Piety"));
+
+                    foreach (var tuple in religion.Faith.Traits)
                     {
-                        result.Add(BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(currentLeader,
-                            candidate,
-                            title.Contract,
-                            explanations).ResultNumber, new TextObject("{=!}Claim as inheritor of previous ruler"));
+                        TraitObject trait = tuple.Key;
+                        int traitLevel = candidate.GetTraitLevel(trait);
+                        if (traitLevel != 0)
+                        {
+                            result.Add(traitLevel * 100f, trait.Name);
+                        }
                     }
 
-                    result.Add(candidate.Clan.Tier * 75f, GameTexts.FindText("str_clan_tier_bonus"));
+                    result.Add(candidate.GetTraitLevel(BKTraits.Instance.Zealous) * 100f, BKTraits.Instance.Zealous.Name);
+                    result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 3f, DefaultSkills.Leadership.Name);
+                    result.Add(candidate.GetSkillValue(DefaultSkills.Tactics) / 3f, DefaultSkills.Tactics.Name);
+                    result.Add(candidate.GetSkillValue(DefaultSkills.Charm) / 3f, DefaultSkills.Charm.Name);
+
+                    result.Add(candidate.Clan.Tier * 25f, GameTexts.FindText("str_clan_tier_bonus"));
                     return result;
                 });
 
             BattanianElective.Initialize(new TextObject("{=!}Battanian Elective"),
-                new TextObject(),
+                new TextObject("{=!}The Battanian succession is traditionally reliant upon renown. Caladog fen Gruffendoc is a notorious exception, who managed to leverage his close relationship to the previous High King, Aeril fen Uthelhain, to rally the traditional houses behind him. Yet, the tradition of renowned, strong leaders remains - Battanians care little for 'legal arguments' such as claims, and instead respect force and name. Family members of the ruler are generally preferred, but will quickly be cast aside once a stronger option presents itself."),
                 true,
                 -0.4f,
                 1f,
                 0.2f,
-                new TextObject("{=!}-Inheritance candidates of current ruler\n- Title claimants\n- Anyone with title of count or higher and clan tier 5 or higher"),
-                new TextObject("{=!}++ Clan tier\n++ Inheritance score (for clan inheritors)\n++ Title claim"),
+                new TextObject("{=!}- Inheritance candidates of current ruler\n- Title claimants\n- Anyone with title of count or higher and clan tier 5 or higher"),
+                new TextObject("{=!}+++ Clan tier\n++ Skills\n+ Inheritance score (for clan inheritors)\n+ Military power"),
                 (Hero currentLeader, FeudalTitle title) =>
                 {
                     HashSet<Hero> result = new HashSet<Hero>(3);
@@ -292,14 +470,17 @@ namespace BannerKings.Managers.Titles.Governments
 
                     foreach (Clan clan in currentLeader.Clan.Kingdom.Clans)
                     {
-                        if (clan.IsUnderMercenaryService) continue;
+                        if (clan.IsUnderMercenaryService || clan.Tier < 5) continue;
 
                         FeudalTitle highestTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                        if (highestTitle.TitleType <= TitleType.County)
+                        if (highestTitle != null && highestTitle.TitleType <= TitleType.County)
                         {
                             result.Add(clan.Leader);
                         }
                     }
+
+                    if (result.Contains(currentLeader))
+                        result.Remove(currentLeader);
 
                     return result;
                 },
@@ -312,21 +493,30 @@ namespace BannerKings.Managers.Titles.Governments
                         result.Add(BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(currentLeader,
                             candidate,
                             title.Contract,
-                            explanations).ResultNumber, new TextObject("{=!}Claim as inheritor of previous ruler"));
+                            explanations).ResultNumber, new TextObject("{=!}{CLAN} inheritor")
+                            .SetTextVariable("CLAN", currentLeader.Clan.Name));
                     }
 
+                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 400f,
+                        new TextObject("{=!}Military power"));
+
+                    result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 2f, DefaultSkills.Leadership.Name);
+                    result.Add(candidate.GetSkillValue(DefaultSkills.Tactics) / 2f, DefaultSkills.Tactics.Name);
+                    result.Add(candidate.GetSkillValue(DefaultSkills.Charm) / 2f, DefaultSkills.Charm.Name);
+
                     result.Add(candidate.Clan.Tier * 75f, GameTexts.FindText("str_clan_tier_bonus"));
+
                     return result;
                 });
 
-            FeudalElective.Initialize(new TextObject("{=!}Feudal Elective"),
-                new TextObject(),
+            FeudalElective.Initialize(new TextObject("{=HZRnRmF8}Feudal Elective"),
+                new TextObject("{=P3EzcNY0}A feudal elective succession is a compromise between a hereditary monarchy and a fully elective monarchy. Votes will be cast by the Peers, however the main candidates are the former ruler's family. However, title claimants will also be considered. If there is a scarcity of candidates available, strong families in the realm will also be considered candidates. If the chosen heir is from the former ruler's family, they will inherit the clan, regardless of Inheritance laws."),
                 true,
                 -0.4f,
                 1f,
                 0.2f,
                 new TextObject("{=!}-Inheritance candidates of current ruler\n- Title claimants\n- Anyone with title of count or higher and clan tier 5 or higher"),
-                new TextObject("{=!}++ Inheritance score (for clan inheritors)\n++ Title claim\n+ Clan tier"),
+                new TextObject("{=!}+++ Inheritance score (for clan inheritors)\n++ Title claim\nInfluence cap\n+ Clan tier\n+ Skills"),
                 (Hero currentLeader, FeudalTitle title) =>
                 {
                     HashSet<Hero> result = new HashSet<Hero>(3);
@@ -352,11 +542,14 @@ namespace BannerKings.Managers.Titles.Governments
                         if (clan.IsUnderMercenaryService) continue;
 
                         FeudalTitle highestTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                        if (highestTitle.TitleType <= TitleType.County)
+                        if (highestTitle != null && highestTitle.TitleType <= TitleType.County)
                         {
                             result.Add(clan.Leader);
                         }
                     }
+
+                    if (result.Contains(currentLeader))
+                        result.Remove(currentLeader);
 
                     return result;
                 },
@@ -369,10 +562,23 @@ namespace BannerKings.Managers.Titles.Governments
                         result.Add(BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(currentLeader,
                             candidate,
                             title.Contract,
-                            explanations).ResultNumber, new TextObject("{=!}Claim as inheritor of previous ruler"));
+                            explanations).ResultNumber * 2f, new TextObject("{=!}{CLAN} inheritor")
+                            .SetTextVariable("CLAN", currentLeader.Clan.Name));
                     }
 
-                    result.Add(candidate.Clan.Tier * 75f, GameTexts.FindText("str_clan_tier_bonus"));
+                    if (title.HeroHasValidClaim(candidate))
+                    {
+                        result.Add(300f, new TextObject("{=ipGDmaBZ}Claimant"));
+                    }
+
+                    result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 3f, DefaultSkills.Leadership.Name);
+                    result.Add(candidate.GetSkillValue(DefaultSkills.Tactics) / 3f, DefaultSkills.Tactics.Name);
+                    result.Add(candidate.GetSkillValue(DefaultSkills.Charm) / 3f, DefaultSkills.Charm.Name);
+
+                    result.Add(candidate.Clan.Tier * 25f, GameTexts.FindText("str_clan_tier_bonus"));
+
+                    result.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(candidate.Clan).ResultNumber / 4f,
+                       new TextObject("{=!}Influence cap"));
                     return result;
                 });
 
@@ -383,7 +589,7 @@ namespace BannerKings.Managers.Titles.Governments
                 1f,
                 0.2f,
                 new TextObject("{=!}-Inheritance candidates of current ruler\n- Title claimants\n- Anyone with title of count or higher and clan tier 5 or higher"),
-                new TextObject("{=!}++ Clan tier\n+ Inheritance score (for clan inheritors)\n"),
+                new TextObject("{=!}++ Skills\n++ Military power\n+ Clan tier\n+ Inheritance score (for clan inheritors)"),
                 (Hero currentLeader, FeudalTitle title) =>
                 {
                     HashSet<Hero> result = new HashSet<Hero>(3);
@@ -415,6 +621,9 @@ namespace BannerKings.Managers.Titles.Governments
                         }
                     }
 
+                    if (result.Contains(currentLeader))
+                        result.Remove(currentLeader);
+
                     return result;
                 },
                 (Hero currentLeader, Hero candidate, FeudalTitle title, bool explanations) =>
@@ -426,10 +635,18 @@ namespace BannerKings.Managers.Titles.Governments
                         result.Add(BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(currentLeader,
                             candidate,
                             title.Contract,
-                            explanations).ResultNumber, new TextObject("{=!}Claim as inheritor of previous ruler"));
+                            explanations).ResultNumber, new TextObject("{=!}{CLAN} inheritor")
+                            .SetTextVariable("CLAN", currentLeader.Clan.Name));
                     }
 
-                    result.Add(candidate.Clan.Tier * 75f, GameTexts.FindText("str_clan_tier_bonus"));
+                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 200f,
+                        new TextObject("{=!}Military power"));
+
+                    result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 2f, DefaultSkills.Leadership.Name);
+                    result.Add(candidate.GetSkillValue(DefaultSkills.Tactics) / 2f, DefaultSkills.Tactics.Name);
+                    result.Add(candidate.GetSkillValue(DefaultSkills.Charm) / 2f, DefaultSkills.Charm.Name);
+
+                    result.Add(candidate.Clan.Tier * 25f, GameTexts.FindText("str_clan_tier_bonus"));
                     return result;
                 });
 
@@ -440,7 +657,7 @@ namespace BannerKings.Managers.Titles.Governments
                 1f,
                 0.2f,
                 new TextObject("{=!}-Inheritance candidates of current ruler\n- Title claimants\n- Anyone with title of duke or higher (if there aren't at least 3 candidates)"),
-                new TextObject("{=!}++ Inheritance score (for clan inheritors)\n+ Clan tier\n+ Title claim"),
+                new TextObject("{=!}++ Inheritance score (for clan inheritors)\n++ Military power\n+ Clan tier\n+ Title claim\n+ Leadership"),
                 (Hero currentLeader, FeudalTitle title) =>
                 {
                     HashSet<Hero> result = new HashSet<Hero>(3);
@@ -475,6 +692,9 @@ namespace BannerKings.Managers.Titles.Governments
                         }
                     }
 
+                    if (result.Contains(currentLeader))
+                        result.Remove(currentLeader);
+
                     return result;
                 },
                 (Hero currentLeader, Hero candidate, FeudalTitle title, bool explanations) =>
@@ -486,15 +706,21 @@ namespace BannerKings.Managers.Titles.Governments
                         result.Add(BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(currentLeader,
                             candidate,
                             title.Contract,
-                            explanations).ResultNumber, new TextObject("{=!}Claim as inheritor of previous ruler"));
+                            explanations).ResultNumber * 1.5f, new TextObject("{=!}{CLAN} inheritor")
+                            .SetTextVariable("CLAN", currentLeader.Clan.Name));
                     }
 
                     if (title.HeroHasValidClaim(candidate))
                     {
-                        result.Add(200f, new TextObject("{=ipGDmaBZ}Claimant"));
+                        result.Add(150f, new TextObject("{=ipGDmaBZ}Claimant"));
                     }
 
-                    result.Add(candidate.Clan.Tier * 50f, GameTexts.FindText("str_clan_tier_bonus"));
+                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 200f, 
+                        new TextObject("{=!}Military power"));
+
+                    result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 3f, DefaultSkills.Leadership.Name);
+
+                    result.Add(candidate.Clan.Tier * 25f, GameTexts.FindText("str_clan_tier_bonus"));
                     return result;
                 });
         }

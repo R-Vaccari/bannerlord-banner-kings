@@ -1,7 +1,6 @@
 using BannerKings.Managers.Cultures;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 
@@ -49,26 +48,6 @@ namespace BannerKings.Utils
         {
             var name = DefaultTitleNames.Instance.GetPrinceName(culture);
             return female ? name.Female : name.Name;
-        }
-
-        public static TextObject GetName(GovernmentType value)
-        {
-            return GameTexts.FindText("str_bk_" + value.ToString().ToLower());
-        }
-
-        public static TextObject GetName(InheritanceType value)
-        {
-            return GameTexts.FindText("str_bk_" + value.ToString().ToLower());
-        }
-
-        public static TextObject GetName(GenderLaw value)
-        {
-            return GameTexts.FindText("str_bk_" + value.ToString().ToLower());
-        }
-
-        public static TextObject GetName(SuccessionType value)
-        {
-            return GameTexts.FindText("str_bk_" + value.ToString().ToLower());
         }
     }
 }

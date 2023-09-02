@@ -8,6 +8,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.BKModels;
 using TaleWorlds.CampaignSystem;
@@ -146,14 +147,14 @@ namespace BannerKings.Managers
             return Titles.FirstOrDefault(x => x.Key.StringId == stringId).Key;
         }
 
-        public GovernmentType GetSettlementGovernment(Settlement settlement)
+        public Government GetSettlementGovernment(Settlement settlement)
         {
-            var type = GovernmentType.Feudal;
-            /*var title = GetTitle(settlement);
+            Government type = DefaultGovernments.Instance.Feudal;
+            var title = GetTitle(settlement);
             if (title?.Contract != null)
             {
                 type = title.Contract.Government;
-            }*/
+            }
 
             return type;
         }
@@ -1034,19 +1035,6 @@ namespace BannerKings.Managers
                 FeudalRights.Conquest_Rights => new TextObject("{=7TCkYXav}You are entitled to the ownership of any lands you conquered by yourself."),
                 _ => new TextObject("{=!}")
             };
-        }
-
-        public IEnumerable<InheritanceType> GetInheritanceTypes()
-        {
-            yield return InheritanceType.Primogeniture;
-            yield return InheritanceType.Ultimogeniture;
-            yield return InheritanceType.Seniority;
-        }
-
-        public IEnumerable<GenderLaw> GetGenderLawTypes()
-        {
-            yield return GenderLaw.Agnatic;
-            yield return GenderLaw.Cognatic;
         }
     }
 }

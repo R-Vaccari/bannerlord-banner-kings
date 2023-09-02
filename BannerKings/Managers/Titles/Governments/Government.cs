@@ -13,16 +13,10 @@ namespace BannerKings.Managers.Titles.Governments
         {
         }
 
-        public float Mercantilism { get; private set; }
-        public List<PolicyObject> ProhibitedPolicies { get; private set; }
-        public List<Succession> Successions { get; private set; }
-        public TextObject Effects { get; private set; }
-        public ValueTuple<bool, TextObject> IsAdequate(Kingdom kingdom) => IsAdequate(kingdom);
-
         public void Initialize(TextObject name, TextObject description, TextObject effects, float mercantilism,
-            List<PolicyObject> prohibitedPolicies,
-            List<Succession> successions,
-            Func<Kingdom, ValueTuple<bool, TextObject>> isAdequate = null)
+        List<PolicyObject> prohibitedPolicies,
+        List<Succession> successions,
+        Func<Kingdom, ValueTuple<bool, TextObject>> isAdequate = null)
         {
             Initialize(name, description);
             Effects = effects;
@@ -31,6 +25,19 @@ namespace BannerKings.Managers.Titles.Governments
             Successions = successions;
             this.isAdequate = isAdequate;
         }
+
+        public void PostInitialize()
+        {
+            Government g = DefaultGovernments.Instance.GetById(this);
+            Initialize(g.name, g.description, g.Effects, g.Mercantilism, g.ProhibitedPolicies, g.Successions,
+                g.isAdequate);
+        }
+
+        public float Mercantilism { get; private set; }
+        public List<PolicyObject> ProhibitedPolicies { get; private set; }
+        public List<Succession> Successions { get; private set; }
+        public TextObject Effects { get; private set; }
+        public ValueTuple<bool, TextObject> IsAdequate(Kingdom kingdom) => IsAdequate(kingdom);
 
         public bool IsKingdomAdequate(Kingdom kingdom)
         {

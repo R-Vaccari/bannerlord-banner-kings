@@ -70,7 +70,7 @@ namespace BannerKings.Models.Vanilla
             result.Add(0.25f * mercantilism, new TextObject("Mercantilism"));
 
             var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
-            if (government == GovernmentType.Feudal)
+            if (government == DefaultGovernments.Instance.Feudal)
             {
                 result.AddFactor(0.15f, new TextObject("{=PSrEtF5L}Government"));
             }

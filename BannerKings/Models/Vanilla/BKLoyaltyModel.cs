@@ -4,6 +4,7 @@ using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -123,7 +124,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
-            if (government == GovernmentType.Republic)
+            if (government == DefaultGovernments.Instance.Republic)
             {
                 baseResult.Add(1f, new TextObject("{=PSrEtF5L}Government"));
             }

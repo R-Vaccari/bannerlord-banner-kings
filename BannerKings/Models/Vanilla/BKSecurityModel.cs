@@ -2,7 +2,7 @@ using BannerKings.Behaviours;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Policies;
-using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -54,7 +54,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
-            if (government == GovernmentType.Imperial)
+            if (government == DefaultGovernments.Instance.Imperial)
             {
                 baseResult.Add(1f, new TextObject("{=PSrEtF5L}Government"));
             }

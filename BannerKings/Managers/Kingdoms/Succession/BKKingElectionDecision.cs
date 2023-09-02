@@ -46,6 +46,11 @@ namespace BannerKings.Managers.Kingdoms.Succession
                 {
                     BannerKingsConfig.Instance.TitleManager.InheritTitle(deJure, king, title);
                 }
+
+                if (king.Clan.Leader != king)
+                {
+                    king.Clan.SetLeader(king);
+                }
             }
         }
 

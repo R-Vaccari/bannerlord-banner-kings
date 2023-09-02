@@ -4,7 +4,6 @@ using System.Linq;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
-using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -41,50 +40,35 @@ namespace BannerKings.Models.BKModels
                 contract = new FeudalContract(null, null,
                     DefaultGovernments.Instance.Feudal, 
                     DefaultSuccessions.Instance.FeudalElective, 
-                    InheritanceType.Primogeniture, GenderLaw.Agnatic);
+                    DefaultInheritances.Instance.Seniority, 
+                    DefaultGenderLaws.Instance.Agnatic);
             }
 
-            GenderLaw genderLaw = contract.GenderLaw;
-            InheritanceType inheritance = contract.Inheritance;
-            if (inheritance == InheritanceType.Seniority)
+            result.Add(candidate.Age, new TextObject("Age"));
+            if (currentLeader.Children.Contains(candidate))
             {
-                result.Add(candidate.Age, new TextObject("Age"));
+                result.Add(contract.Inheritance.ChildrenScore, GameTexts.FindText(candidate.IsFemale ? "str_daughter" : "str_son"));
+            }
+            else if (currentLeader.Siblings.Contains(candidate))
+            {
+                result.Add(contract.Inheritance.SiblingScore, GameTexts.FindText(candidate.IsFemale ? "str_bigsister" : "str_bigbrother"));
+            }
+            else if (currentLeader.Spouse == candidate)
+            {
+                result.Add(contract.Inheritance.SpouseScore, GameTexts.FindText("str_spouse"));
             }
             else
             {
-                if (currentLeader.Children.Contains(candidate))
-                {
-                    result.Add(300f, GameTexts.FindText(candidate.IsFemale ? "str_daughter" : "str_son"));
-                }
-                else if (currentLeader.Spouse == candidate)
-                {
-                    result.Add(150f, GameTexts.FindText("str_spouse"));
-                }
-                else if (currentLeader.Siblings.Contains(candidate))
-                {
-                    result.Add(100f, GameTexts.FindText(candidate.IsFemale ? "str_bigsister" : "str_bigbrother"));
-                }
-
-                if (inheritance == InheritanceType.Primogeniture)
-                {
-                    result.Add(candidate.Age, new TextObject("Age"));
-                }
-
-                if (inheritance == InheritanceType.Ultimogeniture)
-                {
-                    result.Add(-candidate.Age, new TextObject("Age"));
-                }
-
-                if (candidate.CharacterObject != null && candidate.CharacterObject.OriginalCharacter != null &&
-                   candidate.CharacterObject.OriginalCharacter.IsTemplate)
-                {
-                    result.AddFactor(-0.5f, new TextObject("{=9RG3GwJD}Common born"));
-                }
+                result.Add(contract.Inheritance.RelativeScore, new TextObject("{=!}Household member"));
             }
 
-            if (genderLaw == GenderLaw.Agnatic && candidate.IsFemale)
+            if (candidate.IsFemale) 
             {
-                result.AddFactor(-0.9f, GameTexts.FindText("str_bk_agnatic"));
+                result.AddFactor(contract.GenderLaw.FemalePreference - 1f, contract.GenderLaw.Name);    
+            }
+            else
+            {
+                result.AddFactor(contract.GenderLaw.MalePreference - 1f, contract.GenderLaw.Name);
             }
 
             return result;

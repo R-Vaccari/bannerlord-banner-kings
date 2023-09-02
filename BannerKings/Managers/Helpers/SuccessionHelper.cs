@@ -51,6 +51,11 @@ namespace BannerKings.Managers.Helpers
                         .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static)
                         .Invoke(null, new object[] { kingdom, heir.Clan });
 
+                    if (heir.Clan.Leader != heir)
+                    {
+                        heir.Clan.SetLeader(heir);
+                    }
+
                     if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom == victim.Clan.Kingdom)
                     {
                         MBInformationManager.AddQuickInformation(
@@ -91,28 +96,6 @@ namespace BannerKings.Managers.Helpers
                         .ToString(),
                         Utils.Helpers.GetKingdomDecisionSound()));
                 }
-            }
-        }
-
-        public static IEnumerable<SuccessionType> GetValidSuccessions(GovernmentType government)
-        {
-            switch (government)
-            {
-                case GovernmentType.Feudal:
-                    yield return SuccessionType.Hereditary_Monarchy;
-                    yield return SuccessionType.Elective_Monarchy;
-                    yield return SuccessionType.FeudalElective;
-                    yield break;
-                case GovernmentType.Imperial:
-                    yield return SuccessionType.Imperial;
-                    yield break;
-                case GovernmentType.Republic:
-                    yield return SuccessionType.Republic;
-                    yield break;
-                default:
-                    yield return SuccessionType.Elective_Monarchy;
-                    yield return SuccessionType.Hereditary_Monarchy;
-                    break;
             }
         }
     }

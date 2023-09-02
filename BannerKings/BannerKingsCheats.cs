@@ -1,4 +1,5 @@
 ﻿using BannerKings.Behaviours;
+using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Innovations;
 using System.Collections.Generic;
 using System.Linq;
@@ -166,7 +167,7 @@ namespace BannerKings
         [CommandLineFunctionality.CommandLineArgumentFunction("reinit_titles", "bannerkings")]
         public static string ReinitTitles(List<string> strings)
         {
-            BannerKingsConfig.Instance.TitleManager.InitializeTitles();
+            TitleGenerator.InitializeTitles();
 
             return "Successfully reinitted titles.";
         }

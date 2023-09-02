@@ -111,7 +111,7 @@ namespace BannerKings.UI.Titles
                 Population.ToString(), 
                 new TextObject("{=g4pjb4j4}The total population within the fiefs in this hierarchy regardless of who controls them.").ToString()));
 
-            var peerResult = BannerKingsConfig.Instance.InfluenceModel.GetMinimumPeersQuantity(kingdom);
+            var peerResult = BannerKingsConfig.Instance.InfluenceModel.GetMinimumPeersQuantity(kingdom, true);
             int peers = (int)peerResult.ResultNumber;
             TitleInfo.Add(new InformationElement(new TextObject("{=OD6eU7dQ}Minimum Peers:").ToString(),
                 peers.ToString(), 
@@ -126,11 +126,11 @@ namespace BannerKings.UI.Titles
                 new TextObject("{=qMmbExKv}The clan succession form associated with this title. Successions only apply to factions.")
                     .ToString()));
             TitleInfo.Add(new InformationElement(new TextObject("{=OTuRSNZ5}Inheritance Type:").ToString(),
-                title.Contract.Inheritance.ToString(),
+                title.Contract.Inheritance.Name.ToString(),
                 new TextObject("{=Y3mAnDLj}The inheritance form associated with this settlement's title. Inheritance dictates who leads the clan after the leader's death.")
                     .ToString()));
             TitleInfo.Add(new InformationElement(new TextObject("{=vCryQjBB}Gender Law:").ToString(),
-                title.Contract.GenderLaw.ToString(),
+                title.Contract.GenderLaw.Name.ToString(),
                 new TextObject("{=ArvZcS5p}The gender law associated with this settlement's title. Gender law affects how inheritance and other aspects of rule work.")
                     .ToString()));
         }
