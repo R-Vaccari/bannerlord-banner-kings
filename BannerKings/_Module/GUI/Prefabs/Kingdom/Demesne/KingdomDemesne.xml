@@ -17,8 +17,16 @@
 									
 									
 										<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="25"
-														HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@SuccessionText"
-														MarginBottom="15" />
+														HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="32" Text="@SuccessionText"
+														MarginBottom="30" />
+														
+										<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="20"
+														HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="26" Text="@SuccessionName"
+														MarginBottom="10"  MarginRight="550" MarginLeft="550"/>
+														
+										<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="20"
+														HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="22" Text="@SuccessionDescription"
+														MarginBottom="15"  MarginRight="550" MarginLeft="550"/>
 					
 										<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="150"
 												   VerticalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="30" DoNotAcceptEvents="false">
@@ -49,10 +57,7 @@
 													
 													</Children>
 												</ListPanel>
-													
-											
-												
-												
+
 												<GridWidget Id="CoreGrid" DataSource="{Heirs}" WidthSizePolicy="CoverChildren" 
 															HeightSizePolicy="StretchToParent" VerticalAlignment="Bottom" HorizontalAlignment="Center"
 															SuggestedHeight="350" DefaultCellWidth="160" DefaultCellHeight="110" ColumnCount="5">
@@ -78,8 +83,7 @@
 												
 											</Children>
 										</ListPanel>
-										
-										
+	
 										<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="150"
 														HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@LawsText"
 														MarginBottom="15" />

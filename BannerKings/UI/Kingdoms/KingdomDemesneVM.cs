@@ -15,6 +15,7 @@ namespace BannerKings.UI.Kingdoms
         private MBBindingList<DemesneLawVM> laws;
         private MBBindingList<HeirVM> heirs;
         private HeirVM mainHeir;
+        private string successionName, successionDescription;
 
         public KingdomDemesneVM(FeudalTitle title, Kingdom kingdom) : base(null, false)
         {
@@ -35,6 +36,9 @@ namespace BannerKings.UI.Kingdoms
 
             if (Title != null)
             {
+                SuccessionName = Title.Contract.Succession.Name.ToString();
+                SuccessionDescription = Title.Contract.Succession.Description.ToString();
+
                 bool isKing = Kingdom.Leader == Hero.MainHero && Title.deJure == Hero.MainHero;
                 foreach (var law in Title.Contract.DemesneLaws)
                 {
@@ -116,6 +120,34 @@ namespace BannerKings.UI.Kingdoms
 
         [DataSourceProperty]
         public string LawsDescriptionText => new TextObject("{=MbSsFJNY}Demesne Laws may be changed a year after they are issued. Changes are made by the sovereign or through voting by the Peers.").ToString();
+
+        [DataSourceProperty]
+        public string SuccessionName
+        {
+            get => successionName;
+            set
+            {
+                if (value != successionName)
+                {
+                    successionName = value;
+                    OnPropertyChangedWithValue(value, "SuccessionName");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string SuccessionDescription
+        {
+            get => successionDescription;
+            set
+            {
+                if (value != successionDescription)
+                {
+                    successionDescription = value;
+                    OnPropertyChangedWithValue(value, "SuccessionDescription");
+                }
+            }
+        }
 
         [DataSourceProperty]
         public MBBindingList<DemesneLawVM> Laws

@@ -405,7 +405,7 @@ namespace BannerKings.Models.BKModels
 
                 if (bonus > 0f)
                 {
-                    result.Add(bonus, new TextObject("Highest title level"));
+                    result.Add(bonus, new TextObject("{=!}Highest title level"));
                 }
             }
 
