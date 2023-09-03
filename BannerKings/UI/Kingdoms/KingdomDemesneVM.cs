@@ -36,7 +36,6 @@ namespace BannerKings.UI.Kingdoms
 
             if (Title != null)
             {
-                SuccessionName = Title.Contract.Succession.Name.ToString();
                 SuccessionDescription = Title.Contract.Succession.Description.ToString();
 
                 bool isKing = Kingdom.Leader == Hero.MainHero && Title.deJure == Hero.MainHero;
@@ -105,9 +104,31 @@ namespace BannerKings.UI.Kingdoms
                         () => RefreshValues()));
                 }
             }
-
-        
         }
+
+        [DataSourceProperty]
+        public string GovernmentText => new TextObject("{=!}Government").ToString();
+
+        [DataSourceProperty]
+        public string InheritanceText => new TextObject("{=!}Inheritance").ToString();
+
+        [DataSourceProperty]
+        public string GenderLawText => new TextObject("{=!}Gender Law").ToString();
+
+        [DataSourceProperty]
+        public string StructureText => new TextObject("{=!}Contract Structure").ToString();
+
+        [DataSourceProperty]
+        public string GovernmentName => Title.Contract.Government.Name.ToString();
+
+        [DataSourceProperty]
+        public string SuccessionTName => Title.Contract.Succession.Name.ToString();
+
+        [DataSourceProperty]
+        public string InheritanceName => Title.Contract.Inheritance.Name.ToString();
+
+        [DataSourceProperty]
+        public string GenderLawName => Title.Contract.GenderLaw.Name.ToString();
 
         [DataSourceProperty]
         public string HeirText => new TextObject("{=vArnerHC}Heir").ToString();
@@ -121,19 +142,6 @@ namespace BannerKings.UI.Kingdoms
         [DataSourceProperty]
         public string LawsDescriptionText => new TextObject("{=MbSsFJNY}Demesne Laws may be changed a year after they are issued. Changes are made by the sovereign or through voting by the Peers.").ToString();
 
-        [DataSourceProperty]
-        public string SuccessionName
-        {
-            get => successionName;
-            set
-            {
-                if (value != successionName)
-                {
-                    successionName = value;
-                    OnPropertyChangedWithValue(value, "SuccessionName");
-                }
-            }
-        }
 
         [DataSourceProperty]
         public string SuccessionDescription
