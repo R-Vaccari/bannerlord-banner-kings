@@ -91,6 +91,13 @@
 				<GameType value = "CampaignStoryMode"/>
 			</IncludedGameTypes>
 		</XmlNode> 
+		<XmlNode>                
+			<XmlName id="Concepts" path="concept_strings"/>
+			<IncludedGameTypes>
+				<GameType value = "Campaign"/>
+				<GameType value = "CampaignStoryMode"/>
+			</IncludedGameTypes>
+		</XmlNode>   
 		<XmlNode>
 			<XmlName id="ItemModifiers" path="item_modifiers" />
 		</XmlNode>
