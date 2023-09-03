@@ -204,6 +204,8 @@ namespace BannerKings.Behaviours.Diplomacy
                 }
             }
 
+            AddFatigue(-0.005f);
+
             foreach (var kingdom in trucesToDelete)
             {
                 DissolveTruce(kingdom, new TextObject("{=!}The agreed time has expired."));
