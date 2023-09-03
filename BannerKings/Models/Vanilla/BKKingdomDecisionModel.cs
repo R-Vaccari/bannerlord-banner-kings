@@ -15,7 +15,7 @@ namespace BannerKings.Models.Vanilla
                 if (title != null)
                 {
                     var succession = title.Contract.Succession;
-                    return succession == Managers.Titles.SuccessionType.Elective_Monarchy || succession == Managers.Titles.SuccessionType.Republic;
+                    return succession.ElectedSuccession;
                 }
             }
 

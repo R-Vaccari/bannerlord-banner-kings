@@ -1,6 +1,7 @@
 ﻿using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using BannerKings.Utils.Extensions;
 using BannerKings.Utils.Models;
 using System.Collections.Generic;
@@ -373,13 +374,13 @@ namespace BannerKings.Models.BKModels
             var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(diplomacy.Kingdom);
             if (title != null)
             {
-                if (group.Equals(DefaultInterestGroup.Instance.Royalists) && (title.Contract.Government == GovernmentType.Feudal 
-                    || title.Contract.Government == GovernmentType.Imperial))
+                if (group.Equals(DefaultInterestGroup.Instance.Royalists) && (title.Contract.Government == DefaultGovernments.Instance.Feudal 
+                    || title.Contract.Government == DefaultGovernments.Instance.Imperial))
                 {
                     return true;
                 }
 
-                if (group.Equals(DefaultInterestGroup.Instance.Traditionalists) && title.Contract.Government == GovernmentType.Tribal)
+                if (group.Equals(DefaultInterestGroup.Instance.Traditionalists) && title.Contract.Government == DefaultGovernments.Instance.Tribal)
                 {
                     return true;
                 }

@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using Helpers;
 using System;
 using System.Collections.Generic;
@@ -204,12 +205,12 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                         }
 
                         var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction1 as Kingdom);
-                        if (title != null && title.Contract.Government == Managers.Titles.GovernmentType.Imperial)
+                        if (title != null && title.Contract.Government == DefaultGovernments.Instance.Imperial)
                         {
                             if (faction2.IsKingdomFaction)
                             {
                                 var enemyTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction1 as Kingdom);
-                                if (enemyTitle != null && enemyTitle.Contract.Government != Managers.Titles.GovernmentType.Imperial &&
+                                if (enemyTitle != null && enemyTitle.Contract.Government != DefaultGovernments.Instance.Imperial &&
                                 faction2.Culture != faction1.Culture)
                                 {
                                     adequateKingdom = true;
@@ -228,7 +229,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 (Kingdom kingdom) =>
                 {
                     var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-                    if (title != null && title.Contract.Government == Managers.Titles.GovernmentType.Imperial)
+                    if (title != null && title.Contract.Government == DefaultGovernments.Instance.Imperial)
                     {
                         return true;
                     }
