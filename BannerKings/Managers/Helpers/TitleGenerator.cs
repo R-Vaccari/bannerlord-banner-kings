@@ -244,8 +244,6 @@ namespace BannerKings.Managers.Helpers
                 string succession = kingdom.Attributes["succession"].Value;
                 string inheritance = kingdom.Attributes["inheritance"].Value;
                 string genderLaw = kingdom.Attributes["genderLaw"].Value;
-
-                var contractType = kingdom.Attributes["contract"].Value;
                 var contract = GenerateContract(government, succession, inheritance, genderLaw);
 
                 if (contract == null)

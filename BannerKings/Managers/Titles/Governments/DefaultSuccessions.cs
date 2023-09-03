@@ -497,7 +497,7 @@ namespace BannerKings.Managers.Titles.Governments
                             .SetTextVariable("CLAN", currentLeader.Clan.Name));
                     }
 
-                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 400f,
+                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 600f,
                         new TextObject("{=!}Military power"));
 
                     result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 2f, DefaultSkills.Leadership.Name);
@@ -583,7 +583,7 @@ namespace BannerKings.Managers.Titles.Governments
                 });
 
             TribalElective.Initialize(new TextObject("{=!}Tribal Elective"),
-                new TextObject(),
+                new TextObject("{=!}Tribal Elective succession describes a generalized form of succession for the non-feudal and non-imperial cultures of Calradia. Such practices often care little for dynastic inheritance and none for legal trivialities such as claims. Instead, strong competent leaders are respected, specially those with renowned names, for these are the types of rulers that can rally together rivaling tribes that would otherwise be destroying each other."),
                 true,
                 -0.4f,
                 1f,
@@ -639,7 +639,7 @@ namespace BannerKings.Managers.Titles.Governments
                             .SetTextVariable("CLAN", currentLeader.Clan.Name));
                     }
 
-                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 200f,
+                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 400f,
                         new TextObject("{=!}Military power"));
 
                     result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 2f, DefaultSkills.Leadership.Name);
@@ -651,7 +651,7 @@ namespace BannerKings.Managers.Titles.Governments
                 });
 
             WilundingElective.Initialize(new TextObject("{=!}Wilunding Elective"),
-                new TextObject(),
+                new TextObject("{=!}The Wilunding succession is the traditional practice brought the Wilunding peoples, also known as Vlandians, from their ancestral home. This practice gives precedence to the ruling dynasty's inheritors, but in the absence of a good match, legitimizes powerful claimants and lords."),
                 true,
                 -0.4f,
                 1f,
@@ -715,7 +715,7 @@ namespace BannerKings.Managers.Titles.Governments
                         result.Add(150f, new TextObject("{=ipGDmaBZ}Claimant"));
                     }
 
-                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 200f, 
+                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 400f, 
                         new TextObject("{=!}Military power"));
 
                     result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 3f, DefaultSkills.Leadership.Name);

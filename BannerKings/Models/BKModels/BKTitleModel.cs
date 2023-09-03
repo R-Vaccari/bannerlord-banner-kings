@@ -347,70 +347,57 @@ namespace BannerKings.Models.BKModels
                 return revokeAction;
             }
 
-            /*var governmentType = title.Contract.Government;
-            switch (governmentType)
+            if (title.Contract.HasContractAspect(DefaultContractAspects.Instance.RevocationProtected))
             {
-                case GovernmentType.Tribal:
+                revokeAction.Possible = false;
+                revokeAction.Reason = new TextObject("{=!}The {ASPECT} contract aspect does not allow revoking.")
+                    .SetTextVariable("ASPECT", DefaultContractAspects.Instance.RevocationProtected.Name);
+                return revokeAction;
+            }
+            else if (title.Contract.HasContractAspect(DefaultContractAspects.Instance.RevocationRepublic) && title.TitleType != TitleType.Dukedom)
+            {
+                revokeAction.Possible = false;
+                revokeAction.Reason = new TextObject("{=!}{ASPECT} only allows revoking of dukes.")
+                    .SetTextVariable("ASPECT", DefaultContractAspects.Instance.RevocationRepublic.Name);
+                return revokeAction;
+            }
+            else if (title.Contract.HasContractAspect(DefaultContractAspects.Instance.RevocationImperial))
+            {
+                var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
+                if (sovereign == null || revoker != sovereign.deJure)
+                {
                     revokeAction.Possible = false;
-                    revokeAction.Reason = new TextObject("{=duRc8Vrs}Tribal government does not allow revoking.");
+                    revokeAction.Reason = new TextObject("{=!}{ASPECT} requires being de Jure faction leader.")
+                        .SetTextVariable("ASPECT", DefaultContractAspects.Instance.RevocationImperial.Name);
                     return revokeAction;
-                case GovernmentType.Republic when title.TitleType != TitleType.Dukedom:
-                    revokeAction.Possible = false;
-                    revokeAction.Reason = new TextObject("{=MSaLufNx}Republics can only revoke duke titles.");
-                    return revokeAction;
-                case GovernmentType.Republic:
-                {
-                    var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
-                    if (sovereign == null || revoker != sovereign.deJure)
-                    {
-                        revokeAction.Possible = false;
-                        revokeAction.Reason = new TextObject("{=w7b5SE48}Not de Jure faction leader.");
-                        return revokeAction;
-                    }
-
-                    break;
                 }
-                case GovernmentType.Imperial:
+            }
+            else
+            {
+                var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(revoker);
+                var vassal = false;
+                foreach (var revokerTitle in titles)
                 {
-                    var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
-                    if (sovereign == null || revoker != sovereign.deJure)
+                    if (revokerTitle.Vassals != null)
                     {
-                        revokeAction.Possible = false;
-                        revokeAction.Reason = new TextObject("{=w7b5SE48}Not de Jure faction leader.");
-                        return revokeAction;
-                    }
-
-                    break;
-                }
-                default:
-                {
-                    var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(revoker);
-                    var vassal = false;
-                    foreach (var revokerTitle in titles)
-                    {
-                        if (revokerTitle.Vassals != null)
+                        foreach (var revokerTitleVassal in revokerTitle.Vassals)
                         {
-                            foreach (var revokerTitleVassal in revokerTitle.Vassals)
+                            if (revokerTitleVassal.deJure == title.deJure)
                             {
-                                if (revokerTitleVassal.deJure == title.deJure)
-                                {
-                                    vassal = true;
-                                    break;
-                                }
+                                vassal = true;
+                                break;
                             }
                         }
                     }
-
-                    if (!vassal)
-                    {
-                        revokeAction.Possible = false;
-                        revokeAction.Reason = new TextObject("{=Mk29oGgs}Not a direct vassal.");
-                        return revokeAction;
-                    }
-
-                    break;
                 }
-            }*/
+
+                if (!vassal)
+                {
+                    revokeAction.Possible = false;
+                    revokeAction.Reason = new TextObject("{=Mk29oGgs}Not a direct vassal.");
+                    return revokeAction;
+                }
+            }
 
             var revokerHighest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(revoker);
             var targetHighest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(title.deJure);

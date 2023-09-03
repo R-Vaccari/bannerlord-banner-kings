@@ -12,6 +12,7 @@ using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
@@ -144,7 +145,10 @@ namespace BannerKings
             DefaultPopulationNames.Instance.Initialize();
             DefaultTitleNames.Instance.Initialize();
             DefaultSuccessions.Instance.Initialize();
+            DefaultInheritances.Instance.Initialize();
+            DefaultGenderLaws.Instance.Initialize();    
             DefaultGovernments.Instance.Initialize();
+            DefaultContractAspects.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();
@@ -158,6 +162,7 @@ namespace BannerKings
             PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
             PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>());
             TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Kingdom, FeudalTitle>());
+            TitleGenerator.InitializeTitles();
             CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
             ReligionsManager = new ReligionsManager();
             EducationManager = new EducationManager();
@@ -172,7 +177,6 @@ namespace BannerKings
             PopulationManager = populationManager;
             PolicyManager = policyManager;
             TitleManager = titleManager;
-            titleManager.RefreshCaches();
             CourtManager = court;
             ReligionsManager = religions ?? new ReligionsManager();
             EducationManager = educations ?? new EducationManager();

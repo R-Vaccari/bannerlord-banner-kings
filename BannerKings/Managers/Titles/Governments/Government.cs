@@ -44,5 +44,14 @@ namespace BannerKings.Managers.Titles.Governments
             if (isAdequate != null) isAdequate(kingdom);
             return true;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Government)
+            {
+                return (obj as Government).StringId == StringId;
+            }
+            return base.Equals(obj);
+        }
     }
 }

@@ -28,9 +28,7 @@ namespace BannerKings.Managers
         {
             Titles = titles;
             Kingdoms = kingdoms;
-            Knighthood = true;
-            TitleGenerator.InitializeTitles();
-            RefreshCaches();
+            Knighthood = true; 
         }
 
         [SaveableProperty(1)] private Dictionary<FeudalTitle, Hero> Titles { get; set; }
@@ -81,6 +79,7 @@ namespace BannerKings.Managers
 
         public void PostInitialize()
         {
+            RefreshCaches();
             foreach (var title in Titles.Keys.ToList())
             {
                 if (title.Contract.DemesneLaws == null || title.Contract.DemesneLaws.Count == 0)

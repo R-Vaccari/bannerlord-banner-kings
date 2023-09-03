@@ -18,7 +18,8 @@ namespace BannerKings.Managers.Titles
             Succession = succession;
             Inheritance = inheritance;
             GenderLaw = genderLaw;
-            DemesneLaws = new List<DemesneLaw>();
+            DemesneLaws = new List<DemesneLaw>(8);
+            ContractAspects = new List<ContractAspect>(4);
         }
 
         [SaveableProperty(1)] public Dictionary<FeudalDuties, float> Duties { get; set; }
@@ -28,13 +29,14 @@ namespace BannerKings.Managers.Titles
         [SaveableProperty(5)] public Inheritance Inheritance { get; private set; }
         [SaveableProperty(6)] public GenderLaw GenderLaw { get; private set; }
         [SaveableProperty(7)] public List<DemesneLaw> DemesneLaws { get; private set; }
+        public List<ContractAspect> ContractAspects { get; private set; }
 
         public void PostInitialize(Kingdom kingdom)
         {
-            if (Government == null) Government = DefaultGovernments.Instance.GetKingdomIdealSuccession(kingdom);
-            if (Succession == null) Succession = DefaultSuccessions.Instance.GetKingdomIdealSuccession(kingdom, Government);
-            if (Inheritance == null) Inheritance = DefaultInheritances.Instance.GetKingdomIdealInheritance(kingdom, Government);
-            if (GenderLaw == null) GenderLaw = DefaultGenderLaws.Instance.GetKingdomIdealGenderLaw(kingdom, Government);
+            Government ??= DefaultGovernments.Instance.GetKingdomIdealSuccession(kingdom);
+            Succession ??= DefaultSuccessions.Instance.GetKingdomIdealSuccession(kingdom, Government);
+            Inheritance ??= DefaultInheritances.Instance.GetKingdomIdealInheritance(kingdom, Government);
+            GenderLaw ??= DefaultGenderLaws.Instance.GetKingdomIdealGenderLaw(kingdom, Government);
             Government.PostInitialize();
             Succession.PostInitialize();
             Inheritance.PostInitialize();
@@ -45,6 +47,18 @@ namespace BannerKings.Managers.Titles
                 law.Initialize(type.Name, type.Description, type.Effects, type.LawType, type.AuthoritarianWeight,
                     type.EgalitarianWeight, type.OligarchicWeight, type.InfluenceCost, type.Culture, type.IsAdequateForKingdom);
             }
+
+            ContractAspects ??= DefaultContractAspects.Instance.GetIdealKingdomAspects(kingdom, Government);
+        }
+
+        public bool HasContractAspect(ContractAspect aspect)  
+        {
+            if (ContractAspects != null)
+            {
+                ContractAspects.Contains(aspect);
+            }
+
+            return false;
         }
 
         public DemesneLaw GetLawByType(DemesneLawTypes law) => DemesneLaws.FirstOrDefault(x => x.LawType == law);
