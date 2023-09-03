@@ -17,7 +17,7 @@ namespace BannerKings.Behaviours.Diplomacy
         [SaveableProperty(3)] public List<InterestGroup> Groups { get; private set; }
         [SaveableProperty(5)] public List<Kingdom> TradePacts { get; private set; }
         [SaveableProperty(4)] public Dictionary<Kingdom, CampaignTime> Truces { get; private set; }
-        public float Fatigue { get; private set; }
+        [SaveableProperty(6)] public float Fatigue { get; private set; }
       
         public KingdomDiplomacy(Kingdom kingdom)
         {
@@ -43,6 +43,13 @@ namespace BannerKings.Behaviours.Diplomacy
             {
                 Truces = new Dictionary<Kingdom, CampaignTime>();
             }
+        }
+
+        public void AddFatigue(float fatigue)
+        {
+            Fatigue += fatigue;
+            if (Fatigue > 1f) Fatigue = 1f;
+            else if (Fatigue < 0f) Fatigue = 0f;
         }
 
         public bool HasValidTruce(Kingdom kingdom)

@@ -170,6 +170,8 @@ namespace BannerKings.Models.Vanilla
                     }
                     else result.Add(casusBelli.DeclareWarScore * 2f);
                     baseNumber = result.BaseNumber;
+
+                    result.Add(baseNumber * -diplomacy.Fatigue);
                 }
 
                 foreach (Kingdom enemyKingdom in FactionManager.GetEnemyKingdoms(attackerKingdom))
@@ -192,7 +194,7 @@ namespace BannerKings.Models.Vanilla
                         war.TotalWarScore.ResultNumber, -1f, 1f) * 2f;
                     result.Add(baseNumber * (war.Attacker == factionDeclaresWar ? -score : score));
 
-                    float fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, factionDeclaresWar).ResultNumber;
+                    float fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, factionDeclaresWar).ResultNumber * 4f;
                     result.Add(baseNumber * - fatigue);
                 }
                 else
