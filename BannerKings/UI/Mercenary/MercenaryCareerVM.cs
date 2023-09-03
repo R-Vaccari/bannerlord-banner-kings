@@ -501,7 +501,8 @@ namespace BannerKings.UI.Mercenary
             var items = Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
             foreach (var item in items)
             {
-                if (item.Culture != null && item.Culture != customTroop.Character.Culture)
+                if (!item.IsCraftedByPlayer && item.Culture != null && item.Culture != customTroop.Character.Culture
+                    && item.Culture != Hero.MainHero.Culture)
                 {
                     continue;
                 }
@@ -553,26 +554,28 @@ namespace BannerKings.UI.Mercenary
             {
                 if (itemType == ItemTypeEnum.ChestArmor) return tierF >= 3f && tierF <= 3.9f;
                 else if (itemType == ItemTypeEnum.HandArmor) return tierF <= 3f;
-                else if (itemType == ItemTypeEnum.Cape) return tierF <= 1f;
+                else if (itemType == ItemTypeEnum.Cape) return tierF <= 2f;
                 else if (itemType == ItemTypeEnum.HeadArmor) return tierF >= 2.5f && tierF <= 3.9f;
                 else if (itemType == ItemTypeEnum.LegArmor) return tierF <= 2.5f;
                 else if (itemType == ItemTypeEnum.Bow || itemType == ItemTypeEnum.Crossbow ||
                     itemType == ItemTypeEnum.Thrown) return tierF <= 2.2f;
                 else if (itemType == ItemTypeEnum.Shield) return tierF <= 2.2f;
-                else if (itemType == ItemTypeEnum.Horse || itemType == ItemTypeEnum.HorseHarness) return tierF < 2f;
+                else if (itemType == ItemTypeEnum.Horse) return tierF <= 3f;
+                else if (itemType == ItemTypeEnum.HorseHarness) return tierF <= 2f;
                 else return tierF <= 4f;
             }
             else
             {
-                if (itemType == ItemTypeEnum.ChestArmor) return tierF >= 4f && tierF <= 5.5f;
+                if (itemType == ItemTypeEnum.ChestArmor) return tierF >= 4f && tierF <= 5.25f;
                 else if (itemType == ItemTypeEnum.HandArmor) return tierF >= 3f && tierF <= 4f;
-                else if (itemType == ItemTypeEnum.Cape) return tierF <= 2f;
+                else if (itemType == ItemTypeEnum.Cape) return tierF <= 3f;
                 else if (itemType == ItemTypeEnum.HeadArmor) return tierF >= 4f && tierF <= 5.5;
-                else if (itemType == ItemTypeEnum.LegArmor) return tierF <= 4f;
+                else if (itemType == ItemTypeEnum.LegArmor) return tierF <= 3f;
                 else if (itemType == ItemTypeEnum.Bow || itemType == ItemTypeEnum.Crossbow ||
                     itemType == ItemTypeEnum.Thrown) return tierF <= 4.2f;
                 else if (itemType == ItemTypeEnum.Shield) return tierF <= 3.2f;
-                else if (itemType == ItemTypeEnum.Horse || itemType == ItemTypeEnum.HorseHarness) return tierF < 3f;
+                else if (itemType == ItemTypeEnum.Horse) return tierF <= 5f;
+                else if (itemType == ItemTypeEnum.HorseHarness) return tierF <= 3f;
                 else return tierF <= 6f;
             }
         }
