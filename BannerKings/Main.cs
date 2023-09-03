@@ -141,7 +141,6 @@ namespace BannerKings
             DefaultEras.Instance.Initialize();
             DefaultInnovations.Instance.Initialize();
             BKBuildings.Instance.Initialize();
-            BKTraits.Instance.Initialize();
 
             DefaultMercenaryPrivileges.Instance.Initialize();
             DefaultCustomTroopPresets.Instance.Initialize();

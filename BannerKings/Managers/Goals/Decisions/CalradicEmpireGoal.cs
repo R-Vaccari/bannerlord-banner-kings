@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
@@ -180,7 +181,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             foundAction.SetVassals(vassals);
 
-            BannerKingsConfig.Instance.TitleManager.FoundEmpire(foundAction, new TextObject("{=Tdi4brSb}Calradia"), 
+            TitleGenerator.FoundEmpire(foundAction, new TextObject("{=Tdi4brSb}Calradia"), 
                 "title_calradic_empire", "imperial");
         }
 

@@ -1,9 +1,8 @@
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Xml.Linq;
 using BannerKings.Extensions;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -20,9 +19,9 @@ namespace BannerKings.Managers.Titles
         public FeudalTitle(TitleType type, Settlement fief, List<FeudalTitle> vassals, Hero deJure, Hero deFacto, 
             TextObject name, FeudalContract contract, string stringId = null, TextObject fullName = null)
         {
-            this.TitleType = type;
-            this.Fief = fief;
-            this.Vassals = vassals;
+            TitleType = type;
+            Fief = fief;
+            Vassals = vassals;
             this.deJure = deJure;
             this.deFacto = deFacto;
             if (fullName != null)
@@ -33,16 +32,16 @@ namespace BannerKings.Managers.Titles
             else
             {
                 FullName = new TextObject("{=wMius2i9}{TITLE} of {NAME}")
-                                .SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(type, contract.Government, deJure.Culture))
+                                .SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(type, deJure.Culture))
                                 .SetTextVariable("NAME", name);
             }
 
             shortName = name;
-            this.Contract = contract;
+            Contract = contract;
             DueTax = 0;
             claims = new Dictionary<Hero, ClaimType>();
             deJureDrift = new Dictionary<FeudalTitle, float>();
-            this.StringId = stringId;
+            StringId = stringId;
         }
 
         [SaveableProperty(1)] public TitleType TitleType { get; private set; }
@@ -139,13 +138,11 @@ namespace BannerKings.Managers.Titles
 
         public void PostInitialize()
         {
-            Contract.PostInitialize();
+            Contract.PostInitialize(deJure.Clan.Kingdom);
             if (!CustomName)
             {
                 FullName = new TextObject("{=wMius2i9}{TITLE} of {NAME}")
-                                .SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(TitleType, 
-                                Contract.Government, 
-                                deJure.Culture))
+                                .SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(TitleType, deJure.Culture))
                                 .SetTextVariable("NAME", shortName);
             }
         }
@@ -359,8 +356,8 @@ namespace BannerKings.Managers.Titles
             SetSovereign(newSovereign);
             newSovereign.Vassals.Add(this);
 
-            ChangeContract(newSovereign.Contract.Government);
-            ChangeContract(newSovereign.Contract.Succession);
+            //ChangeContract(newSovereign.Contract.Government);
+           // ChangeContract(newSovereign.Contract.Succession);
             ChangeContract(newSovereign.Contract.Inheritance);
             ChangeContract(newSovereign.Contract.GenderLaw);
 
@@ -430,7 +427,7 @@ namespace BannerKings.Managers.Titles
             }
         }
 
-        public void ChangeContract(GovernmentType government)
+        public void ChangeContract(Government government)
         {
             Contract.ChangeGovernment(government);
             if (Vassals is {Count: > 0})
@@ -442,7 +439,7 @@ namespace BannerKings.Managers.Titles
             }
         }
 
-        public void ChangeContract(SuccessionType succession)
+        public void ChangeContract(Succession succession)
         {
             Contract.ChangeSuccession(succession);
             if (Vassals is {Count: > 0})
@@ -454,7 +451,7 @@ namespace BannerKings.Managers.Titles
             }
         }
 
-        public void ChangeContract(InheritanceType inheritance)
+        public void ChangeContract(Inheritance inheritance)
         {
             Contract.ChangeInheritance(inheritance);
             if (Vassals is {Count: > 0})

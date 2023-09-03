@@ -1,7 +1,6 @@
 using BannerKings.Managers.Cultures;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 
@@ -33,7 +32,7 @@ namespace BannerKings.Utils
             return new TextObject("{=HoU7ZObZ}General Goods");
         }
 
-        public static TextObject GetTitleHonorary(TitleType type, GovernmentType government, bool female, CultureObject culture = null)
+        public static TextObject GetTitleHonorary(TitleType type, bool female, CultureObject culture = null)
         {
             var name = DefaultTitleNames.Instance.GetTitleName(culture, type);
             return female ? name.Female : name.Name;
@@ -45,30 +44,10 @@ namespace BannerKings.Utils
             return female ? name.Female : name.Name;
         }
 
-        public static TextObject GetPrinceTitles(GovernmentType government, bool female, CultureObject culture = null)
+        public static TextObject GetPrinceTitles(bool female, CultureObject culture = null)
         {
             var name = DefaultTitleNames.Instance.GetPrinceName(culture);
             return female ? name.Female : name.Name;
-        }
-
-        public static TextObject GetName(GovernmentType value)
-        {
-            return GameTexts.FindText("str_bk_" + value.ToString().ToLower());
-        }
-
-        public static TextObject GetName(InheritanceType value)
-        {
-            return GameTexts.FindText("str_bk_" + value.ToString().ToLower());
-        }
-
-        public static TextObject GetName(GenderLaw value)
-        {
-            return GameTexts.FindText("str_bk_" + value.ToString().ToLower());
-        }
-
-        public static TextObject GetName(SuccessionType value)
-        {
-            return GameTexts.FindText("str_bk_" + value.ToString().ToLower());
         }
     }
 }

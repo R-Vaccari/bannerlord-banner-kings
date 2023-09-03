@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using BannerKings.Managers.Kingdoms.Succession;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Core;
@@ -21,64 +22,51 @@ namespace BannerKings.Managers.Helpers
                 return;
             }
 
-            var succession = title.Contract.Succession;
-            if (succession != SuccessionType.Hereditary_Monarchy && succession != SuccessionType.Imperial)
+            Succession succession = title.Contract.Succession;  
+            if (succession.ElectedSuccession)
             {
-                if (!kingdom.IsEliminated)
+                BKKingElectionDecision decision = new BKKingElectionDecision(victim.Clan, title, victim);
+                var vanillaDecision = kingdom.UnresolvedDecisions.FirstOrDefault(x => x is KingSelectionKingdomDecision);
+                if (vanillaDecision != null)
                 {
-                    if (succession == SuccessionType.FeudalElective)
+                    kingdom.RemoveDecision(vanillaDecision);
+                }
+
+                kingdom.UnresolvedDecisions.Add(decision);
+                if (!decision.IsAllowed())
+                {
+                    ResolveSuccession(title, victim, kingdom);
+                }
+            }
+            else
+            {
+                Hero heir = null;
+                var line = BannerKingsConfig.Instance.TitleModel.CalculateSuccessionLine(title, victim.Clan, victim);
+                heir = line.First().Key;
+
+                if (heir != null)
+                {
+                    BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, heir, title);
+                    Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
+                        .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static)
+                        .Invoke(null, new object[] { kingdom, heir.Clan });
+
+                    if (heir.Clan.Leader != heir)
                     {
-                        ApplyFeudalElective(title, victim, kingdom);
+                        heir.Clan.SetLeader(heir);
+                    }
+
+                    if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom == victim.Clan.Kingdom)
+                    {
+                        MBInformationManager.AddQuickInformation(
+                            new TextObject("{=ytkncUx3}{HEIR} has rightfully inherited the {TITLE}")
+                                .SetTextVariable("HEIR", heir.Name)
+                                .SetTextVariable("TITLE", title.FullName),
+                            0,
+                            heir.CharacterObject,
+                            Utils.Helpers.GetKingdomDecisionSound());
                     }
                 }
-                
-                return;
-            }
-
-            Hero heir = null;
-            float heirScore = float.MinValue;
-            var line = BannerKingsConfig.Instance.TitleModel.CalculateSuccessionLine(title, victim.Clan, victim);
-            heir = line.First().Key;
-
-            if (heir != null)
-            {
-                BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, heir, title);
-                Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
-                    .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static)
-                    .Invoke(null, new object[] { kingdom, heir.Clan });
-
-                var decision = kingdom.UnresolvedDecisions.FirstOrDefault(x => x is KingSelectionKingdomDecision);
-                if (decision != null)
-                {
-                    kingdom.RemoveDecision(decision);
-                }
-
-                if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom == victim.Clan.Kingdom)
-                {
-                    MBInformationManager.AddQuickInformation(
-                        new TextObject("{=ytkncUx3}{HEIR} has rightfully inherited the {TITLE}")
-                            .SetTextVariable("HEIR", heir.Name)
-                            .SetTextVariable("TITLE", title.FullName), 
-                        0, 
-                        heir.CharacterObject,
-                        Utils.Helpers.GetKingdomDecisionSound());
-                }
-            }
-        }
-
-        private static void ApplyFeudalElective(FeudalTitle title, Hero victim, Kingdom kingdom)
-        {
-            var decision = kingdom.UnresolvedDecisions.FirstOrDefault(x => x is KingSelectionKingdomDecision);
-            if (decision != null)
-            {
-                kingdom.UnresolvedDecisions.Remove(decision);
-            }
-
-            var electiveDecision = new FeudalElectiveDecision(victim.Clan, title, victim);
-            kingdom.UnresolvedDecisions.Add(electiveDecision);
-            if (!electiveDecision.IsAllowed())
-            {
-                ResolveSuccession(title, victim, kingdom);
             }
         }
 
@@ -108,28 +96,6 @@ namespace BannerKings.Managers.Helpers
                         .ToString(),
                         Utils.Helpers.GetKingdomDecisionSound()));
                 }
-            }
-        }
-
-        public static IEnumerable<SuccessionType> GetValidSuccessions(GovernmentType government)
-        {
-            switch (government)
-            {
-                case GovernmentType.Feudal:
-                    yield return SuccessionType.Hereditary_Monarchy;
-                    yield return SuccessionType.Elective_Monarchy;
-                    yield return SuccessionType.FeudalElective;
-                    yield break;
-                case GovernmentType.Imperial:
-                    yield return SuccessionType.Imperial;
-                    yield break;
-                case GovernmentType.Republic:
-                    yield return SuccessionType.Republic;
-                    yield break;
-                default:
-                    yield return SuccessionType.Elective_Monarchy;
-                    yield return SuccessionType.Hereditary_Monarchy;
-                    break;
             }
         }
     }

@@ -9,6 +9,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Utils;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -302,6 +303,12 @@ namespace BannerKings.Models.Vanilla
                 if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader, DefaultDivinities.Instance.Oca, religion))
                 {
                     explainedNumber.Add(0.5f, DefaultDivinities.Instance.Oca.Name);
+                }
+
+                if (CultureUtils.IsDevseg(fortification.Culture) && 
+                    BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader, DefaultDivinities.Instance.Iltanlar, religion))
+                {
+                    explainedNumber.Add(0.8f, DefaultDivinities.Instance.Iltanlar.Name);
                 }
             }
 

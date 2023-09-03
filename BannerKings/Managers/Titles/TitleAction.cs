@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Managers.Helpers;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 
 namespace BannerKings.Managers.Titles
@@ -53,7 +54,7 @@ namespace BannerKings.Managers.Titles
                     BannerKingsConfig.Instance.TitleManager.RevokeTitle(this);
                     break;
                 case ActionType.Found:
-                    BannerKingsConfig.Instance.TitleManager.FoundKingdom(this);
+                    TitleGenerator.FoundKingdom(this);
                     break;
                 case ActionType.Grant:
                 case ActionType.Destroy:

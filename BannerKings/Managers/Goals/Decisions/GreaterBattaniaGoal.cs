@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Extensions;
@@ -194,7 +195,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             foundAction.SetVassals(vassals);
 
-            BannerKingsConfig.Instance.TitleManager.FoundEmpire(foundAction, new TextObject("{=5M28g8TK}Greater Battania"), 
+            TitleGenerator.FoundEmpire(foundAction, new TextObject("{=5M28g8TK}Greater Battania"), 
                 "title_greater_battania");
         }
 

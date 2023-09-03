@@ -278,6 +278,16 @@ namespace BannerKings.Models.Vanilla
             public float ValueOfSettlements;
             public float TotalStrengthOfEnemies;
         }
+        public override void GetHeroesForEffectiveRelation(Hero hero1, Hero hero2, out Hero effectiveHero1, out Hero effectiveHero2)
+        {
+            effectiveHero1 = hero1;
+            effectiveHero2 = hero2;
+        }
+
+        public override int GetRelationChangeAfterVotingInSettlementOwnerPreliminaryDecision(Hero supporter, bool hasHeroVotedAgainstOwner)
+        {
+            return base.GetRelationChangeAfterVotingInSettlementOwnerPreliminaryDecision(supporter, hasHeroVotedAgainstOwner);
+        }
     }
 }
 

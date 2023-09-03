@@ -177,6 +177,12 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(data.Settlement.OwnerClan.Leader, 
+                DefaultDivinities.Instance.WindHeaven))
+            {
+                result.AddFactor(-0.2f, DefaultDivinities.Instance.WindHeaven.Name);
+            }
+
             return result;
         }
 

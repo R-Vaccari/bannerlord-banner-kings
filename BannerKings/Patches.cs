@@ -500,8 +500,7 @@ namespace BannerKings.Patches
                     var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
                     if (sovereign != null)
                     {
-                        __result = !PolicyHelper.GetForbiddenGovernmentPolicies(sovereign.Contract.Government)
-                            .Contains(__instance.Policy);
+                        __result = !sovereign.Contract.Government.ProhibitedPolicies.Contains(__instance.Policy);
                         return false;
                     }
                 }

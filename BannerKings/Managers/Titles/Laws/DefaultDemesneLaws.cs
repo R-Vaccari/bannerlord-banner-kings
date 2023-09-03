@@ -1,3 +1,4 @@
+using BannerKings.Managers.Titles.Governments;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -111,7 +112,7 @@ namespace BannerKings.Managers.Titles.Laws
             var slavery = SlaveryStandard.GetCopy();
             list.Add(slavery);
 
-            if (government == GovernmentType.Feudal)
+            if (government == DefaultGovernments.Instance.Feudal)
             {
                 list.Add(DraftingVassalage.GetCopy());
                 list.Add(EstateTenureFeeTail.GetCopy());
@@ -134,7 +135,7 @@ namespace BannerKings.Managers.Titles.Laws
                 list.Add(TenancyNone.GetCopy());
                 list.Add(ArmyPrivate.GetCopy());
             } 
-            else if (government == GovernmentType.Tribal)
+            else if (government == DefaultGovernments.Instance.Tribal)
             {
                 list.Add(DraftingHidage.GetCopy());
                 list.Add(EstateTenureAllodial.GetCopy());
@@ -149,7 +150,7 @@ namespace BannerKings.Managers.Titles.Laws
                 list.Add(ArmyLegion.GetCopy());
             }
 
-            if (government == GovernmentType.Republic)
+            if (government == DefaultGovernments.Instance.Republic)
             {
                 list.Add(CouncilElected.GetCopy());
             }
@@ -185,7 +186,7 @@ namespace BannerKings.Managers.Titles.Laws
                 (Kingdom kingdom) =>
                 {
                     FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-                    if (title != null) return title.Contract.Government == GovernmentType.Tribal;
+                    if (title != null) return title.Contract.Government == DefaultGovernments.Instance.Tribal;
                     return false;
                 });
 
@@ -201,8 +202,8 @@ namespace BannerKings.Managers.Titles.Laws
                 (Kingdom kingdom) =>
                 {
                     FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-                    if (title != null) return title.Contract.Government == GovernmentType.Imperial ||
-                        title.Contract.Government == GovernmentType.Republic;
+                    if (title != null) return title.Contract.Government == DefaultGovernments.Instance.Imperial ||
+                        title.Contract.Government == DefaultGovernments.Instance.Republic;
                     return false;
                 });
 

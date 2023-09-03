@@ -5,6 +5,7 @@ using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -31,22 +32,8 @@ namespace BannerKings.Models.Vanilla
             var title = BannerKingsConfig.Instance.TitleManager.GetSovereignFromSettlement(settlement);
             if (title != null)
             {
-                var government = title.Contract.Government;
-                switch (government)
-                {
-                    case GovernmentType.Republic:
-                        result.Add(0.4f, new TextObject("Government"));
-                        break;
-                    case GovernmentType.Feudal:
-                        result.Add(0.2f, new TextObject("Government"));
-                        break;
-                    case GovernmentType.Tribal:
-                        result.Add(0.1f, new TextObject("Government"));
-                        break;
-                    case GovernmentType.Imperial:
-                        result.Add(0.05f, new TextObject("Government"));
-                        break;
-                }
+                Government government = title.Contract.Government;
+                result.Add(government.Mercantilism, new TextObject("{=!}Government"));
             }
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_mercantilism"))
@@ -83,7 +70,7 @@ namespace BannerKings.Models.Vanilla
             result.Add(0.25f * mercantilism, new TextObject("Mercantilism"));
 
             var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
-            if (government == GovernmentType.Feudal)
+            if (government == DefaultGovernments.Instance.Feudal)
             {
                 result.AddFactor(0.15f, new TextObject("{=PSrEtF5L}Government"));
             }

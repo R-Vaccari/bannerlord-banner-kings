@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Election;
@@ -22,10 +23,8 @@ namespace BannerKings.Managers.Kingdoms.Succession
             PreviousRuler = previousRuler;
         }
 
-        public override bool IsAllowed()
-        {
-            return Title != null && PreviousRuler != null;
-        }
+        public override bool IsAllowed() => Title != null && PreviousRuler != null && 
+            DetermineInitialCandidates().Count() >= 3 && base.IsAllowed();
 
         public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
         {
@@ -46,6 +45,11 @@ namespace BannerKings.Managers.Kingdoms.Succession
                 if (deJure != king)
                 {
                     BannerKingsConfig.Instance.TitleManager.InheritTitle(deJure, king, title);
+                }
+
+                if (king.Clan.Leader != king)
+                {
+                    king.Clan.SetLeader(king);
                 }
             }
         }

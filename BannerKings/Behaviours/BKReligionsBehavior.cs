@@ -7,10 +7,12 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Traits;
 using HarmonyLib;
 using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Encounters;
@@ -208,6 +210,37 @@ namespace BannerKings.Behaviours
                 if (rel != null && rel.HasDoctrine(DefaultDoctrines.Instance.Childbirth))
                 {
                     hero.Clan.AddRenown(25f, true);
+                }
+            }
+
+            if (bornNaturally)
+            {
+                if (hero.Father != null)
+                {
+                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Father, DefaultDivinities.Instance.SheWolf))
+                    {
+                        TraitObject random = BKTraits.Instance.CongenitalTraits.GetRandomElementInefficiently();
+                        hero.SetTraitLevel(random, 1);
+                    }
+
+                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Father, DefaultDivinities.Instance.WindNorth))
+                    {
+                        BannerKingsConfig.Instance.ReligionsManager.AddPiety(hero.Father, 150f, true);
+                    }
+                }
+
+                if (hero.Mother != null)
+                {
+                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Mother, DefaultDivinities.Instance.SheWolf))
+                    {
+                        TraitObject random = BKTraits.Instance.CongenitalTraits.GetRandomElementInefficiently();
+                        hero.SetTraitLevel(random, 1);
+                    }
+
+                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Mother, DefaultDivinities.Instance.WindNorth))
+                    {
+                        BannerKingsConfig.Instance.ReligionsManager.AddPiety(hero.Mother, 150f, true);
+                    }
                 }
             }
         }

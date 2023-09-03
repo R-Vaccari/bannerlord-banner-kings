@@ -4,6 +4,7 @@ using BannerKings.Managers.Skills;
 using BannerKings.Managers.Traits;
 using BannerKings.UI.Court;
 using BannerKings.Utils;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -23,9 +24,10 @@ namespace BannerKings.Models.BKModels
                 var traits = rel.Faith.Traits;
                 var toCheck = new List<TraitObject>
                     {DefaultTraits.Honor, DefaultTraits.Calculating, DefaultTraits.Valor, DefaultTraits.Mercy};
-                foreach (var trait in toCheck)
+                foreach (var tuple in rel.Faith.Traits)
                 {
-                    var traitLevel = hero.GetTraitLevel(trait);
+                    TraitObject trait = tuple.Key;
+                    int traitLevel = hero.GetTraitLevel(trait);
                     if (traits.ContainsKey(trait) && traitLevel != 0)
                     {
                         var target = traits[trait] ? 1 : -1;
@@ -52,23 +54,13 @@ namespace BannerKings.Models.BKModels
             {
                 ExceptionUtils.TryCatch(() =>
                 {
-                    var traits = rel.Faith.Traits;
-                    var toCheck = new List<TraitObject>
-                    {DefaultTraits.Honor, DefaultTraits.Calculating, DefaultTraits.Valor, DefaultTraits.Mercy};
-                    foreach (var trait in toCheck)
+                    foreach (var tuple in rel.Faith.Traits)
                     {
-                        var traitLevel = hero.GetTraitLevel(trait);
-                        if (traits.ContainsKey(trait) && traitLevel != 0)
+                        TraitObject trait = tuple.Key;
+                        int traitLevel = hero.GetTraitLevel(trait);
+                        if (traitLevel != 0)
                         {
-                            var target = traits[trait] ? 1 : -1;
-                            if (target > 0)
-                            {
-                                result.Add(traitLevel * (traitLevel > 0 ? 0.2f : -0.2f), trait.Name);
-                            }
-                            else
-                            {
-                                result.Add(traitLevel * (-traitLevel < 0 ? 0.2f : -0.2f), trait.Name);
-                            }
+                            result.Add(traitLevel * 0.2f * (tuple.Value ? 1f : -1f), trait.Name);
                         }
                     }
 

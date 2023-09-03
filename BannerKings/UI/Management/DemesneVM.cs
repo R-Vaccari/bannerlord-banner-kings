@@ -313,7 +313,7 @@ namespace BannerKings.UI.Management
             if (title != null)
             {
                 var kingdom = data.Settlement.OwnerClan.Kingdom;
-                kingdom?.AddDecision(new BKGovernmentDecision(data.Settlement.OwnerClan, GovernmentType.Imperial, title));
+               // kingdom?.AddDecision(new BKGovernmentDecision(data.Settlement.OwnerClan, GovernmentType.Imperial, title));
             }
         }
     }

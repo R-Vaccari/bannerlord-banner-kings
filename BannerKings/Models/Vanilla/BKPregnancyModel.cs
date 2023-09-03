@@ -30,8 +30,18 @@ namespace BannerKings.Models.Vanilla
                 result *= 1.25f;
             }
 
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero, DefaultDivinities.Instance.SheWolf))
+            {
+                result *= 1.25f;
+            }
+
             if (hero.Spouse != null)
             {
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Spouse, DefaultDivinities.Instance.SheWolf))
+                {
+                    result *= 1.25f;
+                }
+
                 if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Spouse, DefaultDivinities.Instance.TreeloreMoon))
                 {
                     result *= 1.25f;

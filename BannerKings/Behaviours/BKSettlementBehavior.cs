@@ -49,6 +49,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnGameCreated);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -106,9 +107,12 @@ namespace BannerKings.Behaviours
 
         private void OnGameCreated(CampaignGameStarter starter)
         {
-            BannerKingsConfig.Instance.InitializeManagersFirstTime();
-            BannerKingsConfig.Instance.TitleManager.PostInitialize();
-            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+            if (firstUse)
+            {
+                BannerKingsConfig.Instance.InitializeManagersFirstTime();
+                BannerKingsConfig.Instance.TitleManager.PostInitialize();
+                BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+            }
         }
 
         private void OnGameLoaded(CampaignGameStarter starter)

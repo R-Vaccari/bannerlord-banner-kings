@@ -62,6 +62,8 @@ using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Populations.Estates.Estate;
 using CasusBelli = BannerKings.Behaviours.Diplomacy.Wars.CasusBelli;
+using BannerKings.Managers.Institutions.Religions.Faiths.Eastern;
+using BannerKings.Managers.Titles.Governments;
 
 namespace BannerKings
 {
@@ -100,10 +102,7 @@ namespace BannerKings
             AddEnumDefinition(typeof(TitleType), 25);
             AddEnumDefinition(typeof(FeudalDuties), 26);
             AddEnumDefinition(typeof(FeudalRights), 27);
-            AddEnumDefinition(typeof(GovernmentType), 28);
-            AddEnumDefinition(typeof(SuccessionType), 29);
-            AddEnumDefinition(typeof(InheritanceType), 30);
-            AddEnumDefinition(typeof(GenderLaw), 31);
+
             AddClassDefinition(typeof(TitleManager), 32);
             AddClassDefinition(typeof(CouncilMember), 34);
             AddClassDefinition(typeof(CouncilData), 35);
@@ -127,10 +126,7 @@ namespace BannerKings
             AddClassDefinition(typeof(RansomDuty), 53);
             AddClassDefinition(typeof(BannerKingsTournament), 54);
             AddClassDefinition(typeof(BKContractDecision), 55);
-            AddClassDefinition(typeof(BKGenderDecision), 56);
-            AddClassDefinition(typeof(BKInheritanceDecision), 57);
-            AddClassDefinition(typeof(BKSuccessionDecision), 58);
-            AddClassDefinition(typeof(BKGovernmentDecision), 59);
+
             AddClassDefinition(typeof(RepublicElectionDecision), 60);
             AddClassDefinition(typeof(BKSettlementClaimantDecision), 61);
             AddClassDefinition(typeof(BKKingElectionDecision), 62);
@@ -212,6 +208,11 @@ namespace BannerKings
             AddClassDefinition(typeof(CourtExpense), 143);
             AddClassDefinition(typeof(Osfeyd), 144);
             AddClassDefinition(typeof(Era), 145);
+            AddClassDefinition(typeof(SixWinds), 146);
+            AddClassDefinition(typeof(Government), 147);
+            AddClassDefinition(typeof(Succession), 148);
+            AddClassDefinition(typeof(Inheritance), 149);
+            AddClassDefinition(typeof(GenderLaw), 150);
         }
 
         protected override void DefineContainerDefinitions()

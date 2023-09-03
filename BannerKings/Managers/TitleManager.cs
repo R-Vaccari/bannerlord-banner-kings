@@ -1,18 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Xml;
 using BannerKings.Actions;
 using BannerKings.Behaviours;
+using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.BKModels;
-using BannerKings.UI.Cutscenes;
-using Newtonsoft.Json.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -30,14 +28,12 @@ namespace BannerKings.Managers
         {
             Titles = titles;
             Kingdoms = kingdoms;
-            Knighthood = true;
-            InitializeTitles();
-            RefreshCaches();
+            Knighthood = true; 
         }
 
         [SaveableProperty(1)] private Dictionary<FeudalTitle, Hero> Titles { get; set; }
 
-        [SaveableProperty(2)] private Dictionary<Kingdom, FeudalTitle> Kingdoms { get; set; }
+        [SaveableProperty(2)] public Dictionary<Kingdom, FeudalTitle> Kingdoms { get; private set; }
 
         [SaveableProperty(3)] public bool Knighthood { get; set; } = true;
 
@@ -83,6 +79,7 @@ namespace BannerKings.Managers
 
         public void PostInitialize()
         {
+            RefreshCaches();
             foreach (var title in Titles.Keys.ToList())
             {
                 if (title.Contract.DemesneLaws == null || title.Contract.DemesneLaws.Count == 0)
@@ -149,9 +146,9 @@ namespace BannerKings.Managers
             return Titles.FirstOrDefault(x => x.Key.StringId == stringId).Key;
         }
 
-        public GovernmentType GetSettlementGovernment(Settlement settlement)
+        public Government GetSettlementGovernment(Settlement settlement)
         {
-            var type = GovernmentType.Feudal;
+            Government type = DefaultGovernments.Instance.Feudal;
             var title = GetTitle(settlement);
             if (title?.Contract != null)
             {
@@ -263,7 +260,7 @@ namespace BannerKings.Managers
             }
         }
 
-        private void ExecuteAddTitle(FeudalTitle title)
+        internal void ExecuteAddTitle(FeudalTitle title)
         {
             var keys = Titles.Keys.ToList();
             if (!keys.Contains(title))
@@ -585,48 +582,6 @@ namespace BannerKings.Managers
             }
         }
 
-        public void FoundKingdom(TitleAction action)
-        {
-            var title = CreateKingdom(action.ActionTaker, action.ActionTaker.Clan.Kingdom, TitleType.Kingdom, new List<FeudalTitle>(action.Vassals), action.Title.Contract);
-            action.ActionTaker.Clan.AddRenown(action.Renown);
-
-            action.Title.DriftTitle(title, false);
-            foreach (var vassal in action.Vassals)
-            {
-                vassal.DriftTitle(title);
-            }
-
-            action.ActionTaker.ChangeHeroGold(-(int) action.Gold);
-            GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
-            MBInformationManager.AddQuickInformation(new TextObject("{=dFTm4AbE}The {TITLE} has been founded by {FOUNDER}.")
-                    .SetTextVariable("FOUNDER", action.ActionTaker.EncyclopediaLinkWithName)
-                    .SetTextVariable("TITLE", title.FullName),
-                0, null, "event:/ui/notification/relation");
-            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, 
-                BannerKingsConfig.Instance.TitleModel.GetSkillReward(TitleType.Kingdom, action.Type));
-        }
-
-        public void FoundEmpire(TitleAction action, TextObject factionName, string stringId = null, string contractType = null)
-        {
-            var kingdom = action.ActionTaker.Clan.Kingdom;
-            kingdom.ChangeKingdomName(factionName, factionName);
-            var title = CreateEmpire(action.ActionTaker, kingdom, new List<FeudalTitle>(action.Vassals), 
-                GenerateContract(contractType), stringId);
-            action.ActionTaker.Clan.AddRenown(action.Renown);
-
-
-            foreach (var vassal in action.Vassals)
-            {
-                vassal.DriftTitle(title);
-            }
-
-            action.ActionTaker.ChangeHeroGold(-(int) action.Gold);
-            GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
-            MBInformationManager.ShowSceneNotification(new EmpireFoundedScene(kingdom, title));
-            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship,
-                BannerKingsConfig.Instance.TitleModel.GetSkillReward(TitleType.Empire, action.Type));
-        }
-
         public void UsurpTitle(Hero oldOwner, TitleAction action)
         {
             var usurper = action.ActionTaker;
@@ -943,7 +898,6 @@ namespace BannerKings.Managers
             return vassals;
         }
 
-
         public Kingdom GetTitleFaction(FeudalTitle title)
         {
             Kingdom faction = null;
@@ -958,191 +912,6 @@ namespace BannerKings.Managers
             }
 
             return faction;
-        }
-
-        public void InitializeTitles()
-        {
-            var doc = Utils.Helpers.CreateDocumentFromXmlFile(BasePath.Name + "Modules/BannerKings/ModuleData/titles.xml");
-            var titlesNode = doc.ChildNodes[1].ChildNodes[0];
-            var autoGenerate = bool.Parse(titlesNode.Attributes["autoGenerate"].Value);
-
-            foreach (XmlNode kingdom in titlesNode)
-            {
-                if (kingdom.Name != "kingdom")
-                {
-                    return;
-                }
-
-                var vassalsKingdom = new List<FeudalTitle>();
-                var factionName = kingdom.Attributes["faction"].Value;
-                var deJureNameKingdom = kingdom.Attributes["deJure"].Value;
-                var deJureKingdom = GetDeJure(deJureNameKingdom, null);
-                var faction = Kingdom.All.FirstOrDefault(x => x.Name.ToString() == factionName);
-                if (faction == null)
-                {
-                    faction = Kingdom.All.FirstOrDefault(x => x.StringId.ToString() == factionName);
-                }
-
-                var contractType = kingdom.Attributes["contract"].Value;
-                var contract = GenerateContract(contractType);
-
-                if (contract == null)
-                {
-                    return;
-                }
-
-                if (kingdom.ChildNodes != null)
-                {
-                    foreach (XmlNode duchy in kingdom.ChildNodes)
-                    {
-                        if (duchy.Name != "duchy")
-                        {
-                            return;
-                        }
-
-                        var vassalsDuchy = new List<FeudalTitle>();
-                        var dukedomName = new TextObject(duchy.Attributes["name"].Value);
-                        TextObject dukedomFullName = null;
-                        var dukedomFullNameAttribute = duchy.Attributes["fullName"];
-                        if (dukedomFullNameAttribute != null)
-                        {
-                            new TextObject(dukedomFullNameAttribute.Value);
-                        }
-                        var deJureNameDuchy = duchy.Attributes["deJure"].Value;
-                        var deJureDuchy = GetDeJure(deJureNameDuchy, null);
-
-                        if (duchy.ChildNodes != null)
-                        {
-                            foreach (XmlNode county in duchy.ChildNodes)
-                            {
-                                if (county.Name != "county")
-                                {
-                                    return;
-                                }
-
-                                var settlementNameCounty = county.Attributes["settlement"].Value;
-                                var deJureNameCounty = county.Attributes["deJure"].Value;
-                                TextObject countyName = null;
-                                var fullNameAttribute = county.Attributes["fullName"];
-                                if (fullNameAttribute != null)
-                                {
-                                    countyName = new TextObject(fullNameAttribute.Value); 
-                                }
-                                
-                                var settlementCounty = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameCounty);
-                                if (settlementCounty == null)
-                                {
-                                    settlementCounty = Settlement.All.FirstOrDefault(x => x.StringId.ToString() == settlementNameCounty);
-                                }
-
-                                var deJureCounty = GetDeJure(deJureNameCounty, settlementCounty);
-                                var vassalsCounty = new List<FeudalTitle>();
-
-                                if (county.ChildNodes != null)
-                                {
-                                    foreach (XmlNode barony in county.ChildNodes)
-                                    {
-                                        if (barony.Name != "barony")
-                                        {
-                                            return;
-                                        }
-
-                                        TextObject baronyName = null;
-                                        var baronyfullNameAttribute = barony.Attributes["fullName"];
-                                        if (baronyfullNameAttribute != null)
-                                        {
-                                            baronyName = new TextObject(baronyfullNameAttribute.Value);
-                                        }
-
-                                        var settlementNameBarony = barony.Attributes["settlement"].Value;
-                                        var deJureIdBarony = barony.Attributes["deJure"].Value;
-                                        var settlementBarony = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameBarony);
-                                        if (settlementBarony == null)
-                                        {
-                                            settlementBarony = Settlement.All.FirstOrDefault(x => x.StringId.ToString() == settlementNameBarony);
-                                        }
-
-                                        var deJureBarony = GetDeJure(deJureIdBarony, settlementBarony);
-                                        if (settlementBarony != null)
-                                        {
-                                            vassalsCounty.Add(CreateLandedTitle(settlementBarony, deJureBarony, TitleType.Barony, contract, 
-                                                null, baronyName));
-                                        }
-                                    }
-                                }
-
-                                if (settlementCounty != null)
-                                {
-                                    vassalsDuchy.Add(CreateLandedTitle(settlementCounty, deJureCounty, TitleType.County, contract, 
-                                        vassalsCounty, countyName));
-                                }
-                            }
-                        }
-
-                        if (deJureDuchy != null && vassalsDuchy.Count > 0)
-                        {
-                            vassalsKingdom.Add(CreateUnlandedTitle(deJureDuchy, TitleType.Dukedom, vassalsDuchy, dukedomName, contract,
-                                dukedomFullName));
-                        }
-                    }
-                }
-
-                if (deJureKingdom != null && vassalsKingdom.Count > 0 && faction != null)
-                {
-                    var sovereign = CreateKingdom(deJureKingdom, faction, TitleType.Kingdom, vassalsKingdom, contract);
-                    foreach (var duchy in vassalsKingdom)
-                    {
-                        duchy.SetSovereign(sovereign);
-                    }
-                }
-            }
-
-            if (autoGenerate)
-            {
-                foreach (var settlement in Settlement.All)
-                {
-                    if (settlement.IsVillage)
-                    {
-                        continue;
-                    }
-
-                    if (settlement.OwnerClan is {Leader: { }} &&
-                        (settlement.IsTown || settlement.IsCastle))
-                    {
-                        CreateLandedTitle(settlement,
-                            settlement.Owner, settlement.IsTown ? TitleType.County : TitleType.Barony,
-                            GenerateContract("feudal"));
-                    }
-                }
-            }
-        }
-
-        private Hero GetDeJure(string heroId, Settlement settlement)
-        {
-            var target = Hero.AllAliveHeroes.FirstOrDefault(x => x.StringId == heroId);
-            if (target == null)
-            {
-                var hero1Dead = Hero.DeadOrDisabledHeroes.FirstOrDefault(x => x.StringId == heroId);
-                if (hero1Dead != null)
-                {
-                    var clan = hero1Dead.Clan;
-                    if (!clan.IsEliminated)
-                    {
-                        target = clan.Leader;
-                    }
-                    else if (clan.Kingdom != null)
-                    {
-                        target = clan.Kingdom.Leader;
-                    }
-                }
-            }
-
-            if (target == null && settlement != null)
-            {
-                target = settlement.Owner;
-            }
-
-            return target;
         }
 
         public void ApplyOwnerChange(Settlement settlement, Hero newOwner)
@@ -1265,148 +1034,6 @@ namespace BannerKings.Managers
                 FeudalRights.Conquest_Rights => new TextObject("{=7TCkYXav}You are entitled to the ownership of any lands you conquered by yourself."),
                 _ => new TextObject("{=!}")
             };
-        }
-
-        private FeudalContract GenerateContract(string type)
-        {
-            var contract = type switch
-            {
-                "feudal_elective" => new FeudalContract(
-                    new Dictionary<FeudalDuties, float> { { FeudalDuties.Ransom, 0.20f }, { FeudalDuties.Auxilium, 0.4f } },
-                    new List<FeudalRights> { FeudalRights.Absolute_Land_Rights, FeudalRights.Enfoeffement_Rights },
-                    GovernmentType.Feudal, SuccessionType.FeudalElective, InheritanceType.Primogeniture,
-                    GenderLaw.Agnatic),
-                "imperial" => new FeudalContract(
-                    new Dictionary<FeudalDuties, float> {{FeudalDuties.Ransom, 0.10f}, {FeudalDuties.Taxation, 0.4f}},
-                    new List<FeudalRights> {FeudalRights.Assistance_Rights, FeudalRights.Army_Compensation_Rights},
-                    GovernmentType.Imperial, SuccessionType.Imperial, InheritanceType.Primogeniture, GenderLaw.Agnatic),
-                "tribal" => new FeudalContract(
-                    new Dictionary<FeudalDuties, float>
-                    {
-                        {FeudalDuties.Taxation, 0.125f}, {FeudalDuties.Auxilium, 0.66f}
-                    }, new List<FeudalRights> {FeudalRights.Conquest_Rights, FeudalRights.Absolute_Land_Rights},
-                    GovernmentType.Tribal, SuccessionType.Elective_Monarchy, InheritanceType.Seniority,
-                    GenderLaw.Agnatic),
-                "republic" => new FeudalContract(
-                    new Dictionary<FeudalDuties, float> {{FeudalDuties.Ransom, 0.10f}, {FeudalDuties.Taxation, 0.4f}},
-                    new List<FeudalRights> {FeudalRights.Assistance_Rights, FeudalRights.Army_Compensation_Rights},
-                    GovernmentType.Republic, SuccessionType.Republic, InheritanceType.Primogeniture,
-                    GenderLaw.Cognatic),
-                _ => new FeudalContract(
-                    new Dictionary<FeudalDuties, float> {{FeudalDuties.Ransom, 0.20f}, {FeudalDuties.Auxilium, 0.4f}},
-                    new List<FeudalRights> {FeudalRights.Absolute_Land_Rights, FeudalRights.Enfoeffement_Rights},
-                    GovernmentType.Feudal, SuccessionType.Hereditary_Monarchy, InheritanceType.Primogeniture,
-                    GenderLaw.Agnatic)
-            };
-
-            return contract;
-        }
-
-        private FeudalTitle CreateEmpire(Hero deJure, Kingdom faction, List<FeudalTitle> vassals, 
-            FeudalContract contract, string stringId = null)
-        {
-            var title = new FeudalTitle(TitleType.Empire, null, vassals, deJure, faction.Leader,
-                faction.Name, contract, stringId);
-            ExecuteAddTitle(title);
-
-            if (Kingdoms.ContainsKey(faction))
-            {
-                Kingdoms.Remove(faction);
-            }
-
-            var list = new List<Kingdom>();
-            foreach (var vassal in vassals)
-            {
-                if (Kingdoms.Any(x => x.Value == vassal))
-                {
-                    list.Add(Kingdoms.First(x => x.Value == vassal).Key);
-                }
-            }
-
-            list.ForEach(x => Kingdoms.Remove(x));
-
-            Kingdoms.Add(faction, title);
-            return title;
-        }
-
-        private FeudalTitle CreateKingdom(Hero deJure, Kingdom faction, TitleType type, List<FeudalTitle> vassals, FeudalContract contract, string stringId = null)
-        {
-            var title = new FeudalTitle(type, null, vassals, deJure, faction.Leader, faction.Name, contract, stringId);
-            ExecuteAddTitle(title);
-            Kingdoms.Add(faction, title);
-            return title;
-        }
-
-        private FeudalTitle CreateUnlandedTitle(Hero deJure, TitleType type, List<FeudalTitle> vassals, 
-            TextObject name, FeudalContract contract, TextObject fullName = null)
-        {
-            var title = new FeudalTitle(type, null, vassals, deJure, deJure, name, contract, null, fullName);
-            ExecuteAddTitle(title);
-            return title;
-        }
-
-        private FeudalTitle CreateLandedTitle(Settlement settlement, Hero deJure, TitleType type, 
-            FeudalContract contract, List<FeudalTitle> vassals = null, TextObject fullName = null)
-        {
-            var deFacto = settlement.OwnerClan.Leader;
-            if (deJure == null)
-            {
-                deJure = settlement.Owner;
-            }
-
-            if (vassals == null)
-            {
-                vassals = new List<FeudalTitle>();
-            }
-
-            if (settlement.BoundVillages != null)
-            {
-                foreach (var lordship in settlement.BoundVillages)
-                {
-                    var lordshipTitle = CreateLordship(lordship.Settlement, deJure, contract);
-                    vassals.Add(lordshipTitle);
-                    ExecuteAddTitle(lordshipTitle);
-                }
-            }
-
-            var title = new FeudalTitle(type, settlement, vassals, deJure, deFacto, settlement.Name, contract, null, fullName);
-            ExecuteAddTitle(title);
-            return title;
-        }
-
-        private FeudalTitle CreateLordship(Settlement settlement, Hero deJure, FeudalContract contract)
-        {
-            return new FeudalTitle(TitleType.Lordship, settlement, null,
-                deJure, settlement.Village.Bound.Owner, settlement.Name, contract);
-        }
-
-        public IEnumerable<SuccessionType> GetSuccessionTypes()
-        {
-            yield return SuccessionType.Republic;
-            yield return SuccessionType.Hereditary_Monarchy;
-            yield return SuccessionType.Elective_Monarchy;
-            yield return SuccessionType.Imperial;
-        }
-
-        public IEnumerable<InheritanceType> GetInheritanceTypes()
-        {
-            yield return InheritanceType.Primogeniture;
-            yield return InheritanceType.Ultimogeniture;
-            yield return InheritanceType.Seniority;
-        }
-
-        public IEnumerable<GenderLaw> GetGenderLawTypes()
-        {
-            yield return GenderLaw.Agnatic;
-            yield return GenderLaw.Cognatic;
-        }
-
-        public IEnumerable<GovernmentType> GetGovernmentTypes()
-        {
-            yield return GovernmentType.Feudal;
-            yield return GovernmentType.Tribal;
-            yield return GovernmentType.Imperial;
-            yield return GovernmentType.Republic;
         }
     }
 }

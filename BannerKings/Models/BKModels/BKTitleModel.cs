@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
-using BannerKings.Utils.Extensions;
+using BannerKings.Managers.Titles.Governments;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -20,69 +20,10 @@ namespace BannerKings.Models.BKModels
 
         public ExplainedNumber GetSuccessionHeirScore(Hero currentLeader, Hero candidate, FeudalTitle title, bool explanations = false)
         {
-            var result = new ExplainedNumber(0f, explanations);
-
             FeudalContract contract = title.Contract;
             var succession = contract.Succession;
-            if (succession == SuccessionType.Imperial)
-            {
-                result.Add(currentLeader.GetRelation(candidate) / 3f, new TextObject("{=uYDaqbt6}Approval by {HERO}")
-                    .SetTextVariable("HERO", currentLeader.Name));
 
-                result.Add(candidate.Age / 2f, new TextObject("Age"));
-                result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) * 0.1f, DefaultSkills.Leadership.Name);
-                result.Add(candidate.GetSkillValue(DefaultSkills.Tactics) * 0.1f, DefaultSkills.Tactics.Name);
-                result.Add(candidate.GetSkillValue(BKSkills.Instance.Lordship) * 0.1f, BKSkills.Instance.Lordship.Name);
-                result.Add(candidate.GetSkillValue(DefaultSkills.Charm) * 0.1f, DefaultSkills.Charm.Name);
-
-                if (candidate.Clan == currentLeader.Clan)
-                {
-                    result.Add(0.15f, candidate.Clan.Name);
-                }
-
-                result.AddFactor(candidate.Clan.Tier * 0.05f, GameTexts.FindText("str_clan_tier_bonus"));
-            }
-
-            if (succession == SuccessionType.Republic)
-            {
-                result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 5, GameTexts.FindText("str_notable_power"));
-                result.Add(candidate.Age / 2f, new TextObject("Age"));
-                result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) * 0.1f, DefaultSkills.Leadership.Name);
-                result.Add(candidate.GetSkillValue(DefaultSkills.Charm) * 0.1f, DefaultSkills.Charm.Name);
-                result.Add(candidate.GetSkillValue(DefaultSkills.Steward) * 0.1f, DefaultSkills.Steward.Name);
-
-                result.AddFactor(candidate.Clan.Tier * 0.08f, GameTexts.FindText("str_clan_tier_bonus"));
-            }
-
-            if (succession == SuccessionType.Hereditary_Monarchy)
-            {
-                if (GetInheritanceCandidates(currentLeader).Contains(candidate))
-                {
-                    result = GetInheritanceHeirScore(currentLeader, candidate, contract, explanations);
-                }
-            }
-
-            if (succession == SuccessionType.FeudalElective)
-            {
-                if (GetInheritanceCandidates(currentLeader).Contains(candidate))
-                {
-                    result = GetInheritanceHeirScore(currentLeader, candidate, contract, explanations);
-                    result.Add(300f, new TextObject("{=x5vKZHNN}Former ruler's clan"));
-                }
-
-                if (title.HeroHasValidClaim(candidate))
-                {
-                    result.Add(200f, new TextObject("{=ipGDmaBZ}Claimant"));
-                }
-
-                result.Add(candidate.Clan.Tier * 50f, GameTexts.FindText("str_clan_tier_bonus"));
-            }
-
-            if (succession == SuccessionType.Elective_Monarchy)
-            {
-                result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 2, GameTexts.FindText("str_notable_power"));
-            }
-
+            var result = succession.CalculateHeirScore(currentLeader, candidate, title, explanations);
             if (candidate.Culture != currentLeader.Clan.Kingdom.Culture)
             {
                 result.AddFactor(-0.2f, GameTexts.FindText("str_culture"));
@@ -97,50 +38,37 @@ namespace BannerKings.Models.BKModels
             if (contract == null)
             {
                 contract = new FeudalContract(null, null,
-                    GovernmentType.Feudal, SuccessionType.Elective_Monarchy, InheritanceType.Primogeniture, GenderLaw.Agnatic);
+                    DefaultGovernments.Instance.Feudal, 
+                    DefaultSuccessions.Instance.FeudalElective, 
+                    DefaultInheritances.Instance.Seniority, 
+                    DefaultGenderLaws.Instance.Agnatic);
             }
 
-            GenderLaw genderLaw = contract.GenderLaw;
-            InheritanceType inheritance = contract.Inheritance;
-            if (inheritance == InheritanceType.Seniority)
+            result.Add(candidate.Age, new TextObject("Age"));
+            if (currentLeader.Children.Contains(candidate))
             {
-                result.Add(candidate.Age, new TextObject("Age"));
+                result.Add(contract.Inheritance.ChildrenScore, GameTexts.FindText(candidate.IsFemale ? "str_daughter" : "str_son"));
+            }
+            else if (currentLeader.Siblings.Contains(candidate))
+            {
+                result.Add(contract.Inheritance.SiblingScore, GameTexts.FindText(candidate.IsFemale ? "str_bigsister" : "str_bigbrother"));
+            }
+            else if (currentLeader.Spouse == candidate)
+            {
+                result.Add(contract.Inheritance.SpouseScore, GameTexts.FindText("str_spouse"));
             }
             else
             {
-                if (currentLeader.Children.Contains(candidate))
-                {
-                    result.Add(300f, GameTexts.FindText(candidate.IsFemale ? "str_daughter" : "str_son"));
-                }
-                else if (currentLeader.Spouse == candidate)
-                {
-                    result.Add(150f, GameTexts.FindText("str_spouse"));
-                }
-                else if (currentLeader.Siblings.Contains(candidate))
-                {
-                    result.Add(100f, GameTexts.FindText(candidate.IsFemale ? "str_bigsister" : "str_bigbrother"));
-                }
-
-                if (inheritance == InheritanceType.Primogeniture)
-                {
-                    result.Add(candidate.Age, new TextObject("Age"));
-                }
-
-                if (inheritance == InheritanceType.Ultimogeniture)
-                {
-                    result.Add(-candidate.Age, new TextObject("Age"));
-                }
-
-                if (candidate.CharacterObject != null && candidate.CharacterObject.OriginalCharacter != null &&
-                   candidate.CharacterObject.OriginalCharacter.IsTemplate)
-                {
-                    result.AddFactor(-0.5f, new TextObject("{=9RG3GwJD}Common born"));
-                }
+                result.Add(contract.Inheritance.RelativeScore, new TextObject("{=!}Household member"));
             }
 
-            if (genderLaw == GenderLaw.Agnatic && candidate.IsFemale)
+            if (candidate.IsFemale) 
             {
-                result.AddFactor(-0.9f, GameTexts.FindText("str_bk_agnatic"));
+                result.AddFactor(contract.GenderLaw.FemalePreference - 1f, contract.GenderLaw.Name);    
+            }
+            else
+            {
+                result.AddFactor(contract.GenderLaw.MalePreference - 1f, contract.GenderLaw.Name);
             }
 
             return result;
@@ -186,82 +114,8 @@ namespace BannerKings.Models.BKModels
 
         public HashSet<Hero> GetSuccessionCandidates(Hero currentLeader, FeudalTitle title)
         {
-            var list = new HashSet<Hero>();
-            var succession = title.Contract.Succession;
-
-            if (succession == SuccessionType.Hereditary_Monarchy)
-            {
-                foreach (Hero hero in GetInheritanceCandidates(currentLeader))
-                {
-                    list.Add(hero);
-                }
-            }
-
-            if (succession == SuccessionType.FeudalElective)
-            {
-                foreach (Hero hero in GetInheritanceCandidates(currentLeader))
-                {
-                    list.Add(hero);
-                }
-
-                foreach (var claimant in title.Claims)
-                {
-                    Hero hero = claimant.Key;
-                    if (claimant.Value != ClaimType.Ongoing && claimant.Value != ClaimType.None)
-                    {
-                        if (hero.IsClanLeader() && !list.Contains(hero))
-                        {
-                            list.Add(hero);
-                        }
-                    }
-                }
-
-                if (list.Count < 5)
-                {
-                    int count = list.Count;
-                    while (count < 5)
-                    {
-                        int tier = 6;
-                        foreach (var clan in currentLeader.Clan.Kingdom.Clans)
-                        {
-                            if (clan.Tier >= tier && clan != currentLeader.Clan && !list.Contains(clan.Leader))
-                            {
-                                list.Add(clan.Leader);
-                                count++;
-                            }
-                        }
-
-                        tier--;
-                    }
-                }
-            }
-            else
-            {
-                var clans = new List<Clan>();
-                if (currentLeader.Clan.Kingdom != null)
-                {
-                    clans = (from t in currentLeader.Clan.Kingdom.Clans
-                            where !t.IsEliminated && !t.IsUnderMercenaryService
-                            select t).ToList();
-                }
-
-                foreach (var clan in clans)
-                {
-                    if (clan == currentLeader.Clan && succession == SuccessionType.Imperial)
-                    {
-                        foreach (var candidate in GetInheritanceCandidates(currentLeader))
-                        {
-                            list.Add(candidate);
-                        }
-                    }
-                    else if (clan != currentLeader.Clan)
-                    {
-                        list.Add(clan.Leader);
-                    }
-                }
-            }
-
-            return list;
+            Succession succession = title.Contract.Succession;
+            return succession.GetSuccessionCandidates(currentLeader, title); ;
         }
 
         public List<Hero> GetInheritanceCandidates(Hero currentLeader)
@@ -493,68 +347,55 @@ namespace BannerKings.Models.BKModels
                 return revokeAction;
             }
 
-            var governmentType = title.Contract.Government;
-            switch (governmentType)
+            if (title.Contract.HasContractAspect(DefaultContractAspects.Instance.RevocationProtected))
             {
-                case GovernmentType.Tribal:
+                revokeAction.Possible = false;
+                revokeAction.Reason = new TextObject("{=!}The {ASPECT} contract aspect does not allow revoking.")
+                    .SetTextVariable("ASPECT", DefaultContractAspects.Instance.RevocationProtected.Name);
+                return revokeAction;
+            }
+            else if (title.Contract.HasContractAspect(DefaultContractAspects.Instance.RevocationRepublic) && title.TitleType != TitleType.Dukedom)
+            {
+                revokeAction.Possible = false;
+                revokeAction.Reason = new TextObject("{=!}{ASPECT} only allows revoking of dukes.")
+                    .SetTextVariable("ASPECT", DefaultContractAspects.Instance.RevocationRepublic.Name);
+                return revokeAction;
+            }
+            else if (title.Contract.HasContractAspect(DefaultContractAspects.Instance.RevocationImperial))
+            {
+                var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
+                if (sovereign == null || revoker != sovereign.deJure)
+                {
                     revokeAction.Possible = false;
-                    revokeAction.Reason = new TextObject("{=duRc8Vrs}Tribal government does not allow revoking.");
+                    revokeAction.Reason = new TextObject("{=!}{ASPECT} requires being de Jure faction leader.")
+                        .SetTextVariable("ASPECT", DefaultContractAspects.Instance.RevocationImperial.Name);
                     return revokeAction;
-                case GovernmentType.Republic when title.TitleType != TitleType.Dukedom:
-                    revokeAction.Possible = false;
-                    revokeAction.Reason = new TextObject("{=MSaLufNx}Republics can only revoke duke titles.");
-                    return revokeAction;
-                case GovernmentType.Republic:
-                {
-                    var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
-                    if (sovereign == null || revoker != sovereign.deJure)
-                    {
-                        revokeAction.Possible = false;
-                        revokeAction.Reason = new TextObject("{=w7b5SE48}Not de Jure faction leader.");
-                        return revokeAction;
-                    }
-
-                    break;
                 }
-                case GovernmentType.Imperial:
+            }
+            else
+            {
+                var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(revoker);
+                var vassal = false;
+                foreach (var revokerTitle in titles)
                 {
-                    var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
-                    if (sovereign == null || revoker != sovereign.deJure)
+                    if (revokerTitle.Vassals != null)
                     {
-                        revokeAction.Possible = false;
-                        revokeAction.Reason = new TextObject("{=w7b5SE48}Not de Jure faction leader.");
-                        return revokeAction;
-                    }
-
-                    break;
-                }
-                default:
-                {
-                    var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(revoker);
-                    var vassal = false;
-                    foreach (var revokerTitle in titles)
-                    {
-                        if (revokerTitle.Vassals != null)
+                        foreach (var revokerTitleVassal in revokerTitle.Vassals)
                         {
-                            foreach (var revokerTitleVassal in revokerTitle.Vassals)
+                            if (revokerTitleVassal.deJure == title.deJure)
                             {
-                                if (revokerTitleVassal.deJure == title.deJure)
-                                {
-                                    vassal = true;
-                                    break;
-                                }
+                                vassal = true;
+                                break;
                             }
                         }
                     }
+                }
 
-                    if (!vassal)
-                    {
-                        revokeAction.Possible = false;
-                        revokeAction.Reason = new TextObject("{=Mk29oGgs}Not a direct vassal.");
-                        return revokeAction;
-                    }
-
-                    break;
+                if (!vassal)
+                {
+                    revokeAction.Possible = false;
+                    revokeAction.Reason = new TextObject("{=Mk29oGgs}Not a direct vassal.");
+                    return revokeAction;
                 }
             }
 

@@ -77,6 +77,7 @@ namespace BannerKings.UI.CampaignStart
         {
             BannerKingsConfig.Instance.ReligionsManager.AddToReligion(Hero.MainHero,
                 Selected.Religion);
+            BannerKingsConfig.Instance.ReligionsManager.AddPiety(Hero.MainHero, BannerKingsConfig.Instance.ReligionsManager.GetStartingPiety(Selected.Religion, Hero.MainHero));
             ExecuteClose();
         }
 

@@ -305,66 +305,6 @@ namespace BannerKings.Utils
             return text;
         }
 
-        public static string GetGovernmentDescription(GovernmentType type)
-        {
-            var text = type switch
-            {
-                GovernmentType.Imperial => new TextObject("{=Z8ZfKuSX}An Imperial government is a highly centralized one. Policies favor the ruling clan at the expense of vassals. A strong leadership that sees it's vassals more as administrators than lords."),
-                GovernmentType.Tribal => new TextObject("{=mWKXYs2o}The Tribal association is the most descentralized government. Policies to favor the ruling clan are unwelcome, and every lord is a 'king' or 'queen' in their own right."),
-                GovernmentType.Republic => new TextObject("{=v3KydG7F}Republics are firmly setup to avoid the accumulation of power. Every clan is given a chance to rule, and though are able to have a few political advantages, the state is always the priority."),
-                _ => new TextObject("{=3bJSgTAD}Feudal societies can be seen as the midway between tribals and imperials. Although the ruling clan accumulates privileges, and often cannot be easily removed from the throne, lords and their rightful property need to be respected.")
-            };
-
-            return text.ToString();
-        }
-
-        public static string GetSuccessionTypeDescription(SuccessionType type)
-        {
-            var text = type switch
-            {
-                SuccessionType.Elective_Monarchy => new TextObject("{=YSZYZZUw}In elective monarchies, the ruler is chosen from the realm's dynasties, and rules until death or abdication. Elections take place and all dynasties are able to vote when a new leader is required."),
-                SuccessionType.Hereditary_Monarchy => new TextObject("{=9EjsMFJx}In hereditary monarchies, the monarch is always the ruling dynasty's leader. No election takes place, and the realm does not change leadership without extraordinary measures."),
-                SuccessionType.Imperial => new TextObject("{=ag50C9hT}Imperial successions are completely dictated by the emperor/empress. They will choose from most competent members in their family, as well as other family leaders. Imperial succession values age, family prestigy, military and administration skills. No election takes place."),
-                SuccessionType.FeudalElective => new TextObject("{=P3EzcNY0}A feudal elective succession is a compromise between a hereditary monarchy and a fully elective monarchy. Votes will be cast by the Peers, however the main candidates are the former ruler's family. However, title claimants will also be considered. If there is a scarcity of candidates available, strong families in the realm will also be considered candidates. If the chosen heir is from the former ruler's family, they will inherit the clan, regardless of Inheritance laws."),
-                _ => new TextObject("{=ATmtkA1S}Republican successions ensure the power is never concentrated. Each year, a new ruler is chosen from the realm's dynasties. The previous ruler is strickly forbidden to participate. Age, family prestige and administration skills are sought after in candidates.")
-            };
-
-            return text.ToString();
-        }
-
-        public static string GetSuccessionTypeName(SuccessionType type)
-        {
-            var text = type switch
-            {
-                SuccessionType.Elective_Monarchy => new TextObject("{=WG9FTePW}Elective Monarchy"),
-                SuccessionType.Hereditary_Monarchy => new TextObject("{=iYzZgP3y}Hereditary Monarchy"),
-                SuccessionType.FeudalElective => new TextObject("{=HZRnRmF8}Feudal Elective"),
-                SuccessionType.Imperial => new TextObject("{=SW29YLBZ}Imperial"),
-                _ => new TextObject("{=vFXFxkM9}Republican")
-            };
-
-            return text.ToString();
-        }
-
-        public static string GetInheritanceDescription(InheritanceType type)
-        {
-            var text = type switch
-            {
-                InheritanceType.Primogeniture => new TextObject("{=NSWFGCd6}Primogeniture favors blood family of eldest age. Clan members not related by blood are last resort."),
-                InheritanceType.Seniority => new TextObject("{=SiRpKHww}Seniority favors those of more advanced age in the clan, regardless of blood connections."),
-                _ => new TextObject("{=aybPH14L}Ultimogeniture favors the youngest in the clan, as well as blood family. Clan members not related by blood are last resort.")
-            };
-
-            return text.ToString();
-        }
-
-        public static string GetGenderLawDescription(GenderLaw type)
-        {
-            return type == GenderLaw.Agnatic 
-                ? new TextObject("{=EjVOGKj7}Agnatic law favors males. Although females are not completely excluded, they will only be chosen in case a male candidate is not present.").ToString() 
-                : new TextObject("{=M0MP3ysP}Cognatic law sees no distinction between both genders. Candidates are choosen stricly on their merits, as per the context requires.").ToString();
-        }
-
         public static string GetConsumptionHint(ConsumptionType type)
         {
             return type switch
@@ -375,34 +315,7 @@ namespace BannerKings.Utils
                 _ => new TextObject("{=QJ1pjKxw}Satisfaction over availability of food types.").ToString()
             };
         }
-
-        public static string GetGovernmentString(GovernmentType type, CultureObject culture = null)
-        {
-            TextObject title = null;
-
-            if (culture is {StringId: "sturgia"})
-            {
-                if (type == GovernmentType.Tribal)
-                {
-                    title = new TextObject("{=jz2SCLZS}Grand-Principality");
-                }
-            }
-
-            if (title == null)
-            {
-                title = type switch
-                {
-                    GovernmentType.Feudal => new TextObject("{=7x3HJ29f}Kingdom"),
-                    GovernmentType.Tribal => new TextObject("{=SuG07DUi}High Kingship"),
-                    GovernmentType.Imperial => new TextObject("{=uEBLsMAb}Empire"),
-                    _ => new TextObject("{=MSaLufNx}Republic")
-                };
-            }
-
-            return title.ToString();
-        }
-
-        public static string GetTitlePrefix(TitleType type, GovernmentType government, CultureObject culture = null)
+        public static string GetTitlePrefix(TitleType type, CultureObject culture = null)
         {
             TextObject title = null;
 
@@ -448,7 +361,7 @@ namespace BannerKings.Utils
                         }
                         break;
                     }
-                    case "battania":
+                    /*case "battania":
                     {
                         if (government == GovernmentType.Tribal)
                         {
@@ -461,7 +374,7 @@ namespace BannerKings.Utils
                         }
 
                         break;
-                    }
+                    }*/
                 }
             }
 

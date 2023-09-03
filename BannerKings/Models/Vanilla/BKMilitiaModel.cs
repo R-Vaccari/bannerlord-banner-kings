@@ -156,11 +156,6 @@ namespace BannerKings.Models.Vanilla
                 var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
                 if (title != null)
                 {
-                    if (title.Contract.Government == GovernmentType.Tribal)
-                    {
-                        result.Add(0.08f, new TextObject("{=PSrEtF5L}Government"));
-                    }
-
                     var sovereign = title.Sovereign;
                     if (sovereign != null)
                     {
