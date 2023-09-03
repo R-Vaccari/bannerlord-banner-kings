@@ -2,8 +2,8 @@
 
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
 	<titles autoGenerate="true">
-		<kingdom faction="vlandia" contract="feudal" deJure="lord_4_1">
-			<duchy name="{=kS1GtIuD}Sargotha" deJure="lord_4_1" fullName="{=!}Royal Domain">
+		<kingdom faction="vlandia" government="Tribal" succession="WilundingElective" inheritance="Seniority" genderLaw="Agnatic" deJure="lord_4_1">
+			<duchy name="{=kS1GtIuD}Sargotha" deJure="lord_4_1">
 				<county settlement="town_V1" deJure="lord_4_1">
 					<barony settlement="castle_V7" deJure="lord_4_1" />
 				</county>
@@ -36,7 +36,7 @@
 			</duchy>
 		</kingdom>
 
-		<kingdom faction="battania" contract="tribal" deJure="lord_5_1">
+		<kingdom faction="battania" government="Tribal" succession="BattanianElective" inheritance="Seniority" genderLaw="Agnatic" deJure="lord_5_1" >
 			<duchy name="{=3QYdOWmI}Ardus Dunnath" deJure="lord_5_1">
 				<county settlement="town_B5" deJure="lord_5_16">
 					<barony settlement="castle_B1" deJure="lord_B8_l" />
@@ -62,7 +62,7 @@
 			</duchy>
 		</kingdom>
 
-		<kingdom faction="sturgia" contract="tribal" deJure="lord_2_1">
+		<kingdom faction="sturgia" government="Tribal" succession="TribalElective" inheritance="Seniority" genderLaw="Agnatic" deJure="lord_2_1">
 			<duchy name="{=LsKyFaRs}Nordden" deJure="lord_2_1">
 				<county settlement="town_S2"  deJure="lord_2_1">
 					<barony settlement="castle_S6" deJure="lord_2_1"/>
@@ -95,7 +95,7 @@
 		</kingdom>
 
 
-		<kingdom faction="empire" contract="republic" deJure="lord_1_1">
+		<kingdom faction="empire" government="Republic" succession="Republic" inheritance="Seniority" genderLaw="Agnatic" deJure="lord_1_1">
 			<duchy name="{=MZ6IyLe9}Lakonia" deJure="lord_1_3">
 				<county settlement="town_EN1" deJure="lord_1_3">
 					<barony settlement="castle_EN9" deJure="lord_1_1" />
@@ -125,7 +125,7 @@
 			</duchy>
 		</kingdom>
 
-		<kingdom faction="empire_w" contract="imperial" deJure="lord_1_7">
+		<kingdom faction="empire_w" government="Imperial" succession="Dictatorship" inheritance="Seniority" genderLaw="Agnatic" deJure="lord_1_7">
 			<duchy name="{=Cdf6hJNf}Gavys" deJure="lord_1_9">
 				<county settlement="town_EW4" deJure="lord_1_9">
 					<barony settlement="castle_EW1" deJure="lord_1_9" />
@@ -153,7 +153,7 @@
 			</duchy>
 		</kingdom>
 
-		<kingdom faction="empire_s" contract="imperial" deJure="lord_1_14">
+		<kingdom faction="empire_s" government="Imperial" succession="Imperial" inheritance="Primogeniture" genderLaw="Cognatic" deJure="lord_1_14">
 			<duchy name="{=deVTg9cJ}Ornia" deJure="lord_1_14">
 				<county settlement="town_ES4" deJure="lord_1_14">
 					<barony settlement="castle_ES6" deJure="lord_1_14" />
@@ -186,7 +186,7 @@
 		</kingdom>
 
 
-		<kingdom faction="aserai" contract="feudal" deJure="lord_3_1">
+		<kingdom faction="aserai" government="Tribal" succession="AseraiElective" inheritance="Primogeniture" genderLaw="Agnatic" deJure="lord_3_1">
 			<duchy name="{=HPbbd80j}Perassia" deJure="lord_3_1">
 				<county settlement="town_A1" deJure="lord_3_1">
 					<barony settlement="castle_A1" deJure="lord_3_1" />
@@ -222,7 +222,7 @@
 			</duchy>
 		</kingdom>
 
-		<kingdom faction="khuzait" contract="tribal" deJure="lord_6_1">
+		<kingdom faction="khuzait" government="Tribal" succession="TribalElective" inheritance="Seniority" genderLaw="Cognatic" deJure="lord_6_1">
 			<duchy name="{=kRXucvyJ}Kohi Rohini" deJure="lord_6_17">
 				<county settlement="town_K6" deJure="lord_6_17">
 					<barony settlement="castle_K7" deJure="lord_6_19" />
