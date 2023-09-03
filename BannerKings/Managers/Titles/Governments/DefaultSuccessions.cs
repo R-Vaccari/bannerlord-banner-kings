@@ -161,8 +161,7 @@ namespace BannerKings.Managers.Titles.Governments
                    {
                        if (clan.IsUnderMercenaryService) continue;
 
-                       FeudalTitle highestTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                       if (highestTitle.TitleType <= TitleType.County)
+                       if (BannerKingsConfig.Instance.ArmyManagementModel.CanCreateArmy(clan.Leader))
                        {
                            result.Add(clan.Leader);
                        }
@@ -276,7 +275,7 @@ namespace BannerKings.Managers.Titles.Governments
                 0.8f,
                 -0.2f,
                 -0.6f,
-                new TextObject("{=!}-Inheritance candidates of current ruler\n- Title claimants\n- Anyone with title of count or higher and clan tier 5 or higher"),
+                new TextObject("{=!}- Inheritance candidates of current ruler\n- Title claimants\n- Anyone with title of duke or higher (if there aren't at least 3 candidates)"),
                 new TextObject("{=!}+++ Inheritance score (for clan inheritors)\n++ Title claim\n+ Clan tier"),
                 (Hero currentLeader, FeudalTitle title) =>
                 {
@@ -298,14 +297,17 @@ namespace BannerKings.Managers.Titles.Governments
                         }
                     }
 
-                    foreach (Clan clan in currentLeader.Clan.Kingdom.Clans)
+                    if (result.Count < 3)
                     {
-                        if (clan.IsUnderMercenaryService) continue;
-
-                        FeudalTitle highestTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                        if (highestTitle.TitleType <= TitleType.County)
+                        foreach (Clan clan in currentLeader.Clan.Kingdom.Clans)
                         {
-                            result.Add(clan.Leader);
+                            if (clan.IsUnderMercenaryService) continue;
+
+                            FeudalTitle highestTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
+                            if (highestTitle != null && highestTitle.TitleType <= TitleType.Dukedom)
+                            {
+                                result.Add(clan.Leader);
+                            }
                         }
                     }
 
@@ -446,7 +448,7 @@ namespace BannerKings.Managers.Titles.Governments
                 -0.4f,
                 1f,
                 0.2f,
-                new TextObject("{=!}- Inheritance candidates of current ruler\n- Title claimants\n- Anyone with title of count or higher and clan tier 5 or higher"),
+                new TextObject("{=!}- Inheritance candidates of current ruler\n- Any clan leader of clan tier 5 or higher"),
                 new TextObject("{=!}+++ Clan tier\n++ Skills\n+ Inheritance score (for clan inheritors)\n+ Military power"),
                 (Hero currentLeader, FeudalTitle title) =>
                 {
@@ -454,18 +456,6 @@ namespace BannerKings.Managers.Titles.Governments
                     foreach (Hero hero in BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(currentLeader))
                     {
                         result.Add(hero);
-                    }
-
-                    foreach (var claimant in title.Claims)
-                    {
-                        Hero hero = claimant.Key;
-                        if (claimant.Value != ClaimType.Ongoing && claimant.Value != ClaimType.None)
-                        {
-                            if (hero.IsClanLeader())
-                            {
-                                result.Add(hero);
-                            }
-                        }
                     }
 
                     foreach (Clan clan in currentLeader.Clan.Kingdom.Clans)
@@ -615,7 +605,7 @@ namespace BannerKings.Managers.Titles.Governments
                         if (clan.IsUnderMercenaryService) continue;
 
                         FeudalTitle highestTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                        if (highestTitle.TitleType <= TitleType.County)
+                        if (highestTitle != null && highestTitle.TitleType <= TitleType.County)
                         {
                             result.Add(clan.Leader);
                         }
@@ -656,7 +646,7 @@ namespace BannerKings.Managers.Titles.Governments
                 -0.4f,
                 1f,
                 0.2f,
-                new TextObject("{=!}-Inheritance candidates of current ruler\n- Title claimants\n- Anyone with title of duke or higher (if there aren't at least 3 candidates)"),
+                new TextObject("{=!}- Inheritance candidates of current ruler\n- Title claimants\n- Anyone with title of duke or higher (if there aren't at least 3 candidates)"),
                 new TextObject("{=!}++ Inheritance score (for clan inheritors)\n++ Military power\n+ Clan tier\n+ Title claim\n+ Leadership"),
                 (Hero currentLeader, FeudalTitle title) =>
                 {
@@ -685,7 +675,7 @@ namespace BannerKings.Managers.Titles.Governments
                             if (clan.IsUnderMercenaryService) continue;
 
                             FeudalTitle highestTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                            if (highestTitle.TitleType <= TitleType.Dukedom)
+                            if (highestTitle != null && highestTitle.TitleType <= TitleType.Dukedom)
                             {
                                 result.Add(clan.Leader);
                             }

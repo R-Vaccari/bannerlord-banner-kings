@@ -19,7 +19,6 @@ namespace BannerKings.Managers.Titles
             Inheritance = inheritance;
             GenderLaw = genderLaw;
             DemesneLaws = new List<DemesneLaw>(8);
-            ContractAspects = new List<ContractAspect>(4);
         }
 
         [SaveableProperty(1)] public Dictionary<FeudalDuties, float> Duties { get; set; }
@@ -48,7 +47,7 @@ namespace BannerKings.Managers.Titles
                     type.EgalitarianWeight, type.OligarchicWeight, type.InfluenceCost, type.Culture, type.IsAdequateForKingdom);
             }
 
-            ContractAspects ??= DefaultContractAspects.Instance.GetIdealKingdomAspects(kingdom, Government);
+            //ContractAspects ??= DefaultContractAspects.Instance.GetIdealKingdomAspects(kingdom, Government);
         }
 
         public bool HasContractAspect(ContractAspect aspect)  

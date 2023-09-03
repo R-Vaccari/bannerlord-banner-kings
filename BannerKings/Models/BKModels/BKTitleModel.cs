@@ -347,27 +347,27 @@ namespace BannerKings.Models.BKModels
                 return revokeAction;
             }
 
-            if (title.Contract.HasContractAspect(DefaultContractAspects.Instance.RevocationProtected))
+            if (title.Contract.Government == DefaultGovernments.Instance.Tribal)
             {
                 revokeAction.Possible = false;
-                revokeAction.Reason = new TextObject("{=!}The {ASPECT} contract aspect does not allow revoking.")
+                revokeAction.Reason = new TextObject("{=!}Tribal government does not allow revoking.")
                     .SetTextVariable("ASPECT", DefaultContractAspects.Instance.RevocationProtected.Name);
                 return revokeAction;
             }
-            else if (title.Contract.HasContractAspect(DefaultContractAspects.Instance.RevocationRepublic) && title.TitleType != TitleType.Dukedom)
+            else if (title.Contract.Government == DefaultGovernments.Instance.Republic && title.TitleType != TitleType.Dukedom)
             {
                 revokeAction.Possible = false;
-                revokeAction.Reason = new TextObject("{=!}{ASPECT} only allows revoking of dukes.")
+                revokeAction.Reason = new TextObject("{=!}Republican government only allows revoking of dukes.")
                     .SetTextVariable("ASPECT", DefaultContractAspects.Instance.RevocationRepublic.Name);
                 return revokeAction;
             }
-            else if (title.Contract.HasContractAspect(DefaultContractAspects.Instance.RevocationImperial))
+            else if (title.Contract.Government == DefaultGovernments.Instance.Imperial)
             {
                 var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
                 if (sovereign == null || revoker != sovereign.deJure)
                 {
                     revokeAction.Possible = false;
-                    revokeAction.Reason = new TextObject("{=!}{ASPECT} requires being de Jure faction leader.")
+                    revokeAction.Reason = new TextObject("{=!}Imperial government requires being de Jure faction leader.")
                         .SetTextVariable("ASPECT", DefaultContractAspects.Instance.RevocationImperial.Name);
                     return revokeAction;
                 }

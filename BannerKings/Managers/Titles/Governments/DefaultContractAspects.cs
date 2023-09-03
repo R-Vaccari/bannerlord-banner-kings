@@ -7,14 +7,14 @@ namespace BannerKings.Managers.Titles.Governments
 {
     public class DefaultContractAspects : DefaultTypeInitializer<DefaultContractAspects, ContractAspect>
     {
-        public ContractAspect ConquestMight { get; } = new ContractAspect("");
-        public ContractAspect ConquestClaim { get; } = new ContractAspect("");
-        public ContractAspect ConquestDistributed { get; } = new ContractAspect("");
+        public ContractAspect ConquestMight { get; } = new ContractRight("");
+        public ContractAspect ConquestClaim { get; } = new ContractRight("");
+        public ContractAspect ConquestDistributed { get; } = new ContractRight("");
 
-        public ContractAspect RevocationProtected { get; } = new ContractAspect("RevocationProtected");
-        public ContractAspect RevocationVassalage { get; } = new ContractAspect("RevocationVassalage");
-        public ContractAspect RevocationImperial { get; } = new ContractAspect("RevocationImperial");
-        public ContractAspect RevocationRepublic { get; } = new ContractAspect("RevocationRepublic");
+        public ContractAspect RevocationProtected { get; } = new ContractRight("RevocationProtected");
+        public ContractAspect RevocationVassalage { get; } = new ContractRight("RevocationVassalage");
+        public ContractAspect RevocationImperial { get; } = new ContractRight("RevocationImperial");
+        public ContractAspect RevocationRepublic { get; } = new ContractRight("RevocationRepublic");
 
         public override IEnumerable<ContractAspect> All
         {
