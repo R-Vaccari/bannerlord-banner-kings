@@ -1,7 +1,5 @@
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
-using BannerKings.Managers.Titles;
-using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Populations.Estates;
+using BannerKings.Managers.Recruits;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -124,6 +125,15 @@ namespace BannerKings.Managers.Populations
             if (Utils.Helpers.IsRetinueTroop(character))
             {
                 return PopType.Nobles;
+            }
+
+            List<RecruitSpawn> spawns = DefaultRecruitSpawns.Instance.GetPossibleSpawns(character.Culture, settlement);
+            foreach (RecruitSpawn spawn in spawns)
+            {
+                if (spawn.Troop == character)
+                {
+                    return spawn.PopType;
+                }
             }
 
             List<ValueTuple<PopType, float>> options = new List<(PopType, float)>();
