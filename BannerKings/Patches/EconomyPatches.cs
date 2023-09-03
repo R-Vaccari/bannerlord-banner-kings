@@ -60,10 +60,13 @@ namespace BannerKings.Patches
                 if (!__result) return;
 
                 InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(townComponent.Settlement.Culture);
-                if (item.HasWeaponComponent && (item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Crossbow ||
-                    item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Bolt)) 
+                if (data != null)
                 {
-                    __result = data.HasFinishedInnovation(DefaultInnovations.Instance.Crossbows);
+                    if (item.HasWeaponComponent && (item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Crossbow ||
+                                       item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Bolt))
+                    {
+                        __result = data.HasFinishedInnovation(DefaultInnovations.Instance.Crossbows);
+                    }
                 }
             }
         }
