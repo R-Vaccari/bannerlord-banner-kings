@@ -43,14 +43,14 @@ namespace BannerKings.Managers.CampaignStart
             Adventurer = new StartOption("start_adventurer");
             Adventurer.Initialize(new TextObject("{=0VSP2ghD}Adventurer"),
                 new TextObject("{=wTcCEBLB}A free spirit, you are roaming the continent without constraints, or a clear objective. The world is for the taking, will you take your share?"),
-                new TextObject("{=2fcEecjz}Vanilla start. No troops, goods or any benefits."),
+                new TextObject("{=2fcEecjz}Standard Start.\n\nNo positive or negative circumstances."),
                 1000, 3, 0, 50, 0f,
                 null);
 
             IndebtedLord = new StartOption("start_lord");
             IndebtedLord.Initialize(new TextObject("{=2VoYzCNj}Indebted Lord"),
                 new TextObject("{=P1rwCkZJ}After a series of inherited problems and bad decisions, you find yourself in debt. Thankfuly, you are a landed lord, with income from your Lordship. A food supply and a small retinue accompany you, though their loyalty will be tested by the lack of denars..."),
-                new TextObject("{=CiWCMaQV}Start as a lord in a kingdom, with a Lordship title. Redcued influence for 5 years. The village you own can be managed by you. Gain Scholarship skill."),
+                new TextObject("{=CiWCMaQV}Start as a lesser lord in a kingdom with a Lordship Villige Title that you can manage, along with a Scholarship Skill.\n\nReduced influence gain for the next 5 years."),
                 0, 25, 10, 50, -50f,
                 () =>
                 {
@@ -116,7 +116,7 @@ namespace BannerKings.Managers.CampaignStart
             Mercenary = new StartOption("start_mercenary");
             Mercenary.Initialize(new TextObject("{=kLHXZnLY}Mercenary"),
                 new TextObject("{=wcWg3KPt}You serve as a free mercenary company, roaming around the continent in search of employment. After a long period of joblessness, you find your company in the verge of collapse, with little morale, food and finances."),
-                new TextObject("{=G2yNVZ9R}Start with a mercenary band, in desperate need for plundering gold and food. Party morale reduced for 5 years. Mercenary lifestyle is kickstarted as part of your education."),
+                new TextObject("{=G2yNVZ9R}Start with a Mercenary Band with the desire to plunder gold and food, along with a kickstarted Mercenary Lifestyle.\n\nParty morale reduced for the next 5 years."),
                 250, 0, 22, 30, 0f,
                 () =>
                 {
@@ -140,7 +140,7 @@ namespace BannerKings.Managers.CampaignStart
             Outlaw = new StartOption("start_outlaw");
             Outlaw.Initialize(new TextObject("{=GTYYnH9E}Outlaw"),
                 new TextObject("{=YLxp50Ln}Lacking in morals, you assemble a party of like-minded brigands, making a living out stealing and plundering. Your efforts, however, have not gone unnoticed by the local authorities."),
-                new TextObject("{=rSAjO3Qg}Start with a outlaw band, in desperate need for plundering gold and food. Criminal rating does not reduce for 5 years. Outlaw lifestyle is kickstarted as part of your education."),
+                new TextObject("{=rSAjO3Qg}Start with a mob of hungry Outlaws seeking more plunder, along with a kickstarted Outlaw Lifestyle.\n\nCriminal Rating does not reduce for the next 5 years."),
                 50, 2, 15, 50, 0f,
                 () =>
                 {
@@ -184,7 +184,7 @@ namespace BannerKings.Managers.CampaignStart
             Caravaneer = new StartOption("start_caravaneer");
             Caravaneer.Initialize(new TextObject("{=2FW79uHM}Robbed Caravaneer"),
                 new TextObject("{=L1QFOwvp}Your caravan has been recently harassed by criminals - most of your belongings are lost, and certainly all your denars. A few goods, mules and wounded soldiers remain."),
-                new TextObject("{=dSJsWjyR}Start with a wounded caravan, some food, mules and goods. Party speed is reduced by 5% for 5 years. Caravaneer lifestyle is kickstarted as part of your education."),
+                new TextObject("{=dSJsWjyR}Start with a wounded caravan, mules, some supplies and goods, along with a kickstarted Caravaneer Lifestyle.\n\nParty Speed is reduced by 5% for the next 5 years."),
                 0, 6, 12, 50, 0f,
                 () =>
                 {
@@ -229,7 +229,7 @@ namespace BannerKings.Managers.CampaignStart
             Gladiator = new StartOption("start_gladiator");
             Gladiator.Initialize(new TextObject("{=wTyw0yfR}Gladiator"),
                 new TextObject("{=ScHHoM2v}You are an promising athlete, roaming the world looking for a good fight, gold and glory."),
-                new TextObject("{=uUjoaben}Start with a couple mercenaries and food. Party size is reduced by 40% for 5 years. Gladiator lifestyle is kickstarted as part of your education."),
+                new TextObject("{=uUjoaben}Start with a couple mercenaries and supplies, along with a kickstarted Gladiator Lifestyle.\n\nParty Size is reduced by 40% for the next 5 years."),
                 0, 6, 5, 50, 0f,
                 () =>
                 {
