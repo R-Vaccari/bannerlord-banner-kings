@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BannerKings.Extensions;
+using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
 using BannerKings.UI;
 using TaleWorlds.CampaignSystem;
@@ -188,13 +189,21 @@ namespace BannerKings.Behaviours
                     GameMenu.SwitchToMenu(id);
                 }, true);
 
-            campaignGameStarter.AddWaitGameMenu("bannerkings_wait_study",
-                "{=533oQJOp}You are studying scholarship with {SCHOLARSHIP_TUTOR}. The instruction costs {SCHOLARSHIP_GOLD} per hour.",
+            campaignGameStarter.AddWaitGameMenu("bannerkings_wait_research",
+                "{=!}You are researching {RESARCH}. Your current research progress is {POINTS} research points.",
                 MenuWaitInit,
-                MenuActionStudyCondition,
+                MenuActionResearchCondition,
                 MenuActionConsequenceNeutral,
-                TickWaitStudy, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
+                TickWaitResearch, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
                 GameOverlays.MenuOverlayType.SettlementWithBoth, 4f);
+
+            campaignGameStarter.AddWaitGameMenu("bannerkings_wait_study",
+               "{=533oQJOp}You are studying scholarship with {SCHOLARSHIP_TUTOR}. The instruction costs {SCHOLARSHIP_GOLD} per hour.",
+               MenuWaitInit,
+               MenuActionStudyCondition,
+               MenuActionConsequenceNeutral,
+               TickWaitStudy, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
+               GameOverlays.MenuOverlayType.SettlementWithBoth, 4f);
 
             campaignGameStarter.AddGameMenuOption("bannerkings_wait_study", "wait_leave", "{=1kJ3hNWg}Leave",
                 delegate (MenuCallbackArgs args)
@@ -222,6 +231,10 @@ namespace BannerKings.Behaviours
 
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_local_connections", "{=B0KoTpr4}Recruit local mercenaries",
                 MenuActionLocalConnectionsCondition, MenuActionLocalConnectionsConsequence);
+
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_study", "{=!}Research",
+                MenuActionResearchCondition,
+                delegate { GameMenu.SwitchToMenu("bannerkings_wait_research"); });
 
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_study", "{=rThJzFpn}Study scholarship",
                 MenuActionStudyCondition, delegate { GameMenu.SwitchToMenu("bannerkings_wait_study"); });
@@ -422,6 +435,41 @@ namespace BannerKings.Behaviours
                 GameTexts.SetVariable("CRAFTING_EXPLANATION", cost.GetExplanations());
                 GameTexts.SetVariable("GOLD_ICON", "<img src=\"General\\Icons\\Coin@2x\" extend=\"8\">");
                 GameMenu.SwitchToMenu("bannerkings_wait_crafting");
+            }
+        }
+
+        private static void TickWaitResearch(MenuCallbackArgs args, CampaignTime dt)
+        {
+            TickCheckHealth();
+            var progress = args.MenuContext.GameMenu.Progress;
+            var diff = (int)actionStart.ElapsedHoursUntilNow;
+            if (diff > 0)
+            {
+                args.MenuContext.GameMenu.SetProgressOfWaitingInMenu(diff * 0.25f);
+
+                if (args.MenuContext.GameMenu.Progress != progress)
+                {
+                    Hero main = Hero.MainHero;
+                    EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(main);
+                    if (education.Research != null)
+                    {
+                        education.GainResearch(education.ResearchProgress / 4f);
+                        SkillObject secondarySkill = education.Research.ResearchSkill;
+
+                        InformationManager.DisplayMessage(new InformationMessage(
+                            new TextObject("{=!}You have improved your {SKILL1} and {SKILL2} skills during your current action.")
+                                .SetTextVariable("SKILL1", BKSkills.Instance.Scholarship.Name)
+                                .SetTextVariable("SKILL2", secondarySkill.Name)
+                                .ToString()));
+                    }
+                    else
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage(
+                            new TextObject("{=yLhzjPib}You have stopped your current action because the instructor has left the settlement.")
+                                .ToString()));
+                        GameMenu.SwitchToMenu("bannerkings_actions");
+                    }
+                }
             }
         }
 
@@ -663,6 +711,19 @@ namespace BannerKings.Behaviours
             args.optionLeaveType = GameMenuOption.LeaveType.Recruit;
             var canRecruit = CanRecruitLocalMercenaries(Hero.MainHero);
             return Settlement.CurrentSettlement.IsTown && canRecruit;
+        }
+
+        private bool MenuActionResearchCondition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Mission;
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
+            if (education.Research != null)
+            {
+                MBTextManager.SetTextVariable("RESEARCH", education.Research.Name);
+                MBTextManager.SetTextVariable("POINTS", education.ResearchProgress);
+            }
+           
+            return !IsWounded() && !Settlement.CurrentSettlement.IsVillage && education.Research != null;
         }
 
         private bool MenuActionStudyCondition(MenuCallbackArgs args)
