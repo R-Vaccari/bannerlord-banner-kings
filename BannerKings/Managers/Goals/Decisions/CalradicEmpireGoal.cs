@@ -107,13 +107,13 @@ namespace BannerKings.Managers.Goals.Decisions
                     failedReasons.Add(new TextObject("{=4jUw7j4u}Your kingdom is not part of {CULTURE} culture.")
                         .SetTextVariable("CULTURE", culture.Name));
                 }
-
+                /*
                 var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(referenceHero);
                 if (religion == null || religion.Faith.FaithGroup != DefaultFaiths.Instance.ImperialGroup)
                 {
                     failedReasons.Add(new TextObject("{=gcdyXvXR}You do not adhere to a faith that is part of the {RELIGION} faith group.")
                         .SetTextVariable("RELIGION", DefaultFaiths.Instance.ImperialGroup.Name));
-                }
+                }*/
 
                 foreach (Settlement settlement in settlements)
                 {

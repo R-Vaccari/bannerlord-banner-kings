@@ -1,10 +1,8 @@
 ﻿using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
-using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
-using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 
 namespace BannerKings.Models.Vanilla
@@ -71,22 +69,6 @@ namespace BannerKings.Models.Vanilla
             }
 
             return result;
-        }
-
-        public override int GetPlayerGainedRelationAmount(MapEvent mapEvent, Hero hero)
-        {
-            float relation = base.GetPlayerGainedRelationAmount(mapEvent, hero);
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(Hero.MainHero,
-                DefaultDivinities.Instance.VlandiaMain))
-            {
-                var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
-                if (rel != null && rel.Faith == DefaultFaiths.Instance.Canticles)
-                {
-                    relation *= 1.3f;
-                }
-            }
-
-            return (int)relation;
         }
     }
 }

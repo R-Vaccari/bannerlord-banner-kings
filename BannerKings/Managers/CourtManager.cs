@@ -194,7 +194,7 @@ namespace BannerKings.Managers
             data.Update(null);
         }
 
-        private void CheckReligionRankChange(CouncilAction action)
+        /*private void CheckReligionRankChange(CouncilAction action)
         {
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(action.Council.Owner);
             if (rel != null && rel.Leadership.GetType() == typeof(KinshipLeadership) &&
@@ -219,7 +219,7 @@ namespace BannerKings.Managers
                         rel.Faith.GetMaxClergyRank());
                 }
             }
-        }
+        }*/
 
         public void AddHeroToCouncil(CouncilAction action)
         {
@@ -234,7 +234,6 @@ namespace BannerKings.Managers
                     ON_FIRED_RELATION);
             }
 
-            CheckReligionRankChange(action);
             if (action.ActionTaker == null)
             {
                 return;
@@ -296,7 +295,6 @@ namespace BannerKings.Managers
                 return;
             }
 
-            CheckReligionRankChange(action);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.TargetPosition.Member,
                 ON_FIRED_RELATION);
             action.TargetPosition.SetMember(null);
