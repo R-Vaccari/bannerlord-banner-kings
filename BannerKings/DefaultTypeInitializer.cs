@@ -30,7 +30,7 @@ namespace BannerKings
 
         public void AddObject(TMBObjectBase toAdd)
         {
-            if (toAdd != null)
+            if (toAdd != null && !ModAdditions.Contains(toAdd))
             {
                 ModAdditions.Add(toAdd);
             }
