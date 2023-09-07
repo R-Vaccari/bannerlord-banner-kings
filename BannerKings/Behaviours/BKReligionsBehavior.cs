@@ -424,11 +424,10 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).ReligionData;
-
-            if (data?.Clergyman != null)
+            foreach (var notable in target.Notables)
             {
-                Utils.Helpers.AddCharacterToKeep(data.Clergyman.Hero, target);
+                if (notable.IsPreacher)
+                    Utils.Helpers.AddCharacterToKeep(notable, target);
             }
         }
 

@@ -370,7 +370,7 @@ namespace BannerKings.UI.Religion
                 Virtues.Add(new BKTraitItemVM(pair.Key, pair.Value));
             }
 
-            foreach (var docString in currentReligion.Doctrines)
+            foreach (var docString in currentReligion.Faith.Doctrines)
             {
                 var doctrine = DefaultDoctrines.Instance.GetById(docString);
                 if (doctrine != null)
@@ -398,8 +398,6 @@ namespace BannerKings.UI.Religion
                     .SetTextVariable("COST", divinity.BlessingCost(hero)), divinity.Effects));
             }
 
-            Aspects.Add(new ReligionElementVM(new TextObject("{=FRaCMrgt}Leadership"), currentReligion.Leadership.GetName(),
-                currentReligion.Leadership.GetHint()));
             //Aspects.Add(new ReligionElementVM(currentReligion.Faith.GetMainDivinitiesDescription(),
             //    currentReligion.Faith.GetMainDivinity().Name, currentReligion.Faith.GetMainDivinity().Description));
             Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith Group"), currentReligion.Faith.FaithGroup.Name,

@@ -102,6 +102,7 @@ namespace BannerKings.Managers
         public void PostInitialize()
         {
             DefaultDivinities.Instance.Initialize();
+            DefaultFaiths.Instance.Initialize();
             foreach (var pair in Religions.ToList())
             {
                 var rel = pair.Key;
@@ -110,7 +111,16 @@ namespace BannerKings.Managers
                     continue;
                 }
 
-                var faith = DefaultFaiths.Instance.GetById(rel.Faith.GetId());
+                Faith faith;
+                if (rel.Faith == null)
+                {
+                    faith = DefaultFaiths.Instance.GetById(rel.StringId);
+                }
+                else
+                {
+                    faith = DefaultFaiths.Instance.GetById(rel.Faith.GetId());
+                }
+                
                 var presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(faith.GetId()));
                 foreach (var preset in presets)
                 {

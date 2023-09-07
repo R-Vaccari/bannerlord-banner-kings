@@ -26,7 +26,6 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Empire;
 using BannerKings.Managers.Institutions.Religions.Faiths.Northern;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Institutions.Religions.Faiths.Vlandia;
-using BannerKings.Managers.Institutions.Religions.Leaderships;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Kingdoms.Contract;
 using BannerKings.Managers.Kingdoms.Council;
@@ -138,13 +137,8 @@ namespace BannerKings
             AddClassDefinition(typeof(AseraFaith), 76);
             AddClassDefinition(typeof(AmraFaith), 77);
             AddClassDefinition(typeof(DarusosianFaith), 78);
-            AddClassDefinition(typeof(ReligiousLeadership), 79);
-            AddClassDefinition(typeof(CentralizedLeadership), 80);
-            AddClassDefinition(typeof(DescentralizedLeadership), 81);
-            AddClassDefinition(typeof(HierocraticLeadership), 82);
-            AddClassDefinition(typeof(AutocephalousLeadership), 83);
-            AddClassDefinition(typeof(KinshipLeadership), 84);
-            AddClassDefinition(typeof(AutonomousLeadership), 85);
+
+
             AddClassDefinition(typeof(CanticlesFaith), 86);
             AddEnumDefinition(typeof(RiteType), 87);
             AddClassDefinition(typeof(EducationData), 88);
