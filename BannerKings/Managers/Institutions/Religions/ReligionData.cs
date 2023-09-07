@@ -99,7 +99,9 @@ namespace BannerKings.Managers.Institutions.Religions
 
             foreach (var pair in weightDictionary)
             {
-                Religions[pair.Key] = pair.Value / totalWeight;
+                float targetProportion = pair.Value / totalWeight;
+                float diff = targetProportion - Religions[pair.Key];
+                Religions[pair.Key] += diff * 0.01f;
             }
         }
 
