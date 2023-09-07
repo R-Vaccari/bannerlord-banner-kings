@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -9,6 +10,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Eastern
 {
     public class SixWinds : PolytheisticFaith
     {
+        public override Settlement FaithSeat => Settlement.All.First(x => x.StringId == "town_K4");
         public override TextObject GetDescriptionHint()
         {
             return new TextObject("{=!}Alti Yel, or Six Winds, represents the Devseg beliefs that the universe is, in essence, an everflowing current. Six Winds represent the aspects of this current: Uçmag, Tamag, Kurmag, Kunmag, Batmag, Togmag. Each of them is represented by a god or godess, who embodies a necessary aspect of the cosmos, such as the life or death. The Devseg hold all of them in high regard, but Uçmag, Heaven, as the most important guide to their ethics, as every faithful strives to reach the purity of Uçmag on their death.");
@@ -78,7 +80,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Eastern
 
         public override string GetId() => "sixWinds";
 
-        public override int GetIdealRank(Settlement settlement, bool isCapital)
+        public override int GetIdealRank(Settlement settlement)
         {
             if (settlement.IsVillage || settlement.IsTown)
             {
@@ -102,13 +104,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Eastern
 
         public override TextObject GetInductionExplanationText() => new TextObject("{=!}You need to be of a Devseg culture (Khuzait, Iltanlar)");
 
-        public override Divinity GetMainDivinity() => mainGod;
-
         public override int GetMaxClergyRank() => 1;
 
         public override TextObject GetRankTitle(int rank) => new TextObject("{=!}Kam");
-
-        public override MBReadOnlyList<Divinity> GetSecondaryDivinities() => new MBReadOnlyList<Divinity>(pantheon);
 
         public override bool IsCultureNaturalFaith(CultureObject culture) => culture.StringId == "khuzait";
 

@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 {
     public class Osfeyd : PolytheisticFaith
     {
+        public override Settlement FaithSeat => Settlement.All.First(x => x.StringId == "town_V3");
         public override Banner GetBanner() => new Banner("11.148.145.1836.1836.768.774.1.0.0.535.40.149.175.155.874.918.0.1.225.530.22.22.175.155.584.758.1.0.89.525.40.149.175.155.629.602.0.0.45.510.22.149.69.83.780.596.0.0.-52.510.22.149.59.83.776.557.0.0.44.510.22.149.59.83.776.528.0.0.320.510.22.149.133.87.758.566.0.0.-90.533.22.22.175.155.624.898.1.0.315.510.22.149.133.87.895.599.0.0.235.510.22.149.59.83.932.577.0.0.284.131.40.149.207.208.774.758.0.1.0.510.22.149.133.87.954.758.0.0.0.510.22.149.115.87.954.758.0.0.-50.510.22.149.133.87.766.957.0.0.90.510.22.149.59.83.751.1001.0.0.135.510.22.149.59.83.780.1002.0.0.45");
 
         public override TextObject GetBlessingAction() => new TextObject("{=!}I would like to pledge myself to one of the gods.");
@@ -99,7 +100,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override string GetId() => "osfeyd";
 
-        public override int GetIdealRank(Settlement settlement, bool isCapital) => 1;
+        public override int GetIdealRank(Settlement settlement) => 1;
 
         public override (bool, TextObject) GetInductionAllowed(Hero hero, int rank)
         {
@@ -115,13 +116,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetInductionExplanationText() => new TextObject("{=!}You need to be of a Wilunding culture (Vlandia, Osrickin, Swedaz, Rhodok)");
 
-        public override Divinity GetMainDivinity() => mainGod;
-
         public override int GetMaxClergyRank() => 1;
 
         public override TextObject GetRankTitle(int rank) => new TextObject("{=!}Hestawick");
-
-        public override MBReadOnlyList<Divinity> GetSecondaryDivinities() => new MBReadOnlyList<Divinity>(pantheon);
 
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {

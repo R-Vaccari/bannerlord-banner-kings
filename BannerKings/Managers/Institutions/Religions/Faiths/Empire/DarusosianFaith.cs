@@ -1,13 +1,14 @@
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 {
     public class DarusosianFaith : MonotheisticFaith
     {
+        public override Settlement FaithSeat => Settlement.All.First(x => x.StringId == "town_ES4");
         public override TextObject GetDescriptionHint()
         {
             return new TextObject("{=f1Jd0nwL}Though the Calradic Empire had long possessed an imperial cult to venerate Emperors who were deemed to be “deliverers” and “saviors” of the civilized world, during the latter years prior to the schism and inerrenegrum the practice of viewing all emperors as god-emperors had become vulgorously commonplace. It was during this period that doctrines and reforms attributed to the teenage Emperor Darusos, a figure infamously denied the rite of the divus by the generals who usurped him, were uncovered.");
@@ -44,7 +45,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
         {
             return new TextObject("{=NhdiHm3M}Though the Calradic Empire had long possessed an imperial cult to venerate Emperors who were deemed to be “deliverers” and “saviors” of the civilized world, during the latter years prior to the schism and inerrenegrum the practice of viewing all emperors as god-emperors had become vulgorously commonplace. It was during this period that doctrines and reforms attributed to the teenage Emperor Darusos, a figure infamously denied the rite of the divus by the generals who usurped him, were uncovered. Viewed as a divine Martyr, rebels and lesser cults throughout the Empire began to preach his teachings and claim that the divinity of the imperial line was inherent; that the rite of the divus was a formality at best or a means of vaunting false emperors to positions of divine power. Now worshiped throughout the Southern Empire and in hidden cells of far flung holdings, the Darusosian Martyrdom preach the divine mandate that enshrines the rulership of the line of Arenicos. Lay flamines, their purer superiors of the Flamines Castus, and the figurehead of the Rex Sacrarum of Lycaron, collect alms and absolve the sins of petty mortal ambition to those who seek to walk the path of the Martyr.");
         }
-
 
         public override TextObject GetClergyForbiddenAnswer(int rank)
         {
@@ -173,13 +173,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             return "darusosian";
         }
 
-        public override int GetIdealRank(Settlement settlement, bool isCapital)
+        public override int GetIdealRank(Settlement settlement)
         {
-            if (isCapital)
-            {
-                return 3;
-            }
-
             if (settlement.IsTown)
             {
                 return 2;
@@ -191,11 +186,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             }
 
             return 0;
-        }
-
-        public override Divinity GetMainDivinity()
-        {
-            return mainGod;
         }
 
         public override int GetMaxClergyRank()
@@ -213,11 +203,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             };
 
             return text;
-        }
-
-        public override MBReadOnlyList<Divinity> GetSecondaryDivinities()
-        {
-            return new MBReadOnlyList<Divinity>(pantheon);
         }
 
         public override TextObject GetCultsDescription()
@@ -255,7 +240,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 
         public override TextObject GetBlessingQuickInformation()
         {
-            return new TextObject("{=CAjwbXaC}I would like to medidate upon the Martyr.");
+            return new TextObject("{=!}{HERO} is medidating upon {DIVINITY}.");
         }
 
         public override TextObject GetBlessingActionName()

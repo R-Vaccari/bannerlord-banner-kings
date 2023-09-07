@@ -1,3 +1,4 @@
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -8,6 +9,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
 {
     public class TreeloreFaith : PolytheisticFaith
     {
+        public override Settlement FaithSeat => Settlement.All.First(x => x.StringId == "town_S3");
         public override TextObject GetDescriptionHint()
         {
             return new TextObject("{=sCvx3s88}Pérkenweyd is a native faith of the Calradian continent, stretching from the Kachyar peninsula to the Chertyg mountains. Thus, it is the natural faith of the Vakken and Sturgian peoples. Though the Sturgians have been in contact with different cultures and faiths, the Sturgian populace remains true to their ancestry.");
@@ -105,7 +107,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
         public override TextObject GetFaithName() => new TextObject("{=ro2nheLf}Pérkenweyd");
         public override string GetId() => "treelore";
 
-        public override int GetIdealRank(Settlement settlement, bool isCapital)
+        public override int GetIdealRank(Settlement settlement)
         {
             if (settlement.IsVillage)
             {
@@ -128,13 +130,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
                 .SetTextVariable("VAKKEN", Utils.Helpers.GetCulture("vakken").Name));
         }
 
-        public override Divinity GetMainDivinity() => mainGod;
-
         public override int GetMaxClergyRank() => 1;
 
         public override TextObject GetRankTitle(int rank) => new TextObject("{=Yc1bVZ7a}Elder");
-
-        public override MBReadOnlyList<Divinity> GetSecondaryDivinities() => new MBReadOnlyList<Divinity>(pantheon);
 
         public override TextObject GetCultsDescription() => new TextObject("{=J4D4X2XJ}Cults");
 

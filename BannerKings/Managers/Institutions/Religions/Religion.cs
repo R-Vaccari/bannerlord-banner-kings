@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
@@ -11,45 +10,49 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.ObjectSystem;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
-    public class Religion : LandedInstitution
+    public class Religion : MBObjectBase
     {
         [SaveableField(4)] private Dictionary<Settlement, Clergyman> clergy; 
         [field: SaveableField(3)] public Faith Faith { get; private set; }
-        
+        public HeadOfFaith HeadOfFaith { get; private set; }
+
         public Religion(string id) : base(id)
         {
             clergy = new Dictionary<Settlement, Clergyman>();
-            Doctrines = new List<Doctrine>();
         }
 
-        public void Initialize(Faith faith, ReligiousLeadership leadership, List<CultureObject> favoredCultures, 
-            List<Doctrine> doctrines, Settlement settlement)
+        public void Initialize(Faith faith, 
+            List<CultureObject> favoredCultures)
         {
-            Leadership = leadership;
             Faith = faith;
-            this.favoredCultures = favoredCultures;
-            Doctrines = doctrines;
-            leadership.Initialize(this);
-            base.settlement = settlement;
+            FavoredCultures = favoredCultures;
         }
 
-        private List<CultureObject> favoredCultures;
-        public ReligiousLeadership Leadership { get; private set; }
+        public List<CultureObject> FavoredCultures { get; private set; }
         public MBReadOnlyList<Rite> Rites => new MBReadOnlyList<Rite>(Faith.Rites);
-        public List<Doctrine> Doctrines { get; private set; }
-        public CultureObject MainCulture => favoredCultures[0];
-        public Divinity MainGod => Faith.MainGod;
+        public CultureObject MainCulture => FavoredCultures[0];
 
-        public bool HasDoctrine(Doctrine doctrine) => Doctrines.Contains(doctrine);
+        public bool HasDoctrine(Doctrine doctrine) => Faith.Doctrines.Contains(doctrine);
 
         public FaithStance GetStance(Faith otherFaith)
         {
             if (HasDoctrine(DefaultDoctrines.Instance.Tolerant)) return FaithStance.Tolerated;
             return Faith.GetStance(otherFaith);
+        }
+
+        public void ChangeClergymanRank(Clergyman clergyman, int newRank)
+        {
+            var firstName = clergyman.Hero.FirstName;
+            var fullName = new TextObject("{=6MHqUBXt}{RELIGIOUS_TITLE} {NAME}")
+                .SetTextVariable("RELIGIOUS_TITLE", Faith.GetRankTitle(newRank))
+                .SetTextVariable("NAME", firstName);
+            clergyman.Hero.SetName(fullName, firstName);
+            clergyman.Rank = newRank;
         }
 
         public void RemoveClergyman(Clergyman clergyman)
@@ -75,7 +78,6 @@ namespace BannerKings.Managers.Institutions.Religions
         }
 
         public MBReadOnlyDictionary<Settlement, Clergyman> Clergy => clergy.GetReadOnlyDictionary();
-        public MBReadOnlyList<CultureObject> FavoredCultures => new MBReadOnlyList<CultureObject>(favoredCultures);
         public ExplainedNumber Fervor => BannerKingsConfig.Instance.ReligionModel.CalculateFervor(this);
 
         internal void PostInitialize(Faith faith)
@@ -83,15 +85,13 @@ namespace BannerKings.Managers.Institutions.Religions
             StringId = faith.GetId();
             if (clergy == null) clergy = new Dictionary<Settlement, Clergyman>();
             Religion rel = DefaultReligions.Instance.GetById(this);
-            Doctrines = rel.Doctrines;
-            favoredCultures = rel.favoredCultures;
-            Leadership = rel.Leadership;
+            FavoredCultures = rel.FavoredCultures;
             Faith = faith;
         }
 
         public void AddClergyman(Settlement settlement, Hero hero)
         {
-            var clergyman = new Clergyman(hero, Faith.GetIdealRank(settlement, settlement == this.settlement));
+            var clergyman = new Clergyman(hero, Faith.GetIdealRank(settlement));
             if (clergy.ContainsKey(settlement))
             {
                 clergy[settlement] = clergyman;
@@ -124,7 +124,7 @@ namespace BannerKings.Managers.Institutions.Religions
         
         public Clergyman GenerateClergyman(Settlement settlement)
         {
-            var rank = Faith.GetIdealRank(settlement, settlement == this.settlement);
+            var rank = Faith.GetIdealRank(settlement);
             if (rank <= 0)
             {
                 return null;
@@ -166,7 +166,7 @@ namespace BannerKings.Managers.Institutions.Religions
                 Faith.GetId(), rank));
         }
 
-        public Hero GenerateClergymanHero(CharacterObject preset, Settlement settlement, int rank)
+        private Hero GenerateClergymanHero(CharacterObject preset, Settlement settlement, int rank)
         {
             var hero = HeroCreator.CreateSpecialHero(preset, settlement);
             var firstName = hero.FirstName;
@@ -175,11 +175,6 @@ namespace BannerKings.Managers.Institutions.Religions
                 .SetTextVariable("NAME", firstName);
             hero.SetName(fullName, firstName);
             return hero;
-        }
-
-        public override void Destroy()
-        {
-            throw new NotImplementedException();
         }
 
         public override bool Equals(object obj)
