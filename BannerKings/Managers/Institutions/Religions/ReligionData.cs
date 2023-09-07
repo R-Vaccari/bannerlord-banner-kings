@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.LinQuick;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
     public class ReligionData : BannerKingsData
     {
-        [SaveableField(2)] private Clergyman clergyman;
-
         public ReligionData(Religion religion, Settlement settlement)
         {
             Religions = new Dictionary<Religion, float> {{religion, 1f}};
@@ -79,19 +79,6 @@ namespace BannerKings.Managers.Institutions.Religions
             }
         }
 
-        public Clergyman Clergyman
-        {
-            get
-            {
-                if (clergyman == null && DominantReligion != null)
-                {
-                    clergyman = DominantReligion.GenerateClergyman(Settlement);
-                }
-
-                return clergyman;
-            }
-        }
-
         public ExplainedNumber Tension => BannerKingsConfig.Instance.ReligionModel.CalculateTensionTarget(this);
 
         private void BalanceReligions(Religion dominant)
@@ -138,9 +125,17 @@ namespace BannerKings.Managers.Institutions.Religions
                 BalanceReligions(dominant);
             }
 
-            if (clergyman == null || clergyman.Hero.IsDead)
+            foreach (Religion rel in Religions.Keys)
             {
-                clergyman = dominant.GetClergyman(data.Settlement);
+                if (rel == DominantReligion)
+                {
+                    var clergyman = rel.GetClergyman(data.Settlement);
+                    if (clergyman != null && data.Settlement.Notables.Contains(clergyman.Hero))
+                    {
+                        EnterSettlementAction.ApplyForCharacterOnly(clergyman.Hero, data.Settlement);
+                    }
+                }
+               
             }
         }
 
