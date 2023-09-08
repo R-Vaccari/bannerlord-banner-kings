@@ -8,6 +8,7 @@ using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
@@ -144,6 +145,7 @@ namespace BannerKings.Managers.Institutions.Religions
                 {
                     clergy[settlement] = clergyman;
                 }
+                BannerKingsConfig.Instance.ReligionsManager.ExecuteAddToReligion(preacher, this);
                 return clergyman;
             }
 
@@ -159,6 +161,8 @@ namespace BannerKings.Managers.Institutions.Religions
                 {
                     clergy[settlement] = clergyman;
                 }
+                hero.Culture = character.Culture;
+                BannerKingsConfig.Instance.ReligionsManager.AddToReligion(hero, this);
                 return clergyman;
             }
 
@@ -168,7 +172,8 @@ namespace BannerKings.Managers.Institutions.Religions
 
         private Hero GenerateClergymanHero(CharacterObject preset, Settlement settlement, int rank)
         {
-            var hero = HeroCreator.CreateSpecialHero(preset, settlement);
+            Settlement culturalSettlement = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == preset.Culture);
+            var hero = HeroCreator.CreateSpecialHero(preset, culturalSettlement != null ? culturalSettlement : settlement);
             var firstName = hero.FirstName;
             var fullName = new TextObject("{=6MHqUBXt}{RELIGIOUS_TITLE} {NAME}")
                 .SetTextVariable("RELIGIOUS_TITLE", Faith.GetRankTitle(rank))
