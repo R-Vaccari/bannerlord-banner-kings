@@ -90,22 +90,20 @@ namespace BannerKings.Managers
         {
             try
             {
-                if (Populations.ContainsKey(settlement))
-                {
-                    return Populations[settlement];
-                }
-
-                if (settlement.StringId.Contains("Ruin") || settlement.StringId.Contains("tutorial"))
-                {
-                    return null;
-                }
-
                 if (!settlement.IsVillage && !settlement.IsTown && !settlement.IsCastle)
                 {
                     return null;
                 }
 
-                return null;
+                if (Populations.ContainsKey(settlement))
+                {
+                    return Populations[settlement];
+                }
+                else
+                {
+                    InitializeSettlementPops(settlement);
+                    return Populations[settlement];
+                }
             }
             catch (Exception ex)
             {
