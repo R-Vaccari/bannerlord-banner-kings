@@ -15,7 +15,7 @@ namespace BannerKings.UI.Kingdoms
         private MBBindingList<DemesneLawVM> laws;
         private MBBindingList<HeirVM> heirs;
         private HeirVM mainHeir;
-        private string successionName, successionDescription;
+        private string successionDescription;
 
         public KingdomDemesneVM(FeudalTitle title, Kingdom kingdom) : base(null, false)
         {
@@ -119,16 +119,16 @@ namespace BannerKings.UI.Kingdoms
         public string StructureText => new TextObject("{=!}Contract Structure").ToString();
 
         [DataSourceProperty]
-        public string GovernmentName => Title.Contract.Government.Name.ToString();
+        public string GovernmentName => Title?.Contract.Government.Name.ToString();
 
         [DataSourceProperty]
-        public string SuccessionTName => Title.Contract.Succession.Name.ToString();
+        public string SuccessionTName => Title?.Contract.Succession.Name.ToString();
 
         [DataSourceProperty]
-        public string InheritanceName => Title.Contract.Inheritance.Name.ToString();
+        public string InheritanceName => Title?.Contract.Inheritance.Name.ToString();
 
         [DataSourceProperty]
-        public string GenderLawName => Title.Contract.GenderLaw.Name.ToString();
+        public string GenderLawName => Title?.Contract.GenderLaw.Name.ToString();
 
         [DataSourceProperty]
         public string HeirText => new TextObject("{=vArnerHC}Heir").ToString();
