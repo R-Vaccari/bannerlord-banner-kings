@@ -175,6 +175,8 @@ namespace BannerKings.Managers.Innovations
 
         public void SetEra(Era era)
         {
+            if (era == null) return;
+
             InformationManager.DisplayMessage(new InformationMessage(
                 new TextObject("{=!}The {CULTURE} culture is now on the {ERA}!")
                 .SetTextVariable("CULTURE", culture.Name)
@@ -187,8 +189,8 @@ namespace BannerKings.Managers.Innovations
 
         public Era FindNextEra()
         {
-            if (Era == null) return DefaultEras.Instance.SecondEra;
-            return DefaultEras.Instance.All.First(x => x.PreviousEra != null && x.PreviousEra.Equals(Era));
+            if (Era == null) return DefaultEras.Instance.FirstEra;
+            return DefaultEras.Instance.All.FirstOrDefault(x => x.PreviousEra != null && x.PreviousEra.Equals(Era));
         }
 
         internal override void Update(PopulationData data = null)
