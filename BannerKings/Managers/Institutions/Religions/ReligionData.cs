@@ -22,6 +22,16 @@ namespace BannerKings.Managers.Institutions.Religions
 
         [field: SaveableField(1)] public Settlement Settlement { get; }
 
+        public float GetReligionPercentage(Religion target)
+        {
+            if (Religions.ContainsKey(target))
+            {
+                return Religions[target];
+            }
+
+            return 0f;
+        }
+
         public Religion GetRandomReligion()
         {
             foreach (var pair in Religions)

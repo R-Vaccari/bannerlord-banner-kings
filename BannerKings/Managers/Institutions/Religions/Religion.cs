@@ -56,24 +56,17 @@ namespace BannerKings.Managers.Institutions.Religions
             clergyman.Rank = newRank;
         }
 
-        public void RemoveClergyman(Clergyman clergyman)
+        public void RemoveClergyman(Settlement settlement)
         {
-            Settlement settlement = null;
-            foreach (var pair in clergy)
-            {
-                if (pair.Key != null && pair.Value != null && pair.Value == clergyman)
-                {
-                    settlement = pair.Key;
-                }
-            }
-
             if (settlement != null)
             {
+                Clergyman clergyman = clergy[settlement];
                 clergy.Remove(settlement);
                 List<Hero> notables = (List<Hero>)AccessTools.Field(settlement.GetType(), "_notablesCache").GetValue(settlement);
                 if (notables.Contains(clergyman.Hero))
                 {
                     notables.Remove(clergyman.Hero);
+                    KillCharacterAction.ApplyByRemove(clergyman.Hero);
                 }
             }
         }
