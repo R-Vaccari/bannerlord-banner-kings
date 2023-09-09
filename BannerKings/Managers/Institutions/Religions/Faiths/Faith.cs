@@ -88,6 +88,16 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 return stances[otherFaith];
             }
 
+            if (faithGroup == otherFaith.faithGroup)
+            {
+                return FaithStance.Tolerated;
+            }
+
+            if (Doctrines.Contains(DefaultDoctrines.Instance.Tolerant))
+            {
+                return FaithStance.Tolerated;
+            }
+
             return FaithStance.Untolerated;
         }
 
