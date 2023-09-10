@@ -30,7 +30,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             if (IsCultureNaturalFaith(hero.Culture) && hero.MapFaction != null && hero.MapFaction.IsKingdomFaction && 
                 hero.MapFaction.StringId == "empire_s")
             {
-                return true;
+                if (hero.IsLord) return true;
+                else if (MBRandom.RandomFloat < 0.3f) return true;
             }
 
             return false;
