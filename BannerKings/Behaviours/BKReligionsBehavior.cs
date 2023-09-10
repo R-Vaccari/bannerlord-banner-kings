@@ -46,6 +46,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
             CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
+            CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
             //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
         }
 
@@ -63,6 +64,39 @@ namespace BannerKings.Behaviours
             if (BannerKingsConfig.Instance.ReligionsManager != null)
             {
                 BannerKingsConfig.Instance.ReligionsManager.InitializeReligions();
+            }
+        }
+
+        private void OnSiegeAftermath(MobileParty attackerParty, Settlement settlement,
+           SiegeAftermathAction.SiegeAftermath aftermathType,
+           Clan previousSettlementOwner,
+           Dictionary<MobileParty, float> partyContributions)
+        {
+            if (aftermathType == SiegeAftermathAction.SiegeAftermath.ShowMercy)
+            {
+                foreach (MobileParty party in partyContributions.Keys)
+                {
+                    if (!party.IsLordParty || party.LeaderHero == null) continue;
+
+                    Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(party.LeaderHero);
+                    if (rel.HasDoctrine(DefaultDoctrines.Instance.OsricsVengeance))
+                    {
+                        BannerKingsConfig.Instance.ReligionsManager.AddPiety(party.LeaderHero,
+                            MBRandom.RoundRandomized(settlement.Town.Prosperity * 0.03f), 
+                            true);
+                    }
+
+                    if (settlement.Culture.StringId == BannerKingsConfig.EmpireCulture &&
+                        rel.HasDoctrine(DefaultDoctrines.Instance.RenovatioImperi))
+                    {
+                        foreach (Hero notable in settlement.Notables)
+                        {
+                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.LeaderHero,
+                                notable,
+                                5);
+                        }
+                    }
+                }
             }
         }
 

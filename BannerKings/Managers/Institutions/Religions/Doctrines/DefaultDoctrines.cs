@@ -20,7 +20,10 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
         public Doctrine Reavers { get; private set; }
         public Doctrine Tolerant { get; private set; }
         public Doctrine Shamanism { get; private set; }
-        
+        public Doctrine Astrology { get; private set; }
+        public Doctrine Esotericism { get; private set; }
+        public Doctrine RenovatioImperi { get; private set; }
+
         public override IEnumerable<Doctrine> All
         {
             get
@@ -39,6 +42,9 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
                 yield return Reavers;
                 yield return Tolerant;
                 yield return Shamanism;
+                yield return Astrology;
+                yield return Esotericism;
+                yield return RenovatioImperi;
                 foreach (Doctrine item in ModAdditions)
                 {
                     yield return item;
@@ -48,6 +54,33 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
 
         public override void Initialize()
         {
+            RenovatioImperi = new Doctrine("RenovatioImperi",
+                new TextObject("{=!}Renovatio Imperi"),
+                new TextObject("{=!}Peace in Calradia can only exist with an united Empire. A kingdom under the teachings of Heaven. The faithful should cast aside their ambitions and work together for the benefit of the gods."),
+                new TextObject("{=!}On Imperial fiefs, showing mercy post siege, gain relations with all notables and lose no fief stability"),
+                new List<Doctrine>()
+                {
+                },
+                false);
+
+            Esotericism = new Doctrine("Esotericism",
+               new TextObject("{=!}Esotericism"),
+               new TextObject("{=!}Knowledge and faith are less divided than most think. The cosmos is littered with mysteryes, and to seek their answers is to seek to reach the gods themselves."),
+               new TextObject("{=!}Wisdom yields piety\nFinishing education projects yields piety"),
+               new List<Doctrine>()
+               {
+               },
+               false);
+
+            Astrology = new Doctrine("Astrology",
+               new TextObject("{=!}Astrology"),
+               new TextObject("{=!}The study of the stars is the study of the divine itself. Much like the Sun blesses the land with fertility, the stars bless man with wisdom."),
+               new TextObject("{=!}Cultural innovations develop faster (when Cultural Head)\nShip travels are faster"),
+               new List<Doctrine>()
+               {
+               },
+               false);
+
             Tolerant = new Doctrine("Tolerant",
                new TextObject("{=!}Tolerant"),
                new TextObject("{=!}A tolerant faith considers all faiths to be different interpretations of the Truth, as different paths to the real god(s). Tolerant faiths do not have hostile opinions toward any other faith, facilitating marraiges and decreasing tensions in multiple faith fiefs."),
@@ -55,7 +88,7 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
                new List<Doctrine>()
                {
                },
-               true);
+               false);
 
             Shamanism = new Doctrine("Shamanism",
                new TextObject("{=!}Shamanism"),
@@ -65,7 +98,7 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
                {
                    Druidism
                },
-               true);
+               false);
 
             OsricsVengeance = new Doctrine("osrics_vengeance", 
                 new TextObject("{=!}Osric's Vengeance"),
