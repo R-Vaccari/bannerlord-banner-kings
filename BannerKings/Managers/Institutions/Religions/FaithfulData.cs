@@ -9,14 +9,12 @@ namespace BannerKings.Managers.Institutions.Religions
 {
     public class FaithfulData : BannerKingsData
     {
-        [SaveableField(4)] private CampaignTime lastBlessing;
         [SaveableField(5)] private CampaignTime blessingEndDate;
 
         [SaveableField(3)] private readonly Dictionary<RiteType, CampaignTime> performedRites;
 
         public FaithfulData(float piety)
         {
-            lastBlessing = CampaignTime.Never;
             blessingEndDate = CampaignTime.Never;
             Piety = piety;
             Blessing = null;
@@ -32,17 +30,20 @@ namespace BannerKings.Managers.Institutions.Religions
                     bless.BaseBlessingCost);
             }
         }
-
-        public CampaignTime LastBlessing => lastBlessing;
         public CampaignTime BlessingEndDate => blessingEndDate;
         [field: SaveableField(2)] public Divinity Blessing { get; private set; }
 
-        public float GetBlessingYearsWindow(Hero hero)
+        public float GetBlessingYearsWindow(Divinity divinity, Hero hero)
         {
-            var result = 2f;
+            var result = 1f;
             if (hero.GetPerkValue(BKPerks.Instance.TheologyBlessed))
             {
                 result += 0.25f;
+            }
+
+            if (divinity.Shrine != null && hero.CurrentSettlement == divinity.Shrine)
+            {
+                result += 1f;
             }
 
             return result;
@@ -66,7 +67,7 @@ namespace BannerKings.Managers.Institutions.Religions
             }
             else
             {
-                blessingEndDate = CampaignTime.YearsFromNow(GetBlessingYearsWindow(hero));
+                blessingEndDate = CampaignTime.YearsFromNow(GetBlessingYearsWindow(blessing, hero));
             }
         }
 
@@ -94,11 +95,6 @@ namespace BannerKings.Managers.Institutions.Religions
 
         internal override void Update(PopulationData data)
         {
-            if (lastBlessing == null)
-            {
-                lastBlessing = CampaignTime.Never;
-            }
-
             if (Blessing != null && BlessingEndDate != null && BlessingEndDate.IsPast)
             {
                 Blessing = null;
