@@ -2,9 +2,7 @@
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Traits;
-using BannerKings.UI.Court;
 using BannerKings.Utils;
-using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -13,7 +11,7 @@ using TaleWorlds.Core;
 
 namespace BannerKings.Models.BKModels
 {
-    public class BKPietyModel : IReligionModel
+    public class BKPietyModel
     {
         public int GetHeroVirtuesCount(Hero hero)
         {

@@ -11,7 +11,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
 {
-    public class BKReligionModel
+    public class BKReligionModel : IReligionModel
     {
         public ExplainedNumber GetAppointInfluence(Hero appointer, ReligionData data, bool descriptions = false)
         {

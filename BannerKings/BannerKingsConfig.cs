@@ -72,8 +72,8 @@ namespace BannerKings
         public BKWorkshopModel WorkshopModel { get; } = new();
         public BKAdministrativeModel AdministrativeModel { get; } = new();
         public BKSmithingModel SmithingModel { get; } = new();
-        public BKCultureModel CultureModel { get; } = new();
-        public BKReligionModel ReligionModel { get; } = new();
+        public ICultureModel CultureModel { get; set; } = new BKCultureModel();
+        public IReligionModel ReligionModel { get; set; } = new BKReligionModel();
         public BKPietyModel PietyModel { get; } = new();
         public BKVolunteerModel VolunteerModel { get; } = new();
         public BKLegitimacyModel LegitimacyModel { get; } = new();

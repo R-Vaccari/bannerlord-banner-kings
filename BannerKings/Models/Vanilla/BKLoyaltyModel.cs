@@ -3,7 +3,6 @@ using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
-using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using Helpers;
 using TaleWorlds.CampaignSystem;
@@ -21,7 +20,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models.Vanilla
 {
-    internal class BKLoyaltyModel : DefaultSettlementLoyaltyModel
+    public class BKLoyaltyModel : DefaultSettlementLoyaltyModel
     {
         private static readonly float SLAVE_LOYALTY = -0.00035f;
         private static readonly float LOYALTY_FACTOR = 4f;
