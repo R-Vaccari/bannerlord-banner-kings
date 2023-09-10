@@ -5,6 +5,7 @@ using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Traits;
 using BannerKings.Utils;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -312,7 +313,23 @@ namespace BannerKings.Models.BKModels
             float villages = 0f;
             float castles = 0f;
             float towns = 0f;
-            foreach (var settlement in Settlement.All)
+
+            List<Settlement> holySites = new List<Settlement>(3);
+            var mainDivinity = religion.Faith.GetMainDivinity();
+            if (mainDivinity.Shrine != null)
+            {
+                holySites.Add(mainDivinity.Shrine);
+            }
+
+            foreach (Divinity divinity in religion.Faith.GetSecondaryDivinities())
+            {
+                if (divinity.Shrine != null)
+                {
+                    holySites.Add(divinity.Shrine);
+                }
+            }
+
+            foreach (Settlement settlement in Settlement.All)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 if (data?.ReligionData == null)
@@ -323,6 +340,17 @@ namespace BannerKings.Models.BKModels
                 var rel = data.ReligionData.DominantReligion;
                 if (rel != religion)
                 {
+                    if (holySites.Contains(settlement))
+                    {
+                        result.Add(-0.05f, new TextObject("{=!}Missing holy site: {FIEF}")
+                            .SetTextVariable("FIEF", settlement.Name));
+                    }
+
+                    if (settlement == religion.Faith.FaithSeat)
+                    {
+                        result.Add(-0.15f, new TextObject("{=!}Missing faith seat: {FIEF}")
+                           .SetTextVariable("FIEF", settlement.Name));
+                    }
                     continue;
                 }
 
@@ -340,6 +368,18 @@ namespace BannerKings.Models.BKModels
                 if (settlement.IsTown)
                 {
                     towns += value;
+                }
+
+                if (holySites.Contains(settlement))
+                {
+                    result.Add(0.05f, new TextObject("{=!}Holy site: {FIEF}")
+                        .SetTextVariable("FIEF", settlement.Name));
+                }
+
+                if (settlement == religion.Faith.FaithSeat)
+                {
+                    result.Add(0.15f, new TextObject("{=!}Faith seat: {FIEF}")
+                       .SetTextVariable("FIEF", settlement.Name));
                 }
             }
 
