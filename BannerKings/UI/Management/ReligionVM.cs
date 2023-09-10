@@ -138,7 +138,7 @@ namespace BannerKings.UI.Management
                     FormatValue(fervor.ResultNumber),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
-                            new TextObject("{=ukxmkmQR}The faith's fervor. Faiths with more fervor naturally grow to a bigger share of the population. Fervor is based on doctrines, settlements and clans that follow the faith."))
+                            new TextObject("{=!}The faith's fervor. A faith's fervor makes its populations and heroes harder to convert. In settlements, fervor grealy contributes to the faith's presence. Heroes instead are less likely and/or require more resources to convert. Fervor is based on doctrines, settlements and clans that follow the faith. Additionaly, holding the Faith Seat and the faith's Holy Sites are important factors to fervor."))
                         .SetTextVariable("EXPLANATIONS", fervor.GetExplanations())
                         .ToString()));
             }

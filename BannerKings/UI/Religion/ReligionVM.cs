@@ -5,6 +5,7 @@ using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -191,6 +192,16 @@ namespace BannerKings.UI.Religion
                     .ToString()))
                 ));
             }
+
+            var fervor = BannerKingsConfig.Instance.ReligionModel.CalculateFervor(currentReligion);
+            Aspects.Add(new ReligionElementVM(new TextObject("{=!}Fervor"),
+                new TextObject("{=!}" + FormatValue(fervor.ResultNumber)),
+                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT",
+                        new TextObject("{=!}The faith's fervor. A faith's fervor makes its populations and heroes harder to convert. In settlements, fervor grealy contributes to the faith's presence. Heroes instead are less likely and/or require more resources to convert. Fervor is based on doctrines, settlements and clans that follow the faith. Additionaly, holding the Faith Seat and the faith's Holy Sites are important factors to fervor."))
+                    .SetTextVariable("EXPLANATIONS", fervor.GetExplanations())
+                    ));
+
         }
 
         [DataSourceProperty]
