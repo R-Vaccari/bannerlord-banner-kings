@@ -136,6 +136,15 @@ namespace BannerKings.UI.Management
                     .SetTextVariable("EXPLANATIONS", growth.GetExplanations())
                     .ToString()));
 
+            var research = BannerKingsConfig.Instance.InnovationsModel.CalculateSettlementResearch(settlement, true);
+            StatsInfo.Add(new InformationElement(new TextObject("{=!}Research:").ToString(),
+                FormatFloatGain(research.ResultNumber),
+                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT",
+                        new TextObject("{=!}The amount of research this settlement produces towards innovations. This research is used for the settlement's culture innovations. Assimilating a fief will make it research towards your culture instead of the previous."))
+                    .SetTextVariable("EXPLANATIONS", research.GetExplanations())
+                    .ToString()));
+
             var influence = BannerKingsConfig.Instance.InfluenceModel.CalculateSettlementInfluence(settlement, data, true);
             StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
                 FormatFloatGain(influence.ResultNumber),

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -9,6 +10,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 {
     public class CanticlesFaith : PolytheisticFaith
     {
+        public override Settlement FaithSeat => Settlement.All.First(x => x.StringId == "");
         public override TextObject GetDescriptionHint()
         {
             return new TextObject("{=qrhkRi7R}The Canticles is a the history of deeds of the Vlandic peoples. It understands the world as a collection of sagas, of which all people are parts of. It does not discriminate between cultures, nor does it see itself as a 'faith', bur rather, a fact.");
@@ -211,13 +213,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
             return "canticles";
         }
 
-        public override int GetIdealRank(Settlement settlement, bool isCapital)
+        public override int GetIdealRank(Settlement settlement)
         {
-            if (isCapital)
-            {
-                return 3;
-            }
-
             if (settlement.IsTown)
             {
                 return 2;
@@ -229,11 +226,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
             }
 
             return 0;
-        }
-
-        public override Divinity GetMainDivinity()
-        {
-            return mainGod;
         }
 
         public override int GetMaxClergyRank()
@@ -251,11 +243,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
             };
 
             return text;
-        }
-
-        public override MBReadOnlyList<Divinity> GetSecondaryDivinities()
-        {
-            return new MBReadOnlyList<Divinity>(pantheon);
         }
 
         public override TextObject GetCultsDescription()

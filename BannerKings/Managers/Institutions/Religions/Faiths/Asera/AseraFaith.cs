@@ -1,13 +1,15 @@
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 {
     public class AseraFaith : MonotheisticFaith
     {
+        public override Settlement FaithSeat => Settlement.All.First(x => x.StringId == "town_A1");
+
         public override TextObject GetDescriptionHint()
         {
             return new TextObject("{=ezGSFaau}Founded by the immediate sons of the legendary patriarch of the Southlands, the Code of Asera forms the basis of philosophy, art and law among the members of the confederated Aserai tribes.");
@@ -344,7 +346,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             return "asera";
         }
 
-        public override int GetIdealRank(Settlement settlement, bool isCapital)
+        public override int GetIdealRank(Settlement settlement)
         {
             if (settlement.IsTown)
             {
@@ -357,11 +359,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             }
 
             return 1;
-        }
-
-        public override Divinity GetMainDivinity()
-        {
-            return mainGod;
         }
 
         public override int GetMaxClergyRank()
@@ -380,11 +377,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             };
 
             return text;
-        }
-
-        public override MBReadOnlyList<Divinity> GetSecondaryDivinities()
-        {
-            return new MBReadOnlyList<Divinity>(pantheon);
         }
 
         public override TextObject GetCultsDescription()

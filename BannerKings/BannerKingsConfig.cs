@@ -75,9 +75,8 @@ namespace BannerKings
         public BKWorkshopModel WorkshopModel { get; } = new();
         public BKAdministrativeModel AdministrativeModel { get; } = new();
         public BKSmithingModel SmithingModel { get; } = new();
-        public BKCultureModel CultureModel { get; } = new();
-        public BKReligionModel ReligionModel { get; } = new();
-        public BKPietyModel PietyModel { get; } = new();
+        public ICultureModel CultureModel { get; set; } = new BKCultureModel();
+        public IReligionModel ReligionModel { get; set; } = new BKReligionModel();
         public BKVolunteerModel VolunteerModel { get; } = new();
         public BKLegitimacyModel LegitimacyModel { get; } = new();
         public BKGrowthModel GrowthModel { get; } = new();
@@ -135,12 +134,13 @@ namespace BannerKings
             BKTraits.Instance.Initialize();
             DefaultVillageBuildings.Instance.Initialize();
             DefaultDivinities.Instance.Initialize();
-            DefaultFaiths.Instance.Initialize();
             DefaultDoctrines.Instance.Initialize();
             DefaultLanguages.Instance.Initialize();
             DefaultBookTypes.Instance.Initialize();
             DefaultLifestyles.Instance.Initialize();
             DefaultDemesneLaws.Instance.Initialize();
+            DefaultFaithGroups.Instance.Initialize();
+            DefaultFaiths.Instance.Initialize();
             DefaultReligions.Instance.Initialize();
             DefaultCouncilTasks.Instance.Initialize();
             DefaultCouncilPositions.Instance.Initialize();

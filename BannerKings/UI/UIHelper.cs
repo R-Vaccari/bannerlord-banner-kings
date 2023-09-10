@@ -335,10 +335,10 @@ namespace BannerKings.UI
 
         public static List<TooltipProperty> GetPietyTooltip(Managers.Institutions.Religions.Religion rel, Hero hero, int piety)
         {
-            var model = BannerKingsConfig.Instance.PietyModel;
+            var model = BannerKingsConfig.Instance.ReligionModel;
             var tooltipForAccumulatingProperty =
                 CampaignUIHelper.GetTooltipForAccumulatingProperty(new TextObject("{=0EVuzzOU}Piety").ToString(), piety,
-                    model.CalculateEffect(hero, true));
+                    model.CalculatePietyChange(hero, true));
 
             TextObject relText = null;
             if (rel == null)

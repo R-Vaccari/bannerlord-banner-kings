@@ -1,3 +1,4 @@
+using BannerKings.Managers.Education;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Innovations.Eras;
 using BannerKings.UI.Items;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -74,13 +76,17 @@ namespace BannerKings.UI.Cultures
 
             if (innovationData != null)
             {
+                float requiredResearch = 0f;
                 foreach (var i in innovationData.GetEraInnovations(Era))
                 {
                     if (i.Requirement == null)
                     {
-                        Innovations.Add(new InnovationElementVM(i, innovationData, Era));
+                        Innovations.Add(new InnovationElementVM(i, innovationData, Era));  
                     }
+
+                    requiredResearch += i.RequiredProgress - i.CurrentProgress;
                 }
+
 
                 if (innovationData.CulturalHead != null)
                 {
@@ -99,18 +105,14 @@ namespace BannerKings.UI.Cultures
                         .ToString()));
                 }
 
-                var research = new ExplainedNumber(0f, true);
-                foreach (var settlement in Settlement.All)
-                {
-                    if (settlement.Culture != Culture)
-                    {
-                        continue;
-                    }
+                var research = BannerKingsConfig.Instance.InnovationsModel.CalculateCultureResearch(Culture, true);
 
-                    research.Add(
-                        BannerKingsConfig.Instance.InnovationsModel.CalculateSettlementResearch(settlement).ResultNumber,
-                        settlement.Name);
-                }
+                float days = requiredResearch / research.ResultNumber;
+                CultureInfo.Add(new InformationElement(new TextObject("{=!}Years Remaining:").ToString(),
+                    new TextObject("{=!}{COUNT} years")
+                    .SetTextVariable("COUNT", (days / (float)CampaignTime.DaysInYear).ToString("0.0"))
+                    .ToString(),
+                    new TextObject("{=!}How many years remanining until all innovations for this Era are done, approximately.").ToString()));
 
                 CultureInfo.Add(new InformationElement(new TextObject("{=mykO6Ydo}Research (Daily):").ToString(),
                     research.ResultNumber.ToString("0.00"), 
@@ -151,10 +153,15 @@ namespace BannerKings.UI.Cultures
                 new TextObject("{=!}The number of settlements that predominantly follow this culture, across all realms.").ToString()));
         }
 
+        [DataSourceProperty] public bool FascinationEnabled => innovationData.CulturalHead == Clan.PlayerClan;
+        [DataSourceProperty] public string FascinationText => new TextObject("{=!}Change Fascination").ToString();
+        [DataSourceProperty] public string ResearchText => new TextObject("{=!}Research").ToString();
+        [DataSourceProperty] public HintViewModel ResearchHint => new HintViewModel(
+            new TextObject("{=!}A Research project is a personal endeavour towards progressing an innovation. You can research an innovation regardless of being Cultural Head or not. Researching will increase your Scholarship as well as an additional skill, depending on the innovation's type (Buildings, Military, Civic, etc).{newline}{newline}To make progress in your research, visit a friendly fief, select Banner Kings -> Take an Action -> Research."));
+
         [DataSourceMethod]
         private void AssumeCultureHead()
         {
-            var innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(Culture);
             if (innovationData != null)
             {
                 InformationManager.ShowInquiry(new InquiryData(new TextObject("{=e12LxgBp}Culture Head").ToString(),
@@ -168,9 +175,42 @@ namespace BannerKings.UI.Cultures
         }
 
         [DataSourceMethod]
+        private void DoResearch()
+        {
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
+            var elements = new List<InquiryElement>();
+            foreach (var innovation in innovationData.Innovations)
+            {
+                elements.Add(new InquiryElement(innovation,
+                    innovation.Name.ToString(),
+                    null,
+                    innovationData.CanResearch(innovation),
+                    innovation.Description.ToString()));
+            }
+
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                new TextObject("{=!}Choose Research").ToString(),
+                new TextObject("{=!}Choose a research proejct. Your current research progress is {PROGRESS} research points, based on your Scholarship, Intelligence and perks. An innovation is researchable if it has no previous requirements or its direct requirement is already fully researched.{newline}{newline}To make progress in your research, visit a friendly fief, select Banner Kings -> Take an Action -> Research.")
+                .SetTextVariable("PROGRESS", education.ResearchProgress)    
+                .ToString(),
+                elements, true, 1,
+                GameTexts.FindText("str_done").ToString(), string.Empty,
+                delegate (List<InquiryElement> x)
+                {
+                    var innov = (Innovation)x[0].Identifier;
+                    if (innov == null)
+                    {
+                        return;
+                    }
+
+                    education.SetResearch(innov);
+                    RefreshValues();
+                }, null));
+        }
+
+        [DataSourceMethod]
         private void ChangeFascination()
         {
-            var innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(Culture);
             if (innovationData != null)
             {
                 var elements = new List<InquiryElement>();
@@ -185,7 +225,7 @@ namespace BannerKings.UI.Cultures
 
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     new TextObject("{=QkJA3Qjb}Choose Fascination").ToString(),
-                    new TextObject("{=mJzOVNJn}The cultural fascination is an innovation that progresses faster than others.")
+                    new TextObject("{=!}The cultural fascination is an innovation that progresses faster than others. As Cultural Head, you can determine the fascination. Changing fascinations incurs no type of cost.")
                         .ToString(),
                     elements, true, 1,
                     GameTexts.FindText("str_done").ToString(), string.Empty,

@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 
-namespace BannerKings.Managers.Institutions.Religions.Faiths
+namespace BannerKings.Behaviors.Invasions
 {
-    public class DefaultFaiths : DefaultTypeInitializer<DefaultFaiths, Faith>
+    public class DefaultInvasions : DefaultTypeInitializer<DefaultInvasions, Invasion>
     {
-        public override IEnumerable<Faith> All
+        public override IEnumerable<Invasion> All
         {
             get
             {
-                foreach (Faith item in ModAdditions)
+                foreach (Invasion item in ModAdditions)
                 {
                     yield return item;
                 }

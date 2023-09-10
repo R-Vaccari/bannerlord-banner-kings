@@ -11,9 +11,9 @@ namespace BannerKings.Models.BKModels
 {
     public class BKInnovationsModel
     {
-        public ExplainedNumber CalculateSettlementResearch(Settlement settlement)
+        public ExplainedNumber CalculateSettlementResearch(Settlement settlement, bool descriptions = false)
         {
-            var result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
             result.LimitMax(1f);
 
@@ -31,14 +31,16 @@ namespace BannerKings.Models.BKModels
                 if (data.TitleData != null && data.TitleData.Title != null)
                 {
                     bool boost = data.TitleData.Title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties);
-                    result.Add(nobles / (boost ? 90000f : 100000f), new TextObject("{=pJAF5pzO}Nobles"));
+                    result.Add(nobles / (boost ? 7000f : 9000f), new TextObject("{=pJAF5pzO}Nobles"));
                 }
             }
 
             if (craftsmen > 0)
             {
-                result.Add(craftsmen / 150000f, new TextObject("{=d0YJZ6Z1}Craftsmen"));
+                result.Add(craftsmen / 15000f, new TextObject("{=d0YJZ6Z1}Craftsmen"));
             }
+
+            result.AddFactor(data.Stability - 0.75f, new TextObject("{=!}Stability"));
 
             if (settlement.Owner != null)
             {
@@ -52,6 +54,54 @@ namespace BannerKings.Models.BKModels
                     DefaultCouncilTasks.Instance.EncourageMilitarism,
                     0.05f, true);
             }
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateCultureResearch(CultureObject culture, bool descriptions = false)
+        {
+            var result = new ExplainedNumber(0f, descriptions);
+            result.LimitMin(0f);
+
+            float castles = 0f;
+            float villages = 0f;
+            float towns = 0f;
+            int castleCount = 0;
+            int townCount = 0;
+            int villageCount = 0;
+            foreach (var settlement in Settlement.All)
+            {
+                if (settlement.Culture != culture)
+                {
+                    continue;
+                }
+
+                float research = CalculateSettlementResearch(settlement).ResultNumber;
+                if (settlement.IsTown)
+                {
+                    towns += research;
+                    townCount++;
+                }
+                else if (settlement.IsCastle) 
+                {
+                    castles += research;
+                    castleCount++;
+                } 
+                else if (settlement.IsVillage)
+                {
+                    villages += research;
+                    villageCount++;
+                }
+            }
+
+            result.Add(towns, new TextObject("{=!}Towns (x{COUNT})")
+                .SetTextVariable("COUNT", townCount));
+
+            result.Add(castles, new TextObject("{=!}Castles (x{COUNT})")
+                .SetTextVariable("COUNT", castleCount));
+
+            result.Add(villages, new TextObject("{=!}Villages (x{COUNT})")
+                .SetTextVariable("COUNT", villageCount));
 
             return result;
         }

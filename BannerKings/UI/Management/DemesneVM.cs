@@ -237,18 +237,18 @@ namespace BannerKings.UI.Management
                         .ToString()));
 
                 GovernmentInfo.Add(new InformationElement(new TextObject("{=aoZYxUYV}Government Type:").ToString(),
-                    title.Contract.Government.ToString(),
+                    title.Contract.Government.Name.ToString(),
                     new TextObject("{=BvJb2QSM}The dukedom this settlement is associated with.").ToString()));
                 GovernmentInfo.Add(new InformationElement(new TextObject("{=HJcuXO5J}Succession Type:").ToString(),
-                    title.Contract.Succession.ToString().Replace("_", " "),
+                    title.Contract.Succession.Name.ToString().Replace("_", " "),
                     new TextObject("{=qMmbExKv}The clan succession form associated with this title. Successions only apply to factions.")
                         .ToString()));
                 GovernmentInfo.Add(new InformationElement(new TextObject("{=OTuRSNZ5}Inheritance Type:").ToString(),
-                    title.Contract.Inheritance.ToString(),
+                    title.Contract.Inheritance.Name.ToString(),
                     new TextObject("{=Y3mAnDLj}The inheritance form associated with this settlement's title. Inheritance dictates who leads the clan after the leader's death.")
                         .ToString()));
                 GovernmentInfo.Add(new InformationElement(new TextObject("{=vCryQjBB}Gender Law:").ToString(),
-                    title.Contract.GenderLaw.ToString(),
+                    title.Contract.GenderLaw.Name.ToString(),
                     new TextObject("{=ArvZcS5p}The gender law associated with this settlement's title. Gender law affects how inheritance and other aspects of rule work.")
                         .ToString()));
 

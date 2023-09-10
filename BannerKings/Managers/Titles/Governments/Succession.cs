@@ -1,5 +1,4 @@
-﻿using BannerKings.Managers.Kingdoms.Succession;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
@@ -23,6 +22,7 @@ namespace BannerKings.Managers.Titles.Governments
             Func<Kingdom, bool> isAdequate = null)
         {
             Initialize(name, description);
+            ElectedSuccession = elected;
             Authoritarian = authoritarian;
             Oligarchic = oligarchic;
             Egalitarian = egalitarian;
@@ -60,5 +60,14 @@ namespace BannerKings.Managers.Titles.Governments
             => calculateHeirScore.Invoke(currentLeader, candidate, title, explanations);
 
         public bool ElectedSuccession { get; private set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Succession)
+            {
+                return (obj as Succession).StringId == StringId;
+            }
+            return base.Equals(obj);
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace BannerKings.UI.Titles
 
             foreach (var i in data.GetEraInnovations(era))
             {
-                if (i.Requirement != null && i.Requirement.Equals(innovation))
+                if (i.Requirement != null && i.Requirement.StringId == innovation.StringId)
                 {
                     Branch.Add(new InnovationElementVM(i, data, era));
                 }

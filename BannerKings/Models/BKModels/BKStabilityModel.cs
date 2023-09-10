@@ -439,11 +439,23 @@ namespace BannerKings.Models.BKModels
             var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
             if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Legalism))
             {
-                var virtues = BannerKingsConfig.Instance.PietyModel.GetHeroVirtuesCount(hero);
+                foreach (var virtue in religion.Faith.Traits)
+                {
+                    int level = hero.GetTraitLevel(virtue.Key);
+                    if (level < 0 && !virtue.Value)
+                    {
+                        result.Add(0.5f, DefaultDoctrines.Instance.Legalism.Name);
+                    }
+                    else if (level > 0 && virtue.Value)
+                    {
+                        result.Add(0.5f, DefaultDoctrines.Instance.Legalism.Name);
+                    }
+                }
+                /*var virtues = BannerKingsConfig.Instance.PietyModel.GetHeroVirtuesCount(hero);
                 if (virtues > 0)
                 {
                     result.Add(virtues * 0.5f, DefaultDoctrines.Instance.Legalism.Name);
-                }
+                }*/
             }
 
             var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);

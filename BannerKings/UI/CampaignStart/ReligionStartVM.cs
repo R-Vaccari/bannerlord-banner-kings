@@ -69,7 +69,8 @@ namespace BannerKings.UI.CampaignStart
 
             foreach (var option in DefaultReligions.Instance.All)
             {
-                Options.Add(new ReligionStartOptionVM(option, OnSelectOption));
+                if (option.Faith.Active)
+                    Options.Add(new ReligionStartOptionVM(option, OnSelectOption));
             }
         }
 

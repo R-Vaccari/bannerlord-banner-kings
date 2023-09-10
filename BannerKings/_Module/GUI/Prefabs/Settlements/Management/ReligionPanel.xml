@@ -88,6 +88,32 @@
 																<InformationElement />
 															</ItemTemplate>
 														</GridWidget>
+														
+														<ButtonWidget WidthSizePolicy="Fixed" IsVisible="@HasTown" HeightSizePolicy="Fixed" SuggestedHeight="48"
+																	  SuggestedWidth="200" MarginTop="20" HorizontalAlignment="Center" VerticalAlignment="Top"
+																	  Brush="ButtonBrush2" Command.Click="AppointPreacher" IsEnabled="@AppointEnabled">
+															<Children>
+																<HintWidget DataSource="{TournamentHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																			HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																			Command.HoverEnd="ExecuteEndHint" />
+																<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																				HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
+																				Brush.FontSize="20" Text="@AppointText" />
+															</Children>
+														</ButtonWidget>
+														
+														<ButtonWidget WidthSizePolicy="Fixed" IsVisible="@HasTown" HeightSizePolicy="Fixed" SuggestedHeight="48"
+																	  SuggestedWidth="200" MarginTop="20" HorizontalAlignment="Center" VerticalAlignment="Top"
+																	  Brush="ButtonBrush2" Command.Click="BanishPreacher" IsEnabled="@RemoveEnabled">
+															<Children>
+																<HintWidget DataSource="{TournamentHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																			HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																			Command.HoverEnd="ExecuteEndHint" />
+																<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																				HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
+																				Brush.FontSize="20" Text="@RemoveText" />
+															</Children>
+														</ButtonWidget>
 													</Children>
 												</ListPanel>
 

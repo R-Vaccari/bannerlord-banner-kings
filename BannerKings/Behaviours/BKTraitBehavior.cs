@@ -195,13 +195,19 @@ namespace BannerKings.Behaviours
 
             authoritarian += MBRandom.RandomInt(1, 5) * (float)valor;
 
+            if (hero.IsPreacher)
+            {
+                eruditeAptitude++;
+                egalitarian += 2;
+            }
+
             hero.SetTraitLevel(BKTraits.Instance.AptitudeViolence, (int)MathF.Clamp(violentAptitude, -2, 2));
             hero.SetTraitLevel(BKTraits.Instance.AptitudeErudition, (int)MathF.Clamp(eruditeAptitude, -2, 2));
             hero.SetTraitLevel(BKTraits.Instance.AptitudeSocializing, (int)MathF.Clamp(socialAptitude, -2, 2));
 
-            authoritarian += MBRandom.RandomInt(1, 3) * (float)violentAptitude;
-            oligarchic += MBRandom.RandomInt(1, 3) * (float)eruditeAptitude;
-            egalitarian += MBRandom.RandomInt(1, 3) * (float)socialAptitude;
+            authoritarian += MBRandom.RandomInt(1, 3) * (float)violentAptitude * 2f;
+            oligarchic += MBRandom.RandomInt(1, 3) * (float)eruditeAptitude * 2f;
+            egalitarian += MBRandom.RandomInt(1, 3) * (float)socialAptitude * 2f;
 
             if (hero.IsLord)
             {

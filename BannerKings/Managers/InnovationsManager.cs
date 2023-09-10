@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using BannerKings.Managers.Innovations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -30,7 +31,7 @@ namespace BannerKings.Managers
                         continue;
                     }
 
-                    Innovations[culture].AddInnovation(innovation.GetCopy());
+                    Innovations[culture].AddInnovation(innovation.GetCopy(culture));
                 }
             }
         }
@@ -46,7 +47,8 @@ namespace BannerKings.Managers
                         continue;
                     }
 
-                    data.AddInnovation(innovation.GetCopy());
+                    data.RemoveInnovation(innovation);
+                    data.AddInnovation(innovation.GetCopy(data.Culture));
                 }
 
                 data.PostInitialize();

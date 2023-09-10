@@ -41,6 +41,8 @@ namespace BannerKings.Managers.Innovations
         [field: SaveableField(3)] public Innovation Fascination { get; private set; }
         [field: SaveableField(6)] public Era Era { get; private set; }
 
+        public CultureObject Culture => culture;
+
         public MBReadOnlyList<Innovation> Innovations => new MBReadOnlyList<Innovation>(innovations);
 
         public void PostInitialize()
@@ -150,7 +152,13 @@ namespace BannerKings.Managers.Innovations
         public void AddInnovation(Innovation innov)
         {
             if (!innovations.Any(x => x.StringId == innov.StringId)) 
-                innovations.Add(innov);
+                innovations.Add(innov.GetCopy(culture));
+        }
+
+        public void RemoveInnovation(Innovation innov)
+        {
+            Innovation i = innovations.FirstOrDefault(x => x.StringId == innov.StringId);
+            if (i != null && i.Equals(innov)) innovations.Remove(i);
         }
 
         public void AddResearch(float points)
@@ -167,6 +175,8 @@ namespace BannerKings.Managers.Innovations
 
         public void SetEra(Era era)
         {
+            if (era == null) return;
+
             InformationManager.DisplayMessage(new InformationMessage(
                 new TextObject("{=!}The {CULTURE} culture is now on the {ERA}!")
                 .SetTextVariable("CULTURE", culture.Name)
@@ -179,12 +189,21 @@ namespace BannerKings.Managers.Innovations
 
         public Era FindNextEra()
         {
-            if (Era == null) return DefaultEras.Instance.SecondEra;
-            return DefaultEras.Instance.All.First(x => x.PreviousEra != null && x.PreviousEra.Equals(Era));
+            if (Era == null) return DefaultEras.Instance.FirstEra;
+            return DefaultEras.Instance.All.FirstOrDefault(x => x.PreviousEra != null && x.PreviousEra.Equals(Era));
         }
 
         internal override void Update(PopulationData data = null)
         {
+            var startInnovations = DefaultInnovations.Instance.GetCultureDefaultInnovations(culture);
+            foreach (var innovation in innovations)
+            {
+                if (!innovation.Finished && startInnovations.Any(x => x.StringId == innovation.StringId))
+                {
+                    innovation.AddProgress(innovation.RequiredProgress - innovation.CurrentProgress);
+                }
+            }
+
             if (CulturalHead == null)
             {
                 var clans = new List<Clan>(Clan.All).FindAll(x =>
@@ -226,6 +245,10 @@ namespace BannerKings.Managers.Innovations
 
                     random.AddProgress(result);
                 }
+            }
+            else
+            {
+                SetEra(FindNextEra());
             }
 
             research = 0f;

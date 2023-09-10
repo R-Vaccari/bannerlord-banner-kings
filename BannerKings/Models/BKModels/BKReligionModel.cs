@@ -1,10 +1,14 @@
+using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Skills;
 using System.Linq;
 using BannerKings.Managers.Traits;
+using BannerKings.Utils;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -12,8 +16,140 @@ using TaleWorlds.Library;
 
 namespace BannerKings.Models.BKModels
 {
-    public class BKReligionModel
+    public class BKReligionModel : IReligionModel
     {
+        public ExplainedNumber CalculatePietyChange(Hero hero, bool descriptions = false)
+        {
+            var result = new ExplainedNumber(0f, descriptions);
+            var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+            if (rel != null)
+            {
+                ExceptionUtils.TryCatch(() =>
+                {
+                    foreach (var tuple in rel.Faith.Traits)
+                    {
+                        TraitObject trait = tuple.Key;
+                        int traitLevel = hero.GetTraitLevel(trait);
+                        if (traitLevel != 0)
+                        {
+                            result.Add(traitLevel * 0.2f * (tuple.Value ? 1f : -1f), trait.Name);
+                        }
+                    }
+
+                    result.Add(hero.GetTraitLevel(BKTraits.Instance.Zealous) * 0.2f, BKTraits.Instance.Zealous.Name);
+
+                    if (rel.FavoredCultures.Contains(hero.Culture))
+                    {
+                        result.Add(0.1f, GameTexts.FindText("str_culture"));
+                    }
+
+                    if (hero.GetPerkValue(BKPerks.Instance.TheologyFaithful))
+                    {
+                        result.Add(0.2f, BKPerks.Instance.TheologyFaithful.Name);
+                    }
+
+                    if (hero.Clan != null && rel.HasDoctrine(DefaultDoctrines.Instance.Animism))
+                    {
+                        var acres = 0f;
+                        foreach (var settlement in hero.Clan.Settlements)
+                        {
+                            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                            if (data != null && data.LandData != null)
+                            {
+                                acres += data.LandData.Woodland;
+                            }
+                        }
+
+                        if (acres != 0f)
+                        {
+                            result.Add(acres / 10000f, DefaultDoctrines.Instance.Animism.Name);
+                        }
+                    }
+
+                    if (rel.HasDoctrine(DefaultDoctrines.Instance.Literalism))
+                    {
+                        var skill = hero.GetSkillValue(BKSkills.Instance.Scholarship);
+                        if (!hero.GetPerkValue(BKPerks.Instance.ScholarshipLiterate))
+                        {
+                            result.Add(-0.2f, DefaultDoctrines.Instance.Literalism.Name);
+                        }
+                        else if (skill > 100)
+                        {
+                            result.Add(skill * 0.01f, DefaultDoctrines.Instance.Literalism.Name);
+                        }
+                    }
+
+                    if (hero.Clan != null)
+                    {
+                        if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(hero.Clan,
+                                              DefaultCouncilTasks.Instance.CultivatePiety,
+                                              out float pietyCompetence))
+                        {
+                            result.Add(1f * pietyCompetence, DefaultCouncilTasks.Instance.CultivatePiety.Name);
+                        }
+                    }
+                },
+                GetType().Name,
+                false);
+            }
+
+            return result;
+        }
+
+        public ExplainedNumber GetAppointInfluence(Hero appointer, ReligionData data, bool descriptions = false)
+        {
+            var result = new ExplainedNumber(50f, descriptions);
+
+            result.AddFactor(data.Tension.ResultNumber * 0.5f, new TextObject("{=T88BUMMU}Religious tensions"));
+            result.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(appointer.Clan).ResultNumber * 0.1f,
+                new TextObject("{=!}Clan Influence Limit"));
+            return result;
+        }
+
+        public ExplainedNumber GetAppointCost(Hero appointer, ReligionData data, bool descriptions = false)
+        {
+            var result = new ExplainedNumber(300f, descriptions);
+
+
+            result.AddFactor(data.Tension.ResultNumber, new TextObject("{=T88BUMMU}Religious tensions"));
+            return result;
+        }
+
+        public ExplainedNumber GetRemoveInfluence(Hero appointer, Hero removed, ReligionData data, bool descriptions = false)
+        {
+            var result = new ExplainedNumber(50f, descriptions);
+
+            result.AddFactor(GetNotableFactor(removed, data.Settlement),
+                new TextObject("{=!}Power of {HERO}")
+                .SetTextVariable("HERO", removed.Name));
+
+            result.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(appointer.Clan).ResultNumber * 0.2f,
+                new TextObject("{=!}Clan Influence Limit"));
+            return result;
+        }
+
+        public ExplainedNumber GetRemoveCost(Hero appointer, Hero removed, ReligionData data, bool descriptions = false)
+        {
+            var result = new ExplainedNumber(200f, descriptions);
+            result.AddFactor(GetNotableFactor(removed, data.Settlement), 
+                new TextObject("{=!}Power of {HERO}")
+                .SetTextVariable("HERO", removed.Name));
+
+            return result;
+        }
+
+        public ExplainedNumber GetRemoveLoyaltyCost(Hero appointer, Hero removed, ReligionData data, bool descriptions = false)
+        {
+            var result = new ExplainedNumber(0f, descriptions);
+            result.Add(GetNotableFactor(removed, data.Settlement) * 50f,
+                new TextObject("{=!}Power of {HERO}")
+                .SetTextVariable("HERO", removed.Name));
+
+            result.AddFactor(data.Tension.ResultNumber, new TextObject("{=T88BUMMU}Religious tensions"));
+
+            return result;
+        }
+
         public Religion GetKingdomStateReligion(Kingdom kingdom)
         {
             string id = kingdom.StringId;
@@ -44,6 +180,7 @@ namespace BannerKings.Models.BKModels
 
             return DefaultReligions.Instance.All.FirstOrDefault(x => x.Faith.IsCultureNaturalFaith(kingdom.Culture));
         }
+
         public ExplainedNumber GetConversionLikelihood(Hero converter, Hero converted)
         {
             var result = new ExplainedNumber(15f, false);
@@ -191,7 +328,7 @@ namespace BannerKings.Models.BKModels
             switch (stance)
             {
                 case FaithStance.Tolerated:
-                    return 0f;
+                    return 0.1f;
                 case FaithStance.Hostile:
                     return 1f;
                 default:
@@ -201,14 +338,30 @@ namespace BannerKings.Models.BKModels
 
         public ExplainedNumber CalculateFervor(Religion religion)
         {
-            var result = new ExplainedNumber(0.05f, true);
+            ExplainedNumber result = new ExplainedNumber(0.05f, true);
             result.LimitMin(0f);
             result.LimitMax(1f);
 
-            var villages = 0f;
-            var castles = 0f;
-            var towns = 0f;
-            foreach (var settlement in Settlement.All)
+            float villages = 0f;
+            float castles = 0f;
+            float towns = 0f;
+
+            List<Settlement> holySites = new List<Settlement>(3);
+            var mainDivinity = religion.Faith.GetMainDivinity();
+            if (mainDivinity.Shrine != null)
+            {
+                holySites.Add(mainDivinity.Shrine);
+            }
+
+            foreach (Divinity divinity in religion.Faith.GetSecondaryDivinities())
+            {
+                if (divinity.Shrine != null)
+                {
+                    holySites.Add(divinity.Shrine);
+                }
+            }
+
+            foreach (Settlement settlement in Settlement.All)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 if (data?.ReligionData == null)
@@ -219,10 +372,21 @@ namespace BannerKings.Models.BKModels
                 var rel = data.ReligionData.DominantReligion;
                 if (rel != religion)
                 {
+                    if (holySites.Contains(settlement))
+                    {
+                        result.Add(-0.05f, new TextObject("{=!}Missing holy site ({FIEF})")
+                            .SetTextVariable("FIEF", settlement.Name));
+                    }
+
+                    if (settlement == religion.Faith.FaithSeat)
+                    {
+                        result.Add(-0.15f, new TextObject("{=!}Missing faith seat ({FIEF})")
+                           .SetTextVariable("FIEF", settlement.Name));
+                    }
                     continue;
                 }
 
-                var value = GetSettlementFervorWeight(settlement);
+                float value = GetSettlementFervorWeight(settlement) * data.ReligionData.GetReligionPercentage(rel);
                 if (settlement.IsVillage)
                 {
                     villages += value;
@@ -237,13 +401,26 @@ namespace BannerKings.Models.BKModels
                 {
                     towns += value;
                 }
+
+                if (holySites.Contains(settlement))
+                {
+                    result.Add(0.05f, new TextObject("{=!}Holy site ({FIEF})")
+                        .SetTextVariable("FIEF", settlement.Name));
+                }
+
+                if (settlement == religion.Faith.FaithSeat)
+                {
+                    result.Add(0.15f, new TextObject("{=!}Faith seat ({FIEF})")
+                       .SetTextVariable("FIEF", settlement.Name));
+                }
             }
 
             result.Add(towns, GameTexts.FindText("str_towns"));
             result.Add(castles, GameTexts.FindText("str_castles"));
             result.Add(villages, GameTexts.FindText("str_villages"));
 
-            var clans = 0f;
+            float clans = 0f;
+            float kingdomsCount = Kingdom.All.Count;
             foreach (var clan in Clan.All)
             {
                 if (clan.IsBanditFaction || clan.IsEliminated || clan.Leader == null)
@@ -258,7 +435,7 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            result.Add(clans, GameTexts.FindText("str_encyclopedia_clans"));
+            result.Add(clans / kingdomsCount, GameTexts.FindText("str_encyclopedia_clans"));
 
             if (religion.HasDoctrine(DefaultDoctrines.Instance.Animism))
             {
@@ -300,11 +477,6 @@ namespace BannerKings.Models.BKModels
             {
                 foreach (var notable in settlement.Notables)
                 {
-                    if (notable.IsPreacher)
-                    {
-                        continue;
-                    }
-
                     var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(notable);
                     if (rel != null && rel == religion)
                     {

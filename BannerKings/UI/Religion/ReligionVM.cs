@@ -3,7 +3,12 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Populations;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Core.ViewModelCollection.Selector;
@@ -66,6 +71,137 @@ namespace BannerKings.UI.Religion
             {
                 currentReligion = BannerKingsConfig.Instance.ReligionsManager.GetReligions().GetRandomElement();
             }
+        }
+
+        public override void RefreshValues()
+        {
+            base.RefreshValues();
+            Clergymen.Clear();
+            Faithful.Clear();
+            Virtues.Clear();
+            Doctrines.Clear();
+            Aspects.Clear();
+            Rites.Clear();
+            SecondaryDivinities.Clear();
+
+            Name = currentReligion.Faith.GetFaithName().ToString();
+            Description = currentReligion.Faith.GetFaithDescription().ToString();
+            GroupName = currentReligion.Faith.FaithGroup.Name.ToString();
+            GroupDescription = currentReligion.Faith.FaithGroup.Description.ToString();
+            SecondaryDivinitiesText = currentReligion.Faith.GetCultsDescription().ToString();
+
+            var selectedIndex = 0;
+            Selector = new SelectorVM<ReligionSelectorItemVM>(0, null);
+            var i = 0;
+            foreach (var religion in BannerKingsConfig.Instance.ReligionsManager.GetReligions())
+            {
+                var item = new ReligionSelectorItemVM(religion, religion.Faith != this.currentReligion?.Faith);
+                if (religion.Faith == this.currentReligion.Faith) selectedIndex = i;
+                selector.AddItem(item);
+                i++;
+            }
+            Selector.SelectedIndex = selectedIndex;
+            Selector.SetOnChangeAction(delegate (SelectorVM<ReligionSelectorItemVM> obj)
+            {
+                currentReligion = obj.SelectedItem.Religion;
+                RefreshValues();
+            });
+
+            InductionExplanationText = currentReligion.Faith.GetInductionExplanationText().ToString();
+
+            foreach (var pair in currentReligion.Clergy)
+            {
+                var clgm = pair.Value;
+                if (clgm != null && clgm.Hero != null)
+                {
+                    Clergymen.Add(new ReligionMemberVM(clgm, null));
+                }
+            }
+
+            foreach (var hero in BannerKingsConfig.Instance.ReligionsManager.GetFaithfulHeroes(currentReligion))
+            {
+                Faithful.Add(new ReligionMemberVM(hero, null));
+            }
+
+            foreach (var pair in currentReligion.Faith.Traits)
+            {
+                Virtues.Add(new BKTraitItemVM(pair.Key, pair.Value));
+            }
+
+            foreach (var docString in currentReligion.Faith.Doctrines)
+            {
+                var doctrine = DefaultDoctrines.Instance.GetById(docString);
+                if (doctrine != null)
+                {
+                    Doctrines.Add(new ReligionElementVM(doctrine.Name, doctrine.Effects, doctrine.Description));
+                }
+            }
+
+            foreach (var rite in currentReligion.Rites)
+            {
+                Rites.Add(new ReligionElementVM(rite.GetName(), rite.GetDescription(), rite.GetRequirementsText(hero)));
+            }
+
+            var mainDivinity = currentReligion.Faith.GetMainDivinity();
+            SecondaryDivinities.Add(new ReligionElementVM(mainDivinity.SecondaryTitle, mainDivinity.Name,
+                    new TextObject("{=77isPS24}{EFFECTS}\nPiety cost: {COST}")
+                    .SetTextVariable("EFFECTS", mainDivinity.Description)
+                    .SetTextVariable("COST", mainDivinity.BlessingCost(hero)), mainDivinity.Effects));
+
+            Dictionary<Settlement, Divinity> sites = new Dictionary<Settlement, Divinity>(SecondaryDivinities.Count);
+            if (mainDivinity.Shrine != null)
+            {
+                sites.Add(mainDivinity.Shrine, mainDivinity);
+            }
+
+            foreach (var divinity in currentReligion.Faith.GetSecondaryDivinities())
+            {
+                SecondaryDivinities.Add(new ReligionElementVM(divinity.SecondaryTitle, divinity.Name,
+                    new TextObject("{=77isPS24}{EFFECTS}\nPiety cost: {COST}")
+                    .SetTextVariable("EFFECTS", divinity.Description)
+                    .SetTextVariable("COST", divinity.BlessingCost(hero)), divinity.Effects));
+
+                if (divinity.Shrine != null)
+                {
+                    sites.Add(divinity.Shrine, divinity);
+                }
+            }
+
+            //Aspects.Add(new ReligionElementVM(currentReligion.Faith.GetMainDivinitiesDescription(),
+            //    currentReligion.Faith.GetMainDivinity().Name, currentReligion.Faith.GetMainDivinity().Description));
+            Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith Group"), currentReligion.Faith.FaithGroup.Name,
+                currentReligion.Faith.FaithGroup.Description));
+            //Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith"), UIHelper.GetFaithTypeName(currentReligion.Faith),
+            //    UIHelper.GetFaithTypeDescription(currentReligion.Faith)));
+            Aspects.Add(new ReligionElementVM(new TextObject("{=EjTxnGJp}Culture"), currentReligion.MainCulture.Name,
+                new TextObject("{=6NYxLhjH}The main culture associated with this faith.")));
+
+            Aspects.Add(new ReligionElementVM(new TextObject("{=!}Faith Seat"), 
+                currentReligion.Faith.FaithSeat.Name,
+                new TextObject("{=!}The Faith Seat is the most religiously important fief within the faith. When the Seat is not held by a member of the faith, it loses a great deal of fervor. The holder of the Seat is given extra influence limit and piety according to the stability of the Seat, and thus is encouraged to give it good management.")));
+
+            if (sites.Count > 0)
+            {
+                Aspects.Add(new ReligionElementVM(new TextObject("{=!}Holy Sites"),
+                    new TextObject("{=!}" + sites.Count),
+                    new TextObject("{=!}Holy sites are the fiefs directly connected to the religion's divinities or cults. Holding such sites is important for religious Fervor. In addition, being blessed by a Divinity in its holy site adds double the blessing duration.{newline}{newline}Sites:{SITES}")
+                    .SetTextVariable("SITES", sites.Aggregate("", (current, site) => current + Environment.NewLine + 
+                        new TextObject("{=!}{HOLY_SITE}: {DIVINITY}")
+                        .SetTextVariable("HOLY_SITE", site.Key.Name)
+                        .SetTextVariable("DIVINITY", site.Value.Name)
+                        .ToString()))
+                ));
+            }
+
+            var fervor = BannerKingsConfig.Instance.ReligionModel.CalculateFervor(currentReligion);
+            Aspects.Add(new ReligionElementVM(new TextObject("{=!}Fervor"),
+                new TextObject("{=!}" + FormatValue(fervor.ResultNumber)),
+                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT",
+                        new TextObject("{=!}The faith's fervor. A faith's fervor makes its populations and heroes harder to convert. In settlements, fervor grealy contributes to the faith's presence. Heroes instead are less likely and/or require more resources to convert. Fervor is based on doctrines, settlements and clans that follow the faith. Additionaly, holding the Faith Seat and the faith's Holy Sites are important factors to fervor."))
+                    .SetTextVariable("EXPLANATIONS", fervor.GetExplanations())
+                    ));
+
         }
 
         [DataSourceProperty]
@@ -313,101 +449,6 @@ namespace BannerKings.UI.Religion
                     OnPropertyChangedWithValue(value);
                 }
             }
-        }
-
-        public override void RefreshValues()
-        {
-            base.RefreshValues();
-            Clergymen.Clear();
-            Faithful.Clear();
-            Virtues.Clear();
-            Doctrines.Clear();
-            Aspects.Clear();
-            Rites.Clear();
-            SecondaryDivinities.Clear();
-
-            Name = currentReligion.Faith.GetFaithName().ToString();
-            Description = currentReligion.Faith.GetFaithDescription().ToString();
-            GroupName = currentReligion.Faith.FaithGroup.Name.ToString();
-            GroupDescription = currentReligion.Faith.FaithGroup.Description.ToString();
-            SecondaryDivinitiesText = currentReligion.Faith.GetCultsDescription().ToString();
-
-            var selectedIndex = 0;
-            Selector = new SelectorVM<ReligionSelectorItemVM>(0, null);
-            var i = 0;
-            foreach (var religion in BannerKingsConfig.Instance.ReligionsManager.GetReligions())
-            {
-                var item = new ReligionSelectorItemVM(religion, religion.Faith != this.currentReligion?.Faith);
-                if (religion.Faith == this.currentReligion.Faith) selectedIndex = i;
-                selector.AddItem(item);
-                i++;
-            }
-            Selector.SelectedIndex = selectedIndex;
-            Selector.SetOnChangeAction(delegate (SelectorVM<ReligionSelectorItemVM> obj)
-            {
-                currentReligion = obj.SelectedItem.Religion;
-                RefreshValues();
-            });
-
-            InductionExplanationText = currentReligion.Faith.GetInductionExplanationText().ToString();
-
-            foreach (var pair in currentReligion.Clergy)
-            {
-                var clgm = pair.Value;
-                if (clgm != null && clgm.Hero != null)
-                {
-                    Clergymen.Add(new ReligionMemberVM(clgm, null));
-                }
-            }
-
-            foreach (var hero in BannerKingsConfig.Instance.ReligionsManager.GetFaithfulHeroes(currentReligion))
-            {
-                Faithful.Add(new ReligionMemberVM(hero, null));
-            }
-
-            foreach (var pair in currentReligion.Faith.Traits)
-            {
-                Virtues.Add(new BKTraitItemVM(pair.Key, pair.Value));
-            }
-
-            foreach (var docString in currentReligion.Doctrines)
-            {
-                var doctrine = DefaultDoctrines.Instance.GetById(docString);
-                if (doctrine != null)
-                {
-                    Doctrines.Add(new ReligionElementVM(doctrine.Name, doctrine.Effects, doctrine.Description));
-                }
-            }
-
-            foreach (var rite in currentReligion.Rites)
-            {
-                Rites.Add(new ReligionElementVM(rite.GetName(), rite.GetDescription(), rite.GetRequirementsText(hero)));
-            }
-
-            var mainDivinity = currentReligion.Faith.GetMainDivinity();
-            SecondaryDivinities.Add(new ReligionElementVM(mainDivinity.SecondaryTitle, mainDivinity.Name,
-                    new TextObject("{=77isPS24}{EFFECTS}\nPiety cost: {COST}")
-                    .SetTextVariable("EFFECTS", mainDivinity.Description)
-                    .SetTextVariable("COST", mainDivinity.BlessingCost(hero)), mainDivinity.Effects));
-
-            foreach (var divinity in currentReligion.Faith.GetSecondaryDivinities())
-            {
-                SecondaryDivinities.Add(new ReligionElementVM(divinity.SecondaryTitle, divinity.Name,
-                    new TextObject("{=77isPS24}{EFFECTS}\nPiety cost: {COST}")
-                    .SetTextVariable("EFFECTS", divinity.Description)
-                    .SetTextVariable("COST", divinity.BlessingCost(hero)), divinity.Effects));
-            }
-
-            Aspects.Add(new ReligionElementVM(new TextObject("{=FRaCMrgt}Leadership"), currentReligion.Leadership.GetName(),
-                currentReligion.Leadership.GetHint()));
-            //Aspects.Add(new ReligionElementVM(currentReligion.Faith.GetMainDivinitiesDescription(),
-            //    currentReligion.Faith.GetMainDivinity().Name, currentReligion.Faith.GetMainDivinity().Description));
-            Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith Group"), currentReligion.Faith.FaithGroup.Name,
-                currentReligion.Faith.FaithGroup.Description));
-            //Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith"), UIHelper.GetFaithTypeName(currentReligion.Faith),
-            //    UIHelper.GetFaithTypeDescription(currentReligion.Faith)));
-            Aspects.Add(new ReligionElementVM(new TextObject("{=EjTxnGJp}Culture"), currentReligion.MainCulture.Name,
-                new TextObject("{=6NYxLhjH}The main culture associated with this faith.")));
-        }
+        }  
     }
 }

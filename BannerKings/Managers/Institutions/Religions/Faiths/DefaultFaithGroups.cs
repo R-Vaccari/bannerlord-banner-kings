@@ -2,13 +2,13 @@
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
-    public class DefaultFaiths : DefaultTypeInitializer<DefaultFaiths, Faith>
+    public class DefaultFaithGroups : DefaultTypeInitializer<DefaultFaithGroups, FaithGroup>
     {
-        public override IEnumerable<Faith> All
+        public override IEnumerable<FaithGroup> All
         {
             get
             {
-                foreach (Faith item in ModAdditions)
+                foreach (FaithGroup item in ModAdditions)
                 {
                     yield return item;
                 }

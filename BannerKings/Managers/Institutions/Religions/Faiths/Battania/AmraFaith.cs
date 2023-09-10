@@ -1,14 +1,15 @@
 using System;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
 {
     public class AmraFaith : PolytheisticFaith
     {
+        public override Settlement FaithSeat => Settlement.All.First(x => x.StringId == "town_B2");
         public override TextObject GetZealotsGroupName()
         {
             return new TextObject("{=!}Wolves of Llyn Tywal");
@@ -279,7 +280,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
             return "amra";
         }
 
-        public override int GetIdealRank(Settlement settlement, bool isCapital)
+        public override int GetIdealRank(Settlement settlement)
         {
             if (settlement.IsVillage)
             {
@@ -292,11 +293,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
             }
 
             return 0;
-        }
-
-        public override Divinity GetMainDivinity()
-        {
-            return mainGod;
         }
 
         public override int GetMaxClergyRank()
@@ -317,11 +313,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
             }
 
             return text;
-        }
-
-        public override MBReadOnlyList<Divinity> GetSecondaryDivinities()
-        {
-            return new MBReadOnlyList<Divinity>(pantheon);
         }
 
         public override TextObject GetCultsDescription()

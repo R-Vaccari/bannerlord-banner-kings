@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -7,12 +8,13 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.ObjectSystem;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Behaviours.Feasts.Feast;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
-    public abstract class Faith
+    public abstract class Faith : MBObjectBase
     {
         protected FaithGroup faithGroup;
         protected Divinity mainGod;
@@ -24,8 +26,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         protected Dictionary<TraitObject, bool> traits;
 
-        public Faith()
+        public Faith() : base()
         {
+            StringId = GetId();
             stances = new Dictionary<Faith, FaithStance>();
             presets = new Dictionary<int, CharacterObject>();
         }
@@ -35,9 +38,27 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public FaithGroup FaithGroup => faithGroup;
         public Divinity MainGod => mainGod;
         public FeastType FeastType { get; private set; }
-        public bool Active { get; internal set; } = true;
+        public List<Doctrine> Doctrines { get; private set; }
+        public bool Active { get; set; } = true;
+        public List<Settlement> HolySites
+        {
+            get
+            {
+                List<Settlement> sites = new List<Settlement>(pantheon.Count);
+                foreach (Divinity d in pantheon)
+                {
+                    if (d.Shrine != null) sites.Add(d.Shrine);
+                }
 
-        protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup, List<Rite> rites = null,
+                return sites;
+            }
+        }
+
+        protected void Initialize(Divinity mainGod, 
+            Dictionary<TraitObject, bool> traits, 
+            FaithGroup faithGroup,
+            List<Doctrine> doctrines,
+            List<Rite> rites = null,
             FeastType feastType = FeastType.None)
         {
             this.mainGod = mainGod;
@@ -46,7 +67,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             rites ??= new List<Rite>();
 
             this.rites = rites;
-            FeastType = FeastType;
+            Doctrines = doctrines;
+            FeastType = feastType;
         }
 
         public FaithStance GetStance(Faith otherFaith)
@@ -64,6 +86,16 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             if (stances.ContainsKey(otherFaith))
             {
                 return stances[otherFaith];
+            }
+
+            if (faithGroup == otherFaith.faithGroup)
+            {
+                return FaithStance.Tolerated;
+            }
+
+            if (Doctrines.Contains(DefaultDoctrines.Instance.Tolerant))
+            {
+                return FaithStance.Tolerated;
             }
 
             return FaithStance.Untolerated;
@@ -114,8 +146,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract bool IsHeroNaturalFaith(Hero hero);
         public abstract TextObject GetFaithName();
         public abstract TextObject GetFaithDescription();
-        public abstract Divinity GetMainDivinity();
-        public abstract MBReadOnlyList<Divinity> GetSecondaryDivinities();
+        public Divinity GetMainDivinity() => mainGod;
+        public MBReadOnlyList<Divinity> GetSecondaryDivinities() => new MBReadOnlyList<Divinity>(pantheon);
         public abstract TextObject GetCultsDescription();
         public abstract int GetMaxClergyRank();
         public abstract TextObject GetClergyGreeting(int rank);
@@ -129,10 +161,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract TextObject GetClergyInduction(int rank);
         public abstract TextObject GetClergyInductionLast(int rank);
         public abstract ValueTuple<bool, TextObject> GetInductionAllowed(Hero hero, int rank);
-        public abstract int GetIdealRank(Settlement settlement, bool isCapital);
+        public abstract int GetIdealRank(Settlement settlement);
         public abstract TextObject GetRankTitle(int rank);
         public abstract string GetId();
-
         public abstract TextObject GetBlessingAction();
         public abstract TextObject GetBlessingActionName();
         public abstract TextObject GetBlessingQuestion();
@@ -140,6 +171,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract TextObject GetBlessingQuickInformation();
         public abstract Banner GetBanner();
         public abstract TextObject GetDescriptionHint();
+        public abstract Settlement FaithSeat { get; }
 
         public override bool Equals(object obj)
         {

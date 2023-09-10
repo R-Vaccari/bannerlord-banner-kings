@@ -66,15 +66,15 @@ namespace BannerKings.Managers.Titles.Governments
                 return AseraiElective;
             }
 
-            if (government == DefaultGovernments.Instance.Feudal)
+            if (government.Equals(DefaultGovernments.Instance.Feudal))
             {
                 return FeudalElective;
             }
-            else if (government == DefaultGovernments.Instance.Republic)
+            else if (government.Equals(DefaultGovernments.Instance.Republic))
             {
                 return Republic;
             }
-            else if (government == DefaultGovernments.Instance.Imperial)
+            else if (government.Equals(DefaultGovernments.Instance.Imperial))
             {
                 return Imperial;
             }

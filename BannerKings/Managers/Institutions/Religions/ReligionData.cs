@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.SaveSystem;
@@ -10,8 +11,6 @@ namespace BannerKings.Managers.Institutions.Religions
 {
     public class ReligionData : BannerKingsData
     {
-        [SaveableField(2)] private Clergyman clergyman;
-
         public ReligionData(Religion religion, Settlement settlement)
         {
             Religions = new Dictionary<Religion, float> {{religion, 1f}};
@@ -22,6 +21,16 @@ namespace BannerKings.Managers.Institutions.Religions
         public Dictionary<Religion, float> Religions { get; private set; }
 
         [field: SaveableField(1)] public Settlement Settlement { get; }
+
+        public float GetReligionPercentage(Religion target)
+        {
+            if (Religions.ContainsKey(target))
+            {
+                return Religions[target];
+            }
+
+            return 0f;
+        }
 
         public Religion GetRandomReligion()
         {
@@ -79,19 +88,6 @@ namespace BannerKings.Managers.Institutions.Religions
             }
         }
 
-        public Clergyman Clergyman
-        {
-            get
-            {
-                if (clergyman == null && DominantReligion != null)
-                {
-                    clergyman = DominantReligion.GenerateClergyman(Settlement);
-                }
-
-                return clergyman;
-            }
-        }
-
         public ExplainedNumber Tension => BannerKingsConfig.Instance.ReligionModel.CalculateTensionTarget(this);
 
         private void BalanceReligions(Religion dominant)
@@ -112,7 +108,9 @@ namespace BannerKings.Managers.Institutions.Religions
 
             foreach (var pair in weightDictionary)
             {
-                Religions[pair.Key] = pair.Value / totalWeight;
+                float targetProportion = pair.Value / totalWeight;
+                float diff = targetProportion - Religions[pair.Key];
+                Religions[pair.Key] += diff * 0.01f;
             }
         }
 
@@ -138,9 +136,17 @@ namespace BannerKings.Managers.Institutions.Religions
                 BalanceReligions(dominant);
             }
 
-            if (clergyman == null || clergyman.Hero.IsDead)
+            foreach (Religion rel in Religions.Keys)
             {
-                clergyman = dominant.GetClergyman(data.Settlement);
+                if (rel == DominantReligion)
+                {
+                    var clergyman = rel.GetClergyman(data.Settlement);
+                    if (clergyman != null && data.Settlement.Notables.Contains(clergyman.Hero))
+                    {
+                        EnterSettlementAction.ApplyForCharacterOnly(clergyman.Hero, data.Settlement);
+                    }
+                }
+               
             }
         }
 
