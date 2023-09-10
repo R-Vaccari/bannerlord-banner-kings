@@ -150,7 +150,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public Religion GetKingdomStateReligion(Kingdom kingdom)
+        /*public Religion GetKingdomStateReligion(Kingdom kingdom)
         {
             string id = kingdom.StringId;
             if (id == "sturgia")
@@ -179,7 +179,7 @@ namespace BannerKings.Models.BKModels
             }
 
             return DefaultReligions.Instance.All.FirstOrDefault(x => x.Faith.IsCultureNaturalFaith(kingdom.Culture));
-        }
+        }*/
 
         public ExplainedNumber GetConversionLikelihood(Hero converter, Hero converted)
         {
