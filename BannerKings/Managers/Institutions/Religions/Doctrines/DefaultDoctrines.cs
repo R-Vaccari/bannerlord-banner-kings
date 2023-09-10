@@ -20,7 +20,7 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
         public Doctrine Reavers { get; private set; }
         public Doctrine Tolerant { get; private set; }
         public Doctrine Shamanism { get; private set; }
-
+        
         public override IEnumerable<Doctrine> All
         {
             get
@@ -39,6 +39,10 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
                 yield return Reavers;
                 yield return Tolerant;
                 yield return Shamanism;
+                foreach (Doctrine item in ModAdditions)
+                {
+                    yield return item;
+                }
             }
         }
 
