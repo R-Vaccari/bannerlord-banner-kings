@@ -384,10 +384,11 @@ namespace BannerKings.Models.Vanilla
         public List<ValueTuple<PopType, float>> GetMilitaryClasses(Settlement settlement)
         {
             var list = new List<ValueTuple<PopType, float>>(4);
-            float serfFactor = 0.1f;
-            float tenantsFactor = 0.09f;
-            float craftsmenFactor = 0.04f;
-            float nobleFactor = 0.12f;
+            float militarism = GetMilitarism(settlement).ResultNumber;
+            float serfFactor = militarism;
+            float tenantsFactor = militarism * 0.9f;
+            float craftsmenFactor = militarism * 0.4f;
+            float nobleFactor = militarism * 1.2f;
 
             if (settlement.OwnerClan != null)
             {
