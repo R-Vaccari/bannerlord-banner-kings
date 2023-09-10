@@ -7,6 +7,8 @@ using BannerKings.Managers;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Decisions;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
@@ -156,41 +158,64 @@ namespace BannerKings.Behaviours
             BannerKingsConfig.Instance.PolicyManager.InitializeSettlement(settlement);
         }
 
-        private void OnSiegeAftermath(MobileParty attackerParty, Settlement settlement, SiegeAftermathAction.SiegeAftermath aftermathType, Clan previousSettlementOwner, Dictionary<MobileParty, float> partyContributions)
+        private void OnSiegeAftermath(MobileParty attackerParty, Settlement settlement, 
+            SiegeAftermathAction.SiegeAftermath aftermathType, 
+            Clan previousSettlementOwner, 
+            Dictionary<MobileParty, float> partyContributions)
         {
-            if (aftermathType == SiegeAftermathAction.SiegeAftermath.ShowMercy || settlement?.Town == null ||
-                BannerKingsConfig.Instance.PopulationManager == null ||
-                !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            if (settlement?.Town == null ||
+                BannerKingsConfig.Instance.PopulationManager == null)
             {
                 return;
             }
 
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            var shareToKill = aftermathType == SiegeAftermathAction.SiegeAftermath.Pillage ? MBRandom.RandomFloatRanged(0.1f, 0.16f) : MBRandom.RandomFloatRanged(0.16f, 0.24f);
-
-            var killTotal = (int) (data.TotalPop * shareToKill);
-            var lognum = killTotal;
-            var weights = GetDesiredPopTypes(settlement).Select(pair => new ValueTuple<PopType, float>(pair.Key, pair.Value[0])).ToList();
-
-            if (killTotal <= 0)
+            float stabilityLoss = 0f;
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            if (aftermathType == SiegeAftermathAction.SiegeAftermath.ShowMercy)
             {
-                return;
+                stabilityLoss = 0.1f;
+                if (attackerParty.LeaderHero != null)
+                {
+                    Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(attackerParty.LeaderHero);
+
+                    if (settlement.Culture.StringId == BannerKingsConfig.EmpireCulture &&
+                        rel.HasDoctrine(DefaultDoctrines.Instance.RenovatioImperi))
+                    {
+                        stabilityLoss = 0f;
+                    }
+                }
+            }
+            else
+            {
+                float shareToKill = aftermathType == SiegeAftermathAction.SiegeAftermath.Pillage ? 
+                    MBRandom.RandomFloatRanged(0.1f, 0.16f) : 
+                    MBRandom.RandomFloatRanged(0.16f, 0.24f);
+                stabilityLoss = aftermathType == SiegeAftermathAction.SiegeAftermath.Pillage ? 0.25f : 0.45f;
+                int killTotal = (int)(data.TotalPop * shareToKill);
+                var weights = GetDesiredPopTypes(settlement).Select(pair => new ValueTuple<PopType, float>(pair.Key, pair.Value[0])).ToList();
+
+                if (killTotal <= 0)
+                {
+                    return;
+                }
+
+                while (killTotal > 0)
+                {
+                    var random = MBRandom.RandomInt(10, 20);
+                    var target = MBRandom.ChooseWeighted(weights);
+                    var finalNum = MBMath.ClampInt(random, 0, data.GetTypeCount(target));
+                    data.UpdatePopType(target, -finalNum);
+                    killTotal -= finalNum;
+                }
+
+                InformationManager.DisplayMessage(new InformationMessage(
+                    new TextObject("{=ocT5sL1n}{NUMBER} people have been killed in the siege aftermath of {SETTLEMENT}.")
+                        .SetTextVariable("NUMBER", killTotal)
+                        .SetTextVariable("SETTLEMENT", settlement.Name)
+                        .ToString()));
             }
 
-            while (killTotal > 0)
-            {
-                var random = MBRandom.RandomInt(10, 20);
-                var target = MBRandom.ChooseWeighted(weights);
-                var finalNum = MBMath.ClampInt(random, 0, data.GetTypeCount(target));
-                data.UpdatePopType(target, -finalNum);
-                killTotal -= finalNum;
-            }
-
-            InformationManager.DisplayMessage(new InformationMessage(
-                new TextObject("{=ocT5sL1n}{NUMBER} people have been killed in the siege aftermath of {SETTLEMENT}.")
-                    .SetTextVariable("NUMBER", lognum)
-                    .SetTextVariable("SETTLEMENT", settlement.Name)
-                    .ToString()));
+            data.Stability -= stabilityLoss;
         }
 
         private void DailySettlementTick(Settlement settlement)
