@@ -342,13 +342,13 @@ namespace BannerKings.Models.BKModels
                 {
                     if (holySites.Contains(settlement))
                     {
-                        result.Add(-0.05f, new TextObject("{=!}Missing holy site: {FIEF}")
+                        result.Add(-0.05f, new TextObject("{=!}Missing holy site ({FIEF})")
                             .SetTextVariable("FIEF", settlement.Name));
                     }
 
                     if (settlement == religion.Faith.FaithSeat)
                     {
-                        result.Add(-0.15f, new TextObject("{=!}Missing faith seat: {FIEF}")
+                        result.Add(-0.15f, new TextObject("{=!}Missing faith seat ({FIEF})")
                            .SetTextVariable("FIEF", settlement.Name));
                     }
                     continue;
@@ -372,13 +372,13 @@ namespace BannerKings.Models.BKModels
 
                 if (holySites.Contains(settlement))
                 {
-                    result.Add(0.05f, new TextObject("{=!}Holy site: {FIEF}")
+                    result.Add(0.05f, new TextObject("{=!}Holy site ({FIEF})")
                         .SetTextVariable("FIEF", settlement.Name));
                 }
 
                 if (settlement == religion.Faith.FaithSeat)
                 {
-                    result.Add(0.15f, new TextObject("{=!}Faith seat: {FIEF}")
+                    result.Add(0.15f, new TextObject("{=!}Faith seat ({FIEF})")
                        .SetTextVariable("FIEF", settlement.Name));
                 }
             }

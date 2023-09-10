@@ -182,14 +182,14 @@ namespace BannerKings.UI.Religion
 
             if (sites.Count > 0)
             {
-                Aspects.Add(new ReligionElementVM(new TextObject("{=!}Holy Sites"), 
-                    currentReligion.MainCulture.Name,
-                new TextObject("{=!}Holy sites are the fiefs directly connected to the religion's divinities or cults. Holding such sites is important for religious Fervor. In addition, being blessed by a Divinity in its holy site adds double the blessing duration.{newline}{newline}Sites:{newline}{SITES}")
-                .SetTextVariable("SITES", sites.Aggregate("", (current, site) => current + Environment.NewLine + 
-                    new TextObject("{=!}{HOLY_SITE}: {DIVINITY}")
-                    .SetTextVariable("HOLY_SITE", site.Key.Name)
-                    .SetTextVariable("DIVINITY", site.Value.Name)
-                    .ToString()))
+                Aspects.Add(new ReligionElementVM(new TextObject("{=!}Holy Sites"),
+                    new TextObject("{=!}" + sites.Count),
+                    new TextObject("{=!}Holy sites are the fiefs directly connected to the religion's divinities or cults. Holding such sites is important for religious Fervor. In addition, being blessed by a Divinity in its holy site adds double the blessing duration.{newline}{newline}Sites:{SITES}")
+                    .SetTextVariable("SITES", sites.Aggregate("", (current, site) => current + Environment.NewLine + 
+                        new TextObject("{=!}{HOLY_SITE}: {DIVINITY}")
+                        .SetTextVariable("HOLY_SITE", site.Key.Name)
+                        .SetTextVariable("DIVINITY", site.Value.Name)
+                        .ToString()))
                 ));
             }
 
