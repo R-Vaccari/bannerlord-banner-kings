@@ -385,7 +385,7 @@ namespace BannerKings.Behaviours
 
         private void TickFaithXp(Hero hero)
         {
-            float piety = BannerKingsConfig.Instance.PietyModel.CalculateEffect(hero).ResultNumber;
+            float piety = BannerKingsConfig.Instance.ReligionModel.CalculatePietyChange(hero).ResultNumber;
             if (piety > 0f)
             {
                 hero.AddSkillXp(BKSkills.Instance.Theology, MathF.Clamp(piety / 2f, 1f, 10f));
@@ -412,7 +412,7 @@ namespace BannerKings.Behaviours
             {
                 foreach (var hero in ReligionsManager.GetFaithfulHeroes(religion))
                 {
-                    ReligionsManager.AddPiety(religion, hero, BannerKingsConfig.Instance.PietyModel.CalculateEffect(hero).ResultNumber);
+                    ReligionsManager.AddPiety(religion, hero, BannerKingsConfig.Instance.ReligionModel.CalculatePietyChange(hero).ResultNumber);
                 }
             }
         }
