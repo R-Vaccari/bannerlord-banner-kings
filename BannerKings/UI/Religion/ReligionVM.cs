@@ -3,7 +3,9 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Populations;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -181,7 +183,13 @@ namespace BannerKings.UI.Religion
             {
                 Aspects.Add(new ReligionElementVM(new TextObject("{=!}Holy Sites"), 
                     currentReligion.MainCulture.Name,
-                new TextObject("{=6NYxLhjH}The main culture associated with this faith.")));
+                new TextObject("{=!}Holy sites are the fiefs directly connected to the religion's divinities or cults. Holding such sites is important for religious Fervor. In addition, being blessed by a Divinity in its holy site adds double the blessing duration.{newline}{newline}Sites:{newline}{SITES}")
+                .SetTextVariable("SITES", sites.Aggregate("", (current, site) => current + Environment.NewLine + 
+                    new TextObject("{=!}{HOLY_SITE}: {DIVINITY}")
+                    .SetTextVariable("HOLY_SITE", site.Key.Name)
+                    .SetTextVariable("DIVINITY", site.Value.Name)
+                    .ToString()))
+                ));
             }
         }
 
