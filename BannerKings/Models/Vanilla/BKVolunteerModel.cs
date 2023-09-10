@@ -351,12 +351,7 @@ namespace BannerKings.Models.Vanilla
 
         public ExplainedNumber GetMilitarism(Settlement settlement)
         {
-            var explainedNumber = new ExplainedNumber(0f, true);
-            var classes = GetMilitaryClasses(settlement);
-            foreach (var tuple in classes)
-            {
-                explainedNumber.Add(tuple.Item2 / classes.Count, Utils.Helpers.GetClassName(tuple.Item1, settlement.Culture));
-            }
+            var explainedNumber = new ExplainedNumber(0.1f, true);
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader,
                 DefaultCouncilPositions.Instance.Marshal,

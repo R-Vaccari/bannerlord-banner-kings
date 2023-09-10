@@ -36,7 +36,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
                 hero.MapFaction.StringId == "empire_s")
             {
                 if (hero.IsLord) return true;
-                else if (MBRandom.RandomFloat < 0.3f) return true;
+                else if (MBRandom.RandomFloat < 0.9f) return true;
             }
 
             return false;

@@ -85,8 +85,10 @@ namespace BannerKings.UI.Management
 
                 var factor = BannerKingsConfig.Instance.ReligionModel.GetNotableFactor(notable, settlement);
                 var result = FormatValue(factor / totalFaithsWeight);
-                NotablesList.Add(new InformationElement(
-                    notable.Name.ToString(),
+                NotablesList.Add(new InformationElement(new TextObject("{=!}{HERO} ({FAITH})")
+                    .SetTextVariable("HERO", notable.Name)
+                    .SetTextVariable("FAITH", rel.Faith.GetFaithName())
+                    .ToString(),
                     result,
                     new TextObject("{=GxcNDrXt}{HERO} holds sway over {PERCENTAGE} of the population. Changing their faith would strengthen the new faith's grip in the settlement.")
                     .SetTextVariable("HERO", notable.Name)
