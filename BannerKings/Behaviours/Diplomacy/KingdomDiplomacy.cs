@@ -213,7 +213,8 @@ namespace BannerKings.Behaviours.Diplomacy
 
             if (Religion == null)
             {
-                Religion = BannerKingsConfig.Instance.ReligionModel.GetKingdomStateReligion(Kingdom);
+                Religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Kingdom.RulingClan.Leader);
+                //Religion = BannerKingsConfig.Instance.ReligionModel.GetKingdomStateReligion(Kingdom);
             }
 
             foreach (var group in Groups)

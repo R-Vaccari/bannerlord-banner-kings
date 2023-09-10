@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -119,8 +120,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
         public override int GetMaxClergyRank() => 1;
 
         public override TextObject GetRankTitle(int rank) => new TextObject("{=!}Hestawick");
-
-        public override MBReadOnlyList<Divinity> GetSecondaryDivinities() => new MBReadOnlyList<Divinity>(pantheon);
 
         public override TextObject GetZealotsGroupName() => new TextObject("{=!}Osric's Companions");
 
