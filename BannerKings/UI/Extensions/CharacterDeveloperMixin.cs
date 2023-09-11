@@ -1,4 +1,5 @@
 using BannerKings.Managers.Goals;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.UI.Education;
 using BannerKings.UI.Religion;
 using Bannerlord.UIExtenderEx.Attributes;
@@ -114,8 +115,12 @@ namespace BannerKings.UI.Extensions
         [DataSourceMethod]
         public void OpenFaith()
         {
-            ReligionVisible = true;
-            EducationVisible = false;
+            if (DefaultReligions.Instance.All.Count() > 0)
+            {
+                ReligionVisible = true;
+                EducationVisible = false;
+            }
+         
             OnRefresh();
         }
 

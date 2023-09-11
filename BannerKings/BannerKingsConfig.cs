@@ -159,12 +159,12 @@ namespace BannerKings
         {
             Initialize();
 
+            ReligionsManager = new ReligionsManager();
             PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
             PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>());
             TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Kingdom, FeudalTitle>());
             TitleGenerator.InitializeTitles();
-            CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
-            ReligionsManager = new ReligionsManager();
+            CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());          
             EducationManager = new EducationManager();
             InnovationsManager = new InnovationsManager();
             GoalManager = new GoalManager();
@@ -174,11 +174,11 @@ namespace BannerKings
         {
             Initialize();
 
+            ReligionsManager = religions ?? new ReligionsManager();
             PopulationManager = populationManager;
             PolicyManager = policyManager;
             TitleManager = titleManager;
-            CourtManager = court;
-            ReligionsManager = religions ?? new ReligionsManager();
+            CourtManager = court;     
             EducationManager = educations ?? new EducationManager();
             InnovationsManager = innovations ?? new InnovationsManager();
             GoalManager = goals ?? new GoalManager();
