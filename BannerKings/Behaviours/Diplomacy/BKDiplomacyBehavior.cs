@@ -378,10 +378,10 @@ namespace BannerKings.Behaviours.Diplomacy
                 Kingdom attacker = faction1 as Kingdom;
                 Kingdom defender = faction2 as Kingdom;
                 KingdomDiplomacy attackerD = GetKingdomDiplomacy(attacker);
-                attackerD.OnWar(defender);
+                if (attackerD != null) attackerD.OnWar(defender);
 
                 KingdomDiplomacy defenderD = GetKingdomDiplomacy(defender);
-                defenderD.OnWar(attacker);
+                if (defenderD != null) defenderD.OnWar(attacker);
             }
         }
     }
