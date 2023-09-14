@@ -70,7 +70,7 @@ namespace BannerKings.Models.Vanilla
             result.Add(0.25f * mercantilism, new TextObject("Mercantilism"));
 
             var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
-            if (government == DefaultGovernments.Instance.Feudal)
+            if (government.Equals(DefaultGovernments.Instance.Feudal))
             {
                 result.AddFactor(0.15f, new TextObject("{=PSrEtF5L}Government"));
             }
@@ -163,6 +163,12 @@ namespace BannerKings.Models.Vanilla
             if (education.Perks.Contains(BKPerks.Instance.CivilManufacturer))
             {
                 result.Add(0.1f, BKPerks.Instance.CivilManufacturer.Name);
+            }
+
+            var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
+            if (government.Equals(DefaultGovernments.Instance.Republic))
+            {
+                result.AddFactor(0.1f, new TextObject("{=PSrEtF5L}Government"));
             }
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
