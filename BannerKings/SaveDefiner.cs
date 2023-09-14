@@ -187,6 +187,7 @@ namespace BannerKings
             AddClassDefinition(typeof(Succession), 148);
             AddClassDefinition(typeof(Inheritance), 149);
             AddClassDefinition(typeof(GenderLaw), 150);
+            AddClassDefinition(typeof(ContractAspect), 151);
         }
 
         protected override void DefineContainerDefinitions()
