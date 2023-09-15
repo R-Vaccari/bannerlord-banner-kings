@@ -351,14 +351,14 @@ namespace BannerKings.Models.BKModels
             {
                 revokeAction.Possible = false;
                 revokeAction.Reason = new TextObject("{=!}Tribal government does not allow revoking.")
-                    .SetTextVariable("ASPECT", DefaultContractAspects.Instance.RevocationProtected.Name);
+                    .SetTextVariable("ASPECT", DefaultGovernments.Instance.Tribal.Name);
                 return revokeAction;
             }
             else if (title.Contract.Government == DefaultGovernments.Instance.Republic && title.TitleType != TitleType.Dukedom)
             {
                 revokeAction.Possible = false;
                 revokeAction.Reason = new TextObject("{=!}Republican government only allows revoking of dukes.")
-                    .SetTextVariable("ASPECT", DefaultContractAspects.Instance.RevocationRepublic.Name);
+                    .SetTextVariable("ASPECT", DefaultGovernments.Instance.Republic.Name);
                 return revokeAction;
             }
             else if (title.Contract.Government == DefaultGovernments.Instance.Imperial)
@@ -368,7 +368,7 @@ namespace BannerKings.Models.BKModels
                 {
                     revokeAction.Possible = false;
                     revokeAction.Reason = new TextObject("{=!}Imperial government requires being de Jure faction leader.")
-                        .SetTextVariable("ASPECT", DefaultContractAspects.Instance.RevocationImperial.Name);
+                        .SetTextVariable("ASPECT", DefaultGovernments.Instance.Imperial.Name);
                     return revokeAction;
                 }
             }
