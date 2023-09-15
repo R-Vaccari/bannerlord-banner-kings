@@ -467,16 +467,29 @@ namespace BannerKings.Behaviours.Marriage
                        {
                            Utils.Helpers.SetAlliance(Clan.PlayerClan, Hero.OneToOneConversationHero.Clan);
                        }
-                       
-                       ApplyMarriageContract();
+      
                        if (proposedMarriage.Feast && proposedMarriage.FinalClan.Kingdom != null)
                        {
+                           Clan clan = proposedMarriage.FinalClan;
                            var town = proposedMarriage.FinalClan.Fiefs.GetRandomElement();
-                           var clanCount = MathF.Min(proposedMarriage.FinalClan.Kingdom.Clans.Count, MBRandom.RandomInt(3, 8));
+                           int clanCount = MathF.Min(proposedMarriage.FinalClan.Kingdom.Clans.Count, MBRandom.RandomInt(3, 8));
+                           var guests = proposedMarriage.FinalClan.Kingdom.Clans.Take(clanCount).ToList();
+                           if (proposedMarriage.Proposer.Clan != clan && !guests.Contains(proposedMarriage.Proposer.Clan))
+                           {
+                               guests.Add(proposedMarriage.Proposer.Clan);
+                           }
+
+                           if (proposedMarriage.Proposed.Clan != clan && !guests.Contains(proposedMarriage.Proposed.Clan))
+                           {
+                               guests.Add(proposedMarriage.Proposed.Clan);
+                           }
+
                            Campaign.Current.GetCampaignBehavior<BKFeastBehavior>().LaunchFeast(town,
-                               proposedMarriage.FinalClan.Kingdom.Clans.Take(clanCount).ToList(),
+                               guests,
                                proposedMarriage);
                        }
+
+                       ApplyMarriageContract();
                    }
 
                    if (PlayerEncounter.Current != null)
