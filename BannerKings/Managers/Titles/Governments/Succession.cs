@@ -5,7 +5,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Titles.Governments
 {
-    public class Succession : BannerKingsObject
+    public class Succession : ContractAspect
     {
         private Func<Hero, FeudalTitle, HashSet<Hero>> getSuccessionCandidates;
         private Func<Hero, Hero, FeudalTitle, bool, ExplainedNumber> calculateHeirScore;
@@ -33,7 +33,7 @@ namespace BannerKings.Managers.Titles.Governments
             this.isAdequate = isAdequate;
         }
 
-        public void PostInitialize()
+        public override void PostInitialize()
         {
             Succession s = DefaultSuccessions.Instance.GetById(this);
             Initialize(s.name, s.description, s.ElectedSuccession, s.Authoritarian, s.Oligarchic,
@@ -47,9 +47,6 @@ namespace BannerKings.Managers.Titles.Governments
             return true;
         }
 
-        public float Authoritarian { get; private set; }
-        public float Oligarchic { get; private set; }
-        public float Egalitarian { get; private set; }
 
         public TextObject CandidatesText { get; private set; }
         public TextObject ScoreText { get; private set; }

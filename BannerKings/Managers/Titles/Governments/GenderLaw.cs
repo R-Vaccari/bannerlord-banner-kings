@@ -2,7 +2,7 @@
 
 namespace BannerKings.Managers.Titles.Governments
 {
-    public class GenderLaw : BannerKingsObject
+    public class GenderLaw : ContractAspect
     {
         public GenderLaw(string stringId) : base(stringId)
         {
@@ -22,16 +22,13 @@ namespace BannerKings.Managers.Titles.Governments
             FemaleSupressed = femaleSupressed;
         }
 
-        public void PostInitialize()
+        public override void PostInitialize()
         {
             GenderLaw i = DefaultGenderLaws.Instance.GetById(this);
             Initialize(i.name, i.description, i.Authoritarian, i.Oligarchic, i.Egalitarian, i.MalePreference,
                 i.FemalePreference, i.MaleSupressed, i.FemaleSupressed);
         }
 
-        public float Authoritarian { get; private set; }
-        public float Oligarchic { get; private set; }
-        public float Egalitarian { get; private set; }
         public float MalePreference { get; private set; }
         public float FemalePreference { get; private set; }
         public bool MaleSupressed { get; private set; }

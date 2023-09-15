@@ -5,7 +5,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Titles.Governments
 {
-    public class Government : BannerKingsObject
+    public class Government : ContractAspect
     {
         private Func<Kingdom, ValueTuple<bool, TextObject>> isAdequate;
 
@@ -14,11 +14,15 @@ namespace BannerKings.Managers.Titles.Governments
         }
 
         public void Initialize(TextObject name, TextObject description, TextObject effects, float mercantilism,
-        List<PolicyObject> prohibitedPolicies,
-        List<Succession> successions,
-        Func<Kingdom, ValueTuple<bool, TextObject>> isAdequate = null)
+            float authoritarian, float oligarchic, float egalitarian,
+            List<PolicyObject> prohibitedPolicies,
+            List<Succession> successions,
+            Func<Kingdom, ValueTuple<bool, TextObject>> isAdequate = null)
         {
             Initialize(name, description);
+            Authoritarian = authoritarian;
+            Oligarchic = oligarchic;
+            Egalitarian = egalitarian;
             Effects = effects;
             Mercantilism = mercantilism;
             ProhibitedPolicies = prohibitedPolicies;
@@ -26,10 +30,13 @@ namespace BannerKings.Managers.Titles.Governments
             this.isAdequate = isAdequate;
         }
 
-        public void PostInitialize()
+        public override void PostInitialize()
         {
             Government g = DefaultGovernments.Instance.GetById(this);
-            Initialize(g.name, g.description, g.Effects, g.Mercantilism, g.ProhibitedPolicies, g.Successions,
+            Initialize(g.name, g.description, g.Effects, g.Mercantilism,
+                g.Authoritarian, g.Oligarchic, g.Egalitarian,
+                g.ProhibitedPolicies, 
+                g.Successions,
                 g.isAdequate);
         }
 

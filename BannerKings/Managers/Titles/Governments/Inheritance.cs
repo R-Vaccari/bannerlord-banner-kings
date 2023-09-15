@@ -2,26 +2,30 @@
 
 namespace BannerKings.Managers.Titles.Governments
 {
-    public class Inheritance : BannerKingsObject
+    public class Inheritance : ContractAspect
     {
         public Inheritance(string stringId) : base(stringId)
         {
         }
 
         public void Initialize(TextObject name, TextObject description, float childrenScore, float sibingScore, float spouseScore,
-            float relativeScore)
+            float relativeScore, float authoritarian, float oligarchic, float egalitarian)
         {
             Initialize(name, description);
             ChildrenScore = childrenScore;
             SiblingScore = sibingScore;
             SpouseScore = spouseScore;
             RelativeScore = relativeScore;
+            Authoritarian = authoritarian;
+            Oligarchic = oligarchic;
+            Egalitarian = egalitarian;
         }
 
-        public void PostInitialize()
+        public override void PostInitialize()
         {
             Inheritance i = DefaultInheritances.Instance.GetById(this);
-            Initialize(i.name, i.description, i.ChildrenScore, i.SiblingScore, i.SpouseScore, i.RelativeScore);
+            Initialize(i.name, i.description, i.ChildrenScore, i.SiblingScore, i.SpouseScore, i.RelativeScore,
+                i.Authoritarian,  i.Oligarchic,  i.Egalitarian);
         }
 
         public float ChildrenScore { get; private set; }
