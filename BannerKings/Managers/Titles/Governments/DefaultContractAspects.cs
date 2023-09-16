@@ -1,68 +1,71 @@
-﻿using System;
+﻿using BannerKings.Extensions;
+using BannerKings.Managers.Populations;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Titles.Governments
 {
     public class DefaultContractAspects : DefaultTypeInitializer<DefaultContractAspects, ContractAspect>
     {
-        public ContractAspect ConquestMight { get; } = new ContractRight("");
-        public ContractAspect ConquestClaim { get; } = new ContractRight("");
-        public ContractAspect ConquestDistributed { get; } = new ContractRight("");
+        public ContractAspect ConquestMight { get; } = new ContractRight("ConquestMight");
+        public ContractAspect ConquestClaim { get; } = new ContractRight("ConquestClaim");
+        public ContractAspect ConquestDistributed { get; } = new ContractRight("ConquestDistributed");
 
-        public ContractAspect RevocationProtected { get; } = new ContractRight("RevocationProtected");
-        public ContractAspect RevocationVassalage { get; } = new ContractRight("RevocationVassalage");
-        public ContractAspect RevocationImperial { get; } = new ContractRight("RevocationImperial");
-        public ContractAspect RevocationRepublic { get; } = new ContractRight("RevocationRepublic");
+        public ContractAspect Enfoeffment { get; } = new ContractRight("Enfoeffment");
+
+
+        public ContractDuty Geld { get; } = new ContractDuty("Geld");
 
         public override IEnumerable<ContractAspect> All
         {
             get
             {
-                yield return RevocationRepublic;
-                yield return RevocationVassalage;
-                yield return RevocationProtected;
-                yield return RevocationImperial;
+                yield return Geld;
             }
         }
 
         public List<ContractAspect> GetIdealKingdomAspects(Kingdom kingdom, Government government)
         {
             List<ContractAspect> result = new List<ContractAspect>(4);
-            if (government == DefaultGovernments.Instance.Republic)
-            {
-                result.Add(RevocationRepublic);
-            }
-            else if (government == DefaultGovernments.Instance.Imperial)
-            {
-                result.Add(RevocationImperial);
-            }
-            else if (government == DefaultGovernments.Instance.Tribal)
-            {
-                result.Add(RevocationProtected);
-            }
-            else
-            {
-                result.Add(RevocationVassalage);
-            }
+            result.Add(Geld);
 
             return result;
         }
 
         public override void Initialize()
         {
-            RevocationProtected.Initialize(new TextObject("{=!}Revoking Protection"),
-                new TextObject("{=!}Revoking Protection guarantees that all vassals of the realm have their titles secured from revoking."));
+            Geld.Initialize(new TextObject("{=!}Geld"),
+                new TextObject("{=!}The Geld is the traditional taxation form of the Wilunding. It is calculated on the assessment of productive land, which they divide in the so called Hides, and each of these hides is taxed a given amount of gold. While relatively simple to be calculated, the Geld completely ignores the productive value of the land, and thus can be unfairly assessed on a fief of particularly unproductive acreage or lacking in farmlands, inherently most productive acreage type. The geld may be levied up to 2 times a year, but it is not popular - each levy induces a diplomatic penalty."),
+                new TextObject("{=!}Your suzerain, {SUZERAIN}, calls upon you to provide them the Geld."),
+                2,
+                25,
+                ContractAspect.AspectTypes.Taxes,
+                (ContractDuty duty, Hero suzerain, Hero vassal) =>
+                {
+                    GiveGoldAction.ApplyBetweenCharacters(vassal,
+                        suzerain,
+                        duty.CalculateDuty(suzerain, vassal));
+                },
+                (ContractDuty duty, Hero suzerain, Hero vassal) =>
+                {
+                    return vassal.Gold >= duty.CalculateDuty(suzerain, vassal);
+                },
+                (Hero suzerain, Hero vassal) =>
+                {
+                    float acres = 0f;
+                    foreach (var fief in vassal.Clan.Settlements)
+                    {
+                        PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(fief);
+                        if (fief.IsVillage && fief.Village.GetActualOwner() != vassal) continue;
 
-            RevocationImperial.Initialize(new TextObject("{=!}Imperial Revoking"),
-                new TextObject("{=!}Imperial Revoking concentrates all the revoking power on the ruler, who is said to be the true owner of all land."));
+                        acres += data.LandData.Acreage;
+                    }
 
-            RevocationRepublic.Initialize(new TextObject("{=!}Republican Revoking"),
-                new TextObject("{=!}Republican revoking protects most tites except those of Duke levels, who are often the main contests of elections. Its purpose in theory is to stop lords from accumulating too much power, but many a time has been used to destroy political rivals."));
-
-            RevocationVassalage.Initialize(new TextObject("{=!}Vassalage Revoking"),
-                new TextObject("{=!}Vassalage Revoking is the feudal form of revoking. Relying on a strict hierarchy of suzerain and vassal relationships, Vassalage distributes the power of revoking to this hierarchy chain, such that not too much power is concentrated either with the ruler or specific lords."));
+                    return MBRandom.RoundRandomized(acres / 10f);
+                });
         }
     }
 }

@@ -2,7 +2,6 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
@@ -17,13 +16,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
 
         public override TextObject GetDescriptionHint()
         {
-            return new TextObject("{=sCvx3s88}Pérkenweyd is a native faith of the Calradian continent, stretching from the Kachyar peninsula to the Chertyg mountains. Thus, it is the natural faith of the Vakken and Sturgian peoples. Though the Sturgians have been in contact with different cultures and faiths, the Sturgian populace remains true to their ancestry.");
+            return new TextObject("{=!}Pérkkenukos is a native faith of the Calradian continent, natural to the Vakken peoples, who stretch from the Kachyar peninsula to the Chertyg mountains. Once, they say, there was naught but the sea and sky. High above reigned Pérkken, god of sky and thunder, and deep below, Tursas, king of seas.{newline}Pérkkenukos, the faith in Pérkken, represents such oral Vakken traditions, passed on through tribes and generations, often with nuances of local folklore and beliefs, but ultimately united by a common cultural tradition.");
         }
         public override Banner GetBanner() => new Banner("1.22.22.1836.1836.764.764.1.0.0.203.2.116.427.427.764.638.0.0.0.405.142.116.209.209.764.914.0.0.30.405.116.116.209.209.764.914.0.0.0");
 
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {
-            if (culture.StringId == "sturgia" || culture.StringId == "vakken")
+            if (culture.StringId == "vakken")
             {
                 return true;
             }
@@ -49,7 +48,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
 
         public override TextObject GetBlessingQuestion()
         {
-            return new TextObject("{=u8UXkpef}To whom would you pledge? The Thunder-Wielder Pérkos, or the godess Méhns?");
+            return new TextObject("{=!}To whom would you pledge? The Thunder-Wielder Pérkken, or?");
         }
 
         public override TextObject GetBlessingQuickInformation()
@@ -79,7 +78,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
                 return new TextObject("{=e4mTQb3c}Alas, one born outside the embrace of the gods, can not choose to be embraced. Though one can be respected for their boldness, only a child of the forest can follow the path of the true gods - it is written in our ancestry. Such is the tale written in the oak grain.[if:convo_bored]");
             }
 
-            return new TextObject("{=9ZxHecHk}I ask of you only this - why have you not come before? My brethren of the woods, you have come to your home. The way of Pérkos, Méhns and all the gods of the heavenly canopy, that is your true nature. Your blood and bone.");
+            return new TextObject("{=!}I ask of you only this - why have you not come before? My brethren of the woods, you have come to your home. The way of Pérkken, that is your true nature. Your blood and bone.");
         }
 
         public override TextObject GetClergyInductionLast(int rank)
@@ -99,7 +98,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
 
         public override TextObject GetClergyProveFaith(int rank)
         {
-            return new TextObject("{=7abfdtqE}Naturally, to follow the way of Pérkos is to be a true faithful. Uphold honor, honesty and righteousness. Defend your brethren with valor, as the gods that perch upon the Great Oak do over men. Those you take into your hearth as guests - treat them as your own blood, as much as good sense allows.");
+            return new TextObject("{=!}Naturally, to follow the way of Pérkken is to be a true faithful. Uphold honor, honesty and righteousness. Defend your brethren and the forest, our home, with valor. Those you take into your hearth as guests - treat them as your own blood, as much as good sense allows.");
         }
 
         public override TextObject GetClergyProveFaithLast(int rank)
@@ -107,9 +106,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
             return new TextObject("{=m5Zva8LP}Most importantly, uphold tradition and ancestry as a child of the forest, remain true to your family and multiply, lest the Great Oak is unrooted by darkness.");
         }
 
-        public override TextObject GetFaithDescription() => new TextObject("{=4tqa5pOC}Pérkenweyd is a native faith of the Calradian continent, stretching from the Kachyar peninsula to the Chertyg mountains. Thus, it is the natural faith of the Vakken and Sturgian peoples. Though the Sturgians have been in contact with different cultures and faiths, the Sturgian populace remains true to their ancestry. Pérkenweyd, or 'tree lore', understands that the Great Oak is the source of life and root for the world of mankind. Besides the physical world, a dualistic view of Underworld and the Sacred Canopy separates what is good and bad, righteous and malicious. The Gods perch on the Sacred Canopy, atop the Great Oak, from where they defend and guide the children of the forest, that is, those that adhere to the faith. The children believe that spirits roam this world, and in the grains of oaks they chronicle all that which they witness. Experienced elders claim, however, that also the future may be known through the spirits, and as such are known to delve into divination practices. Moreover, believers argue that being a child of the forest is not a decision one takes, but is, instead, their ancestry. As such, a child of the forest must uphold the Gods, family and ancestry above all else.");
+        public override TextObject GetFaithDescription() => new TextObject("{=!}Pérkkenukos is a native faith of the Calradian continent, natural to the Vakken peoples, who stretch from the Kachyar peninsula to the Chertyg mountains. Once, they say, there was naught but the sea and sky. High above reigned Pérkken, god of sky and thunder, and deep below, Tursas, king of seas. A Great Oak once sprang, blocking all sun and moon light from land and sea. Tursas, envious of the oak's heights, set it ablaze. From its ashes, the forests grew, which the Vakken now protect.{newline}Pérkkenukos, the faith in Pérkken, represents such oral Vakken traditions, passed on through tribes and generations, often with nuances of local folklore and beliefs, but ultimately united by a common cultural tradition. As the Vakken are often isolationists, living deep in the woods, their faith is also descentralized and not represented by an organized clergy. However, they all agree on the hallowed status of the region of Omor, a traditional forest-shrine.");
 
-        public override TextObject GetFaithName() => new TextObject("{=ro2nheLf}Pérkenweyd");
+        public override TextObject GetFaithName() => new TextObject("{=!}Pérkkenukos");
         public override string GetId() => "treelore";
 
         public override int GetIdealRank(Settlement settlement)

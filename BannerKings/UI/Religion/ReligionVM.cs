@@ -84,6 +84,8 @@ namespace BannerKings.UI.Religion
             Rites.Clear();
             SecondaryDivinities.Clear();
 
+            if (currentReligion == null) return;
+
             Name = currentReligion.Faith.GetFaithName().ToString();
             Description = currentReligion.Faith.GetFaithDescription().ToString();
             GroupName = currentReligion.Faith.FaithGroup.Name.ToString();

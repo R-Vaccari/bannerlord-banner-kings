@@ -220,7 +220,7 @@ namespace BannerKings.Models.BKModels
                 };
 
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
-                if (government == DefaultGovernments.Instance.Feudal)
+                if (government.Equals(DefaultGovernments.Instance.Imperial))
                 {
                     result.Add(0.05f, new TextObject("{=PSrEtF5L}Government"));
                 }

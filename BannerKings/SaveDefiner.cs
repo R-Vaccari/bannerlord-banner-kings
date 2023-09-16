@@ -63,6 +63,7 @@ using static BannerKings.Managers.Populations.Estates.Estate;
 using CasusBelli = BannerKings.Behaviours.Diplomacy.Wars.CasusBelli;
 using BannerKings.Managers.Institutions.Religions.Faiths.Eastern;
 using BannerKings.Managers.Titles.Governments;
+using BannerKings.Managers.Goals;
 
 namespace BannerKings
 {
@@ -207,6 +208,7 @@ namespace BannerKings
             AddClassDefinition(typeof(Succession), 148);
             AddClassDefinition(typeof(Inheritance), 149);
             AddClassDefinition(typeof(GenderLaw), 150);
+            AddClassDefinition(typeof(ContractAspect), 151);
         }
 
         protected override void DefineContainerDefinitions()
@@ -271,6 +273,8 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, float>));
             ConstructContainerDefinition(typeof(Dictionary<CultureObject, CustomTroop>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, CampaignTime>));
+            ConstructContainerDefinition(typeof(Dictionary<Goal, CampaignTime>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, Dictionary<Goal, CampaignTime>>)); 
         }
     }
 }

@@ -47,6 +47,13 @@ namespace BannerKings.Managers.Titles
                     type.EgalitarianWeight, type.OligarchicWeight, type.InfluenceCost, type.Culture, type.IsAdequateForKingdom);
             }
 
+            if (ContractAspects == null) ContractAspects = new List<ContractAspect>();
+            foreach (var aspect in DefaultContractAspects.Instance.GetIdealKingdomAspects(kingdom, Government))
+            {
+                if (!ContractAspects.Any(x => x.StringId == aspect.StringId))
+                    ContractAspects.Add(aspect);
+            }
+
             //ContractAspects ??= DefaultContractAspects.Instance.GetIdealKingdomAspects(kingdom, Government);
         }
 

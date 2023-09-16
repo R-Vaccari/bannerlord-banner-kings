@@ -16,6 +16,8 @@ namespace BannerKings.Managers.Titles
 {
     public class FeudalTitle
     {
+        private FeudalTitle suzerainCache;
+
         public FeudalTitle(TitleType type, Settlement fief, List<FeudalTitle> vassals, Hero deJure, Hero deFacto, 
             TextObject name, FeudalContract contract, string stringId = null, TextObject fullName = null)
         {
@@ -59,6 +61,19 @@ namespace BannerKings.Managers.Titles
         [SaveableProperty(13)] private Dictionary<FeudalTitle, float> deJureDrift { get; set; }
         [SaveableProperty(14)] public string StringId { get; private set; }
         [SaveableProperty(15)] public bool CustomName { get; private set; }
+
+        public FeudalTitle Suzerain
+        {
+            get
+            {
+                if (suzerainCache == null)
+                {
+                    suzerainCache = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(this);
+                }
+
+                return suzerainCache;
+            }
+        }
 
         public Dictionary<FeudalTitle, float> DeJureDrifts
         {
@@ -155,11 +170,6 @@ namespace BannerKings.Managers.Titles
             }
 
             return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
         }
 
         public void SetName(TextObject shortName)
@@ -356,8 +366,8 @@ namespace BannerKings.Managers.Titles
             SetSovereign(newSovereign);
             newSovereign.Vassals.Add(this);
 
-            //ChangeContract(newSovereign.Contract.Government);
-           // ChangeContract(newSovereign.Contract.Succession);
+            ChangeContract(newSovereign.Contract.Government);
+            ChangeContract(newSovereign.Contract.Succession);
             ChangeContract(newSovereign.Contract.Inheritance);
             ChangeContract(newSovereign.Contract.GenderLaw);
 
@@ -373,7 +383,7 @@ namespace BannerKings.Managers.Titles
 
         public void SetSovereign(FeudalTitle sovereign)
         {
-            this.Sovereign = sovereign;
+            Sovereign = sovereign;
             if (Vassals is {Count: > 0})
             {
                 foreach (var vassal in Vassals)

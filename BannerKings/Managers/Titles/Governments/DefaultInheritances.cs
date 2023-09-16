@@ -37,21 +37,30 @@ namespace BannerKings.Managers.Titles.Governments
                 300f,
                 150f,
                 100f,
-                30f);
+                30f,
+                1f,
+                -0.2f,
+                -0.8f);
 
             Ultimogeniture.Initialize(new TextObject("{=!}Ultimogeniture"),
                 new TextObject("{=!}Ultimogeniture inheritance gives precedence to the children of the deceased, from youngest to eldest. Whether the youngest son or daughter will be chosen depends on the Gender Law in place."),
                 300f,
                 150f,
                 100f,
-                30f);
+                30f,
+                0.5f,
+                0.2f,
+                -0.5f);
 
             Seniority.Initialize(new TextObject("{=!}Seniority"),
                 new TextObject("{=!}Seniority inheritance gives no precedence to any particular member of a household. The main criteria is their age, meaning that household members without blood ties may take precedence over children or close relatives. Whether the eldest man or woman will be chosen depends on the Gender Law in place."),
                 0f,
                 0f,
                 0f,
-                0f);
+                0f,
+                -0.4f,
+                0.4f,
+                1f);
         }
     }
 }

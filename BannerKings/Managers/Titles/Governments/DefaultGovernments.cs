@@ -47,9 +47,12 @@ namespace BannerKings.Managers.Titles.Governments
         public override void Initialize()
         {
             Republic.Initialize(new TextObject("{=!}Republic"),
-                new TextObject(),
-                new TextObject(),
+                new TextObject("{=!}Republics are a Calradoi government with the purpose of preventing authoritarian regimes of power. Before the Calradoi organized themselves into the empire, they were a republic, government by a body of peers called the Senate. They were traditionally quite resistant to any attempts of power concentration at the hands of one or another senator, lest they turn into a monarchical regime... Yet, at times of war, strong, unquestioned leadership was needed, wich could be granted to a temporary senator holding all the power - the Diktator. History teaches that one Diktator too influential is all it takes to topple a republic."),
+                new TextObject("{=!}- Every year, an election for ruler takes place (Republican succession){newline}- Settlement production quality +10%{newline}- Settlement loyalty +1{newline}- Settlement mercantilism +50%"),
                 0.5f,
+                -1f,
+                0.6f,
+                1f,
                 new List<PolicyObject>()
                 {
                     DefaultPolicies.SacredMajesty,
@@ -74,8 +77,11 @@ namespace BannerKings.Managers.Titles.Governments
 
             Imperial.Initialize(new TextObject("{=!}Imperial"),
                 new TextObject(),
-                new TextObject(),
-                0.5f,
+                new TextObject("{=!}- Settlement stability +5%{newline}- Settlement security +1{newline}- Settlement mercantilism +20%"),
+                0.2f,
+                1f,
+                -0.2f,
+                -0.5f,
                 new List<PolicyObject>()
                 {
                     DefaultPolicies.WarTax,
@@ -99,9 +105,12 @@ namespace BannerKings.Managers.Titles.Governments
                 });
 
             Tribal.Initialize(new TextObject("{=!}Tribal"),
-                new TextObject(),
-                new TextObject(),
+                new TextObject("{=!}Tribal"),
+                new TextObject("{=!}- Settlement draft efficiency +20%{newline}- Settlement mercantilism +30%"),
+                0.3f,
+                -0.7f,
                 0.5f,
+                0.4f,
                 new List<PolicyObject>()
                 {
                     DefaultPolicies.SacredMajesty,
@@ -129,8 +138,11 @@ namespace BannerKings.Managers.Titles.Governments
 
             Feudal.Initialize(new TextObject("{=!}Feudal"),
                 new TextObject(),
-                new TextObject(),
-                0.5f,
+                new TextObject("{=!}- +15% settlement production efficiency{newline}- Settlement mercantilism +15%"),
+                0.15f,
+                -0.4f,
+                0.7f,
+                -0.2f,
                 new List<PolicyObject>()
                 {
                     DefaultPolicies.ImperialTowns,

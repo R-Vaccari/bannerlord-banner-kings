@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using TaleWorlds.CampaignSystem;
@@ -197,7 +198,7 @@ namespace BannerKings.Managers
                 Religions[religion].Add(hero, new FaithfulData(0f));
                 if (HeroesCache != null)
                 {
-                    HeroesCache.Add(hero, religion);
+                    HeroesCache[hero] = religion;
                 }
             }
         }
@@ -377,6 +378,38 @@ namespace BannerKings.Managers
             heroes.AddRange(Religions[religion].Keys.ToList());
 
             return heroes;
+        }
+
+        public Religion GetIdealReligion(Settlement settlement)
+        {
+            Religion result = null;
+            if (settlement.OwnerClan != null)
+            {
+                foreach (var religion in Religions.Keys.ToList())
+                {
+                    if (!religion.Faith.Active) continue;
+
+                    if (religion.Faith.IsHeroNaturalFaith(settlement.OwnerClan.Leader))
+                    {
+                        result = religion;
+                    }
+                }
+            }
+           
+            if (result == null)
+            {
+                foreach (var religion in Religions.Keys.ToList())
+                {
+                    if (!religion.Faith.Active) continue;
+
+                    if (religion.Faith.IsCultureNaturalFaith(settlement.Culture))
+                    {
+                        result = religion;
+                    }
+                }
+            }
+
+            return result;
         }
 
         public Religion GetIdealReligion(CultureObject culture)

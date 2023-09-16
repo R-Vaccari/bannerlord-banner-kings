@@ -46,6 +46,12 @@ namespace BannerKings.Managers.Populations
             {
                 EstateData = new EstateData(Settlement, this);
             }
+
+            var religion = BannerKingsConfig.Instance.ReligionsManager.GetIdealReligion(settlement);
+            if (religion != null)
+            {
+                religionData = new ReligionData(religion, settlement);
+            }
         }
 
         [SaveableProperty(1)] private List<PopulationClass> classes { get; set; }
@@ -378,7 +384,7 @@ namespace BannerKings.Managers.Populations
 
             if (religionData == null)
             {
-                var religion = BannerKingsConfig.Instance.ReligionsManager.GetIdealReligion(settlement.Culture);
+                var religion = BannerKingsConfig.Instance.ReligionsManager.GetIdealReligion(settlement);
                 if (religion != null)
                 {
                     religionData = new ReligionData(religion, settlement);

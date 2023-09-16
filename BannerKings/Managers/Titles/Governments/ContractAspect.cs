@@ -10,6 +10,9 @@ namespace BannerKings.Managers.Titles.Governments
         }
 
         public abstract void PostInitialize();
+        public float Authoritarian { get; protected set; }
+        public float Oligarchic { get; protected set; }
+        public float Egalitarian { get; protected set; }
 
         public bool IsAdequateForContract(FeudalContract contract) => isAdequateForContract(contract);
 

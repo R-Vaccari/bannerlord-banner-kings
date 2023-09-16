@@ -2,13 +2,31 @@
 using System.Linq;
 using BannerKings.Managers.Goals;
 using BannerKings.Utils.Extensions;
+using TaleWorlds.CampaignSystem;
 
 namespace BannerKings.Managers
 {
     public class GoalManager
     {
+        private Dictionary<Hero, Dictionary<Goal, CampaignTime>> heroGoals;
+
+        public CampaignTime GetHeroGoalTime(Hero hero, Goal goal)
+        {
+            CampaignTime time = CampaignTime.Zero;
+            if (heroGoals.ContainsKey(hero))
+            {
+                if (heroGoals[hero].ContainsKey(goal))
+                {
+                    time = heroGoals[hero][goal];
+                }
+            }
+
+            return time;
+        }
+
         public GoalManager()
         {
+            heroGoals = new Dictionary<Hero, Dictionary<Goal, CampaignTime>>(50);
             PostInitialize();
         }
 
@@ -16,6 +34,7 @@ namespace BannerKings.Managers
 
         public void PostInitialize()
         {
+            if (heroGoals == null) heroGoals = new Dictionary<Hero, Dictionary<Goal, CampaignTime>>(50);
             DefaultGoals.Instance.Initialize();
         }
 
