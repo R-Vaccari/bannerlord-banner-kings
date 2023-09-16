@@ -28,6 +28,7 @@ namespace BannerKings.Managers.Goals
                 yield return GreaterBattania;
                 yield return RelocateCourtGoal;
                 yield return SentenceCriminal;
+                yield return LevyDuty;
                 foreach (Goal item in ModAdditions)
                 {
                     yield return item;
@@ -35,6 +36,7 @@ namespace BannerKings.Managers.Goals
             }
         }
 
+        public Goal LevyDuty { get; } = new LevyDuty();
         internal Goal AssumeCulture { get; private set; }
         internal Goal GreaterBattania { get; private set; }
         internal Goal CalradicEmpireGoal { get; private set; }
