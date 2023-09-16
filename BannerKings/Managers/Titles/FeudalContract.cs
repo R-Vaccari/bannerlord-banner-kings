@@ -28,7 +28,7 @@ namespace BannerKings.Managers.Titles
         [SaveableProperty(5)] public Inheritance Inheritance { get; private set; }
         [SaveableProperty(6)] public GenderLaw GenderLaw { get; private set; }
         [SaveableProperty(7)] public List<DemesneLaw> DemesneLaws { get; private set; }
-        public List<ContractAspect> ContractAspects { get; private set; }
+        [SaveableProperty(8)] public List<ContractAspect> ContractAspects { get; private set; }
 
         public void PostInitialize(Kingdom kingdom)
         {
