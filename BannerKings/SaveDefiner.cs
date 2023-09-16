@@ -55,6 +55,7 @@ using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Populations.Estates.Estate;
 using BannerKings.Managers.Institutions.Religions.Faiths.Eastern;
 using BannerKings.Managers.Titles.Governments;
+using BannerKings.Managers.Goals;
 
 namespace BannerKings
 {
@@ -240,6 +241,8 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Hero, List<Crime>>));
             ConstructContainerDefinition(typeof(Dictionary<MobileParty, PartySupplies>));
             ConstructContainerDefinition(typeof(List<CourtExpense>));
+            ConstructContainerDefinition(typeof(Dictionary<Goal, CampaignTime>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, Dictionary<Goal, CampaignTime>>)); 
         }
     }
 }
