@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions
@@ -89,7 +91,8 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=!}Mountain God"),
                 300,
                 new TextObject("{=!}"),
-                new TextObject("{=!}"));
+                new TextObject("{=!}"),
+                Settlement.All.First(x => x.StringId == "town_K1"));
 
             WindHeaven.Initialize(new TextObject("{=!}Yel Uçmag"),
                 new TextObject("{=!}Yel Uçmag, the God of Heaven, also known as the first wind. He is the guardian of Heaven, Uçmag, where the souls of the rightous dwell. For this he is the most hollowed of the Devseg deities, for he hosts the souls of their ancestors, who live in a world of perfect, uncorrupted nature and tradition. He is said to wear armor and weapons of silver, as pure as the heavenly realm he guards."),
@@ -153,7 +156,8 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=!}Sun-God"),
                 300,
                 new TextObject("{=!}Osric, as he is known in this land, came to us, the Wilunding, to fulfill the prophecy of Horsa, which we so dearly desired. As vengeance for burning the silk and wine laden homes of the Calradoi, Osric's golden shield, the Sun, was struck and removed from him. With the bones of his lost arm, he promised us a new city. And so it was that Wilund forged him an arm of dark iron and said unto him “If they will not love thee when thou canst not carry gold, then I shall give thee iron to cast a shadow upon the world. And the shadow shall be called conquest.”"),
-                new TextObject("{=!}Osric gathered great host of lances and bolts, with which he turned the sky above Paravenos dark. It was the dawn of the winter solstice. The imperials were terrified and opened the gates to flee the city. Then the arrows ceased and the bright sun shone once more, blinding the defenders. Seizing their chance, the good men rode into the city rallying under Osrac’s holy name and cut down the Calradoi in the streets. And so it is said to this day that the empire paid in red blood what they would not pay in black soil."));
+                new TextObject("{=!}Osric gathered great host of lances and bolts, with which he turned the sky above Paravenos dark. It was the dawn of the winter solstice. The imperials were terrified and opened the gates to flee the city. Then the arrows ceased and the bright sun shone once more, blinding the defenders. Seizing their chance, the good men rode into the city rallying under Osrac’s holy name and cut down the Calradoi in the streets. And so it is said to this day that the empire paid in red blood what they would not pay in black soil."),
+                Settlement.All.First(x => x.StringId == "town_V3"));
 
             Horsa.Initialize(new TextObject("{=!}Horsa"),
                 new TextObject("{=!}The warrior Horse-God, Horsa landed near the lordship of Horsger and planted his spear in the beach. He has since become a prophet-like figure to the Vlandic peoples, foretelling the settlement and rise of Vlandic kingdoms. Though man and warrior, he is also depicted as a horse, a Vlandic symbol of both prosperity through the plough and war though the lance."),
@@ -161,7 +165,8 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=!}Horse-God"),
                 300,
                 new TextObject("{=!}When the first of us Wilundings came to Calradia from west-over-sea, we rode inland from Ostican and saw how it was good and green. We buried our weapons to Horsa, the horse god, and asked him to let us leave the life of war behind us, and to turn the saddle to a yoke and set the horse to plough. Yet, the gods of stone that dwell in this land would not let us live in frith. Regarldess, Horsa took our pledge and called more of us from over the sea, and so we came riding."),
-                new TextObject("{=!}When we came across the sea, Horsa said unto us: “Ye have buried your spears to me in this soil, and they shall grow again like crops whenever ye need them. And your harvest shall be war, and your bread shall be conquest.” On Horsa's name, we plant our seeds in the fields and our spears into the flesh of our foes. From battle flows the red wellspring that blesses this land. It makes the crops to grow and feeds both gods and men."));
+                new TextObject("{=!}When we came across the sea, Horsa said unto us: “Ye have buried your spears to me in this soil, and they shall grow again like crops whenever ye need them. And your harvest shall be war, and your bread shall be conquest.” On Horsa's name, we plant our seeds in the fields and our spears into the flesh of our foes. From battle flows the red wellspring that blesses this land. It makes the crops to grow and feeds both gods and men."),
+                Settlement.All.First(x => x.StringId == "village_V8_1"));
 
             Oca.Initialize(new TextObject("{=!}Oca"),
                 new TextObject("{=!}Oca, a god favored by the Swedaz, is often depicted as an Ox. He is believed to have the power to provide his faithful with bountiful crop yields, who were traditionally ploughed with oxen teams. Yet, it does not mean he is harmless, or to be trifled with - Oca may slaughter his enemies, including those that do not keep their oaths to him. His cult is strongest in eastern Vlandia, around Ocs Hall, named in his honor, but also a land of many legends."),
@@ -169,7 +174,8 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=!}Ox-God"),
                 300,
                 new TextObject("{=!}When we came from west-over-sea, we landed first near Ostican, built the shrine to Horsa, the horse god, and then we followed the shining shield of Osric. As we rode east we saw great mountains of stone shadowing the morning sun. And so it has ever been in Vlandia. The shadows of dawn are long and cold. ut there was one farmer, some say he was a Massa, others that he was the son of a Nord. Most of us count him as a snake god, but that is another tale. His name was Orm. The Battanians told Orm about a towering giant of stone, the one that was sleeping in the way of his sunlight. His name was Mordus. They said that if he got the giant drunk on wine, he’d be easier to knock down. Mordus was one of the Calradians’ Titans of Stone. He was the bastard of a Battanian god. He made his home on the mountainside in the east near the lake of Llyn."),
-                new TextObject("{=!}Orm prayed to the god Oca. He said, “Oca, god of the oxen, plough away for me a sleeping giant. And I will give you all the wine you can drink in summer.” Now Orm went to Mordus and offered him all the wine he could drink if only he would spare his oxen. So Mordus watched Orm yoke a fine ox and plough slowly south towards him. And he drank. The sun was setting over the western sea. He drank so much that he didn’t see the ox was ploughing away the mountainside, by the time the ox came close, Mordus was asleep. And so Oca picked up the pace as night fell and charged right at the sleeping Mordus and cut him to pieces. In the morning light, Orm was horrified. There stood Oca, a giant ox, drinking wine from Mordus’ corpse. It had spilled into the furrow made the day before. Orm shouted at Oca: “I asked you to plough away the body of Mordus but here you are drinking up my wine.”, to which the go replied: “No. This is the wine thou hast promised me. But thou gavest it to Mordus. Now I plough no more. Every summer I will come back and drink this wine, and thou shalt have nothing more from the gods. Instead, beest happy with what thou havest. Learnest to pay those who work for thee.”"));
+                new TextObject("{=!}Orm prayed to the god Oca. He said, “Oca, god of the oxen, plough away for me a sleeping giant. And I will give you all the wine you can drink in summer.” Now Orm went to Mordus and offered him all the wine he could drink if only he would spare his oxen. So Mordus watched Orm yoke a fine ox and plough slowly south towards him. And he drank. The sun was setting over the western sea. He drank so much that he didn’t see the ox was ploughing away the mountainside, by the time the ox came close, Mordus was asleep. And so Oca picked up the pace as night fell and charged right at the sleeping Mordus and cut him to pieces. In the morning light, Orm was horrified. There stood Oca, a giant ox, drinking wine from Mordus’ corpse. It had spilled into the furrow made the day before. Orm shouted at Oca: “I asked you to plough away the body of Mordus but here you are drinking up my wine.”, to which the go replied: “No. This is the wine thou hast promised me. But thou gavest it to Mordus. Now I plough no more. Every summer I will come back and drink this wine, and thou shalt have nothing more from the gods. Instead, beest happy with what thou havest. Learnest to pay those who work for thee.”"),
+                Settlement.All.First(x => x.StringId == "town_V2"));
 
             Grunwald.Initialize(new TextObject("{=!}Kronvalt"),
                 new TextObject("{=!}D"),
@@ -243,7 +249,11 @@ namespace BannerKings.Managers.Institutions.Religions
             DarusosianSecondary2.Initialize(new TextObject("{=JqPzw7PR}Lycaronian Triad"),
                 new TextObject("{=PONMWMm2}The Empire has long held its own pantheon of divine entities which rule over all aspects of mortal life and which are appeased by means of ritual sacrifice, festival activities, and prayers for absolution. Within the Darusosian Martyrdom, the locally vaunted Lycaronian Triad is held above all other eternal divinities and viewed as adjacent to mortal emperors risen to divinity by the rites of the divus. Iovis, the Sky-Father reigns as the henotheistic patriarch who traditionally dwells upon Mount Erithrys. He is accompanied by Astaronia, his bride who represents that which must be protected by the machinations of imperial might; and by his daughter Mesnona who was born from the ego of Iovis and who grants insight to mortal petitioners."),
                 new TextObject("{=hWvSm3Zz}Settlement stability increased\nParty morale bonus"),
-                new TextObject("{=iE8OCyCv}Gods"));
+                new TextObject("{=iE8OCyCv}Gods"),
+                300,
+                null,
+                null,
+                Settlement.All.First(x => x.StringId == "town_ES4"));
 
             VlandiaMain = new Divinity("vlandia-main");
             VlandiaMain.Initialize(new TextObject("{=ePJb0qTR}Lai Vlandia"),
@@ -264,9 +274,9 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=uyhPvxs2}Occasionally receive zealot warriors\nParty morale bonus for vlandian troops"),
                 new TextObject("{=neVhyybi}Saga"));
 
-            TreeloreMain.Initialize(new TextObject("{=qBT3wpBX}Pérkos, Thunder Wielder"),
-                new TextObject("{=8gGop7db}Once, there was naught between the Underworld, nested deep in the roots of the Great Oak, and the heavenly canopy of the gods. Pérkos struck the Great Tree's bark, and from it's sap, mankind blossomed. Such is the tale told by the children of the forest, that is, those that adhere to Pérkenweyd. Though the faith accepts a multitude of gods, the Thunder Wielder is idolized as their ultimate protector, the highest and noblest of gods, charged with protecting the Great Oak itself."),
-                new TextObject("{=CfqOi9gq}Stability for all settlements of acceptable cultures\nRenown gain for every successful raid on foreign villages"),
+            TreeloreMain.Initialize(new TextObject("{=!}Pérkken, Thunder Wielder"),
+                new TextObject("{=!}Once, there was naught but the Great Oak, the sea and sky.."),
+                new TextObject("{=!}Stability for all settlements of acceptable cultures\nRenown gain for every successful raid on foreign villages"),
                 new TextObject("{=z0VYqrO5}Supreme God"));
 
             TreeloreMoon.Initialize(new TextObject("{=AJ3sq4c9}Méhns Cult"),
