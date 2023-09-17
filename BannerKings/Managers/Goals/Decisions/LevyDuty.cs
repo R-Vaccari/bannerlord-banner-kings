@@ -5,7 +5,6 @@ using BannerKings.Managers.Titles.Governments;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
@@ -82,7 +81,7 @@ namespace BannerKings.Managers.Goals.Decisions
                             ContractDuty contractDuty = (ContractDuty)duty;
                             TextObject description = new TextObject("{=!}{DESCRIPTION}{newline}{newline}Results:{newline}{RESULTS}")
                                .SetTextVariable("DESCRIPTION", duty.Description)
-                               .SetTextVariable("RESULTS", contractDuty.CalculateDuty(fulfiller, vassal));
+                               .SetTextVariable("RESULTS", contractDuty.GetResults(fulfiller, vassal));
                             
                             FeudalTitle vassalHighest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(vassal);     
                             if (vassalHighest != null && vassalHighest.GetDutyTime(contractDuty)
@@ -93,6 +92,13 @@ namespace BannerKings.Managers.Goals.Decisions
                                 .SetTextVariable("SEASONS", vassalHighest.GetDutyTime(contractDuty).ElapsedSeasonsUntilNow.ToString("0.0"))
                                 .SetTextVariable("TITLE", vassalHighest.FullName)
                                 .SetTextVariable("DELAY", contractDuty.SeasonsDelay);
+                            }
+
+                            if (!contractDuty.CanFulfill(fulfiller, vassal))
+                            {
+                                available = false;
+                                description = new TextObject("{=!}{HERO} is not able to fulfill this duty at this time.")
+                                .SetTextVariable("HERO", vassal.Name);
                             }
 
                             duties.Add(new InquiryElement(
