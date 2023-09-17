@@ -12,6 +12,7 @@ namespace BannerKings.Managers.Goals
             {
                 yield return CallBannersGoal;
                 yield return AssumeCulture;
+                yield return LevyDuty;
                 if (BannerKingsSettings.Instance.Feasts)
                 {
                     yield return OrganizeFeastDecision;
@@ -27,8 +28,7 @@ namespace BannerKings.Managers.Goals
                 yield return CalradicEmpireGoal;
                 yield return GreaterBattania;
                 yield return RelocateCourtGoal;
-                yield return SentenceCriminal;
-                yield return LevyDuty;
+                yield return SentenceCriminal;              
                 foreach (Goal item in ModAdditions)
                 {
                     yield return item;

@@ -6,6 +6,7 @@ using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
@@ -602,27 +603,74 @@ namespace BannerKings.Patches
                 return false;
             }
 
-            [HarmonyPostfix]
+            [HarmonyPrefix]
             [HarmonyPatch("CalculateMeritOfOutcome")]
-            private static void CalculateMeritOfOutcomePostfix(SettlementClaimantDecision __instance,
+            private static bool CalculateMeritOfOutcomePrefix(SettlementClaimantDecision __instance,
                DecisionOutcome candidateOutcome, ref float __result)
             {
-                if (BannerKingsConfig.Instance.TitleManager != null)
+                SettlementClaimantDecision.ClanAsDecisionOutcome clanAsDecisionOutcome = (SettlementClaimantDecision.ClanAsDecisionOutcome)candidateOutcome;
+                Clan clan = clanAsDecisionOutcome.Clan;
+                Settlement s = __instance.Settlement;
+
+                ExplainedNumber result = new ExplainedNumber(0f);
+
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, DefaultDivinities.Instance.AseraMain))
                 {
-                    __result *= 100f;
-                    SettlementClaimantDecision.ClanAsDecisionOutcome clanAsDecisionOutcome = (SettlementClaimantDecision.ClanAsDecisionOutcome)candidateOutcome;
-                    Clan clan = clanAsDecisionOutcome.Clan;
-
-                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, DefaultDivinities.Instance.AseraMain))
-                    {
-                        __result *= 0.2f;
-                    }
-
-                    var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(clan.Leader).ResultNumber;
-                    var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(clan).ResultNumber;
-                    float factor = current / limit;
-                    __result *= 1f - factor;
+                    result.AddFactor(0.2f);
                 }
+
+                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(s);
+                if (title != null && title.HeroHasValidClaim(clan.Leader))
+                {
+                    result.Add(150f);
+                }
+
+                FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(clan.Kingdom);
+                if (sovereign != null)
+                {
+                    if (sovereign.Contract.HasContractAspect(DefaultContractAspects.Instance.ConquestMight))
+                    {
+                        if (s.Town != null)
+                        {
+                            if (clan == s.Town.LastCapturedBy)
+                            {
+                                result.Add(1000f);
+                            }
+                        }
+                    }
+                    else if (sovereign.Contract.HasContractAspect(DefaultContractAspects.Instance.ConquestClaim))
+                    {
+                        
+                        if (title != null)
+                        {
+                            if (title.deJure == clan.Leader)
+                            {
+                                result.Add(1000f);
+                            }
+                            else if (title.HeroHasValidClaim(clan.Leader))
+                            {
+                                result.Add(500f);
+                            }
+                        }
+                    }
+                    else if (sovereign.Contract.HasContractAspect(DefaultContractAspects.Instance.ConquestDistributed))
+                    {
+                        foreach (Settlement fief in clan.Settlements)
+                        {
+                            if (fief.IsTown) result.Add(-300f);
+                            else if (fief.IsCastle) result.Add(-200f);
+                            else result.Add(-75f);
+                        }
+                    }
+                }
+
+                var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(clan.Leader).ResultNumber;
+                var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(clan).ResultNumber;
+                float factor = current / limit;
+                result.Add(1000f * (1f - factor));
+
+                __result = result.ResultNumber;
+                return false;
             }
 
             [HarmonyPostfix]

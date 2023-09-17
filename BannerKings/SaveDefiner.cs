@@ -209,6 +209,9 @@ namespace BannerKings
             AddClassDefinition(typeof(Inheritance), 149);
             AddClassDefinition(typeof(GenderLaw), 150);
             AddClassDefinition(typeof(ContractAspect), 151);
+            AddClassDefinition(typeof(Goal), 152);
+            AddClassDefinition(typeof(ContractDuty), 153);
+            AddClassDefinition(typeof(ContractRight), 154);
         }
 
         protected override void DefineContainerDefinitions()
@@ -274,7 +277,9 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<CultureObject, CustomTroop>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, CampaignTime>));
             ConstructContainerDefinition(typeof(Dictionary<Goal, CampaignTime>));
-            ConstructContainerDefinition(typeof(Dictionary<Hero, Dictionary<Goal, CampaignTime>>)); 
+            ConstructContainerDefinition(typeof(Dictionary<Hero, Dictionary<Goal, CampaignTime>>));
+            ConstructContainerDefinition(typeof(Dictionary<ContractDuty, CampaignTime>));
+            ConstructContainerDefinition(typeof(List<ContractAspect>));
         }
     }
 }

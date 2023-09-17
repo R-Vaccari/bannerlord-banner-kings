@@ -5,7 +5,6 @@ using BannerKings.Managers.Titles.Governments;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
@@ -51,53 +50,77 @@ namespace BannerKings.Managers.Goals.Decisions
             Hero fulfiller = GetFulfiller();
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(fulfiller.Clan.Kingdom);
 
-            List<InquiryElement> duties = new List<InquiryElement>();
-            foreach (var duty in title.Contract.ContractAspects)
-            {
-                if (duty is ContractDuty)
-                {
-                    duties.Add(new InquiryElement(
-                        duty,
-                        duty.Name.ToString(),
-                        null,
-                        true,
-                        duty.Description.ToString()));
-                }
-            }
-
             List<InquiryElement> vassals = new List<InquiryElement>();
             foreach (var vassal in BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(fulfiller.Clan))
             {
                 vassals.Add(new InquiryElement(
-                    duty,
-                    duty.Name.ToString(),
+                    vassal,
+                    vassal.Name.ToString(),
                     new ImageIdentifier(CampaignUIHelper.GetCharacterCode(vassal.CharacterObject)),
                     true,
-                    duty.CalculateDuty(fulfiller, vassal).ToString()));
+                    string.Empty));
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=!}Levy Duty (1/2)").ToString(),
                 new TextObject("{=!}As a suzerain, you are capable of levying duties from your legal vassals. Such duties depend exclusively on the contract of the realm you serve.").ToString(),
-                duties,
+                vassals,
                 true,
-                duties.Count,
+                1,
                 GameTexts.FindText("str_accept").ToString(),
                 GameTexts.FindText("str_reject").ToString(),
                 delegate (List<InquiryElement> list)
                 {
-                    duty = list.First().Identifier as ContractDuty;
+                    vassal = list.First().Identifier as Hero;
+                    List<InquiryElement> duties = new List<InquiryElement>();
+                    foreach (var duty in title.Contract.ContractAspects)
+                    {
+                        if (duty is ContractDuty)
+                        {
+                            bool available = true;
+                            ContractDuty contractDuty = (ContractDuty)duty;
+                            TextObject description = new TextObject("{=!}{DESCRIPTION}{newline}{newline}Results:{newline}{RESULTS}")
+                               .SetTextVariable("DESCRIPTION", duty.Description)
+                               .SetTextVariable("RESULTS", contractDuty.GetResults(fulfiller, vassal));
+                            
+                            FeudalTitle vassalHighest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(vassal);     
+                            if (vassalHighest != null && vassalHighest.GetDutyTime(contractDuty)
+                                .ElapsedSeasonsUntilNow < contractDuty.SeasonsDelay)
+                            {
+                                available = false;
+                                description = new TextObject("{=!}It has been {SEASONS} seasons since this duty was last levied from the {TITLE}. This duty may be levied every {DELAY} seasons.")
+                                .SetTextVariable("SEASONS", vassalHighest.GetDutyTime(contractDuty).ElapsedSeasonsUntilNow.ToString("0.0"))
+                                .SetTextVariable("TITLE", vassalHighest.FullName)
+                                .SetTextVariable("DELAY", contractDuty.SeasonsDelay);
+                            }
+
+                            if (!contractDuty.CanFulfill(fulfiller, vassal))
+                            {
+                                available = false;
+                                description = new TextObject("{=!}{HERO} is not able to fulfill this duty at this time.")
+                                .SetTextVariable("HERO", vassal.Name);
+                            }
+
+                            duties.Add(new InquiryElement(
+                                duty,
+                                duty.Name.ToString(),
+                                null,
+                                available,
+                                description.ToString()));
+                        }
+                    }
+                    
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                         new TextObject("{=!}Levy Duty (2/2)").ToString(),
                         new TextObject("{=!}As a suzerain, you are capable of levying duties from your legal vassals. Such duties depend exclusively on the contract of the realm you serve.").ToString(),
-                        vassals,
+                        duties,
                         true,
-                        duties.Count,
+                        1,
                         GameTexts.FindText("str_accept").ToString(),
                         GameTexts.FindText("str_reject").ToString(),
                         delegate (List<InquiryElement> list)
                         {
-                            vassal = list.First().Identifier as Hero;
+                            duty = list.First().Identifier as ContractDuty;
                             ApplyGoal();
                         },
                         (List<InquiryElement> list) => ShowInquiry()

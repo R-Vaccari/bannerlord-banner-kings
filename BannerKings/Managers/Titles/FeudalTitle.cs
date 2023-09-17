@@ -44,6 +44,7 @@ namespace BannerKings.Managers.Titles
             claims = new Dictionary<Hero, ClaimType>();
             deJureDrift = new Dictionary<FeudalTitle, float>();
             StringId = stringId;
+            Duties = new Dictionary<ContractDuty, CampaignTime>();
         }
 
         [SaveableProperty(1)] public TitleType TitleType { get; private set; }
@@ -61,6 +62,29 @@ namespace BannerKings.Managers.Titles
         [SaveableProperty(13)] private Dictionary<FeudalTitle, float> deJureDrift { get; set; }
         [SaveableProperty(14)] public string StringId { get; private set; }
         [SaveableProperty(15)] public bool CustomName { get; private set; }
+        [SaveableProperty(16)] public Dictionary<ContractDuty, CampaignTime> Duties { get; private set; }
+
+        public void FulfillDuty(ContractDuty duty)
+        {
+            if (Duties.ContainsKey(duty))
+            {
+                Duties[duty] = CampaignTime.Now;
+            }
+            else
+            {
+                Duties.Add(duty, CampaignTime.Now);
+            }
+        }
+
+        public CampaignTime GetDutyTime(ContractDuty duty)
+        {
+            if (Duties.ContainsKey(duty))
+            {
+                return Duties[duty];
+            }
+
+            return CampaignTime.Zero;
+        }
 
         public FeudalTitle Suzerain
         {
@@ -153,6 +177,7 @@ namespace BannerKings.Managers.Titles
 
         public void PostInitialize()
         {
+            Duties ??= new Dictionary<ContractDuty, CampaignTime>();
             Contract.PostInitialize(deJure.Clan.Kingdom);
             if (!CustomName)
             {
