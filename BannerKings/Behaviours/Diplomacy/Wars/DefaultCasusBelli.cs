@@ -43,7 +43,8 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 10000f,
                 (War war) =>
                 {
-                    return war.CasusBelli.Fief != null && war.CasusBelli.Fief.MapFaction == war.Attacker;
+                    return war.CasusBelli.Fief != null && (war.CasusBelli.Fief.MapFaction == war.Attacker ||
+                    war.CasusBelli.Fief.OwnerClan.Kingdom == war.Attacker);
                 },
                 (War war) =>
                 {
@@ -78,7 +79,8 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 7500f,
                 (War war) =>
                 {
-                    return war.CasusBelli.Fief.MapFaction == war.Attacker;
+                    return war.CasusBelli.Fief != null && (war.CasusBelli.Fief.MapFaction == war.Attacker ||
+                    war.CasusBelli.Fief.OwnerClan.Kingdom == war.Attacker);
                 },
                 (War war) =>
                 {
