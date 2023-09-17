@@ -1,8 +1,8 @@
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.UI.Items;
 using Bannerlord.UIExtenderEx.Attributes;
-using Newtonsoft.Json.Bson;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -18,6 +18,7 @@ namespace BannerKings.UI.Kingdoms
     {
         private MBBindingList<DemesneLawVM> laws;
         private MBBindingList<HeirVM> heirs;
+        private MBBindingList<TripleStringItemVM> aspects;
         private HeirVM mainHeir;
         private string successionDescription;
 
@@ -27,6 +28,7 @@ namespace BannerKings.UI.Kingdoms
             Kingdom = kingdom;
             laws = new MBBindingList<DemesneLawVM>();
             Heirs = new MBBindingList<HeirVM>();
+            Aspects = new MBBindingList<TripleStringItemVM>();
         }
 
         public FeudalTitle Title { get; private set; }
@@ -37,6 +39,7 @@ namespace BannerKings.UI.Kingdoms
             base.RefreshValues();
             Laws.Clear();
             Heirs.Clear();
+            Aspects.Clear();
 
             if (Title != null)
             {
@@ -50,6 +53,18 @@ namespace BannerKings.UI.Kingdoms
                         law,
                         isKing,
                         OnChange));
+                }
+
+                foreach (ContractAspect aspect in Title.Contract.ContractAspects)
+                {
+                    TextObject hint = TextObject.Empty;
+                    if (aspect is ContractRight) hint = (aspect as ContractRight).EffectText;
+                    
+                    Aspects.Add(new TripleStringItemVM(aspect.AspectType.ToString(),
+                        aspect.Name.ToString(),
+                        string.Empty,
+                        new BasicTooltipViewModel(() => aspect.Description.ToString())
+                        ));
                 }
 
                 var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(Kingdom.Leader, Title);
@@ -290,6 +305,20 @@ namespace BannerKings.UI.Kingdoms
                 {
                     successionDescription = value;
                     OnPropertyChangedWithValue(value, "SuccessionDescription");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<TripleStringItemVM> Aspects
+        {
+            get => aspects;
+            set
+            {
+                if (value != aspects)
+                {
+                    aspects = value;
+                    OnPropertyChangedWithValue(value, "Aspects");
                 }
             }
         }
