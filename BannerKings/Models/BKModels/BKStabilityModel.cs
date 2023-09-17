@@ -1,8 +1,5 @@
 using System.Linq;
 using BannerKings.Managers.Buildings;
-using BannerKings.Managers.Court;
-using BannerKings.Managers.Court.Members;
-using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
@@ -220,7 +217,7 @@ namespace BannerKings.Models.BKModels
                 };
 
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
-                if (government.Equals(DefaultGovernments.Instance.Imperial))
+                if (government.Equals(DefaultGovernments.Instance.Feudal))
                 {
                     result.Add(0.05f, new TextObject("{=PSrEtF5L}Government"));
                 }

@@ -1,8 +1,10 @@
 using BannerKings.Managers.Buildings;
+using BannerKings.Managers.Goals;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Governments;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -133,12 +135,25 @@ namespace BannerKings.Models.BKModels
 
             result.Add(data.Acceptance * 50f, new TextObject("{=2qB0s9H9}Cultural acceptance"));
 
-            var owner = settlement.Owner;
+            Hero owner = settlement.Owner;
             if (owner != null)
             {
                 if (data.Culture == owner.Culture)
                 {
                     result.Add(8f, new TextObject("{=LHFoaUGo}Owner Culture"));
+                }
+
+                Kingdom kingdom = owner?.Clan.Kingdom;
+                if (kingdom != null)
+                {
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                    if (title != null)
+                    {
+                        if (title.Contract.Government == DefaultGovernments.Instance.Imperial)
+                        {
+                            result.AddFactor(0.4f, DefaultGovernments.Instance.Imperial.Name);
+                        }
+                    }
                 }
             }
 
@@ -169,7 +184,7 @@ namespace BannerKings.Models.BKModels
             }
             else if (settlement.IsVillage)
             {
-                var village = settlement.Village;
+                Village village = settlement.Village;
                 if (village != null && village.TradeBound != null)
                 {
                     if (data.Culture == settlement.Village.TradeBound.Culture)

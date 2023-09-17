@@ -76,8 +76,8 @@ namespace BannerKings.Managers.Titles.Governments
                 });
 
             Imperial.Initialize(new TextObject("{=!}Imperial"),
-                new TextObject(),
-                new TextObject("{=!}- Settlement stability +5%{newline}- Settlement security +1{newline}- Settlement mercantilism +20%"),
+                new TextObject("{=!}The Calradoi Imperial government was created after its original Republic. Unlike feudal monarchies, the empire, though often hereditary, is built on a different ethos. Though a Senate may exist, it is more often than not a formality than an effective political force. All property is considered ultimately the emperor's, and thus their vassals are mere administrators, rather than owners of their domains. In theory, ruling families only inherit their properties by the emperor's grace, who temporarily holds them in the family head's death, before granting it back to them. In truth, many emperors cannot afford to not concede to such influential families. Imperial fiefs are highly integrated, with security and assimilation as priorities."),
+                new TextObject("{=!}- Settlement cultural weight +40%{newline}- Settlement security +1{newline}- Settlement mercantilism +20%"),
                 0.2f,
                 1f,
                 -0.2f,
@@ -105,8 +105,8 @@ namespace BannerKings.Managers.Titles.Governments
                 });
 
             Tribal.Initialize(new TextObject("{=!}Tribal"),
-                new TextObject("{=!}Tribal"),
-                new TextObject("{=!}- Settlement draft efficiency +20%{newline}- Settlement mercantilism +30%"),
+                new TextObject("{=!}Most non-Imperial societies are organized in the 'tribal' manner, for example: the Battanians who united under a High-Kingdom to fight their common enemy, the Nahawasi as a tribe confederation with the purpose of protecting trade and prosperity. Tribal administrations are often more descentralized and autonomous than otherwise, and legal arguments often have no place against military force and cultural tradition."),
+                new TextObject("{=!}- Settlement militia +1{newline}- Settlement draft efficiency +20%{newline}- Settlement mercantilism +30%"),
                 0.3f,
                 -0.7f,
                 0.5f,
@@ -137,8 +137,8 @@ namespace BannerKings.Managers.Titles.Governments
                 });
 
             Feudal.Initialize(new TextObject("{=!}Feudal"),
-                new TextObject(),
-                new TextObject("{=!}- +15% settlement production efficiency{newline}- Settlement mercantilism +15%"),
+                new TextObject("{=!}Feudal governments stablish the authority of a life-serving ruler, while keeping a relatively degree of autonomy to their vassals. Unlike in empires, feudal societies have a strong sense of property, and legal claims and technicalities often take precedence over other factors. While the king or queen draw great influence, their subordinate peers are guaranteed certain securities that the ruler is bound by law to follow."),
+                new TextObject("{=!}- Petitioning rights yields no relation loss{newline}- Settlement stability +5%{newline}- Settlement prod. efficiency +10%{newline}- Settlement mercantilism +15%"),
                 0.15f,
                 -0.4f,
                 0.7f,
