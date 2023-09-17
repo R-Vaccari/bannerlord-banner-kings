@@ -25,7 +25,8 @@ namespace BannerKings.Managers.Titles.Governments
             AspectTypes type,
             Action<ContractDuty, Hero, Hero> execute, 
             Func<ContractDuty, Hero, Hero, bool> canFulfill,
-            Func<Hero, Hero, int> calculateDuty)
+            Func<Hero, Hero, int> calculateDuty,
+            Func<Kingdom, bool> isAdequateForKingdom)
         {
             Initialize(name, description);
             SeasonsDelay = seasonsDelay;
@@ -36,16 +37,19 @@ namespace BannerKings.Managers.Titles.Governments
             AspectType = type;
             this.calculateDuty = calculateDuty;
             this.canFulfill = canFulfill;
+            this.isAdequateForKingdom = isAdequateForKingdom;
         }
 
         public override void PostInitialize()
         {
-
+            ContractDuty duty = DefaultContractAspects.Instance.GetById(this) as ContractDuty;
+            Initialize(duty.name, duty.description, duty.PopupText, duty.ResultsText,
+                duty.SeasonsDelay, duty.RelationsLoss, duty.AspectType, duty.execute, duty.canFulfill,
+                duty.calculateDuty, duty.isAdequateForKingdom);
         }
 
         public void ExecuteDuty(Hero suzerain, Hero vassal)
         {
-           
             if (vassal == Hero.MainHero)
             {
                 InformationManager.ShowInquiry(new InquiryData(Name.ToString(),
@@ -97,7 +101,6 @@ namespace BannerKings.Managers.Titles.Governments
             .SetTextVariable("RESULTS", CalculateDuty(suzerain, vassal))
             .SetTextVariable("VASSAL", vassal.Name);
 
-        public AspectTypes AspectType { get; private set; }
         public TextObject PopupText { get; private set; }   
         public int RelationsLoss { get; private set; }
         public int SeasonsDelay { get; private set; }

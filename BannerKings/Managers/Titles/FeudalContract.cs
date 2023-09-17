@@ -48,13 +48,19 @@ namespace BannerKings.Managers.Titles
             }
 
             if (ContractAspects == null) ContractAspects = new List<ContractAspect>();
+            else
+            {
+                foreach (var aspect in ContractAspects)
+                {
+                    aspect.PostInitialize();
+                }
+            }
+
             foreach (var aspect in DefaultContractAspects.Instance.GetIdealKingdomAspects(kingdom, Government))
             {
                 if (!ContractAspects.Any(x => x.StringId == aspect.StringId))
                     ContractAspects.Add(aspect);
             }
-
-            //ContractAspects ??= DefaultContractAspects.Instance.GetIdealKingdomAspects(kingdom, Government);
         }
 
         public bool HasContractAspect(ContractAspect aspect)  

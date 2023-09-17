@@ -669,7 +669,7 @@ namespace BannerKings.Managers
                 goto GIVE;
             }
 
-            if (!sovereign.Contract.Rights.Contains(FeudalRights.Enfoeffement_Rights))
+            if (!sovereign.Contract.ContractAspects.Contains(DefaultContractAspects.Instance.Enfoeffment))
             {
                 return;
             }
