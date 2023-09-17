@@ -1,4 +1,5 @@
 ﻿using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Managers.Goals;
 using BannerKings.Utils.Extensions;
 using BannerKings.Utils.Models;
 using Helpers;
@@ -127,12 +128,23 @@ namespace BannerKings.Models.BKModels
                     }
                 }
             }
-           
+
+            int attackCaptives = 0;
+            float attackCaptivesScore = 0f;
             foreach (var hero in attackerCaptives)
             {
                 float points = CalculateHeroScore(hero, totalWarScore, hero == defenderHeir).ResultNumber * justification.CaptureWeight;
-                result.Add(points / totalWarScore,  hero.Name);
+                float total = points / totalWarScore;
+                if (total >= 1f) result.Add(total, hero.Name);
+                else
+                {
+                    attackCaptives++;
+                    attackCaptivesScore += total;
+                }
             }
+
+            result.Add(attackCaptivesScore, new TextObject("{=!}Attacker captives (x{TOTAL})")
+                .SetTextVariable("TOTAL", attackCaptives));
 
             if (justification.IsFulfilled(war))
             {
@@ -177,15 +189,26 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
+            int defendCaptives = 0;
+            float defendCaptivesScore = 0f;
             foreach (var hero in defenderCaptives)
             {
                 float points = -CalculateHeroScore(hero, totalWarScore, hero == attackerHeir).ResultNumber;
-                result.Add(points / totalWarScore, hero.Name);
+                float total = points / totalWarScore;
+                if (total <= -1f) result.Add(total, hero.Name);
+                else
+                {
+                    defendCaptives++;
+                    defendCaptivesScore += total;
+                }
             }
+
+            result.Add(defendCaptivesScore, new TextObject("{=!}Defener captives (x{TOTAL})")
+               .SetTextVariable("TOTAL", defendCaptives));
 
             if (isDefenderScore)
             {
-                result.AddFactor(-1f);
+                result.AddFactor(-1f, new TextObject("{=!}Defender's perspective");
             }
 
             return result;
