@@ -208,7 +208,7 @@ namespace BannerKings.Models.BKModels
 
             if (isDefenderScore)
             {
-                result.AddFactor(-1f, new TextObject("{=!}Defender's perspective");
+                result.AddFactor(-1f, new TextObject("{=!}Defender's perspective"));
             }
 
             return result;
