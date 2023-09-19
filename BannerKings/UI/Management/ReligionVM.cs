@@ -1,7 +1,9 @@
+using BannerKings.Behaviours;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Populations;
 using BannerKings.UI.Items.UI;
 using Bannerlord.UIExtenderEx.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -169,15 +171,11 @@ namespace BannerKings.UI.Management
                     .SetTextVariable("INFLUENCE", cost)
                     .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON);
                 possible = true;
-              
-                if (BannerKingsConfig.Instance.ReligionsManager.GetPiety(Hero.MainHero) < piety)
-                {
-                    possible = false;
-                }
 
-                if (Clan.PlayerClan.Influence < cost)
+                ValueTuple<bool, TextObject> result = Campaign.Current.GetCampaignBehavior<BKReligionsBehavior>().IsInstallingPreacherPossible(Hero.MainHero, settlement);
+                if (!result.Item1)
                 {
-                    possible = false;
+                    possible = result.Item1;
                 }
             }
             else
@@ -196,19 +194,8 @@ namespace BannerKings.UI.Management
                 GameTexts.FindText("str_selection_widget_cancel").ToString(),
                 () =>
                 {
-                    Clergyman clergy = playerFaith.GenerateClergyman(settlement);
-                    if (clergy != null)
-                    {
-                        ChangeClanInfluenceAction.Apply(Clan.PlayerClan, -cost);
-                        BannerKingsConfig.Instance.ReligionsManager.AddPiety(Hero.MainHero, -piety, true);
-                        InformationManager.DisplayMessage(new InformationMessage(
-                            new TextObject("{=!}{HERO} was installed as a preacher at {FIEF}")
-                            .SetTextVariable("HERO", clergy.Hero.Name)
-                            .SetTextVariable("FIEF", settlement.Name)
-                            .ToString(),
-                            Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
-                        RefreshValues();
-                    }
+                    Campaign.Current.GetCampaignBehavior<BKReligionsBehavior>().InstallPreacher(data, Hero.MainHero, playerFaith);
+                    RefreshValues();
                 },
                 null));
         }
@@ -246,7 +233,7 @@ namespace BannerKings.UI.Management
 
                         if (BannerKingsConfig.Instance.ReligionsManager.GetPiety(Hero.MainHero) < piety)
                         {
-                            hint = new TextObject("{=!}Not enough influence.");
+                            hint = new TextObject("{=!}Not enough piety.");
                             possible = false;
                         }
 
