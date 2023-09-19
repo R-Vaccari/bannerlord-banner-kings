@@ -192,6 +192,7 @@ namespace BannerKings
             AddClassDefinition(typeof(Goal), 152);
             AddClassDefinition(typeof(ContractDuty), 153);
             AddClassDefinition(typeof(ContractRight), 154);
+            AddClassDefinition(typeof(BKContractChangeDecision), 155);
         }
 
         protected override void DefineContainerDefinitions()
