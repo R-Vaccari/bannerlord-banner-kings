@@ -69,7 +69,8 @@ namespace BannerKings.UI.Religion
             currentReligion = BannerKingsConfig.Instance.ReligionsManager.GetIdealReligion(hero.Culture);
             if (currentReligion == null)
             {
-                currentReligion = BannerKingsConfig.Instance.ReligionsManager.GetReligions().GetRandomElement();
+                currentReligion = BannerKingsConfig.Instance.ReligionsManager.GetReligions()
+                    .GetRandomElementWithPredicate(x => x.Faith.Active);
             }
         }
 
@@ -97,10 +98,13 @@ namespace BannerKings.UI.Religion
             var i = 0;
             foreach (var religion in BannerKingsConfig.Instance.ReligionsManager.GetReligions())
             {
-                var item = new ReligionSelectorItemVM(religion, religion.Faith != this.currentReligion?.Faith);
-                if (religion.Faith == this.currentReligion.Faith) selectedIndex = i;
-                selector.AddItem(item);
-                i++;
+                if (religion.Faith.Active)
+                {
+                    var item = new ReligionSelectorItemVM(religion, religion.Faith != this.currentReligion?.Faith);
+                    if (religion.Faith == this.currentReligion.Faith) selectedIndex = i;
+                    selector.AddItem(item);
+                    i++;
+                }
             }
             Selector.SelectedIndex = selectedIndex;
             Selector.SetOnChangeAction(delegate (SelectorVM<ReligionSelectorItemVM> obj)
@@ -178,8 +182,8 @@ namespace BannerKings.UI.Religion
             Aspects.Add(new ReligionElementVM(new TextObject("{=EjTxnGJp}Culture"), currentReligion.MainCulture.Name,
                 new TextObject("{=6NYxLhjH}The main culture associated with this faith.")));
 
-            Aspects.Add(new ReligionElementVM(new TextObject("{=!}Faith Seat"), 
-                currentReligion.Faith.FaithSeat.Name,
+            Aspects.Add(new ReligionElementVM(new TextObject("{=!}Faith Seat"),
+                currentReligion.Faith.FaithSeat != null ? currentReligion.Faith.FaithSeat.Name : new TextObject("{=!}Nonexistent"),
                 new TextObject("{=!}The Faith Seat is the most religiously important fief within the faith. When the Seat is not held by a member of the faith, it loses a great deal of fervor. The holder of the Seat is given extra influence limit and piety according to the stability of the Seat, and thus is encouraged to give it good management.")));
 
             if (sites.Count > 0)
