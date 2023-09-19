@@ -1,6 +1,7 @@
 ﻿using System;
 using BannerKings.Extensions;
 using BannerKings.Managers;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Populations.Villages;
@@ -136,12 +137,22 @@ namespace BannerKings.Models.Vanilla
                                     DefaultCulturalFeats.VlandianCastleVillageProductionFeat.EffectBonus,
                                     GameTexts.FindText("str_culture"));
                             }
+
+                            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(characterObject.HeroObject,
+                                DefaultDivinities.Instance.Hirvi))
+                            {
+                                if (village.VillageType == DefaultVillageTypes.Lumberjack || village.VillageType.StringId == "trapper")
+                                {
+                                    explainedNumber.AddFactor(0.25f, DefaultDivinities.Instance.Hirvi.Name);
+                                }
+                            }
                         }
 
                         if (villageData.CurrentBuilding.BuildingType.StringId == DefaultVillageBuildings.Instance.DailyProduction.StringId)
                         {
                             explainedNumber.AddFactor(0.15f, DefaultVillageBuildings.Instance.DailyProduction.Name);
                         }
+                       
 
                         explainedNumber.AddFactor(data.EconomicData.ProductionEfficiency.ResultNumber - 1f);
                     }

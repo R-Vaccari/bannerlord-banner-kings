@@ -25,7 +25,7 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero, DefaultDivinities.Instance.TreeloreMoon))
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero, DefaultDivinities.Instance.Mehns))
             {
                 result *= 1.25f;
             }
@@ -42,7 +42,7 @@ namespace BannerKings.Models.Vanilla
                     result *= 1.25f;
                 }
 
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Spouse, DefaultDivinities.Instance.TreeloreMoon))
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Spouse, DefaultDivinities.Instance.Mehns))
                 {
                     result *= 1.25f;
                 }

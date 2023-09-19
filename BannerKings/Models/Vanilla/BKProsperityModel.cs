@@ -65,11 +65,11 @@ namespace BannerKings.Models.Vanilla
                 baseResult.Add(0.2f, DefaultDivinities.Instance.AmraMain.Name);
             }
 
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.TreeloreMoon, rel))
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.Mehns, rel))
             {
                 if (rel.FavoredCultures.Contains(village.Settlement.Culture))
                 {
-                    baseResult.Add(0.08f, DefaultDivinities.Instance.TreeloreMoon.Name);
+                    baseResult.Add(0.08f, DefaultDivinities.Instance.Mehns.Name);
                 }
             }
 

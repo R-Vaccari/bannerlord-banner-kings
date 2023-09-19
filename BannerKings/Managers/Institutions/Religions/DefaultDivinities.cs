@@ -21,7 +21,8 @@ namespace BannerKings.Managers.Institutions.Religions
         public Divinity VlandiaSecondary1 { get; private set; }
         public Divinity VlandiaSecondary2 { get; private set; }
         public Divinity TreeloreMain { get; private set; } = new Divinity("treelore_main");
-        public Divinity TreeloreMoon { get; private set; } = new Divinity("treelore_moon");
+        public Divinity Hirvi { get; private set; } = new Divinity("Hirvi");
+        public Divinity Mehns { get; private set; } = new Divinity("treelore_moon");
         public Divinity Osric { get; } = new Divinity("Osric");
         public Divinity Wilund { get; } = new Divinity("Wilund");
         public Divinity Oca { get; } = new Divinity("Oca");
@@ -54,7 +55,8 @@ namespace BannerKings.Managers.Institutions.Religions
                 yield return VlandiaSecondary1;
                 yield return VlandiaSecondary2;
                 yield return TreeloreMain;
-                yield return TreeloreMoon;
+                yield return Hirvi;
+                yield return Mehns;
                 yield return Wilund;
                 yield return Osric;
                 yield return Horsa;
@@ -279,7 +281,12 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=!}Stability for all settlements of acceptable cultures\nRenown gain for every successful raid on foreign villages"),
                 new TextObject("{=z0VYqrO5}Supreme God"));
 
-            TreeloreMoon.Initialize(new TextObject("{=AJ3sq4c9}Méhns Cult"),
+            Hirvi.Initialize(new TextObject("{=!}Suurihirvi"),
+                new TextObject("{=!}Vakken shamans tell the story of Suurihirvi - king of the forest. Naturally, the Vakken believe the forests to be ripe with spirits, but some are greater than others, and Suurihirvi is the greatest of all. Hunters pray to him for bountiful game, and foresters for protection. In most stories, Suurihirvi is depicted as a great white elk, for it needs not to hide as the forest is its domain."),
+                new TextObject("{=!}Forester and fur villages increased productivity\nWoodland acreage food production greatly increased"),
+                new TextObject("{=!}Forest Spirit"));
+
+            Mehns.Initialize(new TextObject("{=AJ3sq4c9}Méhns Cult"),
                 new TextObject("{=tXp4wuPZ}Among the children of the forest, many devouts, specially in the Chertyg region, have devoted themselves to Méhns. The Moon, in their understanding, is the source of prosperity for both land and mankind, and thus the Goddess gained popularity among believers. Although not a warrior as Pérkos, she is also believed to a protector of the children, in a motherly manner, as Méhns is solely responsible for keeping darkness away during nighttime."),
                 new TextObject("{=Vn3bTO6r}Prosperity for all villages of acceptable cultures\nIncreased fertility"),
                 new TextObject("{=foD5TnsR}Goddess"));
