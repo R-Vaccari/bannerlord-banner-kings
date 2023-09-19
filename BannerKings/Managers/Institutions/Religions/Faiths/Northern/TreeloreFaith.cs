@@ -18,7 +18,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
         {
             return new TextObject("{=!}Pérkkenukos is a native faith of the Calradian continent, natural to the Vakken peoples, who stretch from the Kachyar peninsula to the Chertyg mountains. Once, they say, there was naught but the sea and sky. High above reigned Pérkken, god of sky and thunder, and deep below, Tursas, king of seas.{newline}Pérkkenukos, the faith in Pérkken, represents such oral Vakken traditions, passed on through tribes and generations, often with nuances of local folklore and beliefs, but ultimately united by a common cultural tradition.");
         }
-        public override Banner GetBanner() => new Banner("1.22.22.1836.1836.764.764.1.0.0.203.2.116.427.427.764.638.0.0.0.405.142.116.209.209.764.914.0.0.30.405.116.116.209.209.764.914.0.0.0");
+        public override Banner GetBanner() => new Banner("11.96.19.1836.1836.768.788.1.0.-30.203.129.116.359.359.914.764.1.1.0.203.129.116.359.359.764.714.1.1.0.135.128.116.399.399.764.764.0.1.0.203.129.116.359.359.614.764.1.1.0");
 
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {
@@ -33,12 +33,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
 
         public override TextObject GetBlessingAction()
         {
-            return new TextObject("{=qYmkFsWj}I would like to pledge myself to a cult.");
+            return new TextObject("{=!}I would like to pray to the gods.");
         }
 
         public override TextObject GetBlessingActionName()
         {
-            return new TextObject("{=bd7HQSJH}pledge an oath to.");
+            return new TextObject("{=!}pray to.");
         }
 
         public override TextObject GetBlessingConfirmQuestion()
@@ -48,7 +48,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
 
         public override TextObject GetBlessingQuestion()
         {
-            return new TextObject("{=!}To whom would you pledge? The Thunder-Wielder Pérkken, or?");
+            return new TextObject("{=!}To whom would you pledge? The Thunder-Wielder Pérkken, or perhaps Suurihirvi of the forest?");
         }
 
         public override TextObject GetBlessingQuickInformation()
@@ -58,24 +58,24 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
 
         public override TextObject GetClergyForbiddenAnswer(int rank)
         {
-            return new TextObject("{=AZf5AS94}What is forbidden? Not upholding family and tradition are crimes in the eyes of the gods. Likewise, betraying in act or word those you take as guests. But most of all, cravenness, of course. A craven is no child of forest, much like spoiled fruit is no nourishment. Fight with boldness or do not fight at all.");
+            return new TextObject("{=!}To destroy the forest without purpose is the highest crime on can make. For not only it is the home of our people, but also of the spirits. Our ancestors and the spirits watch over our doings, to forsake them is to forsake our very being. Many a foreigner, such as the Calradoi, can not understand this. Most of them have never wandered deep into the woods to commune with the forest. They have forsaken their ancestors.");
         }
 
         public override TextObject GetClergyForbiddenAnswerLast(int rank)
         {
-            return new TextObject("{=jcLBX8Db}The struggle between righteousness and darkness is the nature of the worlds. Our world, that of mankind, lies right in its midst. Uphold all that is godly, or rot in darkness.");
+            return new TextObject("{=!}Many among the Sturgian nobility have also commited the crime of abandoning their ways. A shame - though different, Sturgians understand many of our beliefs.");
         }
 
-        public override TextObject GetClergyGreeting(int rank) => new TextObject("{=zSR2NTfA}Hail to you, foreigner. Know that the spirits watch over all mankind, true believers or otherwise, and that no malice escapes their senses, and no misdeed goes unrecorded by the oak grain.");
+        public override TextObject GetClergyGreeting(int rank) => new TextObject("{=!}Tervehtuola, foreigner. I represent here the children of the forest as their Tietaja - 'Shaman', as foreigners say. We Vakken seek no disputes, but merely to live according to our ancestors.");
 
-        public override TextObject GetClergyGreetingInducted(int rank) => new TextObject("{=4FBPYfAH}Hail to you, brethren. How can I help you? Do you wish to hear the truth of the gods, or, perhaps, foretell the future?");
+        public override TextObject GetClergyGreetingInducted(int rank) => new TextObject("{=!}Tervehtuola, brethren! I serve here as the Tietaja of our siblings. Come see me should you need the guidance of the spirits.");
 
         public override TextObject GetClergyInduction(int rank)
         {
             var induction = GetInductionAllowed(Hero.MainHero, rank);
             if (!induction.Item1)
             {
-                return new TextObject("{=e4mTQb3c}Alas, one born outside the embrace of the gods, can not choose to be embraced. Though one can be respected for their boldness, only a child of the forest can follow the path of the true gods - it is written in our ancestry. Such is the tale written in the oak grain.[if:convo_bored]");
+                return new TextObject("{=!}Alas, one born outside the embrace of the gods, can not choose to be embraced. Though one can be respected for their boldness, only a child of the forest can follow the path of the true gods - it is written in our ancestry.[if:convo_bored]");
             }
 
             return new TextObject("{=!}I ask of you only this - why have you not come before? My brethren of the woods, you have come to your home. The way of Pérkken, that is your true nature. Your blood and bone.");
@@ -92,18 +92,18 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
             return new TextObject("{=3eB4RvfE}Be welcome as a child of the forest. Defend your brethren and your gods - fight our enemies fiercely, but also be kind to those that visit your hearth. Do not try and convince them of our ways - it is not their place. Yet it is ours to keep unharmed.[if:convo_excited]");
         }
 
-        public override TextObject GetClergyPreachingAnswer(int rank) => new TextObject("{=cDgdXvLX}When it comes to the gods, there is nothing the words of man can say that the rustling of leaves or burbling of rivers does not tell better. The forest, offspring of the Great Oak, holds the chronicles of the past. Truth, you see, is embedded within all that which is godly, be it the river flow or the oak grain. I merely interpret it.");
+        public override TextObject GetClergyPreachingAnswer(int rank) => new TextObject("{=!}To guide our people in the ways, I uphold the traditions of our forefathers. That is what I preach: our ancestral way of life, that of the children of the forest.");
 
-        public override TextObject GetClergyPreachingAnswerLast(int rank) => new TextObject("{=Zz2xgYgb}But if you insist... We preach the way of the Thunder Wielder. Valor in defending your ancestry, honor in keeping your word, and generosity towards those you take into your hearth.");
+        public override TextObject GetClergyPreachingAnswerLast(int rank) => new TextObject("{=!}To protect our home and our kin is our highest duty as faithful. Uphold honor in your words, uphold the gods through offerings, and protect our home by showing no mercy to those that come to harm it.");
 
         public override TextObject GetClergyProveFaith(int rank)
         {
-            return new TextObject("{=!}Naturally, to follow the way of Pérkken is to be a true faithful. Uphold honor, honesty and righteousness. Defend your brethren and the forest, our home, with valor. Those you take into your hearth as guests - treat them as your own blood, as much as good sense allows.");
+            return new TextObject("{=!}Find a sacred grove among the trees and pay offering to the gods. Pray to the spirits and your ancestor for guidance. Expand your family and teach them the way of our kin - we shan't forsake our ways as the Sturgians did.");
         }
 
         public override TextObject GetClergyProveFaithLast(int rank)
         {
-            return new TextObject("{=m5Zva8LP}Most importantly, uphold tradition and ancestry as a child of the forest, remain true to your family and multiply, lest the Great Oak is unrooted by darkness.");
+            return new TextObject("{=!}Keep your words pure and honest, unlike the Battanians with their lies. Protect our home with courage, and show no mercy to our enemies. Have them fear the woods, our home, as the land of trolls and demons they call our spirits.");
         }
 
         public override TextObject GetFaithDescription() => new TextObject("{=!}Pérkkenukos is a native faith of the Calradian continent, natural to the Vakken peoples, who stretch from the Kachyar peninsula to the Chertyg mountains. Once, they say, there was naught but the sea and sky. High above reigned Pérkken, god of sky and thunder, and deep below, Tursas, king of seas. A Great Oak once sprang, blocking all sun and moon light from land and sea. Tursas, envious of the oak's heights, set it ablaze. From its ashes, the forests grew, which the Vakken now protect.{newline}Pérkkenukos, the faith in Pérkken, represents such oral Vakken traditions, passed on through tribes and generations, often with nuances of local folklore and beliefs, but ultimately united by a common cultural tradition. As the Vakken are often isolationists, living deep in the woods, their faith is also descentralized and not represented by an organized clergy. However, they all agree on the hallowed status of the region of Omor, a traditional forest-shrine.");
@@ -136,7 +136,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
 
         public override int GetMaxClergyRank() => 1;
 
-        public override TextObject GetRankTitle(int rank) => new TextObject("{=Yc1bVZ7a}Elder");
+        public override TextObject GetRankTitle(int rank) => new TextObject("{=!}Tietaja");
 
         public override TextObject GetCultsDescription() => new TextObject("{=J4D4X2XJ}Cults");
 
