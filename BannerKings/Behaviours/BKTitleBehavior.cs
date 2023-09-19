@@ -170,6 +170,20 @@ namespace BannerKings.Behaviours
                 return;
             }
 
+            foreach (Kingdom kingdom in Kingdom.All)
+            {
+                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                if (title != null)
+                {
+                    var prohibited = kingdom.ActivePolicies.ToList()
+                        .FindAll(x => title.Contract.Government.ProhibitedPolicies.Contains(x));
+                    foreach (PolicyObject policy in prohibited)
+                    {
+                        kingdom.RemovePolicy(policy);
+                    }
+                }
+            }
+
             foreach (var duchy in BannerKingsConfig.Instance.TitleManager.GetAllTitlesByType(TitleType.Dukedom))
             {
                 duchy.TickClaims();
