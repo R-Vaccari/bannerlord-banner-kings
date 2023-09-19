@@ -76,8 +76,11 @@ namespace BannerKings.Behaviours
                     return;
                 }
 
-                RequestPeerageDecision decision = new RequestPeerageDecision(clan.Leader);
-                decision.DoAiDecision();
+                if (MBRandom.RandomFloat < 0.05f)
+                {
+                    RequestPeerageDecision decision = new RequestPeerageDecision(clan.Leader);
+                    decision.DoAiDecision();
+                }
 
                 var villageSettlement = gentryTuple.Item2.EstatesData.Settlement;
                 foreach (var member in clan.Heroes)
