@@ -57,7 +57,7 @@
 																   StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true" MarginTop="35" MarginBottom="30">
 													<Children>
 
-														<GridWidget Id="ClassesList" DataSource="{NotablesList}" WidthSizePolicy="StretchToParent"
+														<GridWidget DataSource="{NotablesList}" WidthSizePolicy="StretchToParent"
 																	HorizontalAlignment="Center" MarginLeft="100" HeightSizePolicy="CoverChildren" DefaultCellWidth="100"
 																	DefaultCellHeight="25" ColumnCount="1">
 															<ItemTemplate>

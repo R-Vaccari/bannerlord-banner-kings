@@ -13,7 +13,7 @@ namespace BannerKings.Managers.Institutions.Religions
     {
         public ReligionData(Religion religion, Settlement settlement)
         {
-            Religions = new Dictionary<Religion, float> {{religion, 1f}};
+            Religions = new Dictionary<Religion, float>(2);
             Settlement = settlement;
         }
 
@@ -146,14 +146,36 @@ namespace BannerKings.Managers.Institutions.Religions
                         EnterSettlementAction.ApplyForCharacterOnly(clergyman.Hero, data.Settlement);
                     }
                 }
-               
             }
         }
 
         private void InitializeReligions()
         {
-            Religions = new Dictionary<Religion, float>();
-            AddHeroesReligion();
+            var religions = new List<Religion>();
+            var weightDictionary = new Dictionary<Religion, float>();
+            var totalWeight = 0f;
+
+            var ownerRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Settlement.OwnerClan.Leader);
+            if (ownerRel != null) religions.Add(ownerRel);
+
+            foreach (Hero notable in Settlement.Notables)
+            {
+                var notableRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(notable);
+                if (notableRel != null && !religions.Contains(notableRel)) religions.Add(notableRel);
+            }
+
+            foreach (var religion in religions)
+            {
+                var weight = BannerKingsConfig.Instance.ReligionModel.CalculateReligionWeight(religion, Settlement).ResultNumber;
+                weightDictionary.Add(religion, weight);
+                totalWeight += weight;
+            }
+
+            foreach (var pair in weightDictionary)
+            {
+                float targetProportion = pair.Value / totalWeight;
+                Religions.Add(pair.Key, targetProportion);
+            }
         }
 
         private void AddHeroesReligion()

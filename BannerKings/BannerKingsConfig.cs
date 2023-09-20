@@ -21,6 +21,7 @@ using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Shipping;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
@@ -158,6 +159,7 @@ namespace BannerKings
             DefaultGenderLaws.Instance.Initialize();    
             DefaultGovernments.Instance.Initialize();
             DefaultContractAspects.Instance.Initialize();
+            DefaultShippingLanes.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();

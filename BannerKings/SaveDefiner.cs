@@ -64,6 +64,7 @@ using CasusBelli = BannerKings.Behaviours.Diplomacy.Wars.CasusBelli;
 using BannerKings.Managers.Institutions.Religions.Faiths.Eastern;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Goals;
+using BannerKings.Behaviours.Shipping;
 
 namespace BannerKings
 {
@@ -213,6 +214,7 @@ namespace BannerKings
             AddClassDefinition(typeof(ContractDuty), 153);
             AddClassDefinition(typeof(ContractRight), 154);
             AddClassDefinition(typeof(BKContractChangeDecision), 155);
+            AddClassDefinition(typeof(Travel), 156);
         }
 
         protected override void DefineContainerDefinitions()
@@ -281,6 +283,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Hero, Dictionary<Goal, CampaignTime>>));
             ConstructContainerDefinition(typeof(Dictionary<ContractDuty, CampaignTime>));
             ConstructContainerDefinition(typeof(List<ContractAspect>));
+            ConstructContainerDefinition(typeof(Dictionary<MobileParty, Travel>)); 
         }
     }
 }

@@ -1,5 +1,4 @@
 using BannerKings.Behaviours;
-using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Populations;
 using BannerKings.UI.Items.UI;
 using Bannerlord.UIExtenderEx.Attributes;
@@ -128,19 +127,20 @@ namespace BannerKings.UI.Management
             if (playerFaith != null)
             {
                 var presence = BannerKingsConfig.Instance.ReligionModel.CalculateReligionWeight(playerFaith, settlement);
-                ReligionInfo.Add(new InformationElement(new TextObject("{=gTzbdsBY}Faith Presence:").ToString(),
+                Concept faithPresence = Concept.All.First(x => x.StringId == "str_bk_faith_presence");
+                ReligionInfo.Add(new InformationElement(new TextObject("{=!}Faith Presence ({FAITH}):")
+                    .SetTextVariable("FAITH", playerFaith.Faith.GetFaithName())
+                    .ToString(),
                     FormatValue(presence.ResultNumber / totalFaithsWeight),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
-                        .SetTextVariable("TEXT",
-                            new TextObject("{=STxuNCBU}The faith's presence in the settlement. Presence describes how much of the population adheres to the faith. Presence is affected by various factors, such as the faith's fervor, and whether it accepts the culture's settlement or not."))
+                        .SetTextVariable("TEXT", faithPresence.Description)
                         .SetTextVariable("EXPLANATIONS", presence.GetExplanations())
                         .ToString()));
-
 
                 var fervor = BannerKingsConfig.Instance.ReligionModel.CalculateFervor(playerFaith);
                 ReligionInfo.Add(new InformationElement(new TextObject("{=PUwmzUZy}Fervor:").ToString(),
                     FormatValue(fervor.ResultNumber),
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=!}{TEXT}{newline}{newline}Explanations:{newline}{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject("{=!}The faith's fervor. A faith's fervor makes its populations and heroes harder to convert. In settlements, fervor grealy contributes to the faith's presence. Heroes instead are less likely and/or require more resources to convert. Fervor is based on doctrines, settlements and clans that follow the faith. Additionaly, holding the Faith Seat and the faith's Holy Sites are important factors to fervor."))
                         .SetTextVariable("EXPLANATIONS", fervor.GetExplanations())
@@ -263,9 +263,9 @@ namespace BannerKings.UI.Management
             }
             
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("").ToString(),
-                new TextObject("").ToString(),
-                null,
+                new TextObject("Banish Preacher").ToString(),
+                new TextObject("`{=!}As overlord of this fief, you are able to banish preachers that do not represent your faith. They must not represent the local Dominant Religion.{newline}Banishing a preacher allows you to diminish their faith's presence, and thus increasing your own. Such act costs both piety and influence. Moreover, banishing preachers yields significant negative impact to local loyalty.").ToString(),
+                elements,
                 true,
                 1,
                 GameTexts.FindText("str_accept").ToString(),

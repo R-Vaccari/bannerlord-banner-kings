@@ -329,6 +329,12 @@ namespace BannerKings.Managers.Populations
                             result *= 1.1f;
                         }
                     }
+
+                    if (type == "woodland" && BannerKingsConfig.Instance.ReligionsManager
+                        .HasBlessing(owner, DefaultDivinities.Instance.Hirvi, ownerReligion))
+                    {
+                        result *= 1.5f;
+                    }
                 }
             }
 

@@ -296,9 +296,6 @@ namespace BannerKings.Models.BKModels
                 return result;
             }
 
-            var dominantShare = data.Religions[dominant];
-            result.Add(1f - dominantShare, new TextObject("{=SFRmmVms}Dominant faith's share"));
-
             foreach (var tuple in data.Religions)
             {
                 var rel = tuple.Key;
@@ -338,7 +335,7 @@ namespace BannerKings.Models.BKModels
 
         public ExplainedNumber CalculateFervor(Religion religion)
         {
-            ExplainedNumber result = new ExplainedNumber(0.05f, true);
+            ExplainedNumber result = new ExplainedNumber(0.3f, true);
             result.LimitMin(0f);
             result.LimitMax(1f);
 
