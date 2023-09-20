@@ -94,7 +94,7 @@ namespace BannerKings.Managers.Innovations
             bool result = false;
             foreach (Innovation i in Innovations)
             {
-                if (i.Equals(innovation) && i.Finished)
+                if (i.StringId == innovation.StringId && i.Finished)
                 {
                     result = true;
                     break;
