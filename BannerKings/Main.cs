@@ -9,7 +9,6 @@ using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
-using BannerKings.Managers.Traits;
 using BannerKings.Models.Vanilla;
 using BannerKings.Settings;
 using BannerKings.UI;
@@ -20,6 +19,7 @@ using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using BannerKings.Managers.Innovations.Eras;
 using BannerKings.Behaviours.Innovations;
+using BannerKings.Behaviours.Shipping;
 
 namespace BannerKings
 {
@@ -71,6 +71,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKCriminalityBehavior());
             campaignStarter.AddBehavior(new BKTraitBehavior());
             campaignStarter.AddBehavior(new BKPartyNeedsBehavior());
+            campaignStarter.AddBehavior(new BKShippingBehavior());
 
             campaignStarter.AddModel(new BKPrisonerModel());
             campaignStarter.AddModel(BannerKingsConfig.Instance.CompanionModel);
