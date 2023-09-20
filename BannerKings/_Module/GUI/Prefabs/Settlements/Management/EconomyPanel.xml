@@ -93,9 +93,34 @@
 															</ItemTemplate>
 														</GridWidget>
 														
+
+														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"  IsVisible="@HasLanes"
+																   StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="25" MarginLeft="25"
+																   MarginRight="25" DoNotAcceptEvents="true">
+															<Children>
+																<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5"
+																		MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7"
+																		Sprite="SPGeneral\TownManagement\horizontal_divider" />
+																<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																				HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
+																				Brush.FontSize="20" Text="@LanesText" />
+																<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5"
+																		MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7"
+																		Sprite="SPGeneral\TownManagement\horizontal_divider" />
+															</Children>
+														</ListPanel>
+														
+														<GridWidget DataSource="{LanesList}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																	HorizontalAlignment="Center" MarginLeft="100" DefaultCellWidth="100"
+																	DefaultCellHeight="25" ColumnCount="1">
+															<ItemTemplate>
+																<InformationElement />
+															</ItemTemplate>
+														</GridWidget>
+															
 														
 														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
-																   StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="25" MarginLeft="25"
+																   StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="55" MarginLeft="25"
 																   MarginRight="25" DoNotAcceptEvents="true">
 															<Children>
 																<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5"
@@ -117,8 +142,6 @@
 																<InformationElement />
 															</ItemTemplate>
 														</GridWidget>
-														
-														
 
 														<ListPanel WidthSizePolicy="StretchToParent" IsVisible="@HasTown" HeightSizePolicy="Fixed"
 																   StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="25" MarginLeft="25"

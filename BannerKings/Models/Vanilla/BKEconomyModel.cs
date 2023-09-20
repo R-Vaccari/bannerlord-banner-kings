@@ -3,6 +3,7 @@ using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Shipping;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
@@ -217,9 +218,9 @@ namespace BannerKings.Models.Vanilla
             return cost;
         }
 
-        public ExplainedNumber CalculateCaravanAttraction(Settlement settlement)
+        public ExplainedNumber CalculateCaravanAttraction(Settlement settlement, bool descriptions = false)
         {
-            var result = new ExplainedNumber(1f, true);
+            ExplainedNumber result = new ExplainedNumber(1f, descriptions);
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             result.Add(data.EconomicData.Mercantilism.ResultNumber / 2f, new TextObject("{=5eHCGMEK}Mercantilism"));
@@ -229,6 +230,20 @@ namespace BannerKings.Models.Vanilla
                 DefaultCouncilPositions.Instance.Steward,
                 DefaultCouncilTasks.Instance.DevelopEconomy, 
                 0.15f, false);
+
+            foreach (var lane in DefaultShippingLanes.Instance.GetSettlementLanes(settlement))
+            {
+                float laneResult = 0f;
+                foreach (Settlement port in lane.Ports)
+                {
+                    if (port.IsTown)
+                    {
+                        laneResult += 0.1f;
+                    }
+                }
+
+                result.Add(laneResult, lane.Name);
+            }
 
             if (settlement.Town != null)
             {
