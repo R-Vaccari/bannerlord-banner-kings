@@ -1,5 +1,4 @@
 using BannerKings.Behaviours;
-using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Populations;
 using BannerKings.UI.Items.UI;
 using Bannerlord.UIExtenderEx.Attributes;
@@ -137,7 +136,6 @@ namespace BannerKings.UI.Management
                         .SetTextVariable("TEXT", faithPresence.Description)
                         .SetTextVariable("EXPLANATIONS", presence.GetExplanations())
                         .ToString()));
-
 
                 var fervor = BannerKingsConfig.Instance.ReligionModel.CalculateFervor(playerFaith);
                 ReligionInfo.Add(new InformationElement(new TextObject("{=PUwmzUZy}Fervor:").ToString(),

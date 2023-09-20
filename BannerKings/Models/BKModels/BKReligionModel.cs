@@ -264,9 +264,6 @@ namespace BannerKings.Models.BKModels
                 return result;
             }
 
-            var dominantShare = data.Religions[dominant];
-            result.Add(1f - dominantShare, new TextObject("{=SFRmmVms}Dominant faith's share"));
-
             foreach (var tuple in data.Religions)
             {
                 var rel = tuple.Key;
