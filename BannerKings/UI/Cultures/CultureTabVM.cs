@@ -38,7 +38,7 @@ namespace BannerKings.UI.Cultures
             Managers.Institutions.Religions.Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetIdealReligion(Culture);
             if (rel != null)
             {
-                Banner = new ImageIdentifierVM(rel.Faith.GetBanner());
+                Banner = new ImageIdentifierVM(BannerCode.CreateFrom(rel.Faith.GetBanner()), true);
             }
 
             foreach (Era era in DefaultEras.Instance.All)
