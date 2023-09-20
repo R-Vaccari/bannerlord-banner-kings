@@ -306,7 +306,7 @@ namespace BannerKings.Models.BKModels
 
         public ExplainedNumber CalculateFervor(Religion religion)
         {
-            ExplainedNumber result = new ExplainedNumber(0.05f, true);
+            ExplainedNumber result = new ExplainedNumber(0.3f, true);
             result.LimitMin(0f);
             result.LimitMax(1f);
 
