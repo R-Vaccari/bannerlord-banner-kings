@@ -113,8 +113,11 @@ namespace BannerKings.Managers.Goals.Decisions
                 if (religion == null || religion.Faith.GetId() != "amra")
                 {
                     var amra = BannerKingsConfig.Instance.ReligionsManager.GetReligionById("amra");
-                    failedReasons.Add(new TextObject("{=NVcg68Lz}You do not adhere to the {RELIGION} faith.")
-                        .SetTextVariable("RELIGION", amra.Faith.GetFaithName()));
+                    if (amra != null)
+                    {
+                        failedReasons.Add(new TextObject("{=NVcg68Lz}You do not adhere to the {RELIGION} faith.")
+                                                .SetTextVariable("RELIGION", amra.Faith.GetFaithName()));
+                    }
                 }
 
                 if (BannerKingsConfig.Instance.TitleManager != null)
