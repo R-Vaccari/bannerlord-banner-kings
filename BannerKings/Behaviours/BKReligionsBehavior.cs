@@ -50,6 +50,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
             CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
             CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
+            CampaignEvents.MapEventEnded.AddNonSerializedListener(this, EventEnded);
             //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
         }
 
@@ -110,6 +111,15 @@ namespace BannerKings.Behaviours
             if (BannerKingsConfig.Instance.ReligionsManager != null)
             {
                 BannerKingsConfig.Instance.ReligionsManager.InitializeReligions();
+            }
+        }
+
+        private void EventEnded(MapEvent mapEvent) 
+        {
+            foreach (var eventParty in mapEvent.PartiesOnSide(mapEvent.WinningSide))
+            {
+                BannerKingsConfig.Instance.ReligionsManager.AddPiety(eventParty.Party.LeaderHero, 
+                    eventParty.GainedInfluence, true);
             }
         }
 

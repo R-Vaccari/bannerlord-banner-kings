@@ -48,6 +48,7 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
                 yield return Esotericism;
                 yield return RenovatioImperi;
                 yield return AncestorWorship;
+                yield return Warlike;
                 foreach (Doctrine item in ModAdditions)
                 {
                     yield return item;
@@ -131,9 +132,9 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
                     OsricsVengeance
                 });
 
-            Warlike = new Doctrine("osrics_vengeance",
+            Warlike = new Doctrine("Warlike",
                 new TextObject("{=!}Warlike"),
-                new TextObject("{=!}This faith understands combat as a pious practice."),
+                new TextObject("{=!}Combat is considered by the faith a pious practice. The gods decide the winner, and to attempt to escape our fate through cravenness is an offence to the gods."),
                 new TextObject("{=!}Piety gain as battle reward"),
                 new List<Doctrine>()
                 {
