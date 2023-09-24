@@ -13,7 +13,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
         {
             return new TextObject("{=!}Pérkkenukos is a native faith of the Calradian continent, natural to the Vakken peoples, who stretch from the Kachyar peninsula to the Chertyg mountains. Once, they say, there was naught but the sea and sky. High above reigned Pérkken, god of sky and thunder, and deep below, Tursas, king of seas.{newline}Pérkkenukos, the faith in Pérkken, represents such oral Vakken traditions, passed on through tribes and generations, often with nuances of local folklore and beliefs, but ultimately united by a common cultural tradition.");
         }
-        public override Banner GetBanner() => new Banner("11.96.19.1836.1836.768.788.1.0.-30.203.129.116.359.359.914.764.1.1.0.203.129.116.359.359.764.714.1.1.0.135.128.116.399.399.764.764.0.1.0.203.129.116.359.359.614.764.1.1.0");
+
+        public override Banner GetBanner() => new Banner("11.98.2.1528.1528.764.764.1.0.0.100314.40.3.483.483.764.764.0.0.0");
 
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {
