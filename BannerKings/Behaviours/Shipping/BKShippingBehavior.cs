@@ -33,6 +33,7 @@ namespace BannerKings.Behaviours.Shipping
 
         public override void RegisterEvents()
         {
+            CampaignEvents.WeeklyTickEvent.AddNonSerializedListener(this, OnWeeklyTick);
             CampaignEvents.AfterSettlementEntered.AddNonSerializedListener(this, AfterSettlementEntered);
             CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, TickParty);
         }
@@ -113,6 +114,26 @@ namespace BannerKings.Behaviours.Shipping
             party.Ai.EnableAi();
 
             RemoveParty(travel.Party);
+        }
+
+        private void OnWeeklyTick()
+        {
+            foreach (ShippingLane lane in DefaultShippingLanes.Instance.All)
+            {
+                if (lane.Culture == null) continue;
+                
+                foreach (Settlement port in lane.Ports)
+                {
+                    if (!port.IsTown) continue;
+                        
+                    if (!port.Notables.Any(x => x.Culture == lane.Culture))
+                    {
+                        var merchant = lane.Culture.NotableAndWandererTemplates.FirstOrDefault(x => x.Occupation == Occupation.Merchant);
+                        EnterSettlementAction.ApplyForCharacterOnly(HeroCreator
+                            .CreateSpecialHero(merchant, port, null, null, 30), port);
+                    }
+                }
+            }
         }
 
         private void AfterSettlementEntered(MobileParty party, Settlement settlement, Hero hero)
