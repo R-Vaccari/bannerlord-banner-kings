@@ -1,4 +1,6 @@
-﻿using BannerKings.Managers.Shipping;
+﻿using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
+using BannerKings.Managers.Shipping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +70,16 @@ namespace BannerKings.Behaviours.Shipping
         {
             float distance = party.CurrentSettlement.GatePosition.Distance(settlement.GatePosition);
             float days = distance / 75f;
+
+            Hero owner = party.LeaderHero != null ? party.LeaderHero : party.Owner;
+            if (owner != null)
+            {
+                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
+                if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Astrology))
+                {
+                    days = distance / 60f;
+                }
+            }
 
             return CampaignTime.DaysFromNow(days);
         }

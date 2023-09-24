@@ -65,6 +65,11 @@ namespace BannerKings.Models.BKModels
                         }
                     }
 
+                    if (hero.Clan != null && rel.HasDoctrine(DefaultDoctrines.Instance.AncestorWorship))
+                    {
+                        result.Add(hero.Clan.Tier * 0.05f, DefaultDoctrines.Instance.AncestorWorship.Name);
+                    }
+
                     if (rel.HasDoctrine(DefaultDoctrines.Instance.Literalism))
                     {
                         var skill = hero.GetSkillValue(BKSkills.Instance.Scholarship);
