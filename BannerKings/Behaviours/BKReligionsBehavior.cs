@@ -50,6 +50,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
             CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
             CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
+            CampaignEvents.MapEventEnded.AddNonSerializedListener(this, EventEnded);
             //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
         }
 
@@ -113,6 +114,15 @@ namespace BannerKings.Behaviours
             }
         }
 
+        private void EventEnded(MapEvent mapEvent) 
+        {
+            foreach (var eventParty in mapEvent.PartiesOnSide(mapEvent.WinningSide))
+            {
+                BannerKingsConfig.Instance.ReligionsManager.AddPiety(eventParty.Party.LeaderHero, 
+                    eventParty.GainedInfluence, true);
+            }
+        }
+
         private void OnSiegeAftermath(MobileParty attackerParty, Settlement settlement,
            SiegeAftermathAction.SiegeAftermath aftermathType,
            Clan previousSettlementOwner,
@@ -125,6 +135,8 @@ namespace BannerKings.Behaviours
                     if (!party.IsLordParty || party.LeaderHero == null) continue;
 
                     Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(party.LeaderHero);
+                    if (rel == null) continue;
+
                     if (rel.HasDoctrine(DefaultDoctrines.Instance.OsricsVengeance))
                     {
                         BannerKingsConfig.Instance.ReligionsManager.AddPiety(party.LeaderHero,
@@ -359,6 +371,8 @@ namespace BannerKings.Behaviours
          
         private void InitializeFaith(Hero hero)
         {
+            if (DefaultReligions.Instance.All.Count() == 0) return;
+
             Religion startingReligion = null;
             if (hero.Clan != null && hero != hero.Clan.Leader && hero.Clan.Leader != null)
             {

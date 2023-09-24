@@ -23,6 +23,8 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
         public Doctrine Astrology { get; private set; }
         public Doctrine Esotericism { get; private set; }
         public Doctrine RenovatioImperi { get; private set; }
+        public Doctrine AncestorWorship { get; private set; }
+        public Doctrine Defensive { get; private set; }
 
         public override IEnumerable<Doctrine> All
         {
@@ -45,6 +47,8 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
                 yield return Astrology;
                 yield return Esotericism;
                 yield return RenovatioImperi;
+                yield return AncestorWorship;
+                yield return Warlike;
                 foreach (Doctrine item in ModAdditions)
                 {
                     yield return item;
@@ -54,6 +58,15 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
 
         public override void Initialize()
         {
+            AncestorWorship = new Doctrine("AncestorWorship",
+                new TextObject("{=!}Ancestor Worship"),
+                new TextObject("{=!}Honoring the ancestors is a crucial part of the faith, for they watch over the living, expecting them to fulfill their traditions. They live on as spirits, when they are not among the ranks of the gods themselves."),
+                new TextObject("{=!}Easier to marry within the same faith{newline}Clan renown yields piety"),
+                new List<Doctrine>()
+                {
+                },
+                false);
+
             RenovatioImperi = new Doctrine("RenovatioImperi",
                 new TextObject("{=!}Renovatio Imperi"),
                 new TextObject("{=!}Peace in Calradia can only exist with an united Empire. A kingdom under the teachings of Heaven. The faithful should cast aside their ambitions and work together for the benefit of the gods."),
@@ -66,7 +79,7 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
             Esotericism = new Doctrine("Esotericism",
                new TextObject("{=!}Esotericism"),
                new TextObject("{=!}Knowledge and faith are less divided than most think. The cosmos is littered with mysteryes, and to seek their answers is to seek to reach the gods themselves."),
-               new TextObject("{=!}Wisdom yields piety\nFinishing education projects yields piety"),
+               new TextObject("{=!}Wisdom yields piety{newline}Finishing education projects yields piety and Theology"),
                new List<Doctrine>()
                {
                },
@@ -119,9 +132,9 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
                     OsricsVengeance
                 });
 
-            Warlike = new Doctrine("osrics_vengeance",
+            Warlike = new Doctrine("Warlike",
                 new TextObject("{=!}Warlike"),
-                new TextObject("{=!}This faith understands combat as a pious practice."),
+                new TextObject("{=!}Combat is considered by the faith a pious practice. The gods decide the winner, and to attempt to escape our fate through cravenness is an offence to the gods."),
                 new TextObject("{=!}Piety gain as battle reward"),
                 new List<Doctrine>()
                 {

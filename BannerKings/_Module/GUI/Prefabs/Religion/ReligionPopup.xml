@@ -64,9 +64,27 @@
 																		<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
 																			HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="40" Text="@Name"
 																			MarginTop="20" />
-																		<RichTextWidget HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent"
-																			Brush="Encyclopedia.SubPage.Info.Text" Text="@Description" MarginTop="25" MarginLeft="15"
-																			MarginRight="25" ClipContents="false" />
+																			
+																		<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" SuggestedWidth="1000"
+																           StackLayout.LayoutMethod="HorizontalLeftToRight" DoNotAcceptEvents="true">
+																			<Children>
+																				
+																				<Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" 
+																						VerticalAlignment="Center" MarginLeft="15" MarginRight="15">
+																				  <Children>
+																					<MaskedTextureWidget DataSource="{Banner}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" 
+																										 ImageTypeCode="@ImageTypeCode" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" 
+																										 SuggestedWidth="243" SuggestedHeight="358" HorizontalAlignment="Center" VerticalAlignment="Center" 
+																										 Brush="Encyclopedia.Clan.Banner"  />
+																				  </Children>
+																				</Widget>
+																			
+																				<RichTextWidget HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent"
+																					Brush="Encyclopedia.SubPage.Info.Text" Text="@Description" MarginTop="25" MarginLeft="15"
+																					MarginRight="25" ClipContents="false" />
+																					
+																			</Children>
+																		</ListPanel>
 
 																		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7"
 																			MarginLeft="50" MarginRight="50" MarginTop="20" VerticalAlignment="Bottom" PositionYOffset="7"

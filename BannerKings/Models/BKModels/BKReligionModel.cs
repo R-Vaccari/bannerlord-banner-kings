@@ -66,6 +66,11 @@ namespace BannerKings.Models.BKModels
                         }
                     }
 
+                    if (hero.Clan != null && rel.HasDoctrine(DefaultDoctrines.Instance.AncestorWorship))
+                    {
+                        result.Add(hero.Clan.Tier * 0.05f, DefaultDoctrines.Instance.AncestorWorship.Name);
+                    }
+
                     if (rel.HasDoctrine(DefaultDoctrines.Instance.Literalism))
                     {
                         var skill = hero.GetSkillValue(BKSkills.Instance.Scholarship);
@@ -77,6 +82,12 @@ namespace BannerKings.Models.BKModels
                         {
                             result.Add(skill * 0.01f, DefaultDoctrines.Instance.Literalism.Name);
                         }
+                    }
+
+                    if (rel.HasDoctrine(DefaultDoctrines.Instance.Esotericism))
+                    {
+                        result.Add(hero.GetAttributeValue(BKAttributes.Instance.Wisdom) * 0.1f, 
+                            DefaultDoctrines.Instance.Esotericism.Name);
                     }
 
                     if (hero.Clan != null)

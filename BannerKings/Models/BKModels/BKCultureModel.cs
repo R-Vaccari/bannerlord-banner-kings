@@ -72,11 +72,11 @@ namespace BannerKings.Models.BKModels
             {
                 if (data.Acceptance > data.Assimilation)
                 {
-                    result.Add(-0.02f);
+                    result.Add(-0.001f);
                 }
                 else if (data.Acceptance < data.Assimilation)
                 {
-                    result.Add(0.02f);
+                    result.Add(0.001f);
                 }
             }
 

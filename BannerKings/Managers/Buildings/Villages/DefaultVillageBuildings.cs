@@ -313,7 +313,7 @@ namespace BannerKings.Managers.Populations.Villages
             yield return Instance.TaxOffice;
 
             InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(village.Settlement.Culture);
-            if (data.HasFinishedInnovation(DefaultInnovations.Instance.Mills))
+            if (data != null && data.HasFinishedInnovation(DefaultInnovations.Instance.Mills))
             {
                 yield return Instance.Mill;
             }

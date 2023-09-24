@@ -4,6 +4,7 @@ using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -94,7 +95,18 @@ namespace BannerKings.Managers.Education
 
         public void AddProgress(float progress)
         {
-            LifestyleProgress = MBMath.ClampFloat(LifestyleProgress + progress, 0f, 1f);
+            float result = MBMath.ClampFloat(LifestyleProgress + progress, 0f, 1f); ;
+            LifestyleProgress = result;
+
+            if (result >= 1f)
+            {
+                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+                if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Esotericism))
+                {
+                    BannerKingsConfig.Instance.ReligionsManager.AddPiety(hero, 100, true);
+                    hero.AddSkillXp(BKSkills.Instance.Theology, 500);
+                }
+            }
         }
 
         public MBReadOnlyDictionary<Language, float> Languages => languages.GetReadOnlyDictionary();
@@ -219,6 +231,13 @@ namespace BannerKings.Managers.Education
                 }
 
                 hero.AddSkillXp(BKSkills.Instance.Scholarship, 2000);
+
+                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+                if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Esotericism))
+                {
+                    BannerKingsConfig.Instance.ReligionsManager.AddPiety(hero, 100, true);
+                    hero.AddSkillXp(BKSkills.Instance.Theology, 500);
+                }
             }
 
             hero.AddSkillXp(BKSkills.Instance.Scholarship, 50);
@@ -243,6 +262,13 @@ namespace BannerKings.Managers.Education
                 }
 
                 hero.AddSkillXp(BKSkills.Instance.Scholarship, 2000);
+
+                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+                if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Esotericism))
+                {
+                    BannerKingsConfig.Instance.ReligionsManager.AddPiety(hero, 100, true);
+                    hero.AddSkillXp(BKSkills.Instance.Theology, 500);
+                }
             }
 
             hero.AddSkillXp(BKSkills.Instance.Scholarship, 50);

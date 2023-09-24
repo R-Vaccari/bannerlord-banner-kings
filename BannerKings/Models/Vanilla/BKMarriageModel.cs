@@ -1,4 +1,5 @@
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
 using BannerKings.Utils;
@@ -57,6 +58,11 @@ namespace BannerKings.Models.Vanilla
                 else if (proposerReligion != null && proposedReligion != null)
                 {
                     result.Add(50f, proposerReligion.Faith.GetFaithName());
+
+                    if (proposerReligion.HasDoctrine(DefaultDoctrines.Instance.AncestorWorship))
+                    {
+                        result.Add(50f, DefaultDoctrines.Instance.AncestorWorship.Name);
+                    }
                 }
 
                 if (!IsCoupleSuitableForMarriage(proposer, secondHero))

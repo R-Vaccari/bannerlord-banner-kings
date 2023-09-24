@@ -149,6 +149,14 @@ namespace BannerKings.Managers.Populations
             ExceptionUtils.TryCatch(() =>
             {
                 SettlementOwner = data.Settlement.Owner;
+                foreach (Hero notable in data.Settlement.Notables)
+                {
+                    if (notable.Culture != data.Settlement.Culture && !IsCulturePresent(notable.Culture))
+                    {
+                        float percentage = GetWeightPorportion(data.Settlement, notable.Culture);
+                        AddCulture(notable.Culture, percentage, percentage);
+                    }
+                }
 
                 BalanceCultures(data);
                 var dominant = DominantCulture;
