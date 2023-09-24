@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Institutions.Religions;
+﻿using BannerKings.Behaviours;
+using BannerKings.Managers.Institutions.Religions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -76,10 +77,10 @@ namespace BannerKings.UI.CampaignStart
 
         public void ExecuteFinish()
         {
-            BannerKingsConfig.Instance.ReligionsManager.AddToReligion(Hero.MainHero,
-                Selected.Religion);
-            BannerKingsConfig.Instance.ReligionsManager.AddPiety(Hero.MainHero, BannerKingsConfig.Instance.ReligionsManager.GetStartingPiety(Selected.Religion, Hero.MainHero));
+            var behavior = Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>();
+            behavior.SetReligion(Selected.Religion);
             ExecuteClose();
+            behavior.OnCharacterCreationOver();
         }
 
         public void OnSelectOption(ReligionStartOptionVM option)

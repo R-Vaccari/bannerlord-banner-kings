@@ -79,7 +79,7 @@ namespace BannerKings.UI.CampaignStart
             var behavior = Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>();
             behavior.SetStartOption(Selected.Option);
             ExecuteClose();
-            UIManager.Instance.ShowWindow("religionStart");
+            behavior.OnCharacterCreationOver();
         }
 
         public void OnSelectOption(StartOptionVM option)
