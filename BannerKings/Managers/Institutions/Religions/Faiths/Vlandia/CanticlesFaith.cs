@@ -10,7 +10,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 {
     public class CanticlesFaith : PolytheisticFaith
     {
-        public override Settlement FaithSeat => Settlement.All.First(x => x.StringId == "");
+        public override Settlement FaithSeat => Settlement.All.First(x => x.StringId == "town_V3");
         public override TextObject GetDescriptionHint()
         {
             return new TextObject("{=qrhkRi7R}The Canticles is a the history of deeds of the Vlandic peoples. It understands the world as a collection of sagas, of which all people are parts of. It does not discriminate between cultures, nor does it see itself as a 'faith', bur rather, a fact.");
