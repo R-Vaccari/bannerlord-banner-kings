@@ -125,6 +125,8 @@ namespace BannerKings.Behaviours
                     if (!party.IsLordParty || party.LeaderHero == null) continue;
 
                     Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(party.LeaderHero);
+                    if (rel == null) continue;
+
                     if (rel.HasDoctrine(DefaultDoctrines.Instance.OsricsVengeance))
                     {
                         BannerKingsConfig.Instance.ReligionsManager.AddPiety(party.LeaderHero,
@@ -359,6 +361,8 @@ namespace BannerKings.Behaviours
          
         private void InitializeFaith(Hero hero)
         {
+            if (DefaultReligions.Instance.All.Count() == 0) return;
+
             Religion startingReligion = null;
             if (hero.Clan != null && hero != hero.Clan.Leader && hero.Clan.Leader != null)
             {

@@ -174,7 +174,12 @@ namespace BannerKings.Managers.Court
 
         public ValueTuple<bool, TextObject> IsValidCandidate(Hero candidate)
         {
-            if (candidate.Clan is { IsUnderMercenaryService: true })
+            if (AllPrivileges.Contains(CouncilPrivileges.NOBLE_EXCLUSIVE) && candidate.Occupation != Occupation.Lord)
+            {
+                return new(false, new TextObject("{=f3yxaXA3}This privy council position requires a noble."));
+            }
+
+            if (Clan.IsUnderMercenaryService)
             {
                 return new (false, new TextObject("{=CY32Qr0W}The clan is under mercenary service."));
             }
@@ -188,11 +193,6 @@ namespace BannerKings.Managers.Court
                     return new(false, new TextObject("{=MZuuw80X}The {FAITH} requires councilors of same faith due to it's Legalism.")
                         .SetTextVariable("FAITH", clanReligion.Faith.GetFaithName()));
                 }
-            }
-
-            if (IsRoyal && IsCorePosition(StringId) && candidate.Occupation != Occupation.Lord)
-            {
-                return new(false, new TextObject("{=f3yxaXA3}This privy council position requires a noble."));
             }
 
             return IsValidCandidateInternal(candidate);
