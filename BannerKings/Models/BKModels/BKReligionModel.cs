@@ -83,6 +83,12 @@ namespace BannerKings.Models.BKModels
                         }
                     }
 
+                    if (rel.HasDoctrine(DefaultDoctrines.Instance.Esotericism))
+                    {
+                        result.Add(hero.GetAttributeValue(BKAttributes.Instance.Wisdom) * 0.1f, 
+                            DefaultDoctrines.Instance.Esotericism.Name);
+                    }
+
                     if (hero.Clan != null)
                     {
                         if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(hero.Clan,
