@@ -44,7 +44,9 @@ namespace BannerKings.Patches
                 if (!enumerable.Any())
                 {
                     __result = null;
+                    return false;
                 }
+
                 CharacterObject template = null;
                 int num3 = settlement.RandomIntWithSeed((uint)settlement.Notables.Count, 1, num);
                 foreach (CharacterObject characterObject2 in enumerable)

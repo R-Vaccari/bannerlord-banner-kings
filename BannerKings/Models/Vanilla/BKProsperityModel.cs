@@ -128,6 +128,8 @@ namespace BannerKings.Models.Vanilla
 
             ExplainedNumber explainedNumber = new ExplainedNumber(0f, true);
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(fortification.Settlement);
+            if (data == null) return base.CalculateProsperityChange(fortification, includeDescriptions);
+
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             explainedNumber.Add(craftsmen * 0.0005f, new TextObject("Craftsmen output"));
 
