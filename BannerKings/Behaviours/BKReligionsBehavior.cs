@@ -120,8 +120,18 @@ namespace BannerKings.Behaviours
             {
                 foreach (var eventParty in mapEvent.PartiesOnSide(mapEvent.WinningSide))
                 {
-                    BannerKingsConfig.Instance.ReligionsManager.AddPiety(eventParty.Party.LeaderHero,
-                        eventParty.GainedInfluence, true);
+                    if (eventParty.GainedInfluence > 0f && eventParty.GainedInfluence < float.MaxValue && 
+                        eventParty.Party.LeaderHero != null)
+                    {
+                        Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(eventParty.Party.LeaderHero);
+                        if (rel != null && rel.HasDoctrine(DefaultDoctrines.Instance.Warlike))
+                        {
+                            BannerKingsConfig.Instance.ReligionsManager.AddPiety(
+                                eventParty.Party.LeaderHero,
+                                eventParty.GainedInfluence, 
+                                true);
+                        }
+                    }
                 }
             }
         }
