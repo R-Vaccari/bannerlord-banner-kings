@@ -116,10 +116,23 @@ namespace BannerKings.Behaviours
 
         private void EventEnded(MapEvent mapEvent) 
         {
-            foreach (var eventParty in mapEvent.PartiesOnSide(mapEvent.WinningSide))
+            if ((int)mapEvent.WinningSide >= 0)
             {
-                BannerKingsConfig.Instance.ReligionsManager.AddPiety(eventParty.Party.LeaderHero, 
-                    eventParty.GainedInfluence, true);
+                foreach (var eventParty in mapEvent.PartiesOnSide(mapEvent.WinningSide))
+                {
+                    if (eventParty.GainedInfluence > 0f && eventParty.GainedInfluence < float.MaxValue && 
+                        eventParty.Party.LeaderHero != null)
+                    {
+                        Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(eventParty.Party.LeaderHero);
+                        if (rel != null && rel.HasDoctrine(DefaultDoctrines.Instance.Warlike))
+                        {
+                            BannerKingsConfig.Instance.ReligionsManager.AddPiety(
+                                eventParty.Party.LeaderHero,
+                                eventParty.GainedInfluence, 
+                                true);
+                        }
+                    }
+                }
             }
         }
 

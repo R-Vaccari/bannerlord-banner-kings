@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
@@ -36,6 +37,9 @@ namespace BannerKings.Managers.Institutions.Religions
         public Divinity WindHell { get; } = new Divinity("WindHell");
         public Divinity Iltanlar { get; } = new Divinity("Iltanlar");
         public Divinity SheWolf { get; } = new Divinity("SheWolf");
+        public Divinity GodsFate { get; } = new Divinity("GodsFate");
+        public Divinity Gundar { get; } = new Divinity("Gundar");
+        public Divinity Arkina { get; } = new Divinity("Arkina");
 
         public override IEnumerable<Divinity> All
         {
@@ -69,6 +73,9 @@ namespace BannerKings.Managers.Institutions.Religions
                 yield return WindHeaven;
                 yield return SheWolf;
                 yield return Iltanlar;
+                yield return GodsFate;
+                yield return Gundar;
+                yield return Arkina;
                 //yield return Grunwald;
                 foreach (Divinity item in ModAdditions)
                 {
@@ -79,6 +86,21 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public override void Initialize()
         {
+            GodsFate.Initialize(new TextObject("{=!}Gods of Fate"),
+              new TextObject("{=!}According to the Junme, the world revolves around the concept of Urthr - or in other words, fate. The gods are stewards of the Great Oak that mankind inhabits, keeping its roots and leaves from rotting. Moreover, the gods are the force of justice that fights Ásbani, the God-Devouring Serpent. The gods of fate, they say, give man what is just - rewards to those who are brave and virtuous, and punishment to the wicked, for they do not weave what choices a man makes, but they do the consequences."),
+              new TextObject("{=!}Signicantly increased renown and influence from battles"),
+              new TextObject("{=!}Gods"));
+
+            Gundar.Initialize(new TextObject("{=!}Gundar"),
+               new TextObject("{=!}According to the Junme, the world revolves around the concept of Urthr - or in other words, fate. The gods are stewards of the Great Oak that mankind inhabits, keeping its roots and leaves from rotting. Moreover, the gods are the force of justice that fights Ásbani, the God-Devouring Serpent. The gods of fate, they say, give man what is just - rewards to those who are brave and virtuous, and punishment to the wicked, for they do not weave what choices a man makes, but they do the consequences."),
+               new TextObject("{=!}"),
+               new TextObject("{=!}Ancestor Hero"));
+
+            Arkina.Initialize(new TextObject("{=!}Arkina"),
+               new TextObject("{=!}According to the Junme, the world revolves around the concept of Urthr - or in other words, fate. The gods are stewards of the Great Oak that mankind inhabits, keeping its roots and leaves from rotting. Moreover, the gods are the force of justice that fights Ásbani, the God-Devouring Serpent. The gods of fate, they say, give man what is just - rewards to those who are brave and virtuous, and punishment to the wicked, for they do not weave what choices a man makes, but they do the consequences."),
+               new TextObject("{=!}"),
+               new TextObject("{=!}Ancestor Heroine"));
+
             SheWolf.Initialize(new TextObject("{=!}Great She-Wolf"),
                 new TextObject("{=!}Many among the eastern Devseg, such as the Khuzaits, count themselves among the descendants of the Great She-Wolf. The She-Wolf, it is said, nursed a wounded young boy back to health, who later impregnated her. 12 sons she had, half-wolf, half-man. To be counted as a descendent of the She-wolf is a great honor."),
                 new TextObject("{=!}Increased personal and spouse fertility\nNewborn sons have at least one positive congenital trait"),

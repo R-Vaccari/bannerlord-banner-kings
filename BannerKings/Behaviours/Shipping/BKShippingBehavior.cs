@@ -51,8 +51,12 @@ namespace BannerKings.Behaviours.Shipping
         public bool CanTravel(Settlement settlement, MobileParty party)
         {
             bool fief = settlement.Town != null ? !settlement.IsUnderSiege : settlement.Village.VillageState == Village.VillageStates.Normal;
-            int price = CalculatePrice(settlement, party);
-            bool gold = price <= party.PartyTradeGold || price <= party.LeaderHero?.Gold;
+            bool gold = false;
+            if (party.CurrentSettlement != null)
+            {
+                int price = CalculatePrice(settlement, party);
+                gold = price <= party.PartyTradeGold || price <= party.LeaderHero?.Gold;
+            }
 
             return fief && gold && !sailing.ContainsKey(party);
         }
@@ -141,8 +145,11 @@ namespace BannerKings.Behaviours.Shipping
                     if (!port.Notables.Any(x => x.Culture == lane.Culture))
                     {
                         var merchant = lane.Culture.NotableAndWandererTemplates.FirstOrDefault(x => x.Occupation == Occupation.Merchant);
-                        EnterSettlementAction.ApplyForCharacterOnly(HeroCreator
+                        if (merchant != null)
+                        {
+                            EnterSettlementAction.ApplyForCharacterOnly(HeroCreator
                             .CreateSpecialHero(merchant, port, null, null, 30), port);
+                        }
                     }
                 }
             }
@@ -171,7 +178,7 @@ namespace BannerKings.Behaviours.Shipping
             if (town == null) return;
 
             party.Ai.SetMoveGoToSettlement(town.Settlement);
-            if (town.Settlement == settlement) return;
+            if (town.Settlement == settlement || party.CurrentSettlement == null) return;
 
             foreach (ShippingLane lane in lanes)
             {

@@ -128,6 +128,8 @@ namespace BannerKings.Models.Vanilla
 
             ExplainedNumber explainedNumber = new ExplainedNumber(0f, true);
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(fortification.Settlement);
+            if (data == null) return base.CalculateProsperityChange(fortification, includeDescriptions);
+
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             explainedNumber.Add(craftsmen * 0.0005f, new TextObject("Craftsmen output"));
 
@@ -313,9 +315,12 @@ namespace BannerKings.Models.Vanilla
             }
 
             InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(fortification.Culture);
-            if (innovationData.HasFinishedInnovation(DefaultInnovations.Instance.PublicWorks))
+            if (innovationData != null)
             {
-                explainedNumber.Add(1.5f, DefaultInnovations.Instance.PublicWorks.Name);
+                if (innovationData.HasFinishedInnovation(DefaultInnovations.Instance.PublicWorks))
+                {
+                    explainedNumber.Add(1.5f, DefaultInnovations.Instance.PublicWorks.Name);
+                }
             }
 
             AddDemesneLawEffect(data, ref explainedNumber);

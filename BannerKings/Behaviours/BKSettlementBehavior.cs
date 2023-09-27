@@ -178,7 +178,7 @@ namespace BannerKings.Behaviours
                 {
                     Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(attackerParty.LeaderHero);
 
-                    if (settlement.Culture.StringId == BannerKingsConfig.EmpireCulture &&
+                    if (rel != null && settlement.Culture.StringId == BannerKingsConfig.EmpireCulture &&
                         rel.HasDoctrine(DefaultDoctrines.Instance.RenovatioImperi))
                     {
                         stabilityLoss = 0f;
