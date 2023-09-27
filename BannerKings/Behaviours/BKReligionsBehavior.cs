@@ -116,10 +116,13 @@ namespace BannerKings.Behaviours
 
         private void EventEnded(MapEvent mapEvent) 
         {
-            foreach (var eventParty in mapEvent.PartiesOnSide(mapEvent.WinningSide))
+            if ((int)mapEvent.WinningSide >= 0)
             {
-                BannerKingsConfig.Instance.ReligionsManager.AddPiety(eventParty.Party.LeaderHero, 
-                    eventParty.GainedInfluence, true);
+                foreach (var eventParty in mapEvent.PartiesOnSide(mapEvent.WinningSide))
+                {
+                    BannerKingsConfig.Instance.ReligionsManager.AddPiety(eventParty.Party.LeaderHero,
+                        eventParty.GainedInfluence, true);
+                }
             }
         }
 
