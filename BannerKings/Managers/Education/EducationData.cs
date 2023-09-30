@@ -95,10 +95,11 @@ namespace BannerKings.Managers.Education
 
         public void AddProgress(float progress)
         {
-            float result = MBMath.ClampFloat(LifestyleProgress + progress, 0f, 1f); ;
+            float result = MBMath.ClampFloat(LifestyleProgress + progress, 0f, 1f);
+            float current = LifestyleProgress;
             LifestyleProgress = result;
 
-            if (result >= 1f)
+            if (result >= 1f && current < 1f)
             {
                 Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
                 if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Esotericism))
