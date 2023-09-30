@@ -138,7 +138,7 @@ namespace BannerKings.Models.BKModels
                     if (settlement.IsVillage)
                     {
                         InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(settlement.Culture);
-                        if (innovationData.HasFinishedInnovation(DefaultInnovations.Instance.Manorialism))
+                        if (innovationData != null && innovationData.HasFinishedInnovation(DefaultInnovations.Instance.Manorialism))
                         {
                             result.AddFactor(-0.6f, DefaultInnovations.Instance.Manorialism.Name);
                         }
