@@ -678,6 +678,10 @@ namespace BannerKings.Behaviours
         {
             if (settlement.IsCastle)
             {
+                ItemConsumptionBehavior behavior = Campaign.Current.GetCampaignBehavior<ItemConsumptionBehavior>();
+                behavior.GetType().GetMethod("MakeConsumptionInTown", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                    .Invoke(behavior, new object[] { settlement.Town, new Dictionary<ItemCategory, int>(10) });
+                
                 if (settlement.Town?.GarrisonParty == null)
                 {
                     return;

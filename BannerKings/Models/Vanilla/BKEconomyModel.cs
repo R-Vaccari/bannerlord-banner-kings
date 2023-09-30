@@ -5,7 +5,6 @@ using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Shipping;
 using BannerKings.Managers.Skills;
-using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -358,20 +357,14 @@ namespace BannerKings.Models.Vanilla
             return baseResult;
         }
 
-        public override int GetTownGoldChange(Town town)
-        {
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
-            {
-                return GetMerchantIncome(town);
-            }
+        public override int GetTownGoldChange(Town town) => (int)GetMerchantIncome(town).ResultNumber;
 
-            return base.GetTownGoldChange(town);
-        }
-
-        public int GetMerchantIncome(Town town)
+        public ExplainedNumber GetMerchantIncome(Town town, bool explanations = false)
         {
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+            if (data == null) return new ExplainedNumber(base.GetTownGoldChange(town));
+
+            ExplainedNumber result = new ExplainedNumber(town.Prosperity / 4f, explanations);
             float slaves = data.GetTypeCount(PopType.Slaves);
             var privateSlaves = slaves * (1f - data.EconomicData.StateSlaves);
             var tax = 1f;
@@ -387,13 +380,15 @@ namespace BannerKings.Models.Vanilla
                 };
             }
 
-            var efficiency = data.EconomicData.ProductionEfficiency.ResultNumber;
+            result.AddFactor(data.EconomicData.ProductionEfficiency.ResultNumber, new TextObject("{=!}Production efficiency"));
             if (privateSlaves > 0f)
             {
-                return (int) ((privateSlaves * tax * efficiency) + (town.Prosperity / 2f));
+                result.Add(privateSlaves * tax, new TextObject("{=!}Private slaves"));
             }
 
-            return 0;
+            if (town.IsCastle) result.AddFactor(-0.5f, new TextObject("{=!}Castle"));
+
+            return result;
         }
     }
 }

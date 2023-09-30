@@ -79,7 +79,7 @@ namespace BannerKings.Managers.Populations
             BannerKingsConfig.Instance.AdministrativeModel.CalculateEffect(settlement);
 
         public float MerchantRevenue => settlement.Town != null
-            ? BannerKingsConfig.Instance.EconomyModel.GetMerchantIncome(settlement.Town)
+            ? BannerKingsConfig.Instance.EconomyModel.GetMerchantIncome(settlement.Town).ResultNumber
             : 0f;
 
         public ExplainedNumber CaravanAttraction =>
