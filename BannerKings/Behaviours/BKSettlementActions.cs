@@ -3,10 +3,14 @@ using BannerKings.Extensions;
 using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
 using BannerKings.UI;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.GameMenus;
+using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.CampaignSystem.Overlay;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
@@ -308,18 +312,6 @@ namespace BannerKings.Behaviours
                 },
                 delegate { GameMenu.SwitchToMenu("bannerkings_actions"); });
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "bannerkings_leave", "{=1kJ3hNWg}Leave",
-                delegate (MenuCallbackArgs x)
-                {
-                    x.optionLeaveType = GameMenuOption.LeaveType.Leave;
-                    return true;
-                }, delegate
-                {
-                    var menu = Settlement.CurrentSettlement.IsVillage ? "village" :
-                        Settlement.CurrentSettlement.IsCastle ? "castle" : "town";
-                    GameMenu.SwitchToMenu(menu);
-                }, true);
-
 
             // ------- CASTLE --------
 
@@ -338,6 +330,27 @@ namespace BannerKings.Behaviours
                 delegate (MenuCallbackArgs args) { args.MenuContext.OpenRecruitVolunteers(); },
                 false, 3);
 
+            campaignGameStarter.AddGameMenuOption("bannerkings", 
+                "bannerkings_trade", 
+                "{=GmcgoiGy}Trade", 
+                (MenuCallbackArgs args) =>
+                {
+                    bool shouldBeDisabled;
+                    TextObject disabledText;
+                    bool canPlayerDo = Campaign.Current.Models.SettlementAccessModel.CanMainHeroDoSettlementAction(Settlement.CurrentSettlement, SettlementAccessModel.SettlementAction.Trade, out shouldBeDisabled, out disabledText);
+                    args.optionLeaveType = GameMenuOption.LeaveType.Trade;
+                    return MenuHelper.SetOptionProperties(args, canPlayerDo, shouldBeDisabled, disabledText) && Settlement.CurrentSettlement.IsCastle;
+                }, 
+                (MenuCallbackArgs args) =>
+                {
+                    LocationEncounter locationEncounter = PlayerEncounter.LocationEncounter;
+                    InventoryManager.OpenScreenAsTrade(Settlement.CurrentSettlement.ItemRoster,
+                        Settlement.CurrentSettlement.Town, 
+                        InventoryManager.InventoryCategoryType.None, 
+                        null);
+                }, 
+                false, -1, false, null);
+
 
             // ------- VILLAGE --------
 
@@ -354,6 +367,18 @@ namespace BannerKings.Behaviours
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_projects", "{=fsNhEwHz}Village Projects",
                 MenuVillageBuildingCondition,
                 MenuVillageProjectsConsequence, false, 2);
+
+            campaignGameStarter.AddGameMenuOption("bannerkings", "bannerkings_leave", "{=1kJ3hNWg}Leave",
+                delegate (MenuCallbackArgs x)
+                {
+                    x.optionLeaveType = GameMenuOption.LeaveType.Leave;
+                    return true;
+                }, delegate
+                {
+                    var menu = Settlement.CurrentSettlement.IsVillage ? "village" :
+                        Settlement.CurrentSettlement.IsCastle ? "castle" : "town";
+                    GameMenu.SwitchToMenu(menu);
+                }, true);
         }
 
 

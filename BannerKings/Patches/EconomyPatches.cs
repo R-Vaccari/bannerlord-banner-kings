@@ -25,6 +25,8 @@ using BannerKings.Utils.Extensions;
 using System.Reflection;
 using TaleWorlds.CampaignSystem.GameComponents;
 using BannerKings.Managers.Innovations;
+using SandBox.CampaignBehaviors;
+using SandBox.View.Map;
 
 namespace BannerKings.Patches
 {
@@ -49,6 +51,180 @@ namespace BannerKings.Patches
                         }
                     }
                 }
+            }
+        }
+
+        [HarmonyPatch(typeof(LordConversationsCampaignBehavior))]
+        internal class LordConversationsCampaignBehaviorPatches
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("SmallCaravanFormingCost", MethodType.Getter)]
+            private static void SmallCaravanFormingCost(ref int __result)
+            {
+                __result = (int)BannerKingsConfig.Instance.EconomyModel
+                    .GetCaravanPrice(Settlement.CurrentSettlement, Hero.MainHero).ResultNumber;
+            }
+
+            [HarmonyPostfix]
+            [HarmonyPatch("LargeCaravanFormingCost", MethodType.Getter)]
+            private static void LargeCaravanFormingCost(ref int __result)
+            {
+                __result = (int)BannerKingsConfig.Instance.EconomyModel
+                    .GetCaravanPrice(Settlement.CurrentSettlement, Hero.MainHero, true).ResultNumber;
+            }
+        }
+
+        [HarmonyPatch(typeof(CaravansCampaignBehavior))]
+        internal class CaravansCampaignBehaviorPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("FindNextDestinationForCaravan", MethodType.Normal)]
+            private static bool FindNextDestinationForCaravan(CaravansCampaignBehavior __instance, MobileParty caravanParty, bool distanceCut, ref Town __result)
+            {
+                float num = 0f;
+                Town result = null;
+                float caravanFullness = caravanParty.ItemRoster.TotalWeight / (float)caravanParty.InventoryCapacity;
+
+                Dictionary<MobileParty, CampaignTime> dic = __instance.GetType()
+                    .GetField("_caravanLastHomeTownVisitTime", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .GetValue(__instance) as Dictionary<MobileParty, CampaignTime>;
+
+                Dictionary<MobileParty, List<Settlement>> changedDic = __instance.GetType()
+                    .GetField("_previouslyChangedCaravanTargetsDueToEnemyOnWay", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .GetValue(__instance) as Dictionary<MobileParty, List<Settlement>>;
+
+                CampaignTime lastHomeVisitTimeOfCaravan;
+                dic.TryGetValue(caravanParty, out lastHomeVisitTimeOfCaravan);
+
+                MethodInfo getScore = __instance.GetType().GetMethod("GetTradeScoreForTown", 
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+
+                foreach (Town town in Town.AllFiefs)
+                {
+                    if (town.Owner.Settlement != caravanParty.CurrentSettlement && !town.IsUnderSiege && !town.MapFaction.IsAtWarWith(caravanParty.MapFaction) 
+                        && (!town.Settlement.Parties.Contains(MobileParty.MainParty) || !MobileParty.MainParty.MapFaction.IsAtWarWith(caravanParty.MapFaction)) 
+                        && !changedDic[caravanParty].Contains(town.Settlement))
+                    {
+                        float tradeScoreForTown = (float)getScore.Invoke(__instance, new object[] 
+                        {
+                            caravanParty, 
+                            town, 
+                            lastHomeVisitTimeOfCaravan, 
+                            caravanFullness, 
+                            distanceCut
+                        });
+
+                        if (tradeScoreForTown > num)
+                        {
+                            num = tradeScoreForTown;
+                            result = town;
+                        }
+                    }
+                }
+
+                __result = result;
+                return false;
+            }
+
+            private static MethodInfo getDestination => Campaign.Current.GetCampaignBehavior<CaravansCampaignBehavior>()
+                .GetType()
+                .GetMethod("GetDestinationForMobileParty", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            [HarmonyPrefix]
+            [HarmonyPatch("HourlyTickParty", MethodType.Normal)]
+            private static bool HourlyTickParty(CaravansCampaignBehavior __instance, MobileParty caravanParty)
+            {
+                if (!Campaign.Current.GameStarted)
+                {
+                    return false;
+                }
+
+                if (caravanParty.IsCaravan)
+                {
+                    bool flag = false;
+                    float randomFloat = MBRandom.RandomFloat;
+                    if (caravanParty.MapEvent == null && caravanParty.IsPartyTradeActive && !caravanParty.Ai.DoNotMakeNewDecisions)
+                    {
+                        if (caravanParty.CurrentSettlement != null && caravanParty.CurrentSettlement.Town != null)
+                        {
+                            if (!caravanParty.CurrentSettlement.IsUnderSiege && caravanParty.ShortTermBehavior != AiBehavior.FleeToPoint && !caravanParty.Ai.IsAlerted && (caravanParty.IsCurrentlyUsedByAQuest || randomFloat < 0.33333334f))
+                            {
+                                float num = (caravanParty.MemberRoster.TotalManCount > 0) ? ((float)caravanParty.MemberRoster.TotalWounded / (float)caravanParty.MemberRoster.TotalManCount) : 1f;
+                                float num2 = 1f;
+                                if ((double)num > 0.4)
+                                {
+                                    num2 = 0f;
+                                }
+                                else if ((double)num > 0.2)
+                                {
+                                    num2 = 0.1f;
+                                }
+                                else if ((double)num > 0.1)
+                                {
+                                    num2 = 0.2f;
+                                }
+                                else if ((double)num > 0.05)
+                                {
+                                    num2 = 0.3f;
+                                }
+                                else if ((double)num > 0.025)
+                                {
+                                    num2 = 0.4f;
+                                }
+                                float randomFloat2 = MBRandom.RandomFloat;
+                                if (num2 > randomFloat2)
+                                {
+                                    flag = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Town destinationForMobileParty = getDestination.Invoke(__instance,
+                                new object[] { caravanParty }) as Town;
+
+                            flag = (destinationForMobileParty == null || destinationForMobileParty.IsUnderSiege || caravanParty.MapFaction.IsAtWarWith(destinationForMobileParty.MapFaction) || caravanParty.Ai.NeedTargetReset || (!caravanParty.IsCurrentlyUsedByAQuest && randomFloat < 0.01f));
+                        }
+                        if (flag)
+                        {
+                            Dictionary<MobileParty, List<Settlement>> changedDic = __instance.GetType()
+                            .GetField("_previouslyChangedCaravanTargetsDueToEnemyOnWay", BindingFlags.Instance | BindingFlags.NonPublic)
+                            .GetValue(__instance) as Dictionary<MobileParty, List<Settlement>>;
+
+                            if (caravanParty.CurrentSettlement != null && caravanParty.CurrentSettlement.IsTown)
+                            {
+                                Town town = caravanParty.CurrentSettlement.Town;
+                                MethodInfo buyGoods = __instance.GetType().GetMethod("BuyGoods",
+                                    BindingFlags.Instance | BindingFlags.NonPublic);
+
+                                buyGoods.Invoke(__instance, new object[] { caravanParty, town });
+                            }
+                            if (!changedDic.ContainsKey(caravanParty))
+                            {
+                                changedDic.Add(caravanParty, new List<Settlement>());
+                            }
+                            if (caravanParty.Ai.NeedTargetReset && caravanParty.TargetSettlement != null)
+                            {
+                                changedDic[caravanParty].Add(caravanParty.TargetSettlement);
+                            }
+
+                            MethodInfo thinkDestination = __instance.GetType().GetMethod("ThinkNextDestination",
+                                   BindingFlags.Instance | BindingFlags.NonPublic);
+                            Town town2 = thinkDestination.Invoke(__instance, new object[] { caravanParty }) as Town;
+                            if (town2 != null)
+                            {
+                                caravanParty.Ai.SetMoveGoToSettlement(town2.Settlement);
+                            }
+                        }
+
+                        Town destinationForMobileParty2 = getDestination.Invoke(__instance, new object[] { caravanParty }) as Town;
+                        if (caravanParty.CurrentSettlement == null && destinationForMobileParty2 != null && caravanParty.TargetSettlement != destinationForMobileParty2.Settlement)
+                        {
+                            caravanParty.Ai.SetMoveGoToSettlement(destinationForMobileParty2.Settlement);
+                        }
+                    }
+                }
+                return false;
             }
         }
 
@@ -1012,6 +1188,16 @@ namespace BannerKings.Patches
         }
 
         // Impact prosperity
+        /*[HarmonyPatch(typeof(IPartyVisual), "OnStartup")]
+        internal class PartyVisualPatch
+        {
+            private static bool Postfix(PartyVisual __instance, PartyBase party)
+            {
+                Debug.WriteDebugLineOnScreen(party.Name.ToString());
+                return false;
+            }
+        }*/
+
         [HarmonyPatch(typeof(ChangeOwnerOfWorkshopAction), "ApplyInternal")]
         internal class BankruptcyPatch
         {
@@ -1025,12 +1211,14 @@ namespace BannerKings.Patches
         }
 
         // Added productions
-        [HarmonyPatch(typeof(VillageGoodProductionCampaignBehavior), "TickGoodProduction")]
+        [HarmonyPatch(typeof(VillageGoodProductionCampaignBehavior))]
         internal class TickGoodProductionPatch
         {
             private static Dictionary<Village, Dictionary<ItemObject, float>> productionCache = new Dictionary<Village, Dictionary<ItemObject, float>>();
 
-            private static bool Prefix(Village village, bool initialProductionForTowns)
+            [HarmonyPrefix]
+            [HarmonyPatch("TickGoodProduction", MethodType.Normal)]
+            private static bool TickGoodProduction(Village village, bool initialProductionForTowns)
             {
                 if (BannerKingsConfig.Instance.PopulationManager != null)
                 {
@@ -1079,6 +1267,88 @@ namespace BannerKings.Patches
                 }
 
                 return true;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("DistributeInitialItemsToTowns", MethodType.Normal)]
+            private static bool DistributeInitialItemsToTowns()
+            {
+                int num = 25;
+                foreach (SettlementComponent settlementComponent in Town.AllTowns)
+                {
+                    float num2 = 0f;
+                    Settlement settlement = settlementComponent.Settlement;
+                    foreach (Village village in Village.All)
+                    {
+                        float num3 = 0f;
+                        if (village.TradeBound == settlement)
+                        {
+                            num3 += 1f;
+                        }
+                        else
+                        {
+                            float distance = Campaign.Current.Models.MapDistanceModel.GetDistance(settlement, village.Settlement);
+                            float num4 = 0.5f * (600f / MathF.Pow(distance, 1.5f));
+                            if (num4 > 0.5f)
+                            {
+                                num4 = 0.5f;
+                            }
+                            if (village.TradeBound == null)
+                            {
+                                PropertyInfo bound = village.GetType().GetProperty("TradeBound", BindingFlags.Instance | BindingFlags.Public);
+                                bound.SetValue(village, village.Bound);
+                            }
+
+                            float distance2 = Campaign.Current.Models.MapDistanceModel.GetDistance(settlement, village.TradeBound);
+                            float num5 = 0.5f * (600f / MathF.Pow(distance2, 1.5f));
+                            if (num5 > 0.5f)
+                            {
+                                num5 = 0.5f;
+                            }
+                            num3 = ((village.Settlement.MapFaction == settlement.MapFaction) ? 1f : 0.6f) * 0.5f * ((num4 + num5) / 2f);
+                        }
+                        num2 += num3;
+                    }
+                    foreach (Village village2 in Village.All)
+                    {
+                        float num6 = 0f;
+                        if (village2.TradeBound == settlement)
+                        {
+                            num6 += 1f;
+                        }
+                        else
+                        {
+                            float distance3 = Campaign.Current.Models.MapDistanceModel.GetDistance(settlement, village2.Settlement);
+                            float num7 = 0.5f * (600f / MathF.Pow(distance3, 1.5f));
+                            if (num7 > 0.5f)
+                            {
+                                num7 = 0.5f;
+                            }
+                            float distance4 = Campaign.Current.Models.MapDistanceModel.GetDistance(settlement, village2.TradeBound);
+                            float num8 = 0.5f * (600f / MathF.Pow(distance4, 1.5f));
+                            if (num8 > 0.5f)
+                            {
+                                num8 = 0.5f;
+                            }
+                            num6 = ((village2.Settlement.MapFaction == settlement.MapFaction) ? 1f : 0.6f) * 0.5f * ((num7 + num8) / 2f);
+                        }
+                        foreach (ValueTuple<ItemObject, float> valueTuple in village2.VillageType.Productions)
+                        {
+                            ItemObject item = valueTuple.Item1;
+                            float item2 = valueTuple.Item2;
+                            num6 *= 0.12244235f;
+                            int num9 = MBRandom.RoundRandomized(item2 * num6 * ((float)num * (12f / num2)));
+                            for (int i = 0; i < num9; i++)
+                            {
+                                ItemModifier itemModifier = null;
+                                EquipmentElement rosterElement = new EquipmentElement(item, itemModifier, null, false);
+                                settlement.ItemRoster.AddToCounts(rosterElement, 1);
+                            }
+                        }
+                    }
+                }
+
+                return false;
             }
 
             private static int GetDifferential(Village village, ItemObject item, float diff)

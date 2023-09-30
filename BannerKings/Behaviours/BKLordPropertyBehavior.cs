@@ -1,9 +1,6 @@
 using System.Linq;
-using HarmonyLib;
-using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -123,40 +120,6 @@ namespace BannerKings.Behaviours
         {
             return hero == hero.Clan.Leader && hero.Clan.Gold >= (int) (cost * 2f) &&
                    hero.OwnedCaravans.Count < 1 + hero.Clan.Tier;
-        }
-    }
-
-    namespace Patches
-    {
-        [HarmonyPatch(typeof(CaravansCampaignBehavior))]
-        internal class CaravansCampaignBehaviorPatches
-        {
-            [HarmonyPrefix]
-            [HarmonyPatch("SpawnCaravan", MethodType.Normal)]
-            private static bool SpawnCaravan(Hero hero, bool initialSpawn = false)
-            {
-                return hero.CurrentSettlement is {IsTown: true};
-            }
-        }
-
-        [HarmonyPatch(typeof(LordConversationsCampaignBehavior))]
-        internal class LordConversationsCampaignBehaviorPatches
-        {
-            [HarmonyPostfix]
-            [HarmonyPatch("SmallCaravanFormingCost", MethodType.Getter)]
-            private static void SmallCaravanFormingCost(ref int __result)
-            {
-                __result = (int) BannerKingsConfig.Instance.EconomyModel
-                    .GetCaravanPrice(Settlement.CurrentSettlement, Hero.MainHero).ResultNumber;
-            }
-
-            [HarmonyPostfix]
-            [HarmonyPatch("LargeCaravanFormingCost", MethodType.Getter)]
-            private static void LargeCaravanFormingCost(ref int __result)
-            {
-                __result = (int) BannerKingsConfig.Instance.EconomyModel
-                    .GetCaravanPrice(Settlement.CurrentSettlement, Hero.MainHero, true).ResultNumber;
-            }
         }
     }
 }
