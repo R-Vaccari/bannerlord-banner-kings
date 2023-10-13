@@ -2466,5 +2466,11 @@
 		<string id="WtdhIqRx" text="An alternate skill leveling progression. Skills will require a higher base xp since level 1, but will scale less aggressively. The result should be more consitent xp across all levels, slower at the beginning but faster near the end. Default: true." />
 		<string id="JjTnrl9v" text="Army Cohesion Boost" />
 		<string id="IlTizRLs" text="Cohesion boost to armies to they last longer, to counter balance the presence of more parties. Vanilla is 0%, 50% decreases cohesion loss by half. Default: 50%." />
+		<string id="b4hNMeGx" text="Diplomacy Changes" />
+		<string id="2YgM5mR1" text="Changes to AI evaluation of declaring war such as not calling wars when the entire kingdom is broke. Slows down the game pace. Default: True." />
+		<string id="iBLGdG1Y" text="Party Supplies" />
+		<string id="uURHROGF" text="Affects the party supplies requirement factor. 0% means the feature is functionally disabled. 100% is the standard rate of items consumption, 200% means doube the rate, resulting in more expensive parties. May affect AI party limit sizes. Default: 100%." />
+		<string id="4pJUkbew" text="AI Dismiss Parties" />
+		<string id="FhNxraXd" text="AI clan leaders will dismiss parties from their family members during peace in order to save more money. Default: true." />
 	</strings>
 </base>
