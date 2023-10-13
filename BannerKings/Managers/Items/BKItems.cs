@@ -44,6 +44,7 @@ namespace BannerKings.Managers.Items
         public ItemObject Gems { get; private set; }
         public ItemObject Mead { get; private set; }
         public ItemObject Garum { get; private set; }
+        public ItemObject Spice { get; private set; }
 
         public override IEnumerable<ItemObject> All
         {
@@ -77,29 +78,34 @@ namespace BannerKings.Managers.Items
 
         public override void Initialize()
         {
+            Spice = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("spice"));
+            InitializeTradeGood(Spice,
+                new TextObject("{=1jqxlEkT}Spice{@Plural}sacks of spice{\\@}"), "spice_sack",
+                BKItemCategories.Instance.Spice, 300, 10f, ItemObject.ItemTypeEnum.Goods, false);
+
             Apple = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("apple"));
             InitializeTradeGood(Apple,
-                new TextObject("{=1MAr0j2J}Apples{@Plural}baskets of apples\\@}"), "foods_basket_apple",
+                new TextObject("{=1MAr0j2J}Apples{@Plural}baskets of apples{\\@}"), "foods_basket_apple",
                 BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Orange = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("orange"));
             InitializeTradeGood(Orange,
-                new TextObject("{=Krqwsins}Oranges{@Plural}baskets of oranges\\@}"), "foods_orange_basket",
+                new TextObject("{=Krqwsins}Oranges{@Plural}baskets of oranges{\\@}"), "foods_orange_basket",
                 BKItemCategories.Instance.Orange, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Bread = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("bread"));
             InitializeTradeGood(Bread,
-                new TextObject("{=VJfbLXmi}Bread{@Plural}loathes of bread\\@}"), "merchandise_bread",
+                new TextObject("{=VJfbLXmi}Bread{@Plural}loathes of bread{\\@}"), "merchandise_bread",
                 BKItemCategories.Instance.Bread, 20, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Pie = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("pie"));
             InitializeTradeGood(Pie,
-                new TextObject("{=Qa0dQMOc}Pie{@Plural}baskets of pies\\@}"), "kitchen_pie",
+                new TextObject("{=Qa0dQMOc}Pie{@Plural}baskets of pies{\\@}"), "kitchen_pie",
                 BKItemCategories.Instance.Pie, 30, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Carrot = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("carrot"));
             InitializeTradeGood(Carrot,
-                new TextObject("{=C5Xe5MJK}Carrots{@Plural}baskets of carrots\\@}"), "foods_carrots_basket",
+                new TextObject("{=C5Xe5MJK}Carrots{@Plural}baskets of carrots{\\@}"), "foods_carrots_basket",
                 BKItemCategories.Instance.Carrot, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Honey = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("honey"));

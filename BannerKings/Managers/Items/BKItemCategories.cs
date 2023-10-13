@@ -19,10 +19,14 @@ namespace BannerKings.Managers.Items
         public ItemCategory Gems { get; private set; }
         public ItemCategory Mead { get; private set; }
         public ItemCategory Garum { get; private set; }
+        public ItemCategory Spice { get; private set; }
         public override IEnumerable<ItemCategory> All => throw new NotImplementedException();
 
         public override void Initialize()
         {
+            Spice = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("Spice"));
+            Spice.InitializeObject(true, 5, 10, ItemCategory.Property.BonusToProsperity);
+
             Book = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("book"));
             Book.InitializeObject(false, 0, 0);
 
@@ -60,7 +64,7 @@ namespace BannerKings.Managers.Items
             Marble.InitializeObject(true, 0, 0, ItemCategory.Property.BonusToProsperity);
 
             Gems = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("gems"));
-            Gems.InitializeObject(true, 10, 50, ItemCategory.Property.None);
+            Gems.InitializeObject(true, 0, 1, ItemCategory.Property.None);
         }
     }
 }
