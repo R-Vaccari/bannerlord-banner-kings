@@ -56,7 +56,7 @@ namespace BannerKings.UI.Extensions
                 else
                 {
                     bool inventory = false;
-                    WorkshopData data = Campaign.Current.GetCampaignBehavior<BKWorkshopBehavior>().GetInventory(workshop);
+                    WorkshopData data = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKWorkshopBehavior>().GetInventory(workshop);
                     if (data != null)
                     {
                         if (data.IsRunningOnInventory)
@@ -75,7 +75,7 @@ namespace BannerKings.UI.Extensions
 
                     if (!inventory)
                     {
-                        var behavior = Campaign.Current.GetCampaignBehavior<WorkshopsCampaignBehavior>();
+                        var behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<WorkshopsCampaignBehavior>();
                         var method = AccessTools.Method(behavior.GetType(), "DetermineTownHasSufficientInputs");
                         for (int i = 0; i < workshop.WorkshopType.Productions.Count; i++)
                         {

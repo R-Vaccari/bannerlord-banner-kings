@@ -95,7 +95,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
 
                 /*var imperialKingdomsStringIds = new List<string> { "empire", "empire_w", "empire_s" };
-                var imperialKingdoms = Campaign.Current.Kingdoms.Where(k => imperialKingdomsStringIds.Contains(k.StringId)).ToList();
+                var imperialKingdoms = TaleWorlds.CampaignSystem.Campaign.Current.Kingdoms.Where(k => imperialKingdomsStringIds.Contains(k.StringId)).ToList();
                 if (imperialKingdoms.Any() && imperialKingdoms.All(ik => ik.Leader != referenceHero))
                 {
                     failedReasons.Add(new TextObject("{=YFeW2BUA}You're not the leader of an Imperial Kingdom."));

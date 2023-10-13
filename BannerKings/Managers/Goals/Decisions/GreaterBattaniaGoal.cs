@@ -41,7 +41,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 "town_EN1"
             };
 
-            settlements = Campaign.Current.Settlements.Where(s => settlementStringIds.Contains(s.StringId)).ToList();
+            settlements = TaleWorlds.CampaignSystem.Campaign.Current.Settlements.Where(s => settlementStringIds.Contains(s.StringId)).ToList();
         }
 
         public override bool IsAvailable()
@@ -89,7 +89,7 @@ namespace BannerKings.Managers.Goals.Decisions
                         .SetTextVariable("CULTURE", culture.Name));
                 }
 
-                var battaniaKingdom = Campaign.Current.Kingdoms.FirstOrDefault(k => k.StringId == "battania");
+                var battaniaKingdom = TaleWorlds.CampaignSystem.Campaign.Current.Kingdoms.FirstOrDefault(k => k.StringId == "battania");
                 if (referenceHero.Clan.Kingdom != null)
                 {
                     if (referenceHero.Clan.Kingdom.Culture != culture)

@@ -84,7 +84,7 @@ namespace BannerKings.Components
 
             if (TargetParty != null && TargetParty.IsActive &&
                 garrisonPartyPower >= TargetParty.GetTotalStrengthWithFollowers() &&
-                Campaign.Current.Models.MapDistanceModel.GetDistance(TargetParty, Home) <= 10f)
+                TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(TargetParty, Home) <= 10f)
             {
                 MobileParty.SetMoveEngageParty(TargetParty);
             }

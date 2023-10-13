@@ -16,7 +16,7 @@ namespace BannerKings.Behaviours.Innovations
 
         private void OnGameLoaded()
         {
-            foreach (var culture in Campaign.Current.ObjectManager.GetObjectTypeList<CultureObject>())
+            foreach (var culture in TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<CultureObject>())
             {
                 InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
                 if (data == null) continue;

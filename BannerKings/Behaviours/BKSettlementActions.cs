@@ -1,12 +1,14 @@
 using System.Collections.Generic;
+using System.Linq;
+using BannerKings.Behaviours.Shipping;
 using BannerKings.Extensions;
 using BannerKings.Managers.Education;
+using BannerKings.Managers.Shipping;
 using BannerKings.Managers.Skills;
 using BannerKings.UI;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.GameMenus;
@@ -45,7 +47,7 @@ namespace BannerKings.Behaviours
             float cost = 0;
             foreach (var element in roster.GetTroopRoster())
             {
-                cost += Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(element.Character, hero)
+                cost += TaleWorlds.CampaignSystem.Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(element.Character, hero)
                     * (float)element.Number * 5f;
             }
 
@@ -150,7 +152,6 @@ namespace BannerKings.Behaviours
                     GameMenu.SwitchToMenu(id);
                 }, true);
 
-
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_hunt",
                 "{=ZicUVOPr}You are hunting in the region of {CURRENT_SETTLEMENT}. Game quantity in this region is {HUNTING_GAME}.",
                 MenuWaitInit,
@@ -222,7 +223,6 @@ namespace BannerKings.Behaviours
                     GameMenu.SwitchToMenu(id);
                 }, true);
 
-
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_crafting",
                 "{=EUWd2dC5}You are working on the smith for {CRAFTING_HOURS} hours. The current hourly rate of this smith is: {CRAFTING_RATE} {GOLD_ICON}.{CRAFTING_EXPLANATION}",
                 MenuWaitInit,
@@ -232,6 +232,77 @@ namespace BannerKings.Behaviours
                 GameOverlays.MenuOverlayType.SettlementWithBoth);
 
             // ------- ACTIONS --------
+
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions",
+               "action_ship",
+               "{=!}Take a Ship",
+               (MenuCallbackArgs args) =>
+               {
+                   args.optionLeaveType = GameMenuOption.LeaveType.Continue;
+                   return DefaultShippingLanes.Instance.GetSettlementLanes(Settlement.CurrentSettlement).Count() > 0;
+               },
+               (MenuCallbackArgs args) =>
+               {
+                   List<InquiryElement> list = new List<InquiryElement>();
+                   foreach (ShippingLane lane in DefaultShippingLanes.Instance.GetSettlementLanes(Settlement.CurrentSettlement))
+                   {
+                       list.Add(new InquiryElement(lane,
+                           lane.Name.ToString(),
+                           null,
+                           true,
+                           lane.Description.ToString()));
+                   }
+
+                   MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                       new TextObject("{=!}Ship Travel (1/2)").ToString(),
+                       new TextObject("{=!}Select one of the shipping lanes available to this settlement.").ToString(),
+                       list,
+                       true,
+                       1,
+                       GameTexts.FindText("str_selection_widget_accept").ToString(),
+                       GameTexts.FindText("str_selection_widget_cancel").ToString(),
+                       (List<InquiryElement> list) =>
+                       {
+                           ShippingLane lane = list.First().Identifier as ShippingLane;
+                           List<InquiryElement> ports = new List<InquiryElement>();
+                           BKShippingBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKShippingBehavior>();
+                           foreach (var port in lane.Ports)
+                           {
+                               if (port == Settlement.CurrentSettlement) continue;
+
+                               int price = behavior.CalculatePrice(port, MobileParty.MainParty);
+                               CampaignTime arrival = behavior.CalculateArrival(port, MobileParty.MainParty);
+                               ports.Add(new InquiryElement(port,
+                                   new TextObject("{=!}{PORT} - {GOLD}{GOLD_ICON}, {ARRIVAL} days")
+                                   .SetTextVariable("PORT", port.Name)
+                                   .SetTextVariable("GOLD", price)
+                                   .SetTextVariable("ARRIVAL", arrival.RemainingDaysFromNow.ToString("0"))
+                                   .ToString(),
+                                   new ImageIdentifier(port.MapFaction.Banner),
+                                   Hero.MainHero.Gold >= price,
+                                   port.EncyclopediaText.ToString()));
+                           }
+
+                           MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                               new TextObject("{=!}Ship Travel (2/2)").ToString(),
+                               new TextObject("{=!}Select one of the ports available in this shipping lane.").ToString(),
+                               ports,
+                               true,
+                               1,
+                               GameTexts.FindText("str_selection_widget_accept").ToString(),
+                               GameTexts.FindText("str_selection_widget_cancel").ToString(),
+                               (List<InquiryElement> list) =>
+                               {
+                                   Settlement port = list.First().Identifier as Settlement;
+                                   BKShippingBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKShippingBehavior>();
+                                   behavior.SetTravel(MobileParty.MainParty, port);
+                               },
+                               null));
+                       },
+                       null));
+                   
+               },
+               false, -1, false, null);
 
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_local_connections", "{=B0KoTpr4}Recruit local mercenaries",
                 MenuActionLocalConnectionsCondition, MenuActionLocalConnectionsConsequence);
@@ -265,7 +336,6 @@ namespace BannerKings.Behaviours
                     return true;
                 }, delegate { GameMenu.SwitchToMenu("bannerkings"); }, true);
 
-
             // ------- TOWN --------
 
             campaignGameStarter.AddGameMenuOption("town", "bannerkings_submenu", "{=WaBMVVH9}Banner Kings",
@@ -291,7 +361,7 @@ namespace BannerKings.Behaviours
                 MenuTitlesCondition, 
                 (MenuCallbackArgs args) => UIManager.Instance.ShowWindow("cultures"));
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_demesne", "Estates",
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_demesne", "{=!}Estates",
                 MenuEstatesManageCondition,
                 MenuEstatesManageConsequence);
 
@@ -312,9 +382,7 @@ namespace BannerKings.Behaviours
                 },
                 delegate { GameMenu.SwitchToMenu("bannerkings_actions"); });
 
-
             // ------- CASTLE --------
-
 
             campaignGameStarter.AddGameMenuOption("castle", "bannerkings_castle_submenu", "{=WaBMVVH9}Banner Kings",
                 delegate (MenuCallbackArgs x)
@@ -337,7 +405,7 @@ namespace BannerKings.Behaviours
                 {
                     bool shouldBeDisabled;
                     TextObject disabledText;
-                    bool canPlayerDo = Campaign.Current.Models.SettlementAccessModel.CanMainHeroDoSettlementAction(Settlement.CurrentSettlement, SettlementAccessModel.SettlementAction.Trade, out shouldBeDisabled, out disabledText);
+                    bool canPlayerDo = TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementAccessModel.CanMainHeroDoSettlementAction(Settlement.CurrentSettlement, SettlementAccessModel.SettlementAction.Trade, out shouldBeDisabled, out disabledText);
                     args.optionLeaveType = GameMenuOption.LeaveType.Trade;
                     return MenuHelper.SetOptionProperties(args, canPlayerDo, shouldBeDisabled, disabledText) && Settlement.CurrentSettlement.IsCastle;
                 }, 
@@ -351,9 +419,7 @@ namespace BannerKings.Behaviours
                 }, 
                 false, -1, false, null);
 
-
             // ------- VILLAGE --------
-
 
             campaignGameStarter.AddGameMenuOption("village", "bannerkings_village_submenu", "{=WaBMVVH9}Banner Kings",
                 delegate (MenuCallbackArgs x)
@@ -380,7 +446,6 @@ namespace BannerKings.Behaviours
                     GameMenu.SwitchToMenu(menu);
                 }, true);
         }
-
 
         // -------- TICKS ----------
 
@@ -510,7 +575,7 @@ namespace BannerKings.Behaviours
                 if (args.MenuContext.GameMenu.Progress != progress)
                 {
                     var main = Hero.MainHero;
-                    var seller = Campaign.Current.GetCampaignBehavior<BKEducationBehavior>()
+                    var seller = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKEducationBehavior>()
                         .GetBookSeller(Settlement.CurrentSettlement);
                     if (seller != null)
                     {
@@ -754,7 +819,7 @@ namespace BannerKings.Behaviours
         private bool MenuActionStudyCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Wait;
-            var seller = Campaign.Current.GetCampaignBehavior<BKEducationBehavior>()
+            var seller = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKEducationBehavior>()
                 .GetBookSeller(Settlement.CurrentSettlement);
             var hasSeller = seller != null;
             if (hasSeller)
@@ -1015,7 +1080,7 @@ namespace BannerKings.Behaviours
 
         private void SwitchToMenuIfThereIsAnInterrupt(string currentMenuId)
         {
-            var genericStateMenu = Campaign.Current.Models.EncounterGameMenuModel.GetGenericStateMenu();
+            var genericStateMenu = TaleWorlds.CampaignSystem.Campaign.Current.Models.EncounterGameMenuModel.GetGenericStateMenu();
             if (genericStateMenu != currentMenuId)
             {
                 if (!string.IsNullOrEmpty(genericStateMenu))

@@ -121,7 +121,7 @@ namespace BannerKings.Models.Vanilla
                     result.AddFactor(-0.2f, new TextObject("{=qW1tnxGu}Kingdom cultural difference"));
                 }
 
-                var diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(clan.Kingdom);
+                var diplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(clan.Kingdom);
                 if (diplomacy != null)
                 {
                     foreach (var pact in diplomacy.TradePacts)
@@ -178,7 +178,7 @@ namespace BannerKings.Models.Vanilla
         {
             var baseResult = base.CalculateInfluenceChange(clan, includeDescriptions);
 
-            if (clan == Clan.PlayerClan && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().HasDebuff(DefaultStartOptions.Instance.IndebtedLord))
+            if (clan == Clan.PlayerClan && TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().HasDebuff(DefaultStartOptions.Instance.IndebtedLord))
             {
                 baseResult.Add(-2f, DefaultStartOptions.Instance.IndebtedLord.Name);
             }
@@ -196,7 +196,7 @@ namespace BannerKings.Models.Vanilla
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(clan.Leader);
             if (clan.IsUnderMercenaryService && clan.Leader != null)
             {
-                var mercenaryChange = MathF.Ceiling(clan.Influence * (1f / Campaign.Current.Models.ClanFinanceModel.RevenueSmoothenFraction()));
+                var mercenaryChange = MathF.Ceiling(clan.Influence * (1f / TaleWorlds.CampaignSystem.Campaign.Current.Models.ClanFinanceModel.RevenueSmoothenFraction()));
                 if (mercenaryChange != 0)
                 {
                     if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Mercenary))
@@ -211,7 +211,7 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
 
-                var career = Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetCareer(clan);
+                var career = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetCareer(clan);
                 if (career != null && career.HasPrivilegeCurrentKingdom(DefaultMercenaryPrivileges.Instance.IncreasedPay))
                 {
                     int level = career.GetPrivilegeLevelCurrentKingdom(DefaultMercenaryPrivileges.Instance.IncreasedPay);

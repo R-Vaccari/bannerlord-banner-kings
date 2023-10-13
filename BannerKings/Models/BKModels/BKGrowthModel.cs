@@ -105,7 +105,7 @@ namespace BannerKings.Models.BKModels
 
                 result.Add(settlement.Prosperity / 5f, GameTexts.FindText("str_map_tooltip_prosperity"));
 
-                var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(town.OwnerClan.Kingdom);
+                var capital = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(town.OwnerClan.Kingdom);
                 if (capital == town)
                 {
                     result.AddFactor(0.4f, new TextObject("{=fQVyeiJb}Capital"));

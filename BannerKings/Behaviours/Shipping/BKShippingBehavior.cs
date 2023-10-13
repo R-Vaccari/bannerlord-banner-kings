@@ -8,11 +8,14 @@ using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.GameMenus;
+using TaleWorlds.CampaignSystem.GameState;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.MountAndBlade;
 
 namespace BannerKings.Behaviours.Shipping
 {
@@ -38,6 +41,45 @@ namespace BannerKings.Behaviours.Shipping
             CampaignEvents.WeeklyTickEvent.AddNonSerializedListener(this, OnWeeklyTick);
             CampaignEvents.AfterSettlementEntered.AddNonSerializedListener(this, AfterSettlementEntered);
             CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, TickParty);
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this,
+                (CampaignGameStarter starter) =>
+                {
+                    starter.AddWaitGameMenu("bk_shipping_wait",
+                    "{=!}You are now travelling to {DESTINATION} by ship. Estimated arrival is on {ARRIVAL}.{newline}{SIEGE_INFO}",
+                    (MenuCallbackArgs args) =>
+                    {
+                        UpdateShippingMenu();
+                    },
+                    (MenuCallbackArgs args) => true,
+                    null,
+                    (MenuCallbackArgs args, CampaignTime time) =>
+                    {
+                        if (time.GetHourOfDay % 1f == 0)
+                        {
+                            UpdateShippingMenu();
+                        }
+                    },
+                    GameMenu.MenuAndOptionType.WaitMenuHideProgressAndHoursOption,
+                    TaleWorlds.CampaignSystem.Overlay.GameOverlays.MenuOverlayType.None);
+                });
+
+            CampaignEvents.TickEvent.AddNonSerializedListener(this, 
+                (float dt) =>
+                {
+                    if (sailing.ContainsKey(MobileParty.MainParty))
+                    {
+                        Travel travel = sailing[MobileParty.MainParty];
+                        MapState mapState = Game.Current.GameStateManager.ActiveState as MapState;
+                        if (!PlayerCaptivity.IsCaptive && (dt > 0f || (mapState != null && !mapState.AtMenu)))
+                        {
+                            if (TaleWorlds.CampaignSystem.Campaign.Current.CurrentMenuContext == null ||
+                                TaleWorlds.CampaignSystem.Campaign.Current.CurrentMenuContext.StringId != "bk_shipping_wait")
+                            {
+                                GameMenu.ActivateGameMenu("bk_shipping_wait");
+                            }
+                        }
+                    }
+                });
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -45,6 +87,28 @@ namespace BannerKings.Behaviours.Shipping
             dataStore.SyncData("bannerkings-travels", ref sailing);
 
             if (sailing == null) sailing = new Dictionary<MobileParty, Travel>(20);
+        }
+
+        private void UpdateShippingMenu()
+        {
+            if (sailing.ContainsKey(MobileParty.MainParty))
+            {
+                Travel travel = sailing[MobileParty.MainParty];
+                MBTextManager.SetTextVariable("DESTINATION", travel.Destination.Name);
+                MBTextManager.SetTextVariable("ARRIVAL", travel.Arrival.ToString());
+                if (travel.Destination.IsUnderSiege)
+                {
+                    MBTextManager.SetTextVariable("SIEGE_INFO", 
+                        new TextObject("{=!}Your destination is under siege. The crew will leave you nearby."));
+                }
+                else
+                {
+                    MBTextManager.SetTextVariable("SIEGE_INFO", 
+                        new TextObject("{=!}Your destination is in not under siege, the crew will leave you inside."));
+                }
+
+                if (travel.Arrival.IsPast || travel.Arrival.IsNow) FinishTravel(travel);
+            }
         }
 
         public bool HasLanes(Settlement settlement) => DefaultShippingLanes.Instance.GetSettlementLanes(settlement).Count() > 0;
@@ -65,7 +129,7 @@ namespace BannerKings.Behaviours.Shipping
         {
             float result = 0f;
             float distance = party.CurrentSettlement.GatePosition.Distance(settlement.GatePosition);
-            result += distance * 10f;
+            result += distance;
 
             return MBRandom.RoundRandomized(result);
         }
@@ -97,7 +161,7 @@ namespace BannerKings.Behaviours.Shipping
             Settlement current = party.CurrentSettlement;
             CampaignTime arrival = CalculateArrival(destination, party);
             LeaveSettlementAction.ApplyForParty(party);
-            party.Party.UpdateVisibilityAndInspected(0f, true);
+            
             party.IsActive = false;
             party.Ai.DisableAi();
 
@@ -113,6 +177,20 @@ namespace BannerKings.Behaviours.Shipping
                     .ToString(),
                     Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
             }
+
+            if (party == MobileParty.MainParty)
+            {
+                while (TaleWorlds.CampaignSystem.Campaign.Current.CurrentMenuContext != null)
+                    GameMenu.ExitToLast();
+                GameMenu.SwitchToMenu("bk_shipping_wait");
+
+                if (MBCommon.IsPaused)
+                {
+                    GameStateManager.Current.UnregisterActiveStateDisableRequest(this);
+                    MBCommon.UnPauseGameEngine();
+                }
+            }
+            party.Party.UpdateVisibilityAndInspected(0f, true);
         }
 
         private void FinishTravel(Travel travel)
@@ -122,6 +200,12 @@ namespace BannerKings.Behaviours.Shipping
             else if (travel.Destination.IsVillage && travel.Destination.Village.VillageState != Village.VillageStates.Normal) teleportOutside = true;
 
             MobileParty party = travel.Party;
+            if (party == MobileParty.MainParty)
+            {
+                while (TaleWorlds.CampaignSystem.Campaign.Current.CurrentMenuContext != null)
+                    GameMenu.ExitToLast();
+            }
+
             if (teleportOutside) travel.Party.Position2D = travel.Destination.GatePosition;
             else EnterSettlementAction.ApplyForParty(party, travel.Destination);
 
@@ -165,7 +249,7 @@ namespace BannerKings.Behaviours.Shipping
             Town town = null;
             try
             {
-                CaravansCampaignBehavior behavior = Campaign.Current.GetCampaignBehavior<CaravansCampaignBehavior>();
+                CaravansCampaignBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<CaravansCampaignBehavior>();
                 var thinkMethod = behavior.GetType().GetMethod("ThinkNextDestination",
                                 BindingFlags.NonPublic | BindingFlags.Instance);
                 town = (Town)thinkMethod.Invoke(behavior, new object[] { party });
@@ -194,7 +278,7 @@ namespace BannerKings.Behaviours.Shipping
 
         private void TickParty(MobileParty party)
         {
-            if (!party.IsCaravan) return;
+            if (!party.IsCaravan || party == MobileParty.MainParty) return;
 
             if (sailing.ContainsKey(party))
             {

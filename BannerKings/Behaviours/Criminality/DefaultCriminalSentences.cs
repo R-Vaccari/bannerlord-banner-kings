@@ -105,7 +105,7 @@ namespace BannerKings.Behaviours.Criminality
                            if (friend.IsFriend(hero))
                            {
                                bool affectRelatives;
-                               int relationChangeForExecutingHero = Campaign.Current.Models.ExecutionRelationModel
+                               int relationChangeForExecutingHero = TaleWorlds.CampaignSystem.Campaign.Current.Models.ExecutionRelationModel
                                    .GetRelationChangeForExecutingHero(hero, friend, out affectRelatives);
                                if (relationChangeForExecutingHero != 0)
                                {

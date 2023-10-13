@@ -329,7 +329,7 @@ namespace BannerKings.Models.Vanilla
 
         private void GetSettlementProsperityChangeDueToIssues(Settlement settlement, ref ExplainedNumber result)
         {
-            Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementProsperity,
+            TaleWorlds.CampaignSystem.Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementProsperity,
                 settlement, ref result);
         }
 

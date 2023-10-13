@@ -20,7 +20,7 @@ namespace BannerKings.Models.Vanilla
             IFaction targetFaction = mobileParty.TargetSettlement.MapFaction;
             if (targetFaction != mobileParty.MapFaction && targetFaction.IsAtWarWith(mobileParty.MapFaction))
             {
-                CasusBelli justification = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
+                CasusBelli justification = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
                     .GetWar(mobileParty.MapFaction, targetFaction)?.CasusBelli;
                 if (justification == null)
                 {
@@ -48,7 +48,7 @@ namespace BannerKings.Models.Vanilla
             IFaction targetFaction = targetSettlement.MapFaction;
             if (targetFaction != mobileParty.MapFaction && targetFaction.IsAtWarWith(mobileParty.MapFaction))
             {
-                War war = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
+                War war = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
                     .GetWar(mobileParty.MapFaction, targetFaction);
                 if (war == null)
                 {

@@ -241,7 +241,7 @@ namespace BannerKings.UI.Education
 
 
             StringBuilder sb = new StringBuilder();
-            foreach (Hero seller in Campaign.Current.GetCampaignBehavior<BKEducationBehavior>().GetAllBookSellers())
+            foreach (Hero seller in TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKEducationBehavior>().GetAllBookSellers())
             {
                 if (seller.IsAlive && seller.CurrentSettlement != null)
                 {

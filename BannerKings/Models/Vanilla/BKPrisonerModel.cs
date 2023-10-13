@@ -16,7 +16,7 @@ namespace BannerKings.Models.Vanilla
                 return result;
             }
 
-            int num = Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(donatedHero.CharacterObject, donatingParty.LeaderHero);
+            int num = TaleWorlds.CampaignSystem.Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(donatedHero.CharacterObject, donatingParty.LeaderHero);
             int relation = donatedSettlement.OwnerClan != null ? donatedHero.GetRelation(donatedSettlement.OwnerClan.Leader) : 0;
             if (relation <= 0)
             {

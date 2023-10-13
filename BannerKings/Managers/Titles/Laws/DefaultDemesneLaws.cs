@@ -164,7 +164,7 @@ namespace BannerKings.Managers.Titles.Laws
 
         public override void Initialize()
         {
-            var cultures = Campaign.Current.ObjectManager.GetObjectTypeList<CultureObject>();
+            var cultures = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<CultureObject>();
             ArmyPrivate.Initialize(new TextObject("{=R9xGiMLf}Private Armies"),
                 new TextObject("{=n1ck3HDs}Every head of a House, beholder of any title superior to a Lordship, not accounting for army privilege policies, is allowed to form their own army."),
                 new TextObject("{=sLTkCtmc}Army creation limited by title level (minimum: Barony)\nCalling potential army leaders costs twice as much"),

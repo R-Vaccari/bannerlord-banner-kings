@@ -192,7 +192,7 @@ namespace BannerKings.Components
                     var list = new List<ValueTuple<ItemObject, float>>();
                     foreach (var material in Materials)
                     {
-                        var item = Campaign.Current.Models.SmithingModel.GetCraftingMaterialItem(material);
+                        var item = TaleWorlds.CampaignSystem.Campaign.Current.Models.SmithingModel.GetCraftingMaterialItem(material);
                         list.Add(new ValueTuple<ItemObject, float>(item, item.Value * MBRandom.RandomFloat));
                     }
 
@@ -245,7 +245,7 @@ namespace BannerKings.Components
             var target = TargetSettlement;
             if (target != null)
             {
-                var distance = Campaign.Current.Models.MapDistanceModel.GetDistance(MobileParty, target);
+                var distance = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(MobileParty, target);
                 if (distance <= 1f)
                 {
                     EnterSettlementAction.ApplyForParty(MobileParty, target);

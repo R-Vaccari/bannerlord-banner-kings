@@ -129,7 +129,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var influence = GetFulfiller().Clan?.Influence ?? 0f;
 
             var cultureOptions = new List<InquiryElement>();
-            foreach (var culture in Campaign.Current.ObjectManager.GetObjectTypeList<CultureObject>())
+            foreach (var culture in TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<CultureObject>())
             {
                 if (culture.NotableAndWandererTemplates != null && culture.NotableAndWandererTemplates.Count > 0 ||
                     culture.CanHaveSettlement && !culture.IsBandit && culture.IsMainCulture)
@@ -229,7 +229,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 bornSettlement, 
                 null,
                 null, 
-                Campaign.Current.Models.AgeModel.HeroComesOfAge + MBRandom.RandomInt(32));
+                TaleWorlds.CampaignSystem.Campaign.Current.Models.AgeModel.HeroComesOfAge + MBRandom.RandomInt(32));
 
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero.Clan);
             TeleportHeroAction.ApplyImmediateTeleportToSettlement(companion, council.Location.Settlement);

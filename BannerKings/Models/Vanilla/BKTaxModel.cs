@@ -143,7 +143,7 @@ namespace BannerKings.Models.Vanilla
                                                    .SetTextVariable("CLASS", new TextObject("Tenants")));
                     }
 
-                    var buildingBehavior = Campaign.Current.GetCampaignBehavior<BKBuildingsBehavior>();
+                    var buildingBehavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKBuildingsBehavior>();
                     int mining = buildingBehavior.GetMiningRevenue(town);
                     if (mining > 0)
                     {

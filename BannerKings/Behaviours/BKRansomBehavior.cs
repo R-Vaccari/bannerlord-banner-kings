@@ -55,7 +55,7 @@ namespace BannerKings.Behaviours
 
             var completion = contract.Duties[FeudalDuties.Ransom];
             float ransom =
-                Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(released.CharacterObject);
+                TaleWorlds.CampaignSystem.Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(released.CharacterObject);
             playerRansomDuty = new RansomDuty(CampaignTime.DaysFromNow(2), released, ransom * completion);
         }
     }

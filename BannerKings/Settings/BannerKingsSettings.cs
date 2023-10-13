@@ -138,8 +138,8 @@ namespace BannerKings.Settings
         [SettingPropertyInteger("{=00bG9Ube}Bandit Parties Limit", 150, 600, "{=4tnEdJNu}0 Parties ",
             Order = 1,
             RequireRestart = false,
-            HintText = "{=O3MXc6GM}Maximum number of bandit parties in the world map. Vanilla is 150. Default: 300.")]
+            HintText = "{=!}Maximum number of bandit parties in the world map. Vanilla is 150. Default: 150.")]
         [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
-        public int BanditPartiesLimit { get; set; } = 300;
+        public int BanditPartiesLimit { get; set; } = 150;
     }
 }

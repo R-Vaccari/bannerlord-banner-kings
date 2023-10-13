@@ -101,7 +101,7 @@ namespace BannerKings.Components
         {
             if (party.CurrentSettlement != null)
             {
-                BKBanditBehavior behavior = Campaign.Current.GetCampaignBehavior<BKBanditBehavior>();
+                BKBanditBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKBanditBehavior>();
                 if (party.CurrentSettlement == Hideout.Settlement)
                 {
                     if (party.TotalFoodAtInventory < 10)
@@ -137,7 +137,7 @@ namespace BannerKings.Components
                         }
 
                         List<MobileParty> followers = new List<MobileParty>();
-                        int parties = settlement.Parties.Count - Campaign.Current.Models.BanditDensityModel.NumberOfMinimumBanditPartiesInAHideoutToInfestIt;
+                        int parties = settlement.Parties.Count - TaleWorlds.CampaignSystem.Campaign.Current.Models.BanditDensityModel.NumberOfMinimumBanditPartiesInAHideoutToInfestIt;
                         foreach (var follower in settlement.Parties)
                         {
                             if (!follower.IsBandit || follower.IsBanditBossParty || parties == 0)

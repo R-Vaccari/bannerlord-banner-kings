@@ -27,8 +27,8 @@ namespace BannerKings.Managers.Populations
 
         public MBReadOnlyDictionary<MineralType, float> Compositions => Composition.GetReadOnlyDictionary();
 
-        public TerrainType Terrain => Campaign.Current.MapSceneWrapper != null ? 
-            Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(Settlement.Position2D) : TerrainType.Plain;
+        public TerrainType Terrain => TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper != null ? 
+            TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(Settlement.Position2D) : TerrainType.Plain;
 
         public List<ValueTuple<ItemObject, float>> GetLocalMinerals()
         {
@@ -45,10 +45,10 @@ namespace BannerKings.Managers.Populations
         {
             var result = type switch
             {
-                MineralType.IRON => Campaign.Current.ObjectManager.GetObject<ItemObject>("iron"),
-                MineralType.SALT => Campaign.Current.ObjectManager.GetObject<ItemObject>("salt"),
-                MineralType.SILVER => Campaign.Current.ObjectManager.GetObject<ItemObject>("silver"),
-                MineralType.CLAY => Campaign.Current.ObjectManager.GetObject<ItemObject>("clay"),
+                MineralType.IRON => TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObject<ItemObject>("iron"),
+                MineralType.SALT => TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObject<ItemObject>("salt"),
+                MineralType.SILVER => TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObject<ItemObject>("silver"),
+                MineralType.CLAY => TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObject<ItemObject>("clay"),
                 MineralType.LIMESTONE => BKItems.Instance.Limestone,
                 MineralType.MARBLE => BKItems.Instance.Marble,
                 MineralType.GOLD => BKItems.Instance.GoldOre,

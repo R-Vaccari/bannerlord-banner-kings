@@ -101,6 +101,8 @@ namespace BannerKings.Models.Vanilla
                     baseResult.Add(trainning == 1 ? 0.2f : trainning == 2 ? 0.5f : 1f,
                         new TextObject("{=c6pesaYL}Training Fields"));
                 }
+
+                baseResult.Add(settlement.Village.Hearth / 400f, new TextObject("{=ecdZglky}From Hearths"));
             }
 
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.OwnerClan.Leader);

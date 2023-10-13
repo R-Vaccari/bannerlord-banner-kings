@@ -355,7 +355,7 @@ namespace BannerKings.Behaviours
 
                 if (currentHorses < horseLimit && MBRandom.RandomFloat < 0.02f)
                 {
-                    var horse = Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>()
+                    var horse = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>()
                         .FirstOrDefault(x => x.ItemCategory == DefaultItemCategories.WarHorse && x.Culture == town.Culture);
                     town.Settlement.Stash.AddToCounts(horse, 1);
                 }

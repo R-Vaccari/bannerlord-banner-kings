@@ -286,7 +286,7 @@ namespace BannerKings.Models.Vanilla
 
                         if (hero == Hero.MainHero)
                         {
-                            Contract contract = Campaign.Current.GetCampaignBehavior<BKRetainerBehavior>().GetContract();
+                            Contract contract = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKRetainerBehavior>().GetContract();
                             if (contract != null && contract.Contractor == leader)
                             {
                                 result.Add(contract.Wage);

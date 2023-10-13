@@ -18,7 +18,7 @@ namespace BannerKings.Models.Vanilla
         public override ExplainedNumber GetDailyCrimeRatingChange(IFaction faction, bool includeDescriptions = false)
         {
             var result = base.GetDailyCrimeRatingChange(faction, includeDescriptions);
-            if (Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
+            if (TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
                 .HasDebuff(DefaultStartOptions.Instance.Outlaw))
             {
                 return new ExplainedNumber(0f, includeDescriptions, DefaultStartOptions.Instance.Outlaw.Name);

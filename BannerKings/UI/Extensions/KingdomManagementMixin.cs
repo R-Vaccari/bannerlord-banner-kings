@@ -34,7 +34,7 @@ namespace BannerKings.UI.Extensions
             CourtEnabled = true;
             kingdomManagement.RefreshValues();
 
-            var diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(vm.Kingdom);
+            var diplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(vm.Kingdom);
             Groups = new KingdomGroupsVM(diplomacy);
             GroupsEnabled = diplomacy != null;
 

@@ -61,7 +61,7 @@ namespace BannerKings.Models.Vanilla
             {
                 PerkHelper.AddEpicPerkBonusForCharacter(DefaultPerks.Steward.PriceOfLoyalty, party.EffectiveQuartermaster.CharacterObject, DefaultSkills.Steward, true, ref result, 250);
             }
-            TerrainType faceTerrainType = Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace);
+            TerrainType faceTerrainType = TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace);
             if (faceTerrainType == TerrainType.Forest || faceTerrainType == TerrainType.Steppe)
             {
                 PerkHelper.AddPerkBonusForParty(DefaultPerks.Scouting.Foragers, party, true, ref result);
@@ -97,7 +97,7 @@ namespace BannerKings.Models.Vanilla
             if (leader != null)
             {
                 var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
-                var faceTerrainType = Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace);
+                var faceTerrainType = TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace);
 
                 if (data.HasPerk(BKPerks.Instance.KheshigRaider) && faceTerrainType == TerrainType.Plain ||
                        faceTerrainType == TerrainType.Steppe)

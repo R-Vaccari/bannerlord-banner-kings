@@ -25,6 +25,8 @@ namespace BannerKings.Actions
 
                 for (int i = startingIndex; i != finalIndex; i += indexChange)
                 {
+                    if (sellerInventory.Count <= i) continue;
+
                     ItemRosterElement element = sellerInventory.ElementAt(i);
                     if (element.EquipmentElement.Item == null) continue;
 

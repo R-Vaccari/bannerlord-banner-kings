@@ -19,7 +19,7 @@ namespace BannerKings.Models.Vanilla
         {
             var result = base.GetEffectivePartyMorale(mobileParty, includeDescription);
 
-            if (mobileParty.Owner == Hero.MainHero && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
+            if (mobileParty.Owner == Hero.MainHero && TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
                     .HasDebuff(DefaultStartOptions.Instance.Mercenary))
             {
                 result.Add(-20f, DefaultStartOptions.Instance.Mercenary.Name);
@@ -85,7 +85,7 @@ namespace BannerKings.Models.Vanilla
                     result.Add(nonKhuzaits * -0.05f, DefaultLifestyles.Instance.Kheshig.Name);
                 }
 
-                PartySupplies supplies = Campaign.Current.GetCampaignBehavior<BKPartyNeedsBehavior>().GetPartySupplies(mobileParty);
+                PartySupplies supplies = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKPartyNeedsBehavior>().GetPartySupplies(mobileParty);
                 if (supplies != null)
                 {
                     if (mobileParty.MemberRoster.TotalManCount > supplies.MinimumSoldiersThreshold)

@@ -22,7 +22,7 @@ namespace BannerKings.Models.Vanilla
                     baseResult.AddFactor(0.05f, BKPerks.Instance.FianHighlander.Name);
                 }
 
-                var faceTerrainType = Campaign.Current.MapSceneWrapper.GetFaceTerrainType(mobileParty.CurrentNavigationFace);
+                var faceTerrainType = TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper.GetFaceTerrainType(mobileParty.CurrentNavigationFace);
                 if (faceTerrainType == TaleWorlds.Core.TerrainType.Desert && data.HasPerk(BKPerks.Instance.JawwalDuneRider))
                 {
                     baseResult.AddFactor(0.8f, BKPerks.Instance.JawwalDuneRider.Name);
@@ -33,7 +33,7 @@ namespace BannerKings.Models.Vanilla
                     baseResult.AddFactor(0.03f, BKPerks.Instance.CaravaneerStrider.Name);
                 }
 
-                if (Campaign.Current.IsNight && data.HasPerk(BKPerks.Instance.OutlawNightPredator))
+                if (TaleWorlds.CampaignSystem.Campaign.Current.IsNight && data.HasPerk(BKPerks.Instance.OutlawNightPredator))
                 {
                     baseResult.AddFactor(0.06f, BKPerks.Instance.OutlawNightPredator.Name);
                 }
@@ -72,13 +72,13 @@ namespace BannerKings.Models.Vanilla
             if (mobileParty.IsCaravan && mobileParty.Owner != null)
             {
                 var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.Owner);
-                if (Campaign.Current.IsDay && data.HasPerk(BKPerks.Instance.CaravaneerDealer))
+                if (TaleWorlds.CampaignSystem.Campaign.Current.IsDay && data.HasPerk(BKPerks.Instance.CaravaneerDealer))
                 {
                     baseResult.AddFactor(0.05f, BKPerks.Instance.FianHighlander.Name);
                 }
             }
 
-            if (mobileParty.LeaderHero == Hero.MainHero && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
+            if (mobileParty.LeaderHero == Hero.MainHero && TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
                     .HasDebuff(DefaultStartOptions.Instance.Caravaneer))
             {
                 baseResult.AddFactor(-0.05f, DefaultStartOptions.Instance.Caravaneer.Name);

@@ -150,10 +150,10 @@ namespace BannerKings.Behaviours
             }
 
             var flag = false;
-            var basicVolunteer = Campaign.Current.Models.VolunteerModel.GetBasicVolunteer(hero);
+            var basicVolunteer = TaleWorlds.CampaignSystem.Campaign.Current.Models.VolunteerModel.GetBasicVolunteer(hero);
             for (var i = 0; i < 6; i++)
             {
-                if (!(MBRandom.RandomFloat < Campaign.Current.Models.VolunteerModel.GetDailyVolunteerProductionProbability(hero, i, settlement)))
+                if (!(MBRandom.RandomFloat < TaleWorlds.CampaignSystem.Campaign.Current.Models.VolunteerModel.GetDailyVolunteerProductionProbability(hero, i, settlement)))
                 {
                     continue;
                 }

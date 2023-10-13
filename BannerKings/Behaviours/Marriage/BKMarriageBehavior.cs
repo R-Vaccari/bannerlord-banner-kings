@@ -90,7 +90,7 @@ namespace BannerKings.Behaviours.Marriage
                         MBTextManager.SetTextVariable("FLIRTATION_LINE", "{=v1hC6Aem}My lady, I wish to profess myself your most ardent admirer.", false);
                     }
 
-                    return Campaign.Current.Models.MarriageModel.IsCoupleSuitableForMarriage(Hero.MainHero, Hero.OneToOneConversationHero) && 
+                    return TaleWorlds.CampaignSystem.Campaign.Current.Models.MarriageModel.IsCoupleSuitableForMarriage(Hero.MainHero, Hero.OneToOneConversationHero) && 
                     !FactionManager.IsAtWarAgainstFaction(Hero.MainHero.MapFaction, Hero.OneToOneConversationHero.MapFaction) &&
                     Romance.GetRomanticLevel(Hero.MainHero, Hero.OneToOneConversationHero) == Romance.RomanceLevelEnum.Untested &&
                     !flirtedWith.Contains(Hero.OneToOneConversationHero);
@@ -110,7 +110,7 @@ namespace BannerKings.Behaviours.Marriage
                     }
 
                     var hero = Hero.OneToOneConversationHero;
-                    int attraction = Campaign.Current.Models.RomanceModel.GetAttractionValuePercentage(hero, Hero.MainHero);
+                    int attraction = TaleWorlds.CampaignSystem.Campaign.Current.Models.RomanceModel.GetAttractionValuePercentage(hero, Hero.MainHero);
 
                     TextObject text = null;
                     if (attraction >= 0.7)
@@ -484,7 +484,7 @@ namespace BannerKings.Behaviours.Marriage
                                guests.Add(proposedMarriage.Proposed.Clan);
                            }
 
-                           Campaign.Current.GetCampaignBehavior<BKFeastBehavior>().LaunchFeast(town,
+                           TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKFeastBehavior>().LaunchFeast(town,
                                guests,
                                proposedMarriage);
                        }
@@ -535,7 +535,7 @@ namespace BannerKings.Behaviours.Marriage
         }
 
         private bool IsPotentialSpouseBK() => Hero.MainHero.Spouse == null &&
-                        Campaign.Current.Models.MarriageModel.IsCoupleSuitableForMarriage(Hero.MainHero, Hero.OneToOneConversationHero) &&
+                        TaleWorlds.CampaignSystem.Campaign.Current.Models.MarriageModel.IsCoupleSuitableForMarriage(Hero.MainHero, Hero.OneToOneConversationHero) &&
                         !FactionManager.IsAtWarAgainstFaction(Hero.MainHero.MapFaction, Hero.OneToOneConversationHero.MapFaction) &&
                         !IsCoupleMatchedByFamily(Hero.MainHero, Hero.OneToOneConversationHero) &&
                         Hero.OneToOneConversationHero.Clan.Leader != Hero.OneToOneConversationHero;
@@ -553,9 +553,9 @@ namespace BannerKings.Behaviours.Marriage
             {
                 var proposer = __instance.ProposingHero;
                 var proposed = __instance.HeroBeingProposedTo;
-                if (Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().IsCoupleMatchedByFamily(proposer, proposed))
+                if (TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().IsCoupleMatchedByFamily(proposer, proposed))
                 {
-                    var contract = Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().GetProposedMarriage();
+                    var contract = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().GetProposedMarriage();
                     __result = contract.Dowry;
 
                     return false;
@@ -574,7 +574,7 @@ namespace BannerKings.Behaviours.Marriage
             {
                 if (__result == true)
                 {
-                    __result = Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>()
+                    __result = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>()
                         .IsCoupleMatchedByFamily(Hero.MainHero, Hero.OneToOneConversationHero);
                 }
             }
@@ -585,7 +585,7 @@ namespace BannerKings.Behaviours.Marriage
             {
                 if (__result == true)
                 {
-                    __result = Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>()
+                    __result = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>()
                         .IsCoupleMatchedByFamily(Hero.MainHero, Hero.OneToOneConversationHero);
                 }
             }
@@ -611,7 +611,7 @@ namespace BannerKings.Behaviours.Marriage
                                       select x)
                 {
                     var result = BannerKingsConfig.Instance.MarriageModel.IsMarriageAdequate(proposer, hero);
-                    if (Campaign.Current.Models.MarriageModel.IsCoupleSuitableForMarriage(proposer, hero) && 
+                    if (TaleWorlds.CampaignSystem.Campaign.Current.Models.MarriageModel.IsCoupleSuitableForMarriage(proposer, hero) && 
                         !FactionManager.IsAtWarAgainstFaction(proposer.MapFaction, hero.MapFaction) && 
                         hero != Hero.OneToOneConversationHero && result.ResultNumber > 0f)
                     {

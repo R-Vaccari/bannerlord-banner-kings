@@ -30,6 +30,7 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
+using TaleWorlds.LinQuick;
 
 namespace BannerKings.Behaviours
 {
@@ -269,7 +270,7 @@ namespace BannerKings.Behaviours
 
         private void FinishIssue(IssueBase issue, Hero handler, Hero clanLeader)
         {
-            handler.AddSkillXp(DefaultSkills.Steward, 1000f * Campaign.Current.Models.IssueModel.GetIssueDifficultyMultiplier());
+            handler.AddSkillXp(DefaultSkills.Steward, 1000f * TaleWorlds.CampaignSystem.Campaign.Current.Models.IssueModel.GetIssueDifficultyMultiplier());
 
             if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(clanLeader.Clan,
                 DefaultCouncilTasks.Instance.ManageDemesne, out var competence))
@@ -336,7 +337,7 @@ namespace BannerKings.Behaviours
                     if (garrison != null)
                     {
                         float wage = garrison.TotalWage;
-                        var income = Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(town).ResultNumber;
+                        var income = TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(town).ResultNumber;
                         if (wage >= income * 0.5f)
                         {
                             BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target,
@@ -485,7 +486,7 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            var distance = Campaign.Current.Models.MapDistanceModel.GetDistance(target, origin);
+            var distance = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(target, origin);
             if (distance > 10f)
             {
                 return;
@@ -549,7 +550,7 @@ namespace BannerKings.Behaviours
                 desiredAmounts.Add(DefaultItemCategories.RangedWeapons5, (int)(town.Prosperity / 1500f));
                 desiredAmounts.Add(DefaultItemCategories.RangedWeapons4, (int)(town.Prosperity / 1000f));
 
-                var behavior = Campaign.Current.GetCampaignBehavior<WorkshopsCampaignBehavior>();
+                var behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<WorkshopsCampaignBehavior>();
                 var getItem = AccessTools.Method(behavior.GetType(), "GetRandomItemAux", new Type[] { typeof(ItemCategory), typeof(Town) });
 
                 foreach (var pair in desiredAmounts)
@@ -625,12 +626,12 @@ namespace BannerKings.Behaviours
                             }
                         }
                     }
-                    if (Campaign.Current.Models.SettlementFoodModel is not BKFoodModel)
+                    if (TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementFoodModel is not BKFoodModel)
                     {
                         return;
                     }
 
-                    var foodModel = (BKFoodModel)Campaign.Current.Models.SettlementFoodModel;
+                    var foodModel = (BKFoodModel)TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementFoodModel;
                     var popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                     if (popData == null)
                     {
@@ -678,7 +679,7 @@ namespace BannerKings.Behaviours
         {
             if (settlement.IsCastle)
             {
-                ItemConsumptionBehavior behavior = Campaign.Current.GetCampaignBehavior<ItemConsumptionBehavior>();
+                ItemConsumptionBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<ItemConsumptionBehavior>();
                 behavior.GetType().GetMethod("MakeConsumptionInTown", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
                     .Invoke(behavior, new object[] { settlement.Town, new Dictionary<ItemCategory, int>(10) });
                 
@@ -687,11 +688,26 @@ namespace BannerKings.Behaviours
                     return;
                 }
 
-                foreach (var garrison in from castleBuilding in settlement.Town.Buildings where BKBuildings.Instance.CastleRetinue != null && castleBuilding.BuildingType == BKBuildings.Instance.CastleRetinue let garrison = settlement.Town.GarrisonParty where garrison.MemberRoster != null && garrison.MemberRoster.Count > 0 let elements = garrison.MemberRoster.GetTroopRoster() let currentRetinue = elements.Where(soldierElement => Utils.Helpers.IsRetinueTroop(soldierElement.Character)).Sum(soldierElement => soldierElement.Number) let maxRetinue = castleBuilding.CurrentLevel == 1 ? 20 : castleBuilding.CurrentLevel == 2 ? 40 : 60 where currentRetinue < maxRetinue where garrison.MemberRoster.Count < garrison.Party.PartySizeLimit select garrison)
+                Building barracks = settlement.Town.Buildings.FirstOrDefault(x => x.BuildingType.StringId == BKBuildings.Instance.CastleRetinue.StringId);
+                if (barracks != null && barracks.CurrentLevel > 0)
                 {
-                    garrison.MemberRoster.AddToCounts(settlement.Culture.EliteBasicTroop, 1);
-                }
+                    float max = 20 * barracks.CurrentLevel;
+                    int current = 0;
 
+                    MobileParty garrison = settlement.Town.GarrisonParty;
+                    foreach (var element in garrison.MemberRoster.GetTroopRoster())
+                    {
+                        if (Utils.Helpers.IsRetinueTroop(element.Character))
+                        {
+                            current += element.Number;
+                        }
+                    }
+
+                    if (current < max)
+                    {
+                        garrison.MemberRoster.AddToCounts(settlement.Culture.EliteBasicTroop, 1);
+                    }
+                }
                 if (settlement.Town.FoodStocks <= settlement.Town.FoodStocksUpperLimit() * 0.05f &&
                     settlement.Town.Settlement.Stash != null)
                 {
@@ -951,16 +967,24 @@ namespace BannerKings.Behaviours
         {
             private static bool Prefix(ref Town __instance, ref int __result)
             {
-                if (BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(__instance.Settlement))
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(__instance.Settlement);
+                if (data == null) return true;
+
+                float total = data.TotalPop;
+                float result = total / 3.5f;
+
+                if (__instance.IsCastle) result += TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementFoodModel.CastleFoodStockUpperLimitBonus;
+                else result += TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementFoodModel.FoodStocksUpperLimit;
+
+                foreach (var building in __instance.Buildings)
                 {
-                    return true;
+                    if (building.CurrentLevel > 0 && building.BuildingType == DefaultBuildingTypes.CastleGranary || building.BuildingType == DefaultBuildingTypes.SettlementGranary) 
+                    {
+                        result += 1000f * building.CurrentLevel;
+                    }
                 }
 
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(__instance.Settlement);
-                var total = data.TotalPop;
-                var result = (int) (total / 3.5f);
-
-                __result = (int) (Campaign.Current.Models.SettlementFoodModel.FoodStocksUpperLimit + (__instance.IsCastle ? Campaign.Current.Models.SettlementFoodModel.CastleFoodStockUpperLimitBonus : 0) + __instance.GetEffectOfBuildings(BuildingEffectEnum.Foodstock) + result);
+                __result = (int) result;
                 return false;
 
             }

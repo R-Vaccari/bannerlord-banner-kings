@@ -74,7 +74,7 @@ namespace BannerKings.Behaviours
 
             if (hero == Hero.MainHero)
             {
-                Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new DemesneLimitNotification());
+                TaleWorlds.CampaignSystem.Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new DemesneLimitNotification());
                 return;
             }
 
@@ -116,7 +116,7 @@ namespace BannerKings.Behaviours
 
             if (hero == Hero.MainHero)
             {
-                Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new UnlandedDemesneLimitNotification());
+                TaleWorlds.CampaignSystem.Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new UnlandedDemesneLimitNotification());
             }
 
             var vassals = BannerKingsConfig.Instance.TitleManager.CalculateVassals(hero.Clan);
@@ -159,7 +159,7 @@ namespace BannerKings.Behaviours
 
             if (hero == Hero.MainHero)
             {
-                Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new VassalLimitNotification());
+                TaleWorlds.CampaignSystem.Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new VassalLimitNotification());
             }
         }
 

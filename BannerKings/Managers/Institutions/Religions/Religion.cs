@@ -38,7 +38,11 @@ namespace BannerKings.Managers.Institutions.Religions
         public MBReadOnlyList<Rite> Rites => new MBReadOnlyList<Rite>(Faith.Rites);
         public CultureObject MainCulture => FavoredCultures[0];
 
-        public bool HasDoctrine(Doctrine doctrine) => Faith.Doctrines.Contains(doctrine);
+        public bool HasDoctrine(Doctrine doctrine)
+        {
+            if (Faith != null && Faith.Doctrines != null) return Faith.Doctrines.Contains(doctrine);
+            return false;
+        }
 
         public FaithStance GetStance(Faith otherFaith)
         {

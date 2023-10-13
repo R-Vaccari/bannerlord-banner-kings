@@ -27,8 +27,8 @@ namespace BannerKings.Managers.Populations
 
         public void Start(Town town)
         {
-            var tournamentManager = Campaign.Current.TournamentManager;
-            tournamentManager.AddTournament(Campaign.Current.Models.TournamentModel.CreateTournament(town));
+            var tournamentManager = TaleWorlds.CampaignSystem.Campaign.Current.TournamentManager;
+            tournamentManager.AddTournament(TaleWorlds.CampaignSystem.Campaign.Current.Models.TournamentModel.CreateTournament(town));
             Hero.MainHero.ChangeHeroGold(-5000);
             InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=CyF16uSZ}Tournament started with prize: {PRIZE}")
                 .SetTextVariable("PRIZE", Prize.Name).ToString(),

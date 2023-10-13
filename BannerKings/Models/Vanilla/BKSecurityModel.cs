@@ -22,7 +22,7 @@ namespace BannerKings.Models.Vanilla
                 baseResult.Add(0.5f, new TextObject("{=UnxSzSGt}Castle security"));
             }
 
-            var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(town.OwnerClan.Kingdom);
+            var capital = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(town.OwnerClan.Kingdom);
             if (capital == town)
             {
                 baseResult.Add(-1f, new TextObject("{=fQVyeiJb}Capital"));

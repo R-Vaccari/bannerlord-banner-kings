@@ -138,7 +138,7 @@ namespace BannerKings.UI.Titles
         {
             if (title.deJure != null)
             {
-                Campaign.Current.EncyclopediaManager.GoToLink(title.deJure.EncyclopediaLink);
+                TaleWorlds.CampaignSystem.Campaign.Current.EncyclopediaManager.GoToLink(title.deJure.EncyclopediaLink);
             }
         }
     }

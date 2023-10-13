@@ -78,7 +78,7 @@ namespace BannerKings.Behaviours
                 () => Hero.OneToOneConversationHero != null && Hero.OneToOneConversationHero.CompanionOf != null,
                 () =>
                 {
-                    TakePrisonerAction.Apply(Campaign.Current.MainParty.Party, CharacterObject.OneToOneConversationCharacter.HeroObject);
+                    TakePrisonerAction.Apply(TaleWorlds.CampaignSystem.Campaign.Current.MainParty.Party, CharacterObject.OneToOneConversationCharacter.HeroObject);
                 }, 
                 0, null);
 
@@ -89,14 +89,14 @@ namespace BannerKings.Behaviours
               null,
               () =>
               {
-                  TakePrisonerAction.Apply(Campaign.Current.MainParty.Party, CharacterObject.OneToOneConversationCharacter.HeroObject);
+                  TakePrisonerAction.Apply(TaleWorlds.CampaignSystem.Campaign.Current.MainParty.Party, CharacterObject.OneToOneConversationCharacter.HeroObject);
               });
 
             starter.AddPlayerLine("default_conversation_for_wrongly_created_heroes",
               "start",
               "companion_captured",
               "{=5S2TAT0h}You'll be coming with me now.",
-              () => IsCompanionOfAnotherClan() && Campaign.Current.CurrentConversationContext == ConversationContext.CapturedLord,
+              () => IsCompanionOfAnotherClan() && TaleWorlds.CampaignSystem.Campaign.Current.CurrentConversationContext == ConversationContext.CapturedLord,
               null);
 
             starter.AddPlayerLine("meet_wanderer_different_clan", 
@@ -638,7 +638,7 @@ namespace BannerKings.Behaviours
 
                 if (notable != null)
                 {
-                    Campaign.Current.GetCampaignBehavior<BKNotableBehavior>()
+                    TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKNotableBehavior>()
                     .ApplyNotableCultureConversion(notable, council.Owner);
 
                     if (clan == Clan.PlayerClan)
@@ -861,7 +861,7 @@ namespace BannerKings.Behaviours
 
                     if (notable != null)
                     {
-                        Campaign.Current.GetCampaignBehavior<BKNotableBehavior>()
+                        TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKNotableBehavior>()
                         .ApplyNotableFaithConversion(notable, council.Owner, true);
 
                         if (clan == Clan.PlayerClan)
@@ -891,7 +891,7 @@ namespace BannerKings.Behaviours
 
                     if (hero != null)
                     {
-                        Campaign.Current.GetCampaignBehavior<BKNotableBehavior>()
+                        TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKNotableBehavior>()
                         .ApplyNotableFaithConversion(hero, council.Owner, true);
 
                         if (clan == Clan.PlayerClan)
@@ -1103,7 +1103,7 @@ namespace BannerKings.Behaviours
                     return;
                 }
 
-                var hero = HeroCreator.CreateSpecialHero(template, null, null, null, Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
+                var hero = HeroCreator.CreateSpecialHero(template, null, null, null, TaleWorlds.CampaignSystem.Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
                 EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, equipment);
                 hero.CompanionOf = clan;
                 AssignToRole(mobileParty, result, hero);
@@ -1242,7 +1242,7 @@ namespace BannerKings.Behaviours
                     return;
                 }
 
-                var hero = HeroCreator.CreateSpecialHero(template, settlement, clan, null, Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
+                var hero = HeroCreator.CreateSpecialHero(template, settlement, clan, null, TaleWorlds.CampaignSystem.Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
                 BannerKingsConfig.Instance.TitleManager.GrantKnighthood(title, hero, title.deJure);
                 EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, roster.AllEquipments.GetRandomElement());
                 var mainParty = hero.PartyBelongedTo == MobileParty.MainParty;

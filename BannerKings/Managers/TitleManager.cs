@@ -311,7 +311,7 @@ namespace BannerKings.Managers
         public List<Hero> CalculateAllVassals(Clan clan)
         {
             var list = new List<Hero>();
-            var behavior = Campaign.Current.GetCampaignBehavior<BKGentryBehavior>();
+            var behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKGentryBehavior>();
             foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
             {
                 if (title.Fief != null && title.Fief.IsVillage)

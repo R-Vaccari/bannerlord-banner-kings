@@ -49,7 +49,7 @@ namespace BannerKings.Managers.Education.Books
             else
             {
                 hero.AddSkillXp(Skill, 300f);
-                if (hero.HeroDeveloper.GetFocus(Skill) < Campaign.Current.Models.CharacterDevelopmentModel.MaxFocusPerSkill)
+                if (hero.HeroDeveloper.GetFocus(Skill) < TaleWorlds.CampaignSystem.Campaign.Current.Models.CharacterDevelopmentModel.MaxFocusPerSkill)
                 {
                     hero.HeroDeveloper.UnspentFocusPoints++;
                     hero.HeroDeveloper.AddFocus(Skill, 1);

@@ -48,7 +48,7 @@ namespace BannerKings.UI.Extensions
             {
                 if (kingdomDiplomacy.CurrentSelectedDiplomacyItem is KingdomWarItemVM)
                 {
-                    war = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
+                    war = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
                         .GetWar(kingdomDiplomacy.CurrentSelectedDiplomacyItem.Faction1, 
                         kingdomDiplomacy.CurrentSelectedDiplomacyItem.Faction2);
                 }
@@ -98,7 +98,7 @@ namespace BannerKings.UI.Extensions
                 PeaceExists = true;
                 Kingdom currentKingdom = kingdomDiplomacy.CurrentSelectedDiplomacyItem.Faction1 as Kingdom;
                 Kingdom targetKingdom = kingdomDiplomacy.CurrentSelectedDiplomacyItem.Faction2 as Kingdom;
-                var bkDiplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(currentKingdom);
+                var bkDiplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(currentKingdom);
                 
                 if (bkDiplomacy.HasTradePact(targetKingdom))
                 {

@@ -45,7 +45,7 @@ namespace BannerKings.Models.Vanilla
                 return false;
             }
 
-            var diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(kingdom1);
+            var diplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(kingdom1);
             if (diplomacy != null && diplomacy.HasTradePact(kingdom2))
             {
                 reason = new TextObject("{=!}Kingdoms are already in a trade pact.");
@@ -86,7 +86,7 @@ namespace BannerKings.Models.Vanilla
                 return false;
             }
 
-            var diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(kingdom1);
+            var diplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(kingdom1);
             if (diplomacy != null && diplomacy.HasValidTruce(kingdom2))
             {
                 reason = new TextObject("{=!}Kingdoms are already in truce.");
@@ -121,7 +121,7 @@ namespace BannerKings.Models.Vanilla
                 return false;
             }
 
-            var diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(kingdom1);
+            var diplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(kingdom1);
             if (diplomacy != null && diplomacy.HasValidTruce(kingdom2))
             {
                 reason = new TextObject("{=!}Kingdoms are in truce.");

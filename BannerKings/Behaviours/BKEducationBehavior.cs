@@ -307,7 +307,7 @@ namespace BannerKings.Behaviours
 
                 var randomSettlement = town.Settlement;
                 var hero = HeroCreator.CreateSpecialHero(character, randomSettlement, null, null,
-                    Campaign.Current.Models.AgeModel.HeroComesOfAge + 10 + MBRandom.RandomInt(60));
+                    TaleWorlds.CampaignSystem.Campaign.Current.Models.AgeModel.HeroComesOfAge + 10 + MBRandom.RandomInt(60));
                 var firstName = hero.IsFemale
                     ? hero.Culture.FemaleNameList.GetRandomElement()
                     : hero.Culture.MaleNameList.GetRandomElement();
@@ -449,7 +449,7 @@ namespace BannerKings.Behaviours
             }
 
 
-            return Campaign.Current.ConversationManager.CurrentConversationIsFirst && speakslLanguage;
+            return TaleWorlds.CampaignSystem.Campaign.Current.ConversationManager.CurrentConversationIsFirst && speakslLanguage;
         }
 
         private void OnMeetLanguageConsequence()

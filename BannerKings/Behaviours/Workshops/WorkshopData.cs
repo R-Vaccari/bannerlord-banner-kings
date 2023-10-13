@@ -69,7 +69,7 @@ namespace BannerKings.Behaviours.Workshops
                         continue;
                     }
 
-                    float policyEffectToProduction = Campaign.Current.Models.WorkshopModel.GetPolicyEffectToProduction(town);
+                    float policyEffectToProduction = TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.GetPolicyEffectToProduction(town);
                     ExplainedNumber explainedNumber = new ExplainedNumber(production.ConversionSpeed * policyEffectToProduction, 
                         false, null);
 
@@ -135,7 +135,7 @@ namespace BannerKings.Behaviours.Workshops
                 }
 
                 Town town = Workshop.Settlement.Town;
-                WorkshopsCampaignBehavior vanillaBehavior = Campaign.Current.GetCampaignBehavior<WorkshopsCampaignBehavior>();
+                WorkshopsCampaignBehavior vanillaBehavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<WorkshopsCampaignBehavior>();
                 foreach (var output in production.Outputs)
                 {
                     ItemCategory category = output.Item1;
@@ -147,7 +147,7 @@ namespace BannerKings.Behaviours.Workshops
                         float count = output.Item2;
                         int itemPrice = town.GetItemPrice(element, null, false);
                         town.Owner.ItemRoster.AddToCounts(element, (int)count);
-                        if (Campaign.Current.GameStarted)
+                        if (TaleWorlds.CampaignSystem.Campaign.Current.GameStarted)
                         {
                             int num = (int)(MathF.Min(1000, itemPrice) * count);
                             Workshop.ChangeGold(num);

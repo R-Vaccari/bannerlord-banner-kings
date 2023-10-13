@@ -288,7 +288,7 @@ namespace BannerKings.UI.Marriages
         {
             if (ProposerHero != null && ProposedHero != null)
             {
-                Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().SetProposedMarriage(
+                TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().SetProposedMarriage(
                                new MarriageContract(ProposerHero.Hero,
                                ProposedHero.Hero,
                                GetFinalClan(),

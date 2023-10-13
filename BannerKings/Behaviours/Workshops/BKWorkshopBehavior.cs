@@ -96,25 +96,25 @@ namespace BannerKings.Behaviours.Workshops
                 {
                     Hero oldOwner = wk.Owner;
                     Hero townOwner = town.OwnerClan.Leader;
-                    Hero hero = Campaign.Current.Models.WorkshopModel.SelectNextOwnerForWorkshop(town, wk, wk.Owner, 0);
+                    Hero hero = TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.SelectNextOwnerForWorkshop(town, wk, wk.Owner, 0);
                     if (hero != null)
                     {
                         ChangeOwnerOfWorkshopAction.ApplyByWarDeclaration(wk, 
                             hero, 
                             wk.WorkshopType,
-                            Campaign.Current.Models.WorkshopModel.GetInitialCapital(1), 
+                            TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.GetInitialCapital(1), 
                             true, 
                             null);
                     }
                     else
                     {
-                        if (Campaign.Current.Models.WorkshopModel.GetMaxWorkshopCountForTier(townOwner.Clan.Tier) > 
+                        if (TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.GetMaxWorkshopCountForTier(townOwner.Clan.Tier) > 
                             townOwner.OwnedWorkshops.Count)
                         {
                             ChangeOwnerOfWorkshopAction.ApplyByWarDeclaration(wk,
                                                        townOwner,
                                                        wk.WorkshopType,
-                                                       Campaign.Current.Models.WorkshopModel.GetInitialCapital(1),
+                                                       TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.GetInitialCapital(1),
                                                        true,
                                                        null);
                             if (townOwner == Hero.MainHero)
@@ -147,7 +147,7 @@ namespace BannerKings.Behaviours.Workshops
                                         continue;
                                     }
 
-                                    bool enabled = Campaign.Current.Models.WorkshopModel.GetMaxWorkshopCountForTier(clan.Tier) >
+                                    bool enabled = TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.GetMaxWorkshopCountForTier(clan.Tier) >
                                         clan.Leader.OwnedWorkshops.Count;
 
                                     options.Add(new InquiryElement(clan,
@@ -175,7 +175,7 @@ namespace BannerKings.Behaviours.Workshops
                                         ChangeOwnerOfWorkshopAction.ApplyByWarDeclaration(wk,
                                             clan.Leader,
                                             wk.WorkshopType,
-                                            Campaign.Current.Models.WorkshopModel.GetInitialCapital(1),
+                                            TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.GetInitialCapital(1),
                                             true,
                                             null);
                                     },
@@ -201,7 +201,7 @@ namespace BannerKings.Behaviours.Workshops
                                     ChangeOwnerOfWorkshopAction.ApplyByWarDeclaration(wk,
                                         result,
                                         wk.WorkshopType,
-                                        Campaign.Current.Models.WorkshopModel.GetInitialCapital(1),
+                                        TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.GetInitialCapital(1),
                                         true,
                                         null);
 
@@ -277,7 +277,7 @@ namespace BannerKings.Behaviours.Workshops
                 {
                     if (selectedWorkshop != null)
                     {
-                        MBTextManager.SetTextVariable("COST", Campaign.Current.Models.WorkshopModel.GetBuyingCostForPlayer(selectedWorkshop));
+                        MBTextManager.SetTextVariable("COST", TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.GetBuyingCostForPlayer(selectedWorkshop));
                         if (selectedWorkshop.Owner.OwnedWorkshops.Count == 1)
                         {
                             MBTextManager.SetTextVariable("PREMIUM", new TextObject("{=13LGeTLO}I'll be charging you a premium of 15% as this is my only workshop."));
@@ -306,14 +306,14 @@ namespace BannerKings.Behaviours.Workshops
                 () =>
                 {
                     Workshop lastSelectedWorkshop = selectedWorkshop;
-                    int buyingCostForPlayer = Campaign.Current.Models.WorkshopModel.GetBuyingCostForPlayer(lastSelectedWorkshop);
-                    ChangeOwnerOfWorkshopAction.ApplyByTrade(lastSelectedWorkshop, Hero.MainHero, lastSelectedWorkshop.WorkshopType, Campaign.Current.Models.WorkshopModel.GetInitialCapital(1), true, buyingCostForPlayer, null);
+                    int buyingCostForPlayer = TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.GetBuyingCostForPlayer(lastSelectedWorkshop);
+                    ChangeOwnerOfWorkshopAction.ApplyByTrade(lastSelectedWorkshop, Hero.MainHero, lastSelectedWorkshop.WorkshopType, TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.GetInitialCapital(1), true, buyingCostForPlayer, null);
                 }, 
                 100, 
                 delegate (out TextObject explanation)
                 {
-                    bool flag = Hero.MainHero.Gold < Campaign.Current.Models.WorkshopModel.GetBuyingCostForPlayer(selectedWorkshop);
-                    bool flag2 = Campaign.Current.Models.WorkshopModel.GetMaxWorkshopCountForTier(Clan.PlayerClan.Tier) <= Hero.MainHero.OwnedWorkshops.Count;
+                    bool flag = Hero.MainHero.Gold < TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.GetBuyingCostForPlayer(selectedWorkshop);
+                    bool flag2 = TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.GetMaxWorkshopCountForTier(Clan.PlayerClan.Tier) <= Hero.MainHero.OwnedWorkshops.Count;
                     bool result = false;
                     if (flag)
                     {

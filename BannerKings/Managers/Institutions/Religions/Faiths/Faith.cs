@@ -31,6 +31,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             StringId = GetId();
             stances = new Dictionary<Faith, FaithStance>();
             presets = new Dictionary<int, CharacterObject>();
+            Doctrines = new List<Doctrine>();
         }
 
         public MBReadOnlyList<Rite> Rites => new MBReadOnlyList<Rite>(rites);

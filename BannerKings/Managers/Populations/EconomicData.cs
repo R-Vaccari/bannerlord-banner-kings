@@ -44,7 +44,7 @@ namespace BannerKings.Managers.Populations
                 {
                     if (caravan.MapFaction.IsKingdomFaction && settlement.MapFaction.IsKingdomFaction)
                     {
-                        var diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(settlement.MapFaction as Kingdom);
+                        var diplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(settlement.MapFaction as Kingdom);
                         if (diplomacy.HasTradePact(caravan.MapFaction as Kingdom))
                         {
                             return 0;

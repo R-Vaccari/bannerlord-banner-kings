@@ -32,7 +32,7 @@ namespace BannerKings.Components
                     mobileParty.ShouldJoinPlayerBattles = true;
                     mobileParty.Aggressiveness = 0.1f;
                     mobileParty.Ai.SetMoveEscortParty(escortTarget);
-                    mobileParty.SetWagePaymentLimit(Campaign.Current.Models.PartyWageModel.MaxWage);
+                    mobileParty.SetWagePaymentLimit(TaleWorlds.CampaignSystem.Campaign.Current.Models.PartyWageModel.MaxWage);
                 });
         }
 

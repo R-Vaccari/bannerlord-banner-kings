@@ -291,7 +291,7 @@ namespace BannerKings.Models.Vanilla
 
         public override int GetEnergyCostForSmithing(ItemObject item, Hero hero)
         {
-            var max = Campaign.Current.GetCampaignBehavior<ICraftingCampaignBehavior>().GetMaxHeroCraftingStamina(hero);
+            var max = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<ICraftingCampaignBehavior>().GetMaxHeroCraftingStamina(hero);
             var result = base.GetEnergyCostForSmithing(item, hero);
 
             if (item.WeaponComponent is {PrimaryWeapon: { }})

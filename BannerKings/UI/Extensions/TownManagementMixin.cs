@@ -58,7 +58,7 @@ namespace BannerKings.UI.Extensions
 
             MissingMaterials = materialsMissing;
 
-            ItemObject clay = Campaign.Current.ObjectManager.GetObject<ItemObject>("clay");
+            ItemObject clay = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObject<ItemObject>("clay");
             var settlement = data.Settlement;
             MissingGovernor = settlement.Town.Governor == null;
 
