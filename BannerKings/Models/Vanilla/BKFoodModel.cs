@@ -21,7 +21,7 @@ namespace BannerKings.Models.Vanilla
         public override int FoodStocksUpperLimit => 500;
         public override int NumberOfProsperityToEatOneFood => 40;
         public override int NumberOfMenOnGarrisonToEatOneFood => 20;
-        public override int CastleFoodStockUpperLimitBonus => 150;
+        public override int CastleFoodStockUpperLimitBonus => 250;
 
         public override ExplainedNumber CalculateTownFoodStocksChange(Town town, bool includeMarketStocks = true,
             bool includeDescriptions = false)
@@ -262,7 +262,7 @@ namespace BannerKings.Models.Vanilla
 
         private static void GetSettlementFoodChangeDueToIssues(Town town, ref ExplainedNumber explainedNumber)
         {
-            Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementFood,
+            TaleWorlds.CampaignSystem.Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementFood,
                 town.Settlement, ref explainedNumber);
         }
     }
