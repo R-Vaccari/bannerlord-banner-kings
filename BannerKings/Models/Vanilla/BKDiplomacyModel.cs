@@ -99,7 +99,7 @@ namespace BannerKings.Models.Vanilla
             ExplainedNumber result = new ExplainedNumber(-GetScoreOfDeclaringWar(factionDeclaresPeace, 
                 factionDeclaredPeace, evaluatingClan, out peaceReason, null).ResultNumber);
 
-            War war = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetWar(factionDeclaresPeace,factionDeclaredPeace);
+            War war = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetWar(factionDeclaresPeace,factionDeclaredPeace);
             if (war != null)
             {
                 BKExplainedNumber fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, Hero.MainHero.MapFaction, true);
@@ -139,7 +139,7 @@ namespace BannerKings.Models.Vanilla
                 var defenderKingdom = (Kingdom)factionDeclaredWar;
 
                 TextObject reason;
-                bool warAllowed = Campaign.Current.Models.KingdomDecisionPermissionModel
+                bool warAllowed = TaleWorlds.CampaignSystem.Campaign.Current.Models.KingdomDecisionPermissionModel
                     .IsWarDecisionAllowedBetweenKingdoms(attackerKingdom, defenderKingdom, out reason);
                 if (!warAllowed)
                 {
@@ -152,7 +152,7 @@ namespace BannerKings.Models.Vanilla
                 var tributes = factionDeclaresWar.Stances.ToList().FindAll(x => x.GetDailyTributePaid(x.Faction2) > 0);
                 result.AddFactor(-0.15f * tributes.Count);
    
-                KingdomDiplomacy diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(attackerKingdom);
+                KingdomDiplomacy diplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(attackerKingdom);
                 if (diplomacy != null)
                 {
                     if (diplomacy.HasTradePact(defenderKingdom))
@@ -185,7 +185,7 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
 
-                War war = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetWar(factionDeclaredWar, factionDeclaresWar);
+                War war = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetWar(factionDeclaredWar, factionDeclaresWar);
                 if (war != null)
                 {
                     if (war.StartDate.ElapsedYearsUntilNow < 1f) result.Add(50000f);
@@ -208,9 +208,9 @@ namespace BannerKings.Models.Vanilla
                         War possibleWar = new War(attackerKingdom, defenderKingdom, null, null);
                         if (possibleWar.DefenderFront != null && possibleWar.AttackerFront != null)
                         {
-                            float distance = Campaign.Current.Models.MapDistanceModel.GetDistance(possibleWar.DefenderFront.Settlement,
+                            float distance = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(possibleWar.DefenderFront.Settlement,
                                 possibleWar.AttackerFront.Settlement) * 4f;
-                            float factor = (Campaign.AverageDistanceBetweenTwoFortifications / distance) - 1f;
+                            float factor = (TaleWorlds.CampaignSystem.Campaign.AverageDistanceBetweenTwoFortifications / distance) - 1f;
                             result.Add(baseNumber * factor);
                         }
                     }

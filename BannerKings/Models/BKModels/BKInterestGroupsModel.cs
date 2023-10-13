@@ -109,7 +109,7 @@ namespace BannerKings.Models.BKModels
         {
             var result = new BKExplainedNumber(0f, explanations);
             result.LimitMin(0f);
-            result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(clan), GameTexts.FindText("str_notable_power"));
+            result.Add(TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel.GetClanStrength(clan), GameTexts.FindText("str_notable_power"));
            
             if (clan.Gold > 0)
             {

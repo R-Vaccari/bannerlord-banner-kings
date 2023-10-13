@@ -331,7 +331,7 @@ namespace BannerKings.Behaviours.Diplomacy
                     return;
                 }
 
-                DiplomacyModel diplomacyModel = Campaign.Current.Models.DiplomacyModel;
+                DiplomacyModel diplomacyModel = TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel;
                 if (clan.Influence < (float)diplomacyModel.GetInfluenceCostOfProposingWar(clan.Kingdom))
                 {
                     return;
@@ -439,7 +439,7 @@ namespace BannerKings.Behaviours.Diplomacy
 
                 Kingdom enemyKingdom = enemy as Kingdom;
                 Kingdom kingdom = item.Faction1 as Kingdom;
-                KingdomDiplomacy diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(kingdom);
+                KingdomDiplomacy diplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(kingdom);
                 if (diplomacy == null)
                 {
                     return true;
@@ -525,7 +525,7 @@ namespace BannerKings.Behaviours.Diplomacy
                     GameTexts.FindText("str_selection_widget_cancel").ToString(),
                     () =>
                     {
-                        Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().MakeTruce(diplomacy.Kingdom, enemyKingdom, 3f);
+                        TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().MakeTruce(diplomacy.Kingdom, enemyKingdom, 3f);
                         __instance.RefreshValues();
                     },
                     null));
@@ -548,7 +548,7 @@ namespace BannerKings.Behaviours.Diplomacy
                     GameTexts.FindText("str_selection_widget_cancel").ToString(),
                     () =>
                     {
-                        Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().MakeTradePact(diplomacy.Kingdom, enemyKingdom);
+                        TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().MakeTradePact(diplomacy.Kingdom, enemyKingdom);
                         __instance.RefreshValues();
                     },
                     null));

@@ -27,7 +27,7 @@ namespace BannerKings.UI.Mercenary
         private HintViewModel dailyPointsGainHint;
         public MercenaryCareerVM() : base(null, false)
         {
-            Career = Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetCareer(Clan.PlayerClan);
+            Career = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetCareer(Clan.PlayerClan);
             Privileges = new MBBindingList<MercenaryPrivilegeVM>();
         }
 
@@ -79,7 +79,7 @@ namespace BannerKings.UI.Mercenary
                     .SetTextVariable("DAYS", Career.ServiceDays)
                     .ToString();
 
-                var pointsGain = Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetDailyCareerPointsGain(Career.Clan, true);
+                var pointsGain = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetDailyCareerPointsGain(Career.Clan, true);
                 DailyPointsGainText = FormatFloatGain(pointsGain.ResultNumber);
                 DailyPointsGainHint = new HintViewModel(new TextObject("{=!}" + pointsGain.GetExplanations()));
 
@@ -285,7 +285,7 @@ namespace BannerKings.UI.Mercenary
         {
             var customTroop = Career.GetTroop(Career.Kingdom, levy);
             var list = new List<InquiryElement>();
-            var items = Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+            var items = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
             foreach (var preset in DefaultCustomTroopPresets.Instance.GetAdequatePresets(levy ? 16 : 26))
             {
                 list.Add(new InquiryElement(preset,
@@ -498,7 +498,7 @@ namespace BannerKings.UI.Mercenary
         {
             var customTroop = Career.GetTroop(Career.Kingdom, levy);
             var list = new List<InquiryElement>();
-            var items = Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+            var items = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
             foreach (var item in items)
             {
                 if (!item.IsCraftedByPlayer && item.Culture != null && item.Culture != customTroop.Character.Culture

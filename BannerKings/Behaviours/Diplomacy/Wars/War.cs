@@ -148,14 +148,14 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             if (Attacker is Kingdom)
             {
                 float fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(this, Attacker).ResultNumber;
-                KingdomDiplomacy diplo = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(Attacker as Kingdom);
+                KingdomDiplomacy diplo = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(Attacker as Kingdom);
                 diplo.AddFatigue(fatigue * 0.02f);
             }
 
             if (Defender is Kingdom)
             {
                 float fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(this, Defender).ResultNumber;
-                KingdomDiplomacy diplo = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(Defender as Kingdom);
+                KingdomDiplomacy diplo = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(Defender as Kingdom);
                 diplo.AddFatigue(fatigue * 0.02f);
             }
         }
