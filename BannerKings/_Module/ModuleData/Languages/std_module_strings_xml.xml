@@ -2472,5 +2472,6 @@
 		<string id="uURHROGF" text="Affects the party supplies requirement factor. 0% means the feature is functionally disabled. 100% is the standard rate of items consumption, 200% means doube the rate, resulting in more expensive parties. May affect AI party limit sizes. Default: 100%." />
 		<string id="4pJUkbew" text="AI Dismiss Parties" />
 		<string id="FhNxraXd" text="AI clan leaders will dismiss parties from their family members during peace in order to save more money. Default: true." />
+		<string id="bk_skill_lordship" text="Lordship" />
 	</strings>
 </base>

@@ -31,7 +31,7 @@ namespace BannerKings.Managers.Skills
                 .SetAttribute(BKAttributes.Instance.Wisdom);
 
             Lordship = Game.Current.ObjectManager.RegisterPresumedObject(new SkillObject("Lordship"));
-            Lordship.Initialize(new TextObject("{=dwMA32rq}Lordship"),
+            Lordship.Initialize(new TextObject("{=bk_skill_lordship}Lordship"),
                     new TextObject("{=7LeiEP5f}Ability to deal with legal administration of titles and feudal contracts."),
                     SkillObject.SkillTypeEnum.Personal)
                 .SetAttribute(BKAttributes.Instance.Wisdom);
