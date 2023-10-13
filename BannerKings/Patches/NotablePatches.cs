@@ -151,7 +151,7 @@ namespace BannerKings.Patches
                 var num = 0;
                 foreach (var occupation in list)
                 {
-                    num += Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement,
+                    num += TaleWorlds.CampaignSystem.Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement,
                         occupation);
                 }
 
@@ -176,7 +176,7 @@ namespace BannerKings.Patches
                         }
 
                         var targetNotableCountForSettlement =
-                            Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement,
+                            TaleWorlds.CampaignSystem.Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement,
                                 occupation2);
                         if (num3 < targetNotableCountForSettlement)
                         {
