@@ -11,36 +11,36 @@
 	<string id="str_trait_name_just.3" text="{=trait_just}Just" />
 	<string id="str_trait_name_just.4" text="{=trait_unbiased}Unbiased" />
 
-    <string id="str_trait_name_ambitious.0" text="{=trait_satisfied}Satisfied" />
+	<string id="str_trait_name_ambitious.0" text="{=trait_satisfied}Satisfied" />
 	<string id="str_trait_name_ambitious.1" text="{=trait_content}Content" />
 	<string id="str_trait_name_ambitious.3" text="{=trait_ambitious}Ambitious" />
 	<string id="str_trait_name_ambitious.4" text="{=trait_relentless}Relentless" />
-	
+
 	<string id="str_trait_name_humble.0" text="{=trait_arrogant}Arrogant" />
 	<string id="str_trait_name_humble.1" text="{=trait_pretentious}Pretentious" />
 	<string id="str_trait_name_humble.3" text="{=trait_modest}Modest" />
 	<string id="str_trait_name_humble.4" text="{=trait_humble}Humble" />
-	
+
 	<string id="str_trait_name_diligent.0" text="{=trait_lazy}Lazy" />
 	<string id="str_trait_name_diligent.1" text="{=trait_weary}Weary" />
 	<string id="str_trait_name_diligent.3" text="{=trait_diligent}Diligent" />
 	<string id="str_trait_name_diligent.4" text="{=trait_tireless}Tireless" />
-	
+
 	<string id="str_trait_name_zealous.0" text="{=trait_cynic}Cynic" />
 	<string id="str_trait_name_zealous.1" text="{=trait_skeptic}Skeptic" />
 	<string id="str_trait_name_zealous.3" text="{=trait_faithful}Faithful" />
 	<string id="str_trait_name_zealous.4" text="{=trait_zealot}Zealot" />
-	
+
 	<string id="str_trait_name_aptitudeviolence.0" text="{=trait_pacifist}Pacifist" />
 	<string id="str_trait_name_aptitudeviolence.1" text="{=trait_mild}Mild" />
 	<string id="str_trait_name_aptitudeviolence.3" text="{=trait_violent}Violent" />
 	<string id="str_trait_name_aptitudeviolence.4" text="{=trait_vicious}Vicious" />
-	
+
 	<string id="str_trait_name_aptitudesocializing.0" text="{=trait_reclusive}Reclusive" />
 	<string id="str_trait_name_aptitudesocializing.1" text="{=trait_introspective}Introspective" />
 	<string id="str_trait_name_aptitudesocializing.3" text="{=trait_sociable}Sociable" />
 	<string id="str_trait_name_aptitudesocializing.4" text="{=trait_gregarious}Gregarious" />
-	
+
 	<string id="str_trait_name_aptitudeerudition.0" text="{=trait_oblivious}Oblivious" />
 	<string id="str_trait_name_aptitudeerudition.1" text="{=trait_distracted}Distracted" />
 	<string id="str_trait_name_aptitudeerudition.3" text="{=trait_studious}Studious" />
@@ -107,7 +107,7 @@
 
 	<string id="str_bk_placeholder" text="{=gaJDVkvHA}Placeholder" />
 	<string id="str_crafting_difficulty" text="{=LuF75ia3}Crafting Difficulty" />
-	
+
 	<string id="str_bk_condition.has_enough_gold" text="{=bk_condition_has_enough_gold}{HERO.LINK} has not enough Denar. {?PAYER.GENDER}she{?}he{\\?} needs at least {AMOUNT} {GOLD_ICON}." />
 	<string id="str_bk_condition.is_part_of_clan" text="{=bk_condition_is_part_of_clan}{HERO.LINK} is not part of {CLAN_LINK}." />
 	<string id="str_bk_condition.is_part_of_any_clan" text="{=bk_condition_is_part_of_any_clan}{HERO.LINK} is not part of a clan." />
@@ -171,7 +171,7 @@
 	<string id="str_bk_council_description_courtmusician"
 	        text="{=bk_council_description_courtmusician}The {NAME} is responsible for entertaining's a noble household as well as their guests, mostly on feasts. As feasts are a common way for the high society to interact amongst themselves, many expensive amenities are to be expected, including dedicated entertainers." />
 	<string id="str_bk_council_description_spouse"
-	        text="{=bk_council_description_spouse}The {NAME} is responsible for aiding the household leader with tasks that concern their family and property. A good spouse understands legal subjects in order to adequately handle important matters the household leader cannot attend to." />	
+	        text="{=bk_council_description_spouse}The {NAME} is responsible for aiding the household leader with tasks that concern their family and property. A good spouse understands legal subjects in order to adequately handle important matters the household leader cannot attend to." />
 	<string id="str_bk_council_description_courtsmith"
 	        text="{=bk_council_description_courtsmith}The {NAME} is responsible for arming the household. A dedicated wage allows them to focus their craft on high quality equipment that befit a noble household." />
 
@@ -190,10 +190,10 @@
 	<string id="str_bk_council_constable_effects" text="{=bk_council_constable_effects}Settlement stability +4% flat" />
 	<string id="str_bk_council_elder_effects" text="{=bk_council_elder_effects}Village hearths +0.2 daily" />
 	<string id="str_bk_council_philosopher_effects" text="{=bk_council_philosopher_effects}Settlements provide +5% innovation progress{BREAK}Clan members get 5 daily Scholarship xp" />
-	
-	
+
+
 	<string id="str_bk_council_castellan.vlandia" text="{=bk_council_castellan_vlandia}Castellan" />
-	
+
 	<string id="str_bk_council_constable.empire" text="{=bk_council_constable_empire}Constable" />
 	<string id="str_bk_council_constable.vlandia" text="{=bk_council_constable_vlandia}Constable" />
 	<string id="str_bk_council_constable.khuzait" text="{=bk_council_constable_khuzait}Constable" />
@@ -213,13 +213,13 @@
 	<string id="str_bk_council_chancellor.empire" text="{=bk_council_chancellor_empire}Cancellarius" />
 	<string id="str_bk_council_steward.empire" text="{=bk_council_steward_empire}Praefectus Largitionum" />
 	<string id="str_bk_council_spymaster.empire" text="{=bk_council_spymaster_empire}Custodis" />
-	
+
 	<string id="str_bk_council_marshall_royal.empire" text="{=bk_council_marshall_royal_empire}Magister Domesticus" />
 	<string id="str_bk_council_chancellor_royal.empire" text="{=bk_council_chancellor_royal_empire}Magister Cancellarius" />
 	<string id="str_bk_council_steward_royal.empire" text="{=bk_council_steward_royal_empire}Magister Sacrarum Largitionum" />
 	<string id="str_bk_council_spymaster_royal.empire" text="{=bk_council_spymaster_royal_empire}Magister Officiorum" />
 	<string id="str_bk_council_spiritual_royal.empire" text="{=bk_council_spiritual_guide_royal_empire}High Seneschal" />
-	
+
 
 	<string id="str_bk_council_marshall.battania" text="{=bk_council_marshall_battania}Marasgal" />
 	<string id="str_bk_council_chancellor.battania" text="{=bk_council_steward_battania}Sheumarlan" />
@@ -251,7 +251,7 @@
 	<string id="str_bk_council_steward.khuzait" text="{=bk_council_chancellor_khuzait}Steward" />
 	<string id="str_bk_council_spymaster.khuzait" text="{=bk_council_spymaster_khuzait}Khevtuul" />
 	<string id="str_bk_council_spiritual.khuzait" text="{=bk_council_spiritual_guide_khuzait}Shaman" />
-	
+
 	<string id="str_bk_council_marshall_royal.khuzait" text="{=bk_council_marshall_royal_khuzait}Tumetu-iin Noyan" />
 	<string id="str_bk_council_chancellor_royal.khuzait" text="{=bk_council_chancellor_royal_khuzait}High Chancellor" />
 	<string id="str_bk_council_steward_royal.khuzait" text="{=bk_council_steward_royal_khuzait}High Steward" />
@@ -263,7 +263,7 @@
 	<string id="str_bk_council_steward.sturgia" text="{=bk_council_chancellor_sturgia}Steward" />
 	<string id="str_bk_council_spymaster.sturgia" text="{=bk_council_spymaster_sturgia}Spymaster" />
 	<string id="str_bk_council_spiritual.sturgia" text="{=bk_council_spiritual_guide_sturgia}Volkhvs" />
-	
+
 	<string id="str_bk_council_marshall_royal.sturgia" text="{=bk_council_marshall_royal_sturgia}Grand Marshal" />
 	<string id="str_bk_council_chancellor_royal.sturgia" text="{=bk_council_chancellor_royal_sturgia}High Chancellor" />
 	<string id="str_bk_council_steward_royal.sturgia" text="{=bk_council_steward_royal_sturgia}High Steward" />
@@ -275,7 +275,7 @@
 	<string id="str_bk_council_steward.aserai" text="{=bk_council_chancellor_aserai}Steward" />
 	<string id="str_bk_council_spymaster.aserai" text="{=bk_council_spymaster_aserai}Spymaster" />
 	<string id="str_bk_council_spiritual.aserai" text="{=bk_council_spiritual_guide_aserai}Murshid" />
-	
+
 	<string id="str_bk_council_marshall_royal.aserai" text="{=bk_council_marshall_royal_aserai}Grand Marshal" />
 	<string id="str_bk_council_chancellor_royal.aserai" text="{=bk_council_chancellor_royal_aserai}High Chancellor" />
 	<string id="str_bk_council_steward_royal.aserai" text="{=bk_council_steward_royal_aserai}High Steward" />
@@ -318,15 +318,14 @@
 	<string id="str_pop_class_craftsmen_aserai" text="{=pop_class_craftsmen_aserai}Craftsmen" />
 
 	<string id="str_pop_class_nobles_empire" text="{=pop_class_nobles_empire}Nobiles" />
-	<string id="str_pop_class_nobles_sturgia" text="{=}pop_class_nobles_sturgiaKnyaz" />
-	<string id="str_pop_class_nobles_vlandia" text="{pop_class_nobles_vlandia=}Ealdormen" />
+	<string id="str_pop_class_nobles_sturgia" text="{=pop_class_nobles_sturgia}Knyaz" />
+	<string id="str_pop_class_nobles_vlandia" text="{=pop_class_nobles_vlandia}Ealdormen" />
 	<string id="str_pop_class_nobles_battania" text="{=pop_class_nobles_battania}Nobles" />
 	<string id="str_pop_class_nobles_aserai" text="{=pop_class_nobles_aserai}Nobles" />
 	<string id="str_pop_class_nobles_khuzait" text="{=pop_class_nobles_khuzait}Nobles" />
 
 	<string id="str_feudalism_contract_header" text="{=feudalism_contract_header}Enfoeffement Contract for {0}" />
-	<string id="str_feudalism_contract_paragraph"
-	        text="{=str_feudalism_contract_paragraph}You, {0}, formally accept to be henceforth bound to the {1}, fulfill your duties as well as uphold your rights, what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death." />
+	<string id="str_feudalism_contract_paragraph" text="{=str_feudalism_contract_paragraph}You, {0}, formally accept to be henceforth bound to the {1}, fulfill your duties as well as uphold your rights, what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death." />
 	<string id="str_feudalism_contract_duties" text="{=feudalism_contract_duties}Duties" />
 	<string id="str_feudalism_contract_rights" text="{=feudalism_contract_rights}Rights" />
 </strings>
