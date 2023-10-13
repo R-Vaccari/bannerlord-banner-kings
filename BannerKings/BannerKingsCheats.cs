@@ -113,10 +113,21 @@ namespace BannerKings
             return $"{piety} piety added to Main player.";
         }
 
+        [CommandLineFunctionality.CommandLineArgumentFunction("give_player_full_peerage", "bannerkings")]
+        public static string GrantPeerage(List<string> strings)
+        {
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
+            council.SetPeerage(new Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"), true,
+                                true, true, true, true, false));
+
+            return "Full Peerage set.";
+        }
+
+
         [CommandLineFunctionality.CommandLineArgumentFunction("spawn_bandit_hero", "bannerkings")]
         public static string SpawnBanditHero(List<string> strings)
         {
-            BKBanditBehavior behavior = Campaign.Current.GetCampaignBehavior<BKBanditBehavior>();
+            BKBanditBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKBanditBehavior>();
             Clan clan = Clan.BanditFactions.GetRandomElementInefficiently();
             behavior.CreateBanditHero(clan);
 

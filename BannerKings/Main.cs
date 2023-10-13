@@ -20,6 +20,7 @@ using TaleWorlds.MountAndBlade;
 using BannerKings.Managers.Innovations.Eras;
 using BannerKings.Behaviours.Innovations;
 using BannerKings.Behaviours.Shipping;
+using BannerKings.Behaviours.Camping;
 
 namespace BannerKings
 {
@@ -72,6 +73,8 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKTraitBehavior());
             campaignStarter.AddBehavior(new BKPartyNeedsBehavior());
             campaignStarter.AddBehavior(new BKShippingBehavior());
+            campaignStarter.AddBehavior(new BKSailingBehavior());
+            campaignStarter.AddBehavior(new BKCampingBehavior());
 
             campaignStarter.AddModel(new BKPrisonerModel());
             campaignStarter.AddModel(BannerKingsConfig.Instance.CompanionModel);
