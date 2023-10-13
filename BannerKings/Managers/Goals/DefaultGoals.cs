@@ -10,6 +10,7 @@ namespace BannerKings.Managers.Goals
         {
             get
             {
+                //yield return MakeCamp;
                 yield return CallBannersGoal;
                 yield return AssumeCulture;
                 yield return LevyDuty;
@@ -51,6 +52,7 @@ namespace BannerKings.Managers.Goals
         internal Goal CallBannersGoal { get; private set; }
         public Goal RelocateCourtGoal { get; } = new MoveCourtDecision();
         public Goal SentenceCriminal { get; } = new SentenceCriminalDecision();
+        public Goal MakeCamp { get; } = new MakeCamp();
 
         public override void Initialize()
         {
