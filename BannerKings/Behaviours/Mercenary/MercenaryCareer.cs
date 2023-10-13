@@ -340,7 +340,7 @@ namespace BannerKings.Behaviours.Mercenary
             var clan = career.Kingdom.RulingClan;
             if (clan.Fiefs.Count > 1)
             {
-                var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(clan.Kingdom);
+                var capital = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(clan.Kingdom);
                 foreach (var fief in clan.Fiefs)
                 {
                     var title = BannerKingsConfig.Instance.TitleManager.GetTitle(fief.Settlement);
