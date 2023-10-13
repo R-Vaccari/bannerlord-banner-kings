@@ -144,8 +144,8 @@ namespace BannerKings.Models.BKModels
 
             if (council.Location != null)
             {
-                float factor = Campaign.Current.Models.MapDistanceModel.GetDistance(target.Settlement,
-                council.Location.Settlement) / Campaign.AverageDistanceBetweenTwoFortifications;
+                float factor = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(target.Settlement,
+                council.Location.Settlement) / TaleWorlds.CampaignSystem.Campaign.AverageDistanceBetweenTwoFortifications;
                 result.AddFactor(factor, new TextObject("{=Frw4p1qD}Distance between {TOWN1} and {TOWN2}")
                     .SetTextVariable("TOWN1", target.Name)
                     .SetTextVariable("TOWN2", council.Location.Name));

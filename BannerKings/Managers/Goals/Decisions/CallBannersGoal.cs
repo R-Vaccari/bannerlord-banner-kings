@@ -68,7 +68,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(GameTexts.FindText("str_in_army"));
             }
 
-            var behavior = Campaign.Current.GetCampaignBehavior<BKArmyBehavior>();
+            var behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKArmyBehavior>();
             if (behavior.LastHeroArmy(fulfiller).ElapsedSeasonsUntilNow < 2f)
             {
                 failedReasons.Add(new TextObject("{=yG6r0iaK}It has been less than 2 seasons since you last summoned your banners."));
@@ -90,7 +90,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
         private void AddBanners(Clan suzerainClan)
         {
-            var behavior = Campaign.Current.GetCampaignBehavior<BKGentryBehavior>();
+            var behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKGentryBehavior>();
             foreach (var vassal in BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(suzerainClan))
             {
                 var estates = BannerKingsConfig.Instance.PopulationManager.GetEstates(vassal);
@@ -209,7 +209,7 @@ namespace BannerKings.Managers.Goals.Decisions
             army.Gather(settlement);
             mobileParty.Army = army;
 
-            var behavior = Campaign.Current.GetCampaignBehavior<BKGentryBehavior>();
+            var behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKGentryBehavior>();
             float influenceTotal = 0f;
             foreach (var option in banners)
             {
@@ -228,7 +228,7 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             GainKingdomInfluenceAction.ApplyForDefault(hero, -influenceTotal);
-            var armyBehavior = Campaign.Current.GetCampaignBehavior<BKArmyBehavior>();
+            var armyBehavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKArmyBehavior>();
             armyBehavior.AddRecord(hero);
             if (hero != Hero.MainHero && hero.MapFaction == Hero.MainHero.MapFaction)
             {

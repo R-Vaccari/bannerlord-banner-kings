@@ -16,9 +16,9 @@ namespace BannerKings.Managers.Buildings
         {
             get
             {
-                var buildings = Campaign.Current.GetType()
+                var buildings = TaleWorlds.CampaignSystem.Campaign.Current.GetType()
                     .GetProperty("AllBuildingTypes", BindingFlags.Instance | BindingFlags.NonPublic);
-                return (MBReadOnlyList<BuildingType>)buildings.GetValue(Campaign.Current);
+                return (MBReadOnlyList<BuildingType>)buildings.GetValue(TaleWorlds.CampaignSystem.Campaign.Current);
             }
         }
 
@@ -29,6 +29,7 @@ namespace BannerKings.Managers.Buildings
         public BuildingType Armory { get; private set; }
         public BuildingType CourtHouse { get; private set; }
         public BuildingType WarhorseStuds { get; private set; }
+        public BuildingType Port { get; private set; }
         public BuildingType DailyAssimilation { get; private set; }
 
         public override IEnumerable<BuildingType> All

@@ -487,7 +487,7 @@ namespace BannerKings.Managers.Titles.Governments
                             .SetTextVariable("CLAN", currentLeader.Clan.Name));
                     }
 
-                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 600f,
+                    result.Add(TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 600f,
                         new TextObject("{=!}Military power"));
 
                     result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 2f, DefaultSkills.Leadership.Name);
@@ -629,7 +629,7 @@ namespace BannerKings.Managers.Titles.Governments
                             .SetTextVariable("CLAN", currentLeader.Clan.Name));
                     }
 
-                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 400f,
+                    result.Add(TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 400f,
                         new TextObject("{=!}Military power"));
 
                     result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 2f, DefaultSkills.Leadership.Name);
@@ -705,7 +705,7 @@ namespace BannerKings.Managers.Titles.Governments
                         result.Add(150f, new TextObject("{=ipGDmaBZ}Claimant"));
                     }
 
-                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 400f, 
+                    result.Add(TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 400f, 
                         new TextObject("{=!}Military power"));
 
                     result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 3f, DefaultSkills.Leadership.Name);

@@ -14,7 +14,7 @@ namespace BannerKings.Models.Vanilla
             var result = base.GetPartySpottingDifficulty(spottingParty, party);
 
             if (party is {LeaderHero: { }} &&
-                Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace) == TerrainType.Forest)
+                TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace) == TerrainType.Forest)
             {
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(party.LeaderHero);
                 if (education.HasPerk(BKPerks.Instance.OutlawNightPredator))
@@ -29,7 +29,7 @@ namespace BannerKings.Models.Vanilla
         public override ExplainedNumber GetPartySpottingRange(MobileParty party, bool includeDescriptions = false)
         {
             ExplainedNumber result = base.GetPartySpottingRange(party, includeDescriptions);
-            if (Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace) == TerrainType.Forest)
+            if (TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace) == TerrainType.Forest)
             {
                 result.AddFactor(-0.4f);
             }

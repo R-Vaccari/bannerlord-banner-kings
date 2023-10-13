@@ -191,7 +191,7 @@ namespace BannerKings.Managers.Court
                     Location.Settlement, 
                     null, 
                     null, 
-                    Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
+                    TaleWorlds.CampaignSystem.Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
                 EnterSettlementAction.ApplyForCharacterOnly(guest, Location.Settlement);
                 AddGuest(guest);
             }

@@ -42,8 +42,8 @@ namespace BannerKings.Managers.Populations
 
         public float[] Composition => composition;
 
-        public TerrainType Terrain => Campaign.Current.MapSceneWrapper != null ? 
-            Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(data.Settlement.Position2D) : TerrainType.Plain;
+        public TerrainType Terrain => TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper != null ? 
+            TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(data.Settlement.Position2D) : TerrainType.Plain;
 
         public bool IsExcessLaborExpandingAcreage
         {

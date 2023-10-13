@@ -131,7 +131,7 @@ namespace BannerKings.Behaviours
         public void UpgradeParty(MobileParty party)
         {
             string id = GetPartyTemplateId(party.ActualClan);
-            PartyTemplateObject partyTemplate = Campaign.Current.ObjectManager.GetObjectTypeList<PartyTemplateObject>()
+            PartyTemplateObject partyTemplate = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<PartyTemplateObject>()
                 .FirstOrDefault(x => x.StringId == id);
 
             if (partyTemplate == null)
@@ -164,7 +164,7 @@ namespace BannerKings.Behaviours
 
             foreach (var heroParty in bandits.Values)
             {
-                if (Campaign.Current.Models.MapDistanceModel.GetDistance(party, heroParty) <= 10f)
+                if (TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(party, heroParty) <= 10f)
                 {
                     SetFollow(heroParty, party);
                 }
@@ -178,7 +178,7 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            float partyLimit = Campaign.Current.Models.PartySizeLimitModel.GetPartyMemberSizeLimit(party.Party).ResultNumber;
+            float partyLimit = TaleWorlds.CampaignSystem.Campaign.Current.Models.PartySizeLimitModel.GetPartyMemberSizeLimit(party.Party).ResultNumber;
             BanditHeroComponent component = (BanditHeroComponent)party.PartyComponent;
             if (party.MemberRoster.TotalManCount < partyLimit * 0.2f)
             {
@@ -230,7 +230,7 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            var partyTemplates = Campaign.Current.ObjectManager.GetObjectTypeList<PartyTemplateObject>();
+            var partyTemplates = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<PartyTemplateObject>();
             string id = GetPartyTemplateId(clan);
             PartyTemplateObject partyTemplate = partyTemplates.FirstOrDefault(x => x.StringId == id);
             if (partyTemplate == null)
@@ -242,7 +242,7 @@ namespace BannerKings.Behaviours
                 settlement, 
                 clan, 
                 null, 
-                Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
+                TaleWorlds.CampaignSystem.Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
             EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, roster.AllEquipments.GetRandomElement());
             var mainParty = hero.PartyBelongedTo == MobileParty.MainParty;
 
@@ -284,9 +284,9 @@ namespace BannerKings.Behaviours
         private void InfestHieout(Hideout hideout, Clan clan)
         {
             int num = 0;
-            while ((float)num < Campaign.Current.Models.BanditDensityModel.NumberOfMinimumBanditPartiesInAHideoutToInfestIt * 6)
+            while ((float)num < TaleWorlds.CampaignSystem.Campaign.Current.Models.BanditDensityModel.NumberOfMinimumBanditPartiesInAHideoutToInfestIt * 6)
             {
-                Campaign.Current.GetCampaignBehavior<BanditsCampaignBehavior>()
+                TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BanditsCampaignBehavior>()
                     .AddBanditToHideout(hideout, clan.DefaultPartyTemplate, false);
                 num++;
             }

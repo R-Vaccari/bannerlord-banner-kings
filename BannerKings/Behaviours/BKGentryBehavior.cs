@@ -443,7 +443,7 @@ namespace BannerKings.Behaviours
             int childrenQuantity = MBRandom.RandomInt(0, (int)(fertilityYears / 3f));
             for (int i = 0; i < childrenQuantity; i++)
             {
-                bool female = MBRandom.RandomFloat <= Campaign.Current.Models.PregnancyModel.DeliveringFemaleOffspringProbability;
+                bool female = MBRandom.RandomFloat <= TaleWorlds.CampaignSystem.Campaign.Current.Models.PregnancyModel.DeliveringFemaleOffspringProbability;
                 Equipment childEquipment = GetEquipmentIfPossible(culture, true, female);
                 if (childEquipment == null)
                 {
@@ -474,7 +474,7 @@ namespace BannerKings.Behaviours
             hero.Mother = mother;
             hero.Father = father;
             EquipmentFlags customFlags = EquipmentFlags.IsNobleTemplate | EquipmentFlags.IsChildEquipmentTemplate;
-            MBEquipmentRoster randomElementInefficiently = Campaign.Current.Models.EquipmentSelectionModel
+            MBEquipmentRoster randomElementInefficiently = TaleWorlds.CampaignSystem.Campaign.Current.Models.EquipmentSelectionModel
                 .GetEquipmentRostersForDeliveredOffspring(hero).GetRandomElementInefficiently<MBEquipmentRoster>();
             if (randomElementInefficiently != null)
             {

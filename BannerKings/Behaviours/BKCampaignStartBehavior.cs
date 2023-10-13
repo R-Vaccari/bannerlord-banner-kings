@@ -331,7 +331,7 @@ namespace BannerKings.Behaviours
 
         private void ShowInnerInquiry(LearningElement element)
         {
-            /*Campaign.Current.EncyclopediaManager.GoToLink(element.Concept.EncyclopediaLink);
+            /*TaleWorlds.CampaignSystem.Campaign.Current.EncyclopediaManager.GoToLink(element.Concept.EncyclopediaLink);
             ShowInquiry();*/
             InformationManager.ShowInquiry(new InquiryData(element.Name.ToString(),
                 element.Description.ToString(),
@@ -346,7 +346,7 @@ namespace BannerKings.Behaviours
 
         private void ShowInnerInquiry2(LearningElement element)
         {
-            /*Campaign.Current.EncyclopediaManager.GoToLink(element.Concept.EncyclopediaLink);
+            /*TaleWorlds.CampaignSystem.Campaign.Current.EncyclopediaManager.GoToLink(element.Concept.EncyclopediaLink);
             ShowInquiry();*/
             InformationManager.ShowInquiry(new InquiryData(element.Name.ToString(),
                 element.Description.ToString(),

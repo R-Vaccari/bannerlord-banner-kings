@@ -128,7 +128,7 @@ namespace BannerKings.Models.Vanilla
         public int GetInventoryCost(Workshop workshop)
         {
             int cost = 0;
-            WorkshopData data = Campaign.Current.GetCampaignBehavior<BKWorkshopBehavior>().GetInventory(workshop);
+            WorkshopData data = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKWorkshopBehavior>().GetInventory(workshop);
             if (data != null)
             {
                 foreach (var element in data.Inventory)

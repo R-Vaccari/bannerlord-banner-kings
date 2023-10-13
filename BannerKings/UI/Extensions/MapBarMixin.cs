@@ -96,7 +96,7 @@ namespace BannerKings.UI.Extensions
             IsPietyTooltipWarning = Piety < 0f;
             //if (rel == null) return;
 
-            PartySupplies supplies = Campaign.Current.GetCampaignBehavior<BKPartyNeedsBehavior>().GetPartySupplies(MobileParty.MainParty);
+            PartySupplies supplies = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKPartyNeedsBehavior>().GetPartySupplies(MobileParty.MainParty);
             if (supplies != null)
             {
                 var moraleHint = CampaignUIHelper.GetPartyMoraleTooltip(MobileParty.MainParty);

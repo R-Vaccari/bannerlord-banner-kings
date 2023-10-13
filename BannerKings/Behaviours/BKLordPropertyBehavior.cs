@@ -101,7 +101,7 @@ namespace BannerKings.Behaviours
                         .ToString()));
             }
             ChangeOwnerOfWorkshopAction.ApplyByTrade(wk, buyer, wk.WorkshopType,
-                Campaign.Current.Models.WorkshopModel.GetInitialCapital(1), true,
+                TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.GetInitialCapital(1), true,
                 (int)cost);
         }
 

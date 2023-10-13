@@ -158,14 +158,14 @@ namespace BannerKings.UI.Extensions
             /*float hours;
     
            if (crafting.IsInSmeltingMode)
-               hours = Campaign.Current.Models.SmithingModel.GetEnergyCostForSmelting(crafting.Smelting.CurrentSelectedItem.EquipmentElement.Item,
+               hours = TaleWorlds.CampaignSystem.Campaign.Current.Models.SmithingModel.GetEnergyCostForSmelting(crafting.Smelting.CurrentSelectedItem.EquipmentElement.Item,
                    crafting.CurrentCraftingHero.Hero);
            else if (crafting.IsInRefinementMode)
            {
                Crafting.RefiningFormula reference = crafting.Refinement.CurrentSelectedAction.RefineFormula;
                Crafting.RefiningFormula formula = new Crafting.RefiningFormula(reference.Input1, reference.Input1Count, reference.Input2,
                    reference.Input2Count, reference.Output, reference.OutputCount, reference.Output2, reference.Output2Count);
-               hours = Campaign.Current.Models.SmithingModel.GetEnergyCostForRefining(ref formula, crafting.CurrentCraftingHero.Hero);
+               hours = TaleWorlds.CampaignSystem.Campaign.Current.Models.SmithingModel.GetEnergyCostForRefining(ref formula, crafting.CurrentCraftingHero.Hero);
            }
            else
            {
@@ -173,7 +173,7 @@ namespace BannerKings.UI.Extensions
                if ((craftingState = (GameStateManager.Current.ActiveState as CraftingState)) != null)
                {
                    ItemObject currentCraftedItemObject = craftingState.CraftingLogic.GetCurrentCraftedItemObject(true, overrideData);
-                   hours = Campaign.Current.Models.SmithingModel.GetEnergyCostForSmithing(currentCraftedItemObject, crafterHero);
+                   hours = TaleWorlds.CampaignSystem.Campaign.Current.Models.SmithingModel.GetEnergyCostForSmithing(currentCraftedItemObject, crafterHero);
                }
            }*/
         }
@@ -242,7 +242,7 @@ namespace BannerKings.UI.Extensions
                 crafting.CurrentCraftingHero.Hero.AddSkillXp(DefaultSkills.Crafting,
                     BannerKingsConfig.Instance.SmithingModel.GetSkillXpForSmithingInFreeBuildMode(item));
 
-                Campaign.Current.GetCampaignBehavior<ICraftingCampaignBehavior>()
+                TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<ICraftingCampaignBehavior>()
                     .SetHeroCraftingStamina(crafting.CurrentCraftingHero.Hero,
                         (int) crafting.CurrentCraftingHero.CurrentStamina - staminaSpent);
                 crafting.CurrentCraftingHero.RefreshStamina();
@@ -374,7 +374,7 @@ namespace BannerKings.UI.Extensions
             crafting.ExecuteCancel();
             if (spentStamina != 0f && BannerKingsSettings.Instance.CraftingWaitingTime)
             {
-                Campaign.Current.GetCampaignBehavior<BKSettlementActions>().StartCraftingMenu(GetSpentHours());
+                TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKSettlementActions>().StartCraftingMenu(GetSpentHours());
             }
         }
     }

@@ -172,7 +172,7 @@ namespace BannerKings.UI.Management
                     .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON);
                 possible = true;
 
-                ValueTuple<bool, TextObject> result = Campaign.Current.GetCampaignBehavior<BKReligionsBehavior>().IsInstallingPreacherPossible(Hero.MainHero, settlement);
+                ValueTuple<bool, TextObject> result = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKReligionsBehavior>().IsInstallingPreacherPossible(Hero.MainHero, settlement);
                 if (!result.Item1)
                 {
                     possible = result.Item1;
@@ -194,7 +194,7 @@ namespace BannerKings.UI.Management
                 GameTexts.FindText("str_selection_widget_cancel").ToString(),
                 () =>
                 {
-                    Campaign.Current.GetCampaignBehavior<BKReligionsBehavior>().InstallPreacher(data, Hero.MainHero, playerFaith);
+                    TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKReligionsBehavior>().InstallPreacher(data, Hero.MainHero, playerFaith);
                     RefreshValues();
                 },
                 null));

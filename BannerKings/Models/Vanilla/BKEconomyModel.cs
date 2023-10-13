@@ -257,7 +257,7 @@ namespace BannerKings.Models.Vanilla
                     result.AddFactor(factor, new TextObject("{=s2gxPA2Q}Market gold"));
                 }
                 
-                var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(settlement.OwnerClan.Kingdom);
+                var capital = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(settlement.OwnerClan.Kingdom);
                 if (capital == settlement.Town)
                 {
                     result.AddFactor(0.4f, new TextObject("{=fQVyeiJb}Capital"));

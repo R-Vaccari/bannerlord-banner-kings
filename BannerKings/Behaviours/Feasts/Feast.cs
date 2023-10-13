@@ -188,7 +188,7 @@ namespace BannerKings.Behaviours.Feasts
             float satisfaction = GeneralSatisfaction;
             if (MarriageContract != null)
             {
-                Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().ApplyMarriageContract();
+                TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().ApplyMarriageContract();
             }
 
 

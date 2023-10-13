@@ -120,7 +120,7 @@ namespace BannerKings.Models.Vanilla
 
         public void AddIncomes(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
         {
-            Contract contract = Campaign.Current.GetCampaignBehavior<BKRetainerBehavior>().GetContract();
+            Contract contract = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKRetainerBehavior>().GetContract();
             if (contract != null)
             {
                 result.Add(contract.Wage, new TextObject("{=cYac1rMJ}Retainer service for {HERO}")
@@ -142,7 +142,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             var kingdom = clan.Kingdom;
-            var wkModel = (BKWorkshopModel) Campaign.Current.Models.WorkshopModel;
+            var wkModel = (BKWorkshopModel)TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel;
 
             int totalWorkshopTaxes = 0;
             int totalNotablesAids = 0;
@@ -244,7 +244,7 @@ namespace BannerKings.Models.Vanilla
         {
             var totalWorkshopExpenses = 0;
 
-            var wkModel = (BKWorkshopModel) Campaign.Current.Models.WorkshopModel;
+            var wkModel = (BKWorkshopModel)TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel;
             foreach (var wk in clan.Leader.OwnedWorkshops)
             {
                 if (!wk.IsRunning || wk.Settlement.OwnerClan == clan)

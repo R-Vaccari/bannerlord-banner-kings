@@ -34,7 +34,7 @@ namespace BannerKings.Behaviours.Retainer
             {
                 if (!IsFreelancer)
                 {
-                    return Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(Hero.MainHero.CharacterObject,
+                    return TaleWorlds.CampaignSystem.Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(Hero.MainHero.CharacterObject,
                         Contractor);
                 }
                 else
@@ -52,7 +52,7 @@ namespace BannerKings.Behaviours.Retainer
             {
                 if (!IsFreelancer)
                 {
-                    return Campaign.Current.Models.PartyWageModel.GetCharacterWage(Hero.MainHero.CharacterObject);
+                    return TaleWorlds.CampaignSystem.Campaign.Current.Models.PartyWageModel.GetCharacterWage(Hero.MainHero.CharacterObject);
                 }
                 else
                 {

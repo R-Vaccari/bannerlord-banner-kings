@@ -76,7 +76,7 @@ namespace BannerKings.UI.CampaignStart
 
         public void ExecuteFinish()
         {
-            var behavior = Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>();
+            var behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>();
             behavior.SetStartOption(Selected.Option);
             ExecuteClose();
             behavior.OnCharacterCreationOver();

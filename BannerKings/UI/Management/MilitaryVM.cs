@@ -313,7 +313,7 @@ namespace BannerKings.UI.Management
                     var lord = settlement.OwnerClan.Leader;
                     if (serfs >= party.MemberRoster.TotalManCount)
                     {
-                        var existingParty = Campaign.Current.CampaignObjectManager.Find<MobileParty>(x => x.StringId == "raisedmilitia_" + settlement);
+                        var existingParty = TaleWorlds.CampaignSystem.Campaign.Current.CampaignObjectManager.Find<MobileParty>(x => x.StringId == "raisedmilitia_" + settlement);
                         if (existingParty == null)
                         {
                             if (party.CurrentSettlement == null || party.CurrentSettlement != settlement)

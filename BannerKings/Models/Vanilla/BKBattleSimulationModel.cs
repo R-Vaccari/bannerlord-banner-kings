@@ -28,7 +28,7 @@ namespace BannerKings.Models.Vanilla
 
                 if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader, DefaultDivinities.Instance.AmraSecondary1))
                 {
-                    var faceTerrainType = Campaign.Current.MapSceneWrapper
+                    var faceTerrainType = TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper
                                                   .GetFaceTerrainType(strikerParty.MobileParty.CurrentNavigationFace);
                     if (faceTerrainType == TerrainType.Forest)
                     {

@@ -12,9 +12,9 @@ namespace BannerKings.Managers.Skills
         {
             get
             {
-                var allAttrs = Campaign.Current.GetType()
+                var allAttrs = TaleWorlds.CampaignSystem.Campaign.Current.GetType()
                     .GetProperty("AllCharacterAttributes", BindingFlags.Instance | BindingFlags.NonPublic);
-                return (MBReadOnlyList<CharacterAttribute>) allAttrs.GetValue(Campaign.Current);
+                return (MBReadOnlyList<CharacterAttribute>) allAttrs.GetValue(TaleWorlds.CampaignSystem.Campaign.Current);
             }
         }
 

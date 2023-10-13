@@ -49,7 +49,7 @@ namespace BannerKings.Models.Vanilla
                     baseResult.AddFactor(0.08f, BKPerks.Instance.CommanderWarband.Name);
                 }
 
-                if (leader.Clan == Clan.PlayerClan && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().HasDebuff(DefaultStartOptions.Instance.Gladiator))
+                if (leader.Clan == Clan.PlayerClan && TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().HasDebuff(DefaultStartOptions.Instance.Gladiator))
                 {
                     baseResult.AddFactor(-0.4f, DefaultStartOptions.Instance.Gladiator.Name);
                 }
@@ -74,7 +74,7 @@ namespace BannerKings.Models.Vanilla
                         DefaultSkills.Roguery.Name);
                 }
 
-                PartySupplies supplies = Campaign.Current.GetCampaignBehavior<BKPartyNeedsBehavior>().GetPartySupplies(party.MobileParty);
+                PartySupplies supplies = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKPartyNeedsBehavior>().GetPartySupplies(party.MobileParty);
                 if (supplies != null)
                 {
                     if (party.MobileParty.MemberRoster.TotalManCount > supplies.MinimumSoldiersThreshold)

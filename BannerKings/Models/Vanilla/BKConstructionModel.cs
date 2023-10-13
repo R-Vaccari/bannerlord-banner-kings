@@ -185,7 +185,7 @@ namespace BannerKings.Models.Vanilla
 
             if (clayProportion > 0f)
             {
-                list.Add(new(Campaign.Current.ObjectManager.GetObject<ItemObject>("clay"), (int)(totalItems * clayProportion)));
+                list.Add(new(TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObject<ItemObject>("clay"), (int)(totalItems * clayProportion)));
             }
 
             if (ironProportion > 0f)

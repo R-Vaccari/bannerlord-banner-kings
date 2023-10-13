@@ -71,7 +71,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Empire
                 if (clan != actionTaker.Clan && (clanReligion == null || !clanReligion.Doctrines.Contains("sacrifice")))
                 {
                     bool affectRelatives;
-                    int relationChangeForExecutingHero = Campaign.Current.Models.ExecutionRelationModel.GetRelationChangeForExecutingHero(input, actionTaker, out affectRelatives);
+                    int relationChangeForExecutingHero = TaleWorlds.CampaignSystem.Campaign.Current.Models.ExecutionRelationModel.GetRelationChangeForExecutingHero(input, actionTaker, out affectRelatives);
                     if (relationChangeForExecutingHero != 0)
                         ChangeRelationAction.ApplyRelationChangeBetweenHeroes(actionTaker, clan.Leader, relationChangeForExecutingHero, true);
                 }

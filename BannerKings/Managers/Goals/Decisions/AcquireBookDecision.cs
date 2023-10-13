@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             Initialize(name, description);
 
-            behavior = Campaign.Current.GetCampaignBehavior<BKEducationBehavior>();
+            behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKEducationBehavior>();
         }
 
         public override bool IsAvailable() => true;

@@ -39,7 +39,7 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             failedReasons = new List<TextObject>();
 
-            BKCriminalityBehavior behavior = Campaign.Current.GetCampaignBehavior<BKCriminalityBehavior>();
+            BKCriminalityBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCriminalityBehavior>();
             Dictionary<Hero, List<Crime>> criminals = behavior.GetCriminals(GetFulfiller());
             if (criminals.Count == 0)
             {
@@ -52,7 +52,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public override void ShowInquiry()
         {
             var crimes = new List<InquiryElement>();
-            BKCriminalityBehavior behavior = Campaign.Current.GetCampaignBehavior<BKCriminalityBehavior>();
+            BKCriminalityBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCriminalityBehavior>();
             Dictionary<Hero, List<Crime>> criminals = behavior.GetCriminals(GetFulfiller());
 
             foreach (var pair in criminals)

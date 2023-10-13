@@ -130,8 +130,8 @@ namespace BannerKings.Behaviours.Retainer
                         if (contractor.IsActive)
                         {
                             PartyBase.MainParty.MobileParty.Position2D = contractor.Position2D;
-                            if (Campaign.Current.CurrentMenuContext == null || 
-                                Campaign.Current.CurrentMenuContext.StringId != "bk_retinue_wait")
+                            if (TaleWorlds.CampaignSystem.Campaign.Current.CurrentMenuContext == null || 
+                                TaleWorlds.CampaignSystem.Campaign.Current.CurrentMenuContext.StringId != "bk_retinue_wait")
                             {
                                 GameMenu.ActivateGameMenu("bk_retinue_wait");
                             }

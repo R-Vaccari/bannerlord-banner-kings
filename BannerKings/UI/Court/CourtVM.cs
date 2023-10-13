@@ -34,7 +34,7 @@ namespace BannerKings.UI.Court
             suppliesSelector, securitySelector, lodgingsSelector;
 
         private readonly ITeleportationCampaignBehavior teleportationBehavior =
-            Campaign.Current.GetCampaignBehavior<ITeleportationCampaignBehavior>();
+            TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<ITeleportationCampaignBehavior>();
 
         public CourtVM(bool royal) : base(null, false)
         {

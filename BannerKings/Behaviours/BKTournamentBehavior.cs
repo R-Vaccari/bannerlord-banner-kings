@@ -45,7 +45,7 @@ namespace BannerKings.Behaviours
                         null
                         ).Town;
 
-                        var game = Campaign.Current.TournamentManager.GetTournamentGame(resultTown);
+                        var game = TaleWorlds.CampaignSystem.Campaign.Current.TournamentManager.GetTournamentGame(resultTown);
                         if (resultTown != null)
                         {
                             InformationManager.ShowTextInquiry(new TextInquiryData(
