@@ -114,7 +114,7 @@
 		</Equipments>
 	</NPCCharacter>
 
-	<NPCCharacter id="bannerkings_bookseller_empire" name="{=yr5pa0hs}{FIRSTNAME}, the Book Keeper"
+	<NPCCharacter id="bannerkings_bookseller_empire" name="{=jtE490Bm}{FIRSTNAME}, the Book Keeper"
 	              default_group="Infantry" age="65" voice="softspoken" is_template="true" is_hero="false"
 	              culture="Culture.empire" occupation="Special">
 		<face>
@@ -168,7 +168,7 @@
 		</Equipments>
 	</NPCCharacter>
 
-	<NPCCharacter id="bannerkings_bookseller_aserai" name="{=yr5pa0hs}{FIRSTNAME}, the Wise" default_group="Infantry"
+	<NPCCharacter id="bannerkings_bookseller_aserai" name="{=O9du9s6m}{FIRSTNAME}, the Wise" default_group="Infantry"
 	              age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.aserai"
 	              occupation="Special">
 		<face>
