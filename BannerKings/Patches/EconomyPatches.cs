@@ -126,7 +126,7 @@ namespace BannerKings.Patches
                 return false;
             }
 
-            private static MethodInfo getDestination => Campaign.Current.GetCampaignBehavior<CaravansCampaignBehavior>()
+            private static MethodInfo getDestination => TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<CaravansCampaignBehavior>()
                 .GetType()
                 .GetMethod("GetDestinationForMobileParty", BindingFlags.Instance | BindingFlags.NonPublic);
 
@@ -134,7 +134,7 @@ namespace BannerKings.Patches
             [HarmonyPatch("HourlyTickParty", MethodType.Normal)]
             private static bool HourlyTickParty(CaravansCampaignBehavior __instance, MobileParty caravanParty)
             {
-                if (!Campaign.Current.GameStarted)
+                if (!TaleWorlds.CampaignSystem.Campaign.Current.GameStarted)
                 {
                     return false;
                 }
@@ -263,7 +263,7 @@ namespace BannerKings.Patches
                     {
                         war = FactionManager.GetEnemyKingdoms(clan.Kingdom).Any();
                     }
-                    var income = Campaign.Current.Models.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber *
+                    var income = TaleWorlds.CampaignSystem.Campaign.Current.Models.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber *
                     (war ? 0.45f : 0.15f);
                     if (war)
                     {
@@ -289,7 +289,7 @@ namespace BannerKings.Patches
                                     }
                                     else if (title.Fief.Town != null)
                                     {
-                                        limit = Campaign.Current.Models.SettlementTaxModel
+                                        limit = TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementTaxModel
                                             .CalculateTownTax(title.Fief.Town).ResultNumber;
                                     }
 
@@ -524,7 +524,7 @@ namespace BannerKings.Patches
                                 CampaignEventDispatcher.Instance.OnPlayerEarnedGoldFromAsset(DefaultClanFinanceModel.AssetIncomeType.Taxes, (int)explainedNumber2.ResultNumber);
                             }
                         }
-                        int num2 = (int)Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(town, false).ResultNumber;
+                        int num2 = (int)TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(town, false).ResultNumber;
                         explainedNumber.Add((float)num2, new TextObject("{=TLuaPAIO}{A0} Taxes", null), town.Name);
                         explainedNumber.Add(explainedNumber2.ResultNumber, new TextObject("{=wVMPdc8J}{A0}'s tariff", null), town.Name);
                         if (town.CurrentDefaultBuilding != null && town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Engineering.ArchitecturalCommisions))
@@ -944,7 +944,7 @@ namespace BannerKings.Patches
                     town.Owner.ItemRoster.AddToCounts(element, 1);
                 }
 
-                if (Campaign.Current.GameStarted && !doNotEffectCapital)
+                if (TaleWorlds.CampaignSystem.Campaign.Current.GameStarted && !doNotEffectCapital)
                 {
                     var num = totalValue;
                     workshop.ChangeGold(num);
@@ -1094,10 +1094,12 @@ namespace BannerKings.Patches
         }
 
         //Mules
-        [HarmonyPatch(typeof(VillagerCampaignBehavior), "MoveItemsToVillagerParty")]
+        [HarmonyPatch(typeof(VillagerCampaignBehavior))]
         internal class VillagerMoveItemsPatch
         {
-            private static bool Prefix(Village village, MobileParty villagerParty)
+            [HarmonyPrefix]
+            [HarmonyPatch("MoveItemsToVillagerParty", MethodType.Normal)]
+            private static bool MoveItemsToVillagerParty(Village village, MobileParty villagerParty)
             {
                 var mule = MBObjectManager.Instance.GetObject<ItemObject>(x => x.StringId == "mule");
                 var muleCount = (int)(villagerParty.MemberRoster.TotalManCount * 0.1f);
@@ -1134,6 +1136,25 @@ namespace BannerKings.Patches
 
                 return false;
             }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("SendVillagerPartyToTradeBoundTown", MethodType.Normal)]
+            private static bool SendVillagerPartyToTradeBoundTown(MobileParty villagerParty)
+            {
+                Settlement tradeBound = villagerParty.HomeSettlement.Village.TradeBound;
+                if (tradeBound != null)
+                {
+                    if (!tradeBound.IsUnderSiege) villagerParty.Ai.SetMoveGoToSettlement(tradeBound);
+                    else 
+                    {
+                        Settlement bound = villagerParty.HomeSettlement.Village.Bound;
+                        if (tradeBound != bound && !bound.IsUnderSiege)
+                            villagerParty.Ai.SetMoveGoToSettlement(villagerParty.HomeSettlement.Village.Bound);
+                    }
+                }
+
+                return false;
+            }
         }
 
         //Add gold to village and consume some of it, do not reset gold
@@ -1160,7 +1181,7 @@ namespace BannerKings.Patches
 
                     if (settlement.IsVillage)
                     {
-                        var tax = Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(
+                        var tax = TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(
                             mobileParty.HomeSettlement.Village, mobileParty.PartyTradeGold);
                         float remainder = mobileParty.PartyTradeGold - tax;
                         mobileParty.HomeSettlement.Village.ChangeGold((int)(remainder * 0.5f));
@@ -1232,7 +1253,7 @@ namespace BannerKings.Patches
                     foreach (var valueTuple in productions)
                     {
                         ItemObject item = valueTuple.Item1;
-                        var result = Campaign.Current.Models.VillageProductionCalculatorModel.CalculateDailyProductionAmount(
+                        var result = TaleWorlds.CampaignSystem.Campaign.Current.Models.VillageProductionCalculatorModel.CalculateDailyProductionAmount(
                                 village, item);
 
                         var num = MathF.Floor(result);
@@ -1287,7 +1308,7 @@ namespace BannerKings.Patches
                         }
                         else
                         {
-                            float distance = Campaign.Current.Models.MapDistanceModel.GetDistance(settlement, village.Settlement);
+                            float distance = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(settlement, village.Settlement);
                             float num4 = 0.5f * (600f / MathF.Pow(distance, 1.5f));
                             if (num4 > 0.5f)
                             {
@@ -1299,7 +1320,7 @@ namespace BannerKings.Patches
                                 bound.SetValue(village, village.Bound);
                             }
 
-                            float distance2 = Campaign.Current.Models.MapDistanceModel.GetDistance(settlement, village.TradeBound);
+                            float distance2 = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(settlement, village.TradeBound);
                             float num5 = 0.5f * (600f / MathF.Pow(distance2, 1.5f));
                             if (num5 > 0.5f)
                             {
@@ -1318,13 +1339,13 @@ namespace BannerKings.Patches
                         }
                         else
                         {
-                            float distance3 = Campaign.Current.Models.MapDistanceModel.GetDistance(settlement, village2.Settlement);
+                            float distance3 = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(settlement, village2.Settlement);
                             float num7 = 0.5f * (600f / MathF.Pow(distance3, 1.5f));
                             if (num7 > 0.5f)
                             {
                                 num7 = 0.5f;
                             }
-                            float distance4 = Campaign.Current.Models.MapDistanceModel.GetDistance(settlement, village2.TradeBound);
+                            float distance4 = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(settlement, village2.TradeBound);
                             float num8 = 0.5f * (600f / MathF.Pow(distance4, 1.5f));
                             if (num8 > 0.5f)
                             {
