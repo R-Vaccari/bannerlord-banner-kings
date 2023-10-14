@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<tags>
+		<tag language="English" />
+	</tags>
+	<strings>
+		<string id="Rfv9vbWU" text="Acapanos" />
+		<string id="lg2lDomO" text="Angarys" />
+		<string id="OIxcd3ao" text="Corstases" />
+		<string id="op5Rptx0" text="Balastisos" />
+		<string id="zPm0ltdo" text="Delicos" />
+		<string id="COhOjUea" text="Elysos" />
+		<string id="HyWLZM4F" text="Gessios" />
+		<string id="tm5JKQDu" text="Jalos" />
+		<string id="Jhsz5vCg" text="Lestharos" />
+		<string id="wdtxgOlj" text="Meones" />
+		<string id="a5L7RJyV" text="Nathanys" />
+		<string id="wBH58uZy" text="Opynates" />
+		<string id="GNDwTQAc" text="Paltos" />
+		<string id="A1iBbUgM" text="Phenigos" />
+		<string id="VBr8C72f" text="Stracanasthes" />
+		<string id="EUelOHhn" text="Sumessos" />
+		<string id="7DTyry4A" text="Therycos" />
+		<string id="Yw2QMsqh" text="Zebales" />
+		<string id="R6s9Lqxl" text="Turullios" />
+		<string id="FcsEZlQx" text="Tarquinos" />
+		<string id="6zoPo056" text="Viatores" />
+		<string id="Cx6TRBjY" text="Zosimus" />
+		<string id="pg6ul3Yp" text="Viselzes" />
+		<string id="KIsQrIFd" text="Septemezes" />
+		<string id="e8B1Iksb" text="Nepioes" />
+		<string id="uMj1csZk" text="Marcallas" />
+		<string id="qwJTt97k" text="Caeles" />
+		<string id="gN2bIpri" text="Pinaries" />
+		<string id="fzyV53T8" text="Serranetzes" />
+		<string id="e7JyZ8La" text="Sylvianes" />
+		<string id="BC2UTngP" text="Parnesetzes" />
+		<string id="EzqtSbW4" text="Cordios" />
+		<string id="VeMRErvE" text="Cossos" />
+		<string id="fbyeOeZn" text="Sepurcius" />
+		<string id="KCxAmbjf" text="Ausonioes" />
+		<string id="YZFwSU16" text="Collinos" />
+		<string id="sEvjpMXI" text="Aniensis" />
+		<string id="e9Jvuy6b" text="Velines" />
+		<string id="BJTekUSE" text="Voturos" />
+		<string id="gJEICcRk" text="Scaptes" />
+		<string id="CjHjLK1h" text="Romilis" />
+		<string id="r5XGeoJP" text="Amates" />
+		<string id="40VCTcNa" text="Rhagabes" />
+		<string id="tsrQKTIH" text="Tzimiskes" />
+		<string id="lQzHDD6X" text="Phoca" />
+		<string id="QVLe6t4m" text="Glycas" />
+		<string id="n9Sdou4h" text="Kerularios" />
+		<string id="ISoQuzQt" text="Stauricies" />
+		<string id="ObZf0b8p" text="Vatatzes" />
+		<string id="VEonRiHr" text="Zimisces" />
+		<string id="5JU3r9UM" text="Lascaris" />
+		<string id="Q5nXTkj8" text="Bardanes" />
+		<string id="yr6pc418" text="Zonaras" />
+		<string id="tzSdYSaX" text="Ducas" />
+		<string id="nlkoP8bT" text="Maniakes" />
+		<string id="KvRmhxoz" text="Lecapenas" />
+		<string id="yaV2Au2D" text="Rhangabes" />
+		<string id="q4q0GiEp" text="Laonicos" />
+		<string id="oh39WDuQ" text="Vitalianos" />
+		<string id="fpr44kE7" text="Alypes" />
+		<string id="rjvGzp61" text="Basiles" />
+		<string id="fbyeOeZn" text="Basiles" />
+		<string id="Ij0Oj7xt" text="Bani Aska" />
+		<string id="gPUfUqns" text="Bani Dhamin" />
+		<string id="lVoECbot" text="Bani Fasus" />
+		<string id="TpuYk0Pe" text="Bani Julul" />
+		<string id="xq0cZDW7" text="Bani Kinyan" />
+		<string id="O9jsz8ZR" text="Bani Laikh" />
+		<string id="PBI65QWE" text="Bani Mushala" />
+		<string id="Nfni5rQQ" text="Bani Nir" />
+		<string id="viXtnz6g" text="Bani Tharuq" />
+		<string id="nmPp96tu" text="Bani Yatash" />
+		<string id="KUmPcJ8l" text="Bani Zus" />
+		<string id="cPd48kTO" text="Bani Nadir" />
+		<string id="yzdhnW1I" text="Bani Qainuqa" />
+		<string id="WmF8E0EI" text="Bani Bakr" />
+		<string id="BlgVagUO" text="Bani Tamim" />
+		<string id="G4eUdyzm" text="Bani Ghatafan" />
+		<string id="bvEWLuwK" text="Bani Hawazin" />
+		<string id="kNCKaBIJ" text="Bani Abdul" />
+		<string id="M0N7HzM4" text="Bani Qays" />
+		<string id="d0ucdzLC" text="Bani Madh'hij" />
+		<string id="hWVTvpvZ" text="Bani Kinanah" />
+		<string id="eHWRynFm" text="Bani Malik" />
+		<string id="2yS2WzFz" text="Bani Lam" />
+		<string id="6tSW6PmN" text="Bani Kilab" />
+		<string id="GgkHzJJ4" text="Bani Hasan" />
+		<string id="JJ6DtLai" text="Bani Ali" />
+		<string id="fF8jSJXn" text="Bani Shammar" />
+		<string id="KbBDgXPh" text="Bani Mutair" />
+		<string id="S29AWOLA" text="Bani Duraji" />
+		<string id="hZr75HcS" text="Asraloving" />
+		<string id="7RHcNGhR" text="Boranoving" />
+		<string id="cdltiM4j" text="Folyoroving" />
+		<string id="NEklRQiS" text="Gendiroving" />
+		<string id="yZOZV5PU" text="Iskanoving" />
+		<string id="woyTvYMD" text="Maregoving" />
+		<string id="EtIBAv04" text="Suratoving" />
+		<string id="P7EeIUym" text="Vyshoving" />
+		<string id="z6lE5zWq" text="Yerchoving" />
+		<string id="bjgLQmha" text="Zhanoving" />
+		<string id="XvYJrUi2" text="Dahloving" />
+		<string id="XR3AhYuU" text="Volkoving" />
+		<string id="OkixnjYE" text="Kriskoving" />
+		<string id="y9biF3Yi" text="Loftoving" />
+		<string id="Uanhqlbx" text="Zelenkoving" />
+		<string id="QML3q6vw" text="Krogoving" />
+		<string id="BI3QLykA" text="Durnoving" />
+		<string id="0kHEoism" text="Volloving" />
+		<string id="xjOhYzqm" text="Burakoving" />
+		<string id="ZzDjhsqK" text="Falkoving" />
+		<string id="nJ8DWDFT" text="Ivanoving" />
+		<string id="DorlBuBw" text="Karsanoving" />
+		<string id="PtUzINbJ" text="Lindoving" />
+		<string id="DXT2fuMI" text="Malenkoving" />
+		<string id="Ry5d5OIV" text="Strandoving" />
+		<string id="bJ4Y5hjw" text="Mitroving" />
+		<string id="tuGtkgMv" text="Noktoving" />
+		<string id="03tV3H0W" text="Petroving" />
+		<string id="Xs273Rxj" text="Curaving" />
+		<string id="9xtJke06" text="Rivacheving" />
+		<string id="cqoBbWSK" text="Nelaving" />
+		<string id="HmI28uym" text="Redogving" />
+		<string id="YDZNSaG1" text="Ismiroving" />
+		<string id="OVR6jpxI" text="Mazeroving" />
+		<string id="F5N8IxQc" text="Mechiving" />
+		<string id="KdtnH3FF" text="Harisoving" />
+		<string id="qVEUadp5" text="Druliving" />
+		<string id="hI0aeEmx" text="Rudinoving" />
+		<string id="L4WZgtp6" text="Merigaving" />
+		<string id="grUVFdCx" text="Kaveloving" />
+		<string id="AZa0LYIb" text="Gastyaving" />
+		<string id="F8mont2E" text="Surdonoving" />
+		<string id="qHPjiUFq" text="Hrusoving" />
+		<string id="Z2izQNMM" text="Tehlrogoving" />
+		<string id="lunuAZl0" text="Menchinoving" />
+		<string id="fT0Ah2t6" text="Vladoving" />
+		<string id="YiqmhrAx" text="dey Sunor" />
+		<string id="r8phcSDZ" text="dey Haringoth" />
+		<string id="eiCf8YA9" text="dey Kelredan" />
+		<string id="qiVmOs7O" text="dey Rindyar" />
+		<string id="DJfKtu02" text="dey Ryibelet" />
+		<string id="ZfF1avjw" text="dey Tevarin" />
+		<string id="75dl9sLW" text="dey Tilbaut" />
+		<string id="M78Efpd3" text="dey Azgand" />
+		<string id="3M1RH5HI" text="dey Balanli" />
+		<string id="dQpGw7Km" text="dey Burglend" />
+		<string id="FikOfFpf" text="dey Ehlerdah" />
+		<string id="siRiKubM" text="dey Emirind" />
+		<string id="60dqy1cv" text="dey Gisim" />
+		<string id="qSzhGrOe" text="dey Ibirand" />
+		<string id="yU69qDEm" text="dey Nomarr" />
+		<string id="qSq42OzF" text="dey Rulund" />
+		<string id="3oIKuHS5" text="dey Tosdhar" />
+		<string id="twogtrXR" text="dey Veidarr" />
+		<string id="Y9EQ6AlQ" text="dey Yaliben" />
+		<string id="iQiDbhLq" text="dey Yaragar" />
+		<string id="JZ0yVuLA" text="dey Amerre" />
+		<string id="2xEXelqV" text="dey Culmarr" />
+		<string id="rOL0GKlV" text="dey Elberl" />
+		<string id="uAD6D3KR" text="dey Ergellond" />
+		<string id="TV0j2TWn" text="dey Dumarr" />
+		<string id="PFSl10KX" text="dey Serindiar" />
+		<string id="XAUVLB6c" text="dey Etrosc" />
+		<string id="E1ML8nXd" text="dey Velucand" />
+		<string id="jjWq7PIP" text="dey Vorand" />
+		<string id="Rvdx48mk" text="dey Rodern" />
+		<string id="dFXDuMCS" text="dey Ilbeth" />
+		<string id="fU5TzYZV" text="dey Tuvoren" />
+		<string id="rW0yoMLI" text="dey Harlend" />
+		<string id="IlXu1HfR" text="dey Norrigand" />
+		<string id="4mdNLLm4" text="dey Iveril" />
+		<string id="iH5G5nrZ" text="dey Mareven" />
+		<string id="P4MkvJ7w" text="dey Iyindah" />
+		<string id="5UdfYtrs" text="dey Dramug" />
+		<string id="peoBRfu3" text="dey Reindi" />
+		<string id="bDodZFU1" text="dey Ibdeles" />
+		<string id="LurNvtFa" text="dey Istiniar" />
+		<string id="Jfa3VELK" text="dey Pagundur" />
+		<string id="PLpLwO8n" text="dey Kulund" />
+		<string id="eTSzQjRC" text="dey Ruldi" />
+		<string id="Z200S6Rl" text="dey Tadsamesh" />
+		<string id="EtCGElFl" text="dey Mechin" />
+		<string id="ZPv71NWr" text="dey Rodrand" />
+		<string id="mZFBS7mM" text="dey Venden" />
+		<string id="DKfIEMvq" text="dey Heinrand" />
+		<string id="08OvM4Q5" text="dey Aberan" />
+		<string id="TE7D4uU8" text="dey Berden" />
+		<string id="TuDgsnCd" text="dey Lovar" />
+		<string id="niXZURRM" text="dey Maras" />
+		<string id="YgTXs3s9" text="dey Doucet" />
+		<string id="a3xFVzhF" text="dey Hamend" />
+		<string id="QRpgs4AA" text="dey Vachel" />
+		<string id="0j6y7MqI" text="dey Vyomont" />
+		<string id="n8T3yj5W" text="dey Bellamy" />
+		<string id="KOnPqXZt" text="dey Voill" />
+		<string id="kl98IEcJ" text="dey Verley" />
+		<string id="URhMoErT" text="dey Relin" />
+		<string id="N2F8ZSXy" text="dey Monluc" />
+		<string id="Q6bvCwp0" text="dey Corne" />
+		<string id="N2jCE2dQ" text="dey Boivind" />
+		<string id="VEwOjwAg" text="dey Puchot" />
+		<string id="aMeDJ3BT" text="dey Lefevbre" />
+		<string id="FXrtXab2" text="dey Horbett" />
+		<string id="SjKbe2i9" text="dey Vullend" />
+		<string id="dOGiWLE0" text="dey Pane" />
+		<string id="a2AqGhx1" text="dey Challond" />
+		<string id="fPLLlGtY" text="dey Korevn" />
+		<string id="2GFVghWD" text="dey Drover" />
+		<string id="062fMbOx" text="dey Douchot" />
+		<string id="hEBT1qoo" text="dey Parond" />
+		<string id="NvO4CpeK" text="fen Gwynn" />
+		<string id="DG8mFhRH" text="fen Wiarannus" />
+		<string id="dq6ux0Sd" text="fen Gechal" />
+		<string id="XV1wCCxI" text="fen Grudon" />
+		<string id="owZgF6Yq" text="fen Kilywnn" />
+		<string id="99gZ8LxX" text="fen Cryenwyn" />
+		<string id="ALJvSkho" text="fen Olahdog" />
+		<string id="P9RYlB0m" text="fen Lewyn" />
+		<string id="8RqfutY0" text="fen Culain" />
+		<string id="DxommoFY" text="fen Ifdywn" />
+		<string id="MDQePN8e" text="fen Ethrelog" />
+		<string id="Rtx2YyKE" text="fen Fethredt" />
+		<string id="uI3fkllJ" text="fen Aellyn" />
+		<string id="iyZlA05f" text="fen Orain" />
+		<string id="RxjAKQOV" text="fen Ilric" />
+		<string id="kOderHqK" text="fen Kurewyn" />
+		<string id="sN5BSFCj" text="fen Aleral" />
+		<string id="aKjsOIEx" text="fen Eafraic" />
+		<string id="478dPv2D" text="fen Ctrahaic" />
+		<string id="cBVwueAD" text="fen Lurain" />
+		<string id="2m5qlKl7" text="fen Giswyn" />
+		<string id="KlXg6Nbu" text="fen Daethfec" />
+		<string id="qkEy56EC" text="fen Ilvaic" />
+		<string id="mcOXC0T7" text="fen Kudolog" />
+		<string id="Ck7bibJl" text="fen Fithwyn" />
+		<string id="LEeHrai8" text="fen Aertus" />
+		<string id="u6WTF4nx" text="fen Brachar" />
+		<string id="UEbEjlKG" text="fen Crusac" />
+		<string id="E8EZg1hm" text="fen Domus" />
+		<string id="he1ZczsZ" text="fen Earach" />
+		<string id="JXcmC2yh" text="fen Fiachan" />
+		<string id="kTqJNY5t" text="fen Loen" />
+		<string id="nKEwh4i4" text="fen Morain" />
+		<string id="NsZvn4fV" text="fen Seanel" />
+		<string id="uknl1QTn" text="fen Tuil" />
+		<string id="ykdcm76E" text="fen Asgaill" />
+		<string id="9libwwNH" text="fen Céitinn" />
+		<string id="ZvGRENZH" text="fen Laighin" />
+		<string id="Ore2giQP" text="fen Remicus" />
+		<string id="4J9RYSrV" text="fen Audoti" />
+		<string id="DULwJxrD" text="fen Leucel" />
+		<string id="kMitaaw4" text="fen Adhugious" />
+		<string id="0RAKi1YR" text="fen Scilain" />
+		<string id="MQN3Xgo8" text="fen Ambadus" />
+		<string id="rTQuC9Kh" text="fen Wirato" />
+		<string id="OxLnL4s3" text="Airit" />
+		<string id="20fnzUb0" text="Aldusunit" />
+		<string id="L3RMA5kp" text="Bochit" />
+		<string id="V1OrhR1N" text="Charait" />
+		<string id="5vYJl9RJ" text="Ingchit" />
+		<string id="vrI6RP4c" text="Maranjit" />
+		<string id="adE30RW5" text="Oranarit" />
+		<string id="c2xisAyD" text="Sunit" />
+		<string id="4YhpIeJL" text="Tokhit" />
+		<string id="Wf1icG27" text="Ubchit" />
+		<string id="zfNpmmau" text="Yujit" />
+		<string id="huzja4C8" text="Alchit" />
+		<string id="R3R8qkln" text="Kipchakit" />
+		<string id="t9jMsnAY" text="Tarit" />
+		<string id="hXUePdxR" text="Alukhait" />
+		<string id="7qenciZH" text="Yurkit" />
+		<string id="O4yAn9bs" text="Bugunit" />
+		<string id="7I85kaEj" text="Belgunit" />
+		<string id="a1HijsLG" text="Merkit" />
+		<string id="kvmGQMV2" text="Sakhait" />
+		<string id="P9Sd9Ulj" text="Tarkhit" />
+		<string id="fYZrv6DL" text="Khardakit" />
+		<string id="1ma6bn77" text="Sandagit" />
+		<string id="SZ0ABjt6" text="Terbit" />
+		<string id="WOChDaKs" text="Kokachit" />
+		<string id="UMTmUPHz" text="Yimekit" />
+		<string id="rvoSG4hp" text="Tatarit" />
+		<string id="EB16mDpl" text="Namanit" />
+		<string id="MLeUysgR" text="Burulit" />
+		<string id="Z9WLy2dE" text="Akadit" />
+		<string id="udPxAUBO" text="Asurit" />
+		<string id="qMAwjRp7" text="Belirit" />
+		<string id="p1XrUXb7" text="Nasugit" />
+		<string id="puLvucHn" text="Sebulit" />
+		<string id="d5gB27vG" text="Ulusit" />
+		<string id="AKaDz06r" text="Tulugit" />
+		<string id="IMV4OiOK" text="Hugulit" />
+		<string id="U4qWo1gq" text="Tiridit" />
+		<string id="EEk1aI7W" text="Tunjit" />
+		<string id="rPrJSdXU" text="Tansurit" />
+		<string id="Yq2JnW2t" text="Urumit" />
+		<string id="UnBaLhop" text="Zagusit" />
+	</strings>
+</base>
