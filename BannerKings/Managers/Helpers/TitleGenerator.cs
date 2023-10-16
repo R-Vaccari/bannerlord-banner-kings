@@ -11,6 +11,7 @@ using BannerKings.Managers.Skills;
 using BannerKings.UI.Cutscenes;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
+using System.IO;
 
 namespace BannerKings.Managers.Helpers
 {
@@ -217,9 +218,19 @@ namespace BannerKings.Managers.Helpers
                 deJure, settlement.Village.Bound.Owner, settlement.Name, contract);
         }
 
+        private static XmlDocument CreateDocumentFromXmlFile(string xmlPath)
+        {
+            var xmlDocument = new XmlDocument();
+            var streamReader = new StreamReader(xmlPath);
+            var xml = streamReader.ReadToEnd();
+            xmlDocument.LoadXml(xml);
+            streamReader.Close();
+            return xmlDocument;
+        }
+
         internal static void InitializeTitles()
         {
-            var doc = Utils.Helpers.CreateDocumentFromXmlFile(BasePath.Name + "Modules/BannerKings/ModuleData/titles.xml");
+            XmlDocument doc = CreateDocumentFromXmlFile(BannerKingsConfig.Instance.TitlesGeneratorPath);
             var titlesNode = doc.ChildNodes[1].ChildNodes[0];
             var autoGenerate = bool.Parse(titlesNode.Attributes["autoGenerate"].Value);
 
