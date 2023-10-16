@@ -26,12 +26,23 @@ using System.Reflection;
 using TaleWorlds.CampaignSystem.GameComponents;
 using BannerKings.Managers.Innovations;
 using SandBox.CampaignBehaviors;
-using SandBox.View.Map;
+using BannerKings.Campaign;
 
 namespace BannerKings.Patches
 {
     internal class EconomyPatches
     {
+        [HarmonyPatch(typeof(DefaultVillageTypes))]
+        internal class DefaultVillageTypesPatches
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("InitializeAll")]
+            private static void InitializeAll()
+            {
+                BKVillageTypes.Instance.Initialize();
+            }
+        }
+
         //Clan members should not raise parties on peace, except leader and knights
         [HarmonyPatch(typeof(HeroSpawnCampaignBehavior))]
         internal class HeroSpawnCampaignBehaviorPatches
