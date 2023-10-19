@@ -178,7 +178,7 @@ namespace BannerKings.Managers.Innovations
             if (era == null) return;
 
             InformationManager.DisplayMessage(new InformationMessage(
-                new TextObject("{=!}The {CULTURE} culture is now on the {ERA}!")
+                new TextObject("{=DXhIjqjO}The {CULTURE} culture is now on the {ERA}!")
                 .SetTextVariable("CULTURE", culture.Name)
                 .SetTextVariable("ERA", era.Name)
                 .ToString(),

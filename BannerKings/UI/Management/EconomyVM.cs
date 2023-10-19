@@ -53,7 +53,7 @@ namespace BannerKings.UI.Management
         public string SlaveryText => new TextObject("{=bk_slavery}Slavery").ToString();
 
         [DataSourceProperty]
-        public string LanesText => new TextObject("{=!}Shipping Lanes").ToString();
+        public string LanesText => new TextObject("{=U4mYtTnd}Shipping Lanes").ToString();
 
         [DataSourceProperty]
         public string TaxPolicyText => new TextObject("{=L7QhNa6a}Tax policy").ToString();
@@ -76,7 +76,7 @@ namespace BannerKings.UI.Management
             foreach (var lane in DefaultShippingLanes.Instance.GetSettlementLanes(Settlement))
             {
                 LanesList.Add(new InformationElement(lane.Name,
-                    new TextObject("{=!}{COUNT} ports")
+                    new TextObject("{=95mBtewW}{COUNT} ports")
                     .SetTextVariable("COUNT", lane.Ports.Count),
                     lane.Description));
                 HasLanes = true;

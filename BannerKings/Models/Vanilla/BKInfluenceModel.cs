@@ -338,7 +338,7 @@ namespace BannerKings.Models.Vanilla
             settlementResult.LimitMin(0f);
 
             float nobles = data.GetTypeCount(PopType.Nobles);
-            settlementResult.Add(MBMath.ClampFloat(GetNoblesInfluence(data, nobles), 0f, 20f), new TextObject($"{{=!}}Nobles influence from {settlement.Name}"));
+            settlementResult.Add(MBMath.ClampFloat(GetNoblesInfluence(data, nobles), 0f, 20f), new TextObject("{=tKCCvIPs}Nobles influence from {SETTLEMENT}", new() { { "SETTLEMENT", settlement.Name} }));
 
             var villageData = data.VillageData;
             if (villageData != null)

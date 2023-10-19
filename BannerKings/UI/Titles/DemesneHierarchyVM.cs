@@ -121,7 +121,7 @@ namespace BannerKings.UI.Titles
             TitleInfo.Add(new InformationElement(new TextObject("{=aoZYxUYV}Government Type:").ToString(),
                 title.Contract.Government.Name.ToString(),
                 new TextObject("{=!}{TEXT}\n\n{DESCRIPTION}")
-                .SetTextVariable("TEXT", new TextObject("{=!}Government laws describe how different realms are organized. Different governments accept different types of policies and laws. Ie, republics do not accept policies such as Royal Guard, which highly favor a ruling dynasty. Moreover, government types define what kind of Succession a realm can practice."))
+                .SetTextVariable("TEXT", new TextObject("{=PUat0QQf}Government laws describe how different realms are organized. Different governments accept different types of policies and laws. Ie, republics do not accept policies such as Royal Guard, which highly favor a ruling dynasty. Moreover, government types define what kind of Succession a realm can practice."))
                 .SetTextVariable("DESCRIPTION", title.Contract.Government.Description)
                 .ToString()));
 

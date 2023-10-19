@@ -128,7 +128,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             result.Add(result.ResultNumber * -BannerKingsSettings.Instance.CohesionBoost, 
-                new TaleWorlds.Localization.TextObject("{=!}Army Cohesion Boost"));
+                new TaleWorlds.Localization.TextObject("{=myJbdU9f}Army Cohesion Boost"));
             return result;
         }
 

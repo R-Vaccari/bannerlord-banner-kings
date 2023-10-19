@@ -34,7 +34,7 @@ namespace BannerKings.Models.Vanilla
             if (title != null)
             {
                 Government government = title.Contract.Government;
-                result.Add(government.Mercantilism, new TextObject("{=!}Government"));
+                result.Add(government.Mercantilism, new TextObject("{=yOqpuW1p}Government"));
             }
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_mercantilism"))

@@ -241,7 +241,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 
         public override TextObject GetBlessingQuickInformation()
         {
-            return new TextObject("{=!}{HERO} is medidating upon {DIVINITY}.");
+            return new TextObject("{=hDY5SEOL}{HERO} is medidating upon {DIVINITY}.");
         }
 
         public override TextObject GetBlessingActionName()

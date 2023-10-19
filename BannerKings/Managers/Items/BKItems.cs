@@ -253,7 +253,7 @@ namespace BannerKings.Managers.Items
 
             BookArtHorsemanship = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_mounted"));
             InitializeTradeGood(BookArtHorsemanship,
-                new TextObject("{=!}The Art of Horsemanship{@Plural}collection of The Art of Horsemanship books{\\@}"),
+                new TextObject("{=Q4qLFHJB}The Art of Horsemanship{@Plural}collection of The Art of Horsemanship books{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book, 1000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 

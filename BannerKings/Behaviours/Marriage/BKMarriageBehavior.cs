@@ -501,7 +501,7 @@ namespace BannerKings.Behaviours.Marriage
 
         private void AnnounceBetrothal()
         {
-            MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO1} and {HERO2} are now betrothed! Romantic action can be pursued.")
+            MBInformationManager.AddQuickInformation(new TextObject("{=ok9DvLNp}{HERO1} and {HERO2} are now betrothed! Romantic action can be pursued.")
                 .SetTextVariable("HERO", proposedMarriage.Proposer.Name)
                 .SetTextVariable("HERO2", proposedMarriage.Proposed.Name),
                 100,

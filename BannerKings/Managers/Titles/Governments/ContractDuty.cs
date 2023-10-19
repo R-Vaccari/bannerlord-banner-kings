@@ -88,7 +88,7 @@ namespace BannerKings.Managers.Titles.Governments
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(vassal, suzerain, -RelationsLoss);
             if (suzerain == Hero.MainHero)
             {
-                if (reason == null) reason = new TextObject("{=!}{HERO} is not able to fulfill the {DUTY} duty.");
+                if (reason == null) reason = new TextObject("{=R7jbt9X3}{HERO} is not able to fulfill the {DUTY} duty.");
                 InformationManager.DisplayMessage(new InformationMessage(
                     reason.ToString(),
                     Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)

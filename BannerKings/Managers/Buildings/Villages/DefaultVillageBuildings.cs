@@ -63,8 +63,8 @@ namespace BannerKings.Managers.Populations.Villages
 
         public override void Initialize()
         {
-            Mill.Initialize(new TextObject("{=!}Mill"),
-                new TextObject("{=!}Construct a mill, used to grind grains for breadmaking. Increases bread production (50%, 100%, 150%)."),
+            Mill.Initialize(new TextObject("{=zN6bj4QX}Mill"),
+                new TextObject("{=ZMcefZex}Construct a mill, used to grind grains for breadmaking. Increases bread production (50%, 100%, 150%)."),
                 new[]
                 {
                     1800,

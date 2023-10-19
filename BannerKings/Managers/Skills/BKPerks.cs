@@ -758,7 +758,7 @@ namespace BannerKings.Managers.Skills
                 "{=GpcWSVCy}Killing bandit leaders yields renown.",
                 SkillEffect.PerkRole.Personal, 10f,
                 SkillEffect.EffectIncrementType.Add,
-                "{=!}",
+                "{=gJiGFCLw}",
                 SkillEffect.PerkRole.Personal, 20f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
@@ -1157,7 +1157,7 @@ namespace BannerKings.Managers.Skills
                 "{=fPje2R7V}Additional focus points to children coming of age",
                 SkillEffect.PerkRole.ClanLeader, 2f,
                 SkillEffect.EffectIncrementType.Add,
-                "{=!}",
+                "{=FilKwNeh}",
                 SkillEffect.PerkRole.None, 10f,
                 SkillEffect.EffectIncrementType.AddFactor);
 

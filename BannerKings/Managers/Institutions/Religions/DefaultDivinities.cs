@@ -86,128 +86,128 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public override void Initialize()
         {
-            GodsFate.Initialize(new TextObject("{=!}Gods of Fate"),
-              new TextObject("{=!}According to the Junme, the world revolves around the concept of Urthr - or in other words, fate. The gods are stewards of the Great Oak that mankind inhabits, keeping its roots and leaves from rotting. Moreover, the gods are the force of justice that fights Ásbani, the God-Devouring Serpent. The gods of fate, they say, give man what is just - rewards to those who are brave and virtuous, and punishment to the wicked, for they do not weave what choices a man makes, but they do the consequences."),
-              new TextObject("{=!}Signicantly increased renown and influence from battles"),
-              new TextObject("{=!}Gods"));
+            GodsFate.Initialize(new TextObject("{=NSJgGXr2}Gods of Fate"),
+              new TextObject("{=2mLAXyYN}According to the Junme, the world revolves around the concept of Urthr - or in other words, fate. The gods are stewards of the Great Oak that mankind inhabits, keeping its roots and leaves from rotting. Moreover, the gods are the force of justice that fights Ásbani, the God-Devouring Serpent. The gods of fate, they say, give man what is just - rewards to those who are brave and virtuous, and punishment to the wicked, for they do not weave what choices a man makes, but they do the consequences."),
+              new TextObject("{=zIEaUmN2}Signicantly increased renown and influence from battles"),
+              new TextObject("{=y9QDFWvi}Gods"));
 
-            Gundar.Initialize(new TextObject("{=!}Gundar"),
-               new TextObject("{=!}According to the Junme, the world revolves around the concept of Urthr - or in other words, fate. The gods are stewards of the Great Oak that mankind inhabits, keeping its roots and leaves from rotting. Moreover, the gods are the force of justice that fights Ásbani, the God-Devouring Serpent. The gods of fate, they say, give man what is just - rewards to those who are brave and virtuous, and punishment to the wicked, for they do not weave what choices a man makes, but they do the consequences."),
-               new TextObject("{=!}"),
-               new TextObject("{=!}Ancestor Hero"));
+            Gundar.Initialize(new TextObject("{=866PUEks}Gundar"),
+               new TextObject("{=0sXzSFmJ}According to the Junme, the world revolves around the concept of Urthr - or in other words, fate. The gods are stewards of the Great Oak that mankind inhabits, keeping its roots and leaves from rotting. Moreover, the gods are the force of justice that fights Ásbani, the God-Devouring Serpent. The gods of fate, they say, give man what is just - rewards to those who are brave and virtuous, and punishment to the wicked, for they do not weave what choices a man makes, but they do the consequences."),
+               new TextObject("{=YKydsTv6}"),
+               new TextObject("{=b5hM3VcQ}Ancestor Hero"));
 
-            Arkina.Initialize(new TextObject("{=!}Arkina"),
-               new TextObject("{=!}According to the Junme, the world revolves around the concept of Urthr - or in other words, fate. The gods are stewards of the Great Oak that mankind inhabits, keeping its roots and leaves from rotting. Moreover, the gods are the force of justice that fights Ásbani, the God-Devouring Serpent. The gods of fate, they say, give man what is just - rewards to those who are brave and virtuous, and punishment to the wicked, for they do not weave what choices a man makes, but they do the consequences."),
-               new TextObject("{=!}"),
-               new TextObject("{=!}Ancestor Heroine"));
+            Arkina.Initialize(new TextObject("{=nMw1tIcU}Arkina"),
+               new TextObject("{=46o3GYZ9}According to the Junme, the world revolves around the concept of Urthr - or in other words, fate. The gods are stewards of the Great Oak that mankind inhabits, keeping its roots and leaves from rotting. Moreover, the gods are the force of justice that fights Ásbani, the God-Devouring Serpent. The gods of fate, they say, give man what is just - rewards to those who are brave and virtuous, and punishment to the wicked, for they do not weave what choices a man makes, but they do the consequences."),
+               new TextObject("{=AEYKYyM2}"),
+               new TextObject("{=zvur5q5p}Ancestor Heroine"));
 
-            SheWolf.Initialize(new TextObject("{=!}Great She-Wolf"),
-                new TextObject("{=!}Many among the eastern Devseg, such as the Khuzaits, count themselves among the descendants of the Great She-Wolf. The She-Wolf, it is said, nursed a wounded young boy back to health, who later impregnated her. 12 sons she had, half-wolf, half-man. To be counted as a descendent of the She-wolf is a great honor."),
-                new TextObject("{=!}Increased personal and spouse fertility\nNewborn sons have at least one positive congenital trait"),
-                new TextObject("{=!}Deity"),
+            SheWolf.Initialize(new TextObject("{=kEmNLu7E}Great She-Wolf"),
+                new TextObject("{=2HLzoMod}Many among the eastern Devseg, such as the Khuzaits, count themselves among the descendants of the Great She-Wolf. The She-Wolf, it is said, nursed a wounded young boy back to health, who later impregnated her. 12 sons she had, half-wolf, half-man. To be counted as a descendent of the She-wolf is a great honor."),
+                new TextObject("{=BYEgOs3m}Increased personal and spouse fertility\nNewborn sons have at least one positive congenital trait"),
+                new TextObject("{=XwtY10mI}Deity"),
                 300,
-                new TextObject("{=!}"),
-                new TextObject("{=!}"));
+                new TextObject("{=2rvylJIy}"),
+                new TextObject("{=IqoqdfgQ}"));
 
-            Iltanlar.Initialize(new TextObject("{=!}Iltanlar"),
-                new TextObject("{=!}Iltanlar is the god of a mountain-dwelling Devseg group, who migrated from the Sulun Dag mountain range to mount Iltan, and have since been assimilated by the eastern hordes of their cousins. The Iltanlar people value security above most things, thus they have for long dwelled in the mountains, which they perceive to be bountiful in good, protective spirits. Iltanlar, the god, is said to be an ancient hero, who guided his people to their new promised home, where since the Iltanlar people have founded Baltakhand."),
-                new TextObject("{=!}Improved Devseg town prosperity\nIncreased troop morale in defensive battles"),
-                new TextObject("{=!}Mountain God"),
+            Iltanlar.Initialize(new TextObject("{=tGJxwXlZ}Iltanlar"),
+                new TextObject("{=tQ0CUokx}Iltanlar is the god of a mountain-dwelling Devseg group, who migrated from the Sulun Dag mountain range to mount Iltan, and have since been assimilated by the eastern hordes of their cousins. The Iltanlar people value security above most things, thus they have for long dwelled in the mountains, which they perceive to be bountiful in good, protective spirits. Iltanlar, the god, is said to be an ancient hero, who guided his people to their new promised home, where since the Iltanlar people have founded Baltakhand."),
+                new TextObject("{=alRsFvuS}Improved Devseg town prosperity\nIncreased troop morale in defensive battles"),
+                new TextObject("{=iIxciSmD}Mountain God"),
                 300,
-                new TextObject("{=!}"),
-                new TextObject("{=!}"),
+                new TextObject("{=YLBqdkgo}"),
+                new TextObject("{=zoQnkc6l}"),
                 Settlement.All.First(x => x.StringId == "town_K1"));
 
-            WindHeaven.Initialize(new TextObject("{=!}Yel Uçmag"),
-                new TextObject("{=!}Yel Uçmag, the God of Heaven, also known as the first wind. He is the guardian of Heaven, Uçmag, where the souls of the rightous dwell. For this he is the most hollowed of the Devseg deities, for he hosts the souls of their ancestors, who live in a world of perfect, uncorrupted nature and tradition. He is said to wear armor and weapons of silver, as pure as the heavenly realm he guards."),
-                new TextObject("{=!}Improved settlement stability\nReduced religious tensions"),
-                new TextObject("{=!}Heavenly Wind"),
+            WindHeaven.Initialize(new TextObject("{=zgsOhEk0}Yel Uçmag"),
+                new TextObject("{=2uIr6SrV}Yel Uçmag, the God of Heaven, also known as the first wind. He is the guardian of Heaven, Uçmag, where the souls of the rightous dwell. For this he is the most hollowed of the Devseg deities, for he hosts the souls of their ancestors, who live in a world of perfect, uncorrupted nature and tradition. He is said to wear armor and weapons of silver, as pure as the heavenly realm he guards."),
+                new TextObject("{=CHqvH5GN}Improved settlement stability\nReduced religious tensions"),
+                new TextObject("{=wB8uhK2p}Heavenly Wind"),
                 200,
-                new TextObject("{=!}"),
-                new TextObject("{=!}"));
+                new TextObject("{=6Kk9zqj4}"),
+                new TextObject("{=2J38reHp}"));
 
-            WindHell.Initialize(new TextObject("{=!}Yel Tamag"),
-                new TextObject("{=!}The opposite of Yel Uçmag, Yel Tamag is the guarding of the Underworld, a fiery realm where the unvirtuous are punished. Though one may at first associate him with evil, the Devseg see Yel Tamag as a god of Justice. He does not chose who are to be punished, but only how they will be punished, according to their wrongdoings. The Underworld, Tamag, is where the souls may learn and eventually ascend to Uçmag."),
-                new TextObject("{=!}Improved settlement stability"),
-                new TextObject("{=!}Hellish Wind"),
+            WindHell.Initialize(new TextObject("{=Q6sDIhsO}Yel Tamag"),
+                new TextObject("{=UFissAlh}The opposite of Yel Uçmag, Yel Tamag is the guarding of the Underworld, a fiery realm where the unvirtuous are punished. Though one may at first associate him with evil, the Devseg see Yel Tamag as a god of Justice. He does not chose who are to be punished, but only how they will be punished, according to their wrongdoings. The Underworld, Tamag, is where the souls may learn and eventually ascend to Uçmag."),
+                new TextObject("{=lXd6B6U8}Improved settlement stability"),
+                new TextObject("{=qw6Jtkr8}Hellish Wind"),
                 300,
-                new TextObject("{=!}"),
-                new TextObject("{=!}"));
+                new TextObject("{=3cUOR8yD}"),
+                new TextObject("{=9DPtfWO9}"));
 
-            WindNorth.Initialize(new TextObject("{=!}Yel Kurmag"),
-                new TextObject("{=!}The Moon god, also know as Cold or Northern Wind. Yel Kurmag is the lord of the the bleak and cold nights, whese diseases and demons thrive. The god stands as a protector for his faithful, and so the Devseg have great respect for him, lest have malicious spirits or blights take them. It is believed he also presides over the fertility of women, as both the time of birth and pregnancy duration seem related to the Moon."),
-                new TextObject("{=!}Piety gain for every child born\nProtection against diseases"),
-                new TextObject("{=!}Northern Wind"),
+            WindNorth.Initialize(new TextObject("{=hfe6A2fr}Yel Kurmag"),
+                new TextObject("{=sXVkAm0Z}The Moon god, also know as Cold or Northern Wind. Yel Kurmag is the lord of the the bleak and cold nights, whese diseases and demons thrive. The god stands as a protector for his faithful, and so the Devseg have great respect for him, lest have malicious spirits or blights take them. It is believed he also presides over the fertility of women, as both the time of birth and pregnancy duration seem related to the Moon."),
+                new TextObject("{=3IddMjMm}Piety gain for every child born\nProtection against diseases"),
+                new TextObject("{=JIxWuMEl}Northern Wind"),
                 300,
-                new TextObject("{=!}"),
-                new TextObject("{=!}"));
+                new TextObject("{=vSJGIs3Q}"),
+                new TextObject("{=kmYeTu9w}"));
 
-            WindSouth.Initialize(new TextObject("{=!}Yel Kunmag"),
-               new TextObject("{=!}Yel Kunmag is the god of the Solar Wind, or Southern Wind as the non-Devseg would call him. To these, the Land of the Sun lies in the south, where Yel Kunmag flows to. The Sun is an immensely powerful force in the Devseg cosmos, and as such Yel Kunmag is bestowed great influence. Yel Kunmag's investure is seen as a royal prerogative, for the Sun is capable of both raising and destroying Khaganates."),
-               new TextObject("{=!}Increased influence cap\nImproved ruler legitimacy"),
-               new TextObject("{=!}Southern Wind"),
+            WindSouth.Initialize(new TextObject("{=Mj79BBMO}Yel Kunmag"),
+               new TextObject("{=E3TNDN3W}Yel Kunmag is the god of the Solar Wind, or Southern Wind as the non-Devseg would call him. To these, the Land of the Sun lies in the south, where Yel Kunmag flows to. The Sun is an immensely powerful force in the Devseg cosmos, and as such Yel Kunmag is bestowed great influence. Yel Kunmag's investure is seen as a royal prerogative, for the Sun is capable of both raising and destroying Khaganates."),
+               new TextObject("{=sxnU0sRJ}Increased influence cap\nImproved ruler legitimacy"),
+               new TextObject("{=FEer8lxE}Southern Wind"),
                300,
-               new TextObject("{=!}"),
-               new TextObject("{=!}"));
+               new TextObject("{=WGUKdHEP}"),
+               new TextObject("{=CVanem5N}"));
 
-            WindWest.Initialize(new TextObject("{=!}Yel Batmag"),
-                new TextObject("{=!}The Western Wind, the harbinger of death. Yel Batmag is in direct opposition to Yel Togmag. He grants death to whom he touches, incuding the Sun, who is again bequeated life by Yel Togmag, in an unending cycle. Death from Yel Batmag, however, is not perceived as sorrowful, or painful, but simply the natural and necessary part of the mundane existance, which the god presides over, as opposed to yield for his ambitions. Devseg shamans, the Kams, were the first to oppose the hordes marching westwards, seeing it as a death sentence."),
-                new TextObject("{=!}Protection against curses\nSignificant extra renown from battles"),
-                new TextObject("{=!}Western Wind"),
+            WindWest.Initialize(new TextObject("{=kk5Mk36Q}Yel Batmag"),
+                new TextObject("{=ZIqaFPjX}The Western Wind, the harbinger of death. Yel Batmag is in direct opposition to Yel Togmag. He grants death to whom he touches, incuding the Sun, who is again bequeated life by Yel Togmag, in an unending cycle. Death from Yel Batmag, however, is not perceived as sorrowful, or painful, but simply the natural and necessary part of the mundane existance, which the god presides over, as opposed to yield for his ambitions. Devseg shamans, the Kams, were the first to oppose the hordes marching westwards, seeing it as a death sentence."),
+                new TextObject("{=52FSBJL8}Protection against curses\nSignificant extra renown from battles"),
+                new TextObject("{=gPbo8BHu}Western Wind"),
                 300,
-                new TextObject("{=!}"),
-                new TextObject("{=!}"));
+                new TextObject("{=wmJQ5quJ}"),
+                new TextObject("{=gQlE11FP}"));
 
-            WindEast.Initialize(new TextObject("{=!}Yel Togmag"),
-                new TextObject("{=!}Yel Togmag, or the Eastern Wind, is the Devseg Godess that presides over life. Tog, to be born, is her domain, life she bestows the Sun, daugther of Yel Uçmag. Many faithul, during their prayers, turn towards the East in her honor. The Devseg welcome the Eastern Wind as a blessing of fertility and prosperity - a good omen, by all standards."),
-                new TextObject("{=!}Increased village animal and agricultural productions\nIncreased village prosperity"),
-                new TextObject("{=!}Eastern Wind"),
+            WindEast.Initialize(new TextObject("{=cQgPSwOX}Yel Togmag"),
+                new TextObject("{=hio2f86z}Yel Togmag, or the Eastern Wind, is the Devseg Godess that presides over life. Tog, to be born, is her domain, life she bestows the Sun, daugther of Yel Uçmag. Many faithul, during their prayers, turn towards the East in her honor. The Devseg welcome the Eastern Wind as a blessing of fertility and prosperity - a good omen, by all standards."),
+                new TextObject("{=p5BmPnab}Increased village animal and agricultural productions\nIncreased village prosperity"),
+                new TextObject("{=ZfsXSTva}Eastern Wind"),
                 300,
-                new TextObject("{=!}"),
-                new TextObject("{=!}"));
+                new TextObject("{=JER19TKx}"),
+                new TextObject("{=N04KfW9a}"));
 
-            Wilund.Initialize(new TextObject("{=!}Wilund"),
-                new TextObject("{=!}Wilund is known to non-Vlandians as the first Vlandic warlord to come to the continent. Yet the Vlandic tales tell the story of not a mercenary warlord, but a celestial smith, whose foundry is the world. The stories of how kingdoms rise and fall - that is the craft of Wilund. As such, hestawicks will assure he came to Calradia to make way for the Vlandians to carve their kingdom, or perhaps, kingdoms..."),
-                new TextObject("{=!}Signicantly increased renown and influence from battles"),
-                new TextObject("{=!}Smith-God"),
+            Wilund.Initialize(new TextObject("{=k0lyiU6c}Wilund"),
+                new TextObject("{=h51qIT4c}Wilund is known to non-Vlandians as the first Vlandic warlord to come to the continent. Yet the Vlandic tales tell the story of not a mercenary warlord, but a celestial smith, whose foundry is the world. The stories of how kingdoms rise and fall - that is the craft of Wilund. As such, hestawicks will assure he came to Calradia to make way for the Vlandians to carve their kingdom, or perhaps, kingdoms..."),
+                new TextObject("{=1pZ2KLs7}Signicantly increased renown and influence from battles"),
+                new TextObject("{=LiH5kRoA}Smith-God"),
                 200,
-                new TextObject("{=!}Wilund is the celestial smith. The world is his foundry. The thunder of the storm and the thunder of hooves are the song of his hammer. The black rain of a thousand arrows of war are the sparks upon his anvil. When he tempers life, a thousand men die and a thousand more are born."),
-                new TextObject("{=!}We, the Wilunding, owe him a great debt. The Smith came onto this land so that we may forge it into our kingdom. We shall repay him with a thousand years more of conquest."));
+                new TextObject("{=IRxnIJ7K}Wilund is the celestial smith. The world is his foundry. The thunder of the storm and the thunder of hooves are the song of his hammer. The black rain of a thousand arrows of war are the sparks upon his anvil. When he tempers life, a thousand men die and a thousand more are born."),
+                new TextObject("{=XNz8ZtFb}We, the Wilunding, owe him a great debt. The Smith came onto this land so that we may forge it into our kingdom. We shall repay him with a thousand years more of conquest."));
 
-            Osric.Initialize(new TextObject("{=!}Osric Iron-Arm"),
-                new TextObject("{=!}Deemed to be the first Vlandic king in Calradia, Osric is responsible for the conquest of Pravend, formerly an imperial capital. While they see it as a trivial game of conquest from a petty tribal warlord, Osric's achievements, in the minds of the Wilunding, prove the prophecy that they are, indeed, promised this fertile land for their taking. Osric is said to have killed the Calradic gods so that the Wilunding instead prosper, and so many among these now call themselves Osrickin."),
-                new TextObject("{=!}On capturing a fief, immediatly receive a claim for it"),
-                new TextObject("{=!}Sun-God"),
+            Osric.Initialize(new TextObject("{=m7LSz9jE}Osric Iron-Arm"),
+                new TextObject("{=3my7LVkm}Deemed to be the first Vlandic king in Calradia, Osric is responsible for the conquest of Pravend, formerly an imperial capital. While they see it as a trivial game of conquest from a petty tribal warlord, Osric's achievements, in the minds of the Wilunding, prove the prophecy that they are, indeed, promised this fertile land for their taking. Osric is said to have killed the Calradic gods so that the Wilunding instead prosper, and so many among these now call themselves Osrickin."),
+                new TextObject("{=NO17q5hW}On capturing a fief, immediatly receive a claim for it"),
+                new TextObject("{=dzu0LHfA}Sun-God"),
                 300,
-                new TextObject("{=!}Osric, as he is known in this land, came to us, the Wilunding, to fulfill the prophecy of Horsa, which we so dearly desired. As vengeance for burning the silk and wine laden homes of the Calradoi, Osric's golden shield, the Sun, was struck and removed from him. With the bones of his lost arm, he promised us a new city. And so it was that Wilund forged him an arm of dark iron and said unto him “If they will not love thee when thou canst not carry gold, then I shall give thee iron to cast a shadow upon the world. And the shadow shall be called conquest.”"),
-                new TextObject("{=!}Osric gathered great host of lances and bolts, with which he turned the sky above Paravenos dark. It was the dawn of the winter solstice. The imperials were terrified and opened the gates to flee the city. Then the arrows ceased and the bright sun shone once more, blinding the defenders. Seizing their chance, the good men rode into the city rallying under Osrac’s holy name and cut down the Calradoi in the streets. And so it is said to this day that the empire paid in red blood what they would not pay in black soil."),
+                new TextObject("{=UA55pZEo}Osric, as he is known in this land, came to us, the Wilunding, to fulfill the prophecy of Horsa, which we so dearly desired. As vengeance for burning the silk and wine laden homes of the Calradoi, Osric's golden shield, the Sun, was struck and removed from him. With the bones of his lost arm, he promised us a new city. And so it was that Wilund forged him an arm of dark iron and said unto him “If they will not love thee when thou canst not carry gold, then I shall give thee iron to cast a shadow upon the world. And the shadow shall be called conquest.”"),
+                new TextObject("{=nFvL5ren}Osric gathered great host of lances and bolts, with which he turned the sky above Paravenos dark. It was the dawn of the winter solstice. The imperials were terrified and opened the gates to flee the city. Then the arrows ceased and the bright sun shone once more, blinding the defenders. Seizing their chance, the good men rode into the city rallying under Osrac’s holy name and cut down the Calradoi in the streets. And so it is said to this day that the empire paid in red blood what they would not pay in black soil."),
                 Settlement.All.First(x => x.StringId == "town_V3"));
 
-            Horsa.Initialize(new TextObject("{=!}Horsa"),
-                new TextObject("{=!}The warrior Horse-God, Horsa landed near the lordship of Horsger and planted his spear in the beach. He has since become a prophet-like figure to the Vlandic peoples, foretelling the settlement and rise of Vlandic kingdoms. Though man and warrior, he is also depicted as a horse, a Vlandic symbol of both prosperity through the plough and war though the lance."),
-                new TextObject("{=!}Increased village prosperity\nImproved offensive battle morale"),
-                new TextObject("{=!}Horse-God"),
+            Horsa.Initialize(new TextObject("{=bP7IMDYm}Horsa"),
+                new TextObject("{=Ua7camfx}The warrior Horse-God, Horsa landed near the lordship of Horsger and planted his spear in the beach. He has since become a prophet-like figure to the Vlandic peoples, foretelling the settlement and rise of Vlandic kingdoms. Though man and warrior, he is also depicted as a horse, a Vlandic symbol of both prosperity through the plough and war though the lance."),
+                new TextObject("{=xEM9Xidv}Increased village prosperity\nImproved offensive battle morale"),
+                new TextObject("{=3mKjnpfV}Horse-God"),
                 300,
-                new TextObject("{=!}When the first of us Wilundings came to Calradia from west-over-sea, we rode inland from Ostican and saw how it was good and green. We buried our weapons to Horsa, the horse god, and asked him to let us leave the life of war behind us, and to turn the saddle to a yoke and set the horse to plough. Yet, the gods of stone that dwell in this land would not let us live in frith. Regarldess, Horsa took our pledge and called more of us from over the sea, and so we came riding."),
-                new TextObject("{=!}When we came across the sea, Horsa said unto us: “Ye have buried your spears to me in this soil, and they shall grow again like crops whenever ye need them. And your harvest shall be war, and your bread shall be conquest.” On Horsa's name, we plant our seeds in the fields and our spears into the flesh of our foes. From battle flows the red wellspring that blesses this land. It makes the crops to grow and feeds both gods and men."),
+                new TextObject("{=j0rhPqSe}When the first of us Wilundings came to Calradia from west-over-sea, we rode inland from Ostican and saw how it was good and green. We buried our weapons to Horsa, the horse god, and asked him to let us leave the life of war behind us, and to turn the saddle to a yoke and set the horse to plough. Yet, the gods of stone that dwell in this land would not let us live in frith. Regarldess, Horsa took our pledge and called more of us from over the sea, and so we came riding."),
+                new TextObject("{=CET7oBw9}When we came across the sea, Horsa said unto us: “Ye have buried your spears to me in this soil, and they shall grow again like crops whenever ye need them. And your harvest shall be war, and your bread shall be conquest.” On Horsa's name, we plant our seeds in the fields and our spears into the flesh of our foes. From battle flows the red wellspring that blesses this land. It makes the crops to grow and feeds both gods and men."),
                 Settlement.All.First(x => x.StringId == "village_V8_1"));
 
-            Oca.Initialize(new TextObject("{=!}Oca"),
-                new TextObject("{=!}Oca, a god favored by the Swedaz, is often depicted as an Ox. He is believed to have the power to provide his faithful with bountiful crop yields, who were traditionally ploughed with oxen teams. Yet, it does not mean he is harmless, or to be trifled with - Oca may slaughter his enemies, including those that do not keep their oaths to him. His cult is strongest in eastern Vlandia, around Ocs Hall, named in his honor, but also a land of many legends."),
-                new TextObject("{=!}Improved town prosperity\nIncreased farmland acreage output"),
-                new TextObject("{=!}Ox-God"),
+            Oca.Initialize(new TextObject("{=E4qdoSbS}Oca"),
+                new TextObject("{=x7Ct0KBP}Oca, a god favored by the Swedaz, is often depicted as an Ox. He is believed to have the power to provide his faithful with bountiful crop yields, who were traditionally ploughed with oxen teams. Yet, it does not mean he is harmless, or to be trifled with - Oca may slaughter his enemies, including those that do not keep their oaths to him. His cult is strongest in eastern Vlandia, around Ocs Hall, named in his honor, but also a land of many legends."),
+                new TextObject("{=FVX4JxEJ}Improved town prosperity\nIncreased farmland acreage output"),
+                new TextObject("{=vpyfZpWq}Ox-God"),
                 300,
-                new TextObject("{=!}When we came from west-over-sea, we landed first near Ostican, built the shrine to Horsa, the horse god, and then we followed the shining shield of Osric. As we rode east we saw great mountains of stone shadowing the morning sun. And so it has ever been in Vlandia. The shadows of dawn are long and cold. ut there was one farmer, some say he was a Massa, others that he was the son of a Nord. Most of us count him as a snake god, but that is another tale. His name was Orm. The Battanians told Orm about a towering giant of stone, the one that was sleeping in the way of his sunlight. His name was Mordus. They said that if he got the giant drunk on wine, he’d be easier to knock down. Mordus was one of the Calradians’ Titans of Stone. He was the bastard of a Battanian god. He made his home on the mountainside in the east near the lake of Llyn."),
-                new TextObject("{=!}Orm prayed to the god Oca. He said, “Oca, god of the oxen, plough away for me a sleeping giant. And I will give you all the wine you can drink in summer.” Now Orm went to Mordus and offered him all the wine he could drink if only he would spare his oxen. So Mordus watched Orm yoke a fine ox and plough slowly south towards him. And he drank. The sun was setting over the western sea. He drank so much that he didn’t see the ox was ploughing away the mountainside, by the time the ox came close, Mordus was asleep. And so Oca picked up the pace as night fell and charged right at the sleeping Mordus and cut him to pieces. In the morning light, Orm was horrified. There stood Oca, a giant ox, drinking wine from Mordus’ corpse. It had spilled into the furrow made the day before. Orm shouted at Oca: “I asked you to plough away the body of Mordus but here you are drinking up my wine.”, to which the go replied: “No. This is the wine thou hast promised me. But thou gavest it to Mordus. Now I plough no more. Every summer I will come back and drink this wine, and thou shalt have nothing more from the gods. Instead, beest happy with what thou havest. Learnest to pay those who work for thee.”"),
+                new TextObject("{=CERlaejw}When we came from west-over-sea, we landed first near Ostican, built the shrine to Horsa, the horse god, and then we followed the shining shield of Osric. As we rode east we saw great mountains of stone shadowing the morning sun. And so it has ever been in Vlandia. The shadows of dawn are long and cold. ut there was one farmer, some say he was a Massa, others that he was the son of a Nord. Most of us count him as a snake god, but that is another tale. His name was Orm. The Battanians told Orm about a towering giant of stone, the one that was sleeping in the way of his sunlight. His name was Mordus. They said that if he got the giant drunk on wine, he’d be easier to knock down. Mordus was one of the Calradians’ Titans of Stone. He was the bastard of a Battanian god. He made his home on the mountainside in the east near the lake of Llyn."),
+                new TextObject("{=K09tBz5U}Orm prayed to the god Oca. He said, “Oca, god of the oxen, plough away for me a sleeping giant. And I will give you all the wine you can drink in summer.” Now Orm went to Mordus and offered him all the wine he could drink if only he would spare his oxen. So Mordus watched Orm yoke a fine ox and plough slowly south towards him. And he drank. The sun was setting over the western sea. He drank so much that he didn’t see the ox was ploughing away the mountainside, by the time the ox came close, Mordus was asleep. And so Oca picked up the pace as night fell and charged right at the sleeping Mordus and cut him to pieces. In the morning light, Orm was horrified. There stood Oca, a giant ox, drinking wine from Mordus’ corpse. It had spilled into the furrow made the day before. Orm shouted at Oca: “I asked you to plough away the body of Mordus but here you are drinking up my wine.”, to which the go replied: “No. This is the wine thou hast promised me. But thou gavest it to Mordus. Now I plough no more. Every summer I will come back and drink this wine, and thou shalt have nothing more from the gods. Instead, beest happy with what thou havest. Learnest to pay those who work for thee.”"),
                 Settlement.All.First(x => x.StringId == "town_V2"));
 
-            Grunwald.Initialize(new TextObject("{=!}Kronvalt"),
-                new TextObject("{=!}D"),
-                new TextObject("{=!}Improved village prosperity\nIncreased farmland acreage output"),
-                new TextObject("{=!}"),
+            Grunwald.Initialize(new TextObject("{=scfgBd4l}Kronvalt"),
+                new TextObject("{=9C6z4h0I}D"),
+                new TextObject("{=D1pfyBVq}Improved village prosperity\nIncreased farmland acreage output"),
+                new TextObject("{=AB9h5bNE}"),
                 300,
-                new TextObject("{=!}The Calradoi call him Koronvaldos, but the god of the Rhodoks is called Kronvalt in Vlandic. The name means “king-chooser”. "),
-                new TextObject(""));
+                new TextObject("{=AIpMH2cI}The Calradoi call him Koronvaldos, but the god of the Rhodoks is called Kronvalt in Vlandic. The name means “king-chooser”. "),
+                new TextObject("{=Xc1h2BII}"));
 
             AseraMain = new Divinity("asera-main");
             AseraMain.Initialize(new TextObject("{=7BJOY24H}Asera the Patriarch"),
@@ -240,7 +240,7 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=iNvtNtoK}Increased prosperity of cattle, hog and forestry villages"),
                 new TextObject("{=iYqD0kQM}Great Spirits"),
                 200,
-                new TextObject("{=!}Test 1"));
+                new TextObject("{=gabdBLx4}Test 1"));
 
             AmraSecondary1 = new Divinity("amra-secondary-1");
             AmraSecondary1.Initialize(new TextObject("{=SgShtGNw}Na Sidhfir"),
@@ -248,7 +248,7 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=GgVizsVd}Bonus in forest autosimulated battles\nAbility to recruit forest bandit parties under 20 men into your own"),
                 new TextObject("{=oWpMWLs8}Ancestor Spirits"),
                 300,
-                new TextObject("{=!}Test 2"));
+                new TextObject("{=0JxYlEBi}Test 2"));
 
             AmraSecondary2 = new Divinity("amra-secondary-2");
             AmraSecondary2.Initialize(new TextObject("{=KkYfAdjp}Dymhna Sidset"),
@@ -298,15 +298,15 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=uyhPvxs2}Occasionally receive zealot warriors\nParty morale bonus for vlandian troops"),
                 new TextObject("{=neVhyybi}Saga"));
 
-            TreeloreMain.Initialize(new TextObject("{=!}Pérkken, Thunder Wielder"),
-                new TextObject("{=!}Once, there was naught but the Great Oak, the sea and sky.."),
-                new TextObject("{=!}Stability for all settlements of acceptable cultures\nRenown gain for every successful raid on foreign villages"),
+            TreeloreMain.Initialize(new TextObject("{=jWspS9EP}Pérkken, Thunder Wielder"),
+                new TextObject("{=5mTA1dhJ}Once, there was naught but the Great Oak, the sea and sky.."),
+                new TextObject("{=34gTkB7U}Stability for all settlements of acceptable cultures\nRenown gain for every successful raid on foreign villages"),
                 new TextObject("{=z0VYqrO5}Supreme God"));
 
-            Hirvi.Initialize(new TextObject("{=!}Suurihirvi"),
-                new TextObject("{=!}Vakken shamans tell the story of Suurihirvi - king of the forest. Naturally, the Vakken believe the forests to be ripe with spirits, but some are greater than others, and Suurihirvi is the greatest of all. Hunters pray to him for bountiful game, and foresters for protection. In most stories, Suurihirvi is depicted as a great white elk, for it needs not to hide as the forest is its domain."),
-                new TextObject("{=!}Forester and fur villages increased productivity\nWoodland acreage food production greatly increased"),
-                new TextObject("{=!}Forest Spirit"));
+            Hirvi.Initialize(new TextObject("{=jsa5NhVS}Suurihirvi"),
+                new TextObject("{=GiUDpppu}Vakken shamans tell the story of Suurihirvi - king of the forest. Naturally, the Vakken believe the forests to be ripe with spirits, but some are greater than others, and Suurihirvi is the greatest of all. Hunters pray to him for bountiful game, and foresters for protection. In most stories, Suurihirvi is depicted as a great white elk, for it needs not to hide as the forest is its domain."),
+                new TextObject("{=4aOCSfYo}Forester and fur villages increased productivity\nWoodland acreage food production greatly increased"),
+                new TextObject("{=sK0LTjkU}Forest Spirit"));
 
             Mehns.Initialize(new TextObject("{=AJ3sq4c9}Méhns Cult"),
                 new TextObject("{=tXp4wuPZ}Among the children of the forest, many devouts, specially in the Chertyg region, have devoted themselves to Méhns. The Moon, in their understanding, is the source of prosperity for both land and mankind, and thus the Goddess gained popularity among believers. Although not a warrior as Pérkos, she is also believed to a protector of the children, in a motherly manner, as Méhns is solely responsible for keeping darkness away during nighttime."),

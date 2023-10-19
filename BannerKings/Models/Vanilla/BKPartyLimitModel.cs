@@ -29,9 +29,9 @@ namespace BannerKings.Models.Vanilla
             if (leader != null)
             {
                 if (leader.IsClanLeader()) baseResult.AddFactor(BannerKingsSettings.Instance.PartySizes, 
-                    new TextObject("{=!}Party Size Scaling"));
+                    new TextObject("{=I7kfiaX5}Party Size Scaling"));
                 else baseResult.AddFactor(BannerKingsSettings.Instance.PartySizes * 0.5f, 
-                    new TextObject("{=!}Party Size Scaling"));
+                    new TextObject("{=I7kfiaX5}Party Size Scaling"));
 
                 var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
                 if (data.Perks.Contains(BKPerks.Instance.AugustCommander))

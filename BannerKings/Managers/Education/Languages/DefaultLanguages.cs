@@ -63,7 +63,7 @@ namespace BannerKings.Managers.Education.Languages
                 GetIntelligibles(Khuzait));
 
             Vlandic.Initialize(new TextObject("{=6FGQ31TM}Vlandic"), 
-                new TextObject("{=!}"),
+                new TextObject("{=8A8Ino1q}"),
                 new List<CultureObject>(1)
                 {
                     cultures.First(x => x.StringId == "vlandia")
@@ -78,7 +78,7 @@ namespace BannerKings.Managers.Education.Languages
                 }, 
                 GetIntelligibles(Calradian));
 
-            Aseran.Initialize(new TextObject("{=!}Nahawasi"), 
+            Aseran.Initialize(new TextObject("{=HMYCezy4}Nahawasi"), 
                 new TextObject("{=gM4s1KQf}Although the Aserai peoples speak a multitude of dialects, scattered across the oases, springs and coasts of the Nahasa, a distinct tradition of literalism and poety has established a common variation that has been embraced by the higher Aserai classes."),
                 new List<CultureObject>(1)
                 {

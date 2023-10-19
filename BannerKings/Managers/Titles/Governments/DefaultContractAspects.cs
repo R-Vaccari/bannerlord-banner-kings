@@ -77,31 +77,31 @@ namespace BannerKings.Managers.Titles.Governments
 
         public override void Initialize()
         {
-            ConquestDistributed.Initialize(new TextObject("{=!}Distributed Conquest"),
-                new TextObject("{=!}"),
-                new TextObject("{=!}Every fief owned by a clan make it a weaker candidate option, favoring clans with less property"),
+            ConquestDistributed.Initialize(new TextObject("{=2iPDqVSW}Distributed Conquest"),
+                new TextObject("{=C6KfxCAS}"),
+                new TextObject("{=Mf5xrBbK}Every fief owned by a clan make it a weaker candidate option, favoring clans with less property"),
                 true,
                 0,
                 ContractAspect.AspectTypes.Conquest);
 
-            ConquestClaim.Initialize(new TextObject("{=!}Conquest by Claim"),
-                new TextObject("{=!}"),
-                new TextObject("{=!}Title claimants of the fief are stronger candidates, de jure holder is strongest of all"),
+            ConquestClaim.Initialize(new TextObject("{=E3JvV91y}Conquest by Claim"),
+                new TextObject("{=DQ5feH3J}"),
+                new TextObject("{=Cb7Cr6wt}Title claimants of the fief are stronger candidates, de jure holder is strongest of all"),
                 true,
                 0,
                 ContractAspect.AspectTypes.Conquest);
 
-            ConquestMight.Initialize(new TextObject("{=!}Conquest by Might"),
-                new TextObject("{=!}"),
-                new TextObject("{=!}The conqueror of the settlement (lone clan or army leader) is strongly favored over all other candidates"),
+            ConquestMight.Initialize(new TextObject("{=SXuy1LTN}Conquest by Might"),
+                new TextObject("{=eKd1vr3b}"),
+                new TextObject("{=cn1PlTX7}The conqueror of the settlement (lone clan or army leader) is strongly favored over all other candidates"),
                 true,
                 0,
                 ContractAspect.AspectTypes.Conquest);
 
-            Geld.Initialize(new TextObject("{=!}Geld"),
-                new TextObject("{=!}The Geld is the traditional taxation form of the Wilunding. It is calculated on the assessment of productive land, which they divide in the so called Hides, and each of these hides is taxed a given amount of gold. While relatively simple to be calculated, the Geld completely ignores the productive value of the land, and thus can be unfairly assessed on a fief of particularly unproductive acreage or lacking in farmlands, inherently most productive acreage type. The geld may be levied up to 2 times a year, but it is not popular - each levy induces a diplomatic penalty."),
-                new TextObject("{=!}Your suzerain, {SUZERAIN}, calls upon you to provide them the Geld."),
-                new TextObject("{=!}{VASSAL} will pay you {RESULTS}{GOLD_ICON}"),
+            Geld.Initialize(new TextObject("{=Re7fMz5J}Geld"),
+                new TextObject("{=DVazeF7Z}The Geld is the traditional taxation form of the Wilunding. It is calculated on the assessment of productive land, which they divide in the so called Hides, and each of these hides is taxed a given amount of gold. While relatively simple to be calculated, the Geld completely ignores the productive value of the land, and thus can be unfairly assessed on a fief of particularly unproductive acreage or lacking in farmlands, inherently most productive acreage type. The geld may be levied up to 2 times a year, but it is not popular - each levy induces a diplomatic penalty."),
+                new TextObject("{=MfUydT8x}Your suzerain, {SUZERAIN}, calls upon you to provide them the Geld."),
+                new TextObject("{=0z7qQDS5}{VASSAL} will pay you {RESULTS}{GOLD_ICON}"),
                 2,
                 25,
                 ContractAspect.AspectTypes.Taxes,
@@ -130,10 +130,10 @@ namespace BannerKings.Managers.Titles.Governments
                 },
                 (Kingdom kingdom) => kingdom.Culture.StringId == "vlandia");
 
-            FeudalTax.Initialize(new TextObject("{=!}Feudal Tax"),
-                new TextObject("{=!}The feudal tax is the standard taxation form of feudal realms. This tax is calculated on each fief's revenue times a given amount of days. Whenever a fief is legally held by the taxed lord, its tax contribution is reduced. The tax may be levied once a year, but it is not popular - each levy induces a diplomatic penalty."),
-                new TextObject("{=!}Your suzerain, {SUZERAIN}, calls upon you to provide them the feudal tax."),
-                new TextObject("{=!}{VASSAL} will pay you {RESULTS}{GOLD_ICON}"),
+            FeudalTax.Initialize(new TextObject("{=C9CqU1yA}Feudal Tax"),
+                new TextObject("{=tEkr0464}The feudal tax is the standard taxation form of feudal realms. This tax is calculated on each fief's revenue times a given amount of days. Whenever a fief is legally held by the taxed lord, its tax contribution is reduced. The tax may be levied once a year, but it is not popular - each levy induces a diplomatic penalty."),
+                new TextObject("{=3JHN3Oht}Your suzerain, {SUZERAIN}, calls upon you to provide them the feudal tax."),
+                new TextObject("{=jsuwq9Yl}{VASSAL} will pay you {RESULTS}{GOLD_ICON}"),
                 2,
                 25,
                 ContractAspect.AspectTypes.Taxes,
@@ -170,10 +170,10 @@ namespace BannerKings.Managers.Titles.Governments
                     return result;
                 });
 
-            TribalTax.Initialize(new TextObject("{=!}Tribal Tax"),
-                new TextObject("{=!}The tribal tax is a simple taxation form that charges a given amount of gold per each settlement. The tribal tax may be levied once a year, but it is not popular - each levy induces a diplomatic penalty."),
-                new TextObject("{=!}Your suzerain, {SUZERAIN}, calls upon you to provide them the tribal tax."),
-                new TextObject("{=!}{VASSAL} will pay you {RESULTS}{GOLD_ICON}"),
+            TribalTax.Initialize(new TextObject("{=ZVADomEJ}Tribal Tax"),
+                new TextObject("{=vpjICEbT}The tribal tax is a simple taxation form that charges a given amount of gold per each settlement. The tribal tax may be levied once a year, but it is not popular - each levy induces a diplomatic penalty."),
+                new TextObject("{=H2gIifjD}Your suzerain, {SUZERAIN}, calls upon you to provide them the tribal tax."),
+                new TextObject("{=zqYWFXh6}{VASSAL} will pay you {RESULTS}{GOLD_ICON}"),
                 1,
                 20,
                 ContractAspect.AspectTypes.Taxes,
@@ -212,10 +212,10 @@ namespace BannerKings.Managers.Titles.Governments
                     return result;
                 });
 
-            ImperialTax.Initialize(new TextObject("{=!}Imperial Tax"),
-                new TextObject("{=!}The imperial tax is calculated on the assessment of productive land, taxed differently based on their quality, namely if they are farmland, pastureland and woodland. The tax may be levied up to 2 times a year, but it is not popular - each levy induces a diplomatic penalty."),
-                new TextObject("{=!}Your suzerain, {SUZERAIN}, calls upon you to provide them the Imperial tax."),
-                new TextObject("{=!}{VASSAL} will pay you {RESULTS}{GOLD_ICON}"),
+            ImperialTax.Initialize(new TextObject("{=dg7mLiwS}Imperial Tax"),
+                new TextObject("{=tlC2jZGJ}The imperial tax is calculated on the assessment of productive land, taxed differently based on their quality, namely if they are farmland, pastureland and woodland. The tax may be levied up to 2 times a year, but it is not popular - each levy induces a diplomatic penalty."),
+                new TextObject("{=qELTQZO9}Your suzerain, {SUZERAIN}, calls upon you to provide them the Imperial tax."),
+                new TextObject("{=K51f3P9c}{VASSAL} will pay you {RESULTS}{GOLD_ICON}"),
                 2,
                 10,
                 ContractAspect.AspectTypes.Taxes,

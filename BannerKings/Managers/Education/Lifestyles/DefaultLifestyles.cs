@@ -108,11 +108,11 @@ namespace BannerKings.Managers.Education.Lifestyles
                 cultures.FirstOrDefault(x => x.StringId == "empire"));
 
             Diplomat = new Lifestyle("lifestyle_diplomat");
-            Diplomat.Initialize(new TextObject("{=uc7xjTQv}Diplomat"), new TextObject("{=!}"),
+            Diplomat.Initialize(new TextObject("{=uc7xjTQv}Diplomat"), new TextObject("{=Xq0T2nne}"),
                 DefaultSkills.Charm, 
                 BKSkills.Instance.Lordship,
                 new List<PerkObject>(),
-                new TextObject("{=!}"),
+                new TextObject("{=KPuzAdXZ}"),
                 0f, 
                 0f);
 
@@ -162,7 +162,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             Caravaneer = new Lifestyle("lifestyle_caravaneer");
             Caravaneer.Initialize(new TextObject("{=F5aAvvhD}Caravaneer"), 
-                new TextObject("{=!}"),
+                new TextObject("{=lj5vCFVV}"),
                 DefaultSkills.Trade, 
                 DefaultSkills.Scouting,
                 new List<PerkObject>

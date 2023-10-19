@@ -21,16 +21,16 @@ namespace BannerKings.Managers.Innovations.Eras
 
         public override void Initialize()
         {
-            FirstEra.Initialize(new TextObject("{=!}Calradoi Age"),
-               new TextObject("{=!}The era of the Calradoi was the period in which the Imperium reigned unmatched. "),
+            FirstEra.Initialize(new TextObject("{=SYMLHgr0}Calradoi Age"),
+               new TextObject("{=bDfXuM7W}The era of the Calradoi was the period in which the Imperium reigned unmatched. "),
                null);
 
-            SecondEra.Initialize(new TextObject("{=!}Internecine Age"),
-               new TextObject("{=!}With the advent of the battle of Pendraic and death of emperor Arenicos Pethros, the former Imperium has shattered into civil war - an Internecine."),
+            SecondEra.Initialize(new TextObject("{=edHBhTAg}Internecine Age"),
+               new TextObject("{=rpq2nVfz}With the advent of the battle of Pendraic and death of emperor Arenicos Pethros, the former Imperium has shattered into civil war - an Internecine."),
                FirstEra);
 
-            ThirdEra.Initialize(new TextObject("{=!}Dark Age"),
-               new TextObject("{=!}Little is known about the period after the Internecine... However, scholars all agree that, within the 2 centuries, the empire was completely destroyed. Hordes have pillaged and razed cities to the ground, faiths and cultures ceased to exist and new kingdoms arose from the darkness. Yet, none ever shone a light so strong as did the Imperium."),
+            ThirdEra.Initialize(new TextObject("{=Ij7KN07f}Dark Age"),
+               new TextObject("{=dcFBaPKS}Little is known about the period after the Internecine... However, scholars all agree that, within the 2 centuries, the empire was completely destroyed. Hordes have pillaged and razed cities to the ground, faiths and cultures ceased to exist and new kingdoms arose from the darkness. Yet, none ever shone a light so strong as did the Imperium."),
                SecondEra);
         }
     }

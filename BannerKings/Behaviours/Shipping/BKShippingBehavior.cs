@@ -105,7 +105,7 @@ namespace BannerKings.Behaviours.Shipping
             if (party.MemberRoster.Contains(Hero.MainHero.CharacterObject))
             {
                 InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=!}{PARTY} is at {PLACE} and travelling to {FIEF} on water until {DATE}.")
+                    new TextObject("{=mGLHa74q}{PARTY} is at {PLACE} and travelling to {FIEF} on water until {DATE}.")
                     .SetTextVariable("PARTY", party.Name)
                     .SetTextVariable("FIEF", destination.Name)
                     .SetTextVariable("PLACE", current.Name)

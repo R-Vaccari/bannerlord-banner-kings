@@ -41,23 +41,23 @@ namespace BannerKings.Managers.Cultures
         {
             DefaultNobles = CulturalPopulationName.CreateNobles("DefaultNobles",
                 null,
-                new TextObject("{=!}Nobles"));
+                new TextObject("{=lj2vnf00}Nobles"));
 
             DefaultCraftsmen = CulturalPopulationName.CreateCraftsmen("DefaultCraftsmen",
                 null,
-                new TextObject("{=!}Craftsmen"));
+                new TextObject("{=xLu9Wont}Craftsmen"));
 
             DefaultTenants = CulturalPopulationName.CreateTenants("DefaultTenants",
                 null,
-                new TextObject("{=!}Tenants"));
+                new TextObject("{=EOgnTiuT}Tenants"));
 
             DefaultSerfs = CulturalPopulationName.CreateSerfs("DefaultSerfs",
                 null,
-                new TextObject("{=!}Serfs"));
+                new TextObject("{=ZvgIyIA1}Serfs"));
 
             DefaultSlaves = CulturalPopulationName.CreateSlaves("DefaultSlaves",
                 null,
-                new TextObject("{=!}Slaves"));
+                new TextObject("{=Cu5aCpzU}Slaves"));
         }
     }
 }

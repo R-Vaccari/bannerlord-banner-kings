@@ -36,7 +36,7 @@ namespace BannerKings.Managers.Shipping
 
         public override void Initialize()
         {
-            Laconis.Initialize(new TextObject("{=!}Laconian Shipping Network"),
+            Laconis.Initialize(new TextObject("{=83WvRpJw}Laconian Shipping Network"),
                 new TextObject(),
                 new List<Settlement>()
                 {
@@ -46,7 +46,7 @@ namespace BannerKings.Managers.Shipping
                     Settlement.All.First(x => x.StringId == "village_S3_2")
                 });
 
-            Western.Initialize(new TextObject("{=!}Western Sea Network"),
+            Western.Initialize(new TextObject("{=kpZAQisX}Western Sea Network"),
                 new TextObject(),
                 new List<Settlement>()
                 {
@@ -54,7 +54,7 @@ namespace BannerKings.Managers.Shipping
                     Settlement.All.First(x => x.StringId == "town_V8")
                 });
 
-            Junme.Initialize(new TextObject("{=!}Junme Trade Network"),
+            Junme.Initialize(new TextObject("{=5iP9RyYJ}Junme Trade Network"),
                 new TextObject(),
                 new List<Settlement>()
                 {
@@ -64,7 +64,7 @@ namespace BannerKings.Managers.Shipping
                 false,
                 Utils.Helpers.GetCulture("nord"));
 
-            Perassic.Initialize(new TextObject("{=!}Perassic Trade Network"),
+            Perassic.Initialize(new TextObject("{=B5HToxfF}Perassic Trade Network"),
                 new TextObject(),
                 new List<Settlement>()
                 {

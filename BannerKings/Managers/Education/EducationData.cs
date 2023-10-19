@@ -298,7 +298,7 @@ namespace BannerKings.Managers.Education
             if (hero.Clan == Clan.PlayerClan)
             {
                 InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=!}{HERO} research project is now {RESEARCH}.")
+                    new TextObject("{=CT3XSuhK}{HERO} research project is now {RESEARCH}.")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("RESEARCH", i.Name)
                     .ToString(),
@@ -341,7 +341,7 @@ namespace BannerKings.Managers.Education
                     if (hero.Clan == Clan.PlayerClan)
                     {
                         InformationManager.DisplayMessage(new InformationMessage(
-                            new TextObject("{=!}{HERO} has stopped researching {RESEARCH}: innovation is fully researched.")
+                            new TextObject("{=dHbC9SE2}{HERO} has stopped researching {RESEARCH}: innovation is fully researched.")
                             .SetTextVariable("HERO", hero.Name)
                             .SetTextVariable("RESEARCH", Research.Name)
                             .ToString(),

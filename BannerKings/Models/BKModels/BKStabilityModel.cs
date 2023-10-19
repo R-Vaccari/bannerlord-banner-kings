@@ -403,7 +403,7 @@ namespace BannerKings.Models.BKModels
 
                 if (bonus > 0f)
                 {
-                    result.Add(bonus, new TextObject("{=!}Highest title level"));
+                    result.Add(bonus, new TextObject("{=teAauBbA}Highest title level"));
                 }
             }
 
@@ -496,7 +496,7 @@ namespace BannerKings.Models.BKModels
 
             if (bonus > 0f)
             {
-                result.Add(bonus, new TextObject("Highest title level"));
+                result.Add(bonus, new TextObject("{=teAauBbA}Highest title level"));
             }
 
             return result;

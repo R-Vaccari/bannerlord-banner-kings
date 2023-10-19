@@ -15,8 +15,8 @@ namespace BannerKings.Managers.Goals.Decisions
         private Hero vassal;
         public LevyDuty(Hero fulfiller = null) : base("LevyDuty", GoalCategory.Kingdom, GoalUpdateType.Hero, fulfiller)
         {
-            Initialize(new TextObject("{=!}Levy Duty"),
-                new TextObject("{=!}Levy Duty"));
+            Initialize(new TextObject("{=Q8hIKnka}Levy Duty"),
+                new TextObject("{=jbiRrtAW}Levy Duty"));
         }
 
         public override bool IsAvailable()
@@ -33,13 +33,13 @@ namespace BannerKings.Managers.Goals.Decisions
             List<Hero> vassals = BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(fulfiller.Clan);
             if (vassals.Count == 0)
             {
-                failedReasons.Add(new TextObject("{=!}You don't have any vassals to levy duties from"));
+                failedReasons.Add(new TextObject("{=HRL3zkzA}You don't have any vassals to levy duties from"));
             }
 
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(fulfiller.Clan.Kingdom);
             if (title == null)
             {
-                failedReasons.Add(new TextObject("{=!}Kingdom is not legally stablished with a title"));
+                failedReasons.Add(new TextObject("{=NGClDDOB}Kingdom is not legally stablished with a title"));
             }
 
             return failedReasons.IsEmpty();
@@ -62,8 +62,8 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Levy Duty (1/2)").ToString(),
-                new TextObject("{=!}As a suzerain, you are capable of levying duties from your legal vassals. Such duties depend exclusively on the contract of the realm you serve.").ToString(),
+                new TextObject("{=hKJE5vJN}Levy Duty (1/2)").ToString(),
+                new TextObject("{=xuYLfEqa}As a suzerain, you are capable of levying duties from your legal vassals. Such duties depend exclusively on the contract of the realm you serve.").ToString(),
                 vassals,
                 true,
                 1,
@@ -79,7 +79,7 @@ namespace BannerKings.Managers.Goals.Decisions
                         {
                             bool available = true;
                             ContractDuty contractDuty = (ContractDuty)duty;
-                            TextObject description = new TextObject("{=!}{DESCRIPTION}{newline}{newline}Results:{newline}{RESULTS}")
+                            TextObject description = new TextObject("{=pG8N2TW5}{DESCRIPTION}{newline}{newline}Results:{newline}{RESULTS}")
                                .SetTextVariable("DESCRIPTION", duty.Description)
                                .SetTextVariable("RESULTS", contractDuty.GetResults(fulfiller, vassal));
                             
@@ -88,7 +88,7 @@ namespace BannerKings.Managers.Goals.Decisions
                                 .ElapsedSeasonsUntilNow < contractDuty.SeasonsDelay)
                             {
                                 available = false;
-                                description = new TextObject("{=!}It has been {SEASONS} seasons since this duty was last levied from the {TITLE}. This duty may be levied every {DELAY} seasons.")
+                                description = new TextObject("{=CgEtkPdz}It has been {SEASONS} seasons since this duty was last levied from the {TITLE}. This duty may be levied every {DELAY} seasons.")
                                 .SetTextVariable("SEASONS", vassalHighest.GetDutyTime(contractDuty).ElapsedSeasonsUntilNow.ToString("0.0"))
                                 .SetTextVariable("TITLE", vassalHighest.FullName)
                                 .SetTextVariable("DELAY", contractDuty.SeasonsDelay);
@@ -97,7 +97,7 @@ namespace BannerKings.Managers.Goals.Decisions
                             if (!contractDuty.CanFulfill(fulfiller, vassal))
                             {
                                 available = false;
-                                description = new TextObject("{=!}{HERO} is not able to fulfill this duty at this time.")
+                                description = new TextObject("{=jpTP3DwZ}{HERO} is not able to fulfill this duty at this time.")
                                 .SetTextVariable("HERO", vassal.Name);
                             }
 
@@ -111,8 +111,8 @@ namespace BannerKings.Managers.Goals.Decisions
                     }
                     
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                        new TextObject("{=!}Levy Duty (2/2)").ToString(),
-                        new TextObject("{=!}As a suzerain, you are capable of levying duties from your legal vassals. Such duties depend exclusively on the contract of the realm you serve.").ToString(),
+                        new TextObject("{=nFvY6Yyw}Levy Duty (2/2)").ToString(),
+                        new TextObject("{=xuYLfEqa}As a suzerain, you are capable of levying duties from your legal vassals. Such duties depend exclusively on the contract of the realm you serve.").ToString(),
                         duties,
                         true,
                         1,

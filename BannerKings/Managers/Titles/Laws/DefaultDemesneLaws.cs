@@ -378,7 +378,7 @@ namespace BannerKings.Managers.Titles.Laws
 
             SlaveryStandard.Initialize(new TextObject("{=6jyLYrts}Calradic Law"), 
                 new TextObject("{=ZWmNxRMn}The Imperial or Calradic law stablishes the legal existance of slaves and their ownership. Though they may not be harmed or killed without just cause, the slave trade is rampant and devoid of restrictions. Any person found in debt or captured in battle may be enslaved, and slaves compose the labor force across all settlements."),
-                new TextObject("{=!}"),
+                new TextObject("{=l7Tx7lj7}"),
                 DemesneLawTypes.Slavery,
                 0.4f,
                 -0.6f,

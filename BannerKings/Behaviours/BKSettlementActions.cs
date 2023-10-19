@@ -190,7 +190,7 @@ namespace BannerKings.Behaviours
                 }, true);
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_research",
-                "{=!}You are researching {RESARCH}. Your current research progress is {POINTS} research points.",
+                "{=DNgEuHCW}You are researching {RESARCH}. Your current research progress is {POINTS} research points.",
                 MenuWaitInit,
                 MenuActionResearchCondition,
                 MenuActionConsequenceNeutral,
@@ -232,7 +232,7 @@ namespace BannerKings.Behaviours
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_local_connections", "{=B0KoTpr4}Recruit local mercenaries",
                 MenuActionLocalConnectionsCondition, MenuActionLocalConnectionsConsequence);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_study", "{=!}Research",
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_study", "{=FcVzsBI8}Research",
                 MenuActionResearchCondition,
                 delegate { GameMenu.SwitchToMenu("bannerkings_wait_research"); });
 
@@ -282,8 +282,8 @@ namespace BannerKings.Behaviours
                 MenuTitlesConsequence);
 
             campaignGameStarter.AddGameMenuOption("bannerkings", 
-                "manage_titles", 
-                "{=!}Cultural information",
+                "manage_titles",
+                "{=IE00a4fS}Cultural information",
                 MenuTitlesCondition, 
                 (MenuCallbackArgs args) => UIManager.Instance.ShowWindow("cultures"));
 
@@ -457,7 +457,7 @@ namespace BannerKings.Behaviours
                         SkillObject secondarySkill = education.Research.ResearchSkill;
 
                         InformationManager.DisplayMessage(new InformationMessage(
-                            new TextObject("{=!}You have improved your {SKILL1} and {SKILL2} skills during your current action.")
+                            new TextObject("{=tR9bf6xS}You have improved your {SKILL1} and {SKILL2} skills during your current action.")
                                 .SetTextVariable("SKILL1", BKSkills.Instance.Scholarship.Name)
                                 .SetTextVariable("SKILL2", secondarySkill.Name)
                                 .ToString()));

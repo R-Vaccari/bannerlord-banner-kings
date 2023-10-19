@@ -68,12 +68,12 @@ namespace BannerKings.Behaviours
 
             if (BannerKingsConfig.Instance.ReligionsManager.GetPiety(hero) < piety)
             {
-                return new ValueTuple<bool, TextObject>(false, new TextObject("{=!}Not enough piety."));
+                return new ValueTuple<bool, TextObject>(false, new TextObject("{=OsO3EGYW}Not enough piety."));
             }
 
             if (hero.Clan.Influence < cost)
             {
-                return new ValueTuple<bool, TextObject>(false, new TextObject("{=!}Not enough influence."));
+                return new ValueTuple<bool, TextObject>(false, new TextObject("{=NTBtkx79}Not enough influence."));
             }
 
             return result;
@@ -92,7 +92,7 @@ namespace BannerKings.Behaviours
                 if (hero == Hero.MainHero)
                 {
                     InformationManager.DisplayMessage(new InformationMessage(
-                                        new TextObject("{=!}{HERO} was installed as a preacher at {FIEF}")
+                                        new TextObject("{=OHLXb8sl}{HERO} was installed as a preacher at {FIEF}")
                                         .SetTextVariable("HERO", clergy.Hero.Name)
                                         .SetTextVariable("FIEF", data.Settlement.Name)
                                         .ToString(),
@@ -624,7 +624,7 @@ namespace BannerKings.Behaviours
                 IsPreacher, InductionOnConsequence);
 
             starter.AddPlayerLine("bk_question_induction", "hero_main_options", "bk_preacher_asked_topics",
-               "{=!}Can I learn about specific topics?",
+               "{=NjSl1tPE}Can I learn about specific topics?",
                IsPreacher,
                () =>
                {
@@ -640,11 +640,11 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("bk_answer_induction_1", 
                 "bk_preacher_asked_topics",
                 "bk_preacher_asked_topics_options",
-                "{=!}{CLERGYMAN_TOPICS}",
+                "{=NjSl1tPE}{CLERGYMAN_TOPICS}",
                 () =>
                 {
                     MBTextManager.SetTextVariable("CLERGYMAN_TOPICS",
-                       new TextObject("{=!}Certainly, {PLAYER.NAME}. What can I help you with?"));
+                       new TextObject("{=qyLe2tZt}Certainly, {PLAYER.NAME}. What can I help you with?"));
                     return true;
                 },
                 null);
@@ -652,8 +652,8 @@ namespace BannerKings.Behaviours
             starter.AddRepeatablePlayerLine("bk_preacher_asked_topics_options",
                 "bk_preacher_asked_topics_options",
                 "bk_preacher_asked_topics_answer",
-                "{=!}{DIVINITY_NAME}",
-                "{=!}I was thinking of another option",
+                "{=DKy4H4VR}{DIVINITY_NAME}",
+                "{=zpD9nQFj}I was thinking of another option",
                 "bk_preacher_asked_topics_options",
                 () =>
                 {
@@ -678,14 +678,14 @@ namespace BannerKings.Behaviours
 
             starter.AddDialogLine("bk_preacher_asked_topics_answer", "bk_preacher_asked_topics_answer",
                 "bk_preacher_asked_topics_answer_last",
-                "{=!}{DIVINITY_TEXT}",
+                "{=PEswB3d8}{DIVINITY_TEXT}",
                 () => true,
                 null
                 );
 
             starter.AddDialogLine("bk_preacher_asked_topics_answer_last", "bk_preacher_asked_topics_answer_last",
                "bk_preacher_asked_topics_options",
-               "{=!}{DIVINITY_LAST_TEXT}",
+               "{=Fkfre473}{DIVINITY_LAST_TEXT}",
                () => true,
                null);
 

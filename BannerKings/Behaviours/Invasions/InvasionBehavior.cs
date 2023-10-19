@@ -30,7 +30,7 @@ namespace BannerKings.Behaviors.Invasions
             {
 
                 InformationManager.DisplayMessage(new InformationMessage(
-                new TextObject("{=!}{HERO} has invaded the continent alongside their army... Reports say they arrived near {TOWN}...")
+                new TextObject("{=DqVwd13t}{HERO} has invaded the continent alongside their army... Reports say they arrived near {TOWN}...")
                 .SetTextVariable("TOWN", invasion.SpawnSettlement.Name)
                 .ToString()));
             }
