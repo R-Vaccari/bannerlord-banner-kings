@@ -204,6 +204,7 @@
 		<string id="pop_class_nobles_khuzait" text="Nobles" />
 
 		<!-- CSharp: much frequently used -->
+		<string id="CS_bk" text="Banner Kings" />
 		<string id="CS_nv" text="Never mind." />
 		<string id="CS_explain" text="{TEXT}\n{EXPLANATIONS}" />
 		<string id="CS_explain2" text="{TEXT}\n\n{EXPLANATIONS}" />
@@ -213,6 +214,20 @@
 		<string id="CS_in_towncastle" text="In a town or castle" />
 		<string id="CS_government" text="Government" />
 		<string id="CS_this_rite" text="This rite is available to be performed." />
-
+		<!-- CSharp: Fundamental Terminologies -->
+		<string id="CS_ls" text="Lifestyle" />
+		<string id="CS_ttl" text="Title" />
+		<string id="CS_dmsn" text="Demesne" />
+		<string id="CS_fpg" text="Full Peerage" />
+		<string id="CS_kd" text="Kingdom" />
+		<string id="CS_dk" text="Dukedom" />
+		<string id="CS_ct" text="County" />
+		<string id="CS_br" text="Barony" />
+		<string id="CS_ld" text="Lordship" />
+		<string id="CS_kn" text="Knight" />
+		<string id="CS_wisdom" text="Wisdom" />
+		<string id="CS_wis" text="WIS" />
+		<string id="CS_faith" text="Faith" />
+		<string id="CS_piety" text="Piety" />
 	</strings>
 </base>

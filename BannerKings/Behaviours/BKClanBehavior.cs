@@ -379,7 +379,7 @@ namespace BannerKings.Behaviours
                     {
                         if (council.Peerage == null || !council.Peerage.CanStartElection)
                         {
-                            council.SetPeerage(new Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"), true, 
+                            council.SetPeerage(new Peerage(new TextObject("{=CS_fpg}Full Peerage"), true, 
                                 true, true, true, true, false));
 
                             if (clan == Clan.PlayerClan)
@@ -490,7 +490,7 @@ namespace BannerKings.Behaviours
 
                 if (clan.Kingdom.RulingClan == clan && (council.Peerage == null || !council.Peerage.CanHaveFief))
                 {
-                    council.SetPeerage(new Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"), true,
+                    council.SetPeerage(new Peerage(new TextObject("{=CS_fpg}Full Peerage"), true,
                                 true, true, true, true, false));
 
                     if (clan == Clan.PlayerClan)

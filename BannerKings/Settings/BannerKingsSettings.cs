@@ -11,7 +11,7 @@ namespace BannerKings.Settings
     {
         private int volunteersLimit = 10;
         public override string Id => "BannerKings";
-        public override string DisplayName => new TextObject("{=WaBMVVH9}Banner Kings").ToString();
+        public override string DisplayName => new TextObject("{=CS_bk}Banner Kings").ToString();
         public override string FolderName => "BannerKings"; 
         public override string FormatType => "json2";
 

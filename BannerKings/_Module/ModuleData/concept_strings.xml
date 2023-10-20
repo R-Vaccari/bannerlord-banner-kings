@@ -19,7 +19,7 @@
 	        link_id="BK_LANGUAGES_LINK"
 	        text="{=s42hLvH6}All {CULTURES_LINK} have a language associated with them. Languages allow you to better engage with lords and populations of that culture, through relations and cultural acceptance gains. Languages also allow you to read more {BK_BOOKS_LINK} as well as read faster. Languages may be learned from notables, family members or companions, whenever they have a good competence at it." />
 
-	<string title="{=tYO5xwVe}Lifestyle"
+	<string title="{=CS_ls}Lifestyle"
 	        id="str_bk_lifestyle"
 	        group="BannerKings"
 	        link_id="BK_LIFESTYLES_LINK"
@@ -46,7 +46,7 @@
 	        link_id="BK_DEMESNE_LAWS_LINK"
 	        text="{=uYAwcTZA}{BK_DEMESNE_LINK} laws describe various aspect of the demesne contract, such as duties of lower classes and the tenure of {BK_ESTATES_LINK}. These laws apply to the entire hierarchy of a demesne. They can be changed each year, either by voting with all the Peers of the realm or directly changed by the demesne sovereign." />
 
-	<string title="{=6QMDGRSt}Demesne"
+	<string title="{=CS_dmsn}Demesne"
 	        id="str_bk_demesne_law"
 	        group="BannerKings"
 	        link_id="BK_DEMESNE_LINK"

@@ -31,7 +31,7 @@ namespace BannerKings.UI.Extensions
             kingdomManagement.RefreshValues();
         }
 
-        [DataSourceProperty] public string DemesneText => new TextObject("{=6QMDGRSt}Demesne").ToString();
+        [DataSourceProperty] public string DemesneText => new TextObject("{=CS_dmsn}Demesne").ToString();
         [DataSourceProperty] public string CourtText => new TextObject("{=2QGyA46m}Court").ToString();
         [DataSourceProperty] public string CareerText => new TextObject("{=WmzEL8hL}Career").ToString();
 

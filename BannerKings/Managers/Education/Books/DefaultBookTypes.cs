@@ -181,7 +181,7 @@ namespace BannerKings.Managers.Education.Books
 
             OneHanded = new BookType("book_oneHanded");
             OneHanded.Initialize(BKItems.Instance.BookOneHanded,
-                new TextObject("{=qJ30OzLa}\"Royal Armouries Ms. I.33\" is the earliest known Calradian combat manual. The text provides guidance on the use of a single-handed swords. The fencing system is based on number of wards which are answered by defensive postures for each one of them. The treatise expound a martial system of defensive and offensive techniques between a master and a pupil, each armed with a sword and a shield, drawn in ink and watercolour and accompanied with text in Calradian, interspersed by Vlandian fencing terms. On the last two pages, the pupil is replaced by a woman called Walpurgis."),
+                new TextObject("{=FOxQiMl3}\"Royal Armouries Ms. I.33\" is the earliest known Calradian combat manual. The text provides guidance on the use of a single-handed swords. The fencing system is based on number of wards which are answered by defensive postures for each one of them. The treatise expound a martial system of defensive and offensive techniques between a master and a pupil, each armed with a sword and a shield, drawn in ink and watercolour and accompanied with text in Calradian, interspersed by Vlandian fencing terms. On the last two pages, the pupil is replaced by a woman called Walpurgis."),
                 DefaultLanguages.Instance.Vlandic, BookUse.Focusbook, DefaultSkills.OneHanded);
 
             TwoHanded = new BookType("book_twoHanded");

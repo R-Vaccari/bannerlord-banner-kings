@@ -44,7 +44,7 @@ namespace BannerKings.UI.Management
             public string MilitaryText => new TextObject("{=7ELr3vXm}Military").ToString();
 
             [DataSourceProperty]
-            public string DemesneText => new TextObject("{=6QMDGRSt}Demesne").ToString();
+            public string DemesneText => new TextObject("{=CS_dmsn}Demesne").ToString();
 
             [DataSourceProperty]
             public string ReligionText => new TextObject("{=XYZ6qwT0}Religion").ToString();

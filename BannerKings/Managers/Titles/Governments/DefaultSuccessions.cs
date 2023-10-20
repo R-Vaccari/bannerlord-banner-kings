@@ -421,7 +421,7 @@ namespace BannerKings.Managers.Titles.Governments
 
                     Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(candidate);
                     result.Add(BannerKingsConfig.Instance.ReligionsManager.GetPiety(religion, candidate) / 2f, 
-                        new TextObject("{=0EVuzzOU}Piety"));
+                        new TextObject("{=CS_piety}Piety"));
 
                     foreach (var tuple in religion.Faith.Traits)
                     {

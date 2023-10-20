@@ -381,11 +381,11 @@ namespace BannerKings.Utils
             title ??= type switch
             {
                 TitleType.Empire => new TextObject("Empire"),
-                TitleType.Kingdom => new TextObject("{=7x3HJ29f}Kingdom"),
-                TitleType.Dukedom => new TextObject("{=HtWGKBDF}Dukedom"),
-                TitleType.County => new TextObject("{=c6ggHVzS}County"),
-                TitleType.Barony => new TextObject("{=qOLmvS0B}Barony"),
-                _ => new TextObject("{=dwMA32rq}Lordship")
+                TitleType.Kingdom => new TextObject("{=CS_kd}Kingdom"),
+                TitleType.Dukedom => new TextObject("{=CS_dk}Dukedom"),
+                TitleType.County => new TextObject("{=CS_ct}County"),
+                TitleType.Barony => new TextObject("{=CS_br}Barony"),
+                _ => new TextObject("{=CS_ld}Lordship")
             };
 
 

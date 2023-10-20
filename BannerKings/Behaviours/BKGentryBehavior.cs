@@ -644,7 +644,7 @@ namespace BannerKings.Behaviours
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, granted, 15);
 
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(granted);
-            council.SetPeerage(new Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"), true,
+            council.SetPeerage(new Peerage(new TextObject("{=CS_fpg}Full Peerage"), true,
                                 true, true, true, true, false));
 
             if (granted.Clan == Clan.PlayerClan)

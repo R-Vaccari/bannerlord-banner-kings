@@ -62,7 +62,7 @@ namespace BannerKings.Managers.Court.Grace
         public override void Initialize()
         {
             MinimalLodgings.Initialize(new TextObject("{=Y0NWoa6b}Minimal Lodgings"),
-                new TextObject("{=ZtBCanDT}Provide bare minimum accomodations for guests. Increases guest capacity by 1."),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests. Increases guest capacity by 1."),
                 -25f,
                 0f,
                 new Dictionary<ItemCategory, int>()

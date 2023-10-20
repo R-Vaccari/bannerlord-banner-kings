@@ -241,7 +241,7 @@ namespace BannerKings.Behaviours
             elements.Add(new InquiryElement(finish, finish.Name.ToString(), null, true, finish.Hint.ToString()));
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=WaBMVVH9}Banner Kings").ToString(),
+                new TextObject("{=CS_bk}Banner Kings").ToString(),
                 new TextObject("{=Xa0EZF0c}Welcome to the Banner Kings mod. Before starting your campaign, you should pick a custom start and a religion for your character first. You can also read on topics of the mod. All these topics are available on the Concepts page of Encyclopedia.{newline}{newline}Support is only provided through Discord. Please check out the mod-links over there if you consider contributing. Have fun!").ToString(),
                 elements,
                 false,

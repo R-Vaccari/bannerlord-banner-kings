@@ -264,7 +264,7 @@ namespace BannerKings.Behaviours
 
             // ------- TOWN --------
 
-            campaignGameStarter.AddGameMenuOption("town", "bannerkings_submenu", "{=WaBMVVH9}Banner Kings",
+            campaignGameStarter.AddGameMenuOption("town", "bannerkings_submenu", "{=CS_bk}Banner Kings",
                 delegate (MenuCallbackArgs x)
                 {
                     x.optionLeaveType = GameMenuOption.LeaveType.Submenu;
@@ -324,7 +324,7 @@ namespace BannerKings.Behaviours
             // ------- CASTLE --------
 
 
-            campaignGameStarter.AddGameMenuOption("castle", "bannerkings_castle_submenu", "{=WaBMVVH9}Banner Kings",
+            campaignGameStarter.AddGameMenuOption("castle", "bannerkings_castle_submenu", "{=CS_bk}Banner Kings",
                 delegate (MenuCallbackArgs x)
                 {
                     x.optionLeaveType = GameMenuOption.LeaveType.Submenu;
@@ -342,7 +342,7 @@ namespace BannerKings.Behaviours
             // ------- VILLAGE --------
 
 
-            campaignGameStarter.AddGameMenuOption("village", "bannerkings_village_submenu", "{=WaBMVVH9}Banner Kings",
+            campaignGameStarter.AddGameMenuOption("village", "bannerkings_village_submenu", "{=CS_bk}Banner Kings",
                 delegate (MenuCallbackArgs x)
                 {
                     x.optionLeaveType = GameMenuOption.LeaveType.Submenu;
@@ -1012,7 +1012,7 @@ namespace BannerKings.Behaviours
 
         public static void MenuBannerKingsInit(MenuCallbackArgs args)
         {
-            args.MenuTitle = new TextObject("{=WaBMVVH9}Banner Kings");
+            args.MenuTitle = new TextObject("{=CS_bk}Banner Kings");
         }
     }
 }

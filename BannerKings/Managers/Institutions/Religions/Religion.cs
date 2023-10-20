@@ -3,7 +3,7 @@ using System.Linq;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
-using BannerKings.Managers.Institutions.Religions.Leaderships;
+// using BannerKings.Managers.Institutions.Religions.Leaderships;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -20,7 +20,7 @@ namespace BannerKings.Managers.Institutions.Religions
     {
         [SaveableField(4)] private Dictionary<Settlement, Clergyman> clergy; 
         [field: SaveableField(3)] public Faith Faith { get; private set; }
-        public HeadOfFaith HeadOfFaith { get; private set; }
+        // public HeadOfFaith HeadOfFaith { get; private set; }
 
         public Religion(string id) : base(id)
         {

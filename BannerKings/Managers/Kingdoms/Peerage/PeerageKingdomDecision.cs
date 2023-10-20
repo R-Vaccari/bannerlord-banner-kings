@@ -48,7 +48,7 @@ namespace BannerKings.Managers.Kingdoms.Peerage
             if (outcome.Approve)
             {
                 var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Peer);
-                council.SetPeerage(new Court.Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"),
+                council.SetPeerage(new Court.Peerage(new TextObject("{=CS_fpg}Full Peerage"),
                     true,
                     true,
                     true,
@@ -152,7 +152,7 @@ namespace BannerKings.Managers.Kingdoms.Peerage
             }
         }
 
-        public override TextObject GetGeneralTitle() => new TextObject("{=9OhMK2Wk}Full Peerage");
+        public override TextObject GetGeneralTitle() => new TextObject("{=CS_fpg}Full Peerage");
 
         public override int GetProposalInfluenceCost() => 250;
 

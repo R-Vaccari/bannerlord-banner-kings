@@ -61,7 +61,7 @@ namespace BannerKings.UI.Extensions.Encyclopedia
 
                 if (education.Lifestyle != null)
                 {
-                    heroPageVM.Stats.Add(new StringPairItemVM(new TextObject("{=tYO5xwVe}Lifestyle").ToString(),
+                    heroPageVM.Stats.Add(new StringPairItemVM(new TextObject("{=CS_ls}Lifestyle").ToString(),
                         education.Lifestyle.Name.ToString(),
                         new BasicTooltipViewModel(() => education.Lifestyle.Description.ToString())));
                 }

@@ -35,7 +35,7 @@ namespace BannerKings.UI.Management
         }
 
         [DataSourceProperty]
-        public string FaithText => new TextObject("{=OKw2P9m1}Faith").ToString();
+        public string FaithText => new TextObject("{=CS_faith}Faith").ToString();
         [DataSourceProperty]
         public string PopulationText => new TextObject("{=o3Ohk2hA}Population").ToString();
         [DataSourceProperty]

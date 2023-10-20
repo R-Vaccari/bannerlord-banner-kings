@@ -66,31 +66,31 @@ namespace BannerKings.Managers.Cultures
                 null,
                 new TextObject("{=zyKSROjQ}King"),
                 new TextObject("{=JmdALFU2}Queen"),
-                new TextObject("{=7x3HJ29f}Kingdom"));
+                new TextObject("{=CS_kd}Kingdom"));
 
             DefaultDuke = CulturalTitleName.CreateDuchy("DefaultDuke",
                 null,
                 new TextObject("{=vFJ7NjqE}Duke"),
                 new TextObject("{=5uFw1EmO}Duchess"),
-                new TextObject("{=HtWGKBDF}Dukedom"));
+                new TextObject("{=CS_dk}Dukedom"));
 
             DefaultCount = CulturalTitleName.CreateCounty("DefaultCount",
                 null,
                 new TextObject("{=hG2krbg9}Count"),
                 new TextObject("{=o513XU29}Countess"),
-                new TextObject("{=c6ggHVzS}County"));
+                new TextObject("{=CS_ct}County"));
 
             DefaultBaron = CulturalTitleName.CreateBarony("DefaultBaron",
                 null,
                 new TextObject("{=LvgTvjd1}Baron"),
                 new TextObject("{=yxq4RV7E}Baroness"),
-                new TextObject("{=qOLmvS0B}Barony"));
+                new TextObject("{=CS_br}Barony"));
 
             DefaultLord = CulturalTitleName.CreateLordship("DefaultLord",
                 null,
                 new TextObject("{=Jd1iqDAX}Lord"),
                 new TextObject("{=8V8i6QCm}Lady"),
-                new TextObject("{=dwMA32rq}Lordship"));
+                new TextObject("{=CS_ld}Lordship"));
 
             DefaultPrince = CulturalTitleName.CreatePrince("DefaultPrince",
                 null,
@@ -100,7 +100,7 @@ namespace BannerKings.Managers.Cultures
 
             DefaultKnight = CulturalTitleName.CreateKnight("DefaultKnight",
                 null,
-                new TextObject("{=W9G4PTpt}Knight"),
+                new TextObject("{=CS_kn}Knight"),
                 new TextObject("{=6LHeHpCo}Knightess"),
                 new TextObject("{=ph4LMn6k}Knights"));
         }

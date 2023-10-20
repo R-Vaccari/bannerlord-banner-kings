@@ -178,7 +178,7 @@ namespace BannerKings.UI.Religion
             //    currentReligion.Faith.GetMainDivinity().Name, currentReligion.Faith.GetMainDivinity().Description));
             Aspects.Add(new ReligionElementVM(new TextObject("{=0QL7Y1TF}Faith Group"), currentReligion.Faith.FaithGroup.Name,
                 currentReligion.Faith.FaithGroup.Description));
-            //Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith"), UIHelper.GetFaithTypeName(currentReligion.Faith),
+            //Aspects.Add(new ReligionElementVM(new TextObject("{=CS_faith}Faith"), UIHelper.GetFaithTypeName(currentReligion.Faith),
             //    UIHelper.GetFaithTypeDescription(currentReligion.Faith)));
             Aspects.Add(new ReligionElementVM(new TextObject("{=EjTxnGJp}Culture"), currentReligion.MainCulture.Name,
                 new TextObject("{=6NYxLhjH}The main culture associated with this faith.")));

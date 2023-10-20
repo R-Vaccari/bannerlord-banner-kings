@@ -67,7 +67,7 @@ namespace BannerKings.UI.Education
 
         [DataSourceProperty] public string BooksReadText => new TextObject("{=LRGEk4Ag}Books Read").ToString();
 
-        [DataSourceProperty] public string LifestyleText => new TextObject("{=tYO5xwVe}Lifestyle").ToString();
+        [DataSourceProperty] public string LifestyleText => new TextObject("{=CS_ls}Lifestyle").ToString();
 
         [DataSourceProperty] public string ChooseLifestyleText => new TextObject("{=sOT08u5v}Choose Lifestyle").ToString();
 

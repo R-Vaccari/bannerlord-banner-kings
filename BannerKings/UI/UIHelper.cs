@@ -228,7 +228,7 @@ namespace BannerKings.UI
         {
             var model = BannerKingsConfig.Instance.ReligionModel;
             var tooltipForAccumulatingProperty =
-                CampaignUIHelper.GetTooltipForAccumulatingProperty(new TextObject("{=0EVuzzOU}Piety").ToString(), piety,
+                CampaignUIHelper.GetTooltipForAccumulatingProperty(new TextObject("{=CS_piety}Piety").ToString(), piety,
                     model.CalculatePietyChange(hero, true));
 
             TextObject relText = null;

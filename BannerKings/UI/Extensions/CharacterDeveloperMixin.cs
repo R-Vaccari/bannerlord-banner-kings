@@ -93,7 +93,7 @@ namespace BannerKings.UI.Extensions
         public string DecisionsText => new TextObject("{=GMNhGSUb}Decisions").ToString();
 
         [DataSourceProperty]
-        public string FaithText => new TextObject("{=OKw2P9m1}Faith").ToString();
+        public string FaithText => new TextObject("{=CS_faith}Faith").ToString();
 
         public override void OnRefresh()
         {

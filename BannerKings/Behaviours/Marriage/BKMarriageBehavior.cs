@@ -280,7 +280,7 @@ namespace BannerKings.Behaviours.Marriage
                     }
                     else
                     {
-                        if (isPlayerHigherRanking) text = new TextObject("{=qJ30OzLa}\"{TITLE}\", I am not in the position to accept an offer. But, if I were, I would not entertain the {CLAN} more than I do stray mongrels.")
+                        if (isPlayerHigherRanking) text = new TextObject("{=X8uBCO5s}\"{TITLE}\", I am not in the position to accept an offer. But, if I were, I would not entertain the {CLAN} more than I do stray mongrels.")
                             .SetTextVariable("TITLE", GameTexts.FindText(Hero.MainHero.IsFemale ? "str_my_lady" : "str_my_lord"))
                             .SetTextVariable("CLAN", Hero.MainHero.Clan.Name);
                         else text = new TextObject("{=XMMjS27Y}No, you idiot. Get out of my sight.")
