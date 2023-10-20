@@ -75,7 +75,9 @@
 	
 	<xsl:template match="Culture[@id='aserai']/clan_names">
         <clan_names>
-		  <name><xsl:attribute name="name">{=Ij0Oj7xt}Bani Aska"</xsl:attribute></name>
+		  <name><xsl:attribute name="name">{=Ij0Oj7xt}Bani Aska</xsl:attribute></name>
+		  <name><xsl:attribute name="name">{=gPUfUqns}Bani Dhamin</xsl:attribute></name>
+		  <name><xsl:attribute name="name">{=lVoECbot}Bani Fasus</xsl:attribute></name>
 		  <name><xsl:attribute name="name">{=gPUfUqns}Bani Dhamin</xsl:attribute></name>
 		  <name><xsl:attribute name="name">{=lVoECbot}Bani Fasus</xsl:attribute></name>
 		  <name><xsl:attribute name="name">{=TpuYk0Pe}Bani Julul</xsl:attribute></name>
