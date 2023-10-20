@@ -181,7 +181,7 @@ namespace BannerKings.Managers.Innovations
                HeavyPlough);
 
             HorseShoe.Initialize(new TextObject("{=DmWsuH9A}Horse Shoes"),
-                new TextObject("{=Hcb2wMS1}Metallic horse shows protect the hooves of the animal against the deterioration caused by intense labor. With the advent of teams of horses instead of oxen to pull ploughs, the shoes amplify the animal's advantage of working longer by protecting it moving ability."),
+                new TextObject("{=Hcb2wMS1}Metallic horse shoes protect the hooves of the animal against the deterioration caused by intense labor. With the advent of teams of horses instead of oxen to pull ploughs, the shoes amplify the animal's advantage of working longer by protecting it moving ability."),
                 new TextObject("{=5NppItfx}Improved farmland output"),
                 DefaultEras.Instance.FirstEra,
                 Innovation.InnovationType.Agriculture,
