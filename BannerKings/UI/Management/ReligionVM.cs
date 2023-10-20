@@ -39,9 +39,9 @@ namespace BannerKings.UI.Management
         [DataSourceProperty]
         public string PopulationText => new TextObject("{=o3Ohk2hA}Population").ToString();
         [DataSourceProperty]
-        public string AppointText => new TextObject("{=!}Appoint Preacher").ToString();
+        public string AppointText => new TextObject("{=0OcYVBed}Appoint Preacher").ToString();
         [DataSourceProperty]
-        public string RemoveText => new TextObject("{=!}Banish Preacher").ToString();
+        public string RemoveText => new TextObject("{=BB32C7T5}Banish Preacher").ToString();
 
         public override void RefreshValues()
         {
@@ -86,7 +86,7 @@ namespace BannerKings.UI.Management
 
                 var factor = BannerKingsConfig.Instance.ReligionModel.GetNotableFactor(notable, settlement);
                 var result = FormatValue(factor / totalFaithsWeight);
-                NotablesList.Add(new InformationElement(new TextObject("{=!}{HERO} ({FAITH})")
+                NotablesList.Add(new InformationElement(new TextObject("{=ntt7B3qt}{HERO} ({FAITH})")
                     .SetTextVariable("HERO", notable.Name)
                     .SetTextVariable("FAITH", rel.Faith.GetFaithName())
                     .ToString(),
@@ -113,7 +113,7 @@ namespace BannerKings.UI.Management
             var tension = BannerKingsConfig.Instance.ReligionModel.CalculateTensionTarget(data.ReligionData);
             StatsInfo.Add(new InformationElement(new TextObject("{=QiyEsZ4L}Religious Tension:").ToString(),
                 FormatValue(tension.ResultNumber),
-                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=cz0WGSC1}Tensions between the different faiths in this settlement. The less homogenous the population's faith is, the more tensions there are. Tensions are also affected by the dominant religion's view on the other faiths. Tolerated faiths do not incur extra tensions. Untolerated faiths do, and hostile faiths incur a lot of tension. Religious tensions will significantly affect your settlement's loyalty and performance."))
                     .SetTextVariable("EXPLANATIONS", tension.GetExplanations())
@@ -128,11 +128,11 @@ namespace BannerKings.UI.Management
             {
                 var presence = BannerKingsConfig.Instance.ReligionModel.CalculateReligionWeight(playerFaith, settlement);
                 Concept faithPresence = Concept.All.First(x => x.StringId == "str_bk_faith_presence");
-                ReligionInfo.Add(new InformationElement(new TextObject("{=!}Faith Presence ({FAITH}):")
+                ReligionInfo.Add(new InformationElement(new TextObject("{=SzTgE8jo}Faith Presence ({FAITH}):")
                     .SetTextVariable("FAITH", playerFaith.Faith.GetFaithName())
                     .ToString(),
                     FormatValue(presence.ResultNumber / totalFaithsWeight),
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT", faithPresence.Description)
                         .SetTextVariable("EXPLANATIONS", presence.GetExplanations())
                         .ToString()));
@@ -140,9 +140,9 @@ namespace BannerKings.UI.Management
                 var fervor = BannerKingsConfig.Instance.ReligionModel.CalculateFervor(playerFaith);
                 ReligionInfo.Add(new InformationElement(new TextObject("{=PUwmzUZy}Fervor:").ToString(),
                     FormatValue(fervor.ResultNumber),
-                    new TextObject("{=!}{TEXT}{newline}{newline}Explanations:{newline}{EXPLANATIONS}")
+                    new TextObject("{=cjb5Ycw1}{TEXT}{newline}{newline}Explanations:{newline}{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
-                            new TextObject("{=!}The faith's fervor. A faith's fervor makes its populations and heroes harder to convert. In settlements, fervor grealy contributes to the faith's presence. Heroes instead are less likely and/or require more resources to convert. Fervor is based on doctrines, settlements and clans that follow the faith. Additionaly, holding the Faith Seat and the faith's Holy Sites are important factors to fervor."))
+                            new TextObject("{=0vy9Oxjs}The faith's fervor. A faith's fervor makes its populations and heroes harder to convert. In settlements, fervor grealy contributes to the faith's presence. Heroes instead are less likely and/or require more resources to convert. Fervor is based on doctrines, settlements and clans that follow the faith. Additionaly, holding the Faith Seat and the faith's Holy Sites are important factors to fervor."))
                         .SetTextVariable("EXPLANATIONS", fervor.GetExplanations())
                         .ToString()));
             }
@@ -162,7 +162,7 @@ namespace BannerKings.UI.Management
             {
                 piety = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionModel.GetAppointCost(Hero.MainHero, data.ReligionData).ResultNumber);
                 cost = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionModel.GetAppointInfluence(Hero.MainHero, data.ReligionData).ResultNumber);
-                text = new TextObject("{=!}The {FAITH} faith would admit a preacher of rank {PREACHER} for {FIEF}. Appointing such a preacher would cost you {PIETY}{PIETY_ICON} and {INFLUENCE}{INFLUENCE_ICON}")
+                text = new TextObject("{=GPWOlpcg}The {FAITH} faith would admit a preacher of rank {PREACHER} for {FIEF}. Appointing such a preacher would cost you {PIETY}{PIETY_ICON} and {INFLUENCE}{INFLUENCE_ICON}")
                     .SetTextVariable("FAITH", playerFaith.Faith.GetFaithName())
                     .SetTextVariable("PREACHER", playerFaith.Faith.GetRankTitle(rank))
                     .SetTextVariable("FIEF", Settlement.CurrentSettlement.Name)
@@ -180,13 +180,13 @@ namespace BannerKings.UI.Management
             }
             else
             {
-                text = new TextObject("{=!}The {FAITH} faith does not admit any type of preacher for {FIEF}. It is not possible to appoint one.")
+                text = new TextObject("{=OvQ8sevD}The {FAITH} faith does not admit any type of preacher for {FIEF}. It is not possible to appoint one.")
                                     .SetTextVariable("FAITH", playerFaith.Faith.GetName())
                                     .SetTextVariable("FIEF", Settlement.CurrentSettlement.Name);
                 possible = false;
             }
 
-            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Appoint Preacher").ToString(),
+            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=0OcYVBed}Appoint Preacher").ToString(),
                 text.ToString(),
                 possible,
                 true,
@@ -218,7 +218,7 @@ namespace BannerKings.UI.Management
                     if (faith == data.ReligionData.DominantReligion)
                     {
                         possible = false;
-                        hint = new TextObject("{=!}Not possible to banish a preacher of the local dominant religion.");
+                        hint = new TextObject("{=zuQ7UjDC}Not possible to banish a preacher of the local dominant religion.");
                     }
                     else
                     {
@@ -233,19 +233,19 @@ namespace BannerKings.UI.Management
 
                         if (BannerKingsConfig.Instance.ReligionsManager.GetPiety(Hero.MainHero) < piety)
                         {
-                            hint = new TextObject("{=!}Not enough piety.");
+                            hint = new TextObject("{=OsO3EGYW}Not enough piety.");
                             possible = false;
                         }
 
                         if (Clan.PlayerClan.Influence < cost)
                         {
-                            hint = new TextObject("{=!}Not enough influence.");
+                            hint = new TextObject("{=NTBtkx79}Not enough influence.");
                             possible = false;
                         }
 
                         if (possible)
                         {
-                            hint = new TextObject("{=!}Removing {HERO} will cost you {PIETY}{PIETY_ICON} and {INFLUENCE}{INFLUENCE_ICON}. Moreover, due to their influence over the populace, the fief will suffer a loyalty hit of {LOYALTY} points reduction.")
+                            hint = new TextObject("{=KkWM2C57}Removing {HERO} will cost you {PIETY}{PIETY_ICON} and {INFLUENCE}{INFLUENCE_ICON}. Moreover, due to their influence over the populace, the fief will suffer a loyalty hit of {LOYALTY} points reduction.")
                                 .SetTextVariable("LOYALTY", loyalty)
                                 .SetTextVariable("INFLUENCE", cost)
                                 .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON)
@@ -263,8 +263,8 @@ namespace BannerKings.UI.Management
             }
             
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("Banish Preacher").ToString(),
-                new TextObject("`{=!}As overlord of this fief, you are able to banish preachers that do not represent your faith. They must not represent the local Dominant Religion.{newline}Banishing a preacher allows you to diminish their faith's presence, and thus increasing your own. Such act costs both piety and influence. Moreover, banishing preachers yields significant negative impact to local loyalty.").ToString(),
+                new TextObject("{=BB32C7T5}Banish Preacher").ToString(),
+                new TextObject("`{=Af96HOr3}As overlord of this fief, you are able to banish preachers that do not represent your faith. They must not represent the local Dominant Religion.{newline}Banishing a preacher allows you to diminish their faith's presence, and thus increasing your own. Such act costs both piety and influence. Moreover, banishing preachers yields significant negative impact to local loyalty.").ToString(),
                 elements,
                 true,
                 1,
@@ -294,7 +294,7 @@ namespace BannerKings.UI.Management
                     }
 
                     InformationManager.DisplayMessage(new InformationMessage(
-                        new TextObject("{=!}{HERO} was removed as a preacher at {FIEF}")
+                        new TextObject("{=xY8hHS5G}{HERO} was removed as a preacher at {FIEF}")
                         .SetTextVariable("HERO", notable.Name)
                         .SetTextVariable("FIEF", settlement.Name)
                         .ToString(),

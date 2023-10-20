@@ -39,7 +39,7 @@ namespace BannerKings.Models.Vanilla
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_mercantilism"))
             {
-                result.Add(0.1f, new TextObject("{=OdpuFusm}Encourage mercantilism decision"));
+                result.Add(0.1f, new TextObject("{=KJHIQDWG}Encourage mercantilism decision"));
             }
 
             return result;
@@ -73,7 +73,7 @@ namespace BannerKings.Models.Vanilla
             var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
             if (government.Equals(DefaultGovernments.Instance.Feudal))
             {
-                result.AddFactor(0.15f, new TextObject("{=PSrEtF5L}Government"));
+                result.AddFactor(0.15f, new TextObject("{=CS_government}Government"));
             }
 
             if (settlement.OwnerClan != null)
@@ -169,7 +169,7 @@ namespace BannerKings.Models.Vanilla
             var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
             if (government.Equals(DefaultGovernments.Instance.Republic))
             {
-                result.AddFactor(0.1f, new TextObject("{=PSrEtF5L}Government"));
+                result.AddFactor(0.1f, new TextObject("{=CS_government}Government"));
             }
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,

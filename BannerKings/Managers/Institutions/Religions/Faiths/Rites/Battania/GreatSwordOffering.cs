@@ -27,7 +27,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Battania
         public override void SetDialogue()
         {
             MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM",
-                new TextObject("{=ZNU4rSxp}{?PLAYER.GENDER}My lady{?}My lord{\\?}, a blade sacrifice would certainly please the spirits, aye. A high quality is expected, so it may be worthy of your ancestors. Will you offer the {BLADE}?")
+                new TextObject("{=hpz9UVs4}{?PLAYER.GENDER}My lady{?}My lord{\\?}, a blade sacrifice would certainly please the spirits, aye. A high quality is expected, so it may be worthy of your ancestors. Will you offer the {BLADE}?")
                 .SetTextVariable("BLADE", selectedItem.GetModifiedItemName()));
         }
     }

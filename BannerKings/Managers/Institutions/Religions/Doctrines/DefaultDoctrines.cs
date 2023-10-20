@@ -144,13 +144,13 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
             Druidism = new Doctrine("druidism", 
                 new TextObject("{=9kA2mxU8}Druidism"),
                 new TextObject("{=5pkaQ17t}Clergy is considered part of the Druid caste, who represent the spiritual power, but are also involved in political, material affairs. In a way, druids are a form of lesser nobility and cannot be excluded from political affairs."),
-                new TextObject("{=9TwjtYhb}Preachers provide noble troops\nNo religious council advisor causes daily influence loss"),
+                new TextObject("{=khGmHNMw}Preachers provide noble troops\nNo religious council advisor causes daily influence loss"),
                 new List<Doctrine>());
 
             Animism = new Doctrine("animism", 
                 new TextObject("{=OZqf2Rab}Animism"),
                 new TextObject("{=GxdpgOvT}Spirits inhabit everywhere in this world, hidden in plain sight. Under the earth, flowing along rivers or bound to animals or trees, spirits can be anywhere. It is the duty of the faithful to not harm the balance of the material world with the spiritual world, which are often one and the same."),
-                new TextObject("{=FRAS5TAC}Woodland acreage provides piety\nReduced baseline fervor"),
+                new TextObject("{=e8AbyTnZ}Woodland acreage provides piety\nReduced baseline fervor"),
                 new List<Doctrine>());
 
             CommunalFaith = new Doctrine("communal_faith", new TextObject("{=Pj5aVLht}Communal Faith"),

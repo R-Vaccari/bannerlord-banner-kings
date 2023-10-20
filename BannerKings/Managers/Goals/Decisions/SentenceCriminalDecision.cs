@@ -16,7 +16,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public SentenceCriminalDecision(Hero fulfiller = null) : base("goal_sentence_criminal",
             GoalCategory.Kingdom, GoalUpdateType.Hero, fulfiller)
         {
-            Initialize(new TextObject("{=pKoKaKNd}Sentence Criminal"),
+            Initialize(new TextObject("{=5PJcvLJ1}Sentence Criminal"),
                 new TextObject("{=R6X7JFKz}As a Peer within a realm, you are able to sentence those found to be criminals that you hold within your dungeons."));
         }
 
@@ -75,7 +75,7 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=pKoKaKNd}Sentence Criminal (1/2)").ToString(),
+                new TextObject("{=CZYMHXGq}Sentence Criminal (1/2)").ToString(),
                 new TextObject("{=cNVFv1sW}Choose a criminal to be sentenced. The possible sentences are contextual. Sentences can be considered tyrannical also depending on context, and will negatively impact your standing with your peers.").ToString(),
                 crimes,
                 true,
@@ -102,7 +102,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     }
 
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                        new TextObject("{=pKoKaKNd}Sentence Criminal (2/2)").ToString(),
+                        new TextObject("{=Pniw76Cw}Sentence Criminal (2/2)").ToString(),
                         new TextObject("{=GaQTC0YT}{HERO} will be sentenced for the crime of {CRIME}. Tyrannical sentences will impact your standing with your peers.").ToString(),
                         sentences,
                         true,

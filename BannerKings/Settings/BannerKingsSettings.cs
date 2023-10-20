@@ -65,53 +65,53 @@ namespace BannerKings.Settings
         public float BaseWage { get; set; } = 1f;
 
         [SettingPropertyFloatingInteger("{=KnFgow5F}Party Size Scaling", minValue: 1f, maxValue: 3f, "#0%", RequireRestart = false, HintText = "{=ZbBoUhrM}The scale of party sizes on the map. Applies in half to parties of heroes not leading their clan. Vanilla is 100%. Default: 200%.")]
-        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing")]
         public float PartySizes { get; set; } = 2f;
 
         [SettingProperty("{=binOnQnx}Alternative Leveling", RequireRestart = false, HintText = "{=WtdhIqRx}An alternate skill leveling progression. Skills will require a higher base xp since level 1, but will scale less aggressively. The result should be more consitent xp across all levels, slower at the beginning but faster near the end. Default: true.")]
-        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing")]
         public bool AlternateLeveling { get; set; } = true;
 
         [SettingPropertyFloatingInteger("{=JjTnrl9v}Army Cohesion Boost", minValue: 0f, maxValue: 0.8f, "#0%", RequireRestart = false, HintText = "{=IlTizRLs}Cohesion boost to armies to they last longer, to counter balance the presence of more parties. Vanilla is 0%, 50% decreases cohesion loss by half. Default: 50%.")]
-        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing")]
         public float CohesionBoost { get; set; } = 0.5f;
 
         [SettingPropertyFloatingInteger("{=2yDhJfgh}Troop Upgrade Xp", minValue: 1f, maxValue: 10f, "#0%", RequireRestart = false, HintText = "{=xvNKsFbW}How much Xp troops need to upgrade. Vanilla is 100%. Default: 200%.")]
-        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing")]
         public float TroopUpgradeXp { get; set; } = 2f;
 
         [SettingPropertyFloatingInteger("{=OohdenyR}Slower Parties", minValue: 0f, maxValue: 0.75f, "#0%", RequireRestart = false, HintText = "{=5MR7XH9E}Slows all parties down related to their original speed. 0% is the original speed. Intended to better reflect a realistic map scale. Default: 40%.")]
-        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing")]
         public float SlowerParties { get; set; } = 0.4f;
 
         [SettingPropertyFloatingInteger("{=FtWk1Jm0}Longer Sieges", minValue: 0f, maxValue: 0.75f, "#0%", RequireRestart = false, HintText = "{=0ctG0FEp}Decreases siege camp build speed. 0% is the original speed. Intended to make sieges harder and more impactful, and prevent multiple sequential sieges of same settlement. Default: 50%.")]
-        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing")]
         public float LongerSieges { get; set; } = 0.5f;
 
         [SettingPropertyFloatingInteger("{=gxcgWiwh}Knight Clan Creation Speed", minValue: 0f, maxValue: 5f, "#0%", RequireRestart = false, HintText = "{=yTkU621N}Knight AI heroes can eventually form their own clans, even those in the player clan. Increasing this setting increases their speed of doing so. Setting it to 0% will stop knights from creating clans altogether. Default: 100%.")]
-        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing")]
         public float KnightClanCreationSpeed { get; set; } = 1f;
 
         [SettingProperty("{=DZyyJXRn}Crafting Waiting Time", RequireRestart = false, HintText = "{=pSX0rWGt}When doing any type of work in the smithy, you'll be forced to wait an amount of time correspondent to how much energy was used, as well as pay for that time. Represents a more realistic approach to crafting. Default: true.")]
-        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing")]
         public bool CraftingWaitingTime { get; set; } = true;
 
         [SettingProperty("{=b4hNMeGx}Diplomacy Changes", RequireRestart = true, HintText = "{=2YgM5mR1}Changes to AI evaluation of declaring war such as not calling wars when the entire kingdom is broke. Slows down the game pace. Default: True.")]
-        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing")]
         public bool DiplomacyChanges { get; set; } = true;
 
         [SettingPropertyFloatingInteger("{=iBLGdG1Y}Party Supplies", minValue: 0f, maxValue: 2f, "#0%", RequireRestart = false, 
             HintText = "{=uURHROGF}Affects the party supplies requirement factor. 0% means the feature is functionally disabled. 100% is the standard rate of items consumption, 200% means doube the rate, resulting in more expensive parties. May affect AI party limit sizes. Default: 100%.")]
-        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing")]
         public float PartySuppliesFactor { get; set; } = 1f;
 
-        [SettingProperty("{=iBLGdG1Y}Reset Party Supplies Demand", RequireRestart = false, HintText = "{=uURHROGF}Party supply demands stack each day. Enabling this setting forgets the old demands of the party.")]
-        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        [SettingProperty("{=bUG8B8pA}Reset Party Supplies Demand", RequireRestart = false, HintText = "{=a9PhtgBC}Party supply demands stack each day. Enabling this setting forgets the old demands of the party.")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing")]
         public bool ResetPartySupplyDemand { get; set; } = false;
 
         [SettingPropertyInteger("{=iLmmsgFE}Volunteers Limit", 6, 20, "{=Bm4KO72P}0 Volunteers",
             Order = 1, RequireRestart = false, HintText = "{=2AsFpOok}The number of volunteers that notables may have. Requires reloading. Vanilla is 6, default for BK is 10. The recruitable amount is calculated on percentages and thus is always balanced. Recruits will be lost when changing to a smaller limit. Limits can be changed at any point during campaigns.")]
-        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing")]
         public int VolunteersLimit
         {
             get => volunteersLimit;

@@ -208,7 +208,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 
         public override TextObject GetCultsDescription()
         {
-            return new TextObject("{=J4D4X2XJ}Cults");
+            return new TextObject("{=3mvrd7pr}Cults");
         }
 
         public override (bool, TextObject) GetInductionAllowed(Hero hero, int rank)

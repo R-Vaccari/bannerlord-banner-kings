@@ -153,7 +153,7 @@ namespace BannerKings.UI.Estates
                     new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
                     .SetTextVariable("POINTS", production.ResultNumber.ToString("0.00"))
                     .ToString(),
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject("{=g480uUyC}Sum of goods produced on a daily basis, including all the types produced here."))
                         .SetTextVariable("EXPLANATIONS", production.GetExplanations())

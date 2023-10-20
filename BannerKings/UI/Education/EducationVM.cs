@@ -65,7 +65,7 @@ namespace BannerKings.UI.Education
 
         [DataSourceProperty] public string ChooseBookText => new TextObject("{=Y4G7PxXr}Choose Book").ToString();
 
-        [DataSourceProperty] public string BooksReadText => new TextObject("{=NvnA9WyM}Books Read").ToString();
+        [DataSourceProperty] public string BooksReadText => new TextObject("{=LRGEk4Ag}Books Read").ToString();
 
         [DataSourceProperty] public string LifestyleText => new TextObject("{=tYO5xwVe}Lifestyle").ToString();
 
@@ -255,7 +255,7 @@ namespace BannerKings.UI.Education
             if (data.Books.Count == 0)
             {
                 BooksReadInfo.Add(new InformationElement(new TextObject("{=uovmgGZa}No books read yet").ToString(), string.Empty,
-                    new TextObject("{=NvnA9WyM}Books need to be in your inventory or the current settlement's Stash in order to be readable. To start reading you need to be literate and either have a dictionary or have a minimum understanding of it's language.")
+                    new TextObject("{=IqzVsq0c}Books need to be in your inventory or the current settlement's Stash in order to be readable. To start reading you need to be literate and either have a dictionary or have a minimum understanding of it's language.")
                         .ToString()));
             }
             else
@@ -271,12 +271,12 @@ namespace BannerKings.UI.Education
             {
                 CurrentBookInfo.Add(new InformationElement(new TextObject("{=aBaKuACo}Not currently reading any book").ToString(),
                     string.Empty,
-                    new TextObject("{=NvnA9WyM}Books need to be in your inventory or the current settlement's Stash in order to be readable. To start reading you need to be literate and either have a dictionary or have a minimum understanding of it's language.")
+                    new TextObject("{=IqzVsq0c}Books need to be in your inventory or the current settlement's Stash in order to be readable. To start reading you need to be literate and either have a dictionary or have a minimum understanding of it's language.")
                         .ToString()));
             }
             else
             {
-                CurrentBookInfo.Add(new InformationElement(new TextObject("{=o1Z28eXv}Name:").ToString(),
+                CurrentBookInfo.Add(new InformationElement(new TextObject("{=beLf6VI1}Name:").ToString(),
                     data.CurrentBook.Item.Name.ToString(),
                     data.CurrentBook.Description.ToString()));
 
@@ -297,12 +297,12 @@ namespace BannerKings.UI.Education
             {
                 CurrentLanguageInfo.Add(new InformationElement(
                     new TextObject("{=mGnKu6GO}Not currently learning any language").ToString(), string.Empty,
-                    new TextObject("{=KBsVXEtH}Languages may be taught by your courtiers that have a good fluency, so long they understand it more than you. Languages can be actively studied on the settlement the courtier is located at.")
+                    new TextObject("{=MRDC1LlA}Languages may be taught by your courtiers that have a good fluency, so long they understand it more than you. Languages can be actively studied on the settlement the courtier is located at.")
                         .ToString()));
             }
             else
             {
-                CurrentLanguageInfo.Add(new InformationElement(new TextObject("{=o1Z28eXv}Name:").ToString(),
+                CurrentLanguageInfo.Add(new InformationElement(new TextObject("{=beLf6VI1}Name:").ToString(),
                     data.CurrentLanguage.Name.ToString(),
                     data.CurrentLanguage.Description.ToString()));
 
@@ -328,7 +328,7 @@ namespace BannerKings.UI.Education
             }
 
             var languageLimit = BannerKingsConfig.Instance.EducationModel.CalculateLanguageLimit(hero);
-            KnownLanguagesInfo.Add(new InformationElement(new TextObject("{=KBsVXEtH}Languages limit:").ToString(),
+            KnownLanguagesInfo.Add(new InformationElement(new TextObject("{=pMNMcwNN}Languages limit:").ToString(),
                 languageLimit.ResultNumber.ToString(),
                 languageLimit.GetExplanations()));
             foreach (var pair in data.Languages)
@@ -342,7 +342,7 @@ namespace BannerKings.UI.Education
             {
                 LifestyleProgressInfo.Add(new InformationElement(
                     new TextObject("{=MaV9QBJE}No lifestyle currently adopted").ToString(), string.Empty,
-                    new TextObject("{=KBsVXEtH}Languages may be taught by your courtiers that have a good fluency, so long they understand it more than you. Languages can be actively studied on the settlement the courtier is located at.")
+                    new TextObject("{=FnkRoZvF}Languages may be taught by your courtiers that have a good fluency, so long they understand it more than you. Languages can be actively studied on the settlement the courtier is located at.")
                         .ToString()));
 
                 LifestyleNameText = null;

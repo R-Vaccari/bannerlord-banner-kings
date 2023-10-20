@@ -624,7 +624,7 @@ namespace BannerKings.Behaviours
                 IsPreacher, InductionOnConsequence);
 
             starter.AddPlayerLine("bk_question_induction", "hero_main_options", "bk_preacher_asked_topics",
-               "{=NjSl1tPE}Can I learn about specific topics?",
+               "{=fC90mRIK}Can I learn about specific topics?",
                IsPreacher,
                () =>
                {
@@ -672,7 +672,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_preacher_asked_topics_options_cancel",
                 "bk_preacher_asked_topics_options",
                 "lord_pretalk",
-                "{=D33fIGQe}Never mind.",
+                "{=CS_nv}Never mind.",
                 () => true,
                 null);
 
@@ -706,7 +706,7 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("bk_preacher_asked_boon_answer", "bk_preacher_asked_boon_answer",
                 "lord_pretalk",
-                "{=G4ALCxaA}Never mind.", null, null);
+                "{=CS_nv}Never mind.", null, null);
 
             starter.AddDialogLine("bk_boon_confirm", "bk_boon_confirm", "bk_boon_confirm",
                 "{=VKujVK2V}{CLERGYMAN_BLESSING_CONFIRM}",
@@ -716,7 +716,7 @@ namespace BannerKings.Behaviours
                 () => selectedDivinity != null, BlessingConfirmOnConsequence);
 
             starter.AddPlayerLine("bk_boon_confirm", "bk_boon_confirm", "lord_pretalk",
-                "{=G4ALCxaA}Never mind.",
+                "{=CS_nv}Never mind.",
                 null, null);
 
             starter.AddPlayerLine("bk_question_rite", "hero_main_options", "bk_preacher_asked_rites",
@@ -742,7 +742,7 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer",
                 "lord_pretalk",
-                "{=G4ALCxaA}Never mind.", null,
+                "{=CS_nv}Never mind.", null,
                 null);
 
             starter.AddDialogLine("bk_rite_confirm", "bk_rite_confirm", "bk_rite_confirm",
@@ -754,7 +754,7 @@ namespace BannerKings.Behaviours
                     selectedRite?.Complete(Hero.MainHero);
                 });
             starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_pretalk",
-                "{=G4ALCxaA}Never mind.",
+                "{=CS_nv}Never mind.",
                 null, null);
 
             starter.AddPlayerLine("bk_blessing_recruit_battania_bandits", "bandit_attacker", "common_encounter_ultimatum_answer",
@@ -981,7 +981,7 @@ namespace BannerKings.Behaviours
                            rite.GetName().ToString(),
                            null,
                            available,
-                           new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                           new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                            .SetTextVariable("TEXT", rite.GetDescription().ToString())
                            .SetTextVariable("EXPLANATIONS", reason).ToString());
             }

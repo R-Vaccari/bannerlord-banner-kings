@@ -77,7 +77,7 @@ namespace BannerKings.UI.CampaignStart
             }
 
             UIHelper.TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=zyKSROjQ}Kingdoms").ToString(), " ", 0));
+            list.Add(new TooltipProperty(new TextObject("{=gbGZfZg2}Kingdoms").ToString(), " ", 0));
             UIHelper.TooltipAddSeperator(list);
 
             int kingdomCount = 0;

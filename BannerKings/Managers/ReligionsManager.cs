@@ -454,7 +454,7 @@ namespace BannerKings.Managers
             {
                 if (piety < 0)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has lost {PIETY} piety.")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=WtBHE6L3}{HERO} has lost {PIETY} piety.")
                                                             .SetTextVariable("HERO", hero.Name)
                                                             .SetTextVariable("PIETY", MathF.Abs(piety)));
                 }

@@ -404,7 +404,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("book_seller_scholarly_questions",
                 "book_seller_scholarly_questions",
                 "hero_main_options",
-                "{=G4ALCxaA}Never mind.",
+                "{=CS_nv}Never mind.",
                 null,
                 null);
 

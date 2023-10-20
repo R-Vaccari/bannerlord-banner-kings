@@ -159,7 +159,7 @@ namespace BannerKings.UI.Crafting
 
 
             UIHelper.TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=4aKx5Pj9}Materials").ToString(), " ", 0));
+            list.Add(new TooltipProperty(new TextObject("{=REFyZKjV}Materials").ToString(), " ", 0));
             UIHelper.TooltipAddSeperator(list);
 
             var materials = BannerKingsConfig.Instance.SmithingModel.GetCraftingInputForArmor(Item);

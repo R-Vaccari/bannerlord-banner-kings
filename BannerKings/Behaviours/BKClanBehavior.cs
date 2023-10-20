@@ -231,7 +231,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_convert_family_response_denied",
                 "bk_convert_family_response_denied",
                 "lord_talk_speak_diplomacy_2",
-                "{=G4ALCxaA}Never mind.",
+                "{=CS_nv}Never mind.",
                 () => true,
                 null);
 
@@ -277,7 +277,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_convert_family_response_accepted",
                 "bk_convert_family_response_accepted",
                 "lord_talk_speak_diplomacy_2",
-                "{=G4ALCxaA}Never mind.",
+                "{=CS_nv}Never mind.",
                 () => true,
                 null);
         }

@@ -248,7 +248,7 @@ namespace BannerKings.Behaviours
                 CultureConversionAcceptedConsequence);
 
             starter.AddPlayerLine("bk_convert_culture_confirm", "bk_convert_culture_confirm", "hero_main_options",
-                "{=G4ALCxaA}Never mind.",
+                "{=CS_nv}Never mind.",
                 null, null);
 
             starter.AddPlayerLine("bk_question_convert_faith", "hero_main_options", "bk_answer_convert_faith",
@@ -268,7 +268,7 @@ namespace BannerKings.Behaviours
                 FaithConversionAcceptedConsequence);
 
             starter.AddPlayerLine("bk_convert_faith_confirm", "bk_convert_faith_confirm", "hero_main_options",
-                "{=G4ALCxaA}Never mind.",
+                "{=CS_nv}Never mind.",
                 null, null);
         }
 

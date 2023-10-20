@@ -624,7 +624,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_peerage_accepted",
               "bk_peerage_accepted",
               "close_window",
-              "{=G4ALCxaA}Never mind.",
+              "{=CS_nv}Never mind.",
               () =>
               {
                   var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);

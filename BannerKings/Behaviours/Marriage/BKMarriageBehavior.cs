@@ -359,7 +359,7 @@ namespace BannerKings.Behaviours.Marriage
             starter.AddPlayerLine("propose_marriage_contract_response",
                 "propose_marriage_contract_response",
                 "lord_pretalk",
-                "{=D33fIGQe}Never mind.",
+                "{=CS_nv}Never mind.",
                 null,
                 null);
 

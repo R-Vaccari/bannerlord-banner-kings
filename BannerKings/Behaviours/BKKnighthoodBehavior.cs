@@ -211,7 +211,7 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("companion_grant_knighthood_response_return", "companion_knighthood_response",
                 "hero_main_options",
-                "{=G4ALCxaA}Never mind.",
+                "{=CS_nv}Never mind.",
                 null, 
                 null);
 
@@ -246,7 +246,7 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("companion_knighthood_finish_fief_return", "companion_knighthood_finish_fief",
                 "close_window",
-                "{=G4ALCxaA}Never mind.",
+                "{=CS_nv}Never mind.",
                 null,
                 null);
 
@@ -265,7 +265,7 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("companion_knighthood_finish_estate_return", "companion_knighthood_finish_estate",
                 "close_window",
-                "{=G4ALCxaA}Never mind.",
+                "{=CS_nv}Never mind.",
                 null,
                 null);
 
@@ -325,7 +325,7 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("companion_grant_additional_property_return", "companion_grant_additional_property_finish",
                 "close_window",
-                "{=G4ALCxaA}Never mind.",
+                "{=CS_nv}Never mind.",
                 null,
                 null);
 

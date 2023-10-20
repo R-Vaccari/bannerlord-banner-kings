@@ -32,7 +32,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Northern
         public override void SetDialogue()
         {
             MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM",
-                new TextObject("{=!}{?PLAYER.GENDER}My lady{?}My lord{\\?}, a feast to honor Pérkos would be a wise choice. Call in all our siblings of the forest so we may honor the Gods on the sacred canopy!"));
+                new TextObject("{=FL6eO8SW}{?PLAYER.GENDER}My lady{?}My lord{\\?}, a feast to honor Pérkos would be a wise choice. Call in all our siblings of the forest so we may honor the Gods on the sacred canopy!"));
         }
     }
 }

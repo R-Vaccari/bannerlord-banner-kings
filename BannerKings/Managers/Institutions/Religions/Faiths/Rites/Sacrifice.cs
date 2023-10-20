@@ -83,7 +83,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override bool MeetsCondition(Hero hero, out TextObject reason)
         {
-            reason = new TextObject("{=oo3xtFfT}This rite is available to be performed.");
+            reason = new TextObject("{=CS_this_rite}This rite is available to be performed.");
             var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
             bool baseResult = hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
                              data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero));

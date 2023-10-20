@@ -125,7 +125,7 @@ namespace BannerKings.Models.Vanilla
             var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
             if (government == DefaultGovernments.Instance.Republic)
             {
-                baseResult.Add(1f, new TextObject("{=PSrEtF5L}Government"));
+                baseResult.Add(1f, new TextObject("{=CS_government}Government"));
             }
 
             baseResult.Add(2f * data.Autonomy, new TextObject("Autonomy"));

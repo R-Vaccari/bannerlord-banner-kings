@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Vlandia
         {
         }
 
-        public override TextObject GetName() => new TextObject("{=!}Warhorse Sacrifice");
+        public override TextObject GetName() => new TextObject("{=QZonQk7x}Warhorse Sacrifice");
 
         public override void Execute(Hero executor)
         {
@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Vlandia
         public override void SetDialogue()
         {
             MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM",
-                new TextObject("{=!}Will you offer these fine steeds to Wilund, the Smith?"));
+                new TextObject("{=5ioijfGh}Will you offer these fine steeds to Wilund, the Smith?"));
         }
     }
 }

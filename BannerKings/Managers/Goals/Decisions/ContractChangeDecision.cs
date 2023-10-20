@@ -65,7 +65,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
 
             /*var government = new BKGovernmentDecision(fulfiller.Clan, GovernmentType.Feudal, title);
-            options.Add(new ContractChangeOption(new TextObject("{=PSrEtF5L}Government"),
+            options.Add(new ContractChangeOption(new TextObject("{=CS_government}Government"),
                 new TextObject("{=jeNEcVGi}Propose a change in government structure, altering the allowed succession forms and aspects of settlement governance. Depending on the government choice, an appropriate succession type will be enforced as well."),
                 300, government, GetGovernments(kingdom, title)));
 

@@ -149,7 +149,7 @@ namespace BannerKings.Managers.Court.Members.Tasks
 
             FamilyCare.Initialize(new TextObject("{=EZWTi70m}Family Care"),
                new TextObject("{=XiMo6cPC}Heal family members and educate them into good health practices."),
-               new TextObject("{=QCw05MZN}Household members heal faster in settlements\nDaily medicine xp for household members"),
+               new TextObject("{=YNDr4UPD}Household members heal faster in settlements\nDaily medicine xp for household members"),
                1f);
 
             SmithArmors.Initialize(new TextObject("{=nmaSK0ca}Smith Armors"),

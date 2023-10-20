@@ -90,7 +90,7 @@ namespace BannerKings.UI.Management
             var quality = data.EconomicData.ProductionQuality;
             ProductionInfo.Add(new InformationElement(new TextObject("{=6gaLfex6}Production Quality:").ToString(),
                 $"{quality.ResultNumber:P}",
-                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject(
                             "{=rHXu32s5}Describes the quality of products produced in this settlement. Higher quality means workshops are more likely to produce goods with positive modifiers, therefore yielding a higher income. Because better products are more expensive, more money is extracted from caravans into market gold and the owner's tariff. This is also a factor in workshop prices."))
@@ -100,7 +100,7 @@ namespace BannerKings.UI.Management
             var efficiency = data.EconomicData.ProductionEfficiency;
             ProductionInfo.Add(new InformationElement(new TextObject("{=oJKPne1U}Production Efficiency:").ToString(),
                 $"{efficiency.ResultNumber:P}",
-                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=0z7FL2oe}The speed at which workshops produce goods, affected by kingdom policies and craftsmen"))
                     .SetTextVariable("EXPLANATIONS", efficiency.GetExplanations())
@@ -112,7 +112,7 @@ namespace BannerKings.UI.Management
                 var villageRevenue = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(villageData.Village, true);
                 RevenueInfo.Add(new InformationElement(new TextObject("{=BXFLXR6B}Village Revenue:").ToString(),
                     FormatFloatGain(villageRevenue.ResultNumber),
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject("{=L3KACGcQ}The village's revenue output. Most of the revenue in villages is generated through production and selling of products by serfs and slaves. They are taxed through their labor rather than in coin. Nobles and craftsmen however may be taxed in coins through construction of tax offices."))
                         .SetTextVariable("EXPLANATIONS", villageRevenue.GetExplanations())
@@ -141,7 +141,7 @@ namespace BannerKings.UI.Management
                     new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
                     .SetTextVariable("POINTS", productionExplained.ResultNumber.ToString("0.00"))
                     .ToString(),
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=g480uUyC}Sum of goods produced on a daily basis, including all the types produced here."))
                     .SetTextVariable("EXPLANATIONS", productionExplained.GetExplanations())
@@ -164,7 +164,7 @@ namespace BannerKings.UI.Management
                 var mercantilism = data.EconomicData.Mercantilism;
                 RevenueInfo.Add(new InformationElement(new TextObject("{=5E2NZBtK}Mercantilism:").ToString(),
                     $"{mercantilism.ResultNumber:P}",
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject("{=tOk3vpRY}Represents how economicaly free craftsmen, tradesmen and guilds are. Increased mercantilism reduces the tax revenue of these, but allows them to accumulate wealth or contribute more to overall prosperity."))
                         .SetTextVariable("EXPLANATIONS", mercantilism.GetExplanations())
@@ -173,7 +173,7 @@ namespace BannerKings.UI.Management
                 var caravanAttractiveness = BannerKingsConfig.Instance.EconomyModel.CalculateCaravanAttraction(Settlement, true);
                 RevenueInfo.Add(new InformationElement(new TextObject("{=O9p6A7yD}Caravan Attractiveness:").ToString(),
                     $"{caravanAttractiveness.ResultNumber:P}",
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject("{=GDiY2iFh}How attractive this town is for caravans. Likelihood of caravan visits are dictated mainly by prices, and attractiveness is a factor added on top of that."))
                         .SetTextVariable("EXPLANATIONS", caravanAttractiveness.GetExplanations())
@@ -243,7 +243,7 @@ namespace BannerKings.UI.Management
             var admCost = data.EconomicData.AdministrativeCost;
             RevenueInfo.Add(new InformationElement(new TextObject("{=MhzdyoWG}Administrative Cost:").ToString(),
                 $"{admCost.ResultNumber:P}",
-                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=ay7jnvEJ}Costs associated with the settlement administration, including those of active policies and decisions, deducted on tax revenue."))
                     .SetTextVariable("EXPLANATIONS", admCost.GetExplanations())
@@ -254,7 +254,7 @@ namespace BannerKings.UI.Management
                 var taxes = BannerKingsConfig.Instance.TaxModel.CalculateTownTax(Settlement.Town, true);
                 RevenueInfo.Add(new InformationElement(new TextObject("{=E61zQNSt}Tax Revenues:").ToString(),
                     MBRandom.RoundRandomized(taxes.ResultNumber).ToString(),
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject("{=yZhrtORs}Taxes levied on local population, and other local expenses and revenues. To maximize your revenues, increase local stability and reduce administrative costs."))
                         .SetTextVariable("EXPLANATIONS", taxes.GetExplanations())

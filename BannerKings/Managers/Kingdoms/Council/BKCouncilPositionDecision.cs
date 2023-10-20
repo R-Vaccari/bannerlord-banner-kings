@@ -182,7 +182,7 @@ namespace BannerKings.Managers.Kingdoms.Council
 
         public override TextObject GetGeneralTitle()
         {
-            return new TextObject("{=mUaJDjqO}Council member for position {POSITION}")
+            return new TextObject("{=V1fJRDen}Council member for position {POSITION}")
                 .SetTextVariable("POSITION", Position.Name);
         }
 

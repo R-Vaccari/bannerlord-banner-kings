@@ -202,7 +202,7 @@ namespace BannerKings.UI.Management
             var militiaCap = new BKMilitiaModel().GetMilitiaLimit(data, settlement);
             DefenseInfo.Add(new InformationElement(new TextObject("{=UADFWZgq}Militia Cap:").ToString(), 
                 $"{militiaCap.ResultNumber:n0}",
-                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=AyyuwpBd}The maximum number of militiamen this settlement can support, based on it's population."))
                     .SetTextVariable("EXPLANATIONS", militiaCap.GetExplanations())
@@ -211,7 +211,7 @@ namespace BannerKings.UI.Management
             var militiaQuality = new BKMilitiaModel().MilitiaSpawnChanceExplained(settlement);
             DefenseInfo.Add(new InformationElement(new TextObject("{=ROFzvP4W}Militia Quality:").ToString(), 
                 $"{militiaQuality.ResultNumber:P}",
-                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=xQbPBzgn}Chance of militiamen being spawned as veterans instead of recruits."))
                     .SetTextVariable("EXPLANATIONS", militiaQuality.GetExplanations())
@@ -252,7 +252,7 @@ namespace BannerKings.UI.Management
 
             ManpowerInfo.Add(new InformationElement(new TextObject("{=4gnA3tsw}Militarism:").ToString(), 
                 $"{data.MilitaryData.Militarism.ResultNumber:P}",
-                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=MHFeNBXS}How much the population is willing or able to militarily serve. Militarism increases the manpower caps."))
                     .SetTextVariable("EXPLANATIONS", data.MilitaryData.Militarism.GetExplanations())
@@ -261,7 +261,7 @@ namespace BannerKings.UI.Management
             ExplainedNumber draftEfficiency = data.MilitaryData.DraftEfficiency;
             ManpowerInfo.Add(new InformationElement(new TextObject("{=AJMjhhVL}Draft Efficiency:").ToString(),
                 FormatValue(draftEfficiency.ResultNumber),
-                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=g5NdEeBX}How quickly volunteer availability in notables replenishes."))
                     .SetTextVariable("EXPLANATIONS", draftEfficiency.GetExplanations())

@@ -120,28 +120,28 @@ namespace BannerKings.UI.Titles
 
             TitleInfo.Add(new InformationElement(new TextObject("{=aoZYxUYV}Government Type:").ToString(),
                 title.Contract.Government.Name.ToString(),
-                new TextObject("{=!}{TEXT}\n\n{DESCRIPTION}")
+                new TextObject("{=CS_explain2}{TEXT}\n\n{DESCRIPTION}")
                 .SetTextVariable("TEXT", new TextObject("{=PUat0QQf}Government laws describe how different realms are organized. Different governments accept different types of policies and laws. Ie, republics do not accept policies such as Royal Guard, which highly favor a ruling dynasty. Moreover, government types define what kind of Succession a realm can practice."))
                 .SetTextVariable("DESCRIPTION", title.Contract.Government.Description)
                 .ToString()));
 
             TitleInfo.Add(new InformationElement(new TextObject("{=HJcuXO5J}Succession Type:").ToString(),
                 title.Contract.Succession.Name.ToString().Replace("_", " "),
-                new TextObject("{=!}{TEXT}\n\n{DESCRIPTION}")
+                new TextObject("{=CS_explain2}{TEXT}\n\n{DESCRIPTION}")
                 .SetTextVariable("TEXT", new TextObject("{=qMmbExKv}The clan succession form associated with this title. Successions only apply to factions."))
                 .SetTextVariable("DESCRIPTION", title.Contract.Succession.Description)
                 .ToString()));
 
             TitleInfo.Add(new InformationElement(new TextObject("{=OTuRSNZ5}Inheritance Type:").ToString(),
                 title.Contract.Inheritance.Name.ToString(),
-                new TextObject("{=!}{TEXT}\n\n{DESCRIPTION}")
+                new TextObject("{=CS_explain2}{TEXT}\n\n{DESCRIPTION}")
                 .SetTextVariable("TEXT", new TextObject("{=Y3mAnDLj}The inheritance form associated with this settlement's title. Inheritance dictates who leads the clan after the leader's death."))
                 .SetTextVariable("DESCRIPTION", title.Contract.Inheritance.Description)
                 .ToString()));
 
             TitleInfo.Add(new InformationElement(new TextObject("{=vCryQjBB}Gender Law:").ToString(),
                 title.Contract.GenderLaw.Name.ToString(),
-                new TextObject("{=!}{TEXT}\n\n{DESCRIPTION}")
+                new TextObject("{=CS_explain2}{TEXT}\n\n{DESCRIPTION}")
                 .SetTextVariable("TEXT", new TextObject("{=ArvZcS5p}The gender law associated with this settlement's title. Gender law affects how inheritance and other aspects of rule work."))
                 .SetTextVariable("DESCRIPTION", title.Contract.GenderLaw.Description)
                 .ToString()));

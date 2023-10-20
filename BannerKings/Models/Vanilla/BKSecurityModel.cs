@@ -56,7 +56,7 @@ namespace BannerKings.Models.Vanilla
             var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
             if (government == DefaultGovernments.Instance.Imperial)
             {
-                baseResult.Add(1f, new TextObject("{=PSrEtF5L}Government"));
+                baseResult.Add(1f, new TextObject("{=CS_government}Government"));
             }
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader,

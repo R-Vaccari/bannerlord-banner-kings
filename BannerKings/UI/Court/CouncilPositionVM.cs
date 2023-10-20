@@ -72,7 +72,7 @@ namespace BannerKings.UI.Court
                                 .SetTextVariable("CURRENT", currentText)
                                 .SetTextVariable("PROJECTED", projectedText)
                                 .ToString(),
-                                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                                new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                                 .SetTextVariable("TEXT", new TextObject("{=hdbcAeax}This councillor's competence in their position. The more competent they are, the more likely they are to trigger the tasks' effects and often with better results."))
                                 .SetTextVariable("EXPLANATIONS", explanations)
                                 .ToString()));

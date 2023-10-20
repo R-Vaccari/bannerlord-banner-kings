@@ -219,7 +219,7 @@ namespace BannerKings.Models.BKModels
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
                 if (government.Equals(DefaultGovernments.Instance.Feudal))
                 {
-                    result.Add(0.05f, new TextObject("{=PSrEtF5L}Government"));
+                    result.Add(0.05f, new TextObject("{=CS_government}Government"));
                 }
 
                 result.Add(legitimacy, new TextObject("{=UqLsS4GV}Legitimacy"));

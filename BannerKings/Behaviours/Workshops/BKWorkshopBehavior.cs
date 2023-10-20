@@ -159,7 +159,7 @@ namespace BannerKings.Behaviours.Workshops
 
                                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                                     new TextObject("{=jvVup6nx}Workshop Grant").ToString(),
-                                    new TextObject("{=eQbfxno4}The {WORKSHOP} has been seized from the {OWNER} at {TOWN} due to war between your realms. {TOWNOWNER} has gifted you this property.")
+                                    new TextObject("{=d58JLl12}The {WORKSHOP} has been seized from the {OWNER} at {TOWN} due to war between your realms. {TOWNOWNER} has gifted you this property.")
                                     .SetTextVariable("WORKSHOP", wk.Name)
                                     .SetTextVariable("OWNER", oldOwner.Name)
                                     .SetTextVariable("TOWN", town.Name)
@@ -208,7 +208,7 @@ namespace BannerKings.Behaviours.Workshops
                                     if (result == Hero.MainHero)
                                     {
                                         InformationManager.ShowInquiry(new InquiryData(new TextObject("{=jvVup6nx}Workshop Grant").ToString(),
-                                            new TextObject("{=eQbfxno4}The {WORKSHOP} has been seized from the {OWNER} at {TOWN} due to war between your realms. {TOWNOWNER} has gifted you this property.")
+                                            new TextObject("{=d58JLl12}The {WORKSHOP} has been seized from the {OWNER} at {TOWN} due to war between your realms. {TOWNOWNER} has gifted you this property.")
                                             .SetTextVariable("WORKSHOP", wk.Name)
                                             .SetTextVariable("OWNER", oldOwner.Name)
                                             .SetTextVariable("TOWN", town.Name)

@@ -75,7 +75,7 @@ namespace BannerKings.Managers.Populations.Villages
                 });
 
             Manor.Initialize(new TextObject("{=UHyznyEy}Manor"),
-                new TextObject("{=UHyznyEy}Manor house, the lord's home and center of the village. A manor house allows the housing of a small retinue in the village (15, 30, 45 men). Increases influence from nobles (15%, 30%, 50%)."),
+                new TextObject("{=CAPxKfpx}Manor house, the lord's home and center of the village. A manor house allows the housing of a small retinue in the village (15, 30, 45 men). Increases influence from nobles (15%, 30%, 50%)."),
                 new[]
                 {
                     4000,

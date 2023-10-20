@@ -264,7 +264,7 @@ namespace BannerKings.Managers.Institutions.Religions
                 200);
 
             DarusosianSecondary1 = new Divinity("darusosian-secondary-1");
-            DarusosianSecondary1.Initialize(new TextObject("{=SW29YLBZ}Imperial Cult"),
+            DarusosianSecondary1.Initialize(new TextObject("{=8wMfGyq0}Imperial Cult"),
                 new TextObject("{=XyVMjNNp}Though there has long been an imperial cult in the Calradic Empire, it grew in popularity in the generations after Darusos’s murder. Emperors were deified, made to stand alongside their own gods as peers. During the waning generations of the united empire many would proclaim themselves god-emperor, or other divinely appointed titles; the rite of the divus can only transubstantiate an emperor upon their death. Thus the last truly ordained imperial cult is that which preaches the words of Arenicos Divus; though upstart branches have begun for an inevitable worship of Ira Divus."),
                 new TextObject("{=LZt31UBY}Bonus influence\nEvery season, gain renown for each title part of the Southern Empire"),
                 new TextObject("{=J4D4X2XJ}Cult"));

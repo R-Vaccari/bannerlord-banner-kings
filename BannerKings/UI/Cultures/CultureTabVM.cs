@@ -148,7 +148,7 @@ namespace BannerKings.UI.Cultures
                     language.Description.ToString()));
             }
 
-            CultureInfo.Add(new InformationElement(new TextObject("{=J6oPqQmt}Settlements:").ToString(),
+            CultureInfo.Add(new InformationElement(new TextObject("{=OC34ZRMB}Settlements:").ToString(),
                 settlements.ToString(),
                 new TextObject("{=leRF60G0}The number of settlements that predominantly follow this culture, across all realms.").ToString()));
         }

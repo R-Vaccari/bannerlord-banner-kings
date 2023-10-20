@@ -156,7 +156,7 @@ namespace BannerKings.UI.Cultures
                     language.Name.ToString(), new BasicTooltipViewModel(() => language.Description.ToString())));
             }
 
-            Information.Add(new StringPairItemVM(new TextObject("{=J6oPqQmt}Settlements:").ToString(),
+            Information.Add(new StringPairItemVM(new TextObject("{=OC34ZRMB}Settlements:").ToString(),
                 settlements.ToString()));
 
             foreach (var trait in culture.GetCulturalFeats())

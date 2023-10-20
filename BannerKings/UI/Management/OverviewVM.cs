@@ -52,7 +52,7 @@ namespace BannerKings.UI.Management
                 ExplainedNumber demand = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, popClass.type, true);
                 PopList.Add(new PopulationInfoVM(popName.Name.ToString(),
                         popClass.count,
-                        new TextObject("{=!}{DESCRIPTION}\n\nDemand for this class: {DEMAND}\nExplanations:\n{EXPLANATIONS}")
+                        new TextObject("{=F7HqcL2P}{DESCRIPTION}\n\nDemand for this class: {DEMAND}\nExplanations:\n{EXPLANATIONS}")
                         .SetTextVariable("DEMAND", FormatValue(demand.ResultNumber))
                         .SetTextVariable("EXPLANATIONS", demand.GetExplanations())
                         .SetTextVariable("DESCRIPTION", popName.Description).ToString()));
@@ -87,7 +87,7 @@ namespace BannerKings.UI.Management
                     new TextObject("{=Uw3xBMKd}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject(
-                                "{=xMsWoSnL}Autonomy is inversely correlated to stability, therefore less stability equals more autonomy. Higher autonomy will reduce tax revenue while increasing loyalty. Matching culture with the settlement and setting a local notable as governor increases autonomy. Higher autonomy will also slow down assimilation"))
+                                "{=gu0cNm6L}Autonomy is inversely correlated to stability, therefore less stability equals more autonomy. Higher autonomy will reduce tax revenue while increasing loyalty. Matching culture with the settlement and setting a local notable as governor increases autonomy. Higher autonomy will also slow down assimilation"))
                         .SetTextVariable("EXPLANATIONS", autonomy.GetExplanations())
                         .SetTextVariable("TARGET", FormatValue(autonomy.ResultNumber))
                         .ToString()));
@@ -95,7 +95,7 @@ namespace BannerKings.UI.Management
                 var support = data.NotableSupport;
                 StatsInfo.Add(new InformationElement(new TextObject("{=Ccr7mQMZ}Notable Support:").ToString(), 
                     $"{support.ResultNumber:P}",
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject(
                                 "{=mVTYGkNP}Represents how much the local elite supports you. Support of each notable is weighted on their power, meaning that not having the support of a notable that holds most power will result in a small support percentage. Support is gained through better relations with the notables."))
@@ -107,7 +107,7 @@ namespace BannerKings.UI.Management
                 var hearts = BannerKingsConfig.Instance.ProsperityModel.CalculateHearthChange(settlement.Village, true);
                 StatsInfo.Add(new InformationElement(new TextObject("{=eJECyLLw}Hearth Growth:").ToString(),
                     FormatFloatGain(hearts.ResultNumber),
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject("{=wcHDxPQJ}The number of homes in this village. Hearths are used to calculated the population capacity. Each hearth on average houses 4 people. Increasing hearths allows for population to keep growing and thus making the village more productive and relevant."))
                         .SetTextVariable("EXPLANATIONS", hearts.GetExplanations())
@@ -121,7 +121,7 @@ namespace BannerKings.UI.Management
             var cap = BannerKingsConfig.Instance.GrowthModel.CalculateSettlementCap(settlement, data, true);
             StatsInfo.Add(new InformationElement(new TextObject("{=OfNn72n9}Population Cap:").ToString(),
                 ((int)cap.ResultNumber).ToString(),
-                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=TSwN7iFc}The maximum number of people this settlement is capable of having."))
                     .SetTextVariable("EXPLANATIONS", cap.GetExplanations())
@@ -130,25 +130,25 @@ namespace BannerKings.UI.Management
             var growth = BannerKingsConfig.Instance.GrowthModel.CalculateEffect(settlement, data, true);
             StatsInfo.Add(new InformationElement(new TextObject("{=HcFqTg6k}Population Growth:").ToString(),
                 FormatFloatGain((int)growth.ResultNumber).ToString(),
-                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                 new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=hANYHGHR}The population growth of your settlement on a daily basis, distributed among the classes."))
                     .SetTextVariable("EXPLANATIONS", growth.GetExplanations())
                     .ToString()));
 
             var research = BannerKingsConfig.Instance.InnovationsModel.CalculateSettlementResearch(settlement, true);
-            StatsInfo.Add(new InformationElement(new TextObject("{=!}Research:").ToString(),
+            StatsInfo.Add(new InformationElement(new TextObject("{=1tIi7hc1}Research:").ToString(),
                 FormatFloatGain(research.ResultNumber),
-                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
-                        new TextObject("{=!}The amount of research this settlement produces towards innovations. This research is used for the settlement's culture innovations. Assimilating a fief will make it research towards your culture instead of the previous."))
+                        new TextObject("{=WVm0B9om}The amount of research this settlement produces towards innovations. This research is used for the settlement's culture innovations. Assimilating a fief will make it research towards your culture instead of the previous."))
                     .SetTextVariable("EXPLANATIONS", research.GetExplanations())
                     .ToString()));
 
             var influence = BannerKingsConfig.Instance.InfluenceModel.CalculateSettlementInfluence(settlement, data, true);
             StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
                 FormatFloatGain(influence.ResultNumber),
-                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=8mSDgwhX}The amount of influence this settlement provides in your realm."))
                     .SetTextVariable("EXPLANATIONS", influence.GetExplanations())
@@ -180,7 +180,7 @@ namespace BannerKings.UI.Management
                 var presence = BannerKingsConfig.Instance.CultureModel.CalculateCultureWeight(settlement, heroCulture);
                 CultureInfo.Add(new InformationElement(new TextObject("{=R8mbRNcL}Cultural Presence:").ToString(),
                     FormatValue(presence.ResultNumber / totalCultureWeight),
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=36DgL50p}How present your culture is. Presence is affected by notables and governor following your culture, as well as other factors. This is the percentage that you culture's assimilation will gravitate towards in the settlement."))
                     .SetTextVariable("EXPLANATIONS", presence.GetExplanations())
@@ -190,7 +190,7 @@ namespace BannerKings.UI.Management
                 var acceptanceGain = heroCulture.AcceptanceGain;
                 CultureInfo.Add(new InformationElement(new TextObject("{=qKsaiPd0}Acceptance Gain:").ToString(),
                     FormatFloatGainPercentage(acceptanceGain.ResultNumber),
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=ADimYYhg}How much acceptance your culture gains in this settlement, per day."))
                     .SetTextVariable("EXPLANATIONS", acceptanceGain.GetExplanations())

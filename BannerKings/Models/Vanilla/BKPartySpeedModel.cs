@@ -86,7 +86,7 @@ namespace BannerKings.Models.Vanilla
 
             if (BannerKingsSettings.Instance.SlowerParties > 0f)
             {
-                baseResult.AddFactor(-BannerKingsSettings.Instance.SlowerParties, new TaleWorlds.Localization.TextObject("{=OohdenyR}Slower Parties setting"));
+                baseResult.AddFactor(-BannerKingsSettings.Instance.SlowerParties, new TaleWorlds.Localization.TextObject("{=8VkQjQIr}Slower Parties setting"));
             }
 
             return baseResult;

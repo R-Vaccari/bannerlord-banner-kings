@@ -176,24 +176,24 @@ namespace BannerKings.UI.Religion
 
             //Aspects.Add(new ReligionElementVM(currentReligion.Faith.GetMainDivinitiesDescription(),
             //    currentReligion.Faith.GetMainDivinity().Name, currentReligion.Faith.GetMainDivinity().Description));
-            Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith Group"), currentReligion.Faith.FaithGroup.Name,
+            Aspects.Add(new ReligionElementVM(new TextObject("{=0QL7Y1TF}Faith Group"), currentReligion.Faith.FaithGroup.Name,
                 currentReligion.Faith.FaithGroup.Description));
             //Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith"), UIHelper.GetFaithTypeName(currentReligion.Faith),
             //    UIHelper.GetFaithTypeDescription(currentReligion.Faith)));
             Aspects.Add(new ReligionElementVM(new TextObject("{=EjTxnGJp}Culture"), currentReligion.MainCulture.Name,
                 new TextObject("{=6NYxLhjH}The main culture associated with this faith.")));
 
-            Aspects.Add(new ReligionElementVM(new TextObject("{=!}Faith Seat"),
-                currentReligion.Faith.FaithSeat != null ? currentReligion.Faith.FaithSeat.Name : new TextObject("{=!}Nonexistent"),
-                new TextObject("{=!}The Faith Seat is the most religiously important fief within the faith. When the Seat is not held by a member of the faith, it loses a great deal of fervor. The holder of the Seat is given extra influence limit and piety according to the stability of the Seat, and thus is encouraged to give it good management.")));
+            Aspects.Add(new ReligionElementVM(new TextObject("{=pnLgQOPf}Faith Seat"),
+                currentReligion.Faith.FaithSeat != null ? currentReligion.Faith.FaithSeat.Name : new TextObject("{=UP11qt39}Nonexistent"),
+                new TextObject("{=gWlw1HUm}The Faith Seat is the most religiously important fief within the faith. When the Seat is not held by a member of the faith, it loses a great deal of fervor. The holder of the Seat is given extra influence limit and piety according to the stability of the Seat, and thus is encouraged to give it good management.")));
 
             if (sites.Count > 0)
             {
-                Aspects.Add(new ReligionElementVM(new TextObject("{=!}Holy Sites"),
+                Aspects.Add(new ReligionElementVM(new TextObject("{=RYSdumqG}Holy Sites"),
                     new TextObject("{=!}" + sites.Count),
-                    new TextObject("{=!}Holy sites are the fiefs directly connected to the religion's divinities or cults. Holding such sites is important for religious Fervor. In addition, being blessed by a Divinity in its holy site adds double the blessing duration.{newline}{newline}Sites:{SITES}")
+                    new TextObject("{=O3ZTu7Bd}Holy sites are the fiefs directly connected to the religion's divinities or cults. Holding such sites is important for religious Fervor. In addition, being blessed by a Divinity in its holy site adds double the blessing duration.{newline}{newline}Sites:{SITES}")
                     .SetTextVariable("SITES", sites.Aggregate("", (current, site) => current + Environment.NewLine + 
-                        new TextObject("{=!}{HOLY_SITE}: {DIVINITY}")
+                        new TextObject("{=UlCcg93c}{HOLY_SITE}: {DIVINITY}")
                         .SetTextVariable("HOLY_SITE", site.Key.Name)
                         .SetTextVariable("DIVINITY", site.Value.Name)
                         .ToString()))
@@ -201,11 +201,11 @@ namespace BannerKings.UI.Religion
             }
 
             var fervor = BannerKingsConfig.Instance.ReligionModel.CalculateFervor(currentReligion);
-            Aspects.Add(new ReligionElementVM(new TextObject("{=!}Fervor"),
+            Aspects.Add(new ReligionElementVM(new TextObject("{=eojkbJf2}Fervor"),
                 new TextObject("{=!}" + FormatValue(fervor.ResultNumber)),
-                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=CS_explain}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
-                        new TextObject("{=!}The faith's fervor. A faith's fervor makes its populations and heroes harder to convert. In settlements, fervor grealy contributes to the faith's presence. Heroes instead are less likely and/or require more resources to convert. Fervor is based on doctrines, settlements and clans that follow the faith. Additionaly, holding the Faith Seat and the faith's Holy Sites are important factors to fervor."))
+                        new TextObject("{=pv30MlNb}The faith's fervor. A faith's fervor makes its populations and heroes harder to convert. In settlements, fervor grealy contributes to the faith's presence. Heroes instead are less likely and/or require more resources to convert. Fervor is based on doctrines, settlements and clans that follow the faith. Additionaly, holding the Faith Seat and the faith's Holy Sites are important factors to fervor."))
                     .SetTextVariable("EXPLANATIONS", fervor.GetExplanations())
                     ));
 
@@ -287,7 +287,7 @@ namespace BannerKings.UI.Religion
 
         [DataSourceProperty] public string ClergymenText => new TextObject("{=GbMZ6V8B}Clergymen").ToString();
         [DataSourceProperty] public string FaithfulText => new TextObject("{=mnpTkVYf}Faithful").ToString();
-        [DataSourceProperty] public string GroupText => new TextObject("{=OKw2P9m1}Faith Group").ToString();
+        [DataSourceProperty] public string GroupText => new TextObject("{=0QL7Y1TF}Faith Group").ToString();
         [DataSourceProperty] public string VirtuesText => new TextObject("{=p6itQbf8}Virtues").ToString();
         [DataSourceProperty] public string DoctrinesText => new TextObject("{=BKLacKdC}Doctrines").ToString();
         [DataSourceProperty] public string AspectsText => new TextObject("{=1sKJS1JR}Aspects").ToString();

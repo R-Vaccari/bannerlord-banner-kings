@@ -352,7 +352,7 @@ namespace BannerKings.UI
                         }
 
                         MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                            new TextObject("{=dugq4xHo}Grant {TITLE}").SetTextVariable("TITLE", titleAction.Title.FullName).ToString(),
+                            new TextObject("{=BoGlOBvk}Grant {TITLE}").SetTextVariable("TITLE", titleAction.Title.FullName).ToString(),
                             new TextObject("{=hzwZeQyE}Select a lord who you would like to grant this title to.").ToString(),
                             options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
                             delegate(List<InquiryElement> x)
@@ -457,7 +457,7 @@ namespace BannerKings.UI
             if (title.OngoingClaims.Count + title.Claims.Count > 0)
             {
                 TooltipAddEmptyLine(list);
-                list.Add(new TooltipProperty(new TextObject("{=6hY9WysN}Claimants").ToString(), " ", 0));
+                list.Add(new TooltipProperty(new TextObject("{=IXAQe6vu}Claimants").ToString(), " ", 0));
                 TooltipAddSeperator(list);
 
                 foreach (var pair in title.OngoingClaims)
@@ -532,7 +532,7 @@ namespace BannerKings.UI
             list.Add(new TooltipProperty(new TextObject("{=SaWHeTiw}Supplies").ToString(), " ", 0));
             TooltipAddSeperator(list);
             list.Add(new TooltipProperty(string.Empty,
-              new TextObject("{=SaWHeTiw}Supplies such as alcohol and wood for firewood are required to preserve your retinue in good mental condition.").ToString(),
+              new TextObject("{=JBsbYMEh}Supplies such as alcohol and wood for firewood are required to preserve your retinue in good mental condition.").ToString(),
               0,
               false,
               TooltipProperty.TooltipPropertyFlags.MultiLine));
@@ -558,7 +558,7 @@ namespace BannerKings.UI
             list.Add(new TooltipProperty(new TextObject("{=qBXbGjp1}Daily Supplies").ToString(), " ", 0));
             TooltipAddSeperator(list);
             list.Add(new TooltipProperty(string.Empty,
-              new TextObject("{=SaWHeTiw}Supplies are required to preserve your retinue in maximum efficiency. Your quartermaster is able to handle supplies if you instruct them directly.").ToString(),
+              new TextObject("{=KdbVyj9p}Supplies are required to preserve your retinue in maximum efficiency. Your quartermaster is able to handle supplies if you instruct them directly.").ToString(),
               0,
               false,
               TooltipProperty.TooltipPropertyFlags.MultiLine));
@@ -691,7 +691,7 @@ namespace BannerKings.UI
             list.Add(new TooltipProperty(new TextObject("{=RMUyXy4e}Competence").ToString(), FormatValue(competence * 100f), 0));
 
             TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=J6oPqQmt}Settlement Effects").ToString(), " ", 0));
+            list.Add(new TooltipProperty(new TextObject("{=o8FgGUk8}Settlement Effects").ToString(), " ", 0));
 
             TooltipAddEmptyLine(list);
             return list;

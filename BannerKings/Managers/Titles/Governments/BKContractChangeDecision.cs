@@ -176,7 +176,7 @@ namespace BannerKings.Managers.Titles.Governments
                 {
                     return new TextObject("{=pWyxaauF}We support this proposal", null);
                 }
-                return new TextObject("{=BktSNgY4}We oppose this proposal", null);
+                return new TextObject("{=zfUqKqW2}We oppose this proposal", null);
             }
 
             public override string GetDecisionLink() => null;

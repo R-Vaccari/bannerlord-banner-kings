@@ -30,7 +30,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var cap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(GetFulfiller().Clan).ResultNumber;
             companionTypes = new List<CompanionType>
             {
-                new CompanionType(new TextObject("{=!}Commander"),
+                new CompanionType(new TextObject("{=ULoywhMz}Commander"),
                 new TextObject("{=61scYHtR}A guest adept as a commander. An expensive service given the constant need for quality leadership. A commander will likely have at least 60 proficiency in leadership."),
                 MathF.Max(cap * 0.14f, 60f),
                 new List<TraitObject>()
@@ -93,7 +93,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     DefaultTraits.Trader
                 }),
 
-                new CompanionType(new TextObject("{=!}Steward"),
+                new CompanionType(new TextObject("{=hI1SLFAi}Steward"),
                 new TextObject("{=gfmewont}A guest adept in stewardship. Stewards make for good governors to handle your demesne, as well as capable quartermasters. A rare gift that comes for a premium price. A steward will likely have at least 60 proficiency in stewardship."),
                 MathF.Max(cap * 0.11f, 45f),
                 new List<TraitObject>()
@@ -143,7 +143,7 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=FVA72PZG}Guests (1/2)").ToString(),
+                new TextObject("{=bSOs8OkZ}Guests (1/2)").ToString(),
                 new TextObject("{=zfQkfCPp}Determine the cultural origin of the guests you would entertain. Beware foreigners will often be more expensive.").ToString(),
                 cultureOptions,
                 true,
@@ -182,7 +182,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     }
 
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                       new TextObject("{=FVA72PZG}Guests (2/2)").ToString(),
+                       new TextObject("{=rKRi05n5}Guests (2/2)").ToString(),
                        new TextObject("{=TmBXiTjD}Determine what kind of guest your court will receive.").ToString(),
                        companionOptions,
                        true,

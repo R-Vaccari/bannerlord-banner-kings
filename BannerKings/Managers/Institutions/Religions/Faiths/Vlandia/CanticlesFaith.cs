@@ -247,7 +247,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetCultsDescription()
         {
-            return new TextObject("{=neVhyybi}Sagas");
+            return new TextObject("{=74fN7X2z}Sagas");
         }
 
         public override (bool, TextObject) GetInductionAllowed(Hero hero, int rank)
@@ -274,7 +274,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetBlessingConfirmQuestion()
         {
-            return new TextObject("{=2rby15CO}Are you sure? If so, you shall take these teachings deep into your heart. Let your soul sing for the anguished fallen, and hope one day you may join them in the Canticles!");
+            return new TextObject("{=YSiNsPgs}Are you sure? If so, you shall take these teachings deep into your heart. Let your soul sing for the anguished fallen, and hope one day you may join them in the Canticles!");
         }
 
         public override TextObject GetBlessingQuickInformation()

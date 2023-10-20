@@ -337,7 +337,7 @@ namespace BannerKings.Models.Vanilla
             var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
             if (government == DefaultGovernments.Instance.Tribal)
             {
-                explainedNumber.AddFactor(0.2f, new TextObject("{=PSrEtF5L}Government"));
+                explainedNumber.AddFactor(0.2f, new TextObject("{=CS_government}Government"));
             }
 
             var lordshipMilitaryAdministration = BKPerks.Instance.LordshipMilitaryAdministration;

@@ -42,7 +42,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override bool MeetsCondition(Hero hero, out TextObject reason)
         {
-            reason = new TextObject("{=oo3xtFfT}This rite is available to be performed.");
+            reason = new TextObject("{=CS_this_rite}This rite is available to be performed.");
             bool hasFief = hero.Clan != null && hero.IsClanLeader() &&
                 hero.Clan.Fiefs.Count > 0;
 

@@ -84,7 +84,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.FianRanger, 
                     BKPerks.Instance.FianFennid
                 },
-                new TextObject("{=tRp08jyH}Battanian settlements have +{EFFECT1} militia\nReduced damage by {EFFECT2}% when mounted"),
+                new TextObject("{=j3cwgl88}Battanian settlements have +{EFFECT1} militia\nReduced damage by {EFFECT2}% when mounted"),
                 1.5f, 
                 25f,
                 null,

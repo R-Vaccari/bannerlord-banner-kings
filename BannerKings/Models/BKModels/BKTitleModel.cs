@@ -223,7 +223,7 @@ namespace BannerKings.Models.BKModels
             }
 
             foundAction.Possible = true;
-            foundAction.Reason = new TextObject("{=7x3HJ29f}Kingdom can be founded.");
+            foundAction.Reason = new TextObject("{=RQsLkun1}Kingdom can be founded.");
             ApplyDiscounts(foundAction);
             return foundAction;
         }

@@ -112,7 +112,7 @@ namespace BannerKings.Behaviours
                 TickWaitGuard, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
                 GameOverlays.MenuOverlayType.SettlementWithBoth, 8f);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_wait_guard", "wait_leave", "{=1kJ3hNWg}Leave",
+            campaignGameStarter.AddGameMenuOption("bannerkings_wait_guard", "wait_leave", "{=CS_leave}Leave",
                 delegate (MenuCallbackArgs args)
                 {
                     args.optionLeaveType = GameMenuOption.LeaveType.Leave;
@@ -133,7 +133,7 @@ namespace BannerKings.Behaviours
                 TickWaitTrainGuard, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
                 GameOverlays.MenuOverlayType.SettlementWithBoth, 8f);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_wait_train_guards", "wait_leave", "{=1kJ3hNWg}Leave",
+            campaignGameStarter.AddGameMenuOption("bannerkings_wait_train_guards", "wait_leave", "{=CS_leave}Leave",
                 delegate (MenuCallbackArgs args)
                 {
                     args.optionLeaveType = GameMenuOption.LeaveType.Leave;
@@ -155,7 +155,7 @@ namespace BannerKings.Behaviours
                 TickWaitHunt, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
                 GameOverlays.MenuOverlayType.SettlementWithBoth, 8f);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_wait_hunt", "wait_leave", "{=1kJ3hNWg}Leave",
+            campaignGameStarter.AddGameMenuOption("bannerkings_wait_hunt", "wait_leave", "{=CS_leave}Leave",
                 delegate (MenuCallbackArgs args)
                 {
                     args.optionLeaveType = GameMenuOption.LeaveType.Leave;
@@ -176,7 +176,7 @@ namespace BannerKings.Behaviours
                 TickWaitMeetNobility, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
                 GameOverlays.MenuOverlayType.SettlementWithBoth, 4f);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_wait_meet_nobility", "wait_leave", "{=1kJ3hNWg}Leave",
+            campaignGameStarter.AddGameMenuOption("bannerkings_wait_meet_nobility", "wait_leave", "{=CS_leave}Leave",
                 delegate (MenuCallbackArgs args)
                 {
                     args.optionLeaveType = GameMenuOption.LeaveType.Leave;
@@ -205,7 +205,7 @@ namespace BannerKings.Behaviours
                TickWaitStudy, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
                GameOverlays.MenuOverlayType.SettlementWithBoth, 4f);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_wait_study", "wait_leave", "{=1kJ3hNWg}Leave",
+            campaignGameStarter.AddGameMenuOption("bannerkings_wait_study", "wait_leave", "{=CS_leave}Leave",
                 delegate (MenuCallbackArgs args)
                 {
                     args.optionLeaveType = GameMenuOption.LeaveType.Leave;
@@ -254,7 +254,7 @@ namespace BannerKings.Behaviours
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_hunt", "{=PQSzdrkg}Go hunting",
                 MenuHuntingActionCondition, delegate { GameMenu.SwitchToMenu("bannerkings_wait_hunt"); });
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "bannerkings_leave", "{=1kJ3hNWg}Leave",
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "bannerkings_leave", "{=CS_leave}Leave",
                 delegate (MenuCallbackArgs x)
                 {
                     x.optionLeaveType = GameMenuOption.LeaveType.Leave;
@@ -308,7 +308,7 @@ namespace BannerKings.Behaviours
                 },
                 delegate { GameMenu.SwitchToMenu("bannerkings_actions"); });
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "bannerkings_leave", "{=1kJ3hNWg}Leave",
+            campaignGameStarter.AddGameMenuOption("bannerkings", "bannerkings_leave", "{=CS_leave}Leave",
                 delegate (MenuCallbackArgs x)
                 {
                     x.optionLeaveType = GameMenuOption.LeaveType.Leave;

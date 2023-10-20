@@ -424,7 +424,7 @@ namespace BannerKings.Managers.Skills
             CivilEngineer.Initialize("{=M9R9NkrP}Civil Engineer", null, 
                 80,
                 null,
-                "{=J6oPqQmt}Settlements have an additional catapult during siege start.",
+                "{=NWk00DlA}Settlements have an additional catapult during siege start.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=8AmeeiL0}Workforce yields 20% extra construction.",
@@ -563,7 +563,7 @@ namespace BannerKings.Managers.Skills
             AugustDeFacto.Initialize("{=Yy1wcNon}De Facto", null,
                 160, 
                 null,
-                "{=J6oPqQmt}Settlement autonomy reduced by flat 3%.",
+                "{=6FE2qbub}Settlement autonomy reduced by flat 3%.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=o4Ptq4SC}Randomly receive positive relations with a councillour.",
@@ -684,7 +684,7 @@ namespace BannerKings.Managers.Skills
                 "{=zOzu5By2}Crafting items costs 10% less energy.",
                 SkillEffect.PerkRole.Personal, 10f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=etbv7s6N}Smithy hourly cost is 15% cheaper.",
+                "{=1JsX0gvW}Smithy hourly cost is 15% cheaper.",
                 SkillEffect.PerkRole.Personal, 15f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
@@ -848,7 +848,7 @@ namespace BannerKings.Managers.Skills
                 "{=qDJmqZrJ}Infantry troops take 4% less melee damage while in shield wall formation.",
                 SkillEffect.PerkRole.PartyLeader, 3f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=PawhUHjG}Raiding villages is 15% faster",
+                "{=PawhUHjG}Raiding villages is 15% faster.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
@@ -960,10 +960,10 @@ namespace BannerKings.Managers.Skills
             TheologyPreacher.Initialize("{=9TwjtYhb}Preacher", BKSkills.Instance.Theology, 
                 GetTierCost(4),
                 TheologyRitesOfPassage,
-                "{=J6oPqQmt}Settlement religious tensions reduced by X%.",
+                "{=uljVvlG6}Settlement religious tensions reduced by X%.",
                 SkillEffect.PerkRole.Personal, 0.2f,
                 SkillEffect.EffectIncrementType.Add,
-                "{=J6oPqQmt}Settlement conversion speed increased by 5%.",
+                "{=pRKW0IUI}Settlement conversion speed increased by 5%.",
                 SkillEffect.PerkRole.Ruler, 1f,
                 SkillEffect.EffectIncrementType.Add);
 
@@ -1060,10 +1060,10 @@ namespace BannerKings.Managers.Skills
 
             LordshipClaimant = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipClaimant"));
             LordshipPatron = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipPatron"));
-            LordshipClaimant.Initialize("{=6hY9WysN}Claimant", BKSkills.Instance.Lordship, 
+            LordshipClaimant.Initialize("{=boItgiwZ}Claimant", BKSkills.Instance.Lordship, 
                 GetTierCost(4), 
                 LordshipPatron,
-                "{=6hY9WysN}Claims are built 30% faster",
+                "{=l0eMzlmP}Claims are built 30% faster",
                 SkillEffect.PerkRole.Ruler, 0.3f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=pQ6oCYEb}Hostile actions (claim, usurp & revoke) are 5% cheaper",

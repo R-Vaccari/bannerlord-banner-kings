@@ -173,12 +173,12 @@ namespace BannerKings.UI.Extensions
             options.Add(new InquiryElement(
                 new DecisionCategoryOption(
                 new TextObject("{=AaS8WTzj}Personal"),
-                new TextObject("{=AaS8WTzj}Personal decisions affect your character and sometimes your close family."),
+                new TextObject("{=BE97ZxOP}Personal decisions affect your character and sometimes your close family."),
                 personalDecisions),
             new TextObject("{=AaS8WTzj}Personal").ToString(),
             null,
             personalDecisions.Count > 0,
-            new TextObject("{=AaS8WTzj}Personal decisions affect your character and sometimes your close family.").ToString()));
+            new TextObject("{=BE97ZxOP}Personal decisions affect your character and sometimes your close family.").ToString()));
 
             options.Add(new InquiryElement(
             new DecisionCategoryOption(
@@ -193,22 +193,22 @@ namespace BannerKings.UI.Extensions
             /*options.Add(new InquiryElement(
             new DecisionCategoryOption(
                 new TextObject("{=8uURr54W}Religious"),
-                new TextObject("{=8uURr54W}Religious decisions are ways for you interact with the world through your faith."),
+                new TextObject("{=bhZ4ToMQ}Religious decisions are ways for you interact with the world through your faith."),
                 religiousDecisions),
             new TextObject("{=8uURr54W}Religious").ToString(),
             null,
             religiousDecisions.Count > 0,
-            new TextObject("{=8uURr54W}Religious decisions are ways for you interact with the world through your faith.").ToString()));*/
+            new TextObject("{=bhZ4ToMQ}Religious decisions are ways for you interact with the world through your faith.").ToString()));*/
 
             options.Add(new InquiryElement(
             new DecisionCategoryOption(
                 new TextObject("{=8MLr4eSD}Unique"),
-                new TextObject("{=8MLr4eSD}Unique decisions are difficult and special decisions that often can only be taken once, such as reviving a historical empire."),
+                new TextObject("{=pmNjc2sP}Unique decisions are difficult and special decisions that often can only be taken once, such as reviving a historical empire."),
                 uniqueDecisions),
             new TextObject("{=8MLr4eSD}Unique").ToString(),
             null,
             uniqueDecisions.Count > 0,
-            new TextObject("{=8MLr4eSD}Unique decisions are special decisions that often can only be taken once, such as reviving a historical empire.").ToString()));
+            new TextObject("{=2bwo6NGn}Unique decisions are special decisions that often can only be taken once, such as reviving a historical empire.").ToString()));
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                             new TextObject("{=GMNhGSUb}Decisions").ToString(),

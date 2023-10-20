@@ -188,7 +188,7 @@ namespace BannerKings.Managers.Court.Grace
                 CourtExpense.ExpenseType.Supplies);
 
             MinimalExtravagance.Initialize(new TextObject("{=Wojb1tFw}Shoddy Court"),
-               new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+               new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests. Increases guest capacity by 1."),
                -50f,
                0.02f,
                new Dictionary<ItemCategory, int>()
@@ -202,7 +202,7 @@ namespace BannerKings.Managers.Court.Grace
                CourtExpense.ExpenseType.Extravagance);
 
             SufficientExtravagance.Initialize(new TextObject("{=sMGjTVpS}Modest Court"),
-                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests. Increases guest capacity by 1."),
                 50f,
                 0.06f,
                 new Dictionary<ItemCategory, int>()
@@ -217,7 +217,7 @@ namespace BannerKings.Managers.Court.Grace
                 CourtExpense.ExpenseType.Extravagance);
 
             GoodExtravagance.Initialize(new TextObject("{=hv34pxAv}Noble Court"),
-                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests. Increases guest capacity by 1."),
                 150f,
                 0.1f,
                 new Dictionary<ItemCategory, int>()
@@ -233,7 +233,7 @@ namespace BannerKings.Managers.Court.Grace
                 CourtExpense.ExpenseType.Extravagance);
 
             ExcellentExtravagance.Initialize(new TextObject("{=FU9MdDPz}Regal Court"),
-                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests. Increases guest capacity by 1."),
                 250f,
                 0.14f,
                 new Dictionary<ItemCategory, int>()
@@ -286,7 +286,7 @@ namespace BannerKings.Managers.Court.Grace
                 CourtExpense.ExpenseType.Servants);
 
             PlentifulServants.Initialize(new TextObject("{=Y8OMJJ8P}Plentiful Servants"),
-                new TextObject("{=VCbuZK6B}Hire a small amount of servants to operate mundane tasks such as cleaning or cooking within the court. Increases feast satisfaction and decreases defense against schemes the most."),
+                new TextObject("{=2tr8Q4jj}Hire a small amount of servants to operate mundane tasks such as cleaning or cooking within the court. Increases feast satisfaction and decreases defense against schemes the most."),
                 120f,
                 0.1f,
                 new Dictionary<ItemCategory, int>()
@@ -298,7 +298,7 @@ namespace BannerKings.Managers.Court.Grace
                 CourtExpense.ExpenseType.Servants);
 
             MinimalSecurity.Initialize(new TextObject("{=pxxHAa57}Minimal Security"),
-                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests. Increases guest capacity by 1."),
                 -25f,
                 0f,
                 new Dictionary<ItemCategory, int>()
@@ -309,7 +309,7 @@ namespace BannerKings.Managers.Court.Grace
                 CourtExpense.ExpenseType.Security);
 
             SufficientSecurity.Initialize(new TextObject("{=6oCNmffJ}Sufficient Security"),
-                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests. Increases guest capacity by 1."),
                 10f,
                 0.02f,
                 new Dictionary<ItemCategory, int>()
@@ -320,7 +320,7 @@ namespace BannerKings.Managers.Court.Grace
                 CourtExpense.ExpenseType.Security);
 
             GoodSecurity.Initialize(new TextObject("{=sRWDgNgy}Good Security"),
-                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests. Increases guest capacity by 1."),
                 40f,
                 0.04f,
                 new Dictionary<ItemCategory, int>()
@@ -332,7 +332,7 @@ namespace BannerKings.Managers.Court.Grace
                 CourtExpense.ExpenseType.Security);
 
             ExcellentSecurity.Initialize(new TextObject("{=U41twbPF}Excellent Security"),
-                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests.Increases guest capacity by 1."),
+                new TextObject("{=pZyTEB62}Provide bare minimum accomodations for guests. Increases guest capacity by 1."),
                 80f,
                 0.06f,
                 new Dictionary<ItemCategory, int>()

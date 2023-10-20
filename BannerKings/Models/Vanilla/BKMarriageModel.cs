@@ -21,7 +21,7 @@ namespace BannerKings.Models.Vanilla
 
             var proposerScore = GetSpouseScore(proposer).ResultNumber * 1.1f;
             var proposedScore = GetSpouseScore(secondHero).ResultNumber;
-            result.Add(proposerScore - proposedScore, new TextObject("{=NeydSXjc}Score differences"));
+            result.Add(proposerScore - proposedScore, new TextObject("{=YK193249}Score differences"));
 
             ExceptionUtils.TryCatch(() =>
             {

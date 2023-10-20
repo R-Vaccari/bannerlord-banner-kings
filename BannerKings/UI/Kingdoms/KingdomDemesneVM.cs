@@ -291,10 +291,10 @@ namespace BannerKings.UI.Kingdoms
         }
 
         [DataSourceProperty]
-        public string GovernmentText => new TextObject("{=fvT1V5tZ}Government").ToString();
+        public string GovernmentText => new TextObject("{=CS_government}Government").ToString();
 
         [DataSourceProperty]
-        public string InheritanceText => new TextObject("{=LvRBhq9B}Inheritance").ToString();
+        public string InheritanceText => new TextObject("{=J1fyUpgG}Inheritance").ToString();
 
         [DataSourceProperty]
         public string GenderLawText => new TextObject("{=AX8ilmpj}Gender Law").ToString();

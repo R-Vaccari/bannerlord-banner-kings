@@ -157,7 +157,7 @@ namespace BannerKings.UI.Extensions.Encyclopedia
                 var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
                 if (rel != null)
                 {
-                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=OKw2P9m1}Faith:").ToString(),
+                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=vKAmzKYc}Faith:").ToString(),
                         rel.Faith.GetFaithName().ToString()));
                 }
 

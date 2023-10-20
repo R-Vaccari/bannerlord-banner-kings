@@ -381,7 +381,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetCultsDescription()
         {
-            return new TextObject("{=MBYo3Pjx}Schools");
+            return new TextObject("{=KicpKTED}Schools");
         }
 
         public override (bool, TextObject) GetInductionAllowed(Hero hero, int rank)
@@ -494,7 +494,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetBlessingQuestion()
         {
-            return new TextObject("{=MBYo3Pjx}Schools");
+            return new TextObject("{=KicpKTED}Schools");
         }
 
         public override TextObject GetBlessingConfirmQuestion()

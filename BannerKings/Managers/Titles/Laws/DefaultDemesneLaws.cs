@@ -229,7 +229,7 @@ namespace BannerKings.Managers.Titles.Laws
 
             EstateTenureFeeTail.Initialize(new TextObject("{=esrBR5f3}Fee Tail"),
                 new TextObject("{=SCZjCdwq}The fee tail tenure dictates that property is inherited exclusively through lawful inheritance or grant."),
-                new TextObject("{=WabTyEdr}Buying or selling estates is banned\nAllows choosing estate duty"),
+                new TextObject("{=49jiQl7t}Buying or selling estates is banned\nAllows choosing estate duty"),
                 DemesneLawTypes.EstateTenure,
                 0.1f,
                 -0.6f,
@@ -469,7 +469,7 @@ namespace BannerKings.Managers.Titles.Laws
 
             TenancyNone.Initialize(new TextObject("{=LGuO56aW}Full Serfdom"),
               new TextObject("{=FuKNBsvU}When bound by serfdom, a commoner is unable to leave their suzerain's land without permission. Though their status is above a slave's, they often miss the rights of free men."),
-              new TextObject("{=h9UDWQcM}Tenants will tend to be 0% of population\nSerfs yield more taxes, but are more unhappy and produce less economic prosperity"),
+              new TextObject("{=LQUBt7I7}Tenants will tend to be 0% of population\nSerfs yield more taxes, but are more unhappy and produce less economic prosperity"),
               DemesneLawTypes.Tenancy,
               0.8f,
               -1f,
