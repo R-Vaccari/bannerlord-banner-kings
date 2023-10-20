@@ -3227,9 +3227,6 @@
    <!-- #region CS-BKTraitItemVM -->
    <string id="pS0KNwEm" text="{TRAIT} is considered virtuous"/>
    <!-- #endregion CS-BKTraitItemVM -->
-   <!-- #region CS-BKDemesneLawItemVM -->
-   <string id="0bet1Am4" text="{TEXT}\n\n{EXPLANATIONS}"/>
-   <!-- #endregion CS-BKDemesneLawItemVM -->
    <!-- #region CS-DemesneLawVM -->
    <string id="SJZmL2Co" text="Law issued on:"/>
    <!-- #endregion CS-DemesneLawVM -->

@@ -13,7 +13,7 @@ namespace BannerKings.UI.Kingdoms
             DemesneLaw = law;
             StringItem = law.Name.ToString();
             CanBeSelected = true;
-            Hint = new HintViewModel(new TextObject("{=0bet1Am4}{TEXT}\n\n{EXPLANATIONS}")
+            Hint = new HintViewModel(new TextObject("{=CS_explain2}{TEXT}\n\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT", law.Description)
                         .SetTextVariable("EXPLANATIONS", law.Effects));
         }

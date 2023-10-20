@@ -2,4 +2,5 @@
 <LanguageData id="English" name="English" subtitle_extension="en-GB" supported_iso="en-GB,en-US,en,eng,en-us,en-gb,en-au,en-bz,en-ca,en-ie,en-jm,en-nz,en-za,en-tt" under_development="false">
 	<LanguageFile xml_path="common_strings.xml" />
 	<LanguageFile xml_path="common_names.xml" />
+	<LanguageFile xml_path="std_module_strings_xml.xml" />
 </LanguageData>
