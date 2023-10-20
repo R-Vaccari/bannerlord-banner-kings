@@ -202,5 +202,17 @@
 		<string id="pop_class_nobles_battania" text="Nobles" />
 		<string id="pop_class_nobles_aserai" text="Nobles" />
 		<string id="pop_class_nobles_khuzait" text="Nobles" />
+
+		<!-- CSharp: much frequently used -->
+		<string id="CS_nv" text="Never mind." />
+		<string id="CS_explain" text="{TEXT}\n{EXPLANATIONS}" />
+		<string id="CS_explain2" text="{TEXT}\n\n{EXPLANATIONS}" />
+		<string id="CS_leave" text="Leave" />
+		<string id="CS_balancing" text="Balancing" />
+		<string id="CS_n_troop" text="{TROOP_NAME}(x{COUNT})" />
+		<string id="CS_in_towncastle" text="In a town or castle" />
+		<string id="CS_government" text="Government" />
+		<string id="CS_this_rite" text="This rite is available to be performed." />
+
 	</strings>
 </base>
