@@ -204,7 +204,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
                         if (Clan.PlayerClan.Tier <= 4)
                         {
-                            text = new TextObject("{=uhD1HNgW}Find an imam or an akhund, they shall better serve you in this task. ");
+                            text = new TextObject("{=uhD1HNgW}Find an imam or an akhund, they shall better serve you in this task.");
                             return text;
                         }
 

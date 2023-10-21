@@ -54,8 +54,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
         {
             var text = rank switch
             {
-                3 => new TextObject("{=ZZSfEks0}The tragic state of Vlandia is that we are many people who have all too often forgotten our many homelands, in favor of venerating our united purpose. Nothing is forbidden if one wishes to be known in history; but it is a blasphemy to destroy history to be known in legend. "),
-                2 => new TextObject("{=cPbaoroQ}I would ask though, that you pursue your place in the saga with a kind heart; there are ample enemies enough in the ranks of the gentry and beyond our borders. We’ve little need for more souls of monstrous heart. "),
+                3 => new TextObject("{=ZZSfEks0}The tragic state of Vlandia is that we are many people who have all too often forgotten our many homelands, in favor of venerating our united purpose. Nothing is forbidden if one wishes to be known in history; but it is a blasphemy to destroy history to be known in legend."),
+                2 => new TextObject("{=cPbaoroQ}I would ask though, that you pursue your place in the saga with a kind heart; there are ample enemies enough in the ranks of the gentry and beyond our borders. We’ve little need for more souls of monstrous heart."),
                 _ => new TextObject("{=LjwbtMO6}You will not be shunned or excommunicated by falling into humility and servile unimportance; you will simply be unworthy of remembrance. An epithet upon your grave plank will be all you deserve then, a name that will fade and molder within a generation.")
             };
 
@@ -66,7 +66,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
         {
             var text = rank switch
             {
-                3 => new TextObject("{=5sZwfBhS}Is there something that I can say or do to be of use to you, young master? Our time in this world is short indeed, and mine all the shorter by virtue - or perhaps malus - of my age. Did you come to greet an old master and learn the way of the Canticles? If so, I beg you find a goliard - my voice does not carry with gusto as theirs does, and my words may seem withered by comparison. "),
+                3 => new TextObject("{=5sZwfBhS}Is there something that I can say or do to be of use to you, young master? Our time in this world is short indeed, and mine all the shorter by virtue - or perhaps malus - of my age. Did you come to greet an old master and learn the way of the Canticles? If so, I beg you find a goliard - my voice does not carry with gusto as theirs does, and my words may seem withered by comparison."),
                 2 when Hero.MainHero.Clan.Tier <= 3 => new TextObject("{=Zt7QAgx1}Stranger if you were led to me for the services of a town scribe, know that I work only in vellum and that unless you have procured me wax tablets all your own, there is little scrivener can offer you in terms of an education. It is not my job nor responsibility to tend to the illiterate, for I pen the Canticles and lest you somehow be a notable beyond my knowing - I see no cause to enshrine your name in such sacred work."),
                 2 => new TextObject("{=nHWeQ7Lz}Hmm? Oh yes, greetings. I feel as though I know you, or perhaps if not you then the deeds of one much like you stranger. You bear an uncanny resemblance to one whose deeds have reached the likes of we humble scriveners. I cannot be certain if I have penned your name or face in silverpoint, but I would be pleased to make your acquaintance should you be that soul. It would be my sacred honor, stranger, to know you."),
                 _ => new TextObject("{=C2oSmjZN}Hark, thy nameless and forgotten soul! Come wit and make yourself known such that you might dwell in my mind and be more than but a dim candle among bon fires! Do you not look upon the world and think yourself a lesser than your neighbors? Sons and daughters - children even! The young and the old make themselves worthy of praise, and yet among them you remain unworthy of pen and purpose. Do you not wish to be remembered?")
@@ -142,8 +142,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
             {
                 text = Hero.MainHero.Clan.Tier switch
                 {
-                    >= 5 => new TextObject("{=FGnpjbvG}That you think you need the approval of a humble scrivener to be formally inducted into the Canticles is a courtesy unnecessary but greatly appreciated; for now my own name shall play a role beyond merely a rubricator in the grand tales of this age. "),
-                    >= 3 => new TextObject("{=puCm6PoZ}Were you a soul of middling ambitions this could be comfort to you; but were you that, you’d not find yourself so bound within the fate of an era. You are part of the Canticles now, go forward in momentum; change the stars to make your fate one all shall know. Go in boldness. "),
+                    >= 5 => new TextObject("{=FGnpjbvG}That you think you need the approval of a humble scrivener to be formally inducted into the Canticles is a courtesy unnecessary but greatly appreciated; for now my own name shall play a role beyond merely a rubricator in the grand tales of this age."),
+                    >= 3 => new TextObject("{=puCm6PoZ}Were you a soul of middling ambitions this could be comfort to you; but were you that, you’d not find yourself so bound within the fate of an era. You are part of the Canticles now, go forward in momentum; change the stars to make your fate one all shall know. Go in boldness."),
                     _ => new TextObject("{=r7Hmedg3}Compete in tournaments, serve a lord well, participate in a war and make yourself the leader of a true clan - not a mere rabble mob. Once you are known to more than just yourself, once I hear tell of you in tales, I shall see you named among the cast of characters for this age.")
                 };
             }
@@ -177,7 +177,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
             var text = rank switch
             {
                 3 => new TextObject("{=eTPHgScM}I fought, I killed, I was a legend in the making - as all men would claim to be in hubris. But my hands ached upon a sword hilt; far more than when I gripped a quill. And thus I illuminate, even still in my sunset days."),
-                2 => new TextObject("{=zQKW5qog}It is a humble post, and those who recite the tales by rote are seldom worthy of the annals themselves - but those who pen them are granted the privilege of signing their names, and thus we shall be remembered as those who carried the song. "),
+                2 => new TextObject("{=zQKW5qog}It is a humble post, and those who recite the tales by rote are seldom worthy of the annals themselves - but those who pen them are granted the privilege of signing their names, and thus we shall be remembered as those who carried the song."),
                 _ => new TextObject("{=JD8uK0Bq}Preach, bah! A Vlandian does not preach, they embody the epic and embolden themselves to actions - to pursuits grander than those who came before them!")
             };
 
@@ -200,8 +200,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
         {
             var text = rank switch
             {
-                3 => new TextObject("{=NcpfHNyp}All things we accept as truth, though not of importance when compared to the legacy we leave upon this world. If you wish to prove your faith, go forth with an open mind and a patient heart; if you are to be a legend worthy of the Canticles, fate shall provide you the chance. "),
-                2 => new TextObject("{=Ri01Z2Pe}You must be known, for good or for ill; by deeds worthy of remembrance. Vlandia celebrates warfare and the mercenary life for many reasons, but foremost among them for many is that a sellsword is far more memorable than a money lender or a basket weaver. If you wish to prove your place is more worthy of the song, perform bold deeds. "),
+                3 => new TextObject("{=NcpfHNyp}All things we accept as truth, though not of importance when compared to the legacy we leave upon this world. If you wish to prove your faith, go forth with an open mind and a patient heart; if you are to be a legend worthy of the Canticles, fate shall provide you the chance."),
+                2 => new TextObject("{=Ri01Z2Pe}You must be known, for good or for ill; by deeds worthy of remembrance. Vlandia celebrates warfare and the mercenary life for many reasons, but foremost among them for many is that a sellsword is far more memorable than a money lender or a basket weaver. If you wish to prove your place is more worthy of the song, perform bold deeds."),
                 _ => new TextObject("{=bWocbYpR}If you wish to prove your mettle, you must compete with the deeds of old for the good of our people. Conquer, raid, play at court; make yourself known - live a life both bold and notorious! Better you have ten thousand enemies who remember your name than a single cherished friend whose memory of you will die with them.")
             };
 

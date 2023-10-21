@@ -206,7 +206,7 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=D1pfyBVq}Improved village prosperity\nIncreased farmland acreage output"),
                 new TextObject("{=AB9h5bNE}"),
                 300,
-                new TextObject("{=AIpMH2cI}The Calradoi call him Koronvaldos, but the god of the Rhodoks is called Kronvalt in Vlandic. The name means “king-chooser”. "),
+                new TextObject("{=AIpMH2cI}The Calradoi call him Koronvaldos, but the god of the Rhodoks is called Kronvalt in Vlandic. The name means “king-chooser”."),
                 new TextObject("{=Xc1h2BII}"));
 
             AseraMain = new Divinity("asera-main");
@@ -288,7 +288,7 @@ namespace BannerKings.Managers.Institutions.Religions
 
             VlandiaSecondary1 = new Divinity("vlandia-secondary-1");
             VlandiaSecondary1.Initialize(new TextObject("{=iD6W9AS7}Ribaldi Cant"),
-                new TextObject("{=TLVS4KGV}Those who buck against the perceived hegemony of the Lai Vlandia, be they peasant rebels or upstart lords, will claim piety by way of the Ribaldi Cant. Though traditionalists will note the Cant is but a deviation of the illuminated manuscripts and oral tales of the pre-Calradic Vlandian culture, modern adherents claim the Cant to be the methodology of rebels, wanderers, rascals, and conquerors. Subtlety is seldom found, and parables and morality plays are all too commonly twisted to back the ideology of the teller. As such the works depicted therein are often viewed as satire or crude witticisms, but few cloisters will deny their worth. They are part of the Lai Vlandia, and thus the Canticles, regardless of their desires. "),
+                new TextObject("{=TLVS4KGV}Those who buck against the perceived hegemony of the Lai Vlandia, be they peasant rebels or upstart lords, will claim piety by way of the Ribaldi Cant. Though traditionalists will note the Cant is but a deviation of the illuminated manuscripts and oral tales of the pre-Calradic Vlandian culture, modern adherents claim the Cant to be the methodology of rebels, wanderers, rascals, and conquerors. Subtlety is seldom found, and parables and morality plays are all too commonly twisted to back the ideology of the teller. As such the works depicted therein are often viewed as satire or crude witticisms, but few cloisters will deny their worth. They are part of the Lai Vlandia, and thus the Canticles, regardless of their desires."),
                 new TextObject("{=aP0f2WJp}Bonus influence\nIncreased faith presence in settlements"),
                 new TextObject("{=neVhyybi}Saga"));
 

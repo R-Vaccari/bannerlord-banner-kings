@@ -135,7 +135,7 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
         public int HideoutSpotDifficulty { get; set; } = 5;
 
-        [SettingPropertyInteger("{=00bG9Ube}Bandit Parties Limit", 150, 600, "{=4tnEdJNu}0 Parties ",
+        [SettingPropertyInteger("{=00bG9Ube}Bandit Parties Limit", 150, 600, "{=4tnEdJNu}0 Parties",
             Order = 1,
             RequireRestart = false,
             HintText = "{=O3MXc6GM}Maximum number of bandit parties in the world map. Vanilla is 150. Default: 300.")]
