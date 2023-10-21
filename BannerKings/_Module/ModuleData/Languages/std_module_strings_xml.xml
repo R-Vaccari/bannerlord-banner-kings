@@ -23,8 +23,6 @@
    <string id="Xa0EZF0c" text="Welcome to the Banner Kings mod. Before starting your campaign, you should pick a custom start and a religion for your character first. You can also read on topics of the mod. All these topics are available on the Concepts page of Encyclopedia.{newline}{newline}Support is only provided through Discord. Please check out the mod-links over there if you consider contributing. Have fun!"/>
    <string id="6tzXaLeQ" text="Learning Concepts"/>
    <string id="I0lKIk0L" text="To access these concepts again, access Concepts in Encyclopedia. All names and descriptions here are exactly what is present over there."/>
-   <string id="LylX5ukm" text="Important Concepts"/>
-   <string id="oJMrApIB" text="To access these concepts again, access Concepts in Encyclopedia. All names and descriptions here are exactly what is present over there."/>
    <string id="XbjMOmXU" text="Kingdom Selection"/>
    <string id="g9fgBEgI" text="None selected"/>
    <string id="IGNTGLxS" text="Banner Kings - {TOPIC}"/>
@@ -1975,9 +1973,8 @@
    <string id="B5HToxfF" text="Perassic Trade Network"/>
    <!-- #endregion CS-DefaultShippingLanes -->
    <!-- #region CS-BKAttributes -->
-   <string id="CCfPK6ew" text="Wisdom"/>
+   <string id="CS_wisdom" text="Wisdom"/>
    <string id="txl7SWDk" text="Wisdom represents your world knowledge and competence to deal with skills that require deep learning."/>
-   <string id="rLBAcOoV" text="WIS"/>
    <!-- #endregion CS-BKAttributes -->
    <!-- #region CS-BKPerks -->
    <string id="dD5S3Lj8" text="Logistician"/>
@@ -3422,7 +3419,7 @@
    <string id="SzTgE8jo" text="Faith Presence ({FAITH}):"/>
    <string id="PUwmzUZy" text="Fervor:"/>
    <string id="cjb5Ycw1" text="{TEXT}{newline}{newline}Explanations:{newline}{EXPLANATIONS}"/>
-   <string id="0vy9Oxjs" text="The faith's fervor. A faith's fervor makes its populations and heroes harder to convert. In settlements, fervor grealy contributes to the faith's presence. Heroes instead are less likely and/or require more resources to convert. Fervor is based on doctrines, settlements and clans that follow the faith. Additionaly, holding the Faith Seat and the faith's Holy Sites are important factors to fervor."/>
+   <string id="0vy9Oxjs" text="The faith's fervor. A faith's fervor makes its populations and heroes harder to convert. In settlements, fervor greatly contributes to the faith's presence. Heroes instead are less likely and/or require more resources to convert. Fervor is based on doctrines, settlements and clans that follow the faith. Additionaly, holding the Faith Seat and the faith's Holy Sites are important factors to fervor."/>
    <string id="GPWOlpcg" text="The {FAITH} faith would admit a preacher of rank {PREACHER} for {FIEF}. Appointing such a preacher would cost you {PIETY}{PIETY_ICON} and {INFLUENCE}{INFLUENCE_ICON}"/>
    <string id="OvQ8sevD" text="The {FAITH} faith does not admit any type of preacher for {FIEF}. It is not possible to appoint one."/>
    <string id="zuQ7UjDC" text="Not possible to banish a preacher of the local dominant religion."/>
@@ -3441,7 +3438,6 @@
    <string id="O3ZTu7Bd" text="Holy sites are the fiefs directly connected to the religion's divinities or cults. Holding such sites is important for religious Fervor. In addition, being blessed by a Divinity in its holy site adds double the blessing duration.{newline}{newline}Sites:{SITES}"/>
    <string id="UlCcg93c" text="{HOLY_SITE}: {DIVINITY}"/>
    <string id="eojkbJf2" text="Fervor"/>
-   <string id="pv30MlNb" text="The faith's fervor. A faith's fervor makes its populations and heroes harder to convert. In settlements, fervor grealy contributes to the faith's presence. Heroes instead are less likely and/or require more resources to convert. Fervor is based on doctrines, settlements and clans that follow the faith. Additionaly, holding the Faith Seat and the faith's Holy Sites are important factors to fervor."/>
    <string id="diqoFxAm" text="{HERO} {RELIGION_TEXT}.\n{CULT_TEXT}"/>
    <string id="JoZGpNrK" text=" does not follow any faith"/>
    <string id="Ckk2iVKQ" text="is following the {FAITH}"/>

@@ -311,8 +311,8 @@ namespace BannerKings.Behaviours
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=IGNTGLxS}Banner Kings - {TOPIC}", new() { { "TOPIC", new TextObject("{=LylX5ukm}Important Concepts") } }).ToString(),
-                new TextObject("{=oJMrApIB}To access these concepts again, access Concepts in Encyclopedia. All names and descriptions here are exactly what is present over there.").ToString(),
+                new TextObject("{=IGNTGLxS}Banner Kings - {TOPIC}", new() { { "TOPIC", new TextObject("{=ljMOLbJV}Important Concepts") } }).ToString(),
+                new TextObject("{=I0lKIk0L}To access these concepts again, access Concepts in Encyclopedia. All names and descriptions here are exactly what is present over there.").ToString(),
                 elements,
                 true,
                 1,
