@@ -291,7 +291,7 @@
    <string id="mwaS94oD" text="Bountiful"/>
    <string id="6qcxi3hF" text="Mediocre"/>
    <string id="fphXj90S" text="Poor"/>
-   <string id="vsOFAeWQ" text="You have have caught an animal and improved your {SKILL} skill while hunting."/>
+   <string id="vsOFAeWQ" text="You have caught an animal and improved your {SKILL} skill while hunting."/>
    <string id="mXfR84iG" text="You have improved your {SKILL} skill and gained {INFLUENCE} influence while meeting with nobles."/>
    <string id="DHMTLgw4" text="You have stopped your current action due to health conditions."/>
    <string id="mVzVY3P9" text="No Faith available"/>
@@ -3460,6 +3460,7 @@
    <!-- #endregion CS-ReligionVM -->
    <!-- #region CS-VillageProjectVM -->
    <string id="y5BMxhJv" text="Projects at {VILLAGE_NAME}"/>
+   <string id="hqJtVfPx" text="Available Projects"/>
    <string id="pVCiG95C" text="How much the local population can progress with construction projects, on a daily basis"/>
    <string id="fvaNp0we" text="Current Progress:"/>
    <string id="uUQpLvpq" text="Amount of completed work in the current project"/>
@@ -3470,6 +3471,7 @@
    <string id="0RAPEDaT" text="Goods locally produced by the population."/>
    <string id="Fin3KXMP" text="Goods Production:"/>
    <string id="g480uUyC" text="Sum of goods produced on a daily basis, including all the types produced here."/>
+   <string id="e8Wk3tKw" text="Items Produced:"/>
    <string id="mbUwoU0h" text="{POINTS} (Daily)"/>
    <!-- #endregion CS-VillageProjectVM -->
    <!-- #region CS-MarriageContractProposalVM -->

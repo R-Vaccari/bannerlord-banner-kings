@@ -599,7 +599,7 @@ namespace BannerKings.Behaviours
                         Hero.MainHero.AddSkillXp(target, MBRandom.RandomFloatRanged(10f, 25f));
                         InformationManager.DisplayMessage(
                             new InformationMessage(
-                                new TextObject("{=vsOFAeWQ}You have have caught an animal and improved your {SKILL} skill while hunting.")
+                                new TextObject("{=vsOFAeWQ}You have caught an animal and improved your {SKILL} skill while hunting.")
                                     .ToString()));
                     }
                 }
