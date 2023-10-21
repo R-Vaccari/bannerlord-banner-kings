@@ -22,7 +22,7 @@ namespace BannerKings.Managers.Innovations.Eras
         public override void Initialize()
         {
             FirstEra.Initialize(new TextObject("{=SYMLHgr0}Calradoi Age"),
-               new TextObject("{=bDfXuM7W}The era of the Calradoi was the period in which the Imperium reigned unmatched. "),
+               new TextObject("{=bDfXuM7W}The era of the Calradoi was the period in which the Imperium reigned unmatched."),
                null);
 
             SecondEra.Initialize(new TextObject("{=edHBhTAg}Internecine Age"),
