@@ -191,7 +191,7 @@ namespace BannerKings.Managers.Education.Books
 
             Crossbow = new BookType("book_crossbow");
             Crossbow.Initialize(BKItems.Instance.BookCrossbow,
-                new TextObject("{=R5GJQu3Q}Written by Leonhardth of Ocspool, this monumental work is considered a founding text of Vlandia, as it popularized usage of crossbows and siege engines among Vlandian lords during the rule of King Osrac Iron-arm. Thanks to clear descirption of crossbow and balista constuction and simple explanations of physics behind the contraption even lords of a single village were able to supply their peasants with deadly weapons. It is said that Vlandia is build on crossbow and lance and this work is a proof, that Leonhardth of Ocspool deserves at least half of credit for Vlandian indpendence."),
+                new TextObject("{=R5GJQu3Q}Written by Leonhardth of Ocspool, this monumental work is considered a founding text of Vlandia, as it popularized usage of crossbows and siege engines among Vlandian lords during the rule of King Osrac Iron-arm. Thanks to clear descirption of crossbow and balista constuction and simple explanations of physics behind the contraption even lords of a single village were able to supply their peasants with deadly weapons. It is said that Vlandia is build on crossbow and lance and this work is a proof, that Leonhardth of Ocspool deserves at least half of credit for Vlandian independence."),
                 DefaultLanguages.Instance.Calradian, BookUse.Focusbook, DefaultSkills.Crossbow);
 
             Bow = new BookType("book_bow");
