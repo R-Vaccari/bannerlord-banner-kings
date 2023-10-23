@@ -20,7 +20,7 @@ namespace BannerKings.Managers.Skills
         {
             Scholarship = Game.Current.ObjectManager.RegisterPresumedObject(new SkillObject("Scholarship"));
             Scholarship.Initialize(new TextObject("{=SvfaUDRR}Scholarship"),
-                    new TextObject("{=6vdekDjR}Reading and writting competence as well as knowledge over literary and legal matters."),
+                    new TextObject("{=6vdekDjR}Reading and writing competence as well as knowledge over literary and legal matters."),
                     SkillObject.SkillTypeEnum.Personal)
                 .SetAttribute(BKAttributes.Instance.Wisdom);
 

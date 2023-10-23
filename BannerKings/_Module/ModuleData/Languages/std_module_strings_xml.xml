@@ -2198,7 +2198,7 @@
    <!-- #endregion CS-BKPerks -->
    <!-- #region CS-BKSkills -->
    <string id="SvfaUDRR" text="Scholarship"/>
-   <string id="6vdekDjR" text="Reading and writting competence as well as knowledge over literary and legal matters."/>
+   <string id="6vdekDjR" text="Reading and writing competence as well as knowledge over literary and legal matters."/>
    <string id="SRo2AK0z" text="Theology"/>
    <string id="mrDhJePb" text="Understanding over spiritual matters. Normally reserved for preachers and the most pious faithful."/>
    <string id="bk_skill_lordship" text="Lordship"/>
@@ -2765,7 +2765,7 @@
    <!-- #region CS-BKPartyMoraleModel -->
    <string id="fScrE9fp" text="Foreign troops"/>
    <string id="PaDvmMT6" text="Lacking alcohol supplies"/>
-   <string id="HKuszarc" text="Lacking animal products  supplies"/>
+   <string id="HKuszarc" text="Lacking animal products supplies"/>
    <string id="SkcOem5t" text="Lacking textiles supplies"/>
    <string id="R3NZZPcQ" text="Lacking wood supplies"/>
    <!-- #endregion CS-BKPartyMoraleModel -->

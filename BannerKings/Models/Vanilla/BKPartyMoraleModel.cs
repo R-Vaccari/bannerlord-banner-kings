@@ -96,7 +96,7 @@ namespace BannerKings.Models.Vanilla
 
                         float animal = MathF.Min(supplies.AnimalProductsNeed / supplies.GetAnimalProductsCurrentNeed().ResultNumber, 
                             supplies.AnimalProductsNeed);
-                        result.Add(-animal, new TextObject("{=HKuszarc}Lacking animal products  supplies"));
+                        result.Add(-animal, new TextObject("{=HKuszarc}Lacking animal products supplies"));
 
                         float textiles = MathF.Min(supplies.ClothNeed / supplies.GetTextileCurrentNeed().ResultNumber, 
                             supplies.ClothNeed);
