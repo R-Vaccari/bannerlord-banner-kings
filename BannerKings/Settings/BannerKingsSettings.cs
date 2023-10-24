@@ -15,20 +15,20 @@ namespace BannerKings.Settings
         public override string FolderName => "BannerKings"; 
         public override string FormatType => "json2";
 
-        [SettingProperty("{=K8qLtDh3}Feasts", RequireRestart = true, HintText = "{=Ctj7k5TV}Enable the ability to trigger feasts for player and AI. Default: True.")]
-        [SettingPropertyGroup("{=FnRzVf4Q}Performance")]
+        [SettingProperty("{=K8qLtDh3}Feasts", Order = 0, RequireRestart = true, HintText = "{=Ctj7k5TV}Enable the ability to trigger feasts for player and AI. Default: True.")]
+        [SettingPropertyGroup("{=FnRzVf4Q}Performance", GroupOrder = 0)]
         public bool Feasts { get; set; } = true;
 
-        [SettingProperty("{=W54KmZDR}AI Companions", RequireRestart = true, HintText = "{=juP6OXmp}Enable the ability for AI to generate companions. Will add a large amount of heroes to the world and may impact performance. Default: True.")]
-        [SettingPropertyGroup("{=FnRzVf4Q}Performance")]
+        [SettingProperty("{=W54KmZDR}AI Companions", Order = 1, RequireRestart = true, HintText = "{=juP6OXmp}Enable the ability for AI to generate companions. Will add a large amount of heroes to the world and may impact performance. Default: True.")]
+        [SettingPropertyGroup("{=FnRzVf4Q}Performance", GroupOrder = 0)]
         public bool AICompanions { get; set; } = true;
 
-        [SettingProperty("{=6Qs7booz}AI Knights", RequireRestart = true, HintText = "{=aNSCjnzn}Enable the ability for AI to generate knights. Will add a large amount of heroes to the world and may impact performance. Default: True.")]
-        [SettingPropertyGroup("{=FnRzVf4Q}Performance")]
+        [SettingProperty("{=6Qs7booz}AI Knights", Order = 2, RequireRestart = true, HintText = "{=aNSCjnzn}Enable the ability for AI to generate knights. Will add a large amount of heroes to the world and may impact performance. Default: True.")]
+        [SettingPropertyGroup("{=FnRzVf4Q}Performance", GroupOrder = 0)]
         public bool AIKnights { get; set; } = true;
 
-        [SettingProperty("{=UgfQur9G}AI Management", RequireRestart = true, HintText = "{=3tCf6aOi}Enable the ability for AI to manage their domains and vassals by calculating when to give away titles. Default: True.")]
-        [SettingPropertyGroup("{=FnRzVf4Q}Performance")]
+        [SettingProperty("{=UgfQur9G}AI Management", Order = 3, RequireRestart = true, HintText = "{=3tCf6aOi}Enable the ability for AI to manage their domains and vassals by calculating when to give away titles. Default: True.")]
+        [SettingPropertyGroup("{=FnRzVf4Q}Performance", GroupOrder = 0)]
         public bool AIManagement { get; set; } = true;
 
         [SettingProperty("{=o394sPDk}Close Relatives Honorifics", RequireRestart = false, HintText = "{=AinXkzz7}Apply title honorifcs for close relatives of title holders. This only takes effect if the 'Title Honorifcs' option is any other than 'No Titles'. Different rules apply but in general, spouses of will have an equivalent, gendered title (ie, 'Queen FemaleName' the spouse of 'King MaleName'), while children of Kings and Emperors may be Princes.")]
@@ -44,74 +44,74 @@ namespace BannerKings.Settings
         }, selectedIndex: 0);
 
 
-        [SettingPropertyFloatingInteger("{=9G8cJYQd}Tax Income", minValue: 0.2f, maxValue: 2f, "#0%", RequireRestart = false, HintText = "{=VFRd9aNe}Affects the volume of settlement taxes. May SEVERELY impact AI and it's ability to recruit/keep troops. Default: 100%.")]
-        [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
+        [SettingPropertyFloatingInteger("{=9G8cJYQd}Tax Income", minValue: 0.2f, maxValue: 2f, "#0%", Order = 0, RequireRestart = false, HintText = "{=VFRd9aNe}Affects the volume of settlement taxes. May SEVERELY impact AI and it's ability to recruit/keep troops. Default: 100%.")]
+        [SettingPropertyGroup("{=2oJQ4Snn}Economy", GroupOrder = 1)]
         public float TaxIncome { get; set; } = 1f;
 
-        [SettingProperty("{=0GVNKkGr}Village Tax Reserves", RequireRestart = false, HintText = "{=y9fQuceM}Leave a fifth of villages' production out of player income. This keeps villages in the player's income summary and so lets them always have an idea of how much villages and estates are producing. These can be manually collected through settlement menus. When disabled, all the income is removed and thus villages and estates have nothing to report most of the time, because their income depends on villagers bringing profit back from towns. Default: false.")]
-        [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
+        [SettingProperty("{=0GVNKkGr}Village Tax Reserves", Order = 1, RequireRestart = false, HintText = "{=y9fQuceM}Leave a fifth of villages' production out of player income. This keeps villages in the player's income summary and so lets them always have an idea of how much villages and estates are producing. These can be manually collected through settlement menus. When disabled, all the income is removed and thus villages and estates have nothing to report most of the time, because their income depends on villagers bringing profit back from towns. Default: false.")]
+        [SettingPropertyGroup("{=2oJQ4Snn}Economy", GroupOrder = 1)]
         public bool VillageTaxReserves { get; set; } = false;
 
-        [SettingProperty("{=vWcskVBm}Realistic Caravan Income", RequireRestart = false, HintText = "{=1it7E8tF}Caravans pose a major risk factor not represented in the game: carrying your profits. With this setting, caravan profits will only be added when they enter a settlement owned by their owner, or where they are situated (ie, notables). Default: true.")]
-        [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
+        [SettingProperty("{=vWcskVBm}Realistic Caravan Income", Order = 2, RequireRestart = false, HintText = "{=1it7E8tF}Caravans pose a major risk factor not represented in the game: carrying your profits. With this setting, caravan profits will only be added when they enter a settlement owned by their owner, or where they are situated (ie, notables). Default: true.")]
+        [SettingPropertyGroup("{=2oJQ4Snn}Economy", GroupOrder = 1)]
         public bool RealisticCaravanIncome { get; set; } = true;
 
-        [SettingProperty("{=4pJUkbew}AI Dismiss Parties", RequireRestart = false, HintText = "{=FhNxraXd}AI clan leaders will dismiss parties from their family members during peace in order to save more money. Default: true.")]
-        [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
+        [SettingProperty("{=4pJUkbew}AI Dismiss Parties", Order = 3, RequireRestart = false, HintText = "{=FhNxraXd}AI clan leaders will dismiss parties from their family members during peace in order to save more money. Default: true.")]
+        [SettingPropertyGroup("{=2oJQ4Snn}Economy", GroupOrder = 1)]
         public bool DismissParties { get; set; } = true;
 
-        [SettingPropertyFloatingInteger("{=gZQD2oXd}Base Wages", minValue: 0.5f, maxValue: 2f, "#0%", RequireRestart = false, HintText = "{=i83NUAjy}Modifier for base wages of soldiers, changing their daily upkeep but also their recruitment cost, calculated on their base wage. May SEVERELY impact AI and it's ability to recruit/keep troops. Default: 100%.")]
-        [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
+        [SettingPropertyFloatingInteger("{=gZQD2oXd}Base Wages", minValue: 0.5f, maxValue: 2f, "#0%", Order = 4, RequireRestart = false, HintText = "{=i83NUAjy}Modifier for base wages of soldiers, changing their daily upkeep but also their recruitment cost, calculated on their base wage. May SEVERELY impact AI and it's ability to recruit/keep troops. Default: 100%.")]
+        [SettingPropertyGroup("{=2oJQ4Snn}Economy", GroupOrder = 1)]
         public float BaseWage { get; set; } = 1f;
 
-        [SettingPropertyFloatingInteger("{=KnFgow5F}Party Size Scaling", minValue: 1f, maxValue: 3f, "#0%", RequireRestart = false, HintText = "{=ZbBoUhrM}The scale of party sizes on the map. Applies in half to parties of heroes not leading their clan. Vanilla is 100%. Default: 200%.")]
-        [SettingPropertyGroup("{=CS_balancing}Balancing")]
+        [SettingPropertyFloatingInteger("{=KnFgow5F}Party Size Scaling", minValue: 1f, maxValue: 3f, "#0%", Order = 2, RequireRestart = false, HintText = "{=ZbBoUhrM}The scale of party sizes on the map. Applies in half to parties of heroes not leading their clan. Vanilla is 100%. Default: 200%.")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing", GroupOrder = 2)]
         public float PartySizes { get; set; } = 2f;
 
-        [SettingProperty("{=binOnQnx}Alternative Leveling", RequireRestart = false, HintText = "{=WtdhIqRx}An alternate skill leveling progression. Skills will require a higher base xp since level 1, but will scale less aggressively. The result should be more consitent xp across all levels, slower at the beginning but faster near the end. Default: true.")]
-        [SettingPropertyGroup("{=CS_balancing}Balancing")]
+        [SettingProperty("{=binOnQnx}Alternative Leveling", Order = 3, RequireRestart = false, HintText = "{=WtdhIqRx}An alternate skill leveling progression. Skills will require a higher base xp since level 1, but will scale less aggressively. The result should be more consistent xp across all levels, slower at the beginning but faster near the end. Default: true.")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing", GroupOrder = 2)]
         public bool AlternateLeveling { get; set; } = true;
 
-        [SettingPropertyFloatingInteger("{=JjTnrl9v}Army Cohesion Boost", minValue: 0f, maxValue: 0.8f, "#0%", RequireRestart = false, HintText = "{=IlTizRLs}Cohesion boost to armies to they last longer, to counter balance the presence of more parties. Vanilla is 0%, 50% decreases cohesion loss by half. Default: 50%.")]
-        [SettingPropertyGroup("{=CS_balancing}Balancing")]
+        [SettingPropertyFloatingInteger("{=JjTnrl9v}Army Cohesion Boost", minValue: 0f, maxValue: 0.8f, "#0%", Order = 4, RequireRestart = false, HintText = "{=IlTizRLs}Cohesion boost to armies to they last longer, to counter balance the presence of more parties. Vanilla is 0%, 50% decreases cohesion loss by half. Default: 50%.")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing", GroupOrder = 2)]
         public float CohesionBoost { get; set; } = 0.5f;
 
-        [SettingPropertyFloatingInteger("{=2yDhJfgh}Troop Upgrade Xp", minValue: 1f, maxValue: 10f, "#0%", RequireRestart = false, HintText = "{=xvNKsFbW}How much Xp troops need to upgrade. Vanilla is 100%. Default: 200%.")]
-        [SettingPropertyGroup("{=CS_balancing}Balancing")]
+        [SettingPropertyFloatingInteger("{=2yDhJfgh}Troop Upgrade Xp", minValue: 1f, maxValue: 10f, "#0%", Order = 5, RequireRestart = false, HintText = "{=xvNKsFbW}How much Xp troops need to upgrade. Vanilla is 100%. Default: 200%.")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing", GroupOrder = 2)]
         public float TroopUpgradeXp { get; set; } = 2f;
 
-        [SettingPropertyFloatingInteger("{=OohdenyR}Slower Parties", minValue: 0f, maxValue: 0.75f, "#0%", RequireRestart = false, HintText = "{=5MR7XH9E}Slows all parties down related to their original speed. 0% is the original speed. Intended to better reflect a realistic map scale. Default: 40%.")]
-        [SettingPropertyGroup("{=CS_balancing}Balancing")]
+        [SettingPropertyFloatingInteger("{=OohdenyR}Slower Parties", minValue: 0f, maxValue: 0.75f, "#0%", Order = 6, RequireRestart = false, HintText = "{=5MR7XH9E}Slows all parties down related to their original speed. 0% is the original speed. Intended to better reflect a realistic map scale. Default: 40%.")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing", GroupOrder = 2)]
         public float SlowerParties { get; set; } = 0.4f;
 
-        [SettingPropertyFloatingInteger("{=FtWk1Jm0}Longer Sieges", minValue: 0f, maxValue: 0.75f, "#0%", RequireRestart = false, HintText = "{=0ctG0FEp}Decreases siege camp build speed. 0% is the original speed. Intended to make sieges harder and more impactful, and prevent multiple sequential sieges of same settlement. Default: 50%.")]
-        [SettingPropertyGroup("{=CS_balancing}Balancing")]
+        [SettingPropertyFloatingInteger("{=FtWk1Jm0}Longer Sieges", minValue: 0f, maxValue: 0.75f, "#0%", Order = 7, RequireRestart = false, HintText = "{=0ctG0FEp}Decreases siege camp build speed. 0% is the original speed. Intended to make sieges harder and more impactful, and prevent multiple sequential sieges of same settlement. Default: 50%.")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing", GroupOrder = 2)]
         public float LongerSieges { get; set; } = 0.5f;
 
-        [SettingPropertyFloatingInteger("{=gxcgWiwh}Knight Clan Creation Speed", minValue: 0f, maxValue: 5f, "#0%", RequireRestart = false, HintText = "{=yTkU621N}Knight AI heroes can eventually form their own clans, even those in the player clan. Increasing this setting increases their speed of doing so. Setting it to 0% will stop knights from creating clans altogether. Default: 100%.")]
-        [SettingPropertyGroup("{=CS_balancing}Balancing")]
+        [SettingPropertyFloatingInteger("{=gxcgWiwh}Knight Clan Creation Speed", minValue: 0f, maxValue: 5f, "#0%", Order = 8, RequireRestart = false, HintText = "{=yTkU621N}Knight AI heroes can eventually form their own clans, even those in the player clan. Increasing this setting increases their speed of doing so. Setting it to 0% will stop knights from creating clans altogether. Default: 100%.")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing", GroupOrder = 2)]
         public float KnightClanCreationSpeed { get; set; } = 1f;
 
-        [SettingProperty("{=DZyyJXRn}Crafting Waiting Time", RequireRestart = false, HintText = "{=pSX0rWGt}When doing any type of work in the smithy, you'll be forced to wait an amount of time correspondent to how much energy was used, as well as pay for that time. Represents a more realistic approach to crafting. Default: true.")]
-        [SettingPropertyGroup("{=CS_balancing}Balancing")]
+        [SettingProperty("{=DZyyJXRn}Crafting Waiting Time", Order = 9, RequireRestart = false, HintText = "{=pSX0rWGt}When doing any type of work in the smithy, you'll be forced to wait an amount of time correspondent to how much energy was used, as well as pay for that time. Represents a more realistic approach to crafting. Default: true.")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing", GroupOrder = 2)]
         public bool CraftingWaitingTime { get; set; } = true;
 
-        [SettingProperty("{=b4hNMeGx}Diplomacy Changes", RequireRestart = true, HintText = "{=2YgM5mR1}Changes to AI evaluation of declaring war such as not calling wars when the entire kingdom is broke. Slows down the game pace. Default: True.")]
-        [SettingPropertyGroup("{=CS_balancing}Balancing")]
+        [SettingProperty("{=b4hNMeGx}Diplomacy Changes", Order = 10, RequireRestart = true, HintText = "{=2YgM5mR1}Changes to AI evaluation of declaring war such as not calling wars when the entire kingdom is broke. Slows down the game pace. Default: True.")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing", GroupOrder = 2)]
         public bool DiplomacyChanges { get; set; } = true;
 
-        [SettingPropertyFloatingInteger("{=iBLGdG1Y}Party Supplies", minValue: 0f, maxValue: 2f, "#0%", RequireRestart = false, 
+        [SettingPropertyFloatingInteger("{=iBLGdG1Y}Party Supplies", minValue: 0f, maxValue: 2f, "#0%", Order = 11, RequireRestart = false, 
             HintText = "{=uURHROGF}Affects the party supplies requirement factor. 0% means the feature is functionally disabled. 100% is the standard rate of items consumption, 200% means doube the rate, resulting in more expensive parties. May affect AI party limit sizes. Default: 100%.")]
-        [SettingPropertyGroup("{=CS_balancing}Balancing")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing", GroupOrder = 2)]
         public float PartySuppliesFactor { get; set; } = 1f;
 
-        [SettingProperty("{=bUG8B8pA}Reset Party Supplies Demand", RequireRestart = false, HintText = "{=a9PhtgBC}Party supply demands stack each day. Enabling this setting forgets the old demands of the party.")]
-        [SettingPropertyGroup("{=CS_balancing}Balancing")]
+        [SettingProperty("{=bUG8B8pA}Reset Party Supplies Demand", Order = 12, RequireRestart = false, HintText = "{=a9PhtgBC}Party supply demands stack each day. Enabling this setting forgets the old demands of the party.")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing", GroupOrder = 2)]
         public bool ResetPartySupplyDemand { get; set; } = false;
 
         [SettingPropertyInteger("{=iLmmsgFE}Volunteers Limit", 6, 20, "{=Bm4KO72P}0 Volunteers",
             Order = 1, RequireRestart = false, HintText = "{=2AsFpOok}The number of volunteers that notables may have. Requires reloading. Vanilla is 6, default for BK is 10. The recruitable amount is calculated on percentages and thus is always balanced. Recruits will be lost when changing to a smaller limit. Limits can be changed at any point during campaigns.")]
-        [SettingPropertyGroup("{=CS_balancing}Balancing")]
+        [SettingPropertyGroup("{=CS_balancing}Balancing", GroupOrder = 2)]
         public int VolunteersLimit
         {
             get => volunteersLimit;
@@ -122,24 +122,25 @@ namespace BannerKings.Settings
             }
         }
 
-        [SettingProperty("{=CHVW1U24}De Re Militari Bandits", 
+        [SettingProperty("{=CHVW1U24}De Re Militari Bandits",
+            Order = 3,
             RequireRestart = false, 
             HintText = "{=bAt2AWmj}If you have De Re Militari (DRM) mod, enabling this allows bandit heroes and parties to use DRM's new bandits. Enabling it without DRM will break your game. Default: false.")]
-        [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
+        [SettingPropertyGroup("{=k2Vw7iNm}Bandits", GroupOrder = 3)]
         public bool DRMBandits { get; set; } = false;
 
         [SettingPropertyInteger("{=tx1tsrx0}Hieout Spotting Difficulty", 1, 10, "{=rn4pdZCU}Difficulty 0",
             Order = 1,
             RequireRestart = false,
             HintText = "{=gsnBrnud}Despite being supposed to be hidden, 'Hideouts' can be spotted past the player's actual seeing range, and are not difficult at all to find. Spotting range is divided by the difficulty factor here: 1 is vanilla, 10 means a spotting range 10 times shorter.")]
-        [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
+        [SettingPropertyGroup("{=k2Vw7iNm}Bandits", GroupOrder = 3)]
         public int HideoutSpotDifficulty { get; set; } = 5;
 
         [SettingPropertyInteger("{=00bG9Ube}Bandit Parties Limit", 150, 600, "{=4tnEdJNu}0 Parties",
-            Order = 1,
+            Order = 2,
             RequireRestart = false,
             HintText = "{=O3MXc6GM}Maximum number of bandit parties in the world map. Vanilla is 150. Default: 300.")]
-        [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
+        [SettingPropertyGroup("{=k2Vw7iNm}Bandits", GroupOrder = 3)]
         public int BanditPartiesLimit { get; set; } = 300;
     }
 }
