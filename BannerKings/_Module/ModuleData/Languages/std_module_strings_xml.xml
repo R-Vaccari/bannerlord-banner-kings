@@ -2859,7 +2859,7 @@
    <string id="KnFgow5F" text="Party Size Scaling"/>
    <string id="ZbBoUhrM" text="The scale of party sizes on the map. Applies in half to parties of heroes not leading their clan. Vanilla is 100%. Default: 200%."/>
    <string id="binOnQnx" text="Alternative Leveling"/>
-   <string id="WtdhIqRx" text="An alternate skill leveling progression. Skills will require a higher base xp since level 1, but will scale less aggressively. The result should be more consitent xp across all levels, slower at the beginning but faster near the end. Default: true."/>
+   <string id="WtdhIqRx" text="An alternate skill leveling progression. Skills will require a higher base xp since level 1, but will scale less aggressively. The result should be more consistent xp across all levels, slower at the beginning but faster near the end. Default: true."/>
    <string id="JjTnrl9v" text="Army Cohesion Boost"/>
    <string id="IlTizRLs" text="Cohesion boost to armies to they last longer, to counter balance the presence of more parties. Vanilla is 0%, 50% decreases cohesion loss by half. Default: 50%."/>
    <string id="2yDhJfgh" text="Troop Upgrade Xp"/>
@@ -2948,6 +2948,7 @@
    <string id="MqCH7R4A" text="Security"/>
    <string id="BrMCkQMQ" text="Servants"/>
    <string id="TqMRp818" text="Lodgings"/>
+   <string id="y17gfr4g" text="Current Task"/>
    <string id="PQ9D66GT" text="Grace:"/>
    <string id="FgAWmeXm" text="{GRACE} / {TOTAL} ({CHANGE} / day)"/>
    <string id="VAOqDMk0" text="Grace is the measure of importance attributed to your court by others. A more prestigious court location and higher court expenses are naturally seen as more gracious. A more gracious court allows you more political leverage within the realm.\nGrace Target: {TARGET}\n{EXPLANATIONS}"/>
@@ -3507,6 +3508,7 @@
    <string id="t8gCwGPJ" text="Demesne Information"/>
    <string id="tpH62HBy" text="Contract"/>
    <string id="yRn9AcwU" text="Review this kingdom's contract, signed by lords that join it."/>
+   <string id="3ejuX4PF" text="Total Population:"/>
    <string id="g4pjb4j4" text="The total population within the fiefs in this hierarchy regardless of who controls them."/>
    <string id="OD6eU7dQ" text="Minimum Peers:"/>
    <string id="H1pvLYrA" text="The minimum amount of full Peerage noble houses this realm requires. A minimum amount of Peers is required to maintain the power equilibrium in the realm, so that the ruler does not monopolize voting and fief rights.\n\n{EXPLANATION}"/>
