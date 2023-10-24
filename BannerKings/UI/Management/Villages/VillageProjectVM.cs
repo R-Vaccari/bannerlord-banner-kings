@@ -25,7 +25,10 @@ namespace BannerKings.UI.Management.Villages
             villageData = this.data.VillageData;
         }
 
-        [DataSourceProperty] public string Title => new TextObject("{=y5BMxhJv}Projects at {VILLAGE_NAME}").ToString();
+        [DataSourceProperty]
+        public string Title => new TextObject("{=y5BMxhJv}Projects at {VILLAGE_NAME}").ToString();
+        [DataSourceProperty]
+        public string AvailableProjects => new TextObject("{=hqJtVfPx}Available Projects").ToString();
 
         [DataSourceProperty]
         public VillageProjectSelectionVM Projects
@@ -116,7 +119,7 @@ namespace BannerKings.UI.Management.Villages
                     .SetTextVariable("EXPLANATIONS", productionExplained.GetExplanations())
                     .ToString()));
 
-            ProductionInfo.Add(new InformationElement(new TextObject("Items Produced:").ToString(),
+            ProductionInfo.Add(new InformationElement(new TextObject("{=e8Wk3tKw}Items Produced:").ToString(),
                 productionString,
                 new TextObject("{=0RAPEDaT}Goods locally produced by the population.").ToString()));
         }

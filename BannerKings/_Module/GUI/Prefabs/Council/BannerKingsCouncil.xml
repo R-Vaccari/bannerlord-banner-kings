@@ -165,7 +165,7 @@
 																   SuggestedWidth="200" MarginTop="30" StackLayout.LayoutMethod="VerticalBottomToTop" >
 															<Children>
 																<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
-																				SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Current Task"
+																				SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@CurrentTaskText"
 																				MarginTop="25" />
 																				
 																<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{Selector}" MarginTop="10" 
@@ -239,7 +239,7 @@
 																   SuggestedWidth="200" MarginTop="30" StackLayout.LayoutMethod="VerticalBottomToTop" >
 															<Children>
 																<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
-																				SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Current Task"
+																				SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@CurrentTaskText"
 																				MarginTop="25" />
 																				
 																<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{Selector}" MarginTop="10" 

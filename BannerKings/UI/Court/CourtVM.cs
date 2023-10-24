@@ -71,6 +71,7 @@ namespace BannerKings.UI.Court
         [DataSourceProperty] public string SecurityText => new TextObject("{=MqCH7R4A}Security").ToString();
         [DataSourceProperty] public string ServantsText => new TextObject("{=BrMCkQMQ}Servants").ToString();
         [DataSourceProperty] public string LodgingsText => new TextObject("{=TqMRp818}Lodgings").ToString();
+        [DataSourceProperty] public string CurrentTaskText => new TextObject("{=y17gfr4g}Current Task").ToString();
         [DataSourceProperty] public bool PlayerOwned => council.Owner == Hero.MainHero;
         [DataSourceProperty] public bool DisableButtons => !PlayerOwned;
      
