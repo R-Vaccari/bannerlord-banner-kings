@@ -2209,6 +2209,7 @@
    <string id="D50E4DZk" text="{REVOKER} has revoked the {TITLE}."/>
    <string id="c9RCCv20" text="{USURPER} has usurped the {TITLE}."/>
    <string id="ZAjBRwSY" text="{USURPER} has usurped your title, {TITLE}."/>
+   <string id="0bzHAlyZ" text="Enfoeffement Right"/>
    <string id="pmmxMLmr" text="You have been generously granted the {FIEF} as part of your vassal rights to the {SOVEREIGN}."/>
    <string id="AkTU4Qwg" text="You, {NAME}, formally accept to be henceforth bound to the {TITLE}, fulfill your duties as well as uphold your rights, what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death."/>
    <string id="wWpgZ1QE" text="You are due {DUTY_FACTOR} of your fiefs' income to your suzerain."/>

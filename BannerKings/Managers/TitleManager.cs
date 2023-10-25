@@ -712,7 +712,8 @@ namespace BannerKings.Managers
                 {
                     GameTexts.SetVariable("FIEF", lordship.FullName);
                     GameTexts.SetVariable("SOVEREIGN", sovereign.FullName);
-                    InformationManager.ShowInquiry(new InquiryData("Enfoeffement Right",
+                    InformationManager.ShowInquiry(new InquiryData(
+                        new TextObject("{=0bzHAlyZ}Enfoeffement Right").ToString(),
                         new TextObject("{=pmmxMLmr}You have been generously granted the {FIEF} as part of your vassal rights to the {SOVEREIGN}.").ToString(),
                         true, false, GameTexts.FindText("str_done").ToString(), null, null, null));
                 }
@@ -960,7 +961,7 @@ namespace BannerKings.Managers
 
             var description = BannerKingsConfig.Instance.TitleManager.GetContractText(sovereign);
             InformationManager.ShowInquiry(new InquiryData(
-                $"Enfoeffement Contract for {sovereign.FullName}",
+                GameTexts.FindText("str_feudalism_contract_header").SetTextVariable("FACTION", sovereign.FullName).ToString(),
                 description, true, false, buttonString, "", null, null));
         }
 
@@ -998,8 +999,7 @@ namespace BannerKings.Managers
 
         public string GetContractText(FeudalTitle title)
         {
-            TextObject text = new TextObject("{=AkTU4Qwg}You, {NAME}, formally accept to be henceforth bound to the {TITLE}, fulfill your duties as well as uphold your rights, what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death." +
-                "\n\nDuties\n{DUTY1}\n{DUTY2}\n\nRights\n{RIGHT1}\n{RIGHT2}")
+            TextObject text = GameTexts.FindText("str_feudalism_contract_paragraph")
                 .SetTextVariable("NAME", Hero.MainHero.Name)
                 .SetTextVariable("TITLE", title.FullName)
                 .SetTextVariable("RIGHT1", GetRightString(title.Contract.Rights.ElementAt(0)))

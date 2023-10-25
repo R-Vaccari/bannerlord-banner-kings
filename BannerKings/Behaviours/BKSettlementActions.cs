@@ -287,7 +287,7 @@ namespace BannerKings.Behaviours
                 MenuTitlesCondition, 
                 (MenuCallbackArgs args) => UIManager.Instance.ShowWindow("cultures"));
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_demesne", "Estates",
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_demesne", "{=5yiE49du}Estates",
                 MenuEstatesManageCondition,
                 MenuEstatesManageConsequence);
 
