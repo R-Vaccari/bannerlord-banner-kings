@@ -38,19 +38,34 @@ namespace BannerKings.Managers.Cultures
 
         public CulturalTitleName GetTitleName(CultureObject culture, TitleType titleType)
         {
-            CulturalTitleName name = All.FirstOrDefault(x => x.Culture == culture && titleType == x.TitleType && !x.IsKnightsName && !x.IsPrinceName);
+            CulturalTitleName name = null;
+            if (culture != null)
+            {
+                name = All.FirstOrDefault(x => x.Culture != null && x.Culture.StringId == culture.StringId && titleType == x.TitleType && !x.IsKnightsName && !x.IsPrinceName);
+            }
+
             return name != null ? name : All.First(x => x.Culture == null && titleType == x.TitleType && !x.IsKnightsName && !x.IsPrinceName);
         }
 
         public CulturalTitleName GetPrinceName(CultureObject culture)
         {
-            CulturalTitleName name = All.FirstOrDefault(x => x.Culture == culture && !x.IsKnightsName && x.IsPrinceName);
+            CulturalTitleName name = null;
+            if (culture != null)
+            {
+                name = All.FirstOrDefault(x => x.Culture != null && x.Culture.StringId == culture.StringId && !x.IsKnightsName && x.IsPrinceName);
+            }
+
             return name != null ? name : All.First(x => x.Culture == null && !x.IsKnightsName && x.IsPrinceName);
         }
 
         public CulturalTitleName GetKnightName(CultureObject culture)
         {
-            CulturalTitleName name = All.FirstOrDefault(x => x.Culture == culture && x.IsKnightsName && !x.IsPrinceName);
+            CulturalTitleName name = null;
+            if (culture != null)
+            {
+                name = All.FirstOrDefault(x => x.Culture != null && x.Culture.StringId == culture.StringId && x.IsKnightsName && !x.IsPrinceName);
+            }
+
             return name != null ? name : All.First(x => x.Culture == null && x.IsKnightsName && !x.IsPrinceName);
         }
 

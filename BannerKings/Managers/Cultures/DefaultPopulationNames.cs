@@ -32,7 +32,8 @@ namespace BannerKings.Managers.Cultures
 
         public CulturalPopulationName GetPopulationName(CultureObject culture, PopType popType)
         {
-            CulturalPopulationName name = All
+            CulturalPopulationName name = null;
+            if (culture != null) name = All
                 .FirstOrDefault(x => x.Culture != null && x.Culture.StringId == culture.StringId && popType == x.PopType);
             return name != null ? name : All.First(x => x.Culture == null && popType == x.PopType);
         }
