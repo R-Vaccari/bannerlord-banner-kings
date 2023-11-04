@@ -1,8 +1,6 @@
 using System;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Xml;
+using BannerKings.Managers.Cultures;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Traits;
 using TaleWorlds.CampaignSystem;
@@ -212,98 +210,8 @@ namespace BannerKings.Utils
             return count;
         }
 
-        public static TextObject GetClassName(PopType type, CultureObject culture)
-        {
-            string cultureId = culture.StringId;
-            TextObject text;
-
-            if (type == PopType.Serfs)
-            {
-                switch (cultureId) 
-                {
-                    case "empire":
-                        text = new TextObject("{=5Ym25L00}Servi");
-                        break;
-                    case "aserai" or "battania":
-                        text = new TextObject("{=vSMPBzue}Commoners");
-                        break;
-                    case "sturgia":
-                        text = new TextObject("{=f9tsDXWf}Kholops");
-                        break;
-                    default:
-                        text = new TextObject("Serfs");
-                        break;
-                }
-            }
-            else if (type == PopType.Tenants)
-            {
-                switch (cultureId)
-                {
-                    case "empire":
-                        text = new TextObject("{=GThkJp2s}Coloni");
-                        break;
-                    case "khuzait":
-                        text = new TextObject("{=tUzhQHAh}Nomads");
-                        break;
-                    case "sturgia":
-                        text = new TextObject("{=VviUbJTS}Smerdy");
-                        break;
-                    case "battania":
-                        text = new TextObject("{=TEYb57Wo}Freemen");
-                        break;
-                    default:
-                        text = new TextObject("{=h9UDWQcM}Tenants");
-                        break;
-                }
-            }
-            else if (type == PopType.Slaves)
-            {
-                switch (cultureId)
-                {
-                    case "empire":
-                        text = new TextObject("{=B9hAxxuo}Sclavi");
-                        break;
-                    case "sturgia":
-                        text = new TextObject("{=j6UDXO39}Thralls");
-                        break;
-                    case "aserai":
-                        text = new TextObject("{=TASERbwx}Mameluke");
-                        break;
-                    default:
-                        text = new TextObject("Slaves");
-                        break;
-                }
-            }
-            else if (type == PopType.Craftsmen)
-            {
-                switch (cultureId)
-                {
-                    case "empire":
-                        text = new TextObject("{=6hrBerHd}Cives");
-                        break;
-                    case "sturgia" or "battania" or "khuzait":
-                        text = new TextObject("{=2ogRjAuf}Artisans");
-                        break;
-                    default:
-                        text = new TextObject("Craftsmen");
-                        break;
-                }
-            }
-            else
-            {
-                switch (cultureId)
-                {
-                    case "vlandia":
-                        text = new TextObject("{=FVuW8Y4j}Ealdormen");
-                        break;
-                    default:
-                        text = new TextObject("Nobles");
-                        break;
-                }
-            }
-
-            return text;
-        }
+        public static TextObject GetClassName(PopType type, CultureObject culture) => 
+            DefaultPopulationNames.Instance.GetPopulationName(culture, type).Name;
 
         public static string GetConsumptionHint(ConsumptionType type)
         {
@@ -476,16 +384,6 @@ namespace BannerKings.Utils
             }
 
             return ConsumptionType.None;
-        }
-
-        public static XmlDocument CreateDocumentFromXmlFile(string xmlPath)
-        {
-            var xmlDocument = new XmlDocument();
-            var streamReader = new StreamReader(xmlPath);
-            var xml = streamReader.ReadToEnd();
-            xmlDocument.LoadXml(xml);
-            streamReader.Close();
-            return xmlDocument;
         }
     }
 }
