@@ -47,7 +47,7 @@ namespace BannerKings.Managers.Recruits
 
         public List<RecruitSpawn> GetPossibleSpawns(CultureObject culture, PopType popType, Settlement settlement = null)
         {
-            return GetPossibleSpawns(culture, settlement).Where(x => x.PopType == popType).ToList();
+            return GetPossibleSpawns(culture, settlement).Where(x => x.GetChance(popType) > 0f).ToList();
         }  
 
         public override void Initialize()
