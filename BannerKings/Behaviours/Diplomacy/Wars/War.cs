@@ -3,6 +3,7 @@ using Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.SaveSystem;
 
@@ -16,6 +17,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             Defender = defender;
             CasusBelli = casusBelli;
             Sovereign = sovereign;
+            DefenderAllies = new List<IFaction>();
 
             RecalculateFronts();
         }
@@ -77,6 +79,17 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         [SaveableProperty(7)] public int DaysAttackerHeldObjective { get; private set; }
         [SaveableProperty(8)] public int DaysDefenderHeldObjective { get; private set; }
         [SaveableProperty(9)] public CampaignTime StartDate { get; private set; }
+        [SaveableProperty(10)] public List<IFaction> DefenderAllies { get; private set; }
+
+        public void AddAlly(IFaction enemy, IFaction faction, bool defender = true)
+        {
+            if (defender)
+            {
+                if (DefenderAllies == null) DefenderAllies = new List<IFaction>();
+                DefenderAllies.Add(faction);
+                DeclareWarAction.ApplyByDefault(enemy, faction);
+            }
+        }
 
         public bool IsOriginalFront(Town town) => town == AttackerFront || town == DefenderFront;
 
