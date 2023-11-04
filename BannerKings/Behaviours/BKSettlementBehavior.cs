@@ -290,7 +290,7 @@ namespace BannerKings.Behaviours
                 var town = settlement.Town;
                 HandleItemAvailability(town);
                 //HandleExcessWorkforce(data, town);
-                HandleExcessFood(town);
+                //HandleExcessFood(town);
                 HandleMarketGold(town);
                 HandleGarrison(town);
             }
