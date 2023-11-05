@@ -120,10 +120,13 @@ namespace BannerKings.UI.Management
                     .ToString()));
 
             var dominant = data.ReligionData.DominantReligion;
-            ReligionInfo.Add(new InformationElement(new TextObject("{=ZcGwd8sq}Dominant Faith:").ToString(),
-                dominant.Faith.GetFaithName().ToString(),
-                new TextObject("{=8ootTEcK}The most assimilated culture in this settlement, and considered the legal culture.").ToString()));
-            
+            if (dominant != null)
+            {
+                ReligionInfo.Add(new InformationElement(new TextObject("{=ZcGwd8sq}Dominant Faith:").ToString(),
+                               dominant.Faith.GetFaithName().ToString(),
+                               new TextObject("{=8ootTEcK}The most assimilated culture in this settlement, and considered the legal culture.").ToString()));
+            }
+
             if (playerFaith != null)
             {
                 var presence = BannerKingsConfig.Instance.ReligionModel.CalculateReligionWeight(playerFaith, settlement);
