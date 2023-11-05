@@ -92,7 +92,7 @@ namespace BannerKings.Models.BKModels
                     result.Add(walls.CurrentLevel * 5000f, DefaultBuildingTypes.Fortifications.Name);
 
                     InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(settlement.Culture);
-                    if (innovationData.HasFinishedInnovation(DefaultInnovations.Instance.Burgage))
+                    if (innovationData != null && innovationData.HasFinishedInnovation(DefaultInnovations.Instance.Burgage))
                     {
                         result.AddFactor(0.15f, DefaultInnovations.Instance.Burgage.Name);
                     }

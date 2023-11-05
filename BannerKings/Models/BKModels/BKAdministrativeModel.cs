@@ -61,7 +61,7 @@ namespace BannerKings.Models.BKModels
             }
 
             InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(settlement.Culture);
-            if (innovationData.HasFinishedInnovation(DefaultInnovations.Instance.PublicWorks))
+            if (innovationData != null && innovationData.HasFinishedInnovation(DefaultInnovations.Instance.PublicWorks))
             {
                 baseResult.AddFactor(0.05f, DefaultInnovations.Instance.PublicWorks.Name);
             }
