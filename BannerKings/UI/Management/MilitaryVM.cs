@@ -232,21 +232,35 @@ namespace BannerKings.UI.Management
                     .ToString()));
 
             List<RecruitSpawn> recruits = DefaultRecruitSpawns.Instance.GetPossibleSpawns(settlement.Culture, settlement);
+            Dictionary<PopType, float> weights = new Dictionary<PopType, float>(5) 
+            {
+                { PopType.Serfs, 0f },
+                { PopType.Tenants, 0f },
+                { PopType.Craftsmen, 0f },
+                { PopType.Nobles, 0f },
+                { PopType.Slaves, 0f }
+            };
+
+            foreach (var spawn in recruits)
+                foreach (var type in spawn.GetPossibleTypes())
+                    weights[type] += spawn.GetChance(type);
+
             ManpowerInfo.Add(new InformationElement(new TextObject("{=!}Possible Recruits:").ToString(),
                 recruits.Count.ToString(),
                 recruits.Aggregate(new TextObject("{=!}These are the troops the notables may directly muster, not accounting for further trainning. The chance of each one is correlated to its population class' manpower in relation to the overall manpower.\n\n").ToString(), 
                 (current, recruit) =>
                 {
-                    float totalChance = 0f;
-                    foreach (var spawn in recruits)
-                        if (spawn.PopType == recruit.PopType)
-                            totalChance += spawn.Chance;
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var type in recruit.GetPossibleTypes())
+                        sb.Append(new TextObject("{=!}{newline}-- {TYPE}: {CHANCE}")
+                            .SetTextVariable("TYPE", Utils.Helpers.GetClassName(type, recruit.Culture))
+                            .SetTextVariable("CHANCE", FormatValue(BannerKingsConfig.Instance.VolunteerModel
+                                .GetPopTypeSpawnChance(data, type) * (recruit.GetChance(type) / weights[type])))
+                            .ToString());
 
-                    return current + Environment.NewLine + new TextObject("{=!}{TROOP} ({TYPE}): {CHANCE}")
+                    return current + Environment.NewLine + Environment.NewLine + new TextObject("{=!}{TROOP}{LIST}")
                     .SetTextVariable("TROOP", recruit.Troop.Name)
-                    .SetTextVariable("TYPE", Utils.Helpers.GetClassName(recruit.PopType, recruit.Culture))
-                    .SetTextVariable("CHANCE", FormatValue(BannerKingsConfig.Instance.VolunteerModel
-                    .GetPopTypeSpawnChance(data, recruit.PopType) * (recruit.Chance / totalChance)))
+                    .SetTextVariable("LIST", sb.ToString())
                     .ToString();
                 })));
 
