@@ -120,7 +120,7 @@ namespace BannerKings
         public static string AddCareer(List<string> strings)
         {
 
-            MercenaryCareer career = Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetCareer(Clan.PlayerClan);
+            MercenaryCareer career = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetCareer(Clan.PlayerClan);
             if (career != null)
             {
                 career.AddPoints();
@@ -143,7 +143,7 @@ namespace BannerKings
         [CommandLineFunctionality.CommandLineArgumentFunction("spawn_bandit_hero", "bannerkings")]
         public static string SpawnBanditHero(List<string> strings)
         {
-            BKBanditBehavior behavior = Campaign.Current.GetCampaignBehavior<BKBanditBehavior>();
+            BKBanditBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKBanditBehavior>();
             Clan clan = Clan.BanditFactions.GetRandomElementInefficiently();
             behavior.CreateBanditHero(clan);
 
@@ -155,7 +155,7 @@ namespace BannerKings
         {
             if (strings == null || strings.Count == 0)
             {
-                return "Format is \"bannerkings.add_piety [Quantity\"]";
+                return "Format is \"bannerkings.advance_era [Culture_id\"]";
             }
 
             CultureObject culture = MBObjectManager.Instance.GetObject<CultureObject>(strings[0]);
@@ -172,7 +172,30 @@ namespace BannerKings
 
             data.SetEra(data.FindNextEra());
 
-            return "Knighthood requirements for player companions disabled.";
+            return "Era advanced if available.";
+        }
+
+        [CommandLineFunctionality.CommandLineArgumentFunction("make_alliance", "bannerkings")]
+        public static string MakeAlliance(List<string> strings)
+        {
+            if (strings == null || strings.Count == 0)
+            {
+                return "Format is \"bannerkings.make_alliance [Kingdom_id\"]";
+            }
+
+            Kingdom kingdom = Kingdom.All.FirstOrDefault(x => x.StringId == strings[0]);
+            if (kingdom == null)
+            {
+                return "Invalid kingdom id";
+            }
+
+            if (!Hero.MainHero.MapFaction.IsKingdomFaction)
+            {
+                return "Player not in a kingdom";
+            }
+
+            FactionManager.DeclareAlliance(Hero.MainHero.MapFaction, kingdom);
+            return "Alliance set.";
         }
 
         [CommandLineFunctionality.CommandLineArgumentFunction("disable_knighthood", "bannerkings")]
