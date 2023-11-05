@@ -96,6 +96,68 @@ namespace BannerKings.Models.Vanilla
             return true;
         }
 
+        public bool IsAllianceAllowed(Kingdom kingdom1, Kingdom kingdom2, out TextObject reason)
+        {
+            reason = new TextObject("{=!}An alliance is possible.");
+            if (kingdom1 == kingdom2)
+            {
+                reason = TextObject.Empty;
+                return false;
+            }
+
+            if (!BannerKingsConfig.Instance.DiplomacyModel.IsTruceAcceptable(kingdom1, kingdom2))
+            {
+                reason = new TextObject("{=!}{KINGDOM} is not interested in a truce with your realm.")
+                    .SetTextVariable("KINGDOM", kingdom2.Name);
+                return false;
+            }
+
+            StanceLink stance = kingdom1.GetStanceWith(kingdom2);
+            if (stance.IsAtWar)
+            {
+                reason = new TextObject("{=!}Kingdoms are in war.");
+                return false;
+            }
+
+            if (stance.IsAllied)
+            {
+                reason = new TextObject("{=!}Kingdoms are already allies.");
+                return false;
+            }
+
+            foreach (StanceLink s in kingdom1.Stances)
+            {
+                IFaction other = stance.Faction1 == kingdom1 ? stance.Faction2 : stance.Faction1;
+                if (other.IsKingdomFaction && stance.IsAllied)
+                {
+                    reason = new TextObject("{=!}{KINGDOM} is already in an alliance.")
+                        .SetTextVariable("KINGDOM", kingdom1.Name);
+                    return false;
+                }
+            }
+
+            foreach (StanceLink s in kingdom2.Stances)
+            {
+                IFaction other = stance.Faction1 == kingdom2 ? stance.Faction2 : stance.Faction1;
+                if (other.IsKingdomFaction && stance.IsAllied)
+                {
+                    reason = new TextObject("{=!}{KINGDOM} is already in an alliance.")
+                        .SetTextVariable("KINGDOM", kingdom2.Name);
+                    return false;
+                }
+            }
+
+            bool allianceWilling = BannerKingsConfig.Instance.DiplomacyModel.WillAcceptAlliance(kingdom1, kingdom2);
+            if (!allianceWilling)
+            {
+                reason = new TextObject("{=!}{KINGDOM} is not willing to have an alliance with you.")
+                                        .SetTextVariable("KINGDOM", kingdom2.Name);
+                return false;
+            }
+
+            return true;
+        }
+
         public override bool IsWarDecisionAllowedBetweenKingdoms(Kingdom kingdom1, Kingdom kingdom2, out TextObject reason)
         {
             reason = new TextObject("{=!}Declaring war is possible.");
