@@ -42,6 +42,7 @@ namespace BannerKings.Managers.Populations
         public int GetNotableManpower(PopType type, Hero notable, EstateData data)
         {
             int result = 0;
+            if (type == PopType.None) return result;
 
             if (data != null)
             {
@@ -88,7 +89,6 @@ namespace BannerKings.Managers.Populations
             }
         }
 
-
         public float Manpower => PeasantManpower + NobleManpower;
 
         public ExplainedNumber DraftEfficiency
@@ -122,6 +122,8 @@ namespace BannerKings.Managers.Populations
 
         public PopType GetCharacterManpowerType(CharacterObject character)
         {
+            if (character == null) return PopType.None;
+
             if (Utils.Helpers.IsRetinueTroop(character))
             {
                 return PopType.Nobles;
@@ -132,7 +134,7 @@ namespace BannerKings.Managers.Populations
             {
                 if (spawn.Troop == character)
                 {
-                    return spawn.PopType;
+                    return spawn.GetTroopPopType();
                 }
             }
 
