@@ -134,6 +134,8 @@ namespace BannerKings
 
         private void Initialize()
         {
+            DefaultPopulationNames.Instance.Initialize();
+            DefaultTitleNames.Instance.Initialize();
             BKTraits.Instance.Initialize();
             DefaultVillageBuildings.Instance.Initialize();
             DefaultDivinities.Instance.Initialize();
@@ -153,9 +155,7 @@ namespace BannerKings
             DefaultCriminalSentences.Instance.Initialize();
             DefaultCrimes.Instance.Initialize();
             DefaultCriminalSentences.Instance.Initialize();
-            DefaultCourtExpenses.Instance.Initialize();
-            DefaultPopulationNames.Instance.Initialize();
-            DefaultTitleNames.Instance.Initialize();
+            DefaultCourtExpenses.Instance.Initialize();   
             DefaultSuccessions.Instance.Initialize();
             DefaultInheritances.Instance.Initialize();
             DefaultGenderLaws.Instance.Initialize();    
