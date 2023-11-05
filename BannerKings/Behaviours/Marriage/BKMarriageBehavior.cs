@@ -530,6 +530,12 @@ namespace BannerKings.Behaviours.Marriage
                     ClanActions.JoinClan(proposedMarriage.Proposed, proposedMarriage.FinalClan);
                 }
 
+                if (proposedMarriage.Alliance)
+                {
+                    FactionManager.DeclareAlliance(proposedMarriage.Proposer.MapFaction,
+                        proposedMarriage.Proposed.MapFaction);
+                }
+
                 proposedMarriage = null;
             }
         }
