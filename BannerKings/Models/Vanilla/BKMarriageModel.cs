@@ -293,7 +293,7 @@ namespace BannerKings.Models.Vanilla
             return score;
         }
 
-        private IEnumerable<Hero> DiscoverAncestors(Hero hero, int n)
+        public IEnumerable<Hero> DiscoverAncestors(Hero hero, int n)
         {
             if (hero == null)
             {
