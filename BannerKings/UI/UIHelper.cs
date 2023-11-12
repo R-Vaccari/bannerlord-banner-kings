@@ -21,6 +21,8 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
+using BannerKings.Behaviours.Diplomacy;
+using BannerKings.Behaviours.Diplomacy.Wars;
 
 namespace BannerKings.UI
 {
@@ -703,6 +705,58 @@ namespace BannerKings.UI
                 0));
         }
 
+        public static List<TooltipProperty> GetAllianceHint(Kingdom proposer, Kingdom proposed)
+        {
+            List<TooltipProperty> list = new List<TooltipProperty>();
+            TooltipAddEmptyLine(list);
+            list.Add(new TooltipProperty(new TextObject("{=!}Alliance").ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.Title));
+            TooltipAddSeperator(list);
+            list.Add(new TooltipProperty(string.Empty,
+              new TextObject("{=!}An alliance between two realms institutes an expectation of mutual defensive military help. The proposed ruler needs to have at least one reason (result > 0) to consider an alliance. For more information, see the Alliances concept in the Encyclopedia.").ToString(),
+              0,
+              false,
+              TooltipProperty.TooltipPropertyFlags.MultiLine));
+
+            TooltipAddEmptyLine(list);
+            list.Add(new TooltipProperty(new TextObject("{=!}Willingness").ToString(), " ", 0));
+            //TooltipAddSeperator(list);
+            ExplainedNumber willingness = BannerKingsConfig.Instance.DiplomacyModel
+                .GetAllianceDesire(proposer, proposed, true);
+            TooltipAddSeperator(list);
+            list.Add(new TooltipProperty(string.Empty, willingness.GetExplanations(), 0));
+
+            list.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
+
+            list.Add(new TooltipProperty(string.Empty, willingness.ResultNumber.ToString("0.0"), 0, false, TooltipProperty.TooltipPropertyFlags.RundownResult));
+
+            return list;
+        }
+
+        public static List<TooltipProperty> GetWarSupportHint(Kingdom proposer, Kingdom proposed)
+        {
+            List<TooltipProperty> list = new List<TooltipProperty>();
+            TooltipAddEmptyLine(list);
+            list.Add(new TooltipProperty(new TextObject("{=!}War Support").ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.Title));
+            TooltipAddSeperator(list);
+            list.Add(new TooltipProperty(string.Empty,
+              new TextObject("{=!}The general support towards war against the target kingdom by the Peers of this realm. Different Casus Belli and individuals` goals and personalities affect the final outcome, not represented here. Thus, every voting Peer will have a different support towards a war, either for (result > 0) or against (result < 0), the likelihood of one outcome or the other being the sum of all supports. For more information, see the War Support concept in the Encyclopedia.").ToString(),
+              0,
+              false,
+              TooltipProperty.TooltipPropertyFlags.MultiLine));
+
+            TooltipAddEmptyLine(list);
+            list.Add(new TooltipProperty(new TextObject("{=!}General Support").ToString(), " ", 0));
+            //TooltipAddSeperator(list);
+            ExplainedNumber willingness = BannerKingsConfig.Instance.DiplomacyModel
+                .GetScoreOfDeclaringWar(proposer, proposed, null, out TextObject reason, null, true);
+            TooltipAddSeperator(list);
+            list.Add(new TooltipProperty(string.Empty, willingness.GetExplanations(), 0));
+            list.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
+            list.Add(new TooltipProperty(string.Empty, willingness.ResultNumber.ToString("0.0"), 0, false, TooltipProperty.TooltipPropertyFlags.RundownResult));
+
+            return list;
+        }
+
         public static List<TooltipProperty> GetHeroCourtTooltip(Hero hero)
         {
             var list = new List<TooltipProperty>
@@ -797,7 +851,7 @@ namespace BannerKings.UI
             MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type"));
             var definition2 = GameTexts.FindText("str_LEFT_ONLY").ToString();
             list.Add(new TooltipProperty(definition2, HeroHelper.GetCharacterTypeName(hero).ToString(), 0));
-            list.Add(new TooltipProperty(new TextObject("{=RMUyXy4e}Competence").ToString(), FormatValue(competence * 100f), 0));
+            list.Add(new TooltipProperty(new TextObject("{=RMUyXy4e}Competence").ToString(), FormatValue(competence), 0));
 
             TooltipAddEmptyLine(list);
             list.Add(new TooltipProperty(new TextObject("{=J6oPqQmt}Settlement Effects").ToString(), " ", 0));
@@ -856,20 +910,9 @@ namespace BannerKings.UI
             return list;
         }
 
-        private static string FormatValue(float value)
-        {
-            return value.ToString("0.00") + '%';
-        }
-
-        private static string FormatValueNegative(float value)
-        {
-            return '-' + value.ToString("0.00") + '%';
-        }
-
-        private static string FormatDailyValue(float value)
-        {
-            return '+' + value.ToString("0.00");
-        }
+        public static string FormatValue(float value) => (value * 100f).ToString("0.00") + '%';
+        public static string FormatValueNegative(float value) => '-' + value.ToString("0.00") + '%';
+        public static string FormatDailyValue(float value) => '+' + value.ToString("0.00");
 
         public static void TooltipAddEmptyLine(List<TooltipProperty> properties, bool onlyShowOnExtend = false)
         {

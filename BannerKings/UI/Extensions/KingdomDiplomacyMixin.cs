@@ -4,6 +4,7 @@ using BannerKings.Utils.Models;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Diplomacy;
 using TaleWorlds.Core.ViewModelCollection.Information;
@@ -19,10 +20,10 @@ namespace BannerKings.UI.Extensions
         private string justificationText, warScoreText, warObjectiveText, playerFrontHeader,
             enemyFrontHeader, playerFatigueHeader, enemyFatigueHeader, playerFrontText,
             enemyFrontText, playerFatigueText, enemyFatigueText, tradePactText,
-            truceText, allianceText;
+            truceText, allianceText, warSupportText;
         private HintViewModel justificationHint, warScoreHint, warObjectiveHint, frontHint,
             playerFatigueHint, enemyFatigueHint;
-        private BasicTooltipViewModel tradePactHint;
+        private BasicTooltipViewModel tradePactHint, allianceHint, warSupportHint;
         private bool warExists, peaceExists;
         private War war;
 
@@ -38,6 +39,7 @@ namespace BannerKings.UI.Extensions
         [DataSourceProperty] public string TradePactHeader => new TextObject("{=!}Trade Pact").ToString();
         [DataSourceProperty] public string AllianceHeader => new TextObject("{=!}Alliance").ToString();
         [DataSourceProperty] public string TruceHeader => new TextObject("{=!}Truce").ToString();
+        [DataSourceProperty] public string WarSupportHeader => new TextObject("{=!}War Support").ToString();
 
         public override void OnRefresh()
         {
@@ -118,10 +120,28 @@ namespace BannerKings.UI.Extensions
                     TruceText = new TextObject("{=!}None").ToString();
                 }
 
+                StanceLink stance = currentKingdom.GetStanceWith(targetKingdom);
+                if (stance.IsAllied)
+                {
+                    AllianceText = new TextObject("{=!}In Effect").ToString();
+                    TruceText = new TextObject("{=!}Implicit (Alliance)").ToString();
+                }
+                else
+                {
+                    AllianceText = new TextObject("{=!}None").ToString();
+                }
+
+
+                KingdomElection election = new KingdomElection(new BKDeclareWarDecision(null, currentKingdom.RulingClan, targetKingdom));
+                WarSupportText = UIHelper.FormatValue(election.GetLikelihoodForOutcome(0));
+
                 TradePactHint = new BasicTooltipViewModel(() =>
                 {
 
                 });
+
+                AllianceHint = new BasicTooltipViewModel(() => UIHelper.GetAllianceHint(currentKingdom, targetKingdom));
+                WarSupportHint = new BasicTooltipViewModel(() => UIHelper.GetWarSupportHint(currentKingdom, targetKingdom));
             }
         }
 
@@ -168,6 +188,21 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty]
+        public BasicTooltipViewModel WarSupportHint
+        {
+            get => warSupportHint;
+            set
+            {
+                if (value != warSupportHint)
+                {
+                    warSupportHint = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+        
+
+        [DataSourceProperty]
         public BasicTooltipViewModel TradePactHint
         {
             get => tradePactHint;
@@ -182,14 +217,14 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty]
-        public HintViewModel AllianceHint
+        public BasicTooltipViewModel AllianceHint
         {
-            get => justificationHint;
+            get => allianceHint;
             set
             {
-                if (value != justificationHint)
+                if (value != allianceHint)
                 {
-                    justificationHint = value;
+                    allianceHint = value;
                     ViewModel!.OnPropertyChangedWithValue(value);
                 }
             }
@@ -218,6 +253,20 @@ namespace BannerKings.UI.Extensions
                 if (value != justificationText)
                 {
                     justificationText = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string WarSupportText
+        {
+            get => warSupportText;
+            set
+            {
+                if (value != warSupportText)
+                {
+                    warSupportText = value;
                     ViewModel!.OnPropertyChangedWithValue(value);
                 }
             }
