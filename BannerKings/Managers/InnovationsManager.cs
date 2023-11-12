@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using BannerKings.Managers.Innovations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -21,7 +20,7 @@ namespace BannerKings.Managers
 
         private void InitializeInnovations()
         {
-            foreach (var culture in Game.Current.ObjectManager.GetObjectTypeList<CultureObject>().Where(culture => !culture.IsBandit && culture.IsInitialized))
+            foreach (var culture in Game.Current.ObjectManager.GetObjectTypeList<CultureObject>().Where(culture => !culture.IsBandit && culture.CanHaveSettlement))
             {
                 Innovations.Add(culture, new InnovationData(new List<Innovation>(), culture));
                 foreach (var innovation in DefaultInnovations.Instance.All)
@@ -47,8 +46,7 @@ namespace BannerKings.Managers
                         continue;
                     }
 
-                    data.RemoveInnovation(innovation);
-                    data.AddInnovation(innovation.GetCopy(data.Culture));
+                    data.AddInnovation(innovation);
                 }
 
                 data.PostInitialize();
@@ -63,7 +61,6 @@ namespace BannerKings.Managers
             }
         }
 
-
         public void AddSettlementResearch(Settlement settlement)
         {
             if (!Innovations.ContainsKey(settlement.Culture))
@@ -77,6 +74,8 @@ namespace BannerKings.Managers
 
         public InnovationData GetInnovationData(CultureObject culture)
         {
+            if (culture == null) return null;
+
             InnovationData data = null;
             if (Innovations.ContainsKey(culture))
             {
