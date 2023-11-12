@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Items;
 using HarmonyLib;
+using Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -18,6 +19,22 @@ namespace BannerKings.Patches
 {
     internal class FixesPatches
     {
+        [HarmonyPatch(typeof(ItemRoster))]
+        internal class ItemRosterPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("GetItemNumber")]
+            private static bool GetItemNumberPrefix(ItemRoster __instance, ItemObject item, ref int __result)
+            {
+                int count = 0;
+                foreach (ItemRosterElement element in __instance.ToList())
+                {
+                    if (element.EquipmentElement.Item == item) count += element.Amount;
+                }
+                __result = count;
+                return false;
+            }
+        }
         [HarmonyPatch(typeof(MobileParty))]
         internal class MobilePartyPatches
         {
