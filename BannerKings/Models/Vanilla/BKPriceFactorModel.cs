@@ -58,6 +58,11 @@ namespace BannerKings.Models.Vanilla
                         }
                     }
                 }
+
+                if (settlement.IsVillage)
+                {
+                    inStoreValue += merchant.ItemRoster.GetItemNumber(itemRosterElement.Item) * 10f;
+                }
             }
 
             int price = base.GetPrice(itemRosterElement, clientParty, merchant, isSelling, inStoreValue, supply, demand);
