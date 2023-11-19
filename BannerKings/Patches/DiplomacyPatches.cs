@@ -227,7 +227,7 @@ namespace BannerKings.Patches
                     GameTexts.FindText("str_selection_widget_cancel").ToString(),
                     () =>
                     {
-                        FactionManager.DeclareAlliance(diplomacy.Kingdom, newAlly);
+                        TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().MakeAlliance(diplomacy.Kingdom, newAlly);
                         __instance.RefreshValues();
                     },
                     null));
