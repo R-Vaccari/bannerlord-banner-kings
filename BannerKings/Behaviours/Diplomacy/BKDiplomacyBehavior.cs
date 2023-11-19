@@ -101,6 +101,39 @@ namespace BannerKings.Behaviours.Diplomacy
             else MakeTruce(proposer, proposed, years, kingdomBudget);
         }
 
+        public void ConsiderAlliance(Kingdom proposer, Kingdom proposed)
+        {
+            if (proposed.RulingClan == Clan.PlayerClan)
+            {
+                int denars = MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetAllianceDenarCost(proposer,
+                    proposed).ResultNumber);
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Alliance Offering").ToString(),
+                    new TextObject("{=!}The lords of {KINGDOM} offer an alliance with your realm. They are willing to pay you {DENARS} denars to prove their commitment. Accepting this offer will bind your realm to not raise arms against them by any means.")
+                    .SetTextVariable("DENARS", denars)
+                    .SetTextVariable("KINGDOM", proposer.Name)
+                    .ToString(),
+                    true,
+                    true,
+                    GameTexts.FindText("str_accept").ToString(),
+                    GameTexts.FindText("str_reject").ToString(),
+                    () => MakeAlliance(proposer, proposed),
+                    null),
+                    true,
+                    true);
+            }
+            else MakeAlliance(proposer, proposed);
+        }
+
+        public void MakeAlliance(Kingdom proposer, Kingdom proposed)
+        {
+            FactionManager.DeclareAlliance(proposer, proposed);
+            int denars = MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetAllianceDenarCost(proposer,
+                    proposed).ResultNumber);
+
+            proposer.RulingClan.Leader.ChangeHeroGold(-denars);
+            proposed.RulingClan.Leader.ChangeHeroGold(denars);
+        }
+
         public void MakeTruce(Kingdom proposer, Kingdom proposed, float years, bool kingdomBudget = false)
         {
             int denars = MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(proposer,
@@ -257,6 +290,23 @@ namespace BannerKings.Behaviours.Diplomacy
                             {
                                 ConsiderTruce(kingdom, target, 3f);
                                 break;
+                            }
+                        }
+                        else
+                        {
+                            TextObject allianceReason;
+                            if (BannerKingsConfig.Instance.KingdomDecisionModel.IsAllianceAllowed(kingdom, target, out allianceReason) &&
+                                MBRandom.RandomFloat < MBRandom.RandomFloat)
+                            {
+                                if (kingdom.RulingClan.Gold >= BannerKingsConfig.Instance.DiplomacyModel.GetAllianceDenarCost(kingdom, target)
+                                    .ResultNumber * 3f)
+                                {
+                                    if (target != Hero.MainHero.MapFaction && !BannerKingsConfig.Instance.DiplomacyModel.WillAcceptAlliance(target, kingdom)) 
+                                        continue;
+
+                                    ConsiderAlliance(kingdom, target);
+                                    break;
+                                }
                             }
                         }
                     }
