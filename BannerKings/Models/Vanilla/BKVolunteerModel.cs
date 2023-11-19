@@ -262,7 +262,7 @@ namespace BannerKings.Models.Vanilla
                 { 
                     foreach (RecruitSpawn spawn in options)
                     {
-                        if (MBRandom.RandomFloat <= spawn.Chance)
+                        if (MBRandom.RandomFloat <= spawn.GetChance(popType))
                         {
                             return spawn.Troop;
                         }
