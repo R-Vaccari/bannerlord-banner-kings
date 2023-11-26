@@ -47,7 +47,12 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             Dictionary<Town, int> defenderDic = new Dictionary<Town, int>();
             foreach (var fief in Defender.Fiefs)
             {
-                Settlement settlement = SettlementHelper.FindNearestFortification(x => x.Town != null && x.MapFaction == Attacker, fief.Settlement);
+                Settlement settlement = SettlementHelper.FindNearestFortification(x => 
+                {
+                    bool nullTown = x.Town != null;
+                    bool attacker = x.MapFaction == Attacker;
+                    return nullTown && attacker;
+                }, fief.Settlement);
                 if (settlement != null)
                 {
                     Town town = settlement.Town;
