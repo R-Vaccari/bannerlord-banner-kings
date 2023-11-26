@@ -5,6 +5,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 {
@@ -18,7 +19,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public abstract Demand GetCopy(InterestGroup group);
 
-        public InterestGroup Group { get; protected set; }
+        [SaveableProperty(9)] public InterestGroup Group { get; set; }
         public CampaignTime DueDate { get; protected set; }
 
         public bool IsDueDate => Active && DueDate.GetDayOfYear == CampaignTime.Now.GetDayOfYear && DueDate.GetYear == CampaignTime.Now.GetYear;
@@ -91,6 +92,16 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
             DemandResponse result = MBRandom.ChooseWeighted(options);
             Fulfill(result, Group.FactionLeader);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Demand)
+            {
+                Demand d = obj as Demand;
+                return d.StringId == StringId && d.Group == Group;
+            }
+            return base.Equals(obj);
         }
 
         public class DemandResponse

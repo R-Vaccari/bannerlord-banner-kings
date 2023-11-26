@@ -116,7 +116,7 @@ namespace BannerKings.Models.Vanilla
             result.Add(-100f, new TextObject("{=!}Reluctance"));
 
             KingdomElection election = new KingdomElection(new BKDeclareWarDecision(null, proposed.RulingClan, proposer));
-            result.Add(election.GetLikelihoodForOutcome(1) * 100f, new TextObject("{=!}Peace support in {ALLY}")
+            result.Add(election.GetLikelihoodForOutcome(1) * 85f, new TextObject("{=!}Peace support in {ALLY}")
                 .SetTextVariable("ALLY", proposed.Name));
 
             float relation = proposed.RulingClan.Leader.GetRelation(proposer.RulingClan.Leader);
@@ -333,6 +333,12 @@ namespace BannerKings.Models.Vanilla
             float strengthFactor = (attackerStrength / defenderStrength) - 1f;
             result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.4f, -2f, 2f), new TextObject("{=!}Difference in strength"));
 
+            if (factionDeclaredWar.Fiefs.Count < factionDeclaresWar.Fiefs.Count / 2f)
+            {
+                float fiefFactor = factionDeclaredWar.Fiefs.Count / factionDeclaresWar.Fiefs.Count;
+                result.Add(-baseNumber * (2f - fiefFactor), new TextObject("{=!}Unworthy opponent"));
+            }
+
             float attackerFiefs = factionDeclaresWar.Fiefs.Count;
             float defenderFiefs = factionDeclaredWar.Fiefs.Count;
             float fiefsFactor = (attackerFiefs  / defenderFiefs) - 1f;
@@ -378,7 +384,7 @@ namespace BannerKings.Models.Vanilla
                         float distance = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(possibleWar.DefenderFront.Settlement,
                             possibleWar.AttackerFront.Settlement) * 4f;
                         float factor = (TaleWorlds.CampaignSystem.Campaign.AverageDistanceBetweenTwoFortifications / distance) - 1f;
-                        result.Add(baseNumber * factor, new TextObject("{=!}Distance between realms"));
+                        result.Add(baseNumber * factor * 2f, new TextObject("{=!}Distance between realms"));
                     }
                 }
 

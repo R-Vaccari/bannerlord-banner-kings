@@ -59,7 +59,7 @@ namespace BannerKings.Managers.Innovations
 
             if (Era == null)
             {
-                Era = DefaultEras.Instance.SecondEra;
+                Era = DefaultEras.Instance.FirstEra;
             }
             else Era.PostInitialize();
         }

@@ -928,7 +928,7 @@ namespace BannerKings.Behaviours
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Surrender;
             var currentSettlement = Settlement.CurrentSettlement;
-            return currentSettlement.MapFaction == Hero.MainHero.MapFaction;
+            return !currentSettlement.MapFaction.IsAtWarWith(Hero.MainHero.MapFaction);
         }
 
         private static bool MenuEstatesManageCondition(MenuCallbackArgs args)

@@ -76,6 +76,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKPartyNeedsBehavior());
             campaignStarter.AddBehavior(new BKShippingBehavior());
             campaignStarter.AddBehavior(new BKMercenaryCareerBehavior());
+            campaignStarter.AddBehavior(new BKRelationsBehavior());
 
             campaignStarter.AddModel(new BKPrisonerModel());
             campaignStarter.AddModel(BannerKingsConfig.Instance.CompanionModel);

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <Concepts>
-	<Concept title="{=Dmdy2KUu}Educations"
+	<Concept title="{=!}Education"
 	        id="str_bk_education"
 	        group="Characters"
 	        link_id="BK_EDUCATION_LINK"
@@ -30,6 +30,66 @@
 	        group="Characters"
 	        link_id="BK_DECISIONS_LINK"
 	        text="{=!}Decisions are important actions a character can take. Decisions range from actions that affect only the character themselves, such as buying a book, to affecting their family, such as assuming a culture, to ultimately affecting the continent, such as founding an empire. Decisions can be found inside the Character tab. Each decision has a set of requirements to be completed, which are listed on hovering over each decision. Decisions may not be shown at all, meaning they are not relevant for your situation (ie, decisions related to being a ruler, when you are not a ruler)." />
+
+	<Concept title="{=!}Religions"
+	        id="str_bk_religions"
+	        group="Characters"
+	        link_id="BK_DECISIONS_LINK"
+	        text="{=!}Religions represent a crucial part of cultures within the game's world. Along with cultural flavor, faiths represent how a group of people differs to others in shared values, traditions and ideologies.{newline}{newline}All Banner Kings religions are lore-based. They are directly extracted from Mount and Blade lore (not just Bannerlord) when possible. If that is not possible (no information is present, ie, Sturgian lore), they are made up (though still linking to lore points whenever possible), informed on historical information that a culture/faction aims to represent. Yet, they are made up, fantasy ideas, and not made to represent real ideologies (not those official to Banner Kings).{newline}{newline}Ingame, most religion actions are mediated through {BK_PREACHERS_LINK}, who allow you to perform {BK_RITES_LINK}, take {BK_BLESSINGS_LINK} in exchange for {BK_PIETY_LINK} and learn about {BK_DIVINITIES_LINK} as well as other topics. Moreover, preachers are notables like any other, and provide troops. If you wish to assume a new faith, read {BK_JOIN_RELIGION_LINK}." />
+	
+	<Concept title="{=!}Joinning a Religion"
+	        id="str_bk_join_religion"
+	        group="Characters"
+	        link_id="BK_JOIN_RELIGION_LINK"
+	        text="{=!}There are 2 ways to join a religion: firstly, when loading the mod for the first time within a campaign. Lastly, by being inducted into one through {BK_PREACHERS_LINK}.{newline}{newline}Every faith has different criteria to accept a new follower. These criteria can be found in Character -> Religion -> reading the specific religion you want to learn about. All of them have a text line listing how to be inducted. When joinning a new faith, your {BK_PIETY_LINK} will be zeroed, and some renown is lost." />
+			
+	<Concept title="{=!}Preachers"
+	        id="str_bk_preachers"
+	        group="Characters"
+	        link_id="BK_PREACHERS_LINK"
+	        text="{=!}" />
+			
+	<Concept title="{=!}Divinities"
+	        id="str_bk_divinities"
+	        group="Characters"
+	        link_id="BK_DIVINITIES_LINK"
+	        text="{=!}" />
+			
+	<Concept title="{=!}Rites"
+	        id="str_bk_rites"
+	        group="Characters"
+	        link_id="BK_RITES_LINK"
+	        text="{=!}" />
+	
+	<Concept title="{=!}Blessings"
+	        id="str_bk_blessings"
+	        group="Characters"
+	        link_id="BK_BLESSINGS_LINK"
+	        text="{=!}" />
+
+	<Concept title="{=!}Piety"
+	        id="str_bk_piety"
+	        group="Characters"
+	        link_id="BK_PIETY_LINK"
+	        text="{=!}" />
+
+	<Concept title="{=!}Innovations"
+	        id="str_bk_innovations"
+	        group="Kingdoms"
+	        link_id="BK_INNOVATIONS_LINK"
+	        text="{=!}Government laws describe how different realms are organized. Different governments accept different types of policies and laws. Ie, republics do not accept policies such as Royal Guard, which highly favor a ruling dynasty. Moreover, government types define what kind of {BK_SUCCESSIONS_LINK} a realm can practice.{newline}{newline}Governments can be changed through a Decision. The lords and ladies of the realm must agree to such a fundamental change, and such changes are often hard to be achieved - most are resistant, either due to tradition or to maintain their own status." />
+
+	<Concept title="{=!}Eras"
+	        id="str_bk_eras"
+	        group="Kingdoms"
+	        link_id="BK_ERAS_LINK"
+	        text="{=!}Government laws describe how different realms are organized. Different governments accept different types of policies and laws. Ie, republics do not accept policies such as Royal Guard, which highly favor a ruling dynasty. Moreover, government types define what kind of {BK_SUCCESSIONS_LINK} a realm can practice.{newline}{newline}Governments can be changed through a Decision. The lords and ladies of the realm must agree to such a fundamental change, and such changes are often hard to be achieved - most are resistant, either due to tradition or to maintain their own status." />
+
+	<Concept title="{=!}Alliances"
+	        id="str_bk_alliances"
+	        group="Kingdoms"
+	        link_id="BK_ALLIANCES_LINK"
+	        text="{=!}An alliance between two realms institutes an expectation of mutual defensive military help. When one of the constituents is attacked by another realm, the other constituent is expected to come to their aid. Refusing this terminates the alliance.{newline}Alliances may beging either by mutual agreement between rulers, or by marriage arrangements. Alliances are unmade upon the death or change of rulership of either constituent, with the expection of alliances through marriage. For example, if the ruler of a kingdom dies, but their clan is still the ruling clan, and they have blood ties with their allied realm, the alliance will persevere." />
 
 	<Concept title="{=!}Governments"
 	        id="str_bk_decisions"
@@ -85,11 +145,23 @@
 	        link_id="BK_SPOUSE_LINK"
 	        text="{=!}Spouse Score is a concept added by Banner Kings that dramatically alters how marriages function. Marriages among the high nobility are often made out of gain, not love, and are highly hierarchical, as are the societies behind them. As such, clan leaders do not accept marriage offers between spouses that differ too much in social standing, which is represented by the Spouse Score. The score is composed mostly by the clan's social standing - their {BK_TITLES_LINK} and properties -, but also by the spouse's personal merits, by the clan leader's opinion of you, and the relationship between both proposed spouses." />
 
+	<Concept title="{=!}Party Supplies"
+	        id="str_bk_party_supplies"
+	        group="Characters"
+	        link_id="BK_SUPPLIES_LINK"
+	        text="{=!}Party supplies represent the realistic needs of a war party to regularly consume a variety of different supplies in order to maintain fighting shape. Supplies such as firewood and textiles for building tents and campfires would have a large impact over the morale of soldiers. A soldier that eats well, sleeps dry and warm is much more motivated than otherwise. Weapons, shields and ammunition would also be a major concern for military retinues.{newline}{newline}As such, different categories of supplies are required by noble parties in the mod. Military equipment is used to maintain party size limit, firewood and tools are used to maintain siege camp and engines building speed, and various different supplies are used for morale, such as alcohol. The rate of daily consumption of each item can be checked in the party wage tooltip, in the bottom right. Alternatively, you can also talk you your quartermaster for a detailed rundown. Quartermasters can also be used to buy these supplies automatically. Simply stay over in a town and they'll buy whatever is needed (and you can pay for) at the time of wage payment, about midday. You can activate or deactivate this behavior through dialogue.{newline}{newline}AI parties will always have auto buying enabled. They are susceptible to supplies in the exact same manner as the player." />
+	
 	<Concept title="{=!}Lordships"
 	        id="str_bk_lordships"
 	        group="Settlements"
 	        link_id="BK_LORDSHIPS_LINK"
 	        text="{=!}Lordships are {VILLAGES_LINK} and their associated {BK_TITLES_LINK}. Lordships work differently from other fiefs in one important manner: their de facto ownership and control is context-based. Without Banner Kings, villages are always controlled by the lord of the castle or town the villages are bound to. Through lordships, a village is controlled by the lordship de jure ruler, the legal owner of the title associated with that village. However, this only applies when both the village and the de jure owner share the same realm. Villages still change factions depending on who controls the castle/town. If the de jure owner is not present within the same realm as the village, then the castle/town holder controls the lordship. The de facto controller of the lordship enjoys its full income. Therefore we have that lordships are controlled by:{newline}1. The de jure title holder, if they are present in the same kingdom as the village itself;{newline}2. The castle/town holder, in the absence of a jure owner.{newline}{newline}Because of their nature, lordships allow the existance of {BK_KNIGHTS_LINK}. Knights can hold a lordship on their own, despite not being clan leaders." />
+	
+	<Concept title="{=!}Faith Presence"
+	        id="str_bk_faith_presence"
+	        group="Settlements"
+	        link_id="BK_FAITH_PRESENCE_LINK"
+	        text="{=!}Faith presence describes how strong a given faith is in the settlement. For example, a presence of 10% indicates this faith can represent up to 10% of the population. It does not mean it currently is followed by 10% of the population, as conversion is gradual, but that it has the potential to.{newline}Presence is significantly bolstered by the presence of notables that follow the given faith, specially preachers. If a fief has no preacher of your faith, you may be able to add one with the Appoint Preacher option under Demesne Management -> Religion. This option depends on whether your faith admits a preacher on the settlement type." />
 	
 	<Concept title="{=5yiE49du}Estates"
 	        id="str_bk_title"

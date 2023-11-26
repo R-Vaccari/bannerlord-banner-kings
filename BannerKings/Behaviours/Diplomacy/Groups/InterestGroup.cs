@@ -71,6 +71,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             foreach (var demand in PossibleDemands)
             {
                 demand.SetTexts();
+                demand.Group = this;
             }
         }
 
@@ -107,7 +108,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             }
 
             var influence = BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(this);
-            var support = BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(this);
             foreach (Demand demand in PossibleDemands)
             {
                 if (CanPushDemand(demand, influence.ResultNumber).Item1 && MBRandom.RandomFloat < MBRandom.RandomFloat)

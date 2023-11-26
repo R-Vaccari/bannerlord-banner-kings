@@ -76,7 +76,7 @@ namespace BannerKings.Patches
                         if (hero.CanHaveRecruits)
                         {
                             bool flag = false;
-                            CharacterObject basicVolunteer = Campaign.Current.Models.VolunteerModel.GetBasicVolunteer(hero);
+                            CharacterObject basicVolunteer = TaleWorlds.CampaignSystem.Campaign.Current.Models.VolunteerModel.GetBasicVolunteer(hero);
                             if (data.MilitaryData.GetNotableManpower(data.MilitaryData.GetCharacterManpowerType(basicVolunteer),
                                 hero, data.EstateData) < 1f)
                             {
@@ -85,7 +85,7 @@ namespace BannerKings.Patches
 
                             for (int i = 0; i < hero.VolunteerTypes.Length; i++)
                             {
-                                if (MBRandom.RandomFloat < Campaign.Current.Models.VolunteerModel.GetDailyVolunteerProductionProbability(hero, i, settlement))
+                                if (MBRandom.RandomFloat < TaleWorlds.CampaignSystem.Campaign.Current.Models.VolunteerModel.GetDailyVolunteerProductionProbability(hero, i, settlement))
                                 {
                                     CharacterObject characterObject = hero.VolunteerTypes[i];
                                     if (characterObject == null)
@@ -516,7 +516,7 @@ namespace BannerKings.Patches
             {
                 KingdomPolicyDecision.PolicyDecisionOutcome policyDecisionOutcome = 
                     possibleOutcome as KingdomPolicyDecision.PolicyDecisionOutcome;
-                BKDiplomacyBehavior behavior = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>();
+                BKDiplomacyBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>();
                 KingdomDiplomacy diplomacy = behavior.GetKingdomDiplomacy(clan.Kingdom);
      
                 if (diplomacy != null)
