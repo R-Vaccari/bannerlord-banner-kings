@@ -14,11 +14,10 @@ using static BannerKings.Behaviours.Diplomacy.Groups.Demands.Demand;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups
 {
-    public class InterestGroup : BannerKingsObject
+    public class InterestGroup : DiplomacyGroup
     {
         public InterestGroup(string stringId) : base(stringId)
         {
-            Members = new List<Hero>();
             RecentOucomes = new List<DemandOutcome>();
         }
 
@@ -75,27 +74,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             }
         }
 
-        public void Tick()
+        public override void Tick()
         {
-            var toRemove = new List<Hero>();
-            foreach (var hero in Members)
-            {
-                if (hero.IsDead || hero.MapFaction != KingdomDiplomacy.Kingdom)
-                {
-                    toRemove.Add(hero);
-                }
-            }
-
-            foreach (var hero in toRemove)
-            {
-                Members.Remove(hero);
-            }
-
-            if (Leader == null)
-            {
-                SetNewLeader(KingdomDiplomacy);
-            }
-
+            TickInternal();
             var current = CurrentDemand;
             if (current != null)
             {
@@ -116,17 +97,11 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 }
             }
         }
-
-        [SaveableProperty(10)] public KingdomDiplomacy KingdomDiplomacy { get; private set; }
-        [SaveableProperty(11)] public Hero Leader { get; private set; }
-        [SaveableProperty(12)] public List<Hero> Members { get; private set; }
+        
         [SaveableProperty(13)] public List<Demand> PossibleDemands { get; private set; }
         [SaveableProperty(14)] public List<DemandOutcome> RecentOucomes { get; private set; }
 
-        public Hero FactionLeader => KingdomDiplomacy.Kingdom.Leader;
         public CouncilMember FavoredPosition { get; private set; }
-        public bool IsInterestGroup { get; private set; }
-        public bool IsRadicalGroup => !IsInterestGroup;
         public TraitObject MainTrait { get; private set; }
         public Demand CurrentDemand => PossibleDemands.FirstOrDefault(x => x.Active);
         public bool DemandsCouncil { get; private set; }
@@ -139,16 +114,28 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         public List<DemesneLaw> ShunnedLaws { get; private set; }
         public List<CasusBelli> SupportedCasusBelli { get; private set; }
 
+        public override bool IsInterestGroup => true;
+
         public void SetName(TextObject name) => this.name = name;
 
-        public bool CanHeroJoin(Hero hero, KingdomDiplomacy diplomacy) => hero.MapFaction == diplomacy.Kingdom && 
+        public override bool CanHeroJoin(Hero hero, KingdomDiplomacy diplomacy) => hero.MapFaction == diplomacy.Kingdom &&
             hero.MapFaction.Leader != hero && diplomacy.GetHeroGroup(hero) == null;
 
-        public void AddMember(Hero hero)
+        public override bool CanHeroLeave(Hero hero, KingdomDiplomacy diplomacy)
         {
-            if (hero != null && !Members.Contains(hero))
+            if (JoinTime.TryGetValue(hero, out var joinTime))
             {
-                Members.Add(hero);
+                return joinTime.ElapsedYearsUntilNow >= 1f;
+            }
+
+            return true;
+        }
+
+        public override void AddMember(Hero hero)
+        {
+            if (hero != null && !Members.Contains(hero) && CanHeroJoin(hero, KingdomDiplomacy))
+            {
+                AddMemberInternal(hero);
                 if (hero.Clan == Clan.PlayerClan)
                 {
                     MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has joined the {GROUP} group.")
@@ -161,10 +148,13 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             }
         }
 
-        public void RemoveMember(Hero hero, bool forced = false)
+        public override void RemoveMember(Hero hero, bool forced = false)
         {
             if (hero != null && Members.Contains(hero))
             {
+                if (!forced && !CanHeroLeave(hero, KingdomDiplomacy)) return;
+
+                Members.Remove(hero);
                 if (hero.Clan == Clan.PlayerClan)
                 {
                     MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has left the {GROUP} group.")
@@ -174,38 +164,34 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                         hero.CharacterObject,
                         Utils.Helpers.GetRelationDecisionSound());
                 }
-
-                if (forced)
+              
+                if (!forced)
                 {
-                    Members.Remove(hero);
-                    return;
-                }
-
-                Members.Remove(hero);
-                if (Leader == hero)
-                {
-                    foreach (var member in Members)
+                    if (Leader == hero)
                     {
-                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, member, -10, false);
-                    }
-
-                    SetNewLeader(KingdomDiplomacy);
-                }
-                else
-                {
-                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, Leader, -20, false);
-                    foreach (var member in Members)
-                    {
-                        if (MBRandom.RandomFloat < 0.3f)
+                        foreach (var member in Members)
                         {
-                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, member, -6, false);
+                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, member, -10, false);
+                        }
+
+                        SetNewLeader(KingdomDiplomacy);
+                    }
+                    else
+                    {
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, Leader, -20, false);
+                        foreach (var member in Members)
+                        {
+                            if (MBRandom.RandomFloat < 0.3f)
+                            {
+                                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, member, -6, false);
+                            }
                         }
                     }
                 }
             }
         }
 
-        public void SetNewLeader(KingdomDiplomacy diplomacy)
+        public override void SetNewLeader(KingdomDiplomacy diplomacy)
         {
             var dictionary = new Dictionary<Hero, float>();
             foreach (var member in Members)
@@ -219,25 +205,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 Hero hero = dictionary.FirstOrDefault(x => x.Value == dictionary.Values.Max()).Key;
                 Leader = hero;
             }
-        }
-
-        public List<Hero> GetSortedMembers(KingdomDiplomacy diplomacy)
-        {
-            var list = new List<Hero>(Members);
-            if (Leader != null)
-            {
-                list.Remove(Leader);
-            }
-
-            var dictionary = new Dictionary<Hero, float>();
-            foreach (var member in Members)
-            {
-                dictionary.Add(member, BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroInfluence(this, diplomacy, member)
-                    .ResultNumber);
-            }
-
-            list.Sort((x, y) => dictionary[x].CompareTo(dictionary[y]));
-            return list;
         }
 
         public void AddOutcome(Demand demand, DemandResponse response, bool success)
