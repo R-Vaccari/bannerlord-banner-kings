@@ -275,7 +275,7 @@ namespace BannerKings.Behaviours
         public void ApplyNotableCultureConversion(Hero notable, Hero converter, bool councilConversion = false)
         {
             notable.Culture = converter.Culture;
-            GainKingdomInfluenceAction.ApplyForDefault(converter, -BannerKingsConfig.Instance.CultureModel.GetConversionCost(notable, converter).ResultNumber);
+            converter.Clan.Influence -= BannerKingsConfig.Instance.CultureModel.GetConversionCost(notable, converter).ResultNumber;
             
             if (!councilConversion)
             {
@@ -334,7 +334,8 @@ namespace BannerKings.Behaviours
         private bool ConvertCultureAnswerOnCondition()
         {
             MBTextManager.SetTextVariable("NOTABLE_ANSWER_CONVERT_CULTURE",
-                new TextObject("{=TKUCnCtD}If that is your bidding, I would not deny it. Folks at {SETTLEMENT} might not like this. Over time however, they may accept it."));
+                new TextObject("{=TKUCnCtD}If that is your bidding, I would not deny it. Folks at {SETTLEMENT} might not like this. Over time however, they may accept it.")
+                .SetTextVariable("SETTLEMENT", Hero.OneToOneConversationHero.CurrentSettlement.Name));
             return IsPlayerNotable();
         }
 
