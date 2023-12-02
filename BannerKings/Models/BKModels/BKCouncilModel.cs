@@ -49,7 +49,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMax(1000f);
             if (data.Location != null)
             {
-                result.Add(data.Location.Prosperity * 0.05f, data.Location.Name);
+                result.Add(data.Location.Prosperity * 0.05f, new TextObject("{=!}Court location ({NAME})")
+                    .SetTextVariable("NAME", data.Location.Name));
 
                 var lodgings = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Lodgings);
                 var servants = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Servants);
@@ -66,7 +67,10 @@ namespace BannerKings.Models.BKModels
             
             foreach (var position in data.Positions)
             {
-                result.Add(CalculatePositionGrace(position).ResultNumber, position.GetCulturalName());
+                if (position.Member != null) result.Add(CalculatePositionGrace(position).ResultNumber, 
+                    new TextObject("{=!}{POSITION} position fulfilled by {HERO}")
+                    .SetTextVariable("POSITION", position.GetCulturalName())
+                    .SetTextVariable("HERO", position.Member.Name));
             }
 
             return result;
