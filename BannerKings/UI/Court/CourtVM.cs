@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Grace;
 using BannerKings.Managers.Court.Members;
@@ -116,6 +117,23 @@ namespace BannerKings.UI.Court
             {
                 Guests.Add(new ClanLordItemVM(guest, teleportationBehavior, null, SetCurrentCharacter,
                         OnRequestRecall, OnRequestRecall));
+            }
+
+            KingdomDiplomacy diplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
+                .GetKingdomDiplomacy(council.Clan.Kingdom);
+            if (council.IsRoyal && diplomacy != null)
+            {
+                ExplainedNumber legitimacy = diplomacy.LegitimacyTargetExplained;
+                CourtInfo.Add(new InformationElement(new TextObject("{=!}Legitimacy:").ToString(),
+                    new TextObject("{=FgAWmeXm}{GRACE} / {TOTAL} ({CHANGE} / day)")
+                    .SetTextVariable("GRACE", diplomacy.Legitimacy.ToString("0.0"))
+                    .SetTextVariable("TOTAL", legitimacy.ResultNumber.ToString("0"))
+                    .SetTextVariable("CHANGE", FormatFloatGain(council.CourtGrace.GraceChange))
+                    .ToString(),
+                    new TextObject("{=!}Legitimacy{newline}Legitimacy Target: {TARGET}{newline}{EXPLANATIONS}")
+                    .SetTextVariable("TARGET", FormatValue(legitimacy.ResultNumber))
+                    .SetTextVariable("EXPLANATIONS", legitimacy.GetExplanations())
+                    .ToString()));
             }
 
             if (council.CourtGrace != null)
