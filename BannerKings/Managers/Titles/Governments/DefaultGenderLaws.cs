@@ -58,8 +58,8 @@ namespace BannerKings.Managers.Titles.Governments
                 0f,
                 0f,
                 0f,
-                1f,
                 0.1f,
+                1f,
                 true,
                 false);
         }
