@@ -40,6 +40,8 @@ namespace BannerKings.Managers.Court
             {
                 pos.PostInitialize();
             }
+
+            CourtGrace = new CourtGrace(this);
         }
 
         public void PostInitialize()
