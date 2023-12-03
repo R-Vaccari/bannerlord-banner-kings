@@ -25,15 +25,6 @@ namespace BannerKings.Managers.Innovations
             this.innovations = innovations;
             this.culture = culture;
             Era = DefaultEras.Instance.FirstEra;
-
-            var startInnovations = DefaultInnovations.Instance.GetCultureDefaultInnovations(culture);
-            foreach (var innovation in innovations)
-            {
-                if (startInnovations.Contains(innovation))
-                {
-                    innovation.AddProgress(innovation.RequiredProgress);
-                }
-            }
         }
 
         [field: SaveableField(2)] public Clan CulturalHead { get; private set; }

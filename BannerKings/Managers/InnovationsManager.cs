@@ -22,9 +22,11 @@ namespace BannerKings.Managers
         {
             foreach (var culture in Game.Current.ObjectManager.GetObjectTypeList<CultureObject>().Where(culture => !culture.IsBandit && culture.CanHaveSettlement))
             {
-                Innovations.Add(culture, new InnovationData(new List<Innovation>(), culture));
+                InnovationData data = new InnovationData(new List<Innovation>(), culture);
+                Innovations.Add(culture, data);
                 foreach (var innovation in DefaultInnovations.Instance.All)
-                    Innovations[culture].AddInnovation(innovation.GetCopy(culture));   
+                    data.AddInnovation(innovation.GetCopy(culture));
+                data.Update();
             }
         }
 
