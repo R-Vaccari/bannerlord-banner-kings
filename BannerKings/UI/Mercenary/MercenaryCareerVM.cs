@@ -572,7 +572,7 @@ namespace BannerKings.UI.Mercenary
                 else if (itemType == ItemTypeEnum.HeadArmor) return tierF >= 4f && tierF <= 5.5;
                 else if (itemType == ItemTypeEnum.LegArmor) return tierF <= 3f;
                 else if (itemType == ItemTypeEnum.Bow || itemType == ItemTypeEnum.Crossbow ||
-                    itemType == ItemTypeEnum.Thrown) return tierF <= 4.2f;
+                    itemType == ItemTypeEnum.Thrown) return tierF <= 5.2f;
                 else if (itemType == ItemTypeEnum.Shield) return tierF <= 3.2f;
                 else if (itemType == ItemTypeEnum.Horse) return tierF <= 5f;
                 else if (itemType == ItemTypeEnum.HorseHarness) return tierF <= 3f;
