@@ -17,12 +17,11 @@ namespace BannerKings.Managers.Innovations
         }
 
         public void Initialize(TextObject name, TextObject description, TextObject effects, Era era, InnovationType type,
-            float requiredProgress = 1000f, CultureObject culture = null, Innovation requirement = null)
+            float requiredProgress = 1000f, Innovation requirement = null)
         {
             Initialize(name, description);
             Effects = effects;
             RequiredProgress = requiredProgress;
-            Culture = culture;
             Requirement = requirement;
             Era = era;
             Type = type;
@@ -33,7 +32,7 @@ namespace BannerKings.Managers.Innovations
             Innovation innovation = DefaultInnovations.Instance.GetById(this);
             var newInnovation = new Innovation(innovation.StringId);
             newInnovation.Initialize(innovation.Name, innovation.Description, innovation.Effects, innovation.Era,
-                innovation.Type, innovation.RequiredProgress, innovation.Culture, innovation.Requirement);
+                innovation.Type, innovation.RequiredProgress, innovation.Requirement);
             newInnovation.culture = culture;
             return newInnovation;
         }
@@ -42,7 +41,7 @@ namespace BannerKings.Managers.Innovations
         {
             Innovation innovation = DefaultInnovations.Instance.GetById(this);
             Initialize(innovation.Name, innovation.Description, innovation.Effects, innovation.Era,
-                innovation.Type, innovation.RequiredProgress, innovation.Culture, innovation.Requirement);
+                innovation.Type, innovation.RequiredProgress, innovation.Requirement);
         }
 
         public SkillObject ResearchSkill
@@ -72,7 +71,7 @@ namespace BannerKings.Managers.Innovations
                 currentProgress = MBMath.ClampFloat(currentProgress, 0f, RequiredProgress);
             }
         }
-        public CultureObject Culture { get; private set; }
+        public CultureObject Culture => culture;
         public TextObject Effects { get; private set; }
 
         public void AddProgress(float points)

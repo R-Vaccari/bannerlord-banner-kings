@@ -24,14 +24,7 @@ namespace BannerKings.Managers
             {
                 Innovations.Add(culture, new InnovationData(new List<Innovation>(), culture));
                 foreach (var innovation in DefaultInnovations.Instance.All)
-                {
-                    if (innovation.Culture != null && innovation.Culture != culture)
-                    {
-                        continue;
-                    }
-
-                    Innovations[culture].AddInnovation(innovation.GetCopy(culture));
-                }
+                    Innovations[culture].AddInnovation(innovation.GetCopy(culture));   
             }
         }
 
@@ -41,11 +34,6 @@ namespace BannerKings.Managers
             {
                 foreach (var innovation in DefaultInnovations.Instance.All)
                 {
-                    if (innovation.Culture != null && data.CulturalHead != null && innovation.Culture != data.CulturalHead.Culture)
-                    {
-                        continue;
-                    }
-
                     data.AddInnovation(innovation);
                 }
 
@@ -59,17 +47,6 @@ namespace BannerKings.Managers
             {
                 data.Update();
             }
-        }
-
-        public void AddSettlementResearch(Settlement settlement)
-        {
-            if (!Innovations.ContainsKey(settlement.Culture))
-            {
-                return;
-            }
-
-            var data = Innovations[settlement.Culture];
-            data.AddResearch(BannerKingsConfig.Instance.InnovationsModel.CalculateSettlementResearch(settlement).ResultNumber);
         }
 
         public InnovationData GetInnovationData(CultureObject culture)

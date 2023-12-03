@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Buildings;
@@ -19,13 +20,11 @@ namespace BannerKings.Managers.Innovations
 
         [SaveableField(4)] private readonly List<Innovation> innovations;
 
-        [SaveableField(1)] private float research;
-
         public InnovationData(List<Innovation> innovations, CultureObject culture)
         {
             this.innovations = innovations;
             this.culture = culture;
-            Era = DefaultEras.Instance.SecondEra;
+            Era = DefaultEras.Instance.FirstEra;
 
             var startInnovations = DefaultInnovations.Instance.GetCultureDefaultInnovations(culture);
             foreach (var innovation in innovations)
@@ -161,11 +160,6 @@ namespace BannerKings.Managers.Innovations
             if (i != null && i.Equals(innov)) innovations.Remove(i);
         }
 
-        public void AddResearch(float points)
-        {
-            research += points;
-        }
-
         public bool CanResearch(Innovation innovation)
         {
             bool era = innovation.Era.Equals(Era);
@@ -220,6 +214,7 @@ namespace BannerKings.Managers.Innovations
                 return;
             }
 
+            float research = BannerKingsConfig.Instance.InnovationsModel.CalculateCultureResearch(Culture).ResultNumber;
             var unfinished = innovations.FindAll(x => !x.Finished && CanResearch(x));
             if (unfinished.Count > 0)
             {
@@ -228,30 +223,28 @@ namespace BannerKings.Managers.Innovations
                     ChangeFascination(unfinished.GetRandomElement());
                 }
 
-                for (var i = 0; i < 10; i++)
+                List<ValueTuple<Innovation, float>> candidates = new List<(Innovation, float)>();
+                foreach (Innovation i in unfinished)
                 {
-                    var random = unfinished.GetRandomElement();
-                    var result = research * 0.1f;
-                    if (random == Fascination)
+                    float factor = 1f;
+                    if (i == Fascination)
                     {
-                        var toAdd = 1.25f;
+                        factor += 0.25f;
                         if (CulturalHead.Leader.GetPerkValue(BKPerks.Instance.ScholarshipWellRead))
                         {
-                            toAdd += 0.2f;
+                            factor += 0.2f;
                         }
-
-                        result *= toAdd;
                     }
-
-                    random.AddProgress(result);
+                    candidates.Add(new(i, factor));
                 }
+
+                var random = MBRandom.ChooseWeighted(candidates);
+                random.AddProgress(research);
             }
             else
             {
                 SetEra(FindNextEra());
             }
-
-            research = 0f;
         }
     }
 }

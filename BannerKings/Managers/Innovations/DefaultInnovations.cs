@@ -68,7 +68,6 @@ namespace BannerKings.Managers.Innovations
                 DefaultEras.Instance.FirstEra,
                 Innovation.InnovationType.Civic,
                 1000f,
-                null,
                 null);
 
             ThreeFieldsSystem.Initialize(new TextObject("{=M316iXhm}3 Fields System"),
@@ -77,7 +76,6 @@ namespace BannerKings.Managers.Innovations
                 DefaultEras.Instance.FirstEra,
                 Innovation.InnovationType.Agriculture,
                 2500f,
-                null,
                 Manorialism);
 
             Forum.Initialize(new TextObject("{=!}Forum"),
@@ -86,7 +84,6 @@ namespace BannerKings.Managers.Innovations
                 DefaultEras.Instance.SecondEra,
                 Innovation.InnovationType.Building,
                 1000f,
-                null,
                 null);
 
             Theater.Initialize(new TextObject("{=!}Theater"),
@@ -95,7 +92,6 @@ namespace BannerKings.Managers.Innovations
                 DefaultEras.Instance.SecondEra,
                 Innovation.InnovationType.Building,
                 1000f,
-                null,
                 Forum);
 
             Aqueducts.Initialize(new TextObject("{=!}Aqueducts"),
@@ -104,7 +100,6 @@ namespace BannerKings.Managers.Innovations
                 DefaultEras.Instance.SecondEra,
                 Innovation.InnovationType.Building,
                 1000f,
-                null,
                 Forum);
 
             Burgage.Initialize(new TextObject("{=!}Burgage"),
@@ -120,7 +115,6 @@ namespace BannerKings.Managers.Innovations
                 DefaultEras.Instance.SecondEra,
                 Innovation.InnovationType.Civic,
                 2000f,
-                null,
                 Burgage);
 
             PublicWorks.Initialize(new TextObject("{=d3aY0Bbb}Public Works"),
@@ -129,7 +123,6 @@ namespace BannerKings.Managers.Innovations
                DefaultEras.Instance.SecondEra,
                Innovation.InnovationType.Civic,
                2000f,
-               null,
                Burgage);
 
             Stirrups.Initialize(new TextObject("{=!}Stirrups"),
@@ -145,7 +138,6 @@ namespace BannerKings.Managers.Innovations
                 DefaultEras.Instance.FirstEra,
                 Innovation.InnovationType.Military,
                 2000f,
-                null,
                 Stirrups);
 
             Cogs.Initialize(new TextObject("{=!}Cogs"),
@@ -161,7 +153,6 @@ namespace BannerKings.Managers.Innovations
                 DefaultEras.Instance.FirstEra,
                 Innovation.InnovationType.Building,
                 1500f,
-                null,
                 Cogs);
 
             HeavyPlough.Initialize(new TextObject("{=AQr3XGhg}Heavy Plough"),
@@ -177,7 +168,6 @@ namespace BannerKings.Managers.Innovations
                DefaultEras.Instance.FirstEra,
                Innovation.InnovationType.Agriculture,
                2000f,
-               null,
                HeavyPlough);
 
             HorseShoe.Initialize(new TextObject("{=!}Horse Shoes"),
@@ -186,7 +176,6 @@ namespace BannerKings.Managers.Innovations
                 DefaultEras.Instance.FirstEra,
                 Innovation.InnovationType.Agriculture,
                 1200f,
-                null,
                 HorseCollar);
 
             Cranes.Initialize(new TextObject("{=5BfW3TXX}Cranes"),
@@ -202,7 +191,6 @@ namespace BannerKings.Managers.Innovations
                 DefaultEras.Instance.SecondEra,
                 Innovation.InnovationType.Technology,
                 1500f,
-                null,
                 Cranes);
 
             BlastFurnace.Initialize(new TextObject("{=pOHP0a2R}Blast Furnace"),
@@ -211,7 +199,6 @@ namespace BannerKings.Managers.Innovations
                 DefaultEras.Instance.SecondEra,
                 Innovation.InnovationType.Technology,
                 5000f,
-                null,
                 Cranes);
 
             HalfPlateArmor.Initialize(new TextObject("{=!}Half-Plate Armor"),
@@ -220,7 +207,6 @@ namespace BannerKings.Managers.Innovations
                 DefaultEras.Instance.SecondEra,
                 Innovation.InnovationType.Technology,
                 2000f,
-                null,
                 BlastFurnace);
 
             Compass.Initialize(new TextObject("{=!}Compass"),
@@ -229,7 +215,6 @@ namespace BannerKings.Managers.Innovations
                DefaultEras.Instance.ThirdEra,
                Innovation.InnovationType.Technology,
                3000f,
-               null,
                Astrolabe);
 
             Astrolabe.Initialize(new TextObject("{=!}Astrolabe"),
