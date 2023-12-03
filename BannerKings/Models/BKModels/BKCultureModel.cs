@@ -194,12 +194,6 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            LegitimacyType legitimacy = (LegitimacyType)BannerKingsConfig.Instance.LegitimacyModel.CalculateEffect(settlement).ResultNumber;
-            if (legitimacy == LegitimacyType.Unlawful || legitimacy == LegitimacyType.Unlawful_Foreigner)
-            {
-                result.Add(-5f, new TextObject("{=njD4zXuM}Unlawful owner"));
-            }
-
             return result;
         }
 

@@ -205,24 +205,11 @@ namespace BannerKings.Models.BKModels
                         .SetTextVariable("POINTS", demesneLimit - currentDemesne));
                 }
 
-                var legitimacy = 0f;
-                var legitimacyType = (LegitimacyType) BannerKingsConfig.Instance.LegitimacyModel
-                    .CalculateEffect(settlement).ResultNumber;
-                legitimacy = legitimacyType switch
-                {
-                    LegitimacyType.Lawful => 0.1f,
-                    LegitimacyType.Lawful_Foreigner => 0.05f,
-                    LegitimacyType.Unlawful => -0.05f,
-                    _ => -0.1f
-                };
-
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
                 if (government.Equals(DefaultGovernments.Instance.Feudal))
                 {
                     result.Add(0.05f, new TextObject("{=PSrEtF5L}Government"));
                 }
-
-                result.Add(legitimacy, new TextObject("{=UqLsS4GV}Legitimacy"));
             }
 
             return result;

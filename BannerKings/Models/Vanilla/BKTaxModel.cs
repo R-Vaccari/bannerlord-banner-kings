@@ -195,12 +195,6 @@ namespace BannerKings.Models.Vanilla
                             break;
                     }
 
-                    var legitimacy = (LegitimacyType)new BKLegitimacyModel().CalculateEffect(town.Settlement).ResultNumber;
-                    if (legitimacy == LegitimacyType.Lawful)
-                    {
-                        baseResult.AddFactor(0.05f, new TextObject("Legitimacy"));
-                    }
-
                     if (baseResult.ResultNumber > 0f)
                     {
                         baseResult.Add(baseResult.ResultNumber * -0.6f * data.Autonomy, new TextObject("{=xMsWoSnL}Autonomy"));
