@@ -1,6 +1,7 @@
 using System;
 using BannerKings.Behaviours;
 using BannerKings.Behaviours.Diplomacy;
+using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Mercenary;
 using BannerKings.Extensions;
 using BannerKings.Managers.CampaignStart;
@@ -126,9 +127,15 @@ namespace BannerKings.Models.Vanilla
                 {
                     foreach (var pact in diplomacy.TradePacts)
                     {
-                        result.Add(-BannerKingsConfig.Instance.DiplomacyModel.TRADE_PACT_INFLUENCE_CAP, 
-                            new TextObject("{=!}Trade pact with {KINGDOM}")
+                        result.AddFactor(-0.075f, new TextObject("{=!}Trade pact with {KINGDOM}")
                             .SetTextVariable("KINGDOM", pact.Name));
+                    }
+
+                    foreach (InterestGroup group in diplomacy.Groups)
+                    {
+                        result.AddFactor(0.5f * group.Influence.ResultNumber * (group.Support.ResultNumber - 0.5f), 
+                            new TextObject("{=!}{GROUP} support")
+                            .SetTextVariable("GROUP", group.Name));
                     }
                 }
             }
