@@ -116,7 +116,7 @@ namespace BannerKings.Models.BKModels
                 result.Add(clan.Gold / 10f, GameTexts.FindText("str_wealth"));
             }
 
-            result.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(clan).ResultNumber * 5f, 
+            result.Add(clan.Influence * 5f, 
                 new TextObject("{=wwYABLRd}Clan Influence Limit"));
 
             return result;
@@ -261,7 +261,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public BKExplainedNumber CalculateHeroInfluence(InterestGroup group, KingdomDiplomacy diplomacy,
+        public BKExplainedNumber CalculateHeroInfluence(DiplomacyGroup group, KingdomDiplomacy diplomacy,
             Hero hero, bool explanations = false)
         {
             var result = new BKExplainedNumber(0f, explanations);
