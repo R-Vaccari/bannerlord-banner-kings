@@ -75,15 +75,13 @@ namespace BannerKings.UI.Kingdoms
                 }
             }
 
-            BKExplainedNumber influence = BannerKingsConfig.Instance.InterestGroupsModel
-                .CalculateGroupInfluence(Group, true);
+            BKExplainedNumber influence = Group.InfluenceExplained;
 
             Headers.Add(new StringPairItemVM(new TextObject("{=EkFaisgP}Influence").ToString(),
                 FormatValue(influence.ResultNumber),
                 new BasicTooltipViewModel(() => influence.GetFormattedPercentage())));
 
-            BKExplainedNumber support = BannerKingsConfig.Instance.InterestGroupsModel
-                .CalculateGroupSupport(Group, true);
+            BKExplainedNumber support = Group.SupportExplained;
 
             Headers.Add(new StringPairItemVM(new TextObject("{=!}Support").ToString(),
                 FormatValue(support.ResultNumber), 
@@ -172,11 +170,30 @@ namespace BannerKings.UI.Kingdoms
         {
             if (Group.Members.Contains(Hero.MainHero))
             {
-                Group.RemoveMember(Hero.MainHero);
+                InformationManager.ShowInquiry(new InquiryData(
+                    new TextObject("{=!}Leave Group").ToString(),
+                    new TextObject("{=!}Leaving the group will harm the members' opinion of you, specially if you lead the group.").ToString(),
+                    true,
+                    true,
+                    GameTexts.FindText("str_accept").ToString(),
+                    GameTexts.FindText("str_cancel").ToString(),
+                    () => Group.RemoveMember(Hero.MainHero),
+                    null));
             }
             else
             {
-                Group.AddMember(Hero.MainHero);
+                InformationManager.ShowInquiry(new InquiryData(
+                   new TextObject("{=!}Join Group").ToString(),
+                   new TextObject("{=!}You may join the {GROUP} group, represented by {LEADER}. Once joined, other members will expect your participation.")
+                   .SetTextVariable("GROUP", GroupName)
+                   .SetTextVariable("LEADER", Group.Leader.Name)
+                   .ToString(),
+                   true,
+                   true,
+                   GameTexts.FindText("str_accept").ToString(),
+                   GameTexts.FindText("str_cancel").ToString(),
+                   () => Group.AddMember(Hero.MainHero),
+                   null));
             }
             RefreshValues();
         }
