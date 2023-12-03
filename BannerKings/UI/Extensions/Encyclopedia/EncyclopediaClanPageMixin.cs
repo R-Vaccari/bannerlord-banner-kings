@@ -87,7 +87,7 @@ namespace BannerKings.UI.Extensions.Encyclopedia
                     }
                     else if (member == member.Clan.Leader)
                     {
-                        highestTitle = Utils.Helpers.GetTitlePrefix(title.TitleType, member.MapFaction.Culture);
+                        highestTitle = Utils.TextHelper.GetTitlePrefix(title.TitleType, member.MapFaction.Culture).ToString();
                     }
                 }
             }

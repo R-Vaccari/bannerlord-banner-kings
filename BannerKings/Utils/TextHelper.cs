@@ -34,6 +34,9 @@ namespace BannerKings.Utils
             return new TextObject("{=HoU7ZObZ}General Goods");
         }
 
+        public static TextObject GetTitlePrefix(TitleType type, CultureObject culture = null) =>
+            DefaultTitleNames.Instance.GetTitleName(culture, type).Description;
+
         public static TextObject GetTitleHonorary(TitleType type, bool female, CultureObject culture = null)
         {
             var name = DefaultTitleNames.Instance.GetTitleName(culture, type);

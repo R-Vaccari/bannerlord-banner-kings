@@ -34,7 +34,7 @@ namespace BannerKings.Managers.Titles
             else
             {
                 FullName = new TextObject("{=wMius2i9}{TITLE} of {NAME}")
-                                .SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(type, deJure.Culture))
+                                .SetTextVariable("TITLE", Utils.TextHelper.GetTitlePrefix(type, deJure.Culture))
                                 .SetTextVariable("NAME", name);
             }
 
@@ -182,7 +182,7 @@ namespace BannerKings.Managers.Titles
             if (!CustomName)
             {
                 FullName = new TextObject("{=wMius2i9}{TITLE} of {NAME}")
-                                .SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(TitleType, deJure.Culture))
+                                .SetTextVariable("TITLE", Utils.TextHelper.GetTitlePrefix(TitleType, deJure.Culture))
                                 .SetTextVariable("NAME", shortName);
             }
         }
