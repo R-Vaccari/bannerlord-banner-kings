@@ -61,6 +61,11 @@ namespace BannerKings.Models.Vanilla
 
                 if (settlement.IsVillage)
                 {
+                    inStoreValue += merchant.ItemRoster.GetItemNumber(itemRosterElement.Item) * 20f;
+                }
+
+                if (settlement.IsCastle)
+                {
                     inStoreValue += merchant.ItemRoster.GetItemNumber(itemRosterElement.Item) * 10f;
                 }
             }
