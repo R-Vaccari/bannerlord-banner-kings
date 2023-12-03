@@ -9,7 +9,6 @@ namespace BannerKings.Behaviours.Innovations
         {
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
-            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, OnDailyTickSettlement);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -19,11 +18,6 @@ namespace BannerKings.Behaviours.Innovations
         private void OnDailyTick()
         {
             BannerKingsConfig.Instance.InnovationsManager.UpdateInnovations();
-        }
-
-        private void OnDailyTickSettlement(Settlement settlement)
-        {
-            BannerKingsConfig.Instance.InnovationsManager.AddSettlementResearch(settlement);
         }
 
         private void OnGameLoaded(CampaignGameStarter campaignGameStarter)
