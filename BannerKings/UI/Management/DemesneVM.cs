@@ -175,16 +175,6 @@ namespace BannerKings.UI.Management
 
             if (title != null)
             {
-                var legitimacyType = new BKLegitimacyModel().CalculateEffect(data.Settlement).ResultNumber;
-                if (legitimacyType > 0f)
-                {
-                    var legitimacy = (LegitimacyType) legitimacyType;
-                    DemesneInfo.Add(new InformationElement(new TextObject("{=UqLsS4GV}Legitimacy:").ToString(),
-                        legitimacy.ToString().Replace('_', ' '),
-                        new TextObject("{=2GV3HnQ4}Your legitimacy to this title and it's vassals. You are lawful when you own this title, and considered a foreigner if your culture differs from it.")
-                            .ToString()));
-                }
-
                 if (title.Sovereign != null)
                 {
                     DemesneInfo.Add(new InformationElement(new TextObject("{=qXe7jFLM}Sovereign:").ToString(),
