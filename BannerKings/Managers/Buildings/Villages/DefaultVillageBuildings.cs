@@ -58,6 +58,7 @@ namespace BannerKings.Managers.Populations.Villages
                 yield return Marketplace;
                 yield return Bakery;
                 yield return TaxOffice;
+                yield return Mill;
             }
         }
 
