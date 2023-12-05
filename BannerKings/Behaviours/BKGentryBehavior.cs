@@ -30,7 +30,7 @@ namespace BannerKings.Behaviours
     {
         public override void RegisterEvents()
         {
-            CampaignEvents.OnNewGameCreatedPartialFollowUpEndEvent.AddNonSerializedListener(this, OnGameCreatedFollowUp);
+            CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnGameCreatedFollowUp);
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
             CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnPartyDailyTick);
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
@@ -42,7 +42,7 @@ namespace BannerKings.Behaviours
         {
         }
 
-        private void OnGameCreatedFollowUp(CampaignGameStarter starter)
+        private void OnGameCreatedFollowUp()
         {
             foreach (Settlement settlement in Settlement.All)
             {
