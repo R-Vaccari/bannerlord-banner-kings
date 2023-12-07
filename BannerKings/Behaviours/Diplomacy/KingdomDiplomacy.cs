@@ -1,10 +1,13 @@
 ﻿using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Faiths;
+using BannerKings.Utils.Models;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -18,7 +21,23 @@ namespace BannerKings.Behaviours.Diplomacy
         [SaveableProperty(5)] public List<Kingdom> TradePacts { get; private set; }
         [SaveableProperty(4)] public Dictionary<Kingdom, CampaignTime> Truces { get; private set; }
         [SaveableProperty(6)] public float Fatigue { get; private set; }
-      
+        [SaveableProperty(7)] public float Legitimacy { get; private set; }
+        public float LegitimacyChange
+        {
+            get
+            {
+                var target = LegitimacyTarget.ResultNumber;
+                float change = target * 0.01f;
+                float diff = target - Legitimacy;
+                if (Legitimacy < target) return MathF.Clamp(change, 0f, diff);
+                else if (Legitimacy > target) return MathF.Clamp(-change, diff, 0f);
+                return 0f;
+            }
+        }
+
+        public BKExplainedNumber LegitimacyTarget => BannerKingsConfig.Instance.LegitimacyModel.CalculateEffect(this, false);
+        public BKExplainedNumber LegitimacyTargetExplained => BannerKingsConfig.Instance.LegitimacyModel.CalculateEffect(this, true);
+
         public KingdomDiplomacy(Kingdom kingdom)
         {
             Kingdom = kingdom;
@@ -29,6 +48,8 @@ namespace BannerKings.Behaviours.Diplomacy
 
         public void PostInitialize()
         {
+            if (Religion != null) Religion.PostInitialize(DefaultFaiths.Instance.GetById(Religion.Faith.StringId));
+
             foreach (var group in Groups)
             {
                 group.PostInitialize();
@@ -183,12 +204,8 @@ namespace BannerKings.Behaviours.Diplomacy
         public InterestGroup GetHeroGroup(Hero hero)
         {
             foreach (var group in Groups)
-            {
                 if (group.Members.Contains(hero))
-                {
                     return group;
-                }
-            }
 
             return null;
         }
@@ -196,20 +213,12 @@ namespace BannerKings.Behaviours.Diplomacy
         public void Update()
         {
             var trucesToDelete = new List<Kingdom>();
-            foreach (var truce in Truces)
-            {
-                if (truce.Value.RemainingDaysFromNow < 1f)
-                {
+            foreach (var truce in Truces) if (truce.Value.RemainingDaysFromNow < 1f)
                     trucesToDelete.Add(truce.Key);
-                }
-            }
 
             AddFatigue(-0.005f);
+            foreach (var kingdom in trucesToDelete) DissolveTruce(kingdom, new TextObject("{=!}The agreed time has expired."));
 
-            foreach (var kingdom in trucesToDelete)
-            {
-                DissolveTruce(kingdom, new TextObject("{=!}The agreed time has expired."));
-            }
 
             if (Religion == null)
             {
@@ -217,10 +226,9 @@ namespace BannerKings.Behaviours.Diplomacy
                 //Religion = BannerKingsConfig.Instance.ReligionModel.GetKingdomStateReligion(Kingdom);
             }
 
-            foreach (var group in Groups)
-            {
-                group.Tick();
-            }
+            Legitimacy += LegitimacyChange;
+
+            foreach (var group in Groups) group.Tick();    
 
             foreach (var group in DefaultInterestGroup.Instance.All)
             {
@@ -236,18 +244,12 @@ namespace BannerKings.Behaviours.Diplomacy
                     Groups.Add(copy);
                 }
 
-                if (!adequate && Groups.Contains(group))
-                {
-                    Groups.Remove(group);
-                }
+                if (!adequate && Groups.Contains(group)) Groups.Remove(group);
             }
 
             foreach (var clan in Kingdom.Clans)
             {
-                if (clan.IsUnderMercenaryService)
-                {
-                    continue;
-                }
+                if (clan.IsUnderMercenaryService) continue;
 
                 foreach (var member in clan.Lords)
                 {
@@ -257,15 +259,9 @@ namespace BannerKings.Behaviours.Diplomacy
             }
 
             foreach (var settlement in Kingdom.Settlements)
-            {
                 if (settlement.Notables != null)
-                {
                     foreach (var notable in settlement.Notables)
-                    {
                         EvaluateJoinAGroup(notable);
-                    }
-                }
-            }
         }
 
         private void EvaluateJoinAGroup(Hero hero)
