@@ -31,13 +31,13 @@ namespace BannerKings.Models.BKModels
                 if (data.TitleData != null && data.TitleData.Title != null)
                 {
                     bool boost = data.TitleData.Title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties);
-                    result.Add(nobles / (boost ? 7000f : 9000f), new TextObject("{=pJAF5pzO}Nobles"));
+                    result.Add(nobles / (boost ? 6000f : 8000f), new TextObject("{=pJAF5pzO}Nobles"));
                 }
             }
 
             if (craftsmen > 0)
             {
-                result.Add(craftsmen / 15000f, new TextObject("{=d0YJZ6Z1}Craftsmen"));
+                result.Add(craftsmen / 12500f, new TextObject("{=d0YJZ6Z1}Craftsmen"));
             }
 
             result.AddFactor(data.Stability - 0.75f, new TextObject("{=!}Stability"));
