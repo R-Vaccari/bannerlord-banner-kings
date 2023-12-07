@@ -110,10 +110,10 @@ namespace BannerKings.Managers.Innovations
             return clan == CulturalHead && !fascination.Finished && fascination != Fascination;
         }
 
-        public void AssumeCulturalHead(Clan clan)
+        public void AssumeCulturalHead(Clan clan, bool announce = false)
         {
             CulturalHead = clan;
-            if (culture == Clan.PlayerClan.Culture)
+            if (culture == Clan.PlayerClan.Culture && announce)
             {
                 MBInformationManager.AddQuickInformation(
                     new TextObject("{=uZPepQjz}The {CLAN} has assumed the role of cultural head of the {CULTURE} culture.")
@@ -122,10 +122,10 @@ namespace BannerKings.Managers.Innovations
             }
         }
 
-        public void ChangeFascination(Innovation fascination)
+        public void ChangeFascination(Innovation fascination, bool announce = false)
         {
             Fascination = fascination;
-            if (culture == Clan.PlayerClan.Culture)
+            if (culture == Clan.PlayerClan.Culture && announce)
             {
                 MBInformationManager.AddQuickInformation(
                     new TextObject("{=Hvt8EySp}The {CULTURE} is now fascinated by the {FASCINATION} innovation.")

@@ -168,7 +168,7 @@ namespace BannerKings.UI.Cultures
                     new TextObject("{=1WXxCssM}Assume the position of culture head.").ToString(), true, true,
                     GameTexts.FindText("str_accept").ToString(),
                     GameTexts.FindText("str_cancel").ToString(),
-                    () => innovationData.AssumeCulturalHead(Clan.PlayerClan),
+                    () => innovationData.AssumeCulturalHead(Clan.PlayerClan, true),
                 null
                 ));
             }
@@ -237,7 +237,7 @@ namespace BannerKings.UI.Cultures
                             return;
                         }
 
-                        innovationData.ChangeFascination(innov);
+                        innovationData.ChangeFascination(innov, true);
                         RefreshValues();
                     }, null));
             }
