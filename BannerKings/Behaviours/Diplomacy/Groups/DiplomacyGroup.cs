@@ -17,6 +17,12 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         [SaveableProperty(12)] public List<Hero> Members { get; protected set; }
         [SaveableProperty(9)] public Dictionary<Hero, CampaignTime> JoinTime { get; protected set; }
 
+        protected void PostInitialize()
+        {
+            if (Members == null) Members = new List<Hero>();
+            if (JoinTime == null) JoinTime = new Dictionary<Hero, CampaignTime>();
+        }
+
         public Hero FactionLeader => KingdomDiplomacy.Kingdom.Leader;
 
         public abstract bool IsInterestGroup { get; }
@@ -30,8 +36,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
         protected void AddMemberInternal(Hero hero)
         {
-            Members.Add(hero);
-            JoinTime.Add(hero, CampaignTime.Now);
+            if (!Members.Contains(hero)) Members.Add(hero);
+            JoinTime[hero] = CampaignTime.Now;
         }
 
         public List<Hero> GetSortedMembers(KingdomDiplomacy diplomacy)
