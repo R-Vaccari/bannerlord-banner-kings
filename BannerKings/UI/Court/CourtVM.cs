@@ -8,6 +8,7 @@ using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
+using BannerKings.Utils.Models;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
@@ -123,16 +124,16 @@ namespace BannerKings.UI.Court
                 .GetKingdomDiplomacy(council.Clan.Kingdom);
             if (council.IsRoyal && diplomacy != null)
             {
-                ExplainedNumber legitimacy = diplomacy.LegitimacyTargetExplained;
+                BKExplainedNumber legitimacy = diplomacy.LegitimacyTargetExplained;
                 CourtInfo.Add(new InformationElement(new TextObject("{=!}Legitimacy:").ToString(),
                     new TextObject("{=FgAWmeXm}{GRACE} / {TOTAL} ({CHANGE} / day)")
-                    .SetTextVariable("GRACE", diplomacy.Legitimacy.ToString("0.0"))
-                    .SetTextVariable("TOTAL", legitimacy.ResultNumber.ToString("0"))
-                    .SetTextVariable("CHANGE", FormatFloatGain(council.CourtGrace.GraceChange))
+                    .SetTextVariable("GRACE", FormatValue(diplomacy.Legitimacy))
+                    .SetTextVariable("TOTAL", FormatValue(legitimacy.ResultNumber))
+                    .SetTextVariable("CHANGE", FormatFloatGain(diplomacy.LegitimacyChange * 100f))
                     .ToString(),
-                    new TextObject("{=!}Legitimacy{newline}Legitimacy Target: {TARGET}{newline}{EXPLANATIONS}")
+                    new TextObject("{=!}Legitimacy represents how a ruler is seen by the other members of a realm, concerning their right to rule.{newline}{newline}Legitimacy Target: {TARGET}{newline}{newline}{EXPLANATIONS}")
                     .SetTextVariable("TARGET", FormatValue(legitimacy.ResultNumber))
-                    .SetTextVariable("EXPLANATIONS", legitimacy.GetExplanations())
+                    .SetTextVariable("EXPLANATIONS", legitimacy.GetFormattedPercentage())
                     .ToString()));
             }
 
