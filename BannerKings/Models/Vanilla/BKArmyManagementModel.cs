@@ -19,6 +19,8 @@ namespace BannerKings.Models.Vanilla
     {
         public bool CanCreateArmy(Hero armyLeader)
         {
+            if (armyLeader.Clan == null) return false;
+
             var kingdom = armyLeader.Clan.Kingdom;
             if (kingdom != null)
             {
