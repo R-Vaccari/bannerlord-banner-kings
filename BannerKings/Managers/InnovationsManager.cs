@@ -13,7 +13,6 @@ namespace BannerKings.Managers
         public InnovationsManager()
         {
             Innovations = new Dictionary<CultureObject, InnovationData>();
-            InitializeInnovations();
         }
 
         [SaveableProperty(1)] private Dictionary<CultureObject, InnovationData> Innovations { get; set; }
@@ -22,16 +21,20 @@ namespace BannerKings.Managers
         {
             foreach (var culture in Game.Current.ObjectManager.GetObjectTypeList<CultureObject>().Where(culture => !culture.IsBandit && culture.CanHaveSettlement))
             {
-                InnovationData data = new InnovationData(new List<Innovation>(), culture);
-                Innovations.Add(culture, data);
-                foreach (var innovation in DefaultInnovations.Instance.All)
-                    data.AddInnovation(innovation.GetCopy(culture));
-                data.Update();
+                if (!Innovations.ContainsKey(culture))
+                {
+                    InnovationData data = new InnovationData(new List<Innovation>(), culture);
+                    Innovations.Add(culture, data);
+                    foreach (var innovation in DefaultInnovations.Instance.All)
+                        data.AddInnovation(innovation.GetCopy(culture));
+                    data.Update();
+                }
             }
         }
 
         public void PostInitialize()
         {
+            InitializeInnovations();
             foreach (var data in Innovations.Values)
             {
                 foreach (var innovation in DefaultInnovations.Instance.All)
