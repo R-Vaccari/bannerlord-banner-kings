@@ -277,8 +277,12 @@ namespace BannerKings.UI.Marriages
                 string.Empty,
                 delegate (List<InquiryElement> list)
                 {
-                    ProposedHero = new HeroVM((Hero)list[0].Identifier);
-                    InvertedClan = false;
+                    if (!list.IsEmpty())
+                    {
+                        ProposedHero = new HeroVM((Hero)list[0].Identifier);
+                        InvertedClan = false;
+                    }
+                   
                     RefreshValues();
                 },
                 null));
