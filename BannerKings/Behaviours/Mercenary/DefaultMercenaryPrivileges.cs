@@ -147,11 +147,16 @@ namespace BannerKings.Behaviours.Mercenary
                 (MercenaryCareer career) =>
                 {
                     var barony = MercenaryCareer.GetBaronyPrivilege(career);
-                    var title = BannerKingsConfig.Instance.TitleManager.GetTitle(barony);
-                    var action = BannerKingsConfig.Instance.TitleModel.GetAction(Managers.Titles.ActionType.Grant,
-                        title, title.deJure, career.Clan.Leader);
-                    action.TakeAction(career.Clan.Leader);
-                    return true;
+                    if (barony != null)
+                    {
+                        var title = BannerKingsConfig.Instance.TitleManager.GetTitle(barony);
+                        var action = BannerKingsConfig.Instance.TitleModel.GetAction(Managers.Titles.ActionType.Grant,
+                            title, title.deJure, career.Clan.Leader);
+                        action.TakeAction(career.Clan.Leader);
+                        return true;
+                    }
+
+                    return false;
                 });
 
             FullPeerage.Initialize(new TextObject("Full Peerage"),
