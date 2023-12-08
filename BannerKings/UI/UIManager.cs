@@ -101,6 +101,9 @@ namespace BannerKings.UI
                 {
                     if (!buildings.Any(type => type.StringId == available.Building.BuildingType.StringId))
                         unwanted.Add(available);
+
+                    if (!data.IsBuildingUpgradeAvailable(available.Building.BuildingType, available.Building.CurrentLevel + 1))
+                        unwanted.Add(available);
                 }
 
                 foreach (var toRemove in unwanted)
