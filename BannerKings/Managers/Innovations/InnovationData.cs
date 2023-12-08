@@ -56,6 +56,17 @@ namespace BannerKings.Managers.Innovations
 
         public List<Innovation> GetEraInnovations(Era era) => innovations.FindAll(x => x.Era.Equals(era));
 
+        public bool IsBuildingUpgradeAvailable(BuildingType building, int level)
+        {
+            if (building == DefaultBuildingTypes.Wall || building == DefaultBuildingTypes.Fortifications)
+            {
+                if (level == 2) return HasFinishedInnovation(DefaultInnovations.Instance.Masonry);
+                else if (level == 3) return HasFinishedInnovation(DefaultInnovations.Instance.AdvancedMasonry);
+            }
+
+            return true;
+        }
+
         public List<BuildingType> GetAvailableBuildings()
         {
             List<BuildingType> buildings = new List<BuildingType>(20);
