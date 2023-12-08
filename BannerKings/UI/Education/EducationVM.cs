@@ -407,16 +407,21 @@ namespace BannerKings.UI.Education
                 if (tuple.Item1 != data.CurrentLanguage && tuple.Item2 != data.LanguageInstructor)
                 {
                     var hero = tuple.Item2;
-                    var settlementString = hero.CurrentSettlement != null
-                        ? hero.CurrentSettlement.Name.ToString()
-                        : new TextObject("{=vW3YtyNm}None (in a mobile party)").ToString();
+                    TextObject placeText = hero.CurrentSettlement != null
+                        ? hero.CurrentSettlement.Name
+                        : new TextObject("{=vW3YtyNm}None (in a mobile party)");
+
+                    bool available = hero.IsFriend(Hero.MainHero) || hero.Clan == Clan.PlayerClan;
+                    TextObject hint = available ? new TextObject("{=!}{HERO} is currently available for teaching. Their current location is: {LOCATION}").SetTextVariable("LOCATION", placeText) :
+                        new TextObject("{=!}{HERO} is not available for teaching: either they are not part of your family or do not like you enough.");
                     elements.Add(new InquiryElement(tuple,
                         tuple.Item1.Name + " - " + hero.Name,
                         new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject)),
-                        hero.IsFriend(Hero.MainHero) || hero.Clan == Clan.PlayerClan, settlementString));
+                        available,
+                        hint.SetTextVariable("HERO", hero.Name)
+                        .ToString()));
                 }
             }
-
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=bkoJgoDo}Choose Language").ToString(),
