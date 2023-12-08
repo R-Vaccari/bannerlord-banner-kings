@@ -132,7 +132,7 @@ namespace BannerKings
             FirstUse = false;
         }
 
-        private void Initialize()
+        public void Initialize()
         {
             DefaultPopulationNames.Instance.Initialize();
             DefaultTitleNames.Instance.Initialize();
