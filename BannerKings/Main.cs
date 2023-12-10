@@ -125,7 +125,6 @@ namespace BannerKings
             campaignStarter.AddModel(new BKBattleMoraleModel());
             campaignStarter.AddModel(BannerKingsConfig.Instance.LearningModel);
             campaignStarter.AddModel(BannerKingsConfig.Instance.KingdomDecisionModel);  
-            campaignStarter.AddModel(new BKPartyFoodBuyingModel());
             campaignStarter.AddModel(new BKPregnancyModel());
             campaignStarter.AddModel(new BKPartyHealingModel());
             campaignStarter.AddModel(new BKBanditModel());
