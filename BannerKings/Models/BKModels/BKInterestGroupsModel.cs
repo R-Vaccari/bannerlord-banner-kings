@@ -6,6 +6,7 @@ using BannerKings.Utils.Extensions;
 using BannerKings.Utils.Models;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -176,7 +177,7 @@ namespace BannerKings.Models.BKModels
 
             if (otherMembers > 0)
             {
-                result.Add(approval, new TextObject("{=!}Approval by members (x{MEMBERS})")
+                result.Add(approval, new TextObject("{=!}Approval by nobility members (x{MEMBERS})")
                     .SetTextVariable("MEMBERS", otherMembers));
             }
 
@@ -242,21 +243,36 @@ namespace BannerKings.Models.BKModels
                     .SetTextVariable("COUNT", shunnedLawsCount));
             }
 
+            var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(sovereign);
+            bool matchingReligion = false;
+            if (group.KingdomDiplomacy.Religion != null)
+                if (rel != null && rel.Equals(group.KingdomDiplomacy.Religion))
+                    matchingReligion = true;
+
             if (group.StringId == DefaultInterestGroup.Instance.Traditionalists.StringId)
             {
-                if (group.FactionLeader.Culture == group.KingdomDiplomacy.Kingdom.Culture)
-                {
+                if (sovereign.Culture == group.KingdomDiplomacy.Kingdom.Culture)
                     result.Add(0.12f, new TextObject("{=!}{HERO} is of traditional culture")
-                        .SetTextVariable("HERO", group.FactionLeader.Name));
-                }
+                        .SetTextVariable("HERO", sovereign.Name));
 
-                var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(group.FactionLeader);
-                if (group.KingdomDiplomacy.Religion != null)
+                if (matchingReligion) result.Add(0.12f, new TextObject("{=!}{HERO} is of traditional faith")
+                        .SetTextVariable("HERO", sovereign.Name));
+            }
+
+            if (group.StringId == DefaultInterestGroup.Instance.Zealots.StringId)
+            {
+                if (!matchingReligion) result.Add(-0.4f, new TextObject("{=!}{HERO} is not of traditional faith")
+                        .SetTextVariable("HERO", sovereign.Name));
+                else
                 {
-                    if (rel != null && rel.Equals(group.KingdomDiplomacy.Religion.Faith))
+                    foreach (var tuple in rel.Faith.Traits)
                     {
-                        result.Add(0.12f, new TextObject("{=!}{HERO} is of traditional faith")
-                            .SetTextVariable("HERO", group.FactionLeader.Name));
+                        TraitObject trait = tuple.Key;
+                        int traitLevel = sovereign.GetTraitLevel(trait);
+                        if (traitLevel != 0)
+                        {
+                            result.Add(traitLevel * 0.1f * (tuple.Value ? 1f : -1f), trait.Name);
+                        }
                     }
                 }
             }
@@ -367,8 +383,25 @@ namespace BannerKings.Models.BKModels
             {
                 result.Add(0.075f);
             }
-            
+
             result.Add(hero.GetTraitLevel(group.MainTrait) * 0.15f);
+            return result;
+        }
+
+        public BKExplainedNumber CalculateHeroCreateRadicallGroup(Hero hero, KingdomDiplomacy diplomacy, bool explanations = false)
+        {
+            BKExplainedNumber result = new BKExplainedNumber(0f, explanations);
+
+            InterestGroup group = diplomacy.GetHeroGroup(hero);
+            if (group != null)
+            {
+
+            }
+
+            Hero leader = diplomacy.Kingdom.Leader;
+            float relation = hero.GetRelation(leader) / 100f;
+            result.AddFactor(-relation);
+
             return result;
         }
 
