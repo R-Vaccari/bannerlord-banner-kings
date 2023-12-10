@@ -19,7 +19,8 @@ namespace BannerKings.Behaviours
         public override void RegisterEvents()
         {
             CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameCreated);
-            CampaignEvents.OnGameEarlyLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
+            CampaignEvents.OnGameEarlyLoadedEvent.AddNonSerializedListener(this, OnGameEarlyLoaded);
+            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnGameCreated);
         }
 
@@ -78,31 +79,24 @@ namespace BannerKings.Behaviours
 
         private void OnGameCreated(CampaignGameStarter starter)
         {
-            BannerKingsConfig.Instance.InitializeManagersFirstTime();
-            BannerKingsConfig.Instance.TitleManager.PostInitialize();
-            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
-            BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
+            if (firstUse)
+            {
+                BannerKingsConfig.Instance.InitializeManagersFirstTime();
+                BannerKingsConfig.Instance.TitleManager.PostInitialize();
+                BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+                BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
+            }
         }
 
         private void OnGameLoaded(CampaignGameStarter starter)
         {
-            BannerKingsConfig.Instance.Initialize();
-            if (!firstUse)
-            {
-                BannerKingsConfig.Instance.PopulationManager.PostInitialize();
-                BannerKingsConfig.Instance.EducationManager.PostInitialize();
-                BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
-                BannerKingsConfig.Instance.CourtManager.PostInitialize();
-                BannerKingsConfig.Instance.GoalManager.PostInitialize();
-            } 
-            else
+            if (firstUse)
             {
                 BannerKingsConfig.Instance.InitializeManagersFirstTime();
+                BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
+                BannerKingsConfig.Instance.TitleManager.PostInitialize();
+                BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
             }
-
-            BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
-            BannerKingsConfig.Instance.TitleManager.PostInitialize();
-            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
 
             foreach (var settlement in Settlement.All)
             {
@@ -116,6 +110,22 @@ namespace BannerKings.Behaviours
                     }
                 }
             }
+        }
+
+        private void OnGameEarlyLoaded(CampaignGameStarter starter)
+        {
+            BannerKingsConfig.Instance.Initialize();
+            if (!firstUse)
+            {
+                BannerKingsConfig.Instance.PopulationManager.PostInitialize();
+                BannerKingsConfig.Instance.EducationManager.PostInitialize();
+                BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+                BannerKingsConfig.Instance.CourtManager.PostInitialize();
+                BannerKingsConfig.Instance.GoalManager.PostInitialize();
+                BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
+                BannerKingsConfig.Instance.TitleManager.PostInitialize();
+                BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+            } 
         }
     }
 }
