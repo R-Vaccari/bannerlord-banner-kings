@@ -48,7 +48,7 @@ namespace BannerKings.Behaviours.Diplomacy
 
         public void PostInitialize()
         {
-            if (Religion != null) Religion.PostInitialize(DefaultFaiths.Instance.GetById(Religion.Faith.StringId));
+            if (Religion != null) Religion.PostInitialize();
 
             foreach (var group in Groups)
             {
@@ -134,6 +134,13 @@ namespace BannerKings.Behaviours.Diplomacy
                 {
                     list.Add(liberation);
                 }
+            }
+
+            CasusBelli suppressThreat = DefaultCasusBelli.Instance.SuppressThreat.GetCopy();
+            suppressThreat.SetInstanceData(Kingdom, targetKingdom);
+            if (suppressThreat.IsAdequate(Kingdom, targetKingdom, suppressThreat))
+            {
+                list.Add(suppressThreat);
             }
 
             CasusBelli greatRaid = DefaultCasusBelli.Instance.GreatRaid.GetCopy();

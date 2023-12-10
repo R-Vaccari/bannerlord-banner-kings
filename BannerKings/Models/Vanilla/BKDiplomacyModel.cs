@@ -4,6 +4,7 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Traits;
 using BannerKings.Utils.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -322,16 +323,23 @@ namespace BannerKings.Models.Vanilla
                     if (casusBelli == null)
                     {
                         List<CasusBelli> justifications = diplomacy.GetAvailableCasusBelli(defenderKingdom);
-                        foreach (var justification in justifications)
+                        foreach (CasusBelli justification in justifications)
                         {
-                            result.Add(justification.DeclareWarScore / justifications.Count, new TextObject("{=!}{CASUS} justification")
-                        .SetTextVariable("CASUS", justification.Name));
+                            float num = justification.DeclareWarScore / justifications.Count;
+                            result.Add(num, new TextObject("{=!}{CASUS} justification")
+                                .SetTextVariable("CASUS", justification.Name));
+                            GetPersonalityCasusBelliEffect(ref result, num, evaluatingClan, justification);
                         }
                     }
-                    else result.Add(casusBelli.DeclareWarScore * 2f, new TextObject("{=!}{CASUS} justification")
-                        .SetTextVariable("CASUS", casusBelli.Name));
-                    baseNumber = result.BaseNumber;
+                    else
+                    {
+                        float num = casusBelli.DeclareWarScore * 2f;
+                        result.Add(num, new TextObject("{=!}{CASUS} justification")
+                            .SetTextVariable("CASUS", casusBelli.Name));
+                        GetPersonalityCasusBelliEffect(ref result, num, evaluatingClan, casusBelli);
+                    }
 
+                    baseNumber = result.BaseNumber;
                     result.Add(baseNumber * -diplomacy.Fatigue, new TextObject("{=!}General war fatigue of {FACTION}")
                         .SetTextVariable("FACTION", diplomacy.Kingdom.Name));
                 }
@@ -454,6 +462,22 @@ namespace BannerKings.Models.Vanilla
             result.AddFactor(scoreProportion);*/
 
             return result;
+        }
+
+        private void GetPersonalityCasusBelliEffect(ref ExplainedNumber result, float baseResult, IFaction evaluation, CasusBelli casusBelli)
+        {
+            if (evaluation != null && evaluation.IsClan)
+            {
+                Hero leader = evaluation.Leader;
+                foreach (TraitObject trait in BKTraits.Instance.PersonalityTraits.Concat(BKTraits.Instance.PoliticalTraits))
+                {
+                    float factor = casusBelli.GetTraitWeight(trait);
+                    float level = leader.GetTraitLevel(trait);
+                    result.Add(baseResult * factor * level, new TextObject("{=!}{HERO}'s {TRAIT} personality")
+                        .SetTextVariable("HERO", leader.Name)
+                        .SetTextVariable("TRAIT", trait.Name));
+                }
+            }
         }
 
         private WarStats CalculateWarStats(IFaction faction, IFaction targetFaction)
