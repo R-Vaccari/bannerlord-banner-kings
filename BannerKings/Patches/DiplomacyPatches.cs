@@ -151,7 +151,10 @@ namespace BannerKings.Patches
                     TextObject warHint;
                     bool warPossible = model.IsWarDecisionAllowedBetweenKingdoms(kingdom, enemyKingdom, out warHint);
                     list.Add(new InquiryElement(makeWar,
-                        new TextObject("{=!}Declare War").ToString(),
+                        new TextObject("{=!}Declare War ({INFLUENCE}{INFLUENCE_ICON})")
+                        .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.DiplomacyModel.GetInfluenceCostOfProposingWar(diplomacy.Kingdom))
+                        .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON)
+                        .ToString(),
                         null,
                         warPossible,
                         warHint.ToString()));
@@ -160,7 +163,10 @@ namespace BannerKings.Patches
                     TextObject allianceHint;
                     bool alliancePossible = model.IsAllianceAllowed(kingdom, enemyKingdom, out allianceHint);       
                     list.Add(new InquiryElement(makeAlliance,
-                        new TextObject("{=!}Propose Alliance").ToString(),
+                        new TextObject("{=!}Propose Alliance ({DENARS} {GOLD_ICON})")
+                        .SetTextVariable("DENARS", 
+                        MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetAllianceDenarCost(diplomacy.Kingdom, enemyKingdom).ResultNumber))
+                        .ToString(),
                         null,
                         alliancePossible,
                         new TextObject("{=!}Propose a truce between both realms. A truce is a period of a certain amount of years in which both realms formally agree to not declare wars upon each other, in mutual benefit. The proposing realm is assumed to be the major beneficiary of this agreement, and thus is required a fee. The proposed realm is more likely to accept and offer better terms relative to how advantageous a truce is for them.\n\n{POSSIBLE}")
@@ -172,7 +178,10 @@ namespace BannerKings.Patches
                     TextObject truceHint;
                     bool trucePossible = model.IsTruceAllowed(kingdom, enemyKingdom, out truceHint);
                     list.Add(new InquiryElement(makeTruce,
-                        new TextObject("{=!}Propose Truce").ToString(),
+                        new TextObject("{=!}Propose Truce ({DENARS} {GOLD_ICON})")
+                        .SetTextVariable("DENARS",
+                        MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(diplomacy.Kingdom, enemyKingdom).ResultNumber))
+                        .ToString(),
                         null,
                         trucePossible && playerRuler,
                         new TextObject("{=!}Propose a truce between both realms. A truce is a period of a certain amount of years in which both realms formally agree to not declare wars upon each other, in mutual benefit. The proposing realm is assumed to be the major beneficiary of this agreement, and thus is required a fee. The proposed realm is more likely to accept and offer better terms relative to how advantageous a truce is for them.\n\n{POSSIBLE}")
@@ -183,7 +192,11 @@ namespace BannerKings.Patches
                     TextObject tradeHint;
                     bool tradePossible = model.IsTradePactAllowed(kingdom, enemyKingdom, out tradeHint);
                     list.Add(new InquiryElement(makePact,
-                        new TextObject("{=!}Propose Trade Pact").ToString(),
+                        new TextObject("{=!}Propose Trade Pact ({INFLUENCE}{INFLUENCE_ICON})")
+                        .SetTextVariable("INFLUENCE", 
+                        MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetTradePactInfluenceCost(diplomacy.Kingdom, enemyKingdom).ResultNumber))
+                        .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON)
+                        .ToString(),
                         null,
                         tradePossible && playerRuler,
                         new TextObject("{=!}Propose a trade pact between both realms. A trade access pact establishes the exemptions of caravan tariffs between both realms, meaning that their caravans will not pay entry fees in your realm's fiefs, nor will your realm's caravans pay in theirs. The absence of fees stimulates caravans to circulate in these fiefs, strengthening mercantilism, prosperity and supply of different goods between both sides, while also diverging trade from other realms. A trade pact does not necessarily bring any revenue to lords. In fact, it may incur in some revenue loss due to the caravan fee exemptions.\n\n{POSSIBLE}")
@@ -282,6 +295,7 @@ namespace BannerKings.Patches
             private static void ShowWarOptions(KingdomDiplomacy diplomacy, Kingdom enemyKingdom, KingdomDiplomacyVM __instance)
             {
                 var list = new List<InquiryElement>();
+                bool enabled = Clan.PlayerClan.Influence >= BannerKingsConfig.Instance.DiplomacyModel.GetInfluenceCostOfProposingWar(diplomacy.Kingdom);
                 foreach (var casusBelli in diplomacy.GetAvailableCasusBelli(enemyKingdom))
                 {
                     float support = new KingdomElection(new BKDeclareWarDecision(casusBelli,
@@ -293,11 +307,11 @@ namespace BannerKings.Patches
                     .SetTextVariable("NAME", casusBelli.QueryNameText)
                     .SetTextVariable("CHANCE", (support * 100).ToString("0.00")).ToString(),
                     null,
-                    true,
+                    enabled,
                     casusBelli.GetDescriptionWithModifers().ToString()));
                 }
 
-                list.Add(new InquiryElement(null, new TextObject("{=!}No Casus Belli").ToString(), null));
+                list.Add(new InquiryElement(null, new TextObject("{=!}No Casus Belli").ToString(), null, enabled, null));
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     new TextObject("{=!}Casus Belli").ToString(),
                     new TextObject("{=!}Select a justification for war.").ToString(),
