@@ -257,8 +257,18 @@ namespace BannerKings.Models.Vanilla
 
         public override ExplainedNumber GetTotalWage(MobileParty mobileParty, bool includeDescriptions = false)
         {
-            var result = GetVanillaWage(mobileParty, includeDescriptions);
-            var leader = mobileParty.LeaderHero ?? mobileParty.Owner;
+            ExplainedNumber result = GetVanillaWage(mobileParty, includeDescriptions);
+
+            if (mobileParty.IsLordParty && mobileParty.ActualClan.IsClanTypeMercenary)
+            {
+                Clan clan = mobileParty.ActualClan;
+                if (clan != Clan.PlayerClan && clan.Kingdom == null)
+                {
+                    return new ExplainedNumber(0f);
+                }
+            }
+
+            Hero leader = mobileParty.LeaderHero ?? mobileParty.Owner;
             if (leader != null)
             {
                 var totalCulture = 0f;
