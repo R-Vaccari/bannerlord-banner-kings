@@ -131,7 +131,7 @@ namespace BannerKings.Managers
                     faith.AddPreset(number, preset);
                 }
 
-                rel.PostInitialize(faith);
+                rel.PostInitialize();
 
                 foreach(var keyPair in pair.Value)
                 {

@@ -78,8 +78,9 @@ namespace BannerKings.Managers.Institutions.Religions
         public MBReadOnlyDictionary<Settlement, Clergyman> Clergy => clergy.GetReadOnlyDictionary();
         public ExplainedNumber Fervor => BannerKingsConfig.Instance.ReligionModel.CalculateFervor(this);
 
-        internal void PostInitialize(Faith faith)
+        internal void PostInitialize()
         {
+            Faith faith = DefaultFaiths.Instance.GetById(Faith.StringId);
             StringId = faith.GetId();
             if (clergy == null) clergy = new Dictionary<Settlement, Clergyman>();
             Religion rel = DefaultReligions.Instance.GetById(this);
