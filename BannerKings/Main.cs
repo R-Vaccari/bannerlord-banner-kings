@@ -37,7 +37,7 @@ namespace BannerKings
                 return;
             }
             
-            campaignStarter.AddBehavior(new BKSettlementBehavior());
+            campaignStarter.AddBehavior(new BKManagerBehavior());
             campaignStarter.AddBehavior(new BKEducationBehavior());
             campaignStarter.AddBehavior(new BKSettlementActions());
             campaignStarter.AddBehavior(new BKKnighthoodBehavior());
@@ -77,6 +77,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKShippingBehavior());
             campaignStarter.AddBehavior(new BKMercenaryCareerBehavior());
             campaignStarter.AddBehavior(new BKRelationsBehavior());
+            campaignStarter.AddBehavior(new BKSettlementBehavior());
 
             campaignStarter.AddModel(new BKPrisonerModel());
             campaignStarter.AddModel(BannerKingsConfig.Instance.CompanionModel);
@@ -134,6 +135,7 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKDiplomacyModel());
             }
             campaignStarter.AddModel(new BKTargetScoreModel());
+            campaignStarter.AddModel(new BKPartyBuyingFoodModel());
 
             BKAttributes.Instance.Initialize();
             BKSkills.Instance.Initialize();
