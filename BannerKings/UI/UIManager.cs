@@ -94,20 +94,23 @@ namespace BannerKings.UI
             private static void Postfix(SettlementProjectSelectionVM __instance)
             {
                 InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(Settlement.CurrentSettlement.Culture);
-                var buildings = data.GetAvailableBuildings();
-
-                var unwanted = new List<SettlementBuildingProjectVM>();
-                foreach (var available in __instance.AvailableProjects)
+                if (data != null)
                 {
-                    if (!buildings.Any(type => type.StringId == available.Building.BuildingType.StringId))
-                        unwanted.Add(available);
+                    var buildings = data.GetAvailableBuildings();
 
-                    if (!data.IsBuildingUpgradeAvailable(available.Building.BuildingType, available.Building.CurrentLevel + 1))
-                        unwanted.Add(available);
+                    var unwanted = new List<SettlementBuildingProjectVM>();
+                    foreach (var available in __instance.AvailableProjects)
+                    {
+                        if (!buildings.Any(type => type.StringId == available.Building.BuildingType.StringId))
+                            unwanted.Add(available);
+
+                        if (!data.IsBuildingUpgradeAvailable(available.Building.BuildingType, available.Building.CurrentLevel + 1))
+                            unwanted.Add(available);
+                    }
+
+                    foreach (var toRemove in unwanted)
+                        __instance.AvailableProjects.Remove(toRemove);
                 }
-
-                foreach (var toRemove in unwanted)
-                    __instance.AvailableProjects.Remove(toRemove);
             }
         }
 
