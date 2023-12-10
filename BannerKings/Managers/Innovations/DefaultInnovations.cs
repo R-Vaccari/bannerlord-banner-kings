@@ -30,6 +30,8 @@ namespace BannerKings.Managers.Innovations
         public Innovation Aqueducts { get; } = new Innovation("Aqueducts");
         public Innovation Crossbows { get; } = new Innovation("Crossbows");
         public Innovation Manorialism { get; } = new Innovation("Manorialism");
+        public Innovation Masonry { get; } = new Innovation("Masonry");
+        public Innovation AdvancedMasonry { get; } = new Innovation("AdvancedMasonry");
 
         public override IEnumerable<Innovation> All
         {
@@ -55,6 +57,8 @@ namespace BannerKings.Managers.Innovations
                 yield return HalfPlateArmor;
                 yield return Theater;
                 yield return Manorialism;
+                yield return Masonry;
+                yield return AdvancedMasonry;
             }
         }
 
@@ -77,6 +81,14 @@ namespace BannerKings.Managers.Innovations
                 Innovation.InnovationType.Agriculture,
                 2500f,
                 Manorialism);
+
+            Masonry.Initialize(new TextObject("{=!}Masonry"),
+                new TextObject("{=!}The art of molding stone to man's desire. Within the continent, this art was first explored in its depths by the Calradoi and the Darshi. Their imposing stone walls would, at times, make barbarian raiders entirely give up on raiding their towns, for they knew they could not overwhelm them. More often, it striked them with a sense of might - that those who built such walls were unmatched builders. The art of masonry later evolved into other forms of infrastructure, such as aqueducts and forums."),
+                new TextObject("{=!}Enables construction of level 2 walls"),
+                DefaultEras.Instance.FirstEra,
+                Innovation.InnovationType.Building,
+                1500f,
+                null);
 
             Forum.Initialize(new TextObject("{=!}Forum"),
                 new TextObject("{=!}A Calradian invention, the Forum is the center of town life, where announcements are made, sentences passed, and emperors are named. It is the marble heart of a city, and itself a form of art."),
@@ -184,6 +196,14 @@ namespace BannerKings.Managers.Innovations
                 DefaultEras.Instance.SecondEra,
                 Innovation.InnovationType.Technology,
                 3000f);
+
+            AdvancedMasonry.Initialize(new TextObject("{=!}Advanced Masonry"),
+                new TextObject("{=!}The final culmination of the art of masonry. Advanced masonry involves the construction of high, thick stone walls with deep foundations. Such walls are resistant even agains the strongest forms of siege engines, and certainly provide sisgnificant advantage to those under their protection.."),
+                new TextObject("{=!}Enables construction of level 3 walls"),
+                DefaultEras.Instance.SecondEra,
+                Innovation.InnovationType.Building,
+                3000f,
+                Cranes);
 
             Wheelbarrow.Initialize(new TextObject("{=H5EXMMCH}Wheelbarrow"),
                 new TextObject("{=EtdzfFiF}The wheelbarrow is a goods transporting tool that allows a person to carry bigger weights with less efforts. It can be applied in a variety of situations, such as carrying ore out of mines, building material to constructions and grain sacks out of farms."),
