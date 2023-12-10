@@ -2,6 +2,7 @@
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Utils.Models;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -25,7 +26,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             bool demandsCouncil, bool allowsCommoners, bool allowsNobles, List<Occupation> preferredOccupations, 
             List<PolicyObject> supportedPolicy, List<PolicyObject> shunnedPolicies, List<DemesneLaw> supportedLaws, 
             List<DemesneLaw> shunnedLaws, List<CasusBelli> supportedCasusBelli, List<Demand> possibleDemands,
-            CouncilMember favoredPosition)
+            CouncilMember favoredPosition, float legitimacyFactor)
         {
             Initialize(name, description);
             MainTrait = mainTrait;
@@ -47,8 +48,15 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 }
                 PossibleDemands = demands;
             }
-          
+            else
+            {
+                foreach (Demand demand in possibleDemands)
+                    if (!PossibleDemands.Any(x => x.StringId == demand.StringId))
+                        PossibleDemands.Add(demand.GetCopy(this));
+            }
+
             FavoredPosition = favoredPosition;
+            LegitimacyFactor = legitimacyFactor;
         }
 
         public InterestGroup GetCopy(KingdomDiplomacy diplomacy)
@@ -56,22 +64,25 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             InterestGroup result = new InterestGroup(StringId);
             result.Initialize(Name, Description, MainTrait, DemandsCouncil, AllowsCommoners,
                 AllowsNobles, PreferredOccupations, SupportedPolicies, ShunnedPolicies, SupportedLaws,
-                ShunnedLaws, SupportedCasusBelli, PossibleDemands, FavoredPosition);
+                ShunnedLaws, SupportedCasusBelli, PossibleDemands, FavoredPosition, LegitimacyFactor);
             result.KingdomDiplomacy = diplomacy;
             return result;
         }
 
         public void PostInitialize()
         {
+            base.PostInitialize();
             InterestGroup i = DefaultInterestGroup.Instance.GetById(this);
             Initialize(i.Name, i.Description, i.MainTrait, i.DemandsCouncil, i.AllowsCommoners,
                 i.AllowsNobles, i.PreferredOccupations, i.SupportedPolicies, i.ShunnedPolicies, i.SupportedLaws,
-                i.ShunnedLaws, i.SupportedCasusBelli, null, i.FavoredPosition);
+                i.ShunnedLaws, i.SupportedCasusBelli, i.PossibleDemands, i.FavoredPosition, i.LegitimacyFactor);
             foreach (var demand in PossibleDemands)
             {
                 demand.SetTexts();
                 demand.Group = this;
             }
+
+            if (RecentOucomes == null) RecentOucomes = new List<DemandOutcome>();
         }
 
         public override void Tick()
@@ -107,6 +118,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         public bool DemandsCouncil { get; private set; }
         public bool AllowsCommoners { get; private set; }
         public bool AllowsNobles { get; private set; }
+        public float LegitimacyFactor { get; private set; }
         public List<Occupation> PreferredOccupations { get; private set; }
         public List<PolicyObject> SupportedPolicies { get; private set; }
         public List<PolicyObject> ShunnedPolicies { get; private set; }
@@ -115,6 +127,14 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         public List<CasusBelli> SupportedCasusBelli { get; private set; }
 
         public override bool IsInterestGroup => true;
+        public BKExplainedNumber Influence => BannerKingsConfig.Instance.InterestGroupsModel
+                .CalculateGroupInfluence(this, false);
+        public BKExplainedNumber InfluenceExplained => BannerKingsConfig.Instance.InterestGroupsModel
+                .CalculateGroupInfluence(this, true);
+        public BKExplainedNumber Support => BannerKingsConfig.Instance.InterestGroupsModel
+                .CalculateGroupSupport(this, false);
+        public BKExplainedNumber SupportExplained => BannerKingsConfig.Instance.InterestGroupsModel
+                .CalculateGroupSupport(this, true);
 
         public void SetName(TextObject name) => this.name = name;
 
