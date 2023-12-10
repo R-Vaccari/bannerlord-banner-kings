@@ -43,6 +43,7 @@ namespace BannerKings.UI.Kingdoms
 
         [DataSourceProperty] public string LeaderText => new TextObject("{=SrfYbg3x}Leader").ToString();
         [DataSourceProperty] public string GroupName => Group.Name.ToString();
+        [DataSourceProperty] public string GroupText => Group.Description.ToString();
         [DataSourceProperty] public HintViewModel Hint => new HintViewModel(Group.Description);
 
         public void SetGroup()
@@ -138,6 +139,13 @@ namespace BannerKings.UI.Kingdoms
                     DemandHint = new HintViewModel(new TextObject("{=!}Deliver a demand to {SUZERAIN}. As the leader of this group, you are able to dictate what to demand from your ruler. Once a demand is made you can not disclaim the consequences, be them positive or otherwise.")
                         .SetTextVariable("SUZERAIN", Group.FactionLeader.Name));
                 }
+
+                if (!Group.CanHeroLeave(Hero.MainHero, KingdomDiplomacy))
+                {
+                    IsActionEnabled = false;
+                    ActionHint = new HintViewModel(new TextObject("{=!}You cannot leave this group until a year has passed since you joined ({DATE}).")
+                        .SetTextVariable("DATE", Group.JoinTime[Hero.MainHero].ToString()));
+                }
             }
             else
             {
@@ -177,7 +185,11 @@ namespace BannerKings.UI.Kingdoms
                     true,
                     GameTexts.FindText("str_accept").ToString(),
                     GameTexts.FindText("str_cancel").ToString(),
-                    () => Group.RemoveMember(Hero.MainHero),
+                    () =>
+                    {
+                        Group.RemoveMember(Hero.MainHero);
+                        RefreshValues();
+                    },
                     null));
             }
             else
@@ -192,7 +204,11 @@ namespace BannerKings.UI.Kingdoms
                    true,
                    GameTexts.FindText("str_accept").ToString(),
                    GameTexts.FindText("str_cancel").ToString(),
-                   () => Group.AddMember(Hero.MainHero),
+                   () => 
+                   {
+                       Group.AddMember(Hero.MainHero);
+                       RefreshValues();
+                   },
                    null));
             }
             RefreshValues();
