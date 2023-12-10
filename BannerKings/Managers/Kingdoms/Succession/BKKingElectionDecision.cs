@@ -23,8 +23,8 @@ namespace BannerKings.Managers.Kingdoms.Succession
             PreviousRuler = previousRuler;
         }
 
-        public override bool IsAllowed() => Title != null && PreviousRuler != null && 
-            DetermineInitialCandidates().Count() >= 3 && base.IsAllowed();
+        public override bool IsAllowed() => Title != null && PreviousRuler != null && base.IsAllowed() 
+            && ProposerClan.Kingdom != null && DetermineInitialCandidates().Count() >= 3;
 
         public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
         {
