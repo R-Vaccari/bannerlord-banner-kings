@@ -149,12 +149,16 @@
 												</Children>
 											</Widget>
 											
+											<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="15" MarginRight="100" MarginLeft="100"
+															HorizontalAlignment="Center" Brush="ArmyManagement.Army.Tuple.Name" Brush.FontSize="24" Text="@GroupText"
+															MarginBottom="15" />
+											
 											<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="25" IsVisible="@IsEmpty"
 															HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@EmptyGroupText"
 															MarginBottom="15" />
 						
 											<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="150"
-													   VerticalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="30" DoNotAcceptEvents="false">
+													   VerticalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="100" DoNotAcceptEvents="false">
 												<Children>
 												
 													<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" SuggestedHeight="150"
@@ -228,7 +232,7 @@
 																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="24" Text="@Definition"
 																		MarginBottom="15" />
 																	<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="36" Text="@Value" />
+																		HorizontalAlignment="Center" Brush="ArmyManagement.Army.Tuple.Name" Brush.FontSize="36" Text="@Value" />
 																</Children>
 															</ListPanel>
 														</Children>
@@ -261,7 +265,7 @@
 																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="20" Text="@Definition"
 																		MarginBottom="15" />
 																	<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@Value" />
+																		HorizontalAlignment="Center" Brush="ArmyManagement.Army.Tuple.Name" Brush.FontSize="30" Text="@Value" />
 																</Children>
 															</ListPanel>
 														</Children>
