@@ -229,6 +229,20 @@ namespace BannerKings.Models.Vanilla
             return result.ResultNumber * 10f;
         }
 
+        public float CalculateThreatFactor(IFaction attacker, IFaction threat)
+        {
+            float totalThreat = 0f;
+            foreach (Kingdom k in Kingdom.All)
+            {
+                if (k != attacker && k != threat)
+                {
+                    totalThreat += k.TotalStrength;
+                }
+            }
+
+            return threat.TotalStrength / totalThreat;
+        }
+
         public ExplainedNumber GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan,
            out TextObject warReason, CasusBelli casusBelli = null, bool explanations = false)
         {
@@ -240,13 +254,6 @@ namespace BannerKings.Models.Vanilla
             if (factionDeclaresWar.MapFaction == factionDeclaredWar.MapFaction)
             {
                 return new ExplainedNumber(-50000f);
-            }
-
-            StanceLink stance = factionDeclaresWar.GetStanceWith(factionDeclaredWar);
-            if (stance.GetDailyTributePaid(factionDeclaredWar) < 0)
-            {
-                return new ExplainedNumber(-50000f, explanations, new TextObject("{=!}{FACTION} is paying us tribute")
-                    .SetTextVariable("FACTION", factionDeclaredWar.Name));
             }
 
             float baseNumber = 0f;
@@ -273,9 +280,23 @@ namespace BannerKings.Models.Vanilla
             {
                 var tributes = factionDeclaresWar.Stances.ToList().FindAll(x => x.GetDailyTributePaid(x.Faction2) > 0);
                 int tributeCount = tributes.Count;
-                result.AddFactor(-0.15f * tributeCount, new TextObject("{=!}Paying tributes (x{COUNT})")
+                result.Add(baseNumber * -0.15f * tributeCount, new TextObject("{=!}Paying tributes (x{COUNT})")
                     .SetTextVariable("COUNT", tributeCount));
             }
+
+            /*float totalThreat = 0f;
+            foreach (Kingdom k in Kingdom.All)
+            {
+                if (k != factionDeclaredWar && k != factionDeclaresWar)
+                {
+                    totalThreat += k.TotalStrength;
+                }
+            }
+
+            float threatFactor = factionDeclaredWar.TotalStrength / totalThreat;
+            result.Add(10000f * threatFactor,
+                new TextObject("{=!}{THREAT}% threat relative to all possible enemies")
+                .SetTextVariable("THREAT", (threatFactor * 100f).ToString("0.0"))); */
 
             if (factionDeclaredWar.IsKingdomFaction && factionDeclaresWar.IsKingdomFaction)
             {
@@ -287,7 +308,7 @@ namespace BannerKings.Models.Vanilla
                     .IsWarDecisionAllowedBetweenKingdoms(attackerKingdom, defenderKingdom, out reason);
                 if (!warAllowed)
                 {
-                    return new ExplainedNumber(-50000f);
+                    return new ExplainedNumber(-50000f, explanations, reason);
                 }
    
                 KingdomDiplomacy diplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(attackerKingdom);
@@ -295,7 +316,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (diplomacy.HasTradePact(defenderKingdom))
                     {
-                        result.AddFactor(-0.25f, new TextObject("{=!}Trade pact between both realms"));
+                        result.Add(baseNumber * - 0.25f, new TextObject("{=!}Trade pact between both realms"));
                     }
 
                     if (casusBelli == null)
@@ -326,6 +347,19 @@ namespace BannerKings.Models.Vanilla
                         .SetTextVariable("FACTION", enemyKingdom.Name));
                     }
                 }
+            }
+
+            StanceLink stance = factionDeclaresWar.GetStanceWith(factionDeclaredWar);
+            int tribute = stance.GetDailyTributePaid(factionDeclaredWar);
+            if (tribute > 0)
+            {
+                result.Add(-10000f, new TextObject("{=!}{FACTION} is paying us tribute")
+                    .SetTextVariable("FACTION", factionDeclaredWar.Name));
+            }
+            else if (tribute < 0)
+            {
+                result.Add(baseNumber * 0.3f, new TextObject("{=!}We are paying tribute to {FACTION}")
+                    .SetTextVariable("FACTION", factionDeclaredWar.Name));
             }
 
             float attackerStrength = factionDeclaresWar.TotalStrength;
@@ -384,7 +418,7 @@ namespace BannerKings.Models.Vanilla
                         float distance = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(possibleWar.DefenderFront.Settlement,
                             possibleWar.AttackerFront.Settlement) * 4f;
                         float factor = (TaleWorlds.CampaignSystem.Campaign.AverageDistanceBetweenTwoFortifications / distance) - 1f;
-                        result.Add(baseNumber * factor * 2f, new TextObject("{=!}Distance between realms"));
+                        result.Add(baseNumber * factor, new TextObject("{=!}Distance between realms"));
                     }
                 }
 
