@@ -39,6 +39,11 @@ namespace BannerKings.Managers.Recruits
                     continue;
                 }
 
+                if (spawn.Kingdom != null && settlement.MapFaction != spawn.Kingdom)
+                {
+                    continue;
+                }
+
                 spawns.Add(spawn);
             }
 
