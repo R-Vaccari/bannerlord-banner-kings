@@ -62,6 +62,7 @@ namespace BannerKings.Models.BKModels
         {
             var result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
+            result.LimitMax(10f);
 
             float castles = 0f;
             float villages = 0f;
