@@ -17,8 +17,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         {
             _ = clan.Leader;
             DeclareWarDecisionOutcome obj = (DeclareWarDecisionOutcome)possibleOutcome;
-            float num = new BKWarBarterable(CasusBelli, Kingdom, FactionToDeclareWarOn).GetValueForFaction(clan) *
-                TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel.DenarsToInfluence();
+            float num = new BKWarBarterable(CasusBelli, Kingdom, FactionToDeclareWarOn).GetValueForFaction(clan);
 
             return obj.ShouldWarBeDeclared ? num : -num;
         }
