@@ -349,20 +349,24 @@ namespace BannerKings.Managers.Titles.Governments
                (Hero currentLeader, FeudalTitle title) =>
                {
                    HashSet<Hero> result = new HashSet<Hero>(3);
+                   Kingdom kingdom = currentLeader.Clan.Kingdom;
 
-                   foreach (Clan clan in currentLeader.Clan.Kingdom.Clans)
+                   if (kingdom != null)
                    {
-                       if (clan.IsUnderMercenaryService) continue;
-
-                       CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
-                       if (council.Peerage != null && council.Peerage.IsFullPeerage)
+                       foreach (Clan clan in kingdom.Clans)
                        {
-                           result.Add(clan.Leader);
-                       }
-                   }
+                           if (clan.IsUnderMercenaryService) continue;
 
-                   if (result.Contains(currentLeader))
-                       result.Remove(currentLeader);
+                           CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+                           if (council.Peerage != null && council.Peerage.IsFullPeerage)
+                           {
+                               result.Add(clan.Leader);
+                           }
+                       }
+
+                       if (result.Contains(currentLeader))
+                           result.Remove(currentLeader);
+                   }
 
                    return result;
                },
