@@ -199,6 +199,8 @@ namespace BannerKings
             AddClassDefinition(typeof(CustomTroopPreset), 1003);
 
             AddClassDefinition(typeof(DiplomacyGroup), 130);
+            AddClassDefinition(typeof(AssumeFaithDemand), 131);
+            AddClassDefinition(typeof(TitleDemand), 132);
             AddClassDefinition(typeof(BKCouncilPositionDecision), 140);
             AddClassDefinition(typeof(PartySupplies), 141);
             AddClassDefinition(typeof(CourtGrace), 142);
