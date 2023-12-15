@@ -28,6 +28,10 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 yield return Oligarchists;
                 yield return Zealots;
                 yield return Commoners;
+                foreach (InterestGroup group in ModAdditions)
+                {
+                    yield return group;
+                }
             }
         }
 
@@ -71,16 +75,23 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 },
                 new List<CasusBelli>()
                 {
-                    DefaultCasusBelli.Instance.CulturalLiberation
+                    DefaultCasusBelli.Instance.CulturalLiberation,
+                    DefaultCasusBelli.Instance.ImperialReconquest,
+                    DefaultCasusBelli.Instance.ImperialSuperiority,
+                    DefaultCasusBelli.Instance.SuppressThreat
                 },
                 new List<Demand>()
                 {
                     DefaultDemands.Instance.CouncilPosition,
+                    DefaultDemands.Instance.AssumeFaith,
+                    DefaultDemands.Instance.LawChange,
+                    DefaultDemands.Instance.PolicyChange
                 },
-                null);
+                null,
+                0.5f);
 
             Traditionalists.Initialize(new TextObject("{=!}Traditionalists"),
-               new TextObject("{=!}Traditionalists support the status quo and the way of the ancestors. More than anything, they believe in strength. While they recognize the necessity for a strong ruler, they also do the necessity of liberty for the noble classes. They aim for a balance of power between the sovereign and their vassals, a continuation of old traditions and exerting power through force."),
+               new TextObject("{=!}Traditionalists support the way of the ancestors. More than anything, they believe in strength. While they recognize the necessity for a strong ruler, they also do the necessity of liberty for the noble classes. They aim for a balance of power between the sovereign and their vassals, a continuation of old traditions and exerting power through force."),
                BKTraits.Instance.Diligent,
                true,
                true,
@@ -132,8 +143,13 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                new List<Demand>()
                {
                    DefaultDemands.Instance.CouncilPosition,
+                   DefaultDemands.Instance.DemandTitle,
+                   DefaultDemands.Instance.AssumeFaith,
+                   DefaultDemands.Instance.LawChange,
+                   DefaultDemands.Instance.PolicyChange
                },
-               null);
+               null,
+               0.5f);
 
             Oligarchists.Initialize(new TextObject("{=!}Oligarchists"),
                new TextObject("{=!}Oligarchists are noble people of influence that are concerned, first and foremost, with their own advantage. They continuously seek benefits for themselves or their peers, understanding they are part of the same class. Thus, their interests are often misaligned both with the ruler's, and with the common people."),
@@ -186,11 +202,15 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                new List<Demand>()
                {
                    DefaultDemands.Instance.CouncilPosition,
+                   DefaultDemands.Instance.DemandTitle,
+                   DefaultDemands.Instance.LawChange,
+                   DefaultDemands.Instance.PolicyChange
                },
-               null);
+               null,
+               0.4f);
 
             Zealots.Initialize(new TextObject("{=!}Zealots"),
-                new TextObject(),
+                new TextObject("{=!}Zealots represent those of most religious fervor within the realm. As a group, they are most concerned with the strengthening of their faith and the upholding of its values. A ruler that does not follow the realm's traditional faith will have great difficulty gathering support from such zealots. Those that do follow it, still need to prove themselves by upholding the faith's virtues. Zealots, loyal first and foremost to their faith, gather members both within and withou the nobility."),
                 BKTraits.Instance.Zealous,
                 true,
                 true,
@@ -239,11 +259,15 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 new List<Demand>()
                 {
                     DefaultDemands.Instance.CouncilPosition,
+                    DefaultDemands.Instance.AssumeFaith,
+                    DefaultDemands.Instance.LawChange,
+                    DefaultDemands.Instance.PolicyChange
                 },
-                DefaultCouncilPositions.Instance.Spiritual);
+                DefaultCouncilPositions.Instance.Spiritual,
+                0.2f);
 
             Commoners.Initialize(new TextObject("{=!}Commoners"),
-                new TextObject(),
+                new TextObject("{=!}Commoners represent the general populace, intermediated by fief dignataries. The benefit of the commoners often clashes with the benefit of the high nobility. However, the populace is open to supporting rulers that represent them. Often, that means a shared cultural and religious tradition, as well as signs of certain virtues, such as a keen sense of justice and generosity."),
                 BKTraits.Instance.Just,
                 false,
                 true,
@@ -287,13 +311,16 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 },
                 new List<CasusBelli>()
                 {
-                    DefaultCasusBelli.Instance.CulturalLiberation
+                    DefaultCasusBelli.Instance.CulturalLiberation,
+                    DefaultCasusBelli.Instance.SuppressThreat
                 },
                 new List<Demand>()
                 {
-                    DefaultDemands.Instance.CouncilPosition,
+                    DefaultDemands.Instance.LawChange,
+                    DefaultDemands.Instance.PolicyChange
                 },
-                null);
+                null,
+                0.8f);
         }
     }
 }
