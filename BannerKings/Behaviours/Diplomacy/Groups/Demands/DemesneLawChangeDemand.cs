@@ -25,8 +25,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override void SetTexts()
         {
-            Initialize(new TextObject("{=!}Policy Change"),
-                new TextObject());
+            Initialize(new TextObject("{=!}Demesne Law Change"),
+                new TextObject("{=!}Demand a change to one of the existing demesne laws. An Interest Group may demand that a law is changed to one of the variants of said law that the group supports. For more information on laws, read the Demesne Laws on encyclopedia."));
         }
 
         public override DemandResponse PositiveAnswer => new DemandResponse(new TextObject("{=!}Concede"),
@@ -301,36 +301,42 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         public override void SetUp()
         {
             Kingdom kingdom = Group.FactionLeader.MapFaction as Kingdom;
-            Law = Group.SupportedLaws.GetRandomElementWithPredicate(x => !Title.Contract.DemesneLaws.Contains(x));
-            if (Law == null)
+            FeudalTitle kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+            if (kingdomTitle != null)
             {
-                var options = new List<DemesneLaw>();
-                foreach (var law in DefaultDemesneLaws.Instance.All)
+                Title = kingdomTitle;
+                Law = Group.SupportedLaws.GetRandomElementWithPredicate(x => !Title.Contract.DemesneLaws.Contains(x));
+                if (Law == null)
                 {
-                    if (!Group.ShunnedLaws.Contains(law) && !Title.Contract.DemesneLaws.Contains(law))
+                    var options = new List<DemesneLaw>();
+                    foreach (var law in DefaultDemesneLaws.Instance.All)
                     {
-                        options.Add(law);
+                        if (!Group.ShunnedLaws.Contains(law) && !Title.Contract.DemesneLaws.Contains(law))
+                        {
+                            options.Add(law);
+                        }
+                    }
+                    Law = options.GetRandomElement();
+                }
+
+                if (Law != null)
+                {
+                    if (Group.Members.Contains(Hero.MainHero))
+                    {
+                        ShowPlayerDemandOptions();
+                    }
+
+                    if (Group.FactionLeader == Hero.MainHero)
+                    {
+                        ShowPlayerPrompt();
                     }
                 }
-                Law = options.GetRandomElement();
-            }
-
-            if (Law != null)
-            {
-                if (Group.Members.Contains(Hero.MainHero))
+                else
                 {
-                    ShowPlayerDemandOptions();
-                }
-
-                if (Group.FactionLeader == Hero.MainHero)
-                {
-                    ShowPlayerPrompt();
+                    Finish();
                 }
             }
-            else
-            {
-                Finish();
-            }
+            else Finish();  
         }
 
         public override (bool, TextObject) IsDemandCurrentlyAdequate()
