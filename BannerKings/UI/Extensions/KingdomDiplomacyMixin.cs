@@ -46,6 +46,7 @@ namespace BannerKings.UI.Extensions
             war = null;
             WarExists = false;
             PeaceExists = false;
+            base.ViewModel.ProposeActionExplanationText = new TextObject("{=!}Consider proposing a diplomatic action").ToString();
             if (kingdomDiplomacy.CurrentSelectedDiplomacyItem != null)
             {
                 if (kingdomDiplomacy.CurrentSelectedDiplomacyItem is KingdomWarItemVM)
