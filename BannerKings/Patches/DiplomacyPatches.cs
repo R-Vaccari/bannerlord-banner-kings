@@ -67,7 +67,7 @@ namespace BannerKings.Patches
 
             private static void UpdateVisuals(IFaction faction1, IFaction faction2)
             {
-                if (faction1 == Hero.MainHero.MapFaction || faction2 == Hero.MainHero.MapFaction)
+                if (CharacterObject.PlayerCharacter != null && Hero.MainHero != null && (faction1 == Hero.MainHero.MapFaction || faction2 == Hero.MainHero.MapFaction))
                 {
                     IFaction dirtySide = (faction1 == Hero.MainHero.MapFaction) ? faction2 : faction1;
                     foreach (Settlement settlement in Settlement.All.Where((Settlement party) => party.IsVisible && party.MapFaction == dirtySide))
