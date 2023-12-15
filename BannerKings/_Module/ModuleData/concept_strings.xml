@@ -72,18 +72,54 @@
 	        group="Characters"
 	        link_id="BK_PIETY_LINK"
 	        text="{=!}" />
+			
+	<Concept title="{=!}War Support"
+	        id="str_bk_war_support"
+	        group="Kingdoms"
+	        link_id="BK_WAR_LINK"
+	        text="{=!}Whether the members of a realm support waging war against another realm depends on a series of factors. Firstly, at least one adequate {BK_CASUS_LINK} is required to justify a war.{newline}Secondly, every voting noble has a different opinion on said justification, based on their personalities, as well as their current income. A merciless justification, such as mass raiding, does not bode well with those prone to mercy.{newline}Lastly, a series of other factors also apply, independent of lords or their opinions: distance to the enemy, current wars of the realm, how much of a threat said enemy poses, et cetera. Factors can be seen in detail within the tooltips in the Diplomacy tab." />
+			
+	<Concept title="{=!}Casus Belli"
+	        id="str_bk_casus"
+	        group="Kingdoms"
+	        link_id="BK_CASUS_LINK"
+	        text="{=!}A Casus Belli is a justification for war. Calling one's vassals to serve and risk their lives is not an uncomplicated task. For aggressive wars (not self defense) it is expected a valid reason to risk one's life. Such justifications come in different natures: some may be culturally based, for example, an Imperial Reconquest justification may be used between the successors of the Calradoi Empire. Others, contextual, such as curbing a potential neighbouring threat.{newline}{newline}Every justification is seen differently by each of the voting Peers: a zealous lord is like a religious justification more than those who do not particularly care for faith. These stances are more easily expressed through the {BK_IGROUPS_LINK} a Peer participates in, for each group supports a list of justifications." />
+	
+	<Concept title="{=!}Interest Groups"
+	        id="str_bk_groups"
+	        group="Kingdoms"
+	        link_id="BK_IGROUPS_LINK"
+	        text="{=!}An Interest Group is a political force composed by a series of Peers and/or fief dignataries (notables) that have a certain political agenda. This agenda is expressed by a collection of policies, laws, {BK_CASUS_LINK}, among other things, that the members of the group collectively support.{newline}{newline}Every group represents a % of influence within the realm, as well as supports the ruler to a degree. Group influence is dictated by the relevance of the nobles and dignataries within: their militarily power and the share of population they represent, respectively. Group support relies on multiple factors, depending on the group, but is mostly influenced by: 1) good relations between the ruler and the group leader; 2) {BK_LEGITIMACY_LINK} of the ruler." />
+
+	<Concept title="{=!}Legitimacy"
+	        id="str_bk_legitimacy"
+	        group="Kingdoms"
+	        link_id="BK_LEGITIMACY_LINK"
+	        text="{=!}Legitimacy represents how the ruler is generally seen by their vassals and populace. A legitimate rule is crucial to keep a realm bound together. A ruler is seen as legitimate through a series of criteria. For example: being legally put into rulership through the {BK_KINGDOM_SUCCESSION_LINK} is a major factor. Other factors include a shared cultural and religious heritage with the realm, adequate {BK_GRACE_LINK}, as well as extra factors depending on the specific group. Legitimacy is of great importance for the support of {BK_IGROUPS_LINK}, who may otherwise become domestic enemies, for the powerful nobles will not tolerate a weak or illegitimate ruler for long." />
+
+	<Concept title="{=!}Grace"
+	        id="str_bk_grace"
+	        group="Kingdoms"
+	        link_id="BK_GRACE_LINK"
+	        text="{=!}Every one of the {BK_COURT_LINK} contains a level of Grace associated with it. Grace is the measure of importance attributed to your court by others. It is dictated by the location of your court, as well as the various expenses associated with said court. The higher a Peer is within the hierarchy of the high nobility, the more grace is expected from their court. Naturally, the court of a king is expected to be more luxurious than that of his vassals. Such expenses, useful or otherwise, will dictate a court's Grace. A more gracious court allows more political leverage within the realm, as well as more {BK_LEGITIMACY_LINK} for rulers." />
+			
+	<Concept title="{=!}Courts"
+	        id="str_bk_courts"
+	        group="Kingdoms"
+	        link_id="BK_COURT_LINK"
+	        text="{=!}" />
 
 	<Concept title="{=!}Innovations"
 	        id="str_bk_innovations"
 	        group="Kingdoms"
 	        link_id="BK_INNOVATIONS_LINK"
-	        text="{=!}Government laws describe how different realms are organized. Different governments accept different types of policies and laws. Ie, republics do not accept policies such as Royal Guard, which highly favor a ruling dynasty. Moreover, government types define what kind of {BK_SUCCESSIONS_LINK} a realm can practice.{newline}{newline}Governments can be changed through a Decision. The lords and ladies of the realm must agree to such a fundamental change, and such changes are often hard to be achieved - most are resistant, either due to tradition or to maintain their own status." />
+	        text="{=!}" />
 
 	<Concept title="{=!}Eras"
 	        id="str_bk_eras"
 	        group="Kingdoms"
 	        link_id="BK_ERAS_LINK"
-	        text="{=!}Government laws describe how different realms are organized. Different governments accept different types of policies and laws. Ie, republics do not accept policies such as Royal Guard, which highly favor a ruling dynasty. Moreover, government types define what kind of {BK_SUCCESSIONS_LINK} a realm can practice.{newline}{newline}Governments can be changed through a Decision. The lords and ladies of the realm must agree to such a fundamental change, and such changes are often hard to be achieved - most are resistant, either due to tradition or to maintain their own status." />
+	        text="{=!}" />
 
 	<Concept title="{=!}Alliances"
 	        id="str_bk_alliances"
