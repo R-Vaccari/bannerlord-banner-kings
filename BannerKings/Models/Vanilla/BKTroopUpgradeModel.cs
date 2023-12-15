@@ -15,7 +15,7 @@ namespace BannerKings.Models.Vanilla
             if (party != null && party.MobileParty != null && party.MobileParty.LeaderHero != null)
             {
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(party.MobileParty.LeaderHero);
-                if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Cataphract))
+                if (education != null && education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Cataphract))
                 {
                     result *= 1.25f;
                 }
