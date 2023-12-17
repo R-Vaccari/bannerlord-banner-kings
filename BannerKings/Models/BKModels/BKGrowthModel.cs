@@ -103,7 +103,7 @@ namespace BannerKings.Models.BKModels
                     result.Add(walls.CurrentLevel * 1500f, DefaultBuildingTypes.Fortifications.Name);
                 }
 
-                result.Add(settlement.Prosperity / 5f, GameTexts.FindText("str_map_tooltip_prosperity"));
+                result.Add(settlement.Town.Prosperity / 5f, GameTexts.FindText("str_map_tooltip_prosperity"));
 
                 var capital = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(town.OwnerClan.Kingdom);
                 if (capital == town)
@@ -206,7 +206,7 @@ namespace BannerKings.Models.BKModels
                     }
 
                     if (settlement.Town != null)
-                        result.AddFactor((settlement.Prosperity - 15000f) / 30000f, 
+                        result.AddFactor((settlement.Town.Prosperity - 15000f) / 30000f, 
                             new TextObject("{=mgK8aZuj}Prosperity"));
                 }
 
@@ -234,7 +234,7 @@ namespace BannerKings.Models.BKModels
                 {
                     if (settlement.Town != null)
                     {
-                        result.AddFactor(settlement.Prosperity / 30000f, new TextObject("{=mgK8aZuj}Prosperity"));
+                        result.AddFactor(settlement.Town.Prosperity / 30000f, new TextObject("{=mgK8aZuj}Prosperity"));
 
                         if (settlement.IsTown)
                             result.AddFactor(data.EconomicData.Mercantilism.ResultNumber * 0.1f, new TextObject("{=5eHCGMEK}Mercantilism"));
@@ -256,7 +256,7 @@ namespace BannerKings.Models.BKModels
                     }
 
                     if (settlement.Town != null)
-                        result.AddFactor(settlement.Prosperity / 15000f, new TextObject("{=mgK8aZuj}Prosperity"));
+                        result.AddFactor(settlement.Town.Prosperity / 15000f, new TextObject("{=mgK8aZuj}Prosperity"));
                 }
             }
 

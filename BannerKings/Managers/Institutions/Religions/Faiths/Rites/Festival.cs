@@ -51,7 +51,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                 reason = new TextObject("{=sAqwDCfa}The festival needs a town or castle to be performed in.");
             }
 
-            bool date = CampaignTime.Now.GetSeasonOfYear == SeasonOfTheYear &&
+            bool date = (float)CampaignTime.Now.GetSeasonOfYear == SeasonOfTheYear &&
             CampaignTime.Now.GetDayOfSeason + 1 == DayOfTheSeason;
 
             if (!date)

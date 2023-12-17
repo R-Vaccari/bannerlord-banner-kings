@@ -124,6 +124,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 list,
                 false,
                 1,
+                1,
                 GameTexts.FindText("str_accept").ToString(),
                 String.Empty,
                 delegate (List<InquiryElement> list)
@@ -135,6 +136,7 @@ namespace BannerKings.Managers.Goals.Decisions
                         new TextObject("{=S9S5PCrP}Choose the guests for your feast. Pick at least 3 different clans from your realm. Mind you, guests will have expectations. They will want food in large variety, of good quality and plentiful. They will also expect a lot of alcohol, and the host to be present.").ToString(),
                         clanList,
                         false,
+                        1,
                         clanList.Count,
                         GameTexts.FindText("str_accept").ToString(),
                         String.Empty,

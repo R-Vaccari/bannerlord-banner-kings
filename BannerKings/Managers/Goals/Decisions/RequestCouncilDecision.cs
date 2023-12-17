@@ -96,6 +96,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 new TextObject("{=bLxGGL9z}Choose a council position to fill. Different positions have different criteria for accepting candidates - some will be entirely blocked off, such as religious positions. Swapping with an existing lord will incur relations penalties.").ToString(),
                 options, 
                 true, 
+                1,
                 1, 
                 GameTexts.FindText("str_done").ToString(),
                 GameTexts.FindText("str_cancel").ToString(),

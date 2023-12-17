@@ -6,7 +6,6 @@ namespace BannerKings.Models
     public interface IEconomyModel : IBannerKingsModel
     {
         public new ExplainedNumber CalculateEffect(Settlement settlement);
-        public ExplainedNumber CalculateProductionEfficiency(Settlement settlement);
         public ExplainedNumber CalculateProductionQuality(Settlement settlement);
     }
 }

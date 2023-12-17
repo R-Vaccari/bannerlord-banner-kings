@@ -1,3 +1,4 @@
+using SandBox.View.Map;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -36,7 +37,7 @@ namespace BannerKings.Components
                 delegate (MobileParty mobileParty)
                 {
                     mobileParty.SetPartyUsedByQuest(true);
-                    mobileParty.Party.Visuals.SetMapIconAsDirty();
+                    mobileParty.Party.SetVisualAsDirty();
                     mobileParty.Ai.SetInitiative(1f, 0.5f, float.MaxValue);
                     mobileParty.ShouldJoinPlayerBattles = true;
                     mobileParty.Aggressiveness = 1f;
@@ -60,7 +61,7 @@ namespace BannerKings.Components
                 garrisonRoster.AddToCounts(element.Character, -1);
             }
 
-            patrol.Party.Visuals.OnStartup(patrol.Party);
+            PartyVisualManager.Current.GetVisualOfParty(patrol.Party).OnStartup();
             patrol.InitializeMobilePartyAtPosition(members, new TroopRoster(patrol.Party), origin.GatePosition);
             return patrol;
         }

@@ -9,6 +9,8 @@ using BannerKings.Managers.Policies;
 using System.Linq;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
+using BannerKings.Managers.Populations;
+using BannerKings.Extensions;
 
 namespace BannerKings.Patches
 {
@@ -19,12 +21,13 @@ namespace BannerKings.Patches
         {
             private static void SendOffPrisoners(TroopRoster prisoners, Settlement currentSettlement)
             {
+               
                 var policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
                 switch (policy.Policy)
                 {
                     case BKCriminalPolicy.CriminalPolicy.Enslavement:
                         {
-                            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
+                            PopulationData data = currentSettlement.PopulationData();
                             data?.UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
                             break;
                         }
@@ -60,12 +63,15 @@ namespace BannerKings.Patches
                                 {
                                     continue;
                                 }
-
+                                else 
                                 {
                                     var random = Settlement.All.FirstOrDefault(x => x.Culture == pair.Key);
-                                    if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(random))
+                                
+                                    if (random != null)
                                     {
-                                        BannerKingsConfig.Instance.PopulationManager.GetPopData(random).UpdatePopType(PopType.Serfs, pair.Value);
+                                        PopulationData data = random.PopulationData();
+                                        if (data != null)
+                                            data.UpdatePopType(PopType.Tenants, pair.Value);
                                     }
                                 }
                             }
@@ -77,43 +83,20 @@ namespace BannerKings.Patches
 
             [HarmonyPrefix]
             [HarmonyPatch("ApplyForAllPrisoners", MethodType.Normal)]
-            private static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement, bool applyGoldChange = true)
+            private static bool Prefix(PartyBase sellerParty, PartyBase buyerParty)
             {
-                if (currentSettlement == null || (!currentSettlement.IsCastle && !currentSettlement.IsTown) || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
-                {
-                    return true;
-                }
-
-                if (!currentSettlement.IsVillage && !currentSettlement.IsTown && !currentSettlement.IsCastle)
-                {
-                    return true;
-                }
-
-                SendOffPrisoners(prisoners, currentSettlement);
-
+                SendOffPrisoners(sellerParty.PrisonRoster.CloneRosterData(), Hero.MainHero.CurrentSettlement);
                 return true;
             }
 
             [HarmonyPrefix]
             [HarmonyPatch("ApplyForSelectedPrisoners", MethodType.Normal)]
-            private static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement)
+            private static bool Prefix(PartyBase sellerParty, PartyBase buyerParty, TroopRoster prisoners)
             {
-                if (currentSettlement == null || (!currentSettlement.IsCastle && !currentSettlement.IsTown) || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
-                {
-                    return true;
-                }
-
-                if (!currentSettlement.IsVillage && !currentSettlement.IsTown && !currentSettlement.IsCastle)
-                {
-                    return true;
-                }
-
-                SendOffPrisoners(prisoners, currentSettlement);
-
+                SendOffPrisoners(prisoners, Hero.MainHero.CurrentSettlement);
                 return true;
             }
         }
-
 
         [HarmonyPatch(typeof(Town), "FoodStocksUpperLimit")]
         internal class FoodStockPatch

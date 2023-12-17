@@ -94,6 +94,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     .ToString(),
                 duchies,
                 true,
+                1,
                 3,
                 GameTexts.FindText("str_done").ToString(),
                 string.Empty,

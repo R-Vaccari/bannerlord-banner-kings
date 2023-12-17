@@ -259,6 +259,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 options,
                 false,
                 1,
+                1,
                 GameTexts.FindText("str_accept").ToString(),
                 String.Empty,
                 (List<InquiryElement> list) =>

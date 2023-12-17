@@ -41,7 +41,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                 new MultiSelectionInquiryData(
                     GetName().ToString(),
                     GetDescription().ToString(),
-                    options, false, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
+                    options, 
+                    false, 
+                    1,
+                    1, 
+                    GameTexts.FindText("str_done").ToString(), string.Empty,
                     delegate(List<InquiryElement> x)
                     {
                         input = (Hero?) x[0].Identifier;

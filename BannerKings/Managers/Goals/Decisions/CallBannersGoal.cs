@@ -161,6 +161,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 new TextObject("{=QDf3sOgR}Summon your vassals to fulfill their duties.").ToString(),
                 elements,
                 true,
+                1,
                 elements.Count,
                 GameTexts.FindText("str_accept").ToString(),
                 GameTexts.FindText("str_reject").ToString(),

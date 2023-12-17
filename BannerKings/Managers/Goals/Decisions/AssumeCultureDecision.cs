@@ -83,6 +83,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 new TextObject("{=u4JwjfVz}Assume a culture different than your current. Cultures can be assumed from settlements, your spouse or your faction leader. Direct family members will assume the culture as well. Assuming a culture yields a significant negative impact on clan renown.").ToString(),
                 options, 
                 true, 
+                1,
                 1, 
                 GameTexts.FindText("str_done").ToString(),
                 GameTexts.FindText("str_cancel").ToString(),

@@ -247,6 +247,7 @@ namespace BannerKings.UI.Kingdoms
                     list,
                     true,
                     1,
+                    1,
                     GameTexts.FindText("str_accept").ToString(),
                     GameTexts.FindText("str_cancel").ToString(),
                     (List<InquiryElement> list) =>

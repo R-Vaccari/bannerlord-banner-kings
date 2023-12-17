@@ -116,6 +116,7 @@ namespace BannerKings.Behaviours
                             list,
                             false,
                             1,
+                            1,
                             GameTexts.FindText("str_accept").ToString(),
                             string.Empty,
                             delegate (List<InquiryElement> list)
@@ -246,6 +247,7 @@ namespace BannerKings.Behaviours
                 elements,
                 false,
                 1,
+                1,
                 GameTexts.FindText("str_ok").ToString(),
                 string.Empty,
                 delegate (List<InquiryElement> list)
@@ -274,6 +276,7 @@ namespace BannerKings.Behaviours
                 new TextObject("{=!}To access these concepts again, access Concepts in Encyclopedia. All names and descriptions here are exactly what is present over there.").ToString(),
                 elements,
                 true,
+                1,
                 1,
                 GameTexts.FindText("str_ok").ToString(),
                 string.Empty,
@@ -315,6 +318,7 @@ namespace BannerKings.Behaviours
                 new TextObject("{=!}To access these concepts again, access Concepts in Encyclopedia. All names and descriptions here are exactly what is present over there.").ToString(),
                 elements,
                 true,
+                1,
                 1,
                 GameTexts.FindText("str_ok").ToString(),
                 string.Empty,

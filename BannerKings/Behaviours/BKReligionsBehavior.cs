@@ -15,6 +15,7 @@ using HarmonyLib;
 using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Election;
@@ -855,7 +856,9 @@ namespace BannerKings.Behaviours
                     .SetTextVariable("BLESSING_ACTION", religion.Faith.GetBlessingActionName())
                     .ToString(),
                 list,
-                false, 1,
+                false, 
+                1,
+                1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate(List<InquiryElement> x)
                 {
@@ -991,7 +994,9 @@ namespace BannerKings.Behaviours
                 new TextObject("{=Yy2s38FQ}Rites").ToString(),
                 new TextObject("{=B4M6aqo5}Select what rite you would like to perform. Check their descriptions and entries on Religions tab for details.").ToString(), 
                 list,
-                false, 1,
+                false, 
+                1,
+                1,
                 GameTexts.FindText("str_done").ToString(), 
                 string.Empty,
                 delegate(List<InquiryElement> x)

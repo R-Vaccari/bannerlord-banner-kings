@@ -113,9 +113,9 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            if (army.MapFaction != null)
+            if (army.Kingdom != null)
             {
-                FeudalTitle kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(army.MapFaction);
+                FeudalTitle kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(army.Kingdom);
                 if (kingdomTitle != null)
                 {
                     if (kingdomTitle.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyHorde))

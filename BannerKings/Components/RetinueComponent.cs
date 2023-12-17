@@ -24,7 +24,7 @@ namespace BannerKings.Components
                 delegate(MobileParty mobileParty)
                 {
                     mobileParty.SetPartyUsedByQuest(true);
-                    mobileParty.Party.Visuals.SetMapIconAsDirty();
+                    mobileParty.Party.SetVisualAsDirty();
                     mobileParty.Ai.DisableAi();
                     mobileParty.Aggressiveness = 0f;
                 });

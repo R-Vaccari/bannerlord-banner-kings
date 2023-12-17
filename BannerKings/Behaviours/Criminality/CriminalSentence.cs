@@ -39,7 +39,7 @@ namespace BannerKings.Behaviours.Criminality
             {
                 foreach (var clan in crime.Kingdom.Clans)
                 {
-                    if (!clan.IsEliminated && !clan.IsBanditFaction && clan != Clan.PlayerClan && clan != CampaignData.NeutralFaction)
+                    if (!clan.IsEliminated && !clan.IsBanditFaction && clan != Clan.PlayerClan)
                     {
                         bool affectRelatives;
                         int relationChangeForExecutingHero = TaleWorlds.CampaignSystem.Campaign.Current.Models.ExecutionRelationModel

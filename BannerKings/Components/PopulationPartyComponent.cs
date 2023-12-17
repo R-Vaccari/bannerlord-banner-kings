@@ -57,7 +57,7 @@ namespace BannerKings.Components
                 delegate(MobileParty mobileParty)
                 {
                     mobileParty.SetPartyUsedByQuest(true);
-                    mobileParty.Party.Visuals.SetMapIconAsDirty();
+                    mobileParty.Party.SetVisualAsDirty();
                     mobileParty.Ai.SetInitiative(0f, 1f, float.MaxValue);
                     mobileParty.ShouldJoinPlayerBattles = false;
                     mobileParty.Aggressiveness = 0f;

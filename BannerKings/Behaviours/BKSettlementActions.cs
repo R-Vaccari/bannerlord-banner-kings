@@ -259,6 +259,7 @@ namespace BannerKings.Behaviours
                        list,
                        true,
                        1,
+                       1,
                        GameTexts.FindText("str_selection_widget_accept").ToString(),
                        GameTexts.FindText("str_selection_widget_cancel").ToString(),
                        (List<InquiryElement> list) =>
@@ -288,6 +289,7 @@ namespace BannerKings.Behaviours
                                new TextObject("{=!}Select one of the ports available in this shipping lane.").ToString(),
                                ports,
                                true,
+                               1,
                                1,
                                GameTexts.FindText("str_selection_widget_accept").ToString(),
                                GameTexts.FindText("str_selection_widget_cancel").ToString(),
@@ -462,7 +464,7 @@ namespace BannerKings.Behaviours
                 {
                     var settlement = Settlement.CurrentSettlement;
                     float wage = 15;
-                    wage *= settlement.Prosperity / 8000f;
+                    wage *= settlement.Town.Prosperity / 8000f;
                     actionGold += wage;
 
                     var random = MBRandom.RandomFloat;
@@ -619,7 +621,7 @@ namespace BannerKings.Behaviours
                 {
                     var settlement = Settlement.CurrentSettlement;
                     float wage = 38;
-                    wage *= settlement.Prosperity / 8000f;
+                    wage *= settlement.Town.Prosperity / 8000f;
                     actionGold += wage;
 
                     var random = MBRandom.RandomFloat;
@@ -993,6 +995,7 @@ namespace BannerKings.Behaviours
                 new TextObject("{=Ow7k6t9V}Choose a mercenary lance to recruit. Available lances depend on the town's culture. Lances cost different prices and may differ in sizes. Lances become available again after a week after the last is recruited.").ToString(),
                 elements,
                 true,
+                1,
                 1,
                 GameTexts.FindText("str_ok").ToString(),
                 string.Empty,

@@ -90,6 +90,7 @@ namespace BannerKings.Managers.CampaignStart
                             list,
                             false,
                             1,
+                            1,
                             GameTexts.FindText("str_accept").ToString(),
                             string.Empty,
                             delegate(List<InquiryElement> list)

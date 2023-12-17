@@ -283,7 +283,7 @@ namespace BannerKings.Models.BKModels
 
             if (settlement.Town != null)
             {
-                result.Add(settlement.Prosperity, new TextObject("{=!}Prosperity of {FIEF}")
+                result.Add(settlement.Town.Prosperity, new TextObject("{=!}Prosperity of {FIEF}")
                         .SetTextVariable("FIEF", settlement.Name));
             }
             else if (settlement.Village != null)

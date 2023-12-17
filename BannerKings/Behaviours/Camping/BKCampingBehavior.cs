@@ -79,20 +79,20 @@ namespace BannerKings.Behaviours.Camping
             MobileParty.MainParty.ChangeVisual("map_icon_siege_camp_tent");
             MBTextManager.SetTextVariable("FIEF", SettlementHelper.FindNearestSettlement(x => !x.IsHideout,
                 MobileParty.MainParty));
-            bool flag = ((PartyVisual)MobileParty.MainParty.Party.Visuals).HumanAgentVisuals != null;
+            bool flag = PartyVisualManager.Current.GetVisualOfParty(MobileParty.MainParty.Party).HumanAgentVisuals != null;
             if (flag)
             {
-                ((PartyVisual)MobileParty.MainParty.Party.Visuals).HumanAgentVisuals.GetEntity().SetVisibilityExcludeParents(false);
+                PartyVisualManager.Current.GetVisualOfParty(MobileParty.MainParty.Party).HumanAgentVisuals.GetEntity().SetVisibilityExcludeParents(false);
             }
-            bool flag2 = ((PartyVisual)MobileParty.MainParty.Party.Visuals).MountAgentVisuals != null;
+            bool flag2 = PartyVisualManager.Current.GetVisualOfParty(MobileParty.MainParty.Party).MountAgentVisuals != null;
             if (flag2)
             {
-                ((PartyVisual)MobileParty.MainParty.Party.Visuals).MountAgentVisuals.GetEntity().SetVisibilityExcludeParents(false);
+                PartyVisualManager.Current.GetVisualOfParty(MobileParty.MainParty.Party).MountAgentVisuals.GetEntity().SetVisibilityExcludeParents(false);
             }
-            bool flag3 = ((PartyVisual)MobileParty.MainParty.Party.Visuals).CaravanMountAgentVisuals != null;
+            bool flag3 = PartyVisualManager.Current.GetVisualOfParty(MobileParty.MainParty.Party).CaravanMountAgentVisuals != null;
             if (flag3)
             {
-                ((PartyVisual)MobileParty.MainParty.Party.Visuals).CaravanMountAgentVisuals.GetEntity().SetVisibilityExcludeParents(false);
+                PartyVisualManager.Current.GetVisualOfParty(MobileParty.MainParty.Party).CaravanMountAgentVisuals.GetEntity().SetVisibilityExcludeParents(false);
             }
         }
     }

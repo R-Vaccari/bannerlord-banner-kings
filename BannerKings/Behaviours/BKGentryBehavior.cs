@@ -491,7 +491,7 @@ namespace BannerKings.Behaviours
             TextObject fullName;
             NameGenerator.Current.GenerateHeroNameAndHeroFullName(hero, out firstName, out fullName, false);
             hero.SetName(fullName, firstName);
-            hero.HeroDeveloper.DeriveSkillsFromTraits(true, null);
+            hero.HeroDeveloper.InitializeHeroDeveloper(true, null);
             BodyProperties bodyProperties = mother.BodyProperties;
             BodyProperties bodyProperties2 = father.BodyProperties;
             int seed = isOffspringFemale ? mother.CharacterObject.GetDefaultFaceSeed(1) : father.CharacterObject.GetDefaultFaceSeed(1);

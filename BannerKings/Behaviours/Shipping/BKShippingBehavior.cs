@@ -190,7 +190,8 @@ namespace BannerKings.Behaviours.Shipping
                     MBCommon.UnPauseGameEngine();
                 }
             }
-            party.Party.UpdateVisibilityAndInspected(0f, true);
+            party.Party.UpdateVisibilityAndInspected(0f);
+            party.IsVisible = false;
         }
 
         private void FinishTravel(Travel travel)
@@ -209,7 +210,8 @@ namespace BannerKings.Behaviours.Shipping
             if (teleportOutside) travel.Party.Position2D = travel.Destination.GatePosition;
             else EnterSettlementAction.ApplyForParty(party, travel.Destination);
 
-            party.Party.UpdateVisibilityAndInspected(0f, false);
+            party.Party.UpdateVisibilityAndInspected(0f);
+            party.IsVisible = true;
             party.IsActive = true;
             party.Ai.EnableAi();
 

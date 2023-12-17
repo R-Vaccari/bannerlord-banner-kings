@@ -80,6 +80,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 crimes,
                 true,
                 1,
+                1,
                 GameTexts.FindText("str_done").ToString(),
                 GameTexts.FindText("str_cancel").ToString(),
                 delegate (List<InquiryElement> crimeOptions)
@@ -106,7 +107,8 @@ namespace BannerKings.Managers.Goals.Decisions
                         new TextObject("{=GaQTC0YT}{HERO} will be sentenced for the crime of {CRIME}. Tyrannical sentences will impact your standing with your peers.").ToString(),
                         sentences,
                         true,
-                       1,
+                        1,
+                        1,
                         GameTexts.FindText("str_done").ToString(),
                         GameTexts.FindText("str_cancel").ToString(),
                         delegate (List<InquiryElement> sentenceOptions)

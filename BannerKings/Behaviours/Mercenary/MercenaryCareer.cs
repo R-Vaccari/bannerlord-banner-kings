@@ -298,7 +298,7 @@ namespace BannerKings.Behaviours.Mercenary
                 {
                     if (wk.Owner.IsNotable || wk.Owner.Clan == clan)
                     {
-                        float workshopCost = BannerKingsConfig.Instance.WorkshopModel.GetBuyingCostForPlayer(wk);
+                        float workshopCost = BannerKingsConfig.Instance.WorkshopModel.GetCostForPlayer(wk);
                         if (clan.Gold >= workshopCost && workshopCost < 300000f)
                         {
                             workshop = wk;

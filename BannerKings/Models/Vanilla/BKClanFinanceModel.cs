@@ -150,7 +150,7 @@ namespace BannerKings.Models.Vanilla
             {
                 foreach (var wk in town.Workshops)
                 {
-                    if (wk.IsRunning && wk.Owner != clan.Leader && wk.WorkshopType.StringId != "artisans")
+                    if (wk.Owner != clan.Leader && wk.WorkshopType.StringId != "artisans")
                     {
                         totalWorkshopTaxes += GetWorkshopTaxes(wk);
                     }
@@ -247,7 +247,7 @@ namespace BannerKings.Models.Vanilla
             var wkModel = (BKWorkshopModel)TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel;
             foreach (var wk in clan.Leader.OwnedWorkshops)
             {
-                if (!wk.IsRunning || wk.Settlement.OwnerClan == clan)
+                if (wk.Settlement.OwnerClan == clan)
                 {
                     continue;
                 }

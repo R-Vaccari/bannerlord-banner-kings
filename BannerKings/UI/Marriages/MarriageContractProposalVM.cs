@@ -246,6 +246,7 @@ namespace BannerKings.UI.Marriages
                 list,
                 true,
                 1,
+                1,
                 GameTexts.FindText("str_accept").ToString(),
                 string.Empty,
                 delegate (List<InquiryElement> list)
@@ -272,6 +273,7 @@ namespace BannerKings.UI.Marriages
                 new TextObject("{=x4RmDskH}Select the spouse from their clan. Each spouse has a different score, which represents their importance to their family. The marriage will be acceptable or not according to the difference in the score of your proposed spouse and theirs.").ToString(),
                 list,
                 true,
+                1,
                 1,
                 GameTexts.FindText("str_accept").ToString(),
                 string.Empty,

@@ -117,7 +117,11 @@ namespace BannerKings.UI.Court
                     new MultiSelectionInquiryData(
                         new TextObject("{=91fEPp8b}Select Councillor").ToString(),
                         description.ToString(),
-                        options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
+                        options, 
+                        true, 
+                        1,
+                        1, 
+                        GameTexts.FindText("str_done").ToString(), string.Empty,
                         delegate(List<InquiryElement> x)
                         {
                             var requester = (Hero?) x[0].Identifier;

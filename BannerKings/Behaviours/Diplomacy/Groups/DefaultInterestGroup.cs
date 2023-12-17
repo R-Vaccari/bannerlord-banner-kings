@@ -63,7 +63,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                     DefaultPolicies.Marshals,
                     DefaultPolicies.FeudalInheritance,
                     DefaultPolicies.WarTax,
-                    DefaultPolicies.Peerage
                 },
                 new List<DemesneLaw>()
                 {
@@ -108,7 +107,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                     DefaultPolicies.RoadTolls,
                     DefaultPolicies.Lawspeakers,
                     DefaultPolicies.MilitaryCoronae,
-                    DefaultPolicies.LandGrantsForVeterans,
                     DefaultPolicies.Serfdom
                },
                new List<PolicyObject>()
@@ -166,7 +164,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                    DefaultPolicies.Senate,
                    DefaultPolicies.FeudalInheritance,
                    DefaultPolicies.NobleRetinues,
-                   DefaultPolicies.Peerage,
                    DefaultPolicies.Marshals,
                    DefaultPolicies.Serfdom,
                    DefaultPolicies.WarTax,
@@ -182,7 +179,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                     DefaultPolicies.RoyalPrivilege,
                     DefaultPolicies.PrecarialLandTenure,
                     DefaultPolicies.LandTax,
-                    DefaultPolicies.KingsMercenaries,
                     DefaultPolicies.ImperialTowns,
                     DefaultPolicies.TrialByJury,
                     DefaultPolicies.HuntingRights
@@ -225,7 +221,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                     DefaultPolicies.ForgivenessOfDebts,
                     DefaultPolicies.GrazingRights,
                     DefaultPolicies.TribunesOfThePeople,
-                    DefaultPolicies.LandGrantsForVeterans,
                     DefaultPolicies.CouncilOfTheCommons,
                     DefaultPolicies.HuntingRights,
                     DefaultPolicies.TrialByJury
@@ -282,7 +277,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                     DefaultPolicies.ForgivenessOfDebts,
                     DefaultPolicies.GrazingRights,
                     DefaultPolicies.TribunesOfThePeople,
-                    DefaultPolicies.LandGrantsForVeterans,
                     DefaultPolicies.CouncilOfTheCommons,
                     DefaultPolicies.HuntingRights,
                     DefaultPolicies.TrialByJury

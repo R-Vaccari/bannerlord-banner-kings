@@ -193,7 +193,10 @@ namespace BannerKings.UI.Cultures
                 new TextObject("{=!}Choose a research proejct. Your current research progress is {PROGRESS} research points, based on your Scholarship, Intelligence and perks. An innovation is researchable if it has no previous requirements or its direct requirement is already fully researched.{newline}{newline}To make progress in your research, visit a friendly fief, select Banner Kings -> Take an Action -> Research.")
                 .SetTextVariable("PROGRESS", education.ResearchProgress)    
                 .ToString(),
-                elements, true, 1,
+                elements, 
+                true, 
+                1,
+                1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate (List<InquiryElement> x)
                 {
@@ -227,7 +230,10 @@ namespace BannerKings.UI.Cultures
                     new TextObject("{=QkJA3Qjb}Choose Fascination").ToString(),
                     new TextObject("{=!}The cultural fascination is an innovation that progresses faster than others. As Cultural Head, you can determine the fascination. Changing fascinations incurs no type of cost.")
                         .ToString(),
-                    elements, true, 1,
+                    elements, 
+                    true, 
+                    1,
+                    1,
                     GameTexts.FindText("str_done").ToString(), string.Empty,
                     delegate (List<InquiryElement> x)
                     {

@@ -55,6 +55,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                    GetDescription().ToString(),
                    list, 
                    false, 
+                   1,
                    1, 
                    GameTexts.FindText("str_done").ToString(), 
                    string.Empty,

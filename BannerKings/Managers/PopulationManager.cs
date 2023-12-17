@@ -424,7 +424,7 @@ namespace BannerKings.Managers
         {
             if (settlement.IsCastle)
             {
-                var prosperityFactor = 0.0001f * settlement.Prosperity + 1f;
+                var prosperityFactor = 0.0001f * settlement.Town.Prosperity + 1f;
                 return MBRandom.RandomInt((int) (2000 * prosperityFactor), (int) (3000 * prosperityFactor));
             }
 
@@ -435,7 +435,7 @@ namespace BannerKings.Managers
 
             if (settlement.IsTown)
             {
-                var prosperityFactor = 0.0001f * settlement.Prosperity + 1f;
+                var prosperityFactor = 0.0001f * settlement.Town.Prosperity + 1f;
                 if (settlement.Owner is {IsFactionLeader: true})
                 {
                     prosperityFactor *= 1.2f;

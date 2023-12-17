@@ -65,8 +65,7 @@ namespace BannerKings.Behaviours.Mercenary
                     var workshop = MercenaryCareer.GetWorkshopPrivilege(career);
                     if (workshop != null)
                     {
-                        workshop.SetWorkshop(career.Clan.Leader, workshop.WorkshopType, workshop.Capital, workshop.Upgradable,
-                                                workshop.ConstructionTimeRemained, workshop.Level);
+                        workshop.ChangeOwnerOfWorkshop(career.Clan.Leader, workshop.WorkshopType, BannerKingsConfig.Instance.WorkshopModel.InitialCapital);
                         MBInformationManager.AddQuickInformation(new TextObject("{=!}You are now the owner of {WORKSHOP} at {TOWN}!")
                             .SetTextVariable("WORKSHOP", workshop.Name)
                             .SetTextVariable("TOWN", workshop.Settlement.Name),

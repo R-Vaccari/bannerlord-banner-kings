@@ -37,17 +37,17 @@ namespace BannerKings.Extensions
 
         public static void ChangeVisual(this MobileParty mobileParty, string prefab)
         {
-            List<GameEntity> children = ((PartyVisual)mobileParty.Party.Visuals).StrategicEntity.GetChildren().ToList();
+            List<GameEntity> children = PartyVisualManager.Current.GetVisualOfParty(mobileParty.Party).StrategicEntity.GetChildren().ToList();
             if (children.Count > 0)
-                ((PartyVisual)mobileParty.Party.Visuals).StrategicEntity.RemoveAllChildren();
+                PartyVisualManager.Current.GetVisualOfParty(mobileParty.Party).StrategicEntity.RemoveAllChildren();
             
-            Scene scene = ((PartyVisual)mobileParty.Party.Visuals).StrategicEntity.Scene;
+            Scene scene = PartyVisualManager.Current.GetVisualOfParty(mobileParty.Party).StrategicEntity.Scene;
             GameEntity gameEntity = GameEntity.Instantiate(scene, prefab, true);
             MatrixFrame frame = MatrixFrame.Identity;
             frame.rotation.ApplyScaleLocal(1f);
             frame.Rotate(1.5707964f, Vec3.Up);
             gameEntity.SetFrame(ref frame);
-            ((PartyVisual)mobileParty.Party.Visuals).StrategicEntity.AddChild(gameEntity, false);
+            PartyVisualManager.Current.GetVisualOfParty(mobileParty.Party).StrategicEntity.AddChild(gameEntity, false);
         }
     }
 }

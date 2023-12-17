@@ -276,7 +276,10 @@ namespace BannerKings.Managers
                 new TextObject("{=VrzR1ZzZ}Your faith").ToString(),
                 new TextObject("{=ASWWGeQ3}You look up to the skies and realize there must be something more. You feel there must be a higher purpose for yourself, and people expect you to defend a certain faith. Upholding your cultural forefathers' faith would be considered most pious. Similarly, following a faith that accepts your culture would be pious, however not as much as your true ancestry. Alternatively, having a completely different faith is possible, though a less walked path. What is your faith?")
                     .ToString(),
-                elements, true, 1,
+                elements, 
+                true, 
+                1,
+                1,
                 GameTexts.FindText("str_done").ToString(), string.Empty, delegate(List<InquiryElement> element)
                 {
                     var religion = (Religion) element[0].Identifier;

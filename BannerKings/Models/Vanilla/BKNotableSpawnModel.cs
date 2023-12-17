@@ -22,15 +22,15 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (occupation == Occupation.Merchant)
                     {
-                        if (settlement.Prosperity >= 8000)
+                        if (settlement.Town.Prosperity >= 8000)
                             result += 1;
 
-                        if (settlement.Prosperity >= 15000)
+                        if (settlement.Town.Prosperity >= 15000)
                             result += 1;
                     }
                     else if (occupation == Occupation.Artisan)
                     {
-                        if (settlement.Prosperity >= 10000)
+                        if (settlement.Town.Prosperity >= 10000)
                             result += 1;
                     }
                 }

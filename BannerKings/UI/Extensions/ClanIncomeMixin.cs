@@ -1,4 +1,5 @@
 using BannerKings.Behaviours.Workshops;
+using BannerKings.Extensions;
 using BannerKings.UI.Items.UI;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
@@ -40,60 +41,62 @@ namespace BannerKings.UI.Extensions
             {
                 viewModel.CurrentSelectedIncome.RefreshValues();
                 var workshop = viewModel.CurrentSelectedIncome.Workshop;
+                TextObject state = new TextObject("{=Bom9FTfz}Running normally.");
+                /*
                 var time = CampaignTime.Now - CampaignTime.Days(workshop.NotRunnedDays);
                 //WorkshopInfo.Add(new InformationElement(new TextObject("{=OXes1FKN}Last run:").ToString(),
                 //    time.ToString(),
                 //    new TextObject("{=a2FbzfvH}The last day this workshop has successfully run without issues.").ToString()));
 
-                CanUpgrade = workshop.CanBeUpgraded;
-                TextObject state = new TextObject("{=Bom9FTfz}Running normally.");
+                CanUpgrade = workshop.CanBeUpgraded; 
+                
                 if (!workshop.IsRunning && workshop.ConstructionTimeRemained > 0)
                 {
                     state = new TextObject("{=KnWnjURr}Workshop under expansion! {DAYS} construction day(s) left.")
                         .SetTextVariable("DAYS", workshop.ConstructionTimeRemained);
                     CanUpgrade = false;
-                }
-                else
+                } else 
                 {
-                    bool inventory = false;
-                    WorkshopData data = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKWorkshopBehavior>().GetInventory(workshop);
-                    if (data != null)
-                    {
-                        if (data.IsRunningOnInventory)
-                        {
-                            inventory = true;
-                            state = new TextObject("{=VX9LJJpS}Workshop is running on inventory!");
-                        }
+                }
+                */
 
-                        WorkshopInfo.Add(new InformationElement(GameTexts.FindText("str_inventory").ToString() + ':',
-                            new TextObject("{=8YCJrv0F}{NUMBER} / {CAPACITY}")
-                            .SetTextVariable("NUMBER", data.GetInventoryCount())
-                            .SetTextVariable("CAPACITY", data.GetInventoryCapacity())
-                            .ToString(),
-                            ""));
+                bool inventory = false;
+                WorkshopData data = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKWorkshopBehavior>().GetInventory(workshop);
+                if (data != null)
+                {
+                    if (data.IsRunningOnInventory)
+                    {
+                        inventory = true;
+                        state = new TextObject("{=VX9LJJpS}Workshop is running on inventory!");
                     }
 
-                    if (!inventory)
+                    WorkshopInfo.Add(new InformationElement(GameTexts.FindText("str_inventory").ToString() + ':',
+                        new TextObject("{=8YCJrv0F}{NUMBER} / {CAPACITY}")
+                        .SetTextVariable("NUMBER", data.GetInventoryCount())
+                        .SetTextVariable("CAPACITY", data.GetInventoryCapacity())
+                        .ToString(),
+                        ""));
+                }
+
+                if (!inventory)
+                {
+                    var behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<WorkshopsCampaignBehavior>();
+                    var method = AccessTools.Method(behavior.GetType(), "DetermineTownHasSufficientInputs");
+                    for (int i = 0; i < workshop.WorkshopType.Productions.Count; i++)
                     {
-                        var behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<WorkshopsCampaignBehavior>();
-                        var method = AccessTools.Method(behavior.GetType(), "DetermineTownHasSufficientInputs");
-                        for (int i = 0; i < workshop.WorkshopType.Productions.Count; i++)
+                        bool insufficient = (bool)method.Invoke(behavior, new object[] { workshop.WorkshopType.Productions[i],
+                workshop.Settlement.Town, 0 });
+                        if (!insufficient)
                         {
-                            bool insufficient = (bool)method.Invoke(behavior, new object[] { workshop.WorkshopType.Productions[i],
-                    workshop.Settlement.Town, 0 });
-                            if (!insufficient)
-                            {
-                                CampaignUIHelper.ProductInputOutputEqualityComparer comparer = new CampaignUIHelper.ProductInputOutputEqualityComparer();
-                                IEnumerable<TextObject> texts = from x in workshop.WorkshopType.Productions.SelectMany((WorkshopType.Production p) => p.Outputs).Distinct(comparer)
-                                                                select x.Item1.GetName();
-                                state = new TextObject("{=Pc4NcRHR}Insufficient inputs! {TOWN} is missing inputs for {OUTPUT}.")
-                                    .SetTextVariable("TOWN", workshop.Settlement.Name)
-                                    .SetTextVariable("OUTPUT", texts.ElementAt(0));
-                                break;
-                            }
+                            CampaignUIHelper.ProductInputOutputEqualityComparer comparer = new CampaignUIHelper.ProductInputOutputEqualityComparer();
+                            IEnumerable<TextObject> texts = from x in workshop.WorkshopType.Productions.SelectMany((WorkshopType.Production p) => p.Outputs).Distinct(comparer)
+                                                            select x.Item1.GetName();
+                            state = new TextObject("{=Pc4NcRHR}Insufficient inputs! {TOWN} is missing inputs for {OUTPUT}.")
+                                .SetTextVariable("TOWN", workshop.Settlement.Name)
+                                .SetTextVariable("OUTPUT", texts.ElementAt(0));
+                            break;
                         }
                     }
-  
                 }
 
                 WorkshopInfo.Add(new InformationElement(new TextObject("{=QP368C1V}Running state:"),
@@ -134,7 +137,7 @@ namespace BannerKings.UI.Extensions
                 {
                     var workshop = viewModel.CurrentSelectedIncome.Workshop;
                     AccessTools.Property(workshop.GetType(), "ConstructionTimeRemained").SetValue(workshop, 3);
-                    AccessTools.Property(workshop.GetType(), "Level").SetValue(workshop, workshop.Level + 1);
+                    AccessTools.Property(workshop.GetType(), "Level").SetValue(workshop, workshop.Level() + 1);
                     Hero.MainHero.ChangeHeroGold(-cost);
                     OnRefresh();
                 },

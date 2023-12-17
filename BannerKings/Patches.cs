@@ -322,9 +322,8 @@ namespace BannerKings.Patches
         [HarmonyPatch(typeof(GauntletGamepadNavigationManager), "OnWidgetNavigationStatusChanged")]
         internal class NavigationPatch
         {
-            private static bool Prefix(GauntletGamepadNavigationManager __instance, EventManager source, Widget widget)
+            private static bool Prefix(Widget widget)
             {
-
                 return false;
             }
         }

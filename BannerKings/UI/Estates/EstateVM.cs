@@ -240,6 +240,7 @@ namespace BannerKings.UI.Estates
                     list,
                     true,
                     1,
+                    1,
                     GameTexts.FindText("str_accept").ToString(),
                     string.Empty,
                     delegate (List<InquiryElement> list)

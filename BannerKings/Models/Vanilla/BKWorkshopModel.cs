@@ -1,4 +1,5 @@
 using BannerKings.Behaviours.Workshops;
+using BannerKings.Extensions;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -14,7 +15,7 @@ namespace BannerKings.Models.Vanilla
     {
         public int GetUpgradeCost(Workshop workshop)
         {
-            return GetBuyingCostForPlayer(workshop) / (4 + workshop.Level);
+            return GetCostForPlayer(workshop) / (4 + workshop.Level());
         }
 
         public ExplainedNumber GetProductionQuality(Workshop workshop, bool explanations = false)
@@ -37,9 +38,9 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            if (workshop.Level > 1)
+            if (workshop.Level() > 1)
             {
-                result.AddFactor((workshop.Level - 1) * 0.05f, GameTexts.FindText("str_level"));
+                result.AddFactor((workshop.Level() - 1) * 0.05f, GameTexts.FindText("str_level"));
             }
 
             return result;
@@ -59,19 +60,19 @@ namespace BannerKings.Models.Vanilla
             };
 
             result.Add(labor, workshop.WorkshopType.Name);
-            result.Add(workshop.Settlement.Prosperity * 0.005f, GameTexts.FindText("str_prosperity"));
+            result.Add(workshop.Settlement.Town.Prosperity * 0.005f, GameTexts.FindText("str_prosperity"));
 
-            if (workshop.Level > 1)
+            if (workshop.Level() > 1)
             {
-                result.AddFactor(workshop.Level * 0.12f, GameTexts.FindText("str_level"));
+                result.AddFactor(workshop.Level() * 0.12f, GameTexts.FindText("str_level"));
             }
 
             return result;
         }
 
-        public override int GetSellingCost(Workshop workshop)
+        public override int GetCostForNotable(Workshop workshop)
         {
-            float result = base.GetSellingCost(workshop);
+            float result = base.GetCostForNotable(workshop);
             result *= BannerKingsConfig.Instance.EconomyModel.CalculateProductionQuality(workshop.Settlement)
                 .ResultNumber;
 
@@ -80,9 +81,9 @@ namespace BannerKings.Models.Vanilla
             return (int)result;
         }
 
-        public override int GetBuyingCostForPlayer(Workshop workshop)
+        public override int GetCostForPlayer(Workshop workshop)
         {
-            float result = base.GetSellingCost(workshop);
+            float result = base.GetCostForPlayer(workshop);
             result += (int)(GetDailyExpense(workshop).ResultNumber * 15f * CampaignTime.DaysInYear);
             
             if (workshop.Owner.OwnedWorkshops.Count == 1)
@@ -101,9 +102,10 @@ namespace BannerKings.Models.Vanilla
 
         public ExplainedNumber GetBuyingCostExplained(Workshop workshop, Hero buyer, bool descriptions = false)
         {
-            ExplainedNumber result = new ExplainedNumber(base.GetSellingCost(workshop), descriptions, 
+            ExplainedNumber result = new ExplainedNumber(base.GetCostForPlayer(workshop), descriptions, 
                 new TextObject("{=LiC18pJC}Equipment costs"));
-            result.Add((int)(GetDailyExpense(workshop).ResultNumber * 15f * CampaignTime.DaysInYear));
+            result.Add((int)(GetDailyExpense(workshop).ResultNumber * 15f * CampaignTime.DaysInYear),
+                new TextObject("{=!}Employee wages"));
 
             result.Add(GetInventoryCost(workshop), new TextObject("{=u5LQxWO5}Workshop inventory"));
 
@@ -141,25 +143,15 @@ namespace BannerKings.Models.Vanilla
             return cost;
         }
 
-        public override float GetPolicyEffectToProduction(Town town)
-        {
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
-            {
-                return BannerKingsConfig.Instance.EconomyModel.CalculateProductionEfficiency(town.Settlement).ResultNumber;
-            }
-
-            return base.GetPolicyEffectToProduction(town);
-        }
-
         public ExplainedNumber GetProductionEfficiency(Workshop workshop, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
-            result.Add(GetPolicyEffectToProduction(workshop.Settlement.Town), new TextObject("{=2fCjZALt}Local production efficiency"));
+            result.Add(BannerKingsConfig.Instance.EconomyModel.CalculateProductionEfficiency(workshop.Settlement, false, workshop.Settlement.PopulationData()).ResultNumber, 
+                new TextObject("{=2fCjZALt}Local production efficiency"));
             
-            if (workshop.Level > 1)
+            if (workshop.Level() > 1)
             {
-                result.AddFactor((workshop.Level - 1) * 0.08f, GameTexts.FindText("str_level"));
+                result.AddFactor((workshop.Level() - 1) * 0.08f, GameTexts.FindText("str_level"));
             }
 
             return result;

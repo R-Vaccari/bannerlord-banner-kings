@@ -153,9 +153,11 @@ namespace BannerKings.Behaviours.Retainer
                 if (contractor != null && contractor.LeaderHero == contract.Contractor)
                 {
                     MobileParty.MainParty.IsActive = false;
-                    PartyBase.MainParty.UpdateVisibilityAndInspected(0f, true);
+                    PartyBase.MainParty.UpdateVisibilityAndInspected(0f);
+                    PartyBase.MainParty.MobileParty.IsVisible = false;
                     contractor.Party.SetAsCameraFollowParty();
-                    contractor.Party.UpdateVisibilityAndInspected(0f, false);
+                    contractor.Party.UpdateVisibilityAndInspected(0f);
+                    contractor.IsVisible = true;
                 }
             }
         }

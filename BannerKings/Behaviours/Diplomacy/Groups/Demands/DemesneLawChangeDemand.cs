@@ -410,6 +410,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 options,
                 false,
                 1,
+                1,
                 GameTexts.FindText("str_accept").ToString(),
                 String.Empty,
                 (List<InquiryElement> list) =>
@@ -448,6 +449,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 new TextObject("{=!}As a leader of your group you can decide what demesne law you will be pushing for..").ToString(),
                 policies,
                 true,
+                1,
                 1,
                 GameTexts.FindText("str_accept").ToString(),
                 String.Empty,

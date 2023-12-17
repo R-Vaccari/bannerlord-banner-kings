@@ -49,7 +49,7 @@ namespace BannerKings.Models.Vanilla
             float foodProduction = GetPopulationFoodProduction(data, town).ResultNumber;
             result.Add(foodProduction, new TextObject("{=AOdwTPTa}Population Production"));
 
-            float season = CampaignTime.Now.GetSeasonOfYear;
+            float season = (float)CampaignTime.Now.GetSeasonOfYear;
             switch (season)
             {
                 case 3f:

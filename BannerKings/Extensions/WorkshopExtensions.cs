@@ -10,6 +10,11 @@ namespace BannerKings.Extensions
             return (int)(MathF.Max(0, workshop.ProfitMade) * BannerKingsConfig.Instance.WorkshopModel
                 .CalculateWorkshopTax(workshop.Settlement, workshop.Owner).ResultNumber);
         }
+
+        public static int Level(this Workshop workshop)
+        {
+            return 1;
+        }
     }
 }
 

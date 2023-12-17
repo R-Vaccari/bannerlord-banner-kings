@@ -79,6 +79,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 .ToString(),
                 elements, 
                 true, 
+                1,
                 1, 
                 GameTexts.FindText("str_done").ToString(),
                 GameTexts.FindText("str_cancel").ToString(),

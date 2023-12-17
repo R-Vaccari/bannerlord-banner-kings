@@ -152,6 +152,7 @@ namespace BannerKings.UI.Mercenary
                 list,
                 true,
                 1,
+                1,
                 GameTexts.FindText("str_accept").ToString(),
                 string.Empty,
                 delegate (List<InquiryElement> list)
@@ -252,6 +253,7 @@ namespace BannerKings.UI.Mercenary
                 list,
                 true,
                 1,
+                1,
                 GameTexts.FindText("str_accept").ToString(),
                 string.Empty,
                 delegate (List<InquiryElement> list)
@@ -300,6 +302,7 @@ namespace BannerKings.UI.Mercenary
                 new TextObject("{=!}Choose a skill set that fits the function you want to give your troops, from melee infantry to mounted skirmishers. Equipment is edited separately, make sure to choose skills that match their equipment.").ToString(),
                 list,
                 true,
+                1,
                 1,
                 GameTexts.FindText("str_accept").ToString(),
                 GameTexts.FindText("str_cancel").ToString(),
@@ -415,6 +418,7 @@ namespace BannerKings.UI.Mercenary
                 list,
                 true,
                 1,
+                1,
                 GameTexts.FindText("str_accept").ToString(),
                 GameTexts.FindText("str_cancel").ToString(),
                 delegate (List<InquiryElement> list)
@@ -481,6 +485,7 @@ namespace BannerKings.UI.Mercenary
                 list,
                 true,
                 1,
+                1,
                 GameTexts.FindText("str_accept").ToString(),
                 GameTexts.FindText("str_cancel").ToString(),
                 delegate (List<InquiryElement> list)
@@ -526,6 +531,7 @@ namespace BannerKings.UI.Mercenary
                 .ToString(),
                 list,
                 true,
+                1,
                 5,
                 GameTexts.FindText("str_accept").ToString(),
                 GameTexts.FindText("str_cancel").ToString(),

@@ -250,6 +250,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 options,
                 false,
                 1,
+                1,
                 GameTexts.FindText("str_accept").ToString(),
                 String.Empty,
                 (List<InquiryElement> list) =>
@@ -316,6 +317,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     positions,
                     true,
                     1,
+                    1,
                     GameTexts.FindText("str_accept").ToString(),
                     String.Empty,
                     (List<InquiryElement> list) =>
@@ -327,6 +329,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                             description.ToString(),
                             candidates,
                             true,
+                            1,
                             1,
                             GameTexts.FindText("str_accept").ToString(),
                             String.Empty,
@@ -348,6 +351,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                        description.ToString(),
                        candidates,
                        true,
+                       1,
                        1,
                        GameTexts.FindText("str_accept").ToString(),
                        String.Empty,

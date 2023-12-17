@@ -11,6 +11,7 @@ using TaleWorlds.Library;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using HarmonyLib;
 using TaleWorlds.SaveSystem;
+using BannerKings.Extensions;
 
 namespace BannerKings.Behaviours.Workshops
 {
@@ -28,6 +29,7 @@ namespace BannerKings.Behaviours.Workshops
 
         public void Tick()
         {
+            /*
             IsRunningOnInventory = false;
             var town = Workshop.Settlement.Town;
             if (Workshop.IsRunning && Workshop.Capital > 10000 && Workshop.WorkshopType.StringId != "artisans")
@@ -107,7 +109,7 @@ namespace BannerKings.Behaviours.Workshops
                     }
                     Workshop.SetProgress(i, num);
                 }
-            }
+            } */
         }
 
         private bool DoProduction(WorkshopType.Production production) 
@@ -173,7 +175,7 @@ namespace BannerKings.Behaviours.Workshops
             return count;
         }
 
-        public int GetInventoryCapacity() => (int)(Workshop.Level * 20f);
+        public int GetInventoryCapacity() => (int)(Workshop.Level() * 20f);
 
         private bool HasEnoughInputs(WorkshopType.Production production)
         {

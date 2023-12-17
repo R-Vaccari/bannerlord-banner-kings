@@ -51,9 +51,9 @@ namespace BannerKings.Models.Vanilla
         public override IEnumerable<SiegeEngineType> GetPrebuiltSiegeEnginesOfSiegeCamp(BesiegerCamp besiegerCamp)
         {
             var baseResult = new List<SiegeEngineType>(base.GetPrebuiltSiegeEnginesOfSiegeCamp(besiegerCamp));
-            if (besiegerCamp.BesiegerParty.LeaderHero != null)
+            if (besiegerCamp.LeaderParty.LeaderHero != null)
             {
-                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(besiegerCamp.BesiegerParty
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(besiegerCamp.LeaderParty
                     .LeaderHero);
                 if (data.Perks.Contains(BKPerks.Instance.SiegeEngineer))
                 {

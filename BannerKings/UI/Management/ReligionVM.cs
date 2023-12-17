@@ -271,6 +271,7 @@ namespace BannerKings.UI.Management
                 elements,
                 true,
                 1,
+                1,
                 GameTexts.FindText("str_accept").ToString(),
                 GameTexts.FindText("str_selection_widget_cancel").ToString(),
                 (List<InquiryElement> list) =>

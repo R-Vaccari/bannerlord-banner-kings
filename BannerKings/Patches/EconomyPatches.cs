@@ -65,26 +65,6 @@ namespace BannerKings.Patches
             }
         }
 
-        [HarmonyPatch(typeof(LordConversationsCampaignBehavior))]
-        internal class LordConversationsCampaignBehaviorPatches
-        {
-            [HarmonyPostfix]
-            [HarmonyPatch("SmallCaravanFormingCost", MethodType.Getter)]
-            private static void SmallCaravanFormingCost(ref int __result)
-            {
-                __result = (int)BannerKingsConfig.Instance.EconomyModel
-                    .GetCaravanPrice(Settlement.CurrentSettlement, Hero.MainHero).ResultNumber;
-            }
-
-            [HarmonyPostfix]
-            [HarmonyPatch("LargeCaravanFormingCost", MethodType.Getter)]
-            private static void LargeCaravanFormingCost(ref int __result)
-            {
-                __result = (int)BannerKingsConfig.Instance.EconomyModel
-                    .GetCaravanPrice(Settlement.CurrentSettlement, Hero.MainHero, true).ResultNumber;
-            }
-        }
-
         [HarmonyPatch(typeof(CaravansCampaignBehavior))]
         internal class CaravansCampaignBehaviorPatches
         {
@@ -239,29 +219,36 @@ namespace BannerKings.Patches
             }
         }
 
-        [HarmonyPatch(typeof(WorkshopsCampaignBehavior), "IsItemPreferredForTown")]
-        class IsItemPreferredPatch
+        [HarmonyPatch(typeof(ClanVariablesCampaignBehavior))]
+        internal class ClanVariablesPatches
         {
-            public static void Postfix(ref bool __result, ItemObject item, Town townComponent)
+            [HarmonyPrefix]
+            [HarmonyPatch("UpdateClanSettlementAutoRecruitment", MethodType.Normal)]
+            private static bool Prefix1(Clan clan)
             {
-                if (!__result) return;
-
-                InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(townComponent.Settlement.Culture);
-                if (data != null)
+                if (clan.MapFaction is { IsKingdomFaction: true })
                 {
-                    if (item.HasWeaponComponent && (item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Crossbow ||
-                                       item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Bolt))
+                    var enemies = FactionManager.GetEnemyKingdoms(clan.Kingdom);
+                    foreach (var settlement in clan.Settlements)
                     {
-                        __result = data.HasFinishedInnovation(DefaultInnovations.Instance.Crossbows);
+                        if (settlement.IsFortification && settlement.Town.GarrisonParty != null)
+                        {
+                            if (enemies.Count() >= 0 && settlement.Town.GarrisonParty.MemberRoster.TotalManCount < 500)
+                            {
+                                settlement.Town.GarrisonAutoRecruitmentIsEnabled = true;
+                            }
+
+                            settlement.Town.GarrisonAutoRecruitmentIsEnabled = false;
+                        }
                     }
                 }
-            }
-        }
 
-        [HarmonyPatch(typeof(ClanVariablesCampaignBehavior), "MakeClanFinancialEvaluation")]
-        internal class MakeClanFinancialEvaluationPatch
-        {
-            private static bool Prefix(Clan clan)
+                return false;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("MakeClanFinancialEvaluation", MethodType.Normal)]
+            private static bool Prefix2(Clan clan)
             {
                 if (clan.IsMinorFaction)
                 {
@@ -320,34 +307,6 @@ namespace BannerKings.Patches
                 }
 
                 return true;
-            }
-        }
-
-        [HarmonyPatch(typeof(ClanVariablesCampaignBehavior))]
-        internal class AutoRecruitmentPatch
-        {
-            [HarmonyPrefix]
-            [HarmonyPatch("UpdateClanSettlementAutoRecruitment", MethodType.Normal)]
-            private static bool Prefix1(Clan clan)
-            {
-                if (clan.MapFaction is { IsKingdomFaction: true })
-                {
-                    var enemies = FactionManager.GetEnemyKingdoms(clan.Kingdom);
-                    foreach (var settlement in clan.Settlements)
-                    {
-                        if (settlement.IsFortification && settlement.Town.GarrisonParty != null)
-                        {
-                            if (enemies.Count() >= 0 && settlement.Town.GarrisonParty.MemberRoster.TotalManCount < 500)
-                            {
-                                settlement.Town.GarrisonAutoRecruitmentIsEnabled = true;
-                            }
-
-                            settlement.Town.GarrisonAutoRecruitmentIsEnabled = false;
-                        }
-                    }
-                }
-
-                return false;
             }
         }
 
@@ -872,7 +831,24 @@ namespace BannerKings.Patches
 
                 return false;
             }
-            
+
+            [HarmonyPostfix]
+            [HarmonyPatch("IsItemPreferredForTown", MethodType.Normal)]
+            public static void ItemPreferredPostfix(ref bool __result, ItemObject item, Town townComponent)
+            {
+                if (!__result) return;
+
+                InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(townComponent.Settlement.Culture);
+                if (data != null)
+                {
+                    if (item.HasWeaponComponent && (item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Crossbow ||
+                                       item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Bolt))
+                    {
+                        __result = data.HasFinishedInnovation(DefaultInnovations.Instance.Crossbows);
+                    }
+                }
+            }
+
             [HarmonyPostfix]
             [HarmonyPatch(methodName: "DecideBestWorkshopType", MethodType.Normal)]
             private static void DecideBestWorkshopTypePostfix(ref WorkshopType __result, 
@@ -911,10 +887,11 @@ namespace BannerKings.Patches
             }
 
             [HarmonyPrefix]
-            [HarmonyPatch("ProduceOutput", MethodType.Normal)]
-            private static bool ProduceOutputPrefix(EquipmentElement outputItem, Town town, Workshop workshop, int count,
-                bool doNotEffectCapital)
+            [HarmonyPatch("ProduceAnOutputToTown", MethodType.Normal)]
+            private static bool ProduceOutputPrefix(EquipmentElement outputItem, Workshop workshop, bool effectCapital)
             {
+                Town town = workshop.Settlement.Town;
+                int count = 1;
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 if (data == null)
                 {
@@ -955,7 +932,7 @@ namespace BannerKings.Patches
                     town.Owner.ItemRoster.AddToCounts(element, 1);
                 }
 
-                if (TaleWorlds.CampaignSystem.Campaign.Current.GameStarted && !doNotEffectCapital)
+                if (TaleWorlds.CampaignSystem.Campaign.Current.GameStarted && effectCapital)
                 {
                     var num = totalValue;
                     workshop.ChangeGold(num);
@@ -963,16 +940,6 @@ namespace BannerKings.Patches
                 }
 
                 CampaignEventDispatcher.Instance.OnItemProduced(outputItem.Item, town.Owner.Settlement, count);
-                return false;
-            }
-        }
-
-        [HarmonyPatch(typeof(Workshop), "Expense", MethodType.Getter)]
-        internal class WorkshopExpensePatch
-        {
-            private static bool Prefix(Workshop __instance, ref int __result)
-            {
-                __result = (int)BannerKingsConfig.Instance.WorkshopModel.GetDailyExpense(__instance).ResultNumber;
                 return false;
             }
         }
@@ -1218,17 +1185,6 @@ namespace BannerKings.Patches
                 return true;
             }
         }
-
-        // Impact prosperity
-        /*[HarmonyPatch(typeof(IPartyVisual), "OnStartup")]
-        internal class PartyVisualPatch
-        {
-            private static bool Postfix(PartyVisual __instance, PartyBase party)
-            {
-                Debug.WriteDebugLineOnScreen(party.Name.ToString());
-                return false;
-            }
-        }*/
 
         // Added productions
         [HarmonyPatch(typeof(VillageGoodProductionCampaignBehavior))]

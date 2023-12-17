@@ -247,6 +247,7 @@ namespace BannerKings.UI.Kingdoms
                 aspects,
                 true,
                 1,
+                1,
                 new TextObject("{=!}Propose").ToString(),
                 GameTexts.FindText("str_selection_widget_cancel").ToString(),
                 (List<InquiryElement> list) =>

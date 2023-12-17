@@ -168,6 +168,7 @@ namespace BannerKings.Behaviours.Criminality
                            .ToString(),
                            inquiryElements,
                            true,
+                           1,
                            count,
                            GameTexts.FindText("").ToString(),
                            GameTexts.FindText("").ToString(),

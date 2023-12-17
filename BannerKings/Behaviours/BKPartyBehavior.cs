@@ -173,7 +173,7 @@ namespace BannerKings.Behaviours
                     MobileParty tradersParty = PopulationPartyComponent.CreateTravellerParty("travellers_", settlement, target,
                         name, count, PopType.Serfs, civilian, true);
 
-                    int budget = 500 + (int)(settlement.Prosperity / 1000f);
+                    int budget = 500 + (int)(settlement.Town.Prosperity / 1000f);
 
                     var localData = settlement.Town.MarketData;
                     var targetData = target.Town.MarketData;

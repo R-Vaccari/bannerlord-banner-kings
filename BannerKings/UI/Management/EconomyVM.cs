@@ -297,6 +297,7 @@ namespace BannerKings.UI.Management
                 list,
                 true,
                 1,
+                1,
                 GameTexts.FindText("str_accept").ToString(),
                 GameTexts.FindText("str_reject").ToString(),
                 delegate (List<InquiryElement> list)

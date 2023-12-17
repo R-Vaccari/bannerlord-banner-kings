@@ -148,6 +148,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 cultureOptions,
                 true,
                 1,
+                1,
                 GameTexts.FindText("str_done").ToString(),
                 GameTexts.FindText("str_cancel").ToString(),
                 delegate (List<InquiryElement> selectedOptions)
@@ -186,6 +187,7 @@ namespace BannerKings.Managers.Goals.Decisions
                        new TextObject("{=TmBXiTjD}Determine what kind of guest your court will receive.").ToString(),
                        companionOptions,
                        true,
+                       1,
                        1,
                        GameTexts.FindText("str_done").ToString(),
                        GameTexts.FindText("str_cancel").ToString(),

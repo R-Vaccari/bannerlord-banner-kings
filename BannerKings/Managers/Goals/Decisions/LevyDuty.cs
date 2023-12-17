@@ -67,6 +67,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 vassals,
                 true,
                 1,
+                1,
                 GameTexts.FindText("str_accept").ToString(),
                 GameTexts.FindText("str_reject").ToString(),
                 delegate (List<InquiryElement> list)
@@ -115,6 +116,7 @@ namespace BannerKings.Managers.Goals.Decisions
                         new TextObject("{=!}As a suzerain, you are capable of levying duties from your legal vassals. Such duties depend exclusively on the contract of the realm you serve.").ToString(),
                         duties,
                         true,
+                        1,
                         1,
                         GameTexts.FindText("str_accept").ToString(),
                         GameTexts.FindText("str_reject").ToString(),

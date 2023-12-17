@@ -57,7 +57,7 @@ namespace BannerKings.Behaviours
                     var random = target.Town.Workshops.GetRandomElement();
                     if (random != null)
                     {
-                        float workshopCost = BannerKingsConfig.Instance.WorkshopModel.GetBuyingCostForPlayer(random);
+                        float workshopCost = BannerKingsConfig.Instance.WorkshopModel.GetCostForPlayer(random);
                         if (ShouldHaveWorkshop(lord, (int)workshopCost))
                         {
 
@@ -100,9 +100,10 @@ namespace BannerKings.Behaviours
                         .SetTextVariable("TOWN", wk.Settlement.Name)
                         .ToString()));
             }
-            ChangeOwnerOfWorkshopAction.ApplyByTrade(wk, buyer, wk.WorkshopType,
-                TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.GetInitialCapital(1), true,
-                (int)cost);
+
+            GiveGoldAction.ApplyBetweenCharacters(buyer, wk.Owner, (int)cost, false);
+            CampaignEventDispatcher.Instance.OnWorkshopOwnerChanged(wk, buyer);
+            wk.ChangeOwnerOfWorkshop(buyer, wk.WorkshopType, TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel.InitialCapital);
         }
 
         private bool ShouldHaveCaravan(Hero hero, int cost)

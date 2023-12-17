@@ -164,7 +164,7 @@ namespace BannerKings.Managers.AI
 
                 var rogueWeight = hero.GetTraitLevel(DefaultTraits.RogueSkills) - hero.GetTraitLevel(DefaultTraits.Mercy) -
                                   hero.GetTraitLevel(DefaultTraits.Honor) + hero.GetTraitLevel(DefaultTraits.Thug) +
-                                  hero.GetTraitLevel(DefaultTraits.Thief);
+                                  hero.GetTraitLevel(DefaultTraits.Smuggler);
 
                 var politicianWeight =
                     hero.GetTraitLevel(DefaultTraits.Politician) + hero.GetTraitLevel(DefaultTraits.Commander);
@@ -177,7 +177,6 @@ namespace BannerKings.Managers.AI
                 var healerWeight = hero.GetTraitLevel(DefaultTraits.Surgery);
 
                 var warriorWeight = hero.GetTraitLevel(DefaultTraits.ArcherFIghtingSkills) +
-                                    hero.GetTraitLevel(DefaultTraits.BossFightingSkills) +
                                     hero.GetTraitLevel(DefaultTraits.CavalryFightingSkills) +
                                     hero.GetTraitLevel(DefaultTraits.HuscarlFightingSkills) +
                                     hero.GetTraitLevel(DefaultTraits.HopliteFightingSkills) +

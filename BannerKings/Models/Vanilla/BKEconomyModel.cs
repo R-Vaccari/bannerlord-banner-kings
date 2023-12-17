@@ -1,8 +1,10 @@
 using BannerKings.Behaviours;
+using BannerKings.Extensions;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Shipping;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Governments;
@@ -44,21 +46,13 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber CalculateProductionEfficiency(Settlement settlement)
+        public ExplainedNumber CalculateProductionEfficiency(Settlement settlement, bool explanations = false, PopulationData data = null)
         {
-            var result = new ExplainedNumber(0, true);
-            if (!settlement.IsVillage)
-            {
-                result.Add(new DefaultWorkshopModel().GetPolicyEffectToProduction(settlement.Town));
-            }
-            else
-            {
-                result.Add(0.7f);
-            }
+            var result = new ExplainedNumber(!settlement.IsVillage ? 0.7f : 0.9f, explanations);
+            data ??= BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
 
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
-            result.Add(MathF.Min(craftsmen / 250f * 0.020f, CRAFTSMEN_EFFECT_CAP), new TextObject("Craftsmen"));
+            result.Add(MathF.Min(craftsmen / 250f * 0.020f, CRAFTSMEN_EFFECT_CAP), Utils.Helpers.GetClassName(PopType.Craftsmen, settlement.Culture));
 
             if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, "workforce",
                     (int) WorkforcePolicy.Martial_Law))
@@ -281,14 +275,14 @@ namespace BannerKings.Models.Vanilla
         }
 
         public override float GetDailyDemandForCategory(Town town, ItemCategory category, int extraProsperity) => 
-            GetCategoryDemand(town.Settlement, category, extraProsperity);
+            GetCategoryDemand(town, category, extraProsperity);
 
-        public float GetCategoryDemand(Settlement settlement, ItemCategory category, int extraProsperity)
+        public float GetCategoryDemand(Town town, ItemCategory category, int extraProsperity)
         {
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            var data = town.Settlement.PopulationData();
             if (data == null)
             {
-                return base.GetDailyDemandForCategory(settlement.Town, category, extraProsperity);
+                return base.GetDailyDemandForCategory(town, category, extraProsperity);
             }
 
             float nobles = data.GetTypeCount(PopType.Nobles);
@@ -317,14 +311,9 @@ namespace BannerKings.Models.Vanilla
                     break;
             }
 
-            var prosperity = settlement.IsVillage ? settlement.Village.TradeBound.Prosperity : settlement.Town.Prosperity;
+            float prosperity = town.Prosperity;
             var num = MathF.Max(0f, baseResult + (prosperity / 3) + extraProsperity);
             var num2 = MathF.Max(0f, baseResult + (prosperity / 2));
-
-            if (!category.IsTradeGood && category.StringId != "noble_horse")
-            {
-                num *= 3f;
-            }
 
             float baseDemand = category.BaseDemand;
             var num3 = baseDemand * num;

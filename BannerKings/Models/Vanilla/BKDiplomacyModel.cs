@@ -21,9 +21,9 @@ namespace BannerKings.Models.Vanilla
     {
         public float TRADE_PACT_INFLUENCE_CAP { get;} = 100f;
 
-        public override int GetInfluenceCostOfProposingWar(Kingdom proposingKingdom)
+        public override int GetInfluenceCostOfProposingWar(Clan proposingClan)
         {
-            int result = base.GetInfluenceCostOfProposingWar (proposingKingdom);
+            int result = base.GetInfluenceCostOfProposingWar (proposingClan);
             return result;
         }
 

@@ -427,7 +427,10 @@ namespace BannerKings.UI.Education
                 new TextObject("{=bkoJgoDo}Choose Language").ToString(),
                 new TextObject("{=gdCXV7n3}Select a language you would like to learn. Learning a language requires an instructor from your court, and different people have different teaching skills. A courtier must have a good opinion of you in order to be available. Learning languages is easier when they are intelligible with your native language.")
                     .ToString(),
-                elements, true, 1,
+                elements, 
+                true, 
+                1,
+                1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate(List<InquiryElement> x)
                 {
@@ -491,7 +494,11 @@ namespace BannerKings.UI.Education
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=Y4G7PxXr}Choose Book").ToString(),
                 new TextObject("{=pXUyfe6v}Select what book you would like to read. Options may be disabled due to language barrier, or lack of Literate perk.")
-                    .ToString(), elements, true, 1,
+                    .ToString(), 
+                elements, 
+                true, 
+                1,
+                1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate(List<InquiryElement> x)
                 {
@@ -545,7 +552,11 @@ namespace BannerKings.UI.Education
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=sOT08u5v}Choose Lifestyle").ToString(),
                 new TextObject("{=8vF2rt3F}Select a lifestyle you would like to adopt. Picking a lifestyle will undo the progress of the lifestyle you are currently learning, if any. Each lifestyle is based on 2 skills, and you need at least 15 profficiency in each skill to adopt it.")
-                    .ToString(), elements, true, 1,
+                    .ToString(), 
+                elements, 
+                true, 
+                1,
+                1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate(List<InquiryElement> x)
                 {

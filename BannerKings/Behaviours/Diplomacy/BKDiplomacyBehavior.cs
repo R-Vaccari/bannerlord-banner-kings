@@ -431,7 +431,7 @@ namespace BannerKings.Behaviours.Diplomacy
                 }
 
                 DiplomacyModel diplomacyModel = TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel;
-                if (clan.Influence < (float)diplomacyModel.GetInfluenceCostOfProposingWar(clan.Kingdom))
+                if (clan.Influence < (float)diplomacyModel.GetInfluenceCostOfProposingWar(clan))
                 {
                     return;
                 }
