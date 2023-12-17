@@ -1230,18 +1230,6 @@ namespace BannerKings.Patches
             }
         }*/
 
-        [HarmonyPatch(typeof(ChangeOwnerOfWorkshopAction), "ApplyInternal")]
-        internal class BankruptcyPatch
-        {
-            private static void Postfix(Workshop workshop, Hero newOwner, WorkshopType workshopType, int capital,
-                bool upgradable, int cost, TextObject customName,
-                ChangeOwnerOfWorkshopAction.ChangeOwnerOfWorkshopDetail detail)
-            {
-                var settlement = workshop.Settlement;
-                settlement.Prosperity -= 50f;
-            }
-        }
-
         // Added productions
         [HarmonyPatch(typeof(VillageGoodProductionCampaignBehavior))]
         internal class TickGoodProductionPatch

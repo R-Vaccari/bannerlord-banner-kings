@@ -12,6 +12,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using System.Reflection;
+using SandBox.View.Map;
 
 namespace BannerKings.Patches
 {
@@ -237,7 +238,7 @@ namespace BannerKings.Patches
                 __instance.Hearth += __instance.HearthChange;
                 if (hearthLevel != __instance.GetHearthLevel())
                 {
-                    __instance.Settlement.Party.Visuals.RefreshLevelMask(__instance.Settlement.Party);
+                    __instance.Settlement.Party.SetLevelMaskIsDirty();
                 }
                 if (__instance.Hearth < 10f)
                 {
@@ -280,10 +281,10 @@ namespace BannerKings.Patches
                             __instance.FoodStocks = __instance.FoodStocksUpperLimit();
                         }
 
-                        __instance.Owner.Settlement.Prosperity += __instance.ProsperityChange;
-                        if (__instance.Owner.Settlement.Prosperity < 0f)
+                        __instance.Owner.Settlement.Town.Prosperity += __instance.ProsperityChange;
+                        if (__instance.Owner.Settlement.Town.Prosperity < 0f)
                         {
-                            __instance.Owner.Settlement.Prosperity = 0f;
+                            __instance.Owner.Settlement.Town.Prosperity = 0f;
                         }
 
                         __instance.GetType().GetMethod("HandleMilitiaAndGarrisonOfSettlementDaily",

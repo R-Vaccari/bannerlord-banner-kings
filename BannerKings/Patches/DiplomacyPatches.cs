@@ -14,6 +14,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Party;
+using SandBox.View.Map;
 
 namespace BannerKings.Patches
 {
@@ -71,10 +72,10 @@ namespace BannerKings.Patches
                 {
                     IFaction dirtySide = (faction1 == Hero.MainHero.MapFaction) ? faction2 : faction1;
                     foreach (Settlement settlement in Settlement.All.Where((Settlement party) => party.IsVisible && party.MapFaction == dirtySide))
-                        settlement.Party.Visuals.SetMapIconAsDirty();
+                        settlement.Party.SetVisualAsDirty();
 
                     foreach (MobileParty mobileParty in MobileParty.All.Where((MobileParty party) => party.IsVisible && party.MapFaction == dirtySide))
-                        mobileParty.Party.Visuals.SetMapIconAsDirty();
+                        mobileParty.Party.SetVisualAsDirty();
                 }
             }
         }
@@ -152,7 +153,7 @@ namespace BannerKings.Patches
                     bool warPossible = model.IsWarDecisionAllowedBetweenKingdoms(kingdom, enemyKingdom, out warHint);
                     list.Add(new InquiryElement(makeWar,
                         new TextObject("{=!}Declare War ({INFLUENCE}{INFLUENCE_ICON})")
-                        .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.DiplomacyModel.GetInfluenceCostOfProposingWar(diplomacy.Kingdom))
+                        .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.DiplomacyModel.GetInfluenceCostOfProposingWar(Clan.PlayerClan))
                         .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON)
                         .ToString(),
                         null,
@@ -208,6 +209,7 @@ namespace BannerKings.Patches
                         new TextObject("{=!}A diplomatic action significantly changes the relationship between your realm and the target realm.").ToString(),
                         list,
                         true,
+                        1,
                         1,
                         GameTexts.FindText("str_accept").ToString(),
                         GameTexts.FindText("str_selection_widget_cancel").ToString(),
@@ -295,7 +297,7 @@ namespace BannerKings.Patches
             private static void ShowWarOptions(KingdomDiplomacy diplomacy, Kingdom enemyKingdom, KingdomDiplomacyVM __instance)
             {
                 var list = new List<InquiryElement>();
-                bool enabled = Clan.PlayerClan.Influence >= BannerKingsConfig.Instance.DiplomacyModel.GetInfluenceCostOfProposingWar(diplomacy.Kingdom);
+                bool enabled = Clan.PlayerClan.Influence >= BannerKingsConfig.Instance.DiplomacyModel.GetInfluenceCostOfProposingWar(Clan.PlayerClan);
                 foreach (var casusBelli in diplomacy.GetAvailableCasusBelli(enemyKingdom))
                 {
                     float support = new KingdomElection(new BKDeclareWarDecision(casusBelli,
@@ -317,6 +319,7 @@ namespace BannerKings.Patches
                     new TextObject("{=!}Select a justification for war.").ToString(),
                     list,
                     true,
+                    1,
                     1,
                     GameTexts.FindText("str_accept").ToString(),
                     GameTexts.FindText("str_selection_widget_cancel").ToString(),

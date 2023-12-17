@@ -84,11 +84,11 @@ namespace BannerKings.Patches
                     });
                     if (aftermathType == SiegeAftermathAction.SiegeAftermath.Devastate)
                     {
-                        result = settlement.Prosperity / 400f * (float)num;
+                        result = settlement.Town.Prosperity / 400f * (float)num;
                     }
                     else if (aftermathType == SiegeAftermathAction.SiegeAftermath.ShowMercy && attackerParty.MapFaction.Culture != settlement.Culture)
                     {
-                        result = settlement.Prosperity / 400f * (float)num2;
+                        result = settlement.Town.Prosperity / 400f * (float)num2;
                     }
                 }
                 __result = result;
