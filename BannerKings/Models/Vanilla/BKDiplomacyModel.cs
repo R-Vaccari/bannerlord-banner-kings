@@ -388,6 +388,11 @@ namespace BannerKings.Models.Vanilla
                 result.Add(-baseNumber * (2f - fiefFactor), new TextObject("{=!}Unworthy opponent"));
             }
 
+            if (defenderStrength >= attackerStrength * 1.5f)
+            {
+                result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.5f, -2f, -0.4f), new TextObject("{=!}Enemy significantly stronger"));
+            }
+
             float attackerFiefs = factionDeclaresWar.Fiefs.Count;
             float defenderFiefs = factionDeclaredWar.Fiefs.Count;
             float fiefsFactor = (attackerFiefs  / defenderFiefs) - 1f;

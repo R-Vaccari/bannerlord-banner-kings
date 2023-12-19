@@ -43,7 +43,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 1.3f,
                 0.5f,
                 1f,
-                5000f,
+                2500f,
                 (War war) =>
                 {
                     StanceLink attackerLink = war.Attacker.GetStanceWith(war.Defender);
