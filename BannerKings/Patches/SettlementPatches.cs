@@ -21,7 +21,7 @@ namespace BannerKings.Patches
         {
             private static void SendOffPrisoners(TroopRoster prisoners, Settlement currentSettlement)
             {
-               
+                if (currentSettlement == null) return;
                 var policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
                 switch (policy.Policy)
                 {
@@ -85,7 +85,7 @@ namespace BannerKings.Patches
             [HarmonyPatch("ApplyForAllPrisoners", MethodType.Normal)]
             private static bool Prefix(PartyBase sellerParty, PartyBase buyerParty)
             {
-                SendOffPrisoners(sellerParty.PrisonRoster.CloneRosterData(), Hero.MainHero.CurrentSettlement);
+                SendOffPrisoners(sellerParty.PrisonRoster.CloneRosterData(), buyerParty.Settlement);
                 return true;
             }
 
@@ -93,7 +93,7 @@ namespace BannerKings.Patches
             [HarmonyPatch("ApplyForSelectedPrisoners", MethodType.Normal)]
             private static bool Prefix(PartyBase sellerParty, PartyBase buyerParty, TroopRoster prisoners)
             {
-                SendOffPrisoners(prisoners, Hero.MainHero.CurrentSettlement);
+                SendOffPrisoners(prisoners, buyerParty.Settlement);
                 return true;
             }
         }
