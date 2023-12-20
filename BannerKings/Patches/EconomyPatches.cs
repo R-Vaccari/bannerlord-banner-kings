@@ -820,16 +820,33 @@ namespace BannerKings.Patches
         [HarmonyPatch(typeof(WorkshopsCampaignBehavior))]
         internal class WorkshopsCampaignBehaviorPatches
         {
-            [HarmonyPrefix]
+            [HarmonyPostfix]
             [HarmonyPatch("InitializeWorkshops", MethodType.Normal)]
-            private static bool InitializeWorkshopsPrefix()
+            private static void InitializeWorkshopsPatch()
             {
-                foreach (Town town in Town.AllTowns)
+                foreach (Town town in Town.AllCastles)
                 {
-                    town.InitializeWorkshops(6);
+                    town.InitializeWorkshops((int)(TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel
+                        .DefaultWorkshopCountInSettlement / 2f));
                 }
+            }
 
-                return false;
+            [HarmonyPostfix]
+            [HarmonyPatch("BuildWorkshopsAtGameStart", MethodType.Normal)]
+            private static void BuildWorkshopsAtGameStartPatch(WorkshopsCampaignBehavior __instance)
+            {
+                MethodInfo artisans = __instance.GetType().GetMethod("BuildArtisanWorkshop", BindingFlags.Instance | BindingFlags.NonPublic);
+                MethodInfo build = __instance.GetType().GetMethod("BuildWorkshopForHeroAtGameStart", BindingFlags.Instance | BindingFlags.NonPublic);
+                foreach (Town town in Town.AllCastles)
+                {
+                    artisans.Invoke(__instance, new object[] { town });
+                    for (int i = 1; i < town.Workshops.Length; i++)
+                    {
+                        Hero notableOwnerForWorkshop = TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel
+                            .GetNotableOwnerForWorkshop(town.Workshops[i]);
+                        build.Invoke(__instance, new object[] { notableOwnerForWorkshop });
+                    }
+                }
             }
 
             [HarmonyPostfix]
