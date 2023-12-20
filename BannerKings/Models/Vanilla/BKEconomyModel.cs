@@ -211,7 +211,7 @@ namespace BannerKings.Models.Vanilla
             return cost;
         }
 
-        public ExplainedNumber CalculateCaravanAttraction(Settlement settlement, bool descriptions = false)
+        public ExplainedNumber CalculateTradePower(Settlement settlement, bool descriptions = false)
         {
             ExplainedNumber result = new ExplainedNumber(1f, descriptions);
 
@@ -289,37 +289,37 @@ namespace BannerKings.Models.Vanilla
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             float serfs = data.GetTypeCount(PopType.Serfs);
             float tenants = data.GetTypeCount(PopType.Tenants);
-            var type = Utils.Helpers.GetTradeGoodConsumptionType(category);
+            ConsumptionType type = Utils.Helpers.GetTradeGoodConsumptionType(category);
 
-            var baseResult = 0f;
+            float baseResult = 0f;
             switch (type)
             {
                 case ConsumptionType.Luxury:
-                    baseResult += nobles * 8f;
-                    baseResult += craftsmen * 1f;
+                    baseResult += nobles * 4f;
+                    baseResult += craftsmen * 0.5f;
                     break;
                 case ConsumptionType.Industrial:
-                    baseResult += craftsmen * 1.2f;
-                    baseResult += serfs * 0.2f;
-                    baseResult += tenants * 0.20f;
+                    baseResult += craftsmen * 0.6f;
+                    baseResult += serfs * 0.1f;
+                    baseResult += tenants * 0.2f;
                     break;
                 default:
-                    baseResult += nobles * 1f;
-                    baseResult += craftsmen * 1f;
-                    baseResult += serfs * 0.20f;
-                    baseResult += tenants * 0.20f;
+                    baseResult += nobles * 0.5f;
+                    baseResult += craftsmen * 0.4f;
+                    baseResult += serfs * 0.1f;
+                    baseResult += tenants * 0.2f;
                     break;
             }
 
             float prosperity = town.Prosperity;
-            var num = MathF.Max(0f, baseResult + (prosperity / 3) + extraProsperity);
-            var num2 = MathF.Max(0f, baseResult + (prosperity / 2));
+            float num = MathF.Max(0f, baseResult + (prosperity / 3) + extraProsperity);
+            float num2 = MathF.Max(0f, baseResult + (prosperity / 2));
 
             float baseDemand = category.BaseDemand;
-            var num3 = baseDemand * num;
-            var num4 = category.LuxuryDemand * num2;
-            var result = num3 + num4;
-            if (category.BaseDemand < 1E-08f)
+            float num3 = baseDemand * num;
+            float num4 = category.LuxuryDemand * num2;
+            float result = num3 + num4;
+            if (baseDemand < 1E-08f)
             {
                 result = num * 0.01f;
             }        
