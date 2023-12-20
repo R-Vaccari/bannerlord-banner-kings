@@ -85,7 +85,7 @@ namespace BannerKings.Patches
             [HarmonyPatch("ApplyForAllPrisoners", MethodType.Normal)]
             private static bool Prefix(PartyBase sellerParty, PartyBase buyerParty)
             {
-                SendOffPrisoners(sellerParty.PrisonRoster.CloneRosterData(), buyerParty.Settlement);
+                SendOffPrisoners(sellerParty.PrisonRoster.CloneRosterData(), sellerParty.Settlement ?? ((buyerParty != null) ? buyerParty.Settlement : null));
                 return true;
             }
 
@@ -93,7 +93,7 @@ namespace BannerKings.Patches
             [HarmonyPatch("ApplyForSelectedPrisoners", MethodType.Normal)]
             private static bool Prefix(PartyBase sellerParty, PartyBase buyerParty, TroopRoster prisoners)
             {
-                SendOffPrisoners(prisoners, buyerParty.Settlement);
+                SendOffPrisoners(prisoners, sellerParty.Settlement ?? ((buyerParty != null) ? buyerParty.Settlement : null));
                 return true;
             }
         }
