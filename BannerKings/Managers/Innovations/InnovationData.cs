@@ -4,8 +4,10 @@ using System.Linq;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Innovations.Eras;
 using BannerKings.Managers.Populations;
+using BannerKings.Managers.Shipping;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -67,7 +69,7 @@ namespace BannerKings.Managers.Innovations
             return true;
         }
 
-        public List<BuildingType> GetAvailableBuildings()
+        public List<BuildingType> GetAvailableBuildings(Settlement settlement)
         {
             List<BuildingType> buildings = new List<BuildingType>(20);
             buildings.AddRange(BKBuildings.AllBuildings);
@@ -85,6 +87,12 @@ namespace BannerKings.Managers.Innovations
             if (!HasFinishedInnovation(DefaultInnovations.Instance.Theater))
             {
                 buildings.Remove(BKBuildings.Instance.Theater);
+            }
+
+            if (DefaultShippingLanes.Instance.GetSettlementSeaLanes(settlement).IsEmpty())
+            {
+                buildings.Remove(BKBuildings.Instance.Harbor);
+                buildings.Remove(BKBuildings.Instance.Port);
             }
 
             return buildings;

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -29,6 +28,7 @@ namespace BannerKings.Managers.Buildings
         public BuildingType Armory { get; private set; }
         public BuildingType CourtHouse { get; private set; }
         public BuildingType WarhorseStuds { get; private set; }
+        public BuildingType Harbor { get; private set; }
         public BuildingType Port { get; private set; }
         public BuildingType DailyAssimilation { get; private set; }
 
@@ -43,6 +43,8 @@ namespace BannerKings.Managers.Buildings
                 yield return Armory;
                 yield return CourtHouse;
                 yield return WarhorseStuds;
+                yield return Harbor;
+                yield return Port;
                 yield return DailyAssimilation;
                 foreach (var item in ModAdditions)
                 {
@@ -53,6 +55,35 @@ namespace BannerKings.Managers.Buildings
 
         public override void Initialize()
         {
+            Harbor = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("building_harbor"));
+            Harbor.Initialize(new TextObject("{=!}Harbor"),
+                new TextObject("{=!}A large infrastructure that allows easy access to the city by ships, and thus the flow of goods and money. Harbors output fish products, increase local trade power and prosperity."),
+                new[]
+                {
+                    2500,
+                    4500,
+                    6000
+                },
+                BuildingLocation.Settlement,
+                new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                    new Tuple<BuildingEffectEnum, float, float, float>(BuildingEffectEnum.Prosperity, 0.3f, 0.6f, 1.2f)
+                });
+
+            Port = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("building_port"));
+            Port.Initialize(new TextObject("{=!}Port"),
+                new TextObject("{=!}Infrastructure that allows easy access to town by ships, and thus the flow of goods and money. Ports output fish products, increase local trade power and prosperity."),
+                new[]
+                {
+                    1500,
+                    3000,
+                    4500
+                },
+                BuildingLocation.Castle,
+                new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                    new Tuple<BuildingEffectEnum, float, float, float>(BuildingEffectEnum.Prosperity, 0.2f, 0.5f, 1f)
+                });
 
             Mines = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("building_town_mines"));
             Mines.Initialize(new TextObject("{=iGYstgoo}Mines"),
