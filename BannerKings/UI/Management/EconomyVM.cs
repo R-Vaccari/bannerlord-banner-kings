@@ -170,13 +170,13 @@ namespace BannerKings.UI.Management
                         .SetTextVariable("EXPLANATIONS", mercantilism.GetExplanations())
                         .ToString()));
 
-                var caravanAttractiveness = BannerKingsConfig.Instance.EconomyModel.CalculateCaravanAttraction(Settlement, true);
-                RevenueInfo.Add(new InformationElement(new TextObject("{=O9p6A7yD}Caravan Attractiveness:").ToString(),
-                    $"{caravanAttractiveness.ResultNumber:P}",
+                var tradePower = BannerKingsConfig.Instance.EconomyModel.CalculateTradePower(Settlement, true);
+                Concept tradePowerConcept = Concept.All.First(x => x.StringId == "str_bk_trade_power");
+                RevenueInfo.Add(new InformationElement(new TextObject("{=!}Trade Power:").ToString(),
+                    $"{tradePower.ResultNumber:P}",
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
-                        .SetTextVariable("TEXT",
-                            new TextObject("{=GDiY2iFh}How attractive this town is for caravans. Likelihood of caravan visits are dictated mainly by prices, and attractiveness is a factor added on top of that."))
-                        .SetTextVariable("EXPLANATIONS", caravanAttractiveness.GetExplanations())
+                        .SetTextVariable("TEXT", tradePowerConcept.Description)
+                        .SetTextVariable("EXPLANATIONS", tradePower.GetExplanations())
                         .ToString()));
 
                 for (var i = 0; i < 4; i++)
