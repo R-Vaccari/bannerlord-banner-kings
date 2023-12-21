@@ -26,12 +26,22 @@ namespace BannerKings.Managers.Shipping
         public IEnumerable<ShippingLane> GetSettlementLanes(Settlement settlement)
         {
             foreach (ShippingLane lane in All)
-            {
                 if (lane.Ports.Contains(settlement))
-                {
                     yield return lane;
-                }
-            }
+        }
+
+        public IEnumerable<ShippingLane> GetSettlementSeaLanes(Settlement settlement)
+        {
+            foreach (ShippingLane lane in All)
+                if (!lane.IsRiver && lane.Ports.Contains(settlement))
+                    yield return lane;
+        }
+
+        public IEnumerable<ShippingLane> GetSettlementRiverLanes(Settlement settlement)
+        {
+            foreach (ShippingLane lane in All)
+                if (lane.IsRiver && lane.Ports.Contains(settlement))
+                    yield return lane;
         }
 
         public override void Initialize()
