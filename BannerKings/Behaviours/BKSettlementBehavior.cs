@@ -29,6 +29,8 @@ using static BannerKings.Managers.Policies.BKTaxPolicy;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions;
 using static BannerKings.Managers.PopulationManager;
+using System.Reflection;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
 
 namespace BannerKings.Behaviours
 {
@@ -570,9 +572,16 @@ namespace BannerKings.Behaviours
         {
             if (settlement.IsCastle)
             {
-                ItemConsumptionBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<ItemConsumptionBehavior>();
-                behavior.GetType().GetMethod("MakeConsumptionInTown", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                    .Invoke(behavior, new object[] { settlement.Town, new Dictionary<ItemCategory, int>(10) });
+                ItemConsumptionBehavior itemBehavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<ItemConsumptionBehavior>();
+                itemBehavior.GetType().GetMethod("MakeConsumptionInTown", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                    .Invoke(itemBehavior, new object[] { settlement.Town, new Dictionary<ItemCategory, int>(10) });
+
+                WorkshopsCampaignBehavior workshopBehavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<WorkshopsCampaignBehavior>();
+                MethodInfo runWk = workshopBehavior.GetType().GetMethod("RunTownWorkshop", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                foreach (Workshop wk in settlement.Town.Workshops)
+                {
+                    runWk.Invoke(workshopBehavior, new object[] { settlement.Town, wk });
+                }
 
                 if (settlement.Town?.GarrisonParty == null)
                 {
