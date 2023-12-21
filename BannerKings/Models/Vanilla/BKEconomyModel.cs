@@ -1,5 +1,6 @@
 using BannerKings.Behaviours;
 using BannerKings.Extensions;
+using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Innovations;
@@ -8,10 +9,12 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Shipping;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Governments;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -257,6 +260,14 @@ namespace BannerKings.Models.Vanilla
                     result.AddFactor(0.4f, new TextObject("{=fQVyeiJb}Capital"));
                 }
 
+                Building building = settlement.Town.Buildings.FirstOrDefault(x => x.BuildingType.StringId == BKBuildings.Instance.Harbor.StringId ||
+                                        x.BuildingType.StringId == BKBuildings.Instance.Port.StringId);
+                if (building != null && building.CurrentLevel > 0)
+                {
+                    bool harbor = building.BuildingType.StringId == BKBuildings.Instance.Harbor.StringId;
+                    result.AddFactor((harbor ? 0.12f : 0.7f) * building.CurrentLevel, building.Name);
+                }
+
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result,
                    settlement.OwnerClan.Leader, 
                    DefaultCouncilPositions.Instance.Constable,
@@ -274,10 +285,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public override float GetDailyDemandForCategory(Town town, ItemCategory category, int extraProsperity) => 
-            GetCategoryDemand(town, category, extraProsperity);
-
-        public float GetCategoryDemand(Town town, ItemCategory category, int extraProsperity)
+        public override float GetDailyDemandForCategory(Town town, ItemCategory category, int extraProsperity)
         {
             var data = town.Settlement.PopulationData();
             if (data == null)
@@ -322,29 +330,13 @@ namespace BannerKings.Models.Vanilla
             if (baseDemand < 1E-08f)
             {
                 result = num * 0.01f;
-            }        
+            }
 
             return result;
         }
 
-        public override float GetEstimatedDemandForCategory(Town town, ItemData itemData, ItemCategory category)
-        {
-            return GetDailyDemandForCategory(town, category, 1000);
-        }
-
-        public override float GetDemandChangeFromValue(float purchaseValue)
-        {
-            var value = base.GetDemandChangeFromValue(purchaseValue);
-            return value;
-        }
-
-        public override (float, float) GetSupplyDemandForCategory(Town town, ItemCategory category, float dailySupply,
-            float dailyDemand, float oldSupply, float oldDemand)
-        {
-            var baseResult =
-                base.GetSupplyDemandForCategory(town, category, dailySupply, dailyDemand, oldSupply, oldDemand);
-            return baseResult;
-        }
+        public override float GetEstimatedDemandForCategory(Town town, ItemData itemData, ItemCategory category) =>
+            GetDailyDemandForCategory(town, category, 1000);
 
         public override int GetTownGoldChange(Town town) => (int)GetMerchantIncome(town).ResultNumber;
 
