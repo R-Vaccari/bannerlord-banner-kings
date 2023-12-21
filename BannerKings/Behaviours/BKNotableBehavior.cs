@@ -21,6 +21,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnGovernorChangedEvent.AddNonSerializedListener(this, OnGovernorChanged);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
+            CampaignEvents.OnNewGameCreatedPartialFollowUpEvent.AddNonSerializedListener(this, OnGameCreated);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -30,6 +31,28 @@ namespace BannerKings.Behaviours
         private void OnGameLoaded(CampaignGameStarter starter)
         {
             ExtendVolunteersArray();
+        }
+
+        private void OnGameCreated(CampaignGameStarter starter, int index)
+        {
+            if (index == 1)
+            {
+                foreach (Settlement settlement in Settlement.All)
+                    if (settlement.IsCastle)
+                    {
+                        int targetNotableCountForSettlement = TaleWorlds.CampaignSystem.Campaign.Current.Models.NotableSpawnModel
+                            .GetTargetNotableCountForSettlement(settlement, Occupation.Artisan);
+                        for (int i = 0; i < targetNotableCountForSettlement; i++)
+                        {
+                            HeroCreator.CreateHeroAtOccupation(Occupation.Artisan, settlement);
+                        }
+                        int targetNotableCountForSettlement2 = TaleWorlds.CampaignSystem.Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, Occupation.Merchant);
+                        for (int j = 0; j < targetNotableCountForSettlement2; j++)
+                        {
+                            HeroCreator.CreateHeroAtOccupation(Occupation.Merchant, settlement);
+                        }
+                    }
+            }
         }
 
         private void OnCreationOver()
