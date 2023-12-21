@@ -43,11 +43,23 @@ namespace BannerKings.Models.Vanilla
 
         public override float GetTargetScoreForFaction(Settlement targetSettlement, Army.ArmyTypes missionType, MobileParty mobileParty, float ourStrength, int numberOfEnemyFactionSettlements = -1, float totalEnemyMobilePartyStrength = -1)
         {
-            float result =  base.GetTargetScoreForFaction(targetSettlement, missionType, mobileParty, ourStrength, numberOfEnemyFactionSettlements, totalEnemyMobilePartyStrength);
+            float result =  base.GetTargetScoreForFaction(targetSettlement, missionType, mobileParty, ourStrength, numberOfEnemyFactionSettlements, totalEnemyMobilePartyStrength);   
 
             IFaction targetFaction = targetSettlement.MapFaction;
             if (targetFaction != mobileParty.MapFaction && targetFaction.IsAtWarWith(mobileParty.MapFaction))
             {
+                StanceLink stance = mobileParty.MapFaction.GetStanceWith(targetFaction);
+                if (missionType == Army.ArmyTypes.Besieger || missionType == Army.ArmyTypes.Raider)
+                {
+                    if (stance.BehaviorPriority == 2) result *= 2f;
+                    else if (stance.BehaviorPriority == 1) result *= 0.5f;
+                }
+                else if (missionType == Army.ArmyTypes.Defender)
+                {
+                    if (stance.BehaviorPriority == 2) result *= 0.5f;
+                    else if (stance.BehaviorPriority == 1) result *= 2f;
+                }
+
                 War war = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
                     .GetWar(mobileParty.MapFaction, targetFaction);
                 if (war == null)
