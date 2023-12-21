@@ -7,6 +7,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -250,6 +251,43 @@ namespace BannerKings.Behaviours.Diplomacy
 
         private void OnDailyTick()
         {
+            foreach (Kingdom kingdom in Kingdom.All)
+            {
+                if (kingdom == Clan.PlayerClan.MapFaction) continue;
+
+                float strength = kingdom.TotalStrength;
+                int fiefs = kingdom.Fiefs.Count;
+                foreach (Kingdom k in Kingdom.All)
+                {
+                    if (k == kingdom) continue;
+
+                    StanceLink stance = kingdom.GetStanceWith(k);
+                    if (fiefs == 1) stance.BehaviorPriority = 1;
+                    else
+                    {
+                        if (strength >= k.TotalStrength * 1.5f) stance.BehaviorPriority = 2;
+                        else stance.BehaviorPriority = 0;
+                    }
+                }
+
+                float highestStrength = 0f;
+                foreach (Kingdom k in FactionManager.GetEnemyKingdoms(kingdom))
+                {
+                    float enemyStrength = k.TotalStrength;
+                    if (enemyStrength > highestStrength) highestStrength = enemyStrength;
+                }
+
+                MobileParty.PartyObjective objective = MobileParty.PartyObjective.Neutral;
+                if (fiefs == 1 || highestStrength >= strength * 1.5f) objective = MobileParty.PartyObjective.Defensive;
+
+                if (strength >= highestStrength * 1.5f) objective = MobileParty.PartyObjective.Aggressive;
+
+                foreach (WarPartyComponent party in kingdom.WarPartyComponents)
+                {
+                    party.MobileParty.SetPartyObjective(objective);
+                }
+            }
+            
             InitializeDiplomacies();
             foreach (War war in wars)
             {
