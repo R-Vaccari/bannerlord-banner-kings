@@ -78,7 +78,7 @@ namespace BannerKings.Behaviours.Mercenary
                 skills.Skills.SetPropertyValue(DefaultSkills.Crossbow, preset.Crossbow);
                 skills.Skills.SetPropertyValue(DefaultSkills.Throwing, preset.Throwing);
 
-                AccessTools.Field((character as BasicCharacterObject).GetType(), "CharacterSkills")
+                AccessTools.Field((character as BasicCharacterObject).GetType(), "DefaultCharacterSkills")
                         .SetValue(character, skills);
                 character.DefaultFormationGroup = FetchDefaultFormationGroup(preset.Formation.ToString());
                 AccessTools.Property((character as BasicCharacterObject).GetType(), "DefaultFormationClass")
