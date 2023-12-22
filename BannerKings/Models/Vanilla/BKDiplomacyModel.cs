@@ -356,6 +356,11 @@ namespace BannerKings.Models.Vanilla
                     .SetTextVariable("FACTION", factionDeclaredWar.Name));
             }
 
+            if (stance.BehaviorPriority == 1)
+            {
+                result.Add(-baseNumber, new TextObject("{=!}Defensive stance against {FACTION}")
+                    .SetTextVariable("FACTION", factionDeclaredWar.Name));
+            }
 
             if (evaluatingClan != null)
             {
@@ -373,14 +378,14 @@ namespace BannerKings.Models.Vanilla
             }
 
             float threatFactor = CalculateThreatFactor(factionDeclaresWar, factionDeclaredWar);
-            result.Add(baseNumber * (threatFactor - 0.05f) * 2f, new TextObject("{=!}{THREAT}% threat relative to possible enemies")
+            result.Add(baseNumber * threatFactor * 2f, new TextObject("{=!}{THREAT}% threat relative to possible enemies")
                 .SetTextVariable("THREAT", (threatFactor * 100f).ToString("0.0")));
 
 
             float attackerStrength = factionDeclaresWar.TotalStrength;
             float defenderStrength = factionDeclaredWar.TotalStrength;
             float strengthFactor = (attackerStrength / defenderStrength) - 1f;
-            result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.1f, -2f, 2f), new TextObject("{=!}Difference in strength"));
+            result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.3f, -2f, 2f), new TextObject("{=!}Difference in strength"));
 
             if (factionDeclaredWar.Fiefs.Count < factionDeclaresWar.Fiefs.Count / 2f)
             {
