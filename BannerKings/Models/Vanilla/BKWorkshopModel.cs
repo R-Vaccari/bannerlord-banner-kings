@@ -13,6 +13,8 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKWorkshopModel : DefaultWorkshopModel
     {
+        public override int DefaultWorkshopCountInSettlement => 6;
+
         public int GetUpgradeCost(Workshop workshop)
         {
             return GetCostForPlayer(workshop) / (4 + workshop.Level());
