@@ -218,6 +218,7 @@ namespace BannerKings.Behaviours.Diplomacy
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.RulingClanChanged.AddNonSerializedListener(this, OnRulerChanged);
             CampaignEvents.MakePeace.AddNonSerializedListener(this, OnMakePeace);
+            CampaignEvents.KingdomDestroyedEvent.AddNonSerializedListener(this, OnKingdomDestroyed);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -233,6 +234,14 @@ namespace BannerKings.Behaviours.Diplomacy
             if (wars == null)
             {
                 wars = new List<War>();
+            }
+        }
+
+        private void OnKingdomDestroyed(Kingdom kingdom)
+        {
+            if (kingdomDiplomacies.ContainsKey(kingdom))
+            {
+                kingdomDiplomacies.Remove(kingdom);
             }
         }
 
@@ -254,6 +263,12 @@ namespace BannerKings.Behaviours.Diplomacy
             foreach (Kingdom kingdom in Kingdom.All)
             {
                 if (kingdom == Clan.PlayerClan.MapFaction) continue;
+
+                if (kingdom.IsEliminated)
+                {
+                    OnKingdomDestroyed(kingdom);
+                    continue;
+                }
 
                 float strength = kingdom.TotalStrength;
                 int fiefs = kingdom.Fiefs.Count;
@@ -301,10 +316,12 @@ namespace BannerKings.Behaviours.Diplomacy
 
             RunWeekly(() =>
             {
-                Kingdom kingdom = Kingdom.All.GetRandomElementWithPredicate(x => x.RulingClan != Clan.PlayerClan);
+                Kingdom kingdom = Kingdom.All.GetRandomElementWithPredicate(x => !x.IsEliminated && x.RulingClan != Clan.PlayerClan);
 
                 foreach (var target in Kingdom.All)
                 {
+                    if (target.IsEliminated) continue;
+
                     TextObject pactReason;
                     if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTradePactAllowed(kingdom, target, out pactReason) &&
                         MBRandom.RandomFloat < MBRandom.RandomFloat)
