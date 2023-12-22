@@ -17,7 +17,7 @@ namespace BannerKings.Models.BKModels
             Kingdom kingdom = diplomacy.Kingdom;
             Hero leader = kingdom.Leader;
 
-            if (kingdom == null) return result;
+            if (kingdom == null || leader == null) return result;
 
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
             if (title != null)
