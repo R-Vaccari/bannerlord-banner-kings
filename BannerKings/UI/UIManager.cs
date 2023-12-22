@@ -96,7 +96,7 @@ namespace BannerKings.UI
                 InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(Settlement.CurrentSettlement.Culture);
                 if (data != null)
                 {
-                    var buildings = data.GetAvailableBuildings();
+                    var buildings = data.GetAvailableBuildings(Settlement.CurrentSettlement);
 
                     var unwanted = new List<SettlementBuildingProjectVM>();
                     foreach (var available in __instance.AvailableProjects)
