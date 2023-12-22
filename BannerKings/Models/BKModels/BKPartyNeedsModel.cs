@@ -165,6 +165,8 @@ namespace BannerKings.Models.BKModels
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
+                if (element.Character == null || element.Character.Equipment == null) continue;
+
                 if (element.Character.Equipment.HasWeaponOfClass(WeaponClass.SmallShield) ||
                     element.Character.Equipment.HasWeaponOfClass(WeaponClass.LargeShield))
                 {
