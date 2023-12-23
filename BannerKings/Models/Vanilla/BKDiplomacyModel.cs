@@ -531,6 +531,9 @@ namespace BannerKings.Models.Vanilla
         {
             effectiveHero1 = hero1;
             effectiveHero2 = hero2;
+
+            if (effectiveHero1 == effectiveHero2 || effectiveHero1 == null || effectiveHero2 == null) 
+                base.GetHeroesForEffectiveRelation(hero1, hero2, out effectiveHero1, out effectiveHero2);
         }
 
         public override int GetRelationChangeAfterVotingInSettlementOwnerPreliminaryDecision(Hero supporter, bool hasHeroVotedAgainstOwner)
