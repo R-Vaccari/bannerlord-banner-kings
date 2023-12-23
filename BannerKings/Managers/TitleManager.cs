@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Actions;
 using BannerKings.Behaviours;
-using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Skills;
@@ -80,6 +79,19 @@ namespace BannerKings.Managers
         public void PostInitialize()
         {
             RefreshCaches();
+
+            List<Kingdom> eliminatedKingdoms = new List<Kingdom>();
+            foreach (var pair in Kingdoms)
+            {
+                if (pair.Key.IsEliminated)
+                {
+                    eliminatedKingdoms.Add(pair.Key);
+                }
+            }
+
+            foreach (var k in eliminatedKingdoms)
+                Kingdoms.Remove(k);
+
             foreach (var title in Titles.Keys.ToList())
             {
                 if (title.Contract.DemesneLaws == null || title.Contract.DemesneLaws.Count == 0)
