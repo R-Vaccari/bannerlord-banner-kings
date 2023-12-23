@@ -30,12 +30,16 @@ namespace BannerKings.Managers.Titles
         [SaveableProperty(7)] public List<DemesneLaw> DemesneLaws { get; private set; }
         [SaveableProperty(8)] public List<ContractAspect> ContractAspects { get; private set; }
 
-        public void PostInitialize(Kingdom kingdom)
+        public void PostInitialize(Kingdom kingdom, CultureObject culture)
         {
-            Government ??= DefaultGovernments.Instance.GetKingdomIdealSuccession(kingdom);
-            Succession ??= DefaultSuccessions.Instance.GetKingdomIdealSuccession(kingdom, Government);
-            Inheritance ??= DefaultInheritances.Instance.GetKingdomIdealInheritance(kingdom, Government);
-            GenderLaw ??= DefaultGenderLaws.Instance.GetKingdomIdealGenderLaw(kingdom, Government);
+            string id;
+            if (kingdom != null) id = kingdom.StringId;
+            else id = culture.StringId;
+
+            Government ??= DefaultGovernments.Instance.GetKingdomIdealGovernment(id);
+            Succession ??= DefaultSuccessions.Instance.GetKingdomIdealSuccession(id, Government);
+            Inheritance ??= DefaultInheritances.Instance.GetKingdomIdealInheritance(id, Government);
+            GenderLaw ??= DefaultGenderLaws.Instance.GetKingdomIdealGenderLaw(id, Government);
             Government.PostInitialize();
             Succession.PostInitialize();
             Inheritance.PostInitialize();
@@ -56,7 +60,7 @@ namespace BannerKings.Managers.Titles
                 }
             }
 
-            foreach (var aspect in DefaultContractAspects.Instance.GetIdealKingdomAspects(kingdom, Government))
+            foreach (var aspect in DefaultContractAspects.Instance.GetIdealKingdomAspects(id, Government))
             {
                 if (!ContractAspects.Any(x => x.StringId == aspect.StringId))
                     ContractAspects.Add(aspect);

@@ -23,9 +23,8 @@ namespace BannerKings.Managers.Titles.Governments
             }
         }
 
-        public Government GetKingdomIdealSuccession(Kingdom kingdom)
+        public Government GetKingdomIdealGovernment(string id)
         {
-            string id = kingdom.StringId;
             if (id.Contains("empire"))
             {
                 if (id == "empire")

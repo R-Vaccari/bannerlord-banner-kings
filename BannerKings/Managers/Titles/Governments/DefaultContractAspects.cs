@@ -36,10 +36,10 @@ namespace BannerKings.Managers.Titles.Governments
             }
         }
 
-        public List<ContractAspect> GetIdealKingdomAspects(Kingdom kingdom, Government government)
+        public List<ContractAspect> GetIdealKingdomAspects(string id, Government government)
         {
             List<ContractAspect> result = new List<ContractAspect>(4);
-            if (kingdom != null && kingdom.Culture.StringId == BannerKingsConfig.VlandiaCulture)
+            if (id == BannerKingsConfig.VlandiaCulture)
             {
                 result.Add(Geld);
             }

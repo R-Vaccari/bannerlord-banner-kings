@@ -20,9 +20,8 @@ namespace BannerKings.Managers.Titles.Governments
             }
         }
 
-        public GenderLaw GetKingdomIdealGenderLaw(Kingdom kingdom, Government government)
+        public GenderLaw GetKingdomIdealGenderLaw(string id, Government government)
         {
-            string id = kingdom.StringId;
             if (id == "empire_s" || id == "khuzait")
             {
                 return Cognatic;

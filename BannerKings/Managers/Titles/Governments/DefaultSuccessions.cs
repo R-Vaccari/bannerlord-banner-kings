@@ -42,10 +42,8 @@ namespace BannerKings.Managers.Titles.Governments
             }
         }
 
-        public Succession GetKingdomIdealSuccession(Kingdom kingdom, Government government)
+        public Succession GetKingdomIdealSuccession(string id, Government government)
         {
-            string id = kingdom.StringId;
-
             if (id == "vlandia")
             {
                 return WilundingElective;

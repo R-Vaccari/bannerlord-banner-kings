@@ -19,9 +19,8 @@ namespace BannerKings.Managers.Titles.Governments
             }
         }
 
-        public Inheritance GetKingdomIdealInheritance(Kingdom kingdom, Government government)
+        public Inheritance GetKingdomIdealInheritance(string id, Government government)
         {
-            string id = kingdom.StringId;
             if (id == "empire_s" || id == "aserai")
             {
                 return Primogeniture;

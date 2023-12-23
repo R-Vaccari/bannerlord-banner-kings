@@ -178,7 +178,7 @@ namespace BannerKings.Managers.Titles
         public void PostInitialize()
         {
             Duties ??= new Dictionary<ContractDuty, CampaignTime>();
-            Contract.PostInitialize(deJure.Clan.Kingdom);
+            Contract.PostInitialize(deJure.Clan.Kingdom, deJure.Culture);
             if (!CustomName)
             {
                 FullName = new TextObject("{=wMius2i9}{TITLE} of {NAME}")
