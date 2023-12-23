@@ -367,8 +367,8 @@ namespace BannerKings.Behaviours
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(converter);
             BannerKingsConfig.Instance.ReligionsManager.AddToReligion(notable, rel);   
 
-            var influence = BannerKingsConfig.Instance.ReligionModel.GetConversionInfluenceCost(Hero.OneToOneConversationHero, Hero.MainHero).ResultNumber;
-            var piety = BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero, Hero.MainHero).ResultNumber;
+            var influence = BannerKingsConfig.Instance.ReligionModel.GetConversionInfluenceCost(notable, converter).ResultNumber;
+            var piety = BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(notable, converter).ResultNumber;
             BannerKingsConfig.Instance.ReligionsManager.AddPiety(converter, -piety, true);
             GainKingdomInfluenceAction.ApplyForDefault(converter, -influence);
             if (!councilConversion)
