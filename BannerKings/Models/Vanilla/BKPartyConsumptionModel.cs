@@ -1,6 +1,7 @@
 ﻿using BannerKings.Components;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
+using BannerKings.Settings;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -14,6 +15,16 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKPartyConsumptionModel : DefaultMobilePartyFoodConsumptionModel
     {
+        public override int NumberOfMenOnMapToEatOneFood 
+        { 
+            get
+            {
+                int result = 20;
+                result += (int)(BannerKingsSettings.Instance.SlowerParties * 20f);
+                return result;
+            } 
+        }
+
         public override bool DoesPartyConsumeFood(MobileParty mobileParty)
         {
             if (mobileParty.PartyComponent != null)
