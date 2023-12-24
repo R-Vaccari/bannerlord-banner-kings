@@ -52,11 +52,11 @@ Banner Kings is both a mod and a modding framework - it can be modded by other m
 - How do I use the mod? You can get some insight from the [wiki](https://github.com/R-Vaccari/bannerlord-banner-kings/wiki). Better explanations on some key doubts are being made. You can also use [Discord](https://discord.gg/z7DS5R46wC) to ask questions and often other uses will answer themselves.
 
 ## Installation
-BannerLord: 1.1.6
-[Harmony](https://www.nexusmods.com/mountandblade2bannerlord/mods/2006): 2.2.2
-[Butterlib](https://www.nexusmods.com/mountandblade2bannerlord/mods/2018): v2.8.15
-[UIExtenderEx](https://www.nexusmods.com/mountandblade2bannerlord/mods/2102): v2.8.0
-[MCM](https://www.nexusmods.com/mountandblade2bannerlord/mods/612): v5.9.1
+BannerLord: 1.2.7   
+[Harmony](https://www.nexusmods.com/mountandblade2bannerlord/mods/2006): 2.2.2   
+[Butterlib](https://www.nexusmods.com/mountandblade2bannerlord/mods/2018): v2.8.15   
+[UIExtenderEx](https://www.nexusmods.com/mountandblade2bannerlord/mods/2102): v2.8.0   
+[MCM](https://www.nexusmods.com/mountandblade2bannerlord/mods/612): v5.9.1   
 
 I cannot guarantee anything works if you don't follow the versions as prescribed.
 
