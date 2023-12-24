@@ -581,6 +581,11 @@ namespace BannerKings.Managers
                     .SetTextVariable("TITLE", action.Title.FullName));
             }
 
+            if (title.IsSovereignLevel)
+            {
+                Kingdoms[title] = action.ActionTaker.Clan.Kingdom;
+            }
+
             var impact = BannerKingsConfig.Instance.TitleModel.GetRelationImpact(title);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(usurper, oldOwner, impact);
             var kingdom = oldOwner.Clan.Kingdom;
