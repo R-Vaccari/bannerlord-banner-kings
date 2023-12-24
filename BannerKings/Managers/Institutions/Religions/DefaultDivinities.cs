@@ -203,10 +203,10 @@ namespace BannerKings.Managers.Institutions.Religions
 
             Grunwald.Initialize(new TextObject("{=!}Kronvalt"),
                 new TextObject("{=!}D"),
-                new TextObject("{=!}Improved village prosperity\nIncreased farmland acreage output"),
+                new TextObject("{=!}Improved ruler Legitimacy under elective successions"),
                 new TextObject("{=!}"),
                 300,
-                new TextObject("{=!}The Calradoi call him Koronvaldos, but the god of the Rhodoks is called Kronvalt in Vlandic. The name means “king-chooser”. "),
+                new TextObject("{=!}The Calradoi call him Koronvaldos, but the god of the Rhodoks is called Kronvalt in our Wilunding tongue. The name means “king-chooser”. "),
                 new TextObject(""));
 
             AseraMain = new Divinity("asera-main");

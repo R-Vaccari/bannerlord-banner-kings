@@ -168,8 +168,7 @@ namespace BannerKings.Behaviours
                             Hero.OneToOneConversationHero.IsFemale, false));
                     }
 
-                    return companion != null && companion.Clan == Clan.PlayerClan &&
-                           BannerKingsConfig.Instance.TitleManager.Knighthood;
+                    return companion != null && companion.Clan == Clan.PlayerClan;
                 },
                 delegate
                 {
@@ -814,11 +813,6 @@ namespace BannerKings.Behaviours
         {
             private static bool Prefix(ClanPartiesVM __instance, Clan ____faction)
             {
-                if (!BannerKingsConfig.Instance.TitleManager.Knighthood)
-                {
-                    return true;
-                }
-
                 if (!__instance.CanCreateNewParty)
                 {
                     return false;

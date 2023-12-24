@@ -59,7 +59,7 @@ namespace BannerKings.Models.Vanilla
 
             float manpower = data.GetTypeCount(PopType.Tenants);
             float serfs = data.GetTypeCount(PopType.Serfs);
-            if (settlement.OwnerClan != null)
+            if (settlement.OwnerClan != null && settlement.MapFaction.IsKingdomFaction)
             {
                 var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(settlement.OwnerClan.Kingdom);
                 if (sovereign != null)

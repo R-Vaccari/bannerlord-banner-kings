@@ -198,22 +198,6 @@ namespace BannerKings
             return "Alliance set.";
         }
 
-        [CommandLineFunctionality.CommandLineArgumentFunction("disable_knighthood", "bannerkings")]
-        public static string DisableKnighthood(List<string> strings)
-        {
-            BannerKingsConfig.Instance.TitleManager.Knighthood = false;
-
-            return "Knighthood requirements for player companions disabled.";
-        }
-
-        [CommandLineFunctionality.CommandLineArgumentFunction("enable_knighthood", "bannerkings")]
-        public static string EnableKnighthood(List<string> strings)
-        {
-            BannerKingsConfig.Instance.TitleManager.Knighthood = true;
-
-            return "Knighthood requirements for player companions enabled.";
-        }
-
         [CommandLineFunctionality.CommandLineArgumentFunction("reinit_titles", "bannerkings")]
         public static string ReinitTitles(List<string> strings)
         {

@@ -175,7 +175,7 @@ namespace BannerKings
             ReligionsManager = new ReligionsManager();
             PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
             PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>());
-            TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Kingdom, FeudalTitle>());
+            TitleManager = new TitleManager();
             TitleGenerator.InitializeTitles();
             CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());          
             EducationManager = new EducationManager();

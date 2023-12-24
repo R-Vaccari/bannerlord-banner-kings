@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Skills;
@@ -21,7 +20,7 @@ namespace BannerKings.Managers.Helpers
         {
             var title = new FeudalTitle(type, null, vassals, deJure, faction.Leader, faction.Name, contract, stringId);
             BannerKingsConfig.Instance.TitleManager.ExecuteAddTitle(title);
-            BannerKingsConfig.Instance.TitleManager.Kingdoms.Add(faction, title);
+            BannerKingsConfig.Instance.TitleManager.Kingdoms[title] = faction;
             return title;
         }
 
@@ -31,24 +30,8 @@ namespace BannerKings.Managers.Helpers
             var title = new FeudalTitle(TitleType.Empire, null, vassals, deJure, faction.Leader,
                 faction.Name, contract, stringId);
             BannerKingsConfig.Instance.TitleManager.ExecuteAddTitle(title);
+            BannerKingsConfig.Instance.TitleManager.Kingdoms[title] = faction;
 
-            if (BannerKingsConfig.Instance.TitleManager.Kingdoms.ContainsKey(faction))
-            {
-                BannerKingsConfig.Instance.TitleManager.Kingdoms.Remove(faction);
-            }
-
-            var list = new List<Kingdom>();
-            foreach (var vassal in vassals)
-            {
-                if (BannerKingsConfig.Instance.TitleManager.Kingdoms.Any(x => x.Value == vassal))
-                {
-                    list.Add(BannerKingsConfig.Instance.TitleManager.Kingdoms.First(x => x.Value == vassal).Key);
-                }
-            }
-
-            list.ForEach(x => BannerKingsConfig.Instance.TitleManager.Kingdoms.Remove(x));
-
-            BannerKingsConfig.Instance.TitleManager.Kingdoms.Add(faction, title);
             return title;
         }
 

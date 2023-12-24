@@ -10,6 +10,7 @@ using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.BKModels;
+using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -23,20 +24,17 @@ namespace BannerKings.Managers
 {
     public class TitleManager
     {
-        public TitleManager(Dictionary<FeudalTitle, Hero> titles, Dictionary<Kingdom, FeudalTitle> kingdoms)
+        public TitleManager()
         {
-            Titles = titles;
-            Kingdoms = kingdoms;
-            Knighthood = true; 
+            Titles = new List<FeudalTitle>(Settlement.All.Count);
+            Kingdoms = new Dictionary<FeudalTitle, Kingdom>(Kingdom.All.Count);
         }
 
-        [SaveableProperty(1)] private Dictionary<FeudalTitle, Hero> Titles { get; set; }
+        [SaveableProperty(1)] private List<FeudalTitle> Titles { get; set; }
 
-        [SaveableProperty(2)] public Dictionary<Kingdom, FeudalTitle> Kingdoms { get; private set; }
+        [SaveableProperty(2)] public Dictionary<FeudalTitle, Kingdom> Kingdoms { get; private set; }
 
-        [SaveableProperty(3)] public bool Knighthood { get; set; } = true;
-
-        [SaveableProperty(4)] private Dictionary<Hero, float> Knights { get; set; } = new();
+        [SaveableProperty(3)] private Dictionary<Hero, float> Knights { get; set; } = new();
 
         private Dictionary<Hero, List<FeudalTitle>> DeJuresCache { get; set; }
         private Dictionary<Settlement, FeudalTitle> SettlementCache { get; set; }
@@ -55,7 +53,7 @@ namespace BannerKings.Managers
                 DeJuresCache.Clear();
             }
 
-            foreach (var title in Titles.Keys.ToList())
+            foreach (FeudalTitle title in Titles)
             {
                 var hero = title.deJure;
                 if (!DeJuresCache.ContainsKey(hero))
@@ -79,35 +77,16 @@ namespace BannerKings.Managers
         public void PostInitialize()
         {
             RefreshCaches();
-
-            List<Kingdom> eliminatedKingdoms = new List<Kingdom>();
-            foreach (var pair in Kingdoms)
-            {
-                if (pair.Key.IsEliminated)
-                {
-                    eliminatedKingdoms.Add(pair.Key);
-                }
-            }
-
-            foreach (var k in eliminatedKingdoms)
-                Kingdoms.Remove(k);
-
-            foreach (var title in Titles.Keys.ToList())
+            foreach (var title in Titles)
             {
                 if (title.Contract.DemesneLaws == null || title.Contract.DemesneLaws.Count == 0)
-                {
                     title.SetLaws(DefaultDemesneLaws.Instance.GetAdequateLaws(title));
-                }
 
                 title.PostInitialize();
 
                 foreach (var law in DefaultDemesneLaws.Instance.GetAdequateLaws(title))
-                {
                     if (!title.Contract.DemesneLaws.Any(x => x.LawType == law.LawType))
-                    {
                         title.Contract.DemesneLaws.Add(law);
-                    }
-                }
             }
         }
 
@@ -132,7 +111,7 @@ namespace BannerKings.Managers
                     return SettlementCache[settlement];
                 }
 
-                return Titles.Keys.ToList().Find(x => x.Fief == settlement);
+                return Titles.Find(x => x.Fief == settlement);
             }
             catch (Exception ex)
             {
@@ -143,20 +122,11 @@ namespace BannerKings.Managers
             }
         }
 
-        public List<FeudalTitle> GetAllTitlesByType(TitleType type)
-        {
-            return Titles.Keys.ToList().FindAll(x => x.TitleType == type);
-        }
+        public List<FeudalTitle> GetAllTitlesByType(TitleType type) => Titles.FindAll(x => x.TitleType == type);
 
-        public FeudalTitle GetTitleByName(string name)
-        {
-            return Titles.FirstOrDefault(x => x.Key.FullName.ToString() == name).Key;
-        }
+        public FeudalTitle GetTitleByName(string name) => Titles.FirstOrDefault(x => x.FullName.ToString() == name);
 
-        public FeudalTitle GetTitleByStringId(string stringId)
-        {
-            return Titles.FirstOrDefault(x => x.Key.StringId == stringId).Key;
-        }
+        public FeudalTitle GetTitleByStringId(string stringId) => Titles.FirstOrDefault(x => x.StringId == stringId);
 
         public Government GetSettlementGovernment(Settlement settlement)
         {
@@ -227,9 +197,9 @@ namespace BannerKings.Managers
             FeudalTitle result = null;
             foreach (var pair in Titles)
             {
-                if (pair.Key.Vassals != null && pair.Key.Vassals.Contains(target))
+                if (pair.Vassals != null && pair.Vassals.Contains(target))
                 {
-                    result = pair.Key;
+                    result = pair;
                     break;
                 }
             }
@@ -239,12 +209,11 @@ namespace BannerKings.Managers
 
         private void ExecuteOwnershipChange(Hero oldOwner, Hero newOwner, FeudalTitle title, bool deJure)
         {
-            if (Titles.ContainsKey(title))
+            if (Titles.Contains(title))
             {
                 if (deJure)
                 {
                     title.deJure = newOwner;
-                    Titles[title] = newOwner;
                     DeJuresCache[oldOwner].Remove(title);
                     if (DeJuresCache.ContainsKey(newOwner))
                     {
@@ -255,7 +224,6 @@ namespace BannerKings.Managers
                         DeJuresCache.Add(newOwner, new List<FeudalTitle> {title});
                     }
 
-
                     if (DeJuresCache[oldOwner].Count == 0)
                     {
                         DeJuresCache.Remove(oldOwner);
@@ -265,20 +233,14 @@ namespace BannerKings.Managers
                         }
                     }
                 }
-                else
-                {
-                    title.deFacto = newOwner;
-                }
+                else title.deFacto = newOwner;   
             }
         }
 
         internal void ExecuteAddTitle(FeudalTitle title)
         {
-            var keys = Titles.Keys.ToList();
-            if (!keys.Contains(title))
-            {
-                Titles.Add(title, title.deJure);
-            }
+            var keys = Titles.ToList();
+            if (!keys.Contains(title)) Titles.Add(title);  
 
             RefreshCaches();
         }
@@ -324,7 +286,7 @@ namespace BannerKings.Managers
         {
             var list = new List<Hero>();
             var behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKGentryBehavior>();
-            foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
+            foreach (var title in GetAllDeJure(clan))
             {
                 if (title.Fief != null && title.Fief.IsVillage)
                 {
@@ -361,7 +323,7 @@ namespace BannerKings.Managers
                         }
                         else
                         {
-                            var suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(deJure);
+                            var suzerain = CalculateHeroSuzerain(deJure);
                             if (suzerain != null && suzerain.deJure == clan.Leader && clan.MapFaction == vassal.deJure.MapFaction)
                             {
                                 list.Add(deJure);
@@ -664,13 +626,13 @@ namespace BannerKings.Managers
 
         public void GiveLordshipOnKingdomJoin(Kingdom newKingdom, Clan clan, bool force = false)
         {
-            var clanTitles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan.Leader);
+            var clanTitles = GetAllDeJure(clan.Leader);
             if (clanTitles.Count > 0)
             {
                 return;
             }
 
-            var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(newKingdom);
+            var sovereign = GetSovereignTitle(newKingdom);
             if (sovereign?.Contract == null)
             {
                 return;
@@ -688,7 +650,7 @@ namespace BannerKings.Managers
 
         GIVE:
             Hero owner = newKingdom.Leader;
-            var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(newKingdom.Leader);
+            var titles = GetAllDeJure(newKingdom.Leader);
             if (titles.Count == 0 || titles.FindAll(x => x.TitleType == TitleType.Lordship).Count == 0)
             {
                 foreach (Clan kingdomClan in newKingdom.Clans)
@@ -696,7 +658,7 @@ namespace BannerKings.Managers
                     if (kingdomClan != Clan.PlayerClan)
                     {
                         owner = kingdomClan.Leader;
-                        titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(kingdomClan.Leader);
+                        titles = GetAllDeJure(kingdomClan.Leader);
                         if (titles.Count > 0 && titles.FindAll(x => x.TitleType == TitleType.Lordship).Count > 0)
                         {
                             break;
@@ -767,22 +729,15 @@ namespace BannerKings.Managers
             {
                 DeJuresCache.TryGetValue(hero, out var titleList);
                 if (titleList == null)
-                {
                     titleList = new List<FeudalTitle>();
-                }
 
                 return titleList;
             }
 
-
             var list = new List<FeudalTitle>();
-            foreach (var title in Titles.Keys.ToList())
-            {
+            foreach (var title in Titles.ToList())
                 if (title.deJure == hero)
-                {
                     list.Add(title);
-                }
-            }
 
             return list;
         }
@@ -791,9 +746,7 @@ namespace BannerKings.Managers
         {
             var list = new List<FeudalTitle>();
             foreach (var hero in clan.Heroes)
-            {
                 list.AddRange(GetAllDeJure(hero));
-            }
 
             return list;
         }
@@ -836,13 +789,53 @@ namespace BannerKings.Managers
             return null;
         }
 
+        public List<FeudalTitle> GetSovereignTitleList(Kingdom faction)
+        {
+            try
+            {
+                if (faction != null)
+                {
+                    List<FeudalTitle> titles = new List<FeudalTitle>();
+                    foreach (var pair in Kingdoms)
+                        if (pair.Value == faction)
+                            titles.Add(pair.Key);
+
+                    return titles;
+                }
+                else throw new NullReferenceException();
+            }
+            catch (Exception ex)
+            {
+                var cause = "Exception in Banner Kings GetSovereignTitle method. ";
+                string objInfo = null;
+                if (faction != null)
+                {
+                    objInfo = $"Name [{faction.Name}], Id [{faction.StringId}], Culture [{faction.Culture}].";
+                }
+                else
+                {
+                    objInfo = "Null faction.";
+                }
+
+                throw new BannerKingsException(cause + objInfo, ex);
+            }
+        }
+
         public FeudalTitle GetSovereignTitle(Kingdom faction)
         {
             try
             {
-                if (faction != null && Kingdoms.ContainsKey(faction))
+                if (faction != null)
                 {
-                    return Kingdoms[faction];
+                    List<FeudalTitle> list = GetSovereignTitleList(faction);
+                    var empire = list.FirstOrDefault(x => x.TitleType == TitleType.Empire);
+                    if (empire != null) 
+                        return empire;
+
+                    if (list.Count > 1)
+                        list.Sort((x, y) => x.Priority.CompareTo(y.Priority));
+
+                    return list.FirstOrDefault();
                 }
 
                 return null;
@@ -862,12 +855,6 @@ namespace BannerKings.Managers
 
                 throw new BannerKingsException(cause + objInfo, ex);
             }
-        }
-
-        public FeudalTitle GetSovereignFromSettlement(Settlement settlement)
-        {
-            var title = GetTitle(settlement);
-            return title?.Sovereign;
         }
 
         public List<FeudalTitle> GetVassals(TitleType threshold, Hero lord)
@@ -912,16 +899,9 @@ namespace BannerKings.Managers
 
         public Kingdom GetTitleFaction(FeudalTitle title)
         {
-            Kingdom faction = null;
-            var sovereign = title.Sovereign;
-            if (sovereign != null)
-            {
-                faction = Kingdoms.FirstOrDefault(x => x.Value == sovereign).Key;
-            }
-            else if (Kingdoms.ContainsValue(title))
-            {
-                faction = Kingdoms.FirstOrDefault(x => x.Value == title).Key;
-            }
+            Kingdom faction;
+            FeudalTitle sovereign = title.Sovereign;
+            Kingdoms.TryGetValue(sovereign != null ? sovereign : title, out faction);
 
             return faction;
         }
@@ -951,11 +931,6 @@ namespace BannerKings.Managers
             ExecuteOwnershipChange(title.deFacto, null, title, false);
         }
 
-        public void DeactivateDeJure(FeudalTitle title)
-        {
-            ExecuteOwnershipChange(title.deJure, null, title, true);
-        }
-
         public void ShowContract(Hero lord, string buttonString)
         {
             var kingdom = lord.Clan.Kingdom;
@@ -964,13 +939,13 @@ namespace BannerKings.Managers
                 return;
             }
 
-            var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+            var sovereign = GetSovereignTitle(kingdom);
             if (sovereign?.Contract == null)
             {
                 return;
             }
 
-            var description = BannerKingsConfig.Instance.TitleManager.GetContractText(sovereign);
+            var description = GetContractText(sovereign);
             InformationManager.ShowInquiry(new InquiryData(
                 $"Enfoeffement Contract for {sovereign.FullName}",
                 description, true, false, buttonString, "", null, null));
@@ -978,7 +953,7 @@ namespace BannerKings.Managers
 
         public FeudalTitle GetDuchy(FeudalTitle title)
         {
-            var duchies = Titles.Keys.Where(x => x.TitleType == TitleType.Dukedom && x.Sovereign != null && x.Sovereign == title.Sovereign);
+            var duchies = Titles.Where(x => x.TitleType == TitleType.Dukedom && x.Sovereign != null && x.Sovereign == title.Sovereign);
 
             var suzerain1 = GetImmediateSuzerain(title);
             if (suzerain1 == null)

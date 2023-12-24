@@ -45,6 +45,7 @@ namespace BannerKings.Managers.Titles
             deJureDrift = new Dictionary<FeudalTitle, float>();
             StringId = stringId;
             Duties = new Dictionary<ContractDuty, CampaignTime>();
+            Priority = false;
         }
 
         [SaveableProperty(1)] public TitleType TitleType { get; private set; }
@@ -63,6 +64,7 @@ namespace BannerKings.Managers.Titles
         [SaveableProperty(14)] public string StringId { get; private set; }
         [SaveableProperty(15)] public bool CustomName { get; private set; }
         [SaveableProperty(16)] public Dictionary<ContractDuty, CampaignTime> Duties { get; private set; }
+        [SaveableProperty(17)] public bool Priority { get; internal set; }
 
         public void FulfillDuty(ContractDuty duty)
         {

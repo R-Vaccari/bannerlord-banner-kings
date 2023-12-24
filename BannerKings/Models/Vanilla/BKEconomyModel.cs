@@ -34,11 +34,15 @@ namespace BannerKings.Models.Vanilla
             result.LimitMin(0f);
             result.LimitMax(1f);
 
-            var title = BannerKingsConfig.Instance.TitleManager.GetSovereignFromSettlement(settlement);
-            if (title != null)
+            var titleData = settlement.PopulationData().TitleData;
+            if (titleData != null)
             {
-                Government government = title.Contract.Government;
-                result.Add(government.Mercantilism, new TextObject("{=!}Government"));
+                var title = titleData.Title;
+                if (title != null)
+                {
+                    Government government = title.Contract.Government;
+                    result.Add(government.Mercantilism, new TextObject("{=!}Government"));
+                }
             }
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_mercantilism"))
