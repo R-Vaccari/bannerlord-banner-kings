@@ -54,9 +54,9 @@ Banner Kings is both a mod and a modding framework - it can be modded by other m
 ## Installation
 BannerLord: 1.1.6
 [Harmony](https://www.nexusmods.com/mountandblade2bannerlord/mods/2006): 2.2.2
-[Butterlib](https://www.nexusmods.com/mountandblade2bannerlord/mods/2018): 2.6.3
-[UIExtenderEx](https://www.nexusmods.com/mountandblade2bannerlord/mods/2102): 2.6.0
-[MCM](https://www.nexusmods.com/mountandblade2bannerlord/mods/612): 5.5.5
+[Butterlib](https://www.nexusmods.com/mountandblade2bannerlord/mods/2018): v2.8.15
+[UIExtenderEx](https://www.nexusmods.com/mountandblade2bannerlord/mods/2102): v2.8.0
+[MCM](https://www.nexusmods.com/mountandblade2bannerlord/mods/612): v5.9.1
 
 I cannot guarantee anything works if you don't follow the versions as prescribed.
 
