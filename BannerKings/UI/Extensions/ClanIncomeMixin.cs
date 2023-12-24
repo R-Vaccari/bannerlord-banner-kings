@@ -37,30 +37,31 @@ namespace BannerKings.UI.Extensions
             base.OnRefresh();
             WorkshopInfo.Clear();
 
-            if (viewModel.CurrentSelectedIncome != null)
-            {
-                viewModel.CurrentSelectedIncome.RefreshValues();
-                var workshop = viewModel.CurrentSelectedIncome.Workshop;
-                TextObject state = new TextObject("{=Bom9FTfz}Running normally.");
-                /*
-                var time = CampaignTime.Now - CampaignTime.Days(workshop.NotRunnedDays);
-                //WorkshopInfo.Add(new InformationElement(new TextObject("{=OXes1FKN}Last run:").ToString(),
-                //    time.ToString(),
-                //    new TextObject("{=a2FbzfvH}The last day this workshop has successfully run without issues.").ToString()));
+            /*
+          if (viewModel.CurrentSelectedIncome != null)
+          {
+              viewModel.CurrentSelectedIncome.RefreshValues();
+              var workshop = viewModel.CurrentSelectedIncome.Workshop;
+              TextObject state = new TextObject("{=Bom9FTfz}Running normally.");
 
-                CanUpgrade = workshop.CanBeUpgraded; 
-                
-                if (!workshop.IsRunning && workshop.ConstructionTimeRemained > 0)
-                {
-                    state = new TextObject("{=KnWnjURr}Workshop under expansion! {DAYS} construction day(s) left.")
-                        .SetTextVariable("DAYS", workshop.ConstructionTimeRemained);
-                    CanUpgrade = false;
-                } else 
-                {
-                }
-                */
+              var time = CampaignTime.Now - CampaignTime.Days(workshop.NotRunnedDays);
+              //WorkshopInfo.Add(new InformationElement(new TextObject("{=OXes1FKN}Last run:").ToString(),
+              //    time.ToString(),
+              //    new TextObject("{=a2FbzfvH}The last day this workshop has successfully run without issues.").ToString()));
 
-                bool inventory = false;
+              CanUpgrade = workshop.CanBeUpgraded; 
+
+              if (!workshop.IsRunning && workshop.ConstructionTimeRemained > 0)
+              {
+                  state = new TextObject("{=KnWnjURr}Workshop under expansion! {DAYS} construction day(s) left.")
+                      .SetTextVariable("DAYS", workshop.ConstructionTimeRemained);
+                  CanUpgrade = false;
+              } else 
+              {
+              }
+             
+
+            bool inventory = false;
                 WorkshopData data = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKWorkshopBehavior>().GetInventory(workshop);
                 if (data != null)
                 {
@@ -81,7 +82,7 @@ namespace BannerKings.UI.Extensions
                 if (!inventory)
                 {
                     var behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<WorkshopsCampaignBehavior>();
-                    var method = AccessTools.Method(behavior.GetType(), "DetermineTownHasSufficientInputs");
+                    var method = AccessTools.Method(behavior.GetType(), "DetermineItemRosterHasSufficientInputs");
                     for (int i = 0; i < workshop.WorkshopType.Productions.Count; i++)
                     {
                         bool insufficient = (bool)method.Invoke(behavior, new object[] { workshop.WorkshopType.Productions[i],
@@ -112,7 +113,7 @@ namespace BannerKings.UI.Extensions
                 WorkshopInfo.Add(new InformationElement(new TextObject("{=6gaLfex6}Production Quality:").ToString(),
                     FormatValue(quality.ResultNumber),
                     quality.GetExplanations()));
-            }
+            } */
         }
 
         protected string FormatValue(float value)
