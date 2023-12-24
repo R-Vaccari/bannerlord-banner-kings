@@ -243,6 +243,16 @@ namespace BannerKings.Behaviours.Diplomacy
             {
                 kingdomDiplomacies.Remove(kingdom);
             }
+
+            List<War> delete = new List<War>();
+            foreach (War war in wars)
+            {
+                if (war.Attacker == kingdom || war.Defender == kingdom)
+                    delete.Add(war);
+            }
+
+            foreach (War war in delete)
+                wars.Remove(war);
         }
 
         private void OnGameLoaded(CampaignGameStarter starter)
@@ -384,7 +394,7 @@ namespace BannerKings.Behaviours.Diplomacy
 
             foreach (var kingdom in Kingdom.All)
             {
-                if (!kingdomDiplomacies.ContainsKey(kingdom))
+                if (!kingdom.IsEliminated && !kingdomDiplomacies.ContainsKey(kingdom))
                 {
                     kingdomDiplomacies.Add(kingdom, new KingdomDiplomacy(kingdom));
                 }
