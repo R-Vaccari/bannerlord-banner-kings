@@ -59,6 +59,7 @@ namespace BannerKings.Managers
                 {
                     Religions.Add(religion, new Dictionary<Hero, FaithfulData>());
                     InitializeFaithfulHeroes(religion);
+                    religion.PostInitialize();
                 }
             }
 
@@ -106,6 +107,7 @@ namespace BannerKings.Managers
             DefaultDivinities.Instance.Initialize();
             DefaultFaithGroups.Instance.Initialize();   
             DefaultFaiths.Instance.Initialize();
+            List<Religion> delete = new List<Religion>();
             foreach (var pair in Religions.ToList())
             {
                 var rel = pair.Key;
@@ -123,21 +125,21 @@ namespace BannerKings.Managers
                 {
                     faith = DefaultFaiths.Instance.GetById(rel.Faith.GetId());
                 }
-                
-                var presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(faith.GetId()));
-                foreach (var preset in presets)
+
+                if (faith == null)
                 {
-                    var number = int.Parse(preset.StringId[preset.StringId.Length - 1].ToString());
-                    faith.AddPreset(number, preset);
+                    delete.Add(rel);
+                    continue;
                 }
 
                 rel.PostInitialize();
-
                 foreach(var keyPair in pair.Value)
                 {
                     keyPair.Value.PostInitialize();
                 }
             }
+
+            foreach (var rel in delete) Religions.Remove(rel);
 
             RefreshCaches();
         }

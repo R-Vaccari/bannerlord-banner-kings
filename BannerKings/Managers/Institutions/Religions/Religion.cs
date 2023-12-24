@@ -86,6 +86,13 @@ namespace BannerKings.Managers.Institutions.Religions
             Religion rel = DefaultReligions.Instance.GetById(this);
             FavoredCultures = rel.FavoredCultures;
             Faith = faith;
+
+            var presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(faith.GetId()));
+            foreach (var preset in presets)
+            {
+                var number = int.Parse(preset.StringId[preset.StringId.Length - 1].ToString());
+                faith.AddPreset(number, preset);
+            }
         }
 
         public void AddClergyman(Settlement settlement, Hero hero)
