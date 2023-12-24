@@ -234,12 +234,6 @@ namespace BannerKings.Behaviours
 
         public void AiHourlyTick(MobileParty mobileParty, PartyThinkParams p)
         {
-            if (mobileParty.IsMilitia || mobileParty.IsCaravan || mobileParty.IsVillager ||
-                mobileParty.IsBandit || !mobileParty.MapFaction.IsKingdomFaction)
-            {
-                return;
-            }
-
             if (playerArmyDuty == null || mobileParty != playerArmyDuty.Party)
             {
                 return;
