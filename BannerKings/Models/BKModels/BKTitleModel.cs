@@ -520,11 +520,22 @@ namespace BannerKings.Models.BKModels
                 if (title.IsSovereignLevel)
                 {
                     var faction = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title);
-                    if (faction.Leader != usurper)
+                    if (usurper.MapFaction != faction)
+                    {
+                        if (!usurper.MapFaction.IsKingdomFaction || usurper.MapFaction.Leader != usurper)
+                        {
+                            usurpData.Possible = false;
+                            usurpData.Reason =
+                                new TextObject("{=!}You must be the leader of a faction in order to usurp a Kingdom or Empire level title.");
+                            return usurpData;
+                        }
+                    }
+                    else if (faction.Leader != usurper)
                     {
                         usurpData.Possible = false;
                         usurpData.Reason =
-                            new TextObject("{=2wBj94FG}Must be faction leader to usurp highest title in hierarchy.");
+                            new TextObject("{=!}As a member of {KINGDOM}, you must lead the faction to usurp its title.")
+                            .SetTextVariable("KINGDOM", faction.Name);
                         return usurpData;
                     }
                 }
@@ -536,7 +547,6 @@ namespace BannerKings.Models.BKModels
             usurpData.Reason = new TextObject("{=5ysthcWa}No rightful claim.");
 
             ApplyDiscounts(usurpData);
-
             return usurpData;
         }
 
@@ -582,59 +592,38 @@ namespace BannerKings.Models.BKModels
             var heroes = new List<Hero>();
             var kingdom = grantor.Clan.Kingdom;
             if (kingdom != null)
-            {
                 foreach (var clan in kingdom.Clans)
-                {
                     if (!clan.IsUnderMercenaryService && clan != grantor.Clan)
-                    {
                         heroes.Add(clan.Leader);
-                    }
-                }
-            }
 
             return heroes;
         }
 
         public Dictionary<Hero, TextObject> GetClaimants(FeudalTitle title)
         {
-            var claimants = new Dictionary<Hero, TextObject>();
+            var claimants = new Dictionary<Hero, TextObject>(4);
             var deFacto = title.DeFacto;
             if (deFacto != title.deJure)
             {
                 if (title.Fief == null)
                 {
                     if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(deFacto))
-                    {
-                        claimants[deFacto] = new TextObject("{=XRMMs6QY}De facto title holder");
-                    }
+                        claimants[deFacto] = new TextObject("{=XRMMs6QY}De facto title holder");         
                 }
-                else
-                {
-                    claimants[deFacto] = new TextObject("{=TqfaGy3U}De facto fief holder");
-                }
+                else claimants[deFacto] = new TextObject("{=!}De facto unlanded title holder");
             }
 
             if (title.Sovereign != null && title.Sovereign.deJure != title.deJure && !claimants.ContainsKey(title.Sovereign.deJure))
-            {
                 claimants[title.Sovereign.deJure] = new TextObject("{=pkZ0J4Fo}De jure sovereign of this title");
-            }
 
-            if (title.Vassals is {Count: > 0})
-            {
+            if (title.Vassals != null && title.Vassals.Count > 0)
                 foreach (var vassal in title.Vassals)
-                {
                     if (vassal.deJure != null && vassal.deJure != title.deJure && !claimants.ContainsKey(vassal.deJure))
-                    {
                         claimants[vassal.deJure] = new TextObject("{=J07mQQ6k}De jure vassal of this title");
-                    }
-                }
-            }
 
             FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(title);
             if (suzerain != null && suzerain.deJure != null)
-            {
-                claimants[suzerain.deJure] = new TextObject("{=!}De jure suzerain of this title");
-            }
+                claimants[suzerain.deJure] = new TextObject("{=!}De jure suzerain of this title");   
 
             return claimants;
         }
