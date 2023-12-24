@@ -19,6 +19,7 @@ namespace BannerKings.Managers.Titles
             Inheritance = inheritance;
             GenderLaw = genderLaw;
             DemesneLaws = new List<DemesneLaw>(8);
+            ContractAspects = new List<ContractAspect>();
         }
 
         [SaveableProperty(1)] public Dictionary<FeudalDuties, float> Duties { get; set; }
