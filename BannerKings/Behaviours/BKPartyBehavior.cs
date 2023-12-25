@@ -96,12 +96,21 @@ namespace BannerKings.Behaviours
                 KillCharacterAction.ApplyByMurder(party.LeaderHero);
             }
 
-            if (BannerKingsConfig.Instance.PopulationManager == null)
+            VillagersCastleTick(party);
+            AddCustomPartyBehaviors(party);
+        }
+
+        private void VillagersCastleTick(MobileParty villagerParty)
+        {
+            if (!villagerParty.IsVillager || villagerParty.MapEvent != null)
             {
                 return;
             }
-
-            AddCustomPartyBehaviors(party);
+           
+            if (villagerParty.CurrentSettlement != null && villagerParty.CurrentSettlement.IsCastle)
+            {
+                villagerParty.Ai.SetMoveGoToSettlement(villagerParty.HomeSettlement);
+            }
         }
 
         private void AddCustomPartyBehaviors(MobileParty party)
