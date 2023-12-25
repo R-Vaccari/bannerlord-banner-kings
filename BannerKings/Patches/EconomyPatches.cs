@@ -1088,63 +1088,21 @@ namespace BannerKings.Patches
             }
         }
 
-        //Mules
         [HarmonyPatch(typeof(VillagerCampaignBehavior))]
         internal class VillagerMoveItemsPatch
         {
             [HarmonyPrefix]
-            [HarmonyPatch("MoveItemsToVillagerParty", MethodType.Normal)]
-            private static bool MoveItemsToVillagerParty(Village village, MobileParty villagerParty)
-            {
-                var mule = MBObjectManager.Instance.GetObject<ItemObject>(x => x.StringId == "mule");
-                var muleCount = (int)(villagerParty.MemberRoster.TotalManCount * 0.1f);
-                villagerParty.ItemRoster.AddToCounts(mule, muleCount);
-                var itemRoster = village.Settlement.ItemRoster;
-                var num = villagerParty.InventoryCapacity - villagerParty.ItemRoster.TotalWeight;
-                for (var i = 0; i < 4; i++)
-                {
-                    foreach (var itemRosterElement in itemRoster)
-                    {
-                        var item = itemRosterElement.EquipmentElement.Item;
-                        var num2 = MBRandom.RoundRandomized(itemRosterElement.Amount * 0.2f);
-                        if (num2 > 0)
-                        {
-                            if (!item.HasHorseComponent && item.Weight * num2 > num)
-                            {
-                                num2 = MathF.Ceiling(num / item.Weight);
-                                if (num2 <= 0)
-                                {
-                                    continue;
-                                }
-                            }
-
-                            if (!item.HasHorseComponent)
-                            {
-                                num -= num2 * item.Weight;
-                            }
-
-                            villagerParty.Party.ItemRoster.AddToCounts(itemRosterElement.EquipmentElement, num2);
-                            itemRoster.AddToCounts(itemRosterElement.EquipmentElement, -num2);
-                        }
-                    }
-                }
-
-                return false;
-            }
-
-            [HarmonyPrefix]
             [HarmonyPatch("SendVillagerPartyToTradeBoundTown", MethodType.Normal)]
             private static bool SendVillagerPartyToTradeBoundTown(MobileParty villagerParty)
             {
-                Settlement tradeBound = villagerParty.HomeSettlement.Village.TradeBound;
-                if (tradeBound != null)
+                Settlement bound = villagerParty.HomeSettlement.Village.Bound;
+                if (!bound.IsUnderSiege) villagerParty.Ai.SetMoveGoToSettlement(bound);
+                else
                 {
-                    if (!tradeBound.IsUnderSiege) villagerParty.Ai.SetMoveGoToSettlement(tradeBound);
-                    else 
+                    Settlement tradeBound = villagerParty.HomeSettlement.Village.TradeBound;
+                    if (tradeBound != null)
                     {
-                        Settlement bound = villagerParty.HomeSettlement.Village.Bound;
-                        if (tradeBound != bound && !bound.IsUnderSiege)
-                            villagerParty.Ai.SetMoveGoToSettlement(villagerParty.HomeSettlement.Village.Bound);
+                        if (!tradeBound.IsUnderSiege) villagerParty.Ai.SetMoveGoToSettlement(tradeBound);
                     }
                 }
 
@@ -1160,16 +1118,14 @@ namespace BannerKings.Patches
                 ref Dictionary<MobileParty, List<Settlement>> ____previouslyChangedVillagerTargetsDueToEnemyOnWay,
                 MobileParty mobileParty, Settlement settlement, Hero hero)
             {
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                if (mobileParty is { IsActive: true, IsVillager: true } && data != null && data.EstateData != null)
+                if (mobileParty is { IsActive: true, IsVillager: true })
                 {
-
                     if (____previouslyChangedVillagerTargetsDueToEnemyOnWay.ContainsKey(mobileParty))
                     {
                         ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
                     }
 
-                    if (settlement.IsTown)
+                    if (settlement.Town != null)
                     {
                         SellGoodsForTradeAction.ApplyByVillagerTrade(settlement, mobileParty);
                     }
@@ -1186,10 +1142,11 @@ namespace BannerKings.Patches
                             mobileParty.HomeSettlement.Village.TradeTaxAccumulated = 0;
                         }
 
-                        data.EstateData.AccumulateTradeTax(data, tax);
+                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                        if (data != null && data.EstateData != null) data.EstateData.AccumulateTradeTax(data, tax);
                     }
 
-                    if (settlement.IsTown && settlement.Town.Governor != null &&
+                    if (settlement.Town != null && settlement.Town.Governor != null &&
                         settlement.Town.Governor.GetPerkValue(DefaultPerks.Trade.DistributedGoods))
                     {
                         settlement.Town.TradeTaxAccumulated +=
