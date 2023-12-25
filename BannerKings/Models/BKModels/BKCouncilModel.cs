@@ -247,6 +247,11 @@ namespace BannerKings.Models.BKModels
             CouncilMember targetPosition, CouncilMember currentPosition = null,
             bool appointed = false)
         {
+            if (targetPosition == null) return new CouncilAction(type, requester, targetPosition, currentPosition, council)
+            {
+                Possible = false,
+                Reason = new TextObject("{=!}Invalid position (null).")
+            };
             return type switch
             {
                 CouncilActionType.REQUEST => GetRequest(type, council, requester, targetPosition, currentPosition,
