@@ -21,6 +21,26 @@ namespace BannerKings.Models.Vanilla
     {
         public float TRADE_PACT_INFLUENCE_CAP { get;} = 100f;
 
+        public override void GetHeroesForEffectiveRelation(Hero hero1, Hero hero2, out Hero effectiveHero1, out Hero effectiveHero2)
+        {
+            effectiveHero1 = hero1;
+            effectiveHero2 = hero2;
+
+            if (effectiveHero1 == effectiveHero2 || effectiveHero1 == null || effectiveHero2 == null)
+            {
+                effectiveHero1 = ((hero1.Clan != null) ? hero1.Clan.Leader : hero1);
+                effectiveHero2 = ((hero2.Clan != null) ? hero2.Clan.Leader : hero2);
+                if (hero1 != null)
+                {
+                    if (effectiveHero1 == effectiveHero2 || (hero1.IsPlayerCompanion && hero2.IsHumanPlayerCharacter) || (hero1.IsPlayerCompanion && hero2.IsHumanPlayerCharacter))
+                    {
+                        effectiveHero1 = hero1;
+                        effectiveHero2 = hero2;
+                    }
+                }
+            }
+        }
+
         public override int GetInfluenceCostOfProposingWar(Clan proposingClan)
         {
             int result = base.GetInfluenceCostOfProposingWar (proposingClan);
@@ -526,19 +546,6 @@ namespace BannerKings.Models.Vanilla
             public float Strength;
             public float ValueOfSettlements;
             public float TotalStrengthOfEnemies;
-        }
-        public override void GetHeroesForEffectiveRelation(Hero hero1, Hero hero2, out Hero effectiveHero1, out Hero effectiveHero2)
-        {
-            effectiveHero1 = hero1;
-            effectiveHero2 = hero2;
-
-            if (effectiveHero1 == effectiveHero2 || effectiveHero1 == null || effectiveHero2 == null) 
-                base.GetHeroesForEffectiveRelation(hero1, hero2, out effectiveHero1, out effectiveHero2);
-        }
-
-        public override int GetRelationChangeAfterVotingInSettlementOwnerPreliminaryDecision(Hero supporter, bool hasHeroVotedAgainstOwner)
-        {
-            return base.GetRelationChangeAfterVotingInSettlementOwnerPreliminaryDecision(supporter, hasHeroVotedAgainstOwner);
         }
     }
 }
