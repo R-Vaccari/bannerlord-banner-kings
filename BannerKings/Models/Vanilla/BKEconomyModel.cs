@@ -336,6 +336,7 @@ namespace BannerKings.Models.Vanilla
                 result = num * 0.01f;
             }
 
+            if (town.IsCastle) result *= 0.4f;
             return result;
         }
 
