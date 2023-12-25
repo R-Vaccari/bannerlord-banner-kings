@@ -305,7 +305,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             float slaves = data.LandData.SlavesConstructionForce * SLAVE_CONSTRUCTION;
-            if (data.TitleData != null && data.TitleData.Title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesHardLabor))
+            if (data.TitleData != null && data.TitleData.Title != null && data.TitleData.Title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesHardLabor))
             {
                 slaves *= 1.2f;
             }
