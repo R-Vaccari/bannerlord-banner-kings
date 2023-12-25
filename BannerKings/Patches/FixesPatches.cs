@@ -19,6 +19,22 @@ namespace BannerKings.Patches
 {
     internal class FixesPatches
     {
+        [HarmonyPatch(typeof(ChangeRelationAction))]
+        internal class ChangeRelationActionPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("ApplyInternal")]
+            private static bool ApplyInternalPrefix(Hero originalHero, Hero originalGainedRelationWith, int relationChange, bool showQuickNotification, ChangeRelationAction.ChangeRelationDetail detail)
+            {
+                if (originalHero == null || originalGainedRelationWith == null)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
         [HarmonyPatch(typeof(ItemRoster))]
         internal class ItemRosterPatches
         {
@@ -34,7 +50,8 @@ namespace BannerKings.Patches
                 __result = count;
                 return false;
             }
-        }
+        }     
+
         [HarmonyPatch(typeof(MobileParty))]
         internal class MobilePartyPatches
         {
