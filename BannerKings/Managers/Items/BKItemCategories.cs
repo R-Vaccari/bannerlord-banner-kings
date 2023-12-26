@@ -70,6 +70,9 @@ namespace BannerKings.Managers.Items
 
             Gems = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("gems"));
             Gems.InitializeObject(true, 0, 1, ItemCategory.Property.None);
+
+            DefaultItemCategories.Hides.InitializeObject(true, 10, 5, ItemCategory.Property.None, null, 0f, false, true);
+            DefaultItemCategories.Arrows.InitializeObject(true, 10, 10, ItemCategory.Property.None, null, 0f, false, true);
         }
     }
 }
