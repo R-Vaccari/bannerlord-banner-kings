@@ -50,10 +50,21 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     List<Settlement> attackerConquests = DiplomacyHelper.GetSuccessfullSiegesInWarForFaction(war.Attacker,
                        attackerLink, (Settlement x) => x.Town != null);
 
-                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture && x.MapFaction == war.Attacker).Count >= 2;
+                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture && x.MapFaction == war.Attacker).Count >= 1;
                 },
                 (War war) => false,
-                (IFaction faction1, IFaction faction2, CasusBelli casusBelli) => faction2.TotalStrength >= (faction1.TotalStrength * 0.8f),
+                (IFaction faction1, IFaction faction2, CasusBelli casusBelli) =>
+                {
+                    if (faction2.Fiefs.Count > 0 && faction1.Fiefs.Count > 0)
+                    {
+                        War possibleWar = new War(faction1, faction2, null);
+                        bool strength = faction2.TotalStrength >= (faction1.TotalStrength * 0.8f);
+                        float distance = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(possibleWar.DefenderFront.Settlement,
+                                 possibleWar.AttackerFront.Settlement);
+                        float factor = distance / TaleWorlds.CampaignSystem.Campaign.AverageDistanceBetweenTwoFortifications;
+                        return strength && factor <= 2f;
+                    } return false;
+                },
                 (Kingdom kingdom) => true,
                 new Dictionary<TraitObject, float>()
                 {
