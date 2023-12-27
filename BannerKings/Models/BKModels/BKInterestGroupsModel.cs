@@ -38,15 +38,9 @@ namespace BannerKings.Models.BKModels
             KingdomDiplomacy diplomacy = group.KingdomDiplomacy;
             float totalPower = 0;
             foreach (var settlement in diplomacy.Kingdom.Settlements)
-            {
                 if (settlement.Notables != null)
-                {
                     foreach (var notable in settlement.Notables)
-                    {
                         totalPower += notable.Power;
-                    }
-                }
-            }
 
             Dictionary<Clan, float> clanInfluences = new Dictionary<Clan, float>();
             float totalClanInfluence = 0f;
@@ -78,30 +72,17 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            if (notables > 0)
-            {
-                result.Add(notableInfluence, new TextObject("{=!}Dignataries (x{MEMBERS})")
+            if (notables > 0) result.Add(notableInfluence, new TextObject("{=!}Dignataries (x{MEMBERS})")
                     .SetTextVariable("MEMBERS", notables));
-            }
 
             foreach (var outcome in group.RecentOucomes)
-            {
-                if (outcome.Success)
-                {
+                if (outcome.Success && outcome.Enabled)
                     result.Add(-0.1f, outcome.Explanation);
-                }
-            }
 
             if (group.StringId == DefaultInterestGroup.Instance.Commoners.StringId)
-            {
                 foreach (var fief in diplomacy.Kingdom.Fiefs)
-                {
-                    if (fief.Loyalty < 30f)
-                    {
-                        result.Add(CalculateTownInfluence(fief).ResultNumber);
-                    }
-                }
-            }
+                    if (fief.Loyalty <= 25f) result.Add(CalculateTownInfluence(fief).ResultNumber / diplomacy.Kingdom.Fiefs.Count,
+                            new TextObject("{=!}{TOWN}'s loyalty is low"));
 
             return result;
         }
