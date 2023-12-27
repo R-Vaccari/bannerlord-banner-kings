@@ -415,7 +415,7 @@ namespace BannerKings.Behaviours
                 {
                     LocationEncounter locationEncounter = PlayerEncounter.LocationEncounter;
                     InventoryManager.OpenScreenAsTrade(Settlement.CurrentSettlement.ItemRoster,
-                        Settlement.CurrentSettlement.Town, 
+                        Settlement.CurrentSettlement.SettlementComponent, 
                         InventoryManager.InventoryCategoryType.None, 
                         null);
                 }, 
