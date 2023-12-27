@@ -107,6 +107,14 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                     demand.SetUp();
                 }
             }
+
+            foreach (DemandOutcome outcome in RecentOucomes)
+            {
+                if (outcome.Enabled && outcome.EndDate.IsPast)
+                {
+                    outcome.Enabled = false;
+                }
+            }
         }
         
         [SaveableProperty(13)] public List<Demand> PossibleDemands { get; private set; }
@@ -274,6 +282,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             [SaveableProperty(2)] public CampaignTime EndDate { get; private set; }
             [SaveableProperty(3)] public TextObject Explanation { get; private set; }
             [SaveableProperty(4)] public bool Success { get; private set; }
+            [SaveableProperty(5)] public bool Enabled { get; set; }
 
             public DemandOutcome(Demand demand, CampaignTime endDate, TextObject explanation, bool success)
             {
@@ -281,6 +290,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 EndDate = endDate;
                 Explanation = explanation;
                 Success = success;
+                Enabled = true;
             }
         }
     }

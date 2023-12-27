@@ -265,6 +265,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
             Group.Leader.AddSkillXp(BKSkills.Instance.Lordship, success ? response.LoserXp : response.SuccessXp);
             fulfiller.AddSkillXp(BKSkills.Instance.Lordship, success ? response.SuccessXp : response.LoserXp);
+            Group.AddOutcome(this, response, success);
             Finish();
         }
 
