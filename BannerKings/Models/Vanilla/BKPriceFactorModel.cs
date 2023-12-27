@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Skills;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -71,7 +72,35 @@ namespace BannerKings.Models.Vanilla
             }
 
             int price = base.GetPrice(itemRosterElement, clientParty, merchant, isSelling, inStoreValue, supply, demand);
+            ItemObject item = itemRosterElement.Item;
+            if (item.HasHorseComponent)
+            {
+                if (item.HorseComponent.MeatCount > 0)
+                {
+                    ItemObject meat = DefaultItems.Meat;
+                    price += (int)(meat.Value * 0.5f * GetPriceFactor(meat, clientParty, merchant, inStoreValue, supply, demand, isSelling));
+                }
+
+                if (item.HorseComponent.HideCount > 0)
+                {
+                    ItemObject hides = DefaultItems.Hides;
+                    price += (int)(hides.Value * 0.5f * GetPriceFactor(hides, clientParty, merchant, inStoreValue, supply, demand, isSelling));
+                }
+            }
+
             return price;
+        }
+
+        private float GetPriceFactor(ItemObject item, MobileParty tradingParty, PartyBase merchant, float inStoreValue, float supply, float demand, bool isSelling)
+        {
+            float basePriceFactor = GetBasePriceFactor(item.GetItemCategory(), inStoreValue, supply, demand, isSelling, item.Value);
+            float tradePenalty = GetTradePenalty(item, tradingParty, merchant, isSelling, inStoreValue, supply, demand);
+            if (!isSelling)
+            {
+                return basePriceFactor * (1f + tradePenalty);
+            }
+
+            return basePriceFactor * 1f / (1f + tradePenalty);
         }
 
         public override float GetBasePriceFactor(ItemCategory itemCategory, float inStoreValue, float supply, float demand,
