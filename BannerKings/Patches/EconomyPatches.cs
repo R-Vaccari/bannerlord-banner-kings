@@ -14,7 +14,6 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Localization;
-using TaleWorlds.ObjectSystem;
 using TaleWorlds.Library;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
@@ -25,8 +24,8 @@ using BannerKings.Utils.Extensions;
 using System.Reflection;
 using TaleWorlds.CampaignSystem.GameComponents;
 using BannerKings.Managers.Innovations;
-using SandBox.CampaignBehaviors;
 using BannerKings.Campaign;
+using TaleWorlds.CampaignSystem.Inventory;
 
 namespace BannerKings.Patches
 {
@@ -551,6 +550,21 @@ namespace BannerKings.Patches
                     false,
                     false)
                     .ResultNumber;
+        }
+
+        [HarmonyPatch(typeof(InventoryManager))]
+        internal class InventoryManagerPatches
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("GetCurrentMarketData")]
+            private static void GetPricePostfix(ref IMarketData __result)
+            {
+				Settlement settlement = MobileParty.MainParty.CurrentSettlement;
+                if (settlement != null && settlement.IsCastle)
+                {
+                    __result = settlement.Town.MarketData;
+                }
+            }
         }
 
         [HarmonyPatch(typeof(TownMarketData))]
