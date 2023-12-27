@@ -1,9 +1,11 @@
 ﻿using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Extensions;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Traits;
 using BannerKings.Utils.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -404,8 +406,13 @@ namespace BannerKings.Models.Vanilla
 
             float attackerStrength = factionDeclaresWar.TotalStrength;
             float defenderStrength = factionDeclaredWar.TotalStrength;
+            foreach (IFaction ally in factionDeclaredWar.GetAllies())
+            {
+                defenderStrength += ally.TotalStrength / 2f;
+            }
+
             float strengthFactor = (attackerStrength / defenderStrength) - 1f;
-            result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.3f, -2f, 2f), new TextObject("{=!}Difference in strength"));
+            result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.6f, -2f, 0.5f), new TextObject("{=!}Difference in strength"));
 
             if (factionDeclaredWar.Fiefs.Count < factionDeclaresWar.Fiefs.Count / 2f)
             {
@@ -415,7 +422,7 @@ namespace BannerKings.Models.Vanilla
 
             if (defenderStrength >= attackerStrength * 1.5f)
             {
-                result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.5f, -2f, -0.4f), new TextObject("{=!}Enemy significantly stronger"));
+                result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.5f, -4f, -0.4f), new TextObject("{=!}Enemy significantly stronger"));
             }
 
             float attackerFiefs = factionDeclaresWar.Fiefs.Count;
