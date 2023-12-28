@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Helpers;
+using BannerKings.Managers.Court.Members.Tasks;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -25,6 +21,22 @@ namespace BannerKings.Models.Vanilla
                 bonuses.Add(-num, _starvingText);
             }
             return bonuses;
+        }
+
+        public override ExplainedNumber GetDailyHealingHpForHeroes(MobileParty party, bool includeDescriptions = false)
+        {
+            ExplainedNumber result = base.GetDailyHealingHpForHeroes(party, includeDescriptions);
+            Hero leader = party.LeaderHero;
+            if (leader != null && party.CurrentSettlement != null)
+            {
+                if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(leader.Clan, DefaultCouncilTasks.Instance.FamilyCare,
+                    out float healCompetence))
+                {
+                    result.AddFactor(0.2f * healCompetence, DefaultCouncilTasks.Instance.FamilyCare.Name);
+                }
+            }
+
+            return result;
         }
     }
 }
