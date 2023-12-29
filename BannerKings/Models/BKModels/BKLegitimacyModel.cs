@@ -9,9 +9,9 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
 {
-    public class BKLegitimacyModel
+    public class BKLegitimacyModel : LegitimacyModel
     {
-        public BKExplainedNumber CalculateEffect(KingdomDiplomacy diplomacy, bool explanations = false)
+        public override BKExplainedNumber CalculateEffect(KingdomDiplomacy diplomacy, bool explanations = false)
         {
             var result = new BKExplainedNumber(0f, explanations);
             Kingdom kingdom = diplomacy.Kingdom;

@@ -13,7 +13,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
 {
-    public class BKStabilityModel : IBannerKingsModel
+    public class BKStabilityModel : StabilityModel
     {
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
@@ -61,7 +61,7 @@ namespace BannerKings.Models.BKModels
             return CalculateCurrentVassals(hero.Clan).ResultNumber > CalculateVassalLimit(hero).ResultNumber;
         }
 
-        public ExplainedNumber CalculateAutonomyEffect(Settlement settlement, float stability, float autonomy)
+        public override ExplainedNumber CalculateAutonomyEffect(Settlement settlement, float stability, float autonomy)
         {
             var result = new ExplainedNumber();
             result.LimitMin(-0.01f);
@@ -132,7 +132,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateStabilityTarget(Settlement settlement, bool descriptions = false)
+        public override ExplainedNumber CalculateStabilityTarget(Settlement settlement, bool descriptions = false)
         {
             var result = new ExplainedNumber(0f, descriptions);
             result.LimitMin(0f);
