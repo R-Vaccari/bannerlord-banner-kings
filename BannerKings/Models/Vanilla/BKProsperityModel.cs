@@ -51,38 +51,6 @@ namespace BannerKings.Models.Vanilla
                 baseResult.Add(0.1f, BKPerks.Instance.RitterPettySuzerain.Name);
             }
 
-            var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
-            if ((village.VillageType == DefaultVillageTypes.DateFarm || village.VillageType == DefaultVillageTypes.DesertHorseRanch) 
-                && BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.AseraSecondary3, rel)) 
-            {
-                baseResult.Add(0.1f, DefaultDivinities.Instance.AseraSecondary3.Name);
-            }
-
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.AmraMain, rel) 
-                && (village.VillageType == DefaultVillageTypes.HogFarm || village.VillageType == DefaultVillageTypes.CattleRange ||
-                village.VillageType == DefaultVillageTypes.Lumberjack)) 
-            {
-                baseResult.Add(0.2f, DefaultDivinities.Instance.AmraMain.Name);
-            }
-
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.Mehns, rel))
-            {
-                if (rel.FavoredCultures.Contains(village.Settlement.Culture))
-                {
-                    baseResult.Add(0.08f, DefaultDivinities.Instance.Mehns.Name);
-                }
-            }
-
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.Horsa, rel))
-            {
-                baseResult.Add(0.05f, DefaultDivinities.Instance.Oca.Name);
-            }
-
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.WindEast, rel))
-            {
-                baseResult.Add(0.05f, DefaultDivinities.Instance.WindEast.Name);
-            }
-
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
             if (data != null)
             {
