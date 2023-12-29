@@ -109,11 +109,13 @@ namespace BannerKings.Managers.Populations
             foreach (var building in buildings)
             {
                 building.PostInitialize();
+                building.village = Village;
             }
 
             foreach (VillageBuilding building in inProgress)
             {
                 building.PostInitialize();
+                building.village = Village;
             }
         }
 
@@ -130,6 +132,14 @@ namespace BannerKings.Managers.Populations
             var current = CurrentBuilding;
             if (current != null && BuildingsInProgress.Any())
             {
+                inProgress.Dequeue();
+                current = new VillageBuilding(current.BuildingType,
+                    Settlement.All.First(x => x.StringId == Village.TradeBound.StringId).Town,
+                    Village,
+                    current.BuildingProgress,
+                    current.CurrentLevel);
+                inProgress.Enqueue(current);
+
                 if (BuildingsInProgress.Peek().BuildingType.StringId == current.BuildingType.StringId)
                 {
                     current.BuildingProgress += Construction;

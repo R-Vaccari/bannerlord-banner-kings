@@ -134,6 +134,8 @@ namespace BannerKings.Managers.Titles
                     {
                         return Fief.Village.GetActualOwner();
                     }
+
+                    if (Fief.OwnerClan == null) Fief = Settlement.All.First(x => x.StringId == Fief.StringId);
                     return Fief.Owner;
                 }
 
