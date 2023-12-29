@@ -12,6 +12,8 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
 
 namespace BannerKings
 {
@@ -92,6 +94,38 @@ namespace BannerKings
             }
 
             BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, hero, title);
+            return "Title successfully inherited.";
+        }
+
+
+        [CommandLineFunctionality.CommandLineArgumentFunction("start_rebellion", "bannerkings")]
+        public static string StartRebellionEvent(List<string> strings)
+        {
+            if (!CampaignCheats.CheckCheatUsage(ref CampaignCheats.ErrorType))
+            {
+                return CampaignCheats.ErrorType;
+            }
+
+            if (CampaignCheats.CheckParameters(strings, 0))
+            {
+                return "Format is \"bannerkings.start_rebellion [Settlement]";
+            }
+
+            string id = strings.First();
+            Settlement settlement = Settlement.All.FirstOrDefault(x => x.StringId == id || x.Name.ToString() == id);
+            if (settlement == null)
+            {
+                return "No settlement found with this id or name.";
+            }
+            else
+            {
+                if (settlement.Town == null)
+                {
+                    return "Not a castle or fief.";
+                }
+                else TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<RebellionsCampaignBehavior>().StartRebellionEvent(settlement);
+            }
+
             return "Title successfully inherited.";
         }
 
@@ -196,14 +230,6 @@ namespace BannerKings
 
             FactionManager.DeclareAlliance(Hero.MainHero.MapFaction, kingdom);
             return "Alliance set.";
-        }
-
-        [CommandLineFunctionality.CommandLineArgumentFunction("reinit_titles", "bannerkings")]
-        public static string ReinitTitles(List<string> strings)
-        {
-            TitleGenerator.InitializeTitles();
-
-            return "Successfully reinitted titles.";
         }
     }
 }
