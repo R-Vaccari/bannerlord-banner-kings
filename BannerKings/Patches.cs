@@ -288,36 +288,7 @@ namespace BannerKings.Patches
     namespace Fixes
     {
         // Fix crash on wanderer same gender child born
-        [HarmonyPatch(typeof(NameGenerator), "GenerateHeroFullName")]
-        internal class NameGeneratorPatch
-        {
-            private static bool Prefix(ref TextObject __result, Hero hero, TextObject heroFirstName,
-                bool useDeterministicValues = true)
-            {
-                var parent = hero.IsFemale ? hero.Mother : hero.Father;
-                if (parent == null)
-                {
-                    return true;
-                }
-
-                if (BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(parent) && hero.IsWanderer)
-                {
-                    var textObject = heroFirstName;
-                    textObject.SetTextVariable("FEMALE", hero.IsFemale ? 1 : 0);
-                    textObject.SetTextVariable("IMPERIAL", hero.Culture.StringId == "empire" ? 1 : 0);
-                    textObject.SetTextVariable("COASTAL",
-                        hero.Culture.StringId is "empire" or "vlandia" ? 1 : 0);
-                    textObject.SetTextVariable("NORTHERN",
-                        hero.Culture.StringId is "battania" or "sturgia" ? 1 : 0);
-                    textObject.SetCharacterProperties("HERO", hero.CharacterObject);
-                    textObject.SetTextVariable("FIRSTNAME", heroFirstName);
-                    __result = textObject;
-                    return false;
-                }
-
-                return true;
-            }
-        }
+       
 
         [HarmonyPatch(typeof(GauntletGamepadNavigationManager), "OnWidgetNavigationStatusChanged")]
         internal class NavigationPatch
@@ -402,21 +373,6 @@ namespace BannerKings.Patches
                     }
                 }
                 else
-                {
-                    __result = false;
-                    return false;
-                }
-
-                return true;
-            }
-        }
-
-        [HarmonyPatch(typeof(EscortMerchantCaravanIssueBehavior), "ConditionsHold")]
-        internal class EscortCaravanConditionsHoldPatch
-        {
-            private static bool Prefix(Hero issueGiver, ref bool __result)
-            {
-                if (issueGiver.CurrentSettlement == null || issueGiver.CurrentSettlement.IsVillage)
                 {
                     __result = false;
                     return false;

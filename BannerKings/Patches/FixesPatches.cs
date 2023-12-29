@@ -7,18 +7,86 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Inventory;
+using TaleWorlds.CampaignSystem.Issues;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
+using static TaleWorlds.CampaignSystem.Issues.EscortMerchantCaravanIssueBehavior;
 
 namespace BannerKings.Patches
 {
     internal class FixesPatches
     {
+        [HarmonyPatch(typeof(EscortMerchantCaravanIssueBehavior))]
+        internal class EscortMerchantCaravanIssueBehaviorPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("ConditionsHold")]
+            private static bool ConditionsHoldPrefix(Hero issueGiver, ref bool __result)
+            {
+                if (issueGiver.CurrentSettlement == null || issueGiver.CurrentSettlement.IsVillage)
+                {
+                    __result = false;
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(NameGenerator))]
+        internal class NameGeneratorPatch
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("GenerateHeroFullName")]
+            private static bool GenerateHeroFullNamePrefix(ref TextObject __result, Hero hero, TextObject heroFirstName,
+                bool useDeterministicValues = true)
+            {
+                var parent = hero.IsFemale ? hero.Mother : hero.Father;
+                if (parent == null)
+                {
+                    return true;
+                }
+
+                if (BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(parent) && hero.IsWanderer)
+                {
+                    var textObject = heroFirstName;
+                    textObject.SetTextVariable("FEMALE", hero.IsFemale ? 1 : 0);
+                    textObject.SetTextVariable("IMPERIAL", hero.Culture.StringId == "empire" ? 1 : 0);
+                    textObject.SetTextVariable("COASTAL",
+                        hero.Culture.StringId is "empire" or "vlandia" ? 1 : 0);
+                    textObject.SetTextVariable("NORTHERN",
+                        hero.Culture.StringId is "battania" or "sturgia" ? 1 : 0);
+                    textObject.SetCharacterProperties("HERO", hero.CharacterObject);
+                    textObject.SetTextVariable("FIRSTNAME", heroFirstName);
+                    __result = textObject;
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(EscortMerchantCaravanIssueQuest))]
+        internal class EscortMerchantCaravanIssueQuestPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("ThinkAboutSpawningBanditParty")]
+            private static bool ThinkAboutSpawningBanditPartyPrefix()
+            {
+                Settlement closestHideout = SettlementHelper.FindNearestHideout((Settlement x) => x.IsActive, null);
+                Clan clan = Clan.BanditFactions.FirstOrDefault((Clan t) => t.Culture == closestHideout.Culture);
+
+                return clan != null;
+            }
+        }
+
         [HarmonyPatch(typeof(ChangeRelationAction))]
         internal class ChangeRelationActionPatches
         {
@@ -32,6 +100,37 @@ namespace BannerKings.Patches
                 }
 
                 return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(FactionHelper))]
+        internal class FactionHelperPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("CanPlayerOfferMercenaryService")]
+            private static bool CanPlayerOfferMercenaryServicePrefix(Kingdom offerKingdom, out List<IFaction> playerWars, out List<IFaction> warsOfFactionToJoin, ref bool __result)
+            {
+                playerWars = new List<IFaction>();
+                warsOfFactionToJoin = new List<IFaction>();
+                float strengthThresholdForNonMutualWarsToBeIgnoredToJoinKingdom = TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel.GetStrengthThresholdForNonMutualWarsToBeIgnoredToJoinKingdom(offerKingdom);
+                foreach (Kingdom kingdom in Kingdom.All)
+                {
+                    if (Clan.PlayerClan.MapFaction.IsAtWarWith(kingdom) && kingdom.TotalStrength > strengthThresholdForNonMutualWarsToBeIgnoredToJoinKingdom)
+                    {
+                        playerWars.Add(kingdom);
+                    }
+                }
+                foreach (Kingdom kingdom2 in Kingdom.All)
+                {
+                    if (offerKingdom.IsAtWarWith(kingdom2))
+                    {
+                        warsOfFactionToJoin.Add(kingdom2);
+                    }
+                }
+                __result = Clan.PlayerClan.Kingdom == null && !Clan.PlayerClan.IsAtWarWith(offerKingdom) && Clan.PlayerClan.Tier >= TaleWorlds.CampaignSystem.Campaign.Current.Models.ClanTierModel.MercenaryEligibleTier && offerKingdom.Leader.GetRelationWithPlayer() 
+                    >= (float)TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel.MinimumRelationWithConversationCharacterToJoinKingdom 
+                    && warsOfFactionToJoin.Intersect(playerWars).Count<IFaction>() == playerWars.Count && Clan.PlayerClan.Settlements.IsEmpty<Settlement>();
+                return false;
             }
         }
 
