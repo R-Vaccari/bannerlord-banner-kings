@@ -23,6 +23,23 @@ namespace BannerKings.Patches
 {
     internal class FixesPatches
     {
+        [HarmonyPatch(typeof(GangLeaderNeedsToOffloadStolenGoodsIssueBehavior))]
+        internal class GangLeaderNeedsToOffloadStolenGoodsIssueBehaviorPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("ConditionsHold")]
+            private static bool ConditionsHoldPrefix(Hero issueGiver, ref Settlement selectedHideout, ref bool __result)
+            {
+                if (issueGiver.CurrentSettlement == null || issueGiver.CurrentSettlement.IsVillage)
+                {
+                    __result = false;
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
         [HarmonyPatch(typeof(EscortMerchantCaravanIssueBehavior))]
         internal class EscortMerchantCaravanIssueBehaviorPatches
         {
