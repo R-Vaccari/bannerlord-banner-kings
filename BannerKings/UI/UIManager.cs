@@ -109,7 +109,10 @@ namespace BannerKings.UI
                     }
 
                     foreach (var toRemove in unwanted)
+                    {
                         __instance.AvailableProjects.Remove(toRemove);
+                        __instance.LocalDevelopmentList.Remove(toRemove.Building);
+                    }   
                 }
             }
         }
