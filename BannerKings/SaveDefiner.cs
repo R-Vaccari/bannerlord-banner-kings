@@ -65,6 +65,7 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Eastern;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Goals;
 using BannerKings.Behaviours.Shipping;
+using BannerKings.Campaign;
 
 namespace BannerKings
 {
@@ -202,6 +203,7 @@ namespace BannerKings
             AddClassDefinition(typeof(AssumeFaithDemand), 131);
             AddClassDefinition(typeof(TitleDemand), 132);
             AddClassDefinition(typeof(BKDeclareWarDecision), 133);
+            AddClassDefinition(typeof(BKTournamentManager), 134);
             AddClassDefinition(typeof(BKCouncilPositionDecision), 140);
             AddClassDefinition(typeof(PartySupplies), 141);
             AddClassDefinition(typeof(CourtGrace), 142);
