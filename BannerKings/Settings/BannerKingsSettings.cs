@@ -96,10 +96,6 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public bool CraftingWaitingTime { get; set; } = true;
 
-        [SettingProperty("{=b4hNMeGx}Diplomacy Changes", RequireRestart = true, HintText = "{=2YgM5mR1}Changes to AI evaluation of declaring war such as not calling wars when the entire kingdom is broke. Slows down the game pace. Default: True.")]
-        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
-        public bool DiplomacyChanges { get; set; } = true;
-
         [SettingPropertyFloatingInteger("{=iBLGdG1Y}Party Supplies", minValue: 0f, maxValue: 2f, "#0%", RequireRestart = false, 
             HintText = "{=uURHROGF}Affects the party supplies requirement factor. 0% means the feature is functionally disabled. 100% is the standard rate of items consumption, 200% means doube the rate, resulting in more expensive parties. May affect AI party limit sizes. Default: 100%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]

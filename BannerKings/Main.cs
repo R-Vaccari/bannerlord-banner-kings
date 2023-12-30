@@ -22,6 +22,7 @@ using TaleWorlds.MountAndBlade;
 using BannerKings.Managers.Innovations.Eras;
 using BannerKings.Behaviours.Innovations;
 using BannerKings.Behaviours.Shipping;
+using BannerKings.Campaign;
 
 namespace BannerKings
 {
@@ -129,10 +130,7 @@ namespace BannerKings
             campaignStarter.AddModel(new BKPartyHealingModel());
             campaignStarter.AddModel(new BKBanditModel());
             campaignStarter.AddModel(new BKPartyTrainningModel());
-            if (BannerKingsSettings.Instance.DiplomacyChanges)
-            {
-                campaignStarter.AddModel(new BKDiplomacyModel());
-            }
+            campaignStarter.AddModel(new BKDiplomacyModel());
             campaignStarter.AddModel(new BKTargetScoreModel());
             campaignStarter.AddModel(new BKPartyBuyingFoodModel());
 
@@ -148,6 +146,7 @@ namespace BannerKings
             DefaultCustomTroopPresets.Instance.Initialize();
 
             UIManager.Instance.SetScreen(new BannerKingsScreen());
+            TaleWorlds.CampaignSystem.Campaign.Current.TournamentManager = new BKTournamentManager();
         }
 
         protected override void OnSubModuleLoad()
