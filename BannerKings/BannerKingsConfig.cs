@@ -22,7 +22,6 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Shipping;
-using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Managers.Traits;
@@ -37,8 +36,8 @@ namespace BannerKings
 {
     public class BannerKingsConfig
     {
-        public const string VersionNumber = "1.2.7.6";
-        public const string VersionEdition = "Development";
+        public const string VersionNumber = "1.3.0.0";
+        public const string VersionEdition = "Release";
         public string VersionName => VersionNumber + VersionEdition;
         public const string EmpireCulture = "empire";
         public const string AseraiCulture = "aserai";
