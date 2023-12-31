@@ -388,7 +388,7 @@ namespace BannerKings.Managers
         public Religion GetIdealReligion(Settlement settlement)
         {
             Religion result = null;
-            if (settlement.OwnerClan != null)
+            if (settlement.OwnerClan != null && settlement.OwnerClan.Leader != null)
             {
                 foreach (var religion in Religions.Keys.ToList())
                 {

@@ -15,15 +15,6 @@ namespace BannerKings.UI.Items
             Hint = new HintViewModel(new TextObject("{=!}" + hint));
         }
 
-        public BKItemVM(int index, Enum type, bool isAvailable, TextObject hint, TextObject name) : base("")
-        {
-            Value = index;
-            StringItem = name.ToString();
-            CanBeSelected = isAvailable;
-            Hint = new HintViewModel(hint);
-            Reference = type;
-        }
-
         public BKItemVM(int index, bool isAvailable, TextObject hint, TextObject name) : base("")
         {
             Value = index;
@@ -33,7 +24,5 @@ namespace BannerKings.UI.Items
         }
 
         public int Value { get; }
-
-        public Enum Reference { get; }
     }
 }

@@ -1,5 +1,4 @@
-using BannerKings.Extensions;
-using System;
+using BannerKings.Managers.Recruits;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -15,55 +14,50 @@ namespace BannerKings.Managers.Populations.Estates
     public class Estate
     {
         public Estate(Hero owner, EstateData data, float farmland, float pastureland, float woodland,
-            int serfs, int slaves, int nobles = 0, int craftsmen = 0)
+            int population, int slaves)
         {
             Owner = owner;
             Farmland = farmland;
             Pastureland = pastureland;
             Woodland = woodland;
-            Serfs = serfs;
+            Population = population;
             Slaves = slaves;
             EstatesData = data;
+            TroopRoster = TroopRoster.CreateDummyTroopRoster();
         }
 
         public static Estate CreateNotableEstate(Hero notable, PopulationData data, EstateData estateData= null)
         {
-            try
-            {
-                if (data == null || data.LandData == null)
-                {
-                    return null;
-                }
-
-                float acreage = data.LandData.Acreage;
-                float acres = MBRandom.RandomFloatRanged(BannerKingsConfig.Instance.EstatesModel.MinimumEstateAcreage,
-                    BannerKingsConfig.Instance.EstatesModel.MaximumEstateAcreagePercentage * acreage);
-                var composition = data.LandData.Composition;
-                float farmland = acres * composition[0];
-                float pastureland = acres * composition[1];
-                float woodland = acres * composition[2];
-
-                float totalSerfs = data.GetTypeCount(PopType.Serfs);
-                float totalSlaves = data.GetTypeCount(PopType.Slaves) * (1f - data.EconomicData.StateSlaves);
-
-                int desiredWorkforce = (int)(acres / 5f);
-                float desiredSerfs = (int)(desiredWorkforce * 0.8f);
-                float desiredSlaves = (int)(desiredWorkforce * 0.2f);
-
-                var result = new Estate(notable, estateData != null ? estateData : data.EstateData, farmland, pastureland, woodland,
-                    (int)MathF.Min(desiredSerfs, totalSerfs * 0.15f),
-                    (int)MathF.Min(desiredSlaves, totalSlaves * 0.25f));
-
-                result.AddManpower(PopType.Serfs, result.Serfs * 0.05f);
-
-                return result;
-            } catch (Exception e)
+            if (data == null || data.LandData == null)
             {
                 return null;
             }
-        }
 
-        [SaveableProperty(1)] public Hero Owner { get; private set; }
+            float acreage = data.LandData.Acreage;
+            float acres = MBRandom.RandomFloatRanged(BannerKingsConfig.Instance.EstatesModel.MinimumEstateAcreage,
+                BannerKingsConfig.Instance.EstatesModel.MaximumEstateAcreagePercentage * acreage);
+            var composition = data.LandData.Composition;
+            float farmland = acres * composition[0];
+            float pastureland = acres * composition[1];
+            float woodland = acres * composition[2];
+
+            float popReference = data.GetTypeCount(PopType.Tenants) + data.GetTypeCount(PopType.Serfs);
+            float totalSlaves = data.GetTypeCount(PopType.Slaves) * (1f - data.EconomicData.StateSlaves);
+
+            int desiredWorkforce = (int)(acres / 5f);
+            float desiredAddPopulation = (int)(desiredWorkforce * 0.8f);
+            float desiredSlaves = (int)(desiredWorkforce * 0.2f);
+
+            var result = new Estate(notable, 
+                estateData != null ? estateData : data.EstateData, 
+                farmland, 
+                pastureland, 
+                woodland,
+                (int)MathF.Min(desiredAddPopulation, popReference * 0.15f),
+                (int)MathF.Min(desiredSlaves, totalSlaves * 0.25f));
+
+            return result;
+        }
 
         public TextObject Name => Owner != null ? new TextObject("{=pKtOLvPi}Estate of {OWNER}").SetTextVariable("OWNER", Owner.Name) : new TextObject();
 
@@ -77,31 +71,22 @@ namespace BannerKings.Managers.Populations.Estates
                     .SetTextVariable("SETTLEMENT", EstatesData.Settlement.Name),
                     0,
                     null,
-                    "event:/ui/notification/relation");
+                    Utils.Helpers.GetRelationDecisionSound());
             }
         }
 
         public ExplainedNumber TaxRatio => BannerKingsConfig.Instance.EstatesModel.GetTaxRatio(this, true);
-
-        public bool IsDisabled 
-        { 
-            get
-            {
-                var settlement = EstatesData.Settlement;
-                var fiefOwner = settlement.IsVillage ? settlement.Village.GetActualOwner() : settlement.Owner;
-                return Owner == null || Owner == fiefOwner;
-            } 
-        }
-        public ExplainedNumber AcrePrice => BannerKingsConfig.Instance.EstatesModel.CalculateAcrePrice(EstatesData.Settlement, true);
+        public bool IsDisabled => Owner == null;
+        public ExplainedNumber AcrePriceExplained => BannerKingsConfig.Instance.EstatesModel.CalculateAcrePrice(EstatesData.Settlement, true);
         public ExplainedNumber EstateValue => BannerKingsConfig.Instance.EstatesModel.CalculateEstatePrice(this, true);
         public ExplainedNumber AcreageGrowth => Task == EstateTask.Land_Expansion ? BannerKingsConfig.Instance.ConstructionModel
             .CalculateLandExpansion(BannerKingsConfig.Instance.PopulationManager.GetPopData(EstatesData.Settlement),
             LandExpansionWorkforce) : new ExplainedNumber(0f);
-
         public ExplainedNumber Production => BannerKingsConfig.Instance.EstatesModel.CalculateEstateProduction(this, true);
-
-        public int Population => MathF.Max(Serfs, 0) + MathF.Max(Slaves, 0);
-
+        public ExplainedNumber PopulationCapacity => BannerKingsConfig.Instance.GrowthModel.CalculateEstateCap(this, false);
+        public ExplainedNumber PopulationCapacityExplained => BannerKingsConfig.Instance.GrowthModel.CalculateEstateCap(this, true);
+        public int MaxManpower => (int)(Population * BannerKingsConfig.Instance.VolunteerModel.GetMilitarism(EstatesData.Settlement).ResultNumber);
+        public int Income => (int)(TaxAccumulated * 0.8f);
         public int AvailableWorkForce
         {
             get
@@ -112,11 +97,11 @@ namespace BannerKings.Managers.Populations.Estates
                     toSubtract += LandExpansionWorkforce;
                 }
 
-                return Serfs + Slaves - toSubtract;
+                return Population + Slaves - toSubtract;
             }
         }
 
-        public int LandExpansionWorkforce => (int)((Serfs + Slaves) * 0.5f);
+        public int LandExpansionWorkforce => (int)((Population * 0.5f) + Slaves);
 
         public float WorkforceSaturation
         {
@@ -134,13 +119,14 @@ namespace BannerKings.Managers.Populations.Estates
 
         public float Acreage => Farmland + Pastureland + Woodland;
 
+        [SaveableProperty(1)] public Hero Owner { get; private set; }
         [SaveableProperty(2)] public EstateData EstatesData { get; private set; }
         [SaveableProperty(3)] public float Farmland { get; private set; }
         [SaveableProperty(4)] public float Pastureland { get; private set; }
         [SaveableProperty(5)] public float Woodland { get; private set; }
         [SaveableProperty(6)] public int TaxAccumulated { get; set; } = 0;
 
-        [SaveableProperty(8)] public int Serfs { get; private set; }
+        [SaveableProperty(8)] public int Population { get; private set; }
         [SaveableProperty(9)] public int Slaves { get; private set; }
      
         public void ChangeTask(EstateTask task) => Task = task;
@@ -148,15 +134,21 @@ namespace BannerKings.Managers.Populations.Estates
 
         [SaveableProperty(10)] public EstateDuty Duty { get; private set; }
         [SaveableProperty(11)] public EstateTask Task { get; private set; }
-        [SaveableProperty(12)] private Dictionary<PopType, float> Manpowers { get; set; }
+        [SaveableProperty(12)] public TroopRoster TroopRoster { get; private set; }
+        [SaveableProperty(13)] public int LastIncome { get; set; }
+
+        public void SpawnParty()
+        {
+
+        }
+
+        public void PostInitialize()
+        {
+            if (TroopRoster == null) TroopRoster = TroopRoster.CreateDummyTroopRoster();
+        }
 
         public TroopRoster RaiseManpower(int limit)
         {
-            if (limit > GetManpower(PopType.Serfs))
-            {
-                limit = GetManpower(PopType.Serfs);
-            }
-
             TroopRoster roster = TroopRoster.CreateDummyTroopRoster();
             CultureObject culture = EstatesData.Settlement.Culture;
             roster.AddToCounts(culture.BasicTroop, (int)(limit / 2f));
@@ -174,67 +166,31 @@ namespace BannerKings.Managers.Populations.Estates
             return roster;
         }
 
-        public int GetTypeCount(PopType type)
-        {
-            if (type == PopType.Serfs)
-            {
-                return Serfs;
-            }
-            else if (type == PopType.Slaves)
-            {
-                return Slaves;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        public int GetManpower(PopType type)
-        {
-            if (Manpowers == null)
-            {
-                Manpowers = new Dictionary<PopType, float>();
-            }
-
-            int result = 0;
-            if (Manpowers.ContainsKey(type))
-            {
-                result = (int)Manpowers[type];
-            }
-
-            return result;
-        }
-
-        public void AddManpower(PopType type, float count)
-        {
-            if (Manpowers == null)
-            {
-                Manpowers = new Dictionary<PopType, float>();
-            }
-
-            if (!Manpowers.ContainsKey(type))
-            {
-                Manpowers.Add(type, count);
-            }
-            else
-            {
-                Manpowers[type] += count;
-                Manpowers[type] = MathF.Max(Manpowers[type], 0f);
-            }
-        }
-
         public void Tick(PopulationData data)
         {
-            if (Manpowers == null)
+            if (TroopRoster == null) TroopRoster = TroopRoster.CreateDummyTroopRoster(); 
+
+            if (TroopRoster.TotalManCount < MaxManpower)
             {
-                Manpowers = new Dictionary<PopType, float>(); 
+                float tenantProportion = data.GetCurrentTypeFraction(PopType.Tenants);
+                float serfProportion = data.GetCurrentTypeFraction(PopType.Serfs);
+                foreach (var spawn in DefaultRecruitSpawns.Instance.GetPossibleSpawns(data.Settlement.Culture, data.Settlement))
+                {
+                    float random = MBRandom.RandomFloat;
+                    if (random * tenantProportion < spawn.GetChance(PopType.Tenants))
+                    {
+                        TroopRoster.AddToCounts(spawn.Troop, 1);
+                        break;
+                    }
+                    else if (random * serfProportion < spawn.GetChance(PopType.Serfs))
+                    {
+                        TroopRoster.AddToCounts(spawn.Troop, 1);
+                        break;
+                    }
+                }
             }
 
-            if (IsDisabled)
-            {
-                return;
-            }
+            if (IsDisabled) return;
 
             float maxFarmland = data.LandData.Farmland * 0.2f;
             Farmland = MathF.Clamp(Farmland, 0f, maxFarmland);
@@ -245,9 +201,7 @@ namespace BannerKings.Managers.Populations.Estates
             float maxWoodland = data.LandData.Woodland * 0.2f;
             Woodland = MathF.Clamp(Woodland, 0f, maxWoodland);
 
-            Serfs = (int)MathF.Clamp(Serfs, 0f, data.GetTypeCount(PopType.Serfs) * 0.2f);
-            Slaves = (int)MathF.Clamp(Slaves, 0f, data.GetTypeCount(PopType.Slaves) * 0.2f);
-
+            Population = (int)MathF.Clamp(Population, 0f, PopulationCapacity.ResultNumber);
             BannerKingsConfig.Instance.PopulationManager.AddEstate(this);
             if (Task == EstateTask.Land_Expansion)
             {
@@ -279,35 +233,9 @@ namespace BannerKings.Managers.Populations.Estates
             }
         }
 
-        public void AddPopulation(PopType type, int toAdd)
+        public void AddPopulation(int toAdd)
         {
-            toAdd = (int)MathF.Clamp(toAdd, -20f, 20f);
-            if (type == PopType.Serfs)
-            {
-                Serfs += toAdd;
-                Serfs = MathF.Max(toAdd, Serfs);
-            }
-            else if (type == PopType.Slaves)
-            {
-                Slaves += toAdd;
-                Slaves = MathF.Max(toAdd, Slaves);
-            }
-        }
-
-        public int GetPopulationClassQuantity(PopType type)
-        {
-            int result = 0;
-            
-            if (type == PopType.Serfs)
-            {
-                result = Serfs;
-            }
-            else if (type == PopType.Slaves)
-            {
-                result = Slaves;
-            }
-
-            return result;
+            Population += toAdd;
         }
 
         public enum EstateDuty
@@ -319,7 +247,8 @@ namespace BannerKings.Managers.Populations.Estates
         public enum EstateTask
         {
             Prodution,
-            Land_Expansion
+            Land_Expansion,
+            Military
         }
     }
 }

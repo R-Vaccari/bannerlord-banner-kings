@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -32,11 +33,17 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
         }
         public override bool IsHeroNaturalFaith(Hero hero)
         {
-            if (IsCultureNaturalFaith(hero.Culture) && hero.MapFaction != null && hero.MapFaction.IsKingdomFaction && 
-                hero.MapFaction.StringId == "empire_s")
+            try
             {
-                if (hero.IsLord) return true;
-                else if (MBRandom.RandomFloat < 0.9f) return true;
+                if (IsCultureNaturalFaith(hero.Culture) && hero.MapFaction != null && hero.MapFaction.IsKingdomFaction &&
+                                hero.MapFaction.StringId == "empire_s")
+                {
+                    if (hero.IsLord) return true;
+                    else if (MBRandom.RandomFloat < 0.9f) return true;
+                }
+            } catch (Exception ex)
+            {
+
             }
 
             return false;

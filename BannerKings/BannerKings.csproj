@@ -9,7 +9,7 @@
 		<ModuleId>$(MSBuildProjectName)</ModuleId>
 		<ModuleName>$(MSBuildProjectName)</ModuleName>
 		<GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>
-		<BaseOutputPath>C:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerKings\bin\Win64_Shipping_Client</BaseOutputPath>
+		<OutputPath>C:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerKings\bin\Win64_Shipping_Client</OutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -44,7 +44,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Bannerlord.MCM" Version="5.5.5" />
+		<PackageReference Include="Bannerlord.MCM" Version="5.5.5">
+		  <IncludeAssets>compile</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Nullable" Version="1.3.1" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
 		<PackageReference Include="IsExternalInit" Version="1.0.3" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
 		<PackageReference Include="Bannerlord.BuildResources" Version="1.0.1.92" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />

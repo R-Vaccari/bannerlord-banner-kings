@@ -3,7 +3,7 @@ using Bannerlord.UIExtenderEx.Prefabs2;
 using System.Collections.Generic;
 using System.Xml;
 
-namespace BannerKings.UI.Extensions
+namespace BannerKings.UI.VanillaTabs.Clans
 {
     internal class ClanWorkshopExtension
     {

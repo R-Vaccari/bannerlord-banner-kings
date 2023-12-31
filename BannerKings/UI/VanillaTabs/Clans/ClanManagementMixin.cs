@@ -1,17 +1,12 @@
 using BannerKings.UI.Court;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
-using System;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Settlements.Workshops;
-using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
-using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement.ClanFinance;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using System.Reflection;
 
-namespace BannerKings.UI.Extensions
+namespace BannerKings.UI.VanillaTabs.Clans
 {
     [ViewModelMixin("SetSelectedCategory")]
     internal class ClanManagementMixin : BaseViewModelMixin<ClanManagementVM>
@@ -132,29 +127,6 @@ namespace BannerKings.UI.Extensions
             {
                 Court.IsSelected = false;
                 CourtSelected = false;
-            }
-
-            if (clanManagement.IsIncomeSelected)
-            {
-                var clanIncome = clanManagement.ClanIncome;
-                MethodInfo onSelection = clanIncome.GetType()
-                    .GetMethod("OnIncomeSelection", BindingFlags.Instance | BindingFlags.NonPublic);
-                Action<ClanCardSelectionInfo> action = (Action<ClanCardSelectionInfo>)clanIncome.GetType()
-                    .GetField("_openCardSelectionPopup", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .GetValue(clanIncome);
-
-                clanIncome.Incomes.Clear();
-                foreach (Settlement settlement in Settlement.All)
-                    if (settlement.Town != null)
-                        foreach (Workshop workshop in settlement.Town.Workshops)
-                            if (workshop.Owner == Hero.MainHero)
-                            {
-                                clanIncome.Incomes.Add(new ClanFinanceWorkshopItemVM(workshop, 
-                                    new Action<ClanFinanceWorkshopItemVM>(
-                                        (ClanFinanceWorkshopItemVM income) => onSelection.Invoke(clanIncome, new object[] { income })), 
-                                    new Action(clanIncome.OnRefresh),
-                                    action));
-                            }
             }
         }
 

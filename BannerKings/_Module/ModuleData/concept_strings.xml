@@ -162,7 +162,14 @@
 	        group="Kingdoms"
 	        link_id="BK_KNIGHTS_LINK"
 	        text="{=!}Knights are property-owning nobles that fight for their house/clan in military retinues. Although a knight usually does not have any blood ties to their overlord, they are considered part of their Household, and therefore stand as valid candidates to inherit the clan and its properties. The premise of Knighthood is the Knight-Service: knights will submit to you as vassals and obey faithfully, in exchange of a fee. Knighthood is required to raise new military parties, with the exception of your close relatives. The knight's fee is a property, either {BK_ESTATES_LINK} or {BK_LORDSHIPS_LINK}, the {BK_TITLES_LINK} associated with {VILLAGES_LINK}.{newline}{newline}Estate-owning knights will often still need financial aid. Therefore, they will be part of your payroll. However, their estate will pay for part of their expenses.{newline}{newline}Lordship holders instead fully pay for their expenses, and therefore will never be in your payroll. These knights will also administer their village, building constructions. Therefore, you are advised to give them your best, most productive properties, as their income will determine the size and quality of their parties.{newline}{newline}To grant someone knighthood, you need at least the minimum level of {BK_PEERAGE_LINK}, granted to you on joinning a kingdom. Knighthood will require a Fee, estate or lordship, as well as an initial payment and influence. Therefore, choose well who to invest knighthood. It can be granted through dialogue, directly speaking to the knighthood candidate." />
+	
+	<Concept title="{=!}Trade Pacts"
+	        id="str_bk_knights"
+	        group="Kingdoms"
+	        link_id="BK_TRADE_PACT_LINK"
+	        text="{=!}Knights are property-owning nobles that fight for their house/clan in military retinues. Although a knight usually does not have any blood ties to their overlord, they are considered part of their Household, and therefore stand as valid candidates to inherit the clan and its properties. The premise of Knighthood is the Knight-Service: knights will submit to you as vassals and obey faithfully, in exchange of a fee. Knighthood is required to raise new military parties, with the exception of your close relatives. The knight's fee is a property, either {BK_ESTATES_LINK} or {BK_LORDSHIPS_LINK}, the {BK_TITLES_LINK} associated with {VILLAGES_LINK}.{newline}{newline}Estate-owning knights will often still need financial aid. Therefore, they will be part of your payroll. However, their estate will pay for part of their expenses.{newline}{newline}Lordship holders instead fully pay for their expenses, and therefore will never be in your payroll. These knights will also administer their village, building constructions. Therefore, you are advised to give them your best, most productive properties, as their income will determine the size and quality of their parties.{newline}{newline}To grant someone knighthood, you need at least the minimum level of {BK_PEERAGE_LINK}, granted to you on joinning a kingdom. Knighthood will require a Fee, estate or lordship, as well as an initial payment and influence. Therefore, choose well who to invest knighthood. It can be granted through dialogue, directly speaking to the knighthood candidate." />
 			
+	
 	<Concept title="{=!}Peerage"
 	        id="str_bk_peerage"
 	        group="Kingdoms"
@@ -192,6 +199,12 @@
 	        group="Settlements"
 	        link_id="BK_LORDSHIPS_LINK"
 	        text="{=!}Lordships are {VILLAGES_LINK} and their associated {BK_TITLES_LINK}. Lordships work differently from other fiefs in one important manner: their de facto ownership and control is context-based. Without Banner Kings, villages are always controlled by the lord of the castle or town the villages are bound to. Through lordships, a village is controlled by the lordship de jure ruler, the legal owner of the title associated with that village. However, this only applies when both the village and the de jure owner share the same realm. Villages still change factions depending on who controls the castle/town. If the de jure owner is not present within the same realm as the village, then the castle/town holder controls the lordship. The de facto controller of the lordship enjoys its full income. Therefore we have that lordships are controlled by:{newline}1. The de jure title holder, if they are present in the same kingdom as the village itself;{newline}2. The castle/town holder, in the absence of a jure owner.{newline}{newline}Because of their nature, lordships allow the existance of {BK_KNIGHTS_LINK}. Knights can hold a lordship on their own, despite not being clan leaders." />
+	
+	<Concept title="{=!}Trade Power"
+	        id="str_bk_trade_power"
+	        group="Settlements"
+	        link_id="BK_TRADE_LINK"
+	        text="{=!}Trade Power represents how attractive a fief is for caravans. Such evaluations are based primarily on profit margins, impacted by caravan entry fees (nullified by {BK_TRADE_PACT_LINK}) and other factors, but mostly by Trade Power. Cities naturally exerce more power than towns/buhrs, and the bigger and richer a city is, the more power it has. Certain buildings, such as Harbors, can also influence this. In sum, Trade Power is concentrated in the places you would expect: kingdom capitals, port cities and highly populous and rich cities." />
 	
 	<Concept title="{=!}Faith Presence"
 	        id="str_bk_faith_presence"

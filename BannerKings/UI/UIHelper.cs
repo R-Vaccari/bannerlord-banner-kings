@@ -21,8 +21,6 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
-using BannerKings.Behaviours.Diplomacy;
-using BannerKings.Behaviours.Diplomacy.Wars;
 
 namespace BannerKings.UI
 {
@@ -661,9 +659,14 @@ namespace BannerKings.UI
             list.Add(new TooltipProperty(new TextObject("{=1y4e5t97}Alcohol:").ToString(),
                MBRandom.RoundRandomized(supplies.AlcoholNeed).ToString(),
                0));
+
+            
             list.Add(new TooltipProperty(new TextObject("{=xcEes2qY}Animal Products:").ToString(),
-                MBRandom.RoundRandomized(supplies.AnimalProductsNeed).ToString(),
-                0));
+                new TextObject("{=!}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.AnimalProductsNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetAnimalProductsCurrentNeed().ResultNumber))
+                .ToString(),
+                0));;
         }
 
         public static void AddWageSuppliesHint(ref List<TooltipProperty> list, PartySupplies supplies)
@@ -902,20 +905,96 @@ namespace BannerKings.UI
             MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type"));
             var definition2 = GameTexts.FindText("str_LEFT_ONLY").ToString();
             list.Add(new TooltipProperty(definition2, HeroHelper.GetCharacterTypeName(hero).ToString(), 0));
-        
 
             TooltipAddEmptyLine(list);
             list.Add(new TooltipProperty(new TextObject("{=NeydSXjc}Score").ToString(), " ", 0));
             TooltipAddSeperator(list);
             list.Add(new TooltipProperty(string.Empty, score.GetExplanations(), 0));
 
+            return list;
+        }
+
+        public static List<TooltipProperty> GetEstateProductionTooltip()
+        {
+            var list = new List<TooltipProperty>
+            {
+                new(string.Empty, new TextObject("{=!}Estate Production").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title),
+                new TooltipProperty(" ", new TextObject("{=!}Estate Production represents how much of the village's total production is owned by this estate. The proportion is determined by the estate's workforce in relation to the village's. Estate Income = Total Production * Estate Production * (1 - Tax Rate).").ToString(), 0)
+            };
 
             return list;
         }
 
+        public static List<TooltipProperty> GetEstateWorkforceTooltip(BannerKings.Managers.Populations.Estates.Estate estate)
+        {
+            var list = new List<TooltipProperty>
+            {
+                new(string.Empty, new TextObject("{=!}Workforce").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title),
+                new TooltipProperty(new TextObject("{=!}Non-Slaves").ToString(), estate.Population.ToString(), 0),
+                      new TooltipProperty(new TextObject("{=!}Slaves").ToString(), estate.Slaves.ToString(), 0)
+            };
+
+            return list;
+        }
+
+        public static List<TooltipProperty> GetAccumulatingWithDescription(TextObject title, TextObject description, float total, bool addTotal, ref ExplainedNumber explainedNumber)
+        {
+            List<TooltipProperty> list = new List<TooltipProperty>
+            {
+                new TooltipProperty(title.ToString(), string.Empty, 0, onlyShowWhenExtended: false, TooltipProperty.TooltipPropertyFlags.Title),
+                new TooltipProperty(string.Empty, description.ToString(), 0)
+            };
+
+            TooltipAddExplanation(list, ref explainedNumber);
+            list.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
+            string changeValueString = GetChangeValueString(explainedNumber.ResultNumber);
+            list.Add(new TooltipProperty(addTotal ? total.ToString() : string.Empty, changeValueString, 0, onlyShowWhenExtended: false, TooltipProperty.TooltipPropertyFlags.RundownResult));
+
+            return list;
+        }
+
+        private static string GetChangeValueString(float value)
+        {
+            string text = value.ToString("0.##");
+            if (value > 0.001f)
+            {
+                MBTextManager.SetTextVariable("NUMBER", text);
+                return GameTexts.FindText("str_plus_with_number").ToString();
+            }
+
+            return text;
+        }
+
+        private static void TooltipAddExplanation(List<TooltipProperty> properties, ref ExplainedNumber explainedNumber)
+        {
+            List<(string, float)> lines = explainedNumber.GetLines();
+            if (lines.Count <= 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                var (definition, num) = lines[i];
+                if ((double)MathF.Abs(num) >= 0.01)
+                {
+                    string changeValueString = GetChangeValueString(num);
+                    properties.Add(new TooltipProperty(definition, changeValueString, 0));
+                }
+            }
+        }
+
         public static string FormatValue(float value) => (value * 100f).ToString("0.00") + '%';
-        public static string FormatValueNegative(float value) => '-' + value.ToString("0.00") + '%';
-        public static string FormatDailyValue(float value) => '+' + value.ToString("0.00");
+        public static string FormatFloatGain(float value)
+        {
+            string formatted = value.ToString("0.00");
+            if (value > 0f)
+            {
+                return '+' + formatted;
+            }
+
+            return formatted;
+        }
 
         public static void TooltipAddEmptyLine(List<TooltipProperty> properties, bool onlyShowOnExtend = false)
         {

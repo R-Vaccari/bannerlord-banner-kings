@@ -63,6 +63,9 @@ namespace BannerKings.Managers
             foreach (var data in Populations.Values)
             {
                 data.VillageData?.ReInitializeBuildings();
+                if (data.EstateData != null)
+                    foreach (var estate in data.EstateData.Estates)
+                        estate.PostInitialize();    
             }
         }
 

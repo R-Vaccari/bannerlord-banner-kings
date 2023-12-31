@@ -208,10 +208,6 @@ namespace BannerKings.Behaviours
 
         private void FinishParty(WarPartyComponent party, Estate estate)
         {
-            estate.AddPopulation(PopType.Serfs, party.MobileParty.MemberRoster.TotalRegulars);
-            estate.AddManpower(PopType.Serfs, party.MobileParty.MemberRoster.TotalRegulars);
-
-            estate.AddPopulation(PopType.Slaves, party.MobileParty.PrisonRoster.TotalRegulars);
             DestroyPartyAction.Apply(null, party.MobileParty);
         }
 

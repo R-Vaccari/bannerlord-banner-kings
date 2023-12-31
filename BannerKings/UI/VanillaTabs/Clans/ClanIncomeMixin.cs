@@ -1,33 +1,37 @@
-using BannerKings.Behaviours.Workshops;
 using BannerKings.Extensions;
 using BannerKings.UI.Items.UI;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using HarmonyLib;
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
-using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement.Categories;
+using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement.ClanFinance;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using System.Reflection;
+using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
+using BannerKings.Managers.Populations.Estates;
 
-namespace BannerKings.UI.Extensions
+namespace BannerKings.UI.VanillaTabs.Clans
 {
-    [ViewModelMixin("OnIncomeSelection")]
+    [ViewModelMixin("RefreshList")]
     internal class ClanIncomeMixin : BaseViewModelMixin<ClanIncomeVM>
     {
+        private MBBindingList<ClanIncomeEstateVM> estates;
         private MBBindingList<InformationElement> workshopInfo;
-        private bool canUpgrade, isSelected;
+        private ClanIncomeEstateVM selectedEstate;
+        private bool canUpgrade, isSelected, estateSelected;
 
         private ClanIncomeVM viewModel;
         public ClanIncomeMixin(ClanIncomeVM vm) : base(vm)
         {
             viewModel = vm;
             WorkshopInfo = new MBBindingList<InformationElement>();
+            Estates = new MBBindingList<ClanIncomeEstateVM>();
         }
 
         [DataSourceProperty] public string UpgradeText => new TextObject("{=1rE1OLMj}Upgrade").ToString();
@@ -36,6 +40,42 @@ namespace BannerKings.UI.Extensions
         {
             base.OnRefresh();
             WorkshopInfo.Clear();
+            viewModel.Incomes.Clear();
+            Estates.Clear();
+
+            foreach (Estate estate in BannerKingsConfig.Instance.PopulationManager.GetEstates(Hero.MainHero))
+            {
+                Estates.Add(new ClanIncomeEstateVM(estate,
+                    OnEstateSelection,
+                    viewModel.OnRefresh));
+            }
+
+            if (viewModel.CurrentSelectedSupporterGroup != null || viewModel.CurrentSelectedSupporterGroup != null ||
+                viewModel.CurrentSelectedSupporterGroup != null)
+            {
+                if (CurrentSelectedEstate != null) CurrentSelectedEstate.IsSelected = false;
+                CurrentSelectedEstate = null;
+            }
+
+            estateSelected = selectedEstate != null;
+
+            MethodInfo onSelection = viewModel.GetType()
+                   .GetMethod("OnIncomeSelection", BindingFlags.Instance | BindingFlags.NonPublic);
+            Action<ClanCardSelectionInfo> action = (Action<ClanCardSelectionInfo>)viewModel.GetType()
+                .GetField("_openCardSelectionPopup", BindingFlags.Instance | BindingFlags.NonPublic)
+                .GetValue(viewModel);
+
+            foreach (Settlement settlement in Settlement.All)
+                if (settlement.Town != null)
+                    foreach (Workshop workshop in settlement.Town.Workshops)
+                        if (workshop.Owner == Hero.MainHero)
+                        {
+                            viewModel.Incomes.Add(new ClanFinanceWorkshopItemVM(workshop,
+                                new Action<ClanFinanceWorkshopItemVM>(
+                                    (workshopVM) => onSelection.Invoke(viewModel, new object[] { workshopVM })),
+                                new Action(viewModel.OnRefresh),
+                                action));
+                        }
 
             /*
           if (viewModel.CurrentSelectedIncome != null)
@@ -116,6 +156,21 @@ namespace BannerKings.UI.Extensions
             } */
         }
 
+        public void OnEstateSelection(ClanIncomeEstateVM estate)
+        {
+            if (viewModel.CurrentSelectedAlley != null) viewModel.CurrentSelectedAlley.IsSelected = false;
+            viewModel.CurrentSelectedAlley = null;
+
+            if (viewModel.CurrentSelectedIncome != null) viewModel.CurrentSelectedIncome.IsSelected = false;
+            viewModel.CurrentSelectedIncome = null;
+
+            if (viewModel.CurrentSelectedSupporterGroup != null) viewModel.CurrentSelectedSupporterGroup.IsSelected = false;
+            viewModel.CurrentSelectedSupporterGroup = null;
+
+            CurrentSelectedEstate = estate;
+            CurrentSelectedEstate.IsSelected = true;
+        }
+
         protected string FormatValue(float value)
         {
             return (value * 100f).ToString("0.00") + '%';
@@ -143,6 +198,53 @@ namespace BannerKings.UI.Extensions
                     OnRefresh();
                 },
                 null));
+        }
+
+       
+        [DataSourceProperty]
+        public MBBindingList<ClanIncomeEstateVM> Estates
+        {
+            get => estates;
+            set
+            {
+                if (value != estates)
+                {
+                    estates = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public ClanIncomeEstateVM CurrentSelectedEstate
+        {
+            get => selectedEstate;
+            set
+            {
+                if (value != selectedEstate)
+                {
+                    selectedEstate = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                    IsAnyValidEstateSelected = (value != null);
+                    viewModel.IsAnyValidAlleySelected = false;
+                    viewModel.IsAnyValidIncomeSelected = false;
+                    viewModel.IsAnyValidSupporterSelected = false;
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool IsAnyValidEstateSelected
+        {
+            get => estateSelected;
+            set
+            {
+                if (value != estateSelected)
+                {
+                    estateSelected = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
         }
 
         [DataSourceProperty]

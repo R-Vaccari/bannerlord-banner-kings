@@ -3,9 +3,11 @@ using System.Linq;
 using BannerKings.Managers.Cultures;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Traits;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.AgentOrigins;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Locations;
@@ -20,6 +22,16 @@ namespace BannerKings.Utils
 {
     public static class Helpers
     {
+        public static void ApplyFeat(FeatObject feat, PartyBase party, ref ExplainedNumber result)
+        {
+            if (PartyBaseHelper.HasFeat(party, feat))
+            {
+                if (feat.IncrementType == FeatObject.AdditionType.Add)
+                    result.Add(feat.EffectBonus, feat.Name);
+                else result.AddFactor(feat.EffectBonus, feat.Name);
+            }
+        }
+
         public static void AddTraitLevel(Hero hero, TraitObject trait, int level, float chance = 1f)
         {
             int current = hero.GetTraitLevel(trait);

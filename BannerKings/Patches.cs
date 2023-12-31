@@ -77,11 +77,6 @@ namespace BannerKings.Patches
                         {
                             bool flag = false;
                             CharacterObject basicVolunteer = TaleWorlds.CampaignSystem.Campaign.Current.Models.VolunteerModel.GetBasicVolunteer(hero);
-                            if (data.MilitaryData.GetNotableManpower(data.MilitaryData.GetCharacterManpowerType(basicVolunteer),
-                                hero, data.EstateData) < 1f)
-                            {
-                                continue;
-                            }
 
                             for (int i = 0; i < hero.VolunteerTypes.Length; i++)
                             {

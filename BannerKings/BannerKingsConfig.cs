@@ -81,7 +81,7 @@ namespace BannerKings
         public ICultureModel CultureModel { get; set; } = new BKCultureModel();
         public IReligionModel ReligionModel { get; set; } = new BKReligionModel();
         public BKVolunteerModel VolunteerModel { get; } = new();
-        public BKLegitimacyModel LegitimacyModel { get; } = new();
+        public LegitimacyModel LegitimacyModel { get; set; } = new BKLegitimacyModel();
         public BKGrowthModel GrowthModel { get; } = new();
         public BKVillageProductionModel VillageProductionModel { get; } = new();
         public BKProsperityModel ProsperityModel { get; } = new();

@@ -78,15 +78,6 @@ namespace BannerKings.UI.Estates
                TownManagementDescriptionItemVM.DescriptionType.Gold,
                new BasicTooltipViewModel(() => value.GetExplanations())));
 
-            var serfManpower = Estate.GetManpower(Managers.PopulationManager.PopType.Serfs);
-            var slavesManpower = Estate.GetManpower(Managers.PopulationManager.PopType.Serfs);
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=t9sG2dMh}Manpower:"),
-               serfManpower + slavesManpower,
-               0,
-               TownManagementDescriptionItemVM.DescriptionType.Militia,
-               new BasicTooltipViewModel(() => new TextObject("{=RhMomMnx}This estate's manpower, drawn from it's population. This manpower is used to fuel the estate owner's volunteers. When volunteers are recruited from an estate-owner, the manpower is drawn from the estate rather than the overall settlement.")
-               .ToString())));
-
             var acreage = Estate.AcreageGrowth;
             MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=FT5kL9k5}Acreage:"),
                (int)Estate.Acreage,

@@ -3,7 +3,7 @@ using System.Xml;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.Prefabs2;
 
-namespace BannerKings.UI.Extensions
+namespace BannerKings.UI.VanillaTabs.Clans
 {
     [PrefabExtension("ClanScreen", "descendant::ClanScreenWidget[@Id='ClanScreenWidget']/Children/Widget[2]/Children",
         "ClanScreen")]
@@ -18,7 +18,7 @@ namespace BannerKings.UI.Extensions
             court.LoadXml("<ClanCourt DataSource=\"{Court}\" IsVisible=\"false\" />");
             demesne.LoadXml("<ClanDemesne DataSource=\"{Demesne}\" IsVisible=\"false\" />");
 
-            nodes = new List<XmlNode> {court, demesne };
+            nodes = new List<XmlNode> { court, demesne };
         }
 
         public override InsertType Type => InsertType.Child;
@@ -42,7 +42,7 @@ namespace BannerKings.UI.Extensions
             demesneButton.LoadXml(
                 "<ButtonWidget DoNotPassEventsToChildren=\"true\" IsVisible=\"@DemesneEnabled\" WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"Fixed\" SuggestedWidth=\"!Header.Tab.Center.Width.Scaled\" SuggestedHeight=\"!Header.Tab.Center.Height.Scaled\" PositionYOffset=\"6\" MarginRight=\"2\" Brush=\"Header.Tab.Center\" Command.Click=\"SelectDemesne\" IsSelected=\"@DemesneSelected\" UpdateChildrenStates=\"true\"><Children><TextWidget WidthSizePolicy = \"StretchToParent\" HeightSizePolicy = \"StretchToParent\" MarginTop = \"3\" Brush = \"Clan.TabControl.Text\" Text = \"@DemesneText\" /></Children></ButtonWidget>");
 
-            nodes = new List<XmlNode> {firstChild, demesneButton };
+            nodes = new List<XmlNode> { firstChild, demesneButton };
         }
 
         public override InsertType Type => InsertType.Child;
@@ -60,7 +60,7 @@ namespace BannerKings.UI.Extensions
         };
     }
 
-    [PrefabExtension("ClanScreen", 
+    [PrefabExtension("ClanScreen",
         "descendant::Widget[@VisualDefinition='TopPanel']/Children/Widget[1]/Children/ListPanel[1]", "ClanScreen")]
     internal class TabListAttribute : PrefabExtensionSetAttributePatch
     {
@@ -72,7 +72,7 @@ namespace BannerKings.UI.Extensions
         };
     }
 
-    [PrefabExtension("ClanScreen", 
+    [PrefabExtension("ClanScreen",
         "descendant::Widget[@VisualDefinition='TopPanel']/Children/Widget[1]/Children/ListPanel[1]/Children/ButtonWidget[1]", "ClanScreen")]
     internal class MembersTabAttribute : PrefabExtensionSetAttributePatch
     {

@@ -57,11 +57,12 @@ namespace BannerKings.Models.Vanilla
                     continue;
                 }
 
-                var estateIncome = estate.TaxAccumulated * 0.8f;
+                var estateIncome = estate.Income;
                 result += estateIncome;
                 if (applyWithdrawals)
                 {
                     estate.TaxAccumulated -= (int)estateIncome;
+                    estate.LastIncome = (int)estateIncome;
                 }
             }
 

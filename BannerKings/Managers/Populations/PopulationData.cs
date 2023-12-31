@@ -311,7 +311,6 @@ namespace BannerKings.Managers.Populations
         {
             if (type != PopType.None)
             {
-                EstateData?.UpdatePopulation(type, count, GetTypeCount(type));
                 var pops = classes.Find(popClass => popClass.type == type);
                 if (pops == null)
                 {

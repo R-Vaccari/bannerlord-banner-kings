@@ -135,7 +135,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     hint = new TextObject("{=djtn6LCe}Summon {HERO} to your army. They are landed gentry and will return to their property once the army is finished. Their estate can provide {TROOPS} troops. Calling them will cost {INFLUENCE} influence.\n\n{READY}")
                         .SetTextVariable("HERO", vassal.Name)
                         .SetTextVariable("INFLUENCE", influence)
-                        .SetTextVariable("TROOPS", estate.GetManpower(PopulationManager.PopType.Serfs))
+                        .SetTextVariable("TROOPS", estate.TroopRoster.TotalManCount)
                         .SetTextVariable("READY", readyTuple.Item2);
                 }
 
@@ -191,7 +191,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 result += banner.GetRelation(fulfiller) / -10f;
                 if (estate != null)
                 {
-                    result += estate.GetManpower(PopulationManager.PopType.Serfs) * 0.3f;
+                    result += estate.TroopRoster.TotalManCount * 0.3f;
                 }
                 return MathF.Clamp(result, 15f, 60f);
             }

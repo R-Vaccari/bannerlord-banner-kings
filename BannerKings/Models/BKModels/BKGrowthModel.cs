@@ -2,6 +2,7 @@ using BannerKings.Behaviours;
 using BannerKings.Extensions;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Titles.Laws;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -111,6 +112,23 @@ namespace BannerKings.Models.BKModels
                     result.AddFactor(0.4f, new TextObject("{=fQVyeiJb}Capital"));
                 }
             }
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateEstateCap(Estate estate, bool descriptions = false)
+        {
+            var result = new ExplainedNumber(0f, descriptions);
+
+            var land = estate.EstatesData.Settlement.PopulationData().LandData;
+            var farmland = land.GetAcreOutput("farmland") * 20f;
+            result.Add((int)(estate.Farmland * farmland), new TextObject("{=zMPm162W}Farmlands"));
+
+            var pasture = land.GetAcreOutput("pasture") * 20f;
+            result.Add((int)(estate.Pastureland * pasture), new TextObject("{=ngRhXYj1}Pasturelands"));
+
+            var woods = land.GetAcreOutput("woodland") * 20f;
+            result.Add((int)(estate.Woodland * woods), new TextObject("{=qPQ7HKgG}Woodlands"));
 
             return result;
         }
