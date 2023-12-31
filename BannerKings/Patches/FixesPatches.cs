@@ -144,9 +144,15 @@ namespace BannerKings.Patches
                         warsOfFactionToJoin.Add(kingdom2);
                     }
                 }
-                __result = Clan.PlayerClan.Kingdom == null && !Clan.PlayerClan.IsAtWarWith(offerKingdom) && Clan.PlayerClan.Tier >= TaleWorlds.CampaignSystem.Campaign.Current.Models.ClanTierModel.MercenaryEligibleTier && offerKingdom.Leader.GetRelationWithPlayer() 
-                    >= (float)TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel.MinimumRelationWithConversationCharacterToJoinKingdom 
-                    && warsOfFactionToJoin.Intersect(playerWars).Count<IFaction>() == playerWars.Count && Clan.PlayerClan.Settlements.IsEmpty<Settlement>();
+
+                if (offerKingdom != null && !offerKingdom.IsEliminated)
+                {
+                    __result = Clan.PlayerClan.Kingdom == null && !Clan.PlayerClan.IsAtWarWith(offerKingdom) && Clan.PlayerClan.Tier >= TaleWorlds.CampaignSystem.Campaign.Current.Models.ClanTierModel.MercenaryEligibleTier && offerKingdom.Leader.GetRelationWithPlayer()
+                   >= (float)TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel.MinimumRelationWithConversationCharacterToJoinKingdom
+                   && warsOfFactionToJoin.Intersect(playerWars).Count<IFaction>() == playerWars.Count && Clan.PlayerClan.Settlements.IsEmpty<Settlement>();
+                }
+                else __result = false;
+
                 return false;
             }
         }
