@@ -1,4 +1,4 @@
-﻿using BannerKings.Extensions;
+using BannerKings.Extensions;
 using Helpers;
 using SandBox.View.Map;
 using TaleWorlds.CampaignSystem;
@@ -24,7 +24,7 @@ namespace BannerKings.Behaviours.Camping
                 (CampaignGameStarter starter) =>
                 {
                     starter.AddWaitGameMenu("bk_camping_wait_menu",
-                        "{=!}You are now camping in the vicinity of {FIEF}.",
+                        "{=DjzNUuoT}You are now camping in the vicinity of {FIEF}.",
                         (MenuCallbackArgs args) =>
                         {
                             UpdateCampMenu();
@@ -46,7 +46,7 @@ namespace BannerKings.Behaviours.Camping
 
                     starter.AddGameMenuOption("bk_camping_wait_menu",
                       "bk_camping_leave",
-                      new TextObject("{=!}Dismantle Camp").ToString(),
+                      new TextObject("{=pZRUL363}Dismantle Camp").ToString(),
                       (MenuCallbackArgs args) =>
                       {
                           args.optionLeaveType = GameMenuOption.LeaveType.Leave;

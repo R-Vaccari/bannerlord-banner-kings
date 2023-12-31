@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.GameMenus;
@@ -46,7 +46,7 @@ namespace BannerKings.Behaviours.Mercenary
             InitCareers();
 
             starter.AddGameMenuOption("bannerkings_actions", "action_recruit_custom_levy",
-                "{=!}Recruit {CUSTOM_TROOP}",
+                "{=32rn9nkn}Recruit {CUSTOM_TROOP}",
                 (MenuCallbackArgs args) =>
                 {
                     args.optionLeaveType = GameMenuOption.LeaveType.Recruit;
@@ -86,7 +86,7 @@ namespace BannerKings.Behaviours.Mercenary
                 });
 
             starter.AddGameMenuOption("bannerkings_actions", "action_recruit_custom_professional",
-                "{=!}Recruit {CUSTOM_TROOP}",
+                "{=32rn9nkn}Recruit {CUSTOM_TROOP}",
                 (MenuCallbackArgs args) =>
                 {
                     args.optionLeaveType = GameMenuOption.LeaveType.Recruit;
@@ -143,7 +143,7 @@ namespace BannerKings.Behaviours.Mercenary
             }
 
             var career = careers[hero.Clan];
-            career.AddReputation(gainedRenown / 50f, new TaleWorlds.Localization.TextObject("{=!}Reputation from gained renown."));
+            career.AddReputation(gainedRenown / 50f, new TaleWorlds.Localization.TextObject("{=1KYFwcr7}Reputation from gained renown."));
         }
 
         private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom,
@@ -200,7 +200,7 @@ namespace BannerKings.Behaviours.Mercenary
         {
             var result = new ExplainedNumber(1f, explanations);
             result.Add(clan.Tier / 2f, GameTexts.FindText("str_clan_tier_bonus"));
-            result.Add(careers[clan].Reputation * 2f, new TaleWorlds.Localization.TextObject("{=!}Reputation"));
+            result.Add(careers[clan].Reputation * 2f, new TaleWorlds.Localization.TextObject("{=bLLovmn9}Reputation"));
 
             foreach (var party in clan.WarPartyComponents)
             {
@@ -209,7 +209,7 @@ namespace BannerKings.Behaviours.Mercenary
                     result.Add(1f, party.Name);
                     if (party.MobileParty.Army.LeaderParty == party.MobileParty)
                     {
-                        result.AddFactor(0.2f, new TaleWorlds.Localization.TextObject("{=!}Leading an Army"));
+                        result.AddFactor(0.2f, new TaleWorlds.Localization.TextObject("{=oV2MhyoO}Leading an Army"));
                     }
                 }
             }

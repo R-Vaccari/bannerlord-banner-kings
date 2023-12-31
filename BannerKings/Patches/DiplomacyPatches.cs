@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Models.Vanilla;
 using HarmonyLib;
@@ -140,7 +140,7 @@ namespace BannerKings.Patches
                 if (kingdom.UnresolvedDecisions.Any(x => x is DeclareWarDecision || x is BKDeclareWarDecision))
                 {
                     InformationManager.DisplayMessage(new InformationMessage(
-                        new TextObject("{=!}A war declaration is being voted upon concerning the {FACTION}.")
+                        new TextObject("{=ZdWBHwQL}A war declaration is being voted upon concerning the {FACTION}.")
                         .SetTextVariable("FACTION", enemyKingdom.Name)
                         .ToString()));
                 }
@@ -152,7 +152,7 @@ namespace BannerKings.Patches
                     TextObject warHint;
                     bool warPossible = model.IsWarDecisionAllowedBetweenKingdoms(kingdom, enemyKingdom, out warHint);
                     list.Add(new InquiryElement(makeWar,
-                        new TextObject("{=!}Declare War ({INFLUENCE}{INFLUENCE_ICON})")
+                        new TextObject("{=eQNY5hgE}Declare War ({INFLUENCE}{INFLUENCE_ICON})")
                         .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.DiplomacyModel.GetInfluenceCostOfProposingWar(Clan.PlayerClan))
                         .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON)
                         .ToString(),
@@ -164,13 +164,13 @@ namespace BannerKings.Patches
                     TextObject allianceHint;
                     bool alliancePossible = model.IsAllianceAllowed(kingdom, enemyKingdom, out allianceHint);       
                     list.Add(new InquiryElement(makeAlliance,
-                        new TextObject("{=!}Propose Alliance ({DENARS} {GOLD_ICON})")
+                        new TextObject("{=EBhcYsfJ}Propose Alliance ({DENARS} {GOLD_ICON})")
                         .SetTextVariable("DENARS", 
                         MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetAllianceDenarCost(diplomacy.Kingdom, enemyKingdom).ResultNumber))
                         .ToString(),
                         null,
                         alliancePossible,
-                        new TextObject("{=!}Propose a truce between both realms. A truce is a period of a certain amount of years in which both realms formally agree to not declare wars upon each other, in mutual benefit. The proposing realm is assumed to be the major beneficiary of this agreement, and thus is required a fee. The proposed realm is more likely to accept and offer better terms relative to how advantageous a truce is for them.\n\n{POSSIBLE}")
+                        new TextObject("{=8Z0e830N}Propose a truce between both realms. A truce is a period of a certain amount of years in which both realms formally agree to not declare wars upon each other, in mutual benefit. The proposing realm is assumed to be the major beneficiary of this agreement, and thus is required a fee. The proposed realm is more likely to accept and offer better terms relative to how advantageous a truce is for them.\n\n{POSSIBLE}")
                         .SetTextVariable("POSSIBLE", allianceHint)
                         .ToString()));
 
@@ -179,13 +179,13 @@ namespace BannerKings.Patches
                     TextObject truceHint;
                     bool trucePossible = model.IsTruceAllowed(kingdom, enemyKingdom, out truceHint);
                     list.Add(new InquiryElement(makeTruce,
-                        new TextObject("{=!}Propose Truce ({DENARS} {GOLD_ICON})")
+                        new TextObject("{=K177C8ia}Propose Truce ({DENARS} {GOLD_ICON})")
                         .SetTextVariable("DENARS",
                         MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(diplomacy.Kingdom, enemyKingdom).ResultNumber))
                         .ToString(),
                         null,
                         trucePossible && playerRuler,
-                        new TextObject("{=!}Propose a truce between both realms. A truce is a period of a certain amount of years in which both realms formally agree to not declare wars upon each other, in mutual benefit. The proposing realm is assumed to be the major beneficiary of this agreement, and thus is required a fee. The proposed realm is more likely to accept and offer better terms relative to how advantageous a truce is for them.\n\n{POSSIBLE}")
+                        new TextObject("{=8Z0e830N}Propose a truce between both realms. A truce is a period of a certain amount of years in which both realms formally agree to not declare wars upon each other, in mutual benefit. The proposing realm is assumed to be the major beneficiary of this agreement, and thus is required a fee. The proposed realm is more likely to accept and offer better terms relative to how advantageous a truce is for them.\n\n{POSSIBLE}")
                         .SetTextVariable("POSSIBLE", truceHint)
                         .ToString()));
 
@@ -193,20 +193,20 @@ namespace BannerKings.Patches
                     TextObject tradeHint;
                     bool tradePossible = model.IsTradePactAllowed(kingdom, enemyKingdom, out tradeHint);
                     list.Add(new InquiryElement(makePact,
-                        new TextObject("{=!}Propose Trade Pact ({INFLUENCE}{INFLUENCE_ICON})")
+                        new TextObject("{=jHuXS5zK}Propose Trade Pact ({INFLUENCE}{INFLUENCE_ICON})")
                         .SetTextVariable("INFLUENCE", 
                         MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetTradePactInfluenceCost(diplomacy.Kingdom, enemyKingdom).ResultNumber))
                         .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON)
                         .ToString(),
                         null,
                         tradePossible && playerRuler,
-                        new TextObject("{=!}Propose a trade pact between both realms. A trade access pact establishes the exemptions of caravan tariffs between both realms, meaning that their caravans will not pay entry fees in your realm's fiefs, nor will your realm's caravans pay in theirs. The absence of fees stimulates caravans to circulate in these fiefs, strengthening mercantilism, prosperity and supply of different goods between both sides, while also diverging trade from other realms. A trade pact does not necessarily bring any revenue to lords. In fact, it may incur in some revenue loss due to the caravan fee exemptions.\n\n{POSSIBLE}")
+                        new TextObject("{=qEYgKaNs}Propose a trade pact between both realms. A trade access pact establishes the exemptions of caravan tariffs between both realms, meaning that their caravans will not pay entry fees in your realm's fiefs, nor will your realm's caravans pay in theirs. The absence of fees stimulates caravans to circulate in these fiefs, strengthening mercantilism, prosperity and supply of different goods between both sides, while also diverging trade from other realms. A trade pact does not necessarily bring any revenue to lords. In fact, it may incur in some revenue loss due to the caravan fee exemptions.\n\n{POSSIBLE}")
                         .SetTextVariable("POSSIBLE", tradeHint)
                         .ToString()));
 
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                        new TextObject("{=!}Diplomatic Action").ToString(),
-                        new TextObject("{=!}A diplomatic action significantly changes the relationship between your realm and the target realm.").ToString(),
+                        new TextObject("{=7OCs6wMk}Diplomatic Action").ToString(),
+                        new TextObject("{=aAOEkjCF}A diplomatic action significantly changes the relationship between your realm and the target realm.").ToString(),
                         list,
                         true,
                         1,
@@ -231,8 +231,8 @@ namespace BannerKings.Patches
                     newAlly)
                     .ResultNumber);
 
-                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Propose Alliance").ToString(),
-                    new TextObject("{=!}{LEADER} is interested in accepting an alliance between your rulerships. Such alliances will only last while both rulers stay in power. For long-lasting alliances, seek instead a marriage between both families. Blood ties allow alliances to persevere for generations. In order to formalize it, they request {DENARS}{GOLD_ICON}.")
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=cG3R7J1D}Propose Alliance").ToString(),
+                    new TextObject("{=kqy4fUCu}{LEADER} is interested in accepting an alliance between your rulerships. Such alliances will only last while both rulers stay in power. For long-lasting alliances, seek instead a marriage between both families. Blood ties allow alliances to persevere for generations. In order to formalize it, they request {DENARS}{GOLD_ICON}.")
                     .SetTextVariable("DENARS", denars)
                     .SetTextVariable("LEADER", newAlly.RulingClan.Leader.Name)
                     .ToString(),
@@ -254,8 +254,8 @@ namespace BannerKings.Patches
                     enemyKingdom)
                     .ResultNumber);
 
-                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Propose Truce").ToString(),
-                    new TextObject("{=!}{LEADER} is interested in accepting a truce proposal of 3 years. In order to formalize it, they request {DENARS}{GOLD_ICON}.")
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=oQ9z60ex}Propose Truce").ToString(),
+                    new TextObject("{=5J6SrvjG}{LEADER} is interested in accepting a truce proposal of 3 years. In order to formalize it, they request {DENARS}{GOLD_ICON}.")
                     .SetTextVariable("DENARS", denars)
                     .SetTextVariable("LEADER", enemyKingdom.RulingClan.Leader.Name)
                     .ToString(),
@@ -277,8 +277,8 @@ namespace BannerKings.Patches
                     enemyKingdom)
                     .ResultNumber);
 
-                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Propose Trade Access").ToString(),
-                    new TextObject("{=!}{LEADER} is interested in accepting a trade pact that provides bilateral access indefinitely. Trading caravans will be allowed access to fiefs without paying tariffs, diverging trade from enemies or competitors while strengthening trade between both realms, likely increasing consumption satisfactions and consequently, overall prosperity. Pressing this proposal would cost {INFLUENCE} influence due to all the Peers within your realm that may be affected due to tariffs loss.\n Sustaining trade access pacts will each also reduce your family's influence cap. Trade pacts faciliate making truces and take effect for an indefinite amount of time so long peace between both sides is upheld.")
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=BSDCg6uz}Propose Trade Access").ToString(),
+                    new TextObject("{=W8HQ7SFG}{LEADER} is interested in accepting a trade pact that provides bilateral access indefinitely. Trading caravans will be allowed access to fiefs without paying tariffs, diverging trade from enemies or competitors while strengthening trade between both realms, likely increasing consumption satisfactions and consequently, overall prosperity. Pressing this proposal would cost {INFLUENCE} influence due to all the Peers within your realm that may be affected due to tariffs loss.\n Sustaining trade access pacts will each also reduce your family's influence cap. Trade pacts faciliate making truces and take effect for an indefinite amount of time so long peace between both sides is upheld.")
                     .SetTextVariable("INFLUENCE", influence)
                     .SetTextVariable("LEADER", enemyKingdom.RulingClan.Leader.Name)
                     .ToString(),
@@ -305,7 +305,7 @@ namespace BannerKings.Patches
                         enemyKingdom)).GetLikelihoodForOutcome(0);
 
                     list.Add(new InquiryElement(casusBelli,
-                    new TextObject("{=!}{NAME} ({CHANCE}% approval)")
+                    new TextObject("{=7eaVjOKn}{NAME} ({CHANCE}% approval)")
                     .SetTextVariable("NAME", casusBelli.QueryNameText)
                     .SetTextVariable("CHANCE", (support * 100).ToString("0.00")).ToString(),
                     null,
@@ -313,10 +313,10 @@ namespace BannerKings.Patches
                     casusBelli.GetDescriptionWithModifers().ToString()));
                 }
 
-                list.Add(new InquiryElement(null, new TextObject("{=!}No Casus Belli").ToString(), null, enabled, null));
+                list.Add(new InquiryElement(null, new TextObject("{=mFVyMjXz}No Casus Belli").ToString(), null, enabled, null));
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                    new TextObject("{=!}Casus Belli").ToString(),
-                    new TextObject("{=!}Select a justification for war.").ToString(),
+                    new TextObject("{=Fs2NR9Os}Casus Belli").ToString(),
+                    new TextObject("{=fLc7tO0n}Select a justification for war.").ToString(),
                     list,
                     true,
                     1,

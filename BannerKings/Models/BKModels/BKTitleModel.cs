@@ -59,7 +59,7 @@ namespace BannerKings.Models.BKModels
             }
             else
             {
-                result.Add(contract.Inheritance.RelativeScore, new TextObject("{=!}Household member"));
+                result.Add(contract.Inheritance.RelativeScore, new TextObject("{=m6qYgCZ2}Household member"));
             }
 
             if (candidate.IsFemale) 
@@ -350,14 +350,14 @@ namespace BannerKings.Models.BKModels
             if (title.Contract.Government == DefaultGovernments.Instance.Tribal)
             {
                 revokeAction.Possible = false;
-                revokeAction.Reason = new TextObject("{=!}Tribal government does not allow revoking.")
+                revokeAction.Reason = new TextObject("Tribal government does not allow revoking.")
                     .SetTextVariable("ASPECT", DefaultGovernments.Instance.Tribal.Name);
                 return revokeAction;
             }
             else if (title.Contract.Government == DefaultGovernments.Instance.Republic && title.TitleType != TitleType.Dukedom)
             {
                 revokeAction.Possible = false;
-                revokeAction.Reason = new TextObject("{=!}Republican government only allows revoking of dukes.")
+                revokeAction.Reason = new TextObject("{=RDxuKgC6}Republican government only allows revoking of dukes.")
                     .SetTextVariable("ASPECT", DefaultGovernments.Instance.Republic.Name);
                 return revokeAction;
             }
@@ -367,7 +367,7 @@ namespace BannerKings.Models.BKModels
                 if (sovereign == null || revoker != sovereign.deJure)
                 {
                     revokeAction.Possible = false;
-                    revokeAction.Reason = new TextObject("{=!}Imperial government requires being de Jure faction leader.")
+                    revokeAction.Reason = new TextObject("{=EecVkFHJ}Imperial government requires being de Jure faction leader.")
                         .SetTextVariable("ASPECT", DefaultGovernments.Instance.Imperial.Name);
                     return revokeAction;
                 }
@@ -526,7 +526,7 @@ namespace BannerKings.Models.BKModels
                         {
                             usurpData.Possible = false;
                             usurpData.Reason =
-                                new TextObject("{=!}You must be the leader of a faction in order to usurp a Kingdom or Empire level title.");
+                                new TextObject("{=FESBxuj3}You must be the leader of a faction in order to usurp a Kingdom or Empire level title.");
                             return usurpData;
                         }
                     }
@@ -534,7 +534,7 @@ namespace BannerKings.Models.BKModels
                     {
                         usurpData.Possible = false;
                         usurpData.Reason =
-                            new TextObject("{=!}As a member of {KINGDOM}, you must lead the faction to usurp its title.")
+                            new TextObject("{=ioU78p59}As a member of {KINGDOM}, you must lead the faction to usurp its title.")
                             .SetTextVariable("KINGDOM", faction.Name);
                         return usurpData;
                     }
@@ -610,7 +610,7 @@ namespace BannerKings.Models.BKModels
                     if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(deFacto))
                         claimants[deFacto] = new TextObject("{=XRMMs6QY}De facto title holder");         
                 }
-                else claimants[deFacto] = new TextObject("{=!}De facto unlanded title holder");
+                else claimants[deFacto] = new TextObject("{=zp4c76pS}De facto unlanded title holder");
             }
 
             if (title.Sovereign != null && title.Sovereign.deJure != title.deJure && !claimants.ContainsKey(title.Sovereign.deJure))
@@ -623,7 +623,7 @@ namespace BannerKings.Models.BKModels
 
             FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(title);
             if (suzerain != null && suzerain.deJure != null)
-                claimants[suzerain.deJure] = new TextObject("{=!}De jure suzerain of this title");   
+                claimants[suzerain.deJure] = new TextObject("{=ymbhLtjf}De jure suzerain of this title");   
 
             return claimants;
         }

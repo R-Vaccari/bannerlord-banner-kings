@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Diplomacy;
+using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
@@ -24,13 +24,13 @@ namespace BannerKings.Models.BKModels
             {
                 if (title.deJure == leader)
                 {
-                    result.Add(0.3f, new TextObject("{=!}De Jure holder of {KINGDOM}")
+                    result.Add(0.3f, new TextObject("{=6taO5rFT}De Jure holder of {KINGDOM}")
                     .SetTextVariable("KINGDOM", title.FullName));
                 }
 
                 if (title.DeFacto == leader)
                 {
-                    result.Add(0.1f, new TextObject("{=!}De Facto holder of {KINGDOM}")
+                    result.Add(0.1f, new TextObject("{=ZzWypH2B}De Facto holder of {KINGDOM}")
                     .SetTextVariable("KINGDOM", title.FullName));
                 }
             }
@@ -42,25 +42,25 @@ namespace BannerKings.Models.BKModels
                     TextObject titleDescription = Utils.TextHelper.GetTitlePrefix(highestTitle.TitleType, leader.Culture);
                     if (highestTitle.TitleType == TitleType.County)
                     {
-                        result.Add(0.05f, new TextObject("{=!}Highest title is of {TITLE} level")
+                        result.Add(0.05f, new TextObject("{=060rYpf3}Highest title is of {TITLE} level")
                         .SetTextVariable("TITLE", titleDescription));
                     }
 
                     if (highestTitle.TitleType == TitleType.Dukedom)
                     {
-                        result.Add(0.1f, new TextObject("{=!}Highest title is of {TITLE} level")
+                        result.Add(0.1f, new TextObject("{=060rYpf3}Highest title is of {TITLE} level")
                         .SetTextVariable("TITLE", titleDescription));
                     }
 
                     if (highestTitle.TitleType == TitleType.Kingdom)
                     {
-                        result.Add(0.15f, new TextObject("{=!}Highest title is of {TITLE} level")
+                        result.Add(0.15f, new TextObject("{=060rYpf3}Highest title is of {TITLE} level")
                         .SetTextVariable("TITLE", titleDescription));
                     }
 
                     if (highestTitle.TitleType == TitleType.Empire)
                     {
-                        result.Add(0.3f, new TextObject("{=!}Highest title is of {TITLE} level")
+                        result.Add(0.3f, new TextObject("{=060rYpf3}Highest title is of {TITLE} level")
                         .SetTextVariable("TITLE", titleDescription));
                     }
                 }
@@ -80,14 +80,14 @@ namespace BannerKings.Models.BKModels
 
                 if (isHighest)
                 {
-                    result.Add(0.1f, new TextObject("{=!}Holder of the highest title level within members of {KINGDOM}")
+                    result.Add(0.1f, new TextObject("{=inTH0dOO}Holder of the highest title level within members of {KINGDOM}")
                     .SetTextVariable("KINGDOM", kingdom.Name));
                 }
             }
 
             if (leader.Culture == kingdom.Culture)
             {
-                result.Add(0.075f, new TextObject("{=!}Culture match with {KINGDOM}")
+                result.Add(0.075f, new TextObject("{=kyB8tkgY}Culture match with {KINGDOM}")
                     .SetTextVariable("KINGDOM", kingdom.Name));
             }
 
@@ -95,11 +95,11 @@ namespace BannerKings.Models.BKModels
             if (leaderRel != null && diplomacy.Religion != null)
             {
                 FaithStance stance = diplomacy.Religion.GetStance(leaderRel.Faith);
-                if (stance == FaithStance.Hostile) result.Add(-0.25f, new TextObject("{=!}Hostile faith to {FAITH}")
+                if (stance == FaithStance.Hostile) result.Add(-0.25f, new TextObject("{=xSxKo7Gq}Hostile faith to {FAITH}")
                     .SetTextVariable("FAITH", diplomacy.Religion.Faith.GetFaithName()));
-                else if (stance == FaithStance.Untolerated) result.Add(-0.10f, new TextObject("{=!}Untolerated faith to {FAITH}")
+                else if (stance == FaithStance.Untolerated) result.Add(-0.10f, new TextObject("{=T4kiLZJR}Untolerated faith to {FAITH}")
                     .SetTextVariable("FAITH", diplomacy.Religion.Faith.GetFaithName()));
-                else result.Add(0.10f, new TextObject("{=!}Faith match with {KINGDOM}")
+                else result.Add(0.10f, new TextObject("{=OgpTY8c6}Faith match with {KINGDOM}")
                     .SetTextVariable("KINGDOM", kingdom.Name));
             }
 

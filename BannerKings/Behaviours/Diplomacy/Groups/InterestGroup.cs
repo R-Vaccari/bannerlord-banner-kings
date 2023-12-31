@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Diplomacy.Groups.Demands;
+using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles.Laws;
@@ -166,7 +166,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 AddMemberInternal(hero);
                 if (hero.Clan == Clan.PlayerClan)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has joined the {GROUP} group.")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=J7Yomhae}{HERO} has joined the {GROUP} group.")
                         .SetTextVariable("HERO", hero.Name)
                         .SetTextVariable("GROUP", this.Name),
                         0,
@@ -185,7 +185,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 Members.Remove(hero);
                 if (hero.Clan == Clan.PlayerClan)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has left the {GROUP} group.")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=O9K6i3iT}{HERO} has left the {GROUP} group.")
                         .SetTextVariable("HERO", hero.Name)
                         .SetTextVariable("GROUP", this.Name),
                         0,
@@ -254,13 +254,13 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             Demand active = CurrentDemand;
             if (active != null)
             {
-                return new(false, new TextObject("{=!}The {DEMAND} demand is already being pushed.")
+                return new(false, new TextObject("{=ZzzD1hZM}The {DEMAND} demand is already being pushed.")
                     .SetTextVariable("DEMAND", active.Name));
             }
 
             if (influence < demand.MinimumGroupInfluence)
             {
-                return new(false, new TextObject("{=!}This demand requires at least {INFLUENCE}% group influence.")
+                return new(false, new TextObject("{=uVGV4dnc}This demand requires at least {INFLUENCE}% group influence.")
                     .SetTextVariable("INFLUENCE", (demand.MinimumGroupInfluence * 100f).ToString("0.0")));
             }
 

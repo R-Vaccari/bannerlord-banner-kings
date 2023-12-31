@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Traits;
 using Helpers;
@@ -37,9 +37,9 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
         public override void Initialize()
         {
-            SuppressThreat.Initialize(new TextObject("{=!}Suppress Threat"),
-                new TextObject("{=!}Liberate a fief of your people from the rule of foreigners. Any town or castle that is mostly composed by our culture is reason enough for us to rule it rather than foreigners.\n\nObjective: Capture the selected target."),
-                new TextObject("{=!}Conquer a fief"),
+            SuppressThreat.Initialize(new TextObject("{=iN3RbEku}Suppress Threat"),
+                new TextObject("{=WsSwHEk4}Liberate a fief of your people from the rule of foreigners. Any town or castle that is mostly composed by our culture is reason enough for us to rule it rather than foreigners.\n\nObjective: Capture the selected target."),
+                new TextObject("{=kyB8tkgY}Conquer a fief"),
                 1.3f,
                 0.5f,
                 1f,
@@ -71,11 +71,11 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     { BKTraits.Instance.Ambitious, 0.1f },
                     { DefaultTraits.Valor, 0.2f }
                 },
-                new TextObject("{=!}The {ATTACKER} marches to war! They claim {DEFENDER} are an existential threat."));
+                new TextObject("{=v7CeGL18}The {ATTACKER} marches to war! They claim {DEFENDER} are an existential threat."));
 
-            CulturalLiberation.Initialize(new TextObject("{=!}Cultural Liberation"),
-                new TextObject("{=!}Liberate a fief of your people from the rule of foreigners. Any town or castle that is mostly composed by our culture is reason enough for us to rule it rather than foreigners.\n\nObjective: Capture the selected target."),
-                new TextObject("{=!}Conquer the target fief"),
+            CulturalLiberation.Initialize(new TextObject("{=kyB8tkgY}Cultural Liberation"),
+                new TextObject("{=WsSwHEk4}Liberate a fief of your people from the rule of foreigners. Any town or castle that is mostly composed by our culture is reason enough for us to rule it rather than foreigners.\n\nObjective: Capture the selected target."),
+                new TextObject("{=kyB8tkgY}Conquer the target fief"),
                 1.3f,
                 0.5f,
                 1f,
@@ -112,11 +112,11 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     { DefaultTraits.Valor, -0.1f },
                     { BKTraits.Instance.Ambitious, -0.1f }
                 },
-                new TextObject("{=!}The {ATTACKER} marches to war! {FIEF} is being liberated from the oppresion of {DEFENDER}!"));
+                new TextObject("{=zcmfRF08}The {ATTACKER} marches to war! {FIEF} is being liberated from the oppresion of {DEFENDER}!"));
 
-            FiefClaim.Initialize(new TextObject("{=!}Claim Fief"),
-                new TextObject("{=!}Conquer a fief claimed by your realm. The benefactor of the conquest will always be the claimant, regardless of other ownership procedures.\n\nObjective: Capture the selected target."),
-                new TextObject("{=!}Conquer the target fief"),
+            FiefClaim.Initialize(new TextObject("{=kyB8tkgY}Claim Fief"),
+                new TextObject("{=kyB8tkgY}Conquer a fief claimed by your realm. The benefactor of the conquest will always be the claimant, regardless of other ownership procedures.\n\nObjective: Capture the selected target."),
+                new TextObject("{=kyB8tkgY}Conquer the target fief"),
                 1.2f,
                 0.7f,
                 1f,
@@ -146,11 +146,11 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 {
 
                 },
-                new TextObject("{=!}The {ATTACKER} marches to war! {FIEF} is being liberated from the oppresion of {DEFENDER}!"));
+                new TextObject("{=zcmfRF08}The {ATTACKER} marches to war! {FIEF} is being liberated from the oppresion of {DEFENDER}!"));
 
-            Invasion.Initialize(new TextObject("{=!}Invasion"),
-                new TextObject("{=!}Invade a foreign kingdom as is the way of our ancestors. Seize their property and stablish our own rule.\n\nObjective: Capture 2 or more fiefs of the enemy's culture."),
-                new TextObject("{=!}Conquer Fiefs"),
+            Invasion.Initialize(new TextObject("{=yz3sGus6}Invasion"),
+                new TextObject("{=6yqojVsh}Invade a foreign kingdom as is the way of our ancestors. Seize their property and stablish our own rule.\n\nObjective: Capture 2 or more fiefs of the enemy's culture."),
+                new TextObject("{=kyB8tkgY}Conquer Fiefs"),
                 1.5f,
                 0.2f,
                 0.8f,
@@ -188,11 +188,11 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     { DefaultTraits.Valor, 0.1f },
                     { BKTraits.Instance.Ambitious, 0.1f }
                 },
-                new TextObject("{=!}The {ATTACKER} is launching a large scale invasion on the {DEFENDER}!"));
+                new TextObject("{=YSBDqEEu}The {ATTACKER} is launching a large scale invasion on the {DEFENDER}!"));
 
-            GreatRaid.Initialize(new TextObject("{=!}Great Raid"),
-                new TextObject("{=!}Pillage and steal from our enemies as our ancestors did. Ruling their lands may be unviable, but it will not stop us from taking what we are owed by the rule of the strongest.\n\nObjective: Raid 8 or more villages of the enemy's culture."),
-                new TextObject("{=!}Mass Raiding"),
+            GreatRaid.Initialize(new TextObject("{=JasbMH20}Great Raid"),
+                new TextObject("{=GjgPaAne}Pillage and steal from our enemies as our ancestors did. Ruling their lands may be unviable, but it will not stop us from taking what we are owed by the rule of the strongest.\n\nObjective: Raid 8 or more villages of the enemy's culture."),
+                new TextObject("{=mkkNJgAA}Mass Raiding"),
                 0.5f,
                 3f,
                 0.8f,
@@ -228,11 +228,11 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     { DefaultTraits.Valor, 0.2f },
                     { BKTraits.Instance.Ambitious, 0.1f }
                 },
-                new TextObject("{=!}The {ATTACKER} ride out for a great raid! {DEFENDER} towns and villages will be razed to the ground."));
+                new TextObject("{=RyUztoR1}The {ATTACKER} ride out for a great raid! {DEFENDER} towns and villages will be razed to the ground."));
 
-            ImperialSuperiority.Initialize(new TextObject("{=!}Imperial Superiority"),
-                new TextObject("{=!}Subjugate barbarians with our Imperial might as the original Empire once did. Strength is the language that they understand.\n\nObjective: Capture 1 or more fiefs of the enemy's culture."),
-                new TextObject("{=!}Conquer 2 fiefs"),
+            ImperialSuperiority.Initialize(new TextObject("{=t5fJoQWO}Imperial Superiority"),
+                new TextObject("{=EFqkRSpY}Subjugate barbarians with our Imperial might as the original Empire once did. Strength is the language that they understand.\n\nObjective: Capture 1 or more fiefs of the enemy's culture."),
+                new TextObject("{=kyB8tkgY}Conquer 2 fiefs"),
                 1f,
                 0.4f,
                 1.8f,
@@ -302,11 +302,11 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     { BKTraits.Instance.Ambitious, 0.1f },
                     { DefaultTraits.Mercy, -0.15f }
                 },
-                new TextObject("{=!}The {ATTACKER} is subjugating the barbarians of {DEFENDER}!"));
+                new TextObject("{=arKYyCGd}The {ATTACKER} is subjugating the barbarians of {DEFENDER}!"));
 
-            ImperialReconquest.Initialize(new TextObject("{=!}Imperial Reconquest"),
-                new TextObject("{=!}Subjugate pretenders of the Empire. As rightful heirs of the Calradian Empire, any other kingdom that claims to be so ought to be subjugated and annexed by any means necessary.\n\nObjective: Capture 1 or more fiefs of the enemy's culture."),
-                new TextObject("{=!}Conquer Fiefs"),
+            ImperialReconquest.Initialize(new TextObject("{=Tpgeed0V}Imperial Reconquest"),
+                new TextObject("{=PXJD1at9}Subjugate pretenders of the Empire. As rightful heirs of the Calradian Empire, any other kingdom that claims to be so ought to be subjugated and annexed by any means necessary.\n\nObjective: Capture 1 or more fiefs of the enemy's culture."),
+                new TextObject("{=kyB8tkgY}Conquer Fiefs"),
                 1.5f,
                 0.1f,
                 0.8f,
@@ -345,7 +345,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     { DefaultTraits.Generosity, -0.1f },
                     { DefaultTraits.Mercy, -0.1f }
                 },
-                new TextObject("{=!}The {ATTACKER} is marching on {DEFENDER}! They claim to be the rightful heir of the Empire."));
+                new TextObject("{=J6KMLMX1}The {ATTACKER} is marching on {DEFENDER}! They claim to be the rightful heir of the Empire."));
         }
     }
 }

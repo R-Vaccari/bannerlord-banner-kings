@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Skills;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
 using System;
@@ -25,14 +25,14 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override void SetTexts()
         {
-            Initialize(new TextObject("{=!}Demesne Law Change"),
-                new TextObject("{=!}Demand a change to one of the existing demesne laws. An Interest Group may demand that a law is changed to one of the variants of said law that the group supports. For more information on laws, read the Demesne Laws on encyclopedia."));
+            Initialize(new TextObject("{=RYmV2PEY}Demesne Law Change"),
+                new TextObject("{=RYmV2PEY}Demand a change to one of the existing demesne laws. An Interest Group may demand that a law is changed to one of the variants of said law that the group supports. For more information on laws, read the Demesne Laws on encyclopedia."));
         }
 
-        public override DemandResponse PositiveAnswer => new DemandResponse(new TextObject("{=!}Concede"),
-                    new TextObject("{=!}Accept the demand to pass the {LAW} law. They will be satisfied with this outcome.")
+        public override DemandResponse PositiveAnswer => new DemandResponse(new TextObject("{=kyB8tkgY}Concede"),
+                    new TextObject("{=ORfB9aOJ}Accept the demand to pass the {LAW} law. They will be satisfied with this outcome.")
                     .SetTextVariable("LAW", Law.Name),
-                    new TextObject("{=!}On {DATE}, the {GROUP} were conceded their {DEMAND} demand.")
+                    new TextObject("{=Pr6r49e8}On {DATE}, the {GROUP} were conceded their {DEMAND} demand.")
                     .SetTextVariable("GROUP", Group.Name)
                     .SetTextVariable("DEMAND", Name),
                     6,
@@ -51,7 +51,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                         if (fulfiller == Hero.MainHero)
                         {
                             InformationManager.DisplayMessage(new InformationMessage(
-                                new TextObject("{=!}The {GROUP} is satisfied! {LAW} is now enacted in the realm.")
+                                new TextObject("{=WWs1WShV}The {GROUP} is satisfied! {LAW} is now enacted in the realm.")
                                 .SetTextVariable("GROUP", Group.Name)
                                 .SetTextVariable("LAW", Law.Name)
                                 .ToString(),
@@ -62,10 +62,10 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
                         return true;
                     });
-        public override DemandResponse NegativeAnswer => new DemandResponse(new TextObject("{=!}Reject"),
-                   new TextObject("{=!}Deny the demand to pass the {LAW} law. They will not like this outcome.")
+        public override DemandResponse NegativeAnswer => new DemandResponse(new TextObject("{=PoAmUqGR}Reject"),
+                   new TextObject("{=RYmV2PEY}Deny the demand to pass the {LAW} law. They will not like this outcome.")
                    .SetTextVariable("LAW", Law.Name),
-                   new TextObject("{=!}On {DATE}, the {GROUP} were rejected their {DEMAND} demand.")
+                   new TextObject("{=icR6DbJR}On {DATE}, the {GROUP} were rejected their {DEMAND} demand.")
                    .SetTextVariable("GROUP", Group.Name)
                    .SetTextVariable("DEMAND", Name),
                    6,
@@ -85,7 +85,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                        if (fulfiller == Hero.MainHero)
                        {
                            InformationManager.DisplayMessage(new InformationMessage(
-                               new TextObject("{=!}The {GROUP} is not satisfied...")
+                               new TextObject("{=Wi3oUWpJ}The {GROUP} is not satisfied...")
                                .SetTextVariable("GROUP", Group.Name)
                                .SetTextVariable("LEADER", Group.Leader.Name)
                                .ToString(),
@@ -104,12 +104,12 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             {
                 yield return PositiveAnswer;
                 yield return NegativeAnswer;
-                yield return new DemandResponse(new TextObject("{=!}Financial Compromise"),
-                   new TextObject("{=!}Negotiate with {LEADER} a financial compromise to appease the group's demand. A sum of denars based on your income will be paied out to the group, mostly to the leader. They will be satisfied with this outcome.")
+                yield return new DemandResponse(new TextObject("{=2bBytgK0}Financial Compromise"),
+                   new TextObject("{=6VxLRan7}Negotiate with {LEADER} a financial compromise to appease the group's demand. A sum of denars based on your income will be paied out to the group, mostly to the leader. They will be satisfied with this outcome.")
                    .SetTextVariable("LEADER", Group.Leader.Name)
                    .SetTextVariable("DENARS", MBRandom.RoundRandomized(BannerKingsConfig.Instance.InterestGroupsModel
                    .CalculateFinancialCompromiseCost(Hero.MainHero, 10000, 1f).ResultNumber)),
-                   new TextObject("{=!}On {DATE}, a financial compromise was made with {GROUP} due to their {DEMAND} demand.")
+                   new TextObject("{=sAWVfzx6}On {DATE}, a financial compromise was made with {GROUP} due to their {DEMAND} demand.")
                    .SetTextVariable("GROUP", Group.Name)
                    .SetTextVariable("DEMAND", Name),
                    5,
@@ -133,7 +133,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                        if (fulfiller == Hero.MainHero)
                        {
                            InformationManager.DisplayMessage(new InformationMessage(
-                               new TextObject("{=!}The {GROUP} accepts the compromise... However, some criticize it as bribery.")
+                               new TextObject("{=Y1KdZHHg}The {GROUP} accepts the compromise... However, some criticize it as bribery.")
                                .SetTextVariable("GROUP", Group.Name)
                                .ToString(),
                                Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
@@ -142,12 +142,12 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                        return true;
                    });
 
-                yield return new DemandResponse(new TextObject("{=!}Leverage Influence"),
-                   new TextObject("{=!}Use your political influence to deny this demand. {LEADER} will not be pleased with this option, but the group will accept it. They will be satisfied with this outcome.")
+                yield return new DemandResponse(new TextObject("{=GkWMyggj}Leverage Influence"),
+                   new TextObject("{=mGhTovWX}Use your political influence to deny this demand. {LEADER} will not be pleased with this option, but the group will accept it. They will be satisfied with this outcome.")
                    .SetTextVariable("LEADER", Group.Leader.Name)
                    .SetTextVariable("INFLUENCE", MBRandom.RoundRandomized(BannerKingsConfig.Instance.InterestGroupsModel
                    .CalculateLeverageInfluenceCost(Hero.MainHero, 100, 1f).ResultNumber)),
-                   new TextObject("{=!}On {DATE}, the {GROUP} were politically influenced to abandon their {DEMAND} demand.")
+                   new TextObject("{=hxeZ0LNf}On {DATE}, the {GROUP} were politically influenced to abandon their {DEMAND} demand.")
                    .SetTextVariable("GROUP", Group.Name)
                    .SetTextVariable("DEMAND", Name),
                    -8,
@@ -167,7 +167,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                        if (fulfiller == Hero.MainHero)
                        {
                            InformationManager.DisplayMessage(new InformationMessage(
-                               new TextObject("{=!}The {GROUP} back down on their demand! {LEADER} was politically compelled to give up.")
+                               new TextObject("{=CUGYcFbS}The {GROUP} back down on their demand! {LEADER} was politically compelled to give up.")
                                .SetTextVariable("GROUP", Group.Name)
                                .SetTextVariable("LEADER", Group.Leader.Name)
                                .ToString(),
@@ -179,11 +179,11 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                        return true;
                    });
 
-                yield return new DemandResponse(new TextObject("{=!}Appease (Charm)"),
-                   new TextObject("{=!}Use your diplomatic and charm skills to convince {LEADER} out of this idea. This option may or may not work. The chance of working depends on your Charm and how much {LEADER} likes you - its unlikely you will charm an enemy. Whether the group is satisfied or not depends on the leader being convinced.\nMinimum Charm: {CHARM}")
+                yield return new DemandResponse(new TextObject("{=Uxjzd09j}Appease (Charm)"),
+                   new TextObject("{=SHDJYFt7}Use your diplomatic and charm skills to convince {LEADER} out of this idea. This option may or may not work. The chance of working depends on your Charm and how much {LEADER} likes you - its unlikely you will charm an enemy. Whether the group is satisfied or not depends on the leader being convinced.\nMinimum Charm: {CHARM}")
                    .SetTextVariable("LEADER", Group.Leader.Name)
                    .SetTextVariable("CHARM", 150),
-                   new TextObject("{=!}On {DATE}, the {GROUP} were appeased to forfeit their {DEMAND} demand.")
+                   new TextObject("{=Wd5ZRzuQ}On {DATE}, the {GROUP} were appeased to forfeit their {DEMAND} demand.")
                    .SetTextVariable("GROUP", Group.Name)
                    .SetTextVariable("DEMAND", Name),
                    0,
@@ -207,7 +207,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                            if (fulfiller == Hero.MainHero)
                            {
                                InformationManager.DisplayMessage(new InformationMessage(
-                                   new TextObject("{=!}{LEADER} was appeased! The {GROUP} back down on their demand.")
+                                   new TextObject("{=cQv03vke}{LEADER} was appeased! The {GROUP} back down on their demand.")
                                    .SetTextVariable("GROUP", Group.Name)
                                    .SetTextVariable("LEADER", Group.Leader.Name)
                                    .ToString(),
@@ -222,7 +222,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                            if (fulfiller == Hero.MainHero)
                            {
                                InformationManager.DisplayMessage(new InformationMessage(
-                                   new TextObject("{=!}{LEADER} was not convinced... The {GROUP} is not satisfied with this outcome.")
+                                   new TextObject("{=tEY3J9Pn}{LEADER} was not convinced... The {GROUP} is not satisfied with this outcome.")
                                    .SetTextVariable("GROUP", Group.Name)
                                    .SetTextVariable("LEADER", Group.Leader.Name)
                                    .ToString(),
@@ -234,13 +234,13 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                        }
                    });
 
-                yield return new DemandResponse(new TextObject("{=!}Dispute (Lordship)"),
-                   new TextObject("{=!}Dispute on legal terms the efficacy of this demand. {LEADER} may or not be compelled to conceded, based on their Lordship ({LEADER_LORDSHIP}) against yours ({PLAYER_LORDSHIP}). Whether the group is satisfied or not depends on the leader being convinced.\nMinimum Lordship: {LORDSHIP}")
+                yield return new DemandResponse(new TextObject("{=RYmV2PEY}Dispute (Lordship)"),
+                   new TextObject("{=RYmV2PEY}Dispute on legal terms the efficacy of this demand. {LEADER} may or not be compelled to conceded, based on their Lordship ({LEADER_LORDSHIP}) against yours ({PLAYER_LORDSHIP}). Whether the group is satisfied or not depends on the leader being convinced.\nMinimum Lordship: {LORDSHIP}")
                    .SetTextVariable("LEADER", Group.Leader.Name)
                    .SetTextVariable("LEADER_LORDSHIP", Group.Leader.GetSkillValue(BKSkills.Instance.Lordship))
                    .SetTextVariable("PLAYER_LORDSHIP", Hero.MainHero.GetSkillValue(BKSkills.Instance.Lordship))
                    .SetTextVariable("LORDSHIP", 100),
-                   new TextObject("{=!}On {DATE}, the {GROUP} were defeated on legal grounds over the {DEMAND} demand.")
+                   new TextObject("{=Zmrzar4v}On {DATE}, the {GROUP} were defeated on legal grounds over the {DEMAND} demand.")
                    .SetTextVariable("GROUP", Group.Name)
                    .SetTextVariable("DEMAND", Name),
                    -5,
@@ -264,7 +264,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                            if (fulfiller == Hero.MainHero)
                            {
                                InformationManager.DisplayMessage(new InformationMessage(
-                                   new TextObject("{=!}{LEADER} was appeased! The {GROUP} back down on their demand.")
+                                   new TextObject("{=cQv03vke}{LEADER} was appeased! The {GROUP} back down on their demand.")
                                    .SetTextVariable("GROUP", Group.Name)
                                    .SetTextVariable("LEADER", Group.Leader.Name)
                                    .ToString(),
@@ -278,7 +278,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                            if (fulfiller == Hero.MainHero)
                            {
                                InformationManager.DisplayMessage(new InformationMessage(
-                                   new TextObject("{=!}{LEADER} was appeased! The {GROUP} back down on their demand.")
+                                   new TextObject("{=cQv03vke}{LEADER} was appeased! The {GROUP} back down on their demand.")
                                    .SetTextVariable("GROUP", Group.Name)
                                    .SetTextVariable("LEADER", Group.Leader.Name)
                                    .ToString(),
@@ -350,29 +350,29 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
             if (policy == null)
             {
-                return new(false, new TextObject("{=!}There are currently no supported policies that aren't already enacted, or shunned policies that are not enacted."));
+                return new(false, new TextObject("{=dYhoJxo6}There are currently no supported policies that aren't already enacted, or shunned policies that are not enacted."));
             }
 
             if (Active)
             {
-                return new(false, new TextObject("{=!}This demand is already under revision by the ruler."));
+                return new(false, new TextObject("{=RnN79qMx}This demand is already under revision by the ruler."));
             }
 
-            return new(true, new TextObject("{=!}This demand is possible."));
+            return new(true, new TextObject("{=WvxUuqmj}This demand is possible."));
         }
 
         public override void ShowPlayerPrompt()
         {
             SetTexts();
             InformationManager.ShowInquiry(new InquiryData(Name.ToString(),
-                new TextObject("{=!}The {GROUP} group is demanding the enactment of the {LAW} law. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
+                new TextObject("{=OpQHhMmS}The {GROUP} group is demanding the enactment of the {LAW} law. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
                 .SetTextVariable("GROUP", Group.Name)
                 .SetTextVariable("LAW", Law.Name)
                 .ToString(),
                 true,
                 true,
-                new TextObject("{=!}Resolve").ToString(),
-                new TextObject("{=!}Postpone").ToString(),
+                new TextObject("{=j90Aa0xG}Resolve").ToString(),
+                new TextObject("{=sbwMaTwx}Postpone").ToString(),
                 () =>
                 {
                     ShowPlayerDemandAnswers();
@@ -399,7 +399,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
-                new TextObject("{=!}The {GROUP} is pushing for the enactment of the {LAW} law. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
+                new TextObject("{=5hFXX5rW}The {GROUP} is pushing for the enactment of the {LAW} law. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
                 .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(Group).ResultNumber * 100f).ToString("0.00"))
                 .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(Group).ResultNumber * 100f).ToString("0.00"))
                 .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
@@ -432,7 +432,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 if (!Title.Contract.DemesneLaws.Contains(Law))
                 {
                     policies.Add(new InquiryElement(law,
-                        new TextObject("{=!}Enact {LAW}")
+                        new TextObject("{=iEPx4KXi}Enact {LAW}")
                         .SetTextVariable("LAW", law.Name)
                         .ToString(),
                         null,
@@ -444,9 +444,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             bool playerLead = Group.Leader == Hero.MainHero;
             TextObject description;
 
-            description = new TextObject("{=!}Choose the benefactor for the {POSITION} position.");
+            description = new TextObject("{=kyB8tkgY}Choose the benefactor for the {POSITION} position.");
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString() + " (1/2)",
-                new TextObject("{=!}As a leader of your group you can decide what demesne law you will be pushing for..").ToString(),
+                new TextObject("{=d5im2kAj}As a leader of your group you can decide what demesne law you will be pushing for..").ToString(),
                 policies,
                 true,
                 1,

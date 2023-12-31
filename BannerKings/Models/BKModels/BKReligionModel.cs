@@ -113,7 +113,7 @@ namespace BannerKings.Models.BKModels
 
             result.AddFactor(data.Tension.ResultNumber * 0.5f, new TextObject("{=T88BUMMU}Religious tensions"));
             result.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(appointer.Clan).ResultNumber * 0.1f,
-                new TextObject("{=!}Clan Influence Limit"));
+                new TextObject("{=kyB8tkgY}Clan Influence Limit"));
             return result;
         }
 
@@ -131,11 +131,11 @@ namespace BannerKings.Models.BKModels
             var result = new ExplainedNumber(50f, descriptions);
 
             result.AddFactor(GetNotableFactor(removed, data.Settlement),
-                new TextObject("{=!}Power of {HERO}")
+                new TextObject("{=mH6dkHSp}Power of {HERO}")
                 .SetTextVariable("HERO", removed.Name));
 
             result.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(appointer.Clan).ResultNumber * 0.2f,
-                new TextObject("{=!}Clan Influence Limit"));
+                new TextObject("{=kyB8tkgY}Clan Influence Limit"));
             return result;
         }
 
@@ -143,7 +143,7 @@ namespace BannerKings.Models.BKModels
         {
             var result = new ExplainedNumber(200f, descriptions);
             result.AddFactor(GetNotableFactor(removed, data.Settlement), 
-                new TextObject("{=!}Power of {HERO}")
+                new TextObject("{=mH6dkHSp}Power of {HERO}")
                 .SetTextVariable("HERO", removed.Name));
 
             return result;
@@ -153,7 +153,7 @@ namespace BannerKings.Models.BKModels
         {
             var result = new ExplainedNumber(0f, descriptions);
             result.Add(GetNotableFactor(removed, data.Settlement) * 50f,
-                new TextObject("{=!}Power of {HERO}")
+                new TextObject("{=mH6dkHSp}Power of {HERO}")
                 .SetTextVariable("HERO", removed.Name));
 
             result.AddFactor(data.Tension.ResultNumber, new TextObject("{=T88BUMMU}Religious tensions"));
@@ -382,13 +382,13 @@ namespace BannerKings.Models.BKModels
                 {
                     if (holySites.Contains(settlement))
                     {
-                        result.Add(-0.05f, new TextObject("{=!}Missing holy site ({FIEF})")
+                        result.Add(-0.05f, new TextObject("{=3w3G1VQk}Missing holy site ({FIEF})")
                             .SetTextVariable("FIEF", settlement.Name));
                     }
 
                     if (settlement == religion.Faith.FaithSeat)
                     {
-                        result.Add(-0.15f, new TextObject("{=!}Missing faith seat ({FIEF})")
+                        result.Add(-0.15f, new TextObject("{=goy63pDb}Missing faith seat ({FIEF})")
                            .SetTextVariable("FIEF", settlement.Name));
                     }
                     continue;
@@ -412,13 +412,13 @@ namespace BannerKings.Models.BKModels
 
                 if (holySites.Contains(settlement))
                 {
-                    result.Add(0.05f, new TextObject("{=!}Holy site ({FIEF})")
+                    result.Add(0.05f, new TextObject("{=BPgMgury}Holy site ({FIEF})")
                         .SetTextVariable("FIEF", settlement.Name));
                 }
 
                 if (settlement == religion.Faith.FaithSeat)
                 {
-                    result.Add(0.15f, new TextObject("{=!}Faith seat ({FIEF})")
+                    result.Add(0.15f, new TextObject("{=z0ifBnEL}Faith seat ({FIEF})")
                        .SetTextVariable("FIEF", settlement.Name));
                 }
             }

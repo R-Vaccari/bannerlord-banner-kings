@@ -12,7 +12,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
         public override Settlement FaithSeat => Settlement.All.First(x => x.StringId == "town_B2");
         public override TextObject GetZealotsGroupName()
         {
-            return new TextObject("{=!}Wolves of Llyn Tywal");
+            return new TextObject("{=HU7B8BPZ}Wolves of Llyn Tywal");
         }
 
         public override TextObject GetDescriptionHint()

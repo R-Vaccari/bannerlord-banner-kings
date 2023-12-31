@@ -125,13 +125,13 @@ namespace BannerKings.UI.Court
             if (council.IsRoyal && diplomacy != null)
             {
                 BKExplainedNumber legitimacy = diplomacy.LegitimacyTargetExplained;
-                CourtInfo.Add(new InformationElement(new TextObject("{=!}Legitimacy:").ToString(),
+                CourtInfo.Add(new InformationElement(new TextObject("Legitimacy:").ToString(),
                     new TextObject("{=FgAWmeXm}{GRACE} / {TOTAL} ({CHANGE} / day)")
                     .SetTextVariable("GRACE", FormatValue(diplomacy.Legitimacy))
                     .SetTextVariable("TOTAL", FormatValue(legitimacy.ResultNumber))
                     .SetTextVariable("CHANGE", FormatFloatGain(diplomacy.LegitimacyChange * 100f))
                     .ToString(),
-                    new TextObject("{=!}Legitimacy represents how a ruler is seen by the other members of a realm, concerning their right to rule.{newline}{newline}Legitimacy Target: {TARGET}{newline}{newline}{EXPLANATIONS}")
+                    new TextObject("Legitimacy represents how a ruler is seen by the other members of a realm, concerning their right to rule.{newline}{newline}Legitimacy Target: {TARGET}{newline}{newline}{EXPLANATIONS}")
                     .SetTextVariable("TARGET", FormatValue(legitimacy.ResultNumber))
                     .SetTextVariable("EXPLANATIONS", legitimacy.GetFormattedPercentage())
                     .ToString()));

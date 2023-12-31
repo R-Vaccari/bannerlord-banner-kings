@@ -127,14 +127,14 @@ namespace BannerKings.Models.Vanilla
                 {
                     foreach (var pact in diplomacy.TradePacts)
                     {
-                        result.AddFactor(-0.075f, new TextObject("{=!}Trade pact with {KINGDOM}")
+                        result.AddFactor(-0.075f, new TextObject("{=kiBf4bre}Trade pact with {KINGDOM}")
                             .SetTextVariable("KINGDOM", pact.Name));
                     }
 
                     foreach (InterestGroup group in diplomacy.Groups)
                     {
                         result.AddFactor(0.5f * group.Influence.ResultNumber * (group.Support.ResultNumber - 0.5f), 
-                            new TextObject("{=!}{GROUP} support")
+                            new TextObject("{=NVoUn9ro}{GROUP} support")
                             .SetTextVariable("GROUP", group.Name));
                     }
                 }

@@ -192,13 +192,13 @@ namespace BannerKings.UI
                 TooltipProperty.TooltipPropertyFlags.Title));
 
             properties.Add(new TooltipProperty(string.Empty,
-                new TextObject("{=!}Acts endorsed by this group. Promoting any of these laws, policies or engaging in wars with these justifications (Casus Belli) will evoke the group's support.").ToString(),
+                new TextObject("{=xTEWx9Zd}Acts endorsed by this group. Promoting any of these laws, policies or engaging in wars with these justifications (Casus Belli) will evoke the group's support.").ToString(),
                 0,
                 false,
                 TooltipProperty.TooltipPropertyFlags.MultiLine));
 
             TooltipAddEmptyLine(properties);
-            properties.Add(new TooltipProperty(new TextObject("{=!}Laws").ToString(), " ", 0));
+            properties.Add(new TooltipProperty(new TextObject("Laws").ToString(), " ", 0));
             properties.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
 
             foreach (var law in group.SupportedLaws)
@@ -207,7 +207,7 @@ namespace BannerKings.UI
             }
 
             TooltipAddEmptyLine(properties);
-            properties.Add(new TooltipProperty(new TextObject("{=!}Policies").ToString(), " ", 0));
+            properties.Add(new TooltipProperty(new TextObject("{=kP1H1dTq}Policies").ToString(), " ", 0));
             properties.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
 
             foreach (var policy in group.SupportedPolicies)
@@ -216,7 +216,7 @@ namespace BannerKings.UI
             }
 
             TooltipAddEmptyLine(properties);
-            properties.Add(new TooltipProperty(new TextObject("{=!}Casus Belli").ToString(), " ", 0));
+            properties.Add(new TooltipProperty(new TextObject("{=Fs2NR9Os}Casus Belli").ToString(), " ", 0));
             properties.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
 
             foreach (var justification in group.SupportedCasusBelli)
@@ -237,13 +237,13 @@ namespace BannerKings.UI
                 TooltipProperty.TooltipPropertyFlags.Title));
 
             properties.Add(new TooltipProperty(string.Empty,
-                new TextObject("{=!}Acts shunned by this group. Promoting any of these laws or policies reduce the group's support.").ToString(),
+                new TextObject("{=fiV2P3dD}Acts shunned by this group. Promoting any of these laws or policies reduce the group's support.").ToString(),
                 0,
                 false,
                 TooltipProperty.TooltipPropertyFlags.MultiLine));
 
             TooltipAddEmptyLine(properties);
-            properties.Add(new TooltipProperty(new TextObject("{=!}Laws").ToString(), " ", 0));
+            properties.Add(new TooltipProperty(new TextObject("Laws").ToString(), " ", 0));
             properties.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
 
             foreach (var law in group.ShunnedLaws)
@@ -252,7 +252,7 @@ namespace BannerKings.UI
             }
 
             TooltipAddEmptyLine(properties);
-            properties.Add(new TooltipProperty(new TextObject("{=!}Policies").ToString(), " ", 0));
+            properties.Add(new TooltipProperty(new TextObject("{=kP1H1dTq}Policies").ToString(), " ", 0));
             properties.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
 
             foreach (var policy in group.ShunnedPolicies)
@@ -273,13 +273,13 @@ namespace BannerKings.UI
                 TooltipProperty.TooltipPropertyFlags.Title));
 
             properties.Add(new TooltipProperty(string.Empty,
-                new TextObject("{=!}Every group is capable of pushing demands for the ruler. Each demand requires a certain level of group influence. Supportive groups will push for less demands. Thus, high-support, low-influence groups are the least likely to push for any demands.").ToString(),
+                new TextObject("{=CJTfnQZR}Every group is capable of pushing demands for the ruler. Each demand requires a certain level of group influence. Supportive groups will push for less demands. Thus, high-support, low-influence groups are the least likely to push for any demands.").ToString(),
                 0,
                 false,
                 TooltipProperty.TooltipPropertyFlags.MultiLine));
 
             TooltipAddEmptyLine(properties);
-            properties.Add(new TooltipProperty(new TextObject("{=!}Demands").ToString(), " ", 0));
+            properties.Add(new TooltipProperty(new TextObject("{=F5nvf0YA}Demands").ToString(), " ", 0));
             properties.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
 
             foreach (var demand in group.PossibleDemands)
@@ -697,7 +697,7 @@ namespace BannerKings.UI
 
             
             list.Add(new TooltipProperty(new TextObject("{=xcEes2qY}Animal Products:").ToString(),
-                new TextObject("{=!}{CURRENT} ({RATE} daily)")
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
                 .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.AnimalProductsNeed).ToString())
                 .SetTextVariable("RATE", FormatFloatGain(supplies.GetAnimalProductsCurrentNeed().ResultNumber))
                 .ToString(),
@@ -750,16 +750,16 @@ namespace BannerKings.UI
         {
             List<TooltipProperty> list = new List<TooltipProperty>();
             TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=!}Alliance").ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.Title));
+            list.Add(new TooltipProperty(new TextObject("{=ueWn5rM4}Alliance").ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.Title));
             TooltipAddSeperator(list);
             list.Add(new TooltipProperty(string.Empty,
-              new TextObject("{=!}An alliance between two realms institutes an expectation of mutual defensive military help. The proposed ruler needs to have at least one reason (result > 0) to consider an alliance. For more information, see the Alliances concept in the Encyclopedia.").ToString(),
+              new TextObject("{=0BUor31V}An alliance between two realms institutes an expectation of mutual defensive military help. The proposed ruler needs to have at least one reason (result > 0) to consider an alliance. For more information, see the Alliances concept in the Encyclopedia.").ToString(),
               0,
               false,
               TooltipProperty.TooltipPropertyFlags.MultiLine));
 
             TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=!}Willingness").ToString(), " ", 0));
+            list.Add(new TooltipProperty(new TextObject("{=0kB61iLq}Willingness").ToString(), " ", 0));
             //TooltipAddSeperator(list);
             ExplainedNumber willingness = BannerKingsConfig.Instance.DiplomacyModel
                 .GetAllianceDesire(proposer, proposed, true);
@@ -777,16 +777,16 @@ namespace BannerKings.UI
         {
             List<TooltipProperty> list = new List<TooltipProperty>();
             TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=!}War Support").ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.Title));
+            list.Add(new TooltipProperty(new TextObject("{=KU4x1UyH}War Support").ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.Title));
             TooltipAddSeperator(list);
             list.Add(new TooltipProperty(string.Empty,
-              new TextObject("{=!}The general support towards war against the target kingdom by the Peers of this realm. Different Casus Belli and individuals` goals and personalities affect the final outcome, not represented here. Thus, every voting Peer will have a different support towards a war, either for (result > 0) or against (result < 0), the likelihood of one outcome or the other being the sum of all supports. For more information, see the War Support concept in the Encyclopedia.").ToString(),
+              new TextObject("{=EQvJ3xVZ}The general support towards war against the target kingdom by the Peers of this realm. Different Casus Belli and individuals` goals and personalities affect the final outcome, not represented here. Thus, every voting Peer will have a different support towards a war, either for (result > 0) or against (result < 0), the likelihood of one outcome or the other being the sum of all supports. For more information, see the War Support concept in the Encyclopedia.").ToString(),
               0,
               false,
               TooltipProperty.TooltipPropertyFlags.MultiLine));
 
             TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=!}General Support").ToString(), " ", 0));
+            list.Add(new TooltipProperty(new TextObject("{=ts5eguUE}General Support").ToString(), " ", 0));
             //TooltipAddSeperator(list);
             ExplainedNumber willingness = BannerKingsConfig.Instance.DiplomacyModel
                 .GetScoreOfDeclaringWar(proposer, proposed, null, out TextObject reason, null, true);
@@ -859,7 +859,7 @@ namespace BannerKings.UI
             var main = Hero.MainHero;
             if (hero.IsNotable)
             {
-                correlation = new TextObject("{=!}Notable");
+                correlation = new TextObject("{=krTq3JMM}Notable");
             }
             else if (playerClan.Companions.Contains(hero) && BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
             {
@@ -870,13 +870,13 @@ namespace BannerKings.UI
                      hero.Siblings.Contains(main)
                      || hero.Spouse == main || hero.Children.Contains(main))
             {
-                correlation = new TextObject("{=!}Family");
+                correlation = new TextObject("{=TrckwZCf}Family");
             }
             else if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(hero))
             {
-                correlation = new TextObject("{=!}Vassal");
+                correlation = new TextObject("{=NMjbJsbD}Vassal");
             }
-            else correlation = new TextObject("{=!}Guest");
+            else correlation = new TextObject("{=PmNJnrJZ}Guest");
 
             return correlation.ToString();
         }
@@ -955,9 +955,9 @@ namespace BannerKings.UI
         {
             var list = new List<TooltipProperty>
             {
-                new(string.Empty, new TextObject("{=!}Workforce").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title),
-                new TooltipProperty(new TextObject("{=!}Non-Slaves").ToString(), estate.Population.ToString(), 0),
-                      new TooltipProperty(new TextObject("{=!}Slaves").ToString(), estate.Slaves.ToString(), 0)
+                new(string.Empty, new TextObject("Workforce").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title),
+                new TooltipProperty(new TextObject("{=A0MLAHO6}Non-Slaves").ToString(), estate.Population.ToString(), 0),
+                      new TooltipProperty(new TextObject("Slaves").ToString(), estate.Slaves.ToString(), 0)
             };
 
             return list;

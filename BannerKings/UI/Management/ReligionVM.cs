@@ -39,9 +39,9 @@ namespace BannerKings.UI.Management
         [DataSourceProperty]
         public string PopulationText => new TextObject("{=o3Ohk2hA}Population").ToString();
         [DataSourceProperty]
-        public string AppointText => new TextObject("{=!}Appoint Preacher").ToString();
+        public string AppointText => new TextObject("{=i2a0s6Ue}Appoint Preacher").ToString();
         [DataSourceProperty]
-        public string RemoveText => new TextObject("{=!}Banish Preacher").ToString();
+        public string RemoveText => new TextObject("{=NSsVwu3t}Banish Preacher").ToString();
 
         public override void RefreshValues()
         {
@@ -86,7 +86,7 @@ namespace BannerKings.UI.Management
 
                 var factor = BannerKingsConfig.Instance.ReligionModel.GetNotableFactor(notable, settlement);
                 var result = FormatValue(factor / totalFaithsWeight);
-                NotablesList.Add(new InformationElement(new TextObject("{=!}{HERO} ({FAITH})")
+                NotablesList.Add(new InformationElement(new TextObject("{=69vRMwjd}{HERO} ({FAITH})")
                     .SetTextVariable("HERO", notable.Name)
                     .SetTextVariable("FAITH", rel.Faith.GetFaithName())
                     .ToString(),
@@ -131,7 +131,7 @@ namespace BannerKings.UI.Management
             {
                 var presence = BannerKingsConfig.Instance.ReligionModel.CalculateReligionWeight(playerFaith, settlement);
                 Concept faithPresence = Concept.All.First(x => x.StringId == "str_bk_faith_presence");
-                ReligionInfo.Add(new InformationElement(new TextObject("{=!}Faith Presence ({FAITH}):")
+                ReligionInfo.Add(new InformationElement(new TextObject("{=4b4fY92L}Faith Presence ({FAITH}):")
                     .SetTextVariable("FAITH", playerFaith.Faith.GetFaithName())
                     .ToString(),
                     FormatValue(presence.ResultNumber / totalFaithsWeight),
@@ -143,9 +143,9 @@ namespace BannerKings.UI.Management
                 var fervor = BannerKingsConfig.Instance.ReligionModel.CalculateFervor(playerFaith);
                 ReligionInfo.Add(new InformationElement(new TextObject("{=PUwmzUZy}Fervor:").ToString(),
                     FormatValue(fervor.ResultNumber),
-                    new TextObject("{=!}{TEXT}{newline}{newline}Explanations:{newline}{EXPLANATIONS}")
+                    new TextObject("{=ba0zGtYh}{TEXT}{newline}{newline}Explanations:{newline}{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
-                            new TextObject("{=!}The faith's fervor. A faith's fervor makes its populations and heroes harder to convert. In settlements, fervor grealy contributes to the faith's presence. Heroes instead are less likely and/or require more resources to convert. Fervor is based on doctrines, settlements and clans that follow the faith. Additionaly, holding the Faith Seat and the faith's Holy Sites are important factors to fervor."))
+                            new TextObject("{=a98ihEMD}The faith's fervor. A faith's fervor makes its populations and heroes harder to convert. In settlements, fervor grealy contributes to the faith's presence. Heroes instead are less likely and/or require more resources to convert. Fervor is based on doctrines, settlements and clans that follow the faith. Additionaly, holding the Faith Seat and the faith's Holy Sites are important factors to fervor."))
                         .SetTextVariable("EXPLANATIONS", fervor.GetExplanations())
                         .ToString()));
             }
@@ -165,7 +165,7 @@ namespace BannerKings.UI.Management
             {
                 piety = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionModel.GetAppointCost(Hero.MainHero, data.ReligionData).ResultNumber);
                 cost = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionModel.GetAppointInfluence(Hero.MainHero, data.ReligionData).ResultNumber);
-                text = new TextObject("{=!}The {FAITH} faith would admit a preacher of rank {PREACHER} for {FIEF}. Appointing such a preacher would cost you {PIETY}{PIETY_ICON} and {INFLUENCE}{INFLUENCE_ICON}")
+                text = new TextObject("{=Jo1qy4rw}The {FAITH} faith would admit a preacher of rank {PREACHER} for {FIEF}. Appointing such a preacher would cost you {PIETY}{PIETY_ICON} and {INFLUENCE}{INFLUENCE_ICON}")
                     .SetTextVariable("FAITH", playerFaith.Faith.GetFaithName())
                     .SetTextVariable("PREACHER", playerFaith.Faith.GetRankTitle(rank))
                     .SetTextVariable("FIEF", Settlement.CurrentSettlement.Name)
@@ -183,13 +183,13 @@ namespace BannerKings.UI.Management
             }
             else
             {
-                text = new TextObject("{=!}The {FAITH} faith does not admit any type of preacher for {FIEF}. It is not possible to appoint one.")
+                text = new TextObject("{=T66RCyGO}The {FAITH} faith does not admit any type of preacher for {FIEF}. It is not possible to appoint one.")
                                     .SetTextVariable("FAITH", playerFaith.Faith.GetName())
                                     .SetTextVariable("FIEF", Settlement.CurrentSettlement.Name);
                 possible = false;
             }
 
-            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Appoint Preacher").ToString(),
+            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=i2a0s6Ue}Appoint Preacher").ToString(),
                 text.ToString(),
                 possible,
                 true,
@@ -221,7 +221,7 @@ namespace BannerKings.UI.Management
                     if (faith == data.ReligionData.DominantReligion)
                     {
                         possible = false;
-                        hint = new TextObject("{=!}Not possible to banish a preacher of the local dominant religion.");
+                        hint = new TextObject("{=ag4W3DmO}Not possible to banish a preacher of the local dominant religion.");
                     }
                     else
                     {
@@ -236,19 +236,19 @@ namespace BannerKings.UI.Management
 
                         if (BannerKingsConfig.Instance.ReligionsManager.GetPiety(Hero.MainHero) < piety)
                         {
-                            hint = new TextObject("{=!}Not enough piety.");
+                            hint = new TextObject("Not enough piety.");
                             possible = false;
                         }
 
                         if (Clan.PlayerClan.Influence < cost)
                         {
-                            hint = new TextObject("{=!}Not enough influence.");
+                            hint = new TextObject("Not enough influence.");
                             possible = false;
                         }
 
                         if (possible)
                         {
-                            hint = new TextObject("{=!}Removing {HERO} will cost you {PIETY}{PIETY_ICON} and {INFLUENCE}{INFLUENCE_ICON}. Moreover, due to their influence over the populace, the fief will suffer a loyalty hit of {LOYALTY} points reduction.")
+                            hint = new TextObject("{=kO0MyA6z}Removing {HERO} will cost you {PIETY}{PIETY_ICON} and {INFLUENCE}{INFLUENCE_ICON}. Moreover, due to their influence over the populace, the fief will suffer a loyalty hit of {LOYALTY} points reduction.")
                                 .SetTextVariable("LOYALTY", loyalty)
                                 .SetTextVariable("INFLUENCE", cost)
                                 .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON)
@@ -298,7 +298,7 @@ namespace BannerKings.UI.Management
                     }
 
                     InformationManager.DisplayMessage(new InformationMessage(
-                        new TextObject("{=!}{HERO} was removed as a preacher at {FIEF}")
+                        new TextObject("{=P1XuHMXg}{HERO} was removed as a preacher at {FIEF}")
                         .SetTextVariable("HERO", notable.Name)
                         .SetTextVariable("FIEF", settlement.Name)
                         .ToString(),

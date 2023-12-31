@@ -56,8 +56,8 @@ namespace BannerKings.Managers.Buildings
         public override void Initialize()
         {
             Harbor = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("building_harbor"));
-            Harbor.Initialize(new TextObject("{=!}Harbor"),
-                new TextObject("{=!}A large infrastructure that allows easy access to the city by ships, and thus the flow of goods and money. Harbors output fish products, increase local trade power and prosperity."),
+            Harbor.Initialize(new TextObject("{=DXPEKUWf}Harbor"),
+                new TextObject("{=EoCMnvLM}A large infrastructure that allows easy access to the city by ships, and thus the flow of goods and money. Harbors output fish products, increase local trade power and prosperity."),
                 new[]
                 {
                     2500,
@@ -71,8 +71,8 @@ namespace BannerKings.Managers.Buildings
                 });
 
             Port = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("building_port"));
-            Port.Initialize(new TextObject("{=!}Port"),
-                new TextObject("{=!}Infrastructure that allows easy access to town by ships, and thus the flow of goods and money. Ports output fish products, increase local trade power and prosperity."),
+            Port.Initialize(new TextObject("{=YSv8Dzw1}Port"),
+                new TextObject("{=CjjO5qs6}Infrastructure that allows easy access to town by ships, and thus the flow of goods and money. Ports output fish products, increase local trade power and prosperity."),
                 new[]
                 {
                     1500,

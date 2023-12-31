@@ -412,8 +412,8 @@ namespace BannerKings.UI.Education
                         : new TextObject("{=vW3YtyNm}None (in a mobile party)");
 
                     bool available = hero.IsFriend(Hero.MainHero) || hero.Clan == Clan.PlayerClan;
-                    TextObject hint = available ? new TextObject("{=!}{HERO} is currently available for teaching. Their current location is: {LOCATION}").SetTextVariable("LOCATION", placeText) :
-                        new TextObject("{=!}{HERO} is not available for teaching: either they are not part of your family or do not like you enough.");
+                    TextObject hint = available ? new TextObject("{=xve1zriF}{HERO} is currently available for teaching. Their current location is: {LOCATION}").SetTextVariable("LOCATION", placeText) :
+                        new TextObject("{=ZJzjhHNd}{HERO} is not available for teaching: either they are not part of your family or do not like you enough.");
                     elements.Add(new InquiryElement(tuple,
                         tuple.Item1.Name + " - " + hero.Name,
                         new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject)),

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -23,7 +23,7 @@ namespace BannerKings.Campaign
         public override void Initialize()
         {
             SpiceFarm = Game.Current.ObjectManager.RegisterPresumedObject(new VillageType("SpiceFarm"));
-            SpiceFarm.Initialize(new TextObject("{=!}Spice Farm"),
+            SpiceFarm.Initialize(new TextObject("{=JnKofObL}Spice Farm"),
                 "spice_sack",
                 "silk_plant_ucon",
                 "silk_plant_burned",
@@ -39,7 +39,7 @@ namespace BannerKings.Campaign
                 });
 
             Papyrus = Game.Current.ObjectManager.RegisterPresumedObject(new VillageType("Papyrus"));
-            Papyrus.Initialize(new TextObject("{=!}Damarian Farm"),
+            Papyrus.Initialize(new TextObject("{=RVm9TTU6}Damarian Farm"),
                 "wheat_farm", "wheat_farm_ucon", "wheat_farm_burned",
                 new ValueTuple<ItemObject, float>[]
                 {
@@ -55,7 +55,7 @@ namespace BannerKings.Campaign
                 });
 
             Whale = Game.Current.ObjectManager.RegisterPresumedObject(new VillageType("Whale"));
-            Whale.Initialize(new TextObject("{=!}Whaler"),
+            Whale.Initialize(new TextObject("{=T0oGcX47}Whaler"),
                 "fisherman", "fisherman_ucon", "fisherman_burned",
                 new ValueTuple<ItemObject, float>[]
                 {
@@ -70,7 +70,7 @@ namespace BannerKings.Campaign
                 });
 
             PurpleDye = Game.Current.ObjectManager.RegisterPresumedObject(new VillageType("PurpleDye"));
-            PurpleDye.Initialize(new TextObject("{=!}Perassic Fishers"),
+            PurpleDye.Initialize(new TextObject("{=dDruSq5J}Perassic Fishers"),
                 "fisherman", "fisherman_ucon", "fisherman_burned",
                 new ValueTuple<ItemObject, float>[]
                 {
@@ -85,7 +85,7 @@ namespace BannerKings.Campaign
                 });
 
             Limestone = Game.Current.ObjectManager.RegisterPresumedObject(new VillageType("Limestone"));
-            Limestone.Initialize(new TextObject("{=!}Limestone Quarry"),
+            Limestone.Initialize(new TextObject("{=nSLhrHWX}Limestone Quarry"),
                 "spice_sack",
                 "silk_plant_ucon",
                 "silk_plant_burned",
@@ -101,7 +101,7 @@ namespace BannerKings.Campaign
                 });
 
             Marble = Game.Current.ObjectManager.RegisterPresumedObject(new VillageType("Marble"));
-            Marble.Initialize(new TextObject("{=!}Marble Quarry"),
+            Marble.Initialize(new TextObject("{=4DcWaY9q}Marble Quarry"),
                 "spice_sack",
                 "silk_plant_ucon",
                 "silk_plant_burned",

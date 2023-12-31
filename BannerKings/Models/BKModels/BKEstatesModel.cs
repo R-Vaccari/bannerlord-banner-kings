@@ -342,7 +342,7 @@ namespace BannerKings.Models.BKModels
                     break;
             }
 
-            result.Add(factor, new TextObject("{=!}Tax policy at {FIEF}")
+            result.Add(factor, new TextObject("{=4ioUfApH}Tax policy at {FIEF}")
                 .SetTextVariable("FIEF", settlement.Name));
             return result;
         }
@@ -367,10 +367,10 @@ namespace BannerKings.Models.BKModels
         {
             var result = new ExplainedNumber(0f, descriptions);
 
-            result.Add((int)estate.PopulationCapacity.ResultNumber, new TextObject("{=!}Population Capacity"));
+            result.Add((int)estate.PopulationCapacity.ResultNumber, new TextObject("{=OBAkW4VT}Population Capacity"));
             var settlement = estate.EstatesData.Settlement;
             float militarism = BannerKingsConfig.Instance.VolunteerModel.GetMilitarism(settlement).ResultNumber;
-            result.AddFactor(militarism - 1f, new TextObject("{=!}Militarism of {FIEF}")
+            result.AddFactor(militarism - 1f, new TextObject("{=vTg1TpWq}Militarism of {FIEF}")
                 .SetTextVariable("FIEF", settlement.Name));
 
             if (estate.Task == EstateTask.Military)
@@ -385,7 +385,7 @@ namespace BannerKings.Models.BKModels
             {
                 result.Add(settlement.Village.Hearth * 0.1f, GameTexts.FindText("str_map_tooltip_hearths"));
                 Town town = settlement.Village.Bound.Town;
-                result.Add(town.Prosperity / 50f, new TextObject("{=!}Prosperity of {TOWN}")
+                result.Add(town.Prosperity / 50f, new TextObject("{=byjOdZ8U}Prosperity of {TOWN}")
                     .SetTextVariable("TOWN", town.Name));
             }
 
@@ -402,8 +402,8 @@ namespace BannerKings.Models.BKModels
             result.Add(acrePrice * estate.Pastureland * 0.5f, new TextObject("{=ngRhXYj1}Pasturelands"));
             result.Add(acrePrice * estate.Woodland * 0.15f, new TextObject("{=qPQ7HKgG}Woodlands"));
 
-            result.Add(estate.TaxAccumulated, new TextObject("{=!}Current Income"));
-            result.Add(estate.LastIncome * CampaignTime.DaysInYear, new TextObject("{=!}Yearly income"));
+            result.Add(estate.TaxAccumulated, new TextObject("{=kyB8tkgY}Current Income"));
+            result.Add(estate.LastIncome * CampaignTime.DaysInYear, new TextObject("{=8xNix2pu}Yearly income"));
             /*var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
             if (title != null)
             {

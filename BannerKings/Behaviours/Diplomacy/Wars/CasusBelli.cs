@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -79,7 +79,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         [SaveableProperty(14)] public FeudalTitle Title { get; private set; }
         public TextObject ObjectiveText { get; private set; }
 
-        public TextObject GetDescriptionWithModifers() => new TextObject("{=!}{DESCRIPTION}\n\nConquest Modifier: {CONQUEST}%\nHostage Modifier: {HOSTAGE}%\nRaiding Modifier: {RAID}%")
+        public TextObject GetDescriptionWithModifers() => new TextObject("{=pwxzjqjJ}{DESCRIPTION}\n\nConquest Modifier: {CONQUEST}%\nHostage Modifier: {HOSTAGE}%\nRaiding Modifier: {RAID}%")
             .SetTextVariable("DESCRIPTION", Description)
             .SetTextVariable("CONQUEST", ConquestWeight * 100)
             .SetTextVariable("HOSTAGE", CaptureWeight * 100)
@@ -89,7 +89,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             .SetTextVariable("ATTACKER", Attacker != null ? Attacker.Name : new TextObject())
             .SetTextVariable("DEFENDER", Defender != null ? Defender.Name : new TextObject());
 
-        public TextObject QueryNameText => Fief != null ? new TextObject("{=!}{FIEF} - {NAME}")
+        public TextObject QueryNameText => Fief != null ? new TextObject("{=TZXcmqKk}{FIEF} - {NAME}")
             .SetTextVariable("FIEF", Fief.Name)
             .SetTextVariable("NAME", Name)
             : Name;

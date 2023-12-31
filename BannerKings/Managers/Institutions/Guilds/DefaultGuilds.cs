@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
@@ -56,7 +56,7 @@ namespace BannerKings.Managers.Institutions.Guilds
         public override void Initialize()
         {
             Merchants.Initialize(new TextObject("{=z69WpCc8}Merchants Guild"),
-                new TextObject("{=!}An association of merchants. As a group, merchants seek to have the freest markets possible, avoiding tariffs to noble overlords or other regulations.\nEffects:\nIncreased mercantilism\nIncreased caravan attractiveness"),
+                new TextObject("{=zMqR7D6c}An association of merchants. As a group, merchants seek to have the freest markets possible, avoiding tariffs to noble overlords or other regulations.\nEffects:\nIncreased mercantilism\nIncreased caravan attractiveness"),
                 new List<WorkshopType>()
                 {
                     WorkshopType.Find("velvet_weavery"), 
@@ -70,7 +70,7 @@ namespace BannerKings.Managers.Institutions.Guilds
                 });
 
             Masons.Initialize(new TextObject("{=qLVinLay}Masons Guild"),
-                new TextObject("{=!}An association of construction workers and engineers. Masons are responsible for stonework in construction and hence essential for towns and castles.\nEffects:\nImproved construction power"),
+                new TextObject("{=YPM5xg8s}An association of construction workers and engineers. Masons are responsible for stonework in construction and hence essential for towns and castles.\nEffects:\nImproved construction power"),
                 new List<WorkshopType>()
                 {
                     WorkshopType.Find("pottery_shop"),
@@ -84,7 +84,7 @@ namespace BannerKings.Managers.Institutions.Guilds
                 });
 
             Metalsmiths.Initialize(new TextObject("{=VPDXcJu7}Metalsmiths Guild"),
-                new TextObject("{=!}An association of various types of metalworkers, such as tool makers, horseshoe makers, among others."),
+                new TextObject("{=Y2QCuRwj}An association of various types of metalworkers, such as tool makers, horseshoe makers, among others."),
                 new List<WorkshopType>()
                 {
                     WorkshopType.Find("smithy"),

@@ -188,8 +188,8 @@ namespace BannerKings.Behaviours
 
             var elements = new List<InquiryElement>();
             LearningElement start = new LearningElement(
-                new TextObject("{=!}Custom Start ({CURRENT})")
-                .SetTextVariable("CURRENT", option != null ? option.Name : new TextObject("{=!}None selected")),
+                new TextObject("{=tScOpxMZ}Custom Start ({CURRENT})")
+                .SetTextVariable("CURRENT", option != null ? option.Name : new TextObject("{=rj6769F8}None selected")),
                 TextObject.Empty,
                 new TextObject(),
                 () => UIManager.Instance.ShowWindow("campaignStart"));
@@ -201,12 +201,12 @@ namespace BannerKings.Behaviours
             if (count == 0)
             {
                 relAllowed = false;
-                relHint = new TextObject("{=!}You do not have any religions installed. Install the separate mod, 'Banner Kings: Cultures Expanded' for the official, lore-based BK religions. Alternatively, install another third party mod that adds BK religions.");
+                relHint = new TextObject("{=4W1sGEzQ}You do not have any religions installed. Install the separate mod, 'Banner Kings: Cultures Expanded' for the official, lore-based BK religions. Alternatively, install another third party mod that adds BK religions.");
             }
 
             LearningElement religion = new LearningElement(
-                new TextObject("{=!}Religion ({CURRENT})")
-                .SetTextVariable("CURRENT", this.religion != null ? this.religion.Faith.GetFaithName() : new TextObject("{=!}None selected")),
+                new TextObject("{=Y1giFY9O}Religion ({CURRENT})")
+                .SetTextVariable("CURRENT", this.religion != null ? this.religion.Faith.GetFaithName() : new TextObject("{=rj6769F8}None selected")),
                 TextObject.Empty,
                 relHint,
                 () => UIManager.Instance.ShowWindow("religionStart"));
@@ -217,23 +217,23 @@ namespace BannerKings.Behaviours
                 religion.Hint.ToString()));
 
             LearningElement importantConcepts = new LearningElement(
-                new TextObject("{=!}Important Concepts"),
+                new TextObject("{=f3GuDtEU}Important Concepts"),
                 TextObject.Empty,
-                new TextObject("{=!}The main topics a newcomer to the mod should become familiarized with, concerning essential gameplay systems and balance changes."),
+                new TextObject("{=ju5qvoMH}The main topics a newcomer to the mod should become familiarized with, concerning essential gameplay systems and balance changes."),
                 () => ShowInquiry2());
             elements.Add(new InquiryElement(importantConcepts, importantConcepts.Name.ToString(), null, true, importantConcepts.Hint.ToString()));
 
             LearningElement concepts = new LearningElement(
-                new TextObject("{=!}Learning Concepts"),
+                new TextObject("{=j9h1yOpp}Learning Concepts"),
                 TextObject.Empty,
-                new TextObject("{=!}Learn about the various topics of the mod."),
+                new TextObject("{=cMzxQoUS}Learn about the various topics of the mod."),
                 () => ShowInquiry());
             elements.Add(new InquiryElement(concepts, concepts.Name.ToString(), null, true, concepts.Hint.ToString()));     
 
             LearningElement finish = new LearningElement(
-                new TextObject("{=!}Finish"),
+                new TextObject("{=ktbC3W5M}Finish"),
                 TextObject.Empty,
-                new TextObject("{=!}Start the game with the chosen start and religion."),
+                new TextObject("{=SgJXJKeu}Start the game with the chosen start and religion."),
                 () =>
                 {
                     RunReligion();
@@ -243,7 +243,7 @@ namespace BannerKings.Behaviours
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=WaBMVVH9}Banner Kings").ToString(),
-                new TextObject("{=!}Welcome to the Banner Kings mod. Before starting your campaign, you should pick a custom start and a religion for your character first. You can also read on topics of the mod. All these topics are available on the Concepts page of Encyclopedia.{newline}{newline}Support is only provided through Discord. Please check out the mod-links over there if you consider contributing. Have fun!").ToString(),
+                new TextObject("{=pZ8F1HZR}Welcome to the Banner Kings mod. Before starting your campaign, you should pick a custom start and a religion for your character first. You can also read on topics of the mod. All these topics are available on the Concepts page of Encyclopedia.{newline}{newline}Support is only provided through Discord. Please check out the mod-links over there if you consider contributing. Have fun!").ToString(),
                 elements,
                 false,
                 1,
@@ -273,8 +273,8 @@ namespace BannerKings.Behaviours
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Banner Kings - Learning Concepts").ToString(),
-                new TextObject("{=!}To access these concepts again, access Concepts in Encyclopedia. All names and descriptions here are exactly what is present over there.").ToString(),
+                new TextObject("{=PbR13RE6}Banner Kings - Learning Concepts").ToString(),
+                new TextObject("{=ZnFCNKON}To access these concepts again, access Concepts in Encyclopedia. All names and descriptions here are exactly what is present over there.").ToString(),
                 elements,
                 true,
                 1,
@@ -315,8 +315,8 @@ namespace BannerKings.Behaviours
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Banner Kings - Important Concepts").ToString(),
-                new TextObject("{=!}To access these concepts again, access Concepts in Encyclopedia. All names and descriptions here are exactly what is present over there.").ToString(),
+                new TextObject("{=DWiRFSfS}Banner Kings - Important Concepts").ToString(),
+                new TextObject("{=ZnFCNKON}To access these concepts again, access Concepts in Encyclopedia. All names and descriptions here are exactly what is present over there.").ToString(),
                 elements,
                 true,
                 1,

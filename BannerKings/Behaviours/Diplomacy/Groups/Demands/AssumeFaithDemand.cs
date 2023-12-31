@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -19,10 +19,10 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         [SaveableProperty(1)] private Religion Religion { get; set; }
         private Religion RulerReligion => BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Group.KingdomDiplomacy.Kingdom.Leader);
 
-        public override DemandResponse PositiveAnswer => new DemandResponse(new TextObject("{=!}Concede"),
-                    new TextObject("{=!}Accept the demand to adhere to the {RELIGION} faith. They will be satisfied with this outcome.")
+        public override DemandResponse PositiveAnswer => new DemandResponse(new TextObject("{=kyB8tkgY}Concede"),
+                    new TextObject("{=Z9AB8vR6}Accept the demand to adhere to the {RELIGION} faith. They will be satisfied with this outcome.")
                     .SetTextVariable("RELIGION", Religion.Faith.GetName()),
-                    new TextObject("{=!}On {DATE}, the {GROUP} were conceded their {DEMAND} demand.")
+                    new TextObject("{=Pr6r49e8}On {DATE}, the {GROUP} were conceded their {DEMAND} demand.")
                     .SetTextVariable("GROUP", Group.Name)
                     .SetTextVariable("DEMAND", Name),
                     6,
@@ -41,7 +41,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                         if (fulfiller == Hero.MainHero)
                         {
                             InformationManager.DisplayMessage(new InformationMessage(
-                                new TextObject("{=!}The {GROUP} is satisfied! You will now adhere to the {RELIGION} faith.")
+                                new TextObject("{=iG3vZQnP}The {GROUP} is satisfied! You will now adhere to the {RELIGION} faith.")
                                 .SetTextVariable("GROUP", Group.Name)
                                 .SetTextVariable("RELIGION", Religion.Faith.GetFaithName())
                                 .ToString(),
@@ -53,10 +53,10 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                         return true;
                     });
 
-        public override DemandResponse NegativeAnswer => new DemandResponse(new TextObject("{=!}Reject"),
-                   new TextObject("{=!}Deny the demand to assumne the {RELIGION} faith. They will not like this outcome.")
+        public override DemandResponse NegativeAnswer => new DemandResponse(new TextObject("{=PoAmUqGR}Reject"),
+                   new TextObject("{=RYmV2PEY}Deny the demand to assumne the {RELIGION} faith. They will not like this outcome.")
                    .SetTextVariable("RELIGION", Religion.Faith.GetName()),
-                   new TextObject("{=!}On {DATE}, the {GROUP} were rejected their {DEMAND} demand.")
+                   new TextObject("{=icR6DbJR}On {DATE}, the {GROUP} were rejected their {DEMAND} demand.")
                    .SetTextVariable("GROUP", Group.Name)
                    .SetTextVariable("DEMAND", Name),
                    6,
@@ -76,7 +76,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                        if (fulfiller == Hero.MainHero)
                        {
                            InformationManager.DisplayMessage(new InformationMessage(
-                               new TextObject("{=!}The {GROUP} is not satisfied...")
+                               new TextObject("{=Wi3oUWpJ}The {GROUP} is not satisfied...")
                                .SetTextVariable("GROUP", Group.Name)
                                .SetTextVariable("LEADER", Group.Leader.Name)
                                .ToString(),
@@ -124,14 +124,14 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 Religion leaderReligion = RulerReligion;
                 if (leaderReligion == null || leaderReligion.Faith != kingdomReligion.Faith)
                 {
-                    result = new(true, new TextObject("{=!}This demand is possible."));
+                    result = new(true, new TextObject("{=WvxUuqmj}This demand is possible."));
                 }
-                else result = new(false, new TextObject("{=!}The ruler adheres to the legal faith of the realm."));
+                else result = new(false, new TextObject("{=jpYAAwvw}The ruler adheres to the legal faith of the realm."));
             }
 
             if (Active)
             {
-                result = new(false, new TextObject("{=!}This demand is already under revision by the ruler."));
+                result = new(false, new TextObject("{=RnN79qMx}This demand is already under revision by the ruler."));
             }
 
             return result;
@@ -140,8 +140,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         public override void SetTexts()
         {
             if (Religion != null) Religion.PostInitialize();
-            Initialize(new TextObject("{=!}Assume Faith"),
-                new TextObject("{=!}Demand that the ruler assume the legal faith of the realm."));
+            Initialize(new TextObject("{=euPvwc76}Assume Faith"),
+                new TextObject("{=RYmV2PEY}Demand that the ruler assume the legal faith of the realm."));
         }
 
         public override void SetUp()
@@ -179,7 +179,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
-                new TextObject("{=!}The {GROUP} is pushing for you to assume the {RELIGION} faith, the legal faith of the realm. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
+                new TextObject("{=1rWYDHQj}The {GROUP} is pushing for you to assume the {RELIGION} faith, the legal faith of the realm. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
                 .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(Group).ResultNumber * 100f).ToString("0.00"))
                 .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(Group).ResultNumber * 100f).ToString("0.00"))
                 .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
@@ -211,14 +211,14 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         {
             SetTexts();
             InformationManager.ShowInquiry(new InquiryData(Name.ToString(),
-                new TextObject("{=!}The {GROUP} group is demanding you assume the {RELIGION} faith. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
+                new TextObject("{=yHWrKsKr}The {GROUP} group is demanding you assume the {RELIGION} faith. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
                 .SetTextVariable("GROUP", Group.Name)
                 .SetTextVariable("RELIGION", Religion.Faith.GetFaithName())
                 .ToString(),
                 true,
                 true,
-                new TextObject("{=!}Resolve").ToString(),
-                new TextObject("{=!}Postpone").ToString(),
+                new TextObject("{=j90Aa0xG}Resolve").ToString(),
+                new TextObject("{=sbwMaTwx}Postpone").ToString(),
                 () =>
                 {
                     ShowPlayerDemandAnswers();

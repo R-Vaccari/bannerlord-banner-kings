@@ -141,7 +141,7 @@ namespace BannerKings.Managers.Education.Books
 
             Siege = new BookType("book_siege");
             Siege.Initialize(BKItems.Instance.BookSiege,
-                new TextObject("{=!}A Calradic, illustrated treatise on siege warfare, also known as poliorcetics. The manuscript goes over all the main topics of sieges: building appropriate engines, bringing men upon the enemy's walls, as well as keeping the enemy off yours. All those in Calradia can attest that none can match the Calradoi in terms of siege warfare."),
+                new TextObject("{=rH0HthvA}A Calradic, illustrated treatise on siege warfare, also known as poliorcetics. The manuscript goes over all the main topics of sieges: building appropriate engines, bringing men upon the enemy's walls, as well as keeping the enemy off yours. All those in Calradia can attest that none can match the Calradoi in terms of siege warfare."),
                 DefaultLanguages.Instance.Calradian, BookUse.Focusbook, DefaultSkills.Engineering);
 
             Strategikon = new BookType("book_tactics");
@@ -161,7 +161,7 @@ namespace BannerKings.Managers.Education.Books
                 BookUse.Dictionary);
 
             GreenKnight.Initialize(BKItems.Instance.BookGreenKnight,
-                new TextObject("{=!}A Vlandic tale that explores the themes of chivalry, honor and sacrifice. A knight is made an offer by this mysterious, green knight figure, at the possible cost of his life. Believing the danger to be absurd and the offer purely benefitial to himself, he makes a pledge. A year later, the terms of the offer come due, and the knight's honor and integrity are challenged: will he keep his word and risk his life?"),
+                new TextObject("{=8LP235SH}A Vlandic tale that explores the themes of chivalry, honor and sacrifice. A knight is made an offer by this mysterious, green knight figure, at the possible cost of his life. Believing the danger to be absurd and the offer purely benefitial to himself, he makes a pledge. A year later, the terms of the offer come due, and the knight's honor and integrity are challenged: will he keep his word and risk his life?"),
                 DefaultLanguages.Instance.Vlandic,
                 BookUse.Skillbook,
                 DefaultSkills.Riding,
@@ -169,7 +169,7 @@ namespace BannerKings.Managers.Education.Books
 
             Mounted = new BookType("book_riding");
             Mounted.Initialize(BKItems.Instance.BookArtHorsemanship,
-                new TextObject("{=!}An ancient Calradic treatise concerning the trainning, care and art of mounting horses. The treatise is the staple manuscript on the long Calradic equestrian tradition, an art developed by its nobility and culminated into the cataphract doctrice."),
+                new TextObject("{=SpKkv3PR}An ancient Calradic treatise concerning the trainning, care and art of mounting horses. The treatise is the staple manuscript on the long Calradic equestrian tradition, an art developed by its nobility and culminated into the cataphract doctrice."),
                 DefaultLanguages.Instance.Calradian,
                 BookUse.Focusbook,
                 DefaultSkills.Riding);

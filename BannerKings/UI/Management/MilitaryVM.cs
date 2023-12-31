@@ -228,7 +228,7 @@ namespace BannerKings.UI.Management
 
             ManpowerInfo.Add(new InformationElement(new TextObject("{=nkk8no8d}Peasant Manpower:").ToString(), 
                 $"{data.MilitaryData.PeasantManpower:n0}",
-                new TextObject("{=!}Manpower from every non-noble population class. Available classes are affected by kingdom demesne laws. Peasant manpower compromises the majority of military forces.")
+                new TextObject("{=D6mnTxzM}Manpower from every non-noble population class. Available classes are affected by kingdom demesne laws. Peasant manpower compromises the majority of military forces.")
                     .ToString()));
 
             List<RecruitSpawn> recruits = DefaultRecruitSpawns.Instance.GetPossibleSpawns(settlement.Culture, settlement);
@@ -245,20 +245,20 @@ namespace BannerKings.UI.Management
                 foreach (var type in spawn.GetPossibleTypes())
                     weights[type] += spawn.GetChance(type);
 
-            ManpowerInfo.Add(new InformationElement(new TextObject("{=!}Possible Recruits:").ToString(),
+            ManpowerInfo.Add(new InformationElement(new TextObject("{=jhSJLHp1}Possible Recruits:").ToString(),
                 recruits.Count.ToString(),
-                recruits.Aggregate(new TextObject("{=!}These are the troops the notables may directly muster, not accounting for further trainning. The chance of each one is correlated to its population class' manpower in relation to the overall manpower.\n\n").ToString(), 
+                recruits.Aggregate(new TextObject("{=PA0b7FJk}These are the troops the notables may directly muster, not accounting for further trainning. The chance of each one is correlated to its population class' manpower in relation to the overall manpower.\n\n").ToString(), 
                 (current, recruit) =>
                 {
                     StringBuilder sb = new StringBuilder();
                     foreach (var type in recruit.GetPossibleTypes())
-                        sb.Append(new TextObject("{=!}{newline}-- {TYPE}: {CHANCE}")
+                        sb.Append(new TextObject("{=QfGQBr8Z}{newline}-- {TYPE}: {CHANCE}")
                             .SetTextVariable("TYPE", Utils.Helpers.GetClassName(type, recruit.Culture))
                             .SetTextVariable("CHANCE", FormatValue(BannerKingsConfig.Instance.VolunteerModel
                                 .GetPopTypeSpawnChance(data, type) * (recruit.GetChance(type) / weights[type])))
                             .ToString());
 
-                    return current + Environment.NewLine + Environment.NewLine + new TextObject("{=!}{TROOP}{LIST}")
+                    return current + Environment.NewLine + Environment.NewLine + new TextObject("{=tUZshvxh}{TROOP}{LIST}")
                     .SetTextVariable("TROOP", recruit.Troop.Name)
                     .SetTextVariable("LIST", sb.ToString())
                     .ToString();

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
@@ -31,8 +31,8 @@ namespace BannerKings.Managers.Titles.Governments
 
         public override void Initialize()
         {
-            Primogeniture.Initialize(new TextObject("{=!}Primogeniture"),
-                new TextObject("{=!}Primogeniture inheritance gives precedence to the children of the deceased, from eldest to youngest. Whether the firstborn son or daughter will be chosen depends on the Gender Law in place."),
+            Primogeniture.Initialize(new TextObject("{=2VAxdqb0}Primogeniture"),
+                new TextObject("{=2VAxdqb0}Primogeniture inheritance gives precedence to the children of the deceased, from eldest to youngest. Whether the firstborn son or daughter will be chosen depends on the Gender Law in place."),
                 300f,
                 150f,
                 100f,
@@ -41,8 +41,8 @@ namespace BannerKings.Managers.Titles.Governments
                 -0.2f,
                 -0.8f);
 
-            Ultimogeniture.Initialize(new TextObject("{=!}Ultimogeniture"),
-                new TextObject("{=!}Ultimogeniture inheritance gives precedence to the children of the deceased, from youngest to eldest. Whether the youngest son or daughter will be chosen depends on the Gender Law in place."),
+            Ultimogeniture.Initialize(new TextObject("{=zqkBqFJf}Ultimogeniture"),
+                new TextObject("{=zqkBqFJf}Ultimogeniture inheritance gives precedence to the children of the deceased, from youngest to eldest. Whether the youngest son or daughter will be chosen depends on the Gender Law in place."),
                 300f,
                 150f,
                 100f,
@@ -51,8 +51,8 @@ namespace BannerKings.Managers.Titles.Governments
                 0.2f,
                 -0.5f);
 
-            Seniority.Initialize(new TextObject("{=!}Seniority"),
-                new TextObject("{=!}Seniority inheritance gives no precedence to any particular member of a household. The main criteria is their age, meaning that household members without blood ties may take precedence over children or close relatives. Whether the eldest man or woman will be chosen depends on the Gender Law in place."),
+            Seniority.Initialize(new TextObject("{=HOoAoUV7}Seniority"),
+                new TextObject("{=HOoAoUV7}Seniority inheritance gives no precedence to any particular member of a household. The main criteria is their age, meaning that household members without blood ties may take precedence over children or close relatives. Whether the eldest man or woman will be chosen depends on the Gender Law in place."),
                 0f,
                 0f,
                 0f,

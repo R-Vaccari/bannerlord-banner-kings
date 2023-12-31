@@ -52,7 +52,7 @@ namespace BannerKings.UI.Management
                 ExplainedNumber demand = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, popClass.type, true);
                 PopList.Add(new PopulationInfoVM(popName.Name.ToString(),
                         popClass.count,
-                        new TextObject("{=!}{DESCRIPTION}\n\nDemand for this class: {DEMAND}\nExplanations:\n{EXPLANATIONS}")
+                        new TextObject("{=umTZshjG}{DESCRIPTION}\n\nDemand for this class: {DEMAND}\nExplanations:\n{EXPLANATIONS}")
                         .SetTextVariable("DEMAND", FormatValue(demand.ResultNumber))
                         .SetTextVariable("EXPLANATIONS", demand.GetExplanations())
                         .SetTextVariable("DESCRIPTION", popName.Description).ToString()));
@@ -137,11 +137,11 @@ namespace BannerKings.UI.Management
                     .ToString()));
 
             var research = BannerKingsConfig.Instance.InnovationsModel.CalculateSettlementResearch(settlement, true);
-            StatsInfo.Add(new InformationElement(new TextObject("{=!}Research:").ToString(),
+            StatsInfo.Add(new InformationElement(new TextObject("{=91WqQDR9}Research:").ToString(),
                 FormatFloatGain(research.ResultNumber),
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
-                        new TextObject("{=!}The amount of research this settlement produces towards innovations. This research is used for the settlement's culture innovations. Assimilating a fief will make it research towards your culture instead of the previous."))
+                        new TextObject("{=xBXyqjL3}The amount of research this settlement produces towards innovations. This research is used for the settlement's culture innovations. Assimilating a fief will make it research towards your culture instead of the previous."))
                     .SetTextVariable("EXPLANATIONS", research.GetExplanations())
                     .ToString()));
 

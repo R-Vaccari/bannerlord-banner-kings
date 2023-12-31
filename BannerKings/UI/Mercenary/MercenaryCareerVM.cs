@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Mercenary;
+using BannerKings.Behaviours.Mercenary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,36 +34,36 @@ namespace BannerKings.UI.Mercenary
         public MercenaryCareer Career { get; private set; }
 
         [DataSourceProperty]
-        public string CareerText => new TextObject("{=!}{CLAN} Career in {KINGDOM}")
+        public string CareerText => new TextObject("{=tDfLwHfm}{CLAN} Career in {KINGDOM}")
             .SetTextVariable("CLAN", Clan.PlayerClan.Name)
             .SetTextVariable("KINGDOM", Career?.Kingdom.Name)
             .ToString();
         [DataSourceProperty] public string RequestPrivilegeText => new TextObject("{=ZYyxmOv9}Request").ToString();
-        [DataSourceProperty] public string PrivilegesText => new TextObject("{=!}Privileges").ToString();
-        [DataSourceProperty] public string NoPrivilegesText => new TextObject("{=!}No privileges yet! Acquire Career Points through service time and merit. Request privileges by spending these points.").ToString();
-        [DataSourceProperty] public string PointsHeaderText => new TextObject("{=!}Career Points").ToString();
-        [DataSourceProperty] public string ReputationHeaderText => new TextObject("{=!}Reputation").ToString();
-        [DataSourceProperty] public string TimeHeaderText => new TextObject("{=!}Service Time").ToString();
-        [DataSourceProperty] public string LevyCharacterText => new TextObject("{=!}Levy Character").ToString();
-        [DataSourceProperty] public string ProfessionalCharacterText => new TextObject("{=!}Professional Character").ToString();
-        [DataSourceProperty] public string PrivilegeAvailableHeaderText => new TextObject("{=!}Privilege Available").ToString();
-        [DataSourceProperty] public string DailyPointsGainHeaderText => new TextObject("{=!}Points Gain").ToString();
+        [DataSourceProperty] public string PrivilegesText => new TextObject("Privileges").ToString();
+        [DataSourceProperty] public string NoPrivilegesText => new TextObject("{=2uHBLzKE}No privileges yet! Acquire Career Points through service time and merit. Request privileges by spending these points.").ToString();
+        [DataSourceProperty] public string PointsHeaderText => new TextObject("{=kyB8tkgY}Career Points").ToString();
+        [DataSourceProperty] public string ReputationHeaderText => new TextObject("{=bLLovmn9}Reputation").ToString();
+        [DataSourceProperty] public string TimeHeaderText => new TextObject("{=9GCLaXGO}Service Time").ToString();
+        [DataSourceProperty] public string LevyCharacterText => new TextObject("{=KXn0ibbd}Levy Character").ToString();
+        [DataSourceProperty] public string ProfessionalCharacterText => new TextObject("{=sPUD25pZ}Professional Character").ToString();
+        [DataSourceProperty] public string PrivilegeAvailableHeaderText => new TextObject("{=sTtdGwdP}Privilege Available").ToString();
+        [DataSourceProperty] public string DailyPointsGainHeaderText => new TextObject("{=ENLpFVMf}Points Gain").ToString();
 
         [DataSourceProperty]
         public HintViewModel TimeHint => new HintViewModel(
-            new TextObject("{=!}Your total time of service as mercenary, across all kingdoms. Every year of service, your clan gains Reputation as mercenaries."));
+            new TextObject("{=o41xMTfj}Your total time of service as mercenary, across all kingdoms. Every year of service, your clan gains Reputation as mercenaries."));
 
         [DataSourceProperty]
         public HintViewModel ReputationHint => new HintViewModel(
-           new TextObject("{=!}Your reputation as mercenary, shared across all kingdoms. Reputation is awarded by service time (regardless of the contractor) & merit, such as gainning renown while serving."));
+           new TextObject("{=Nm2zL5ZE}Your reputation as mercenary, shared across all kingdoms. Reputation is awarded by service time (regardless of the contractor) & merit, such as gainning renown while serving."));
 
         [DataSourceProperty]
         public HintViewModel PointsHint => new HintViewModel(
-           new TextObject("{=!}Your Career Points within this kingdom. Career Points are used for requesting Privileges. Points are gained daily based on your clan Reputation and Tier. Each clan party in an Army yields extra points. Leading an Army increases total gain by 20%."));
+           new TextObject("{=cncHonHX}Your Career Points within this kingdom. Career Points are used for requesting Privileges. Points are gained daily based on your clan Reputation and Tier. Each clan party in an Army yields extra points. Leading an Army increases total gain by 20%."));
 
         [DataSourceProperty]
         public HintViewModel PrivilegeAvailableHint => new HintViewModel(
-          new TextObject("{=!}Whether or not you are able to ask for another privilege in this realm. Once a privilege is requested, you need at least 2 seasons before requesting another."));
+          new TextObject("{=4YvWQwYX}Whether or not you are able to ask for another privilege in this realm. Once a privilege is requested, you need at least 2 seasons before requesting another."));
 
         public override void RefreshValues()
         {
@@ -75,7 +75,7 @@ namespace BannerKings.UI.Mercenary
                 PointsText = Career.GetPoints(Career.Kingdom).ToString();
                 ReputationText = FormatValue(Career.Reputation);
 
-                TimeText = new TextObject("{=!}{DAYS} days served")
+                TimeText = new TextObject("{=Dya8D2NY}{DAYS} days served")
                     .SetTextVariable("DAYS", Career.ServiceDays)
                     .ToString();
 
@@ -101,11 +101,11 @@ namespace BannerKings.UI.Mercenary
                 CanEditLevy = privilegesList.Contains(DefaultMercenaryPrivileges.Instance.CustomTroop3);
                 CanEditProfessional = privilegesList.Contains(DefaultMercenaryPrivileges.Instance.CustomTroop5);
 
-                EditLevyText = new TextObject("{=!}Create").ToString();
-                EditProfessionalText = new TextObject("{=!}Create").ToString();
+                EditLevyText = new TextObject("{=kyB8tkgY}Create").ToString();
+                EditProfessionalText = new TextObject("{=kyB8tkgY}Create").ToString();
 
                 CanAskForPrivilege = Career.HasTimePassedForPrivilege(Career.Kingdom);
-                PrivilegeAvailableText = new TextObject("{=!}{AVAILABLE} ({TIME})")
+                PrivilegeAvailableText = new TextObject("{=xGNd2D1A}{AVAILABLE} ({TIME})")
                     .SetTextVariable("AVAILABLE", GameTexts.FindText(CanAskForPrivilege ? "str_yes" : "str_no"))
                     .SetTextVariable("TIME", Career.GetPrivilegeTime(Career.Kingdom).ToString()).ToString();
 
@@ -113,7 +113,7 @@ namespace BannerKings.UI.Mercenary
                 if (levy != null)
                 {
                     LevyVisible = true;
-                    EditLevyText = new TextObject("{=!}Edit").ToString();
+                    EditLevyText = new TextObject("{=we2yiKUb}Edit").ToString();
                     LevyCharacterName = levy.Name != null ? levy.Name.ToString() : "";
                     LevyCharacter.FillFrom(levy.Character);
                     LevyCharacter.SetEquipment(levy.Character.BattleEquipments.First());
@@ -123,7 +123,7 @@ namespace BannerKings.UI.Mercenary
                 if (professional != null)
                 {
                     ProfessionalVisible = true;
-                    EditProfessionalText = new TextObject("{=!}Edit").ToString();
+                    EditProfessionalText = new TextObject("{=we2yiKUb}Edit").ToString();
                     ProfessionalCharacterName = professional.Name != null ? professional.Name.ToString() : "";
                     ProfessionalCharacter.FillFrom(professional.Character);
                     ProfessionalCharacter.SetEquipment(professional.Character.BattleEquipments.First());
@@ -147,8 +147,8 @@ namespace BannerKings.UI.Mercenary
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Select privilege").ToString(),
-                new TextObject("{=!}Each privilege has a max level and Career Points requirement. Some may be unavailable due to external factors, such as your contractor not having the type of property you'd like to receive.").ToString(),
+                new TextObject("{=NfwWfbAk}Select privilege").ToString(),
+                new TextObject("{=ZEUfWmdQ}Each privilege has a max level and Career Points requirement. Some may be unavailable due to external factors, such as your contractor not having the type of property you'd like to receive.").ToString(),
                 list,
                 true,
                 1,
@@ -171,8 +171,8 @@ namespace BannerKings.UI.Mercenary
                 var preset = DefaultCustomTroopPresets.Instance.SargeantLevy;
                 var character = CharacterObject.CreateFrom(Career.Kingdom.Culture.BasicTroop);
 
-                InformationManager.ShowTextInquiry(new TextInquiryData(new TextObject("{=!}Custom Levy").ToString(),
-                    new TextObject("{=!}Create a custom levy troop! This troop will be available in towns of {CULTURE} culture. They will only be available for your clan, and can be retrained or rearmed on demand - though these will incur costs. Their recruitment and upkeep costs will depend on the equipment you give them. First, give them a name.")
+                InformationManager.ShowTextInquiry(new TextInquiryData(new TextObject("{=kyB8tkgY}Custom Levy").ToString(),
+                    new TextObject("{=kyB8tkgY}Create a custom levy troop! This troop will be available in towns of {CULTURE} culture. They will only be available for your clan, and can be retrained or rearmed on demand - though these will incur costs. Their recruitment and upkeep costs will depend on the equipment you give them. First, give them a name.")
                     .SetTextVariable("CULTURE", Career.Kingdom.Culture.Name)
                     .ToString(),
                     true,
@@ -202,8 +202,8 @@ namespace BannerKings.UI.Mercenary
                 var preset = DefaultCustomTroopPresets.Instance.SargeantLevy;
                 var character = CharacterObject.CreateFrom(Career.Kingdom.Culture.BasicTroop);
 
-                InformationManager.ShowTextInquiry(new TextInquiryData(new TextObject("{=!}Custom Professional").ToString(),
-                    new TextObject("{=!}Create a custom professional troop! This troop will be available in towns of {CULTURE} culture. They will only be available for your clan, and can be retrained or rearmed on demand - though these will incur costs. Their recruitment and upkeep costs will depend on the equipment you give them. First, give them a name.")
+                InformationManager.ShowTextInquiry(new TextInquiryData(new TextObject("{=kyB8tkgY}Custom Professional").ToString(),
+                    new TextObject("{=kyB8tkgY}Create a custom professional troop! This troop will be available in towns of {CULTURE} culture. They will only be available for your clan, and can be retrained or rearmed on demand - though these will incur costs. Their recruitment and upkeep costs will depend on the equipment you give them. First, give them a name.")
                     .SetTextVariable("CULTURE", Career.Kingdom.Culture.Name)
                     .ToString(),
                     true,
@@ -243,12 +243,12 @@ namespace BannerKings.UI.Mercenary
                 null));
 
             list.Add(new InquiryElement("edit-clear",
-                new TextObject("{=!}Clear all equipments").ToString(),
+                new TextObject("{=kyB8tkgY}Clear all equipments").ToString(),
                 null));
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Troop Editing").ToString(),
-                new TextObject("{=!}Edit the {TROOP} to better fit your needs.")
+                new TextObject("{=AwZFObm9}Troop Editing").ToString(),
+                new TextObject("{=we2yiKUb}Edit the {TROOP} to better fit your needs.")
                 .SetTextVariable("TROOP", levy ? LevyCharacterName : ProfessionalCharacterName).ToString(),
                 list,
                 true,
@@ -271,7 +271,7 @@ namespace BannerKings.UI.Mercenary
                     {
                         var customTroop = Career.GetTroop(Career.Kingdom, false);
                         customTroop.CreateEquipments();
-                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}All equipments removed for custom troop {NAME}.")
+                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=6NE71rPk}All equipments removed for custom troop {NAME}.")
                             .SetTextVariable("NAME", customTroop.Character.Name)
                             .ToString()));
                     }
@@ -298,8 +298,8 @@ namespace BannerKings.UI.Mercenary
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Select Skill Set").ToString(),
-                new TextObject("{=!}Choose a skill set that fits the function you want to give your troops, from melee infantry to mounted skirmishers. Equipment is edited separately, make sure to choose skills that match their equipment.").ToString(),
+                new TextObject("{=wCiW42Bq}Select Skill Set").ToString(),
+                new TextObject("{=kyB8tkgY}Choose a skill set that fits the function you want to give your troops, from melee infantry to mounted skirmishers. Equipment is edited separately, make sure to choose skills that match their equipment.").ToString(),
                 list,
                 true,
                 1,
@@ -317,8 +317,8 @@ namespace BannerKings.UI.Mercenary
                     else
                     {
                         int cost = (int)(quantity * (levy ? 750f : 1500f));
-                        InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Retrainning Costs").ToString(),
-                            new TextObject("{=!}It seems there are {QUANTITY} of {CHARACTER} in your clan parties. Retrainning them to new skills will cost {COST}{GOLD_ICON}.")
+                        InformationManager.ShowInquiry(new InquiryData(new TextObject("{=AEiDqH17}Retrainning Costs").ToString(),
+                            new TextObject("{=Q3AZE4aT}It seems there are {QUANTITY} of {CHARACTER} in your clan parties. Retrainning them to new skills will cost {COST}{GOLD_ICON}.")
                             .SetTextVariable("QUANTITY", quantity)
                             .SetTextVariable("CHARACTER", customTroop.Name)
                             .SetTextVariable("COST", cost)
@@ -345,8 +345,8 @@ namespace BannerKings.UI.Mercenary
         private void ShowNameEditing(bool levy = true)
         {
             var customTroop = Career.GetTroop(Career.Kingdom, levy);
-            InformationManager.ShowTextInquiry(new TextInquiryData(new TextObject("{=!}Edit Name").ToString(),
-                new TextObject("{=!}Change the name of {TROOP}.")
+            InformationManager.ShowTextInquiry(new TextInquiryData(new TextObject("{=we2yiKUb}Edit Name").ToString(),
+                new TextObject("{=kyB8tkgY}Change the name of {TROOP}.")
                 .SetTextVariable("TROOP", customTroop.Name)
                 .ToString(),
                 true,
@@ -368,19 +368,19 @@ namespace BannerKings.UI.Mercenary
         {
             var list = new List<InquiryElement>();
             list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Weapon0, ItemTypeEnum.Invalid),
-                new TextObject("{=!}Weapon 1").ToString(),
+                new TextObject("{=Eb6xHM4p}Weapon 1").ToString(),
                 null));
 
             list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Weapon1, ItemTypeEnum.Invalid),
-                new TextObject("{=!}Weapon 2").ToString(),
+                new TextObject("{=LkGB1nkD}Weapon 2").ToString(),
                 null));
 
             list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Weapon2, ItemTypeEnum.Invalid),
-                new TextObject("{=!}Weapon 3").ToString(),
+                new TextObject("{=kFjdQ5uw}Weapon 3").ToString(),
                 null));
 
             list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Weapon3, ItemTypeEnum.Invalid),
-                new TextObject("{=!}Weapon 4").ToString(),
+                new TextObject("{=9MYqjiSA}Weapon 4").ToString(),
                 null));
 
             list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Head, ItemTypeEnum.HeadArmor),
@@ -412,8 +412,8 @@ namespace BannerKings.UI.Mercenary
                null));
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Equipment Editing").ToString(),
-                new TextObject("{=!}Select the inventory slot you would like to edit. Weapons may be assigned to 4 different slots, each with a weapon of a different type, such as slot 1, one-handed weapons, slot 2 bows, and slot 3 arrows.")
+                new TextObject("{=koUo8oLV}Equipment Editing").ToString(),
+                new TextObject("{=5pASJDfC}Select the inventory slot you would like to edit. Weapons may be assigned to 4 different slots, each with a weapon of a different type, such as slot 1, one-handed weapons, slot 2 bows, and slot 3 arrows.")
                 .ToString(),
                 list,
                 true,
@@ -479,8 +479,8 @@ namespace BannerKings.UI.Mercenary
                 null));
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Weapon Editing").ToString(),
-                new TextObject("{=!}Select what type of weapon you want to equip in this slot.")
+                new TextObject("{=ZesjqyGJ}Weapon Editing").ToString(),
+                new TextObject("{=rKx6yOEn}Select what type of weapon you want to equip in this slot.")
                 .ToString(),
                 list,
                 true,
@@ -518,7 +518,7 @@ namespace BannerKings.UI.Mercenary
                         item.Name.ToString(),
                         new ImageIdentifier(item),
                         true,
-                        new TextObject("{=!}Tier: {TIER}\nValue: {VALUE}\nType: {TYPE}")
+                        new TextObject("{=TFbOS7F6}Tier: {TIER}\nValue: {VALUE}\nType: {TYPE}")
                         .SetTextVariable("TIER", item.Tierf)
                         .SetTextVariable("VALUE", item.Value)
                         .SetTextVariable("TYPE", GameTexts.FindText("str_inventory_type_" + item.ItemType)).ToString()));
@@ -526,8 +526,8 @@ namespace BannerKings.UI.Mercenary
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Equipment Editing").ToString(),
-                new TextObject("{=!}Choose the item selection for this equipment slot. You may choose from 1 to 5 items.")
+                new TextObject("{=koUo8oLV}Equipment Editing").ToString(),
+                new TextObject("{=kyB8tkgY}Choose the item selection for this equipment slot. You may choose from 1 to 5 items.")
                 .ToString(),
                 list,
                 true,

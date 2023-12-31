@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Diplomacy;
+using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Extensions;
 using BannerKings.Managers.Institutions.Religions;
@@ -57,14 +57,14 @@ namespace BannerKings.Models.Vanilla
             Clan defenderClan = defender.IsClan ? (defender as Clan) : (defender as Kingdom).RulingClan;
 
             float defenderRelation = allyClan.Leader.GetRelation(defenderClan.Leader);
-            result.Add(defenderRelation * 0.2f, new TextObject("{=!}Relation"));
+            result.Add(defenderRelation * 0.2f, new TextObject("{=tB34b2ov}Relation"));
 
             float honor = allyClan.Leader.GetTraitLevel(DefaultTraits.Honor);
-            result.Add(honor * 0.1f, new TextObject("{=!}{HERO}'s honor")
+            result.Add(honor * 0.1f, new TextObject("{=0usOMAnM}{HERO}'s honor")
                 .SetTextVariable("HERO", allyClan.Name));
 
             KingdomElection warSupport = new KingdomElection(new BKDeclareWarDecision(null, allyClan, attacker));
-            result.Add(warSupport.GetLikelihoodForOutcome(0), new TextObject("{=!}War support in {ALLY}")
+            result.Add(warSupport.GetLikelihoodForOutcome(0), new TextObject("{=uXVMjfM9}War support in {ALLY}")
                 .SetTextVariable("ALLY", ally.Name));
 
             /*War war = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetWar(attacker, defender);
@@ -72,17 +72,17 @@ namespace BannerKings.Models.Vanilla
             {
                 if (war.CasusBelli == null)
                 {
-                    result.Add(-0.25f, new TextObject("{=!}Unjustified war"));
+                    result.Add(-0.25f, new TextObject("{=nzbtmjPJ}Unjustified war"));
                 }
             }
             else
             {
-                result.Add(-0.25f, new TextObject("{=!}Unjustified war"));
+                result.Add(-0.25f, new TextObject("{=nzbtmjPJ}Unjustified war"));
             }
 
             if (detail == DeclareWarAction.DeclareWarDetail.CausedByPlayerHostility)
             {
-                result.Add(-0.15f, new TextObject("{=!}War started by illegal aggression"));
+                result.Add(-0.15f, new TextObject("{=Fxqpy1sE}War started by illegal aggression"));
             }*/
 
             return result;
@@ -130,7 +130,7 @@ namespace BannerKings.Models.Vanilla
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
             float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason) / 2f;
-            result.Add((100000f - peace) * MathF.Sqrt(years), new TextObject("{=!}Truce duration"));
+            result.Add((100000f - peace) * MathF.Sqrt(years), new TextObject("{=PsRfxMEv}Truce duration"));
 
             float relation = proposed.RulingClan.Leader.GetRelation(proposer.RulingClan.Leader) / 150f;
             result.AddFactor(-relation, new TextObject("{=BlidMNGT}Relation"));
@@ -141,10 +141,10 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber GetAllianceDesire(Kingdom proposer, Kingdom proposed, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
-            result.Add(-100f, new TextObject("{=!}Reluctance"));
+            result.Add(-100f, new TextObject("{=Gq5BnNiN}Reluctance"));
 
             KingdomElection election = new KingdomElection(new BKDeclareWarDecision(null, proposed.RulingClan, proposer));
-            result.Add(election.GetLikelihoodForOutcome(1) * 85f, new TextObject("{=!}Peace support in {ALLY}")
+            result.Add(election.GetLikelihoodForOutcome(1) * 85f, new TextObject("{=04Smb5KQ}Peace support in {ALLY}")
                 .SetTextVariable("ALLY", proposed.Name));
 
             float relation = proposed.RulingClan.Leader.GetRelation(proposer.RulingClan.Leader);
@@ -156,16 +156,16 @@ namespace BannerKings.Models.Vanilla
                 float distance = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(possibleWar.DefenderFront.Settlement,
                                             possibleWar.AttackerFront.Settlement) * 2f;
                 float factor = (TaleWorlds.CampaignSystem.Campaign.AverageDistanceBetweenTwoFortifications / distance) - 0.5f;
-                result.AddFactor(factor, new TextObject("{=!}Distance between realms"));
+                result.AddFactor(factor, new TextObject("{=fiHYU8X3}Distance between realms"));
             }*/
                 
             if (proposed.RulingClan.Leader.Culture == proposer.RulingClan.Leader.Culture)
             {
-                result.Add(10f, new TextObject("{=!}Shared culture"));
+                result.Add(10f, new TextObject("{=qR61PqMa}Shared culture"));
             }
 
             result.Add(proposer.RulingClan.Leader.GetTraitLevel(DefaultTraits.Honor) * 15f,
-                new TextObject("{=!}Honor of {HERO}").SetTextVariable("HERO", proposer.RulingClan.Leader.Name));
+                new TextObject("{=vrm5pNf3}Honor of {HERO}").SetTextVariable("HERO", proposer.RulingClan.Leader.Name));
 
             Religion proposerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(proposer.RulingClan.Leader);
             if (proposerReligion != null)
@@ -175,14 +175,14 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (proposerReligion == proposedReligion)
                     {
-                        result.Add(25f, new TextObject("{=!}Shared faith"));
+                        result.Add(25f, new TextObject("{=Pcy4iFnT}Shared faith"));
                     }
                     else
                     {
                         FaithStance faithStance = proposedReligion.GetStance(proposerReligion.Faith);
                         if (faithStance != FaithStance.Tolerated)
                         {
-                            result.Add(faithStance == FaithStance.Untolerated ? -20f : -50f, new TextObject("{=!}Faith differences"));
+                            result.Add(faithStance == FaithStance.Untolerated ? -20f : -50f, new TextObject("Faith differences"));
                         }
                     }
                 }
@@ -197,7 +197,7 @@ namespace BannerKings.Models.Vanilla
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
             float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason) / 2f;
-            result.Add((100000f), new TextObject("{=!}Truce duration"));
+            result.Add((100000f), new TextObject("{=PsRfxMEv}Truce duration"));
 
             float income = 0f;
             foreach (Clan clan in proposer.Clans)
@@ -205,9 +205,9 @@ namespace BannerKings.Models.Vanilla
                 income += BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber;
             }
 
-            result.Add(income, new TextObject("{=!}Truce duration"));
+            result.Add(income, new TextObject("{=PsRfxMEv}Truce duration"));
 
-            result.Add(proposed.TotalStrength * 20f, new TextObject("{=!}Truce duration"));
+            result.Add(proposed.TotalStrength * 20f, new TextObject("{=PsRfxMEv}Truce duration"));
 
             float relation = proposed.RulingClan.Leader.GetRelation(proposer.RulingClan.Leader) / 150f;
             result.AddFactor(-relation, new TextObject("{=BlidMNGT}Relation"));
@@ -229,7 +229,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason);
-            result.AddFactor(peace / -75000f, new TextObject("{=!}Peace interest"));
+            result.AddFactor(peace / -75000f, new TextObject("{=hAAOEqaJ}Peace interest"));
             return result;
         }
 
@@ -289,7 +289,7 @@ namespace BannerKings.Models.Vanilla
             {
                 var tributes = factionDeclaresWar.Stances.ToList().FindAll(x => x.GetDailyTributePaid(x.Faction2) > 0);
                 int tributeCount = tributes.Count;
-                result.Add(baseNumber * -0.15f * tributeCount, new TextObject("{=!}Paying tributes (x{COUNT})")
+                result.Add(baseNumber * -0.15f * tributeCount, new TextObject("{=TCVWRr8K}Paying tributes (x{COUNT})")
                     .SetTextVariable("COUNT", tributeCount));
             }
 
@@ -304,7 +304,7 @@ namespace BannerKings.Models.Vanilla
 
             float threatFactor = factionDeclaredWar.TotalStrength / totalThreat;
             result.Add(10000f * threatFactor,
-                new TextObject("{=!}{THREAT}% threat relative to all possible enemies")
+                new TextObject("{=s21vTPmS}{THREAT}% threat relative to all possible enemies")
                 .SetTextVariable("THREAT", (threatFactor * 100f).ToString("0.0"))); */
 
             if (factionDeclaredWar.IsKingdomFaction && factionDeclaresWar.IsKingdomFaction)
@@ -325,7 +325,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (diplomacy.HasTradePact(defenderKingdom))
                     {
-                        result.Add(baseNumber * - 0.25f, new TextObject("{=!}Trade pact between both realms"));
+                        result.Add(baseNumber * - 0.25f, new TextObject("{=DPK2KdUk}Trade pact between both realms"));
                     }
 
                     if (casusBelli == null)
@@ -334,7 +334,7 @@ namespace BannerKings.Models.Vanilla
                         foreach (CasusBelli justification in justifications)
                         {
                             float num = justification.DeclareWarScore / justifications.Count;
-                            result.Add(num, new TextObject("{=!}{CASUS} justification")
+                            result.Add(num, new TextObject("{=onUOp8WF}{CASUS} justification")
                                 .SetTextVariable("CASUS", justification.Name));
                             GetPersonalityCasusBelliEffect(ref result, num, evaluatingClan, justification);
                         }
@@ -342,13 +342,13 @@ namespace BannerKings.Models.Vanilla
                     else
                     {
                         float num = casusBelli.DeclareWarScore * 2f;
-                        result.Add(num, new TextObject("{=!}{CASUS} justification")
+                        result.Add(num, new TextObject("{=onUOp8WF}{CASUS} justification")
                             .SetTextVariable("CASUS", casusBelli.Name));
                         GetPersonalityCasusBelliEffect(ref result, num, evaluatingClan, casusBelli);
                     }
 
                     baseNumber = result.BaseNumber;
-                    result.Add(baseNumber * -diplomacy.Fatigue, new TextObject("{=!}General war fatigue of {FACTION}")
+                    result.Add(baseNumber * -diplomacy.Fatigue, new TextObject("{=Rdmm1Kmh}General war fatigue of {FACTION}")
                         .SetTextVariable("FACTION", diplomacy.Kingdom.Name));
                 }
 
@@ -359,7 +359,7 @@ namespace BannerKings.Models.Vanilla
                         WarStats enemyStats = CalculateWarStats(factionDeclaresWar, enemyKingdom);
                         float enemyScore = enemyStats.Strength + enemyStats.ValueOfSettlements - (enemyStats.TotalStrengthOfEnemies * 1.25f);
                         float proportion = MathF.Clamp((attackerScore / (enemyScore * 4f)) - 1f, -1f, 0f);
-                        result.Add(baseNumber * proportion, new TextObject("{=!}Existing war with {FACTION}")
+                        result.Add(baseNumber * proportion, new TextObject("{=epNrP2AT}Existing war with {FACTION}")
                         .SetTextVariable("FACTION", enemyKingdom.Name));
                     }
                 }
@@ -369,38 +369,38 @@ namespace BannerKings.Models.Vanilla
             int tribute = stance.GetDailyTributePaid(factionDeclaredWar);
             if (tribute > 0)
             {
-                result.Add(-10000f, new TextObject("{=!}{FACTION} is paying us tribute")
+                result.Add(-10000f, new TextObject("{=ZtL0fh80}{FACTION} is paying us tribute")
                     .SetTextVariable("FACTION", factionDeclaredWar.Name));
             }
             else if (tribute < 0)
             {
-                result.Add(baseNumber * 0.3f, new TextObject("{=!}We are paying tribute to {FACTION}")
+                result.Add(baseNumber * 0.3f, new TextObject("{=tvtoXveu}We are paying tribute to {FACTION}")
                     .SetTextVariable("FACTION", factionDeclaredWar.Name));
             }
 
             if (stance.BehaviorPriority == 1)
             {
-                result.Add(-baseNumber, new TextObject("{=!}Defensive stance against {FACTION}")
+                result.Add(-baseNumber, new TextObject("{=fvd0nAa3}Defensive stance against {FACTION}")
                     .SetTextVariable("FACTION", factionDeclaredWar.Name));
             }
 
             if (evaluatingClan != null)
             {
                 float relations = evaluatingClan.Leader.GetRelation(factionDeclaredWar.Leader);
-                result.Add(baseNumber * (-relations / 100f), new TextObject("{=!}{HERO1}`s opinion of {HERO2}")
+                result.Add(baseNumber * (-relations / 100f), new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
                     .SetTextVariable("HERO1", evaluatingClan.Leader.Name)
                 .SetTextVariable("HERO2", factionDeclaredWar.Leader.Name));
             }
             else
             {
                 float relations = factionDeclaresWar.Leader.GetRelation(factionDeclaredWar.Leader);
-                result.Add(baseNumber * (-relations / 100f), new TextObject("{=!}{FACTION1} ruler`s opinion of {FACTION2} ruler")
+                result.Add(baseNumber * (-relations / 100f), new TextObject("{=nAz6xfjt}{FACTION1} ruler`s opinion of {FACTION2} ruler")
                     .SetTextVariable("FACTION1", factionDeclaresWar.Name)
                 .SetTextVariable("FACTION2", factionDeclaredWar.Name));
             }
 
             float threatFactor = CalculateThreatFactor(factionDeclaresWar, factionDeclaredWar);
-            result.Add(baseNumber * threatFactor * 2f, new TextObject("{=!}{THREAT}% threat relative to possible enemies")
+            result.Add(baseNumber * threatFactor * 2f, new TextObject("{=ew3Ga8Lu}{THREAT}% threat relative to possible enemies")
                 .SetTextVariable("THREAT", (threatFactor * 100f).ToString("0.0")));
 
 
@@ -412,23 +412,23 @@ namespace BannerKings.Models.Vanilla
             }
 
             float strengthFactor = (attackerStrength / defenderStrength) - 1f;
-            result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.6f, -2f, 0.5f), new TextObject("{=!}Difference in strength"));
+            result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.6f, -2f, 0.5f), new TextObject("{=KcLdYKrY}Difference in strength"));
 
             if (factionDeclaredWar.Fiefs.Count < factionDeclaresWar.Fiefs.Count / 2f)
             {
                 float fiefFactor = factionDeclaredWar.Fiefs.Count / factionDeclaresWar.Fiefs.Count;
-                result.Add(-baseNumber * (2f - fiefFactor), new TextObject("{=!}Unworthy opponent"));
+                result.Add(-baseNumber * (2f - fiefFactor), new TextObject("{=SRN3KdjF}Unworthy opponent"));
             }
 
             if (defenderStrength >= attackerStrength * 1.5f)
             {
-                result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.5f, -4f, -0.4f), new TextObject("{=!}Enemy significantly stronger"));
+                result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.5f, -4f, -0.4f), new TextObject("{=Z7AW5i79}Enemy significantly stronger"));
             }
 
             float attackerFiefs = factionDeclaresWar.Fiefs.Count;
             float defenderFiefs = factionDeclaredWar.Fiefs.Count;
             float fiefsFactor = (attackerFiefs  / defenderFiefs) - 1f;
-            result.Add(baseNumber * MathF.Clamp(fiefsFactor * 0.1f, -2f, 2f), new TextObject("{=!}Difference in controlled fiefs"));
+            result.Add(baseNumber * MathF.Clamp(fiefsFactor * 0.1f, -2f, 2f), new TextObject("{=MvV0HUdo}Difference in controlled fiefs"));
 
             float attackerStability = 0f;
             foreach (var fief in factionDeclaresWar.Fiefs)
@@ -438,23 +438,23 @@ namespace BannerKings.Models.Vanilla
             foreach (var fief in factionDeclaredWar.Fiefs)
                 defenderStability += BannerKingsConfig.Instance.PopulationManager.GetPopData(fief.Settlement).Stability / defenderFiefs;
 
-            result.Add(baseNumber * (attackerStability - 0.5f), new TextObject("{=!}Fief stability in {FACTION}")
+            result.Add(baseNumber * (attackerStability - 0.5f), new TextObject("{=cpVyc2Xc}Fief stability in {FACTION}")
                         .SetTextVariable("FACTION", factionDeclaresWar.Name));
 
-            result.Add(-baseNumber * (defenderStability - 0.5f), new TextObject("{=!}Fief stability in {FACTION}")
+            result.Add(-baseNumber * (defenderStability - 0.5f), new TextObject("{=cpVyc2Xc}Fief stability in {FACTION}")
                         .SetTextVariable("FACTION", factionDeclaredWar.Name));
 
             War war = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetWar(factionDeclaredWar, factionDeclaresWar);
             if (war != null)
             {
-                if (war.StartDate.ElapsedYearsUntilNow < 1f) result.Add(50000f, new TextObject("{=!}Recently started war"));
+                if (war.StartDate.ElapsedYearsUntilNow < 1f) result.Add(50000f, new TextObject("{=UaofTriA}Recently started war"));
 
                 float score = MathF.Clamp(war.CalculateWarScore(war.Attacker, false).ResultNumber /
                     war.TotalWarScore.ResultNumber, -1f, 1f) * 2f;
                 result.Add(baseNumber * (war.Attacker == factionDeclaresWar ? -score : score));
 
                 float fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, factionDeclaresWar).ResultNumber * 4f;
-                result.Add(baseNumber * -fatigue, new TextObject("{=!}Fatigue over this war"));
+                result.Add(baseNumber * -fatigue, new TextObject("{=Nxrd7yym}Fatigue over this war"));
             }
             else
             {
@@ -470,7 +470,7 @@ namespace BannerKings.Models.Vanilla
                         float distance = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(possibleWar.DefenderFront.Settlement,
                             possibleWar.AttackerFront.Settlement) * 4f;
                         float factor = (TaleWorlds.CampaignSystem.Campaign.AverageDistanceBetweenTwoFortifications / distance) - 1f;
-                        result.Add(baseNumber * factor, new TextObject("{=!}Distance between realms"));
+                        result.Add(baseNumber * factor, new TextObject("{=fiHYU8X3}Distance between realms"));
                     }
                 }
 
@@ -517,7 +517,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     float factor = casusBelli.GetTraitWeight(trait);
                     float level = leader.GetTraitLevel(trait);
-                    result.Add(baseResult * factor * level, new TextObject("{=!}{HERO}'s {TRAIT} personality")
+                    result.Add(baseResult * factor * level, new TextObject("{=fLSny0R8}{HERO}'s {TRAIT} personality")
                         .SetTextVariable("HERO", leader.Name)
                         .SetTextVariable("TRAIT", trait.Name));
                 }

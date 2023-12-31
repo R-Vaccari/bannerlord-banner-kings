@@ -516,7 +516,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetZealotsGroupName()
         {
-            return new TextObject("{=!}Heirs of Asera");
+            return new TextObject("{=sBGMstSL}Heirs of Asera");
         }
     }
 }

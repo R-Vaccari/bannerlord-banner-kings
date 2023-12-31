@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Shipping;
 using System;
@@ -45,7 +45,7 @@ namespace BannerKings.Behaviours.Shipping
                 (CampaignGameStarter starter) =>
                 {
                     starter.AddWaitGameMenu("bk_shipping_wait",
-                    "{=!}You are now travelling to {DESTINATION} by ship. Estimated arrival is on {ARRIVAL}.{newline}{SIEGE_INFO}",
+                    "{=grOE0m3c}You are now travelling to {DESTINATION} by ship. Estimated arrival is on {ARRIVAL}.{newline}{SIEGE_INFO}",
                     (MenuCallbackArgs args) =>
                     {
                         UpdateShippingMenu();
@@ -99,12 +99,12 @@ namespace BannerKings.Behaviours.Shipping
                 if (travel.Destination.IsUnderSiege)
                 {
                     MBTextManager.SetTextVariable("SIEGE_INFO", 
-                        new TextObject("{=!}Your destination is under siege. The crew will leave you nearby."));
+                        new TextObject("{=ua5R0cSg}Your destination is under siege. The crew will leave you nearby."));
                 }
                 else
                 {
                     MBTextManager.SetTextVariable("SIEGE_INFO", 
-                        new TextObject("{=!}Your destination is in not under siege, the crew will leave you inside."));
+                        new TextObject("{=tUyv4ppp}Your destination is in not under siege, the crew will leave you inside."));
                 }
 
                 if (travel.Arrival.IsPast || travel.Arrival.IsNow) FinishTravel(travel);
@@ -169,7 +169,7 @@ namespace BannerKings.Behaviours.Shipping
             if (party.MemberRoster.Contains(Hero.MainHero.CharacterObject))
             {
                 InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=!}{PARTY} is at {PLACE} and travelling to {FIEF} on water until {DATE}.")
+                    new TextObject("{=enrNvyGg}{PARTY} is at {PLACE} and travelling to {FIEF} on water until {DATE}.")
                     .SetTextVariable("PARTY", party.Name)
                     .SetTextVariable("FIEF", destination.Name)
                     .SetTextVariable("PLACE", current.Name)

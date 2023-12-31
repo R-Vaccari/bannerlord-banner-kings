@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Mercenary;
+using BannerKings.Behaviours.Mercenary;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -17,7 +17,7 @@ namespace BannerKings.UI.Mercenary
         [DataSourceProperty] public string Name => Privilege.Name.ToString();
 
         [DataSourceProperty]
-        public string Description => new TextObject("{=!}Level {NUMBER}")
+        public string Description => new TextObject("{=rVRE0tUw}Level {NUMBER}")
             .SetTextVariable("NUMBER", GetNumeral(Privilege.Level)).ToString();
 
         [DataSourceProperty] public HintViewModel Hint => new(Privilege.Description);

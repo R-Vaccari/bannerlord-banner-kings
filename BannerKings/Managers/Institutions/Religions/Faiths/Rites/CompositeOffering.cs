@@ -22,7 +22,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                 actionTaker.PartyBelongedTo.ItemRoster.AddToCounts(pair.Key, -pair.Value);
             }
             
-            MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has completed the {RITE} ritual.")
+            MBInformationManager.AddQuickInformation(new TextObject("{=03vJzoze}{HERO} has completed the {RITE} ritual.")
                     .SetTextVariable("HERO", actionTaker.Name)
                     .SetTextVariable("RITE", GetName()),
                 0, 
@@ -72,7 +72,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
             if (!hasItems)
             {
-                reason = new TextObject("{=!}This rite requires several items, check its description for details.");
+                reason = new TextObject("{=EFF7YLQw}This rite requires several items, check its description for details.");
             }
 
             return baseResult && hasItems;

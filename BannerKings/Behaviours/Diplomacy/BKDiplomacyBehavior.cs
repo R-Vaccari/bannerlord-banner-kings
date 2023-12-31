@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Extensions;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,8 +85,8 @@ namespace BannerKings.Behaviours.Diplomacy
             {
                 int denars = MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(proposer,
                     proposed).ResultNumber);
-                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Truce Offering").ToString(),
-                    new TextObject("{=!}The lords of {KINGDOM} offer a truce with your realm for {YEARS} years. They are willing to pay you {DENARS} denars to prove their commitment. Accepting this offer will bind your realm to not raise arms against them by any means.")
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=PQaR5Cin}Truce Offering").ToString(),
+                    new TextObject("{=hDk5O2fE}The lords of {KINGDOM} offer a truce with your realm for {YEARS} years. They are willing to pay you {DENARS} denars to prove their commitment. Accepting this offer will bind your realm to not raise arms against them by any means.")
                     .SetTextVariable("DENARS", denars)
                     .SetTextVariable("KINGDOM", proposer.Name)
                     .SetTextVariable("YEARS", years).ToString(),
@@ -108,8 +108,8 @@ namespace BannerKings.Behaviours.Diplomacy
             {
                 int denars = MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetAllianceDenarCost(proposer,
                     proposed).ResultNumber);
-                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Alliance Offering").ToString(),
-                    new TextObject("{=!}The lords of {KINGDOM} offer an alliance with your realm. They are willing to pay you {DENARS} denars to prove their commitment. Accepting this offer will bind your realm to not raise arms against them by any means.")
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=ueWn5rM4}Alliance Offering").ToString(),
+                    new TextObject("{=83eNZyPH}The lords of {KINGDOM} offer an alliance with your realm. They are willing to pay you {DENARS} denars to prove their commitment. Accepting this offer will bind your realm to not raise arms against them by any means.")
                     .SetTextVariable("DENARS", denars)
                     .SetTextVariable("KINGDOM", proposer.Name)
                     .ToString(),
@@ -151,7 +151,7 @@ namespace BannerKings.Behaviours.Diplomacy
             diplomacy2.AddTruce(proposer, years);
 
             InformationManager.DisplayMessage(new InformationMessage(
-                new TextObject("{=!}The lords of {KINGDOM1} and {KINGDOM2} have settled on a truce until {DATE}.")
+                new TextObject("{=4S5vs7AB}The lords of {KINGDOM1} and {KINGDOM2} have settled on a truce until {DATE}.")
                 .SetTextVariable("KINGDOM1", proposer.Name)
                 .SetTextVariable("KINGDOM2", proposed.Name)
                 .SetTextVariable("DATE", CampaignTime.YearsFromNow(years).ToString())
@@ -165,8 +165,8 @@ namespace BannerKings.Behaviours.Diplomacy
         {
             if (proposed.RulingClan == Clan.PlayerClan)
             {
-                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Trade Access Offering").ToString(),
-                    new TextObject("{=!}The lords of {KINGDOM} offer a trade access pact with your realm. Trade access pacts help develop prosperity on the long term in both kingdoms and set an amicable relation that facilitates future truces and alliances. The pact will not cost or award you any resources, but sustaining the pact will reduce your clan influence cap.")
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=ANqRKsFx}Trade Access Offering").ToString(),
+                    new TextObject("{=4MWhfXAB}The lords of {KINGDOM} offer a trade access pact with your realm. Trade access pacts help develop prosperity on the long term in both kingdoms and set an amicable relation that facilitates future truces and alliances. The pact will not cost or award you any resources, but sustaining the pact will reduce your clan influence cap.")
                     .SetTextVariable("KINGDOM", proposer.Name)
                     .ToString(),
                     true,
@@ -195,7 +195,7 @@ namespace BannerKings.Behaviours.Diplomacy
             diplomacy2.AddPact(proposer);
 
             InformationManager.DisplayMessage(new InformationMessage(
-                new TextObject("{=!}The lords of {KINGDOM1} and {KINGDOM2} have settled on trade access pact.")
+                new TextObject("{=g5SBiVOu}The lords of {KINGDOM1} and {KINGDOM2} have settled on trade access pact.")
                 .SetTextVariable("KINGDOM1", proposer.Name)
                 .SetTextVariable("KINGDOM2", proposed.Name)
                 .ToString(),
@@ -427,7 +427,7 @@ namespace BannerKings.Behaviours.Diplomacy
                         if (kingdom == Clan.PlayerClan.MapFaction && other == Clan.PlayerClan.MapFaction)
                         {
                             InformationManager.DisplayMessage(new InformationMessage(
-                                new TextObject("{=!}Despite the new rulership of {KINGDOM}, the realm and the {OTHER} are still allies through blood ties.")
+                                new TextObject("{=ycB56vXA}Despite the new rulership of {KINGDOM}, the realm and the {OTHER} are still allies through blood ties.")
                                 .SetTextVariable("KINGDOM", kingdom.Name)
                                 .SetTextVariable("OTHER", other.Name)
                                 .ToString(),
@@ -439,7 +439,7 @@ namespace BannerKings.Behaviours.Diplomacy
                         if (kingdom == Clan.PlayerClan.MapFaction && other == Clan.PlayerClan.MapFaction)
                         {
                             InformationManager.DisplayMessage(new InformationMessage(
-                                new TextObject("{=!}Due to the absence of blood ties, the new rulership of {KINGDOM} has dissolved its previous alliance with the {OTHER}.")
+                                new TextObject("{=nVhqicUR}Due to the absence of blood ties, the new rulership of {KINGDOM} has dissolved its previous alliance with the {OTHER}.")
                                 .SetTextVariable("KINGDOM", kingdom.Name)
                                 .SetTextVariable("OTHER", other.Name)
                                 .ToString(),

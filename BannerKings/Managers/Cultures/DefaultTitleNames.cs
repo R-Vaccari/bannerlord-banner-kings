@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
@@ -75,7 +75,7 @@ namespace BannerKings.Managers.Cultures
                 null,
                 new TextObject("{=9WOQTiBr}Emperor"),
                 new TextObject("{=gbpokx6s}Empress"),
-                new TextObject("{=!}Empire"));
+                new TextObject("Empire"));
 
             DefaultKing = CulturalTitleName.CreateKingdom("DefaultKing",
                 null,
@@ -111,7 +111,7 @@ namespace BannerKings.Managers.Cultures
                 null,
                 new TextObject("{=V219eHY6}Prince"),
                 new TextObject("{=e7Nhe2YX}Princess"),
-                new TextObject("{=!}Princes"));
+                new TextObject("{=UZNcONWY}Princes"));
 
             DefaultKnight = CulturalTitleName.CreateKnight("DefaultKnight",
                 null,

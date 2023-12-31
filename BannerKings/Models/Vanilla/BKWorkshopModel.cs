@@ -107,7 +107,7 @@ namespace BannerKings.Models.Vanilla
             ExplainedNumber result = new ExplainedNumber(base.GetCostForPlayer(workshop), descriptions, 
                 new TextObject("{=LiC18pJC}Equipment costs"));
             result.Add((int)(GetDailyExpense(workshop).ResultNumber * 15f * CampaignTime.DaysInYear),
-                new TextObject("{=!}Employee wages"));
+                new TextObject("{=hwVR2ej5}Employee wages"));
 
             result.Add(GetInventoryCost(workshop), new TextObject("{=u5LQxWO5}Workshop inventory"));
 

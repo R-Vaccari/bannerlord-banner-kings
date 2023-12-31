@@ -195,7 +195,7 @@ namespace BannerKings.Behaviours
                 }, true);
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_research",
-                "{=!}You are researching {RESARCH}. Your current research progress is {POINTS} research points.",
+                "{=oDbBSRn6}You are researching {RESARCH}. Your current research progress is {POINTS} research points.",
                 MenuWaitInit,
                 MenuActionResearchCondition,
                 MenuActionConsequenceNeutral,
@@ -235,7 +235,7 @@ namespace BannerKings.Behaviours
 
             campaignGameStarter.AddGameMenuOption("bannerkings_actions",
                "action_ship",
-               "{=!}Take a Ship",
+               "{=v4RfkZ9Q}Take a Ship",
                (MenuCallbackArgs args) =>
                {
                    args.optionLeaveType = GameMenuOption.LeaveType.Continue;
@@ -254,8 +254,8 @@ namespace BannerKings.Behaviours
                    }
 
                    MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                       new TextObject("{=!}Ship Travel (1/2)").ToString(),
-                       new TextObject("{=!}Select one of the shipping lanes available to this settlement.").ToString(),
+                       new TextObject("{=ufDdSBDk}Ship Travel (1/2)").ToString(),
+                       new TextObject("{=pmAiqwfC}Select one of the shipping lanes available to this settlement.").ToString(),
                        list,
                        true,
                        1,
@@ -274,7 +274,7 @@ namespace BannerKings.Behaviours
                                int price = behavior.CalculatePrice(port, MobileParty.MainParty);
                                CampaignTime arrival = behavior.CalculateArrival(port, MobileParty.MainParty);
                                ports.Add(new InquiryElement(port,
-                                   new TextObject("{=!}{PORT} - {GOLD}{GOLD_ICON}, {ARRIVAL} days")
+                                   new TextObject("{=cQPJe24s}{PORT} - {GOLD}{GOLD_ICON}, {ARRIVAL} days")
                                    .SetTextVariable("PORT", port.Name)
                                    .SetTextVariable("GOLD", price)
                                    .SetTextVariable("ARRIVAL", arrival.RemainingDaysFromNow.ToString("0"))
@@ -285,8 +285,8 @@ namespace BannerKings.Behaviours
                            }
 
                            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                               new TextObject("{=!}Ship Travel (2/2)").ToString(),
-                               new TextObject("{=!}Select one of the ports available in this shipping lane.").ToString(),
+                               new TextObject("{=PiUBNXne}Ship Travel (2/2)").ToString(),
+                               new TextObject("{=xEsPbrGm}Select one of the ports available in this shipping lane.").ToString(),
                                ports,
                                true,
                                1,
@@ -309,7 +309,7 @@ namespace BannerKings.Behaviours
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_local_connections", "{=B0KoTpr4}Recruit local mercenaries",
                 MenuActionLocalConnectionsCondition, MenuActionLocalConnectionsConsequence);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_study", "{=!}Research",
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_study", "{=91WqQDR9}Research",
                 MenuActionResearchCondition,
                 delegate { GameMenu.SwitchToMenu("bannerkings_wait_research"); });
 
@@ -359,11 +359,11 @@ namespace BannerKings.Behaviours
 
             campaignGameStarter.AddGameMenuOption("bannerkings", 
                 "manage_titles", 
-                "{=!}Cultural information",
+                "{=ZODUL0v2}Cultural information",
                 MenuTitlesCondition, 
                 (MenuCallbackArgs args) => UIManager.Instance.ShowWindow("cultures"));
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_demesne", "{=!}Estates",
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_demesne", "{=mVPtsCXS}Estates",
                 MenuEstatesManageCondition,
                 MenuEstatesManageConsequence);
 
@@ -549,7 +549,7 @@ namespace BannerKings.Behaviours
                         SkillObject secondarySkill = education.Research.ResearchSkill;
 
                         InformationManager.DisplayMessage(new InformationMessage(
-                            new TextObject("{=!}You have improved your {SKILL1} and {SKILL2} skills during your current action.")
+                            new TextObject("{=9gwkDQkv}You have improved your {SKILL1} and {SKILL2} skills during your current action.")
                                 .SetTextVariable("SKILL1", BKSkills.Instance.Scholarship.Name)
                                 .SetTextVariable("SKILL2", secondarySkill.Name)
                                 .ToString()));

@@ -12,7 +12,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
         public override Settlement FaithSeat => Settlement.All.First(x => x.StringId == "town_ES4");
         public override TextObject GetZealotsGroupName()
         {
-            return new TextObject("{=!}Keepers of the Flame");
+            return new TextObject("{=Pzqe1BYq}Keepers of the Flame");
         }
 
         public override TextObject GetDescriptionHint()
@@ -253,7 +253,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 
         public override TextObject GetBlessingQuickInformation()
         {
-            return new TextObject("{=!}{HERO} is medidating upon {DIVINITY}.");
+            return new TextObject("{=8kkbZ7uS}{HERO} is medidating upon {DIVINITY}.");
         }
 
         public override TextObject GetBlessingActionName()

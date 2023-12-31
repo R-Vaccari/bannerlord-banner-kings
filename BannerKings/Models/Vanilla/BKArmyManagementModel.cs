@@ -1,4 +1,4 @@
-﻿using BannerKings.Extensions;
+using BannerKings.Extensions;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Education;
 using BannerKings.Managers.Kingdoms.Policies;
@@ -130,7 +130,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             result.Add(result.ResultNumber * -BannerKingsSettings.Instance.CohesionBoost, 
-                new TaleWorlds.Localization.TextObject("{=!}Army Cohesion Boost"));
+                new TaleWorlds.Localization.TextObject("{=hpWaDjNM}Army Cohesion Boost"));
             return result;
         }
 

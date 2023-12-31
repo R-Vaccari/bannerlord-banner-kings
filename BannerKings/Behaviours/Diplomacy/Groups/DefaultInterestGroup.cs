@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Diplomacy.Groups.Demands;
+using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Titles.Laws;
@@ -37,8 +37,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
         public override void Initialize()
         {
-            Royalists.Initialize(new TextObject("{=!}Royalists"),
-                new TextObject("{=!}The royalists are those who support the royal administration. They favor the sovereign even over themselves, be for true loyalty or for the prospect of compensation. Royalists support everything that benefits the royal administration regardless of impacts on other groups."),
+            Royalists.Initialize(new TextObject("{=q8tYdtw5}Royalists"),
+                new TextObject("{=g01HUrg3}The royalists are those who support the royal administration. They favor the sovereign even over themselves, be for true loyalty or for the prospect of compensation. Royalists support everything that benefits the royal administration regardless of impacts on other groups."),
                 DefaultTraits.Authoritarian,
                 true,
                 true,
@@ -89,8 +89,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 null,
                 0.5f);
 
-            Traditionalists.Initialize(new TextObject("{=!}Traditionalists"),
-               new TextObject("{=!}Traditionalists support the way of the ancestors. More than anything, they believe in strength. While they recognize the necessity for a strong ruler, they also do the necessity of liberty for the noble classes. They aim for a balance of power between the sovereign and their vassals, a continuation of old traditions and exerting power through force."),
+            Traditionalists.Initialize(new TextObject("{=JqLT9Fro}Traditionalists"),
+               new TextObject("{=JqLT9Fro}Traditionalists support the way of the ancestors. More than anything, they believe in strength. While they recognize the necessity for a strong ruler, they also do the necessity of liberty for the noble classes. They aim for a balance of power between the sovereign and their vassals, a continuation of old traditions and exerting power through force."),
                BKTraits.Instance.Diligent,
                true,
                true,
@@ -149,8 +149,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                null,
                0.5f);
 
-            Oligarchists.Initialize(new TextObject("{=!}Oligarchists"),
-               new TextObject("{=!}Oligarchists are noble people of influence that are concerned, first and foremost, with their own advantage. They continuously seek benefits for themselves or their peers, understanding they are part of the same class. Thus, their interests are often misaligned both with the ruler's, and with the common people."),
+            Oligarchists.Initialize(new TextObject("{=ZhZFKHhO}Oligarchists"),
+               new TextObject("{=ZhZFKHhO}Oligarchists are noble people of influence that are concerned, first and foremost, with their own advantage. They continuously seek benefits for themselves or their peers, understanding they are part of the same class. Thus, their interests are often misaligned both with the ruler's, and with the common people."),
                DefaultTraits.Oligarchic,
                true,
                false,
@@ -205,8 +205,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                null,
                0.4f);
 
-            Zealots.Initialize(new TextObject("{=!}Zealots"),
-                new TextObject("{=!}Zealots represent those of most religious fervor within the realm. As a group, they are most concerned with the strengthening of their faith and the upholding of its values. A ruler that does not follow the realm's traditional faith will have great difficulty gathering support from such zealots. Those that do follow it, still need to prove themselves by upholding the faith's virtues. Zealots, loyal first and foremost to their faith, gather members both within and withou the nobility."),
+            Zealots.Initialize(new TextObject("{=3Yy4bGJj}Zealots"),
+                new TextObject("{=3Yy4bGJj}Zealots represent those of most religious fervor within the realm. As a group, they are most concerned with the strengthening of their faith and the upholding of its values. A ruler that does not follow the realm's traditional faith will have great difficulty gathering support from such zealots. Those that do follow it, still need to prove themselves by upholding the faith's virtues. Zealots, loyal first and foremost to their faith, gather members both within and withou the nobility."),
                 BKTraits.Instance.Zealous,
                 true,
                 true,
@@ -261,8 +261,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 DefaultCouncilPositions.Instance.Spiritual,
                 0.2f);
 
-            Commoners.Initialize(new TextObject("{=!}Commoners"),
-                new TextObject("{=!}Commoners represent the general populace, intermediated by fief dignataries. The benefit of the commoners often clashes with the benefit of the high nobility. However, the populace is open to supporting rulers that represent them. Often, that means a shared cultural and religious tradition, as well as signs of certain virtues, such as a keen sense of justice and generosity."),
+            Commoners.Initialize(new TextObject("{=kyB8tkgY}Commoners"),
+                new TextObject("{=kyB8tkgY}Commoners represent the general populace, intermediated by fief dignataries. The benefit of the commoners often clashes with the benefit of the high nobility. However, the populace is open to supporting rulers that represent them. Often, that means a shared cultural and religious tradition, as well as signs of certain virtues, such as a keen sense of justice and generosity."),
                 BKTraits.Instance.Just,
                 false,
                 true,

@@ -301,12 +301,12 @@ namespace BannerKings.Models.Vanilla
             }
 
             ExplainedNumber explainedNumber = new ExplainedNumber(0.5f);
-            explainedNumber.AddFactor(hero.Power / 150f, new TextObject("{=!}Power"));
+            explainedNumber.AddFactor(hero.Power / 150f, new TextObject("{=fwAxicYv}Power"));
 
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             if (data != null)
             {
-                explainedNumber.AddFactor(data.Stability - 0.5f, new TextObject("{=!}Settlement Stability"));
+                explainedNumber.AddFactor(data.Stability - 0.5f, new TextObject("{=dEuappyT}Settlement Stability"));
                 var religionData = data.ReligionData;
                 if (religionData != null)
                 {

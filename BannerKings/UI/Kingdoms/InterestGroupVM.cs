@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Diplomacy;
+using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Utils.Models;
@@ -84,66 +84,66 @@ namespace BannerKings.UI.Kingdoms
 
             BKExplainedNumber support = Group.SupportExplained;
 
-            Headers.Add(new StringPairItemVM(new TextObject("{=!}Support").ToString(),
+            Headers.Add(new StringPairItemVM(new TextObject("{=b0smO4NW}Support").ToString(),
                 FormatValue(support.ResultNumber), 
                 new BasicTooltipViewModel(() => support.GetFormattedPercentage())));
 
-            Headers.Add(new StringPairItemVM(new TextObject("{=!}Members").ToString(),
+            Headers.Add(new StringPairItemVM(new TextObject("{=eZEhpmxY}Members").ToString(),
                 Group.Members.Count.ToString(),
-                new BasicTooltipViewModel(() => new TextObject("{=!}The amount of members in this group.").ToString())));
+                new BasicTooltipViewModel(() => new TextObject("{=Bm7Nc90U}The amount of members in this group.").ToString())));
 
-            SecondaryHeaders.Add(new StringPairItemVM(new TextObject("{=!}Endorsed Trait").ToString(),
+            SecondaryHeaders.Add(new StringPairItemVM(new TextObject("{=OA58FJuM}Endorsed Trait").ToString(),
                 Group.MainTrait.Name.ToString(),
-                new BasicTooltipViewModel(() => new TextObject("{=!}This group favors those with this personality trait. Hero with this trait are more likely to join the group, and the group supports more a sovereign with this trait.").ToString())));
+                new BasicTooltipViewModel(() => new TextObject("{=znxbBpaL}This group favors those with this personality trait. Hero with this trait are more likely to join the group, and the group supports more a sovereign with this trait.").ToString())));
 
-            SecondaryHeaders.Add(new StringPairItemVM(new TextObject("{=!}Allows Nobility").ToString(),
+            SecondaryHeaders.Add(new StringPairItemVM(new TextObject("{=r8QiF5TC}Allows Nobility").ToString(),
                GameTexts.FindText(Group.AllowsNobles ? "str_yes" : "str_no").ToString(),
-               new BasicTooltipViewModel(() => new TextObject("{=!}Whether or not lords are allowed to participate in this group.").ToString())));
+               new BasicTooltipViewModel(() => new TextObject("{=1Fb3U8yb}Whether or not lords are allowed to participate in this group.").ToString())));
 
-            SecondaryHeaders.Add(new StringPairItemVM(new TextObject("{=!}Allows Commoners").ToString(),
+            SecondaryHeaders.Add(new StringPairItemVM(new TextObject("{=9XYN8ORW}Allows Commoners").ToString(),
                GameTexts.FindText(Group.AllowsCommoners ? "str_yes" : "str_no").ToString(),
-               new BasicTooltipViewModel(() => new TextObject("{=!}Whether or not relevant commoners (notables) are allowed to participate in this group.").ToString())));
+               new BasicTooltipViewModel(() => new TextObject("{=p3tBzVXX}Whether or not relevant commoners (notables) are allowed to participate in this group.").ToString())));
 
             int lords = Group.Members.FindAll(x => x.IsLord).Count;
             int notables = Group.Members.FindAll(x => x.IsNotable).Count;
 
-            TertiaryHeaders.Add(new StringPairItemVM(new TextObject("{=!}Endorsed Acts").ToString(), 
+            TertiaryHeaders.Add(new StringPairItemVM(new TextObject("{=LwfduROT}Endorsed Acts").ToString(), 
                 string.Empty,
                 new BasicTooltipViewModel(() => UIHelper.GetGroupEndorsed(Group))));
 
-            TertiaryHeaders.Add(new StringPairItemVM(new TextObject("{=!}Demands").ToString(),
+            TertiaryHeaders.Add(new StringPairItemVM(new TextObject("{=F5nvf0YA}Demands").ToString(),
                 string.Empty,
                 new BasicTooltipViewModel(() => UIHelper.GetGroupDemands(Group))));
 
-            TertiaryHeaders.Add(new StringPairItemVM(new TextObject("{=!}Shunned Acts").ToString(),
+            TertiaryHeaders.Add(new StringPairItemVM(new TextObject("{=r3H9r011}Shunned Acts").ToString(),
                 string.Empty,
                 new BasicTooltipViewModel(() => UIHelper.GetGroupShunned(Group))));
 
-            DemandName = new TextObject("{=!}Push Demand").ToString();
+            DemandName = new TextObject("{=zVboRONd}Push Demand").ToString();
             IsDemandEnabled = Group.Leader == Hero.MainHero;
-            DemandHint = new HintViewModel(new TextObject("{=!}Group leaders are able to push demands to their suzerain. You are not part of this group, and therefore have no say in its matters."));
+            DemandHint = new HintViewModel(new TextObject("{=r43NMSOf}Group leaders are able to push demands to their suzerain. You are not part of this group, and therefore have no say in its matters."));
 
             if (Group.Members.Contains(Hero.MainHero))
             {
                 ActionName = new TextObject("{=3sRdGQou}Leave").ToString();
                 IsActionEnabled = true;
-                ActionHint = new HintViewModel(new TextObject("{=!}Leave this group. This will break any ties to their interests and demands. Leaving a group will hurt your relations with it's members, mainly the group leader. If you are the leader yourself, this impact will be increased."));  
+                ActionHint = new HintViewModel(new TextObject("{=tEticUst}Leave this group. This will break any ties to their interests and demands. Leaving a group will hurt your relations with it's members, mainly the group leader. If you are the leader yourself, this impact will be increased."));  
 
                 if (!IsDemandEnabled)
                 {
-                    DemandHint = new HintViewModel(new TextObject("{=!}As a member of this group you are not able to push demands. You may vote on the demand specifications once the group leader pushes them. To become leader, be the most influential member of the group.")
+                    DemandHint = new HintViewModel(new TextObject("{=KEgFGRpy}As a member of this group you are not able to push demands. You may vote on the demand specifications once the group leader pushes them. To become leader, be the most influential member of the group.")
                         .SetTextVariable("SUZERAIN", Group.FactionLeader.Name));
                 }
                 else
                 {
-                    DemandHint = new HintViewModel(new TextObject("{=!}Deliver a demand to {SUZERAIN}. As the leader of this group, you are able to dictate what to demand from your ruler. Once a demand is made you can not disclaim the consequences, be them positive or otherwise.")
+                    DemandHint = new HintViewModel(new TextObject("{=C2Ne3tF7}Deliver a demand to {SUZERAIN}. As the leader of this group, you are able to dictate what to demand from your ruler. Once a demand is made you can not disclaim the consequences, be them positive or otherwise.")
                         .SetTextVariable("SUZERAIN", Group.FactionLeader.Name));
                 }
 
                 if (!Group.CanHeroLeave(Hero.MainHero, KingdomDiplomacy))
                 {
                     IsActionEnabled = false;
-                    ActionHint = new HintViewModel(new TextObject("{=!}You cannot leave this group until a year has passed since you joined ({DATE}).")
+                    ActionHint = new HintViewModel(new TextObject("{=jBxzXBGZ}You cannot leave this group until a year has passed since you joined ({DATE}).")
                         .SetTextVariable("DATE", Group.JoinTime[Hero.MainHero].ToString()));
                 }
             }
@@ -151,22 +151,22 @@ namespace BannerKings.UI.Kingdoms
             {
                 ActionName = new TextObject("{=es0Y3Bxc}Join").ToString();
                 IsActionEnabled = Group.CanHeroJoin(Hero.MainHero, KingdomDiplomacy);
-                ActionHint = new HintViewModel(new TextObject("{=!}Join this group. Being a group member means you will be aligned with their interests and demands. The group leader will be responsible for the group's interaction with the realm's sovereign, and their actions will impact the entire group. For example, a malcontent group leader may make pressure for a member of the group to be awarded a title or property and thus increase the group's influence."));
+                ActionHint = new HintViewModel(new TextObject("{=pmRmHSYe}Join this group. Being a group member means you will be aligned with their interests and demands. The group leader will be responsible for the group's interaction with the realm's sovereign, and their actions will impact the entire group. For example, a malcontent group leader may make pressure for a member of the group to be awarded a title or property and thus increase the group's influence."));
 
                 if (Group.FactionLeader == Hero.MainHero)
                 {
                     var currentDemand = Group.CurrentDemand;
-                    DemandName = new TextObject("{=!}Resolve Demand").ToString();
+                    DemandName = new TextObject("{=nteMrGXZ}Resolve Demand").ToString();
                     IsDemandEnabled = currentDemand != null;
-                    TextObject demandText = new TextObject("{=!}The {GROUP} is currently not pushing for any demands.")
+                    TextObject demandText = new TextObject("{=PFLUEun9}The {GROUP} is currently not pushing for any demands.")
                         .SetTextVariable("GROUP", Group.Name);
                     if (IsDemandEnabled)
                     {
-                        demandText = new TextObject("{=!}The {GROUP} is currently pushing for the {DEMAND} demand.")
+                        demandText = new TextObject("{=9w9bh2WH}The {GROUP} is currently pushing for the {DEMAND} demand.")
                         .SetTextVariable("GROUP", Group.Name)
                         .SetTextVariable("DEMAND", currentDemand.Name);
                     }
-                    DemandHint = new HintViewModel(new TextObject("{=!}As the sovereign of your realm, you are responsible for resolving demands of groups. {DEMAND_TEXT}")
+                    DemandHint = new HintViewModel(new TextObject("{=7GbeADru}As the sovereign of your realm, you are responsible for resolving demands of groups. {DEMAND_TEXT}")
                         .SetTextVariable("SUZERAIN", Group.FactionLeader.Name)
                         .SetTextVariable("DEMAND_TEXT", demandText));
                 }
@@ -179,8 +179,8 @@ namespace BannerKings.UI.Kingdoms
             if (Group.Members.Contains(Hero.MainHero))
             {
                 InformationManager.ShowInquiry(new InquiryData(
-                    new TextObject("{=!}Leave Group").ToString(),
-                    new TextObject("{=!}Leaving the group will harm the members' opinion of you, specially if you lead the group.").ToString(),
+                    new TextObject("{=ds1KP4Qc}Leave Group").ToString(),
+                    new TextObject("{=pXkS1xV5}Leaving the group will harm the members' opinion of you, specially if you lead the group.").ToString(),
                     true,
                     true,
                     GameTexts.FindText("str_accept").ToString(),
@@ -195,8 +195,8 @@ namespace BannerKings.UI.Kingdoms
             else
             {
                 InformationManager.ShowInquiry(new InquiryData(
-                   new TextObject("{=!}Join Group").ToString(),
-                   new TextObject("{=!}You may join the {GROUP} group, represented by {LEADER}. Once joined, other members will expect your participation.")
+                   new TextObject("{=9SnWS77u}Join Group").ToString(),
+                   new TextObject("{=XWOjp2ZM}You may join the {GROUP} group, represented by {LEADER}. Once joined, other members will expect your participation.")
                    .SetTextVariable("GROUP", GroupName)
                    .SetTextVariable("LEADER", Group.Leader.Name)
                    .ToString(),
@@ -239,8 +239,8 @@ namespace BannerKings.UI.Kingdoms
                         .ToString()));
                 }
 
-                MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Push Demand").ToString(),
-                    new TextObject("{=!}As the representative of the {GROUP}, you are able to push demands to {SUZERAIN} in the group's name. Pushing for a demand will often harm your relationship with your suzerain. How the group will respond will feel about it will depend entirely on the suzerain's response. Once a demand is pushed, the group is both unable to press the same kind of request and its influence is lowered, temporarily.")
+                MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=zVboRONd}Push Demand").ToString(),
+                    new TextObject("{=Ya1W2cuE}As the representative of the {GROUP}, you are able to push demands to {SUZERAIN} in the group's name. Pushing for a demand will often harm your relationship with your suzerain. How the group will respond will feel about it will depend entirely on the suzerain's response. Once a demand is pushed, the group is both unable to press the same kind of request and its influence is lowered, temporarily.")
                     .SetTextVariable("GROUP", GroupName)
                     .SetTextVariable("SUZERAIN", Group.FactionLeader.Name)
                     .ToString(),

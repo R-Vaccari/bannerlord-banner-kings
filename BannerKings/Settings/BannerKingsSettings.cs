@@ -60,19 +60,19 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public bool DismissParties { get; set; } = true;
 
-        [SettingPropertyFloatingInteger("{=!}Base Wages", minValue: 0.5f, maxValue: 2f, "#0%", RequireRestart = false, HintText = "{=!}Modifier for base wages of soldiers, changing their daily upkeep but also their recruitment cost, calculated on their base wage. May SEVERELY impact AI and it's ability to recruit/keep troops. Default: 100%.")]
+        [SettingPropertyFloatingInteger("{=D0UNUOgy}Base Wages", minValue: 0.5f, maxValue: 2f, "#0%", RequireRestart = false, HintText = "{=Jabak5nx}Modifier for base wages of soldiers, changing their daily upkeep but also their recruitment cost, calculated on their base wage. May SEVERELY impact AI and it's ability to recruit/keep troops. Default: 100%.")]
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public float BaseWage { get; set; } = 1f;
 
-        [SettingPropertyFloatingInteger("{=!}Party Size Scaling", minValue: 1f, maxValue: 3f, "#0%", RequireRestart = false, HintText = "{=!}The scale of party sizes on the map. Applies in half to parties of heroes not leading their clan. Vanilla is 100%. Default: 200%.")]
+        [SettingPropertyFloatingInteger("{=mSLQa207}Party Size Scaling", minValue: 1f, maxValue: 3f, "#0%", RequireRestart = false, HintText = "{=RszZwN4X}The scale of party sizes on the map. Applies in half to parties of heroes not leading their clan. Vanilla is 100%. Default: 200%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float PartySizes { get; set; } = 2f;
 
-        [SettingProperty("{=!}Alternative Leveling", RequireRestart = false, HintText = "{=!}An alternate skill leveling progression. Skills will require a higher base xp since level 1, but will scale less aggressively. The result should be more consitent xp across all levels, slower at the beginning but faster near the end. Default: true.")]
+        [SettingProperty("{=QtuWPLe1}Alternative Leveling", RequireRestart = false, HintText = "{=LEE0ixHk}An alternate skill leveling progression. Skills will require a higher base xp since level 1, but will scale less aggressively. The result should be more consitent xp across all levels, slower at the beginning but faster near the end. Default: true.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public bool AlternateLeveling { get; set; } = true;
 
-        [SettingPropertyFloatingInteger("{=!}Army Cohesion Boost", minValue: 0f, maxValue: 0.8f, "#0%", RequireRestart = false, HintText = "{=!}Cohesion boost to armies to they last longer, to counter balance the presence of more parties. Vanilla is 0%, 50% decreases cohesion loss by half. Default: 50%.")]
+        [SettingPropertyFloatingInteger("{=hpWaDjNM}Army Cohesion Boost", minValue: 0f, maxValue: 0.8f, "#0%", RequireRestart = false, HintText = "{=AW5mYHB5}Cohesion boost to armies to they last longer, to counter balance the presence of more parties. Vanilla is 0%, 50% decreases cohesion loss by half. Default: 50%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float CohesionBoost { get; set; } = 0.5f;
 
@@ -134,7 +134,7 @@ namespace BannerKings.Settings
         [SettingPropertyInteger("{=00bG9Ube}Bandit Parties Limit", 150, 600, "{=4tnEdJNu}0 Parties ",
             Order = 1,
             RequireRestart = false,
-            HintText = "{=!}Maximum number of bandit parties in the world map. Vanilla is 150. Default: 150.")]
+            HintText = "{=gDK2LRib}Maximum number of bandit parties in the world map. Vanilla is 150. Default: 150.")]
         [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
         public int BanditPartiesLimit { get; set; } = 150;
     }

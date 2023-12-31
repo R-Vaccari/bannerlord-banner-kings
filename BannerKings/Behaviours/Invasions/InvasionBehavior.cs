@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -30,7 +30,7 @@ namespace BannerKings.Behaviors.Invasions
             {
 
                 InformationManager.DisplayMessage(new InformationMessage(
-                new TextObject("{=!}{HERO} has invaded the continent alongside their army... Reports say they arrived near {TOWN}...")
+                new TextObject("{=mBO1CASH}{HERO} has invaded the continent alongside their army... Reports say they arrived near {TOWN}...")
                 .SetTextVariable("TOWN", invasion.SpawnSettlement.Name)
                 .ToString()));
             }

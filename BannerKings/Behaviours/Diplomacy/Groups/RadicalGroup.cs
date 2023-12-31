@@ -1,4 +1,4 @@
-﻿using BannerKings.Actions;
+using BannerKings.Actions;
 using BannerKings.Utils.Extensions;
 using System;
 using TaleWorlds.CampaignSystem;
@@ -52,7 +52,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 AddMemberInternal(hero);
                 if (hero.Clan == Clan.PlayerClan)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has joined the {GROUP} group.")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=J7Yomhae}{HERO} has joined the {GROUP} group.")
                         .SetTextVariable("HERO", hero.Name)
                         .SetTextVariable("GROUP", this.Name),
                         0,
@@ -61,7 +61,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 }
                 else if (hero.MapFaction.Leader == Hero.MainHero) 
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has joined the {GROUP} radical group against you!")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=oxwdse8t}{HERO} has joined the {GROUP} radical group against you!")
                         .SetTextVariable("HERO", hero.Name)
                         .SetTextVariable("GROUP", this.Name),
                         0,
@@ -93,7 +93,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 Members.Remove(hero);
                 if (hero.Clan == Clan.PlayerClan)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has left the {GROUP} group.")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=O9K6i3iT}{HERO} has left the {GROUP} group.")
                         .SetTextVariable("HERO", hero.Name)
                         .SetTextVariable("GROUP", this.Name),
                         0,

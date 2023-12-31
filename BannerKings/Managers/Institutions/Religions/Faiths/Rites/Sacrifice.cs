@@ -27,7 +27,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                 {
                     var hero = element.Character.HeroObject;
                     input = hero;
-                    TextObject description = new TextObject("{=!}The sacrifice of {HERO} will yield {PIETY} piety.")
+                    TextObject description = new TextObject("{=tuDyHJmq}The sacrifice of {HERO} will yield {PIETY} piety.")
                         .SetTextVariable("HERO", input.Name)
                         .SetTextVariable("PIETY", GetPietyReward());
                     bool available = CanHeroBeSacrificed(executor, hero);

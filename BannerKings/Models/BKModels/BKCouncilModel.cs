@@ -49,7 +49,7 @@ namespace BannerKings.Models.BKModels
             result.LimitMax(1000f);
             if (data.Location != null)
             {
-                result.Add(data.Location.Prosperity * 0.05f, new TextObject("{=!}Court location ({NAME})")
+                result.Add(data.Location.Prosperity * 0.05f, new TextObject("{=kyB8tkgY}Court location ({NAME})")
                     .SetTextVariable("NAME", data.Location.Name));
 
                 var lodgings = data.CourtGrace.GetExpense(CourtExpense.ExpenseType.Lodgings);
@@ -68,7 +68,7 @@ namespace BannerKings.Models.BKModels
             foreach (var position in data.Positions)
             {
                 if (position.Member != null) result.Add(CalculatePositionGrace(position).ResultNumber, 
-                    new TextObject("{=!}{POSITION} position fulfilled by {HERO}")
+                    new TextObject("{=Bn4akxdA}{POSITION} position fulfilled by {HERO}")
                     .SetTextVariable("POSITION", position.GetCulturalName())
                     .SetTextVariable("HERO", position.Member.Name));
             }
@@ -250,7 +250,7 @@ namespace BannerKings.Models.BKModels
             if (targetPosition == null) return new CouncilAction(type, requester, targetPosition, currentPosition, council)
             {
                 Possible = false,
-                Reason = new TextObject("{=!}Invalid position (null).")
+                Reason = new TextObject("{=o4f4jVRJ}Invalid position (null).")
             };
             return type switch
             {

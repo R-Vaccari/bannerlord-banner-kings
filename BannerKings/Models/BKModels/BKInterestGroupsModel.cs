@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Diplomacy;
+using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
@@ -72,7 +72,7 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            if (notables > 0) result.Add(notableInfluence, new TextObject("{=!}Dignataries (x{MEMBERS})")
+            if (notables > 0) result.Add(notableInfluence, new TextObject("{=Ce2gcy3j}Dignataries (x{MEMBERS})")
                     .SetTextVariable("MEMBERS", notables));
 
             foreach (var outcome in group.RecentOucomes)
@@ -82,7 +82,7 @@ namespace BannerKings.Models.BKModels
             if (group.StringId == DefaultInterestGroup.Instance.Commoners.StringId)
                 foreach (var fief in diplomacy.Kingdom.Fiefs)
                     if (fief.Loyalty <= 25f) result.Add(CalculateTownInfluence(fief).ResultNumber / diplomacy.Kingdom.Fiefs.Count,
-                            new TextObject("{=!}{TOWN}'s loyalty is low"));
+                            new TextObject("{=K0pRPse7}{TOWN}'s loyalty is low"));
 
             return result;
         }
@@ -121,7 +121,7 @@ namespace BannerKings.Models.BKModels
             KingdomDiplomacy diplomacy = group.KingdomDiplomacy;
             Hero sovereign = diplomacy.Kingdom.Leader;
 
-            result.Add(diplomacy.Legitimacy * group.LegitimacyFactor, new TextObject("{=!}Legitimacy"));
+            result.Add(diplomacy.Legitimacy * group.LegitimacyFactor, new TextObject("Legitimacy"));
 
             if (group.Leader != null)
             {
@@ -158,13 +158,13 @@ namespace BannerKings.Models.BKModels
 
             if (otherMembers > 0)
             {
-                result.Add(approval, new TextObject("{=!}Approval by nobility members (x{MEMBERS})")
+                result.Add(approval, new TextObject("{=ShSqfhkh}Approval by nobility members (x{MEMBERS})")
                     .SetTextVariable("MEMBERS", otherMembers));
             }
 
             if (notables > 0)
             {
-                result.Add(notableApproval, new TextObject("{=!}Approval by dignataries (x{MEMBERS})")
+                result.Add(notableApproval, new TextObject("{=JXfGqamr}Approval by dignataries (x{MEMBERS})")
                     .SetTextVariable("MEMBERS", notables));
             }
 
@@ -178,7 +178,7 @@ namespace BannerKings.Models.BKModels
                     supportedPoliciesCount++;
                 }
             }
-            result.Add(supportedPolicies, new TextObject("{=!}Endorsed policies active (x{COUNT})")
+            result.Add(supportedPolicies, new TextObject("{=hxOViTwY}Endorsed policies active (x{COUNT})")
                 .SetTextVariable("COUNT", supportedPoliciesCount));
 
             float shunnedPolicies = 0f;
@@ -191,7 +191,7 @@ namespace BannerKings.Models.BKModels
                     shunnedPoliciesCount++;
                 }
             }
-            result.Add(-shunnedPolicies, new TextObject("{=!}Shunned policies active (x{COUNT})")
+            result.Add(-shunnedPolicies, new TextObject("{=ETikwXjV}Shunned policies active (x{COUNT})")
                 .SetTextVariable("COUNT", shunnedPoliciesCount));
 
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(diplomacy.Kingdom);
@@ -207,7 +207,7 @@ namespace BannerKings.Models.BKModels
                         supportedLawsCount++;
                     }
                 }
-                result.Add(supportedLaws, new TextObject("{=!}Endorsed laws active (x{COUNT})")
+                result.Add(supportedLaws, new TextObject("{=MP5kk91f}Endorsed laws active (x{COUNT})")
                     .SetTextVariable("COUNT", supportedLawsCount));
 
                 float shunnedLaws = 0f;
@@ -220,7 +220,7 @@ namespace BannerKings.Models.BKModels
                         shunnedLawsCount++;
                     }
                 }
-                result.Add(-shunnedLaws, new TextObject("{=!}Shunned laws active (x{COUNT})")
+                result.Add(-shunnedLaws, new TextObject("{=4UXFSw4t}Shunned laws active (x{COUNT})")
                     .SetTextVariable("COUNT", shunnedLawsCount));
             }
 
@@ -233,16 +233,16 @@ namespace BannerKings.Models.BKModels
             if (group.StringId == DefaultInterestGroup.Instance.Traditionalists.StringId)
             {
                 if (sovereign.Culture == group.KingdomDiplomacy.Kingdom.Culture)
-                    result.Add(0.12f, new TextObject("{=!}{HERO} is of traditional culture")
+                    result.Add(0.12f, new TextObject("{=O8tcdKZ9}{HERO} is of traditional culture")
                         .SetTextVariable("HERO", sovereign.Name));
 
-                if (matchingReligion) result.Add(0.12f, new TextObject("{=!}{HERO} is of traditional faith")
+                if (matchingReligion) result.Add(0.12f, new TextObject("{=v3kM9Awv}{HERO} is of traditional faith")
                         .SetTextVariable("HERO", sovereign.Name));
             }
 
             if (group.StringId == DefaultInterestGroup.Instance.Zealots.StringId)
             {
-                if (!matchingReligion) result.Add(-0.4f, new TextObject("{=!}{HERO} is not of traditional faith")
+                if (!matchingReligion) result.Add(-0.4f, new TextObject("{=xL5afAGh}{HERO} is not of traditional faith")
                         .SetTextVariable("HERO", sovereign.Name));
                 else
                 {

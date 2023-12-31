@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Goals;
 using BannerKings.Utils.Extensions;
 using BannerKings.Utils.Models;
@@ -79,13 +79,13 @@ namespace BannerKings.Models.BKModels
 
             int defenderCasualties = attackerLink.GetCasualties(defender);
             result.Add(defenderCasualties / totalWarScore,
-                new TextObject("{=!}{FACTION} suffered {CASUALTIES} casualties")
+                new TextObject("{=yhTbvYFh}{FACTION} suffered {CASUALTIES} casualties")
                 .SetTextVariable("FACTION", defender.Name)
                 .SetTextVariable("CASUALTIES", defenderCasualties));
 
             int attackerCasualties = attackerLink.GetCasualties(attacker);
             result.Add(-attackerCasualties / totalWarScore,
-                new TextObject("{=!}{FACTION} suffered {CASUALTIES} casualties")
+                new TextObject("{=yhTbvYFh}{FACTION} suffered {CASUALTIES} casualties")
                 .SetTextVariable("FACTION", attacker.Name)
                 .SetTextVariable("CASUALTIES", attackerCasualties));
 
@@ -109,7 +109,7 @@ namespace BannerKings.Models.BKModels
             foreach (var settlement in attackerRaids)
             {
                 float points = CalculateRaidScore(settlement.Village).ResultNumber * justification.RaidWeight;
-                result.Add(points / totalWarScore, new TextObject("{=!}Raid of {VILLAGE}")
+                result.Add(points / totalWarScore, new TextObject("{=e3MgNF7a}Raid of {VILLAGE}")
                     .SetTextVariable("VILLAGE", settlement.Name));
             }
 
@@ -143,12 +143,12 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            result.Add(attackCaptivesScore, new TextObject("{=!}Attacker captives (x{TOTAL})")
+            result.Add(attackCaptivesScore, new TextObject("{=idg6MqLK}Attacker captives (x{TOTAL})")
                 .SetTextVariable("TOTAL", attackCaptives));
 
             if (justification.IsFulfilled(war))
             {
-                result.Add(0.5f, new TextObject("{=!}Objective fulfilled ({OBJECTIVE})")
+                result.Add(0.5f, new TextObject("{=a9OLSCt0}Objective fulfilled ({OBJECTIVE})")
                     .SetTextVariable("OBJECTIVE", justification.ObjectiveText));
             }
 
@@ -169,7 +169,7 @@ namespace BannerKings.Models.BKModels
             foreach (var settlement in defenderRaids)
             {
                 float points = -CalculateRaidScore(settlement.Village).ResultNumber * justification.RaidWeight;
-                result.Add(points / totalWarScore, new TextObject("{=!}Raid of {VILLAGE}")
+                result.Add(points / totalWarScore, new TextObject("{=e3MgNF7a}Raid of {VILLAGE}")
                     .SetTextVariable("VILLAGE", settlement.Name));
             }
 
@@ -203,12 +203,12 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            result.Add(defendCaptivesScore, new TextObject("{=!}Defener captives (x{TOTAL})")
+            result.Add(defendCaptivesScore, new TextObject("{=DyKbVdPa}Defener captives (x{TOTAL})")
                .SetTextVariable("TOTAL", defendCaptives));
 
             if (isDefenderScore)
             {
-                result.AddFactor(-1f, new TextObject("{=!}Defender's perspective"));
+                result.AddFactor(-1f, new TextObject("{=GMOKktYa}Defender's perspective"));
             }
 
             return result;
@@ -251,7 +251,7 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateRaidScore(Village village, bool explanations = false)
         {
             var result = CalculateFiefScore(village.Settlement, false, explanations);
-            result.AddFactor(-0.66f, new TextObject("{=!}Raid"));
+            result.AddFactor(-0.66f, new TextObject("{=pA8rNnUH}Raid"));
             return result;
         }
 
@@ -263,7 +263,7 @@ namespace BannerKings.Models.BKModels
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             if (data != null)
             {
-                result.Add(data.TotalPop / 2f, new TextObject("{=!}Population of {FIEF}")
+                result.Add(data.TotalPop / 2f, new TextObject("{=WKBvL5Qc}Population of {FIEF}")
                         .SetTextVariable("FIEF", settlement.Name));
 
                 if (data.ReligionData != null && data.ReligionData.DominantReligion != null)
@@ -274,7 +274,7 @@ namespace BannerKings.Models.BKModels
                         var leaderReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(ownerFaction.Leader);
                         if (leaderReligion != null && leaderReligion.Faith.GetId() == religion.Faith.GetId())
                         {
-                            result.AddFactor(0.25f, new TextObject("{=!}{FIEF} has same faith as it's realm")
+                            result.AddFactor(0.25f, new TextObject("{=KWcY6gEF}{FIEF} has same faith as it's realm")
                                 .SetTextVariable("FIEF", settlement.Name));
                         }
                     }
@@ -283,24 +283,24 @@ namespace BannerKings.Models.BKModels
 
             if (settlement.Town != null)
             {
-                result.Add(settlement.Town.Prosperity, new TextObject("{=!}Prosperity of {FIEF}")
+                result.Add(settlement.Town.Prosperity, new TextObject("{=PFXzsGZS}Prosperity of {FIEF}")
                         .SetTextVariable("FIEF", settlement.Name));
             }
             else if (settlement.Village != null)
             {
-                result.Add(settlement.Village.Hearth, new TextObject("{=!}Hearths in {FIEF}")
+                result.Add(settlement.Village.Hearth, new TextObject("{=3ffRDBnb}Hearths in {FIEF}")
                         .SetTextVariable("FIEF", settlement.Name));
             }
 
             if (settlement.Culture == ownerFaction.Culture)
             {
-                result.AddFactor(0.25f, new TextObject("{=!}{TOWN} has same culture as it's realm")
+                result.AddFactor(0.25f, new TextObject("{=eBEMbdPo}{TOWN} has same culture as it's realm")
                     .SetTextVariable("TOWN", settlement.Name));
             }
 
             if (isOriginalFront)
             {
-                result.AddFactor(0.1f, new TextObject("{=!}{TOWN} was a front on war declaration")
+                result.AddFactor(0.1f, new TextObject("{=Ge4YqswJ}{TOWN} was a front on war declaration")
                     .SetTextVariable("TOWN", settlement.Name));
             }
 
@@ -328,12 +328,12 @@ namespace BannerKings.Models.BKModels
             result.Add(casualties / GetTotalManpower(faction.Settlements), GameTexts.FindText("str_war_casualties_inflicted"));
 
             float yearsPassed = stance.WarStartDate.ElapsedYearsUntilNow;
-            result.Add(yearsPassed * 0.04f, new TextObject("{=!}War duration"));
+            result.Add(yearsPassed * 0.04f, new TextObject("{=62cGPfZQ}War duration"));
 
             if (war.CasusBelli.Fief != null)
             {
                 float daysPassed = MathF.Max(1f, yearsPassed * CampaignTime.DaysInYear);
-                result.AddFactor(-war.GetDaysHeldObjective(faction) / daysPassed, new TextObject("{=!}Time controlling objective"));
+                result.AddFactor(-war.GetDaysHeldObjective(faction) / daysPassed, new TextObject("{=vt2qZ8YH}Time controlling objective"));
             }
 
             return result;

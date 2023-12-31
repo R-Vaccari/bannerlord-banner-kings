@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
@@ -46,7 +46,7 @@ namespace BannerKings.Managers.Shipping
 
         public override void Initialize()
         {
-            Laconis.Initialize(new TextObject("{=!}Laconian Shipping Network"),
+            Laconis.Initialize(new TextObject("{=ZJBYtrAB}Laconian Shipping Network"),
                 new TextObject(),
                 new List<Settlement>()
                 {
@@ -56,7 +56,7 @@ namespace BannerKings.Managers.Shipping
                     Settlement.All.First(x => x.StringId == "village_S3_2")
                 });
 
-            Western.Initialize(new TextObject("{=!}Western Sea Network"),
+            Western.Initialize(new TextObject("{=tySxydya}Western Sea Network"),
                 new TextObject(),
                 new List<Settlement>()
                 {
@@ -64,7 +64,7 @@ namespace BannerKings.Managers.Shipping
                     Settlement.All.First(x => x.StringId == "town_V8")
                 });
 
-            Junme.Initialize(new TextObject("{=!}Junme Trade Network"),
+            Junme.Initialize(new TextObject("{=FGXR8tdb}Junme Trade Network"),
                 new TextObject(),
                 new List<Settlement>()
                 {
@@ -74,7 +74,7 @@ namespace BannerKings.Managers.Shipping
                 false,
                 Utils.Helpers.GetCulture("nord"));
 
-            Perassic.Initialize(new TextObject("{=!}Perassic Trade Network"),
+            Perassic.Initialize(new TextObject("{=TFoGRBnG}Perassic Trade Network"),
                 new TextObject(),
                 new List<Settlement>()
                 {

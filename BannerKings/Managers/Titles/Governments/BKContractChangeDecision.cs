@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -94,24 +94,24 @@ namespace BannerKings.Managers.Titles.Governments
         }
 
         public override TextObject GetChooseDescription()
-            => new TextObject("{=!}As ruler, you must decide whether to enforce the law {LAW}.")
+            => new TextObject("{=aYqq0bmM}As ruler, you must decide whether to enforce the law {LAW}.")
             .SetTextVariable("LAW", GetDifference());
 
-        public override TextObject GetChooseTitle() => new TextObject("{=!}Implement the {LAW} law")
+        public override TextObject GetChooseTitle() => new TextObject("{=FSQuGKW5}Implement the {LAW} law")
             .SetTextVariable("LAW", GetDifference());
 
         public override TextObject GetChosenOutcomeText(DecisionOutcome chosenOutcome, SupportStatus supportStatus, 
             bool isShortVersion = false)
         {
             bool enforce = (chosenOutcome as ContractDecisionOutcome).ShouldDecisionBeEnforced;
-            TextObject result = enforce ? new TextObject("{=!}The {CHANGE} law will be made part of the realm's demesne, replacing the {CURRENT} law.") :
-                new TextObject("{=!}The {CHANGE} law will not be made part of the realm's demesne, and the {CURRENT} law is upheld.");
+            TextObject result = enforce ? new TextObject("{=wtnoQEUL}The {CHANGE} law will be made part of the realm's demesne, replacing the {CURRENT} law.") :
+                new TextObject("{=7bNjSk4z}The {CHANGE} law will not be made part of the realm's demesne, and the {CURRENT} law is upheld.");
 
             return result.SetTextVariable("CHANGE", GetDifference())
                 .SetTextVariable("CURRENT", GetCurrent());
         }
 
-        public override TextObject GetGeneralTitle() => new TextObject("{=!}Contract Structure Change");
+        public override TextObject GetGeneralTitle() => new TextObject("{=kyB8tkgY}Contract Structure Change");
 
         public override int GetProposalInfluenceCost() => 500;
 
@@ -123,19 +123,19 @@ namespace BannerKings.Managers.Titles.Governments
             if (!Proposed.Government.Successions.Contains(Proposed.Succession))
             {
                 Succession s = Proposed.Government.Successions.First();
-                return new TextObject("{=!}Succession law will be changed to {NAME}.")
+                return new TextObject("{=OQ8y4Ros}Succession law will be changed to {NAME}.")
                     .SetTextVariable("NAME", s.Name);
             }
             return TextObject.Empty;
         }
 
         public override TextObject GetSupportDescription() =>
-            new TextObject("{=!}{FACTION_LEADER} proposes the legal implementation of {CHANGE} throughout the realm's demesne, replacing its current law, {CURRENT}. You can pick your stance regarding this decision.")
+            new TextObject("{=rY1zLP3W}{FACTION_LEADER} proposes the legal implementation of {CHANGE} throughout the realm's demesne, replacing its current law, {CURRENT}. You can pick your stance regarding this decision.")
             .SetTextVariable("FACTION_LEADER", Kingdom.RulingClan.Leader.Name)
             .SetTextVariable("CHANGE", GetDifference())
             .SetTextVariable("CURRENT", GetCurrent());
 
-        public override TextObject GetSupportTitle() => new TextObject("{=!}Vote for the implementation of {CHANGE}")
+        public override TextObject GetSupportTitle() => new TextObject("{=DfsZPB4e}Vote for the implementation of {CHANGE}")
             .SetTextVariable("CHANGE", GetDifference());
 
         public override bool IsAllowed() => Title != null && Proposed != null;
@@ -165,7 +165,7 @@ namespace BannerKings.Managers.Titles.Governments
 
             public override TextObject GetDecisionTitle()
             {
-                TextObject textObject = new TextObject("{=!}{?SUPPORT}Change contract{?}Maintain contract{\\?}", null);
+                TextObject textObject = new TextObject("{=Yau6xiXr}{?SUPPORT}Change contract{?}Maintain contract{\\?}", null);
                 textObject.SetTextVariable("SUPPORT", ShouldDecisionBeEnforced ? 1 : 0);
                 return textObject;
             }

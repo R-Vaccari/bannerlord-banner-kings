@@ -601,12 +601,12 @@ namespace BannerKings.Behaviours
                 null, delegate { PlayerEncounter.LeaveEncounter = true; });
 
             starter.AddDialogLine("retinue_continue", "retinue_continue", "raised_retinue_greeting",
-                "{=!}Anything else?",
+                "{=sFJ0pObc}Anything else?",
                 null,
                 null);
 
             starter.AddPlayerLine("retinue_party_retreat", "raised_retinue_greeting", "retinue_continue",
-                new TextObject("{=!}Let me check your ranks.").ToString(),
+                new TextObject("{=UKybEESB}Let me check your ranks.").ToString(),
                 () => true,
                 () =>
                 {
@@ -706,23 +706,6 @@ namespace BannerKings.Behaviours
             if (party.MobileParty.PartyComponent is EstateComponent)
             {
                 value = (party.MobileParty.PartyComponent as EstateComponent).Estate.Owner == Hero.MainHero;
-            }
-
-            return value;
-        }
-
-        private bool raised_militia_order_on_condition()
-        {
-            var value = false;
-            var party = PlayerEncounter.EncounteredParty;
-            if (!IsTravellerParty(party))
-            {
-                return false;
-            }
-
-            if (party.MobileParty.PartyComponent is MilitiaComponent && party.Owner == Hero.MainHero)
-            {
-                value = true;
             }
 
             return value;

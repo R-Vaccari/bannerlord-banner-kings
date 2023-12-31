@@ -84,12 +84,12 @@ namespace BannerKings.UI.Estates
                new BasicTooltipViewModel(() => acreage.GetExplanations())));
 
             PlayerOwned = Estate.Owner == Hero.MainHero && !IsDisabled;
-            RetinueHint = new HintViewModel(new TextObject("{=!}Enter dialogue with your retainers. You can command and manage their party."));
+            RetinueHint = new HintViewModel(new TextObject("{=g9WenypY}Enter dialogue with your retainers. You can command and manage their party."));
             if (PlayerOwned)
             {
                 retinueEnabled = Estate.Retinue != null && Estate.Retinue.CurrentSettlement == Estate.EstatesData.Settlement;
                 if (!retinueEnabled)
-                    RetinueHint = new HintViewModel(new TextObject("{=!}Your estate either does not have a retinue yet or it is currently travelling. The retinue must be within the settlement so dialogue can be entered with this option."));
+                    RetinueHint = new HintViewModel(new TextObject("{=BuRha0Av}Your estate either does not have a retinue yet or it is currently travelling. The retinue must be within the settlement so dialogue can be entered with this option."));
             }
 
             TaskSelector = new BannerKingsSelectorVM<BKItemVM>(PlayerOwned, 0, OnTaskChange);
@@ -203,11 +203,11 @@ namespace BannerKings.UI.Estates
                         hero.Name.ToString(),
                         new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject, true)),
                         action.Possible,
-                        new TextObject("{=!}{POSSIBLE}{newline}Grant this property to {HERO}. They serve the {CLAN} clan ({OWNER}) and have {OPINION} opinion towards you.")
+                        new TextObject("{=D2wXBQAU}{POSSIBLE}{newline}Grant this property to {HERO}. They serve the {CLAN} clan ({OWNER}) and have {OPINION} opinion towards you.")
                         .SetTextVariable("POSSIBLE", action.Reason)
                         .SetTextVariable("HERO", hero.Name)
                         .SetTextVariable("CLAN", hero.Clan.Name)
-                        .SetTextVariable("OWNER", hero.Clan == Clan.PlayerClan ? new TextObject("{=!}your clan") : hero.Clan.Leader.Name)
+                        .SetTextVariable("OWNER", hero.Clan == Clan.PlayerClan ? new TextObject("{=mgL0UYTE}your clan") : hero.Clan.Leader.Name)
                         .SetTextVariable("OPINION", (int)hero.GetRelationWithPlayer())
                         .ToString()));
                 }
@@ -280,10 +280,10 @@ namespace BannerKings.UI.Estates
         [DataSourceProperty]
         public string BuyText => new TextObject("{=WabTyEdr}Buy").ToString();
         [DataSourceProperty]
-        public string RetinueText => new TextObject("{=!}Retinue").ToString();
+        public string RetinueText => new TextObject("{=06vrmp18}Retinue").ToString();
 
         [DataSourceProperty]
-        public string SlavesText => new TextObject("{=!}Slaves").ToString(); 
+        public string SlavesText => new TextObject("Slaves").ToString(); 
 
         [DataSourceProperty]
         public string GrantText => new TextObject("{=dugq4xHo}Grant").ToString();

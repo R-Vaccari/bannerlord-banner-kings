@@ -40,7 +40,7 @@ namespace BannerKings.Models.BKModels
                 result.Add(craftsmen / 12500f, new TextObject("{=d0YJZ6Z1}Craftsmen"));
             }
 
-            result.AddFactor(data.Stability - 0.75f, new TextObject("{=!}Stability"));
+            result.AddFactor(data.Stability - 0.75f, new TextObject("Stability"));
 
             if (settlement.Owner != null)
             {
@@ -95,13 +95,13 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            result.Add(towns, new TextObject("{=!}Towns (x{COUNT})")
+            result.Add(towns, new TextObject("{=iNKRzazP}Towns (x{COUNT})")
                 .SetTextVariable("COUNT", townCount));
 
-            result.Add(castles, new TextObject("{=!}Castles (x{COUNT})")
+            result.Add(castles, new TextObject("{=kyB8tkgY}Castles (x{COUNT})")
                 .SetTextVariable("COUNT", castleCount));
 
-            result.Add(villages, new TextObject("{=!}Villages (x{COUNT})")
+            result.Add(villages, new TextObject("{=CqNOH2qW}Villages (x{COUNT})")
                 .SetTextVariable("COUNT", villageCount));
 
             return result;

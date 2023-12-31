@@ -11,7 +11,7 @@ namespace BannerKings.Components
     internal class EstateComponent : BannerKingsComponent
     {
         public EstateComponent(Settlement origin, Estate estate) : base(origin, 
-            "{=!}Estate Retinue from {ORIGIN}")
+            "{=NzSOneTv}Estate Retinue from {ORIGIN}")
         {
             Behavior = AiBehavior.Hold;
             Estate = estate;
@@ -21,7 +21,7 @@ namespace BannerKings.Components
         [SaveableProperty(1002)] public AiBehavior Behavior { get; set; }
         [SaveableProperty(1003)] public Estate Estate { get; set; }
 
-        public override TextObject Name => new TextObject("{=!}Estate Retinue from {ORIGIN}")
+        public override TextObject Name => new TextObject("{=NzSOneTv}Estate Retinue from {ORIGIN}")
             .SetTextVariable("ORIGIN", HomeSettlement.Name);
 
         private static MobileParty CreateParty(string id, Estate estate, Settlement origin)

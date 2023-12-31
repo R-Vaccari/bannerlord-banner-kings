@@ -59,54 +59,54 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
         public override void Initialize()
         {
             AncestorWorship = new Doctrine("AncestorWorship",
-                new TextObject("{=!}Ancestor Worship"),
-                new TextObject("{=!}Honoring the ancestors is a crucial part of the faith, for they watch over the living, expecting them to fulfill their traditions. They live on as spirits, when they are not among the ranks of the gods themselves."),
-                new TextObject("{=!}Easier to marry within the same faith{newline}Clan renown yields piety"),
+                new TextObject("{=Xiu8X9qO}Ancestor Worship"),
+                new TextObject("{=9p6qSRg8}Honoring the ancestors is a crucial part of the faith, for they watch over the living, expecting them to fulfill their traditions. They live on as spirits, when they are not among the ranks of the gods themselves."),
+                new TextObject("{=juD5XdS4}Easier to marry within the same faith{newline}Clan renown yields piety"),
                 new List<Doctrine>()
                 {
                 },
                 false);
 
             RenovatioImperi = new Doctrine("RenovatioImperi",
-                new TextObject("{=!}Renovatio Imperi"),
-                new TextObject("{=!}Peace in Calradia can only exist with an united Empire. A kingdom under the teachings of Heaven. The faithful should cast aside their ambitions and work together for the benefit of the gods."),
-                new TextObject("{=!}On Imperial fiefs, showing mercy post siege, gain relations with all notables and lose no fief stability"),
+                new TextObject("{=fchnoe9s}Renovatio Imperi"),
+                new TextObject("{=M3JvSbgU}Peace in Calradia can only exist with an united Empire. A kingdom under the teachings of Heaven. The faithful should cast aside their ambitions and work together for the benefit of the gods."),
+                new TextObject("{=sv5WQvKn}On Imperial fiefs, showing mercy post siege, gain relations with all notables and lose no fief stability"),
                 new List<Doctrine>()
                 {
                 },
                 false);
 
             Esotericism = new Doctrine("Esotericism",
-               new TextObject("{=!}Esotericism"),
-               new TextObject("{=!}Knowledge and faith are less divided than most think. The cosmos is littered with mysteryes, and to seek their answers is to seek to reach the gods themselves."),
-               new TextObject("{=!}Wisdom yields piety{newline}Finishing education projects yields piety and Theology"),
+               new TextObject("{=YGuFNnk3}Esotericism"),
+               new TextObject("{=Q0d4cDjf}Knowledge and faith are less divided than most think. The cosmos is littered with mysteryes, and to seek their answers is to seek to reach the gods themselves."),
+               new TextObject("{=pOeZJvrH}Wisdom yields piety{newline}Finishing education projects yields piety and Theology"),
                new List<Doctrine>()
                {
                },
                false);
 
             Astrology = new Doctrine("Astrology",
-               new TextObject("{=!}Astrology"),
-               new TextObject("{=!}The study of the stars is the study of the divine itself. Much like the Sun blesses the land with fertility, the stars bless man with wisdom."),
-               new TextObject("{=!}Cultural innovations develop faster (when Cultural Head)\nShip travels are faster"),
+               new TextObject("{=OuOni6ou}Astrology"),
+               new TextObject("{=T4Pgu3ej}The study of the stars is the study of the divine itself. Much like the Sun blesses the land with fertility, the stars bless man with wisdom."),
+               new TextObject("{=kyB8tkgY}Cultural innovations develop faster (when Cultural Head)\nShip travels are faster"),
                new List<Doctrine>()
                {
                },
                false);
 
             Tolerant = new Doctrine("Tolerant",
-               new TextObject("{=!}Tolerant"),
-               new TextObject("{=!}A tolerant faith considers all faiths to be different interpretations of the Truth, as different paths to the real god(s). Tolerant faiths do not have hostile opinions toward any other faith, facilitating marraiges and decreasing tensions in multiple faith fiefs."),
-               new TextObject("{=!}Every other faith is consedered Tolerated"),
+               new TextObject("{=LZrCRven}Tolerant"),
+               new TextObject("{=am2cZ8UT}A tolerant faith considers all faiths to be different interpretations of the Truth, as different paths to the real god(s). Tolerant faiths do not have hostile opinions toward any other faith, facilitating marraiges and decreasing tensions in multiple faith fiefs."),
+               new TextObject("{=MtkhyDww}Every other faith is consedered Tolerated"),
                new List<Doctrine>()
                {
                },
                false);
 
             Shamanism = new Doctrine("Shamanism",
-               new TextObject("{=!}Shamanism"),
-               new TextObject("{=!}Shamans are the intermediaries between manking and the spiritual world. They do not adhere to an organized structure, instead relying on oral tradition and local custom. Shamans often live close to nature, where the spirits lie, and perform rituals to access the spiritual world to communicate with them, acquiring knowledge to guide their people in the mundane plane."),
-               new TextObject("{=!}Preachers are able to heal diseases and curses"),
+               new TextObject("{=t4G2QPKk}Shamanism"),
+               new TextObject("{=2ibJQmci}Shamans are the intermediaries between manking and the spiritual world. They do not adhere to an organized structure, instead relying on oral tradition and local custom. Shamans often live close to nature, where the spirits lie, and perform rituals to access the spiritual world to communicate with them, acquiring knowledge to guide their people in the mundane plane."),
+               new TextObject("{=amGHABLU}Preachers are able to heal diseases and curses"),
                new List<Doctrine>()
                {
                    Druidism
@@ -114,9 +114,9 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
                false);
 
             OsricsVengeance = new Doctrine("osrics_vengeance", 
-                new TextObject("{=!}Osric's Vengeance"),
-                new TextObject("{=!}Osric fulfilled his vengeace against the Calradic gods when the captured Pravend, taking away their power and providing bountiful land to his people. As such, the Wilunding should follow in his path of occupying their enemies."),
-                new TextObject("{=!}Occupying fiefs yields significant piety"),
+                new TextObject("{=5MQPBU0H}Osric's Vengeance"),
+                new TextObject("{=o4TWonXM}Osric fulfilled his vengeace against the Calradic gods when the captured Pravend, taking away their power and providing bountiful land to his people. As such, the Wilunding should follow in his path of occupying their enemies."),
+                new TextObject("{=cRk0gMDk}Occupying fiefs yields significant piety"),
                 new List<Doctrine>()
                 {
                     Warlike
@@ -124,18 +124,18 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
                 true);
 
             Reavers = new Doctrine("Reavers",
-                new TextObject("{=!}Reavers"),
-                new TextObject("{=!}Raiding and pillaging is understood as a pious practice. This faith"),
-                new TextObject("{=!}Piety gain raiding and fief pillaging of different cultures"),
+                new TextObject("{=RCHN6ovr}Reavers"),
+                new TextObject("{=pA8rNnUH}Raiding and pillaging is understood as a pious practice. This faith"),
+                new TextObject("Piety gain raiding and fief pillaging of different cultures"),
                 new List<Doctrine>()
                 {
                     OsricsVengeance
                 });
 
             Warlike = new Doctrine("Warlike",
-                new TextObject("{=!}Warlike"),
-                new TextObject("{=!}Combat is considered by the faith a pious practice. The gods decide the winner, and to attempt to escape our fate through cravenness is an offence to the gods."),
-                new TextObject("{=!}Piety gain as battle reward"),
+                new TextObject("{=P5ptbVxu}Warlike"),
+                new TextObject("{=kyB8tkgY}Combat is considered by the faith a pious practice. The gods decide the winner, and to attempt to escape our fate through cravenness is an offence to the gods."),
+                new TextObject("Piety gain as battle reward"),
                 new List<Doctrine>()
                 {
                     OsricsVengeance

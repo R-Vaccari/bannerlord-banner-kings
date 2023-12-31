@@ -207,13 +207,13 @@ namespace BannerKings.UI.VanillaTabs.Character
 
             options.Add(new InquiryElement(
             new DecisionCategoryOption(
-                new TextObject("{=!}Criminal"),
-                new TextObject("{=!}Criminal decisions relate to carrying out sentences or crimes. Captured criminals can be sentenced with a criminal decision."),
+                new TextObject("{=kyB8tkgY}Criminal"),
+                new TextObject("{=kyB8tkgY}Criminal decisions relate to carrying out sentences or crimes. Captured criminals can be sentenced with a criminal decision."),
                 criminalDecisions),
-            new TextObject("{=!}Criminal").ToString(),
+            new TextObject("{=kyB8tkgY}Criminal").ToString(),
             null,
             criminalDecisions.Count > 0,
-            new TextObject("{=!}Criminal decisions relate to carrying out sentences or crimes. Captured criminals can be sentenced with a criminal decision.").ToString()));
+            new TextObject("{=kyB8tkgY}Criminal decisions relate to carrying out sentences or crimes. Captured criminals can be sentenced with a criminal decision.").ToString()));
 
 
             options.Add(new InquiryElement(

@@ -1,4 +1,4 @@
-﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites.Vlandia
         {
         }
 
-        public override TextObject GetName() => new TextObject("{=!}Warhorse Sacrifice");
+        public override TextObject GetName() => new TextObject("{=HfOqj748}Warhorse Sacrifice");
 
         public override void Execute(Hero executor)
         {

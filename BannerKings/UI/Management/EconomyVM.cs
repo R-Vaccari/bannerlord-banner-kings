@@ -53,7 +53,7 @@ namespace BannerKings.UI.Management
         public string SlaveryText => new TextObject("{=bk_slavery}Slavery").ToString();
 
         [DataSourceProperty]
-        public string LanesText => new TextObject("{=!}Shipping Lanes").ToString();
+        public string LanesText => new TextObject("{=GatcoJXF}Shipping Lanes").ToString();
 
         [DataSourceProperty]
         public string TaxPolicyText => new TextObject("{=L7QhNa6a}Tax policy").ToString();
@@ -76,7 +76,7 @@ namespace BannerKings.UI.Management
             foreach (var lane in DefaultShippingLanes.Instance.GetSettlementLanes(Settlement))
             {
                 LanesList.Add(new InformationElement(lane.Name,
-                    new TextObject("{=!}{COUNT} ports")
+                    new TextObject("{=Vjy26Aru}{COUNT} ports")
                     .SetTextVariable("COUNT", lane.Ports.Count),
                     lane.Description));
                 HasLanes = true;
@@ -172,7 +172,7 @@ namespace BannerKings.UI.Management
 
                 var tradePower = BannerKingsConfig.Instance.EconomyModel.CalculateTradePower(Settlement, true);
                 Concept tradePowerConcept = Concept.All.First(x => x.StringId == "str_bk_trade_power");
-                RevenueInfo.Add(new InformationElement(new TextObject("{=!}Trade Power:").ToString(),
+                RevenueInfo.Add(new InformationElement(new TextObject("{=PJmuMrrY}Trade Power:").ToString(),
                     $"{tradePower.ResultNumber:P}",
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT", tradePowerConcept.Description)

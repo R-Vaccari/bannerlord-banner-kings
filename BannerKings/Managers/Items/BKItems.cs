@@ -90,23 +90,23 @@ namespace BannerKings.Managers.Items
         {
             PurpleDye = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("PurpleDye"));
             InitializeTradeGood(PurpleDye,
-                new TextObject("{=!}Purple Dye{@Plural}jars of purple dye{\\@}"), "lib_inkwell",
+                new TextObject("{=oQAeHzY3}Purple Dye{@Plural}jars of purple dye{\\@}"), "lib_inkwell",
                 BKItemCategories.Instance.Dyes, 500, 10f, ItemObject.ItemTypeEnum.Goods, false);
 
             WhaleMeat = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("WhaleMeat"));
             ItemObject.InitializeTradeGood(WhaleMeat, 
-                new TextObject("{=!}Whale Meat{@Plural}loads of whale meat{\\@}", null), 
+                new TextObject("{=6U2zYiq6}Whale Meat{@Plural}loads of whale meat{\\@}", null), 
                 "merchandise_meat", 
                 DefaultItemCategories.Meat, 50, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Papyrus = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("Papyrus"));
             InitializeTradeGood(Papyrus,
-                new TextObject("{=!}Papyrus{@Plural}rolls of papyrus{\\@}"), "lib_scroll_a",
+                new TextObject("{=fowoOOL4}Papyrus{@Plural}rolls of papyrus{\\@}"), "lib_scroll_a",
                 BKItemCategories.Instance.Papyrus, 60, 10f, ItemObject.ItemTypeEnum.Goods, false);
 
             Ink = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("Ink"));
             InitializeTradeGood(Ink,
-                new TextObject("{=!}Ink{@Plural}jars of ink{\\@}"), "lib_inkwell",
+                new TextObject("{=H11qZfBw}Ink{@Plural}jars of ink{\\@}"), "lib_inkwell",
                 BKItemCategories.Instance.Ink, 200, 10f, ItemObject.ItemTypeEnum.Goods, false);
 
             Spice = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("spice"));
@@ -290,7 +290,7 @@ namespace BannerKings.Managers.Items
 
             BookArtHorsemanship = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_mounted"));
             InitializeTradeGood(BookArtHorsemanship,
-                new TextObject("{=!}The Art of Horsemanship{@Plural}collection of The Art of Horsemanship books{\\@}"),
+                new TextObject("{=MRRoTZGw}The Art of Horsemanship{@Plural}collection of The Art of Horsemanship books{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book, 1000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 

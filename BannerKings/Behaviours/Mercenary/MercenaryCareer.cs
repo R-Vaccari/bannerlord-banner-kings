@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Populations.Estates;
+using BannerKings.Managers.Populations.Estates;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -83,7 +83,7 @@ namespace BannerKings.Behaviours.Mercenary
             ServiceDays++;
             if (((float)ServiceDays / (float)CampaignTime.DaysInYear) % 1f == 0f)
             {
-                AddReputation(0.05f, new TextObject("{=!}A year of service has passed."));
+                AddReputation(0.05f, new TextObject("{=YoEwwXZN}A year of service has passed."));
             }
 
             foreach (MercenaryPrivilege privilege in DefaultMercenaryPrivileges.Instance.All)
@@ -105,7 +105,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             if (Clan == Clan.PlayerClan)
             {
-                MBInformationManager.AddQuickInformation(new TextObject("{=!}You have gained {REPUTATION}% mercenary reputation! {REASON}")
+                MBInformationManager.AddQuickInformation(new TextObject("{=H7GxnhBB}You have gained {REPUTATION}% mercenary reputation! {REASON}")
                     .SetTextVariable("REPUTATION", reputation * 100f)
                     .SetTextVariable("REASON", reason));
             }
@@ -230,7 +230,7 @@ namespace BannerKings.Behaviours.Mercenary
                 PrivilegeTimes[Kingdom] = CampaignTime.Now;
                 if (Clan == Clan.PlayerClan)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{CLAN} has acquired the {PRIVILEGE} privilege!")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=pqydS2kr}{CLAN} has acquired the {PRIVILEGE} privilege!")
                         .SetTextVariable("CLAN", Clan.PlayerClan.Name)
                         .SetTextVariable("PRIVILEGE", privilege.Name),
                         0,

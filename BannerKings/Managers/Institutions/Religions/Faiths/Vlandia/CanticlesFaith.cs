@@ -291,7 +291,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetZealotsGroupName()
         {
-            return new TextObject("{=!}Wardens of the Tale");
+            return new TextObject("{=NgCmsHOX}Wardens of the Tale");
         }
     }
 }

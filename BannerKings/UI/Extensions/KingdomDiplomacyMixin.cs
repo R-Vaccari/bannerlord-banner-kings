@@ -33,20 +33,20 @@ namespace BannerKings.UI.Extensions
             kingdomDiplomacy = vm;
         }
 
-        [DataSourceProperty] public string JustificationHeader => new TextObject("{=!}Casus Belli").ToString();
-        [DataSourceProperty] public string WarScoreHeader => new TextObject("{=!}War Score").ToString();
-        [DataSourceProperty] public string WarObjectiveHeader => new TextObject("{=!}War Objective").ToString();
-        [DataSourceProperty] public string TradePactHeader => new TextObject("{=!}Trade Pact").ToString();
-        [DataSourceProperty] public string AllianceHeader => new TextObject("{=!}Alliance").ToString();
-        [DataSourceProperty] public string TruceHeader => new TextObject("{=!}Truce").ToString();
-        [DataSourceProperty] public string WarSupportHeader => new TextObject("{=!}War Support").ToString();
+        [DataSourceProperty] public string JustificationHeader => new TextObject("{=Fs2NR9Os}Casus Belli").ToString();
+        [DataSourceProperty] public string WarScoreHeader => new TextObject("{=FFzEZAqj}War Score").ToString();
+        [DataSourceProperty] public string WarObjectiveHeader => new TextObject("{=HDfqWzbQ}War Objective").ToString();
+        [DataSourceProperty] public string TradePactHeader => new TextObject("{=9B3GozDo}Trade Pact").ToString();
+        [DataSourceProperty] public string AllianceHeader => new TextObject("{=ueWn5rM4}Alliance").ToString();
+        [DataSourceProperty] public string TruceHeader => new TextObject("{=bNsdETJY}Truce").ToString();
+        [DataSourceProperty] public string WarSupportHeader => new TextObject("{=KU4x1UyH}War Support").ToString();
 
         public override void OnRefresh()
         {
             war = null;
             WarExists = false;
             PeaceExists = false;
-            base.ViewModel.ProposeActionExplanationText = new TextObject("{=!}Consider proposing a diplomatic action").ToString();
+            base.ViewModel.ProposeActionExplanationText = new TextObject("{=kyB8tkgY}Consider proposing a diplomatic action").ToString();
             if (kingdomDiplomacy.CurrentSelectedDiplomacyItem != null)
             {
                 if (kingdomDiplomacy.CurrentSelectedDiplomacyItem is KingdomWarItemVM)
@@ -57,8 +57,8 @@ namespace BannerKings.UI.Extensions
                 }
             }
 
-            PlayerFatigueHeader = new TextObject("{=!}Our Fatigue").ToString();
-            EnemyFatigueHeader = new TextObject("{=!}Enemy Fatigue").ToString();
+            PlayerFatigueHeader = new TextObject("{=0ksQ2otA}Our Fatigue").ToString();
+            EnemyFatigueHeader = new TextObject("{=eesjwvUR}Enemy Fatigue").ToString();
 
             if (war != null)
             {
@@ -75,18 +75,18 @@ namespace BannerKings.UI.Extensions
                     war.CasusBelli.Fief.Name.ToString();
                 WarObjectiveHint = new HintViewModel(war.CasusBelli.Description);
 
-                PlayerFrontHeader = new TextObject("{=!}{FACTION} Front")
+                PlayerFrontHeader = new TextObject("{=CMoMTMey}{FACTION} Front")
                     .SetTextVariable("FACTION", Hero.MainHero.MapFaction.Name)
                     .ToString();
                 Town playerFront = war.GetFront(Hero.MainHero.MapFaction);
-                PlayerFrontText = playerFront != null ? playerFront.Name.ToString() : new TextObject("{=!}No Front").ToString();
+                PlayerFrontText = playerFront != null ? playerFront.Name.ToString() : new TextObject("{=5Gphhg0D}No Front").ToString();
 
                 IFaction enemyFaction = war.GetPlayerEnemyFaction();
-                EnemyFrontHeader = new TextObject("{=!}{FACTION} Front")
+                EnemyFrontHeader = new TextObject("{=CMoMTMey}{FACTION} Front")
                     .SetTextVariable("FACTION", enemyFaction.Name)
                     .ToString();
                 Town enemyFront = war.GetFront(enemyFaction);
-                EnemyFrontText = enemyFront != null ? enemyFront.Name.ToString() : new TextObject("{=!}No Front").ToString();
+                EnemyFrontText = enemyFront != null ? enemyFront.Name.ToString() : new TextObject("{=5Gphhg0D}No Front").ToString();
 
                 BKExplainedNumber fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, Hero.MainHero.MapFaction, true);
                 PlayerFatigueText = (fatigue.ResultNumber * 100f).ToString("0.00") + '%';
@@ -105,11 +105,11 @@ namespace BannerKings.UI.Extensions
                 
                 if (bkDiplomacy.HasTradePact(targetKingdom))
                 {
-                    TradePactText = new TextObject("{=!}In Effect").ToString();
+                    TradePactText = new TextObject("{=GTQCGxvy}In Effect").ToString();
                 }
                 else
                 {
-                    TradePactText = new TextObject("{=!}Not Present").ToString();
+                    TradePactText = new TextObject("{=er8kmimQ}Not Present").ToString();
                 }
 
                 if (bkDiplomacy.HasValidTruce(targetKingdom))
@@ -118,18 +118,18 @@ namespace BannerKings.UI.Extensions
                 }
                 else
                 {
-                    TruceText = new TextObject("{=!}None").ToString();
+                    TruceText = new TextObject("None").ToString();
                 }
 
                 StanceLink stance = currentKingdom.GetStanceWith(targetKingdom);
                 if (stance.IsAllied)
                 {
-                    AllianceText = new TextObject("{=!}In Effect").ToString();
-                    TruceText = new TextObject("{=!}Implicit (Alliance)").ToString();
+                    AllianceText = new TextObject("{=GTQCGxvy}In Effect").ToString();
+                    TruceText = new TextObject("{=d92ORtRp}Implicit (Alliance)").ToString();
                 }
                 else
                 {
-                    AllianceText = new TextObject("{=!}None").ToString();
+                    AllianceText = new TextObject("None").ToString();
                 }
 
 

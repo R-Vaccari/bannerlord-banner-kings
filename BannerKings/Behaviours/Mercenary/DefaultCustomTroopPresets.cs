@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.Localization;
 
@@ -65,8 +65,8 @@ namespace BannerKings.Behaviours.Mercenary
         }
         public override void Initialize()
         {
-            SargeantLevy.Initialize(new TextObject("{=!}Sargeant"),
-                new TextObject("{=!}The backbone of infantry armies, the sargeant specializes in one-handed combat and foot movement. Handles well an extra polearm but poorly any type of ranged weapons. Better with a shield."),
+            SargeantLevy.Initialize(new TextObject("{=akA3mNVY}Sargeant"),
+                new TextObject("{=xqjWas2R}The backbone of infantry armies, the sargeant specializes in one-handed combat and foot movement. Handles well an extra polearm but poorly any type of ranged weapons. Better with a shield."),
                 TaleWorlds.Core.FormationClass.Infantry,
                 16,
                 120,
@@ -79,8 +79,8 @@ namespace BannerKings.Behaviours.Mercenary
                 10,
                 "empire_sword_2_t3");
 
-            LineBreakerLevy.Initialize(new TextObject("{=!}Line Breaker"),
-                new TextObject("{=!}In opposition to the sargeant, line breakers focus on two-handed combat and thus are better off without shields. Their role is maximum damage output, but are vulnerable to cavalry or ranged attacks. Handles well secondary throwing weapons."),
+            LineBreakerLevy.Initialize(new TextObject("{=Qs9pvZFC}Line Breaker"),
+                new TextObject("{=fLEeLuUm}In opposition to the sargeant, line breakers focus on two-handed combat and thus are better off without shields. Their role is maximum damage output, but are vulnerable to cavalry or ranged attacks. Handles well secondary throwing weapons."),
                 TaleWorlds.Core.FormationClass.Infantry,
                 16,
                 40,
@@ -93,8 +93,8 @@ namespace BannerKings.Behaviours.Mercenary
                 10,
                 "bearded_axe_t3");
 
-            DefenderLevy.Initialize(new TextObject("{=!}Defender"),
-                new TextObject("{=!}The defender is a slow moving infantry, that focuses on polearm combat, but also capable with one-handed and throwing. They are best equipped with a good shield."),
+            DefenderLevy.Initialize(new TextObject("{=GMOKktYa}Defender"),
+                new TextObject("{=9eZ2OSxT}The defender is a slow moving infantry, that focuses on polearm combat, but also capable with one-handed and throwing. They are best equipped with a good shield."),
                 TaleWorlds.Core.FormationClass.Infantry,
                 16,
                 70,
@@ -108,7 +108,7 @@ namespace BannerKings.Behaviours.Mercenary
                 "western_spear_4_t3");
 
             SkirmisherLevy.Initialize(new TextObject("{=s9oED1IR}Skirmisher"),
-                new TextObject("{=!}Skirmishers specialize in moving fast and hitting hard with thrown weapons. Their close-combat skills are just enough to give them a chance to defend themselves if needed."),
+                new TextObject("{=Y9s50ZOA}Skirmishers specialize in moving fast and hitting hard with thrown weapons. Their close-combat skills are just enough to give them a chance to defend themselves if needed."),
                 TaleWorlds.Core.FormationClass.Infantry,
                 16,
                 60,
@@ -121,8 +121,8 @@ namespace BannerKings.Behaviours.Mercenary
                 10,
                 "western_javelin_2_t3");
 
-            ArcherLevy.Initialize(new TextObject("{=!}Archer"),
-                new TextObject("{=!}Archers have strong ranged skills focused on Bows, while maintaining decent speed and ability to defend themselves in close quarters."),
+            ArcherLevy.Initialize(new TextObject("{=f8XaH0NC}Archer"),
+                new TextObject("{=f8XaH0NC}Archers have strong ranged skills focused on Bows, while maintaining decent speed and ability to defend themselves in close quarters."),
                 TaleWorlds.Core.FormationClass.Ranged,
                 16,
                 70,
@@ -135,8 +135,8 @@ namespace BannerKings.Behaviours.Mercenary
                 50,
                 "lowland_longbow");
 
-            CrossbowmanLevy.Initialize(new TextObject("{=!}Crossbowman"),
-                new TextObject("{=!}Crossbowmen have strong ranged skills focused on Crossbows, while maintaining decent speed and ability to defend themselves in close quarters."),
+            CrossbowmanLevy.Initialize(new TextObject("{=UipQAOyO}Crossbowman"),
+                new TextObject("{=XvGLCYwr}Crossbowmen have strong ranged skills focused on Crossbows, while maintaining decent speed and ability to defend themselves in close quarters."),
                 TaleWorlds.Core.FormationClass.Ranged,
                 16,
                 70,
@@ -149,8 +149,8 @@ namespace BannerKings.Behaviours.Mercenary
                 110,
                 "crossbow_b");
 
-            HorsemanLevy.Initialize(new TextObject("{=!}Horseman"),
-                new TextObject("{=!}Quite similar to the Sargeant, but mounted. Horseman focuses on polearm and riding trainning, with a good amount of one-handed for melee combat. Slowest cavalry, but with the strongest melee."),
+            HorsemanLevy.Initialize(new TextObject("{=7NonV7TK}Horseman"),
+                new TextObject("{=RWgQCjzq}Quite similar to the Sargeant, but mounted. Horseman focuses on polearm and riding trainning, with a good amount of one-handed for melee combat. Slowest cavalry, but with the strongest melee."),
                 TaleWorlds.Core.FormationClass.Cavalry,
                 16,
                 100,
@@ -164,7 +164,7 @@ namespace BannerKings.Behaviours.Mercenary
                 "empire_horse");
 
             HorseArcherLevy.Initialize(new TextObject("{=ugJfuabA}Horse Archer"),
-                new TextObject("{=!}Ranged cavalry, mainly focused on Bows, but also capable with Crossbows. Very limited melee capacities."),
+                new TextObject("{=TLmSu7AS}Ranged cavalry, mainly focused on Bows, but also capable with Crossbows. Very limited melee capacities."),
                 TaleWorlds.Core.FormationClass.HorseArcher,
                 16,
                 50,
@@ -177,8 +177,8 @@ namespace BannerKings.Behaviours.Mercenary
                 70,
                 "khuzait_horse");
 
-            MountedSkirmisherLevy.Initialize(new TextObject("{=!}Mounted Skirmisher"),
-                new TextObject("{=!}The nimblest form of cavalry, made for hit-and-run combat with javelins. Sub-par melee capabilities."),
+            MountedSkirmisherLevy.Initialize(new TextObject("{=KKCWuCA7}Mounted Skirmisher"),
+                new TextObject("{=NhQQEDMW}The nimblest form of cavalry, made for hit-and-run combat with javelins. Sub-par melee capabilities."),
                 TaleWorlds.Core.FormationClass.Cavalry,
                 26,
                 70,
@@ -192,8 +192,8 @@ namespace BannerKings.Behaviours.Mercenary
                 "camel");
 
 
-            SargeantProfessional.Initialize(new TextObject("{=!}Sargeant"),
-                new TextObject("{=!}The backbone of infantry armies, the sargeant specializes in one-handed combat and foot movement. Handles well an extra polearm but poorly any type of ranged weapons. Better with a shield."),
+            SargeantProfessional.Initialize(new TextObject("{=akA3mNVY}Sargeant"),
+                new TextObject("{=xqjWas2R}The backbone of infantry armies, the sargeant specializes in one-handed combat and foot movement. Handles well an extra polearm but poorly any type of ranged weapons. Better with a shield."),
                 TaleWorlds.Core.FormationClass.Infantry,
                 26,
                 120,
@@ -206,8 +206,8 @@ namespace BannerKings.Behaviours.Mercenary
                 10,
                 "empire_sword_2_t3");
 
-            LineBreakerProfessional.Initialize(new TextObject("{=!}Line Breaker"),
-                new TextObject("{=!}In opposition to the sargeant, line breakers focus on two-handed combat and thus are better off without shields. Their role is maximum damage output, but are vulnerable to cavalry or ranged attacks. Handles well secondary throwing weapons."),
+            LineBreakerProfessional.Initialize(new TextObject("{=Qs9pvZFC}Line Breaker"),
+                new TextObject("{=fLEeLuUm}In opposition to the sargeant, line breakers focus on two-handed combat and thus are better off without shields. Their role is maximum damage output, but are vulnerable to cavalry or ranged attacks. Handles well secondary throwing weapons."),
                 TaleWorlds.Core.FormationClass.Infantry,
                 26,
                 40,
@@ -220,8 +220,8 @@ namespace BannerKings.Behaviours.Mercenary
                 10,
                 "bearded_axe_t3");
 
-            DefenderProfessional.Initialize(new TextObject("{=!}Defender"),
-                new TextObject("{=!}The defender is a slow moving infantry, that focuses on polearm combat, but also capable with one-handed and throwing. They are best equipped with a good shield."),
+            DefenderProfessional.Initialize(new TextObject("{=GMOKktYa}Defender"),
+                new TextObject("{=9eZ2OSxT}The defender is a slow moving infantry, that focuses on polearm combat, but also capable with one-handed and throwing. They are best equipped with a good shield."),
                 TaleWorlds.Core.FormationClass.Infantry,
                 26,
                 70,
@@ -235,7 +235,7 @@ namespace BannerKings.Behaviours.Mercenary
                 "western_spear_4_t3");
 
             SkirmisherProfessional.Initialize(new TextObject("{=s9oED1IR}Skirmisher"),
-                new TextObject("{=!}Skirmishers specialize in moving fast and hitting hard with thrown weapons. Their close-combat skills are just enough to give them a chance to defend themselves if needed."),
+                new TextObject("{=Y9s50ZOA}Skirmishers specialize in moving fast and hitting hard with thrown weapons. Their close-combat skills are just enough to give them a chance to defend themselves if needed."),
                 TaleWorlds.Core.FormationClass.Infantry,
                 26,
                 60,
@@ -248,8 +248,8 @@ namespace BannerKings.Behaviours.Mercenary
                 10,
                 "western_javelin_2_t3");
 
-            ArcherProfessional.Initialize(new TextObject("{=!}Archer"),
-                new TextObject("{=!}Archers have strong ranged skills focused on Bows, while maintaining decent speed and ability to defend themselves in close quarters."),
+            ArcherProfessional.Initialize(new TextObject("{=f8XaH0NC}Archer"),
+                new TextObject("{=f8XaH0NC}Archers have strong ranged skills focused on Bows, while maintaining decent speed and ability to defend themselves in close quarters."),
                 TaleWorlds.Core.FormationClass.Ranged,
                 26,
                 70,
@@ -262,8 +262,8 @@ namespace BannerKings.Behaviours.Mercenary
                 50,
                 "lowland_longbow");
 
-            CrossbowmanProfessional.Initialize(new TextObject("{=!}Crossbowman"),
-                new TextObject("{=!}Crossbowmen have strong ranged skills focused on Crossbows, while maintaining decent speed and ability to defend themselves in close quarters."),
+            CrossbowmanProfessional.Initialize(new TextObject("{=UipQAOyO}Crossbowman"),
+                new TextObject("{=XvGLCYwr}Crossbowmen have strong ranged skills focused on Crossbows, while maintaining decent speed and ability to defend themselves in close quarters."),
                 TaleWorlds.Core.FormationClass.Ranged,
                 26,
                 70,
@@ -276,8 +276,8 @@ namespace BannerKings.Behaviours.Mercenary
                 110,
                 "crossbow_b");
 
-            HorsemanProfessional.Initialize(new TextObject("{=!}Horseman"),
-                new TextObject("{=!}Quite similar to the Sargeant, but mounted. Horseman focuses on polearm and riding trainning, with a good amount of one-handed for melee combat. Slowest cavalry, but with the strongest melee."),
+            HorsemanProfessional.Initialize(new TextObject("{=7NonV7TK}Horseman"),
+                new TextObject("{=RWgQCjzq}Quite similar to the Sargeant, but mounted. Horseman focuses on polearm and riding trainning, with a good amount of one-handed for melee combat. Slowest cavalry, but with the strongest melee."),
                 TaleWorlds.Core.FormationClass.Cavalry,
                 26,
                 100,
@@ -291,7 +291,7 @@ namespace BannerKings.Behaviours.Mercenary
                 "empire_horse");
 
             HorseArcherProfessional.Initialize(new TextObject("{=ugJfuabA}Horse Archer"),
-                new TextObject("{=!}Ranged cavalry, mainly focused on Bows, but also capable with Crossbows. Very limited melee capacities."),
+                new TextObject("{=TLmSu7AS}Ranged cavalry, mainly focused on Bows, but also capable with Crossbows. Very limited melee capacities."),
                 TaleWorlds.Core.FormationClass.HorseArcher,
                 26,
                 50,
@@ -304,8 +304,8 @@ namespace BannerKings.Behaviours.Mercenary
                 70,
                 "khuzait_horse");
 
-            MountedSkirmisherProfessional.Initialize(new TextObject("{=!}Mounted Skirmisher"),
-                new TextObject("{=!}The nimblest form of cavalry, made for hit-and-run combat with javelins. Sub-par melee capabilities."),
+            MountedSkirmisherProfessional.Initialize(new TextObject("{=KKCWuCA7}Mounted Skirmisher"),
+                new TextObject("{=NhQQEDMW}The nimblest form of cavalry, made for hit-and-run combat with javelins. Sub-par melee capabilities."),
                 TaleWorlds.Core.FormationClass.Cavalry,
                 26,
                 70,

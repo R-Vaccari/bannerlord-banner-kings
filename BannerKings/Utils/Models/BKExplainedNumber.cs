@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -87,7 +87,7 @@ namespace BannerKings.Utils.Models
 
             if (_explainer.Lines.Count == 0)
             {
-                mbstringBuilder.Append(new TextObject("{=!}No factors yet").ToString());
+                mbstringBuilder.Append(new TextObject("{=mZR7knaH}No factors yet").ToString());
             }
             return mbstringBuilder.ToStringAndRelease();
         }

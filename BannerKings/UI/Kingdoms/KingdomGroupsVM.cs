@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Diplomacy;
+using BannerKings.Behaviours.Diplomacy;
 using System.Linq;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -33,13 +33,13 @@ namespace BannerKings.UI.Kingdoms
         public KingdomDiplomacy KingdomDiplomacy { get; }
 
         [DataSourceProperty]
-        public string GroupsText => new TextObject("{=!}Groups").ToString();
+        public string GroupsText => new TextObject("{=F4Vv8Lc8}Groups").ToString();
 
         [DataSourceProperty]
-        public string InterestGroupsText => new TextObject("{=!}Interest Groups").ToString();
+        public string InterestGroupsText => new TextObject("{=AnFLBw7F}Interest Groups").ToString();
 
         [DataSourceProperty]
-        public string RadicalGroupsText => new TextObject("{=!}Radical Groups").ToString();
+        public string RadicalGroupsText => new TextObject("{=k7QVZnaK}Radical Groups").ToString();
 
         public override void RefreshValues()
         {

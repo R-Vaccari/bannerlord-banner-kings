@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Diplomacy.Groups;
+using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
@@ -103,8 +103,8 @@ namespace BannerKings.Behaviours.Diplomacy
 
         public void OnWar(Kingdom otherKingdom)
         {
-            DissolveTruce(otherKingdom, new TextObject("{=!}War has broken out!"));
-            DissolveTradePact(otherKingdom, new TextObject("{=!}War has broken out!"));
+            DissolveTruce(otherKingdom, new TextObject("{=yrTObrmg}War has broken out!"));
+            DissolveTradePact(otherKingdom, new TextObject("{=yrTObrmg}War has broken out!"));
         }
 
         public List<CasusBelli> GetAvailableCasusBelli(Kingdom targetKingdom = null)
@@ -183,7 +183,7 @@ namespace BannerKings.Behaviours.Diplomacy
                 TradePacts.Remove(kingdom);
                 if (kingdom.MapFaction == Hero.MainHero.MapFaction || Kingdom.MapFaction == Hero.MainHero.MapFaction)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}The trade pact with {KINGDOM} has ended. {REASON}")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=S4Owp9cp}The trade pact with {KINGDOM} has ended. {REASON}")
                         .SetTextVariable("REASON", reason),
                         0,
                         null,
@@ -199,7 +199,7 @@ namespace BannerKings.Behaviours.Diplomacy
                 Truces.Remove(kingdom);
                 if (kingdom.MapFaction == Hero.MainHero.MapFaction || Kingdom.MapFaction == Hero.MainHero.MapFaction)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}The truce with {KINGDOM} has ended. {REASON}")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=95csqL0K}The truce with {KINGDOM} has ended. {REASON}")
                         .SetTextVariable("REASON", reason),
                         0,
                         null,
@@ -224,7 +224,7 @@ namespace BannerKings.Behaviours.Diplomacy
                     trucesToDelete.Add(truce.Key);
 
             AddFatigue(-0.005f);
-            foreach (var kingdom in trucesToDelete) DissolveTruce(kingdom, new TextObject("{=!}The agreed time has expired."));
+            foreach (var kingdom in trucesToDelete) DissolveTruce(kingdom, new TextObject("{=zW5K0UcD}The agreed time has expired."));
 
 
             if (Religion == null)

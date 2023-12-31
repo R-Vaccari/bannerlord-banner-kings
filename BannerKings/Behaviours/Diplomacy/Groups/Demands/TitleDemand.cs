@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
 using BannerKings.Utils;
 using System;
@@ -26,15 +26,15 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override void SetTexts()
         {
-            Initialize(new TextObject("{=!}Council Position"),
+            Initialize(new TextObject("{=kyB8tkgY}Council Position"),
                 new TextObject());
         }
 
-        public override DemandResponse PositiveAnswer => new DemandResponse(new TextObject("{=!}Concede"),
-                    new TextObject("{=!}Accept the demand grant {BENEFACTOR} the {TITLE} title. They will be satisfied with this outcome.")
+        public override DemandResponse PositiveAnswer => new DemandResponse(new TextObject("{=kyB8tkgY}Concede"),
+                    new TextObject("{=wOyhKR1F}Accept the demand grant {BENEFACTOR} the {TITLE} title. They will be satisfied with this outcome.")
                     .SetTextVariable("BENEFACTOR", benefactor.Name)
                     .SetTextVariable("TITLE", Title.FullName),
-                    new TextObject("{=!}On {DATE}, the {GROUP} were conceded their {DEMAND} demand.")
+                    new TextObject("{=Pr6r49e8}On {DATE}, the {GROUP} were conceded their {DEMAND} demand.")
                     .SetTextVariable("GROUP", Group.Name)
                     .SetTextVariable("DEMAND", Name),
                     6,
@@ -53,7 +53,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                         if (fulfiller == Hero.MainHero)
                         {
                             InformationManager.DisplayMessage(new InformationMessage(
-                                new TextObject("{=!}The {GROUP} is satisfied! {BENEFACTOR} is now the legal holder of {TITLE}.")
+                                new TextObject("{=SojLSL2V}The {GROUP} is satisfied! {BENEFACTOR} is now the legal holder of {TITLE}.")
                                 .SetTextVariable("GROUP", Group.Name)
                                 .SetTextVariable("BENEFACTOR", benefactor.Name)
                                 .SetTextVariable("TITLE", Title.FullName)
@@ -63,11 +63,11 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                         BannerKingsConfig.Instance.TitleManager.InheritTitle(fulfiller, benefactor, Title);
                         return true;
                     });
-        public override DemandResponse NegativeAnswer => new DemandResponse(new TextObject("{=!}Reject"),
-                   new TextObject("{=!}Deny the demand to grant {BENEFACTOR} the {TITLE} title. They will not like this outcome.")
+        public override DemandResponse NegativeAnswer => new DemandResponse(new TextObject("{=PoAmUqGR}Reject"),
+                   new TextObject("{=RYmV2PEY}Deny the demand to grant {BENEFACTOR} the {TITLE} title. They will not like this outcome.")
                    .SetTextVariable("BENEFACTOR", benefactor.Name)
                    .SetTextVariable("TITLE", Title.FullName),
-                   new TextObject("{=!}On {DATE}, the {GROUP} were rejected their {DEMAND} demand.")
+                   new TextObject("{=icR6DbJR}On {DATE}, the {GROUP} were rejected their {DEMAND} demand.")
                    .SetTextVariable("GROUP", Group.Name)
                    .SetTextVariable("DEMAND", Name),
                    6,
@@ -87,7 +87,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                        if (fulfiller == Hero.MainHero)
                        {
                            InformationManager.DisplayMessage(new InformationMessage(
-                               new TextObject("{=!}The {GROUP} is not satisfied...")
+                               new TextObject("{=Wi3oUWpJ}The {GROUP} is not satisfied...")
                                .SetTextVariable("GROUP", Group.Name)
                                .SetTextVariable("LEADER", Group.Leader.Name)
                                .ToString(),
@@ -179,26 +179,26 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
                 if (titles.Count == 0)
                 {
-                    result = new(false, new TextObject("{=!}The ruler does not hold any titles legally."));
+                    result = new(false, new TextObject("{=nsuGScp0}The ruler does not hold any titles legally."));
                 }
 
                 if (titles.Count == 1)
                 {
-                    result = new(false, new TextObject("{=!}The ruler's only title cannot be demanded."));
+                    result = new(false, new TextObject("{=Tw105SbN}The ruler's only title cannot be demanded."));
                 }
 
                 if (!BannerKingsConfig.Instance.StabilityModel.IsHeroOverDemesneLimit(leader) &&
                     !BannerKingsConfig.Instance.StabilityModel.IsHeroOverUnlandedDemesneLimit(leader))
                 {
-                    result = new(false, new TextObject("{=!}The ruler is not over their landed or unlanded demesne limit."));
+                    result = new(false, new TextObject("{=7xd5aKx0}The ruler is not over their landed or unlanded demesne limit."));
                 }
 
                 if (Active)
                 {
-                    result = new(false, new TextObject("{=!}This demand is already under revision by the ruler."));
+                    result = new(false, new TextObject("{=RnN79qMx}This demand is already under revision by the ruler."));
                 }
 
-                result = new(true, new TextObject("{=!}This demand is possible."));
+                result = new(true, new TextObject("{=WvxUuqmj}This demand is possible."));
             },
             GetType().Name,
             false);
@@ -210,7 +210,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         {
             SetTexts();
             InformationManager.ShowInquiry(new InquiryData(Name.ToString(),
-                new TextObject("{=!}The {GROUP} group is demanding the grant of the {TITLE} title to {HERO}{ROLE}. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
+                new TextObject("{=A9nXTVZS}The {GROUP} group is demanding the grant of the {TITLE} title to {HERO}{ROLE}. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
                 .SetTextVariable("GROUP", Group.Name)
                 .SetTextVariable("TITLE", Title.FullName)
                 .SetTextVariable("HERO", benefactor.Name)
@@ -218,8 +218,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 .ToString(),
                 true,
                 true,
-                new TextObject("{=!}Resolve").ToString(),
-                new TextObject("{=!}Postpone").ToString(),
+                new TextObject("{=j90Aa0xG}Resolve").ToString(),
+                new TextObject("{=sbwMaTwx}Postpone").ToString(),
                 () =>
                 {
                     ShowPlayerDemandAnswers();
@@ -246,7 +246,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
-                new TextObject("{=!}The {GROUP} is pushing for {HERO}{ROLE} to be granted the {TITLE} title. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
+                new TextObject("{=G65bguxz}The {GROUP} is pushing for {HERO}{ROLE} to be granted the {TITLE} title. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
                 .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(Group).ResultNumber * 100f).ToString("0.00"))
                 .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(Group).ResultNumber * 100f).ToString("0.00"))
                 .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
@@ -295,11 +295,11 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 TextObject hint;
                 if (member == Hero.MainHero)
                 {
-                    hint = new TextObject("{=!}Vote on yourself as beneficiary to this demand.");
+                    hint = new TextObject("{=fcSgp74y}Vote on yourself as beneficiary to this demand.");
                 }
                 else
                 {
-                    hint = new TextObject("{=!}Vote on {HERO}{HERO_TEXT} as beneficiary for the {TITLE} position. Their opinion of you is ({RELATION}).")
+                    hint = new TextObject("{=9u1fTBa3}Vote on {HERO}{HERO_TEXT} as beneficiary for the {TITLE} position. Their opinion of you is ({RELATION}).")
                         .SetTextVariable("RELATION", member.GetRelationWithPlayer())
                         .SetTextVariable("HERO", member.Name)
                         .SetTextVariable("HERO_TEXT", GetHeroRoleText(member))
@@ -307,7 +307,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 }
 
                 candidates.Add(new InquiryElement(member,
-                    new TextObject("{=!}{HERO} - {COMPETENCE}% competence")
+                    new TextObject("{=PP7GiXEk}{HERO} - {COMPETENCE}% competence")
                     .SetTextVariable("HERO", member.Name)
                     .SetTextVariable("COMPETENCE", (competence.ResultNumber * 100).ToString("0.00"))
                     .ToString(),
@@ -320,9 +320,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             TextObject description;
             if (playerLead)
             {
-                description = new TextObject("{=!}Choose the benefactor for the {TITLE} position.");
+                description = new TextObject("{=kyB8tkgY}Choose the benefactor for the {TITLE} position.");
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString() + " (1/2)",
-                    new TextObject("{=!}As a leader of your group you can decide what council position to demand. Only positions from the Privy Council are suitable.").ToString(),
+                    new TextObject("{=dJQa0dws}As a leader of your group you can decide what council position to demand. Only positions from the Privy Council are suitable.").ToString(),
                     positions,
                     true,
                     1,
@@ -352,7 +352,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
             else
             {
-                description = new TextObject("{=!}Cast your vote on who should be granted the {TITLE} title.")
+                description = new TextObject("{=kyB8tkgY}Cast your vote on who should be granted the {TITLE} title.")
                     .SetTextVariable("TITLE", Title.FullName);
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
                        description.ToString(),
