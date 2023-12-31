@@ -204,6 +204,7 @@ namespace BannerKings
             AddClassDefinition(typeof(TitleDemand), 132);
             AddClassDefinition(typeof(BKDeclareWarDecision), 133);
             AddClassDefinition(typeof(BKTournamentManager), 134);
+            AddClassDefinition(typeof(EstateComponent), 135);
             AddClassDefinition(typeof(BKCouncilPositionDecision), 140);
             AddClassDefinition(typeof(PartySupplies), 141);
             AddClassDefinition(typeof(CourtGrace), 142);

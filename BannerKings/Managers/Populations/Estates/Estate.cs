@@ -1,7 +1,10 @@
+using BannerKings.Components;
 using BannerKings.Managers.Recruits;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -137,15 +140,45 @@ namespace BannerKings.Managers.Populations.Estates
         [SaveableProperty(11)] public EstateTask Task { get; private set; }
         [SaveableProperty(12)] public TroopRoster TroopRoster { get; private set; }
         [SaveableProperty(13)] public int LastIncome { get; set; }
+        [SaveableProperty(14)] public MobileParty Retinue { get; private set; }
 
-        public void SpawnParty()
-        {
+        public void AddSlaves(int slaves) => Slaves += slaves;
 
-        }
+        public void SetParty(MobileParty party) => Retinue = party;
 
         public void PostInitialize()
         {
             if (TroopRoster == null) TroopRoster = TroopRoster.CreateDummyTroopRoster();
+            if (Retinue == null) EstateComponent.CreateRetinue(this);
+        }
+
+        public void TakeRetinue(MobileParty ai)
+        {
+            foreach (var item in Retinue.MemberRoster.GetTroopRoster())
+            {
+                ai.MemberRoster.AddToCounts(item.Character, item.Number);
+            }
+
+            Retinue.MemberRoster.RemoveIf(roster => roster.Number > 0);
+        }
+
+        public void SetFollow()
+        {
+            if (Retinue != null && Owner.IsPartyLeader)
+            {
+                var component = (EstateComponent)Retinue.PartyComponent;
+                component.Behavior = AiBehavior.EscortParty;
+                component.Escort = Owner.PartyBelongedTo; 
+            }
+        }
+
+        public void SetGoBack()
+        {
+            if (Retinue != null)
+            {
+                var component = (EstateComponent)Retinue.PartyComponent;
+                component.Behavior = AiBehavior.GoToSettlement;
+            }
         }
 
         public TroopRoster RaiseManpower(int limit)
@@ -169,9 +202,10 @@ namespace BannerKings.Managers.Populations.Estates
 
         public void Tick(PopulationData data)
         {
-            if (TroopRoster == null) TroopRoster = TroopRoster.CreateDummyTroopRoster(); 
+            if (TroopRoster == null) TroopRoster = TroopRoster.CreateDummyTroopRoster();
 
-            if (TroopRoster.TotalManCount < (int)MaxManpower.ResultNumber)
+            if (Retinue == null) EstateComponent.CreateRetinue(this);
+            else if (Retinue.MemberRoster.TotalManCount < (int)MaxManpower.ResultNumber)
             {
                 float tenantProportion = data.GetCurrentTypeFraction(PopType.Tenants);
                 float serfProportion = data.GetCurrentTypeFraction(PopType.Serfs);
@@ -180,12 +214,12 @@ namespace BannerKings.Managers.Populations.Estates
                     float random = MBRandom.RandomFloat;
                     if (random * tenantProportion < spawn.GetChance(PopType.Tenants))
                     {
-                        TroopRoster.AddToCounts(spawn.Troop, 1);
+                        Retinue.MemberRoster.AddToCounts(spawn.Troop, 1);
                         break;
                     }
                     else if (random * serfProportion < spawn.GetChance(PopType.Serfs))
                     {
-                        TroopRoster.AddToCounts(spawn.Troop, 1);
+                        Retinue.MemberRoster.AddToCounts(spawn.Troop, 1);
                         break;
                     }
                 }

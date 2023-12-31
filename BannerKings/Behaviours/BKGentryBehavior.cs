@@ -245,6 +245,7 @@ namespace BannerKings.Behaviours
                 MobileParty party = MobilePartyHelper.SpawnLordParty(clan.Leader, settlement);
                 EnterSettlementAction.ApplyForParty(party, settlement);
                 LeaveSettlementAction.ApplyForParty(party);
+                estate.TakeRetinue(party);
                 SetPartyAiAction.GetActionForEscortingParty(party, army.LeaderParty);
             }
         }

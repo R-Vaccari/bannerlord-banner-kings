@@ -570,6 +570,53 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("raised_militia_order_response", "raised_militia_order", "close_window",
                 "{=Oo88Sazm}Aye!",
                 null, delegate { PlayerEncounter.LeaveEncounter = true; });
+
+            starter.AddDialogLine("raised_retinue_party_start", "start", "raised_retinue_greeting",
+               "{=SRg8cwUN}{?PLAYER.GENDER}M'lady!{?}M'lord!{\\?} We are ready to serve you.",
+               IsPlayerEstateRetinue, null);
+
+            starter.AddPlayerLine("retinue_party_follow", "raised_retinue_greeting", "retinue_order",
+               new TextObject("{=Hvi96rXx}Follow my company.").ToString(),
+               () => true,
+               () =>
+               {
+                   var party = PlayerEncounter.EncounteredParty;
+                   var component = (EstateComponent)party.MobileParty.PartyComponent;
+                   component.Behavior = AiBehavior.EscortParty;
+                   component.Escort = MobileParty.MainParty;
+               });
+
+            starter.AddPlayerLine("retinue_party_retreat", "raised_retinue_greeting", "retinue_order",
+                new TextObject("{=xPvsVw4b}You may go home.").ToString(),
+                () => true,
+                () =>
+                {
+                    var party = PlayerEncounter.EncounteredParty;
+                    var component = (EstateComponent)party.MobileParty.PartyComponent;
+                    component.Behavior = AiBehavior.GoToSettlement;
+                });
+
+            starter.AddDialogLine("retinue_order_response", "retinue_order", "close_window",
+                "{=Oo88Sazm}Aye!",
+                null, delegate { PlayerEncounter.LeaveEncounter = true; });
+
+            starter.AddDialogLine("retinue_continue", "retinue_continue", "raised_retinue_greeting",
+                "{=!}Anything else?",
+                null,
+                null);
+
+            starter.AddPlayerLine("retinue_party_retreat", "raised_retinue_greeting", "retinue_continue",
+                new TextObject("{=!}Let me check your ranks.").ToString(),
+                () => true,
+                () =>
+                {
+                    PartyScreenManager.OpenScreenAsManageTroopsAndPrisoners(PlayerEncounter.EncounteredParty.MobileParty);
+                });
+
+            starter.AddPlayerLine("retinue_party_leave", "raised_retinue_greeting", "close_window",
+                "{=G4ALCxaA}Never mind.",
+                () => true,
+                delegate { PlayerEncounter.LeaveEncounter = true; });
         }
 
         private bool IsTravellerParty(PartyBase party)
@@ -647,6 +694,19 @@ namespace BannerKings.Behaviours
             if (party.MobileParty.PartyComponent is MilitiaComponent)
             {
                 value = true;
+            }
+
+            return value;
+        }
+
+        private bool IsPlayerEstateRetinue()
+        {
+            var value = false;
+            var party = PlayerEncounter.EncounteredParty;
+            var component = party.MobileParty.PartyComponent;
+            if (component is EstateComponent)
+            {
+                value = (component as EstateComponent).Estate.Owner == Hero.MainHero;
             }
 
             return value;
