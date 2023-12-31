@@ -76,14 +76,18 @@ namespace BannerKings.Models.BKModels
             }
 
             var land = data.LandData;
+            float landFactor = 1f;
+            if (settlement.IsTown) landFactor = 4f;
+            else if (settlement.IsCastle) landFactor = 2f;
+
             var farmland = land.GetAcreOutput("farmland") * 20f;
-            result.Add(land.Farmland * farmland, new TextObject("{=zMPm162W}Farmlands"));
+            result.Add(land.Farmland * farmland * landFactor, new TextObject("{=zMPm162W}Farmlands"));
 
             var pasture = land.GetAcreOutput("pasture") * 20f;
-            result.Add(land.Pastureland * pasture, new TextObject("{=ngRhXYj1}Pasturelands"));
+            result.Add(land.Pastureland * pasture * landFactor, new TextObject("{=ngRhXYj1}Pasturelands"));
 
             var woods = land.GetAcreOutput("woodland") * 20f;
-            result.Add(land.Woodland * woods, new TextObject("{=qPQ7HKgG}Woodlands"));
+            result.Add(land.Woodland * woods * landFactor, new TextObject("{=qPQ7HKgG}Woodlands"));
 
             var town = settlement.Town;
             if (town != null)
