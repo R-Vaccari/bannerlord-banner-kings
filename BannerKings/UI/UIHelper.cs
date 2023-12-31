@@ -934,7 +934,7 @@ namespace BannerKings.UI
             List<TooltipProperty> list = new List<TooltipProperty>
             {
                 new TooltipProperty(title.ToString(), string.Empty, 0, onlyShowWhenExtended: false, TooltipProperty.TooltipPropertyFlags.Title),
-                new TooltipProperty(string.Empty, description.ToString(), 0)
+                new TooltipProperty("", description.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.MultiLine)
             };
 
             TooltipAddExplanation(list, ref explainedNumber);

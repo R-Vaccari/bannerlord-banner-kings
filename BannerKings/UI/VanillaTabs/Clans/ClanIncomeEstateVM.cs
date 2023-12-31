@@ -56,7 +56,7 @@ namespace BannerKings.UI.VanillaTabs.Clans
                  new TextObject("{=!}Land expansion task sets part of your workforce to expand the estate's useful acreage. They wont be productive and thus the income is reduced. Increased acreage allows more population capacity."),
                 GameTexts.FindText("str_bk_estate_task", EstateTask.Land_Expansion.ToString())));
 
-            TaskSelector.AddItem(new BKItemVM(1,
+            TaskSelector.AddItem(new BKItemVM(2,
                true,
                 new TextObject("{=!}Drafting increases the military participation of your estate population, but reduces its general output."),
                GameTexts.FindText("str_bk_estate_task", EstateTask.Military.ToString())));
@@ -71,15 +71,7 @@ namespace BannerKings.UI.VanillaTabs.Clans
             {
                 var vm = obj.GetCurrentItem();
                 Estate.ChangeTask((EstateTask)vm.Value);
-            }
-        }
-
-        private void OnDutyChange(SelectorVM<BKItemVM> obj)
-        {
-            if (obj.SelectedItem != null)
-            {
-                var vm = obj.GetCurrentItem();
-                Estate.ChangeDuty((EstateDuty)vm.Value);
+                RefreshValues();
             }
         }
 
@@ -96,7 +88,7 @@ namespace BannerKings.UI.VanillaTabs.Clans
                Estate.PopulationCapacity.ResultNumber.ToString("0"),
                false,
                new BasicTooltipViewModel(() => UIHelper.GetAccumulatingWithDescription(priceT,
-                new TextObject("{=!}Estate Value"),
+                new TextObject("{=!}Acre Value represents the monetary value of each acre, variable according to the local economy."),
                 price.ResultNumber,
                 false,
                 ref price))
@@ -111,10 +103,14 @@ namespace BannerKings.UI.VanillaTabs.Clans
 
             ExplainedNumber tax = Estate.TaxRatio;
             TextObject taxT = new TextObject("{=!}Tax Rate");
-            ItemProperties.Add(new SelectableItemPropertyVM(new TextObject("{=!}Slaves", null).ToString(),
-               Estate.Slaves.ToString(),
+            ItemProperties.Add(new SelectableItemPropertyVM(taxT.ToString(),
+               UIHelper.FormatValue(tax.ResultNumber),
                false,
-               null));
+                new BasicTooltipViewModel(() => UIHelper.GetAccumulatingWithDescription(taxT,
+                new TextObject("{=!}Represents the % that is deducted from this estate's income, and taken by the village lord instead. If the village lord and estate owner are the same, it makes no difference in the final income."),
+                tax.ResultNumber,
+                false,
+                ref tax))));
 
             ExplainedNumber capacity = Estate.PopulationCapacityExplained;
             TextObject capacityT = new TextObject("{=!}Population Capacity");
@@ -122,20 +118,31 @@ namespace BannerKings.UI.VanillaTabs.Clans
                Estate.PopulationCapacity.ResultNumber.ToString("0"),
                false,
                new BasicTooltipViewModel(() => UIHelper.GetAccumulatingWithDescription(capacityT,
-                new TextObject("{=!}Estate Value"),
+                new TextObject("{=!}The maximum capacity of people this estate can support. Population grows naturally, or can be grown directly by adding slaves to the estate."),
                 capacity.ResultNumber,
                 false,
                 ref capacity))
                ));
 
+            ExplainedNumber manpower = Estate.MaxManpowerExplained;
+            TextObject manpowerT = new TextObject("{=!}Manpower Capacity");
+            ItemProperties.Add(new SelectableItemPropertyVM(manpowerT.ToString(),
+               manpower.ResultNumber.ToString("0"),
+               false,
+               new BasicTooltipViewModel(() => UIHelper.GetAccumulatingWithDescription(manpowerT,
+                new TextObject("{=!}The maximum capacity of people this estate's retinue can be. The retinue is determined by the estate's population, local task and militarism."),
+                manpower.ResultNumber,
+                false,
+                ref manpower))
+               ));
 
             ExplainedNumber production = Estate.Production;
             TextObject productionT = new TextObject("{=!}Production");
             ItemProperties.Add(new SelectableItemPropertyVM(productionT.ToString(),
-               UIHelper.FormatValue(production.ResultNumber),
+               production.ResultNumber.ToString("0.00") + '%',
                false,
                 new BasicTooltipViewModel(() => UIHelper.GetAccumulatingWithDescription(productionT,
-                new TextObject("{=!}"),
+                new TextObject("{=!}Represents the share of the village's production that is owned by this estate. The estate's income equals the total village production * estate's production share * (1 - tax rate)."),
                 production.ResultNumber,
                 false,
                 ref production))
@@ -147,7 +154,7 @@ namespace BannerKings.UI.VanillaTabs.Clans
                value.ResultNumber.ToString("0"),
                false,
                new BasicTooltipViewModel(() => UIHelper.GetAccumulatingWithDescription(valueT,
-                new TextObject("{=!}Estate Value"),
+                new TextObject("{=!}Estate Value is the estate's monetary price, according to its acreage, income and local economy."),
                 value.ResultNumber,
                 false,
                 ref value))

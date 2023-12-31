@@ -35,47 +35,6 @@
 															HorizontalAlignment="Center" Brush="Encyclopedia.SubPage.Header.Text"
 															Text="@EstatesText" MarginBottom="8" />
 															
-															
-												<Widget DataSource="{DemesneLands}" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren"
-													WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
-													<Children>
-													
-														<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent"
-																  SuggestedWidth="250" MarginTop="40" StackLayout.LayoutMethod="VerticalBottomToTop">
-															<Children>
-																<RichTextWidget DataSource="{..}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																	HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@DemesneLandsText"
-																	 />
-																	
-																<ListPanel DataSource="{MainInfo}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" 
-																		   VerticalAlignment="Center" MarginTop="20" StackLayout.LayoutMethod="VerticalBottomToTop">
-																	<ItemTemplate>
-																		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" >
-																			<Children>
-																				<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" 
-																							MarginLeft="8" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsEnabled="false">
-																					<Children>
-																						<ListPanel DataSource="{..}" HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" 
-																								  StackLayout.LayoutMethod="HorizontalLeftToRight" MinHeight="38">
-																							<Children>
-																								<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="TownManagement.Description.Title.Text" Brush.FontSize="20" Text="@Title" />
-																								<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" MarginLeft="5" Brush="TownManagement.Description.Value.Text" Brush.FontSize="20" IntText="@Value" />
-																								<ChangeAmountTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MaxWidth="80" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Settlement.Property.PositiveChange.Text" Amount="@ValueChange" NegativeBrushName="TownManagement.Property.NegativeChange.Text" PositiveBrushName="TownManagement.Property.PositiveChange.Text" UseParentheses="true" />
-																								<DescriptionItemVisualBrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Brush="TownManamgement.Description.Type.Brush" Type="@Type" />
-																							</Children>
-																						</ListPanel>
-																					</Children>
-																				</HintWidget>
-																			</Children>
-																		</Widget>
-																	</ItemTemplate>
-																</ListPanel>
-															</Children>
-														</ListPanel>
-													</Children>
-												</Widget>
-													
-															
 												<GridWidget DataSource="{EstatesList}" WidthSizePolicy="StretchToParent"
 															HeightSizePolicy="CoverChildren" MarginRight="50" MarginLeft="50" HorizontalAlignment="Center"
 															DefaultCellWidth="250" DefaultCellHeight="550" ColumnCount="1" MarginTop="10">
@@ -136,8 +95,6 @@
 																		<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{TaskSelector}" MarginTop="10"
 																												HorizontalAlignment="Center" IsVisible="@Enabled" />
 																												
-																		<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{DutySelector}" MarginTop="10"
-																												HorizontalAlignment="Center" IsVisible="@Enabled" />
 																						
 																		<GridWidget DataSource="{ExtraInfos}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" VerticalAlignment="Center"
 																					SuggestedWidth="700" SuggestedHeight="120" HorizontalAlignment="Center" DefaultCellWidth="230" 

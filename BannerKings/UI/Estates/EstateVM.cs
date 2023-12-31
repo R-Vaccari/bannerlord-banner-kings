@@ -22,10 +22,10 @@ namespace BannerKings.UI.Estates
         private MBBindingList<TownManagementDescriptionItemVM> mainInfo;
         private MBBindingList<MBBindingList<InformationElement>> extraInfos;
         private ImageIdentifierVM imageIdentifier;
-        private BannerKingsSelectorVM<BKItemVM> taskSelector, dutySelector;
+        private BannerKingsSelectorVM<BKItemVM> taskSelector;
         private EstateAction grantAction, buyAction, reclaimAction;
         private HintViewModel buyHint, grantHint, reclaimHint;
-        private bool playerOwned, dutyEnabled, buyVisible, grantVisible, reclaimVisible;
+        private bool playerOwned, buyVisible, grantVisible, reclaimVisible;
         private string nameText;
 
         public EstateVM(Estate estate, PopulationData data) : base(data, true)
@@ -37,7 +37,6 @@ namespace BannerKings.UI.Estates
             MainInfo = new MBBindingList<TownManagementDescriptionItemVM>();
             ExtraInfos = new MBBindingList<MBBindingList<InformationElement>>();
             
-            DutyEnabled = false;
             PlayerOwned = false;
 
             RefreshValues();
@@ -99,25 +98,6 @@ namespace BannerKings.UI.Estates
 
             var settlement = Estate.EstatesData.Settlement;
             var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
-            if (title != null)
-            {
-                var owner = settlement.IsVillage ? settlement.Village.GetActualOwner() : settlement.Owner;
-                DutyEnabled = title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureFeeTail) && owner == Hero.MainHero;
-            }
-            else
-            {
-                DutyEnabled = false;
-            }
-
-            DutySelector = new BannerKingsSelectorVM<BKItemVM>(DutyEnabled, 0, OnDutyChange);
-            DutySelector.AddItem(new BKItemVM(EstateDuty.Taxation, true, "",
-                GameTexts.FindText("str_bk_estate_duty", EstateDuty.Taxation.ToString())));
-
-            DutySelector.AddItem(new BKItemVM(EstateDuty.Military, true, "",
-                GameTexts.FindText("str_bk_estate_duty", EstateDuty.Military.ToString())));
-
-            DutySelector.SelectedIndex = (int)Estate.Duty;
-            DutySelector.SetOnChangeAction(OnDutyChange);
 
 
             if (IsEnabled)
@@ -139,17 +119,6 @@ namespace BannerKings.UI.Estates
 
                 ExtraInfos.Add(LandInfo);
 
-                var production = Estate.Production;
-                WorkforceInfo.Add(new InformationElement(new TextObject("{=Fin3KXMP}Goods Production:").ToString(),
-                    new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
-                    .SetTextVariable("POINTS", production.ResultNumber.ToString("0.00"))
-                    .ToString(),
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
-                        .SetTextVariable("TEXT",
-                            new TextObject("{=g480uUyC}Sum of goods produced on a daily basis, including all the types produced here."))
-                        .SetTextVariable("EXPLANATIONS", production.GetExplanations())
-                        .ToString()));
-
                 WorkforceInfo.Add(new InformationElement(new TextObject("{=p7yrSOcC}Available Workforce:").ToString(),
                     Estate.AvailableWorkForce.ToString(),
                     new TextObject("{=1mJgkKHB}The amount of productive workers in this region, able to work the land").ToString()));
@@ -161,20 +130,10 @@ namespace BannerKings.UI.Estates
 
                 ExtraInfos.Add(WorkforceInfo);
 
-                StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
-                    FormatFloatGain(Estate.Influence),
-                    new TextObject("{=V9CJARWT}Influence from local nobles.").ToString()));
-
                 var tax = Estate.TaxRatio;
                 StatsInfo.Add(new InformationElement(new TextObject("{=Kq3T4MBV}Tax Rate:").ToString(),
                     FormatValue(tax.ResultNumber),
                     tax.GetExplanations()));
-
-                
-                StatsInfo.Add(new InformationElement(new TextObject("{=hgBL20Jm}Tax Accumulated:").ToString(),
-                    Estate.TaxAccumulated.ToString("0"),
-                    new TextObject("{=G1sYULTd}The accumulated profits since villagers last brought production revenues back. This is zeroed once the estate owner collects their income.").ToString()));
-
 
                 ExtraInfos.Add(StatsInfo);
             }
@@ -222,7 +181,13 @@ namespace BannerKings.UI.Estates
                         hero.Name.ToString(),
                         new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject, true)),
                         action.Possible,
-                        action.Reason.ToString()));
+                        new TextObject("{=!}{POSSIBLE}{newline}Grant this property to {HERO}. They serve the {CLAN} clan ({OWNER}) and have {OPINION} opinion towards you.")
+                        .SetTextVariable("POSSIBLE", action.Reason)
+                        .SetTextVariable("HERO", hero.Name)
+                        .SetTextVariable("CLAN", hero.Clan.Name)
+                        .SetTextVariable("OWNER", hero.Clan == Clan.PlayerClan ? new TextObject("{=!}your clan") : hero.Clan.Leader.Name)
+                        .SetTextVariable("OPINION", (int)hero.GetRelationWithPlayer())
+                        .ToString()));
                 }
 
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
@@ -315,20 +280,6 @@ namespace BannerKings.UI.Estates
         }
 
         [DataSourceProperty]
-        public BannerKingsSelectorVM<BKItemVM> DutySelector
-        {
-            get => dutySelector;
-            set
-            {
-                if (value != dutySelector)
-                {
-                    dutySelector = value;
-                    OnPropertyChangedWithValue(value);
-                }
-            }
-        }
-
-        [DataSourceProperty]
         public bool PlayerOwned
         {
             get => playerOwned;
@@ -338,21 +289,6 @@ namespace BannerKings.UI.Estates
                 {
                     playerOwned = value;
                     OnPropertyChanged("PlayerOwned");
-                }
-            }
-        }
-
-
-        [DataSourceProperty]
-        public bool DutyEnabled
-        {
-            get => dutyEnabled;
-            set
-            {
-                if (value != dutyEnabled)
-                {
-                    dutyEnabled = value;
-                    OnPropertyChanged("DutyEnabled");
                 }
             }
         }
@@ -398,7 +334,6 @@ namespace BannerKings.UI.Estates
                 }
             }
         }
-
 
         [DataSourceProperty]
         public HintViewModel GrantHint
