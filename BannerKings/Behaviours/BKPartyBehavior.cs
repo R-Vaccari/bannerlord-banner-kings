@@ -703,10 +703,9 @@ namespace BannerKings.Behaviours
         {
             var value = false;
             var party = PlayerEncounter.EncounteredParty;
-            var component = party.MobileParty.PartyComponent;
-            if (component is EstateComponent)
+            if (party.MobileParty.PartyComponent is EstateComponent)
             {
-                value = (component as EstateComponent).Estate.Owner == Hero.MainHero;
+                value = (party.MobileParty.PartyComponent as EstateComponent).Estate.Owner == Hero.MainHero;
             }
 
             return value;
