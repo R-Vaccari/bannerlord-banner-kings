@@ -3,7 +3,7 @@ using System.Xml;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.Prefabs2;
 
-namespace BannerKings.UI.Extensions
+namespace BannerKings.UI.VanillaTabs.Character
 {
 
     [PrefabExtension("CharacterDeveloper", "descendant::Widget/Children", "CharacterDeveloper")]

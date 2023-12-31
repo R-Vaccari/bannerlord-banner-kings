@@ -12,7 +12,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Extensions
+namespace BannerKings.UI.VanillaTabs.Character
 {
     [ViewModelMixin("RefreshValues")]
     internal class CharacterDeveloperMixin : BaseViewModelMixin<CharacterDeveloperVM>
@@ -120,7 +120,7 @@ namespace BannerKings.UI.Extensions
                 ReligionVisible = true;
                 EducationVisible = false;
             }
-         
+
             OnRefresh();
         }
 
@@ -229,11 +229,11 @@ namespace BannerKings.UI.Extensions
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                             new TextObject("{=GMNhGSUb}Decisions").ToString(),
                             new TextObject("{=VbM15ztE}Choose a category of decisions to take. Decisions are always taken on behalf of the family head, regardless of what hero is chosen in the Character tab.").ToString(),
-                            options, 
+                            options,
                             true,
                             1,
-                            1, 
-                            GameTexts.FindText("str_done").ToString(), 
+                            1,
+                            GameTexts.FindText("str_done").ToString(),
                             string.Empty,
                             delegate (List<InquiryElement> x)
                             {
@@ -241,8 +241,8 @@ namespace BannerKings.UI.Extensions
                                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                                         categoryOption.Title.ToString(),
                                         categoryOption.Description.ToString(),
-                                        categoryOption.Options, 
-                                        true, 
+                                        categoryOption.Options,
+                                        true,
                                         1,
                                         1,
                                         GameTexts.FindText("str_done").ToString(),
@@ -257,8 +257,8 @@ namespace BannerKings.UI.Extensions
                                             OpenDecisions();
                                         },
                                         string.Empty));
-                            }, 
-                            null, 
+                            },
+                            null,
                             string.Empty));
             OnRefresh();
         }
