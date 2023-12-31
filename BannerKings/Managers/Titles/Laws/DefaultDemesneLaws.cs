@@ -229,7 +229,7 @@ namespace BannerKings.Managers.Titles.Laws
 
             EstateTenureFeeTail.Initialize(new TextObject("{=esrBR5f3}Fee Tail"),
                 new TextObject("{=SCZjCdwq}The fee tail tenure dictates that property is inherited exclusively through lawful inheritance or grant."),
-                new TextObject("{=WabTyEdr}Buying or selling estates is banned\nAllows choosing estate duty"),
+                new TextObject("{=!}Buying or selling estates is banned\nReduced taxation on estate incomes"),
                 DemesneLawTypes.EstateTenure,
                 0.1f,
                 -0.6f,
