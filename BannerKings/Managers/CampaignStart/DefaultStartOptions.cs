@@ -71,47 +71,15 @@ namespace BannerKings.Managers.CampaignStart
                         }
                     }
 
-                    Kingdom kingdom = null;
-                    var list = new List<InquiryElement>();
-                    foreach (var option in Kingdom.All)
-                    {
-                        if (option.Culture == Hero.MainHero.Culture)
-                        {
-                            list.Add(new InquiryElement(option, option.Name.ToString(),
-                                new ImageIdentifier(option.Banner)));
-                        }
-                    }
+                    MobileParty.MainParty.ItemRoster.AddToCounts(sumpter, 2);
+                    Hero.MainHero.AddSkillXp(BKSkills.Instance.Scholarship, 2000);
 
-                    if (list.Count > 1)
+                    Kingdom kingdom = Kingdom.All.FirstOrDefault(x => x.Culture == Hero.MainHero.Culture);
+                    if (kingdom != null)
                     {
-                        MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                            new TextObject("{=XbjMOmXU}Kingdom Selection").ToString(),
-                            new TextObject("{=vz2HDwKD}Choose which of the kingdoms that share your culture you want to start as a lord in.").ToString(),
-                            list,
-                            false,
-                            1,
-                            1,
-                            GameTexts.FindText("str_accept").ToString(),
-                            string.Empty,
-                            delegate(List<InquiryElement> list)
-                            {
-                                kingdom = (Kingdom)list[0].Identifier;
-                                ChangeKingdomAction.ApplyByJoinToKingdom(Clan.PlayerClan, kingdom, false);
-                                BannerKingsConfig.Instance.TitleManager.GiveLordshipOnKingdomJoin(kingdom, Clan.PlayerClan, true);
-                            },
-                            null),
-                            true,
-                            true);
-                    }
-                    else
-                    {
-                        kingdom = (Kingdom)list[0].Identifier;
                         ChangeKingdomAction.ApplyByJoinToKingdom(Clan.PlayerClan, kingdom, false);
                         BannerKingsConfig.Instance.TitleManager.GiveLordshipOnKingdomJoin(kingdom, Clan.PlayerClan, true);
                     }
-                    
-                    MobileParty.MainParty.ItemRoster.AddToCounts(sumpter, 2);
-                    Hero.MainHero.AddSkillXp(BKSkills.Instance.Scholarship, 2000);
                 });
 
             Mercenary = new StartOption("start_mercenary");

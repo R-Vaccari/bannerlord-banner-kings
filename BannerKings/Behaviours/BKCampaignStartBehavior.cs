@@ -256,7 +256,8 @@ namespace BannerKings.Behaviours
                     result.Action();
                 },
                 null), 
-                true);
+                true,
+                false);
         }
 
         private void ShowInquiry()
