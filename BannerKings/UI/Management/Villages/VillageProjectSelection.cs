@@ -104,7 +104,13 @@ namespace BannerKings.UI.Management.Villages
 
         private void OnResetCurrentProject()
         {
-            CurrentSelectedProject = LocalDevelopmentList.Count > 0 ? AvailableProjects.First((VillageBuildingProjectVM p) => p.Building == LocalDevelopmentList[0]) : CurrentDailyDefault;
+            SettlementProjectVM result = CurrentDailyDefault;
+            if (LocalDevelopmentList.Count > 0)
+            {
+                var option = AvailableProjects.FirstOrDefault((VillageBuildingProjectVM p) => p.Building == LocalDevelopmentList[0]); ;
+                if (option != null) result = option;
+            }
+            CurrentSelectedProject = result;
             CurrentSelectedProject.RefreshProductionText();
         }
 
