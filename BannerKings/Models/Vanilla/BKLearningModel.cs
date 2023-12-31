@@ -21,11 +21,24 @@ namespace BannerKings.Models.Vanilla
         }
         private void InitializeXpRequiredForSkillLevel()
         {
-            int num = 4000;
-            bkRequireXp[0] = num;
-            for (int i = 1; i < 1024; i++)
+            if (BannerKingsSettings.Instance.AlternateLeveling)
             {
-                bkRequireXp[i] = bkRequireXp[i - 1] + (int)(20 * (1 + (i * 0.02f)));
+                int num = 4000;
+                bkRequireXp[0] = num;
+                for (int i = 1; i < 1024; i++)
+                {
+                    bkRequireXp[i] = bkRequireXp[i - 1] + (int)(20 * (1 + (i * 0.02f)));
+                }
+            }  
+            else
+            {
+                int num = 30;
+                this.bkRequireXp[0] = num;
+                for (int i = 1; i < 1024; i++)
+                {
+                    num += 10 + i;
+                    this.bkRequireXp[i] = this.bkRequireXp[i - 1] + num;
+                }
             }
         }
 
