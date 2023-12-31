@@ -85,7 +85,8 @@ namespace BannerKings.Managers.Populations.Estates
         public ExplainedNumber Production => BannerKingsConfig.Instance.EstatesModel.CalculateEstateProduction(this, true);
         public ExplainedNumber PopulationCapacity => BannerKingsConfig.Instance.GrowthModel.CalculateEstateCap(this, false);
         public ExplainedNumber PopulationCapacityExplained => BannerKingsConfig.Instance.GrowthModel.CalculateEstateCap(this, true);
-        public int MaxManpower => (int)(Population * BannerKingsConfig.Instance.VolunteerModel.GetMilitarism(EstatesData.Settlement).ResultNumber);
+        public ExplainedNumber MaxManpower => BannerKingsConfig.Instance.EstatesModel.CalculateEstateManpower(this);
+        public ExplainedNumber MaxManpowerExplained => BannerKingsConfig.Instance.EstatesModel.CalculateEstateManpower(this, true);
         public int Income => (int)(TaxAccumulated * 0.8f);
         public int AvailableWorkForce
         {
@@ -170,7 +171,7 @@ namespace BannerKings.Managers.Populations.Estates
         {
             if (TroopRoster == null) TroopRoster = TroopRoster.CreateDummyTroopRoster(); 
 
-            if (TroopRoster.TotalManCount < MaxManpower)
+            if (TroopRoster.TotalManCount < (int)MaxManpower.ResultNumber)
             {
                 float tenantProportion = data.GetCurrentTypeFraction(PopType.Tenants);
                 float serfProportion = data.GetCurrentTypeFraction(PopType.Serfs);

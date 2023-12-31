@@ -357,9 +357,24 @@ namespace BannerKings.Models.BKModels
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(estate.EstatesData.Settlement);
                 float proportion = GetEstateWorkforceProportion(estate, data);
-                result.Add(proportion, new TextObject("{=8mOMavNZ}Total production proportion"));
+                result.Add(proportion * 100f, new TextObject("{=8mOMavNZ}Total production proportion"));
             }
 
+            return result;
+        }
+
+        public ExplainedNumber CalculateEstateManpower(Estate estate, bool descriptions = false)
+        {
+            var result = new ExplainedNumber(0f, descriptions);
+
+            result.Add((int)estate.PopulationCapacity.ResultNumber, new TextObject("{=!}Population Capacity"));
+            var settlement = estate.EstatesData.Settlement;
+            float militarism = BannerKingsConfig.Instance.VolunteerModel.GetMilitarism(settlement).ResultNumber;
+            result.AddFactor(militarism - 1f, new TextObject("{=!}Militarism of {FIEF}")
+                .SetTextVariable("FIEF", settlement.Name));
+
+            if (estate.Task == EstateTask.Military)
+                result.AddFactor(0.25f, GameTexts.FindText("str_bk_estate_task", EstateTask.Military.ToString()));
             return result;
         }
 

@@ -13,6 +13,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
 using static BannerKings.Managers.PopulationManager;
+using static BannerKings.Managers.Populations.Estates.Estate;
 
 namespace BannerKings.Models.BKModels
 {
