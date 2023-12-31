@@ -21,6 +21,7 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
+using BannerKings.Managers.Cultures;
 
 namespace BannerKings.UI
 {
@@ -819,29 +820,31 @@ namespace BannerKings.UI
 
         private static string GetCorrelation(Hero hero)
         {
-            var correlation = "";
+            TextObject correlation = TextObject.Empty;
             var playerClan = Clan.PlayerClan;
             var main = Hero.MainHero;
             if (hero.IsNotable)
             {
-                correlation = "Notable";
+                correlation = new TextObject("{=!}Notable");
             }
             else if (playerClan.Companions.Contains(hero) && BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
             {
-                correlation = "Knight";
+                var knightName = DefaultTitleNames.Instance.GetKnightName(hero.Culture);
+                correlation = hero.IsFemale ? knightName.Female : knightName.Name;
             }
             else if ((playerClan.Heroes.Contains(hero) && hero.Father == main) || hero.Mother == main ||
                      hero.Siblings.Contains(main)
                      || hero.Spouse == main || hero.Children.Contains(main))
             {
-                correlation = "Family";
+                correlation = new TextObject("{=!}Family");
             }
             else if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(hero))
             {
-                correlation = "Vassal Lord";
+                correlation = new TextObject("{=!}Vassal");
             }
+            else correlation = new TextObject("{=!}Guest");
 
-            return correlation;
+            return correlation.ToString();
         }
 
         public static List<TooltipProperty> GetHeroGovernorEffectsTooltip(Hero hero, CouncilMember position,
@@ -910,17 +913,6 @@ namespace BannerKings.UI
             list.Add(new TooltipProperty(new TextObject("{=NeydSXjc}Score").ToString(), " ", 0));
             TooltipAddSeperator(list);
             list.Add(new TooltipProperty(string.Empty, score.GetExplanations(), 0));
-
-            return list;
-        }
-
-        public static List<TooltipProperty> GetEstateProductionTooltip()
-        {
-            var list = new List<TooltipProperty>
-            {
-                new(string.Empty, new TextObject("{=!}Estate Production").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title),
-                new TooltipProperty(" ", new TextObject("{=!}Estate Production represents how much of the village's total production is owned by this estate. The proportion is determined by the estate's workforce in relation to the village's. Estate Income = Total Production * Estate Production * (1 - Tax Rate).").ToString(), 0)
-            };
 
             return list;
         }
