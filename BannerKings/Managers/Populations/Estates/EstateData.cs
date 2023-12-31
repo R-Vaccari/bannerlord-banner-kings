@@ -14,7 +14,6 @@ namespace BannerKings.Managers.Populations.Estates
         {
             Settlement = settlement;
             Estates = new List<Estate>();
-            Update(data);
         }
 
         [SaveableProperty(1)] public Settlement Settlement { get; private set; }
