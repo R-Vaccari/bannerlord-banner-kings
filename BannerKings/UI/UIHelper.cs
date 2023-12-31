@@ -393,6 +393,40 @@ namespace BannerKings.UI
                 });
         }
 
+        public static void ShowEstateTransferScreen(Managers.Populations.Estates.Estate estate)
+        {
+            var count = estate.Slaves;
+            var stlmtSlaves = new TroopRoster(null);
+            stlmtSlaves.AddToCounts(CharacterObject.All.FirstOrDefault(x => x.StringId == "looter"), count);
+
+            PartyScreenManager.OpenScreenAsLoot(TroopRoster.CreateDummyTroopRoster(), stlmtSlaves,
+                Settlement.CurrentSettlement.Name, 0,
+                delegate (PartyBase _, TroopRoster _, TroopRoster leftPrisonRoster,
+                    PartyBase _, TroopRoster _, TroopRoster rightPrisonRoster,
+                    bool _)
+                {
+                    if (leftPrisonRoster.TotalHeroes > 0)
+                    {
+                        var heroes = new List<CharacterObject>();
+                        foreach (var element in leftPrisonRoster.GetTroopRoster())
+                        {
+                            if (element.Character.IsHero)
+                            {
+                                heroes.Add(element.Character);
+                            }
+                        }
+
+                        foreach (var hero in heroes)
+                        {
+                            leftPrisonRoster.RemoveTroop(hero);
+                            rightPrisonRoster.AddToCounts(hero, 1);
+                        }
+                    }
+
+                    estate.AddSlaves(leftPrisonRoster.TotalRegulars - count);
+                });
+        }
+
         public static void ShowSlaveDonationScreen(Hero notable)
         {
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);

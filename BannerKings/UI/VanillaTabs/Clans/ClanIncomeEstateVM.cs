@@ -42,9 +42,6 @@ namespace BannerKings.UI.VanillaTabs.Clans
            
             ImageName = ((settlementComponent != null) ? settlementComponent.WaitMeshName : "");
 
-            ItemProperties.Clear();
-            PopulateStatsList();
-
             TaskSelector = new BannerKingsSelectorVM<BKItemVM>(true, 0, OnTaskChange);
             TaskSelector.AddItem(new BKItemVM(0, 
                 true, 
@@ -71,7 +68,8 @@ namespace BannerKings.UI.VanillaTabs.Clans
             {
                 var vm = obj.GetCurrentItem();
                 Estate.ChangeTask((EstateTask)vm.Value);
-                RefreshValues();
+                ItemProperties.Clear();
+                PopulateStatsList();
             }
         }
 
@@ -85,7 +83,7 @@ namespace BannerKings.UI.VanillaTabs.Clans
             ExplainedNumber price = Estate.AcrePriceExplained;
             TextObject priceT = new TextObject("{=!}Acre Value");
             ItemProperties.Add(new SelectableItemPropertyVM(priceT.ToString(),
-               Estate.PopulationCapacity.ResultNumber.ToString("0"),
+               price.ResultNumber.ToString("0"),
                false,
                new BasicTooltipViewModel(() => UIHelper.GetAccumulatingWithDescription(priceT,
                 new TextObject("{=!}Acre Value represents the monetary value of each acre, variable according to the local economy."),
@@ -115,7 +113,7 @@ namespace BannerKings.UI.VanillaTabs.Clans
             ExplainedNumber capacity = Estate.PopulationCapacityExplained;
             TextObject capacityT = new TextObject("{=!}Population Capacity");
             ItemProperties.Add(new SelectableItemPropertyVM(capacityT.ToString(),
-               Estate.PopulationCapacity.ResultNumber.ToString("0"),
+               capacity.ResultNumber.ToString("0"),
                false,
                new BasicTooltipViewModel(() => UIHelper.GetAccumulatingWithDescription(capacityT,
                 new TextObject("{=!}The maximum capacity of people this estate can support. Population grows naturally, or can be grown directly by adding slaves to the estate."),

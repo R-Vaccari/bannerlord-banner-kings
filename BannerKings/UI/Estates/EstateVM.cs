@@ -1,11 +1,10 @@
-using BannerKings.Extensions;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
-using BannerKings.Managers.Titles.Laws;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.Core;
@@ -24,8 +23,8 @@ namespace BannerKings.UI.Estates
         private ImageIdentifierVM imageIdentifier;
         private BannerKingsSelectorVM<BKItemVM> taskSelector;
         private EstateAction grantAction, buyAction, reclaimAction;
-        private HintViewModel buyHint, grantHint, reclaimHint;
-        private bool playerOwned, buyVisible, grantVisible, reclaimVisible;
+        private HintViewModel buyHint, grantHint, reclaimHint, retinueHint;
+        private bool playerOwned, buyVisible, grantVisible, reclaimVisible, retinueEnabled;
         private string nameText;
 
         public EstateVM(Estate estate, PopulationData data) : base(data, true)
@@ -85,6 +84,13 @@ namespace BannerKings.UI.Estates
                new BasicTooltipViewModel(() => acreage.GetExplanations())));
 
             PlayerOwned = Estate.Owner == Hero.MainHero && !IsDisabled;
+            RetinueHint = new HintViewModel(new TextObject("{=!}Enter dialogue with your retainers. You can command and manage their party."));
+            if (PlayerOwned)
+            {
+                retinueEnabled = Estate.Retinue != null && Estate.Retinue.CurrentSettlement == Estate.EstatesData.Settlement;
+                if (!retinueEnabled)
+                    RetinueHint = new HintViewModel(new TextObject("{=!}Your estate either does not have a retinue yet or it is currently travelling. The retinue must be within the settlement so dialogue can be entered with this option."));
+            }
 
             TaskSelector = new BannerKingsSelectorVM<BKItemVM>(PlayerOwned, 0, OnTaskChange);
             TaskSelector.AddItem(new BKItemVM(EstateTask.Prodution, true, "",
@@ -157,6 +163,8 @@ namespace BannerKings.UI.Estates
             var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
             ReclaimVisible = Estate.Owner != null && Hero.MainHero == title.deJure && settlement.MapFaction == Hero.MainHero.MapFaction &&
                 Estate.Owner.MapFaction != Hero.MainHero.MapFaction;
+
+            if (Estate.Owner != null && Estate.Owner.IsNotable) BuyVisible = false;
         }
 
         private void ExecuteBuy()
@@ -166,6 +174,20 @@ namespace BannerKings.UI.Estates
                 buyAction.TakeAction();
                 RefreshValues();
             } 
+        }
+
+        private void ExecuteRetinue()
+        {
+            if (retinueEnabled)
+            {
+                EncounterManager.StartPartyEncounter(MobileParty.MainParty.Party, Estate.Retinue.Party);
+                ExecuteClose();
+            }
+        }
+
+        private void ExecuteSlaves()
+        {
+            UIHelper.ShowEstateTransferScreen(Estate);
         }
 
         private void ExecuteGrant()
@@ -257,6 +279,11 @@ namespace BannerKings.UI.Estates
 
         [DataSourceProperty]
         public string BuyText => new TextObject("{=WabTyEdr}Buy").ToString();
+        [DataSourceProperty]
+        public string RetinueText => new TextObject("{=!}Retinue").ToString();
+
+        [DataSourceProperty]
+        public string SlavesText => new TextObject("{=!}Slaves").ToString(); 
 
         [DataSourceProperty]
         public string GrantText => new TextObject("{=dugq4xHo}Grant").ToString();
@@ -359,6 +386,20 @@ namespace BannerKings.UI.Estates
                 {
                     buyHint = value;
                     OnPropertyChanged("BuyHint");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public HintViewModel RetinueHint
+        {
+            get => retinueHint;
+            set
+            {
+                if (value != retinueHint)
+                {
+                    retinueHint = value;
+                    OnPropertyChanged("RetinueHint");
                 }
             }
         }
