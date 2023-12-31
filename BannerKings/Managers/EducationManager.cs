@@ -97,8 +97,8 @@ namespace BannerKings.Managers
         {
             Educations.Remove(Hero.MainHero);
             var languages = new Dictionary<Language, float>();
-            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Cultures.Contains(Hero.MainHero.Culture)) ??
-                DefaultLanguages.Instance.Calradian;
+            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Cultures
+            .Any(c => c.StringId == Hero.MainHero.Culture.StringId)) ?? DefaultLanguages.Instance.Calradian;
 
             languages.Add(native, 1f);
             var data = new EducationData(Hero.MainHero, languages);
