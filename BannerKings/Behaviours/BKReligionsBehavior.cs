@@ -175,6 +175,11 @@ namespace BannerKings.Behaviours
             Hero capturerHero,
             ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
         {
+            if (capturerHero == null)
+            {
+                return;
+            }
+            
             if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(capturerHero, DefaultDivinities.Instance.Osric))
             {
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
