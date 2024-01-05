@@ -10,7 +10,6 @@ using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.BKModels;
-using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -111,7 +110,7 @@ namespace BannerKings.Managers
                     return SettlementCache[settlement];
                 }
 
-                return Titles.Find(x => x.Fief == settlement);
+                return Titles.Find(x => x.Fief.StringId == settlement.StringId);
             }
             catch (Exception ex)
             {
