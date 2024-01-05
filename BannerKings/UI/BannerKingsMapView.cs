@@ -45,11 +45,14 @@ namespace BannerKings.UI
             //UIManager.Instance.BKScreen.OnFinalize();
             var tuple = GetVM(id);
             Layer = new GauntletLayer(500);
-            VM = tuple.Item1;
-            Layer.LoadMovie(tuple.Item2, tuple.Item1);
-            Layer.InputRestrictions.SetInputRestrictions(false);
-            MapScreen.Instance.AddLayer(Layer);
-            ScreenManager.TrySetFocus(Layer);
+            if (tuple.Item1 != null)
+            {
+                VM = tuple.Item1;
+                Layer.LoadMovie(tuple.Item2, tuple.Item1);
+                Layer.InputRestrictions.SetInputRestrictions(false);
+                MapScreen.Instance.AddLayer(Layer);
+                ScreenManager.TrySetFocus(Layer);
+            }
         }
 
         private (BannerKingsViewModel, string) GetVM(string id)
@@ -76,8 +79,14 @@ namespace BannerKings.UI
                         title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
                     }
 
-                    return (new DemesneHierarchyVM(title.Sovereign ?? title, Clan.PlayerClan.Kingdom),
-                        "TitlesWindow");
+                    if (title != null)
+                    {
+                        return (new DemesneHierarchyVM(title.Sovereign), "TitlesWindow");
+                    } 
+                    else
+                    {
+                        return (null, "TitlesWindow");
+                    }
                 }
                 case "cultures":
                     return (new CultureTabVM(), "CultureTabWindow");

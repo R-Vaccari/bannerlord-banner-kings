@@ -22,7 +22,7 @@ namespace BannerKings.UI.Titles
         private TitleElementVM tree;
         private BannerKingsSelectorVM<KingdomSelectorItem> selector;
 
-        public DemesneHierarchyVM(FeudalTitle title, Kingdom kingdom) : base(null, false)
+        public DemesneHierarchyVM(FeudalTitle title) : base(null, false)
         {
             this.title = title;
             decisions = new MBBindingList<DecisionElement>();
