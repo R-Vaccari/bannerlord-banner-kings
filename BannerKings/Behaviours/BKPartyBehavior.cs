@@ -622,20 +622,23 @@ namespace BannerKings.Behaviours
         private bool IsTravellerParty(PartyBase party)
         {
             var value = false;
-            if (party is not {MobileParty: { }})
+            if (party is not { MobileParty: { } })
             {
                 return false;
             }
 
-            if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
+            try
             {
-                value = true;
-            }
+                if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
+                {
+                    value = true;
+                }
 
-            if (party.MobileParty.PartyComponent is not PopulationPartyComponent)
-            {
-                value = false;
-            }
+                if (party.MobileParty.PartyComponent is not PopulationPartyComponent)
+                {
+                    value = false;
+                }
+            } catch (Exception ex) { }
 
             return value;
         }
@@ -703,6 +706,11 @@ namespace BannerKings.Behaviours
         {
             var value = false;
             var party = PlayerEncounter.EncounteredParty;
+            if (!IsTravellerParty(party))
+            {
+                return value;
+            }
+
             if (party.MobileParty.PartyComponent is EstateComponent)
             {
                 value = (party.MobileParty.PartyComponent as EstateComponent).Estate.Owner == Hero.MainHero;
