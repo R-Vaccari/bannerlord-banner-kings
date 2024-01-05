@@ -61,22 +61,14 @@ namespace BannerKings.Managers.Innovations
         public InnovationType Type { get; private set; }
         public Innovation Requirement { get; private set; }
         public float RequiredProgress { get; private set; }
-       
-        public float CurrentProgress
-        {
-            get => currentProgress;
-            private set
-            {
-                currentProgress += value;
-                currentProgress = MBMath.ClampFloat(currentProgress, 0f, RequiredProgress);
-            }
-        }
+
+        public float CurrentProgress => currentProgress;
         public CultureObject Culture => culture;
         public TextObject Effects { get; private set; }
 
         public void AddProgress(float points)
         {
-            CurrentProgress += points;
+            currentProgress += points;
         }
 
         public enum InnovationType
