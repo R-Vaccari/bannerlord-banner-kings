@@ -49,7 +49,6 @@ namespace BannerKings.Components
                 (int)(estate.MaxManpower.ResultNumber * 0.5f));
                 GiveMounts(ref retinue);
                 GiveFood(ref retinue);
-                BannerKingsConfig.Instance.PopulationManager.AddParty(retinue);
                 EnterSettlementAction.ApplyForParty(retinue, origin);
                 estate.SetParty(retinue);
             }  

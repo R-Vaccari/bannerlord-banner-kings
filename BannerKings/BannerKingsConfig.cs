@@ -172,7 +172,7 @@ namespace BannerKings
             Initialize();
 
             ReligionsManager = new ReligionsManager();
-            PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
+            PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>());
             PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>());
             TitleManager = new TitleManager();
             TitleGenerator.InitializeTitles();

@@ -8,11 +8,9 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Populations.Villages;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers
@@ -38,20 +36,15 @@ namespace BannerKings.Managers
             Tenants
         }
 
-        public PopulationManager(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans)
+        public PopulationManager(Dictionary<Settlement, PopulationData> pops)
         {
             Populations = pops;
-            Caravans = caravans;
             Estates = new Dictionary<Hero, List<Estate>>();
         }
 
         [SaveableProperty(1)] private Dictionary<Settlement, PopulationData> Populations { get; set; }
 
-        [SaveableProperty(2)] private List<MobileParty> Caravans { get; set; }
-
         [SaveableProperty(3)] private Dictionary<Hero, List<Estate>> Estates { get; set; }
-
-        public MBReadOnlyList<MobileParty> AllParties => new MBReadOnlyList<MobileParty>(Caravans);
 
         public void PostInitialize()
         {
@@ -123,24 +116,6 @@ namespace BannerKings.Managers
             if (!Populations.ContainsKey(settlement))
             {
                 Populations.Add(settlement, data);
-            }
-        }
-
-        public bool IsPopulationParty(MobileParty party)
-        {
-            return Caravans.Contains(party);
-        }
-
-        public void AddParty(MobileParty party)
-        {
-            Caravans.Add(party);
-        }
-
-        public void RemoveCaravan(MobileParty party)
-        {
-            if (Caravans.Contains(party))
-            {
-                Caravans.Remove(party);
             }
         }
 

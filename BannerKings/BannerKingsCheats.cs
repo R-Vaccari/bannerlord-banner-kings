@@ -6,8 +6,6 @@ using BannerKings.Behaviours.Mercenary;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -19,47 +17,6 @@ namespace BannerKings
 {
     public static class BannerKingsCheats
     {
-        [CommandLineFunctionality.CommandLineArgumentFunction("wipe_data", "bannerkings")]
-        public static string WipeSaveData(List<string> strings)
-        {
-            var parties = from party in MobileParty.All
-                where party.StringId.Contains("raisedmilitia_") ||
-                      party.StringId.Contains("slavecaravan_") || party.StringId.Contains("travellers_")
-                select party;
-            var list = new List<MobileParty>(parties);
-            var count = 0;
-            foreach (var party in list)
-            {
-                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
-                DestroyPartyAction.Apply(null, party);
-                count++;
-            }
-
-            var civillians = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().ToList()
-                .FindAll(x => x.StringId.Contains("craftsman_") || x.StringId is "noble_empire" or "noble_vlandia" or "noble_sturgia" or "noble_aserai" or "noble_khuzait" or "noble_battania");
-
-            foreach (var party in MobileParty.All)
-            {
-                foreach (var civillian in civillians)
-                {
-                    if (party.MemberRoster != null && party.MemberRoster.Contains(civillian))
-                    {
-                        var memberCount = party.MemberRoster.GetTroopCount(civillian);
-                        party.MemberRoster.RemoveTroop(civillian, memberCount);
-                    }
-
-                    if (party.PrisonRoster != null && party.PrisonRoster.Contains(civillian))
-                    {
-                        var memberCount = party.PrisonRoster.GetTroopCount(civillian);
-                        party.PrisonRoster.RemoveTroop(civillian, memberCount);
-                    }
-                }
-            }
-
-            BannerKingsConfig.Instance.wipeData = true;
-            return $"{count} parties destroyed.";
-        }
-
         [CommandLineFunctionality.CommandLineArgumentFunction("give_title", "bannerkings")]
         public static string GiveTitle(List<string> strings)
         {

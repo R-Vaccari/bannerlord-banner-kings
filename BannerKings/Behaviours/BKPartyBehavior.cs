@@ -25,7 +25,6 @@ namespace BannerKings.Behaviours
         public override void RegisterEvents()
         {
             CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, HourlyTickParty);
-            CampaignEvents.MobilePartyDestroyed.AddNonSerializedListener(this, OnMobilePartyDestroyed);
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
@@ -76,7 +75,7 @@ namespace BannerKings.Behaviours
             var toRemove = new List<MobileParty>();
             foreach (var party in siegeEvent.BesiegedSettlement.Parties)
             {
-                if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
+                if (party.PartyComponent != null && party.PartyComponent is PopulationPartyComponent)
                 {
                     toRemove.Add(party);
                 }
@@ -85,7 +84,6 @@ namespace BannerKings.Behaviours
             foreach (var party in toRemove)
             {
                 DestroyPartyAction.Apply(null, party);
-                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
             }
         }
 
@@ -125,7 +123,6 @@ namespace BannerKings.Behaviours
             if (bkComponent.HomeSettlement == null)
             {
                 DestroyPartyAction.Apply(null, party);
-                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
                 return;
             }
 
@@ -292,7 +289,6 @@ namespace BannerKings.Behaviours
                 }
 
                 DestroyPartyAction.Apply(null, party);
-                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
             }
         }
 
@@ -358,7 +354,6 @@ namespace BannerKings.Behaviours
                 }
 
                 DestroyPartyAction.Apply(null, party);
-                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
             }
         }
 
@@ -393,15 +388,6 @@ namespace BannerKings.Behaviours
                         }
                     }
                 }
-            }
-        }
-
-        private void OnMobilePartyDestroyed(MobileParty mobileParty, PartyBase destroyerParty)
-        {
-            if (mobileParty != null && BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(mobileParty))
-            {
-                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(mobileParty);
             }
         }
 
@@ -629,7 +615,7 @@ namespace BannerKings.Behaviours
 
             try
             {
-                if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
+                if (party.MobileParty.PartyComponent != null && party.MobileParty.PartyComponent is PopulationPartyComponent)
                 {
                     value = true;
                 }
