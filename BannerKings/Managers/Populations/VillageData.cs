@@ -15,10 +15,10 @@ namespace BannerKings.Managers.Populations
         public VillageData(Village village)
         {
             this.village = village;
-            buildings = new List<VillageBuilding>();
+            buildings = new List<Building>(10);
             foreach (var type in DefaultVillageBuildings.VillageBuildings(village))
             {
-                buildings.Add(new VillageBuilding(type, village.Bound.Town, village));
+                buildings.Add(new Building(type, village.Bound.Town));
             }
 
             inProgress = new Queue<Building>();
@@ -26,32 +26,34 @@ namespace BannerKings.Managers.Populations
         }
 
         [SaveableProperty(1)] private Village village { get; set; }
-        [SaveableProperty(2)] private List<VillageBuilding> buildings { get; set; }
+        [SaveableProperty(2)] private List<Building> buildings { get; set; }
         [SaveableProperty(3)] public int LastPayment { get; set; }
         [SaveableProperty(5)] private Queue<Building> inProgress { get; set; }
 
         public Village Village => village;
 
-        public List<VillageBuilding> Buildings => buildings;
+        public List<Building> Buildings => buildings;
 
         public ExplainedNumber ProductionsExplained => BannerKingsConfig.Instance.VillageProductionModel.CalculateProductionsExplained(village);
 
-        public VillageBuilding CurrentBuilding
+        public Building CurrentBuilding
         {
             get
             {
-                VillageBuilding building = null;
+                Building building = null;
 
                 if (inProgress != null && !inProgress.IsEmpty())
                 {
-                    building = (VillageBuilding?) inProgress.Peek();
+                    var peek = inProgress.Peek();
+                    if (peek == null || !peek.BuildingType.IsInitialized) inProgress.Dequeue();
+                    else building = peek;
                 }
 
                 return building ?? CurrentDefault;
             }
         }
 
-        public VillageBuilding CurrentDefault
+        public Building CurrentDefault
         {
             get
             {
@@ -106,40 +108,21 @@ namespace BannerKings.Managers.Populations
 
         public void ReInitializeBuildings()
         {
-            foreach (var building in buildings)
-            {
-                building.PostInitialize();
-                building.village = Village;
-            }
-
-            foreach (VillageBuilding building in inProgress)
-            {
-                building.PostInitialize();
-                building.village = Village;
-            }
+            if (buildings == null) buildings = new List<Building>(10);
+            foreach (var type in DefaultVillageBuildings.VillageBuildings(village))
+                if (buildings.FirstOrDefault(x => x.BuildingType.StringId == type.StringId) == null)
+                    buildings.Add(new Building(type, village.Bound.Town));
         }
 
         internal override void Update(PopulationData data)
         {
             foreach (var type in DefaultVillageBuildings.VillageBuildings(village))
-            {
                 if (buildings.FirstOrDefault(x => x.BuildingType.StringId == type.StringId) == null)
-                {
-                    buildings.Add(new VillageBuilding(type, village.Bound.Town, village));
-                }
-            }
+                    buildings.Add(new Building(type, village.Bound.Town));
 
             var current = CurrentBuilding;
             if (current != null && BuildingsInProgress.Any())
             {
-                inProgress.Dequeue();
-                current = new VillageBuilding(current.BuildingType,
-                    Settlement.All.First(x => x.StringId == Village.TradeBound.StringId).Town,
-                    Village,
-                    current.BuildingProgress,
-                    current.CurrentLevel);
-                inProgress.Enqueue(current);
-
                 if (BuildingsInProgress.Peek().BuildingType.StringId == current.BuildingType.StringId)
                 {
                     current.BuildingProgress += Construction;

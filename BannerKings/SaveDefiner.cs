@@ -97,7 +97,6 @@ namespace BannerKings
             AddEnumDefinition(typeof(CriminalPolicy), 18);
             AddClassDefinition(typeof(TournamentData), 19);
             AddClassDefinition(typeof(VillageData), 20);
-            AddClassDefinition(typeof(VillageBuilding), 21);
             AddClassDefinition(typeof(CultureDataClass), 22);
             AddClassDefinition(typeof(FeudalTitle), 23);
             AddClassDefinition(typeof(FeudalContract), 24);
@@ -228,7 +227,6 @@ namespace BannerKings
         {
             ConstructContainerDefinition(typeof(Dictionary<FeudalTitle, Kingdom>));
             ConstructContainerDefinition(typeof(List<PopulationClass>));
-            ConstructContainerDefinition(typeof(List<VillageBuilding>));
             ConstructContainerDefinition(typeof(List<CultureDataClass>));
             ConstructContainerDefinition(typeof(Dictionary<Settlement, PopulationData>));
             ConstructContainerDefinition(typeof(List<BannerKingsDecision>));
