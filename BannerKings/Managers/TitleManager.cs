@@ -110,7 +110,7 @@ namespace BannerKings.Managers
                     return SettlementCache[settlement];
                 }
 
-                return Titles.Find(x => x.Fief.StringId == settlement.StringId);
+                return Titles.Find(x => x.Fief != null && x.Fief.StringId == settlement.StringId);
             }
             catch (Exception ex)
             {
