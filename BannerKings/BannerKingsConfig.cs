@@ -28,7 +28,6 @@ using BannerKings.Managers.Traits;
 using BannerKings.Models.BKModels;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 
@@ -48,7 +47,7 @@ namespace BannerKings
 
         private List<ITypeInitializer> modInitializers = new List<ITypeInitializer>();
 
-        public bool FirstUse { get; private set; } = true;
+        public bool FirstUse { get; internal set; } = true;
         public string TitlesGeneratorPath { get; set; } = BasePath.Name + "Modules/BannerKings/ModuleData/titles.xml";
 
         public AIBehavior AI = new();

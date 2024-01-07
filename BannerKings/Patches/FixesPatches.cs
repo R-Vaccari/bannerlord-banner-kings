@@ -1,6 +1,8 @@
-﻿using BannerKings.Managers.Items;
+﻿using BannerKings.Behaviours;
+using BannerKings.Managers.Items;
 using HarmonyLib;
 using Helpers;
+using SandBox.View.Map;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -36,6 +38,19 @@ namespace BannerKings.Patches
                     return false;
                 }
 
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(MapScreen))]
+        internal class MapScreenPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("OnExitToMainMenu")]
+            private static bool OnExitToMainMenu()
+            {
+                BKManagerBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKManagerBehavior>();
+                behavior.NullManagers();
                 return true;
             }
         }
