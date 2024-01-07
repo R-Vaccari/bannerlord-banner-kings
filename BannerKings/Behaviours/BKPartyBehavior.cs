@@ -4,9 +4,11 @@ using System.Linq;
 using BannerKings.Components;
 using BannerKings.Managers.Populations;
 using BannerKings.Settings;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
@@ -96,6 +98,82 @@ namespace BannerKings.Behaviours
 
             VillagersCastleTick(party);
             AddCustomPartyBehaviors(party);
+            GoBuyFood(party);
+        }
+
+        private void GoBuyFood(MobileParty lordParty)
+        {
+            if (!lordParty.IsLordParty || lordParty == MobileParty.MainParty) return;
+
+            if (lordParty.Army != null || lordParty.MapEvent != null) return;
+
+            if (lordParty.Ai.DefaultBehavior != AiBehavior.PatrolAroundPoint) return;
+
+            if (TaleWorlds.CampaignSystem.Campaign.Current.Models.MobilePartyFoodConsumptionModel.DoesPartyConsumeFood(lordParty) &&
+                lordParty.TotalFoodAtInventory < (int)(MathF.Abs(lordParty.FoodChange * 5f)))
+            {
+                Settlement settlement = SettlementHelper.FindNearestSettlement((Settlement settlement) =>
+                {
+                    return (settlement.Town != null || settlement.IsVillage) && settlement.MapFaction != null &&
+                    !settlement.MapFaction.IsAtWarWith(lordParty.MapFaction) && settlement.ItemRoster.TotalFood > 0;
+                },
+                lordParty);
+                if (settlement != null) lordParty.Ai.SetMoveGoToSettlement(settlement);
+            }
+        }
+
+        private void TryBuyingFood(MobileParty mobileParty, Settlement settlement)
+        {
+            if (TaleWorlds.CampaignSystem.Campaign.Current.GameStarted && mobileParty.LeaderHero != null && settlement.IsCastle && 
+                TaleWorlds.CampaignSystem.Campaign.Current.Models.MobilePartyFoodConsumptionModel.DoesPartyConsumeFood(mobileParty) && 
+                (mobileParty.Army == null || mobileParty.Army.LeaderParty == mobileParty) && 
+                (settlement.IsVillage || (mobileParty.MapFaction != null && !mobileParty.MapFaction.IsAtWarWith(settlement.MapFaction))) && 
+                settlement.ItemRoster.TotalFood > 0)
+            {
+                PartyFoodBuyingModel partyFoodBuyingModel = TaleWorlds.CampaignSystem.Campaign.Current.Models.PartyFoodBuyingModel;
+                float minimumDaysToLast = settlement.IsVillage ? partyFoodBuyingModel.MinimumDaysFoodToLastWhileBuyingFoodFromVillage : partyFoodBuyingModel.MinimumDaysFoodToLastWhileBuyingFoodFromTown;
+                if (mobileParty.Army == null)
+                {
+                    this.BuyFoodInternal(mobileParty, settlement, this.CalculateFoodCountToBuy(mobileParty, minimumDaysToLast));
+                    return;
+                }
+            }
+        }
+
+        private void BuyFoodInternal(MobileParty mobileParty, Settlement settlement, int numberOfFoodItemsNeededToBuy)
+        {
+            if (!mobileParty.IsMainParty)
+            {
+                for (int i = 0; i < numberOfFoodItemsNeededToBuy; i++)
+                {
+                    ItemRosterElement subject;
+                    float num;
+                    TaleWorlds.CampaignSystem.Campaign.Current.Models.PartyFoodBuyingModel.FindItemToBuy(mobileParty, settlement, out subject, out num);
+                    if (subject.EquipmentElement.Item == null)
+                    {
+                        break;
+                    }
+                    if (num <= (float)mobileParty.LeaderHero.Gold)
+                    {
+                        SellItemsAction.Apply(settlement.Party, mobileParty.Party, subject, 1, null);
+                    }
+                    if (subject.EquipmentElement.Item.HasHorseComponent && subject.EquipmentElement.Item.HorseComponent.IsLiveStock)
+                    {
+                        i += subject.EquipmentElement.Item.HorseComponent.MeatCount - 1;
+                    }
+                }
+            }
+        }
+
+        private int CalculateFoodCountToBuy(MobileParty mobileParty, float minimumDaysToLast)
+        {
+            float num = (float)mobileParty.TotalFoodAtInventory / -mobileParty.FoodChange;
+            float num2 = minimumDaysToLast - num;
+            if (num2 > 0f)
+            {
+                return (int)(-mobileParty.FoodChange * num2);
+            }
+            return 0;
         }
 
         private void VillagersCastleTick(MobileParty villagerParty)
@@ -234,12 +312,13 @@ namespace BannerKings.Behaviours
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (party == null)
+            if (party == null || party == MobileParty.MainParty)
             {
                 return;
             }
 
-           
+            if (party.IsLordParty) TryBuyingFood(party, target);
+
             AddRealisticIncome(party, target);
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target);
             if (data == null)
