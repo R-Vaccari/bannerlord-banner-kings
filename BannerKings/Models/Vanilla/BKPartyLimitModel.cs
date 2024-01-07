@@ -2,6 +2,7 @@ using BannerKings.Behaviours;
 using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.Components;
 using BannerKings.Managers.CampaignStart;
+using BannerKings.Managers.Cultures;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using BannerKings.Settings;
@@ -97,6 +98,14 @@ namespace BannerKings.Models.Vanilla
                             supplies.ShieldsNeed);
                         baseResult.Add(MathF.Clamp(shields, minValue, 0), new TextObject("{=ut6PVJ40}Lacking shield supplies"));
                     }
+                }
+
+                var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(leader);
+                if (title != null)
+                {
+                    float type = (float)title.TitleType + 1;
+                    baseResult.AddFactor(0.4f / type, new TextObject("{=!}Highest title of rank {RANK}")
+                        .SetTextVariable("RANK", DefaultTitleNames.Instance.GetTitleName(leader.Culture, title.TitleType).Name));
                 }
             }
 
