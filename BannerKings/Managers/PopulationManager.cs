@@ -43,8 +43,7 @@ namespace BannerKings.Managers
         }
 
         [SaveableProperty(1)] private Dictionary<Settlement, PopulationData> Populations { get; set; }
-
-        [SaveableProperty(3)] private Dictionary<Hero, List<Estate>> Estates { get; set; }
+        private Dictionary<Hero, List<Estate>> Estates { get; set; }
 
         public void PostInitialize()
         {
