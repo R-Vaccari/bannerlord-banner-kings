@@ -29,6 +29,7 @@ namespace BannerKings.Managers.Populations
         [SaveableProperty(2)] private List<Building> buildings { get; set; }
         [SaveableProperty(3)] public int LastPayment { get; set; }
         [SaveableProperty(5)] private Queue<Building> inProgress { get; set; }
+        [SaveableProperty(6)] private bool BuildingsSet { get; set; }
 
         public Village Village => village;
 
@@ -90,6 +91,19 @@ namespace BannerKings.Managers.Populations
             }
         }
 
+        private void GiveBuildings()
+        {
+            if (!buildings.IsEmpty())
+            {
+                int buildingsToGive = (int)(Village.Hearth / 200f);
+                for (int i = 0; i < buildingsToGive; i++)
+                    buildings.GetRandomElementWithPredicate(x => x.BuildingType.BuildingLocation != BuildingLocation.Daily)
+                        .LevelUp();           
+
+                BuildingsSet = true;
+            }
+        }
+
         public int GetBuildingLevel(BuildingType type)
         {
             if (type == null)
@@ -109,21 +123,49 @@ namespace BannerKings.Managers.Populations
         public void ReInitializeBuildings()
         {
             if (buildings == null) buildings = new List<Building>(10);
-            foreach (var type in DefaultVillageBuildings.VillageBuildings(village))
-                if (buildings.FirstOrDefault(x => x.BuildingType.StringId == type.StringId) == null)
-                    buildings.Add(new Building(type, village.Bound.Town));
+
+            foreach (var building in buildings)
+            {
+                var type = DefaultVillageBuildings.Instance.GetById(building.BuildingType);
+                building.BuildingType.Initialize(type.Name,
+                    type.Explanation,
+                    new int[3]
+                    {
+                        type.GetProductionCost(0),
+                        type.GetProductionCost(1),
+                        type.GetProductionCost(2)
+                    },
+                    type.BuildingLocation,
+                    new System.Tuple<BuildingEffectEnum, float, float, float>[] {});
+            }
+
+            if (village.Owner != null)
+            {
+                foreach (var type in DefaultVillageBuildings.VillageBuildings(village))
+                    if (buildings.FirstOrDefault(x => x.BuildingType.StringId == type.StringId) == null)
+                        buildings.Add(new Building(type, village.Bound.Town));
+
+                if (!BuildingsSet) GiveBuildings();
+            }
         }
 
         internal override void Update(PopulationData data)
         {
-            foreach (var type in DefaultVillageBuildings.VillageBuildings(village))
-                if (buildings.FirstOrDefault(x => x.BuildingType.StringId == type.StringId) == null)
-                    buildings.Add(new Building(type, village.Bound.Town));
+            if (village.Owner != null)
+            {
+                foreach (var type in DefaultVillageBuildings.VillageBuildings(village))
+                    if (buildings.FirstOrDefault(x => x.BuildingType.StringId == type.StringId) == null)
+                        buildings.Add(new Building(type, village.Bound.Town));
+
+                if (!BuildingsSet) GiveBuildings();
+            }
 
             var current = CurrentBuilding;
             if (current != null && BuildingsInProgress.Any())
             {
-                if (BuildingsInProgress.Peek().BuildingType.StringId == current.BuildingType.StringId)
+                var inProgress = BuildingsInProgress.Peek();
+                if (inProgress == null) BuildingsInProgress.Dequeue();
+                else if (inProgress.BuildingType.StringId == current.BuildingType.StringId)
                 {
                     current.BuildingProgress += Construction;
                     if (current.GetConstructionCost() <= current.BuildingProgress)
