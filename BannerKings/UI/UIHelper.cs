@@ -685,16 +685,25 @@ namespace BannerKings.UI
               TooltipProperty.TooltipPropertyFlags.MultiLine));
 
             list.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
-            list.Add(new TooltipProperty(new TextObject("{=ex269b0j}Wood:").ToString(), 
-                MBRandom.RoundRandomized(supplies.WoodNeed).ToString(), 
+            list.Add(new TooltipProperty(new TextObject("{=ex269b0j}Wood:").ToString(),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.WoodNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetWoodCurrentNeed().ResultNumber))
+                .ToString(), 
                 0));
+
             list.Add(new TooltipProperty(new TextObject("{=yw4KTjMj}Textiles:").ToString(),
-                MBRandom.RoundRandomized(supplies.ClothNeed).ToString(),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.ClothNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetTextileCurrentNeed().ResultNumber))
+                .ToString(),
                 0));
             list.Add(new TooltipProperty(new TextObject("{=1y4e5t97}Alcohol:").ToString(),
-               MBRandom.RoundRandomized(supplies.AlcoholNeed).ToString(),
+               new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.AlcoholNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetAlcoholCurrentNeed().ResultNumber))
+                .ToString(),
                0));
-
             
             list.Add(new TooltipProperty(new TextObject("{=xcEes2qY}Animal Products:").ToString(),
                 new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
@@ -718,31 +727,58 @@ namespace BannerKings.UI
             list.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
 
             list.Add(new TooltipProperty(new TextObject("{=j8R1v8fv}Weapons:").ToString(),
-                supplies.GetWeaponsCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.WeaponsNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetWeaponsCurrentNeed().ResultNumber))
+                .ToString(),
                0));
             list.Add(new TooltipProperty(new TextObject("{=x4KhXV25}Ammunition:").ToString(),
-                supplies.GetArrowsCurrentNeed().ResultNumber.ToString("0.00"),
+               new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.ArrowsNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetArrowsCurrentNeed().ResultNumber))
+                .ToString(),
                 0));
             list.Add(new TooltipProperty(new TextObject("{=GgdSMucS}Mounts:").ToString(),
-                supplies.GetMountsCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.HorsesNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetMountsCurrentNeed().ResultNumber))
+                .ToString(),
               0));
             list.Add(new TooltipProperty(new TextObject("{=JC5JZRjY}Shields:").ToString(),
-                supplies.GetShieldsCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.ShieldsNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetShieldsCurrentNeed().ResultNumber))
+                .ToString(),
               0));
             list.Add(new TooltipProperty(new TextObject("{=1y4e5t97}Alcohol:").ToString(),
-                supplies.GetAlcoholCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.AlcoholNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetAlcoholCurrentNeed().ResultNumber))
+                .ToString(),
                0));
             list.Add(new TooltipProperty(new TextObject("{=xcEes2qY}Animal Products:").ToString(),
-                supplies.GetAnimalProductsCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.AnimalProductsNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetAnimalProductsCurrentNeed().ResultNumber))
+                .ToString(),
                 0));
             list.Add(new TooltipProperty(new TextObject("{=ex269b0j}Wood:").ToString(),
-                supplies.GetWoodCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.WoodNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetWoodCurrentNeed().ResultNumber))
+                .ToString(),
               0));
             list.Add(new TooltipProperty(new TextObject("{=yw4KTjMj}Textiles:").ToString(),
-                supplies.GetTextileCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.ClothNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetTextileCurrentNeed().ResultNumber))
+                .ToString(),
                 0));
             list.Add(new TooltipProperty(new TextObject("{=9C4tmyos}Tools:").ToString(),
-                supplies.GetToolsCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.ToolsNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetToolsCurrentNeed().ResultNumber))
+                .ToString(),
                 0));
         }
 
