@@ -64,6 +64,10 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public float BaseWage { get; set; } = 1f;
 
+        [SettingPropertyFloatingInteger("{=!}Clan Renown Scaling", minValue: 1f, maxValue: 10f, "#0%", RequireRestart = false, HintText = "{=!}The scale of renown points required for clans to level up in tier. Vanilla is 100%. Default: 300%.")]
+        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        public float ClanRenown { get; set; } = 3f;
+
         [SettingPropertyFloatingInteger("{=mSLQa207}Party Size Scaling", minValue: 1f, maxValue: 3f, "#0%", RequireRestart = false, HintText = "{=RszZwN4X}The scale of party sizes on the map. Applies in half to parties of heroes not leading their clan. Vanilla is 100%. Default: 200%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float PartySizes { get; set; } = 2f;
