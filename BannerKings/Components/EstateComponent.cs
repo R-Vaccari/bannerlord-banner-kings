@@ -68,6 +68,11 @@ namespace BannerKings.Components
                 if (TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(Party.MobileParty, HomeSettlement) <= 1f)
                     EnterSettlementAction.ApplyForParty(Party.MobileParty, HomeSettlement);
             }
+
+            if (MobileParty.CurrentSettlement == null && Behavior != AiBehavior.EscortParty) 
+            {
+                MobileParty.Ai.SetMoveGoToSettlement(HomeSettlement);
+            }
         }
     }
 }
