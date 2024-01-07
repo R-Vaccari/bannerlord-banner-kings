@@ -111,10 +111,13 @@ namespace BannerKings.Managers.Populations
                 return 0;
             }
 
-            Building building = buildings.FirstOrDefault(x => x.BuildingType.StringId == type.StringId);
-            if (building != null)
+            if (buildings != null)
             {
-                return building.CurrentLevel;
+                Building building = buildings.FirstOrDefault(x => x.BuildingType.StringId == type.StringId);
+                if (building != null)
+                {
+                    return building.CurrentLevel;
+                }
             }
 
             return 0;
