@@ -150,6 +150,7 @@ namespace BannerKings.Managers.Populations.Estates
         {
             if (TroopRoster == null) TroopRoster = TroopRoster.CreateDummyTroopRoster();
             if (Retinue == null) EstateComponent.CreateRetinue(this);
+            BannerKingsConfig.Instance.PopulationManager.AddEstate(this);
         }
 
         public void TakeRetinue(MobileParty ai)
