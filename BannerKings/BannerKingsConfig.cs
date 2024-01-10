@@ -3,6 +3,7 @@ using System.Linq;
 using BannerKings.Behaviours.Criminality;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Campaign.Economy.Markets;
 using BannerKings.Managers;
 using BannerKings.Managers.AI;
 using BannerKings.Managers.Court;
@@ -160,6 +161,7 @@ namespace BannerKings
             DefaultGovernments.Instance.Initialize();
             DefaultContractAspects.Instance.Initialize();
             DefaultShippingLanes.Instance.Initialize();
+            DefaultMarketGroups.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();

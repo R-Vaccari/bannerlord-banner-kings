@@ -26,6 +26,7 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using BannerKings.Managers.Innovations;
 using BannerKings.Campaign;
 using TaleWorlds.CampaignSystem.Inventory;
+using BannerKings.Campaign.Economy.Markets;
 
 namespace BannerKings.Patches
 {
@@ -801,15 +802,25 @@ namespace BannerKings.Patches
             [HarmonyPatch("IsItemPreferredForTown", MethodType.Normal)]
             public static void ItemPreferredPostfix(ref bool __result, ItemObject item, Town townComponent)
             {
-                if (!__result) return;
-
-                InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(townComponent.Settlement.Culture);
-                if (data != null)
+                if (!__result && item.Culture != null)
                 {
-                    if (item.HasWeaponComponent && (item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Crossbow ||
-                                       item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Bolt))
+                    MarketGroup market = DefaultMarketGroups.Instance.GetMarket(townComponent.Culture);
+                    if (market != null && MBRandom.RandomFloat < market.GetSpawn((CultureObject)item.Culture))
                     {
-                        __result = data.HasFinishedInnovation(DefaultInnovations.Instance.Crossbows);
+                        __result = true;
+                    }
+                }
+
+                if (__result)
+                {
+                    InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(townComponent.Settlement.Culture);
+                    if (data != null)
+                    {
+                        if (item.HasWeaponComponent && (item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Crossbow ||
+                                           item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Bolt))
+                        {
+                            __result = data.HasFinishedInnovation(DefaultInnovations.Instance.Crossbows);
+                        }
                     }
                 }
             }
