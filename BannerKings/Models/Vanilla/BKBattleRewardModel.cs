@@ -1,14 +1,28 @@
 ﻿using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
+using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.Core;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKBattleRewardModel : DefaultBattleRewardModel
     {
+        public override EquipmentElement GetLootedItemFromTroop(CharacterObject character, float targetValue)
+        {
+            EquipmentElement result = base.GetLootedItemFromTroop(character, targetValue);
+            float scale = BannerKingsSettings.Instance.LootScale;
+            if (!result.Equals(default(EquipmentElement)) && scale > MBRandom.RandomFloat)
+            {
+                result = default(EquipmentElement);
+            }
+
+            return result;
+        }
+
         public override ExplainedNumber CalculateInfluenceGain(PartyBase party, float influenceValueOfBattle, float contributionShare)
         {
             ExplainedNumber result = base.CalculateInfluenceGain(party, influenceValueOfBattle, contributionShare);
