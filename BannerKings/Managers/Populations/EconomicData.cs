@@ -1,6 +1,5 @@
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Managers.Institutions.Guilds;
-using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -28,12 +27,10 @@ namespace BannerKings.Managers.Populations
         [SaveableProperty(2)] private float[] satisfactions { get; set; }
 
         [SaveableProperty(3)] private float stateSlaves { get; set; }
+        [SaveableProperty(4)] public int ConsumedValue { get; set; }
 
         public Guild Guild => guild;
-
-        public float Corruption => 1f;
-
-        public float Tariff => new BKTaxModel().GetTownTaxRatio(settlement.Town);
+        public float Tariff => BannerKingsConfig.Instance.TaxModel.GetTownTaxRatio(settlement.Town);
 
         public int CaravanFee(MobileParty caravan)
         {
