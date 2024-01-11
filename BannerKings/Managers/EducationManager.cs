@@ -47,7 +47,7 @@ namespace BannerKings.Managers
             if (startingLanguages != null)
             {
                 var startData = new EducationData(hero, startingLanguages);
-                Educations.Add(hero, startData);
+                Educations[hero] = startData;
                 return startData;
             }
 
@@ -77,7 +77,7 @@ namespace BannerKings.Managers
             }
 
             var data = new EducationData(hero, languages);
-            Educations.Add(hero, data);
+            Educations[hero] = data;
 
             return data;
         }
