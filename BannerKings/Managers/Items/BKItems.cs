@@ -50,7 +50,8 @@ namespace BannerKings.Managers.Items
         public ItemObject WhaleMeat { get; private set; }
         public ItemObject Carpet { get; private set; }
         public ItemObject PurpleDye { get; private set; }
-
+        public ItemObject Egg { get; private set; }
+        
         public override IEnumerable<ItemObject> All
         {
             get
@@ -83,11 +84,17 @@ namespace BannerKings.Managers.Items
                 yield return WhaleMeat;
                 yield return PurpleDye;
                 yield return Spice;
+                yield return Egg;
             }
         }
 
         public override void Initialize()
         {
+            Egg = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("Egg"));
+            InitializeTradeGood(PurpleDye,
+                new TextObject("{=!}Egg{@Plural}baskets of eggs{\\@}"), "kitchen_food_egg",
+                BKItemCategories.Instance.Eggs, 500, 10f, ItemObject.ItemTypeEnum.Goods, true);
+
             PurpleDye = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("PurpleDye"));
             InitializeTradeGood(PurpleDye,
                 new TextObject("{=oQAeHzY3}Purple Dye{@Plural}jars of purple dye{\\@}"), "lib_inkwell",

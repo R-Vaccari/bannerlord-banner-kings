@@ -21,11 +21,15 @@ namespace BannerKings.Managers.Items
         public ItemCategory Papyrus { get; private set; }
         public ItemCategory Ink { get; private set; }
         public ItemCategory Dyes { get; private set; }
+        public ItemCategory Eggs { get; private set; }
 
         public override IEnumerable<ItemCategory> All => throw new NotImplementedException();
 
         public override void Initialize()
         {
+            Eggs = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("Eggs"));
+            Eggs.InitializeObject(true, 25, 0, ItemCategory.Property.BonusToFoodStores);
+
             Dyes = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("Dyes"));
             Dyes.InitializeObject(true, 5, 10, ItemCategory.Property.BonusToProsperity);
 
