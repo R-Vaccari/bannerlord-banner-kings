@@ -2,7 +2,7 @@ using BannerKings.Behaviours;
 using BannerKings.Extensions;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Court;
-using BannerKings.Managers.Institutions.Religions.Doctrines;
+using BannerKings.Managers.Cultures;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
@@ -12,8 +12,8 @@ using BannerKings.Models.BKModels;
 using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
@@ -21,15 +21,23 @@ using TaxType = BannerKings.Managers.Policies.BKTaxPolicy.TaxType;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKTaxModel : DefaultSettlementTaxModel
+    public class BKTaxModel : ITaxModel
     {
-        public static readonly float SERF_OUTPUT = 0.2f;
-        public static readonly float TENANT_OUTPUT = 0.17f;
+        public override float NobleTaxOutput => 1.2f;
 
-        public float GetNobleOutput(FeudalTitle title)
+        public override float CraftsmanTaxOutput => 0.3f;
+
+        public override float TenantTaxOutput => 0.12f;
+
+        public override float SerfTaxOutput => 0.07f;
+
+        public override float SlaveTaxOutput => 0.10f;
+        public override float SettlementCommissionRateTown => 0.1f;
+
+        public override float GetNobleTaxRate(FeudalTitle title, PopulationData data, BKTaxPolicy policy)
         {
-            float result = 2.2f;
-
+            float result = NobleTaxOutput;
+            float nobles = data.GetTypeCount(PopType.Nobles);
             if (title != null)
             {
                 if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesTaxDuties))
@@ -42,13 +50,23 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            return result;
+            switch (policy.Policy)
+            {
+                case TaxType.Low:
+                    result *= 0.85f;
+                    break;
+                case TaxType.High:
+                    result *= 1.15f;
+                    break;
+            }
+
+            return nobles * result * BannerKingsSettings.Instance.TaxIncome;
         }
 
-        public float GetCraftsmenOutput(FeudalTitle title)
+        public override float GetCraftsmenTaxRate(FeudalTitle title, PopulationData data, BKTaxPolicy policy)
         {
-            float result = 0.8f;
-
+            float result = CraftsmanTaxOutput;
+            float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             if (title != null)
             {
                 if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenTaxDuties))
@@ -61,13 +79,23 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            return result;
+            switch (policy.Policy)
+            {
+                case TaxType.Low:
+                    result *= 0.85f;
+                    break;
+                case TaxType.High:
+                    result *= 1.15f;
+                    break;
+            }
+
+            return craftsmen * result * BannerKingsSettings.Instance.TaxIncome * data.EconomicData.Mercantilism.ResultNumber;
         }
 
-        public float GetSlaveOutput(FeudalTitle title)
+        public override float GetSlaveTaxRate(FeudalTitle title, PopulationData data, BKTaxPolicy policy)
         {
-            float result = 0.24f;
-
+            float result = SlaveTaxOutput;
+            float slaves = data.GetTypeCount(PopType.Slaves);
             if (title != null)
             {
                 if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesDomesticDuties))
@@ -76,7 +104,68 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            return result;
+            switch (policy.Policy)
+            {
+                case TaxType.Low:
+                    result *= 0.85f;
+                    break;
+                case TaxType.High:
+                    result *= 1.15f;
+                    break;
+            }
+
+            var taxSlaves = BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(data.Settlement, "decision_slaves_tax");
+            return slaves * result * BannerKingsSettings.Instance.TaxIncome * (taxSlaves ? 1f : 1f - data.EconomicData.StateSlaves);
+        }
+
+        public override float GetTenantTaxRate(FeudalTitle title, PopulationData data, BKTaxPolicy policy)
+        {
+            float result = TenantTaxOutput;
+            float tenants = data.GetTypeCount(PopType.Tenants);
+            if (title != null)
+            {
+                if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesDomesticDuties))
+                {
+                    result *= 1.15f;
+                }
+            }
+
+            switch (policy.Policy)
+            {
+                case TaxType.Low:
+                    result *= 0.85f;
+                    break;
+                case TaxType.High:
+                    result *= 1.15f;
+                    break;
+            }
+
+            return tenants * result * BannerKingsSettings.Instance.TaxIncome;
+        }
+
+        public override float GetSerfTaxRate(FeudalTitle title, PopulationData data, BKTaxPolicy policy)
+        {
+            float result = SerfTaxOutput;
+            float serfs = data.GetTypeCount(PopType.Serfs);
+            if (title != null)
+            {
+                if (title.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesDomesticDuties))
+                {
+                    result *= 1.15f;
+                }
+            }
+
+            switch (policy.Policy)
+            {
+                case TaxType.Low:
+                    result *= 0.85f;
+                    break;
+                case TaxType.High:
+                    result *= 1.15f;
+                    break;
+            }
+
+            return serfs * result * BannerKingsSettings.Instance.TaxIncome;
         }
 
         public override ExplainedNumber CalculateTownTax(Town town, bool includeDescriptions = false)
@@ -88,60 +177,37 @@ namespace BannerKings.Models.Vanilla
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 if (data != null)
                 {
-                    baseResult.LimitMin(-200000f);
-                    baseResult.LimitMax(200000f);
-                    var taxSlaves =
-                        BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_slaves_tax");
-
-                    float nobles = data.GetTypeCount(PopType.Nobles);
-                    float craftsmen = data.GetTypeCount(PopType.Craftsmen);
-                    float serfs = data.GetTypeCount(PopType.Serfs);
-                    float slaves = data.GetTypeCount(PopType.Slaves);
-                    float tenants = data.GetTypeCount(PopType.Tenants);
-
-                    if (craftsmen > 0)
-                    {
-                        craftsmen *= 1f - data.EconomicData.Mercantilism.ResultNumber;
-                    }
-
-                    if (slaves > 0)
-                    {
-                        slaves *= taxSlaves ? 1f : 1f - data.EconomicData.StateSlaves;
-                    }
-
                     var title = BannerKingsConfig.Instance.TitleManager.GetTitle(town.Settlement);
+                    var taxType = (BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax");
+                    baseResult.Add(GetNobleTaxRate(title, data, taxType), new TextObject("{=!}{CLASS} taxes")
+                        .SetTextVariable("CLASS", DefaultPopulationNames.Instance.GetPopulationName(town.Culture, PopType.Nobles).Name));
 
-                    if (nobles > 0f)
+                    baseResult.Add(GetCraftsmenTaxRate(title, data, taxType), new TextObject("{=!}{CLASS} taxes")
+                        .SetTextVariable("CLASS", DefaultPopulationNames.Instance.GetPopulationName(town.Culture, PopType.Craftsmen).Name));
+
+                    baseResult.Add(GetTenantTaxRate(title, data, taxType), new TextObject("{=!}{CLASS} taxes")
+                        .SetTextVariable("CLASS", DefaultPopulationNames.Instance.GetPopulationName(town.Culture, PopType.Tenants).Name));
+                    
+                    baseResult.Add(GetSerfTaxRate(title, data, taxType), new TextObject("{=!}{CLASS} taxes")
+                        .SetTextVariable("CLASS", DefaultPopulationNames.Instance.GetPopulationName(town.Culture, PopType.Serfs).Name));
+
+                    baseResult.Add(GetSlaveTaxRate(title, data, taxType),new TextObject("{=!}{CLASS} taxes")
+                        .SetTextVariable("CLASS", DefaultPopulationNames.Instance.GetPopulationName(town.Culture, PopType.Slaves).Name));
+
+                    foreach (Workshop wk in town.Workshops)
                     {
-                        baseResult.Add(MBMath.ClampFloat(nobles * GetNobleOutput(title), 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
-                            new TextObject("{=5mCY3JCP}{CLASS} output")
-                            .SetTextVariable("CLASS", new TextObject("{=pop_class_nobles}Nobles")));
+                        if (wk.Owner != town.OwnerClan.Leader)
+                        {
+                            baseResult.Add(BannerKingsConfig.Instance.ClanFinanceModel.GetWorkshopTaxes(wk),
+                                new TextObject("{=!}Taxes from {WORKSHOP} ({OWNER})")
+                                .SetTextVariable("WORKSHOP", wk.Name)
+                                .SetTextVariable("OWNER", wk.Owner.Name));
+                        }
                     }
 
-                    if (craftsmen > 0f)
-                    {
-                        baseResult.Add(MBMath.ClampFloat(craftsmen * GetCraftsmenOutput(title), 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
-                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("Craftsmen")));
-                    }
-
-                    if (serfs > 0f)
-                    {
-                        baseResult.Add(MBMath.ClampFloat(serfs * SERF_OUTPUT, 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
-                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("Serfs")));
-                    }
-
-                    if (slaves > 0f)
-                    {
-                        baseResult.Add(MBMath.ClampFloat(slaves * GetSlaveOutput(title), 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
-                            new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("Slaves")));
-                    }
-
-                    if (tenants > 0f)
-                    {
-                        baseResult.Add(MBMath.ClampFloat(tenants * TENANT_OUTPUT, 0f, 50000f) * BannerKingsSettings.Instance.TaxIncome,
-                                                   new TextObject("{=5mCY3JCP}{CLASS} output")
-                                                   .SetTextVariable("CLASS", new TextObject("Tenants")));
-                    }
+                    float tariff = data.EconomicData.Tariff;
+                    baseResult.Add(data.EconomicData.ConsumedValue * tariff, new TextObject("{=!}Goods consumed by the populace ({TARIFF}% tariffs)")
+                        .SetTextVariable("TARIFF", (tariff * 100f).ToString("0.00")));
 
                     var buildingBehavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKBuildingsBehavior>();
                     int mining = buildingBehavior.GetMiningRevenue(town);
@@ -156,7 +222,7 @@ namespace BannerKings.Models.Vanilla
                         baseResult.Add(-materials, new TextObject("{=a9HMZMAF}Project material expenses"));
                     }
 
-                    var ownerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(town.OwnerClan.Leader);
+                    /*var ownerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(town.OwnerClan.Leader);
                     if (data.ReligionData != null && ownerReligion != null &&
                         ownerReligion.HasDoctrine(DefaultDoctrines.Instance.HeathenTax))
                     {
@@ -181,19 +247,7 @@ namespace BannerKings.Models.Vanilla
 
                             baseResult.Add(result * heathens, DefaultDoctrines.Instance.HeathenTax.Name);
                         }
-                    }
-
-                    var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax"))
-                            .Policy;
-                    switch (taxType)
-                    {
-                        case TaxType.Low:
-                            baseResult.AddFactor(-0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
-                            break;
-                        case TaxType.High:
-                            baseResult.AddFactor(0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
-                            break;
-                    }
+                    }*/
 
                     if (baseResult.ResultNumber > 0f)
                     {
@@ -236,16 +290,10 @@ namespace BannerKings.Models.Vanilla
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
             if (data != null && data.VillageData != null)
             {
-                var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager
-                    .GetPolicy(village.Settlement, "tax")).Policy;
-
-                float nobles = data.GetTypeCount(PopType.Nobles);
-                float craftsmen = data.GetTypeCount(PopType.Craftsmen);
-
                 float taxOffice = data.VillageData.GetBuildingLevel(DefaultVillageBuildings.Instance.TaxOffice);
                 if (taxOffice > 0)
                 {
-                    AddVillagePopulationTaxes(ref result, village.Settlement, nobles, craftsmen, taxOffice, taxType);
+                    AddVillagePopulationTaxes(ref result, data, taxOffice);
                 }
 
                 var admCost = BannerKingsConfig.Instance.AdministrativeModel.CalculateEffect(village.Settlement).ResultNumber;
@@ -287,7 +335,6 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-
         public override int CalculateVillageTaxFromIncome(Village village, int marketIncome)
         {
             var factor = 0.7f;
@@ -305,35 +352,19 @@ namespace BannerKings.Models.Vanilla
             return (int)(marketIncome * factor);
         }
 
-        public void AddVillagePopulationTaxes(ref ExplainedNumber result, Settlement settlement, float nobles, float craftsmen, float taxOfficeLevel, TaxType taxType)
+        public void AddVillagePopulationTaxes(ref ExplainedNumber result, PopulationData data, float taxOfficeLevel)
         {
-            float taxFactor = 1f;
-            switch (taxType)
-            {
-                case TaxType.Low:
-                    taxFactor = 0.8f;
-                    break;
-                case TaxType.High:
-                    taxFactor = 1.2f;
-                    break;
-            }
+            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(data.Settlement);
+            var taxType = (BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(data.Settlement, "tax");
 
-            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
-            if (nobles > 0f)
-            {
-                result.Add(MBMath.ClampFloat(nobles * GetNobleOutput(title) * taxFactor * (0.33f * taxOfficeLevel), 0f, 50000f),
-                    new TextObject("{=5mCY3JCP}{CLASS} output")
-                    .SetTextVariable("CLASS", new TextObject("{=pop_class_nobles}Nobles")));
-            }
+            result.Add(MBMath.ClampFloat(GetNobleTaxRate(title, data, taxType) * (0.33f * taxOfficeLevel), 0f, 50000f),
+                new TextObject("{=5mCY3JCP}{CLASS} output")
+                .SetTextVariable("CLASS", new TextObject("{=pop_class_nobles}Nobles")));
 
-            if (craftsmen > 0f)
-            {
-                result.Add(MBMath.ClampFloat(craftsmen * GetCraftsmenOutput(title) * taxFactor * (0.33f * taxOfficeLevel), 0f, 50000f),
-                    new TextObject("{=5mCY3JCP}{CLASS} output")
-                    .SetTextVariable("CLASS", new TextObject("{=pop_class_craftsmen}Craftsmen")));
-            }
+            result.Add(MBMath.ClampFloat(GetCraftsmenTaxRate(title, data, taxType) * (0.33f * taxOfficeLevel), 0f, 50000f),
+                new TextObject("{=5mCY3JCP}{CLASS} output")
+                .SetTextVariable("CLASS", new TextObject("{=pop_class_craftsmen}Craftsmen")));
         }
-
 
         private void CalculateDueWages(CouncilData data, float result)
         {
@@ -365,15 +396,27 @@ namespace BannerKings.Models.Vanilla
 
         public override float GetTownTaxRatio(Town town)
         {
-            if (BannerKingsConfig.Instance.PolicyManager != null)
+            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_tariff_exempt"))
             {
-                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_tariff_exempt"))
-                {
-                    return 0f;
-                }
+                return 0f;
             }
 
-            return base.GetTownTaxRatio(town);
+            float result = base.GetTownTaxRatio(town);
+            var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax")).Policy;
+            switch (taxType)
+            {
+                case TaxType.Low:
+                    result -= 0.04f;
+                    break;
+                case TaxType.High:
+                    result += 0.04f;
+                    break;
+                case TaxType.Exemption:
+                    result = 0f;
+                    break;
+            }
+
+            return result;
         }
     }
 }
