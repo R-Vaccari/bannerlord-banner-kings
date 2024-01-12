@@ -65,7 +65,7 @@ namespace BannerKings.Components
             else if (behavior == AiBehavior.GoToSettlement)
             {
                 MobileParty.Ai.SetMoveGoToSettlement(HomeSettlement);
-                if (TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(Party.MobileParty, HomeSettlement) <= 1f)
+                if (TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(Party.MobileParty, HomeSettlement) <= 2f)
                     EnterSettlementAction.ApplyForParty(Party.MobileParty, HomeSettlement);
             }
 
