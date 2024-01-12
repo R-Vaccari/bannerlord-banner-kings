@@ -314,10 +314,15 @@ namespace BannerKings.Behaviours.Diplomacy
             }
             
             InitializeDiplomacies();
+            var toRemove = new List<War>();
             foreach (War war in wars)
             {
                 war.Update();
+                if (!war.Attacker.IsAtWarWith(war.Defender)) toRemove.Add(war);
             }
+
+            foreach (War war in toRemove)
+                wars.Remove(war);
 
             foreach (var pair in kingdomDiplomacies)
             {
@@ -533,6 +538,9 @@ namespace BannerKings.Behaviours.Diplomacy
             {
                 MakeTruce(faction1 as Kingdom, faction2 as Kingdom, 1f);
             }
+
+            War war = GetWar(faction1, faction2);
+            if (war != null) wars.Remove(war);
         }
 
         private void OnWarDeclared(IFaction faction1, IFaction faction2, DeclareWarAction.DeclareWarDetail detail)
