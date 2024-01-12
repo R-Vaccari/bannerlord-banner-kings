@@ -36,6 +36,11 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
+            Settlement settlement = merchant?.Settlement;
+            if (settlement != null && settlement.IsCastle) result *= 3f;
+
+            if (item.HasWeaponComponent || item.HasArmorComponent || item.HasSaddleComponent) result *= 5f;
+
             return result;
         }
 
@@ -106,24 +111,23 @@ namespace BannerKings.Models.Vanilla
         public override float GetBasePriceFactor(ItemCategory itemCategory, float inStoreValue, float supply, float demand,
             bool isSelling, int transferValue)
         {
-            float baseResult = base.GetBasePriceFactor(itemCategory, inStoreValue, supply, demand, isSelling, transferValue);
-
-            if (!itemCategory.IsAnimal)
+            if (isSelling)
             {
-                baseResult *= 0.9f;
+                inStoreValue += (float)transferValue;
             }
 
+            float value = MathF.Pow(demand / (0.1f * supply + inStoreValue * 0.04f + 2f), itemCategory.IsAnimal ? 0.3f : 0.6f);
             if (itemCategory.Properties == ItemCategory.Property.BonusToFoodStores)
             {
-                return MathF.Clamp(baseResult, 0.3f, 3f);
+                return MathF.Clamp(value, 0.3f, 3f);
             }
 
             if (itemCategory.IsTradeGood)
             {
-                return MathF.Clamp(baseResult, 0.3f, 10f);
+                return MathF.Clamp(value, 0.3f, 10f);
             }
 
-            return baseResult;
+            return MathF.Clamp(value, 0.7f, 1.3f);
         }
     }
 }
