@@ -164,7 +164,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             var cityTenants = data.GetTypeCount(PopType.Tenants);
-            if (cityCraftsmen > 0)
+            if (cityTenants > 0)
             {
                 var craftsmenConsumption = cityTenants * SERF_FOOD;
                 result.Add(craftsmenConsumption, new TextObject("{=!}Tenants consumption"));
