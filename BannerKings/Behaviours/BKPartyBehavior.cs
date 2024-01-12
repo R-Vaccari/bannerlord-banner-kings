@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Components;
+using BannerKings.Managers.Items;
 using BannerKings.Managers.Populations;
 using BannerKings.Settings;
 using Helpers;
@@ -24,6 +25,27 @@ namespace BannerKings.Behaviours
 {
     public class BKPartyBehavior : CampaignBehaviorBase
     {
+        private ItemObject chicken;
+        private ItemObject goose;
+
+        private ItemObject Chicken
+        {
+            get
+            {
+                if (chicken == null) chicken = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObject<ItemObject>("chicken");
+                return chicken;
+            }
+        }
+
+        private ItemObject Goose
+        {
+            get
+            {
+                if (goose == null) goose = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObject<ItemObject>("goose");
+                return goose;
+            }
+        }
+
         public override void RegisterEvents()
         {
             CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, HourlyTickParty);
@@ -32,6 +54,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, OnSiegeStarted);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
+            //CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnDailyTick);
         }
 
         private void OnGameLoaded(CampaignGameStarter starter)
@@ -64,6 +87,23 @@ namespace BannerKings.Behaviours
                 {
                     party.RemovePartyLeader();
                 }
+            }
+        }
+
+        private void OnDailyTick(MobileParty party)
+        {
+            if (!party.IsActive) return;
+
+            float flock = party.ItemRoster.GetItemNumber(Chicken) +
+                party.ItemRoster.GetItemNumber(Goose);
+
+            if (flock > 0)
+            {
+                int eggs = 0;
+                for (int i = 0; i < flock; i++)
+                    if (MBRandom.RandomFloat < 0.05f) eggs++;             
+
+                if (eggs > 0) party.ItemRoster.AddToCounts(BKItems.Instance.Egg, eggs);
             }
         }
 
