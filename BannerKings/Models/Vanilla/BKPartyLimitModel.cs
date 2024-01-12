@@ -29,9 +29,9 @@ namespace BannerKings.Models.Vanilla
             var leader = party.MobileParty.LeaderHero;
             if (leader != null)
             {
-                if (leader.IsClanLeader()) baseResult.AddFactor(BannerKingsSettings.Instance.PartySizes, 
+                if (leader.IsClanLeader()) baseResult.AddFactor(BannerKingsSettings.Instance.PartySizes - 1f, 
                     new TextObject("{=mSLQa207}Party Size Scaling"));
-                else baseResult.AddFactor(BannerKingsSettings.Instance.PartySizes * 0.5f, 
+                else baseResult.AddFactor((BannerKingsSettings.Instance.PartySizes -1f) * 0.5f, 
                     new TextObject("{=mSLQa207}Party Size Scaling"));
 
                 var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
