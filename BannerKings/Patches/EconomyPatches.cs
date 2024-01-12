@@ -614,73 +614,123 @@ namespace BannerKings.Patches
             private static bool Prefix(Town town, Dictionary<ItemCategory, float> categoryDemand,
                 Dictionary<ItemCategory, int> saleLog)
             {
-                saleLog.Clear();
-                TownMarketData marketData = town.MarketData;
-                ItemRoster itemRoster = town.Owner.ItemRoster;
-                var popData = town.Settlement.PopulationData();
-                popData.EconomicData.ConsumedValue = 0;
-                for (int i = itemRoster.Count - 1; i >= 0; i--)
+                if (BannerKingsConfig.Instance.PopulationManager != null &&
+                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
                 {
-                    ItemRosterElement elementCopyAtIndex = itemRoster.GetElementCopyAtIndex(i);
-                    ItemObject item = elementCopyAtIndex.EquipmentElement.Item;
-                    float desiredAmount = elementCopyAtIndex.Amount;
-                    ItemCategory itemCategory = item.GetItemCategory();
-                    float demand = categoryDemand[itemCategory];
-                    float budget = CalculateBudget(town, demand, itemCategory);
-                    if (budget > 0.01f)
+                    saleLog.Clear();
+                    var marketData = town.MarketData;
+                    var itemRoster = town.Owner.ItemRoster;
+                    var popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                    popData.EconomicData.ConsumedValue = 0;
+                    for (var i = itemRoster.Count - 1; i >= 0; i--)
                     {
-                        if (item.IsFood && town.FoodStocks <= town.FoodStocksUpperLimit() * 0.1f)
+                        var elementCopyAtIndex = itemRoster.GetElementCopyAtIndex(i);
+                        var item = elementCopyAtIndex.EquipmentElement.Item;
+                        var amount = elementCopyAtIndex.Amount;
+                        var itemCategory = item.GetItemCategory();
+
+                        if (!categoryDemand.ContainsKey(itemCategory))
                         {
-                            var requiredFood = town.FoodChange * -1f;
-                            if (desiredAmount > requiredFood)
+                            continue;
+                        }
+
+                        var demand = categoryDemand[itemCategory];
+                        var budget = CalculateBudget(town, demand, itemCategory);
+
+                        if (budget > 0.01f)
+                        {
+                            var price = marketData.GetPrice(item);
+                            var desiredAmount = budget / price;
+                            if (desiredAmount > amount)
                             {
-                                desiredAmount += requiredFood + 1f;
+                                desiredAmount = amount;
+                            }
+
+                            if (item.IsFood && town.FoodStocks <= town.FoodStocksUpperLimit() * 0.1f)
+                            {
+                                var requiredFood = town.FoodChange * -1f;
+                                if (amount > requiredFood)
+                                {
+                                    desiredAmount += requiredFood + 1f;
+                                }
+                                else
+                                {
+                                    desiredAmount += amount;
+                                }
+                            }
+
+                            var finalAmount = MBRandom.RoundRandomized(desiredAmount);
+                            var type = Utils.Helpers.GetTradeGoodConsumptionType(item);
+                            if (finalAmount > amount)
+                            {
+                                finalAmount = amount;
+                                if (type != ConsumptionType.None)
+                                {
+                                    popData.EconomicData.UpdateSatisfaction(type, -0.0015f);
+                                }
+                            }
+                            else if (type != ConsumptionType.None)
+                            {
+                                popData.EconomicData.UpdateSatisfaction(type, 0.001f);
+                            }
+
+                            itemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -finalAmount);
+                            categoryDemand[itemCategory] = budget - desiredAmount * price;
+                            int finalCost = (int)(finalAmount * (float)price);
+                            popData.EconomicData.ConsumedValue += finalCost;
+                            town.ChangeGold(finalCost);
+                            var num4 = 0;
+                            saleLog.TryGetValue(itemCategory, out num4);
+                            saleLog[itemCategory] = num4 + finalAmount;
+                        }
+                    }
+
+                    if (town.FoodStocks <= town.FoodStocksUpperLimit() * 0.05f && town.Settlement.Stash != null)
+                    {
+                        var elements = new List<ItemRosterElement>();
+                        foreach (var element in town.Settlement.Stash)
+                        {
+                            if (element.EquipmentElement.Item.CanBeConsumedAsFood())
+                            {
+                                elements.Add(element);
+                            }
+                        }
+
+                        foreach (var element in elements)
+                        {
+                            var item = element.EquipmentElement.Item;
+                            var category = item.ItemCategory;
+                            if (saleLog.ContainsKey(category))
+                            {
+                                saleLog[category] += element.Amount;
                             }
                             else
                             {
-                                desiredAmount += desiredAmount;
+                                saleLog.Add(category, element.Amount);
                             }
-                        }
 
-                        float finalAmount = MBRandom.RoundRandomized(desiredAmount);
-                        var type = Utils.Helpers.GetTradeGoodConsumptionType(item);
-               
-                        if (finalAmount > desiredAmount)
-                        {
-                            finalAmount = desiredAmount;
-                            if (type != ConsumptionType.None)
+                            town.Settlement.Stash.Remove(element);
+                            if (item.HasHorseComponent)
                             {
-                                popData.EconomicData.UpdateSatisfaction(type, -0.0015f);
+                                town.FoodStocks += item.GetItemFoodValue();
                             }
                         }
-                        else if (type != ConsumptionType.None)
-                        {
-                            popData.EconomicData.UpdateSatisfaction(type, 0.001f);
-                        }
-
-                        int price = marketData.GetPrice(item, null, false, null);
-                        float num2 = budget / (float)price;
-                        if (num2 > (float)finalAmount)
-                        {
-                            num2 = (float)finalAmount;
-                        }
-                        int num3 = MBRandom.RoundRandomized(num2);
-                        if (num3 > finalAmount)
-                        {
-                            num3 = (int)finalAmount;
-                        }
-                        itemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -num3);
-                        categoryDemand[itemCategory] = budget - num2 * (float)price;
-                        int finalCost = (int)(num3 * (float)price);
-                        town.ChangeGold(finalCost);
-                        popData.EconomicData.ConsumedValue += finalCost;
-                        int num4 = 0;
-                        saleLog.TryGetValue(itemCategory, out num4);
-                        saleLog[itemCategory] = num4 + num3;
                     }
+
+                    var list = new List<Town.SellLog>();
+                    foreach (var keyValuePair in saleLog)
+                    {
+                        if (keyValuePair.Value > 0)
+                        {
+                            list.Add(new Town.SellLog(keyValuePair.Key, keyValuePair.Value));
+                        }
+                    }
+
+                    town.SetSoldItems(list);
+                    return false;
                 }
 
-                return false;
+                return true;
             }
         }
 
@@ -831,9 +881,8 @@ namespace BannerKings.Patches
                 ItemModifierGroup modifierGroup = Utils.Helpers.GetItemModifierGroup(outputItem.Item);
                 if (workshop.WorkshopType.StringId == "artisans")
                 {
-                    float prosperityFactor = town.Prosperity / 10000f;
-                    float craftsmenFactor = data.GetTypeCount(PopType.Craftsmen) / 50f;
-                    count = (int)MathF.Max(1f, count + ((craftsmenFactor / outputItem.ItemValue) * prosperityFactor));
+                    float craftsmenFactor = data.GetTypeCount(PopType.Craftsmen) / 45f;
+                    count = (int)MathF.Max(1f, count + (craftsmenFactor / outputItem.ItemValue));
                 }
                 else if (workshop.WorkshopType.StringId == "mines" && data.MineralData != null)
                 {
