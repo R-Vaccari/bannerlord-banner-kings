@@ -53,10 +53,10 @@ namespace BannerKings.Models.Vanilla
             switch (season)
             {
                 case 3f:
-                    result.Add(-0.5f * foodProduction, GameTexts.FindText("str_season_" + season));
+                    result.Add(-0.5f * foodProduction, new TextObject("{=nwqUFaU8}Winter"));
                     break;
                 case 1f:
-                    result.Add(0.5f * foodProduction, GameTexts.FindText("str_season_" + season));
+                    result.Add(0.5f * foodProduction, new TextObject("{=f7vOVQb7}Summer"));
                     break;
             }
 
@@ -160,7 +160,14 @@ namespace BannerKings.Models.Vanilla
             if (cityCraftsmen > 0)
             {
                 var craftsmenConsumption = cityCraftsmen * CRAFTSMEN_FOOD;
-                result.Add(craftsmenConsumption, new TextObject("Craftsmen consumption"));
+                result.Add(craftsmenConsumption, new TextObject("{=!}Craftsmen consumption"));
+            }
+
+            var cityTenants = data.GetTypeCount(PopType.Tenants);
+            if (cityCraftsmen > 0)
+            {
+                var craftsmenConsumption = cityTenants * SERF_FOOD;
+                result.Add(craftsmenConsumption, new TextObject("{=!}Tenants consumption"));
             }
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(data.Settlement, "decision_ration"))
