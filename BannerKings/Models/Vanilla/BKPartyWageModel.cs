@@ -32,12 +32,12 @@ namespace BannerKings.Models.Vanilla
             {
                 <= 1 => 1,
                 <= 6 => 2,
-                <= 11 => 4,
-                <= 16 => 8,
-                <= 21 => 14,
-                <= 26 => 26,
-                <= 31 => 40,
-                _ => 80
+                <= 11 => 3,
+                <= 16 => 4,
+                <= 21 => 8,
+                <= 26 => 12,
+                <= 31 => 20,
+                _ => 25
             };
 
             return (int)(result * BannerKingsSettings.Instance.BaseWage);
