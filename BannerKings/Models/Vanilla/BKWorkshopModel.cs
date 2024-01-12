@@ -30,7 +30,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             result.Add(data.EconomicData.ProductionQuality.ResultNumber, new TextObject("{=56S6FhCd}Production quality"));
-
+            result.AddFactor(0.25f, workshop.WorkshopType.Name);
             if (workshop.Owner != null)
             {
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(workshop.Owner);
