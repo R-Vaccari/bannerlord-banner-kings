@@ -14,7 +14,7 @@ using System.IO;
 
 namespace BannerKings.Managers.Helpers
 {
-    internal static class TitleGenerator
+    public static class TitleGenerator
     {
         internal static FeudalTitle CreateKingdom(Hero deJure, Kingdom faction, TitleType type, List<FeudalTitle> vassals, FeudalContract contract, string stringId = null)
         {
@@ -35,7 +35,7 @@ namespace BannerKings.Managers.Helpers
             return title;
         }
 
-        internal static void FoundKingdom(TitleAction action)
+        public static void FoundKingdom(TitleAction action)
         {
             var title = CreateKingdom(action.ActionTaker, action.ActionTaker.Clan.Kingdom, TitleType.Kingdom, new List<FeudalTitle>(action.Vassals), action.Title.Contract);
             action.ActionTaker.Clan.AddRenown(action.Renown);
@@ -56,7 +56,7 @@ namespace BannerKings.Managers.Helpers
                 BannerKingsConfig.Instance.TitleModel.GetSkillReward(TitleType.Kingdom, action.Type));
         }
 
-        internal static void FoundEmpire(TitleAction action, TextObject factionName, string stringId = null, string contractType = null)
+        public static void FoundEmpire(TitleAction action, TextObject factionName, string stringId = null, string contractType = null)
         {
             var kingdom = action.ActionTaker.Clan.Kingdom;
             kingdom.ChangeKingdomName(factionName, factionName);
@@ -147,7 +147,7 @@ namespace BannerKings.Managers.Helpers
             return contract;
         }
 
-        internal static FeudalContract GenerateContract(string government, string succession, string inheritance, string genderLaw)
+        public static FeudalContract GenerateContract(string government, string succession, string inheritance, string genderLaw)
         {
             return new FeudalContract(
                     new Dictionary<FeudalDuties, float> { { FeudalDuties.Ransom, 0.20f }, { FeudalDuties.Auxilium, 0.4f } },
