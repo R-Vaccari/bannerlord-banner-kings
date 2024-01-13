@@ -126,7 +126,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
         public override bool IsCultureNaturalFaith(CultureObject culture)
         {
             string id = culture.StringId;
-            return id == "vlandia" || id == "swadia" || id == "osrickin" || id == "rhodok";
+            return id == "vlandia" || id == "swadia" || id == "osrickin" || id == "rhodok" || id == "massa" || id == "balion";
         }
 
         public override bool IsHeroNaturalFaith(Hero hero) => IsCultureNaturalFaith(hero.Culture);
