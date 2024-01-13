@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using BannerKings.Behaviours;
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
@@ -115,28 +116,28 @@ namespace BannerKings.Models.Vanilla
                             .SetTextVariable("COUNT", peers)
                             .SetTextVariable("MINIMUM", minimum));
                     }
+
+                    var diplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(clan.Kingdom);
+                    if (diplomacy != null)
+                    {
+                        foreach (var pact in diplomacy.TradePacts)
+                        {
+                            result.AddFactor(-0.075f, new TextObject("{=kiBf4bre}Trade pact with {KINGDOM}")
+                                .SetTextVariable("KINGDOM", pact.Name));
+                        }
+
+                        foreach (InterestGroup group in diplomacy.Groups)
+                        {
+                            result.AddFactor(0.5f * group.Influence.ResultNumber * (group.Support.ResultNumber - 0.5f),
+                                new TextObject("{=NVoUn9ro}{GROUP} support")
+                                .SetTextVariable("GROUP", group.Name));
+                        }
+                    }
                 }
 
-                if (clan.Culture != clan.Kingdom.Culture)
+                if (clan.Culture.StringId != clan.Kingdom.Culture.StringId)
                 {
                     result.AddFactor(-0.2f, new TextObject("{=qW1tnxGu}Kingdom cultural difference"));
-                }
-
-                var diplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(clan.Kingdom);
-                if (diplomacy != null)
-                {
-                    foreach (var pact in diplomacy.TradePacts)
-                    {
-                        result.AddFactor(-0.075f, new TextObject("{=kiBf4bre}Trade pact with {KINGDOM}")
-                            .SetTextVariable("KINGDOM", pact.Name));
-                    }
-
-                    foreach (InterestGroup group in diplomacy.Groups)
-                    {
-                        result.AddFactor(0.5f * group.Influence.ResultNumber * (group.Support.ResultNumber - 0.5f), 
-                            new TextObject("{=NVoUn9ro}{GROUP} support")
-                            .SetTextVariable("GROUP", group.Name));
-                    }
                 }
             }
 
@@ -176,6 +177,11 @@ namespace BannerKings.Models.Vanilla
                     new TextObject("{=FFr56V5A}Grace ({GRACE}) correlation to expected grace ({EXPECTED})")
                     .SetTextVariable("EXPECTED", expectedGrace.ToString("0.0"))
                     .SetTextVariable("GRACE", council.CourtGrace.Grace.ToString("0.0")));
+            }
+
+            if (council.Peerage == null || council.Peerage.IsLesserPeerage)
+            {
+                result.AddFactor(-0.5f, new TextObject("{=!}Not a Full Peer"));
             }
 
             return result;
