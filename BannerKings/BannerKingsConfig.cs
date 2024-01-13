@@ -94,6 +94,7 @@ namespace BannerKings
         public IPartyNeedsModel PartyNeedsModel { get; } = new BKPartyNeedsModel();
         public BKDiplomacyModel DiplomacyModel { get; } = new();
         public BKKingdomDecisionModel KingdomDecisionModel { get; } = new();
+        public IMercenaryModel MercenaryModel { get; } = new MercenaryModel();
 
         static BannerKingsConfig()
         {
