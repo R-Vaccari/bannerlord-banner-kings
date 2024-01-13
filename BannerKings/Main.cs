@@ -133,6 +133,7 @@ namespace BannerKings
             campaignStarter.AddModel(new BKDiplomacyModel());
             campaignStarter.AddModel(new BKTargetScoreModel());
             campaignStarter.AddModel(new BKPartyBuyingFoodModel());
+            campaignStarter.AddModel(new BKCategorySelector());
 
             BKAttributes.Instance.Initialize();
             BKSkills.Instance.Initialize();
