@@ -17,6 +17,19 @@ namespace BannerKings.Models.BKModels
             yield return DefaultItemCategories.RangedWeapons2;
             yield return DefaultItemCategories.Horse;
             yield return DefaultItemCategories.Shield2;
+            yield return DefaultItemCategories.HorseEquipment;
+            yield return DefaultItemCategories.HorseEquipment2;
+            yield return DefaultItemCategories.Arrows;
+        }
+
+        public override IEnumerable<ItemCategory> GetNonCulturalCategories()
+        {
+            yield return DefaultItemCategories.Arrows;
+            yield return DefaultItemCategories.RangedWeapons1;
+            yield return DefaultItemCategories.RangedWeapons2;
+            yield return DefaultItemCategories.RangedWeapons3;
+            yield return DefaultItemCategories.RangedWeapons4;
+            yield return DefaultItemCategories.RangedWeapons5;
         }
 
         public override IEnumerable<ItemCategory> GetProCategories()
@@ -26,7 +39,12 @@ namespace BannerKings.Models.BKModels
             yield return DefaultItemCategories.MeleeWeapons3;
             yield return DefaultItemCategories.RangedWeapons3;
             yield return DefaultItemCategories.Horse;
+            yield return DefaultItemCategories.WarHorse;
             yield return DefaultItemCategories.Shield3;
+            yield return DefaultItemCategories.HorseEquipment2;
+            yield return DefaultItemCategories.HorseEquipment3;
+            yield return DefaultItemCategories.HorseEquipment4;
+            yield return DefaultItemCategories.Arrows;
         }
 
         public override bool IsEquipmentAdequate(ItemObject item, CharacterObject troop, bool levy)
@@ -37,13 +55,16 @@ namespace BannerKings.Models.BKModels
                 return false;
             }
 
-            if (group != null && group.GetSpawn((CultureObject)item.Culture) <= 0f)
+            if (!GetNonCulturalCategories().Contains(item.ItemCategory))
             {
-                return false;
-            }
-            else if (item.Culture != troop.Culture)
-            {
-                return false;
+                if (group != null && group.GetSpawn((CultureObject)item.Culture) <= 0f)
+                {
+                    return false;
+                }
+                else if (item.Culture != troop.Culture)
+                {
+                    return false;
+                }
             }
 
             if (levy)
