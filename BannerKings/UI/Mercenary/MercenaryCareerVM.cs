@@ -506,13 +506,9 @@ namespace BannerKings.UI.Mercenary
             var items = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
             foreach (var item in items)
             {
-                if (!item.IsCraftedByPlayer && item.Culture != null && item.Culture != customTroop.Character.Culture
-                    && item.Culture != Hero.MainHero.Culture)
-                {
-                    continue;
-                }
-
-                if (item.ItemType == option.ItemType && IsEquipmentAdequate(item.ItemType, item.Tierf, levy))
+                if (item.ItemType == option.ItemType && BannerKingsConfig.Instance.MercenaryModel.IsEquipmentAdequate(item, 
+                    customTroop.Character, 
+                    levy))
                 {
                     list.Add(new InquiryElement(item,
                         item.Name.ToString(),
@@ -521,7 +517,7 @@ namespace BannerKings.UI.Mercenary
                         new TextObject("{=TFbOS7F6}Tier: {TIER}\nValue: {VALUE}\nType: {TYPE}")
                         .SetTextVariable("TIER", item.Tierf)
                         .SetTextVariable("VALUE", item.Value)
-                        .SetTextVariable("TYPE", GameTexts.FindText("str_inventory_type_" + item.ItemType)).ToString()));
+                        .SetTextVariable("TYPE", GameTexts.FindText("str_inventory_type_" + (int)item.ItemType)).ToString()));
                 }
             }
 
