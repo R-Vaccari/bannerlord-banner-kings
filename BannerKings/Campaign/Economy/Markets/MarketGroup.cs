@@ -23,7 +23,8 @@ namespace BannerKings.Campaign.Economy.Markets
         public float GetSpawn(CultureObject culture)
         {
             float result = 0f;
-            if (Spawns.ContainsKey(culture)) result = Spawns[culture];
+            if (culture.StringId == Culture.StringId) result = 1f;
+            else if (Spawns.ContainsKey(culture)) result = Spawns[culture];
 
             return result;
         }
