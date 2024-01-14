@@ -228,7 +228,7 @@ namespace BannerKings.Behaviours.Shipping
                 {
                     if (!port.IsTown) continue;
                         
-                    if (!port.Notables.Any(x => x.Culture == lane.Culture))
+                    if (!port.Notables.Any(x => x.Culture.StringId == lane.Culture.StringId))
                     {
                         var merchant = lane.Culture.NotableAndWandererTemplates.FirstOrDefault(x => x.Occupation == Occupation.Merchant);
                         if (merchant != null)
