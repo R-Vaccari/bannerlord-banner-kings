@@ -155,7 +155,7 @@ namespace BannerKings.Behaviours.Shipping
         public void SetTravel(MobileParty party, Settlement destination)
         {
             int price = CalculatePrice(destination, party);
-            if (party.LeaderHero?.Gold >= price) party.LeaderHero.ChangeHeroGold(price);
+            if (party.LeaderHero?.Gold >= price) party.LeaderHero.ChangeHeroGold(-price);
             else party.PartyTradeGold -= price;
 
             Settlement current = party.CurrentSettlement;
