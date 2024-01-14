@@ -292,6 +292,7 @@ namespace BannerKings.Behaviours
                     return;
                 }
 
+                data.EstateData.CreateEstates(data);
                 Estate vacantEstate = data.EstateData.Estates.FirstOrDefault(x => x.IsDisabled);
                 if (vacantEstate == null)
                 {
