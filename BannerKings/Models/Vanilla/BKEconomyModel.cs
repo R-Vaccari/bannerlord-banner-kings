@@ -14,7 +14,6 @@ using Helpers;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
@@ -26,11 +25,11 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKEconomyModel : DefaultSettlementEconomyModel, IEconomyModel
+    public class BKEconomyModel : EconomyModel
     {
         private static readonly float CRAFTSMEN_EFFECT_CAP = 0.4f;
 
-        public ExplainedNumber CalculateEffect(Settlement settlement)
+        public override ExplainedNumber CalculateMercantilism(Settlement settlement)
         {
             var result = new ExplainedNumber(0.1f, true);
             result.LimitMin(0f);
@@ -55,7 +54,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber CalculateProductionEfficiency(Settlement settlement, bool explanations = false, PopulationData data = null)
+        public override ExplainedNumber CalculateProductionEfficiency(Settlement settlement, bool explanations = false, PopulationData data = null)
         {
             var result = new ExplainedNumber(!settlement.IsVillage ? 0.7f : 0.9f, explanations);
             data ??= BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
@@ -142,13 +141,13 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber CalculateProductionQuality(Settlement settlement)
+        public override ExplainedNumber CalculateProductionQuality(Settlement settlement)
         {
             var result = new ExplainedNumber(1f, true);
             result.LimitMin(0f);
             result.LimitMax(2f);
 
-            result.Add((CalculateEffect(settlement).ResultNumber - 0.4f) * 0.5f, new TextObject("{=5eHCGMEK}Mercantilism"));
+            result.Add((CalculateMercantilism(settlement).ResultNumber - 0.4f) * 0.5f, new TextObject("{=5eHCGMEK}Mercantilism"));
 
             var lordshipEconomicAdministration = BKPerks.Instance.LordshipEconomicAdministration;
             if (settlement.Owner.GetPerkValue(lordshipEconomicAdministration))
@@ -218,7 +217,7 @@ namespace BannerKings.Models.Vanilla
             return cost;
         }
 
-        public ExplainedNumber CalculateTradePower(Settlement settlement, bool descriptions = false)
+        public override ExplainedNumber CalculateTradePower(Settlement settlement, bool descriptions = false)
         {
             ExplainedNumber result = new ExplainedNumber(1f, descriptions);
 
