@@ -11,6 +11,7 @@ namespace BannerKings.Campaign.Skills
     {
         public SkillEffect PietyGain { get; set; }
         public SkillEffect FaithPresence { get; set; }
+        public SkillEffect LanguageSpeed { get; set; }
         public SkillEffect ReadingSpeed { get; set; }
         public SkillEffect LifestyleSpeed { get; set; }
         public SkillEffect ResearchSpeed { get; set; }
@@ -182,6 +183,21 @@ namespace BannerKings.Campaign.Skills
                 0f,
                 0f);
 
+
+            LanguageSpeed = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("LanguageSpeed"));
+            LanguageSpeed.Initialize(new TextObject("{=!}Language learning speed: +{a0}%"),
+                new SkillObject[]
+                {
+                    BKSkills.Instance.Scholarship
+                },
+                SkillEffect.PerkRole.Personal,
+                0.15f,
+                SkillEffect.PerkRole.None,
+                0f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                0f,
+                0f);
+
             ReadingSpeed = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("ReadingSpeed"));
             ReadingSpeed.Initialize(new TextObject("{=!}Book reading speed: +{a0}%"),
                 new SkillObject[]
@@ -211,16 +227,16 @@ namespace BannerKings.Campaign.Skills
                 0f);
 
             ResearchSpeed = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("ResearchSpeed"));
-            ResearchSpeed.Initialize(new TextObject("{=!}Personal research efficiency: +{a0}%"),
+            ResearchSpeed.Initialize(new TextObject("{=!}Personal research progress: +{a0}"),
                 new SkillObject[]
                 {
                     BKSkills.Instance.Scholarship
                 },
                 SkillEffect.PerkRole.Personal,
-                0.2f,
+                0.0333f,
                 SkillEffect.PerkRole.None,
                 0f,
-                SkillEffect.EffectIncrementType.AddFactor,
+                SkillEffect.EffectIncrementType.Add,
                 0f,
                 0f);
         }

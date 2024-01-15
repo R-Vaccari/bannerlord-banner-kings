@@ -1,6 +1,8 @@
+using BannerKings.Campaign.Skills;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Skills;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
@@ -43,13 +45,34 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
+        public ExplainedNumber CalculateLifestyleProgress(Hero hero, bool explanations = false)
+        {
+            var result = new ExplainedNumber(1f / (CampaignTime.DaysInYear * 3f), explanations);
+
+            SkillHelper.AddSkillBonusForCharacter(BKSkills.Instance.Scholarship,
+              BKSkillEffects.Instance.LifestyleSpeed,
+              hero.CharacterObject,
+              ref result,
+              hero.GetSkillValue(BKSkills.Instance.Scholarship),
+              true,
+              0);
+
+            return result;
+        }
+
         public ExplainedNumber CalculateLanguageLearningRate(Hero student, Hero instructor, Language language)
         {
             var result = new ExplainedNumber(1f, true);
             result.LimitMin(0f);
             result.LimitMax(5f);
 
-            result.Add(student.GetSkillValue(BKSkills.Instance.Scholarship) * 0.01f, BKSkills.Instance.Scholarship.Name);
+            SkillHelper.AddSkillBonusForCharacter(BKSkills.Instance.Scholarship,
+                BKSkillEffects.Instance.LanguageSpeed,
+                student.CharacterObject,
+                ref result,
+                student.GetSkillValue(BKSkills.Instance.Scholarship),
+                true,
+                0);
 
             if (instructor != null)
             {
@@ -63,8 +86,7 @@ namespace BannerKings.Models.BKModels
             else
             {
                 return new ExplainedNumber(0f);
-            }
-           
+            }       
 
             var native = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(student);
             var dic = native.Inteligible;
@@ -109,6 +131,14 @@ namespace BannerKings.Models.BKModels
             {
                 result.AddFactor(0.20f, BKPerks.Instance.ScholarshipBookWorm.Name);
             }
+
+            SkillHelper.AddSkillBonusForCharacter(BKSkills.Instance.Scholarship,
+                BKSkillEffects.Instance.ReadingSpeed,
+                reader.CharacterObject,
+                ref result,
+                reader.GetSkillValue(BKSkills.Instance.Scholarship),
+                true,
+                0);
 
             return result;
         }

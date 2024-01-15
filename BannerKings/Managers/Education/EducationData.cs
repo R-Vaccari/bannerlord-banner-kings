@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BannerKings.Campaign.Skills;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education.Lifestyles;
@@ -117,7 +118,7 @@ namespace BannerKings.Managers.Education
 
         public ExplainedNumber CurrentBookReadingRate => BannerKingsConfig.Instance.EducationModel.CalculateBookReadingRate(CurrentBook, hero);
 
-        public float StandartLifestyleProgress => 1f / (CampaignTime.DaysInYear * 3f);
+        public ExplainedNumber CurrentLifestyleRate => BannerKingsConfig.Instance.EducationModel.CalculateLifestyleProgress(hero);
 
         public void PostInitialize()
         {
@@ -280,7 +281,7 @@ namespace BannerKings.Managers.Education
             get
             {
                 float progress = 0f;
-                progress += hero.GetSkillValue(BKSkills.Instance.Scholarship) / 300f;
+                progress += BKSkillEffects.Instance.ResearchSpeed.GetPrimaryValue(hero.GetSkillValue(BKSkills.Instance.Scholarship));
                 progress += hero.GetAttributeValue(DefaultCharacterAttributes.Intelligence) * 0.10f;
                 return progress;
             }
@@ -372,7 +373,7 @@ namespace BannerKings.Managers.Education
 
             if (Lifestyle != null)
             {
-                AddProgress(StandartLifestyleProgress);
+                AddProgress(CurrentLifestyleRate.ResultNumber);
                 hero.AddSkillXp(BKSkills.Instance.Scholarship, 5f);
             }
         }
