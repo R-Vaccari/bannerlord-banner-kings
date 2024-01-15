@@ -322,23 +322,19 @@ namespace BannerKings.UI
         [HarmonyPatch(typeof(SkillIconVisualWidget), "SkillId", MethodType.Setter)]
         internal class SkillIconOnLateUpdatePatch
         {
-            private static bool Prefix(SkillIconVisualWidget __instance, string value)
+            private static bool Prefix(ref string value)
             {
-                var text = value switch
+                if (value == "Lordship" || value == "Scholarship" || value == "Theology")
                 {
-                    "Lordship" => "leadership",
-                    "Scholarship" => "Steward",
-                    "Theology" => "charm",
-                    _ => value
-                };
-
-                var skillId = __instance.GetType().GetField("_skillId", BindingFlags.Instance | BindingFlags.NonPublic);
-                if (skillId != null)
-                {
-                    skillId.SetValue(__instance, text);
+                    value = value switch
+                    {
+                        "Lordship" => "leadership",
+                        "Scholarship" => "Steward",
+                        "Theology" => "charm",
+                    };
                 }
 
-                return false;
+                return true;
             }
         }
 

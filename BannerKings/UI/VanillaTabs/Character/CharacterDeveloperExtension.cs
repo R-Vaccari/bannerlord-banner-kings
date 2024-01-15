@@ -35,10 +35,27 @@ namespace BannerKings.UI.VanillaTabs.Character
     [PrefabExtension("CharacterDeveloper", "descendant::ListPanel[@Id='Traits']/Children/TextWidget", "CharacterDeveloper")]
     internal class RemoveTraitsTextExtension : PrefabExtensionSetAttributePatch
     {
-
         public override List<Attribute> Attributes => new()
         {
             new Attribute("IsVisible", "false")
+        };
+    }
+
+    [PrefabExtension("CharacterDeveloper", "descendant::NavigatableGridWidget[@Id='SkillsGrid']", "CharacterDeveloper")]
+    internal class ChangeSkillSizeExtension : PrefabExtensionSetAttributePatch
+    {
+        public override List<Attribute> Attributes => new()
+        {
+            new Attribute("DefaultCellHeight", "118")
+        };
+    }
+
+    [PrefabExtension("AttributeListItem", "descendant::ButtonWidget", "AttributeListItem")]
+    internal class ChangeAttributeSizeExtension : PrefabExtensionSetAttributePatch
+    {
+        public override List<Attribute> Attributes => new()
+        {
+            new Attribute("SuggestedHeight", "108")
         };
     }
 }
