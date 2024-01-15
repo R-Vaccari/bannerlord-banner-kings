@@ -1,4 +1,5 @@
 using System.Linq;
+using BannerKings.Campaign.Skills;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
@@ -6,6 +7,7 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -195,6 +197,18 @@ namespace BannerKings.Models.BKModels
                     DefaultDivinities.Instance.TreeloreMain, religion) && religion.FavoredCultures.Contains(town.Culture))
                 {
                     result.Add(0.06f, DefaultDivinities.Instance.DarusosianSecondary2.Name);
+                }
+
+                Hero governor = settlement.Town.Governor;
+                if (governor != null)
+                {
+                    SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Steward,
+                        BKSkillEffects.Instance.Stability,
+                        governor.CharacterObject,
+                        ref result,
+                        governor.GetSkillValue(DefaultSkills.Steward),
+                        true,
+                        0);
                 }
 
                 var demesneLimit = CalculateDemesneLimit(settlement.Owner).ResultNumber;
@@ -405,6 +419,14 @@ namespace BannerKings.Models.BKModels
                 result.AddFactor(-0.2f, DefaultLifestyles.Instance.Jawwal.Name);
             }
 
+            SkillHelper.AddSkillBonusForCharacter(BKSkills.Instance.Lordship,
+                BKSkillEffects.Instance.DemesneLimit,
+                hero.CharacterObject,
+                ref result,
+                hero.GetSkillValue(BKSkills.Instance.Lordship),
+                true,
+                0);
+
             return result;
         }
 
@@ -485,6 +507,14 @@ namespace BannerKings.Models.BKModels
             {
                 result.Add(bonus, new TextObject("Highest title level"));
             }
+
+            SkillHelper.AddSkillBonusForCharacter(BKSkills.Instance.Lordship,
+                BKSkillEffects.Instance.VassalLimit,
+                hero.CharacterObject,
+                ref result,
+                hero.GetSkillValue(BKSkills.Instance.Lordship),
+                true,
+                0);
 
             return result;
         }

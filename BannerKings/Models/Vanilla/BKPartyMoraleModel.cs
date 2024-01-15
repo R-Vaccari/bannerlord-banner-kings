@@ -90,21 +90,22 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (mobileParty.MemberRoster.TotalManCount > supplies.MinimumSoldiersThreshold)
                     {
-                        float alcohol = MathF.Min(supplies.AlcoholNeed / supplies.GetAlcoholCurrentNeed().ResultNumber, 
+                        float alcoholNeed = MathF.Max(supplies.GetAlcoholCurrentNeed().ResultNumber, 1f);
+                        float alcohol = MathF.Min(supplies.AlcoholNeed / alcoholNeed, 
                             supplies.AlcoholNeed);
-                        result.Add(-alcohol, new TextObject("{=PaDvmMT6}Lacking alcohol supplies"));
+                        result.Add(-alcohol, new TextObject("{=!}Alcohol supplies"));
 
                         float animal = MathF.Min(supplies.AnimalProductsNeed / supplies.GetAnimalProductsCurrentNeed().ResultNumber, 
                             supplies.AnimalProductsNeed);
-                        result.Add(-animal, new TextObject("{=HKuszarc}Lacking animal products  supplies"));
+                        result.Add(-animal, new TextObject("{=!}Animal products  supplies"));
 
                         float textiles = MathF.Min(supplies.ClothNeed / supplies.GetTextileCurrentNeed().ResultNumber, 
                             supplies.ClothNeed);
-                        result.Add(-textiles, new TextObject("{=SkcOem5t}Lacking textiles supplies"));
+                        result.Add(-textiles, new TextObject("{=!}Textiles supplies"));
 
                         float wood = MathF.Min(supplies.WoodNeed / supplies.GetWoodCurrentNeed().ResultNumber,
                             supplies.WoodNeed);
-                        result.Add(-wood, new TextObject("{=R3NZZPcQ}Lacking wood supplies"));
+                        result.Add(-wood, new TextObject("{=!}Wood supplies"));
                     }
                 }
             }

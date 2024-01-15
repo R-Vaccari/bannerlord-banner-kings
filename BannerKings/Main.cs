@@ -23,6 +23,7 @@ using BannerKings.Managers.Innovations.Eras;
 using BannerKings.Behaviours.Innovations;
 using BannerKings.Behaviours.Shipping;
 using BannerKings.Campaign;
+using BannerKings.Campaign.Skills;
 
 namespace BannerKings
 {
@@ -137,6 +138,7 @@ namespace BannerKings
 
             BKAttributes.Instance.Initialize();
             BKSkills.Instance.Initialize();
+            BKSkillEffects.Instance.Initialize();
             BKPerks.Instance.Initialize();   
             BKPolicies.Instance.Initialize();
             DefaultEras.Instance.Initialize();

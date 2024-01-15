@@ -1,7 +1,9 @@
 using BannerKings.Behaviours.Diplomacy;
+using BannerKings.Campaign.Skills;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Utils.Models;
 using TaleWorlds.CampaignSystem;
@@ -116,6 +118,10 @@ namespace BannerKings.Models.BKModels
             {
                 result.Add(-10f * (5f / tier), new TextObject());
             }
+
+            result.AddFactor(BKSkillEffects.Instance.Legitimacy.GetPrimaryValue(
+                leader.GetSkillValue(BKSkills.Instance.Lordship)) * 0.01f, 
+                new TextObject("{=UxAl9iyi}Personal"));
 
             return result;
         }

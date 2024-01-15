@@ -3,7 +3,6 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Skills;
-using System.Linq;
 using BannerKings.Managers.Traits;
 using BannerKings.Utils;
 using System.Collections.Generic;
@@ -13,6 +12,8 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.Library;
+using Helpers;
+using BannerKings.Campaign.Skills;
 
 namespace BannerKings.Models.BKModels
 {
@@ -37,6 +38,14 @@ namespace BannerKings.Models.BKModels
                     }
 
                     result.Add(hero.GetTraitLevel(BKTraits.Instance.Zealous) * 0.2f, BKTraits.Instance.Zealous.Name);
+
+                    SkillHelper.AddSkillBonusForCharacter(BKSkills.Instance.Theology, 
+                        BKSkillEffects.Instance.PietyGain,
+                        hero.CharacterObject, 
+                        ref result,
+                        hero.GetSkillValue(BKSkills.Instance.Theology), 
+                        true, 
+                        0);
 
                     if (rel.FavoredCultures.Contains(hero.Culture))
                     {
@@ -521,6 +530,18 @@ namespace BannerKings.Models.BKModels
                     DefaultDivinities.Instance.AseraSecondary3))
                 {
                     result.AddFactor(0.15f, DefaultDivinities.Instance.AseraSecondary1.Name);
+                }
+
+                if (settlement.Town != null && settlement.Town.Governor != null)
+                {
+                    Hero governor = settlement.Town.Governor;
+                    SkillHelper.AddSkillBonusForCharacter(BKSkills.Instance.Theology,
+                        BKSkillEffects.Instance.FaithPresence,
+                        governor.CharacterObject,
+                        ref result,
+                        governor.GetSkillValue(BKSkills.Instance.Theology),
+                        true,
+                        0);
                 }
             }
 

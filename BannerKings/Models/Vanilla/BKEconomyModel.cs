@@ -1,4 +1,5 @@
 using BannerKings.Behaviours;
+using BannerKings.Campaign.Skills;
 using BannerKings.Extensions;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Court.Members;
@@ -9,6 +10,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Shipping;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Governments;
+using Helpers;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -132,9 +134,15 @@ namespace BannerKings.Models.Vanilla
             if (settlement.Town != null)
             {
                 Hero governor = settlement.Town.Governor;
-                if (governor != null && governor.IsArtisan)
+                if (governor != null)
                 {
-                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Crafting) * 0.08f, new TextObject("{=cbL60ObC}Artisan Governor"));
+                    SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Crafting,
+                        BKSkillEffects.Instance.ProductionEfficiency,
+                        governor.CharacterObject,
+                        ref result,
+                        governor.GetSkillValue(DefaultSkills.Crafting),
+                        true,
+                        0);
                 }
             }
 
@@ -180,9 +188,15 @@ namespace BannerKings.Models.Vanilla
             if (settlement.Town != null)
             {
                 Hero governor = settlement.Town.Governor;
-                if (governor != null && governor.IsArtisan)
+                if (governor != null)
                 {
-                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Crafting) * 0.04f, new TextObject("{=cbL60ObC}Artisan Governor"));
+                    SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Crafting,
+                        BKSkillEffects.Instance.ProductionQuality,
+                        governor.CharacterObject,
+                        ref result,
+                        governor.GetSkillValue(DefaultSkills.Crafting),
+                        true,
+                        0);
                 }
             }
            
@@ -280,9 +294,15 @@ namespace BannerKings.Models.Vanilla
                    true);
 
                 Hero governor = settlement.Town.Governor;
-                if (governor != null && governor.IsMerchant)
+                if (governor != null)
                 {
-                    result.AddFactor(governor.GetSkillValue(DefaultSkills.Trade) * 0.1f, new TextObject("{=mpuvSCJU}Merchant Governor"));
+                    SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Trade,
+                        BKSkillEffects.Instance.TradePower,
+                        governor.CharacterObject,
+                        ref result,
+                        governor.GetSkillValue(DefaultSkills.Trade),
+                        true,
+                        0);
                 }
             }
 
