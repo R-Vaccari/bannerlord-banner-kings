@@ -1,5 +1,8 @@
 using BannerKings.Behaviours.PartyNeeds;
+using BannerKings.Campaign.Skills;
+using BannerKings.Managers.Skills;
 using BannerKings.Settings;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
@@ -44,11 +47,21 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateAlcoholNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
-            result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
-                return result;
+                result.AddFactor(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+            }
+
+            if (needs.Party.EffectiveQuartermaster != null)
+            {
+                Hero quarterMaster = needs.Party.EffectiveQuartermaster;
+                SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Steward,
+                    BKSkillEffects.Instance.SupplyEfficiency,
+                    quarterMaster.CharacterObject,
+                    ref result,
+                    quarterMaster.GetSkillValue(DefaultSkills.Steward),
+                    true,
+                    0);
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -65,11 +78,21 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateArrowsNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
-            result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
-                return result;
+                result.AddFactor(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+            }
+
+            if (needs.Party.EffectiveQuartermaster != null)
+            {
+                Hero quarterMaster = needs.Party.EffectiveQuartermaster;
+                SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Steward,
+                    BKSkillEffects.Instance.SupplyEfficiency,
+                    quarterMaster.CharacterObject,
+                    ref result,
+                    quarterMaster.GetSkillValue(DefaultSkills.Steward),
+                    true,
+                    0);
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -90,11 +113,21 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateClothNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
-            result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
-                return result;
+                result.AddFactor(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+            }
+
+            if (needs.Party.EffectiveQuartermaster != null)
+            {
+                Hero quarterMaster = needs.Party.EffectiveQuartermaster;
+                SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Steward,
+                    BKSkillEffects.Instance.SupplyEfficiency,
+                    quarterMaster.CharacterObject,
+                    ref result,
+                    quarterMaster.GetSkillValue(DefaultSkills.Steward),
+                    true,
+                    0);
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -111,11 +144,21 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateHorsesNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
-            result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
-                return result;
+                result.AddFactor(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+            }
+
+            if (needs.Party.EffectiveQuartermaster != null)
+            {
+                Hero quarterMaster = needs.Party.EffectiveQuartermaster;
+                SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Steward,
+                    BKSkillEffects.Instance.SupplyEfficiency,
+                    quarterMaster.CharacterObject,
+                    ref result,
+                    quarterMaster.GetSkillValue(DefaultSkills.Steward),
+                    true,
+                    0);
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -135,11 +178,21 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateAnimalProductsNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
-            result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
-                return result;
+                result.AddFactor(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+            }
+
+            if (needs.Party.EffectiveQuartermaster != null)
+            {
+                Hero quarterMaster = needs.Party.EffectiveQuartermaster;
+                SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Steward,
+                    BKSkillEffects.Instance.SupplyEfficiency,
+                    quarterMaster.CharacterObject,
+                    ref result,
+                    quarterMaster.GetSkillValue(DefaultSkills.Steward),
+                    true,
+                    0);
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -156,11 +209,21 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateShieldsNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
-            result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
-                return result;
+                result.AddFactor(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+            }
+
+            if (needs.Party.EffectiveQuartermaster != null)
+            {
+                Hero quarterMaster = needs.Party.EffectiveQuartermaster;
+                SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Steward,
+                    BKSkillEffects.Instance.SupplyEfficiency,
+                    quarterMaster.CharacterObject,
+                    ref result,
+                    quarterMaster.GetSkillValue(DefaultSkills.Steward),
+                    true,
+                    0);
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -183,11 +246,21 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateWeaponsNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
-            result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
-                return result;
+                result.AddFactor(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+            }
+
+            if (needs.Party.EffectiveQuartermaster != null)
+            {
+                Hero quarterMaster = needs.Party.EffectiveQuartermaster;
+                SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Steward,
+                    BKSkillEffects.Instance.SupplyEfficiency,
+                    quarterMaster.CharacterObject,
+                    ref result,
+                    quarterMaster.GetSkillValue(DefaultSkills.Steward),
+                    true,
+                    0);
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -207,11 +280,21 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateToolsNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
-            result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
-                return result;
+                result.AddFactor(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+            }
+
+            if (needs.Party.EffectiveQuartermaster != null)
+            {
+                Hero quarterMaster = needs.Party.EffectiveQuartermaster;
+                SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Steward,
+                    BKSkillEffects.Instance.SupplyEfficiency,
+                    quarterMaster.CharacterObject,
+                    ref result,
+                    quarterMaster.GetSkillValue(DefaultSkills.Steward),
+                    true,
+                    0);
             }
 
             float siege = 0f;
@@ -251,11 +334,21 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateWoodNeed(PartySupplies needs, bool descriptions)
         {
             ExplainedNumber result = new ExplainedNumber(0f, descriptions);
-            result.LimitMin(0f);
             if (needs.Party.CurrentSettlement != null && needs.Party.CurrentSettlement.Town != null)
             {
-                result.Add(-1f, new TextObject("{=eN981XMi}In a town or castle"));
-                return result;
+                result.AddFactor(-1f, new TextObject("{=eN981XMi}In a town or castle"));
+            }
+
+            if (needs.Party.EffectiveQuartermaster != null)
+            {
+                Hero quarterMaster = needs.Party.EffectiveQuartermaster;
+                SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Steward,
+                    BKSkillEffects.Instance.SupplyEfficiency,
+                    quarterMaster.CharacterObject,
+                    ref result,
+                    quarterMaster.GetSkillValue(DefaultSkills.Steward),
+                    true,
+                    0);
             }
 
             float siege = 0f;
