@@ -33,6 +33,8 @@ namespace BannerKings.Managers.Innovations
         public Innovation Masonry { get; } = new Innovation("Masonry");
         public Innovation AdvancedMasonry { get; } = new Innovation("AdvancedMasonry");
 
+        public Dictionary<string, List<Innovation>> StartingInnovations { get; } = new Dictionary<string, List<Innovation>>(15);
+
         public override IEnumerable<Innovation> All
         {
             get
@@ -59,6 +61,10 @@ namespace BannerKings.Managers.Innovations
                 yield return Manorialism;
                 yield return Masonry;
                 yield return AdvancedMasonry;
+                foreach (Innovation item in ModAdditions)
+                {
+                    yield return item;
+                }
             }
         }
 
@@ -243,28 +249,65 @@ namespace BannerKings.Managers.Innovations
                 DefaultEras.Instance.ThirdEra,
                 Innovation.InnovationType.Technology,
                 3000f);
+
+            StartingInnovations.Add("vlandia", new List<Innovation>()
+            {
+                Burgage,
+                HeavyPlough,
+                HorseCollar,
+                Crossbows,
+                Mills
+            });
+
+            StartingInnovations.Add("empire", new List<Innovation>()
+            {
+                HeavyPlough,
+                HorseCollar,
+                Guilds,
+                Manorialism,
+                Crossbows,
+                Stirrups,
+                Mills,
+                Theater,
+                Forum,
+                Aqueducts
+            });
+
+            StartingInnovations.Add("khuzait", new List<Innovation>()
+            {
+                HorseCollar,
+                Stirrups
+            });
+
+            StartingInnovations.Add("aserai", new List<Innovation>()
+            {
+                Burgage,
+                HeavyPlough,
+                HorseCollar,
+                Crossbows
+            });
+
+            StartingInnovations.Add("sturgia", new List<Innovation>()
+            {
+                Burgage,
+                HeavyPlough,
+                HorseCollar,
+            });
+
+            StartingInnovations.Add("battania", new List<Innovation>()
+            {
+                HeavyPlough,
+                ThreeFieldsSystem,
+                Wheelbarrow
+            });
         }
 
         public List<Innovation> GetCultureDefaultInnovations(CultureObject culture)
         {
-            List<Innovation> list = new List<Innovation>(2);
-            string id = culture.StringId;
-
-            if (id == "vlandia")
+            List<Innovation> list = new List<Innovation>(3);
+            if (StartingInnovations.ContainsKey(culture.StringId))
             {
-                list.Add(Burgage);
-                list.Add(HeavyPlough);
-                list.Add(HorseCollar);
-                list.Add(Crossbows);
-            }
-            else if (id == "empire")
-            {
-                list.Add(HeavyPlough);
-                list.Add(HorseCollar);
-                list.Add(Guilds);
-                list.Add(Manorialism);
-                list.Add(Crossbows);
-                list.Add(Stirrups);
+                list = StartingInnovations[culture.StringId];
             }
 
             return list;
