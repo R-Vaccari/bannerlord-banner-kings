@@ -27,8 +27,8 @@ namespace BannerKings.Utils
             if (PartyBaseHelper.HasFeat(party, feat))
             {
                 if (feat.IncrementType == FeatObject.AdditionType.Add)
-                    result.Add(feat.EffectBonus, feat.Name);
-                else result.AddFactor(feat.EffectBonus, feat.Name);
+                    result.Add(feat.EffectBonus, GameTexts.FindText("str_culture"));
+                else result.AddFactor(feat.EffectBonus, GameTexts.FindText("str_culture"));
             }
         }
 
