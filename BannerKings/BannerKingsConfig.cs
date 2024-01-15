@@ -4,6 +4,7 @@ using BannerKings.Behaviours.Criminality;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Campaign.Economy.Markets;
+using BannerKings.Campaign.Skills;
 using BannerKings.Managers;
 using BannerKings.Managers.AI;
 using BannerKings.Managers.Court;
@@ -134,6 +135,7 @@ namespace BannerKings
 
         public void Initialize()
         {
+            BKSkillEffects.Instance.AddVanilla();
             DefaultPopulationNames.Instance.Initialize();
             DefaultTitleNames.Instance.Initialize();
             BKTraits.Instance.Initialize();

@@ -199,17 +199,10 @@ namespace BannerKings.Models.BKModels
                     result.Add(0.06f, DefaultDivinities.Instance.DarusosianSecondary2.Name);
                 }
 
-                Hero governor = settlement.Town.Governor;
-                if (governor != null)
-                {
-                    SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Steward,
-                        BKSkillEffects.Instance.Stability,
-                        governor.CharacterObject,
-                        ref result,
-                        governor.GetSkillValue(DefaultSkills.Steward),
-                        true,
-                        0);
-                }
+                SkillHelper.AddSkillBonusForTown(DefaultSkills.Steward,
+                      BKSkillEffects.Instance.Stability,
+                      settlement.Town,
+                      ref result);
 
                 var demesneLimit = CalculateDemesneLimit(settlement.Owner).ResultNumber;
                 var currentDemesne = CalculateCurrentDemesne(settlement.OwnerClan).ResultNumber;

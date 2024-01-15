@@ -60,7 +60,7 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.CharacterObject,
                     ref result,
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
-                    true,
+                    false,
                     0);
             }
 
@@ -91,7 +91,7 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.CharacterObject,
                     ref result,
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
-                    true,
+                    false,
                     0);
             }
 
@@ -126,7 +126,7 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.CharacterObject,
                     ref result,
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
-                    true,
+                    false,
                     0);
             }
 
@@ -157,7 +157,7 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.CharacterObject,
                     ref result,
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
-                    true,
+                    false,
                     0);
             }
 
@@ -191,7 +191,7 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.CharacterObject,
                     ref result,
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
-                    true,
+                    false,
                     0);
             }
 
@@ -222,7 +222,7 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.CharacterObject,
                     ref result,
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
-                    true,
+                    false,
                     0);
             }
 
@@ -259,7 +259,7 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.CharacterObject,
                     ref result,
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
-                    true,
+                    false,
                     0);
             }
 
@@ -293,7 +293,7 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.CharacterObject,
                     ref result,
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
-                    true,
+                    false,
                     0);
             }
 
@@ -347,7 +347,7 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.CharacterObject,
                     ref result,
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
-                    true,
+                    false,
                     0);
             }
 

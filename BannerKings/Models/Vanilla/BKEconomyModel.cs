@@ -133,17 +133,10 @@ namespace BannerKings.Models.Vanilla
 
             if (settlement.Town != null)
             {
-                Hero governor = settlement.Town.Governor;
-                if (governor != null)
-                {
-                    SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Crafting,
+                SkillHelper.AddSkillBonusForTown(DefaultSkills.Crafting,
                         BKSkillEffects.Instance.ProductionEfficiency,
-                        governor.CharacterObject,
-                        ref result,
-                        governor.GetSkillValue(DefaultSkills.Crafting),
-                        true,
-                        0);
-                }
+                        settlement.Town,
+                        ref result);
             }
 
             return result;
@@ -187,17 +180,10 @@ namespace BannerKings.Models.Vanilla
 
             if (settlement.Town != null)
             {
-                Hero governor = settlement.Town.Governor;
-                if (governor != null)
-                {
-                    SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Crafting,
-                        BKSkillEffects.Instance.ProductionQuality,
-                        governor.CharacterObject,
-                        ref result,
-                        governor.GetSkillValue(DefaultSkills.Crafting),
-                        true,
-                        0);
-                }
+                SkillHelper.AddSkillBonusForTown(DefaultSkills.Crafting,
+                       BKSkillEffects.Instance.ProductionQuality,
+                       settlement.Town,
+                       ref result);
             }
            
             return result;
@@ -296,13 +282,10 @@ namespace BannerKings.Models.Vanilla
                 Hero governor = settlement.Town.Governor;
                 if (governor != null)
                 {
-                    SkillHelper.AddSkillBonusForCharacter(DefaultSkills.Trade,
-                        BKSkillEffects.Instance.TradePower,
-                        governor.CharacterObject,
-                        ref result,
-                        governor.GetSkillValue(DefaultSkills.Trade),
-                        true,
-                        0);
+                    SkillHelper.AddSkillBonusForTown(DefaultSkills.Trade,
+                       BKSkillEffects.Instance.TradePower,
+                       settlement.Town,
+                       ref result);
                 }
             }
 

@@ -532,16 +532,12 @@ namespace BannerKings.Models.BKModels
                     result.AddFactor(0.15f, DefaultDivinities.Instance.AseraSecondary1.Name);
                 }
 
-                if (settlement.Town != null && settlement.Town.Governor != null)
+                if (settlement.Town != null)
                 {
-                    Hero governor = settlement.Town.Governor;
-                    SkillHelper.AddSkillBonusForCharacter(BKSkills.Instance.Theology,
+                    SkillHelper.AddSkillBonusForTown(BKSkills.Instance.Theology,
                         BKSkillEffects.Instance.FaithPresence,
-                        governor.CharacterObject,
-                        ref result,
-                        governor.GetSkillValue(BKSkills.Instance.Theology),
-                        true,
-                        0);
+                        settlement.Town,
+                        ref result);
                 }
             }
 
