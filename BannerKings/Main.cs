@@ -80,6 +80,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKMercenaryCareerBehavior());
             campaignStarter.AddBehavior(new BKRelationsBehavior());
             campaignStarter.AddBehavior(new BKSettlementBehavior());
+            campaignStarter.AddBehavior(new BKTroopAdvancementBehavior());
 
             campaignStarter.AddModel(new BKPrisonerModel());
             campaignStarter.AddModel(BannerKingsConfig.Instance.CompanionModel);
