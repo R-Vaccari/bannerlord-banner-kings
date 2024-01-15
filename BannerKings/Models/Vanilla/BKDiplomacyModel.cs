@@ -228,8 +228,12 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
+            float cap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(proposer.RulingClan).ResultNumber;
+            result.Add(cap, new TextObject("{=!}Influence limit of {CLAN}")
+                .SetTextVariable("CLAN", proposer.RulingClan.Name));
+
             float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason);
-            result.AddFactor(peace / -75000f, new TextObject("{=hAAOEqaJ}Peace interest"));
+            result.AddFactor(peace / -60000f, new TextObject("{=hAAOEqaJ}Peace interest"));
             return result;
         }
 
