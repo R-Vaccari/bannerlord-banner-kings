@@ -1,4 +1,5 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Campaign;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Extensions
@@ -32,7 +33,8 @@ namespace BannerKings.Extensions
             var type = village.VillageType;
             return type == DefaultVillageTypes.WheatFarm || type == DefaultVillageTypes.DateFarm ||
                 type == DefaultVillageTypes.FlaxPlant || type == DefaultVillageTypes.SilkPlant || 
-                type == DefaultVillageTypes.OliveTrees || type == DefaultVillageTypes.VineYard;
+                type == DefaultVillageTypes.OliveTrees || type == DefaultVillageTypes.VineYard ||
+                type == BKVillageTypes.Instance.Papyrus;
         }
 
         public static bool IsAnimalVillage(this Village village)
