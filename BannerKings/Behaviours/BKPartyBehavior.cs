@@ -54,7 +54,17 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, OnSiegeStarted);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
-            //CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnDailyTick);
+            CampaignEvents.OnSettlementLeftEvent.AddNonSerializedListener(this, OnSettlementLeft);
+            CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnDailyTick);
+        }
+
+        private void OnSettlementLeft(MobileParty mobileParty, Settlement settlement)
+        {
+            if (!mobileParty.IsCaravan) return;
+
+            if (settlement.Town == null) return;
+
+
         }
 
         private void OnGameLoaded(CampaignGameStarter starter)
