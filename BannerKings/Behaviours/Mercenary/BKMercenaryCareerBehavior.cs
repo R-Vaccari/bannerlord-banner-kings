@@ -3,6 +3,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.GameMenus;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -55,31 +56,25 @@ namespace BannerKings.Behaviours.Mercenary
                         return false;
                     }
 
-                    if (Clan.PlayerClan.Kingdom == null)
+                    if (Settlement.CurrentSettlement.MapFaction.IsAtWarWith(Clan.PlayerClan.MapFaction))
                     {
                         return false;
                     }
 
                     var career = careers[Clan.PlayerClan];
-                    var troop = career.GetTroop(Clan.PlayerClan.Kingdom, true);
+                    var troop = career.GetTroop(Settlement.CurrentSettlement.Culture, true);
                     if (troop == null)
                     {
                         return false;
                     }
 
-                    if (troop.Character.Culture != Hero.MainHero.CurrentSettlement.Culture)
-                    {
-                        return false;
-                    }
-
                     MBTextManager.SetTextVariable("CUSTOM_TROOP", troop.Name);
-
                     return true;
                 },
                 (MenuCallbackArgs args) =>
                 {
                     var career = careers[Clan.PlayerClan];
-                    var troop = career.GetTroop(Clan.PlayerClan.Kingdom, true);
+                    var troop = career.GetTroop(Settlement.CurrentSettlement.Culture, true);
                     var cost = TaleWorlds.CampaignSystem.Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(troop.Character, Hero.MainHero);
                     Hero.MainHero.ChangeHeroGold(-cost);
                     MobileParty.MainParty.AddElementToMemberRoster(troop.Character, 1);
@@ -95,31 +90,25 @@ namespace BannerKings.Behaviours.Mercenary
                         return false;
                     }
 
-                    if (Clan.PlayerClan.Kingdom == null)
+                    if (Settlement.CurrentSettlement.MapFaction.IsAtWarWith(Clan.PlayerClan.MapFaction))
                     {
                         return false;
                     }
 
                     var career = careers[Clan.PlayerClan];
-                    var troop = career.GetTroop(Clan.PlayerClan.Kingdom, false);
+                    var troop = career.GetTroop(Settlement.CurrentSettlement.Culture, false);
                     if (troop == null)
                     {
                         return false;
                     }
 
-                    if (troop.Character.Culture != Hero.MainHero.CurrentSettlement.Culture)
-                    {
-                        return false;
-                    }
-
                     MBTextManager.SetTextVariable("CUSTOM_TROOP", troop.Name);
-
                     return true;
                 },
                 (MenuCallbackArgs args) =>
                 {
                     var career = careers[Clan.PlayerClan];
-                    var troop = career.GetTroop(Clan.PlayerClan.Kingdom, false);
+                    var troop = career.GetTroop(Settlement.CurrentSettlement.Culture, false);
                     var cost = TaleWorlds.CampaignSystem.Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(troop.Character, Hero.MainHero);
                     Hero.MainHero.ChangeHeroGold(-cost);
                     MobileParty.MainParty.AddElementToMemberRoster(troop.Character, 1);
