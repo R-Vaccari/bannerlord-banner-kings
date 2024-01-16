@@ -64,7 +64,29 @@ namespace BannerKings.Behaviours
 
             if (settlement.Town == null) return;
 
-
+            float space = mobileParty.InventoryCapacity * 0.8f - mobileParty.TotalWeightCarried;
+            if (space > 5f)
+            {
+                foreach (var element in settlement.Party.ItemRoster)
+                {
+                    float price = settlement.Town.GetItemPrice(element.EquipmentElement, mobileParty);
+                    if (price < element.EquipmentElement.ItemValue * 0.33f)
+                    {
+                        int count = (int)MathF.Min(space / element.EquipmentElement.Item.Weight, (float)element.Amount);
+                        if (count > 0)
+                        {
+                            int cost = (int)(count * price);
+                            if (mobileParty.PartyTradeGold >= cost)
+                            {
+                                mobileParty.ItemRoster.AddToCounts(element.EquipmentElement, count);
+                                mobileParty.PartyTradeGold -= cost;
+                                settlement.Town.Owner.ItemRoster.AddToCounts(element.EquipmentElement, -count);
+                                settlement.Town.ChangeGold(cost);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void OnGameLoaded(CampaignGameStarter starter)
