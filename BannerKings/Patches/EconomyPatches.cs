@@ -960,6 +960,7 @@ namespace BannerKings.Patches
                 CampaignTime lastHomeVisitTimeOfCaravan,
                 float caravanFullness, bool distanceCut)
             {
+                __result += 50f;
                 if (BannerKingsConfig.Instance.PopulationManager != null)
                 {
                     var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
@@ -970,8 +971,13 @@ namespace BannerKings.Patches
                             __result *= data.EconomicData.CaravanAttraction.ResultNumber;
                         }
                         
-                        __result -= data.EconomicData.CaravanFee(caravanParty) / 10f;
+                        __result -= data.EconomicData.CaravanFee(caravanParty) / 15f;
                     }
+                }
+
+                if (lastHomeVisitTimeOfCaravan.ElapsedWeeksUntilNow < 1f)
+                {
+                    __result *= 0.5f;
                 }
             }
         }
