@@ -149,7 +149,7 @@ namespace BannerKings
             DefaultCustomTroopPresets.Instance.Initialize();
 
             UIManager.Instance.SetScreen(new BannerKingsScreen());
-            TaleWorlds.CampaignSystem.Campaign.Current.TournamentManager = new BKTournamentManager();
+            //TaleWorlds.CampaignSystem.Campaign.Current.TournamentManager = new BKTournamentManager();
         }
 
         protected override void OnSubModuleLoad()
