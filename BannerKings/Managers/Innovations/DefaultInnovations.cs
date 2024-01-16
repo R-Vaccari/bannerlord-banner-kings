@@ -250,16 +250,16 @@ namespace BannerKings.Managers.Innovations
                 Innovation.InnovationType.Technology,
                 3000f);
 
-            StartingInnovations.Add("vlandia", new List<Innovation>()
+            StartingInnovations["vlandia"] = new List<Innovation>()
             {
                 Burgage,
                 HeavyPlough,
                 HorseCollar,
                 Crossbows,
                 Mills
-            });
+            };
 
-            StartingInnovations.Add("empire", new List<Innovation>()
+            StartingInnovations["empire"] = new List<Innovation>()
             {
                 HeavyPlough,
                 HorseCollar,
@@ -271,35 +271,35 @@ namespace BannerKings.Managers.Innovations
                 Theater,
                 Forum,
                 Aqueducts
-            });
+            };
 
-            StartingInnovations.Add("khuzait", new List<Innovation>()
+            StartingInnovations["khuzait"] = new List<Innovation>()
             {
                 HorseCollar,
                 Stirrups
-            });
+            };
 
-            StartingInnovations.Add("aserai", new List<Innovation>()
+            StartingInnovations["aserai"] = new List<Innovation>()
             {
                 Burgage,
                 HeavyPlough,
                 HorseCollar,
                 Crossbows
-            });
+            };
 
-            StartingInnovations.Add("sturgia", new List<Innovation>()
+            StartingInnovations["sturgia"] = new List<Innovation>()
             {
                 Burgage,
                 HeavyPlough,
                 HorseCollar,
-            });
+            };
 
-            StartingInnovations.Add("battania", new List<Innovation>()
+            StartingInnovations["battania"] = new List<Innovation>()
             {
                 HeavyPlough,
                 ThreeFieldsSystem,
                 Wheelbarrow
-            });
+            };
         }
 
         public List<Innovation> GetCultureDefaultInnovations(CultureObject culture)
