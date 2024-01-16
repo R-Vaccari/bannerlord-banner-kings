@@ -32,11 +32,30 @@
 			<Output output="ItemCategory.iron" output_count="1" />
 		  </Outputs>
 		</Production>
+		<Production
+			conversion_speed="0.8">
+			<Inputs>
+				<Input
+					input_item="grain" />
+			</Inputs>
+			<Outputs>
+				<Output
+					output="ItemCategory.beer"
+					output_count="1" />
+			</Outputs>
+		</Production>
 		<Production conversion_speed="0.2">
 		  <Inputs>
 		  </Inputs>
 		  <Outputs>
 			<Output output="ItemCategory.leather" output_count="1" />
+		  </Outputs>
+		</Production>
+		<Production conversion_speed="0.5">
+		  <Inputs>
+		  </Inputs>
+		  <Outputs>
+			<Output output="ItemCategory.linen" output_count="1" />
 		  </Outputs>
 		</Production>
 		<Production conversion_speed="1.0">
@@ -191,7 +210,7 @@
 		<Production conversion_speed="0.8">
 		  <Inputs></Inputs>
 		  <Outputs>
-			<Output output="ItemCategory.arrows" output_count="2" />
+			<Output output="ItemCategory.arrows" output_count="4" />
 		  </Outputs>
 		</Production>
 		<Production conversion_speed="1.2">
