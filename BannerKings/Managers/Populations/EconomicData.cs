@@ -82,7 +82,7 @@ namespace BannerKings.Managers.Populations
         public ExplainedNumber CaravanAttraction =>
             BannerKingsConfig.Instance.EconomyModel.CalculateTradePower(settlement);
 
-        public ExplainedNumber Mercantilism => BannerKingsConfig.Instance.EconomyModel.CalculateEffect(settlement);
+        public ExplainedNumber Mercantilism => BannerKingsConfig.Instance.EconomyModel.CalculateMercantilism(settlement);
 
         public ExplainedNumber ProductionEfficiency =>
             BannerKingsConfig.Instance.EconomyModel.CalculateProductionEfficiency(settlement);

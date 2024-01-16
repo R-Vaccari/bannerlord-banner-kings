@@ -13,15 +13,14 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
 using static BannerKings.Managers.PopulationManager;
-using static BannerKings.Managers.Populations.Estates.Estate;
 
 namespace BannerKings.Models.BKModels
 {
-    public class BKGrowthModel : IGrowthModel
+    public class BKGrowthModel : GrowthModel
     {
         private const float POP_GROWTH_FACTOR = 0.005f;
 
-        public ExplainedNumber CalculateEffect(Settlement settlement, PopulationData data, bool descriptions = false)
+        public override ExplainedNumber CalculateEffect(Settlement settlement, PopulationData data, bool descriptions = false)
         {
             var result = new ExplainedNumber(5f, descriptions);
 
@@ -66,7 +65,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateSettlementCap(Settlement settlement, PopulationData data, bool descriptions = false)
+        public override ExplainedNumber CalculateSettlementCap(Settlement settlement, PopulationData data, bool descriptions = false)
         {
             var result = new ExplainedNumber(0f, descriptions);
 
@@ -121,7 +120,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateEstateCap(Estate estate, bool descriptions = false)
+        public override ExplainedNumber CalculateEstateCap(Estate estate, bool descriptions = false)
         {
             var result = new ExplainedNumber(0f, descriptions);
 
@@ -138,7 +137,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculatePopulationClassDemand(Settlement settlement, PopType type, bool explanations = false)
+        public override ExplainedNumber CalculatePopulationClassDemand(Settlement settlement, PopType type, bool explanations = false)
         {
             var result = new ExplainedNumber(1f, explanations);
             var faction = settlement.OwnerClan.Kingdom;
@@ -286,7 +285,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateSlavePrice(Settlement settlement, bool explanations = false)
+        public override ExplainedNumber CalculateSlavePrice(Settlement settlement, bool explanations = false)
         {
             var result = new ExplainedNumber(150f, explanations);
             result.LimitMin(0f);
@@ -303,11 +302,6 @@ namespace BannerKings.Models.BKModels
             result.AddFactor(medium - fraction, new TextObject("{=G15w2C46}Local demand"));
 
             return result;
-        }
-
-        public ExplainedNumber CalculateEffect(Settlement settlement)
-        {
-            return new ExplainedNumber();
         }
     }
 }

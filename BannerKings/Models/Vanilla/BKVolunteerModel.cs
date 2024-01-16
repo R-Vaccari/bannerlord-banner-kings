@@ -25,7 +25,7 @@ using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKVolunteerModel : DefaultVolunteerModel
+    public class BKVolunteerModel : VolunteerModel
     {
         public override int MaximumIndexHeroCanRecruitFromHero(Hero buyerHero, Hero sellerHero, int useValueAsRelation = -101)
           => (int)Math.Floor(CalculateMaximumRecruitmentIndex(buyerHero, sellerHero, useValueAsRelation, false).ResultNumber);
@@ -299,10 +299,10 @@ namespace BannerKings.Models.Vanilla
 
         public override float GetDailyVolunteerProductionProbability(Hero hero, int index, Settlement settlement)
         {
-            return GetDraftEfficiency(hero, index, settlement).ResultNumber;
+            return GetDraftEfficiency(hero, settlement).ResultNumber;
         }
 
-        public ExplainedNumber GetDraftEfficiency(Hero hero, int index, Settlement settlement)
+        public override ExplainedNumber GetDraftEfficiency(Hero hero, Settlement settlement)
         {
             if (hero == null)
             {

@@ -286,6 +286,11 @@ namespace BannerKings.Models.Vanilla
                        settlement.Town,
                        ref result);
                 }
+
+                if (settlement.IsCastle)
+                {
+                    result.AddFactor(-0.4f, new TextObject("{=UPhMZ859}Castle"));
+                }
             }
 
             return result;
