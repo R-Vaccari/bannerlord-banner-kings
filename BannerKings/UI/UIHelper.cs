@@ -942,17 +942,20 @@ namespace BannerKings.UI
         public static List<TooltipProperty> GetRecruitToolTip(CharacterObject character, Hero owner, int relation, bool canRecruit)
         {
             List<TooltipProperty> list = new List<TooltipProperty>();
-
             if (!canRecruit)
             {
                 string text = "";
-                list.Add(new TooltipProperty(text, character.ToString(), 1, false, TooltipProperty.TooltipPropertyFlags.None));
+                list.Add(new TooltipProperty(text, character.ToString(), 1, false, TooltipProperty.TooltipPropertyFlags.Title));
                 list.Add(new TooltipProperty(text, text, -1, false, TooltipProperty.TooltipPropertyFlags.None));
                 GameTexts.SetVariable("LEVEL", character.Level);
                 GameTexts.SetVariable("newline", "\n");
                 list.Add(new TooltipProperty(text, GameTexts.FindText("str_level_with_value", null).ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
 
                 list.Add(new TooltipProperty(text, new TextObject("{=xa13n63V}You don't have access to this recruit.").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+
+                TooltipAddEmptyLine(list);
+                list.Add(new TooltipProperty("", new TextObject("{=!}Access to volunteers is determined mostly by the Drating law (Demesne law) assocaited with the title of this fief. Laws are only changable through the kingdom repsented by a Kingdom-level title that rulers over this fief (see Demesne Hierarchy). Relationship, perks and other factors are secondary to the law's effects.").ToString(), 
+                    0, false, TooltipProperty.TooltipPropertyFlags.MultiLine));
 
                 var explanation = BannerKingsConfig.Instance.VolunteerModel.CalculateMaximumRecruitmentIndex(Hero.MainHero, owner, relation, true);
                 TooltipAddEmptyLine(list);
@@ -963,7 +966,6 @@ namespace BannerKings.UI
             }
 
             return list;
-
         }
 
         public static List<TooltipProperty> GetHeirTooltip(Hero hero, ExplainedNumber score)
