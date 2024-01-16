@@ -80,23 +80,10 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (party.MobileParty.MemberRoster.TotalManCount > supplies.MinimumSoldiersThreshold)
                     {
-                        float weapons = MathF.Min(supplies.WeaponsNeed / supplies.GetWeaponsCurrentNeed().ResultNumber,
-                            supplies.WeaponsNeed);
-                        float minValue = -baseResult.ResultNumber * 0.15f;
-                        baseResult.Add(MathF.Clamp(weapons, minValue, 0),
-                            new TextObject("{=7Y1M7b0R}Lacking weapon supplies"));
-
-                        float ammo = MathF.Min(supplies.ArrowsNeed / supplies.GetArrowsCurrentNeed().ResultNumber,
-                            supplies.ArrowsNeed);
-                        baseResult.Add(MathF.Clamp(ammo, minValue, 0), new TextObject("{=2Luts26h}Lacking ammunition supplies"));
-
-                        float mounts = MathF.Min(supplies.HorsesNeed / supplies.GetMountsCurrentNeed().ResultNumber,
-                            supplies.HorsesNeed);
-                        baseResult.Add(MathF.Clamp(mounts, minValue, 0), new TextObject("{=Ps0ugfFQ}Lacking mount supplies"));
-
-                        float shields = MathF.Min(supplies.ShieldsNeed / supplies.GetShieldsCurrentNeed().ResultNumber,
-                            supplies.ShieldsNeed);
-                        baseResult.Add(MathF.Clamp(shields, minValue, 0), new TextObject("{=ut6PVJ40}Lacking shield supplies"));
+                        baseResult.Add(-supplies.WeaponsNeed / 1f, new TextObject("{=7Y1M7b0R}Lacking weapon supplies"));
+                        baseResult.Add(-supplies.ArrowsNeed / 1f, new TextObject("{=2Luts26h}Lacking ammunition supplies"));
+                        baseResult.Add(-supplies.HorsesNeed / 1f, new TextObject("{=Ps0ugfFQ}Lacking mount supplies"));
+                        baseResult.Add(-supplies.ShieldsNeed / 1f, new TextObject("{=ut6PVJ40}Lacking shield supplies"));
                     }
                 }
 
