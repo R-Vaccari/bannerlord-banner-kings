@@ -12,6 +12,7 @@ using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings
 {
@@ -119,6 +120,17 @@ namespace BannerKings
             }
 
             return "No mercenary career found.";
+        }
+
+        [CommandLineFunctionality.CommandLineArgumentFunction("finish_claims", "bannerkings")]
+        public static string FinishClaims(List<string> strings)
+        {
+            foreach (FeudalTitle title in BannerKingsConfig.Instance.TitleManager.AllTitles)
+            {
+                title.FinishClaims();
+            }
+
+            return "Claims finished.";
         }
 
         [CommandLineFunctionality.CommandLineArgumentFunction("give_player_full_peerage", "bannerkings")]

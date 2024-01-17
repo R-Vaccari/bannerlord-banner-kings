@@ -227,6 +227,20 @@ namespace BannerKings.Managers.Titles
             }
         }
 
+        internal void FinishClaims()
+        {
+            var toAdd = new Dictionary<Hero, ClaimType>();
+            foreach (var pair in OngoingClaims)
+            {
+                toAdd.Add(pair.Key, ClaimType.Fabricated);
+            }
+
+            foreach (var pair in toAdd)
+            {
+                AddClaim(pair.Key, pair.Value);
+            }
+        }
+
         public void TickDrift(FeudalTitle current, float progress = 0.000793f)
         {
             AddDrift(current, progress);
@@ -383,7 +397,7 @@ namespace BannerKings.Managers.Titles
 
         public void DriftTitle(FeudalTitle newSovereign, bool notify = true)
         {
-            if (TitleType > TitleType.Dukedom)
+            if (TitleType > TitleType.Kingdom)
             {
                 return;
             }

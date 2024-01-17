@@ -38,6 +38,8 @@ namespace BannerKings.Managers
         private Dictionary<Hero, List<FeudalTitle>> DeJuresCache { get; set; }
         private Dictionary<Settlement, FeudalTitle> SettlementCache { get; set; }
 
+        internal List<FeudalTitle> AllTitles => Titles;
+
         public void RefreshCaches()
         {
             SettlementCache ??= new Dictionary<Settlement, FeudalTitle>();
