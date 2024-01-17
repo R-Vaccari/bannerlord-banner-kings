@@ -8,6 +8,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using static System.Collections.Specialized.BitVector32;
 
 namespace BannerKings.Models.BKModels
 {
@@ -517,6 +518,17 @@ namespace BannerKings.Models.BKModels
                     return usurpData;
                 }
 
+                if (title.deJure != null && title.deJure.MapFaction == usurper.MapFaction)
+                {
+                    if (BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(usurper.Clan).Contains(title.deJure))
+                    {
+                        usurpData.Possible = false;
+                        usurpData.Reason =
+                            new TextObject("{=!}You can not usurp from your vassal, revoke instead.");
+                        return usurpData;
+                    }
+                }
+
                 if (title.IsSovereignLevel)
                 {
                     var faction = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title);
@@ -630,17 +642,17 @@ namespace BannerKings.Models.BKModels
 
         private float GetInfluenceUsurpCost(FeudalTitle title)
         {
-            return 500f / (float) title.TitleType + 1f;
+            return 500f / ((float) title.TitleType + 1f);
         }
 
         private float GetRenownUsurpCost(FeudalTitle title)
         {
-            return 100f / (float) title.TitleType + 1f;
+            return 100f / ((float) title.TitleType + 1f);
         }
 
         public float GetGoldUsurpCost(FeudalTitle title)
         {
-            var gold = 100000f / (float) title.TitleType + 1f;
+            var gold = 100000f / ((float) title.TitleType + 1f);
             if (title.Fief != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(title.Fief);
