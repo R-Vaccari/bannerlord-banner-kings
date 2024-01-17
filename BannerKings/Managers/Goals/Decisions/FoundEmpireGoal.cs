@@ -8,19 +8,16 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
-    public class FoundKingdomGoal : Goal
+    public class FoundEmpireGoal : Goal
     {
-        public FoundKingdomGoal() : base("goal_found_kingdom", GoalCategory.Unique, GoalUpdateType.Hero)
+        public FoundEmpireGoal() : base("goal_found_kingdom", GoalCategory.Unique, GoalUpdateType.Hero)
         {
-            var name = new TextObject("{=nbV21qZv}Found Kingdom");
-            var description = new TextObject("{=!}Establish your own kingdom title. This new title will be bound to your Kingdom faction, and represent it in terms of Demesne laws, Succession and Inheritance laws, and all other types of laws attached to titles. Your faction must be one that is not already represented by a sovereign-level title (Kingdom or Empire titles).");
+            var name = new TextObject("{=!}Found Empire");
+            var description = new TextObject("{=!}Found an Empire-level title. An Empire is the highest form of title, ruling over kingdoms. Empires may absorb kingdom titles as their vassals through the process of De Jure Drift.{newline}{newline}");
             Initialize(name, description);
         }
 
-        public override bool IsAvailable()
-        {
-            return true;
-        }
+        public override bool IsAvailable() => true;      
 
         public override bool IsFulfilled(out List<TextObject> failedReasons)
         {
@@ -33,11 +30,16 @@ namespace BannerKings.Managers.Goals.Decisions
             else
             {
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
-                if (title != null)
+                if (title == null)
                 {
-                    failedReasons.Add(new TextObject("{=!}The realm {REALM} is already represented by a sovereign title ({TITLE})")
-                        .SetTextVariable("REALM", Clan.PlayerClan.Kingdom.Name)
-                        .SetTextVariable("TITLE", title.FullName));
+                    failedReasons.Add(new TextObject("{=!}The realm {REALM} is not represented by a Kingdom-level title. Found a Kingdom first, and then an Empire.")
+                        .SetTextVariable("REALM", Clan.PlayerClan.Kingdom.Name));
+                }
+                else if (title.TitleType == TitleType.Empire)
+                {
+                    failedReasons.Add(new TextObject("{=!}Your realm, {REALM} is already attached to the Empire-level title {TITLE}.")
+                            .SetTextVariable("REALM", Clan.PlayerClan.Kingdom.Name)
+                            .SetTextVariable("TITLE", title.FullName));
                 }
             }
             
@@ -51,22 +53,27 @@ namespace BannerKings.Managers.Goals.Decisions
             var kingdom = clan.Kingdom;
             var action = BannerKingsConfig.Instance.TitleModel.GetFoundKingdom(kingdom, hero);
 
-            InformationManager.ShowInquiry(new InquiryData(
-                new TextObject("{=ztoYKWVA}Founding a new Kingdom").ToString(),
-                new TextObject("{=5VhaJ732}Found a new title for your kingdom. The title will legitimize your position and allow the de Jure domain of the kingdom to expand through de Jure drift of dukedoms, as well as extend your influence as a suzerain. Founding a title would increase your clan's renown by {RENOWN}. \n \nCosts: {GOLD} {GOLD_ICON}, {INFLUENCE} {INFLUENCE_ICON} \n\nCan form kingdom: {POSSIBLE} \n\nExplanation: {REASON}")
-                    .SetTextVariable("POSSIBLE", GameTexts.FindText(action.Possible ? "str_yes" : "str_no"))
-                    .SetTextVariable("GOLD", $"{(int) action.Gold:n0}")
-                    .SetTextVariable("INFLUENCE", (int) action.Influence)
-                    .SetTextVariable("INFLUENCE_ICON", "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
-                    .SetTextVariable("RENOWN", action.Renown)
-                    .SetTextVariable("REASON", action.Reason)
-                    .ToString(),
-                action.Possible,
-                true,
-                GameTexts.FindText("str_accept").ToString(),
-                GameTexts.FindText("str_cancel").ToString(),
-                ApplyGoal,
-                null));
+            InformationManager.ShowInquiry
+            (
+                new InquiryData
+                (
+                    new TextObject("{=!}Establish a new Title").ToString(),
+                    new TextObject("{=qjD2WwBH}Do you want to establish the title {TITLE}?\nThis will cost you {GOLD}{GOLD_ICON} and {INFLUENCE}{INFLUENCE_ICON}.\nAs a reward your clan will earn {RENOWN} renown.")
+                        .SetTextVariable("TITLE", name)
+                        .SetTextVariable("GOLD", (int)action.Gold)
+                        .SetTextVariable("INFLUENCE", action.Influence)
+                        .SetTextVariable("INFLUENCE_ICON", "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
+                        .SetTextVariable("RENOWN", 100)
+                        .ToString(),
+                    true,
+                    true,
+                    GameTexts.FindText("str_accept").ToString(),
+                    GameTexts.FindText("str_cancel").ToString(),
+                    ApplyGoal,
+                    null
+                ),
+                true
+            );
         }
 
         public override void ApplyGoal()
@@ -89,7 +96,7 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=CSRMOcCm}Founding Dukedoms").ToString(),
+                new TextObject("{=!}Founding Dukedom").ToString(),
                 new TextObject("{=!}Select a dukedom that will compose your kingdom. The kingdom's contract will follow this dukedom's contract in terms of Succession, Inheritance and so on. Future dukedoms may be assimilated into the kingdom by the process of De Jure Drift.")
                     .ToString(),
                 duchies,

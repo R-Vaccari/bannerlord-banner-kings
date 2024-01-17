@@ -126,8 +126,6 @@ namespace BannerKings
             AddClassDefinition(typeof(AuxiliumDuty), 52);
             AddClassDefinition(typeof(RansomDuty), 53);
             AddClassDefinition(typeof(BannerKingsTournament), 54);
-            AddClassDefinition(typeof(BKContractDecision), 55);
-
             AddClassDefinition(typeof(RepublicElectionDecision), 60);
             AddClassDefinition(typeof(BKSettlementClaimantDecision), 61);
             AddClassDefinition(typeof(BKKingElectionDecision), 62);

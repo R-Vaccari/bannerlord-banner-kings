@@ -51,6 +51,14 @@
 			<Output output="ItemCategory.leather" output_count="1" />
 		  </Outputs>
 		</Production>
+		<Production conversion_speed="0.4">
+		  <Inputs>
+			<Input input_item="clay" input_count="1" />
+		  </Inputs>
+		  <Outputs>
+			<Output output="ItemCategory.pottery" output_count="1" />
+		  </Outputs>
+		</Production>
 		<Production conversion_speed="0.5">
 		  <Inputs>
 		  </Inputs>

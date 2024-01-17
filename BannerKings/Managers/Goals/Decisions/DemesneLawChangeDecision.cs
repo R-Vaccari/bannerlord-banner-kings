@@ -1,4 +1,5 @@
 using BannerKings.Managers.Kingdoms.Contract;
+using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(new TextObject("{=qCfmQGiD}Contract changes can not be proposed during wars."));
             }
 
-            if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom.UnresolvedDecisions.Any(x => x is BKContractDecision || x is DemesneLawChangeDecision))
+            if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom.UnresolvedDecisions.Any(x => x is BKContractChangeDecision || x is DemesneLawChangeDecision))
             {
                 failedReasons.Add(new TextObject("{=nsQZHLQf}A contract-altering proposal is already being voted on."));
             }

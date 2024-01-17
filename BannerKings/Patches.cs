@@ -158,7 +158,7 @@ namespace BannerKings.Patches
                 foreach (Clan clan in __instance.Kingdom.Clans)
                 {
                     var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
-                    if (council != null && council.Peerage != null)
+                    if (council != null && council.Peerage != null && !clan.IsUnderMercenaryService)
                     {
                         if (council.Peerage.CanVote)
                         {
