@@ -1,6 +1,8 @@
 ﻿using BannerKings.Managers.Helpers;
+using BannerKings.Managers.Traits;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 
 namespace BannerKings.Managers.Titles
 {
@@ -33,6 +35,57 @@ namespace BannerKings.Managers.Titles
         public void SetVassals(List<FeudalTitle> vassals)
         {
             Vassals = vassals;
+        }
+
+        public bool IsWilling
+        {
+            get
+            {
+                bool result = true;
+                if (IsHostile())
+                {
+                    Hero target = Title.deJure;
+                    int ambitious = ActionTaker.GetTraitLevel(BKTraits.Instance.Ambitious);
+                    if (ambitious >= 1)
+                    {
+                        if (ambitious == 2)
+                        {
+                            result = true;
+                        }
+                        else if (ActionTaker.GetRelation(target) < 50)
+                        {
+                            result = true;
+                        }
+                    }
+
+                    if (ActionTaker.MapFaction != target.MapFaction)
+                    {
+                        result = true;
+                    }
+
+                    if (ActionTaker.IsFriend(target))
+                    {
+                        result = false;
+                    }
+                    else if (ActionTaker.IsEnemy(target))
+                    {
+                        result = true;
+                    }
+
+                    if (result && target.MapFaction == ActionTaker.MapFaction)
+                    {
+                        result = false;
+                        if (MBRandom.RandomFloat < 0.01f) result = true;
+                    }
+                }
+
+                if (Gold >= ActionTaker.Gold * 0.5f)
+                {
+                    result = false;
+                }
+               
+                return result;
+            }
         }
 
         public override void TakeAction(Hero receiver)
