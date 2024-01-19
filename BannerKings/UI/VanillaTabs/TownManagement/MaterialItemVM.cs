@@ -3,7 +3,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.TownManagement
+namespace BannerKings.UI.VanillaTabs.TownManagement
 {
     public class MaterialItemVM : ViewModel
     {

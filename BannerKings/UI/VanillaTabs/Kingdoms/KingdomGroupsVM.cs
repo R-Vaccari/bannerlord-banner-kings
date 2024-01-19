@@ -3,7 +3,7 @@ using System.Linq;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Kingdoms
+namespace BannerKings.UI.VanillaTabs.Kingdoms
 {
     public class KingdomGroupsVM : BannerKingsViewModel
     {

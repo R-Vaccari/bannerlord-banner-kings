@@ -1,6 +1,6 @@
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Populations;
-using BannerKings.UI.TownManagement;
+using BannerKings.UI.VanillaTabs.TownManagement;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using HarmonyLib;

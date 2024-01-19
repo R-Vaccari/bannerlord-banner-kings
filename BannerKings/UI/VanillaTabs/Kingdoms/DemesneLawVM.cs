@@ -7,13 +7,13 @@ using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Kingdoms
+namespace BannerKings.UI.VanillaTabs.Kingdoms
 {
     public class DemesneLawVM : ViewModel
     {
         private BannerKingsSelectorVM<BKDemesneLawItemVM> selector;
         private string nameText, descriptionText, dateText;
-       
+
 
         public DemesneLawVM(List<DemesneLaw> options, DemesneLaw law, bool isKing, Action<SelectorVM<BKDemesneLawItemVM>> onChange)
         {
@@ -43,7 +43,7 @@ namespace BannerKings.UI.Kingdoms
         [DataSourceProperty]
         public string DateHeaderText => new TextObject("{=SJZmL2Co}Law issued on:").ToString();
 
-      
+
 
         [DataSourceProperty]
         public string NameText

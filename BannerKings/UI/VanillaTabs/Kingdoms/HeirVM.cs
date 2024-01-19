@@ -3,14 +3,14 @@ using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Kingdoms
+namespace BannerKings.UI.VanillaTabs.Kingdoms
 {
-    public class GroupMemberVM : HeroVM
+    public class HeirVM : HeroVM
     {
         private BasicTooltipViewModel hint;
-        public GroupMemberVM(Hero hero, bool useCivilian = false) : base(hero, useCivilian)
+        public HeirVM(Hero hero, ExplainedNumber explanation, bool useCivilian = false) : base(hero, useCivilian)
         {
-            Hint = new BasicTooltipViewModel();
+            Hint = new BasicTooltipViewModel(() => UIHelper.GetHeirTooltip(hero, explanation));
         }
 
         private void MakeHint()

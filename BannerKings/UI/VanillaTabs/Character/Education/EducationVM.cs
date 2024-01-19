@@ -14,7 +14,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Education
+namespace BannerKings.UI.VanillaTabs.Character.Education
 {
     public class EducationVM : BannerKingsViewModel
     {
@@ -49,7 +49,8 @@ namespace BannerKings.UI.Education
 
         [DataSourceProperty] public bool ChangeBookPossible => hero.PartyBelongedTo != null;
 
-        [DataSourceProperty] public string EducationText => new TextObject("{=0KjrcEam}Education of {HERO}")
+        [DataSourceProperty]
+        public string EducationText => new TextObject("{=0KjrcEam}Education of {HERO}")
                 .SetTextVariable("HERO", hero.Name).ToString();
         [DataSourceProperty] public string LanguagesText => new TextObject("{=KBsVXEtH}Languages").ToString();
 
@@ -427,14 +428,14 @@ namespace BannerKings.UI.Education
                 new TextObject("{=bkoJgoDo}Choose Language").ToString(),
                 new TextObject("{=gdCXV7n3}Select a language you would like to learn. Learning a language requires an instructor from your court, and different people have different teaching skills. A courtier must have a good opinion of you in order to be available. Learning languages is easier when they are intelligible with your native language.")
                     .ToString(),
-                elements, 
-                true, 
+                elements,
+                true,
                 1,
                 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
-                delegate(List<InquiryElement> x)
+                delegate (List<InquiryElement> x)
                 {
-                    var result = (ValueTuple<Language, Hero>) x[0].Identifier;
+                    var result = (ValueTuple<Language, Hero>)x[0].Identifier;
                     BannerKingsConfig.Instance.EducationManager.SetCurrentLanguage(hero, result.Item1, result.Item2);
                     if (result.Item1 != null)
                     {
@@ -483,7 +484,7 @@ namespace BannerKings.UI.Education
                         new TextObject("{=u2yXrnLc}{DESCRIPTION}\nLanguage: {LANGUAGE}\n{SKILL}\n{TRAIT}")
                         .SetTextVariable("DESCRIPTION", book.Description)
                         .SetTextVariable("LANGUAGE", book.Language.Name)
-                        .SetTextVariable("SKILL", book.Skill != null ? new TextObject("{=NrQdJeJU}Skill: {SKILL}").SetTextVariable("SKILL", book.Skill.Name) 
+                        .SetTextVariable("SKILL", book.Skill != null ? new TextObject("{=NrQdJeJU}Skill: {SKILL}").SetTextVariable("SKILL", book.Skill.Name)
                         : TextObject.Empty)
                         .SetTextVariable("TRAIT", book.Trait != null ? new TextObject("{=1P5txvhk}Trait: {TRAIT}").SetTextVariable("TRAIT", book.Trait.Name)
                         : TextObject.Empty)
@@ -494,15 +495,15 @@ namespace BannerKings.UI.Education
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=Y4G7PxXr}Choose Book").ToString(),
                 new TextObject("{=pXUyfe6v}Select what book you would like to read. Options may be disabled due to language barrier, or lack of Literate perk.")
-                    .ToString(), 
-                elements, 
-                true, 
+                    .ToString(),
+                elements,
+                true,
                 1,
                 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
-                delegate(List<InquiryElement> x)
+                delegate (List<InquiryElement> x)
                 {
-                    var book = (BookType) x[0].Identifier;
+                    var book = (BookType)x[0].Identifier;
                     BannerKingsConfig.Instance.EducationManager.SetCurrentBook(hero, book);
                     if (book != null)
                     {
@@ -552,15 +553,15 @@ namespace BannerKings.UI.Education
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=sOT08u5v}Choose Lifestyle").ToString(),
                 new TextObject("{=8vF2rt3F}Select a lifestyle you would like to adopt. Picking a lifestyle will undo the progress of the lifestyle you are currently learning, if any. Each lifestyle is based on 2 skills, and you need at least 15 profficiency in each skill to adopt it.")
-                    .ToString(), 
-                elements, 
-                true, 
+                    .ToString(),
+                elements,
+                true,
                 1,
                 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
-                delegate(List<InquiryElement> x)
+                delegate (List<InquiryElement> x)
                 {
-                    var lf = (Lifestyle) x[0].Identifier;
+                    var lf = (Lifestyle)x[0].Identifier;
                     BannerKingsConfig.Instance.EducationManager.SetCurrentLifestyle(hero, lf);
                     if (lf != null)
                     {

@@ -3,7 +3,7 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Mercenary
+namespace BannerKings.UI.VanillaTabs.Kingdoms.Mercenary
 {
     internal class MercenaryPrivilegeVM : BannerKingsViewModel
     {

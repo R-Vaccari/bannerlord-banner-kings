@@ -7,7 +7,6 @@ using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
-using BannerKings.UI.TownManagement;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -22,6 +21,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using BannerKings.Managers.Cultures;
+using BannerKings.UI.VanillaTabs.TownManagement;
 
 namespace BannerKings.UI
 {

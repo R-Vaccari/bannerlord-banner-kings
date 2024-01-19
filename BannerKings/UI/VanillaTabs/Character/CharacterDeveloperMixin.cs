@@ -1,7 +1,7 @@
 using BannerKings.Managers.Goals;
 using BannerKings.Managers.Institutions.Religions;
-using BannerKings.UI.Education;
-using BannerKings.UI.Religion;
+using BannerKings.UI.VanillaTabs.Character.Education;
+using BannerKings.UI.VanillaTabs.Character.Religion;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using System;

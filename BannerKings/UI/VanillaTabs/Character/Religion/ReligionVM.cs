@@ -14,7 +14,7 @@ using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Religion
+namespace BannerKings.UI.VanillaTabs.Character.Religion
 {
     internal class ReligionVM : BannerKingsViewModel
     {
@@ -101,8 +101,8 @@ namespace BannerKings.UI.Religion
             {
                 if (religion.Faith.Active)
                 {
-                    var item = new ReligionSelectorItemVM(religion, religion.Faith != this.currentReligion?.Faith);
-                    if (religion.Faith == this.currentReligion.Faith) selectedIndex = i;
+                    var item = new ReligionSelectorItemVM(religion, religion.Faith != currentReligion?.Faith);
+                    if (religion.Faith == currentReligion.Faith) selectedIndex = i;
                     selector.AddItem(item);
                     i++;
                 }
@@ -192,7 +192,7 @@ namespace BannerKings.UI.Religion
                 Aspects.Add(new ReligionElementVM(new TextObject("{=g0Pc7Awk}Holy Sites"),
                     new TextObject("{=!}" + sites.Count),
                     new TextObject("{=wprHBRFq}Holy sites are the fiefs directly connected to the religion's divinities or cults. Holding such sites is important for religious Fervor. In addition, being blessed by a Divinity in its holy site adds double the blessing duration.{newline}{newline}Sites:{SITES}")
-                    .SetTextVariable("SITES", sites.Aggregate("", (current, site) => current + Environment.NewLine + 
+                    .SetTextVariable("SITES", sites.Aggregate("", (current, site) => current + Environment.NewLine +
                         new TextObject("{=s1CgckUZ}{HOLY_SITE}: {DIVINITY}")
                         .SetTextVariable("HOLY_SITE", site.Key.Name)
                         .SetTextVariable("DIVINITY", site.Value.Name)
@@ -211,7 +211,8 @@ namespace BannerKings.UI.Religion
 
         }
 
-        [DataSourceProperty] public ImageIdentifierVM Banner
+        [DataSourceProperty]
+        public ImageIdentifierVM Banner
         {
             get => banner;
             set
@@ -318,7 +319,8 @@ namespace BannerKings.UI.Religion
             }
         }
 
-        [DataSourceProperty] public string Name
+        [DataSourceProperty]
+        public string Name
         {
             get => name;
             set
@@ -328,17 +330,19 @@ namespace BannerKings.UI.Religion
             }
         }
 
-        [DataSourceProperty] public string Description 
-        { 
+        [DataSourceProperty]
+        public string Description
+        {
             get => description;
-            set 
+            set
             {
                 description = value;
-                OnPropertyChangedWithValue(value, "Description"); 
-            } 
+                OnPropertyChangedWithValue(value, "Description");
+            }
         }
 
-        [DataSourceProperty] public string GroupName
+        [DataSourceProperty]
+        public string GroupName
         {
             get => groupName;
             set
@@ -348,7 +352,8 @@ namespace BannerKings.UI.Religion
             }
         }
 
-        [DataSourceProperty] public string GroupDescription
+        [DataSourceProperty]
+        public string GroupDescription
         {
             get => groupDescription;
             set
@@ -470,6 +475,6 @@ namespace BannerKings.UI.Religion
                     OnPropertyChangedWithValue(value);
                 }
             }
-        }  
+        }
     }
 }

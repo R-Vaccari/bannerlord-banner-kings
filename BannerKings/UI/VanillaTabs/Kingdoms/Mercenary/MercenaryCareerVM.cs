@@ -11,7 +11,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static TaleWorlds.Core.ItemObject;
 
-namespace BannerKings.UI.Mercenary
+namespace BannerKings.UI.VanillaTabs.Kingdoms.Mercenary
 {
     internal class MercenaryCareerVM : BannerKingsViewModel
     {
@@ -506,8 +506,8 @@ namespace BannerKings.UI.Mercenary
             var items = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
             foreach (var item in items)
             {
-                if (item.ItemType == option.ItemType && BannerKingsConfig.Instance.MercenaryModel.IsEquipmentAdequate(item, 
-                    customTroop.Character, 
+                if (item.ItemType == option.ItemType && BannerKingsConfig.Instance.MercenaryModel.IsEquipmentAdequate(item,
+                    customTroop.Character,
                     levy))
                 {
                     list.Add(new InquiryElement(item,

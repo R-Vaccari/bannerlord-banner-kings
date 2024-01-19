@@ -12,7 +12,7 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Kingdoms
+namespace BannerKings.UI.VanillaTabs.Kingdoms
 {
     public class InterestGroupVM : BannerKingsViewModel
     {
@@ -85,7 +85,7 @@ namespace BannerKings.UI.Kingdoms
             BKExplainedNumber support = Group.SupportExplained;
 
             Headers.Add(new StringPairItemVM(new TextObject("{=b0smO4NW}Support").ToString(),
-                FormatValue(support.ResultNumber), 
+                FormatValue(support.ResultNumber),
                 new BasicTooltipViewModel(() => support.GetFormattedPercentage())));
 
             Headers.Add(new StringPairItemVM(new TextObject("{=eZEhpmxY}Members").ToString(),
@@ -107,7 +107,7 @@ namespace BannerKings.UI.Kingdoms
             int lords = Group.Members.FindAll(x => x.IsLord).Count;
             int notables = Group.Members.FindAll(x => x.IsNotable).Count;
 
-            TertiaryHeaders.Add(new StringPairItemVM(new TextObject("{=LwfduROT}Endorsed Acts").ToString(), 
+            TertiaryHeaders.Add(new StringPairItemVM(new TextObject("{=LwfduROT}Endorsed Acts").ToString(),
                 string.Empty,
                 new BasicTooltipViewModel(() => UIHelper.GetGroupEndorsed(Group))));
 
@@ -127,7 +127,7 @@ namespace BannerKings.UI.Kingdoms
             {
                 ActionName = new TextObject("{=3sRdGQou}Leave").ToString();
                 IsActionEnabled = true;
-                ActionHint = new HintViewModel(new TextObject("{=tEticUst}Leave this group. This will break any ties to their interests and demands. Leaving a group will hurt your relations with it's members, mainly the group leader. If you are the leader yourself, this impact will be increased."));  
+                ActionHint = new HintViewModel(new TextObject("{=tEticUst}Leave this group. This will break any ties to their interests and demands. Leaving a group will hurt your relations with it's members, mainly the group leader. If you are the leader yourself, this impact will be increased."));
 
                 if (!IsDemandEnabled)
                 {
@@ -204,7 +204,7 @@ namespace BannerKings.UI.Kingdoms
                    true,
                    GameTexts.FindText("str_accept").ToString(),
                    GameTexts.FindText("str_cancel").ToString(),
-                   () => 
+                   () =>
                    {
                        Group.AddMember(Hero.MainHero);
                        RefreshValues();
@@ -250,7 +250,7 @@ namespace BannerKings.UI.Kingdoms
                     1,
                     GameTexts.FindText("str_accept").ToString(),
                     GameTexts.FindText("str_cancel").ToString(),
-                    (List<InquiryElement> list) =>
+                    (list) =>
                     {
                         Demand demand = (Demand)list.First().Identifier;
                         demand.SetUp();

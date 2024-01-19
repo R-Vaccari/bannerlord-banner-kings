@@ -1,7 +1,7 @@
 ﻿using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 
-namespace BannerKings.UI.Religion
+namespace BannerKings.UI.VanillaTabs.Character.Religion
 {
     public class ReligionSelectorItemVM : SelectorItemVM
     {

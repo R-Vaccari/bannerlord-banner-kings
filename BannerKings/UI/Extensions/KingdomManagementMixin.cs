@@ -1,7 +1,7 @@
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.UI.Court;
-using BannerKings.UI.Kingdoms;
-using BannerKings.UI.Mercenary;
+using BannerKings.UI.VanillaTabs.Kingdoms;
+using BannerKings.UI.VanillaTabs.Kingdoms.Mercenary;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem;

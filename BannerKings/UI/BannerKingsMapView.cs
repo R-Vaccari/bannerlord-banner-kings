@@ -13,7 +13,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.ScreenSystem;
 using TaleWorlds.TwoDimension;
-using ReligionVM = BannerKings.UI.Religion.ReligionVM;
+using ReligionVM = BannerKings.UI.VanillaTabs.Character.Religion.ReligionVM;
 
 namespace BannerKings.UI
 {
