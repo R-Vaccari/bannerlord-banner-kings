@@ -15,6 +15,9 @@
 								<ListPanel Id="VerticalList" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop">
 									<Children>
 									
+										<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{KingdomSelector}" MarginTop="10"
+																						HorizontalAlignment="Center" />
+									
 										<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="25"
 														HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="32" Text="@StructureText"
 														MarginBottom="30" />
@@ -22,7 +25,7 @@
 										<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="200"
 												   VerticalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="30" MarginBottom="30" DoNotAcceptEvents="false">
 											<Children>
-											
+
 												<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" SuggestedHeight="150"
 														   VerticalAlignment="Bottom" StackLayout.LayoutMethod="VerticalBottomToTop" MarginRight="15" MarginLeft="15" DoNotAcceptEvents="false">
 													<Children>
