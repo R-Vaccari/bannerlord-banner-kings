@@ -5,7 +5,6 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Traits;
 using BannerKings.Utils.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -22,6 +21,14 @@ namespace BannerKings.Models.Vanilla
     public class BKDiplomacyModel : DefaultDiplomacyModel
     {
         public float TRADE_PACT_INFLUENCE_CAP { get;} = 100f;
+
+        public override int GetInfluenceCostOfAnnexation(Clan proposingClan)
+        {
+            float result = base.GetInfluenceCostOfAnnexation(proposingClan);
+            result += BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(proposingClan).ResultNumber * 0.25f;
+
+            return (int)result;
+        }
 
         public override void GetHeroesForEffectiveRelation(Hero hero1, Hero hero2, out Hero effectiveHero1, out Hero effectiveHero2)
         {
