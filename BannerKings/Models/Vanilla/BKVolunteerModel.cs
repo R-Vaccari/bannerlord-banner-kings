@@ -115,7 +115,8 @@ namespace BannerKings.Models.Vanilla
                 {
                     factor = 0.8f;
                 }
-                else if (settlement.IsVillage ? settlement.Village.GetActualOwner() == buyerHero : settlement.Owner == buyerHero)
+                else if (settlement.IsVillage ? settlement.Village.GetActualOwner() == buyerHero :
+                    settlement.OwnerClan != null && settlement.Owner == buyerHero)
                 {
                     factor = 0.6f;
                 }
