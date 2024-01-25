@@ -153,25 +153,29 @@ namespace BannerKings.Managers.Titles
                 }
 
                 var deJureCount = contestors.ContainsKey(deJure) ? contestors[deJure] : 0;
-                var highestCount = contestors.Values.Max();
-                var highestCountHeroes = contestors.Keys.ToList().FindAll(x => contestors[x] == highestCount);
-                if (highestCountHeroes.Contains(deJure))
+                if (contestors.Count > 0)
                 {
-                    return deJure;
-                }
+                    var highestCount = contestors.Values.Max();
+                    var highestCountHeroes = contestors.Keys.ToList().FindAll(x => contestors[x] == highestCount);
+                    if (highestCountHeroes.Contains(deJure))
+                    {
+                        return deJure;
+                    }
 
-                var selected = highestCountHeroes[0];
-                if (highestCountHeroes.Count <= 1)
-                {
+                    var selected = highestCountHeroes[0];
+                    if (highestCountHeroes.Count <= 1)
+                    {
+                        return selected;
+                    }
+
+                    foreach (var competitor in highestCountHeroes.Where(competitor => (competitor != selected && competitor.Clan.Tier > selected.Clan.Tier) || competitor.Clan.Influence > selected.Clan.Influence))
+                    {
+                        selected = competitor;
+                    }
+
                     return selected;
                 }
-
-                foreach (var competitor in highestCountHeroes.Where(competitor => (competitor != selected && competitor.Clan.Tier > selected.Clan.Tier) || competitor.Clan.Influence > selected.Clan.Influence))
-                {
-                    selected = competitor;
-                }
-
-                return selected;
+                else return deJure;
             }
         }
 
