@@ -374,6 +374,21 @@ namespace BannerKings.Behaviours
         private List<InquiryElement> GetAvailableEstates()
         {
             var result = new List<InquiryElement>();
+            var estates = BannerKingsConfig.Instance.PopulationManager.GetEstates(Hero.MainHero);
+            foreach (var estate in estates)
+            {
+                var settlement = estate.EstatesData.Settlement;
+                var action = BannerKingsConfig.Instance.EstatesModel.GetGrant(estate, Hero.MainHero, Hero.OneToOneConversationHero);
+                result.Add(new InquiryElement(estate,
+                    new TextObject("{=68m3U2ey}{VILLAGE} - {ACREAGE} acres")
+                    .SetTextVariable("VILLAGE", settlement.Name)
+                    .SetTextVariable("ACREAGE", estate.Acreage.ToString("0.00"))
+                    .ToString(),
+                    null,
+                    action.Possible,
+                    action.Reason.ToString()));
+            }
+
             var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero);
             foreach (var title in titles)
             {
