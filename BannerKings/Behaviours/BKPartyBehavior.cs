@@ -46,6 +46,8 @@ namespace BannerKings.Behaviours
             }
         }
 
+        private Dictionary<Settlement, List<Settlement>> travelCache;
+
         public override void RegisterEvents()
         {
             CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, HourlyTickParty);
@@ -314,6 +316,8 @@ namespace BannerKings.Behaviours
             
             foreach (var town in target)
             {
+                if (!settlement.MapFaction.IsAtWarWith(town.MapFaction)) continue;
+
                 var random = MBRandom.RandomInt(1, 100);
                 if (random > 40) continue;
      
@@ -580,17 +584,29 @@ namespace BannerKings.Behaviours
 
         private List<Settlement> GetTownsToTravel(Settlement origin)
         {
-            List<Settlement> list = new List<Settlement>();  
-            foreach (var fortification in Town.AllFiefs)
+            List<Settlement> list;  
+            if (travelCache == null)
             {
-                if (fortification.Settlement == origin) continue;
-
-                if (!origin.MapFaction.IsAtWarWith(fortification.MapFaction))
-                {
-                    if (TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(fortification.Settlement, origin) < 100f)
-                        list.Add(fortification.Settlement);
-                }
+                travelCache = new Dictionary<Settlement, List<Settlement>>(Town.AllFiefs.Count());
             }
+
+            if (!travelCache.TryGetValue(origin, out list)) 
+            {
+                list = new List<Settlement>();
+                foreach (var fortification in Town.AllFiefs)
+                {
+                    if (fortification.Settlement == origin) continue;
+
+                    if (!origin.MapFaction.IsAtWarWith(fortification.MapFaction))
+                    {
+                        if (TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(fortification.Settlement, origin) < 100f)
+                            list.Add(fortification.Settlement);
+                    }
+                }
+
+                travelCache[origin] = list;
+            }
+            
 
             return list;
         }
