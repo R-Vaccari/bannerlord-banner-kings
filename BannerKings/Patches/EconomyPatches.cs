@@ -69,6 +69,30 @@ namespace BannerKings.Patches
         [HarmonyPatch(typeof(CaravansCampaignBehavior))]
         internal class CaravansCampaignBehaviorPatches
         {
+            private static FieldInfo VisitDictionary => TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<CaravansCampaignBehavior>()
+                .GetType()
+                .GetField("_caravanLastHomeTownVisitTime", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            private static FieldInfo EnemyDictionary => TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<CaravansCampaignBehavior>()
+                .GetType()
+                 .GetField("_previouslyChangedCaravanTargetsDueToEnemyOnWay", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            private static MethodInfo GetScore => TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<CaravansCampaignBehavior>()
+                .GetType()
+                .GetMethod("GetTradeScoreForTown", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            private static MethodInfo GetDestination => TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<CaravansCampaignBehavior>()
+                .GetType()
+                .GetMethod("GetDestinationForMobileParty", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            private static MethodInfo ThinkDestination => TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<CaravansCampaignBehavior>()
+               .GetType()
+               .GetMethod("ThinkNextDestination", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            private static MethodInfo BuyGoods => TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<CaravansCampaignBehavior>()
+              .GetType()
+              .GetMethod("BuyGoods", BindingFlags.Instance | BindingFlags.NonPublic);
+
             [HarmonyPrefix]
             [HarmonyPatch("FindNextDestinationForCaravan", MethodType.Normal)]
             private static bool FindNextDestinationForCaravan(CaravansCampaignBehavior __instance, MobileParty caravanParty, bool distanceCut, ref Town __result)
@@ -77,19 +101,11 @@ namespace BannerKings.Patches
                 Town result = null;
                 float caravanFullness = caravanParty.ItemRoster.TotalWeight / (float)caravanParty.InventoryCapacity;
 
-                Dictionary<MobileParty, CampaignTime> dic = __instance.GetType()
-                    .GetField("_caravanLastHomeTownVisitTime", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .GetValue(__instance) as Dictionary<MobileParty, CampaignTime>;
-
-                Dictionary<MobileParty, List<Settlement>> changedDic = __instance.GetType()
-                    .GetField("_previouslyChangedCaravanTargetsDueToEnemyOnWay", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .GetValue(__instance) as Dictionary<MobileParty, List<Settlement>>;
+                Dictionary<MobileParty, CampaignTime> dic = VisitDictionary.GetValue(__instance) as Dictionary<MobileParty, CampaignTime>;
+                Dictionary<MobileParty, List<Settlement>> changedDic = EnemyDictionary.GetValue(__instance) as Dictionary<MobileParty, List<Settlement>>;
 
                 CampaignTime lastHomeVisitTimeOfCaravan;
                 dic.TryGetValue(caravanParty, out lastHomeVisitTimeOfCaravan);
-
-                MethodInfo getScore = __instance.GetType().GetMethod("GetTradeScoreForTown", 
-                    BindingFlags.Instance | BindingFlags.NonPublic);
 
                 foreach (Town town in Town.AllFiefs)
                 {
@@ -97,7 +113,7 @@ namespace BannerKings.Patches
                         && (!town.Settlement.Parties.Contains(MobileParty.MainParty) || !MobileParty.MainParty.MapFaction.IsAtWarWith(caravanParty.MapFaction)) 
                         && !changedDic[caravanParty].Contains(town.Settlement))
                     {
-                        float tradeScoreForTown = (float)getScore.Invoke(__instance, new object[] 
+                        float tradeScoreForTown = (float)GetScore.Invoke(__instance, new object[] 
                         {
                             caravanParty, 
                             town, 
@@ -117,10 +133,6 @@ namespace BannerKings.Patches
                 __result = result;
                 return false;
             }
-
-            private static MethodInfo getDestination => TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<CaravansCampaignBehavior>()
-                .GetType()
-                .GetMethod("GetDestinationForMobileParty", BindingFlags.Instance | BindingFlags.NonPublic);
 
             [HarmonyPrefix]
             [HarmonyPatch("HourlyTickParty", MethodType.Normal)]
@@ -172,24 +184,19 @@ namespace BannerKings.Patches
                         }
                         else
                         {
-                            Town destinationForMobileParty = getDestination.Invoke(__instance,
+                            Town destinationForMobileParty = GetDestination.Invoke(__instance,
                                 new object[] { caravanParty }) as Town;
 
                             flag = (destinationForMobileParty == null || destinationForMobileParty.IsUnderSiege || caravanParty.MapFaction.IsAtWarWith(destinationForMobileParty.MapFaction) || caravanParty.Ai.NeedTargetReset || (!caravanParty.IsCurrentlyUsedByAQuest && randomFloat < 0.01f));
                         }
                         if (flag)
                         {
-                            Dictionary<MobileParty, List<Settlement>> changedDic = __instance.GetType()
-                            .GetField("_previouslyChangedCaravanTargetsDueToEnemyOnWay", BindingFlags.Instance | BindingFlags.NonPublic)
-                            .GetValue(__instance) as Dictionary<MobileParty, List<Settlement>>;
+                            Dictionary<MobileParty, List<Settlement>> changedDic = EnemyDictionary.GetValue(__instance) as Dictionary<MobileParty, List<Settlement>>;
 
                             if (caravanParty.CurrentSettlement != null && caravanParty.CurrentSettlement.IsTown)
                             {
                                 Town town = caravanParty.CurrentSettlement.Town;
-                                MethodInfo buyGoods = __instance.GetType().GetMethod("BuyGoods",
-                                    BindingFlags.Instance | BindingFlags.NonPublic);
-
-                                buyGoods.Invoke(__instance, new object[] { caravanParty, town });
+                                BuyGoods.Invoke(__instance, new object[] { caravanParty, town });
                             }
                             if (!changedDic.ContainsKey(caravanParty))
                             {
@@ -200,16 +207,14 @@ namespace BannerKings.Patches
                                 changedDic[caravanParty].Add(caravanParty.TargetSettlement);
                             }
 
-                            MethodInfo thinkDestination = __instance.GetType().GetMethod("ThinkNextDestination",
-                                   BindingFlags.Instance | BindingFlags.NonPublic);
-                            Town town2 = thinkDestination.Invoke(__instance, new object[] { caravanParty }) as Town;
+                            Town town2 = ThinkDestination.Invoke(__instance, new object[] { caravanParty }) as Town;
                             if (town2 != null)
                             {
                                 caravanParty.Ai.SetMoveGoToSettlement(town2.Settlement);
                             }
                         }
 
-                        Town destinationForMobileParty2 = getDestination.Invoke(__instance, new object[] { caravanParty }) as Town;
+                        Town destinationForMobileParty2 = GetDestination.Invoke(__instance, new object[] { caravanParty }) as Town;
                         if (caravanParty.CurrentSettlement == null && destinationForMobileParty2 != null && caravanParty.TargetSettlement != destinationForMobileParty2.Settlement)
                         {
                             caravanParty.Ai.SetMoveGoToSettlement(destinationForMobileParty2.Settlement);
@@ -960,25 +965,17 @@ namespace BannerKings.Patches
                 CampaignTime lastHomeVisitTimeOfCaravan,
                 float caravanFullness, bool distanceCut)
             {
-                __result += 50f;
                 if (BannerKingsConfig.Instance.PopulationManager != null)
                 {
                     var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                     if (data != null)
                     {
-                        if (__result > 0f)
-                        {
-                            __result *= data.EconomicData.CaravanAttraction.ResultNumber;
-                        }
-                        
-                        __result -= data.EconomicData.CaravanFee(caravanParty) / 15f;
+                        if (__result > 0f) __result *= data.EconomicData.CaravanAttraction.ResultNumber; 
+                        __result -= data.EconomicData.CaravanFee(caravanParty) / 10f;
                     }
                 }
 
-                if (lastHomeVisitTimeOfCaravan.ElapsedWeeksUntilNow < 1f)
-                {
-                    __result *= 0.5f;
-                }
+                if (lastHomeVisitTimeOfCaravan.ElapsedWeeksUntilNow < 1f) __result -= 50f;
             }
         }
 
