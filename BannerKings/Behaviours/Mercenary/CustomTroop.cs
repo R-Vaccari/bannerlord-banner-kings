@@ -5,6 +5,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.ObjectSystem;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Mercenary
@@ -23,15 +24,16 @@ namespace BannerKings.Behaviours.Mercenary
             {
                 Name = new TextObject("{=gaJDVkvHA}Placeholder").ToString();
             }
-            SetName(new TextObject(Name));
+
             FillCharacter(culture.BasicTroop);
+            SetName(new TextObject(Name));       
             SetEquipment(Character);
             SetSkills(Character, Skills);
         }
 
         private void FillCharacter(CharacterObject reference)
         {
-            Character.Initialize();
+            MBObjectManager.Instance.RegisterObject(Character);
             Character.Culture = reference.Culture;
 
             Character.Age = reference.Age;
