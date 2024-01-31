@@ -155,12 +155,15 @@ namespace BannerKings.Managers.Populations.Estates
 
         public void TakeRetinue(MobileParty ai)
         {
-            foreach (var item in Retinue.MemberRoster.GetTroopRoster())
+            if (Retinue != null)
             {
-                ai.MemberRoster.AddToCounts(item.Character, item.Number);
-            }
+                foreach (var item in Retinue.MemberRoster.GetTroopRoster())
+                {
+                    ai.MemberRoster.AddToCounts(item.Character, item.Number);
+                }
 
-            Retinue.MemberRoster.RemoveIf(roster => roster.Number > 0);
+                Retinue.MemberRoster.RemoveIf(roster => roster.Number > 0);
+            }
         }
 
         public void SetFollow()
