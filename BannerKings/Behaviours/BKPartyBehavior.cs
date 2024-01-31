@@ -306,9 +306,7 @@ namespace BannerKings.Behaviours
 
         private void DecideSendTraders(Settlement settlement)
         {
-            CharacterObject civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>()
-                          .FirstOrDefault(x => x.StringId == "villager_" + settlement.Culture.StringId);
-
+            CharacterObject civilian = settlement.Culture.Villager;
             if (civilian == null) return;
 
             var target = GetTownsToTravel(settlement);
@@ -316,10 +314,10 @@ namespace BannerKings.Behaviours
             
             foreach (var town in target)
             {
-                if (!settlement.MapFaction.IsAtWarWith(town.MapFaction)) continue;
+                if (settlement.MapFaction.IsAtWarWith(town.MapFaction)) continue;
 
                 var random = MBRandom.RandomInt(1, 100);
-                if (random > 40) continue;
+                if (random > 20) continue;
      
                 int count = MBRandom.RandomInt(12, 25);
                 var name = "{=ds9BcMxr}Traders from {ORIGIN}";
@@ -335,7 +333,7 @@ namespace BannerKings.Behaviours
                         civilian, 
                         true);
 
-                    int budget = 500 + (int)(settlement.Town.Prosperity / 10f);
+                    int budget = 1000 + (int)(settlement.Town.Prosperity / 10f);
                     var localData = settlement.Town.MarketData;
                     var targetData = town.Town.MarketData;
                     var townStock = settlement.Town.Owner.ItemRoster;
@@ -385,6 +383,8 @@ namespace BannerKings.Behaviours
                             }
                         }
                     }
+
+                    break;
                 }
             }
         }
