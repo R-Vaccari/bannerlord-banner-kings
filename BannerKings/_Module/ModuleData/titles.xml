@@ -228,6 +228,7 @@
 					<barony settlement="castle_K7" deJure="lord_6_19" />
 				</county>
 				<county settlement="town_K2" deJure="lord_6_16">
+					<barony settlement="castle_K2" deJure="lord_6_16" />
 					<barony settlement="castle_K8" deJure="lord_K9_l" />
 				</county>
 			</duchy>
