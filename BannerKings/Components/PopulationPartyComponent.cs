@@ -141,13 +141,13 @@ namespace BannerKings.Components
                     }
 
                     break;
-                }
+                    }
             }
 
             party.InitializeMobilePartyAroundPosition(roster, new TroopRoster(party.Party), origin.GatePosition, 1f);
+            GivePackAnimals(ref party);
             if (!trading)
             {
-                GivePackAnimals(ref party);
                 GiveFood(ref party);
                 GiveItems(ref party, type);
             }
