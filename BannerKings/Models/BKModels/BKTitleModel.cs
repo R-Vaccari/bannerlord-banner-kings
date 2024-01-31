@@ -551,6 +551,15 @@ namespace BannerKings.Models.BKModels
                         return usurpData;
                     }
                 }
+                else if (title.TitleType == TitleType.Dukedom)
+                {
+                    if (title.DeFacto != usurper)
+                    {
+                        usurpData.Possible = false;
+                        usurpData.Reason = new TextObject("{=!}To usurp a duchy-level title, you need to control the majority of its direct vassals.");
+                        return usurpData;
+                    }
+                }
 
                 return usurpData;
             }
