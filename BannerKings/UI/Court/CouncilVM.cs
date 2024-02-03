@@ -131,17 +131,17 @@ namespace BannerKings.UI.Court
                             {
                                 action = model.GetAction(CouncilActionType.REQUEST, council, requester, position, null,
                                     true);
+
+                                if (!council.GetAvailableHeroes(Position).Contains(requester))
+                                {
+                                    action = model.GetAction(CouncilActionType.SWAP, council, requester, position,
+                                        council.GetHeroCurrentConflictingPosition(position, requester));
+                                }
                             }
                             else if (position.Member != null)
                             {
                                 action = model.GetAction(CouncilActionType.RELINQUISH, council, requester, position);
-                            }
-
-                            if (!council.GetAvailableHeroes(Position).Contains(requester))
-                            {
-                                action = model.GetAction(CouncilActionType.SWAP, council, requester, position,
-                                    council.GetHeroCurrentConflictingPosition(position, requester));
-                            }
+                            }    
 
                             if (action != null)
                             {
