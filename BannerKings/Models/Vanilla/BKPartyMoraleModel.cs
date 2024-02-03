@@ -19,7 +19,7 @@ namespace BannerKings.Models.Vanilla
         {
             var result = base.GetEffectivePartyMorale(mobileParty, includeDescription);
 
-            if (mobileParty.Owner == Hero.MainHero && TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
+            if (mobileParty.IsLordParty && mobileParty.Owner == Hero.MainHero && TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
                     .HasDebuff(DefaultStartOptions.Instance.Mercenary))
             {
                 result.Add(-20f, DefaultStartOptions.Instance.Mercenary.Name);
