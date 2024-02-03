@@ -5,6 +5,7 @@ using BannerKings.Settings;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
@@ -23,6 +24,23 @@ namespace BannerKings.Models.Vanilla
                 result += (int)(BannerKingsSettings.Instance.SlowerParties * 20f);
                 return result;
             } 
+        }
+
+        protected float CalculateAnimalFoodNeed(MobileParty party)
+        {
+            float mounts = party.ItemRoster.NumberOfMounts + party.ItemRoster.NumberOfLivestockAnimals +
+                    party.ItemRoster.NumberOfPackAnimals;
+            foreach (var troop in party.MemberRoster.GetTroopRoster())
+            {
+                if (troop.Character.IsMounted) mounts++;
+            }
+
+            foreach (var troop in party.PrisonRoster.GetTroopRoster())
+            {
+                if (troop.Character.IsMounted) mounts++;
+            }
+
+            return mounts;
         }
 
         public override bool DoesPartyConsumeFood(MobileParty mobileParty)
@@ -133,6 +151,24 @@ namespace BannerKings.Models.Vanilla
                     {
                         baseConsumption.AddFactor(-0.3f, DefaultLifestyles.Instance.Jawwal.Name);
                     }
+                }
+            }
+
+            if (TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace) == TerrainType.Desert)
+            {
+                float mounts = CalculateAnimalFoodNeed(party);
+                baseConsumption.Add(-mounts / 2f, new TaleWorlds.Localization.TextObject("{=!}Carrying {COUNT} animals while on desert (inventory, party and prisoners)")
+                    .SetTextVariable("COUNT", mounts.ToString("0")));
+            }
+            else
+            {
+                MapWeatherModel.WeatherEvent weatherEventInPosition = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapWeatherModel
+                              .GetWeatherEventInPosition(party.Position2D);
+                if (weatherEventInPosition == MapWeatherModel.WeatherEvent.Snowy || weatherEventInPosition == MapWeatherModel.WeatherEvent.Blizzard)
+                {
+                    float mounts = CalculateAnimalFoodNeed(party);
+                    baseConsumption.Add(-mounts / 2f, new TaleWorlds.Localization.TextObject("{=!}Carrying {COUNT} animals while in snow or blizzard (inventory, party and prisoners)")
+                        .SetTextVariable("COUNT", mounts.ToString("0")));
                 }
             }
 
