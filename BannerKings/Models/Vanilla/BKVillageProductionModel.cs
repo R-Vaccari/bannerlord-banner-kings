@@ -37,11 +37,12 @@ namespace BannerKings.Models.Vanilla
         public override float CalculateDailyProductionAmount(Village village, ItemObject item)
         {
             if (village.Settlement != null && village.VillageState == Village.VillageStates.Normal &&
-                BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
+                BannerKingsConfig.Instance.PopulationManager != null)
             {
                 var explainedNumber = new ExplainedNumber(0f);
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
+                if (data == null) return base.CalculateDailyProductionAmount(village, item);
+
                 var villageData = data.VillageData;
                 var serfs = data.LandData.AvailableSerfsWorkForce + data.LandData.AvailableTenantsWorkForce;
                 var slaves = data.LandData.AvailableSlavesWorkForce;
