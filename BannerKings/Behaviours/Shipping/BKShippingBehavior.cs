@@ -80,6 +80,15 @@ namespace BannerKings.Behaviours.Shipping
                         }
                     }
                 });
+
+            CampaignEvents.OnGameLoadFinishedEvent.AddNonSerializedListener(this,
+                () =>
+                {
+                    foreach (var caravan in MobileParty.AllCaravanParties)
+                    {
+                        caravan.Party.UpdateVisibilityAndInspected(0f);
+                    }
+                });
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -211,10 +220,10 @@ namespace BannerKings.Behaviours.Shipping
             else EnterSettlementAction.ApplyForParty(party, travel.Destination);
 
             party.Party.UpdateVisibilityAndInspected(0f);
-            party.IsVisible = true;
             party.IsActive = true;
             party.Ai.EnableAi();
 
+            party.Party.UpdateVisibilityAndInspected();
             RemoveParty(travel.Party);
         }
 
