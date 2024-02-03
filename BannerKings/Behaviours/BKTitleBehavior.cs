@@ -12,7 +12,6 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using static System.Collections.Specialized.BitVector32;
 
 namespace BannerKings.Behaviours
 {
@@ -221,7 +220,7 @@ namespace BannerKings.Behaviours
                 }
 
                 var currentFactionSovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
-                if (currentFactionSovereign.TitleType == TitleType.Empire)
+                if (currentFactionSovereign != null && currentFactionSovereign.TitleType == TitleType.Empire)
                 {
                     kingdom.TickDrift(currentFactionSovereign);
                 }
