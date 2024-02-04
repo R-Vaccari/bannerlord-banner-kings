@@ -8,6 +8,8 @@ namespace BannerKings.Managers.Recruits
 {
     public class DefaultRecruitSpawns : DefaultTypeInitializer<DefaultRecruitSpawns, RecruitSpawn>
     {
+        public IEnumerable<RecruitSpawn> XmlSpawns { get; private set; }
+
         public override IEnumerable<RecruitSpawn> All
         {
             get
@@ -26,8 +28,6 @@ namespace BannerKings.Managers.Recruits
 
             foreach (RecruitSpawn spawn in All)
             {
-                if (culture != spawn.Culture) continue;
-
                 if (spawn.FiefStrings.Count > 0)
                 {
                     if (spawn.FiefStrings.Contains(settlement.StringId) || (settlement.IsVillage &&
@@ -38,6 +38,8 @@ namespace BannerKings.Managers.Recruits
 
                     continue;
                 }
+
+                if (culture != spawn.Culture) continue;
 
                 if (spawn.Kingdom != null && settlement.MapFaction != spawn.Kingdom)
                 {
