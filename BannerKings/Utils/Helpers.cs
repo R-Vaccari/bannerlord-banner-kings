@@ -1,7 +1,8 @@
 using System;
+using System.IO;
 using System.Linq;
+using System.Xml;
 using BannerKings.Managers.Cultures;
-using BannerKings.Managers.Titles;
 using BannerKings.Managers.Traits;
 using Helpers;
 using TaleWorlds.CampaignSystem;
@@ -22,6 +23,16 @@ namespace BannerKings.Utils
 {
     public static class Helpers
     {
+        internal static XmlDocument CreateDocumentFromXmlFile(string xmlPath)
+        {
+            var xmlDocument = new XmlDocument();
+            var streamReader = new StreamReader(xmlPath);
+            var xml = streamReader.ReadToEnd();
+            xmlDocument.LoadXml(xml);
+            streamReader.Close();
+            return xmlDocument;
+        }
+
         public static void ApplyFeat(FeatObject feat, PartyBase party, ref ExplainedNumber result)
         {
             if (PartyBaseHelper.HasFeat(party, feat))
