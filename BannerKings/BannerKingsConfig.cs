@@ -51,6 +51,7 @@ namespace BannerKings
 
         public bool FirstUse { get; internal set; } = true;
         public string TitlesGeneratorPath { get; set; } = BasePath.Name + "Modules/BannerKings/ModuleData/titles.xml";
+        public string RecruitsXmlPath { get; set; }
 
         public AIBehavior AI = new();
 
