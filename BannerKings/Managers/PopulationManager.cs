@@ -90,9 +90,10 @@ namespace BannerKings.Managers
                     return null;
                 }
 
-                if (Populations.ContainsKey(settlement))
+                var equal = Populations.FirstOrDefault(x => x.Key.StringId == settlement.StringId).Key;
+                if (equal != null)
                 {
-                    return Populations[settlement];
+                    return Populations[equal];
                 }
                 else
                 {
