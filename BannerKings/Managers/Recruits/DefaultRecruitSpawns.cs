@@ -9,7 +9,7 @@ namespace BannerKings.Managers.Recruits
 {
     public class DefaultRecruitSpawns : DefaultTypeInitializer<DefaultRecruitSpawns, RecruitSpawn>
     {
-        public List<RecruitSpawn> XmlSpawns { get; private set; }
+        public List<RecruitSpawn> XmlSpawns { get; private set; } = new List<RecruitSpawn>();
         public bool IgnoreCode { get; set; } = false;
 
         public override IEnumerable<RecruitSpawn> All
