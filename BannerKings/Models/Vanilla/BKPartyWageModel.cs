@@ -16,33 +16,13 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using BannerKings.Behaviours.Retainer;
 using BannerKings.Settings;
+using BannerKings.Behaviours.Mercenary;
+using System;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKPartyWageModel : DefaultPartyWageModel
     {
-        public override int GetCharacterWage(CharacterObject character)
-        {
-            return GetCharacterLevelWage(character);
-        }
-
-        public int GetCharacterLevelWage(CharacterObject character)
-        {
-            var result = character.Level switch
-            {
-                <= 1 => 1,
-                <= 6 => 2,
-                <= 11 => 3,
-                <= 16 => 4,
-                <= 21 => 8,
-                <= 26 => 12,
-                <= 31 => 20,
-                _ => 25
-            };
-
-            return (int)(result * BannerKingsSettings.Instance.BaseWage);
-        }
-
         private void CalculatePartialGarrisonWageReduction(float troopRatio, MobileParty mobileParty, PerkObject perk, ref ExplainedNumber garrisonWageReductionMultiplier, bool isSecondaryEffect)
         {
             if (troopRatio > 0f && mobileParty.CurrentSettlement.Town.Governor != null && PerkHelper.GetPerkValueForTown(perk, mobileParty.CurrentSettlement.Town))
@@ -72,6 +52,15 @@ namespace BannerKings.Models.Vanilla
                 TroopRosterElement elementCopyAtIndex = mobileParty.MemberRoster.GetElementCopyAtIndex(i);
                 CharacterObject character = elementCopyAtIndex.Character;
                 int num14 = flag ? elementCopyAtIndex.Number : (elementCopyAtIndex.Number - elementCopyAtIndex.WoundedNumber);
+                int wage = (int)Math.Max(character.TroopWage * BannerKingsSettings.Instance.BaseWage, 1);
+
+                if (character.Occupation == Occupation.Mercenary)
+                {
+                    MercenaryCareer career = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>()
+                                   .GetCareer(Clan.PlayerClan);
+                    if (career != null && career.IsTroopCustom(character)) wage = (int)(wage * 3f);
+                }
+
                 if (character.IsHero)
                 {
                     Hero heroObject = elementCopyAtIndex.Character.HeroObject;
@@ -80,11 +69,11 @@ namespace BannerKings.Models.Vanilla
                     {
                         if (mobileParty.LeaderHero != null && mobileParty.LeaderHero.GetPerkValue(DefaultPerks.Steward.PaidInPromise))
                         {
-                            num3 += MathF.Round((float)elementCopyAtIndex.Character.TroopWage * (1f + DefaultPerks.Steward.PaidInPromise.PrimaryBonus));
+                            num3 += MathF.Round(wage * (1f + DefaultPerks.Steward.PaidInPromise.PrimaryBonus));
                         }
                         else
                         {
-                            num3 += elementCopyAtIndex.Character.TroopWage;
+                            num3 += wage;
                         }
                     }
                 }
@@ -94,25 +83,25 @@ namespace BannerKings.Models.Vanilla
                     {
                         if (character.Culture.IsBandit)
                         {
-                            num9 += elementCopyAtIndex.Character.TroopWage * elementCopyAtIndex.Number;
+                            num9 += wage * elementCopyAtIndex.Number;
                         }
-                        num += elementCopyAtIndex.Character.TroopWage * num14;
+                        num += wage * num14;
                     }
                     else if (character.Tier == 4)
                     {
                         if (character.Culture.IsBandit)
                         {
-                            num10 += elementCopyAtIndex.Character.TroopWage * elementCopyAtIndex.Number;
+                            num10 += wage * elementCopyAtIndex.Number;
                         }
-                        num2 += elementCopyAtIndex.Character.TroopWage * num14;
+                        num2 += wage * num14;
                     }
                     else if (character.Tier > 4)
                     {
                         if (character.Culture.IsBandit)
                         {
-                            num11 += elementCopyAtIndex.Character.TroopWage * elementCopyAtIndex.Number;
+                            num11 += wage * elementCopyAtIndex.Number;
                         }
-                        num3 += elementCopyAtIndex.Character.TroopWage * num14;
+                        num3 += wage * num14;
                     }
                     if (character.IsInfantry)
                     {
@@ -136,7 +125,7 @@ namespace BannerKings.Models.Vanilla
                         if (character.Tier >= 4)
                         {
                             num7 += num14;
-                            num8 += elementCopyAtIndex.Character.TroopWage * elementCopyAtIndex.Number;
+                            num8 += wage * elementCopyAtIndex.Number;
                         }
                     }
                 }
