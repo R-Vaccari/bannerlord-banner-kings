@@ -3,6 +3,8 @@ using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Extensions;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
+using BannerKings.Managers.Titles.Governments;
+using BannerKings.Managers.Titles;
 using BannerKings.Managers.Traits;
 using BannerKings.Utils.Models;
 using System.Collections.Generic;
@@ -15,12 +17,76 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using System;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKDiplomacyModel : DefaultDiplomacyModel
     {
         public float TRADE_PACT_INFLUENCE_CAP { get;} = 100f;
+
+        public ExplainedNumber CalculateHeroFiefScore(Settlement settlement, Hero annexing, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(0f, explanations);
+            Clan clan = annexing.Clan;
+
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(annexing, DefaultDivinities.Instance.AseraMain))
+            {
+                result.AddFactor(0.2f, DefaultDivinities.Instance.AseraMain.Name);
+            }
+
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+            if (title != null && title.HeroHasValidClaim(annexing))
+            {
+                result.Add(150f);
+            }
+
+            FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(annexing.Clan.Kingdom);
+            if (sovereign != null)
+            {
+                if (sovereign.Contract.HasContractAspect(DefaultContractAspects.Instance.ConquestMight))
+                {
+                    if (settlement.Town != null)
+                    {
+                        if (clan == settlement.Town.LastCapturedBy)
+                        {
+                            result.Add(1000f);
+                        }
+                    }
+                }
+                else if (sovereign.Contract.HasContractAspect(DefaultContractAspects.Instance.ConquestClaim))
+                {
+
+                    if (title != null)
+                    {
+                        if (title.deJure == clan.Leader)
+                        {
+                            result.Add(1000f, new TextObject("{=!}{HERO} is de jure holder of {TITLE} ({LAW})"));
+                        }
+                        else if (title.HeroHasValidClaim(clan.Leader))
+                        {
+                            result.Add(500f, new TextObject("{=!}{HERO} is a claimant of {TITLE} ({LAW})"));
+                        }
+                    }
+                }
+                else if (sovereign.Contract.HasContractAspect(DefaultContractAspects.Instance.ConquestDistributed))
+                {
+                    foreach (Settlement fief in clan.Settlements)
+                    {
+                        if (fief.IsTown) result.Add(-300f);
+                        else if (fief.IsCastle) result.Add(-200f);
+                        else result.Add(-75f);
+                    }
+                }
+            }
+
+            var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(clan.Leader).ResultNumber;
+            var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(clan).ResultNumber;
+            float factor = current / limit;
+            result.Add(1000f * (1f - factor));
+
+            return result;
+        }
 
         public override int GetInfluenceCostOfAnnexation(Clan proposingClan)
         {
@@ -377,7 +443,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             StanceLink stance = factionDeclaresWar.GetStanceWith(factionDeclaredWar);
-            int tribute = stance.GetDailyTributePaid(factionDeclaredWar);
+            /*int tribute = stance.GetDailyTributePaid(factionDeclaredWar);
             if (tribute > 0)
             {
                 result.Add(-10000f, new TextObject("{=ZtL0fh80}{FACTION} is paying us tribute")
@@ -387,7 +453,7 @@ namespace BannerKings.Models.Vanilla
             {
                 result.Add(baseNumber * 0.3f, new TextObject("{=tvtoXveu}We are paying tribute to {FACTION}")
                     .SetTextVariable("FACTION", factionDeclaredWar.Name));
-            }
+            }*/
 
             if (stance.BehaviorPriority == 1)
             {
@@ -413,7 +479,6 @@ namespace BannerKings.Models.Vanilla
             float threatFactor = CalculateThreatFactor(factionDeclaresWar, factionDeclaredWar);
             result.Add(baseNumber * threatFactor * 2f, new TextObject("{=ew3Ga8Lu}{THREAT}% threat relative to possible enemies")
                 .SetTextVariable("THREAT", (threatFactor * 100f).ToString("0.0")));
-
 
             float attackerStrength = factionDeclaresWar.TotalStrength;
             float defenderStrength = factionDeclaredWar.TotalStrength;
@@ -475,13 +540,12 @@ namespace BannerKings.Models.Vanilla
                 }
                 else
                 {
-                    War possibleWar = new War(factionDeclaresWar, factionDeclaredWar, null, null);
-                    if (possibleWar.DefenderFront != null && possibleWar.AttackerFront != null)
+                    ValueTuple<Settlement, Settlement> border = GetBorder(factionDeclaresWar, factionDeclaredWar);
+                    if (border.Item1 != null && border.Item2 != null)
                     {
-                        float distance = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(possibleWar.DefenderFront.Settlement,
-                            possibleWar.AttackerFront.Settlement) * 4f;
-                        float factor = (TaleWorlds.CampaignSystem.Campaign.AverageDistanceBetweenTwoFortifications / distance) - 1f;
-                        result.Add(baseNumber * factor, new TextObject("{=fiHYU8X3}Distance between realms"));
+                        float distance = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(border.Item1, border.Item2);
+                        float factor = (TaleWorlds.CampaignSystem.Campaign.AverageDistanceBetweenTwoFortifications / distance);
+                        result.Add(baseNumber * MathF.Pow(factor, 2f), new TextObject("{=fiHYU8X3}Distance between realms"));
                     }
                 }
 
@@ -517,6 +581,28 @@ namespace BannerKings.Models.Vanilla
             result.AddFactor(scoreProportion);*/
 
             return result;
+        }
+
+        private ValueTuple<Settlement, Settlement> GetBorder(IFaction faction1, IFaction faction2)
+        {
+            float distance = float.MaxValue;
+            Settlement border1 = null;
+            Settlement border2 = null;
+            foreach (Town fief1 in faction1.Fiefs)
+            {
+                foreach (Town fief2 in faction2.Fiefs)
+                {
+                    float d = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(fief1.Settlement, fief2.Settlement);
+                    if (d < distance)
+                    {
+                        border1 = fief1.Settlement;
+                        border2 = fief2.Settlement;
+                        distance = d;
+                    }
+                }
+            }
+
+            return new (border1, border2);
         }
 
         private void GetPersonalityCasusBelliEffect(ref ExplainedNumber result, float baseResult, IFaction evaluation, CasusBelli casusBelli)
