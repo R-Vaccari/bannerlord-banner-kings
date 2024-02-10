@@ -1,5 +1,6 @@
 ﻿using BannerKings.Behaviours;
 using BannerKings.Managers.Items;
+using BannerKings.Settings;
 using HarmonyLib;
 using Helpers;
 using SandBox.View.Map;
@@ -25,6 +26,18 @@ namespace BannerKings.Patches
 {
     internal class FixesPatches
     {
+        [HarmonyPatch(typeof(CompanionsCampaignBehavior))]
+        internal class CompanionsCampaignBehaviorPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("_desiredTotalCompanionCount", MethodType.Getter)]
+            private static bool ConditionsHoldPrefix(ref float __result)
+            {
+                __result = Town.AllTowns.Count * BannerKingsSettings.Instance.WorldCompanions;
+                return false;
+            }
+        }
+
         [HarmonyPatch(typeof(GangLeaderNeedsToOffloadStolenGoodsIssueBehavior))]
         internal class GangLeaderNeedsToOffloadStolenGoodsIssueBehaviorPatches
         {
