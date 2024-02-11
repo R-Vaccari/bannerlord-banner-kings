@@ -935,73 +935,68 @@ namespace BannerKings.Behaviours
 
         private void SetCompanionParty(Clan clan)
         {
-            RunWeekly(() =>
+            if (clan.Companions == null || clan.Companions.Count == 0)
             {
-                if (clan.Companions == null || clan.Companions.Count == 0)
+                return;
+            }
+
+            foreach (var companion in clan.Companions)
+            {
+                if (!companion.IsWanderer || companion.IsPrisoner || !companion.IsReady)
                 {
-                    return;
+                    continue;
                 }
 
-                foreach (var companion in clan.Companions)
+                if (companion.PartyBelongedTo == null || companion.PartyBelongedTo.LeaderHero == null)
                 {
-                    if (!companion.IsWanderer || companion.IsPrisoner || !companion.IsReady)
-                    {
-                        continue;
-                    }
-
-                    if (companion.PartyBelongedTo == null || companion.PartyBelongedTo.LeaderHero == null)
-                    {
-                        goto Skills;
-                    }
-
-                    if (companion.PartyBelongedTo.LeaderHero == companion ||
-                        companion.PartyBelongedTo.LeaderHero.Clan != companion.Clan)
-                    {
-                        continue;
-                    }
-
-                Skills:
-                    var role = companion.PartyBelongedTo != null ? companion.PartyBelongedTo.GetHeroPerkRole(companion) : PerkRole.None;
-                    if (role != PerkRole.None)
-                    {
-                        continue;
-                    }
-
-                    if (companion.GetSkillValue(DefaultSkills.Medicine) >= 60)
-                    {
-                        role = PerkRole.Surgeon;
-                    }
-                    else if (companion.GetSkillValue(DefaultSkills.Engineering) >= 60)
-                    {
-                        role = PerkRole.Engineer;
-                    }
-                    else if (companion.GetSkillValue(DefaultSkills.Steward) >= 60)
-                    {
-                        role = PerkRole.Quartermaster;
-                    }
-                    else if (companion.GetSkillValue(DefaultSkills.Scouting) >= 60)
-                    {
-                        role = PerkRole.Scout;
-                    }
-
-                    if (clan.WarPartyComponents.Count <= 0)
-                    {
-                        continue;
-                    }
-
-                    var warParty = clan.WarPartyComponents.GetRandomElementWithPredicate(x => IsRoleFree(x.MobileParty, role));
-                    if (warParty != null)
-                    {
-                        AssignToRole(warParty.MobileParty, role, companion);
-                    }
-                    else
-                    {
-                        AssignToRole(clan.WarPartyComponents.GetRandomElement().MobileParty, PerkRole.None, companion);
-                    }
+                    goto Skills;
                 }
-            },
-            GetType().Name,
-            false);
+
+                if (companion.PartyBelongedTo.LeaderHero == companion ||
+                    companion.PartyBelongedTo.LeaderHero.Clan != companion.Clan)
+                {
+                    continue;
+                }
+
+            Skills:
+                var role = companion.PartyBelongedTo != null ? companion.PartyBelongedTo.GetHeroPerkRole(companion) : PerkRole.None;
+                if (role != PerkRole.None)
+                {
+                    continue;
+                }
+
+                if (companion.GetSkillValue(DefaultSkills.Medicine) >= 60)
+                {
+                    role = PerkRole.Surgeon;
+                }
+                else if (companion.GetSkillValue(DefaultSkills.Engineering) >= 60)
+                {
+                    role = PerkRole.Engineer;
+                }
+                else if (companion.GetSkillValue(DefaultSkills.Steward) >= 60)
+                {
+                    role = PerkRole.Quartermaster;
+                }
+                else if (companion.GetSkillValue(DefaultSkills.Scouting) >= 60)
+                {
+                    role = PerkRole.Scout;
+                }
+
+                if (clan.WarPartyComponents.Count <= 0)
+                {
+                    continue;
+                }
+
+                var warParty = clan.WarPartyComponents.GetRandomElementWithPredicate(x => IsRoleFree(x.MobileParty, role));
+                if (warParty != null)
+                {
+                    AssignToRole(warParty.MobileParty, role, companion);
+                }
+                else
+                {
+                    AssignToRole(clan.WarPartyComponents.GetRandomElement().MobileParty, PerkRole.None, companion);
+                }
+            }
         }
 
         private bool IsRoleFree(MobileParty party, PerkRole role)
@@ -1053,63 +1048,32 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            if (clan.Leader.PartyBelongedTo == null || clan.Leader.IsPrisoner || clan.Companions.Count >= clan.CompanionLimit)
+            if (clan.Leader.IsPrisoner || clan.Companions.Count >= clan.CompanionLimit)
             {
                 return;
             }
 
-            var warParty = clan.WarPartyComponents.FirstOrDefault(x => x.Leader == clan.Leader);
-            if (warParty?.MobileParty == null)
+            var candidates = new List<(PerkRole, float)>
             {
-                return;
-            }
-
-            var mobileParty = warParty.MobileParty;
-            if (!mobileParty.IsActive || !mobileParty.IsReady)
-            {
-                return;
-            }
-
-            var candidates = new List<(PerkRole, float)>();
-
-            if (IsRoleFree(mobileParty, PerkRole.Scout))
-            {
-                candidates.Add(new ValueTuple<PerkRole, float>(PerkRole.Scout, 1f));
-            }
-
-            if (IsRoleFree(mobileParty, PerkRole.Surgeon))
-            {
-                candidates.Add(new ValueTuple<PerkRole, float>(PerkRole.Surgeon, 1f));
-            }
-
-            if (IsRoleFree(mobileParty, PerkRole.Engineer))
-            {
-                candidates.Add(new ValueTuple<PerkRole, float>(PerkRole.Engineer, 1f));
-            }
-
-            if (IsRoleFree(mobileParty, PerkRole.Quartermaster))
-            {
-                candidates.Add(new ValueTuple<PerkRole, float>(PerkRole.Quartermaster, 1f));
-            }
-
-            if (candidates.Count == 0)
-            {
-                return;
-            }
+                new ValueTuple<PerkRole, float>(PerkRole.Scout, 1f),
+                new ValueTuple<PerkRole, float>(PerkRole.Surgeon, 1f),
+                new ValueTuple<PerkRole, float>(PerkRole.Engineer, 1f),
+                new ValueTuple<PerkRole, float>(PerkRole.Quartermaster, 1f)
+            };
 
             var result = MBRandom.ChooseWeighted(candidates);
-            var traits = new Dictionary<PerkRole, List<TraitObject>>
+            var traits = new Dictionary<PerkRole, List<SkillObject>>
             {
                 {
                     PerkRole.Scout,
-                    new List<TraitObject>
+                    new List<SkillObject>
                     {
-                        DefaultTraits.ScoutSkills
+                        DefaultSkills.Scouting
                     }
                 },
-                {PerkRole.Surgeon, new List<TraitObject> {DefaultTraits.Surgery}},
-                {PerkRole.Engineer, new List<TraitObject> {DefaultTraits.Siegecraft}},
-                {PerkRole.Quartermaster, new List<TraitObject> {DefaultTraits.Manager}}
+                {PerkRole.Surgeon, new List<SkillObject> { DefaultSkills.Medicine}},
+                {PerkRole.Engineer, new List<SkillObject> { DefaultSkills.Engineering}},
+                {PerkRole.Quartermaster, new List<SkillObject> { DefaultSkills.Steward}}
             };
 
             var template = GetAdequateTemplate(traits[result], clan.Culture);
@@ -1127,16 +1091,16 @@ namespace BannerKings.Behaviours
             var hero = HeroCreator.CreateSpecialHero(template, null, null, null, TaleWorlds.CampaignSystem.Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
             EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, equipment);
             hero.CompanionOf = clan;
-            AssignToRole(mobileParty, result, hero);
         }
 
-        private CharacterObject GetAdequateTemplate(List<TraitObject> traits, CultureObject culture)
+        private CharacterObject GetAdequateTemplate(List<SkillObject> traits, CultureObject culture)
         {
             CharacterObject template = null;
-            foreach (var trait in traits.Where(_ => template == null))
+            foreach (var skill in traits)
             {
+                if (template != null) break;
                 template = (from x in culture.NotableAndWandererTemplates
-                    where x.Occupation == Occupation.Wanderer && x.GetTraitLevel(trait) >= 2
+                    where x.Occupation == Occupation.Wanderer && x.GetSkillValue(skill) >= 50
                     select x).GetRandomElementInefficiently();
             }
 
