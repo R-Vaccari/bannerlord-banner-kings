@@ -1,0 +1,48 @@
+<Prefab>
+  <Constants>
+    <Constant Name="Clan.Management.Slot.Width" BrushLayer="Default" BrushName="Clan.Management.Slot" BrushValueType="Width" />
+    <Constant Name="Clan.Management.Slot.Height" BrushLayer="Default" BrushName="Clan.Management.Slot" BrushValueType="Height" />
+
+    <Constant Name="Clan.Item.Tuple.Width" BrushLayer="Default" BrushName="Clan.Item.Tuple" BrushValueType="Width" />
+    <Constant Name="Clan.Item.Tuple.Height" BrushLayer="Default" BrushName="Clan.Item.Tuple" BrushValueType="Height" />
+  </Constants>
+  <Window>
+    <!--Income Item-->
+    <ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!Clan.Item.Tuple.Width" SuggestedHeight="!Clan.Item.Tuple.Height" Brush="Clan.Item.Tuple" Command.Click="OnIncomeSelection" IsSelected="@IsSelected">
+      <Children>
+
+        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="10" DoNotAcceptEvents="true">
+          <Children>
+
+            <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Left" DoNotAcceptEvents="true">
+              <Children>
+
+                <!--Visual-->
+
+                <!--Name-->
+                <TextWidget DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="190" MarginLeft="10" Brush="Clan.Tuple.Name.Text" Text="@Name"/>
+
+              </Children>
+            </ListPanel>
+
+            <!--Location-->
+            <TextWidget DoNotAcceptEvents="true"  WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="160" MarginLeft="320" Brush="Clan.Tuple.Name.Text" Text="@Location"/>
+
+            <!--Income-->
+            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Right" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginLeft="10" MarginRight="10" DoNotAcceptEvents="true">
+              <Children>
+
+                <!--Income-->
+                <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Right" Brush="Clan.Tuple.Name.Text" Brush.TextHorizontalAlignment="Right" Text="@IncomeValueText" DoNotAcceptEvents="true" MarginRight="5"/>
+                <ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="25" SuggestedHeight="25" HorizontalAlignment="Right" VerticalAlignment="Center" Sprite="General\Icons\Coin@2x" DoNotAcceptEvents="true"/>
+
+              </Children>
+            </ListPanel>
+
+          </Children>
+        </Widget>
+
+      </Children>
+    </ButtonWidget>
+  </Window>
+</Prefab>
