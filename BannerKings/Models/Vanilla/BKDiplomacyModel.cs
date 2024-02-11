@@ -35,10 +35,28 @@ namespace BannerKings.Models.Vanilla
                 result.AddFactor(0.2f, DefaultDivinities.Instance.AseraMain.Name);
             }
 
-            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
-            if (title != null && title.HeroHasValidClaim(annexing))
+            if (settlement.Owner == annexing)
             {
-                result.Add(150f);
+                result.Add(150f, new TextObject("{=!}{HERO} is the established owner of {FIEF}")
+                    .SetTextVariable("HERO", clan.Leader.Name)
+                    .SetTextVariable("FIEF", settlement.Name));
+            }
+
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+            if (title != null)
+            {
+                if (title.deJure == clan.Leader)
+                {
+                    result.Add(400f, new TextObject("{=!}{HERO} is de jure holder of {TITLE}")
+                        .SetTextVariable("HERO", clan.Leader.Name)
+                        .SetTextVariable("TITLE", title.FullName));
+                }
+                else if (title.HeroHasValidClaim(clan.Leader))
+                {
+                    result.Add(250f, new TextObject("{=!}{HERO} is a legal claimant of {TITLE}")
+                       .SetTextVariable("HERO", clan.Leader.Name)
+                       .SetTextVariable("TITLE", title.FullName));
+                }
             }
 
             FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(annexing.Clan.Kingdom);
@@ -50,22 +68,29 @@ namespace BannerKings.Models.Vanilla
                     {
                         if (clan == settlement.Town.LastCapturedBy)
                         {
-                            result.Add(1000f);
+                            result.Add(1000f, new TextObject("{=!}Last conquered by {CLAN} ({LAW})")
+                                .SetTextVariable("CLAN", clan.Name)
+                                .SetTextVariable("LAW", DefaultContractAspects.Instance.ConquestMight.Name));
                         }
                     }
                 }
                 else if (sovereign.Contract.HasContractAspect(DefaultContractAspects.Instance.ConquestClaim))
                 {
-
                     if (title != null)
                     {
                         if (title.deJure == clan.Leader)
                         {
-                            result.Add(1000f, new TextObject("{=!}{HERO} is de jure holder of {TITLE} ({LAW})"));
+                            result.Add(1000f, new TextObject("{=!}{HERO} is de jure holder of {TITLE} ({LAW})")
+                                .SetTextVariable("HERO", clan.Leader.Name)
+                                .SetTextVariable("TITLE", title.FullName)
+                                .SetTextVariable("LAW", DefaultContractAspects.Instance.ConquestClaim.Name));
                         }
                         else if (title.HeroHasValidClaim(clan.Leader))
                         {
-                            result.Add(500f, new TextObject("{=!}{HERO} is a claimant of {TITLE} ({LAW})"));
+                            result.Add(500f, new TextObject("{=!}{HERO} is a claimant of {TITLE} ({LAW})")
+                                .SetTextVariable("HERO", clan.Leader.Name)
+                                .SetTextVariable("TITLE", title.FullName)
+                                .SetTextVariable("LAW", DefaultContractAspects.Instance.ConquestClaim.Name));
                         }
                     }
                 }
@@ -73,9 +98,16 @@ namespace BannerKings.Models.Vanilla
                 {
                     foreach (Settlement fief in clan.Settlements)
                     {
-                        if (fief.IsTown) result.Add(-300f);
-                        else if (fief.IsCastle) result.Add(-200f);
-                        else result.Add(-75f);
+                        if (fief.IsTown) result.Add(-150f, new TextObject("{=!}Owns {FIEF} ({LAW})")
+                            .SetTextVariable("FIEF", fief.Name)
+                            .SetTextVariable("LAW", DefaultContractAspects.Instance.ConquestDistributed.Name));
+                        else if (fief.IsCastle) result.Add(-75f, new TextObject("{=!}Owns {FIEF} ({LAW})")
+                            .SetTextVariable("FIEF", fief.Name)
+                            .SetTextVariable("LAW", DefaultContractAspects.Instance.ConquestDistributed.Name));
+                        else if (fief.IsVillage && fief.Village.GetActualOwner() == annexing)
+                            result.Add(-30f, new TextObject("{=!}Owns {FIEF} ({LAW})")
+                            .SetTextVariable("FIEF", fief.Name)
+                            .SetTextVariable("LAW", DefaultContractAspects.Instance.ConquestDistributed.Name));
                     }
                 }
             }
@@ -83,7 +115,9 @@ namespace BannerKings.Models.Vanilla
             var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(clan.Leader).ResultNumber;
             var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(clan).ResultNumber;
             float factor = current / limit;
-            result.Add(1000f * (1f - factor));
+            result.Add(500f * (1f - factor), new TextObject("{=!}Current Demesne Limit {CURRENT}/{LIMIT}")
+                .SetTextVariable("CURRENT", current.ToString("0.0"))
+                .SetTextVariable("LIMIT", limit.ToString("0.0")));
 
             return result;
         }
