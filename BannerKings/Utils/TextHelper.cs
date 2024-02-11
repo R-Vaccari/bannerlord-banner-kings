@@ -46,7 +46,7 @@ namespace BannerKings.Utils
         public static TextObject GetKnightTitle(CultureObject culture, bool female, bool plural)
         {
             var name = DefaultTitleNames.Instance.GetKnightName(culture);
-            return female ? name.Female : name.Name;
+            return plural ? name.Description : (female ? name.Female : name.Name);
         }
 
         public static TextObject GetPrinceTitles(bool female, CultureObject culture = null)
