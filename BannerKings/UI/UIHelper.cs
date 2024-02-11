@@ -22,6 +22,8 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using BannerKings.Managers.Cultures;
 using BannerKings.UI.VanillaTabs.TownManagement;
+using TaleWorlds.CampaignSystem.Election;
+using static TaleWorlds.CampaignSystem.Election.SettlementClaimantDecision;
 
 namespace BannerKings.UI
 {
@@ -846,7 +848,7 @@ namespace BannerKings.UI
             MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type"));
             var definition2 = GameTexts.FindText("str_LEFT_ONLY").ToString();
             list.Add(new TooltipProperty(definition2, GetCorrelation(hero), 0));
-            list.Add(new TooltipProperty(new TextObject("{=uUmEcuV8}Age").ToString(), hero.Age.ToString(), 0));
+            list.Add(new TooltipProperty(new TextObject("{=uUmEcuV8}Age").ToString(), ((int)hero.Age).ToString(), 0));
 
             if (hero.CurrentSettlement != null)
             {
@@ -865,6 +867,65 @@ namespace BannerKings.UI
                     list.Add(new TooltipProperty(title.FullName.ToString(), GetOwnership(hero, title), 0));
                 }
             }
+
+            return list;
+        }
+
+        public static List<TooltipProperty> GetDecisionOptionTooltip(KingdomDecision decision, DecisionOutcome outcome)
+        {
+            if (outcome == null) return new List<TooltipProperty>();
+
+            var list = new List<TooltipProperty>
+            {
+                new("", outcome.GetDecisionTitle().ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title),
+                new TooltipProperty(new TextObject("{=!}Sponsor").ToString(), outcome.SponsorClan.Name.ToString(), 0),
+                new TooltipProperty(new TextObject("{=!}Support").ToString(), FormatValue(outcome.WinChance), 0)     
+            };
+
+            if (outcome is ClanAsDecisionOutcome)
+            {
+                TooltipAddEmptyLine(list);
+                ClanAsDecisionOutcome claimantOutcome = (ClanAsDecisionOutcome)outcome;
+                Hero claimant = claimantOutcome.Clan.Leader;
+                MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_relation"));
+                list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), ((int)claimant.GetRelationWithPlayer()).ToString(), 0));
+
+                SettlementClaimantDecision claimantDecision = (SettlementClaimantDecision)decision;
+                ExplainedNumber score = BannerKingsConfig.Instance.DiplomacyModel.CalculateHeroFiefScore(claimantDecision.Settlement,
+                    claimant,
+                    true);
+                list.AddRange(GetAccumulatingWithDescription(new TextObject("{=!}Claim Strength"),
+                    outcome.GetDecisionDescription(),
+                    score.ResultNumber,
+                    false,
+                    ref score));
+            }
+
+            /*MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_relation"));
+            var definition = GameTexts.FindText("str_LEFT_ONLY").ToString();
+            list.Add(new TooltipProperty(definition, ((int)hero.GetRelationWithPlayer()).ToString(), 0));
+            MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type"));
+            var definition2 = GameTexts.FindText("str_LEFT_ONLY").ToString();
+            list.Add(new TooltipProperty(definition2, GetCorrelation(hero), 0));
+            list.Add(new TooltipProperty(new TextObject("{=uUmEcuV8}Age").ToString(), hero.Age.ToString(), 0));
+
+            if (hero.CurrentSettlement != null)
+            {
+                list.Add(new TooltipProperty(new TextObject("{=J6oPqQmt}Settlement").ToString(),
+                    hero.CurrentSettlement.Name.ToString(), 0));
+            }
+
+            var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero);
+            if (titles.Count > 0)
+            {
+                TooltipAddEmptyLine(list);
+                list.Add(new TooltipProperty(new TextObject("{=2qXtnwSn}Titles").ToString(), " ", 0));
+                TooltipAddSeperator(list);
+                foreach (var title in titles)
+                {
+                    list.Add(new TooltipProperty(title.FullName.ToString(), GetOwnership(hero, title), 0));
+                }
+            }*/
 
             return list;
         }
