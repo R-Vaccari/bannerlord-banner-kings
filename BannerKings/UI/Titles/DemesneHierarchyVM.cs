@@ -20,7 +20,7 @@ namespace BannerKings.UI.Titles
         private string name, demesneText;
         private FeudalTitle title;
         private TitleElementVM tree;
-        private BannerKingsSelectorVM<KingdomSelectorItem> selector;
+        private BannerKingsSelectorVM<TitleSelectorItem> selector;
 
         public DemesneHierarchyVM(FeudalTitle title) : base(null, false)
         {
@@ -29,23 +29,20 @@ namespace BannerKings.UI.Titles
             TitleInfo = new MBBindingList<InformationElement>();
             DemesneText = new TextObject("{=t8gCwGPJ}Demesne Information").ToString();
 
-            Selector = new BannerKingsSelectorVM<KingdomSelectorItem>(true, 0, null);
+            Selector = new BannerKingsSelectorVM<TitleSelectorItem>(true, 0, null);
 
             int selected = 0;
             int index = 0;
-            foreach (Kingdom k in Kingdom.All)
+            foreach (FeudalTitle t in BannerKingsConfig.Instance.TitleManager.AllTitles)
             {
-                var kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(k);
-                if (kingdomTitle == null)
-                {
-                    continue;
-                }
+                if (t.TitleType >= TitleType.County) continue;
+                if (t.TitleType == TitleType.Dukedom && t.Sovereign != null) continue;
 
-                Selector.AddItem(new KingdomSelectorItem(k));
-                if (k == Hero.MainHero.CurrentSettlement.MapFaction)
+                Selector.AddItem(new TitleSelectorItem(t));
+                if (t == title)
                 {
                     selected = index;
-                }
+                } 
 
                 index++;
             }
@@ -54,11 +51,11 @@ namespace BannerKings.UI.Titles
             Selector.SetOnChangeAction(OnChange);
         }
 
-        private void OnChange(SelectorVM<KingdomSelectorItem> obj)
+        private void OnChange(SelectorVM<TitleSelectorItem> obj)
         {
             if (obj.SelectedItem != null)
             {
-                title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(obj.SelectedItem.Kingdom);
+                title = obj.SelectedItem.Title;
                 RefreshValues();
             }
         }
@@ -148,7 +145,7 @@ namespace BannerKings.UI.Titles
         }
 
         [DataSourceProperty]
-        public BannerKingsSelectorVM<KingdomSelectorItem> Selector
+        public BannerKingsSelectorVM<TitleSelectorItem> Selector
         {
             get => selector;
             set
