@@ -74,19 +74,28 @@ namespace BannerKings.UI
                 case "titles":
                 {
                     var title = BannerKingsConfig.Instance.TitleManager.GetTitle(Settlement.CurrentSettlement);
+                    var duchy = BannerKingsConfig.Instance.TitleManager.GetDuchy(title);
+                    var sovereign = title?.Sovereign;
+
                     if (title == null)
                     {
                         title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
                     }
 
-                    if (title != null)
+                    if (sovereign != null)
                     {
-                        return (new DemesneHierarchyVM(title.Sovereign), "TitlesWindow");
-                    } 
-                    else
-                    {
-                        return (null, "TitlesWindow");
+                        return (new DemesneHierarchyVM(sovereign), "TitlesWindow");
                     }
+                    else if (duchy != null)
+                    {
+                        return (new DemesneHierarchyVM(duchy), "TitlesWindow");
+                    }
+                    else if (title != null)
+                    {
+                        return (new DemesneHierarchyVM(title), "TitlesWindow");
+                    }
+
+                    return (null, "TitlesWindow");
                 }
                 case "cultures":
                     return (new CultureTabVM(), "CultureTabWindow");
