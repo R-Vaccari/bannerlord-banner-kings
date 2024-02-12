@@ -80,9 +80,9 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public bool AlternateLeveling { get; set; } = true;
 
-        [SettingPropertyFloatingInteger("{=!}World Companions Limit", minValue: 1f, maxValue: 4f, "#0%", RequireRestart = false, HintText = "{=!}The max limit of wanderers in the world, available at taverns. The limit is relative to all existing cities in the map. Vanilla is 100%, and amounts to less than 1 wanderer per town, BK amounts to 1.2 per town. Default: 150%.")]
+        [SettingPropertyFloatingInteger("{=!}World Companions Limit", minValue: 0.5f, maxValue: 1f, "#0%", RequireRestart = false, HintText = "{=!}The max limit of wanderers in the world, available at taverns. The limit is relative to all existing cities in the map. Vanilla is 60%, and amounts to less than 1 wanderer per town, BK amounts to 1 per town. Default: 100%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
-        public float WorldCompanions { get; set; } = 1.5f;
+        public float WorldCompanions { get; set; } = 1f;
 
         [SettingPropertyFloatingInteger("{=hpWaDjNM}Army Cohesion Boost", minValue: 0f, maxValue: 0.8f, "#0%", RequireRestart = false, HintText = "{=AW5mYHB5}Cohesion boost to armies to they last longer, to counter balance the presence of more parties. Vanilla is 0%, 50% decreases cohesion loss by half. Default: 50%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
