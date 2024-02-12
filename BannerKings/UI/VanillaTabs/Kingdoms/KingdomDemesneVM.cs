@@ -46,29 +46,32 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
             Heirs.Clear();
             Aspects.Clear();
 
-            KingdomSelector = new SelectorVM<BKItemVM>(0, OnKingdomChange);
-            var selectorIndex = 0;
-            int selectedIndex = 0;
-            var titles = BannerKingsConfig.Instance.TitleManager.GetSovereignTitleList(Kingdom);
-            foreach (var title in titles)
+            if (KingdomSelector == null)
             {
-                bool available = true;
-                if (title.Sovereign != null && titles.Contains(title.Sovereign)) available = false;
-                TextObject description = available ? new TextObject("{=!}Administer the laws of the {TITLE}, a legal dominion represented by the {REALM}.")
-                    .SetTextVariable("TITLE", Title.FullName)
-                    .SetTextVariable("REALM", Kingdom.Name)
-                    :
-                    new TextObject("{=!}Administering the laws of the {TITLE} is not possible, as this title is subjected to the laws of {SOVEREIGN}.")
-                    .SetTextVariable("TITLE", Title.FullName)
-                    .SetTextVariable("SOVEREIGN", title.Sovereign.FullName);
-                var item = new BKItemVM(selectorIndex, available, title.FullName, title.FullName);
-                KingdomSelector.AddItem(item);
-                if (title == Title) selectedIndex = selectorIndex;
-                selectorIndex++;
-            }
+                KingdomSelector = new SelectorVM<BKItemVM>(0, OnKingdomChange);
+                var selectorIndex = 0;
+                int selectedIndex = 0;
+                var titles = BannerKingsConfig.Instance.TitleManager.GetSovereignTitleList(Kingdom);
+                foreach (var title in titles)
+                {
+                    bool available = true;
+                    if (title.Sovereign != null && titles.Contains(title.Sovereign)) available = false;
+                    TextObject description = available ? new TextObject("{=!}Administer the laws of the {TITLE}, a legal dominion represented by the {REALM}.")
+                        .SetTextVariable("TITLE", Title.FullName)
+                        .SetTextVariable("REALM", Kingdom.Name)
+                        :
+                        new TextObject("{=!}Administering the laws of the {TITLE} is not possible, as this title is subjected to the laws of {SOVEREIGN}.")
+                        .SetTextVariable("TITLE", Title.FullName)
+                        .SetTextVariable("SOVEREIGN", title.Sovereign.FullName);
+                    var item = new BKItemVM(selectorIndex, available, title.FullName, title.FullName);
+                    KingdomSelector.AddItem(item);
+                    if (title == Title) selectedIndex = selectorIndex;
+                    selectorIndex++;
+                }
 
-            KingdomSelector.SelectedIndex = selectedIndex;
-            KingdomSelector.SetOnChangeAction(OnKingdomChange);
+                KingdomSelector.SelectedIndex = selectedIndex;
+                KingdomSelector.SetOnChangeAction(OnKingdomChange);
+            }
 
             if (Title != null)
             {
