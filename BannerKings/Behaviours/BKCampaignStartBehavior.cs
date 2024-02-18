@@ -1,3 +1,4 @@
+using StoryMode;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,8 +38,16 @@ namespace BannerKings.Behaviours
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
-            CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCharacterCreationOver);
             CampaignEvents.OnGameLoadFinishedEvent.AddNonSerializedListener(this, OnGameLoaded);
+
+            if (Game.Current.GameType is CampaignStoryMode)
+            {
+                StoryModeEvents.OnStoryModeTutorialEndedEvent.AddNonSerializedListener(this, OnCharacterCreationOver);
+            }
+            else
+            {
+                CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCharacterCreationOver);
+            }
         }
 
         public override void SyncData(IDataStore dataStore)
