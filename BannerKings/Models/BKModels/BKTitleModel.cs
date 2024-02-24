@@ -88,9 +88,12 @@ namespace BannerKings.Models.BKModels
                 explanations.Add(hero, explanation);
             }
 
-            return (from x in explanations
-                    orderby x.Value.ResultNumber descending
-                    select x).Take(count);
+            var result = from x in explanations
+                          orderby x.Value.ResultNumber descending
+                          select x;
+
+            if (count > 0) return result.Take(count);
+            else return result;
         }
 
         public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateInheritanceLine(Clan clan, Hero victim = null, int count = 6)

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -18,9 +19,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public abstract void SetTexts();
 
-        public abstract Demand GetCopy(InterestGroup group);
+        public abstract Demand GetCopy(DiplomacyGroup group);
 
-        [SaveableProperty(9)] public InterestGroup Group { get; set; }
+        [SaveableProperty(9)] public DiplomacyGroup Group { get; set; }
         public CampaignTime DueDate { get; protected set; }
 
         public bool IsDueDate => Active && DueDate.GetDayOfYear == CampaignTime.Now.GetDayOfYear && DueDate.GetYear == CampaignTime.Now.GetYear;
@@ -51,7 +52,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                    (Hero fulfiller) =>
                    {
                        float factor = fulfiller.GetSkillValue(BKSkills.Instance.Lordship) /
-                       Group.Leader.GetSkillValue(BKSkills.Instance.Lordship);
+                       (Group.Leader.GetSkillValue(BKSkills.Instance.Lordship) + 1);
 
                        if (MBRandom.RandomFloat <= factor * 0.5f)
                        {
@@ -197,7 +198,10 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                    (Hero fulfiller) =>
                    {
                        int denars = MBRandom.RoundRandomized(BannerKingsConfig.Instance.InterestGroupsModel
-                       .CalculateFinancialCompromiseCost(fulfiller, 10000, 1f).ResultNumber);
+                       .CalculateFinancialCompromiseCost(fulfiller, 
+                       10000, 
+                       1f - (0.2f * Group.Leader.GetTraitLevel(DefaultTraits.Generosity)))
+                       .ResultNumber);
                        fulfiller.ChangeHeroGold(-denars);
 
                        LoseRelationsWithGroup(fulfiller, -6, 0.2f);
@@ -226,6 +230,36 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         public abstract void Tick();
         public abstract void Finish();
 
+        public void PushForDemand()
+        {
+            if (Group.KingdomDiplomacy.Kingdom.Leader == Hero.MainHero)
+            {
+                ShowPlayerDemandAnswers();
+            }
+            else
+            {
+                DoAiChoice();
+            }
+        }
+
+        protected void FinishRadicalDemand()
+        {
+            if (Group != null)
+            {
+                Group.Members.Clear();
+                Group.SetLeader(null);
+
+                if (Group.KingdomDiplomacy.Kingdom == Clan.PlayerClan.MapFaction)
+                {
+                    InformationManager.DisplayMessage(new InformationMessage(
+                        new TextObject("{=!}The radical {GROUP} group has been dissolved.")
+                        .SetTextVariable("GROUP", Group.Name)
+                        .ToString(),
+                        Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
+                }
+            }
+        }
+
         protected void LoseRelationsWithGroup(Hero fulfiller, int maxLoss, float chance)
         {
             foreach (Hero member in Group.Members)
@@ -247,6 +281,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     return new TextObject("{=qQbNuioA}, a member of your household").ToString();
                 }
 
+                if (hero.IsClanLeader) new TextObject("{=!}, head of the {CLAN}").SetTextVariable("CLAN", hero.Clan.Name).ToString();
+
                 return new TextObject("{=npdeYCOm} of the {CLAN}").SetTextVariable("CLAN", hero.Clan.Name).ToString();
             }
 
@@ -265,7 +301,16 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
             Group.Leader.AddSkillXp(BKSkills.Instance.Lordship, success ? response.LoserXp : response.SuccessXp);
             fulfiller.AddSkillXp(BKSkills.Instance.Lordship, success ? response.SuccessXp : response.LoserXp);
-            Group.AddOutcome(this, response, success);
+            
+            if (!Group.IsInterestGroup)
+            {
+                Group.TriggerRevolt();
+            }
+            else
+            {
+                (Group as InterestGroup).AddOutcome(this, response, success);
+            }
+
             Finish();
         }
 

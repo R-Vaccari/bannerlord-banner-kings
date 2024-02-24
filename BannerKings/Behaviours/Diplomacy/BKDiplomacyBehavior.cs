@@ -1,3 +1,4 @@
+using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Extensions;
 using System.Collections.Generic;
@@ -327,62 +328,84 @@ namespace BannerKings.Behaviours.Diplomacy
             foreach (var pair in kingdomDiplomacies)
             {
                 pair.Value.Update();
+                ConsiderRadicalGroups(pair.Value);
             }
 
             RunWeekly(() =>
             {
-                Kingdom kingdom = Kingdom.All.GetRandomElementWithPredicate(x => !x.IsEliminated && x.RulingClan != Clan.PlayerClan);
+                ConsiderAIDiplomacy();
+            },
+            GetType().Name);
+        }
 
-                foreach (var target in Kingdom.All)
+        private void ConsiderRadicalGroups(KingdomDiplomacy diplomacy)
+        {
+            foreach (var template in DefaultRadicalGroups.Instance.All)
+            {
+                RadicalGroup copy = (RadicalGroup)template.GetCopy(diplomacy);
+                foreach (Clan clan in diplomacy.Kingdom.Clans)
                 {
-                    if (target.IsEliminated) continue;
+                    Hero hero = clan.Leader;
+                    if (BannerKingsConfig.Instance.InterestGroupsModel.WillHeroCreateGroup(copy, hero, diplomacy))
+                    {
+                        diplomacy.CreateGroup(copy, hero);
+                    }
+                }
+            }
+        }
 
-                    TextObject pactReason;
-                    if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTradePactAllowed(kingdom, target, out pactReason) &&
+        private void ConsiderAIDiplomacy()
+        {
+            Kingdom kingdom = Kingdom.All.GetRandomElementWithPredicate(x => !x.IsEliminated && x.RulingClan != Clan.PlayerClan);
+
+            foreach (var target in Kingdom.All)
+            {
+                if (target.IsEliminated) continue;
+
+                TextObject pactReason;
+                if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTradePactAllowed(kingdom, target, out pactReason) &&
+                    MBRandom.RandomFloat < MBRandom.RandomFloat)
+                {
+                    if (kingdom.RulingClan.Influence >=
+                    BannerKingsConfig.Instance.DiplomacyModel.GetTradePactInfluenceCost(kingdom, target)
+                        .ResultNumber * 2f)
+                    {
+                        ConsiderTradePact(kingdom, target);
+                        break;
+                    }
+                }
+                else
+                {
+                    TextObject truceReason;
+                    if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTruceAllowed(kingdom, target, out truceReason) &&
                         MBRandom.RandomFloat < MBRandom.RandomFloat)
                     {
-                        if (kingdom.RulingClan.Influence >= 
-                        BannerKingsConfig.Instance.DiplomacyModel.GetTradePactInfluenceCost(kingdom, target)
-                            .ResultNumber * 2f)
+                        if (kingdom.RulingClan.Gold >= BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(kingdom, target)
+                            .ResultNumber * 3f)
                         {
-                            ConsiderTradePact(kingdom, target);
+                            ConsiderTruce(kingdom, target, 3f);
                             break;
                         }
                     }
                     else
                     {
-                        TextObject truceReason;
-                        if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTruceAllowed(kingdom, target, out truceReason) &&
+                        TextObject allianceReason;
+                        if (BannerKingsConfig.Instance.KingdomDecisionModel.IsAllianceAllowed(kingdom, target, out allianceReason) &&
                             MBRandom.RandomFloat < MBRandom.RandomFloat)
                         {
-                            if (kingdom.RulingClan.Gold >= BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(kingdom, target)
+                            if (kingdom.RulingClan.Gold >= BannerKingsConfig.Instance.DiplomacyModel.GetAllianceDenarCost(kingdom, target)
                                 .ResultNumber * 3f)
                             {
-                                ConsiderTruce(kingdom, target, 3f);
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            TextObject allianceReason;
-                            if (BannerKingsConfig.Instance.KingdomDecisionModel.IsAllianceAllowed(kingdom, target, out allianceReason) &&
-                                MBRandom.RandomFloat < MBRandom.RandomFloat)
-                            {
-                                if (kingdom.RulingClan.Gold >= BannerKingsConfig.Instance.DiplomacyModel.GetAllianceDenarCost(kingdom, target)
-                                    .ResultNumber * 3f)
-                                {
-                                    if (target != Hero.MainHero.MapFaction && !BannerKingsConfig.Instance.DiplomacyModel.WillAcceptAlliance(target, kingdom)) 
-                                        continue;
+                                if (target != Hero.MainHero.MapFaction && !BannerKingsConfig.Instance.DiplomacyModel.WillAcceptAlliance(target, kingdom))
+                                    continue;
 
-                                    ConsiderAlliance(kingdom, target);
-                                    break;
-                                }
+                                ConsiderAlliance(kingdom, target);
+                                break;
                             }
                         }
                     }
                 }
-            },
-            GetType().Name);
+            }
         }
 
         private void OnNewGameCreated(CampaignGameStarter starter)

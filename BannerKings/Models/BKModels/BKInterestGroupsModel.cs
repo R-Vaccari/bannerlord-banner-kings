@@ -1,24 +1,54 @@
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
+using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
+using BannerKings.Managers.Traits;
 using BannerKings.Utils.Extensions;
 using BannerKings.Utils.Models;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using static TaleWorlds.CampaignSystem.CampaignBehaviors.LordConversationsCampaignBehavior;
 
 namespace BannerKings.Models.BKModels
 {
     public class BKInterestGroupsModel
     {
-        public ExplainedNumber CalculateFinancialCompromiseCost(Hero fulfiller, int minimumInfluence, float factor, bool explanations = false)
+        public bool WillHeroCreateGroup(DiplomacyGroup group, Hero hero, KingdomDiplomacy diplomacy)
         {
-            ExplainedNumber result = new ExplainedNumber(minimumInfluence, explanations);
+            if (hero == Hero.MainHero || !CanHeroCreateAGroup(hero, diplomacy)) return false;
 
+            if (diplomacy.RadicalGroups.Any(x => x.Equals(group))) return false;
+
+            if (group.CanHeroJoin(hero, diplomacy))
+            {
+                if (group is RadicalGroup)
+                {
+                    float chance = CalculateHeroJoinChance(hero, group, diplomacy).ResultNumber;
+                    if (chance > 0f && chance < MBRandom.RandomFloat)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public ExplainedNumber CalculateFinancialCompromiseCost(Hero fulfiller, int minimumCost, float factor, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(minimumCost, explanations);
+            ExplainedNumber income = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(fulfiller.Clan);
+
+            result.Add(income.ResultNumber * 10f, new TextObject("{=!}Revenues of {CLAN}")
+                .SetTextVariable("CLAN", fulfiller.Clan.Name));
+            result.AddFactor(factor - 1f, new TextObject("{=!}Generosity of the group leader"));
             return result;
         }
 
@@ -290,32 +320,151 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public BKExplainedNumber CalculateHeroJoinChance(Hero hero, InterestGroup group, KingdomDiplomacy diplomacy)
+        public bool CanHeroJoinAGroup(Hero hero, KingdomDiplomacy diplomacy)
         {
-            var result = new BKExplainedNumber(0f, false);
+            if (diplomacy.Kingdom != hero.MapFaction)
+            {
+                return false;
+            }
+
+            if (hero.IsLord && hero.MapFaction.Leader == hero)
+            {
+                return false;
+            }
+
+            if (hero.IsChild || hero.IsDead)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public BKExplainedNumber InviteToGroupInfluenceCost(DiplomacyGroup group, Hero invitee, KingdomDiplomacy diplomacy, bool explanations = false)
+        {
+            BKExplainedNumber result = new BKExplainedNumber(50f, explanations);
+
+            if (invitee.Clan != null)
+            {
+                Dictionary<Clan, float> clanInfluences = new Dictionary<Clan, float>();
+                float totalClanInfluence = 0f;
+                foreach (var clan in diplomacy.Kingdom.Clans)
+                {
+                    float f = CalculateClanInfluence(clan, diplomacy).ResultNumber;
+                    totalClanInfluence += f;
+                    clanInfluences.Add(clan, f);
+                }
+
+                result.Add(50f * (clanInfluences[invitee.Clan] / totalClanInfluence), new TextObject("{=!}Political relevance of {CLAN}")
+                    .SetTextVariable("CLAN", invitee.Clan.Name));
+
+                float willingness = CalculateHeroJoinChance(invitee, group, diplomacy).ResultNumber;
+                result.AddFactor(-willingness * 0.5f, new TextObject("{=!}Willingness to join this group"));
+            }
+           
+
+            return result;
+        }
+
+        public bool CanHeroJoinARadicalGroup(Hero hero, KingdomDiplomacy diplomacy) => CanHeroJoinAGroup(hero, diplomacy) && hero.IsClanLeader();
+        
+
+        public bool CanHeroCreateAGroup(Hero hero, KingdomDiplomacy diplomacy)
+        {
+            return CanHeroJoinAGroup(hero, diplomacy) && hero.IsClanLeader() && diplomacy.Kingdom.Leader != hero;
+        }
+
+        public BKExplainedNumber CalculateHeroJoinChance(Hero hero, DiplomacyGroup group, KingdomDiplomacy diplomacy, bool explanations = false)
+        {
+            var result = new BKExplainedNumber(0f, explanations);
             result.LimitMin(-1f);
             result.LimitMax(1f);
-            if (diplomacy.Kingdom != hero.MapFaction)
+            if (!CanHeroJoinAGroup(hero, diplomacy))
             {
                 return result;
             }
+            
+            return group.IsInterestGroup ? CalculateHeroJoinInterestGroup(hero, (InterestGroup)group, diplomacy, ref result) :
+               CalculateHeroJoinRadicalGroup(hero, (RadicalGroup)group, diplomacy, ref result);
+        }
 
+        public BKExplainedNumber CalculateHeroJoinRadicalGroup(Hero hero, RadicalGroup group, KingdomDiplomacy diplomacy, ref BKExplainedNumber result)
+        {
+            Dictionary<Clan, float> clanInfluences = new Dictionary<Clan, float>();
+            float totalClanInfluence = 0f;
+            foreach (var clan in diplomacy.Kingdom.Clans)
+            {
+                float f = CalculateClanInfluence(clan, diplomacy).ResultNumber;
+                totalClanInfluence += f;
+                clanInfluences.Add(clan, f);
+            }
+
+            result.Add(-0.2f + (clanInfluences[hero.Clan] / totalClanInfluence), new TextObject("{=!}Reluctance"));
+            Hero ruler = diplomacy.Kingdom.Leader;
+            float support = -MBMath.Map(diplomacy.Legitimacy, 0f, 1f, -0.5f, 0.5f);
+            result.Add(support, new TextObject("{=!}Legitimacy of {HERO}")
+                .SetTextVariable("HERO", ruler.Name));
+
+            float relation = -MBMath.Map(hero.GetRelation(ruler), -100f, 100f, -0.5f, 0.5f);
+            result.Add(relation, new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
+                    .SetTextVariable("HERO1", hero.Name)
+                    .SetTextVariable("HERO2", ruler.Name));
+
+            InterestGroup interestGroup = diplomacy.GetHeroGroup(hero);
+            if (interestGroup != null)
+            {
+                float groupSupport = -MBMath.Map(interestGroup.Support.ResultNumber, 0f, 1f, -0.1f, 0.1f);
+                result.Add(groupSupport, new TextObject("{=!}Support from interest group ({GROUP})")
+                        .SetTextVariable("GROUP", interestGroup.Name));
+            }
+
+            if (group.Leader != null && hero != group.Leader)
+            {
+                float relationLeader = -MBMath.Map(hero.GetRelation(group.Leader), -100f, 100f, -0.25f, 0.25f);
+                result.Add(relationLeader, new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
+                    .SetTextVariable("HERO1", hero.Name)
+                    .SetTextVariable("HERO2", group.Leader.Name));
+            }
+
+            bool positiveResult = result.ResultNumber > 0f;
+            float honor = hero.GetTraitLevel(DefaultTraits.Honor);
+            result.AddFactor(honor * 0.2f * (positiveResult ? -1 : 1), DefaultTraits.Honor.Name);
+
+            float ambition = hero.GetTraitLevel(BKTraits.Instance.Ambitious);
+            result.AddFactor(ambition * 0.3f * (positiveResult ? 1 : -1), BKTraits.Instance.Ambitious.Name);
+
+            if (group.StringId == DefaultRadicalGroups.Instance.Claimant.StringId)
+            {
+                ClaimantDemand demand = (ClaimantDemand)group.CurrentDemand;
+                if (demand.Claimant != null)
+                {
+                    if (demand.Claimant != hero)
+                    {
+                        float relationClaimant = -MBMath.Map(hero.GetRelation(demand.Claimant), -100f, 100f, -0.25f, 0.25f);
+                        result.Add(relationClaimant, new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
+                            .SetTextVariable("HERO1", hero.Name)
+                            .SetTextVariable("HERO2", demand.Claimant.Name));
+                    }
+                    else
+                    {
+                        result.Add(0.2f + (ambition * 0.1f), new TextObject("{=!}{HERO1}`s ambition of ruling")
+                            .SetTextVariable("HERO1", hero.Name)
+                                                    .SetTextVariable("HERO2", demand.Claimant.Name));
+                    }
+                }
+            }
+         
+            return result;
+        }
+
+        public BKExplainedNumber CalculateHeroJoinInterestGroup(Hero hero, InterestGroup group, KingdomDiplomacy diplomacy, ref BKExplainedNumber result)
+        {
             if (hero.IsLord && !group.AllowsNobles)
             {
                 return result;
             }
 
             if (!hero.IsLord && !group.AllowsCommoners)
-            {
-                return result;
-            }
-
-            if (hero.IsLord && hero.MapFaction.Leader == hero)
-            {
-                return result;
-            }
-
-            if (hero.IsChild || hero.IsDead)
             {
                 return result;
             }

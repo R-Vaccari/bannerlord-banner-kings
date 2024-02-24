@@ -15,33 +15,59 @@ namespace BannerKings.Models.BKModels
     {
         public override BKExplainedNumber CalculateEffect(KingdomDiplomacy diplomacy, bool explanations = false)
         {
-            var result = new BKExplainedNumber(0f, explanations);
             Kingdom kingdom = diplomacy.Kingdom;
             Hero leader = kingdom.Leader;
 
-            if (kingdom == null || leader == null) return result;
+            if (kingdom == null || leader == null) return new BKExplainedNumber(0);
+            else return CalculateLegitimacy(leader, false, diplomacy, explanations);
+        }
+
+        public BKExplainedNumber CalculateLegitimacy(Hero hero, bool compareToRuler, KingdomDiplomacy diplomacy, bool explanations = false)
+        {
+            var result = new BKExplainedNumber(0f, explanations);
+            Kingdom kingdom = diplomacy.Kingdom;
+
+            if (kingdom == null || hero == null) return result;
 
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
             if (title != null)
             {
-                if (title.deJure == leader)
+                if (!compareToRuler)
                 {
-                    result.Add(0.3f, new TextObject("{=6taO5rFT}De Jure holder of {KINGDOM}")
-                    .SetTextVariable("KINGDOM", title.FullName));
-                }
+                    if (title.deJure == hero)
+                    {
+                        result.Add(0.3f, new TextObject("{=6taO5rFT}De Jure holder of {KINGDOM}")
+                        .SetTextVariable("KINGDOM", title.FullName));
+                    }
 
-                if (title.DeFacto == leader)
+                    if (title.DeFacto == hero)
+                    {
+                        result.Add(0.1f, new TextObject("{=ZzWypH2B}De Facto holder of {KINGDOM}")
+                        .SetTextVariable("KINGDOM", title.FullName));
+                    }
+                }
+                else
                 {
-                    result.Add(0.1f, new TextObject("{=ZzWypH2B}De Facto holder of {KINGDOM}")
-                    .SetTextVariable("KINGDOM", title.FullName));
+                    Hero ruler = kingdom.Leader;
+                    if (title.deJure == ruler)
+                    {
+                        result.Add(0.3f, new TextObject("{=!}De Jure holder of {KINGDOM} (theoretical)")
+                        .SetTextVariable("KINGDOM", title.FullName));
+                    }
+
+                    if (title.DeFacto == ruler)
+                    {
+                        result.Add(0.1f, new TextObject("{=!}De Facto holder of {KINGDOM} (theoretical)")
+                        .SetTextVariable("KINGDOM", title.FullName));
+                    }
                 }
             }
             else
             {
-                FeudalTitle highestTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(leader);
+                FeudalTitle highestTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
                 if (highestTitle != null)
                 {
-                    TextObject titleDescription = Utils.TextHelper.GetTitlePrefix(highestTitle.TitleType, leader.Culture);
+                    TextObject titleDescription = Utils.TextHelper.GetTitlePrefix(highestTitle.TitleType, hero.Culture);
                     if (highestTitle.TitleType == TitleType.County)
                     {
                         result.Add(0.05f, new TextObject("{=060rYpf3}Highest title is of {TITLE} level")
@@ -70,9 +96,9 @@ namespace BannerKings.Models.BKModels
                 bool isHighest = true;
                 foreach (Clan clan in kingdom.Clans)
                 {
-                    if (clan != leader.Clan && !clan.IsUnderMercenaryService)
+                    if (clan != hero.Clan && !clan.IsUnderMercenaryService)
                     {
-                        FeudalTitle clantTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(leader);
+                        FeudalTitle clantTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
                         if (clantTitle != null && (highestTitle == null || clantTitle.TitleType <= highestTitle.TitleType))
                         {
                             isHighest = false;
@@ -87,13 +113,13 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            if (leader.Culture == kingdom.Culture)
+            if (hero.Culture == kingdom.Culture)
             {
                 result.Add(0.075f, new TextObject("{=kyB8tkgY}Culture match with {KINGDOM}")
                     .SetTextVariable("KINGDOM", kingdom.Name));
             }
 
-            Religion leaderRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(leader);
+            Religion leaderRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
             if (leaderRel != null && diplomacy.Religion != null)
             {
                 FaithStance stance = diplomacy.Religion.GetStance(leaderRel.Faith);
@@ -105,7 +131,7 @@ namespace BannerKings.Models.BKModels
                     .SetTextVariable("KINGDOM", kingdom.Name));
             }
 
-            CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(leader.Clan);
+            CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero.Clan);
             float expectedGrace = council.CourtGrace.ExpectedGrace.ResultNumber;
             float grace = council.CourtGrace.Grace;
             float graceFactor = grace / expectedGrace;
@@ -113,14 +139,14 @@ namespace BannerKings.Models.BKModels
                 .SetTextVariable("GRACE", grace)
                 .SetTextVariable("EXPECTED", expectedGrace));
 
-            int tier = leader.Clan.Tier;
+            int tier = hero.Clan.Tier;
             if (tier < 5)
             {
                 result.Add(-10f * (5f / tier), new TextObject());
             }
 
             result.AddFactor(BKSkillEffects.Instance.Legitimacy.GetPrimaryValue(
-                leader.GetSkillValue(BKSkills.Instance.Lordship)) * 0.01f, 
+                hero.GetSkillValue(BKSkills.Instance.Lordship)) * 0.01f,
                 new TextObject("{=UxAl9iyi}Personal"));
 
             return result;

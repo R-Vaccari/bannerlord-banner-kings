@@ -2,6 +2,7 @@
 using System.Linq;
 using BannerKings.Behaviours.Criminality;
 using BannerKings.Behaviours.Diplomacy.Groups;
+using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Campaign.Economy.Markets;
 using BannerKings.Campaign.Skills;
@@ -154,6 +155,8 @@ namespace BannerKings
             DefaultCouncilPositions.Instance.Initialize();
             DefaultCasusBelli.Instance.Initialize();
             BKTraits.Instance.Initialize();
+            DefaultDemands.Instance.Initialize();
+            DefaultRadicalGroups.Instance.Initialize();
             DefaultInterestGroup.Instance.Initialize();
             DefaultCriminalSentences.Instance.Initialize();
             DefaultCrimes.Instance.Initialize();
