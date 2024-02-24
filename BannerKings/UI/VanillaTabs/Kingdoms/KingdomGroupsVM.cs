@@ -1,4 +1,5 @@
 using BannerKings.Behaviours.Diplomacy;
+using BannerKings.UI.VanillaTabs.Kingdoms.Groups;
 using System.Linq;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -8,18 +9,25 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
     public class KingdomGroupsVM : BannerKingsViewModel
     {
         private MBBindingList<InterestGroupVM> interestGroups;
-        private InterestGroupVM currentGroup;
-        private string interestGroupsCount;
+        private MBBindingList<RadicalGroupVM> radicalGroups;
+        private GroupItemVM currentGroup;
+        private string interestGroupsCount, radicalGroupsCount;
         public KingdomGroupsVM(KingdomDiplomacy diplomacy) : base(null, false)
         {
             KingdomDiplomacy = diplomacy;
             InterestGroups = new MBBindingList<InterestGroupVM>();
+            RadicalGroups = new MBBindingList<RadicalGroupVM>();
 
             if (KingdomDiplomacy != null)
             {
                 foreach (var group in KingdomDiplomacy.Groups)
                 {
                     InterestGroups.Add(new InterestGroupVM(group, this));
+                }
+
+                foreach (var group in KingdomDiplomacy.RadicalGroups)
+                {
+                    RadicalGroups.Add(new RadicalGroupVM(group, this));
                 }
 
                 InterestGroupsCountText = $"({InterestGroups.Count.ToString()})";
@@ -53,7 +61,7 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
             }
         }
 
-        public void SetGroup(InterestGroupVM group)
+        public void SetGroup(GroupItemVM group)
         {
             if (CurrentGroup != null)
             {
@@ -66,7 +74,7 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
 
 
         [DataSourceProperty]
-        public InterestGroupVM CurrentGroup
+        public GroupItemVM CurrentGroup
         {
             get => currentGroup;
             set
@@ -75,6 +83,20 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
                 {
                     currentGroup = value;
                     OnPropertyChangedWithValue(value, "CurrentGroup");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<RadicalGroupVM> RadicalGroups
+        {
+            get => radicalGroups;
+            set
+            {
+                if (value != radicalGroups)
+                {
+                    radicalGroups = value;
+                    OnPropertyChangedWithValue(value, "RadicalGroups");
                 }
             }
         }
@@ -103,6 +125,20 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
                 {
                     interestGroupsCount = value;
                     OnPropertyChangedWithValue(value, "InterestGroupsCountText");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string RadicalGroupsCountText
+        {
+            get => radicalGroupsCount;
+            set
+            {
+                if (value != radicalGroupsCount)
+                {
+                    radicalGroupsCount = value;
+                    OnPropertyChangedWithValue(value, "RadicalGroupsCountText");
                 }
             }
         }

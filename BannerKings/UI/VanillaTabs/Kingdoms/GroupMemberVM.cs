@@ -10,10 +10,10 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
         private BasicTooltipViewModel hint;
         public GroupMemberVM(Hero hero, bool useCivilian = false) : base(hero, useCivilian)
         {
-            Hint = new BasicTooltipViewModel();
+            //Hint = new BasicTooltipViewModel();
         }
 
-        private void MakeHint()
+        /*private void MakeHint()
         {
             Hint.ExecuteBeginHint();
         }
@@ -35,6 +35,6 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
                     OnPropertyChangedWithValue(value);
                 }
             }
-        }
+        }*/
     }
 }
