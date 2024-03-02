@@ -2,7 +2,6 @@ using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Traits;
 using Helpers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -21,6 +20,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         public CasusBelli Invasion { get; } = new CasusBelli("invasion");
         public CasusBelli FiefClaim { get; } = new CasusBelli("fief_claim");
         public CasusBelli SuppressThreat { get; } = new CasusBelli("SuppressThreat");
+        public CasusBelli Rebellion { get; } = new CasusBelli("Rebellion");
         public override IEnumerable<CasusBelli> All
         {
             get
@@ -32,11 +32,35 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 yield return Invasion;
                 yield return FiefClaim;
                 yield return SuppressThreat;
+                yield return Rebellion;
+                foreach (var item in ModAdditions)
+                    yield return item;
             }
         }
 
         public override void Initialize()
         {
+            Rebellion.Initialize(new TextObject("{=!}Rebellion"),
+                new TextObject("{=!}A rebellion war is fought by former radical groups over a realm, after their demand was rejected by their ruler. Rebels seek to enforce their demand by force.{newline}{newline}Objective: Survive as a rebellion for over 2 years with at least 1 fief."),
+                new TextObject("{=!}Survive for 2 years"),
+                2f,
+                0.1f,
+                1f,
+                5000f,
+                (War war) =>
+                {
+                    return war.StartDate.ElapsedYearsUntilNow >= 1f && war.Attacker.Fiefs.Count >= 2;
+                },
+                (War war) => false,
+                (IFaction faction1, IFaction faction2, CasusBelli casusBelli) => false,
+                (Kingdom kingdom) => false,
+                new Dictionary<TraitObject, float>()
+                {
+                    { BKTraits.Instance.Ambitious, 0.1f },
+                    { DefaultTraits.Valor, 0.2f }
+                },
+                new TextObject("{=v7CeGL18}The {ATTACKER} marches to war! They claim {DEFENDER} are an existential threat."));
+
             SuppressThreat.Initialize(new TextObject("{=iN3RbEku}Suppress Threat"),
                 new TextObject("{=WsSwHEk4}Liberate a fief of your people from the rule of foreigners. Any town or castle that is mostly composed by our culture is reason enough for us to rule it rather than foreigners.\n\nObjective: Capture the selected target."),
                 new TextObject("{=kyB8tkgY}Conquer a fief"),

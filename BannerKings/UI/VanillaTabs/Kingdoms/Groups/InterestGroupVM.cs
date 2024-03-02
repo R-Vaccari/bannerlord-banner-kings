@@ -1,7 +1,6 @@
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Groups.Demands;
-using BannerKings.UI.VanillaTabs.Kingdoms.Groups;
 using BannerKings.Utils.Models;
 using Bannerlord.UIExtenderEx.Attributes;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.VanillaTabs.Kingdoms
+namespace BannerKings.UI.VanillaTabs.Kingdoms.Groups
 {
     public class InterestGroupVM : GroupItemVM
     {
@@ -45,7 +44,7 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
             SecondaryHeaders.Clear();
             TertiaryHeaders.Clear();
             IsEmpty = InterestGroup.Members.Count == 0;
-          
+
 
             foreach (var member in InterestGroup.GetSortedMembers(KingdomDiplomacy).Take(5))
             {

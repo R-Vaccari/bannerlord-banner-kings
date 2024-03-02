@@ -14,7 +14,6 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static TaleWorlds.CampaignSystem.CampaignBehaviors.LordConversationsCampaignBehavior;
 
 namespace BannerKings.Models.BKModels
 {
@@ -342,7 +341,7 @@ namespace BannerKings.Models.BKModels
 
         public BKExplainedNumber InviteToGroupInfluenceCost(DiplomacyGroup group, Hero invitee, KingdomDiplomacy diplomacy, bool explanations = false)
         {
-            BKExplainedNumber result = new BKExplainedNumber(50f, explanations);
+            BKExplainedNumber result = new BKExplainedNumber(75f, explanations);
 
             if (invitee.Clan != null)
             {
@@ -355,13 +354,16 @@ namespace BannerKings.Models.BKModels
                     clanInfluences.Add(clan, f);
                 }
 
-                result.Add(50f * (clanInfluences[invitee.Clan] / totalClanInfluence), new TextObject("{=!}Political relevance of {CLAN}")
+                result.Add(200f * (clanInfluences[invitee.Clan] / totalClanInfluence), new TextObject("{=!}Political relevance of {CLAN}")
                     .SetTextVariable("CLAN", invitee.Clan.Name));
 
                 float willingness = CalculateHeroJoinChance(invitee, group, diplomacy).ResultNumber;
                 result.AddFactor(-willingness * 0.5f, new TextObject("{=!}Willingness to join this group"));
             }
-           
+
+            float leaderCap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(group.Leader.Clan).ResultNumber;
+            result.Add(leaderCap * 0.07f, new TextObject("{=!}Influence limit of {CLAN}")
+                .SetTextVariable("CLAN", group.Leader.Clan.Name));      
 
             return result;
         }

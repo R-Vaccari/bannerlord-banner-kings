@@ -1,4 +1,5 @@
-﻿using BannerKings.Utils.Models;
+﻿using BannerKings.Behaviours.Diplomacy.Groups.Demands;
+using BannerKings.Utils.Models;
 using Helpers;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,14 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 {
     public class War
     {
-        public War(IFaction attacker, IFaction defender, CasusBelli casusBelli, Kingdom sovereign = null)
+        public War(IFaction attacker, IFaction defender, CasusBelli casusBelli, Kingdom sovereign = null, RadicalDemand demand = null)
         {
             Attacker = attacker;
             Defender = defender;
             CasusBelli = casusBelli;
             Sovereign = sovereign;
             DefenderAllies = new List<IFaction>();
+            Demand = demand;
 
             RecalculateFronts();
         }
@@ -85,6 +87,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         [SaveableProperty(8)] public int DaysDefenderHeldObjective { get; private set; }
         [SaveableProperty(9)] public CampaignTime StartDate { get; private set; }
         [SaveableProperty(10)] public List<IFaction> DefenderAllies { get; private set; }
+        [SaveableProperty(11)] public RadicalDemand Demand { get; private set; }
 
         public void AddAlly(IFaction enemy, IFaction faction, bool defender = true)
         {
@@ -180,7 +183,11 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
         public void EndWar()
         {
-
+            if (Demand != null)
+            {
+                bool success = Attacker.GetStanceWith(Defender).GetDailyTributePaid(Defender) > 0;
+                Demand.EndRebellion(Attacker as Kingdom, Defender as Kingdom, success);
+            }
         }
     }
 }

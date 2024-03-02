@@ -1,6 +1,5 @@
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
-using BannerKings.UI.VanillaTabs.Kingdoms.Groups;
 using BannerKings.Utils.Models;
 using Bannerlord.UIExtenderEx.Attributes;
 using System.Collections.Generic;
@@ -14,12 +13,12 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.VanillaTabs.Kingdoms
+namespace BannerKings.UI.VanillaTabs.Kingdoms.Groups
 {
     public class RadicalGroupVM : GroupItemVM
     {
         private bool isDemandEnabled, hasLeader, isInviteEnabled;
-        private string  demandName, createChance;
+        private string demandName, createChance;
         private HintViewModel demandHint, inviteHint;
         private HintViewModel chanceHint;
 
@@ -72,14 +71,16 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
                     if (BannerKingsConfig.Instance.InterestGroupsModel.CanHeroCreateAGroup(hero, KingdomDiplomacy))
                         heroes.Add(hero);
 
+                float total = 0f;
                 foreach (Hero hero in heroes)
                 {
                     float r = BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroJoinChance(hero, Group, KingdomDiplomacy)
                         .ResultNumber / heroes.Count;
                     result.Add(r, hero.Name);
+                    total += MathF.Max(0f, r);
                 }
 
-                ChanceText = FormatValue(result.ResultNumber);
+                ChanceText = FormatValue(total);
                 ChanceHint = new HintViewModel(new TextObject("{=!}{EXPLANATION}")
                     .SetTextVariable("EXPLANATION", result.GetFormattedPercentage()));
 
@@ -115,7 +116,7 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
 
                 Headers.Add(new StringPairItemVM(new TextObject("{=!}Strength").ToString(),
                 FormatValue(RadicalGroup.PowerProportion),
-                new BasicTooltipViewModel(() => Group.CurrentDemand.Description.ToString())));
+                new BasicTooltipViewModel(() => new TextObject("{=!}The military strength of the group's participants, in comparison to all other non-participants of the realm. 100% strength would mean that both sides have equal strength.").ToString())));
             }
 
             DemandName = new TextObject("{=!}Make Ultimatum").ToString();
@@ -185,12 +186,13 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
                     1,
                     GameTexts.FindText("str_done").ToString(),
                     GameTexts.FindText("str_cancel").ToString(),
-                    (List<InquiryElement> list) =>
+                    (list) =>
                     {
                         Hero hero = (Hero)list.First().Identifier;
                         float influence = BannerKingsConfig.Instance.InterestGroupsModel.InviteToGroupInfluenceCost(Group, hero, KingdomDiplomacy).ResultNumber;
                         ChangeClanInfluenceAction.Apply(Clan.PlayerClan, -influence);
                         Group.AddMember(hero);
+                        RefreshValues();
                     },
                     null));
             }
@@ -203,7 +205,7 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
             {
                 InformationManager.ShowInquiry(new InquiryData(
                     new TextObject("{=!}Create Group").ToString(),
-                    new TextObject("{=!}Push for a demand as a radical {GROUP} group. Once created, you can not abandon the group without suffering consequences. Other members will join based on how they like you, the demand and their perception of the ruler. A radical group slowly gathers Radicalism and can push an ultimatum to the ruler once Radicalism reaches 100%.")
+                    new TextObject("{=!}Push for a demand as a radical {GROUP} group. Once created, you can not abandon the group without suffering consequences. Other members will join based on how they like you, the demand and their perception of the ruler.{newline}{newline}A radical group slowly gathers Radicalism, so long their combined forces are equal or greater to 50% of the loyalist forces. The group  can push an ultimatum to the ruler once Radicalism reaches the minimum defined threshold set by the demand type.")
                     .SetTextVariable("GROUP", GroupName)
                     .ToString(),
                     true,
@@ -261,11 +263,21 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
         private void ExecuteDemand()
         {
             float rebelStrength = RadicalGroup.TotalStrength;
+            Hero ruler = Group.KingdomDiplomacy.Kingdom.Leader;
+            float accept = RadicalGroup.CurrentDemand.PositiveAnswer.CalculateAiLikelihood(ruler);
+            float deny = RadicalGroup.CurrentDemand.NegativeAnswer.CalculateAiLikelihood(ruler);
+            float total = 0f;
+            if (accept > 0f) total += accept;
+            if (deny > 0f) total += deny;
+            float chance = accept / total;
+
             InformationManager.ShowInquiry(new InquiryData(
                     new TextObject("{=!}Make Ultimatum").ToString(),
-                    new TextObject("{=!}Make an ultimatum to your ruler demanding they accept your terms. If rejected, you and your group peers will be denounced as enemies of the realm, and a civil war will begin.{newline}{newline}Loyalist strength: {LOYALIST_STRENGTH}{newline}Rebel strength: {REBEL_STRENGTH}")
+                    new TextObject("{=!}Make an ultimatum to your ruler demanding they accept your terms. If rejected, you and your group peers will be denounced as enemies of the realm, and a civil war will begin.{newline}{newline}{RULER} is {CHANCE} likely to conceive to this demand.{newline}{newline}Loyalist strength: {LOYALIST_STRENGTH}{newline}Rebel strength: {REBEL_STRENGTH}")
                     .SetTextVariable("LOYALIST_STRENGTH", Group.KingdomDiplomacy.Kingdom.TotalStrength - rebelStrength)
                     .SetTextVariable("REBEL_STRENGTH", rebelStrength)
+                    .SetTextVariable("RULER", ruler.Name)
+                    .SetTextVariable("CHANCE", FormatValue(chance))
                     .ToString(),
                     true,
                     true,

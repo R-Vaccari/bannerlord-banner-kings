@@ -1,8 +1,12 @@
+using BannerKings.Actions;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Traits;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -11,7 +15,7 @@ using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 {
-    public class ClaimantDemand : Demand
+    public class ClaimantDemand : RadicalDemand
     {
         public ClaimantDemand() : base("Claimant")
         {
@@ -35,7 +39,10 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     },
                     (Hero fulfiller) =>
                     {
-                        return 1f;
+                        
+                        return 2f + fulfiller.GetTraitLevel(BKTraits.Instance.Humble) 
+                        - fulfiller.GetTraitLevel(BKTraits.Instance.Ambitious)
+                        + fulfiller.GetTraitLevel(DefaultTraits.Generosity);
                     },
                     (Hero fulfiller) =>
                     {
@@ -51,6 +58,17 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                         }
 
                         ChangeRulingClanAction.Apply(Group.KingdomDiplomacy.Kingdom, Claimant.Clan);
+
+                        foreach (Hero member1 in Group.Members)
+                        {
+                            foreach (Hero member2 in Group.Members)
+                            {
+                                if (member1 != member2) ChangeRelationAction.ApplyRelationChangeBetweenHeroes(member1, member2, 5);
+                            }
+
+                            if (member1 != Claimant)
+                                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(member1, Claimant, 20);
+                        }
 
                         return true;
                     });
@@ -70,26 +88,43 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                    },
                    (Hero fulfiller) =>
                    {
-                       return 1f;
+                       float result = 5f;
+                       if (FactionManager.GetEnemyKingdoms(fulfiller.MapFaction as Kingdom).Count() == 0) result += 2f;
+                       int gold = fulfiller.Clan.Gold;
+                       if (gold > 100000) result += 2f;
+                       else if (gold > 50000) result += 1f;
+
+                       float strength = (Group as RadicalGroup).PowerProportion;
+                       return result + fulfiller.GetTraitLevel(BKTraits.Instance.Ambitious)
+                       + fulfiller.GetTraitLevel(DefaultTraits.Honor)
+                       - fulfiller.GetTraitLevel(DefaultTraits.Generosity)
+                       - strength;
                    },
                    (Hero fulfiller) =>
                    {
-                       LoseRelationsWithGroup(fulfiller, -10, 0.5f);
+                       LoseRelationsWithGroup(fulfiller, -20, 0.5f);
                        if (fulfiller == Hero.MainHero || Group.Members.Contains(Hero.MainHero))
                        {
-                           InformationManager.DisplayMessage(new InformationMessage(
-                               new TextObject("{=!}The {GROUP} is not satisfied... A civil war breaks out!")
+                           InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Civil War").ToString(),
+                               new TextObject("{=!}A civil war breaks out! {RULER} has rejected the demand of your {GROUP} group. You and your fellow group members are now in open war with the original realm.")
                                .SetTextVariable("GROUP", Group.Name)
                                .SetTextVariable("LEADER", Group.Leader.Name)
+                               .SetTextVariable("RULER", Group.KingdomDiplomacy.Kingdom.Leader.Name)
                                .ToString(),
-                               Color.FromUint(Utils.TextHelper.COLOR_LIGHT_RED)));
+                               true,
+                               false,
+                               GameTexts.FindText("str_accept").ToString(),
+                               string.Empty,
+                               null,
+                               null));
                        }
+
                        return false;
                    });
 
         public override float MinimumGroupInfluence => 0.75f;
 
-        public override bool Active => Claimant != null;
+        public override bool Active => Claimant != null && Claimant.IsAlive;
 
         public override IEnumerable<DemandResponse> DemandResponses
         {
@@ -97,6 +132,20 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             {
                 yield return PositiveAnswer;
                 yield return NegativeAnswer;
+            }
+        }
+
+        public override void EndRebellion(Kingdom rebels, Kingdom original, bool success)
+        {
+            List<Clan> rebelClans = new List<Clan>(rebels.Clans);
+            ReintegrateMembers(rebels, original);
+            if (success)
+            {
+                KingdomActions.SetRulerWithTitle(Claimant, original);
+            }
+            else
+            {
+
             }
         }
 
@@ -112,6 +161,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         {
             ClaimantDemand demand = new ClaimantDemand();
             demand.Group = group;
+            demand.Claimant = Claimant;
             return demand;
         }
 
@@ -179,7 +229,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override void ShowPlayerDemandAnswers()
         {
-            /*List<InquiryElement> options = new List<InquiryElement>();
+            List<InquiryElement> options = new List<InquiryElement>();
             foreach (var answer in DemandResponses)
             {
                 options.Add(new InquiryElement(answer,
@@ -190,12 +240,11 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
-                new TextObject("{=1rWYDHQj}The {GROUP} is pushing for you to assume the {RELIGION} faith, the legal faith of the realm. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
-                .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(Group).ResultNumber * 100f).ToString("0.00"))
-                .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(Group).ResultNumber * 100f).ToString("0.00"))
+                new TextObject("{=!}The {GROUP} is pushing for you to cede rulership to {CLAIMANT}. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {STRENGTH}% military strength relative to your loyalist forces.")
+                .SetTextVariable("STRENGTH", (Group as RadicalGroup).PowerProportion)
                 .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
                 .SetTextVariable("LEADER", Group.Leader.Name)
-                .SetTextVariable("RELIGION", Claimant.Name)
+                .SetTextVariable("CLAIMANT", Claimant.Name)
                 .SetTextVariable("GROUP", Group.Name)
                 .ToString(),
                 options,
@@ -211,7 +260,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 },
                 null,
                 Utils.Helpers.GetKingdomDecisionSound()),
-                true);*/
+                true);
         }
 
         public override void ShowPlayerDemandOptions()
@@ -260,40 +309,20 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     SetTexts();
                     (Group as RadicalGroup).ViewModel.RefreshValues();
                 },
-                (List<InquiryElement> list) => Finish()));
+                (List<InquiryElement> list) =>
+                {
+                    Finish();
+                    (Group as RadicalGroup).ViewModel.RefreshValues();
+                }));
         }
 
         public override void ShowPlayerPrompt()
         {
-            SetTexts();
-            InformationManager.ShowInquiry(new InquiryData(Name.ToString(),
-                new TextObject("{=yHWrKsKr}The {GROUP} group is demanding you assume the {RELIGION} faith. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
-                .SetTextVariable("GROUP", Group.Name)
-                .SetTextVariable("RELIGION", Claimant.Name)
-                .ToString(),
-                true,
-                true,
-                new TextObject("{=j90Aa0xG}Resolve").ToString(),
-                new TextObject("{=sbwMaTwx}Postpone").ToString(),
-                () =>
-                {
-                    ShowPlayerDemandAnswers();
-                },
-                () =>
-                {
-                    DueDate = CampaignTime.DaysFromNow(7f);
-                },
-                Utils.Helpers.GetKingdomDecisionSound()),
-                true,
-                true);
         }
 
         public override void Tick()
         {
-
-            if (IsDueDate)
-            {
-            }
+            if (!Active) Finish();
         }
     }
 }

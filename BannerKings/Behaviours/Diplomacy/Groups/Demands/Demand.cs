@@ -7,6 +7,7 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.MountAndBlade.View;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
@@ -242,24 +243,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
         }
 
-        protected void FinishRadicalDemand()
-        {
-            if (Group != null)
-            {
-                Group.Members.Clear();
-                Group.SetLeader(null);
-
-                if (Group.KingdomDiplomacy.Kingdom == Clan.PlayerClan.MapFaction)
-                {
-                    InformationManager.DisplayMessage(new InformationMessage(
-                        new TextObject("{=!}The radical {GROUP} group has been dissolved.")
-                        .SetTextVariable("GROUP", Group.Name)
-                        .ToString(),
-                        Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
-                }
-            }
-        }
-
         protected void LoseRelationsWithGroup(Hero fulfiller, int maxLoss, float chance)
         {
             foreach (Hero member in Group.Members)
@@ -304,7 +287,13 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             
             if (!Group.IsInterestGroup)
             {
-                Group.TriggerRevolt();
+                if (!success)
+                {
+                    (Group as RadicalGroup).TriggerRevolt();
+                }
+
+                Game.Current.GameStateManager.PopState(0);
+                UISoundsHelper.PlayUISound("event:/ui/default");
             }
             else
             {

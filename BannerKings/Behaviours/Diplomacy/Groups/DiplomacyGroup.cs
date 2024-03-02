@@ -1,8 +1,6 @@
-﻿using BannerKings.Actions;
-using BannerKings.Behaviours.Diplomacy.Groups.Demands;
+﻿using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -89,12 +87,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             {
                 SetNewLeader(KingdomDiplomacy);
             }
-        }
-
-        public void TriggerRevolt()
-        {
-            Kingdom rebels = RebellionActions.CreateRebelKingdom(this as RadicalGroup, Leader.Clan, Members.ConvertAll(x => x.Clan), KingdomDiplomacy.Kingdom);
-            DeclareWarAction.ApplyByKingdomCreation(KingdomDiplomacy.Kingdom, rebels);  
         }
     }
 }

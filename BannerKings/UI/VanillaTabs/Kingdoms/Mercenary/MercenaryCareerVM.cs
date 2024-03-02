@@ -187,7 +187,7 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms.Mercenary
                         customTroop.SetName(new TextObject("{=!}" + name));
 
                         RefreshValues();
-                        ShowSkillEditing();
+                        ShowSkillEditing(true);
                     },
                     null));
             }
@@ -283,12 +283,12 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms.Mercenary
                 null));
         }
 
-        private void ShowSkillEditing(bool levy = true)
+        private void ShowSkillEditing(bool levy)
         {
             var customTroop = Career.GetTroop(Career.Kingdom, levy);
             var list = new List<InquiryElement>();
             var items = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
-            foreach (var preset in DefaultCustomTroopPresets.Instance.GetAdequatePresets(levy ? 16 : 26))
+            foreach (var preset in DefaultCustomTroopPresets.Instance.GetAdequatePresets(levy))
             {
                 list.Add(new InquiryElement(preset,
                     preset.Name.ToString(),

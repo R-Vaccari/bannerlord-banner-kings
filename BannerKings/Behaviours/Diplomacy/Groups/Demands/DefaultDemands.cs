@@ -9,7 +9,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         public Demand LawChange { get; } = new DemesneLawChangeDemand();
         public Demand AssumeFaith { get; } = new AssumeFaithDemand();
         public Demand DemandTitle { get; } = new TitleDemand();
-        public Demand Claimant { get; } = new ClaimantDemand();
+        public RadicalDemand Claimant { get; } = new ClaimantDemand();
         /*public Demand PolicyChange { get; } = new Demand("policy_change");
         = new Demand("law_change");
         public Demand CeaseWar { get; } = new Demand("cease_war");

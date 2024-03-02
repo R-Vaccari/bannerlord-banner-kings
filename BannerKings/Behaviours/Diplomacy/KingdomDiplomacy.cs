@@ -1,7 +1,6 @@
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Institutions.Religions;
-using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Utils.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +69,11 @@ namespace BannerKings.Behaviours.Diplomacy
             if (RadicalGroups == null)
             {
                 RadicalGroups = new List<RadicalGroup>();
+            }
+
+            foreach (var group in RadicalGroups)
+            {
+                group.PostInitialize();
             }
         }
 
@@ -244,6 +248,15 @@ namespace BannerKings.Behaviours.Diplomacy
             return null;
         }
 
+        public RadicalGroup GetHeroRadicalGroup(Hero hero)
+        {
+            foreach (var group in RadicalGroups)
+                if (group.Members.Contains(hero))
+                    return group;
+
+            return null;
+        }
+
         public void Update()
         {
             var trucesToDelete = new List<Kingdom>();
@@ -262,13 +275,19 @@ namespace BannerKings.Behaviours.Diplomacy
 
             Legitimacy += LegitimacyChange;
 
-            foreach (var group in Groups) 
-                if (group.IsGroupActive) 
-                    group.Tick();
+            foreach (var group in Groups)
+            {
+                if (group.IsGroupActive) group.Tick();
+                else group.SetNewLeader(this);
+            }
 
             foreach (var group in RadicalGroups)
-                if (group.IsGroupActive) 
-                    group.Tick();
+            {
+                if (group.IsGroupActive) group.Tick();
+                else group.SetNewLeader(this);
+
+                if (!group.IsGroupActive) group.CurrentDemand.Finish();
+            } 
 
             foreach (var group in DefaultInterestGroup.Instance.All)
             {
@@ -310,6 +329,18 @@ namespace BannerKings.Behaviours.Diplomacy
                 if (settlement.Notables != null)
                     foreach (var notable in settlement.Notables)
                         EvaluateJoinAGroup(notable);
+
+            foreach (var group in RadicalGroups)
+            {
+                foreach (Clan clan in Kingdom.Clans)
+                {
+                    Hero hero = clan.Leader;
+                    if (BannerKingsConfig.Instance.InterestGroupsModel.WillHeroCreateGroup(group, hero, this))
+                    {
+                        group.SetupRadicalGroup(hero, null);
+                    }
+                }
+            }
         }
 
         private void EvaluateJoinAGroup(Hero hero)
@@ -329,6 +360,9 @@ namespace BannerKings.Behaviours.Diplomacy
                     }
                 }
             }
+
+            RadicalGroup radicalGroup = GetHeroRadicalGroup(hero);
+
         }
     }
 }

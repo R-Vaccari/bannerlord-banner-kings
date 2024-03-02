@@ -1,10 +1,9 @@
 using BannerKings.Behaviours.Diplomacy;
-using BannerKings.UI.VanillaTabs.Kingdoms.Groups;
 using System.Linq;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.VanillaTabs.Kingdoms
+namespace BannerKings.UI.VanillaTabs.Kingdoms.Groups
 {
     public class KingdomGroupsVM : BannerKingsViewModel
     {

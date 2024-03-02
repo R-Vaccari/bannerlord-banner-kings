@@ -1,4 +1,5 @@
 using BannerKings.Behaviours.Diplomacy.Groups;
+using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Extensions;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace BannerKings.Behaviours.Diplomacy
     {
         private Dictionary<Kingdom, KingdomDiplomacy> kingdomDiplomacies = new Dictionary<Kingdom, KingdomDiplomacy>();
         private List<War> wars = new List<War>();
+        private List<Kingdom> rebelling = new List<Kingdom>();
 
         public bool WillJoinWar(IFaction attacker, IFaction defender, IFaction ally, DeclareWarAction.DeclareWarDetail detail)
             => BannerKingsConfig.Instance.DiplomacyModel.WillJoinWar(attacker, defender, ally, detail).ResultNumber > 0f;
@@ -35,6 +37,8 @@ namespace BannerKings.Behaviours.Diplomacy
                 }
             }
         }
+
+        public bool IsRebelling(Kingdom kingdom) => rebelling.Contains(kingdom);
 
         public War GetWar(IFaction faction1, IFaction faction2)
         {
@@ -78,6 +82,13 @@ namespace BannerKings.Behaviours.Diplomacy
         {
             wars.Add(new War(attacker, defender, justification));
             InformationManager.DisplayMessage(new InformationMessage(justification.WarDeclaredText.ToString()));
+        }
+
+        public void TriggerRebelWar(Kingdom attacker, Kingdom defender, RadicalDemand demand)
+        {
+            //rebelling.Add(kingdom);
+            wars.Add(new War(attacker, defender, DefaultCasusBelli.Instance.Rebellion, null, demand));
+            InformationManager.DisplayMessage(new InformationMessage(DefaultCasusBelli.Instance.Rebellion.WarDeclaredText.ToString()));
         }
 
         public void ConsiderTruce(Kingdom proposer, Kingdom proposed, float years, bool kingdomBudget = false)
@@ -182,7 +193,6 @@ namespace BannerKings.Behaviours.Diplomacy
             else MakeTradePact(proposer, proposed);
         }
 
-
         public void MakeTradePact(Kingdom proposer, Kingdom proposed)
         {
             int influence = MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetPactInfluenceCost(proposer,
@@ -220,6 +230,7 @@ namespace BannerKings.Behaviours.Diplomacy
             CampaignEvents.RulingClanChanged.AddNonSerializedListener(this, OnRulerChanged);
             CampaignEvents.MakePeace.AddNonSerializedListener(this, OnMakePeace);
             CampaignEvents.KingdomDestroyedEvent.AddNonSerializedListener(this, OnKingdomDestroyed);
+            CampaignEvents.OnClanChangedKingdomEvent.AddNonSerializedListener(this, OnClanChangedKingdom);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -235,6 +246,20 @@ namespace BannerKings.Behaviours.Diplomacy
             if (wars == null)
             {
                 wars = new List<War>();
+            }
+        }
+
+        private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom,
+           ChangeKingdomAction.ChangeKingdomActionDetail detail, bool showNotification = true)
+        {
+            KingdomDiplomacy diplomacy = GetKingdomDiplomacy(oldKingdom);
+            if (diplomacy != null)
+            {
+                foreach (Hero hero in clan.Heroes)
+                {
+                    InterestGroup group = diplomacy.GetHeroGroup(hero);
+                    if (group != null) group.RemoveMember(hero, true);
+                }
             }
         }
 
@@ -328,7 +353,6 @@ namespace BannerKings.Behaviours.Diplomacy
             foreach (var pair in kingdomDiplomacies)
             {
                 pair.Value.Update();
-                ConsiderRadicalGroups(pair.Value);
             }
 
             RunWeekly(() =>
@@ -336,22 +360,6 @@ namespace BannerKings.Behaviours.Diplomacy
                 ConsiderAIDiplomacy();
             },
             GetType().Name);
-        }
-
-        private void ConsiderRadicalGroups(KingdomDiplomacy diplomacy)
-        {
-            foreach (var template in DefaultRadicalGroups.Instance.All)
-            {
-                RadicalGroup copy = (RadicalGroup)template.GetCopy(diplomacy);
-                foreach (Clan clan in diplomacy.Kingdom.Clans)
-                {
-                    Hero hero = clan.Leader;
-                    if (BannerKingsConfig.Instance.InterestGroupsModel.WillHeroCreateGroup(copy, hero, diplomacy))
-                    {
-                        diplomacy.CreateGroup(copy, hero);
-                    }
-                }
-            }
         }
 
         private void ConsiderAIDiplomacy()
@@ -495,6 +503,19 @@ namespace BannerKings.Behaviours.Diplomacy
                         war.RecalculateFronts();
                     }
                 }
+
+                if (attacker.IsKingdomFaction)
+                {
+                    KingdomDiplomacy diplomacy = GetKingdomDiplomacy(attacker as Kingdom);
+                    foreach (Settlement s in newOwner.Clan.Settlements)
+                    {
+                        foreach (Hero notable in s.Notables)
+                        {
+                            InterestGroup group = diplomacy.GetHeroGroup(notable);
+                            if (group != null) group.RemoveMember(notable, true);
+                        }
+                    }
+                }
             }
         }
 
@@ -563,6 +584,7 @@ namespace BannerKings.Behaviours.Diplomacy
             }
 
             War war = GetWar(faction1, faction2);
+            war.EndWar();
             if (war != null) wars.Remove(war);
         }
 
@@ -581,7 +603,7 @@ namespace BannerKings.Behaviours.Diplomacy
 
             foreach (IFaction ally in faction2.GetAllies())
             {
-                WillJoinWar(faction1, faction2, ally, detail);
+                CallToWar(faction1, faction2, ally, detail);
             }
         }
     }
