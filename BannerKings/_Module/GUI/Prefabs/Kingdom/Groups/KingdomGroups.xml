@@ -387,12 +387,12 @@
 											</Widget>
 						
 											<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="150"
-													   VerticalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="100" DoNotAcceptEvents="false">
+													   VerticalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="100" DoNotAcceptEvents="false"
+													   IsVisible="@HasLeader">
 												<Children>
 												
 													<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" SuggestedHeight="150"
-															   VerticalAlignment="Bottom" StackLayout.LayoutMethod="VerticalBottomToTop" MarginBottom="29" DoNotAcceptEvents="false"
-															   IsVisible="@HasLeader">
+															   VerticalAlignment="Bottom" StackLayout.LayoutMethod="VerticalBottomToTop" MarginBottom="29" DoNotAcceptEvents="false">
 														<Children>
 														
 															<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
@@ -491,7 +491,8 @@
 												  </Children>
 												</Widget>
 												
-												<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="227" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginRight="10" MarginBottom="2">
+												<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="227" SuggestedHeight="30" HorizontalAlignment="Center" 
+													    VerticalAlignment="Bottom" MarginRight="10" MarginBottom="2" IsVisible="@HasLeader">
 												  <Children>
 													<HintWidget DataSource="{InviteHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
 													<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="ButtonBrush2" UpdateChildrenStates="true" 
@@ -503,7 +504,8 @@
 												  </Children>
 												</Widget>
 												
-												<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="227" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginLeft="10" MarginBottom="2">
+												<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="227" SuggestedHeight="30" HorizontalAlignment="Center" 
+												        VerticalAlignment="Bottom" MarginLeft="10" MarginBottom="2" IsVisible="@HasLeader">
 												  <Children>
 													<HintWidget DataSource="{DemandHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
 													<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="ButtonBrush2" UpdateChildrenStates="true" 
