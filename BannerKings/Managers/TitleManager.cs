@@ -141,11 +141,12 @@ namespace BannerKings.Managers
             return type;
         }
 
-        public void GrantKnighthood(FeudalTitle title, Hero knight, Hero grantor)
+        public void GrantKnighthood(FeudalTitle title, Hero knight, Hero grantor, bool ignoreCosts = false)
         {
             var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, grantor);
-            action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber;
-            action.TakeAction(knight);
+            if (!ignoreCosts)
+                action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber;
+            BannerKingsConfig.Instance.TitleManager.GrantTitle(action, knight);
 
             if (grantor == Hero.MainHero)
             {
@@ -285,7 +286,7 @@ namespace BannerKings.Managers
 
         public List<Hero> CalculateAllVassals(Clan clan)
         {
-            var list = new List<Hero>();
+            var set = new HashSet<Hero>();
             var behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKGentryBehavior>();
             foreach (var title in GetAllDeJure(clan))
             {
@@ -301,7 +302,7 @@ namespace BannerKings.Managers
                                 (bool, Estate) isGentry = behavior.IsGentryClan(estate.Owner.Clan);
                                 if (isGentry.Item1 && isGentry.Item2 == estate && estate.Owner.MapFaction == clan.MapFaction)
                                 {
-                                    list.Add(estate.Owner);
+                                    set.Add(estate.Owner);
                                 }
                             }
                         }
@@ -320,21 +321,21 @@ namespace BannerKings.Managers
                     {
                         if (deJure.Clan == clan)
                         {
-                            list.Add(deJure);
+                            set.Add(deJure);
                         }
                         else
                         {
                             var suzerain = CalculateHeroSuzerain(deJure);
                             if (suzerain != null && suzerain.deJure == clan.Leader && clan.MapFaction == vassal.deJure.MapFaction)
                             {
-                                list.Add(deJure);
+                                set.Add(deJure);
                             }
                         }
                     }
                 }
             }
 
-            return list;
+            return set.ToList();
         }
 
         public Dictionary<Clan, List<FeudalTitle>> CalculateVassals(Clan suzerainClan, Clan targetClan = null)
