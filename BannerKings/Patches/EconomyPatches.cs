@@ -28,6 +28,7 @@ using BannerKings.Campaign;
 using TaleWorlds.CampaignSystem.Inventory;
 using BannerKings.Campaign.Economy.Markets;
 using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Party.PartyComponents;
 
 namespace BannerKings.Patches
 {
@@ -92,6 +93,25 @@ namespace BannerKings.Patches
             private static MethodInfo BuyGoods => TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<CaravansCampaignBehavior>()
               .GetType()
               .GetMethod("BuyGoods", BindingFlags.Instance | BindingFlags.NonPublic);
+
+           /* [HarmonyPostfix]
+            [HarmonyPatch("GetTradeScoreForTown", MethodType.Normal)]
+            private static void GetTradeScoreForTownPostfix(ref float __result, MobileParty caravanParty, Town town,
+                    CampaignTime lastHomeVisitTimeOfCaravan,
+                    float caravanFullness, bool distanceCut)
+            {
+                if (BannerKingsConfig.Instance.PopulationManager != null)
+                {
+                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                    if (data != null)
+                    {
+                        if (__result > 0f) __result *= data.EconomicData.CaravanAttraction.ResultNumber;
+                        __result -= data.EconomicData.CaravanFee(caravanParty) / 10f;
+                    }
+                }
+
+                if (lastHomeVisitTimeOfCaravan.ElapsedWeeksUntilNow < 1f) __result -= 50f;
+            }*/
 
             [HarmonyPrefix]
             [HarmonyPatch("FindNextDestinationForCaravan", MethodType.Normal)]
@@ -256,7 +276,49 @@ namespace BannerKings.Patches
             [HarmonyPatch("MakeClanFinancialEvaluation", MethodType.Normal)]
             private static bool Prefix2(Clan clan)
             {
-                if (clan.IsMinorFaction)
+                int num = clan.IsMinorFaction ? 10000 : 30000;
+                int num2 = clan.IsMinorFaction ? 30000 : 90000;
+                if (clan.Leader.Gold > num2)
+                {
+                    using (List<WarPartyComponent>.Enumerator enumerator = clan.WarPartyComponents.GetEnumerator())
+                    {
+                        while (enumerator.MoveNext())
+                        {
+                            WarPartyComponent warPartyComponent = enumerator.Current;
+                            warPartyComponent.MobileParty.SetWagePaymentLimit(TaleWorlds.CampaignSystem.Campaign.Current.Models.PartyWageModel.MaxWage);
+                        }
+                        return false;
+                    }
+                }
+                if (clan.Leader.Gold > num)
+                {
+                    using (List<WarPartyComponent>.Enumerator enumerator = clan.WarPartyComponents.GetEnumerator())
+                    {
+                        while (enumerator.MoveNext())
+                        {
+                            WarPartyComponent warPartyComponent2 = enumerator.Current;
+                            float num3 = 600f + (float)(clan.Leader.Gold - num) / (float)(num2 - num) * 600f;
+                            if (warPartyComponent2.MobileParty.LeaderHero == clan.Leader)
+                            {
+                                num3 *= 1.5f;
+                            }
+                            warPartyComponent2.MobileParty.SetWagePaymentLimit((int)num3);
+                        }
+                        return false;
+                    }
+                }
+                foreach (WarPartyComponent warPartyComponent3 in clan.WarPartyComponents)
+                {
+                    float num4 = 200f + (float)clan.Leader.Gold / (float)num * ((float)clan.Leader.Gold / (float)num) * 400f;
+                    if (warPartyComponent3.MobileParty.LeaderHero == clan.Leader)
+                    {
+                        num4 *= 1.5f;
+                    }
+                    warPartyComponent3.MobileParty.SetWagePaymentLimit((int)num4);
+                }
+
+                return false;
+                /*if (clan.IsMinorFaction)
                 {
                     return true;
                 }
@@ -312,7 +374,7 @@ namespace BannerKings.Patches
                     }
                 }
 
-                return true;
+                return true;*/
             }
         }
 
@@ -955,27 +1017,6 @@ namespace BannerKings.Patches
                 }
                 __result = list;
                 return false;
-            }
-        }
-
-        [HarmonyPatch(typeof(CaravansCampaignBehavior), "GetTradeScoreForTown")]
-        internal class GetTradeScoreForTownPatch
-        {
-            private static void Postfix(ref float __result, MobileParty caravanParty, Town town,
-                CampaignTime lastHomeVisitTimeOfCaravan,
-                float caravanFullness, bool distanceCut)
-            {
-                if (BannerKingsConfig.Instance.PopulationManager != null)
-                {
-                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                    if (data != null)
-                    {
-                        if (__result > 0f) __result *= data.EconomicData.CaravanAttraction.ResultNumber; 
-                        __result -= data.EconomicData.CaravanFee(caravanParty) / 10f;
-                    }
-                }
-
-                if (lastHomeVisitTimeOfCaravan.ElapsedWeeksUntilNow < 1f) __result -= 50f;
             }
         }
 
