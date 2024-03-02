@@ -80,6 +80,37 @@ namespace BannerKings.Patches
             }
         }
 
+        /*[HarmonyPatch(typeof(Clan), "MapFaction", MethodType.Getter)]
+        internal class ClanFactionPatch
+        {
+            private static BKDiplomacyBehavior behavior;
+            private static BKDiplomacyBehavior Behavior
+            {
+                get
+                {
+                    if (behavior == null)
+                    {
+                        behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>();
+                    }
+
+                    return behavior;
+                }
+            }
+            private static bool Prefix(Clan __instance, ref IFaction __result)
+            {
+                if (__instance.Kingdom != null)
+                {
+                    if (Behavior.IsRebelling(__instance.Kingdom))
+                    {
+                        __result = __instance;
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }*/
+
         [HarmonyPatch(typeof(KingdomDecisionProposalBehavior), "ConsiderWar")]
         internal class ConsiderWarPatch
         {
