@@ -64,7 +64,6 @@ namespace BannerKings.Managers.Helpers
                 GenerateContract(contractType), stringId);
             action.ActionTaker.Clan.AddRenown(action.Renown);
 
-
             foreach (var vassal in action.Vassals)
             {
                 vassal.DriftTitle(title);

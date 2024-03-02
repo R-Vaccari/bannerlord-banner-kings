@@ -450,7 +450,7 @@ namespace BannerKings.Managers.Titles.Governments
                 -0.4f,
                 1f,
                 0.2f,
-                new TextObject("{=o8Ngf6oX}- Inheritance candidates of current ruler\n- Any clan leader of clan tier 5 or higher"),
+                new TextObject("{=!}- Inheritance candidates of current ruler\n- Any clan leader of clan tier 3 or higher"),
                 new TextObject("{=ydo55teN}+++ Clan tier\n++ Skills\n+ Inheritance score (for clan inheritors)\n+ Military power"),
                 (Hero currentLeader, FeudalTitle title) =>
                 {
@@ -462,7 +462,7 @@ namespace BannerKings.Managers.Titles.Governments
 
                     foreach (Clan clan in currentLeader.Clan.Kingdom.Clans)
                     {
-                        if (clan.IsUnderMercenaryService || clan.Tier < 5) continue;
+                        if (clan.IsUnderMercenaryService || clan.Tier < 3) continue;
 
                         FeudalTitle highestTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
                         if (highestTitle != null && highestTitle.TitleType <= TitleType.County)
