@@ -584,8 +584,11 @@ namespace BannerKings.Behaviours.Diplomacy
             }
 
             War war = GetWar(faction1, faction2);
-            war.EndWar();
-            if (war != null) wars.Remove(war);
+            if (war != null)
+            {
+                war.EndWar();
+                wars.Remove(war);
+            }
         }
 
         private void OnWarDeclared(IFaction faction1, IFaction faction2, DeclareWarAction.DeclareWarDetail detail)
