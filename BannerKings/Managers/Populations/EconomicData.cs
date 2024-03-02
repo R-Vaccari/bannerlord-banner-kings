@@ -42,7 +42,7 @@ namespace BannerKings.Managers.Populations
                     if (caravan.MapFaction.IsKingdomFaction && settlement.MapFaction.IsKingdomFaction)
                     {
                         var diplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(settlement.MapFaction as Kingdom);
-                        if (diplomacy.HasTradePact(caravan.MapFaction as Kingdom))
+                        if (diplomacy != null && diplomacy.HasTradePact(caravan.MapFaction as Kingdom))
                         {
                             return 0;
                         }
