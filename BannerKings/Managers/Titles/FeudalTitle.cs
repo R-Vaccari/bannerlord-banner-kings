@@ -401,11 +401,8 @@ namespace BannerKings.Managers.Titles
 
         public void DriftTitle(FeudalTitle newSovereign, bool notify = true)
         {
-            if (TitleType > TitleType.Kingdom)
-            {
-                return;
-            }
-
+            if (TitleType < TitleType.Kingdom) return;
+            
             if (Sovereign != null && Sovereign.Vassals.Contains(this))
             {
                 Sovereign.Vassals.Remove(this);
