@@ -80,8 +80,11 @@ namespace BannerKings.Behaviours.Diplomacy
 
         public void TriggerJustifiedWar(CasusBelli justification, Kingdom attacker, Kingdom defender)
         {
-            wars.Add(new War(attacker, defender, justification));
-            InformationManager.DisplayMessage(new InformationMessage(justification.WarDeclaredText.ToString()));
+            if (justification != null)
+            {
+                wars.Add(new War(attacker, defender, justification));
+                InformationManager.DisplayMessage(new InformationMessage(justification.WarDeclaredText.ToString()));
+            }
         }
 
         public void TriggerRebelWar(Kingdom attacker, Kingdom defender, RadicalDemand demand)
