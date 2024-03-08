@@ -39,6 +39,7 @@ namespace BannerKings.Managers.Titles.Governments
                 yield return Republic;
                 yield return Dictatorship;
                 yield return AseraiElective;
+                foreach (var item in ModAdditions) yield return item;
             }
         }
 
