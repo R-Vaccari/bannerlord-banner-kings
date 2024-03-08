@@ -8,7 +8,6 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using static System.Collections.Specialized.BitVector32;
 
 namespace BannerKings.Models.BKModels
 {
@@ -70,6 +69,13 @@ namespace BannerKings.Models.BKModels
             else
             {
                 result.AddFactor(contract.GenderLaw.MalePreference - 1f, contract.GenderLaw.Name);
+            }
+
+            if (BannerKingsConfig.Instance.TitleManager.IsKnight(candidate))
+            {
+                result.AddFactor(-0.8f, new TextObject("{=!}{HERO} is a {KNIGHT}")
+                    .SetTextVariable("HERO", candidate.Name)
+                    .SetTextVariable("KNIGHT", Utils.TextHelper.GetKnightTitle(currentLeader.Culture, candidate.IsFemale, false)));
             }
 
             return result;
