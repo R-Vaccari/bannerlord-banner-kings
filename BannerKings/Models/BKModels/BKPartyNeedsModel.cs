@@ -2,6 +2,7 @@ using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.Campaign.Skills;
 using BannerKings.Managers.Skills;
 using BannerKings.Settings;
+using BannerKings.Utils;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Roster;
@@ -230,14 +231,19 @@ namespace BannerKings.Models.BKModels
             {
                 if (element.Character == null || element.Character.Equipment == null) continue;
 
-                if (element.Character.Equipment.HasWeaponOfClass(WeaponClass.SmallShield) ||
-                    element.Character.Equipment.HasWeaponOfClass(WeaponClass.LargeShield))
+                ExceptionUtils.TryCatch(() =>
                 {
-                    result.Add(element.Number * ShieldsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
-                        new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
-                        .SetTextVariable("TROOP_NAME", element.Character.Name)
-                        .SetTextVariable("COUNT", element.Number));
-                }
+                    if (element.Character.Equipment.HasWeaponOfClass(WeaponClass.SmallShield) ||
+                                                           element.Character.Equipment.HasWeaponOfClass(WeaponClass.LargeShield))
+                    {
+                        result.Add(element.Number * ShieldsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor,
+                            new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
+                            .SetTextVariable("TROOP_NAME", element.Character.Name)
+                            .SetTextVariable("COUNT", element.Number));
+                    }
+                },
+                GetType().Name,
+                false); 
             }
 
             return result;
