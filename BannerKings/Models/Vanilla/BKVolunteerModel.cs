@@ -2,7 +2,6 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -38,7 +37,8 @@ namespace BannerKings.Models.Vanilla
 
             if (buyerHero != null)
             {
-                useValueAsRelation = sellerHero.GetRelation(buyerHero);
+                if (buyerHero.Clan != null && !buyerHero.IsClanLeader) useValueAsRelation = sellerHero.GetRelation(buyerHero.Clan.Leader);
+                else useValueAsRelation = sellerHero.GetRelation(buyerHero);
             }
 
             result.Add(GetRelationImpact(useValueAsRelation), 
@@ -52,6 +52,9 @@ namespace BannerKings.Models.Vanilla
                 return new ExplainedNumber(base.MaximumIndexHeroCanRecruitFromHero(buyerHero, sellerHero, useValueAsRelation));
             }
 
+            int halfRecruits = (int)(BannerKingsSettings.Instance.VolunteersLimit / 2f);
+            MBMath.Map(useValueAsRelation, -100, 100, -halfRecruits, halfRecruits);
+
             var contract = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement).Contract;
             if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingVassalage))
             {
@@ -63,9 +66,12 @@ namespace BannerKings.Models.Vanilla
             }
             else if (result.ResultNumber >= 2f)
             {
-                result.AddFactor(-0.5f, new TextObject("{=!}Drafting Demesne Law ({LAW}) in {TITLE}")
-                    .SetTextVariable("LAW", DefaultDemesneLaws.Instance.DraftingFreeContracts.Name)
-                    .SetTextVariable("TITLE", title.FullName));
+                if (sellerHero.MapFaction != buyerHero.MapFaction) result.AddFactor(-0.25f, new TextObject("{=!}Drafting Demesne Law ({LAW}) in {TITLE}")
+                        .SetTextVariable("LAW", DefaultDemesneLaws.Instance.DraftingFreeContracts.Name)
+                        .SetTextVariable("TITLE", title.FullName));
+                else result.Add(halfRecruits, new TextObject("{=!}Drafting Demesne Law ({LAW}) in {TITLE}")
+                        .SetTextVariable("LAW", DefaultDemesneLaws.Instance.DraftingFreeContracts.Name)
+                        .SetTextVariable("TITLE", title.FullName));
             }
 
             AddPerks(ref result, buyerHero, sellerHero, useValueAsRelation);
