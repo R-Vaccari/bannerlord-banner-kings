@@ -469,8 +469,8 @@ namespace BannerKings.Models.Vanilla
                     {
                         WarStats enemyStats = CalculateWarStats(factionDeclaresWar, enemyKingdom);
                         float enemyScore = enemyStats.Strength + enemyStats.ValueOfSettlements - (enemyStats.TotalStrengthOfEnemies * 1.25f);
-                        float proportion = MathF.Clamp((attackerScore / (enemyScore * 4f)) - 1f, -1f, 0f);
-                        result.Add(baseNumber * proportion, new TextObject("{=epNrP2AT}Existing war with {FACTION}")
+                        float f = 2f - (attackerScore / (enemyScore * 5f));
+                        result.Add(-baseNumber * f, new TextObject("{=epNrP2AT}Existing war with {FACTION}")
                         .SetTextVariable("FACTION", enemyKingdom.Name));
                     }
                 }
@@ -502,13 +502,6 @@ namespace BannerKings.Models.Vanilla
                     .SetTextVariable("HERO1", evaluatingClan.Leader.Name)
                 .SetTextVariable("HERO2", factionDeclaredWar.Leader.Name));
             }
-            else
-            {
-                float relations = factionDeclaresWar.Leader.GetRelation(factionDeclaredWar.Leader);
-                result.Add(baseNumber * (-relations / 100f), new TextObject("{=nAz6xfjt}{FACTION1} ruler`s opinion of {FACTION2} ruler")
-                    .SetTextVariable("FACTION1", factionDeclaresWar.Name)
-                .SetTextVariable("FACTION2", factionDeclaredWar.Name));
-            }
 
             float threatFactor = CalculateThreatFactor(factionDeclaresWar, factionDeclaredWar);
             result.Add(baseNumber * threatFactor * 2f, new TextObject("{=ew3Ga8Lu}{THREAT}% threat relative to possible enemies")
@@ -532,27 +525,13 @@ namespace BannerKings.Models.Vanilla
 
             if (defenderStrength >= attackerStrength * 1.5f)
             {
-                result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.5f, -4f, -0.4f), new TextObject("{=Z7AW5i79}Enemy significantly stronger"));
+                result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.5f, -5f, -0.4f), new TextObject("{=Z7AW5i79}Enemy significantly stronger"));
             }
 
             float attackerFiefs = factionDeclaresWar.Fiefs.Count;
             float defenderFiefs = factionDeclaredWar.Fiefs.Count;
             float fiefsFactor = (attackerFiefs  / defenderFiefs) - 1f;
             result.Add(baseNumber * MathF.Clamp(fiefsFactor * 0.1f, -2f, 2f), new TextObject("{=MvV0HUdo}Difference in controlled fiefs"));
-
-            float attackerStability = 0f;
-            foreach (var fief in factionDeclaresWar.Fiefs)
-                attackerStability += BannerKingsConfig.Instance.PopulationManager.GetPopData(fief.Settlement).Stability / attackerFiefs;
-
-            float defenderStability = 0f;
-            foreach (var fief in factionDeclaredWar.Fiefs)
-                defenderStability += BannerKingsConfig.Instance.PopulationManager.GetPopData(fief.Settlement).Stability / defenderFiefs;
-
-            result.Add(baseNumber * (attackerStability - 0.5f), new TextObject("{=cpVyc2Xc}Fief stability in {FACTION}")
-                        .SetTextVariable("FACTION", factionDeclaresWar.Name));
-
-            result.Add(-baseNumber * (defenderStability - 0.5f), new TextObject("{=cpVyc2Xc}Fief stability in {FACTION}")
-                        .SetTextVariable("FACTION", factionDeclaredWar.Name));
 
             War war = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetWar(factionDeclaredWar, factionDeclaresWar);
             if (war != null)
@@ -578,8 +557,8 @@ namespace BannerKings.Models.Vanilla
                     if (border.Item1 != null && border.Item2 != null)
                     {
                         float distance = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(border.Item1, border.Item2);
-                        float factor = (TaleWorlds.CampaignSystem.Campaign.AverageDistanceBetweenTwoFortifications / distance);
-                        result.Add(baseNumber * MathF.Pow(factor, 2f), new TextObject("{=fiHYU8X3}Distance between realms"));
+                        float factor = (TaleWorlds.CampaignSystem.Campaign.AverageDistanceBetweenTwoFortifications / distance) - 1f;
+                        result.Add(MathF.Clamp(baseNumber * factor * 2f, baseNumber * -2f, 0f), new TextObject("{=fiHYU8X3}Distance between realms"));
                     }
                 }
 
