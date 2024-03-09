@@ -27,7 +27,6 @@ using BannerKings.Managers.Innovations;
 using BannerKings.Campaign;
 using TaleWorlds.CampaignSystem.Inventory;
 using BannerKings.Campaign.Economy.Markets;
-using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Party.PartyComponents;
 
 namespace BannerKings.Patches
@@ -381,6 +380,90 @@ namespace BannerKings.Patches
         [HarmonyPatch(typeof(DefaultClanFinanceModel))]
         internal class ClanFinancesPatches
         {
+            private static DefaultClanFinanceModel DefaultClanFinanceModel = new DefaultClanFinanceModel();
+            /*private static MethodInfo AddExpensesFromPartiesAndGarrisons => DefaultClanFinanceModel
+                .GetType()
+                .GetMethod("AddExpensesFromPartiesAndGarrisons", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            private static MethodInfo AddExpensesForHiredMercenaries => DefaultClanFinanceModel
+                .GetType()
+                .GetMethod("AddExpensesForHiredMercenaries", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            private static MethodInfo AddExpensesForTributes => DefaultClanFinanceModel
+                .GetType()
+                .GetMethod("AddExpensesForTributes", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            private static MethodInfo AddExpensesForAutoRecruitment => DefaultClanFinanceModel
+                .GetType()
+                .GetMethod("AddExpensesForAutoRecruitment", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            private static MethodInfo AddPaymentForDebts => DefaultClanFinanceModel
+                .GetType()
+                .GetMethod("AddPaymentForDebts", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            private static MethodInfo AddPlayerExpenseForWorkshops => DefaultClanFinanceModel
+                .GetType()
+                .GetMethod("AddPlayerExpenseForWorkshops", BindingFlags.Instance | BindingFlags.NonPublic);*/
+
+            [HarmonyPrefix]
+            [HarmonyPatch("CalculateClanExpensesInternal")]
+            private static bool CalculateClanExpensesInternalPrefix(DefaultClanFinanceModel __instance, Clan clan, 
+                ref ExplainedNumber goldChange, bool applyWithdrawals = false, bool includeDetails = false)
+            {
+                bool payBudget = clan.Gold > 100000 && clan.Kingdom != null && clan.Leader != Hero.MainHero && !clan.IsUnderMercenaryService;
+                if (payBudget) 
+                {
+                    MethodInfo AddExpensesFromPartiesAndGarrisons = DefaultClanFinanceModel
+                        .GetType()
+                        .GetMethod("AddExpensesFromPartiesAndGarrisons", BindingFlags.Instance | BindingFlags.NonPublic);
+                    AddExpensesFromPartiesAndGarrisons.Invoke(__instance, new object[] { clan, goldChange, applyWithdrawals, includeDetails });
+                    if (!clan.IsUnderMercenaryService)
+                    {
+                        MethodInfo AddExpensesForHiredMercenaries = DefaultClanFinanceModel
+                            .GetType()
+                            .GetMethod("AddExpensesForHiredMercenaries", BindingFlags.Instance | BindingFlags.NonPublic);
+                        MethodInfo AddExpensesForTributes = DefaultClanFinanceModel
+                           .GetType()
+                           .GetMethod("AddExpensesForTributes", BindingFlags.Instance | BindingFlags.NonPublic);
+                        AddExpensesForHiredMercenaries.Invoke(__instance, new object[] { clan, goldChange, applyWithdrawals });
+                        AddExpensesForTributes.Invoke(__instance, new object[] { clan, goldChange, applyWithdrawals });
+                    }
+
+                    MethodInfo AddExpensesForAutoRecruitment = DefaultClanFinanceModel
+                        .GetType()
+                        .GetMethod("AddExpensesForAutoRecruitment", BindingFlags.Instance | BindingFlags.NonPublic);
+                    AddExpensesForAutoRecruitment.Invoke(__instance, new object[] { clan, goldChange, applyWithdrawals });
+                    if (clan.Gold > 100000 && clan.Kingdom != null && clan.Leader != Hero.MainHero && !clan.IsUnderMercenaryService)
+                    {
+                        int num = (int)(((float)clan.Gold - 100000f) * 0.001f);
+                        if (applyWithdrawals)
+                        {
+                            clan.Kingdom.KingdomBudgetWallet += num;
+                        }
+                        goldChange.Add((float)(-(float)num), new TextObject("{=7uzvI8e8}Kingdom Budget Expense"));
+                    }
+                    if (clan.DebtToKingdom > 0)
+                    {
+                        MethodInfo AddPaymentForDebts = DefaultClanFinanceModel
+                            .GetType()
+                            .GetMethod("AddPaymentForDebts", BindingFlags.Instance | BindingFlags.NonPublic);
+                        AddPaymentForDebts.Invoke(__instance, new object[] { clan, goldChange, applyWithdrawals });
+                    }
+                    
+                    if (Clan.PlayerClan == clan)
+                    {
+                        MethodInfo AddPlayerExpenseForWorkshops = DefaultClanFinanceModel
+                            .GetType()
+                            .GetMethod("AddPlayerExpenseForWorkshops", BindingFlags.Instance | BindingFlags.NonPublic);
+                        AddPlayerExpenseForWorkshops.Invoke(__instance, new object[] { goldChange });
+                    }
+                    
+                    return false;
+                }
+
+                return true;
+            }
+
             [HarmonyPrefix]
             [HarmonyPatch("AddIncomeFromKingdomBudget", MethodType.Normal)]
             private static bool KingdomBudgetPrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
