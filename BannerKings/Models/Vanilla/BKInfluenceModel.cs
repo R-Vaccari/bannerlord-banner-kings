@@ -1,5 +1,4 @@
 using System;
-using System.Numerics;
 using BannerKings.Behaviours;
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
@@ -56,11 +55,10 @@ namespace BannerKings.Models.Vanilla
 
         public ExplainedNumber GetMinimumPeersQuantity(Kingdom kingdom, bool explanations = false)
         {
-            ExplainedNumber result = new ExplainedNumber(0f, explanations);
+            ExplainedNumber result = new ExplainedNumber(1f, explanations);
             if (kingdom != null)
             {
-                result.Add(1f, new TextObject("{=grgaF5Mc}Base value"));
-                result.Add(MathF.Floor(kingdom.Fiefs.Count / 2f), new TextObject("{=LBNzsqyb}Fiefs"));
+                result.Add(MathF.Floor(kingdom.Fiefs.Count / 2.5f), new TextObject("{=LBNzsqyb}Fiefs"));
                 result.LimitMax(kingdom.Clans.Count);
             }
 
