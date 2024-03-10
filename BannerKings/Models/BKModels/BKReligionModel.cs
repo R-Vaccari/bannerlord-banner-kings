@@ -383,7 +383,7 @@ namespace BannerKings.Models.BKModels
             {
                 Settlement settlement = religion.Faith.FaithSeat;
                 var rel = settlement.PopulationData().ReligionData.DominantReligion;
-                if (rel.Equals(religion))
+                if (rel != null && rel.Equals(religion))
                 {
                     result.Add(0.15f, new TextObject("{=z0ifBnEL}Faith seat ({FIEF})")
                        .SetTextVariable("FIEF", settlement.Name));
@@ -395,7 +395,7 @@ namespace BannerKings.Models.BKModels
             foreach (Settlement settlement in holySites)
             {
                 var rel = settlement.PopulationData().ReligionData.DominantReligion;
-                if (rel.Equals(religion))
+                if (rel != null && rel.Equals(religion))
                 {
                     result.Add(0.05f, new TextObject("{=BPgMgury}Holy site ({FIEF})")
                         .SetTextVariable("FIEF", settlement.Name));
