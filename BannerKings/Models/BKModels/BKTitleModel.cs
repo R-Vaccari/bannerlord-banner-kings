@@ -245,8 +245,32 @@ namespace BannerKings.Models.BKModels
                 ActionType.Usurp => GetUsurp(title, taker),
                 ActionType.Revoke => GetRevoke(title, taker),
                 ActionType.Claim => GetClaim(title, taker),
+                ActionType.Create => GetCreate(title, taker),
                 _ => GetGrant(title, taker)
             };
+        }
+
+        private TitleAction GetCreate(FeudalTitle title, Hero creator)
+        {
+            var claimAction = new TitleAction(ActionType.Claim, title, creator)
+            {
+                Gold = GetGoldUsurpCost(title) * 0.1f,
+                Influence = GetInfluenceUsurpCost(title) * 0.2f,
+                Renown = GetRenownUsurpCost(title) * 0.2f
+            };
+
+            if (creator.Gold < claimAction.Gold || creator.Clan.Influence < claimAction.Influence)
+            {
+                claimAction.Possible = false;
+                claimAction.Reason = new TextObject("{=zuKjwXH6}Missing required resources.");
+                return claimAction;
+            }
+
+            claimAction.Possible = true;
+            claimAction.Reason = new TextObject("{=zMnXdAxp}You may claim this title.");
+            ApplyDiscounts(claimAction);
+
+            return claimAction;
         }
 
         private TitleAction GetClaim(FeudalTitle title, Hero claimant)
@@ -643,8 +667,13 @@ namespace BannerKings.Models.BKModels
                 else claimants[deFacto] = new TextObject("{=zp4c76pS}De facto unlanded title holder");
             }
 
-            if (title.Sovereign != null && title.Sovereign.deJure != title.deJure && !claimants.ContainsKey(title.Sovereign.deJure))
+            if (title.Sovereign != null &&
+                title.Sovereign.deJure != null &&
+                title.Sovereign.deJure != title.deJure &&
+                !claimants.ContainsKey(title.Sovereign.deJure))
+            {
                 claimants[title.Sovereign.deJure] = new TextObject("{=pkZ0J4Fo}De jure sovereign of this title");
+            }
 
             if (title.Vassals != null && title.Vassals.Count > 0)
                 foreach (var vassal in title.Vassals)

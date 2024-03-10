@@ -56,14 +56,17 @@ namespace BannerKings.Managers
 
             foreach (FeudalTitle title in Titles)
             {
-                var hero = title.deJure;
-                if (!DeJuresCache.ContainsKey(hero))
+                Hero hero = title.deJure;
+                if (hero != null)
                 {
-                    DeJuresCache.Add(hero, new List<FeudalTitle> {title});
-                }
-                else
-                {
-                    DeJuresCache[hero].Add(title);
+                    if (!DeJuresCache.ContainsKey(hero))
+                    {
+                        DeJuresCache.Add(hero, new List<FeudalTitle> { title });
+                    }
+                    else
+                    {
+                        DeJuresCache[hero].Add(title);
+                    }
                 }
 
                 if (title.Fief != null)
@@ -466,6 +469,37 @@ namespace BannerKings.Managers
             if (action.ActionTaker == Hero.MainHero)
             {
 
+            }
+        }
+
+        public void CreateTitle(TitleAction action)
+        {
+            var currentOwner = action.Title.deJure;
+            InformationManager.DisplayMessage(new InformationMessage(
+                new TextObject("{=D50E4DZk}{REVOKER} has revoked the {TITLE}.")
+                    .SetTextVariable("REVOKER", action.ActionTaker.EncyclopediaLinkWithName)
+                    .SetTextVariable("TITLE", action.Title.FullName)
+                    .ToString()));
+            var impact = new BKTitleModel().GetRelationImpact(action.Title);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.ActionTaker, currentOwner, impact);
+
+            action.Title.RemoveClaim(action.ActionTaker);
+            action.Title.AddClaim(currentOwner, ClaimType.Previous_Owner, true);
+            ExecuteOwnershipChange(currentOwner, action.ActionTaker, action.Title, true);
+
+            if (action.Gold > 0)
+            {
+                action.ActionTaker.ChangeHeroGold((int)-action.Gold);
+            }
+
+            if (action.Influence > 0)
+            {
+                action.ActionTaker.Clan.Influence -= action.Influence;
+            }
+
+            if (action.Renown > 0)
+            {
+                action.ActionTaker.Clan.Renown -= action.Renown;
             }
         }
 

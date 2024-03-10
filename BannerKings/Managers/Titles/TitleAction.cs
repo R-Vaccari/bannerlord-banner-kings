@@ -106,12 +106,15 @@ namespace BannerKings.Managers.Titles
                 case ActionType.Revoke:
                     BannerKingsConfig.Instance.TitleManager.RevokeTitle(this);
                     break;
+                case ActionType.Create:
+                    BannerKingsConfig.Instance.TitleManager.CreateTitle(this);
+                    break;
                 case ActionType.Found:
                     TitleGenerator.FoundKingdom(this);
                     break;
                 case ActionType.Grant:
                 case ActionType.Destroy:
-                case ActionType.Create:
+               
                 default:
                     BannerKingsConfig.Instance.TitleManager.GrantTitle(this, receiver);
                     break;
