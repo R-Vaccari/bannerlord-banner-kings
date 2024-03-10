@@ -192,12 +192,11 @@ namespace BannerKings.UI
                 if (__instance.IsLord && namingSetting != DefaultSettings.Instance.NamingNoTitles &&
                     BannerKingsConfig.Instance.TitleManager != null)
                 {
-                    var kingdom = __instance.Clan?.Kingdom;
                     var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(__instance);
                     if (title != null)
                     {
                         var honorary = Utils.TextHelper.GetTitleHonorary(title.TitleType, __instance.IsFemale,
-                            kingdom != null ? kingdom.Culture : __instance.Culture);
+                            __instance.Culture);
                         var name = (TextObject) __instance.GetType()
                             .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
                             .GetValue(__instance);
@@ -236,10 +235,11 @@ namespace BannerKings.UI
                                 .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
                                 .GetValue(__instance);
 
+                            var clan = __instance.Clan;
                             if (leader == __instance.Spouse)
                             {
                                 var honorary = Utils.TextHelper.GetTitleHonorary(leaderTitle.TitleType, __instance.IsFemale,
-                                    kingdom != null ? kingdom.Culture : __instance.Culture);
+                                    clan != null ? clan.Culture : __instance.Culture);
 
                                 __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
                                     .SetTextVariable("TITLE", honorary)
@@ -250,7 +250,7 @@ namespace BannerKings.UI
                                 (leader.Children.Contains(__instance) || leader.Siblings.Contains(__instance)))
                             { 
                                 var honorary = Utils.TextHelper.GetPrinceTitles(__instance.IsFemale,
-                                    kingdom != null ? kingdom.Culture : __instance.Culture);
+                                    clan != null ? clan.Culture : __instance.Culture);
 
                                 __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
                                     .SetTextVariable("TITLE", honorary)

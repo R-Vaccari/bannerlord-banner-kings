@@ -516,6 +516,11 @@ namespace BannerKings.UI
                             new TextObject("{=2kxQvCVb}Revoking transfers the legal ownership of a vassal's title to the suzerain. The revoking restrictions are associated with the title's government type.");
                         affirmativeText = new TextObject("{=iLpAKttu}Revoke");
                         break;
+                    case ActionType.Create:
+                        description =
+                            new TextObject("{=!}Creating a title sets you as its legal holder, rather than no legal holder at all. The title's laws, such as Succession and Government laws, will match those of your current primary title.");
+                        affirmativeText = new TextObject("{=!}Create");
+                        break;
                     case ActionType.Claim:
                         description =
                             new TextObject("{=BSX8rvCS}Claiming this title sets a legal precedence for you to legally own it, thus allowing it to be usurped. A claim takes 1 year to build. Claims last until they are pressed or until it's owner dies.");
@@ -549,17 +554,24 @@ namespace BannerKings.UI
             var hero = title.deJure;
             var list = new List<TooltipProperty>
             {
-                new("", hero.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title)
+                new("", title.FullName.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title)
             };
 
-            MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_relation"));
-            var definition = GameTexts.FindText("str_LEFT_ONLY").ToString();
-            list.Add(new TooltipProperty(definition, ((int) hero.GetRelationWithPlayer()).ToString(), 0));
+            list.Add(new TooltipProperty(new TextObject("{=!}De Jure Holder").ToString(), 
+                hero != null ? hero.Name.ToString() : new TextObject("{=!}None").ToString(), 
+                0));
 
-            list.Add(new TooltipProperty(new TextObject("{=j4F7tTzy}Clan").ToString(), hero.Clan.Name.ToString(), 0));
+            if (hero != null)
+            {
+                MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_relation"));
+                var definition = GameTexts.FindText("str_LEFT_ONLY").ToString();
+                list.Add(new TooltipProperty(definition, ((int)hero.GetRelationWithPlayer()).ToString(), 0));
 
-            list.Add(new TooltipProperty(new TextObject("{=uUmEcuV8}Age").ToString(), 
-                MBRandom.RoundRandomized(hero.Age).ToString(), 0));
+                list.Add(new TooltipProperty(new TextObject("{=j4F7tTzy}Clan").ToString(), hero.Clan.Name.ToString(), 0));
+
+                list.Add(new TooltipProperty(new TextObject("{=uUmEcuV8}Age").ToString(),
+                    MBRandom.RoundRandomized(hero.Age).ToString(), 0));
+            }
 
             TooltipAddEmptyLine(list);
 
@@ -640,6 +652,7 @@ namespace BannerKings.UI
                 ActionType.Usurp => new TextObject("{=L3Jzg76z}Usurp"),
                 ActionType.Revoke => new TextObject("{=iLpAKttu}Revoke"),
                 ActionType.Claim => new TextObject("{=6hY9WysN}Claim"),
+                ActionType.Create => new TextObject("{=!}Create"),
                 _ => new TextObject("{=dugq4xHo}Grant")
             };
         }

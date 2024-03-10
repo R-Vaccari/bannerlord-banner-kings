@@ -83,7 +83,7 @@ namespace BannerKings.UI.Titles
                 {
                     Banner = new ImageIdentifierVM(BannerCode.CreateFrom(kingdom.Banner), true);
                 }
-                else
+                else if (title.deJure != null)
                 {
                     Banner = new ImageIdentifierVM(BannerCode.CreateFrom(title.deJure.Clan.Banner), true);
                 }

@@ -25,24 +25,31 @@
 						           StackLayout.LayoutMethod="VerticalBottomToTop" HorizontalAlignment="Center">
 							<Children>
 
-								<ButtonWidget Command.Click="ExecuteLink" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="89"
-								              SuggestedWidth="123" HorizontalAlignment="Center" Brush="Encyclopedia.SubPage.Element">
+								<ButtonWidget Command.Click="ExecuteLink" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="200"
+								              SuggestedWidth="100" HorizontalAlignment="Center" Brush="Encyclopedia.SubPage.Element">
 									<Children>
-										<ImageIdentifierWidget Id="ElementImage" DataSource="{ImageIdentifier}" DoNotAcceptEvents="true"
-										                       WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ImageId="@Id"
-										                       AdditionalArgs="@AdditionalArgs" ImageTypeCode="@ImageTypeCode"
-										                       HorizontalAlignment="Center" MarginRight="3" MarginLeft="3" MarginBottom="3"
-										                       MarginTop="3" />
-										<HintWidget DataSource="{Hint}" DoNotAcceptEvents="true" HeightSizePolicy="StretchToParent"
-										            WidthSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint"
-										            Command.HoverEnd="ExecuteEndHint" />
+										<EncyclopediaCharacterTableauWidget DataSource="{ImageIdentifier}" WidthSizePolicy="StretchToParent" HeightSizePolicy ="StretchToParent" 
+																			BodyProperties="@BodyProperties" IsFemale="@IsFemale" EquipmentCode="@EquipmentCode" CharStringId="@CharStringId" 
+																			StanceIndex="@StanceIndex" BannerCodeText="@BannerCodeText" MountCreationKey="@MountCreationKey" IsEnabled="false" 
+																			IsDead="@IsDead" ArmorColor1="@ArmorColor1" ArmorColor2="@ArmorColor2" IdleAction="@IdleAction" IdleFaceAnim="@IdleFaceAnim" 
+																			Race="@Race" IsHidden="@IsHidden" MarginRight="3" MarginLeft="3" MarginBottom="3"
+																			MarginTop="3" VerticalAlignment="Center" /> 
+																			
+										<Widget WidthSizePolicy="Fixed" HeightSizePolicy ="Fixed" SuggestedHeight="200" SuggestedWidth="100" 
+												HorizontalAlignment="Center" ValueFactor="20" Sprite="Encyclopedia\hero_silhouette" IsVisible="@IsHidden"/>
+										
+										
 										<Widget DoNotAcceptEvents="true" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent"
 										        Sprite="SelectionBorder@2x_9" IsVisible="@IsActiveUnit" />
+												
+										<HintWidget DataSource="{Hint}" HeightSizePolicy="StretchToParent"
+										            WidthSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint"
+										            Command.HoverEnd="ExecuteEndHint" />
 									</Children>
 								</ButtonWidget>
 
 								<TextWidget DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren"
-								            SuggestedWidth="140" MinHeight="45" VerticalAlignment="Center"
+								            SuggestedWidth="100" MinHeight="55" VerticalAlignment="Center"
 								            Brush="Encyclopedia.SubPage.Element.Name.Text" Brush.FontSize="18" Text="@NameText" />
 
 							</Children>
@@ -71,14 +78,15 @@
 					</Children>
 				</ListPanel>
 
-				<Widget Id="LineContainer" DoNotAcceptEvents="true" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="0" HeightSizePolicy="Fixed" SuggestedHeight="!Encyclopedia.CharacterTree.Line.Height" HorizontalAlignment="Center" MarginTop="134" Sprite="BlankWhiteSquare_9" AlphaFactor="0.5">
+				<Widget Id="LineContainer" DoNotAcceptEvents="true" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="0" HeightSizePolicy="Fixed" 
+						SuggestedHeight="!Encyclopedia.CharacterTree.Line.Height" HorizontalAlignment="Center" MarginTop="250" Sprite="BlankWhiteSquare_9" AlphaFactor="0.5">
 				  <Children>
 
 				  </Children>
 				</Widget>
 
 				<ListPanel Id="ChildContainer" DataSource="{Branch}" HeightSizePolicy="CoverChildren"
-				           WidthSizePolicy="CoverChildren" SuggestedWidth="800" MarginTop="169" DoNotAcceptEvents="true"
+				           WidthSizePolicy="CoverChildren" SuggestedWidth="800" MarginTop="300" DoNotAcceptEvents="true"
 				           StackLayout.LayoutMethod="HorizontalLeftToRight">
 					<ItemTemplate>
 						<TitleElement />
