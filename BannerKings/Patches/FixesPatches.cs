@@ -38,7 +38,8 @@ namespace BannerKings.Patches
                 int num = TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementGarrisonModel
                     .FindNumberOfTroopsToLeaveToGarrison(mobileParty, currentSettlement);
                 int item = 0;
-                if (num <= 0 && mobileParty.LeaderHero.Clan == currentSettlement.OwnerClan && !mobileParty.IsWageLimitExceeded())
+                if (num <= 0 && currentSettlement != null && mobileParty.LeaderHero.Clan == currentSettlement.OwnerClan && 
+                    !mobileParty.IsWageLimitExceeded())
                 {
                     item = TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementGarrisonModel
                         .FindNumberOfTroopsToTakeFromGarrison(mobileParty, mobileParty.CurrentSettlement, 0f);
