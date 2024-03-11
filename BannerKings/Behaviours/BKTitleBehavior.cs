@@ -191,6 +191,8 @@ namespace BannerKings.Behaviours
                 duchy.TickClaims();
                 CheckClaimants(duchy);
 
+                if (duchy.deJure == null) continue;
+
                 var faction = duchy.deJure.Clan.Kingdom;
                 if (faction == null || faction != duchy.DeFacto.Clan.Kingdom)
                 {
@@ -213,11 +215,10 @@ namespace BannerKings.Behaviours
                 kingdom.TickClaims();
                 CheckClaimants(kingdom);
 
+                if (kingdom.deJure == null) continue;
+
                 var faction = kingdom.deJure.Clan.Kingdom;
-                if (faction == null || faction != kingdom.DeFacto.Clan.Kingdom)
-                {
-                    continue;
-                }
+                if (faction == null || faction != kingdom.DeFacto.Clan.Kingdom) continue;  
 
                 var currentFactionSovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
                 if (currentFactionSovereign != null && currentFactionSovereign.TitleType == TitleType.Empire)

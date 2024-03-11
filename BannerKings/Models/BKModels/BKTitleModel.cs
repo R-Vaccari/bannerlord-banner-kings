@@ -8,6 +8,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using TaleWorlds.MountAndBlade.Launcher.Library.UserDatas;
 
 namespace BannerKings.Models.BKModels
 {
@@ -283,6 +284,13 @@ namespace BannerKings.Models.BKModels
             };
             var possibleClaimants = GetClaimants(title);
 
+            if (title.deJure == null)
+            {
+                claimAction.Possible = false;
+                claimAction.Reason = new TextObject("{=!}No de jure owner, title must be created.");
+                return claimAction;
+            }
+
             if (title.deJure == claimant)
             {
                 claimAction.Possible = false;
@@ -365,6 +373,14 @@ namespace BannerKings.Models.BKModels
 
             revokeAction.Influence = GetInfluenceUsurpCost(title) * 0.8f;
             revokeAction.Renown = GetRenownUsurpCost(title) * 0.6f;
+
+
+            if (title.deJure == null)
+            {
+                revokeAction.Possible = false;
+                revokeAction.Reason = new TextObject("{=!}No de jure owner, title must be created.");
+                return revokeAction;
+            }
 
             if (title.deJure == revoker)
             {
@@ -463,6 +479,13 @@ namespace BannerKings.Models.BKModels
             grantAction.Gold = 0f;
             grantAction.Renown = 0f;
 
+            if (title.deJure == null)
+            {
+                grantAction.Possible = false;
+                grantAction.Reason = new TextObject("{=!}No de jure owner, title must be created.");
+                return grantAction;
+            }
+
             if (title.deJure != grantor)
             {
                 grantAction.Possible = false;
@@ -515,6 +538,14 @@ namespace BannerKings.Models.BKModels
                 Influence = GetInfluenceUsurpCost(title),
                 Renown = GetRenownUsurpCost(title)
             };
+
+            if (title.deJure == null)
+            {
+                usurpData.Possible = false;
+                usurpData.Reason = new TextObject("{=!}No de jure owner, title must be created.");
+                return usurpData;
+            }
+
             if (title.deJure == usurper)
             {
                 usurpData.Possible = false;

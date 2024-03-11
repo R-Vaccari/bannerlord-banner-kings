@@ -4,7 +4,6 @@ using BannerKings.Extensions;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
-using MonoMod.Utils;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -17,8 +16,6 @@ namespace BannerKings.Managers.Titles
 {
     public class FeudalTitle
     {
-        private FeudalTitle suzerainCache;
-
         public FeudalTitle(TitleType type, Settlement fief, List<FeudalTitle> vassals, Hero deJure, Hero deFacto, 
             TextObject name, FeudalContract contract, string stringId = null, TextObject fullName = null)
         {
