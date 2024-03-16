@@ -15,9 +15,9 @@ namespace BannerKings.Models.Vanilla
     public class BKFoodModel : IFoodModel
     {
         public override float NobleFood => -0.1f;
-        public override float CraftsmanFood => -0.04f;
-        public override float SerfFood => -0.02f;
-        public override float TenantFood => -0.03f;
+        public override float CraftsmanFood => -0.044f;
+        public override float SerfFood => -0.025f;
+        public override float TenantFood => -0.035f;
         public override float SlaveFood => -0.0015f;
         public override int FoodStocksUpperLimit => 500;
         public override int NumberOfProsperityToEatOneFood => 40;

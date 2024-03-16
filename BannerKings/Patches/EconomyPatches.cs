@@ -242,6 +242,59 @@ namespace BannerKings.Patches
                 }
                 return false;
             }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("ShouldHaveCaravan", MethodType.Normal)]
+            private static bool ShouldHaveCaravan(Hero hero, ref bool __result)
+            {
+                float caravans = hero.OwnedCaravans.Count;
+                __result = hero.PartyBelongedTo == null &&
+                    caravans < BannerKingsConfig.Instance.EconomyModel.GetNotableCaravanLimit(hero) && 
+                    hero.Power > (50f + (caravans * 75f)) &&
+                    (hero.IsFugitive || hero.IsReleased || hero.IsNotSpawned || hero.IsActive) && 
+                    !hero.IsTemplate && 
+                    hero.CanLeadParty();
+                return false;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("SpawnCaravan", MethodType.Normal)]
+            private static bool SpawnCaravan(Hero hero, bool initialSpawn = false)
+            {
+                if (hero.OwnedCaravans.Count <= 0)
+                {
+                    Settlement settlement = hero.HomeSettlement ?? hero.BornSettlement;
+                    Settlement spawnSettlement;
+                    if (settlement == null)
+                    {
+                        spawnSettlement = Town.AllTowns.GetRandomElement<Town>().Settlement;
+                    }
+                    else if (settlement.IsTown)
+                    {
+                        spawnSettlement = settlement;
+                    }
+                    else if (settlement.IsVillage)
+                    {
+                        spawnSettlement = (settlement.Village.TradeBound ?? Town.AllTowns.GetRandomElement<Town>().Settlement);
+                    }
+                    else
+                    {
+                        spawnSettlement = Town.AllTowns.GetRandomElement<Town>().Settlement;
+                    }
+                    bool isElite = false;
+                    if (hero.Power >= 112f)
+                    {
+                        float num = hero.Power * 0.0045f - 0.5f;
+                        isElite = (hero.RandomFloat() < num);
+                    }
+                    CaravanPartyComponent.CreateCaravanParty(hero, spawnSettlement, initialSpawn, null, null, 0, isElite);
+                    if (!initialSpawn && hero.Power >= 50f)
+                    {
+                        hero.AddPower(-30f);
+                    }
+                }
+                return false;
+            }
         }
 
         [HarmonyPatch(typeof(ClanVariablesCampaignBehavior))]

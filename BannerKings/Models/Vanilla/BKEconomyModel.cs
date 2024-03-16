@@ -29,6 +29,7 @@ namespace BannerKings.Models.Vanilla
     {
         private static readonly float CRAFTSMEN_EFFECT_CAP = 0.4f;
 
+
         public override ExplainedNumber CalculateMercantilism(Settlement settlement)
         {
             var result = new ExplainedNumber(0.1f, true);
@@ -314,25 +315,25 @@ namespace BannerKings.Models.Vanilla
             switch (type)
             {
                 case ConsumptionType.Luxury:
-                    baseResult += nobles * 4f;
-                    baseResult += craftsmen * 0.5f;
+                    baseResult += nobles * 0.2f;
+                    baseResult += craftsmen * 0.05f;
                     break;
                 case ConsumptionType.Industrial:
-                    baseResult += craftsmen * 0.6f;
-                    baseResult += serfs * 0.1f;
-                    baseResult += tenants * 0.2f;
+                    baseResult += craftsmen * 0.06f;
+                    baseResult += serfs * 0.01f;
+                    baseResult += tenants * 0.02f;
                     break;
                 default:
-                    baseResult += nobles * 0.5f;
-                    baseResult += craftsmen * 0.4f;
-                    baseResult += serfs * 0.1f;
-                    baseResult += tenants * 0.2f;
+                    baseResult += nobles * 0.05f;
+                    baseResult += craftsmen * 0.04f;
+                    baseResult += serfs * 0.01f;
+                    baseResult += tenants * 0.02f;
                     break;
             }
 
             float prosperity = town.Prosperity;
-            float num = MathF.Max(0f, baseResult + (prosperity / 3) + extraProsperity);
-            float num2 = MathF.Max(0f, baseResult + (prosperity / 2));
+            float num = MathF.Max(0f, baseResult + (prosperity / 2) + extraProsperity);
+            float num2 = MathF.Max(0f, baseResult + (prosperity));
 
             float baseDemand = category.BaseDemand;
             float num3 = baseDemand * num;
@@ -343,7 +344,6 @@ namespace BannerKings.Models.Vanilla
                 result = num * 0.01f;
             }
 
-            if (town.IsCastle) result *= 0.4f;
             return result;
         }
 
@@ -360,7 +360,7 @@ namespace BannerKings.Models.Vanilla
             ExplainedNumber result = new ExplainedNumber(town.Prosperity / 4f, explanations);
             float slaves = data.GetTypeCount(PopType.Slaves);
             var privateSlaves = slaves * (1f - data.EconomicData.StateSlaves);
-            var tax = 1f;
+            var tax = 0.05f;
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_slaves_tax"))
             {
                 var taxtype = (BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax") as BKTaxPolicy)
@@ -380,6 +380,35 @@ namespace BannerKings.Models.Vanilla
             }
 
             if (town.IsCastle) result.AddFactor(-0.5f, new TextObject("{=kyB8tkgY}Castle"));
+            return result;
+        }
+
+        public override int GetNotableCaravanLimit(Hero notable)
+        {
+            Occupation occupation = notable.Occupation;
+            if (occupation == Occupation.Merchant) return 3;
+            else if (occupation == Occupation.Artisan) return 2;
+            else if (occupation == Occupation.GangLeader) return 1;
+
+            return 0;
+        }
+
+        public override int GetSettlementMarketGoldLimit(Settlement settlememt)
+        {
+            int result = 0;
+            if (settlememt.IsVillage)
+            {
+                result += 10000;
+                Village village = settlememt.Village;
+                result += (int)(village.Hearth * 3f);
+            }
+            else if (settlememt.Town != null)
+            {
+                result += 50000;
+                Town town = settlememt.Town;
+                if (settlememt.IsCastle) result += (int)(town.Prosperity * 12f);
+                else result += (int)(town.Prosperity * 25f);
+            }
 
             return result;
         }

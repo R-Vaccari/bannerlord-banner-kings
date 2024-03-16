@@ -7,6 +7,8 @@ namespace BannerKings.Models.Vanilla
 {
     public abstract class EconomyModel : DefaultSettlementEconomyModel
     {
+        public abstract int GetSettlementMarketGoldLimit(Settlement settlememt);
+        public abstract int GetNotableCaravanLimit(Hero notable);
         public abstract ExplainedNumber CalculateTradePower(Settlement settlement, bool descriptions = false);
         public abstract ExplainedNumber CalculateProductionQuality(Settlement settlement);
         public abstract ExplainedNumber CalculateMercantilism(Settlement settlement);
