@@ -73,7 +73,7 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber CalculateInfluenceCap(Clan clan, bool includeDescriptions = false)
         {
             ExplainedNumber result = new ExplainedNumber(50f, includeDescriptions);
-            result.Add(clan.Tier * 150f, GameTexts.FindText("str_clan_tier_bonus"));
+            result.Add(clan.Tier * 175f, GameTexts.FindText("str_clan_tier_bonus"));
             result.LimitMin(clan.Tier * 50f);
 
             foreach (var fief in clan.Fiefs)
@@ -96,14 +96,14 @@ namespace BannerKings.Models.Vanilla
 
             foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
             {
-                result.Add(500 / ((int)title.TitleType * 8f), title.FullName);
+                result.Add(600 / ((int)title.TitleType * 8f), title.FullName);
             }
 
             if (clan.Kingdom != null)
             {
                 if (clan == clan.Kingdom.RulingClan)
                 {
-                    result.Add(350, new TextObject("{=IcgVKFxZ}Ruler"));
+                    result.Add(350f, new TextObject("{=IcgVKFxZ}Ruler"));
                     int peers = GetCurrentPeers(clan.Kingdom);
 
                     int minimum = (int)GetMinimumPeersQuantity(clan.Kingdom).ResultNumber;
@@ -269,39 +269,16 @@ namespace BannerKings.Models.Vanilla
                 if (religion.HasDoctrine(DefaultDoctrines.Instance.Druidism) &&
                     spiritual != null && spiritual.Member == null) 
                 {
-                    baseResult.Add(-4f, DefaultDoctrines.Instance.Druidism.Name);
+                    baseResult.Add(-2f, DefaultDoctrines.Instance.Druidism.Name);
                 }
             }
 
             foreach (var settlement in clan.Settlements)
             {
-                if (!settlement.IsVillage && !settlement.IsCastle && !settlement.IsTown)
-                {
-                    continue;
-                }
+                if (!settlement.IsVillage && !settlement.IsCastle && !settlement.IsTown) continue;
 
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                if (data == null || settlement.Name == null)
-                {
-                    continue;
-                }
-
-                if (BannerKingsConfig.Instance.AI.AcceptNotableAid(clan, data))
-                {
-                    float aids = 0f;
-                    int count = 0;
-                    foreach (var notable in data.Settlement.Notables)
-                    {
-                        if (notable.SupporterOf == clan && notable.Gold > 5000)
-                        {
-                            aids -= 1f;
-                            count++;
-                        }
-                    }
-
-                    baseResult.Add(aids, new TextObject("{=yDr9aqLO}Financial aids from supporters (x{COUNT})")
-                                .SetTextVariable("COUNT", count));
-                }
+                if (data == null || settlement.Name == null) continue;     
 
                 var settlementResult = CalculateSettlementInfluence(settlement, data, includeDescriptions);
                 if (settlement.IsVillage)
@@ -343,6 +320,11 @@ namespace BannerKings.Models.Vanilla
                 {
                     baseResult.AddFactor(finalAutonomy, new TextObject("{=qJbYtZjH}Overall settlement autonomy"));
                 }
+            }
+
+            if (council.Peerage != null && council.Peerage.IsFullPeerage)
+            {
+                baseResult.AddFactor(0.1f * (baseResult.ResultNumber > 0f ? 1f : -1f), council.Peerage.Name);
             }
 
             return baseResult;
