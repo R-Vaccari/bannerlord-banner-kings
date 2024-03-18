@@ -297,8 +297,8 @@ namespace BannerKings.Managers.Populations
         {
             var result = type switch
             {
-                "farmland" => 0.014f,
-                "pasture" => 0.006f,
+                "farmland" => 0.0155f,
+                "pasture" => 0.0062f,
                 _ => 0.0012f
             };
 

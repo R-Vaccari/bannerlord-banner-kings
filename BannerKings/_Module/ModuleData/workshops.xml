@@ -74,7 +74,7 @@
 			<Output output="ItemCategory.bread" />
 		  </Outputs>
 		</Production>
-		<Production conversion_speed="1">
+		<Production conversion_speed="2">
 		  <Inputs>
 			<Input input_item="chicken" input_count="4" />
 		  </Inputs>
@@ -82,7 +82,7 @@
 			<Output output="ItemCategory.meat" output_count="1" />
 		  </Outputs>
 		</Production>
-		<Production conversion_speed="1">
+		<Production conversion_speed="2">
 		  <Inputs>
 			<Input input_item="goose" input_count="4" />
 		  </Inputs>

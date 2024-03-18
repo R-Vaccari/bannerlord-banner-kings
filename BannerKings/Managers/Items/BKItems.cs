@@ -92,7 +92,7 @@ namespace BannerKings.Managers.Items
         {
             Egg = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("Egg"));
             InitializeTradeGood(Egg,
-                new TextObject("{=!}Eggs{@Plural}baskets of eggs{\\@}"), "kitchen_food_egg",
+                new TextObject("{=bk_egg}Eggs{@Plural}baskets of eggs{\\@}"), "kitchen_food_egg",
                 BKItemCategories.Instance.Eggs, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             PurpleDye = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("PurpleDye"));
