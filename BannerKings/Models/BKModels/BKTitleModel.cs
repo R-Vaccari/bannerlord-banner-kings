@@ -605,6 +605,19 @@ namespace BannerKings.Models.BKModels
                                 new TextObject("{=FESBxuj3}You must be the leader of a faction in order to usurp a Kingdom or Empire level title.");
                             return usurpData;
                         }
+
+                        foreach (FeudalTitle vassal in title.Vassals)
+                        {
+                            if (vassal.DeFacto != usurper)
+                            {
+                                usurpData.Possible = false;
+                                usurpData.Reason =
+                                    new TextObject("{=!}You must be the de facto holder of {TITLE} to inherit the sovereign title {SOVEREIGN}.")
+                                    .SetTextVariable("TITLE", vassal.FullName)
+                                    .SetTextVariable("SOVEREIGN", title.FullName);
+                                return usurpData;
+                            }
+                        }
                     }
                     else if (faction.Leader != usurper)
                     {
