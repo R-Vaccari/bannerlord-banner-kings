@@ -42,7 +42,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             result.Add(GetRelationImpact(useValueAsRelation), 
-                new TextObject("{=!}Relationship with {HERO}")
+                new TextObject("{=aPEQXOTV}Relationship with {HERO}")
                 .SetTextVariable("HERO", sellerHero.Name));
 
             var settlement = sellerHero.CurrentSettlement;
@@ -66,10 +66,10 @@ namespace BannerKings.Models.Vanilla
             }
             else if (result.ResultNumber >= 2f)
             {
-                if (sellerHero.MapFaction != buyerHero.MapFaction) result.AddFactor(-0.25f, new TextObject("{=!}Drafting Demesne Law ({LAW}) in {TITLE}")
+                if (sellerHero.MapFaction != buyerHero.MapFaction) result.AddFactor(-0.25f, new TextObject("{=fWnWwmqn}Drafting Demesne Law ({LAW}) in {TITLE}")
                         .SetTextVariable("LAW", DefaultDemesneLaws.Instance.DraftingFreeContracts.Name)
                         .SetTextVariable("TITLE", title.FullName));
-                else result.Add(halfRecruits, new TextObject("{=!}Drafting Demesne Law ({LAW}) in {TITLE}")
+                else result.Add(halfRecruits, new TextObject("{=fWnWwmqn}Drafting Demesne Law ({LAW}) in {TITLE}")
                         .SetTextVariable("LAW", DefaultDemesneLaws.Instance.DraftingFreeContracts.Name)
                         .SetTextVariable("TITLE", title.FullName));
             }
@@ -105,7 +105,7 @@ namespace BannerKings.Models.Vanilla
                 factor = -1f;
             }
 
-            result.Add(factor, new TextObject("{=!}Drafting Demesne Law ({LAW}) in {TITLE}")
+            result.Add(factor, new TextObject("{=fWnWwmqn}Drafting Demesne Law ({LAW}) in {TITLE}")
                     .SetTextVariable("LAW", DefaultDemesneLaws.Instance.DraftingHidage.Name)
                     .SetTextVariable("TITLE", title.FullName));
         }
@@ -136,13 +136,13 @@ namespace BannerKings.Models.Vanilla
                     factor += 0.15f;
                 }
 
-                result.Add(BannerKingsSettings.Instance.VolunteersLimit * factor, new TextObject("{=!}Drafting Demesne Law ({LAW}) in {TITLE}")
+                result.Add(BannerKingsSettings.Instance.VolunteersLimit * factor, new TextObject("{=fWnWwmqn}Drafting Demesne Law ({LAW}) in {TITLE}")
                     .SetTextVariable("LAW", DefaultDemesneLaws.Instance.DraftingVassalage.Name)
                     .SetTextVariable("TITLE", title.FullName));
             }
             else 
             {
-                result.Add(-1f, new TextObject("{=!}Drafting Demesne Law ({LAW}) in {TITLE}")
+                result.Add(-1f, new TextObject("{=fWnWwmqn}Drafting Demesne Law ({LAW}) in {TITLE}")
                     .SetTextVariable("LAW", DefaultDemesneLaws.Instance.DraftingVassalage.Name)
                     .SetTextVariable("TITLE", title.FullName));
             }  

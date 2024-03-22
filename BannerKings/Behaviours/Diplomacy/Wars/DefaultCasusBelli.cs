@@ -40,9 +40,9 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
         public override void Initialize()
         {
-            Rebellion.Initialize(new TextObject("{=!}Rebellion"),
-                new TextObject("{=!}A rebellion war is fought by former radical groups over a realm, after their demand was rejected by their ruler. Rebels seek to enforce their demand by force.{newline}{newline}Objective: Survive as a rebellion for over 2 years with at least 1 fief."),
-                new TextObject("{=!}Survive for 2 years"),
+            Rebellion.Initialize(new TextObject("{=kcjyuGpA}Rebellion"),
+                new TextObject("{=t8HQqf4z}A rebellion war is fought by former radical groups over a realm, after their demand was rejected by their ruler. Rebels seek to enforce their demand by force.{newline}{newline}Objective: Survive as a rebellion for over 2 years with at least 1 fief."),
+                new TextObject("{=EOpunWCA}Survive for 2 years"),
                 2f,
                 0.1f,
                 1f,

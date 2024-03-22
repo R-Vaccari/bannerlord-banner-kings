@@ -26,7 +26,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override void SetTexts()
         {
-            Initialize(new TextObject("{=!}Title Demand"),
+            Initialize(new TextObject("{=tMCr5Ln7}Title Demand"),
                 new TextObject());
         }
 

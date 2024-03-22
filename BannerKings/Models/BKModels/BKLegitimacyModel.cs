@@ -51,13 +51,13 @@ namespace BannerKings.Models.BKModels
                     Hero ruler = kingdom.Leader;
                     if (title.deJure == ruler)
                     {
-                        result.Add(0.3f, new TextObject("{=!}De Jure holder of {KINGDOM} (theoretical)")
+                        result.Add(0.3f, new TextObject("{=PMpAhYvn}De Jure holder of {KINGDOM} (theoretical)")
                         .SetTextVariable("KINGDOM", title.FullName));
                     }
 
                     if (title.DeFacto == ruler)
                     {
-                        result.Add(0.1f, new TextObject("{=!}De Facto holder of {KINGDOM} (theoretical)")
+                        result.Add(0.1f, new TextObject("{=ueQMwDQe}De Facto holder of {KINGDOM} (theoretical)")
                         .SetTextVariable("KINGDOM", title.FullName));
                     }
                 }

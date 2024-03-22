@@ -451,7 +451,7 @@ namespace BannerKings.Managers.Titles.Governments
                 -0.4f,
                 1f,
                 0.2f,
-                new TextObject("{=!}- Inheritance candidates of current ruler\n- Any clan leader of clan tier 3 or higher"),
+                new TextObject("{=Ei6ahKw3}- Inheritance candidates of current ruler\n- Any clan leader of clan tier 3 or higher"),
                 new TextObject("{=ydo55teN}+++ Clan tier\n++ Skills\n+ Inheritance score (for clan inheritors)\n+ Military power"),
                 (Hero currentLeader, FeudalTitle title) =>
                 {

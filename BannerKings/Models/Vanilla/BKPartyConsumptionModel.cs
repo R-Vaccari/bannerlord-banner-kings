@@ -1,4 +1,4 @@
-﻿using BannerKings.Components;
+using BannerKings.Components;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using BannerKings.Settings;
@@ -187,7 +187,7 @@ namespace BannerKings.Models.Vanilla
             if (TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace) == TerrainType.Desert)
             {
                 float mounts = CalculateAnimalFoodNeed(party, true);
-                baseConsumption.Add(-mounts, new TaleWorlds.Localization.TextObject("{=!}Carrying animals while on desert (inventory, party and prisoners)"));
+                baseConsumption.Add(-mounts, new TaleWorlds.Localization.TextObject("{=1WT6A7nG}Carrying animals while on desert (inventory, party and prisoners)"));
             }
             else
             {
@@ -196,7 +196,7 @@ namespace BannerKings.Models.Vanilla
                 if (weatherEventInPosition == MapWeatherModel.WeatherEvent.Snowy || weatherEventInPosition == MapWeatherModel.WeatherEvent.Blizzard)
                 {
                     float mounts = CalculateAnimalFoodNeed(party, false);
-                    baseConsumption.Add(-mounts / 2f, new TaleWorlds.Localization.TextObject("{=!}Carrying animals while in snow or blizzard (inventory, party and prisoners)"));
+                    baseConsumption.Add(-mounts / 2f, new TaleWorlds.Localization.TextObject("{=BqaxcvqV}Carrying animals while in snow or blizzard (inventory, party and prisoners)"));
                 }
             }
 

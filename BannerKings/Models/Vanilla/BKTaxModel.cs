@@ -179,19 +179,19 @@ namespace BannerKings.Models.Vanilla
                 {
                     var title = BannerKingsConfig.Instance.TitleManager.GetTitle(town.Settlement);
                     var taxType = (BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax");
-                    baseResult.Add(GetNobleTaxRate(title, data, taxType), new TextObject("{=!}{CLASS} taxes")
+                    baseResult.Add(GetNobleTaxRate(title, data, taxType), new TextObject("{=26yWZwHo}{CLASS} taxes")
                         .SetTextVariable("CLASS", DefaultPopulationNames.Instance.GetPopulationName(town.Culture, PopType.Nobles).Name));
 
-                    baseResult.Add(GetCraftsmenTaxRate(title, data, taxType), new TextObject("{=!}{CLASS} taxes")
+                    baseResult.Add(GetCraftsmenTaxRate(title, data, taxType), new TextObject("{=26yWZwHo}{CLASS} taxes")
                         .SetTextVariable("CLASS", DefaultPopulationNames.Instance.GetPopulationName(town.Culture, PopType.Craftsmen).Name));
 
-                    baseResult.Add(GetTenantTaxRate(title, data, taxType), new TextObject("{=!}{CLASS} taxes")
+                    baseResult.Add(GetTenantTaxRate(title, data, taxType), new TextObject("{=26yWZwHo}{CLASS} taxes")
                         .SetTextVariable("CLASS", DefaultPopulationNames.Instance.GetPopulationName(town.Culture, PopType.Tenants).Name));
                     
-                    baseResult.Add(GetSerfTaxRate(title, data, taxType), new TextObject("{=!}{CLASS} taxes")
+                    baseResult.Add(GetSerfTaxRate(title, data, taxType), new TextObject("{=26yWZwHo}{CLASS} taxes")
                         .SetTextVariable("CLASS", DefaultPopulationNames.Instance.GetPopulationName(town.Culture, PopType.Serfs).Name));
 
-                    baseResult.Add(GetSlaveTaxRate(title, data, taxType),new TextObject("{=!}{CLASS} taxes")
+                    baseResult.Add(GetSlaveTaxRate(title, data, taxType),new TextObject("{=26yWZwHo}{CLASS} taxes")
                         .SetTextVariable("CLASS", DefaultPopulationNames.Instance.GetPopulationName(town.Culture, PopType.Slaves).Name));
 
                     foreach (Workshop wk in town.Workshops)
@@ -199,14 +199,14 @@ namespace BannerKings.Models.Vanilla
                         if (wk.Owner != town.OwnerClan.Leader)
                         {
                             baseResult.Add(BannerKingsConfig.Instance.ClanFinanceModel.GetWorkshopTaxes(wk),
-                                new TextObject("{=!}Taxes from {WORKSHOP} ({OWNER})")
+                                new TextObject("{=GKtDoLCd}Taxes from {WORKSHOP} ({OWNER})")
                                 .SetTextVariable("WORKSHOP", wk.Name)
                                 .SetTextVariable("OWNER", wk.Owner.Name));
                         }
                     }
 
                     float tariff = data.EconomicData.Tariff;
-                    baseResult.Add(data.EconomicData.ConsumedValue * tariff, new TextObject("{=!}Goods consumed by the populace ({TARIFF}% tariffs)")
+                    baseResult.Add(data.EconomicData.ConsumedValue * tariff, new TextObject("{=2vBXHPsS}Goods consumed by the populace ({TARIFF}% tariffs)")
                         .SetTextVariable("TARIFF", (tariff * 100f).ToString("0.00")));
 
                     var buildingBehavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKBuildingsBehavior>();

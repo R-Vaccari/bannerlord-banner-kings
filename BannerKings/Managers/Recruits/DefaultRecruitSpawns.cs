@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using TaleWorlds.CampaignSystem;
@@ -105,7 +105,7 @@ namespace BannerKings.Managers.Recruits
                     if (troop == null)
                     {
                         InformationManager.DisplayMessage(new InformationMessage(
-                            new TextObject("{=!}Invalid character {CHAR} from recruits path {PATH}")
+                            new TextObject("{=0P1gM2Kb}Invalid character {CHAR} from recruits path {PATH}")
                             .SetTextVariable("CHAR", character)
                             .SetTextVariable("PATH", BannerKingsConfig.Instance.RecruitsXmlPath).ToString(),
                             Color.FromUint(Utils.TextHelper.COLOR_LIGHT_RED)));

@@ -40,7 +40,7 @@ namespace BannerKings.Behaviours.Diplomacy
                     if (attacker == Hero.MainHero.MapFaction || ally == Hero.MainHero.MapFaction)
                     {
                         InformationManager.DisplayMessage(new InformationMessage(
-                        new TextObject("{=!}The {ALLY} has refused to help the {DEFENDER} in their war effort!")
+                        new TextObject("{=AJRV3Ex3}The {ALLY} has refused to help the {DEFENDER} in their war effort!")
                         .SetTextVariable("ALLY", ally.Name)
                         .SetTextVariable("DEFENDER", defender.Name)
                         .ToString(),

@@ -179,7 +179,7 @@ namespace BannerKings.Models.Vanilla
 
             if (council.Peerage == null || council.Peerage.IsLesserPeerage)
             {
-                result.AddFactor(-0.5f, new TextObject("{=!}Not a Full Peer"));
+                result.AddFactor(-0.5f, new TextObject("{=DcEELxKF}Not a Full Peer"));
             }
 
             return result;

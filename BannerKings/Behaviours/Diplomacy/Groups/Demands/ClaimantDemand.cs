@@ -25,7 +25,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         [SaveableProperty(1)] public Hero Claimant { get; set; }
 
         public override DemandResponse PositiveAnswer => new DemandResponse(new TextObject("{=kyB8tkgY}Concede"),
-                    new TextObject("{=!}Accept the demand to cede your rulership to the {CLAIMANT}. You will keep your properties and titles, but be replaced as a ruler. They will be satisfied with this outcome.")
+                    new TextObject("{=69rAwxib}Accept the demand to cede your rulership to the {CLAIMANT}. You will keep your properties and titles, but be replaced as a ruler. They will be satisfied with this outcome.")
                     .SetTextVariable("CLAIMANT", Claimant.Name),
                     new TextObject("{=Pr6r49e8}On {DATE}, the {GROUP} were conceded their {DEMAND} demand.")
                     .SetTextVariable("GROUP", Group.Name)
@@ -49,7 +49,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                         if (fulfiller == Hero.MainHero || Group.Members.Contains(Hero.MainHero))
                         {
                             InformationManager.DisplayMessage(new InformationMessage(
-                                new TextObject("{=!}The {GROUP} is satisfied! {CLAIMANT} will now rule the {REALM}.")
+                                new TextObject("{=53q6oUzO}The {GROUP} is satisfied! {CLAIMANT} will now rule the {REALM}.")
                                 .SetTextVariable("GROUP", Group.Name)
                                 .SetTextVariable("CLAIMANT", Claimant.Name)
                                 .SetTextVariable("REALM", Group.KingdomDiplomacy.Kingdom.Name)
@@ -74,7 +74,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     });
 
         public override DemandResponse NegativeAnswer => new DemandResponse(new TextObject("{=PoAmUqGR}Reject"),
-                   new TextObject("{=!}Deny the demand to cede rulership to the {CLAIMANT}, lead by {HERO}. They will not like this outcome.")
+                   new TextObject("{=2MvkhB8h}Deny the demand to cede rulership to the {CLAIMANT}, lead by {HERO}. They will not like this outcome.")
                    .SetTextVariable("RELIGION", Claimant.Name),
                    new TextObject("{=icR6DbJR}On {DATE}, the {GROUP} were rejected their {DEMAND} demand.")
                    .SetTextVariable("GROUP", Group.Name)
@@ -105,8 +105,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                        LoseRelationsWithGroup(fulfiller, -20, 0.5f);
                        if (fulfiller == Hero.MainHero || Group.Members.Contains(Hero.MainHero))
                        {
-                           InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Civil War").ToString(),
-                               new TextObject("{=!}A civil war breaks out! {RULER} has rejected the demand of your {GROUP} group. You and your fellow group members are now in open war with the original realm.")
+                           InformationManager.ShowInquiry(new InquiryData(new TextObject("{=9Tdt2RiC}Civil War").ToString(),
+                               new TextObject("{=s3dhcwG2}A civil war breaks out! {RULER} has rejected the demand of your {GROUP} group. You and your fellow group members are now in open war with the original realm.")
                                .SetTextVariable("GROUP", Group.Name)
                                .SetTextVariable("LEADER", Group.Leader.Name)
                                .SetTextVariable("RULER", Group.KingdomDiplomacy.Kingdom.Leader.Name)
@@ -181,13 +181,13 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         {
             if (Claimant != null)
             {
-                Initialize(new TextObject("{=!}Install {CLAIMANT}").SetTextVariable("CLAIMANT", Claimant.Name),
-                    new TextObject("{=!}Demand that the ruler cede rulership to the claimant backed by the group."));
+                Initialize(new TextObject("{=Yjq7GL10}Install {CLAIMANT}").SetTextVariable("CLAIMANT", Claimant.Name),
+                    new TextObject("{=zdQMSQf4}Demand that the ruler cede rulership to the claimant backed by the group."));
             }
             else
             {
-                Initialize(new TextObject("{=!}Claimant"),
-                    new TextObject("{=!}Demand that the ruler cede rulership to the claimant backed by the group."));
+                Initialize(new TextObject("Claimant"),
+                    new TextObject("{=zdQMSQf4}Demand that the ruler cede rulership to the claimant backed by the group."));
             }
         }
 
@@ -240,7 +240,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
-                new TextObject("{=!}The {GROUP} is pushing for you to cede rulership to {CLAIMANT}. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {STRENGTH}% military strength relative to your loyalist forces.")
+                new TextObject("{=BKAdUzjo}The {GROUP} is pushing for you to cede rulership to {CLAIMANT}. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {STRENGTH}% military strength relative to your loyalist forces.")
                 .SetTextVariable("STRENGTH", (Group as RadicalGroup).PowerProportion)
                 .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
                 .SetTextVariable("LEADER", Group.Leader.Name)
@@ -272,17 +272,17 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             foreach (var tuple in claimants)
             {
                 Hero hero = tuple.Key;
-                TextObject hint = new TextObject("{=!}{HERO} {ROLE}, a family of {PEERAGE}.{newline}{newline}{REASON}{newline}{newline}Claim strength: {RESULT}{newline}-----{newline}{EXPLANATION}")
+                TextObject hint = new TextObject("{=UoPv1RvG}{HERO} {ROLE}, a family of {PEERAGE}.{newline}{newline}{REASON}{newline}{newline}Claim strength: {RESULT}{newline}-----{newline}{EXPLANATION}")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("ROLE", GetHeroRoleText(hero))
                     .SetTextVariable("FIEFS", hero.Clan.Fiefs.Count)
                     .SetTextVariable("PEERAGE", BannerKingsConfig.Instance.CourtManager.GetCouncil(hero.Clan).Peerage.Name)
-                    .SetTextVariable("REASON", new TextObject("{=!}This person is willing to back your radical group."))
+                    .SetTextVariable("REASON", new TextObject("{=F2N7WBbz}This person is willing to back your radical group."))
                     .SetTextVariable("RESULT", tuple.Value.ResultNumber)
                     .SetTextVariable("EXPLANATION", tuple.Value.GetExplanations());
 
                 list.Add(new InquiryElement(hero,
-                    new TextObject("{=!}{NAME} - {SCORE}")
+                    new TextObject("{=bn3YBXvb}{NAME} - {SCORE}")
                     .SetTextVariable("NAME", hero.Name)
                     .SetTextVariable("SCORE", tuple.Value.ResultNumber.ToString("0"))
                     .ToString(),
@@ -292,7 +292,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
-                new TextObject("{=!}As leader of a claimant group, you must choose the claimant that shall be backed by the group. This decision is final and will not change until the entire claimant group is unmade.{newline}{newline}Possible claimants are all the possible successors of the {TITLE} according to its {SUCCESSION} succession law.")
+                new TextObject("{=YjfTwnhj}As leader of a claimant group, you must choose the claimant that shall be backed by the group. This decision is final and will not change until the entire claimant group is unmade.{newline}{newline}Possible claimants are all the possible successors of the {TITLE} according to its {SUCCESSION} succession law.")
                 .SetTextVariable("TITLE", title.FullName)
                 .SetTextVariable("SUCCESSION", title.Contract.Succession.Name)
                 .ToString(),

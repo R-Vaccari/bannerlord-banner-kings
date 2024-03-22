@@ -35,7 +35,7 @@ namespace BannerKings.Behaviours.Mercenary
                 copy.Riding, copy.Athletics, copy.Throwing, copy.Bow, copy.Crossbow, copy.ItemId);
         }
 
-        public TextObject GetExplanation() => new TextObject("{=!}{DESCRIPTION}{newline}{newline}One-Handed: {ONEHANDED}{newline}Two-Handed: {TWOHANDED}{newline}Polearm: {POLEARM}{newline}Riding: {RIDING}{newline}Athletics: {ATHLETICS}{newline}Throwing: {THROWING}{newline}Bow: {BOW}{newline}Crossbow: {CROSSBOW}")
+        public TextObject GetExplanation() => new TextObject("{=3azYg7UM}{DESCRIPTION}{newline}{newline}One-Handed: {ONEHANDED}{newline}Two-Handed: {TWOHANDED}{newline}Polearm: {POLEARM}{newline}Riding: {RIDING}{newline}Athletics: {ATHLETICS}{newline}Throwing: {THROWING}{newline}Bow: {BOW}{newline}Crossbow: {CROSSBOW}")
             .SetTextVariable("DESCRIPTION", Description)
             .SetTextVariable("ONEHANDED", OneHanded)
             .SetTextVariable("TWOHANDED", TwoHanded)

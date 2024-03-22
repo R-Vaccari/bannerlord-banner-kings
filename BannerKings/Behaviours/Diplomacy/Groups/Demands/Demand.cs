@@ -264,7 +264,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     return new TextObject("{=qQbNuioA}, a member of your household").ToString();
                 }
 
-                if (hero.IsClanLeader) new TextObject("{=!}, head of the {CLAN}").SetTextVariable("CLAN", hero.Clan.Name).ToString();
+                if (hero.IsClanLeader) new TextObject("{=ABnd5G9h}, head of the {CLAN}").SetTextVariable("CLAN", hero.Clan.Name).ToString();
 
                 return new TextObject("{=npdeYCOm} of the {CLAN}").SetTextVariable("CLAN", hero.Clan.Name).ToString();
             }

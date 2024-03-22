@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Buildings;
+using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Policies;
@@ -172,7 +172,7 @@ namespace BannerKings.Behaviours
             if (clanLeader == Hero.MainHero && manage)
             {
                 InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=!}Your spouse has solved an issue for {HERO}")
+                    new TextObject("{=t6GBuiJX}Your spouse has solved an issue for {HERO}")
                     .SetTextVariable("HERO", issue.IssueOwner.Name).ToString(),
                     Color.FromUint(TextHelper.COLOR_LIGHT_YELLOW)));
                 issue.CompleteIssueWithLordSolutionWithRefuseCounterOffer();

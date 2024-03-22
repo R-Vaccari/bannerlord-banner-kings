@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Skills;
+using BannerKings.Managers.Skills;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -30,7 +30,7 @@ namespace BannerKings.Campaign.Skills
         public override void Initialize()
         {
             PietyGain = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("PietyGain"));
-            PietyGain.Initialize(new TextObject("{=!}Daily piety gain: +{a0}"), 
+            PietyGain.Initialize(new TextObject("{=3MDmvuVf}Daily piety gain: +{a0}"), 
                 new SkillObject[]
                 {
                     BKSkills.Instance.Theology
@@ -44,7 +44,7 @@ namespace BannerKings.Campaign.Skills
                 0f);
 
             FaithPresence = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("FaithPresence"));
-            FaithPresence.Initialize(new TextObject("{=!}Faith presence in fiefs: +{a0}%"),
+            FaithPresence.Initialize(new TextObject("{=vTyRD6cM}Faith presence in fiefs: +{a0}%"),
                 new SkillObject[]
                 {
                     BKSkills.Instance.Theology
@@ -58,7 +58,7 @@ namespace BannerKings.Campaign.Skills
                 0f);
 
             SpouseScore = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("SpouseScore"));
-            SpouseScore.Initialize(new TextObject("{=!}Spouse score improvement (half for other clan members): +{a0}%"),
+            SpouseScore.Initialize(new TextObject("{=Jh0vPbET}Spouse score improvement (half for other clan members): +{a0}%"),
                 new SkillObject[]
                 {
                     BKSkills.Instance.Lordship
@@ -72,7 +72,7 @@ namespace BannerKings.Campaign.Skills
                 0f);
 
             Legitimacy = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("Legitimacy"));
-            Legitimacy.Initialize(new TextObject("{=!}Legitimacy (as ruler): +{a0}%"),
+            Legitimacy.Initialize(new TextObject("{=Ojp1qZdC}Legitimacy (as ruler): +{a0}%"),
                 new SkillObject[]
                 {
                     BKSkills.Instance.Lordship
@@ -86,7 +86,7 @@ namespace BannerKings.Campaign.Skills
                 0f);
 
             DemesneLimit = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("DemesneLimit"));
-            DemesneLimit.Initialize(new TextObject("{=!}Demesne limit: +{a0}%"),
+            DemesneLimit.Initialize(new TextObject("{=yEbrBMJC}Demesne limit: +{a0}%"),
                 new SkillObject[]
                 {
                     BKSkills.Instance.Lordship
@@ -100,7 +100,7 @@ namespace BannerKings.Campaign.Skills
                 0f);
 
             VassalLimit = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("VassalLimit"));
-            VassalLimit.Initialize(new TextObject("{=!}Vassal limit: +{a0}%"),
+            VassalLimit.Initialize(new TextObject("{=UkiSUHE6}Vassal limit: +{a0}%"),
                 new SkillObject[]
                 {
                     BKSkills.Instance.Lordship
@@ -115,7 +115,7 @@ namespace BannerKings.Campaign.Skills
 
 
             LanguageSpeed = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("LanguageSpeed"));
-            LanguageSpeed.Initialize(new TextObject("{=!}Language learning speed: +{a0}%"),
+            LanguageSpeed.Initialize(new TextObject("{=7oP8Hj7c}Language learning speed: +{a0}%"),
                 new SkillObject[]
                 {
                     BKSkills.Instance.Scholarship
@@ -129,7 +129,7 @@ namespace BannerKings.Campaign.Skills
                 0f);
 
             ReadingSpeed = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("ReadingSpeed"));
-            ReadingSpeed.Initialize(new TextObject("{=!}Book reading speed: +{a0}%"),
+            ReadingSpeed.Initialize(new TextObject("{=GuYLFezW}Book reading speed: +{a0}%"),
                 new SkillObject[]
                 {
                     BKSkills.Instance.Scholarship
@@ -143,7 +143,7 @@ namespace BannerKings.Campaign.Skills
                 0f);
 
             LifestyleSpeed = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("LifestyleSpeed"));
-            LifestyleSpeed.Initialize(new TextObject("{=!}Lifestyle progress speed: +{a0}%"),
+            LifestyleSpeed.Initialize(new TextObject("{=zwd8fwK7}Lifestyle progress speed: +{a0}%"),
                 new SkillObject[]
                 {
                     BKSkills.Instance.Scholarship
@@ -157,7 +157,7 @@ namespace BannerKings.Campaign.Skills
                 0f);
 
             ResearchSpeed = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("ResearchSpeed"));
-            ResearchSpeed.Initialize(new TextObject("{=!}Personal research progress: +{a0}"),
+            ResearchSpeed.Initialize(new TextObject("{=Zyao3x8F}Personal research progress: +{a0}"),
                 new SkillObject[]
                 {
                     BKSkills.Instance.Scholarship
@@ -174,7 +174,7 @@ namespace BannerKings.Campaign.Skills
         public void AddVanilla()
         {
             ProductionEfficiency = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("ProductionEfficiency"));
-            ProductionEfficiency.Initialize(new TextObject("{=!}Fief production efficiency: +{a0}%"),
+            ProductionEfficiency.Initialize(new TextObject("{=ft4CKf5O}Fief production efficiency: +{a0}%"),
                 new SkillObject[]
                 {
                     DefaultSkills.Crafting
@@ -188,7 +188,7 @@ namespace BannerKings.Campaign.Skills
                 0f);
 
             ProductionQuality = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("ProductionQuality"));
-            ProductionQuality.Initialize(new TextObject("{=!}Fief production quality: +{a0}%"),
+            ProductionQuality.Initialize(new TextObject("{=H8jSy770}Fief production quality: +{a0}%"),
                 new SkillObject[]
                 {
                     DefaultSkills.Crafting
@@ -202,7 +202,7 @@ namespace BannerKings.Campaign.Skills
                 0f);
 
             SupplyEfficiency = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("SupplyEfficiency"));
-            SupplyEfficiency.Initialize(new TextObject("{=!}Party supply efficiency: +{a0}%"),
+            SupplyEfficiency.Initialize(new TextObject("{=wMcipFaM}Party supply efficiency: +{a0}%"),
                 new SkillObject[]
                 {
                     DefaultSkills.Steward
@@ -216,7 +216,7 @@ namespace BannerKings.Campaign.Skills
                 0f);
 
             Stability = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("Stability"));
-            Stability.Initialize(new TextObject("{=!}Fief stability: +{a0}"),
+            Stability.Initialize(new TextObject("{=dSjTJUjU}Fief stability: +{a0}"),
                 new SkillObject[]
                 {
                     DefaultSkills.Steward
@@ -230,7 +230,7 @@ namespace BannerKings.Campaign.Skills
                 0f);
 
             TradePower = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("TradePower"));
-            TradePower.Initialize(new TextObject("{=!}Fief trade power: +{a0}%"),
+            TradePower.Initialize(new TextObject("{=vSqWjxNU}Fief trade power: +{a0}%"),
                 new SkillObject[]
                 {
                     DefaultSkills.Trade

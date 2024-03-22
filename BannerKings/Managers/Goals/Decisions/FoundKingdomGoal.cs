@@ -13,7 +13,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public FoundKingdomGoal() : base("goal_found_kingdom", GoalCategory.Unique, GoalUpdateType.Hero)
         {
             var name = new TextObject("{=nbV21qZv}Found Kingdom");
-            var description = new TextObject("{=!}Establish your own kingdom title. This new title will be bound to your Kingdom faction, and represent it in terms of Demesne laws, Succession and Inheritance laws, and all other types of laws attached to titles. Your faction must be one that is not already represented by a sovereign-level title (Kingdom or Empire titles).");
+            var description = new TextObject("{=XpFaiiny}Establish your own kingdom title. This new title will be bound to your Kingdom faction, and represent it in terms of Demesne laws, Succession and Inheritance laws, and all other types of laws attached to titles. Your faction must be one that is not already represented by a sovereign-level title (Kingdom or Empire titles).");
             Initialize(name, description);
         }
 
@@ -35,7 +35,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
                 if (title != null)
                 {
-                    failedReasons.Add(new TextObject("{=!}The realm {REALM} is already represented by a sovereign title ({TITLE})")
+                    failedReasons.Add(new TextObject("{=TGyoYia6}The realm {REALM} is already represented by a sovereign title ({TITLE})")
                         .SetTextVariable("REALM", Clan.PlayerClan.Kingdom.Name)
                         .SetTextVariable("TITLE", title.FullName));
                 }
@@ -90,7 +90,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=CSRMOcCm}Founding Dukedoms").ToString(),
-                new TextObject("{=!}Select a dukedom that will compose your kingdom. The kingdom's contract will follow this dukedom's contract in terms of Succession, Inheritance and so on. Future dukedoms may be assimilated into the kingdom by the process of De Jure Drift.")
+                new TextObject("{=AVzvekuX}Select a dukedom that will compose your kingdom. The kingdom's contract will follow this dukedom's contract in terms of Succession, Inheritance and so on. Future dukedoms may be assimilated into the kingdom by the process of De Jure Drift.")
                     .ToString(),
                 duchies,
                 true,

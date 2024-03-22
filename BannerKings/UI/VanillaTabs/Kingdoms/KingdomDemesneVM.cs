@@ -56,11 +56,11 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
                 {
                     bool available = true;
                     if (title.Sovereign != null && titles.Contains(title.Sovereign)) available = false;
-                    TextObject description = available ? new TextObject("{=!}Administer the laws of the {TITLE}, a legal dominion represented by the {REALM}.")
+                    TextObject description = available ? new TextObject("{=q7Bk0wGf}Administer the laws of the {TITLE}, a legal dominion represented by the {REALM}.")
                         .SetTextVariable("TITLE", Title.FullName)
                         .SetTextVariable("REALM", Kingdom.Name)
                         :
-                        new TextObject("{=!}Administering the laws of the {TITLE} is not possible, as this title is subjected to the laws of {SOVEREIGN}.")
+                        new TextObject("{=LprJYC1C}Administering the laws of the {TITLE} is not possible, as this title is subjected to the laws of {SOVEREIGN}.")
                         .SetTextVariable("TITLE", Title.FullName)
                         .SetTextVariable("SOVEREIGN", title.Sovereign.FullName);
                     var item = new BKItemVM(selectorIndex, available, title.FullName, title.FullName);

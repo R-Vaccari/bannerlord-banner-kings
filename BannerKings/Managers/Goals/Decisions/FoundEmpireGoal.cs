@@ -12,8 +12,8 @@ namespace BannerKings.Managers.Goals.Decisions
     {
         public FoundEmpireGoal() : base("goal_found_kingdom", GoalCategory.Unique, GoalUpdateType.Hero)
         {
-            var name = new TextObject("{=!}Found Empire");
-            var description = new TextObject("{=!}Found an Empire-level title. An Empire is the highest form of title, ruling over kingdoms. Empires may absorb kingdom titles as their vassals through the process of De Jure Drift.{newline}{newline}");
+            var name = new TextObject("{=e0t4jZoO}Found Empire");
+            var description = new TextObject("{=Zi7h8WK3}Found an Empire-level title. An Empire is the highest form of title, ruling over kingdoms. Empires may absorb kingdom titles as their vassals through the process of De Jure Drift.{newline}{newline}");
             Initialize(name, description);
         }
 
@@ -32,12 +32,12 @@ namespace BannerKings.Managers.Goals.Decisions
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
                 if (title == null)
                 {
-                    failedReasons.Add(new TextObject("{=!}The realm {REALM} is not represented by a Kingdom-level title. Found a Kingdom first, and then an Empire.")
+                    failedReasons.Add(new TextObject("{=eH3B6qgm}The realm {REALM} is not represented by a Kingdom-level title. Found a Kingdom first, and then an Empire.")
                         .SetTextVariable("REALM", Clan.PlayerClan.Kingdom.Name));
                 }
                 else if (title.TitleType == TitleType.Empire)
                 {
-                    failedReasons.Add(new TextObject("{=!}Your realm, {REALM} is already attached to the Empire-level title {TITLE}.")
+                    failedReasons.Add(new TextObject("{=F5BEyddZ}Your realm, {REALM} is already attached to the Empire-level title {TITLE}.")
                             .SetTextVariable("REALM", Clan.PlayerClan.Kingdom.Name)
                             .SetTextVariable("TITLE", title.FullName));
                 }
@@ -57,7 +57,7 @@ namespace BannerKings.Managers.Goals.Decisions
             (
                 new InquiryData
                 (
-                    new TextObject("{=!}Establish a new Title").ToString(),
+                    new TextObject("{=thijhbki}Establish a new Title").ToString(),
                     new TextObject("{=qjD2WwBH}Do you want to establish the title {TITLE}?\nThis will cost you {GOLD}{GOLD_ICON} and {INFLUENCE}{INFLUENCE_ICON}.\nAs a reward your clan will earn {RENOWN} renown.")
                         .SetTextVariable("TITLE", name)
                         .SetTextVariable("GOLD", (int)action.Gold)
@@ -96,8 +96,8 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Founding Dukedom").ToString(),
-                new TextObject("{=!}Select a dukedom that will compose your kingdom. The kingdom's contract will follow this dukedom's contract in terms of Succession, Inheritance and so on. Future dukedoms may be assimilated into the kingdom by the process of De Jure Drift.")
+                new TextObject("{=miyAGkb6}Founding Dukedom").ToString(),
+                new TextObject("{=AVzvekuX}Select a dukedom that will compose your kingdom. The kingdom's contract will follow this dukedom's contract in terms of Succession, Inheritance and so on. Future dukedoms may be assimilated into the kingdom by the process of De Jure Drift.")
                     .ToString(),
                 duchies,
                 true,

@@ -125,7 +125,7 @@ namespace BannerKings.Models.BKModels
 
             int attackerRaids = attackerLink.GetSuccessfulRaids(attacker);
             result.Add(attackerRaids * CalculateAverageRaidScore(defender).ResultNumber / totalWarScore,
-                new TextObject("{=!}{RAIDS} raids by {FACTION}")
+                new TextObject("{=hz42Pe9J}{RAIDS} raids by {FACTION}")
                 .SetTextVariable("RAIDS", attackerRaids)
                 .SetTextVariable("FACTION", attacker.Name));
 
@@ -183,7 +183,7 @@ namespace BannerKings.Models.BKModels
 
             int defenderRaids = attackerLink.GetSuccessfulRaids(defender);
             result.Add(defenderRaids * CalculateAverageRaidScore(attacker).ResultNumber / totalWarScore,
-                new TextObject("{=!}{RAIDS} raids by {FACTION} during the war")
+                new TextObject("{=hz42Pe9J}{RAIDS} raids by {FACTION} during the war")
                 .SetTextVariable("RAIDS", defenderRaids)
                 .SetTextVariable("FACTION", defender.Name));
 
@@ -217,7 +217,7 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            result.Add(defendCaptivesScore * (isDefenderScore ? -1f : 1f), new TextObject("{=!}Defender captives (x{TOTAL})")
+            result.Add(defendCaptivesScore * (isDefenderScore ? -1f : 1f), new TextObject("{=eTaEWbFK}Defender captives (x{TOTAL})")
                .SetTextVariable("TOTAL", defendCaptives));
 
             return result;

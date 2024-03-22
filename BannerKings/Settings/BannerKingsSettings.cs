@@ -64,11 +64,11 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public float BaseWage { get; set; } = 1f;
 
-        [SettingPropertyFloatingInteger("{=!}Loot Scale", minValue: 0.2f, maxValue: 1f, "#0%", RequireRestart = false, HintText = "{=!}The scale of loot dropped by troops. When under 100%, items will randomly be eliminated from the loot pool. Vanilla is 100%. Default: 50%.")]
+        [SettingPropertyFloatingInteger("{=Kjb25TsU}Loot Scale", minValue: 0.2f, maxValue: 1f, "#0%", RequireRestart = false, HintText = "{=g9Sa4rmA}The scale of loot dropped by troops. When under 100%, items will randomly be eliminated from the loot pool. Vanilla is 100%. Default: 50%.")]
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public float LootScale { get; set; } = 0.5f;
 
-        [SettingPropertyFloatingInteger("{=!}Clan Renown Scaling", minValue: 1f, maxValue: 10f, "#0%", RequireRestart = false, HintText = "{=!}The scale of renown points required for clans to level up in tier. Vanilla is 100%. Default: 300%.")]
+        [SettingPropertyFloatingInteger("{=smqPaUHR}Clan Renown Scaling", minValue: 1f, maxValue: 10f, "#0%", RequireRestart = false, HintText = "{=G08wtvco}The scale of renown points required for clans to level up in tier. Vanilla is 100%. Default: 300%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float ClanRenown { get; set; } = 3f;
 
@@ -80,7 +80,7 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public bool AlternateLeveling { get; set; } = true;
 
-        [SettingPropertyFloatingInteger("{=!}World Companions Limit", minValue: 0.5f, maxValue: 1f, "#0%", RequireRestart = false, HintText = "{=!}The max limit of wanderers in the world, available at taverns. The limit is relative to all existing cities in the map. Vanilla is 60%, and amounts to less than 1 wanderer per town, BK amounts to 1 per town. Default: 100%.")]
+        [SettingPropertyFloatingInteger("{=iZcJtDkH}World Companions Limit", minValue: 0.5f, maxValue: 1f, "#0%", RequireRestart = false, HintText = "{=6m4y9ujC}The max limit of wanderers in the world, available at taverns. The limit is relative to all existing cities in the map. Vanilla is 60%, and amounts to less than 1 wanderer per town, BK amounts to 1 per town. Default: 100%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float WorldCompanions { get; set; } = 1f;
 

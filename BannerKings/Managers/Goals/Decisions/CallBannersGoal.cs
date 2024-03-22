@@ -243,7 +243,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
 
                 InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=!}{HERO} has called {?PLAYER.GENDER}her{?}his{\\? banners! {TROOPS} troops are gathering for war.")
+                    new TextObject("{=WpjPTcJt}{HERO} has called {?PLAYER.GENDER}her{?}his{\\? banners! {TROOPS} troops are gathering for war.")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("TROOPS", troops).ToString(),
                     Color.FromUint(4282569842U),

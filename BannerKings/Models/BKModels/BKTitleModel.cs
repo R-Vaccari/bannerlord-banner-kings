@@ -74,7 +74,7 @@ namespace BannerKings.Models.BKModels
 
             if (BannerKingsConfig.Instance.TitleManager.IsKnight(candidate))
             {
-                result.AddFactor(-0.8f, new TextObject("{=!}{HERO} is a {KNIGHT}")
+                result.AddFactor(-0.8f, new TextObject("{=7NPiKyo0}{HERO} is a {KNIGHT}")
                     .SetTextVariable("HERO", candidate.Name)
                     .SetTextVariable("KNIGHT", Utils.TextHelper.GetKnightTitle(currentLeader.Culture, candidate.IsFemale, false)));
             }
@@ -287,7 +287,7 @@ namespace BannerKings.Models.BKModels
             if (title.deJure == null)
             {
                 claimAction.Possible = false;
-                claimAction.Reason = new TextObject("{=!}No de jure owner, title must be created.");
+                claimAction.Reason = new TextObject("{=GpKQomFn}No de jure owner, title must be created.");
                 return claimAction;
             }
 
@@ -378,7 +378,7 @@ namespace BannerKings.Models.BKModels
             if (title.deJure == null)
             {
                 revokeAction.Possible = false;
-                revokeAction.Reason = new TextObject("{=!}No de jure owner, title must be created.");
+                revokeAction.Reason = new TextObject("{=GpKQomFn}No de jure owner, title must be created.");
                 return revokeAction;
             }
 
@@ -482,7 +482,7 @@ namespace BannerKings.Models.BKModels
             if (title.deJure == null)
             {
                 grantAction.Possible = false;
-                grantAction.Reason = new TextObject("{=!}No de jure owner, title must be created.");
+                grantAction.Reason = new TextObject("{=GpKQomFn}No de jure owner, title must be created.");
                 return grantAction;
             }
 
@@ -542,7 +542,7 @@ namespace BannerKings.Models.BKModels
             if (title.deJure == null)
             {
                 usurpData.Possible = false;
-                usurpData.Reason = new TextObject("{=!}No de jure owner, title must be created.");
+                usurpData.Reason = new TextObject("{=GpKQomFn}No de jure owner, title must be created.");
                 return usurpData;
             }
 
@@ -588,7 +588,7 @@ namespace BannerKings.Models.BKModels
                     {
                         usurpData.Possible = false;
                         usurpData.Reason =
-                            new TextObject("{=!}You can not usurp from your vassal, revoke instead.");
+                            new TextObject("{=rkrK9Js5}You can not usurp from your vassal, revoke instead.");
                         return usurpData;
                     }
                 }
@@ -612,7 +612,7 @@ namespace BannerKings.Models.BKModels
                             {
                                 usurpData.Possible = false;
                                 usurpData.Reason =
-                                    new TextObject("{=!}You must be the de facto holder of {TITLE} to inherit the sovereign title {SOVEREIGN}.")
+                                    new TextObject("{=JFcNv7no}You must be the de facto holder of {TITLE} to inherit the sovereign title {SOVEREIGN}.")
                                     .SetTextVariable("TITLE", vassal.FullName)
                                     .SetTextVariable("SOVEREIGN", title.FullName);
                                 return usurpData;
@@ -633,7 +633,7 @@ namespace BannerKings.Models.BKModels
                     if (title.DeFacto != usurper)
                     {
                         usurpData.Possible = false;
-                        usurpData.Reason = new TextObject("{=!}To usurp a duchy-level title, you need to control the majority of its direct vassals.");
+                        usurpData.Reason = new TextObject("{=sN05SxWb}To usurp a duchy-level title, you need to control the majority of its direct vassals.");
                         return usurpData;
                     }
                 }

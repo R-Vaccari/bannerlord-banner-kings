@@ -518,8 +518,8 @@ namespace BannerKings.UI
                         break;
                     case ActionType.Create:
                         description =
-                            new TextObject("{=!}Creating a title sets you as its legal holder, rather than no legal holder at all. The title's laws, such as Succession and Government laws, will match those of your current primary title.");
-                        affirmativeText = new TextObject("{=!}Create");
+                            new TextObject("{=VFTH237z}Creating a title sets you as its legal holder, rather than no legal holder at all. The title's laws, such as Succession and Government laws, will match those of your current primary title.");
+                        affirmativeText = new TextObject("{=bLwFU6mw}Create");
                         break;
                     case ActionType.Claim:
                         description =
@@ -557,8 +557,8 @@ namespace BannerKings.UI
                 new("", title.FullName.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title)
             };
 
-            list.Add(new TooltipProperty(new TextObject("{=!}De Jure Holder").ToString(), 
-                hero != null ? hero.Name.ToString() : new TextObject("{=!}None").ToString(), 
+            list.Add(new TooltipProperty(new TextObject("{=gp1fPcSo}De Jure Holder").ToString(), 
+                hero != null ? hero.Name.ToString() : new TextObject("None").ToString(), 
                 0));
 
             if (hero != null)
@@ -652,7 +652,7 @@ namespace BannerKings.UI
                 ActionType.Usurp => new TextObject("{=L3Jzg76z}Usurp"),
                 ActionType.Revoke => new TextObject("{=iLpAKttu}Revoke"),
                 ActionType.Claim => new TextObject("{=6hY9WysN}Claim"),
-                ActionType.Create => new TextObject("{=!}Create"),
+                ActionType.Create => new TextObject("{=bLwFU6mw}Create"),
                 _ => new TextObject("{=dugq4xHo}Grant")
             };
         }
@@ -891,8 +891,8 @@ namespace BannerKings.UI
             var list = new List<TooltipProperty>
             {
                 new("", outcome.GetDecisionTitle().ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title),
-                new TooltipProperty(new TextObject("{=!}Sponsor").ToString(), outcome.SponsorClan.Name.ToString(), 0),
-                new TooltipProperty(new TextObject("{=!}Support").ToString(), FormatValue(outcome.WinChance), 0)     
+                new TooltipProperty(new TextObject("{=AiTyaUSW}Sponsor").ToString(), outcome.SponsorClan.Name.ToString(), 0),
+                new TooltipProperty(new TextObject("Support").ToString(), FormatValue(outcome.WinChance), 0)     
             };
 
             if (outcome is ClanAsDecisionOutcome)
@@ -907,7 +907,7 @@ namespace BannerKings.UI
                 ExplainedNumber score = BannerKingsConfig.Instance.DiplomacyModel.CalculateHeroFiefScore(claimantDecision.Settlement,
                     claimant,
                     true);
-                list.AddRange(GetAccumulatingWithDescription(new TextObject("{=!}Claim Strength"),
+                list.AddRange(GetAccumulatingWithDescription(new TextObject("{=Q6aobVvq}Claim Strength"),
                     outcome.GetDecisionDescription(),
                     score.ResultNumber,
                     false,
@@ -1028,7 +1028,7 @@ namespace BannerKings.UI
                 list.Add(new TooltipProperty(text, new TextObject("{=xa13n63V}You don't have access to this recruit.").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
 
                 TooltipAddEmptyLine(list);
-                list.Add(new TooltipProperty("", new TextObject("{=!}Access to volunteers is determined mostly by the Drating law (Demesne law) assocaited with the title of this fief. Laws are only changable through the kingdom repsented by a Kingdom-level title that rulers over this fief (see Demesne Hierarchy). Relationship, perks and other factors are secondary to the law's effects.").ToString(), 
+                list.Add(new TooltipProperty("", new TextObject("{=cnshSfx9}Access to volunteers is determined mostly by the Drating law (Demesne law) assocaited with the title of this fief. Laws are only changable through the kingdom repsented by a Kingdom-level title that rulers over this fief (see Demesne Hierarchy). Relationship, perks and other factors are secondary to the law's effects.").ToString(), 
                     0, false, TooltipProperty.TooltipPropertyFlags.MultiLine));
 
                 var explanation = BannerKingsConfig.Instance.VolunteerModel.CalculateMaximumRecruitmentIndex(Hero.MainHero, owner, relation, true);

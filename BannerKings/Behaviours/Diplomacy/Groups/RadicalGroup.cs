@@ -228,7 +228,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         {
             if (radicalism < demand.MinimumGroupInfluence)
             {
-                return new(false, new TextObject("{=!}This demand requires at least {INFLUENCE}% group radicalism.")
+                return new(false, new TextObject("{=EYqxJOKQ}This demand requires at least {INFLUENCE}% group radicalism.")
                     .SetTextVariable("INFLUENCE", (demand.MinimumGroupInfluence * 100f).ToString("0.0")));
             }
 

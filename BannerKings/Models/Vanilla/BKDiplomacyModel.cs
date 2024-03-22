@@ -37,7 +37,7 @@ namespace BannerKings.Models.Vanilla
 
             if (settlement.Owner == annexing)
             {
-                result.Add(150f, new TextObject("{=!}{HERO} is the established owner of {FIEF}")
+                result.Add(150f, new TextObject("{=CfiavKU4}{HERO} is the established owner of {FIEF}")
                     .SetTextVariable("HERO", clan.Leader.Name)
                     .SetTextVariable("FIEF", settlement.Name));
             }
@@ -47,13 +47,13 @@ namespace BannerKings.Models.Vanilla
             {
                 if (title.deJure == clan.Leader)
                 {
-                    result.Add(400f, new TextObject("{=!}{HERO} is de jure holder of {TITLE}")
+                    result.Add(400f, new TextObject("{=OQmLP0qp}{HERO} is de jure holder of {TITLE}")
                         .SetTextVariable("HERO", clan.Leader.Name)
                         .SetTextVariable("TITLE", title.FullName));
                 }
                 else if (title.HeroHasValidClaim(clan.Leader))
                 {
-                    result.Add(250f, new TextObject("{=!}{HERO} is a legal claimant of {TITLE}")
+                    result.Add(250f, new TextObject("{=FUyGdaRm}{HERO} is a legal claimant of {TITLE}")
                        .SetTextVariable("HERO", clan.Leader.Name)
                        .SetTextVariable("TITLE", title.FullName));
                 }
@@ -68,7 +68,7 @@ namespace BannerKings.Models.Vanilla
                     {
                         if (clan == settlement.Town.LastCapturedBy)
                         {
-                            result.Add(1000f, new TextObject("{=!}Last conquered by {CLAN} ({LAW})")
+                            result.Add(1000f, new TextObject("{=sAb8WSFG}Last conquered by {CLAN} ({LAW})")
                                 .SetTextVariable("CLAN", clan.Name)
                                 .SetTextVariable("LAW", DefaultContractAspects.Instance.ConquestMight.Name));
                         }
@@ -80,14 +80,14 @@ namespace BannerKings.Models.Vanilla
                     {
                         if (title.deJure == clan.Leader)
                         {
-                            result.Add(1000f, new TextObject("{=!}{HERO} is de jure holder of {TITLE} ({LAW})")
+                            result.Add(1000f, new TextObject("{=OQmLP0qp}{HERO} is de jure holder of {TITLE} ({LAW})")
                                 .SetTextVariable("HERO", clan.Leader.Name)
                                 .SetTextVariable("TITLE", title.FullName)
                                 .SetTextVariable("LAW", DefaultContractAspects.Instance.ConquestClaim.Name));
                         }
                         else if (title.HeroHasValidClaim(clan.Leader))
                         {
-                            result.Add(500f, new TextObject("{=!}{HERO} is a claimant of {TITLE} ({LAW})")
+                            result.Add(500f, new TextObject("{=Tk8HfVjp}{HERO} is a claimant of {TITLE} ({LAW})")
                                 .SetTextVariable("HERO", clan.Leader.Name)
                                 .SetTextVariable("TITLE", title.FullName)
                                 .SetTextVariable("LAW", DefaultContractAspects.Instance.ConquestClaim.Name));
@@ -98,14 +98,14 @@ namespace BannerKings.Models.Vanilla
                 {
                     foreach (Settlement fief in clan.Settlements)
                     {
-                        if (fief.IsTown) result.Add(-150f, new TextObject("{=!}Owns {FIEF} ({LAW})")
+                        if (fief.IsTown) result.Add(-150f, new TextObject("{=ow8Bo8qm}Owns {FIEF} ({LAW})")
                             .SetTextVariable("FIEF", fief.Name)
                             .SetTextVariable("LAW", DefaultContractAspects.Instance.ConquestDistributed.Name));
-                        else if (fief.IsCastle) result.Add(-75f, new TextObject("{=!}Owns {FIEF} ({LAW})")
+                        else if (fief.IsCastle) result.Add(-75f, new TextObject("{=ow8Bo8qm}Owns {FIEF} ({LAW})")
                             .SetTextVariable("FIEF", fief.Name)
                             .SetTextVariable("LAW", DefaultContractAspects.Instance.ConquestDistributed.Name));
                         else if (fief.IsVillage && fief.Village.GetActualOwner() == annexing)
-                            result.Add(-30f, new TextObject("{=!}Owns {FIEF} ({LAW})")
+                            result.Add(-30f, new TextObject("{=ow8Bo8qm}Owns {FIEF} ({LAW})")
                             .SetTextVariable("FIEF", fief.Name)
                             .SetTextVariable("LAW", DefaultContractAspects.Instance.ConquestDistributed.Name));
                     }
@@ -115,7 +115,7 @@ namespace BannerKings.Models.Vanilla
             var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(clan.Leader).ResultNumber;
             var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(clan).ResultNumber;
             float factor = current / limit;
-            result.Add(500f * (1f - factor), new TextObject("{=!}Current Demesne Limit {CURRENT}/{LIMIT}")
+            result.Add(500f * (1f - factor), new TextObject("{=P7tvtWh6}Current Demesne Limit {CURRENT}/{LIMIT}")
                 .SetTextVariable("CURRENT", current.ToString("0.0"))
                 .SetTextVariable("LIMIT", limit.ToString("0.0")));
 
@@ -164,7 +164,7 @@ namespace BannerKings.Models.Vanilla
             Clan defenderClan = defender.IsClan ? (defender as Clan) : (defender as Kingdom).RulingClan;
 
             if (ally.IsAtWarWith(attacker))
-                result.Add(-1000f, new TextObject("{=!}Already at war with {FACTION}")
+                result.Add(-1000f, new TextObject("{=LebeA6tg}Already at war with {FACTION}")
                     .SetTextVariable("FACTION", attacker.Name));
 
             float defenderRelation = allyClan.Leader.GetRelation(defenderClan.Leader);
@@ -340,7 +340,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             float cap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(proposer.RulingClan).ResultNumber;
-            result.Add(cap, new TextObject("{=!}Influence limit of {CLAN}")
+            result.Add(cap, new TextObject("{=1RD1OWYP}Influence limit of {CLAN}")
                 .SetTextVariable("CLAN", proposer.RulingClan.Name));
 
             float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason);
@@ -539,7 +539,7 @@ namespace BannerKings.Models.Vanilla
             {
                 if (defenderFiefs > attackerFiefs)
                 {
-                    result.Add(-baseNumber, new TextObject("{=!}{FACTION} should defend its few fiefs rather than attacking")
+                    result.Add(-baseNumber, new TextObject("{=7ix3cKGX}{FACTION} should defend its few fiefs rather than attacking")
                         .SetTextVariable("FACTION", factionDeclaresWar.Name));
                 }
             }
@@ -548,7 +548,7 @@ namespace BannerKings.Models.Vanilla
             result.Add(baseNumber * MathF.Clamp(fiefsFactor * 0.1f, -2f, 2f), new TextObject("{=MvV0HUdo}Difference in controlled fiefs"));
 
             if (attackerFiefs >= defenderFiefs * 2f)
-                result.Add(-baseNumber, new TextObject("{=!}{FACTION1} controls more than twice the fiefs than {FACTION2}")
+                result.Add(-baseNumber, new TextObject("{=bwVkTDdv}{FACTION1} controls more than twice the fiefs than {FACTION2}")
                     .SetTextVariable("FACTION1", factionDeclaredWar.Name)
                     .SetTextVariable("FACTION2", factionDeclaresWar.Name));
 

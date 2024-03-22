@@ -93,19 +93,19 @@ namespace BannerKings.Models.Vanilla
                         float alcoholNeed = MathF.Max(supplies.GetAlcoholCurrentNeed().ResultNumber, 1f);
                         float alcohol = MathF.Min(supplies.AlcoholNeed / alcoholNeed, 
                             supplies.AlcoholNeed);
-                        result.Add(-alcohol, new TextObject("{=!}Alcohol supplies"));
+                        result.Add(-alcohol, new TextObject("{=Jph09YjR}Alcohol supplies"));
 
                         float animal = MathF.Min(supplies.AnimalProductsNeed / supplies.GetAnimalProductsCurrentNeed().ResultNumber, 
                             supplies.AnimalProductsNeed);
-                        result.Add(-animal, new TextObject("{=!}Animal products  supplies"));
+                        result.Add(-animal, new TextObject("{=EYGfTj7F}Animal products  supplies"));
 
                         float textiles = MathF.Min(supplies.ClothNeed / supplies.GetTextileCurrentNeed().ResultNumber, 
                             supplies.ClothNeed);
-                        result.Add(-textiles, new TextObject("{=!}Textiles supplies"));
+                        result.Add(-textiles, new TextObject("{=Zz8Op0OS}Textiles supplies"));
 
                         float wood = MathF.Min(supplies.WoodNeed / supplies.GetWoodCurrentNeed().ResultNumber,
                             supplies.WoodNeed);
-                        result.Add(-wood, new TextObject("{=!}Wood supplies"));
+                        result.Add(-wood, new TextObject("{=wtBW7t3v}Wood supplies"));
                     }
                 }
             }

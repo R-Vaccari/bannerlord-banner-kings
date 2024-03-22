@@ -161,14 +161,14 @@ namespace BannerKings.Models.Vanilla
             if (cityCraftsmen > 0)
             {
                 var craftsmenConsumption = cityCraftsmen * CraftsmanFood;
-                result.Add(craftsmenConsumption, new TextObject("{=!}Craftsmen consumption"));
+                result.Add(craftsmenConsumption, new TextObject("{=EOe81mg7}Craftsmen consumption"));
             }
 
             var cityTenants = data.GetTypeCount(PopType.Tenants);
             if (cityTenants > 0)
             {
                 var tenantsConsumption = cityTenants * TenantFood;
-                result.Add(tenantsConsumption, new TextObject("{=!}Tenants consumption"));
+                result.Add(tenantsConsumption, new TextObject("{=CB6A3Eor}Tenants consumption"));
             }
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(data.Settlement, "decision_ration"))

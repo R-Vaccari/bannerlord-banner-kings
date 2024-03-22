@@ -91,7 +91,7 @@ namespace BannerKings.Models.Vanilla
                 if (title != null)
                 {
                     float type = (float)title.TitleType + 1;
-                    baseResult.AddFactor(0.4f / type, new TextObject("{=!}Highest title of rank {RANK}")
+                    baseResult.AddFactor(0.4f / type, new TextObject("{=Cz0aNGdW}Highest title of rank {RANK}")
                         .SetTextVariable("RANK", DefaultTitleNames.Instance.GetTitleName(leader.Culture, title.TitleType).Name));
                 }
             }

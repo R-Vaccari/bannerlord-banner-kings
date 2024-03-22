@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Diplomacy.Groups.Demands;
+using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Utils.Models;
 using Helpers;
 using System.Collections.Generic;
@@ -101,7 +101,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 if (faction == Hero.MainHero.MapFaction || Defender == Hero.MainHero.MapFaction)
                 {
                     InformationManager.DisplayMessage(new InformationMessage(
-                        new TextObject("{=!}The {ALLY} has joined the {DEFENDER} in their war effort!")
+                        new TextObject("{=1NHS00eA}The {ALLY} has joined the {DEFENDER} in their war effort!")
                         .SetTextVariable("ALLY", faction.Name)
                         .SetTextVariable("DEFENDER", Defender.Name)
                         .ToString(),

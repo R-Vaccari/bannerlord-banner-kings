@@ -231,7 +231,7 @@ namespace BannerKings.Behaviours.Diplomacy
             if (Kingdom == Clan.PlayerClan.Kingdom)
             {
                 InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=!}The group {GROUP} has formed under the leadership of {LEADER}.")
+                    new TextObject("{=xqGUkJZH}The group {GROUP} has formed under the leadership of {LEADER}.")
                     .SetTextVariable("GROUP", group.Name)
                     .SetTextVariable("LEADER", group.Leader.Name)
                     .ToString(),

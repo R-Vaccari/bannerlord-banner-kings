@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Library;
@@ -33,7 +33,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 if (Group.KingdomDiplomacy.Kingdom == Clan.PlayerClan.MapFaction)
                 {
                     InformationManager.DisplayMessage(new InformationMessage(
-                        new TextObject("{=!}The radical {GROUP} group has been dissolved.")
+                        new TextObject("{=sKFZDhiA}The radical {GROUP} group has been dissolved.")
                         .SetTextVariable("GROUP", Group.Name)
                         .ToString(),
                         Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));

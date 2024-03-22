@@ -266,14 +266,14 @@ namespace BannerKings.UI.Management
 
             ManpowerInfo.Add(new InformationElement(new TextObject("{=jhSJLHp1}Possible Recruits:").ToString(),
                 recruits.Count.ToString(),
-                recruitWeights.Aggregate(new TextObject("{=!}These are the troops the notables may directly muster, not accounting for further trainning. The chance of each one is correlated to its population class' manpower in relation to the overall manpower.").ToString(), 
+                recruitWeights.Aggregate(new TextObject("{=ridNrfno}These are the troops the notables may directly muster, not accounting for further trainning. The chance of each one is correlated to its population class' manpower in relation to the overall manpower.").ToString(), 
                 (current, recruitWeight) =>
                 {
                     StringBuilder sb = new StringBuilder();
                     foreach (var pair in recruitWeight.Value)
                     {
                         if (pair.Value > 0f)
-                            sb.Append(new TextObject("{=!}{newline}{TYPE}: {CHANCE}")
+                            sb.Append(new TextObject("{=Og5Ks2R2}{newline}{TYPE}: {CHANCE}")
                                .SetTextVariable("TYPE", pair.Key.Name)
                                .SetTextVariable("CHANCE", FormatValue(pair.Value))
                                .ToString());

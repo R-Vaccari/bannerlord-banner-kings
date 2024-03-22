@@ -58,7 +58,7 @@ namespace BannerKings.UI.Titles
                     var createAction = model.GetAction(ActionType.Create, title, Hero.MainHero);
                     if (createAction.Possible)
                     {
-                        var createButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Create").ToString(),
+                        var createButton = new DecisionElement().SetAsButtonOption(new TextObject("{=bLwFU6mw}Create").ToString(),
                             () => UIHelper.ShowActionPopup(createAction, this),
                             new TextObject("{=!}"));
                         createButton.Enabled = createAction.Possible;

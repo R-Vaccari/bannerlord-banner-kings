@@ -45,9 +45,9 @@ namespace BannerKings.Models.BKModels
             ExplainedNumber result = new ExplainedNumber(minimumCost, explanations);
             ExplainedNumber income = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(fulfiller.Clan);
 
-            result.Add(income.ResultNumber * 10f, new TextObject("{=!}Revenues of {CLAN}")
+            result.Add(income.ResultNumber * 10f, new TextObject("{=Ssi15mFy}Revenues of {CLAN}")
                 .SetTextVariable("CLAN", fulfiller.Clan.Name));
-            result.AddFactor(factor - 1f, new TextObject("{=!}Generosity of the group leader"));
+            result.AddFactor(factor - 1f, new TextObject("{=ZQgfSkQ8}Generosity of the group leader"));
             return result;
         }
 
@@ -354,15 +354,15 @@ namespace BannerKings.Models.BKModels
                     clanInfluences.Add(clan, f);
                 }
 
-                result.Add(200f * (clanInfluences[invitee.Clan] / totalClanInfluence), new TextObject("{=!}Political relevance of {CLAN}")
+                result.Add(200f * (clanInfluences[invitee.Clan] / totalClanInfluence), new TextObject("{=8JtaP3Ak}Political relevance of {CLAN}")
                     .SetTextVariable("CLAN", invitee.Clan.Name));
 
                 float willingness = CalculateHeroJoinChance(invitee, group, diplomacy).ResultNumber;
-                result.AddFactor(-willingness * 0.5f, new TextObject("{=!}Willingness to join this group"));
+                result.AddFactor(-willingness * 0.5f, new TextObject("{=JHcib2AV}Willingness to join this group"));
             }
 
             float leaderCap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(group.Leader.Clan).ResultNumber;
-            result.Add(leaderCap * 0.07f, new TextObject("{=!}Influence limit of {CLAN}")
+            result.Add(leaderCap * 0.07f, new TextObject("{=1RD1OWYP}Influence limit of {CLAN}")
                 .SetTextVariable("CLAN", group.Leader.Clan.Name));      
 
             return result;
@@ -401,10 +401,10 @@ namespace BannerKings.Models.BKModels
                 clanInfluences.Add(clan, f);
             }
 
-            result.Add(-0.2f + (clanInfluences[hero.Clan] / totalClanInfluence), new TextObject("{=!}Reluctance"));
+            result.Add(-0.2f + (clanInfluences[hero.Clan] / totalClanInfluence), new TextObject("Reluctance"));
             Hero ruler = diplomacy.Kingdom.Leader;
             float support = -MBMath.Map(diplomacy.Legitimacy, 0f, 1f, -0.5f, 0.5f);
-            result.Add(support, new TextObject("{=!}Legitimacy of {HERO}")
+            result.Add(support, new TextObject("{=KDH6VoKQ}Legitimacy of {HERO}")
                 .SetTextVariable("HERO", ruler.Name));
 
             float relation = -MBMath.Map(hero.GetRelation(ruler), -100f, 100f, -0.5f, 0.5f);
@@ -416,7 +416,7 @@ namespace BannerKings.Models.BKModels
             if (interestGroup != null)
             {
                 float groupSupport = -MBMath.Map(interestGroup.Support.ResultNumber, 0f, 1f, -0.1f, 0.1f);
-                result.Add(groupSupport, new TextObject("{=!}Support from interest group ({GROUP})")
+                result.Add(groupSupport, new TextObject("Support from interest group ({GROUP})")
                         .SetTextVariable("GROUP", interestGroup.Name));
             }
 
@@ -449,7 +449,7 @@ namespace BannerKings.Models.BKModels
                     }
                     else
                     {
-                        result.Add(0.2f + (ambition * 0.1f), new TextObject("{=!}{HERO1}`s ambition of ruling")
+                        result.Add(0.2f + (ambition * 0.1f), new TextObject("{=s7sxJgWg}{HERO1}`s ambition of ruling")
                             .SetTextVariable("HERO1", hero.Name)
                                                     .SetTextVariable("HERO2", demand.Claimant.Name));
                     }

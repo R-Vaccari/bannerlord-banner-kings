@@ -33,8 +33,8 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms.Groups
         [DataSourceProperty] public string LeaderText => new TextObject("{=SrfYbg3x}Leader").ToString();
         [DataSourceProperty] public string GroupName => Group.Name.ToString();
         [DataSourceProperty] public string GroupText => Group.Description.ToString();
-        [DataSourceProperty] public string InviteName => new TextObject("{=!}Invite Members").ToString();
-        [DataSourceProperty] public string ChanceHeader => new TextObject("{=!}Creation Chance").ToString();
+        [DataSourceProperty] public string InviteName => new TextObject("{=2xWSvbVc}Invite Members").ToString();
+        [DataSourceProperty] public string ChanceHeader => new TextObject("{=Un7UY83V}Creation Chance").ToString();
         [DataSourceProperty] public HintViewModel Hint => new HintViewModel(Group.Description);
 
         public override void RefreshValues()
@@ -81,12 +81,12 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms.Groups
                 }
 
                 ChanceText = FormatValue(total);
-                ChanceHint = new HintViewModel(new TextObject("{=!}{EXPLANATION}")
+                ChanceHint = new HintViewModel(new TextObject("{=oVr1RVY0}{EXPLANATION}")
                     .SetTextVariable("EXPLANATION", result.GetFormattedPercentage()));
 
-                EmptyGroupText = new TextObject("{=!}There is no {GROUP} currently active in the {REALM}. At any time, non-ruling clan leaders may start a radical group according to their interests, political leverage, relationships and support of the ruler.").ToString();
+                EmptyGroupText = new TextObject("{=Bfkjk1o0}There is no {GROUP} currently active in the {REALM}. At any time, non-ruling clan leaders may start a radical group according to their interests, political leverage, relationships and support of the ruler.").ToString();
 
-                ActionName = new TextObject("{=!}Create Group").ToString();
+                ActionName = new TextObject("{=bLwFU6mw}Create Group").ToString();
                 IsActionEnabled = BannerKingsConfig.Instance.InterestGroupsModel.CanHeroCreateAGroup(Hero.MainHero, KingdomDiplomacy);
             }
             else
@@ -94,39 +94,39 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms.Groups
                 if (Group.Members.Contains(Hero.MainHero))
                 {
                     IsActionEnabled = Group.CanHeroLeave(Hero.MainHero, KingdomDiplomacy);
-                    ActionName = new TextObject("{=!}Leave Group").ToString();
-                    ActionHint = new HintViewModel(new TextObject("{=!}Leave Group"));
+                    ActionName = new TextObject("Leave Group").ToString();
+                    ActionHint = new HintViewModel(new TextObject("Leave Group"));
                 }
                 else
                 {
                     IsActionEnabled = BannerKingsConfig.Instance.InterestGroupsModel.CanHeroJoinARadicalGroup(Hero.MainHero, KingdomDiplomacy);
-                    ActionName = new TextObject("{=!}Join Group").ToString();
+                    ActionName = new TextObject("Join Group").ToString();
                 }
 
-                Headers.Add(new StringPairItemVM(new TextObject("{=!}Radicalism").ToString(),
+                Headers.Add(new StringPairItemVM(new TextObject("{=znEakOmv}Radicalism").ToString(),
                 new TextObject("{=8YCJrv0F}{NUMBER} / {CAPACITY}")
                 .SetTextVariable("NUMBER", FormatValue(RadicalGroup.Radicalism))
                 .SetTextVariable("CAPACITY", FormatValue(Group.CurrentDemand.MinimumGroupInfluence))
                 .ToString(),
-                new BasicTooltipViewModel(() => new TextObject("{=!}Radicalism indicates the group's readiness. The minimum radicalism required to make an ultimatum is determined by the type of demand being made. Radicalism grows while the group represents 50% or more of the military force within the realm, and goes down otherwise. A group is dissolved once radicalism reaches 0%.").ToString())));
+                new BasicTooltipViewModel(() => new TextObject("{=znEakOmv}Radicalism indicates the group's readiness. The minimum radicalism required to make an ultimatum is determined by the type of demand being made. Radicalism grows while the group represents 50% or more of the military force within the realm, and goes down otherwise. A group is dissolved once radicalism reaches 0%.").ToString())));
 
-                Headers.Add(new StringPairItemVM(new TextObject("{=!}Demand").ToString(),
+                Headers.Add(new StringPairItemVM(new TextObject("{=ZgRQ1v2d}Demand").ToString(),
                 Group.CurrentDemand.Name.ToString(),
                 new BasicTooltipViewModel(() => Group.CurrentDemand.Description.ToString())));
 
-                Headers.Add(new StringPairItemVM(new TextObject("{=!}Strength").ToString(),
+                Headers.Add(new StringPairItemVM(new TextObject("{=9G5uYwk6}Strength").ToString(),
                 FormatValue(RadicalGroup.PowerProportion),
-                new BasicTooltipViewModel(() => new TextObject("{=!}The military strength of the group's participants, in comparison to all other non-participants of the realm. 100% strength would mean that both sides have equal strength.").ToString())));
+                new BasicTooltipViewModel(() => new TextObject("{=iaCoQ8Px}The military strength of the group's participants, in comparison to all other non-participants of the realm. 100% strength would mean that both sides have equal strength.").ToString())));
             }
 
-            DemandName = new TextObject("{=!}Make Ultimatum").ToString();
+            DemandName = new TextObject("{=30S3yEVo}Make Ultimatum").ToString();
             var canPush = Group.CanPushDemand(Group.CurrentDemand, RadicalGroup.Radicalism);
             IsDemandEnabled = canPush.Item1;
             DemandHint = new HintViewModel(
-                new TextObject("{=!}Make an ultimatum to your ruler demanding they accept your terms. If rejected, you and your group peers will be denounced as enemies of the realm, and a civil war will begin."));
+                new TextObject("{=8CtOagZE}Make an ultimatum to your ruler demanding they accept your terms. If rejected, you and your group peers will be denounced as enemies of the realm, and a civil war will begin."));
 
             IsInviteEnabled = Group.Leader == Hero.MainHero;
-            InviteHint = new HintViewModel(new TextObject("{=!}Invite other members to your group. Only the group's leader can invite other members, at the expense of their influence. Members will be avaiable or not to be invited according to their willingness to participate in the group. Willing lords and ladies may also occasionally join the group on their own volition, without any costs to the leader."));
+            InviteHint = new HintViewModel(new TextObject("{=vmbdT2Wf}Invite other members to your group. Only the group's leader can invite other members, at the expense of their influence. Members will be avaiable or not to be invited according to their willingness to participate in the group. Willing lords and ladies may also occasionally join the group on their own volition, without any costs to the leader."));
         }
 
         [DataSourceMethod]
@@ -144,19 +144,19 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms.Groups
                             BKExplainedNumber willing = BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroJoinChance(hero, Group, KingdomDiplomacy, true);
                             float influence = BannerKingsConfig.Instance.InterestGroupsModel.InviteToGroupInfluenceCost(Group, hero, KingdomDiplomacy).ResultNumber;
                             bool possible = true;
-                            TextObject hint = new TextObject("{=!}{HERO} leads the {CLAN}, a family of {PEERAGE}.{newline}Fiefs: {FIEFS}{newline}Estates: {ESTATES}{newline}{newline}{REASON}{newline}{newline}Willingness: {RESULT}{newline}-----{newline}{EXPLANATION}")
+                            TextObject hint = new TextObject("{=GFAEtBRb}{HERO} leads the {CLAN}, a family of {PEERAGE}.{newline}Fiefs: {FIEFS}{newline}Estates: {ESTATES}{newline}{newline}{REASON}{newline}{newline}Willingness: {RESULT}{newline}-----{newline}{EXPLANATION}")
                                 .SetTextVariable("HERO", hero.Name)
                                 .SetTextVariable("CLAN", hero.Clan.Name)
                                 .SetTextVariable("FIEFS", hero.Clan.Fiefs.Count)
                                 .SetTextVariable("PEERAGE", BannerKingsConfig.Instance.CourtManager.GetCouncil(hero.Clan).Peerage.Name)
                                 .SetTextVariable("ESTATES", BannerKingsConfig.Instance.PopulationManager.GetEstates(hero).Count)
-                                .SetTextVariable("REASON", new TextObject("{=!}This person is willing to back your radical group."))
+                                .SetTextVariable("REASON", new TextObject("{=F2N7WBbz}This person is willing to back your radical group."))
                                 .SetTextVariable("RESULT", FormatValue(willing.ResultNumber))
                                 .SetTextVariable("EXPLANATION", willing.GetFormattedPercentage());
                             if (willing.ResultNumber < 0f)
                             {
                                 possible = false;
-                                hint = hint.SetTextVariable("REASON", new TextObject("{=!}This person is not willing to back your radical group."));
+                                hint = hint.SetTextVariable("REASON", new TextObject("{=RdWAc9p5}This person is not willing to back your radical group."));
                             }
 
                             if (Clan.PlayerClan.Influence < influence)
@@ -178,8 +178,8 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms.Groups
                     }
                 }
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                    new TextObject("{=!}Invite Members").ToString(),
-                    new TextObject("{=!}Invite other members to your group. Only the group's leader can invite other members, at the expense of their influence. Members will be avaiable or not to be invited according to their willingness to participate in the group. Willing lords and ladies may also occasionally join the group on their own volition, without any costs to the leader.").ToString(),
+                    new TextObject("{=2xWSvbVc}Invite Members").ToString(),
+                    new TextObject("{=vmbdT2Wf}Invite other members to your group. Only the group's leader can invite other members, at the expense of their influence. Members will be avaiable or not to be invited according to their willingness to participate in the group. Willing lords and ladies may also occasionally join the group on their own volition, without any costs to the leader.").ToString(),
                     list,
                     true,
                     1,
@@ -204,8 +204,8 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms.Groups
             if (IsEmpty)
             {
                 InformationManager.ShowInquiry(new InquiryData(
-                    new TextObject("{=!}Create Group").ToString(),
-                    new TextObject("{=!}Push for a demand as a radical {GROUP} group. Once created, you can not abandon the group without suffering consequences. Other members will join based on how they like you, the demand and their perception of the ruler.{newline}{newline}A radical group slowly gathers Radicalism, so long their combined forces are equal or greater to 50% of the loyalist forces. The group  can push an ultimatum to the ruler once Radicalism reaches the minimum defined threshold set by the demand type.")
+                    new TextObject("{=bLwFU6mw}Create Group").ToString(),
+                    new TextObject("{=vRvVDXgC}Push for a demand as a radical {GROUP} group. Once created, you can not abandon the group without suffering consequences. Other members will join based on how they like you, the demand and their perception of the ruler.{newline}{newline}A radical group slowly gathers Radicalism, so long their combined forces are equal or greater to 50% of the loyalist forces. The group  can push an ultimatum to the ruler once Radicalism reaches the minimum defined threshold set by the demand type.")
                     .SetTextVariable("GROUP", GroupName)
                     .ToString(),
                     true,
@@ -272,8 +272,8 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms.Groups
             float chance = accept / total;
 
             InformationManager.ShowInquiry(new InquiryData(
-                    new TextObject("{=!}Make Ultimatum").ToString(),
-                    new TextObject("{=!}Make an ultimatum to your ruler demanding they accept your terms. If rejected, you and your group peers will be denounced as enemies of the realm, and a civil war will begin.{newline}{newline}{RULER} is {CHANCE} likely to conceive to this demand.{newline}{newline}Loyalist strength: {LOYALIST_STRENGTH}{newline}Rebel strength: {REBEL_STRENGTH}")
+                    new TextObject("{=30S3yEVo}Make Ultimatum").ToString(),
+                    new TextObject("{=8CtOagZE}Make an ultimatum to your ruler demanding they accept your terms. If rejected, you and your group peers will be denounced as enemies of the realm, and a civil war will begin.{newline}{newline}{RULER} is {CHANCE} likely to conceive to this demand.{newline}{newline}Loyalist strength: {LOYALIST_STRENGTH}{newline}Rebel strength: {REBEL_STRENGTH}")
                     .SetTextVariable("LOYALIST_STRENGTH", Group.KingdomDiplomacy.Kingdom.TotalStrength - rebelStrength)
                     .SetTextVariable("REBEL_STRENGTH", rebelStrength)
                     .SetTextVariable("RULER", ruler.Name)

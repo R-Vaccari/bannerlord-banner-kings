@@ -397,7 +397,7 @@ namespace BannerKings.Models.BKModels
             if (requester.Clan != null && requester.Clan.IsUnderMercenaryService)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Mercenaries can not fulfill council roles.");
+                action.Reason = new TextObject("{=0k2rUZbZ}Mercenaries can not fulfill council roles.");
                 return action;
             }
 
