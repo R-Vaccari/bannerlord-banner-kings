@@ -108,7 +108,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Eastern
 
         public override TextObject GetRankTitle(int rank) => new TextObject("{=nXDrh2c5}Kam");
 
-        public override bool IsCultureNaturalFaith(CultureObject culture) => culture.StringId == "khuzait";
+        public override bool IsCultureNaturalFaith(CultureObject culture) => culture.StringId == "khuzait" || culture.StringId == "iltanlar";
 
         public override bool IsHeroNaturalFaith(Hero hero) => IsCultureNaturalFaith(hero.Culture);
 

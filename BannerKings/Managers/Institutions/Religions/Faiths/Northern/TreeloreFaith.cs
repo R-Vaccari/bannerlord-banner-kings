@@ -28,6 +28,16 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Northern
                 return true;
             }
 
+            if (culture.StringId == "lokti")
+            {
+                return true;
+            }
+
+            if (culture.StringId == "sturgia")
+            {
+                return true;
+            }
+
             return false;
         }
         public override bool IsHeroNaturalFaith(Hero hero) => IsCultureNaturalFaith(hero.Culture);
