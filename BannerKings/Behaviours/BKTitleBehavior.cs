@@ -348,14 +348,14 @@ namespace BannerKings.Behaviours
                     if (BannerKingsConfig.Instance.TitleManager.HasSuzerain(title))
                     {
                         var suzerain = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(title);
-                        if (suzerain.deJure.IsAlive && !clan.Heroes.Contains(suzerain.deJure))
+                        if (suzerain.deJure != null && suzerain.deJure.IsAlive && !clan.Heroes.Contains(suzerain.deJure))
                         {
                             BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, suzerain.deJure, title);
                             continue;
                         }
                     }
 
-                    if (title.Sovereign != null)
+                    if (title.Sovereign != null && title.Sovereign.deJure != null)
                     {
                         if (title.Sovereign.deJure != title.deJure && title.Sovereign.deJure.IsAlive)
                         {
