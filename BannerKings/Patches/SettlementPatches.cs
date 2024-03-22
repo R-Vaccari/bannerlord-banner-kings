@@ -106,8 +106,7 @@ namespace BannerKings.Patches
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(__instance.Settlement);
                 if (data == null) return true;
 
-                float total = data.TotalPop;
-                float result = total / 3.5f;
+                float result = data.TotalPop * 2f;
 
                 if (__instance.IsCastle) result += TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementFoodModel.CastleFoodStockUpperLimitBonus;
                 else result += TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementFoodModel.FoodStocksUpperLimit;

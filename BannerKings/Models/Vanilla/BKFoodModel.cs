@@ -14,10 +14,10 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKFoodModel : IFoodModel
     {
-        public override float NobleFood => -0.1f;
-        public override float CraftsmanFood => -0.042f;
-        public override float SerfFood => -0.022f;
-        public override float TenantFood => -0.032f;
+        public override float NobleFood => -0.075f;
+        public override float CraftsmanFood => -0.040f;
+        public override float SerfFood => -0.020f;
+        public override float TenantFood => -0.030f;
         public override float SlaveFood => -0.0015f;
         public override int FoodStocksUpperLimit => 500;
         public override int NumberOfProsperityToEatOneFood => 40;
@@ -54,10 +54,10 @@ namespace BannerKings.Models.Vanilla
             switch (season)
             {
                 case 3f:
-                    result.Add(-0.5f * foodProduction, new TextObject("{=nwqUFaU8}Winter"));
+                    result.Add(-0.6f * foodProduction, new TextObject("{=nwqUFaU8}Winter"));
                     break;
                 case 1f:
-                    result.Add(0.5f * foodProduction, new TextObject("{=f7vOVQb7}Summer"));
+                    result.Add(1f * foodProduction, new TextObject("{=f7vOVQb7}Summer"));
                     break;
             }
 
