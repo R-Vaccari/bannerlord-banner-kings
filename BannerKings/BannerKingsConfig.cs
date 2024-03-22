@@ -24,6 +24,7 @@ using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Recruits;
 using BannerKings.Managers.Shipping;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
@@ -169,6 +170,7 @@ namespace BannerKings
             DefaultContractAspects.Instance.Initialize();
             DefaultShippingLanes.Instance.Initialize();
             DefaultMarketGroups.Instance.Initialize();
+            DefaultRecruitSpawns.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();
