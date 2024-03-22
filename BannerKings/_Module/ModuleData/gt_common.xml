@@ -102,6 +102,11 @@
 	<string id="str_item_category.marble" text="{=bk_marble}Marble{@Plural}blocks of marble{\@}" />
 	<string id="str_item_category.limestone" text="{=bk_limestone}Limestone{@Plural}blocks of limestone{\@}" />
 	<string id="str_item_category.gold" text="{=bk_gold}Gold{@Plural}loads of gold{\@}" />
+	<string id="str_item_category.Eggs" text="{=bk_egg}Eggs{@Plural}crates of eggs{\@}" />
+	<string id="str_item_category.Spice" text="{=1jqxlEkT}Spice{@Plural}sacks of spice{\@}" />
+	<string id="str_item_category.Papyrus" text="{=fowoOOL4}Papyrus{@Plural}rolls of papyrus{\@}" />
+	<string id="str_item_category.Ink" text="{=H11qZfBw}Ink{@Plural}jars of ink{\@}" />
+	<string id="str_item_category.Dyes" text="{=bk_dyes}Dyes{@Plural}jars of dyes{\@}" /> 
 
 	<string id="str_bk_placeholder" text="{=gaJDVkvHA}Placeholder" />
 	<string id="str_crafting_difficulty" text="{=LuF75ia3}Crafting Difficulty" />
@@ -293,34 +298,6 @@
 	<string id="str_pop_class_craftsmen" text="{=pop_class_craftsmen}Craftsmen" />
 	<string id="str_pop_class_serfs" text="{=pop_class_serfs}Serfs" />
 	<string id="str_pop_class_slaves" text="{=pop_class_slaves}Slaves" />
-
-	<string id="str_pop_class_serfs_sturgia" text="{=pop_class_serfs_sturgia}Lowmen" />
-	<string id="str_pop_class_serfs_empire" text="{=pop_class_serfs_empire}Coloni" />
-	<string id="str_pop_class_serfs_aserai" text="{=pop_class_serfs_aserai}Commoners" />
-	<string id="str_pop_class_serfs_battania" text="{=pop_class_serfs_battania}Freemen" />
-	<string id="str_pop_class_serfs_khuzait" text="{=pop_class_serfs_khuzait}Nomads" />
-	<string id="str_pop_class_serfs_vlandia" text="{=pop_class_serfs_vlandia}Serfs" />
-
-	<string id="str_pop_class_slaves_sturgia" text="{=pop_class_slaves_sturgia}Thralls" />
-	<string id="str_pop_class_slaves_aserai" text="{=pop_class_slaves_aserai}Mameluke" />
-	<string id="str_pop_class_slaves_vlandia" text="{=pop_class_slaves_vlandia}Slaves" />
-	<string id="str_pop_class_slaves_battania" text="{=pop_class_slaves_battania}Slaves" />
-	<string id="str_pop_class_slaves_empire" text="{=pop_class_slaves_empire}Sclavi" />
-	<string id="str_pop_class_slaves_khuzait" text="{=pop_class_slaves_khuzait}Slaves" />
-
-	<string id="str_pop_class_craftsmen_battania" text="{=pop_class_craftsmen_battania}Artisans" />
-	<string id="str_pop_class_craftsmen_khuzait" text="{=pop_class_craftsmen_khuzait}Artisans" />
-	<string id="str_pop_class_craftsmen_vlandia" text="{=pop_class_craftsmen_vlandia}Craftsmen" />
-	<string id="str_pop_class_craftsmen_empire" text="{=pop_class_craftsmen_empire}Cives" />
-	<string id="str_pop_class_craftsmen_sturgia" text="{=pop_class_craftsmen_sturgia}Craftsmen" />
-	<string id="str_pop_class_craftsmen_aserai" text="{=pop_class_craftsmen_aserai}Craftsmen" />
-
-	<string id="str_pop_class_nobles_empire" text="{=pop_class_nobles_empire}Nobiles" />
-	<string id="str_pop_class_nobles_sturgia" text="{=}pop_class_nobles_sturgiaKnyaz" />
-	<string id="str_pop_class_nobles_vlandia" text="{pop_class_nobles_vlandia=}Ealdormen" />
-	<string id="str_pop_class_nobles_battania" text="{=pop_class_nobles_battania}Nobles" />
-	<string id="str_pop_class_nobles_aserai" text="{=pop_class_nobles_aserai}Nobles" />
-	<string id="str_pop_class_nobles_khuzait" text="{=pop_class_nobles_khuzait}Nobles" />
 
 	<string id="str_feudalism_contract_header" text="{=feudalism_contract_header}Enfoeffement Contract for {0}" />
 	<string id="str_feudalism_contract_paragraph"
