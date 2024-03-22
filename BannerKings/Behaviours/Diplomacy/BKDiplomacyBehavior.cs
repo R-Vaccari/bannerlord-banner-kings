@@ -35,6 +35,18 @@ namespace BannerKings.Behaviours.Diplomacy
                 {
                     war.AddAlly(attacker, ally);
                 }
+                else
+                {
+                    if (attacker == Hero.MainHero.MapFaction || ally == Hero.MainHero.MapFaction)
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage(
+                        new TextObject("{=!}The {ALLY} has refused to help the {DEFENDER} in their war effort!")
+                        .SetTextVariable("ALLY", ally.Name)
+                        .SetTextVariable("DEFENDER", defender.Name)
+                        .ToString(),
+                        Color.FromUint(Utils.TextHelper.COLOR_LIGHT_RED)));
+                    }
+                }
             }
         }
 
@@ -50,6 +62,17 @@ namespace BannerKings.Behaviours.Diplomacy
 
             return wars.FirstOrDefault(x => (x.Attacker == faction1 || x.Defender == faction1) &&
             (x.Attacker == faction2 || x.Defender == faction2));
+        }
+
+        public War GetAllyWar(IFaction defender, IFaction attacker, IFaction ally)
+        {
+            if (wars == null)
+            {
+                wars = new List<War>();
+                return null;
+            }
+
+            return wars.FirstOrDefault(x => x.Defender == defender && x.Attacker == attacker && x.DefenderAllies.Contains(ally));
         }
 
         public CasusBelli GetWarJustification(IFaction faction1, IFaction faction2)

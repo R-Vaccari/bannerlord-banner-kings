@@ -6,6 +6,8 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Diplomacy.Wars
@@ -96,6 +98,15 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 if (DefenderAllies == null) DefenderAllies = new List<IFaction>();
                 DefenderAllies.Add(faction);
                 DeclareWarAction.ApplyByDefault(enemy, faction);
+                if (faction == Hero.MainHero.MapFaction || Defender == Hero.MainHero.MapFaction)
+                {
+                    InformationManager.DisplayMessage(new InformationMessage(
+                        new TextObject("{=!}The {ALLY} has joined the {DEFENDER} in their war effort!")
+                        .SetTextVariable("ALLY", faction.Name)
+                        .SetTextVariable("DEFENDER", Defender.Name)
+                        .ToString(),
+                        Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
+                }
             }
         }
 
