@@ -1,6 +1,7 @@
 using System.Linq;
 using BannerKings.Campaign.Skills;
 using BannerKings.Managers.Buildings;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
@@ -272,7 +273,17 @@ namespace BannerKings.Models.BKModels
         {
             if (title.Fief != null)
             {
-                return GetSettlementDemesneWight(title.Fief);
+                float result = GetSettlementDemesneWight(title.Fief);
+                Settlement settlement = title.Fief;
+                if (settlement.IsVillage) result *= 10f;
+                else if (settlement.Town != null)
+                {
+                    CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(title.deJure.Clan);
+                    if (data.Location == settlement.Town) return 0f;
+                }
+
+                if (settlement.Culture != title.deJure.Culture) result *= 2f;
+                return result;
             }
 
             return GetUnlandedDemesneWight(title.TitleType);
