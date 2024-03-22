@@ -3,6 +3,9 @@ using System.Linq;
 using System.Xml;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
+using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Managers.Recruits
@@ -51,6 +54,10 @@ namespace BannerKings.Managers.Recruits
 
                 if (culture != spawn.Culture) continue;
 
+                if (settlement.IsVillage && !spawn.SpawnVillages) continue;
+                if (settlement.IsCastle && !spawn.SpawnCastles) continue;
+                if (settlement.IsTown && !spawn.SpawnTowns) continue;
+
                 if (spawn.Kingdom != null && settlement.MapFaction != spawn.Kingdom)
                 {
                     continue;
@@ -69,7 +76,7 @@ namespace BannerKings.Managers.Recruits
 
         public override void Initialize()
         {
-            if (BannerKingsConfig.Instance.RecruitsXmlPath != null)
+            if (BannerKingsConfig.Instance.RecruitsXmlPath != null && XmlSpawns.IsEmpty())
             {
                 XmlDocument doc = Utils.Helpers.CreateDocumentFromXmlFile(BannerKingsConfig.Instance.RecruitsXmlPath);
                 XmlSpawns = new List<RecruitSpawn>(doc.ChildNodes.Count);
@@ -89,8 +96,22 @@ namespace BannerKings.Managers.Recruits
                     float tenants = 0f;
                     float craftsmen = 0f;
                     float nobles = 0f;
+                    bool villages = true;
+                    bool castles = true;
+                    bool towns = true;
 
                     character = node.Attributes["character"].Value;
+                    CharacterObject troop = GetTroop(character);
+                    if (troop == null)
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage(
+                            new TextObject("{=!}Invalid character {CHAR} from recruits path {PATH}")
+                            .SetTextVariable("CHAR", character)
+                            .SetTextVariable("PATH", BannerKingsConfig.Instance.RecruitsXmlPath).ToString(),
+                            Color.FromUint(Utils.TextHelper.COLOR_LIGHT_RED)));
+                        continue;
+                    }
+
                     if (node.Attributes["kingdom"] != null) kingdom = node.Attributes["kingdom"].Value;
                     if (node.Attributes["culture"] != null) culture = node.Attributes["culture"].Value;
                     if (node.Attributes["slaves"] != null) slaves = float.Parse(node.Attributes["slaves"].Value);
@@ -98,6 +119,9 @@ namespace BannerKings.Managers.Recruits
                     if (node.Attributes["tenants"] != null) tenants = float.Parse(node.Attributes["tenants"].Value);
                     if (node.Attributes["craftsmen"] != null) craftsmen = float.Parse(node.Attributes["craftsmen"].Value);
                     if (node.Attributes["nobles"] != null) nobles = float.Parse(node.Attributes["nobles"].Value);
+                    if (node.Attributes["spawnVillages"] != null) villages = bool.Parse(node.Attributes["spawnVillages"].Value);
+                    if (node.Attributes["spawnCastles"] != null) castles = bool.Parse(node.Attributes["spawnCastles"].Value);
+                    if (node.Attributes["spawnTowns"] != null) towns = bool.Parse(node.Attributes["spawnTowns"].Value);
 
                     RecruitSpawn spawn = new RecruitSpawn();
                     spawn.Initialize(GetTroop(character),
@@ -110,7 +134,10 @@ namespace BannerKings.Managers.Recruits
                             { PopType.Craftsmen, craftsmen },
                             { PopType.Nobles, nobles }
                         },
-                        Kingdom.All.FirstOrDefault(x => x.StringId == "kingdom"));
+                        Kingdom.All.FirstOrDefault(x => x.StringId == "kingdom"),
+                        villages,
+                        towns,
+                        castles);
                     foreach (string fief in fiefs) spawn.AddFiefString(fief);
                     XmlSpawns.Add(spawn);
                 }

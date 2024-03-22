@@ -20,12 +20,18 @@ namespace BannerKings.Managers.Recruits
         public void Initialize(CharacterObject troop, 
             CultureObject culture,
             Dictionary<PopType, float> chances,
-            Kingdom kingdom = null)
+            Kingdom kingdom = null,
+            bool spawnVillages = true,
+            bool spawnTowns = true,
+            bool spawnCastles = true)
         {
             Troop = troop;
             Chances = chances;
             Culture = culture;
             Kingdom = kingdom;
+            SpawnVillages = spawnVillages;
+            SpawnCastles = spawnCastles;
+            SpawnTowns = spawnTowns;
         }
 
         public void SetTroopAdvancement(Era era, string equipmentId)
@@ -38,6 +44,9 @@ namespace BannerKings.Managers.Recruits
             FiefStrings.Add(id);
         }
 
+        public bool SpawnVillages { get; private set; }
+        public bool SpawnCastles { get; private set; }
+        public bool SpawnTowns { get; private set; }
         public CharacterObject Troop { get; private set; }
         public HashSet<string> FiefStrings { get; set; }
         public Kingdom Kingdom { get; private set; }
