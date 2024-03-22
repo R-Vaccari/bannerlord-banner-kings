@@ -163,6 +163,10 @@ namespace BannerKings.Models.Vanilla
             Clan allyClan = ally.IsClan ? (ally as Clan) : (ally as Kingdom).RulingClan;
             Clan defenderClan = defender.IsClan ? (defender as Clan) : (defender as Kingdom).RulingClan;
 
+            if (ally.IsAtWarWith(attacker))
+                result.Add(-1000f, new TextObject("{=!}Already at war with {FACTION}")
+                    .SetTextVariable("FACTION", attacker.Name));
+
             float defenderRelation = allyClan.Leader.GetRelation(defenderClan.Leader);
             result.Add(defenderRelation * 0.2f, new TextObject("{=tB34b2ov}Relation"));
 
@@ -530,8 +534,23 @@ namespace BannerKings.Models.Vanilla
 
             float attackerFiefs = factionDeclaresWar.Fiefs.Count;
             float defenderFiefs = factionDeclaredWar.Fiefs.Count;
+
+            if (attackerFiefs == 1 || attackerFiefs == 2)
+            {
+                if (defenderFiefs > attackerFiefs)
+                {
+                    result.Add(-baseNumber, new TextObject("{=!}{FACTION} should defend its few fiefs rather than attacking")
+                        .SetTextVariable("FACTION", factionDeclaresWar.Name));
+                }
+            }
+
             float fiefsFactor = (attackerFiefs  / defenderFiefs) - 1f;
             result.Add(baseNumber * MathF.Clamp(fiefsFactor * 0.1f, -2f, 2f), new TextObject("{=MvV0HUdo}Difference in controlled fiefs"));
+
+            if (attackerFiefs >= defenderFiefs * 2f)
+                result.Add(-baseNumber, new TextObject("{=!}{FACTION1} controls more than twice the fiefs than {FACTION2}")
+                    .SetTextVariable("FACTION1", factionDeclaredWar.Name)
+                    .SetTextVariable("FACTION2", factionDeclaresWar.Name));
 
             War war = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetWar(factionDeclaredWar, factionDeclaresWar);
             if (war != null)
@@ -549,7 +568,25 @@ namespace BannerKings.Models.Vanilla
             {
                 if (stance.IsAtWar)
                 {
-                    result.Add(-50000f);
+                    bool isInAllyWar = false;
+                    foreach (IFaction ally in factionDeclaresWar.GetAllies())
+                    {
+                        War allyWar = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetAllyWar(ally, factionDeclaredWar, factionDeclaresWar);
+                        if (allyWar != null)
+                        {
+                            isInAllyWar = true;
+                            if (war.StartDate.ElapsedYearsUntilNow < 1f) result.Add(50000f, new TextObject("{=UaofTriA}Recently started war"));
+
+                            float score = MathF.Clamp(war.CalculateWarScore(war.Attacker, false).ResultNumber /
+                                war.TotalWarScore.ResultNumber, -1f, 1f) * 2f;
+                            result.Add(baseNumber * (war.Attacker == factionDeclaresWar ? -score : score));
+
+                            float fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, factionDeclaresWar).ResultNumber * 4f;
+                            result.Add(baseNumber * -fatigue, new TextObject("{=Nxrd7yym}Fatigue over this war"));
+                        }
+                    }
+                    
+                    if (!isInAllyWar) result.Add(-15000f);
                 }
                 else
                 {
