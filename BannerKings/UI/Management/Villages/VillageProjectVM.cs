@@ -130,7 +130,7 @@ namespace BannerKings.UI.Management.Villages
                 var building = Projects.CurrentDailyDefault?.Building;
                 if (localDevelopmentList is { Count: > 0 })
                 {
-                    foreach (VillageBuilding building2 in localDevelopmentList)
+                    foreach (Building building2 in localDevelopmentList)
                     {
                         if (!building2.BuildingType.IsDefaultProject)
                         {

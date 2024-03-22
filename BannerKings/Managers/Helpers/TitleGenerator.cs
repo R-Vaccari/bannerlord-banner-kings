@@ -10,15 +10,22 @@ using BannerKings.Managers.Skills;
 using BannerKings.UI.Cutscenes;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
-using System.IO;
 
 namespace BannerKings.Managers.Helpers
 {
-    internal static class TitleGenerator
+    public static class TitleGenerator
     {
-        internal static FeudalTitle CreateKingdom(Hero deJure, Kingdom faction, TitleType type, List<FeudalTitle> vassals, FeudalContract contract, string stringId = null)
+        internal static FeudalTitle CreateKingdom(Hero deJure, Kingdom faction, TitleType type, List<FeudalTitle> vassals, FeudalContract contract, string stringId = null, TextObject name = null, TextObject fullName = null)
         {
-            var title = new FeudalTitle(type, null, vassals, deJure, faction.Leader, faction.Name, contract, stringId);
+            var title = new FeudalTitle(type, 
+                null, 
+                vassals, 
+                deJure, 
+                faction != null ? faction.Leader : null, 
+                name != null ? name : faction.Name, 
+                contract, 
+                stringId, 
+                fullName);;
             BannerKingsConfig.Instance.TitleManager.ExecuteAddTitle(title);
             BannerKingsConfig.Instance.TitleManager.Kingdoms[title] = faction;
             return title;
@@ -35,7 +42,7 @@ namespace BannerKings.Managers.Helpers
             return title;
         }
 
-        internal static void FoundKingdom(TitleAction action)
+        public static void FoundKingdom(TitleAction action)
         {
             var title = CreateKingdom(action.ActionTaker, action.ActionTaker.Clan.Kingdom, TitleType.Kingdom, new List<FeudalTitle>(action.Vassals), action.Title.Contract);
             action.ActionTaker.Clan.AddRenown(action.Renown);
@@ -56,14 +63,13 @@ namespace BannerKings.Managers.Helpers
                 BannerKingsConfig.Instance.TitleModel.GetSkillReward(TitleType.Kingdom, action.Type));
         }
 
-        internal static void FoundEmpire(TitleAction action, TextObject factionName, string stringId = null, string contractType = null)
+        public static void FoundEmpire(TitleAction action, TextObject factionName, string stringId = null, string contractType = null)
         {
             var kingdom = action.ActionTaker.Clan.Kingdom;
             kingdom.ChangeKingdomName(factionName, factionName);
             var title = CreateEmpire(action.ActionTaker, kingdom, new List<FeudalTitle>(action.Vassals),
                 GenerateContract(contractType), stringId);
             action.ActionTaker.Clan.AddRenown(action.Renown);
-
 
             foreach (var vassal in action.Vassals)
             {
@@ -147,7 +153,7 @@ namespace BannerKings.Managers.Helpers
             return contract;
         }
 
-        internal static FeudalContract GenerateContract(string government, string succession, string inheritance, string genderLaw)
+        public static FeudalContract GenerateContract(string government, string succession, string inheritance, string genderLaw)
         {
             return new FeudalContract(
                     new Dictionary<FeudalDuties, float> { { FeudalDuties.Ransom, 0.20f }, { FeudalDuties.Auxilium, 0.4f } },
@@ -201,163 +207,185 @@ namespace BannerKings.Managers.Helpers
                 deJure, settlement.Village.Bound.Owner, settlement.Name, contract);
         }
 
-        private static XmlDocument CreateDocumentFromXmlFile(string xmlPath)
+        internal static void GenerateDuchy(XmlNode duchy, List<FeudalTitle> vassalsKingdom, FeudalContract contract)
         {
-            var xmlDocument = new XmlDocument();
-            var streamReader = new StreamReader(xmlPath);
-            var xml = streamReader.ReadToEnd();
-            xmlDocument.LoadXml(xml);
-            streamReader.Close();
-            return xmlDocument;
+            var vassalsDuchy = new List<FeudalTitle>();
+            var dukedomName = new TextObject(duchy.Attributes["name"].Value);
+            TextObject dukedomFullName = null;
+            XmlAttribute dukedomFullNameAttribute = duchy.Attributes["fullName"];
+            if (dukedomFullNameAttribute != null)
+            {
+                dukedomFullName = new TextObject(dukedomFullNameAttribute.Value);
+            }
+
+            string deJureName = null;
+            XmlAttribute deJureNameAttribute = duchy.Attributes["deJure"];
+            if (deJureNameAttribute != null) deJureName = deJureNameAttribute.Value;
+
+            Hero deJureDuchy = null;
+            if (deJureName != null) deJureDuchy = GetDeJure(deJureName, null);
+
+            if (contract == null)
+            {
+                string government = duchy.Attributes["government"].Value;
+                string succession = duchy.Attributes["succession"].Value;
+                string inheritance = duchy.Attributes["inheritance"].Value;
+                string genderLaw = duchy.Attributes["genderLaw"].Value;
+                contract = GenerateContract(government, succession, inheritance, genderLaw);
+            }
+
+            if (duchy.ChildNodes != null)
+            {
+                foreach (XmlNode county in duchy.ChildNodes)
+                {
+                    if (county.Name != "county")
+                    {
+                        return;
+                    }
+
+                    var settlementNameCounty = county.Attributes["settlement"].Value;
+                    var deJureNameCounty = county.Attributes["deJure"].Value;
+                    TextObject countyName = null;
+                    XmlAttribute countyFullNameAttribute = county.Attributes["fullName"];
+                    if (countyFullNameAttribute != null)
+                    {
+                        countyName = new TextObject(countyFullNameAttribute.Value);
+                    }
+
+                    var settlementCounty = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameCounty);
+                    if (settlementCounty == null)
+                    {
+                        settlementCounty = Settlement.All.FirstOrDefault(x => x.StringId.ToString() == settlementNameCounty);
+                    }
+
+                    var deJureCounty = GetDeJure(deJureNameCounty, settlementCounty);
+                    var vassalsCounty = new List<FeudalTitle>();
+
+                    if (county.ChildNodes != null)
+                    {
+                        foreach (XmlNode barony in county.ChildNodes)
+                        {
+                            if (barony.Name != "barony")
+                            {
+                                return;
+                            }
+
+                            TextObject baronyName = null;
+                            XmlAttribute barnyFullNameAttribute = barony.Attributes["fullName"];
+                            if (barnyFullNameAttribute != null)
+                            {
+                                baronyName = new TextObject(barnyFullNameAttribute.Value);
+                            }
+
+                            var settlementNameBarony = barony.Attributes["settlement"].Value;
+                            var deJureIdBarony = barony.Attributes["deJure"].Value;
+                            var settlementBarony = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameBarony);
+                            if (settlementBarony == null)
+                            {
+                                settlementBarony = Settlement.All.FirstOrDefault(x => x.StringId.ToString() == settlementNameBarony);
+                            }
+
+                            var deJureBarony = GetDeJure(deJureIdBarony, settlementBarony);
+                            if (settlementBarony != null)
+                            {
+                                vassalsCounty.Add(CreateLandedTitle(settlementBarony,
+                                    deJureBarony,
+                                    TitleType.Barony,
+                                    contract,
+                                    null,
+                                    baronyName));
+                            }
+                        }
+                    }
+
+                    if (settlementCounty != null)
+                    {
+                        vassalsDuchy.Add(CreateLandedTitle(settlementCounty,
+                            deJureCounty,
+                            TitleType.County,
+                            contract,
+                            vassalsCounty,
+                            countyName));
+                    }
+                }
+            }
+
+            var title = CreateUnlandedTitle(deJureDuchy, TitleType.Dukedom, vassalsDuchy, dukedomName, contract,
+                dukedomFullName);
+            if (vassalsKingdom != null) vassalsKingdom.Add(title);      
         }
 
-        internal static void InitializeTitles()
+        internal static void GenerateKingdom(XmlNode kingdom)
         {
-            XmlDocument doc = CreateDocumentFromXmlFile(BannerKingsConfig.Instance.TitlesGeneratorPath);
-            var titlesNode = doc.ChildNodes[1].ChildNodes[0];
-            var autoGenerate = bool.Parse(titlesNode.Attributes["autoGenerate"].Value);
+            var vassalsKingdom = new List<FeudalTitle>();
 
-            foreach (XmlNode kingdom in titlesNode)
+            string factionName = null;
+            XmlAttribute factionNameAttribute = kingdom.Attributes["faction"];
+            if (factionNameAttribute != null) factionName = factionNameAttribute.Value;
+
+            Kingdom faction = null;
+            if (factionName != null)
             {
-                if (kingdom.Name != "kingdom")
-                {
-                    return;
-                }
-
-                var vassalsKingdom = new List<FeudalTitle>();
-                var factionName = kingdom.Attributes["faction"].Value;
-                var deJureNameKingdom = kingdom.Attributes["deJure"].Value;
-                var deJureKingdom = GetDeJure(deJureNameKingdom, null);
-                var faction = Kingdom.All.FirstOrDefault(x => x.Name.ToString() == factionName);
+                faction = Kingdom.All.FirstOrDefault(x => x.Name.ToString() == factionName);
                 if (faction == null)
                 {
                     faction = Kingdom.All.FirstOrDefault(x => x.StringId.ToString() == factionName);
                 }
+            }
 
-                string government = kingdom.Attributes["government"].Value;
-                string succession = kingdom.Attributes["succession"].Value;
-                string inheritance = kingdom.Attributes["inheritance"].Value;
-                string genderLaw = kingdom.Attributes["genderLaw"].Value;
-                var contract = GenerateContract(government, succession, inheritance, genderLaw);
+            string deJureName = null;
+            XmlAttribute deJureNameAttribute = kingdom.Attributes["deJure"];
+            if (deJureNameAttribute != null) deJureName = deJureNameAttribute.Value;    
 
-                if (contract == null)
+            Hero deJureKingdom = null;
+            if (deJureName != null) deJureKingdom = GetDeJure(deJureName, null);
+
+            TextObject kingdomName = null;
+            XmlAttribute kingdomNameAttribute = kingdom.Attributes["name"];
+            if (kingdomNameAttribute != null) kingdomName = new TextObject(kingdomNameAttribute.Value);
+
+            TextObject kingdomFullName = null;
+            XmlAttribute kingdomFullNameAttribute = kingdom.Attributes["fullName"];
+            if (kingdomFullNameAttribute != null) kingdomFullName = new TextObject(kingdomFullNameAttribute.Value);   
+
+            string id = null;
+            XmlAttribute idAttribute = kingdom.Attributes["id"];
+            if (idAttribute != null) id = idAttribute.Value;  
+
+            string government = kingdom.Attributes["government"].Value;
+            string succession = kingdom.Attributes["succession"].Value;
+            string inheritance = kingdom.Attributes["inheritance"].Value;
+            string genderLaw = kingdom.Attributes["genderLaw"].Value;
+            var contract = GenerateContract(government, succession, inheritance, genderLaw);
+            if (contract == null) return;
+            
+
+            if (kingdom.ChildNodes != null)
+            {
+                foreach (XmlNode duchy in kingdom.ChildNodes)
                 {
-                    return;
+                    if (duchy.Name != "duchy") return;
+                    GenerateDuchy(duchy, vassalsKingdom, contract);
                 }
+            }
 
-                if (kingdom.ChildNodes != null)
-                {
-                    foreach (XmlNode duchy in kingdom.ChildNodes)
-                    {
-                        if (duchy.Name != "duchy")
-                        {
-                            return;
-                        }
+            var sovereign = CreateKingdom(deJureKingdom, faction, TitleType.Kingdom, vassalsKingdom, contract, id, kingdomName, kingdomFullName);
+            foreach (var duchy in vassalsKingdom)
+            {
+                duchy.SetSovereign(sovereign);
+            }
+        }
 
-                        var vassalsDuchy = new List<FeudalTitle>();
-                        var dukedomName = new TextObject(duchy.Attributes["name"].Value);
-                        TextObject dukedomFullName = null;
-                        XmlAttribute dukedomFullNameAttribute = duchy.Attributes["fullName"];
-                        if (dukedomFullNameAttribute != null)
-                        {
-                            dukedomFullName = new TextObject(dukedomFullNameAttribute.Value);
-                        }
+        internal static void InitializeTitles()
+        {
+            XmlDocument doc = Utils.Helpers.CreateDocumentFromXmlFile(BannerKingsConfig.Instance.TitlesGeneratorPath);
+            var titlesNode = doc.ChildNodes[1].ChildNodes[0];
+            var autoGenerate = bool.Parse(titlesNode.Attributes["autoGenerate"].Value);
 
-                        var deJureNameDuchy = duchy.Attributes["deJure"].Value;
-                        var deJureDuchy = GetDeJure(deJureNameDuchy, null);
-
-                        if (duchy.ChildNodes != null)
-                        {
-                            foreach (XmlNode county in duchy.ChildNodes)
-                            {
-                                if (county.Name != "county")
-                                {
-                                    return;
-                                }
-
-                                var settlementNameCounty = county.Attributes["settlement"].Value;
-                                var deJureNameCounty = county.Attributes["deJure"].Value;
-                                TextObject countyName = null;
-                                XmlAttribute countyFullNameAttribute = county.Attributes["fullName"];
-                                if (countyFullNameAttribute != null)
-                                {
-                                    countyName = new TextObject(countyFullNameAttribute.Value);
-                                }
-
-                                var settlementCounty = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameCounty);
-                                if (settlementCounty == null)
-                                {
-                                    settlementCounty = Settlement.All.FirstOrDefault(x => x.StringId.ToString() == settlementNameCounty);
-                                }
-
-                                var deJureCounty = GetDeJure(deJureNameCounty, settlementCounty);
-                                var vassalsCounty = new List<FeudalTitle>();
-
-                                if (county.ChildNodes != null)
-                                {
-                                    foreach (XmlNode barony in county.ChildNodes)
-                                    {
-                                        if (barony.Name != "barony")
-                                        {
-                                            return;
-                                        }
-
-                                        TextObject baronyName = null;
-                                        XmlAttribute barnyFullNameAttribute = barony.Attributes["fullName"];
-                                        if (barnyFullNameAttribute != null)
-                                        {
-                                            baronyName = new TextObject(barnyFullNameAttribute.Value);
-                                        }
-
-                                        var settlementNameBarony = barony.Attributes["settlement"].Value;
-                                        var deJureIdBarony = barony.Attributes["deJure"].Value;
-                                        var settlementBarony = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameBarony);
-                                        if (settlementBarony == null)
-                                        {
-                                            settlementBarony = Settlement.All.FirstOrDefault(x => x.StringId.ToString() == settlementNameBarony);
-                                        }
-
-                                        var deJureBarony = GetDeJure(deJureIdBarony, settlementBarony);
-                                        if (settlementBarony != null)
-                                        {
-                                            vassalsCounty.Add(CreateLandedTitle(settlementBarony,
-                                                deJureBarony,
-                                                TitleType.Barony,
-                                                contract,
-                                                null,
-                                                baronyName));
-                                        }
-                                    }
-                                }
-
-                                if (settlementCounty != null)
-                                {
-                                    vassalsDuchy.Add(CreateLandedTitle(settlementCounty,
-                                        deJureCounty,
-                                        TitleType.County,
-                                        contract,
-                                        vassalsCounty,
-                                        countyName));
-                                }
-                            }
-                        }
-
-                        if (deJureDuchy != null && vassalsDuchy.Count > 0)
-                        {
-                            vassalsKingdom.Add(CreateUnlandedTitle(deJureDuchy, TitleType.Dukedom, vassalsDuchy, dukedomName, contract,
-                                dukedomFullName));
-                        }
-                    }
-                }
-
-                if (deJureKingdom != null && vassalsKingdom.Count > 0 && faction != null)
-                {
-                    var sovereign = CreateKingdom(deJureKingdom, faction, TitleType.Kingdom, vassalsKingdom, contract);
-                    foreach (var duchy in vassalsKingdom)
-                    {
-                        duchy.SetSovereign(sovereign);
-                    }
-                }
+            foreach (XmlNode node in titlesNode)
+            {
+                if (node.Name == "kingdom") GenerateKingdom(node);
+                if (node.Name == "duchy") GenerateDuchy(node, null, null);
             }
 
             if (autoGenerate)

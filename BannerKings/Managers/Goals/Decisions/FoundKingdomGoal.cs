@@ -1,21 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static System.Collections.Specialized.BitVector32;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
-    internal class FoundKingdomGoal : Goal
+    public class FoundKingdomGoal : Goal
     {
         public FoundKingdomGoal() : base("goal_found_kingdom", GoalCategory.Unique, GoalUpdateType.Hero)
         {
             var name = new TextObject("{=nbV21qZv}Found Kingdom");
-            var description = new TextObject("{=Df3Fdnuw}Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title.");
+            var description = new TextObject("{=XpFaiiny}Establish your own kingdom title. This new title will be bound to your Kingdom faction, and represent it in terms of Demesne laws, Succession and Inheritance laws, and all other types of laws attached to titles. Your faction must be one that is not already represented by a sovereign-level title (Kingdom or Empire titles).");
             Initialize(name, description);
         }
 
@@ -37,7 +35,9 @@ namespace BannerKings.Managers.Goals.Decisions
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
                 if (title != null)
                 {
-                    failedReasons.Add(new TextObject("{=eTMvobFw}Faction sovereign title already exists."));
+                    failedReasons.Add(new TextObject("{=TGyoYia6}The realm {REALM} is already represented by a sovereign title ({TITLE})")
+                        .SetTextVariable("REALM", Clan.PlayerClan.Kingdom.Name)
+                        .SetTextVariable("TITLE", title.FullName));
                 }
             }
             
@@ -90,23 +90,18 @@ namespace BannerKings.Managers.Goals.Decisions
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=CSRMOcCm}Founding Dukedoms").ToString(),
-                new TextObject("{=JgLZ27UL}Select up to 3 dukedoms that will compose your kingdom. The kingdom's contract will follow the first dukedom's contract. Dukedom titles from other clans in the faction may be included as well.")
+                new TextObject("{=AVzvekuX}Select a dukedom that will compose your kingdom. The kingdom's contract will follow this dukedom's contract in terms of Succession, Inheritance and so on. Future dukedoms may be assimilated into the kingdom by the process of De Jure Drift.")
                     .ToString(),
                 duchies,
                 true,
                 1,
-                3,
+                1,
                 GameTexts.FindText("str_done").ToString(),
                 string.Empty,
                 delegate(List<InquiryElement> list)
                 {
                     var firstDukedom = (FeudalTitle) list[0].Identifier;
-                    var vassals = (from element in list
-                        where (FeudalTitle) list[0].Identifier != firstDukedom
-                        select (FeudalTitle) element.Identifier).ToList();
-
                     action.SetTile(firstDukedom);
-                    action.SetVassals(vassals);
                     action.TakeAction(null);
                 }, 
                 null));

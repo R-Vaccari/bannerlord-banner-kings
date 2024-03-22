@@ -16,8 +16,6 @@ namespace BannerKings.Managers.Titles
 {
     public class FeudalTitle
     {
-        private FeudalTitle suzerainCache;
-
         public FeudalTitle(TitleType type, Settlement fief, List<FeudalTitle> vassals, Hero deJure, Hero deFacto, 
             TextObject name, FeudalContract contract, string stringId = null, TextObject fullName = null)
         {
@@ -33,8 +31,9 @@ namespace BannerKings.Managers.Titles
             }
             else
             {
+                CultureObject culture = deJure != null ? deJure.Culture : null;
                 FullName = new TextObject("{=wMius2i9}{TITLE} of {NAME}")
-                                .SetTextVariable("TITLE", Utils.TextHelper.GetTitlePrefix(type, deJure.Culture))
+                                .SetTextVariable("TITLE", Utils.TextHelper.GetTitlePrefix(type, culture))
                                 .SetTextVariable("NAME", name);
             }
 
@@ -66,6 +65,30 @@ namespace BannerKings.Managers.Titles
         [SaveableProperty(16)] public Dictionary<ContractDuty, CampaignTime> Duties { get; private set; }
         [SaveableProperty(17)] public bool Priority { get; internal set; }
 
+        public void PostInitialize()
+        {
+            Duties ??= new Dictionary<ContractDuty, CampaignTime>();
+            if (deJure != null) Contract.PostInitialize(deJure.Clan.Kingdom, deJure.Culture);
+
+            if (!CustomName)
+            {
+                CultureObject culture = Fief != null ? Fief.Culture : (deJure != null ? deJure.Culture : null);
+                FullName = new TextObject("{=wMius2i9}{TITLE} of {NAME}")
+                                .SetTextVariable("TITLE", Utils.TextHelper.GetTitlePrefix(TitleType, culture))
+                                .SetTextVariable("NAME", shortName);
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is FeudalTitle target)
+            {
+                return Fief != null ? Fief == target.Fief : FullName == target.FullName;
+            }
+
+            return base.Equals(obj);
+        }
+
         public void FulfillDuty(ContractDuty duty)
         {
             if (Duties.ContainsKey(duty))
@@ -86,19 +109,6 @@ namespace BannerKings.Managers.Titles
             }
 
             return CampaignTime.Zero;
-        }
-
-        public FeudalTitle Suzerain
-        {
-            get
-            {
-                if (suzerainCache == null)
-                {
-                    suzerainCache = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(this);
-                }
-
-                return suzerainCache;
-            }
         }
 
         public Dictionary<FeudalTitle, float> DeJureDrifts
@@ -139,67 +149,63 @@ namespace BannerKings.Managers.Titles
                     return Fief.Owner;
                 }
 
-                var contestors = new Dictionary<Hero, int>();
-                foreach (var vassal in Vassals.Select(title => title.DeFacto))
+                var contestors = GetDeFactoHolders();
+                if (contestors.Count > 0)
                 {
-                    if (contestors.ContainsKey(vassal))
+                    var highestCount = contestors.Values.Max();
+                    var highestCountHeroes = contestors.Keys.ToList().FindAll(x => contestors[x] == highestCount);
+                    if (highestCountHeroes.Contains(deJure))
                     {
-                        contestors[vassal] += 1;
+                        return deJure;
                     }
-                    else
+
+                    var selected = highestCountHeroes[0];
+                    if (highestCountHeroes.Count <= 1)
                     {
-                        contestors.Add(vassal, 1);
+                        return selected;
                     }
-                }
 
-                var deJureCount = contestors.ContainsKey(deJure) ? contestors[deJure] : 0;
-                var highestCount = contestors.Values.Max();
-                var highestCountHeroes = contestors.Keys.ToList().FindAll(x => contestors[x] == highestCount);
-                if (highestCountHeroes.Contains(deJure))
-                {
-                    return deJure;
-                }
+                    foreach (var competitor in highestCountHeroes.Where(competitor => 
+                    (competitor != selected && competitor.Clan.Tier > selected.Clan.Tier) || competitor.Clan.Influence > selected.Clan.Influence))
+                    {
+                        selected = competitor;
+                    }
 
-                var selected = highestCountHeroes[0];
-                if (highestCountHeroes.Count <= 1)
-                {
                     return selected;
                 }
+                else return deJure;
+            }
+        }
 
-                foreach (var competitor in highestCountHeroes.Where(competitor => (competitor != selected && competitor.Clan.Tier > selected.Clan.Tier) || competitor.Clan.Influence > selected.Clan.Influence))
+        public Dictionary<Hero, int> GetDeFactoHolders()
+        {
+            Dictionary<Hero, int> holders = new Dictionary<Hero, int>(10);
+            AddContestantsFromVassals(this, holders);
+            return holders;
+        }
+
+        private void AddContestantsFromVassals(FeudalTitle title, Dictionary<Hero, int> contestants)
+        {
+            if (title.Vassals != null && title.Vassals.Count > 0)
+            {
+                foreach (var vassal in title.Vassals)
                 {
-                    selected = competitor;
+                    Hero defacto = vassal.DeFacto;
+                    if (contestants.ContainsKey(defacto)) contestants[defacto] += 1;
+                    else contestants.Add(defacto, 1);
+                    var results = vassal.GetDeFactoHolders();
+                    foreach (var result in results)
+                    {
+                        if (contestants.ContainsKey(result.Key)) contestants[result.Key] += result.Value;
+                        else contestants.Add(result.Key, result.Value);
+                    }
                 }
-
-                return selected;
             }
         }
 
         public bool Active => deJure != null || deFacto != null;
 
         public bool IsSovereignLevel => (int) TitleType <= 1;
-
-        public void PostInitialize()
-        {
-            Duties ??= new Dictionary<ContractDuty, CampaignTime>();
-            Contract.PostInitialize(deJure.Clan.Kingdom, deJure.Culture);
-            if (!CustomName)
-            {
-                FullName = new TextObject("{=wMius2i9}{TITLE} of {NAME}")
-                                .SetTextVariable("TITLE", Utils.TextHelper.GetTitlePrefix(TitleType, deJure.Culture))
-                                .SetTextVariable("NAME", shortName);
-            }
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is FeudalTitle target)
-            {
-                return Fief != null ? Fief == target.Fief : FullName == target.FullName;
-            }
-
-            return base.Equals(obj);
-        }
 
         public void SetName(TextObject shortName)
         {
@@ -219,6 +225,20 @@ namespace BannerKings.Managers.Titles
                 {
                     pair.Key.AddSkillXp(BKSkills.Instance.Lordship, 3.5f);
                 }
+            }
+
+            foreach (var pair in toAdd)
+            {
+                AddClaim(pair.Key, pair.Value);
+            }
+        }
+
+        internal void FinishClaims()
+        {
+            var toAdd = new Dictionary<Hero, ClaimType>();
+            foreach (var pair in OngoingClaims)
+            {
+                toAdd.Add(pair.Key, ClaimType.Fabricated);
             }
 
             foreach (var pair in toAdd)
@@ -383,11 +403,8 @@ namespace BannerKings.Managers.Titles
 
         public void DriftTitle(FeudalTitle newSovereign, bool notify = true)
         {
-            if (TitleType > TitleType.Dukedom)
-            {
-                return;
-            }
-
+            if (TitleType < TitleType.Kingdom) return;
+            
             if (Sovereign != null && Sovereign.Vassals.Contains(this))
             {
                 Sovereign.Vassals.Remove(this);

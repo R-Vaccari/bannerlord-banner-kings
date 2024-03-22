@@ -2,7 +2,6 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -21,26 +20,30 @@ using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Recruits;
 using BannerKings.Managers.Titles.Governments;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKVolunteerModel : DefaultVolunteerModel
+    public class BKVolunteerModel : VolunteerModel
     {
         public override int MaximumIndexHeroCanRecruitFromHero(Hero buyerHero, Hero sellerHero, int useValueAsRelation = -101)
           => (int)Math.Floor(CalculateMaximumRecruitmentIndex(buyerHero, sellerHero, useValueAsRelation, false).ResultNumber);
 
         public ExplainedNumber CalculateMaximumRecruitmentIndex(Hero buyerHero, Hero sellerHero, int useValueAsRelation = -101, bool explanations = false)
         {
-            var result = new ExplainedNumber(0f, explanations);
+            var result = new ExplainedNumber(1f, explanations);
             result.LimitMin(0f);
             result.LimitMax(sellerHero.VolunteerTypes.Length);
 
             if (buyerHero != null)
             {
-                useValueAsRelation = sellerHero.GetRelation(buyerHero);
+                if (buyerHero.Clan != null && !buyerHero.IsClanLeader) useValueAsRelation = sellerHero.GetRelation(buyerHero.Clan.Leader);
+                else useValueAsRelation = sellerHero.GetRelation(buyerHero);
             }
 
-            result.Add(GetRelationImpact(useValueAsRelation), GameTexts.FindText("str_notable_relations"));
+            result.Add(GetRelationImpact(useValueAsRelation), 
+                new TextObject("{=aPEQXOTV}Relationship with {HERO}")
+                .SetTextVariable("HERO", sellerHero.Name));
 
             var settlement = sellerHero.CurrentSettlement;
             var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
@@ -49,26 +52,33 @@ namespace BannerKings.Models.Vanilla
                 return new ExplainedNumber(base.MaximumIndexHeroCanRecruitFromHero(buyerHero, sellerHero, useValueAsRelation));
             }
 
+            int halfRecruits = (int)(BannerKingsSettings.Instance.VolunteersLimit / 2f);
+            MBMath.Map(useValueAsRelation, -100, 100, -halfRecruits, halfRecruits);
+
             var contract = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement).Contract;
             if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingVassalage))
             {
-                AddVassalage(ref result, buyerHero, sellerHero);
+                AddVassalage(ref result, buyerHero, sellerHero, title);
             }
             else if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingHidage))
             {
-                AddHidage(ref result, buyerHero, sellerHero);
+                AddHidage(ref result, buyerHero, sellerHero, title);
             }
-            else
+            else if (result.ResultNumber >= 2f)
             {
-                int baseResult = base.MaximumIndexHeroCanRecruitFromHero(buyerHero, sellerHero, useValueAsRelation);
-                result.Add(baseResult * (BannerKingsSettings.Instance.VolunteersLimit / 6f) * 0.5f, DefaultDemesneLaws.Instance.DraftingFreeContracts.Name);
+                if (sellerHero.MapFaction != buyerHero.MapFaction) result.AddFactor(-0.25f, new TextObject("{=fWnWwmqn}Drafting Demesne Law ({LAW}) in {TITLE}")
+                        .SetTextVariable("LAW", DefaultDemesneLaws.Instance.DraftingFreeContracts.Name)
+                        .SetTextVariable("TITLE", title.FullName));
+                else result.Add(halfRecruits, new TextObject("{=fWnWwmqn}Drafting Demesne Law ({LAW}) in {TITLE}")
+                        .SetTextVariable("LAW", DefaultDemesneLaws.Instance.DraftingFreeContracts.Name)
+                        .SetTextVariable("TITLE", title.FullName));
             }
 
             AddPerks(ref result, buyerHero, sellerHero, useValueAsRelation);
             return result;
         }
 
-        private void AddHidage(ref ExplainedNumber result, Hero buyerHero, Hero sellerHero)
+        private void AddHidage(ref ExplainedNumber result, Hero buyerHero, Hero sellerHero, FeudalTitle title)
         {
             Settlement settlement = sellerHero.CurrentSettlement;
             float factor = 0f;
@@ -88,29 +98,31 @@ namespace BannerKings.Models.Vanilla
                     hides = sellerHero.Power / 150f;
                 }
 
-                factor = hides * 0.15f;
+                factor = -hides * 0.15f;
             }
             else if (settlement.IsVillage)
             {
                 factor = -1f;
             }
 
-            result.Add(BannerKingsSettings.Instance.VolunteersLimit * factor, DefaultDemesneLaws.Instance.DraftingVassalage.Name);
+            result.Add(factor, new TextObject("{=fWnWwmqn}Drafting Demesne Law ({LAW}) in {TITLE}")
+                    .SetTextVariable("LAW", DefaultDemesneLaws.Instance.DraftingHidage.Name)
+                    .SetTextVariable("TITLE", title.FullName));
         }
 
-        private void AddVassalage(ref ExplainedNumber result, Hero buyerHero, Hero sellerHero)
+        private void AddVassalage(ref ExplainedNumber result, Hero buyerHero, Hero sellerHero, FeudalTitle title)
         {
-            Settlement settlement = sellerHero.CurrentSettlement;
             float factor = 0f;
 
+            Settlement settlement = title.Fief;
             if (buyerHero.MapFaction == sellerHero.MapFaction)
             {
-                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
                 if (title.deJure == buyerHero)
                 {
                     factor = 0.8f;
                 }
-                else if (settlement.IsVillage ? settlement.Village.GetActualOwner() == buyerHero : settlement.Owner == buyerHero)
+                else if (settlement.IsVillage ? settlement.Village.GetActualOwner() == buyerHero :
+                    settlement.OwnerClan != null && settlement.Owner == buyerHero)
                 {
                     factor = 0.6f;
                 }
@@ -123,13 +135,17 @@ namespace BannerKings.Models.Vanilla
                 {
                     factor += 0.15f;
                 }
-            }
-            else if (settlement.IsVillage)
-            {
-                factor = -1f;
-            }
 
-            result.Add(BannerKingsSettings.Instance.VolunteersLimit * factor, DefaultDemesneLaws.Instance.DraftingVassalage.Name);
+                result.Add(BannerKingsSettings.Instance.VolunteersLimit * factor, new TextObject("{=fWnWwmqn}Drafting Demesne Law ({LAW}) in {TITLE}")
+                    .SetTextVariable("LAW", DefaultDemesneLaws.Instance.DraftingVassalage.Name)
+                    .SetTextVariable("TITLE", title.FullName));
+            }
+            else 
+            {
+                result.Add(-1f, new TextObject("{=fWnWwmqn}Drafting Demesne Law ({LAW}) in {TITLE}")
+                    .SetTextVariable("LAW", DefaultDemesneLaws.Instance.DraftingVassalage.Name)
+                    .SetTextVariable("TITLE", title.FullName));
+            }  
         }
 
         private void AddPerks(ref ExplainedNumber result, Hero buyerHero, Hero sellerHero, int useValueAsRelation = -101)
@@ -188,8 +204,8 @@ namespace BannerKings.Models.Vanilla
         private int GetRelationImpact(int relation)
         {
             int result;
-            float divided = relation / 50f;
-            result = (int)(BannerKingsSettings.Instance.VolunteersLimit * (divided * 0.25f));
+            float divided = relation / BannerKingsSettings.Instance.VolunteersLimit;
+            result = (int)divided;
 
             return result;
         }
@@ -290,10 +306,10 @@ namespace BannerKings.Models.Vanilla
 
         public override float GetDailyVolunteerProductionProbability(Hero hero, int index, Settlement settlement)
         {
-            return GetDraftEfficiency(hero, index, settlement).ResultNumber;
+            return GetDraftEfficiency(hero, settlement).ResultNumber;
         }
 
-        public ExplainedNumber GetDraftEfficiency(Hero hero, int index, Settlement settlement)
+        public override ExplainedNumber GetDraftEfficiency(Hero hero, Settlement settlement)
         {
             if (hero == null)
             {

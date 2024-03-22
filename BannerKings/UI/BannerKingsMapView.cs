@@ -13,7 +13,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.ScreenSystem;
 using TaleWorlds.TwoDimension;
-using ReligionVM = BannerKings.UI.Religion.ReligionVM;
+using ReligionVM = BannerKings.UI.VanillaTabs.Character.Religion.ReligionVM;
 
 namespace BannerKings.UI
 {
@@ -45,11 +45,14 @@ namespace BannerKings.UI
             //UIManager.Instance.BKScreen.OnFinalize();
             var tuple = GetVM(id);
             Layer = new GauntletLayer(500);
-            VM = tuple.Item1;
-            Layer.LoadMovie(tuple.Item2, tuple.Item1);
-            Layer.InputRestrictions.SetInputRestrictions(false);
-            MapScreen.Instance.AddLayer(Layer);
-            ScreenManager.TrySetFocus(Layer);
+            if (tuple.Item1 != null)
+            {
+                VM = tuple.Item1;
+                Layer.LoadMovie(tuple.Item2, tuple.Item1);
+                Layer.InputRestrictions.SetInputRestrictions(false);
+                MapScreen.Instance.AddLayer(Layer);
+                ScreenManager.TrySetFocus(Layer);
+            }
         }
 
         private (BannerKingsViewModel, string) GetVM(string id)
@@ -71,13 +74,28 @@ namespace BannerKings.UI
                 case "titles":
                 {
                     var title = BannerKingsConfig.Instance.TitleManager.GetTitle(Settlement.CurrentSettlement);
+                    var duchy = BannerKingsConfig.Instance.TitleManager.GetDuchy(title);
+                    var sovereign = title?.Sovereign;
+
                     if (title == null)
                     {
                         title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
                     }
 
-                    return (new DemesneHierarchyVM(title.Sovereign ?? title, Clan.PlayerClan.Kingdom),
-                        "TitlesWindow");
+                    if (sovereign != null)
+                    {
+                        return (new DemesneHierarchyVM(sovereign), "TitlesWindow");
+                    }
+                    else if (duchy != null)
+                    {
+                        return (new DemesneHierarchyVM(duchy), "TitlesWindow");
+                    }
+                    else if (title != null)
+                    {
+                        return (new DemesneHierarchyVM(title), "TitlesWindow");
+                    }
+
+                    return (null, "TitlesWindow");
                 }
                 case "cultures":
                     return (new CultureTabVM(), "CultureTabWindow");

@@ -194,16 +194,16 @@ namespace BannerKings.Behaviours.PartyNeeds
                 }
 
                 float alcohol = model.CalculateAlcoholNeed(this, false).ResultNumber * modifier;
-                AlcoholNeed = MathF.Clamp(AlcoholNeed + alcohol, 0f, size * 0.25f);
+                AlcoholNeed = MathF.Clamp(AlcoholNeed + alcohol, -size * 0.25f, size * 0.25f);
 
                 float wood = model.CalculateWoodNeed(this, false).ResultNumber * modifier;
-                WoodNeed = MathF.Clamp(WoodNeed + wood, 0f, size * 0.3f);
+                WoodNeed = MathF.Clamp(WoodNeed + wood, -size * 0.3f, size * 0.3f);
 
                 float tools = model.CalculateToolsNeed(this, false).ResultNumber * modifier;
-                ToolsNeed = MathF.Clamp(ToolsNeed + tools, 0f, size * 0.1f);
+                ToolsNeed = MathF.Clamp(ToolsNeed + tools, -size * 0.1f, size * 0.1f);
 
                 float cloth = model.CalculateClothNeed(this, false).ResultNumber * modifier;
-                ClothNeed = MathF.Clamp(ClothNeed + cloth, 0f, size * 0.3f);
+                ClothNeed = MathF.Clamp(ClothNeed + cloth, -size * 0.3f, size * 0.3f);
 
                 int maxRanged = 0;
                 int maxMounted = 0;
@@ -216,31 +216,33 @@ namespace BannerKings.Behaviours.PartyNeeds
                 }
 
                 float arrows = model.CalculateArrowsNeed(this, false).ResultNumber * modifier;
-                ArrowsNeed = MathF.Clamp(ArrowsNeed + arrows, 0f, size * (maxRanged / Party.MemberRoster.TotalManCount));
+                ArrowsNeed = MathF.Clamp(ArrowsNeed + arrows, -size, size * (maxRanged / Party.MemberRoster.TotalManCount));
 
                 float horses = model.CalculateHorsesNeed(this, false).ResultNumber * modifier;
-                HorsesNeed = MathF.Clamp(HorsesNeed + horses, 0f, size * (maxMounted / Party.MemberRoster.TotalManCount));
+                HorsesNeed = MathF.Clamp(HorsesNeed + horses, -size, size * (maxMounted / Party.MemberRoster.TotalManCount));
 
                 float weapons = model.CalculateWeaponsNeed(this, false).ResultNumber * modifier;
-                WeaponsNeed = MathF.Clamp(WeaponsNeed + weapons, 0f, size);
+                WeaponsNeed = MathF.Clamp(WeaponsNeed + weapons, -size, size);
 
                 float animal = model.CalculateAnimalProductsNeed(this, false).ResultNumber * modifier;
-                AnimalProductsNeed = MathF.Clamp(AnimalProductsNeed + animal, 0f, size * 0.25f);
+                AnimalProductsNeed = MathF.Clamp(AnimalProductsNeed + animal, -size * 0.25f, size * 0.25f);
 
                 float shields = model.CalculateShieldsNeed(this, false).ResultNumber * modifier;
-                ShieldsNeed = MathF.Clamp(ShieldsNeed + shields, 0f, size * (maxInfantry / Party.MemberRoster.TotalManCount));
+                ShieldsNeed = MathF.Clamp(ShieldsNeed + shields, 
+                    -size * (maxInfantry / Party.MemberRoster.TotalManCount), 
+                    size * (maxInfantry / Party.MemberRoster.TotalManCount));
             }
 
             BuyItems();
-            AlcoholNeed -= ConsumeItems(AlcoholNeed, alcoholCategories);
-            WoodNeed -= ConsumeItems(WoodNeed, woodCategories);
-            ToolsNeed -= ConsumeItems(ToolsNeed, toolsCategories);
-            ClothNeed -= ConsumeItems(ClothNeed, clothCategories);
-            ArrowsNeed -= ConsumeItems(ArrowsNeed, ammoCategories);
-            WeaponsNeed -= ConsumeItems(WeaponsNeed, weaponCategories);
-            HorsesNeed -= ConsumeItems(HorsesNeed, horseCategories);
-            AnimalProductsNeed -= ConsumeItems(AnimalProductsNeed, animalProductsCategories);
-            ShieldsNeed -= ConsumeItems(ShieldsNeed, shieldCategories);
+            AlcoholNeed -= ConsumeItems(AlcoholNeed * 2f, alcoholCategories);
+            WoodNeed -= ConsumeItems(WoodNeed * 2f, woodCategories);
+            ToolsNeed -= ConsumeItems(ToolsNeed * 2f, toolsCategories);
+            ClothNeed -= ConsumeItems(ClothNeed * 2f, clothCategories);
+            ArrowsNeed -= ConsumeItems(ArrowsNeed * 2f, ammoCategories);
+            WeaponsNeed -= ConsumeItems(WeaponsNeed * 2f, weaponCategories);
+            HorsesNeed -= ConsumeItems(HorsesNeed * 2f, horseCategories);
+            AnimalProductsNeed -= ConsumeItems(AnimalProductsNeed * 2f, animalProductsCategories);
+            ShieldsNeed -= ConsumeItems(ShieldsNeed * 2f, shieldCategories);
         }
 
         public void BuyItems()
@@ -312,11 +314,10 @@ namespace BannerKings.Behaviours.PartyNeeds
             }
         }
 
-        private float ConsumeItems(float floatCount, List<ItemCategory> categories)
+        private float ConsumeItems(float count, List<ItemCategory> categories)
         {
             float finalResult = 0;
-            int count = MathF.Floor(floatCount);
-            if (count < 1)
+            if (count < 1f)
             {
                 return finalResult;
             }
@@ -333,7 +334,7 @@ namespace BannerKings.Behaviours.PartyNeeds
             toConsume.Sort((a, b) => a.EquipmentElement.ItemValue.CompareTo(b.EquipmentElement.ItemValue));
             foreach (ItemRosterElement element in toConsume)
             {
-                int result = MathF.Min(count, element.Amount);
+                int result = MathF.Min(MathF.Ceiling(count), element.Amount);
                 Party.ItemRoster.AddToCounts(element.EquipmentElement, -result);
                 count -= result;
                 float modifier = 1f;

@@ -49,7 +49,6 @@ namespace BannerKings.Components
                 (int)(estate.MaxManpower.ResultNumber * 0.5f));
                 GiveMounts(ref retinue);
                 GiveFood(ref retinue);
-                BannerKingsConfig.Instance.PopulationManager.AddParty(retinue);
                 EnterSettlementAction.ApplyForParty(retinue, origin);
                 estate.SetParty(retinue);
             }  
@@ -63,11 +62,16 @@ namespace BannerKings.Components
                 MobileParty.Ai.SetMoveEscortParty(Escort);
                 if (MobileParty.CurrentSettlement != null) LeaveSettlementAction.ApplyForParty(MobileParty);
             }
-            else if (behavior == AiBehavior.GoToSettlement)
+            else if (behavior == AiBehavior.GoToSettlement || behavior == AiBehavior.Hold)
             {
                 MobileParty.Ai.SetMoveGoToSettlement(HomeSettlement);
-                if (TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(Party.MobileParty, HomeSettlement) <= 1f)
+                if (TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(Party.MobileParty, HomeSettlement) <= 2f)
                     EnterSettlementAction.ApplyForParty(Party.MobileParty, HomeSettlement);
+            }
+
+            if (MobileParty.CurrentSettlement == null && Behavior != AiBehavior.EscortParty) 
+            {
+                MobileParty.Ai.SetMoveGoToSettlement(HomeSettlement);
             }
         }
     }

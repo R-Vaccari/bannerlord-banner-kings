@@ -59,7 +59,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             LegitimacyFactor = legitimacyFactor;
         }
 
-        public InterestGroup GetCopy(KingdomDiplomacy diplomacy)
+        public override DiplomacyGroup GetCopy(KingdomDiplomacy diplomacy)
         {
             InterestGroup result = new InterestGroup(StringId);
             result.Initialize(Name, Description, MainTrait, DemandsCouncil, AllowsCommoners,
@@ -71,7 +71,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
         public void PostInitialize()
         {
-            base.PostInitialize();
             InterestGroup i = DefaultInterestGroup.Instance.GetById(this);
             Initialize(i.Name, i.Description, i.MainTrait, i.DemandsCouncil, i.AllowsCommoners,
                 i.AllowsNobles, i.PreferredOccupations, i.SupportedPolicies, i.ShunnedPolicies, i.SupportedLaws,
@@ -122,7 +121,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
         public CouncilMember FavoredPosition { get; private set; }
         public TraitObject MainTrait { get; private set; }
-        public Demand CurrentDemand => PossibleDemands.FirstOrDefault(x => x.Active);
+        public override Demand CurrentDemand => PossibleDemands.FirstOrDefault(x => x.Active);
         public bool DemandsCouncil { get; private set; }
         public bool AllowsCommoners { get; private set; }
         public bool AllowsNobles { get; private set; }
@@ -243,7 +242,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 success));
         }
 
-        public (bool, TextObject) CanPushDemand(Demand demand, float influence)
+        public override (bool, TextObject) CanPushDemand(Demand demand, float influence)
         {
             DemandOutcome outcome = RecentOucomes.FirstOrDefault(x => x.Demand == demand);
             if (outcome != null)

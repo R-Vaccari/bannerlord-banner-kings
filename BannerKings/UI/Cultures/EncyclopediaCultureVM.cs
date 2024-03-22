@@ -164,55 +164,6 @@ namespace BannerKings.UI.Cultures
                 Traits.Add(new StringPairItemVM(string.Empty,
                     trait.Description.ToString()));
             }
-
-            var innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
-            if (innovationData != null)
-            {
-                if (innovationData.CulturalHead != null)
-                {
-                    Information.Add(new StringPairItemVM(new TextObject("{=AoqhWZU9}Cultural Head:").ToString(),
-                        innovationData.CulturalHead.Name.ToString()));
-                }
-
-                if (innovationData.Fascination != null)
-                {
-                    Information.Add(new StringPairItemVM(new TextObject("{=eLLt37Yx}Cultural Fascination:").ToString(),
-                        innovationData.Fascination.Name.ToString(),
-                        new BasicTooltipViewModel(() => innovationData.Fascination.Description.ToString())));
-                }
-
-                ChangeFascinationPossible = innovationData.CulturalHead == Clan.PlayerClan;
-                AssumeHeadPossible = innovationData.CanAssumeCulturalHead(Clan.PlayerClan);
-
-                var research = new ExplainedNumber(0f, true);
-                foreach (var settlement in Settlement.All)
-                {
-                    if (settlement.Culture != culture)
-                    {
-                        continue;
-                    }
-
-                    research.Add(
-                        BannerKingsConfig.Instance.InnovationsModel.CalculateSettlementResearch(settlement).ResultNumber,
-                        settlement.Name);
-                }
-
-                Information.Add(new StringPairItemVM(new TextObject("{=mykO6Ydo}Research (Daily):").ToString(),
-                    research.ResultNumber.ToString("0.00"), new BasicTooltipViewModel(() => research.GetExplanations())));
-
-                foreach (var innovation in innovationData.Innovations)
-                {
-                    Innovations.Add(new TripleStringItemVM(innovation.Name.ToString(),
-                        innovation.Effects.ToString(),
-                        new TextObject("{=0ABQRW1Z}{CURRENT}/{REQUIRED} ({PERCENTAGE})")
-                            .SetTextVariable("CURRENT", innovation.CurrentProgress.ToString("0.00"))
-                            .SetTextVariable("REQUIRED", innovation.RequiredProgress)
-                            .SetTextVariable("PERCENTAGE",
-                                FormatValue(innovation.CurrentProgress / innovation.RequiredProgress))
-                            .ToString(),
-                        new BasicTooltipViewModel(() => innovation.Description.ToString())));
-                }
-            }
         }
     }
 }

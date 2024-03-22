@@ -1,17 +1,57 @@
 using BannerKings.Actions;
+using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Utils.Extensions;
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups
 {
     public class RadicalGroup : DiplomacyGroup
     {
+        private RadicalDemand demand;
+        public ViewModel ViewModel { get; private set; }
         public RadicalGroup(string stringId) : base(stringId)
         {
+        }
+
+        public void Initialize(TextObject name, TextObject description, RadicalDemand demand)
+        {
+            Initialize(name, description);
+            this.demand = demand;
+        }
+
+        public void PostInitialize()
+        {
+            RadicalGroup r = DefaultRadicalGroups.Instance.GetById(this);
+            Initialize(r.name, r.description, r.demand);
+            CurrentDemand.SetTexts();
+            CurrentDemand.Group = this;
+        }
+
+        public override DiplomacyGroup GetCopy(KingdomDiplomacy diplomacy)
+        {
+            RadicalGroup group = new RadicalGroup(StringId);
+            group.Initialize(Name, Description, CurrentDemand as RadicalDemand);
+            group.KingdomDiplomacy = diplomacy;
+            group.KingdomName = diplomacy.Kingdom.Name;
+            return group;
+        }
+
+        public void SetupRadicalGroup(Hero leader, ViewModel viewModel)
+        {
+            AddMember(leader);
+            SetLeader(leader);
+            ViewModel = viewModel;
+            demand = (RadicalDemand)CurrentDemand.GetCopy(this);
+            if (leader == Hero.MainHero) CurrentDemand.ShowPlayerDemandOptions();
+            else CurrentDemand.SetUp();
         }
 
         public float TotalStrength
@@ -42,7 +82,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         }
 
         public TextObject KingdomName { get; private set; }
-        public float Radicalism { get; private set; }
+        [SaveableProperty(13)] public float Radicalism { get; private set; } = 0.25f;
+        public override Demand CurrentDemand => demand;
         public override bool IsInterestGroup => false;
 
         public override void AddMember(Hero hero)
@@ -123,32 +164,107 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
         public override void SetNewLeader(KingdomDiplomacy diplomacy)
         {
-            throw new NotImplementedException();
-        }
+            var dictionary = new Dictionary<Hero, float>();
+            foreach (var member in Members)
+            {
+                dictionary.Add(member, BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroInfluence(this, diplomacy, member)
+                    .ResultNumber);
+            }
 
-        public void TriggerRevolt()
-        {
-            RebellionActions.CreateRebelKingdom(this, Leader.Clan, Members.ConvertAll(x => x.Clan), KingdomDiplomacy.Kingdom);
+            if (dictionary.Count > 0)
+            {
+                Hero hero = dictionary.FirstOrDefault(x => x.Value == dictionary.Values.Max()).Key;
+                Leader = hero;
+            }
         }
 
         public override void Tick()
         {
             TickInternal();
 
-            if (Leader == Hero.MainHero || Leader == null || FactionLeader == null)
+            if (!CurrentDemand.Active) CurrentDemand.SetUp();
+            if (Leader == null || FactionLeader == null || !CurrentDemand.Active)
             {
                 return;
             }
 
             float proportion = PowerProportion;
             if (proportion >= 0.5f) Radicalism += 0.01f;
-            else Radicalism -= 0.01f;
+            else Radicalism -= 0.005f;
 
             if (Radicalism > 1f)
             {
                 Radicalism = 1f;
-                if (MBRandom.RandomFloat < 0.1f) TriggerRevolt();
+                if (Leader != Hero.MainHero)
+                {
+                    if (CanPushDemand(CurrentDemand, Radicalism).Item1)
+                    {
+                        if (MBRandom.RandomFloat < 0.05f * Radicalism)
+                        {
+                            CurrentDemand.SetUp();
+                        }
+                    }
+                }
+                if (MBRandom.RandomFloat < 0.1f * Radicalism) CurrentDemand.PushForDemand();
             }
+            else if (Radicalism <= 0f)
+            {
+                Radicalism = 0f;
+                demand.Finish();
+            }
+
+            foreach (Hero member in Members)
+            {
+                float joinChance = BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroJoinChance(member, this, KingdomDiplomacy)
+                    .ResultNumber;
+                if (joinChance < 0f)
+                {
+                    RemoveMember(member);
+                }
+            }
+        }
+
+        public override (bool, TextObject) CanPushDemand(Demand demand, float radicalism)
+        {
+            if (radicalism < demand.MinimumGroupInfluence)
+            {
+                return new(false, new TextObject("{=EYqxJOKQ}This demand requires at least {INFLUENCE}% group radicalism.")
+                    .SetTextVariable("INFLUENCE", (demand.MinimumGroupInfluence * 100f).ToString("0.0")));
+            }
+
+            return demand.IsDemandCurrentlyAdequate();
+        }
+
+        public void TriggerRevolt()
+        {
+            var rebels = Members.ConvertAll(x => x.Clan);
+            /* foreach (Clan rebel in rebels)
+             {
+                 foreach (Clan clan in KingdomDiplomacy.Kingdom.Clans) 
+                 {
+                     if (!rebels.Contains(clan))
+                     {
+                         FactionManager.DeclareWar(rebel, clan);
+                     }
+                 }
+             }*/
+
+            Kingdom originalKingdom = KingdomDiplomacy.Kingdom;
+            Kingdom rebelKingdom = RebellionActions.CreateRebelKingdom(this, Leader.Clan, rebels, KingdomDiplomacy.Kingdom);
+            foreach (Clan clan in rebels)
+            {
+                foreach (var party in clan.WarPartyComponents)
+                {
+                    MobileParty mobileParty = party.MobileParty;
+                    if (mobileParty.Army != null && mobileParty.Army.LeaderParty.MapFaction == originalKingdom) mobileParty.Army = null;
+                    if (mobileParty.CurrentSettlement != null && mobileParty.CurrentSettlement.MapFaction == originalKingdom) LeaveSettlementAction.ApplyForParty(mobileParty);
+                }
+            }
+
+            DeclareWarAction.ApplyByKingdomCreation(originalKingdom, rebelKingdom);
+            TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().TriggerRebelWar(rebelKingdom, 
+                KingdomDiplomacy.Kingdom, 
+                (RadicalDemand)demand.GetCopy(null));
         }
 
         public override bool Equals(object obj)

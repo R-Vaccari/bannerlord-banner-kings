@@ -261,6 +261,26 @@ namespace BannerKings.Behaviours.Mercenary
             return null;
         }
 
+        internal CustomTroop GetTroop(CultureObject culture, bool isLevy = true)
+        {
+            if (isLevy)
+            {
+                if (LevyTroops.ContainsKey(culture))
+                {
+                    return LevyTroops[culture];
+                }
+            }
+            else
+            {
+                if (ProfessionalTroops.ContainsKey(culture))
+                {
+                    return ProfessionalTroops[culture];
+                }
+            }
+
+            return null;
+        }
+
         internal void AddTroop(Kingdom kingdom, CharacterObject troop, bool isLevy = true)
         {
             var culture = kingdom.Culture;

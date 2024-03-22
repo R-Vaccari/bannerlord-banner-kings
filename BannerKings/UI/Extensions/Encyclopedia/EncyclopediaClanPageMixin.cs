@@ -3,7 +3,7 @@ using System.Linq;
 using BannerKings.Managers.Titles;
 using BannerKings.UI.Court;
 using BannerKings.UI.Cultures;
-using BannerKings.UI.Kingdoms;
+using BannerKings.UI.VanillaTabs.Kingdoms;
 using BannerKings.Utils;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;

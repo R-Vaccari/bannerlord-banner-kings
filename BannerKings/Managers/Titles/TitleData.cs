@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Populations;
-using BannerKings.Models.BKModels;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Titles
@@ -50,32 +47,16 @@ namespace BannerKings.Managers.Titles
                 return;
             }
 
-            if ((owner.IsFriend(title.deJure) && owner.Clan.Kingdom == title.deJure.Clan.Kingdom)
-                || owner.Clan == title.deJure.Clan)
-            {
-                return;
-            }
-
-            var random = MBRandom.RandomFloatRanged(0f, 1f);
-            if (random >= 0.2f)
-            {
-                return;
-            }
-
             var model = BannerKingsConfig.Instance.TitleModel;
             var claimAction = model.GetAction(ActionType.Claim, title, owner);
-            if (claimAction.Possible)
+            if (claimAction.Possible && claimAction.IsWilling)
             {
-                var knight = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(title.deJure).Count == 1 && title.TitleType == TitleType.Lordship;
-                if (owner.Clan.Kingdom == null || owner.Clan.Kingdom != title.deJure.Clan.Kingdom || !knight)
-                {
-                    claimAction.TakeAction(null);
-                }
+                claimAction.TakeAction(null);
             }
             else
             {
                 var usurpAction = model.GetAction(ActionType.Usurp, title, owner);
-                if (usurpAction.Possible)
+                if (usurpAction.Possible && usurpAction.IsWilling)
                 {
                     usurpAction.TakeAction(null);
                 }

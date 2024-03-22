@@ -1,11 +1,9 @@
 using BannerKings.Managers.Court;
-using BannerKings.Managers.Skills;
 using BannerKings.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -113,7 +111,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
         }
 
-        public override Demand GetCopy(InterestGroup group)
+        public override Demand GetCopy(DiplomacyGroup group)
         {
             CouncilPositionDemand demand = new CouncilPositionDemand();
             demand.Group = group;
@@ -123,7 +121,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         public override void SetUp()
         {
             CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Group.FactionLeader.Clan);
-            if (Group.FavoredPosition == null)
+            if ((Group as InterestGroup).FavoredPosition == null)
             {
                 Position = council.Positions.FindAll(x => x.IsCorePosition(x.StringId)
                           && x.IsValidCandidate(Group.Leader).Item1).GetRandomElement();
@@ -131,7 +129,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             else
             {
                 Position = council.Positions.FindAll(x => x.IsCorePosition(x.StringId)
-                          && x.IsValidCandidate(Group.Leader).Item1 && x.StringId == Group.FavoredPosition.StringId).FirstOrDefault();
+                          && x.IsValidCandidate(Group.Leader).Item1 && x.StringId == (Group as InterestGroup).FavoredPosition.StringId).FirstOrDefault();
             }
 
             if (Position != null)
@@ -238,8 +236,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
                 new TextObject("{=2EYEFGAZ}The {GROUP} is pushing for {HERO}{ROLE} to be appointed for the {POSITION} position. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
-                .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(Group).ResultNumber * 100f).ToString("0.00"))
-                .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(Group).ResultNumber * 100f).ToString("0.00"))
+                .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport((Group as InterestGroup)).ResultNumber * 100f).ToString("0.00"))
+                .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence((Group as InterestGroup)).ResultNumber * 100f).ToString("0.00"))
                 .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
                 .SetTextVariable("LEADER", Group.Leader.Name)
                 .SetTextVariable("POSITION", Position.Name)
@@ -418,13 +416,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 {
                     PositiveAnswer.Fulfill(Group.FactionLeader);
                 }
-                else if (Group.Leader == Hero.MainHero)
+                else 
                 {
-                    ShowPlayerDemandAnswers();
-                }
-                else
-                {
-                    DoAiChoice();
+                    PushForDemand();
                 }
             }
         }

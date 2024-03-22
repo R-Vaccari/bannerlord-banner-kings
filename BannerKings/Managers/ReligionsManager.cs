@@ -30,7 +30,8 @@ namespace BannerKings.Managers
                     var newValueDic = new Dictionary<Hero, FaithfulData>();
                     foreach (var pair2 in pair.Value)
                     {
-                        if (pair2.Key != null && pair.Value != null && !newValueDic.ContainsKey(pair2.Key))
+                        if (pair2.Key != null && pair.Value != null && !newValueDic.ContainsKey(pair2.Key) &&
+                            pair2.Key.IsAlive)
                         {
                             newValueDic.Add(pair2.Key, pair2.Value);
                         }

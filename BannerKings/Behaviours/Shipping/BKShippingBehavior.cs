@@ -80,6 +80,15 @@ namespace BannerKings.Behaviours.Shipping
                         }
                     }
                 });
+
+            CampaignEvents.OnGameLoadFinishedEvent.AddNonSerializedListener(this,
+                () =>
+                {
+                    foreach (var caravan in MobileParty.AllCaravanParties)
+                    {
+                        caravan.Party.UpdateVisibilityAndInspected(0f);
+                    }
+                });
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -155,7 +164,7 @@ namespace BannerKings.Behaviours.Shipping
         public void SetTravel(MobileParty party, Settlement destination)
         {
             int price = CalculatePrice(destination, party);
-            if (party.LeaderHero?.Gold >= price) party.LeaderHero.ChangeHeroGold(price);
+            if (party.LeaderHero?.Gold >= price) party.LeaderHero.ChangeHeroGold(-price);
             else party.PartyTradeGold -= price;
 
             Settlement current = party.CurrentSettlement;
@@ -211,10 +220,10 @@ namespace BannerKings.Behaviours.Shipping
             else EnterSettlementAction.ApplyForParty(party, travel.Destination);
 
             party.Party.UpdateVisibilityAndInspected(0f);
-            party.IsVisible = true;
             party.IsActive = true;
             party.Ai.EnableAi();
 
+            party.Party.UpdateVisibilityAndInspected();
             RemoveParty(travel.Party);
         }
 
@@ -228,7 +237,7 @@ namespace BannerKings.Behaviours.Shipping
                 {
                     if (!port.IsTown) continue;
                         
-                    if (!port.Notables.Any(x => x.Culture == lane.Culture))
+                    if (!port.Notables.Any(x => x.Culture.StringId == lane.Culture.StringId))
                     {
                         var merchant = lane.Culture.NotableAndWandererTemplates.FirstOrDefault(x => x.Occupation == Occupation.Merchant);
                         if (merchant != null)

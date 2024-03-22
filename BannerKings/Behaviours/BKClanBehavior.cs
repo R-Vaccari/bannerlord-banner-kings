@@ -7,7 +7,6 @@ using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
-using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Traits;
 using BannerKings.Settings;
@@ -41,6 +40,23 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.AfterSettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.NewCompanionAdded.AddNonSerializedListener(this, OnCompanionAdded);
+            CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, () =>
+            {
+                foreach (Clan clan in Clan.All)
+                {
+                    if (clan.IsEliminated || clan.IsBanditFaction || clan.Kingdom == null || clan.Leader == null)
+                    {
+                        continue;
+                    }
+
+                    EvaluateRecruitCompanion(clan, true);
+                    EvaluateRecruitCompanion(clan, true);
+                    EvaluateRecruitCompanion(clan, true);
+                    EvaluateRecruitKnight(clan, true);
+                    EvaluateRecruitKnight(clan, true);
+                    EvaluateRecruitKnight(clan, true);
+                }
+            });
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -518,8 +534,15 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            EvaluateRecruitKnight(clan);
-            EvaluateRecruitCompanion(clan);
+            string name = GetType().Name;
+            RunWeekly(() =>
+            {
+                EvaluateRecruitKnight(clan);
+                EvaluateRecruitCompanion(clan);
+            },
+            name,
+            false);
+           
             SetCompanionParty(clan);
             RunCouncilTasks(clan);
             DismissParties(clan);
@@ -912,73 +935,68 @@ namespace BannerKings.Behaviours
 
         private void SetCompanionParty(Clan clan)
         {
-            RunWeekly(() =>
+            if (clan.Companions == null || clan.Companions.Count == 0)
             {
-                if (clan.Companions == null || clan.Companions.Count == 0)
+                return;
+            }
+
+            foreach (var companion in clan.Companions)
+            {
+                if (!companion.IsWanderer || companion.IsPrisoner || !companion.IsReady)
                 {
-                    return;
+                    continue;
                 }
 
-                foreach (var companion in clan.Companions)
+                if (companion.PartyBelongedTo == null || companion.PartyBelongedTo.LeaderHero == null)
                 {
-                    if (!companion.IsWanderer || companion.IsPrisoner || !companion.IsReady)
-                    {
-                        continue;
-                    }
-
-                    if (companion.PartyBelongedTo == null || companion.PartyBelongedTo.LeaderHero == null)
-                    {
-                        goto Skills;
-                    }
-
-                    if (companion.PartyBelongedTo.LeaderHero == companion ||
-                        companion.PartyBelongedTo.LeaderHero.Clan != companion.Clan)
-                    {
-                        continue;
-                    }
-
-                Skills:
-                    var role = companion.PartyBelongedTo != null ? companion.PartyBelongedTo.GetHeroPerkRole(companion) : PerkRole.None;
-                    if (role != PerkRole.None)
-                    {
-                        continue;
-                    }
-
-                    if (companion.GetSkillValue(DefaultSkills.Medicine) >= 60)
-                    {
-                        role = PerkRole.Surgeon;
-                    }
-                    else if (companion.GetSkillValue(DefaultSkills.Engineering) >= 60)
-                    {
-                        role = PerkRole.Engineer;
-                    }
-                    else if (companion.GetSkillValue(DefaultSkills.Steward) >= 60)
-                    {
-                        role = PerkRole.Quartermaster;
-                    }
-                    else if (companion.GetSkillValue(DefaultSkills.Scouting) >= 60)
-                    {
-                        role = PerkRole.Scout;
-                    }
-
-                    if (clan.WarPartyComponents.Count <= 0)
-                    {
-                        continue;
-                    }
-
-                    var warParty = clan.WarPartyComponents.GetRandomElementWithPredicate(x => IsRoleFree(x.MobileParty, role));
-                    if (warParty != null)
-                    {
-                        AssignToRole(warParty.MobileParty, role, companion);
-                    }
-                    else
-                    {
-                        AssignToRole(clan.WarPartyComponents.GetRandomElement().MobileParty, PerkRole.None, companion);
-                    }
+                    goto Skills;
                 }
-            },
-            GetType().Name,
-            false);
+
+                if (companion.PartyBelongedTo.LeaderHero == companion ||
+                    companion.PartyBelongedTo.LeaderHero.Clan != companion.Clan)
+                {
+                    continue;
+                }
+
+            Skills:
+                var role = companion.PartyBelongedTo != null ? companion.PartyBelongedTo.GetHeroPerkRole(companion) : PerkRole.None;
+                if (role != PerkRole.None)
+                {
+                    continue;
+                }
+
+                if (companion.GetSkillValue(DefaultSkills.Medicine) >= 60)
+                {
+                    role = PerkRole.Surgeon;
+                }
+                else if (companion.GetSkillValue(DefaultSkills.Engineering) >= 60)
+                {
+                    role = PerkRole.Engineer;
+                }
+                else if (companion.GetSkillValue(DefaultSkills.Steward) >= 60)
+                {
+                    role = PerkRole.Quartermaster;
+                }
+                else if (companion.GetSkillValue(DefaultSkills.Scouting) >= 60)
+                {
+                    role = PerkRole.Scout;
+                }
+
+                if (clan.WarPartyComponents.Count <= 0)
+                {
+                    continue;
+                }
+
+                var warParty = clan.WarPartyComponents.GetRandomElementWithPredicate(x => IsRoleFree(x.MobileParty, role));
+                if (warParty != null)
+                {
+                    AssignToRole(warParty.MobileParty, role, companion);
+                }
+                else
+                {
+                    AssignToRole(clan.WarPartyComponents.GetRandomElement().MobileParty, PerkRole.None, companion);
+                }
+            }
         }
 
         private bool IsRoleFree(MobileParty party, PerkRole role)
@@ -1023,102 +1041,66 @@ namespace BannerKings.Behaviours
             }
         }
 
-        private void EvaluateRecruitCompanion(Clan clan)
+        private void EvaluateRecruitCompanion(Clan clan, bool ignoreCosts = false)
         {
             if (!BannerKingsSettings.Instance.AICompanions)
             {
                 return;
             }
 
-            RunWeekly(() =>
+            if (clan.Leader.IsPrisoner || clan.Companions.Count >= clan.CompanionLimit)
             {
-                if (clan.Leader.PartyBelongedTo == null || clan.Leader.IsPrisoner || clan.Companions.Count >= clan.CompanionLimit)
-                {
-                    return;
-                }
+                return;
+            }
 
-                var warParty = clan.WarPartyComponents.FirstOrDefault(x => x.Leader == clan.Leader);
-                if (warParty?.MobileParty == null)
-                {
-                    return;
-                }
+            var candidates = new List<(PerkRole, float)>
+            {
+                new ValueTuple<PerkRole, float>(PerkRole.Scout, 1f),
+                new ValueTuple<PerkRole, float>(PerkRole.Surgeon, 1f),
+                new ValueTuple<PerkRole, float>(PerkRole.Engineer, 1f),
+                new ValueTuple<PerkRole, float>(PerkRole.Quartermaster, 1f)
+            };
 
-                var mobileParty = warParty.MobileParty;
-                if (!mobileParty.IsActive || !mobileParty.IsReady)
-                {
-                    return;
-                }
-
-                var candidates = new List<(PerkRole, float)>();
-
-                if (IsRoleFree(mobileParty, PerkRole.Scout))
-                {
-                    candidates.Add(new ValueTuple<PerkRole, float>(PerkRole.Scout, 1f));
-                }
-
-                if (IsRoleFree(mobileParty, PerkRole.Surgeon))
-                {
-                    candidates.Add(new ValueTuple<PerkRole, float>(PerkRole.Surgeon, 1f));
-                }
-
-                if (IsRoleFree(mobileParty, PerkRole.Engineer))
-                {
-                    candidates.Add(new ValueTuple<PerkRole, float>(PerkRole.Engineer, 1f));
-                }
-
-                if (IsRoleFree(mobileParty, PerkRole.Quartermaster))
-                {
-                    candidates.Add(new ValueTuple<PerkRole, float>(PerkRole.Quartermaster, 1f));
-                }
-
-                if (candidates.Count == 0)
-                {
-                    return;
-                }
-
-                var result = MBRandom.ChooseWeighted(candidates);
-                var traits = new Dictionary<PerkRole, List<TraitObject>>
+            var result = MBRandom.ChooseWeighted(candidates);
+            var traits = new Dictionary<PerkRole, List<SkillObject>>
             {
                 {
                     PerkRole.Scout,
-                    new List<TraitObject>
+                    new List<SkillObject>
                     {
-                        DefaultTraits.ScoutSkills
+                        DefaultSkills.Scouting
                     }
                 },
-                {PerkRole.Surgeon, new List<TraitObject> {DefaultTraits.Surgery}},
-                {PerkRole.Engineer, new List<TraitObject> {DefaultTraits.Siegecraft}},
-                {PerkRole.Quartermaster, new List<TraitObject> {DefaultTraits.Manager}}
+                {PerkRole.Surgeon, new List<SkillObject> { DefaultSkills.Medicine}},
+                {PerkRole.Engineer, new List<SkillObject> { DefaultSkills.Engineering}},
+                {PerkRole.Quartermaster, new List<SkillObject> { DefaultSkills.Steward}}
             };
 
-                var template = GetAdequateTemplate(traits[result], clan.Culture);
-                if (template == null)
-                {
-                    return;
-                }
+            var template = GetAdequateTemplate(traits[result], clan.Culture);
+            if (template == null)
+            {
+                return;
+            }
 
-                var equipment = GetEquipmentIfPossible(clan, false);
-                if (equipment == null)
-                {
-                    return;
-                }
+            var equipment = GetEquipmentIfPossible(clan, false);
+            if (equipment == null)
+            {
+                return;
+            }
 
-                var hero = HeroCreator.CreateSpecialHero(template, null, null, null, TaleWorlds.CampaignSystem.Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
-                EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, equipment);
-                hero.CompanionOf = clan;
-                AssignToRole(mobileParty, result, hero);
-            },
-            GetType().Name,
-            false);
+            var hero = HeroCreator.CreateSpecialHero(template, null, null, null, TaleWorlds.CampaignSystem.Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
+            EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, equipment);
+            hero.CompanionOf = clan;
         }
 
-        private CharacterObject GetAdequateTemplate(List<TraitObject> traits, CultureObject culture)
+        private CharacterObject GetAdequateTemplate(List<SkillObject> traits, CultureObject culture)
         {
             CharacterObject template = null;
-            foreach (var trait in traits.Where(_ => template == null))
+            foreach (var skill in traits)
             {
+                if (template != null) break;
                 template = (from x in culture.NotableAndWandererTemplates
-                    where x.Occupation == Occupation.Wanderer && x.GetTraitLevel(trait) >= 2
+                    where x.Occupation == Occupation.Wanderer && x.GetSkillValue(skill) >= 50
                     select x).GetRandomElementInefficiently();
             }
 
@@ -1159,102 +1141,110 @@ namespace BannerKings.Behaviours
                 : null;
         }
 
-        private void EvaluateRecruitKnight(Clan clan)
+        private void EvaluateRecruitKnight(Clan clan, bool ignoreCosts = false)
         {
             if (!BannerKingsSettings.Instance.AIKnights)
             {
                 return;
             }
 
-            RunWeekly(() =>
+            if (clan.WarPartyComponents.Count >= clan.CommanderLimit || clan.Settlements.Count(x => x.IsVillage) <= 1)
             {
-                if (clan.WarPartyComponents.Count >= clan.CommanderLimit || clan.Companions.Count >= clan.CompanionLimit || clan.Settlements.Count(x => x.IsVillage) <= 1 || !(clan.Influence >= BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(clan.Leader).ResultNumber))
-                {
-                    return;
-                }
+                return;
+            }
 
-                var village = clan.Settlements.FirstOrDefault(x => x.IsVillage);
-                if (village == null)
-                {
-                    return;
-                }
+            if (!ignoreCosts && (clan.Influence < BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(clan.Leader).ResultNumber))
+            {
+                return;
+            }
 
+            var village = clan.Settlements.FirstOrDefault(x => x.IsVillage);
+            if (village == null)
+            {
+                return;
+            }
+
+            if (!ignoreCosts)
+            {
                 var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
                 if (council == null || council.Peerage == null || !council.Peerage.CanGrantKnighthood)
                 {
                     return;
                 }
+            }
 
-                var clanTitles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
-                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(village);
-                if (clanTitles.Count == 0 || title == null || !clanTitles.Contains(title) || title.deJure != clan.Leader)
-                {
-                    return;
-                }
+            var clanTitles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
+            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(village);
+            if (clanTitles.Count == 0 || title == null || !clanTitles.Contains(title) || title.deJure != clan.Leader)
+            {
+                return;
+            }
 
-                CharacterObject template;
-                var genderLaw = title.Contract.GenderLaw;
-                if (genderLaw == DefaultGenderLaws.Instance.Agnatic)
-                {
-                    template = (from e in clan.Culture.NotableAndWandererTemplates
-                                where e.Occupation == Occupation.Wanderer && !e.IsFemale
-                                select e).GetRandomElementInefficiently();
-                }
-                else if (genderLaw == DefaultGenderLaws.Instance.Enatic)
-                {
-                    template = (from e in clan.Culture.NotableAndWandererTemplates
-                                where e.Occupation == Occupation.Wanderer && e.IsFemale
-                                select e).GetRandomElementInefficiently();
-                }
-                else
-                {
-                    template = (from e in clan.Culture.NotableAndWandererTemplates
-                                where e.Occupation == Occupation.Wanderer
-                                select e).GetRandomElementInefficiently();
-                }
+            CharacterObject template;
+            var genderLaw = title.Contract.GenderLaw;
+            if (genderLaw == DefaultGenderLaws.Instance.Agnatic)
+            {
+                template = (from e in clan.Culture.NotableAndWandererTemplates
+                            where e.Occupation == Occupation.Wanderer && !e.IsFemale
+                            select e).GetRandomElementInefficiently();
+            }
+            else if (genderLaw == DefaultGenderLaws.Instance.Enatic)
+            {
+                template = (from e in clan.Culture.NotableAndWandererTemplates
+                            where e.Occupation == Occupation.Wanderer && e.IsFemale
+                            select e).GetRandomElementInefficiently();
+            }
+            else
+            {
+                template = (from e in clan.Culture.NotableAndWandererTemplates
+                            where e.Occupation == Occupation.Wanderer
+                            select e).GetRandomElementInefficiently();
+            }
 
-                if (template == null)
-                {
-                    return;
-                }
+            if (template == null)
+            {
+                return;
+            }
 
-                var settlement = clan.Settlements.FirstOrDefault() ?? Town.AllTowns.FirstOrDefault(x => x.Culture == clan.Culture).Settlement;
-                var source = from e in MBObjectManager.Instance.GetObjectTypeList<MBEquipmentRoster>() where e.EquipmentCulture == clan.Culture select e;
-                if (source == null)
-                {
-                    return;
-                }
+            var settlement = clan.Settlements.FirstOrDefault() ?? Town.AllTowns.FirstOrDefault(x => x.Culture == clan.Culture).Settlement;
+            var source = from e in MBObjectManager.Instance.GetObjectTypeList<MBEquipmentRoster>() where e.EquipmentCulture == clan.Culture select e;
+            if (source == null)
+            {
+                return;
+            }
 
-                var roster = (from e in source
-                              where e.HasEquipmentFlags(EquipmentFlags.IsMediumTemplate)
-                              select e
-                    into x
-                              orderby MBRandom.RandomInt()
-                              select x).FirstOrDefault();
-                if (roster == null)
-                {
-                    return;
-                }
+            var roster = (from e in source
+                            where e.HasEquipmentFlags(EquipmentFlags.IsMediumTemplate)
+                            select e
+                into x
+                            orderby MBRandom.RandomInt()
+                            select x).FirstOrDefault();
+            if (roster == null)
+            {
+                return;
+            }
 
-                var price = GetPrice(village.Village.Bound, roster);
-                if (clan.Leader.Gold < price * 2f)
-                {
-                    return;
-                }
+            var price = GetPrice(village.Village.Bound, roster);
+            if (!ignoreCosts && clan.Leader.Gold < price * 2f)
+            {
+                return;
+            }
 
-                var hero = HeroCreator.CreateSpecialHero(template, settlement, clan, null, TaleWorlds.CampaignSystem.Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
-                BannerKingsConfig.Instance.TitleManager.GrantKnighthood(title, hero, title.deJure);
-                EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, roster.AllEquipments.GetRandomElement());
-                var mainParty = hero.PartyBelongedTo == MobileParty.MainParty;
-                MobilePartyHelper.CreateNewClanMobileParty(hero, clan, out mainParty);
-                var component = clan.WarPartyComponents.FirstOrDefault(x => x.Leader == hero);
-                if (component != null)
-                {
-                    EnterSettlementAction.ApplyForParty(component.MobileParty, settlement);
-                }
-            },
-            GetType().Name,
-            false);
+            var hero = HeroCreator.CreateSpecialHero(template, settlement, clan, null, TaleWorlds.CampaignSystem.Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
+            BannerKingsConfig.Instance.TitleManager.GrantKnighthood(title, hero, title.deJure, ignoreCosts);
+            EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, roster.AllEquipments.GetRandomElement());
+            var mainParty = hero.PartyBelongedTo == MobileParty.MainParty;
+            MobilePartyHelper.CreateNewClanMobileParty(hero, clan, out mainParty);
+            var component = clan.WarPartyComponents.FirstOrDefault(x => x.Leader == hero);
+            if (component != null)
+            {
+                EnterSettlementAction.ApplyForParty(component.MobileParty, settlement);
+            }
+
+            if (!ignoreCosts)
+            {
+                clan.Leader.ChangeHeroGold((int)-price);
+            }
         }
 
         private float GetPrice(Settlement settlement, MBEquipmentRoster roster)

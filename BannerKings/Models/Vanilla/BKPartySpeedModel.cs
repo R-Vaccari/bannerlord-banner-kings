@@ -72,9 +72,12 @@ namespace BannerKings.Models.Vanilla
             if (mobileParty.IsCaravan && mobileParty.Owner != null)
             {
                 var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.Owner);
-                if (TaleWorlds.CampaignSystem.Campaign.Current.IsDay && data.HasPerk(BKPerks.Instance.CaravaneerDealer))
+                if (data != null)
                 {
-                    baseResult.AddFactor(0.05f, BKPerks.Instance.FianHighlander.Name);
+                    if (TaleWorlds.CampaignSystem.Campaign.Current.IsDay && data.HasPerk(BKPerks.Instance.CaravaneerDealer))
+                    {
+                        baseResult.AddFactor(0.05f, BKPerks.Instance.FianHighlander.Name);
+                    }
                 }
             }
 

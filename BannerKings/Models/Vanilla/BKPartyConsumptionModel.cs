@@ -1,11 +1,11 @@
-﻿using BannerKings.Components;
+using BannerKings.Components;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using BannerKings.Settings;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Siege;
@@ -13,7 +13,7 @@ using TaleWorlds.Core;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKPartyConsumptionModel : DefaultMobilePartyFoodConsumptionModel
+    public class BKPartyConsumptionModel : PartyFoodModel
     {
         public override int NumberOfMenOnMapToEatOneFood 
         { 
@@ -25,6 +25,59 @@ namespace BannerKings.Models.Vanilla
             } 
         }
 
+        public override float BirdFood => 0.025f;
+
+        public override float MuleFood => 0.15f;
+
+        public override float CattleFood => 0.175f;
+
+        public override float PigFood => 0.1f;
+
+        public override float HorseFood => 0.25f;
+
+        public override float WarhorseFood => 0.5f;
+
+        public override float SheepFood => 0.05f;
+
+        public override float CalculateAnimalFoodNeed(MobileParty party, bool ignoreCamels)
+        {
+            float horses = 0f;
+            float birds = 0f;
+            float sheep = 0f;
+            float pig = 0f;
+            float warHorses = 0f;
+            float cattle = 0f;
+            float mules = 0f;
+            foreach (var troop in party.MemberRoster.GetTroopRoster())
+            {
+                if (troop.Character.IsMounted) horses++;
+            }
+
+            foreach (var troop in party.PrisonRoster.GetTroopRoster())
+            {
+                if (troop.Character.IsMounted) horses++;
+            }
+
+            foreach (var element in party.ItemRoster)
+            {
+                ItemObject item = element.EquipmentElement.Item;
+                if (item.HasHorseComponent)
+                {
+                    if (ignoreCamels && item.StringId.Contains("camel")) continue;
+
+                    if (item.HorseComponent.IsPackAnimal) mules += element.Amount;
+                    else if (item.ItemCategory == DefaultItemCategories.WarHorse) warHorses += element.Amount;
+                    else if (item.ItemCategory == DefaultItemCategories.Sheep) sheep += element.Amount;
+                    else if (item.ItemCategory == DefaultItemCategories.Hog) pig += element.Amount;
+                    else if (item.ItemCategory == DefaultItemCategories.Cow) cattle += element.Amount;
+                    else birds += element.Amount;
+                }
+            }
+
+            return (horses * HorseFood) + (birds * BirdFood) + (pig * PigFood) + (mules * MuleFood) +
+                (cattle * CattleFood) + (sheep * SheepFood) + (warHorses * WarhorseFood);
+        }
+
         public override bool DoesPartyConsumeFood(MobileParty mobileParty)
         {
             if (mobileParty.PartyComponent != null)
@@ -34,11 +87,6 @@ namespace BannerKings.Models.Vanilla
                 {
                     return false;
                 }
-
-                /*if (type != null && mobileParty.PartyComponent is BanditHeroComponent)
-                {
-                    return false;
-                }*/
             }
 
             return base.DoesPartyConsumeFood(mobileParty);
@@ -133,6 +181,22 @@ namespace BannerKings.Models.Vanilla
                     {
                         baseConsumption.AddFactor(-0.3f, DefaultLifestyles.Instance.Jawwal.Name);
                     }
+                }
+            }
+
+            if (TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace) == TerrainType.Desert)
+            {
+                float mounts = CalculateAnimalFoodNeed(party, true);
+                baseConsumption.Add(-mounts, new TaleWorlds.Localization.TextObject("{=1WT6A7nG}Carrying animals while on desert (inventory, party and prisoners)"));
+            }
+            else
+            {
+                MapWeatherModel.WeatherEvent weatherEventInPosition = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapWeatherModel
+                              .GetWeatherEventInPosition(party.Position2D);
+                if (weatherEventInPosition == MapWeatherModel.WeatherEvent.Snowy || weatherEventInPosition == MapWeatherModel.WeatherEvent.Blizzard)
+                {
+                    float mounts = CalculateAnimalFoodNeed(party, false);
+                    baseConsumption.Add(-mounts / 2f, new TaleWorlds.Localization.TextObject("{=BqaxcvqV}Carrying animals while in snow or blizzard (inventory, party and prisoners)"));
                 }
             }
 

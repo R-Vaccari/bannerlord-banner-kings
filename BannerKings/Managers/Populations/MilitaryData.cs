@@ -76,7 +76,7 @@ namespace BannerKings.Managers.Populations
                 var number = new ExplainedNumber(0f);
                 if (settlement.Notables is {Count: > 0})
                 {
-                    number = BannerKingsConfig.Instance.VolunteerModel.GetDraftEfficiency(settlement.Notables[0], 2, settlement);
+                    number = BannerKingsConfig.Instance.VolunteerModel.GetDraftEfficiency(settlement.Notables[0], settlement);
                 }
 
                 return number;

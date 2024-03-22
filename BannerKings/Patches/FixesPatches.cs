@@ -1,6 +1,10 @@
-﻿using BannerKings.Managers.Items;
+﻿using BannerKings.Behaviours;
+using BannerKings.Managers.Items;
+using BannerKings.Settings;
 using HarmonyLib;
 using Helpers;
+using SandBox.View.Map;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -23,6 +27,43 @@ namespace BannerKings.Patches
 {
     internal class FixesPatches
     {
+        [HarmonyPatch(typeof(GarrisonTroopsCampaignBehavior))]
+        internal class GarrisonTroopsCampaignBehaviorPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("GetGarrisonLeaveOrTakeDataOfParty")]
+            private static bool GetGarrisonLeaveOrTakeDataOfPartyPrefix(MobileParty mobileParty, ref ValueTuple<int, int> __result)
+            {
+                Settlement currentSettlement = mobileParty.CurrentSettlement;
+                int num = TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementGarrisonModel
+                    .FindNumberOfTroopsToLeaveToGarrison(mobileParty, currentSettlement);
+                int item = 0;
+                if (mobileParty.LeaderHero != null && currentSettlement != null)
+                {
+                    if (num <= 0 && mobileParty.LeaderHero.Clan == currentSettlement.OwnerClan && !mobileParty.IsWageLimitExceeded())
+                    {
+                        item = TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementGarrisonModel
+                            .FindNumberOfTroopsToTakeFromGarrison(mobileParty, mobileParty.CurrentSettlement, 0f);
+                    }
+                }
+                
+                __result = new ValueTuple<int, int>(num, item);
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(CompanionsCampaignBehavior))]
+        internal class CompanionsCampaignBehaviorPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("_desiredTotalCompanionCount", MethodType.Getter)]
+            private static bool DesiredTotalPrefix(ref float __result)
+            {
+                __result = Town.AllTowns.Count * BannerKingsSettings.Instance.WorldCompanions;
+                return false;
+            }
+        }
+
         [HarmonyPatch(typeof(GangLeaderNeedsToOffloadStolenGoodsIssueBehavior))]
         internal class GangLeaderNeedsToOffloadStolenGoodsIssueBehaviorPatches
         {
@@ -36,6 +77,19 @@ namespace BannerKings.Patches
                     return false;
                 }
 
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(MapScreen))]
+        internal class MapScreenPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("OnExitToMainMenu")]
+            private static bool OnExitToMainMenu()
+            {
+                BKManagerBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKManagerBehavior>();
+                behavior.NullManagers();
                 return true;
             }
         }

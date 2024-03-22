@@ -20,6 +20,7 @@ namespace BannerKings.Managers.Titles.Governments
                 yield return Tribal;
                 yield return Imperial;
                 yield return Republic;
+                foreach (var item in ModAdditions) yield return item;
             }
         }
 

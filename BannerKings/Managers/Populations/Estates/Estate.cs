@@ -150,16 +150,20 @@ namespace BannerKings.Managers.Populations.Estates
         {
             if (TroopRoster == null) TroopRoster = TroopRoster.CreateDummyTroopRoster();
             if (Retinue == null) EstateComponent.CreateRetinue(this);
+            BannerKingsConfig.Instance.PopulationManager.AddEstate(this);
         }
 
         public void TakeRetinue(MobileParty ai)
         {
-            foreach (var item in Retinue.MemberRoster.GetTroopRoster())
+            if (Retinue != null)
             {
-                ai.MemberRoster.AddToCounts(item.Character, item.Number);
-            }
+                foreach (var item in Retinue.MemberRoster.GetTroopRoster())
+                {
+                    ai.MemberRoster.AddToCounts(item.Character, item.Number);
+                }
 
-            Retinue.MemberRoster.RemoveIf(roster => roster.Number > 0);
+                Retinue.MemberRoster.RemoveIf(roster => roster.Number > 0);
+            }
         }
 
         public void SetFollow()

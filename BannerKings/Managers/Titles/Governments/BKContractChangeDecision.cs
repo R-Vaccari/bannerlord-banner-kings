@@ -22,6 +22,8 @@ namespace BannerKings.Managers.Titles.Governments
             Proposed = proposed;
         }
 
+        public override bool IsKingsVoteAllowed => false;
+
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
             if ((chosenOutcome as ContractDecisionOutcome).ShouldDecisionBeEnforced)

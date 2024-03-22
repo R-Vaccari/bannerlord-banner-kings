@@ -2,7 +2,6 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Issues;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
@@ -13,11 +12,13 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models.Vanilla
 {
-    internal class BKFoodModel : DefaultSettlementFoodModel
+    public class BKFoodModel : IFoodModel
     {
-        private static readonly float NOBLE_FOOD = -0.1f;
-        private static readonly float CRAFTSMEN_FOOD = -0.05f;
-        private static readonly float SERF_FOOD = 0.03f;
+        public override float NobleFood => -0.1f;
+        public override float CraftsmanFood => -0.042f;
+        public override float SerfFood => -0.022f;
+        public override float TenantFood => -0.032f;
+        public override float SlaveFood => -0.0015f;
         public override int FoodStocksUpperLimit => 500;
         public override int NumberOfProsperityToEatOneFood => 40;
         public override int NumberOfMenOnGarrisonToEatOneFood => 20;
@@ -53,10 +54,10 @@ namespace BannerKings.Models.Vanilla
             switch (season)
             {
                 case 3f:
-                    result.Add(-0.5f * foodProduction, GameTexts.FindText("str_season_" + season));
+                    result.Add(-0.5f * foodProduction, new TextObject("{=nwqUFaU8}Winter"));
                     break;
                 case 1f:
-                    result.Add(0.5f * foodProduction, GameTexts.FindText("str_season_" + season));
+                    result.Add(0.5f * foodProduction, new TextObject("{=f7vOVQb7}Summer"));
                     break;
             }
 
@@ -130,7 +131,7 @@ namespace BannerKings.Models.Vanilla
             return finalResult;
         }
 
-        public ExplainedNumber GetPopulationFoodConsumption(PopulationData data)
+        public override ExplainedNumber GetPopulationFoodConsumption(PopulationData data)
         {
             var result = new ExplainedNumber();
             result.LimitMin(-3000f);
@@ -138,29 +139,36 @@ namespace BannerKings.Models.Vanilla
             var citySerfs = data.GetTypeCount(PopType.Serfs);
             if (citySerfs > 0)
             {
-                var serfConsumption = citySerfs * SERF_FOOD * -1f;
+                var serfConsumption = citySerfs * SerfFood;
                 result.Add(serfConsumption, new TextObject("{=jH7cWD5r}Serfs consumption"));
             }
 
             var citySlaves = data.GetTypeCount(PopType.Slaves);
             if (citySlaves > 0)
             {
-                var slaveConsumption = citySlaves * SERF_FOOD * -0.5f;
+                var slaveConsumption = citySlaves * SlaveFood;
                 result.Add(slaveConsumption, new TextObject("{=8xhVr4rK}Slaves consumption"));
             }
 
             var cityNobles = data.GetTypeCount(PopType.Nobles);
             if (cityNobles > 0)
             {
-                var nobleConsumption = cityNobles * NOBLE_FOOD;
+                var nobleConsumption = cityNobles * NobleFood;
                 result.Add(nobleConsumption, new TextObject("{=myyYr6BO}Nobles consumption"));
             }
 
             var cityCraftsmen = data.GetTypeCount(PopType.Craftsmen);
             if (cityCraftsmen > 0)
             {
-                var craftsmenConsumption = cityCraftsmen * CRAFTSMEN_FOOD;
-                result.Add(craftsmenConsumption, new TextObject("Craftsmen consumption"));
+                var craftsmenConsumption = cityCraftsmen * CraftsmanFood;
+                result.Add(craftsmenConsumption, new TextObject("{=EOe81mg7}Craftsmen consumption"));
+            }
+
+            var cityTenants = data.GetTypeCount(PopType.Tenants);
+            if (cityTenants > 0)
+            {
+                var tenantsConsumption = cityTenants * TenantFood;
+                result.Add(tenantsConsumption, new TextObject("{=CB6A3Eor}Tenants consumption"));
             }
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(data.Settlement, "decision_ration"))
@@ -176,7 +184,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber GetPopulationFoodProduction(PopulationData data, Town town)
+        public override ExplainedNumber GetPopulationFoodProduction(PopulationData data, Town town)
         {
             var result = new ExplainedNumber();
             result.LimitMin(0f);

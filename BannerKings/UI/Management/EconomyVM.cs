@@ -159,7 +159,7 @@ namespace BannerKings.UI.Management
 
                 RevenueInfo.Add(new InformationElement(new TextObject("{=Re0UyaL5}Tariff:").ToString(),
                     $"{data.EconomicData.Tariff:P}",
-                    new TextObject("{=UgD3or79}Percentage of an item's value charged as tax when sold.").ToString()));
+                    new TextObject("{=sVGeHKpm}Tariffs determine the percentage of sale revenues that are owned to the fief's lord. This applies both to trade between the fief and free parties, as well as the fief and its population. Thus, the more goods the population consumes, the more tariffs they yield.").ToString()));
 
                 var mercantilism = data.EconomicData.Mercantilism;
                 RevenueInfo.Add(new InformationElement(new TextObject("{=5E2NZBtK}Mercantilism:").ToString(),

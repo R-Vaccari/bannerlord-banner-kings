@@ -394,6 +394,13 @@ namespace BannerKings.Models.BKModels
                 return action;
             }
 
+            if (requester.Clan != null && requester.Clan.IsUnderMercenaryService)
+            {
+                action.Possible = false;
+                action.Reason = new TextObject("{=0k2rUZbZ}Mercenaries can not fulfill council roles.");
+                return action;
+            }
+
             if (!appointed)
             {
                 if (requester.Clan != null && requester.Clan.Influence < action.Influence)

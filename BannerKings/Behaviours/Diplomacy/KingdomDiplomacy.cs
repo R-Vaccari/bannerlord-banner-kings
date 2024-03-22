@@ -1,7 +1,6 @@
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Institutions.Religions;
-using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Utils.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +21,7 @@ namespace BannerKings.Behaviours.Diplomacy
         [SaveableProperty(4)] public Dictionary<Kingdom, CampaignTime> Truces { get; private set; }
         [SaveableProperty(6)] public float Fatigue { get; private set; }
         [SaveableProperty(7)] public float Legitimacy { get; private set; }
+        [SaveableProperty(8)] public List<RadicalGroup> RadicalGroups { get; private set; }
         public float LegitimacyChange
         {
             get
@@ -43,7 +43,8 @@ namespace BannerKings.Behaviours.Diplomacy
             Kingdom = kingdom;
             TradePacts = new List<Kingdom>();
             Truces = new Dictionary<Kingdom, CampaignTime>();
-            Groups = new List<InterestGroup>();
+            Groups = new List<InterestGroup>(4);
+            RadicalGroups = new List<RadicalGroup>();
         }
 
         public void PostInitialize()
@@ -63,6 +64,16 @@ namespace BannerKings.Behaviours.Diplomacy
             if (Truces == null)
             {
                 Truces = new Dictionary<Kingdom, CampaignTime>();
+            }
+
+            if (RadicalGroups == null)
+            {
+                RadicalGroups = new List<RadicalGroup>();
+            }
+
+            foreach (var group in RadicalGroups)
+            {
+                group.PostInitialize();
             }
         }
 
@@ -208,9 +219,38 @@ namespace BannerKings.Behaviours.Diplomacy
             }
         }
 
+        public void CreateGroup(DiplomacyGroup group, Hero leader)
+        {
+            group.SetLeader(leader);
+            if (!group.IsInterestGroup)
+            {
+                RadicalGroups.Add((RadicalGroup)group);
+            }
+            else Groups.Add((InterestGroup)group);
+
+            if (Kingdom == Clan.PlayerClan.Kingdom)
+            {
+                InformationManager.DisplayMessage(new InformationMessage(
+                    new TextObject("{=xqGUkJZH}The group {GROUP} has formed under the leadership of {LEADER}.")
+                    .SetTextVariable("GROUP", group.Name)
+                    .SetTextVariable("LEADER", group.Leader.Name)
+                    .ToString(),
+                    Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
+            }
+        }
+
         public InterestGroup GetHeroGroup(Hero hero)
         {
             foreach (var group in Groups)
+                if (group.Members.Contains(hero))
+                    return group;
+
+            return null;
+        }
+
+        public RadicalGroup GetHeroRadicalGroup(Hero hero)
+        {
+            foreach (var group in RadicalGroups)
                 if (group.Members.Contains(hero))
                     return group;
 
@@ -235,14 +275,26 @@ namespace BannerKings.Behaviours.Diplomacy
 
             Legitimacy += LegitimacyChange;
 
-            foreach (var group in Groups) group.Tick();    
+            foreach (var group in Groups)
+            {
+                if (group.IsGroupActive) group.Tick();
+                else group.SetNewLeader(this);
+            }
+
+            foreach (var group in RadicalGroups)
+            {
+                if (group.IsGroupActive) group.Tick();
+                else group.SetNewLeader(this);
+
+                if (!group.IsGroupActive) group.CurrentDemand.Finish();
+            } 
 
             foreach (var group in DefaultInterestGroup.Instance.All)
             {
                 bool adequate = BannerKingsConfig.Instance.InterestGroupsModel.IsGroupAdequateForKingdom(this, group);
                 if (adequate && !Groups.Any(x => group.StringId == x.StringId))
                 {
-                    var copy = group.GetCopy(this);
+                    InterestGroup copy = (InterestGroup)group.GetCopy(this);
                     if (copy.Equals(DefaultInterestGroup.Instance.Zealots))
                     {
                         copy.SetName(Religion.Faith.GetZealotsGroupName());
@@ -252,6 +304,14 @@ namespace BannerKings.Behaviours.Diplomacy
                 }
 
                 if (!adequate && Groups.Contains(group)) Groups.Remove(group);
+            }
+
+            foreach (var group in DefaultRadicalGroups.Instance.All)
+            {
+                if (!RadicalGroups.Any(x => group.StringId == x.StringId))
+                {
+                    RadicalGroups.Add((RadicalGroup)group.GetCopy(this));
+                }
             }
 
             foreach (var clan in Kingdom.Clans)
@@ -269,6 +329,18 @@ namespace BannerKings.Behaviours.Diplomacy
                 if (settlement.Notables != null)
                     foreach (var notable in settlement.Notables)
                         EvaluateJoinAGroup(notable);
+
+            foreach (var group in RadicalGroups)
+            {
+                foreach (Clan clan in Kingdom.Clans)
+                {
+                    Hero hero = clan.Leader;
+                    if (BannerKingsConfig.Instance.InterestGroupsModel.WillHeroCreateGroup(group, hero, this))
+                    {
+                        group.SetupRadicalGroup(hero, null);
+                    }
+                }
+            }
         }
 
         private void EvaluateJoinAGroup(Hero hero)
@@ -288,6 +360,9 @@ namespace BannerKings.Behaviours.Diplomacy
                     }
                 }
             }
+
+            RadicalGroup radicalGroup = GetHeroRadicalGroup(hero);
+
         }
     }
 }

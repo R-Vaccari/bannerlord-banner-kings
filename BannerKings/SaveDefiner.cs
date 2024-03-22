@@ -31,7 +31,6 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Empire;
 using BannerKings.Managers.Institutions.Religions.Faiths.Northern;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Institutions.Religions.Faiths.Vlandia;
-using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Kingdoms.Contract;
 using BannerKings.Managers.Kingdoms.Council;
 using BannerKings.Managers.Kingdoms.Peerage;
@@ -40,7 +39,6 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Populations.Tournament;
-using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
@@ -50,7 +48,6 @@ using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.SaveSystem;
-using static BannerKings.Managers.Kingdoms.Council.BKCouncilPositionDecision;
 using static BannerKings.Behaviours.Diplomacy.Groups.InterestGroup;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
@@ -97,7 +94,6 @@ namespace BannerKings
             AddEnumDefinition(typeof(CriminalPolicy), 18);
             AddClassDefinition(typeof(TournamentData), 19);
             AddClassDefinition(typeof(VillageData), 20);
-            AddClassDefinition(typeof(VillageBuilding), 21);
             AddClassDefinition(typeof(CultureDataClass), 22);
             AddClassDefinition(typeof(FeudalTitle), 23);
             AddClassDefinition(typeof(FeudalContract), 24);
@@ -127,10 +123,7 @@ namespace BannerKings
             AddClassDefinition(typeof(AuxiliumDuty), 52);
             AddClassDefinition(typeof(RansomDuty), 53);
             AddClassDefinition(typeof(BannerKingsTournament), 54);
-            AddClassDefinition(typeof(BKContractDecision), 55);
-
             AddClassDefinition(typeof(RepublicElectionDecision), 60);
-            AddClassDefinition(typeof(BKSettlementClaimantDecision), 61);
             AddClassDefinition(typeof(BKKingElectionDecision), 62);
             AddClassDefinition(typeof(TitleData), 63);
             AddEnumDefinition(typeof(ClaimType), 64);
@@ -194,11 +187,6 @@ namespace BannerKings
             AddClassDefinition(typeof(War), 127);
             AddClassDefinition(typeof(CasusBelli), 128);
             AddClassDefinition(typeof(Crime), 129);
-            AddClassDefinition(typeof(MercenaryCareer), 1000);
-            AddClassDefinition(typeof(MercenaryPrivilege), 1001);
-            AddClassDefinition(typeof(CustomTroop), 1002);
-            AddClassDefinition(typeof(CustomTroopPreset), 1003);
-
             AddClassDefinition(typeof(DiplomacyGroup), 130);
             AddClassDefinition(typeof(AssumeFaithDemand), 131);
             AddClassDefinition(typeof(TitleDemand), 132);
@@ -222,13 +210,20 @@ namespace BannerKings
             AddClassDefinition(typeof(ContractRight), 154);
             AddClassDefinition(typeof(BKContractChangeDecision), 155);
             AddClassDefinition(typeof(Travel), 156);
+            AddClassDefinition(typeof(RadicalDemand), 157);
+            AddClassDefinition(typeof(ClaimantDemand), 158);
+            AddClassDefinition(typeof(RadicalGroup), 159);
+
+            AddClassDefinition(typeof(MercenaryCareer), 1000);
+            AddClassDefinition(typeof(MercenaryPrivilege), 1001);
+            AddClassDefinition(typeof(CustomTroop), 1002);
+            AddClassDefinition(typeof(CustomTroopPreset), 1003);
         }
 
         protected override void DefineContainerDefinitions()
         {
             ConstructContainerDefinition(typeof(Dictionary<FeudalTitle, Kingdom>));
             ConstructContainerDefinition(typeof(List<PopulationClass>));
-            ConstructContainerDefinition(typeof(List<VillageBuilding>));
             ConstructContainerDefinition(typeof(List<CultureDataClass>));
             ConstructContainerDefinition(typeof(Dictionary<Settlement, PopulationData>));
             ConstructContainerDefinition(typeof(List<BannerKingsDecision>));
@@ -272,6 +267,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Workshop, WorkshopData>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, MobileParty>)); 
             ConstructContainerDefinition(typeof(List<InterestGroup>));
+            ConstructContainerDefinition(typeof(List<RadicalGroup>));
             ConstructContainerDefinition(typeof(List<Demand>));
             ConstructContainerDefinition(typeof(List<DemandOutcome>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, KingdomDiplomacy>));

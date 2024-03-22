@@ -7,7 +7,6 @@ using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
-using BannerKings.UI.TownManagement;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -22,6 +21,9 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using BannerKings.Managers.Cultures;
+using BannerKings.UI.VanillaTabs.TownManagement;
+using TaleWorlds.CampaignSystem.Election;
+using static TaleWorlds.CampaignSystem.Election.SettlementClaimantDecision;
 
 namespace BannerKings.UI
 {
@@ -514,6 +516,11 @@ namespace BannerKings.UI
                             new TextObject("{=2kxQvCVb}Revoking transfers the legal ownership of a vassal's title to the suzerain. The revoking restrictions are associated with the title's government type.");
                         affirmativeText = new TextObject("{=iLpAKttu}Revoke");
                         break;
+                    case ActionType.Create:
+                        description =
+                            new TextObject("{=VFTH237z}Creating a title sets you as its legal holder, rather than no legal holder at all. The title's laws, such as Succession and Government laws, will match those of your current primary title.");
+                        affirmativeText = new TextObject("{=bLwFU6mw}Create");
+                        break;
                     case ActionType.Claim:
                         description =
                             new TextObject("{=BSX8rvCS}Claiming this title sets a legal precedence for you to legally own it, thus allowing it to be usurped. A claim takes 1 year to build. Claims last until they are pressed or until it's owner dies.");
@@ -547,17 +554,24 @@ namespace BannerKings.UI
             var hero = title.deJure;
             var list = new List<TooltipProperty>
             {
-                new("", hero.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title)
+                new("", title.FullName.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title)
             };
 
-            MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_relation"));
-            var definition = GameTexts.FindText("str_LEFT_ONLY").ToString();
-            list.Add(new TooltipProperty(definition, ((int) hero.GetRelationWithPlayer()).ToString(), 0));
+            list.Add(new TooltipProperty(new TextObject("{=gp1fPcSo}De Jure Holder").ToString(), 
+                hero != null ? hero.Name.ToString() : new TextObject("None").ToString(), 
+                0));
 
-            list.Add(new TooltipProperty(new TextObject("{=j4F7tTzy}Clan").ToString(), hero.Clan.Name.ToString(), 0));
+            if (hero != null)
+            {
+                MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_relation"));
+                var definition = GameTexts.FindText("str_LEFT_ONLY").ToString();
+                list.Add(new TooltipProperty(definition, ((int)hero.GetRelationWithPlayer()).ToString(), 0));
 
-            list.Add(new TooltipProperty(new TextObject("{=uUmEcuV8}Age").ToString(), 
-                MBRandom.RoundRandomized(hero.Age).ToString(), 0));
+                list.Add(new TooltipProperty(new TextObject("{=j4F7tTzy}Clan").ToString(), hero.Clan.Name.ToString(), 0));
+
+                list.Add(new TooltipProperty(new TextObject("{=uUmEcuV8}Age").ToString(),
+                    MBRandom.RoundRandomized(hero.Age).ToString(), 0));
+            }
 
             TooltipAddEmptyLine(list);
 
@@ -638,6 +652,7 @@ namespace BannerKings.UI
                 ActionType.Usurp => new TextObject("{=L3Jzg76z}Usurp"),
                 ActionType.Revoke => new TextObject("{=iLpAKttu}Revoke"),
                 ActionType.Claim => new TextObject("{=6hY9WysN}Claim"),
+                ActionType.Create => new TextObject("{=bLwFU6mw}Create"),
                 _ => new TextObject("{=dugq4xHo}Grant")
             };
         }
@@ -685,16 +700,25 @@ namespace BannerKings.UI
               TooltipProperty.TooltipPropertyFlags.MultiLine));
 
             list.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
-            list.Add(new TooltipProperty(new TextObject("{=ex269b0j}Wood:").ToString(), 
-                MBRandom.RoundRandomized(supplies.WoodNeed).ToString(), 
+            list.Add(new TooltipProperty(new TextObject("{=ex269b0j}Wood:").ToString(),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.WoodNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetWoodCurrentNeed().ResultNumber))
+                .ToString(), 
                 0));
+
             list.Add(new TooltipProperty(new TextObject("{=yw4KTjMj}Textiles:").ToString(),
-                MBRandom.RoundRandomized(supplies.ClothNeed).ToString(),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.ClothNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetTextileCurrentNeed().ResultNumber))
+                .ToString(),
                 0));
             list.Add(new TooltipProperty(new TextObject("{=1y4e5t97}Alcohol:").ToString(),
-               MBRandom.RoundRandomized(supplies.AlcoholNeed).ToString(),
+               new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.AlcoholNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetAlcoholCurrentNeed().ResultNumber))
+                .ToString(),
                0));
-
             
             list.Add(new TooltipProperty(new TextObject("{=xcEes2qY}Animal Products:").ToString(),
                 new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
@@ -718,31 +742,58 @@ namespace BannerKings.UI
             list.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
 
             list.Add(new TooltipProperty(new TextObject("{=j8R1v8fv}Weapons:").ToString(),
-                supplies.GetWeaponsCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.WeaponsNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetWeaponsCurrentNeed().ResultNumber))
+                .ToString(),
                0));
             list.Add(new TooltipProperty(new TextObject("{=x4KhXV25}Ammunition:").ToString(),
-                supplies.GetArrowsCurrentNeed().ResultNumber.ToString("0.00"),
+               new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.ArrowsNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetArrowsCurrentNeed().ResultNumber))
+                .ToString(),
                 0));
             list.Add(new TooltipProperty(new TextObject("{=GgdSMucS}Mounts:").ToString(),
-                supplies.GetMountsCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.HorsesNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetMountsCurrentNeed().ResultNumber))
+                .ToString(),
               0));
             list.Add(new TooltipProperty(new TextObject("{=JC5JZRjY}Shields:").ToString(),
-                supplies.GetShieldsCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.ShieldsNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetShieldsCurrentNeed().ResultNumber))
+                .ToString(),
               0));
             list.Add(new TooltipProperty(new TextObject("{=1y4e5t97}Alcohol:").ToString(),
-                supplies.GetAlcoholCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.AlcoholNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetAlcoholCurrentNeed().ResultNumber))
+                .ToString(),
                0));
             list.Add(new TooltipProperty(new TextObject("{=xcEes2qY}Animal Products:").ToString(),
-                supplies.GetAnimalProductsCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.AnimalProductsNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetAnimalProductsCurrentNeed().ResultNumber))
+                .ToString(),
                 0));
             list.Add(new TooltipProperty(new TextObject("{=ex269b0j}Wood:").ToString(),
-                supplies.GetWoodCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.WoodNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetWoodCurrentNeed().ResultNumber))
+                .ToString(),
               0));
             list.Add(new TooltipProperty(new TextObject("{=yw4KTjMj}Textiles:").ToString(),
-                supplies.GetTextileCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.ClothNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetTextileCurrentNeed().ResultNumber))
+                .ToString(),
                 0));
             list.Add(new TooltipProperty(new TextObject("{=9C4tmyos}Tools:").ToString(),
-                supplies.GetToolsCurrentNeed().ResultNumber.ToString("0.00"),
+                new TextObject("{=7cBKQ4EC}{CURRENT} ({RATE} daily)")
+                .SetTextVariable("CURRENT", MBRandom.RoundRandomized(supplies.ToolsNeed).ToString())
+                .SetTextVariable("RATE", FormatFloatGain(supplies.GetToolsCurrentNeed().ResultNumber))
+                .ToString(),
                 0));
         }
 
@@ -810,7 +861,7 @@ namespace BannerKings.UI
             MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type"));
             var definition2 = GameTexts.FindText("str_LEFT_ONLY").ToString();
             list.Add(new TooltipProperty(definition2, GetCorrelation(hero), 0));
-            list.Add(new TooltipProperty(new TextObject("{=uUmEcuV8}Age").ToString(), hero.Age.ToString(), 0));
+            list.Add(new TooltipProperty(new TextObject("{=uUmEcuV8}Age").ToString(), ((int)hero.Age).ToString(), 0));
 
             if (hero.CurrentSettlement != null)
             {
@@ -829,6 +880,65 @@ namespace BannerKings.UI
                     list.Add(new TooltipProperty(title.FullName.ToString(), GetOwnership(hero, title), 0));
                 }
             }
+
+            return list;
+        }
+
+        public static List<TooltipProperty> GetDecisionOptionTooltip(KingdomDecision decision, DecisionOutcome outcome)
+        {
+            if (outcome == null) return new List<TooltipProperty>();
+
+            var list = new List<TooltipProperty>
+            {
+                new("", outcome.GetDecisionTitle().ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title),
+                new TooltipProperty(new TextObject("{=AiTyaUSW}Sponsor").ToString(), outcome.SponsorClan.Name.ToString(), 0),
+                new TooltipProperty(new TextObject("Support").ToString(), FormatValue(outcome.WinChance), 0)     
+            };
+
+            if (outcome is ClanAsDecisionOutcome)
+            {
+                TooltipAddEmptyLine(list);
+                ClanAsDecisionOutcome claimantOutcome = (ClanAsDecisionOutcome)outcome;
+                Hero claimant = claimantOutcome.Clan.Leader;
+                MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_relation"));
+                list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), ((int)claimant.GetRelationWithPlayer()).ToString(), 0));
+
+                SettlementClaimantDecision claimantDecision = (SettlementClaimantDecision)decision;
+                ExplainedNumber score = BannerKingsConfig.Instance.DiplomacyModel.CalculateHeroFiefScore(claimantDecision.Settlement,
+                    claimant,
+                    true);
+                list.AddRange(GetAccumulatingWithDescription(new TextObject("{=Q6aobVvq}Claim Strength"),
+                    outcome.GetDecisionDescription(),
+                    score.ResultNumber,
+                    false,
+                    ref score));
+            }
+
+            /*MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_relation"));
+            var definition = GameTexts.FindText("str_LEFT_ONLY").ToString();
+            list.Add(new TooltipProperty(definition, ((int)hero.GetRelationWithPlayer()).ToString(), 0));
+            MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type"));
+            var definition2 = GameTexts.FindText("str_LEFT_ONLY").ToString();
+            list.Add(new TooltipProperty(definition2, GetCorrelation(hero), 0));
+            list.Add(new TooltipProperty(new TextObject("{=uUmEcuV8}Age").ToString(), hero.Age.ToString(), 0));
+
+            if (hero.CurrentSettlement != null)
+            {
+                list.Add(new TooltipProperty(new TextObject("{=J6oPqQmt}Settlement").ToString(),
+                    hero.CurrentSettlement.Name.ToString(), 0));
+            }
+
+            var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero);
+            if (titles.Count > 0)
+            {
+                TooltipAddEmptyLine(list);
+                list.Add(new TooltipProperty(new TextObject("{=2qXtnwSn}Titles").ToString(), " ", 0));
+                TooltipAddSeperator(list);
+                foreach (var title in titles)
+                {
+                    list.Add(new TooltipProperty(title.FullName.ToString(), GetOwnership(hero, title), 0));
+                }
+            }*/
 
             return list;
         }
@@ -906,17 +1016,20 @@ namespace BannerKings.UI
         public static List<TooltipProperty> GetRecruitToolTip(CharacterObject character, Hero owner, int relation, bool canRecruit)
         {
             List<TooltipProperty> list = new List<TooltipProperty>();
-
             if (!canRecruit)
             {
                 string text = "";
-                list.Add(new TooltipProperty(text, character.ToString(), 1, false, TooltipProperty.TooltipPropertyFlags.None));
+                list.Add(new TooltipProperty(text, character.ToString(), 1, false, TooltipProperty.TooltipPropertyFlags.Title));
                 list.Add(new TooltipProperty(text, text, -1, false, TooltipProperty.TooltipPropertyFlags.None));
                 GameTexts.SetVariable("LEVEL", character.Level);
                 GameTexts.SetVariable("newline", "\n");
                 list.Add(new TooltipProperty(text, GameTexts.FindText("str_level_with_value", null).ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
 
                 list.Add(new TooltipProperty(text, new TextObject("{=xa13n63V}You don't have access to this recruit.").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+
+                TooltipAddEmptyLine(list);
+                list.Add(new TooltipProperty("", new TextObject("{=cnshSfx9}Access to volunteers is determined mostly by the Drating law (Demesne law) assocaited with the title of this fief. Laws are only changable through the kingdom repsented by a Kingdom-level title that rulers over this fief (see Demesne Hierarchy). Relationship, perks and other factors are secondary to the law's effects.").ToString(), 
+                    0, false, TooltipProperty.TooltipPropertyFlags.MultiLine));
 
                 var explanation = BannerKingsConfig.Instance.VolunteerModel.CalculateMaximumRecruitmentIndex(Hero.MainHero, owner, relation, true);
                 TooltipAddEmptyLine(list);
@@ -927,7 +1040,6 @@ namespace BannerKings.UI
             }
 
             return list;
-
         }
 
         public static List<TooltipProperty> GetHeirTooltip(Hero hero, ExplainedNumber score)

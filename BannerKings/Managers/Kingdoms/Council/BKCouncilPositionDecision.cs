@@ -223,7 +223,9 @@ namespace BannerKings.Managers.Kingdoms.Council
 
         public override bool IsAllowed()
         {
-            return !Kingdom.UnresolvedDecisions.Any(x => x is BKCouncilPositionDecision && x != this);
+            return !Kingdom.UnresolvedDecisions.Any(x => x is BKCouncilPositionDecision && x != this) &&
+                Position != null && Position.Member == null && 
+                (Suggested == null || (Suggested.Clan != null && !Suggested.Clan.IsUnderMercenaryService));
         }
 
         public class CouncilPositionDecisionOutcome : DecisionOutcome

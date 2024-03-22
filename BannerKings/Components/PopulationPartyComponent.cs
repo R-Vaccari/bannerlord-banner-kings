@@ -77,7 +77,6 @@ namespace BannerKings.Components
             caravan.InitializeMobilePartyAtPosition(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition);
             GiveMounts(ref caravan);
             GiveFood(ref caravan);
-            BannerKingsConfig.Instance.PopulationManager.AddParty(caravan);
         }
 
         public static MobileParty CreateTravellerParty(string id, Settlement origin, Settlement target, string name, int count,
@@ -142,18 +141,17 @@ namespace BannerKings.Components
                     }
 
                     break;
-                }
+                    }
             }
 
             party.InitializeMobilePartyAroundPosition(roster, new TroopRoster(party.Party), origin.GatePosition, 1f);
+            GivePackAnimals(ref party);
             if (!trading)
             {
-                GivePackAnimals(ref party);
                 GiveFood(ref party);
                 GiveItems(ref party, type);
             }
 
-            BannerKingsConfig.Instance.PopulationManager.AddParty(party);
             return party;
         }
 
@@ -285,7 +283,6 @@ namespace BannerKings.Components
                 else
                 {
                     DestroyPartyAction.Apply(null, MobileParty);
-                    BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(MobileParty);
                 }
             }
         }

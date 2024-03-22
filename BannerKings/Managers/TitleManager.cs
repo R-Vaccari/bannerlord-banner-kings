@@ -10,7 +10,6 @@ using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.BKModels;
-using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -39,6 +38,8 @@ namespace BannerKings.Managers
         private Dictionary<Hero, List<FeudalTitle>> DeJuresCache { get; set; }
         private Dictionary<Settlement, FeudalTitle> SettlementCache { get; set; }
 
+        internal List<FeudalTitle> AllTitles => Titles;
+
         public void RefreshCaches()
         {
             SettlementCache ??= new Dictionary<Settlement, FeudalTitle>();
@@ -55,14 +56,17 @@ namespace BannerKings.Managers
 
             foreach (FeudalTitle title in Titles)
             {
-                var hero = title.deJure;
-                if (!DeJuresCache.ContainsKey(hero))
+                Hero hero = title.deJure;
+                if (hero != null)
                 {
-                    DeJuresCache.Add(hero, new List<FeudalTitle> {title});
-                }
-                else
-                {
-                    DeJuresCache[hero].Add(title);
+                    if (!DeJuresCache.ContainsKey(hero))
+                    {
+                        DeJuresCache.Add(hero, new List<FeudalTitle> { title });
+                    }
+                    else
+                    {
+                        DeJuresCache[hero].Add(title);
+                    }
                 }
 
                 if (title.Fief != null)
@@ -111,7 +115,7 @@ namespace BannerKings.Managers
                     return SettlementCache[settlement];
                 }
 
-                return Titles.Find(x => x.Fief == settlement);
+                return Titles.Find(x => x.Fief != null && x.Fief.StringId == settlement.StringId);
             }
             catch (Exception ex)
             {
@@ -140,11 +144,12 @@ namespace BannerKings.Managers
             return type;
         }
 
-        public void GrantKnighthood(FeudalTitle title, Hero knight, Hero grantor)
+        public void GrantKnighthood(FeudalTitle title, Hero knight, Hero grantor, bool ignoreCosts = false)
         {
             var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, grantor);
-            action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber;
-            action.TakeAction(knight);
+            if (!ignoreCosts)
+                action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber;
+            BannerKingsConfig.Instance.TitleManager.GrantTitle(action, knight);
 
             if (grantor == Hero.MainHero)
             {
@@ -284,7 +289,7 @@ namespace BannerKings.Managers
 
         public List<Hero> CalculateAllVassals(Clan clan)
         {
-            var list = new List<Hero>();
+            var set = new HashSet<Hero>();
             var behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKGentryBehavior>();
             foreach (var title in GetAllDeJure(clan))
             {
@@ -300,7 +305,7 @@ namespace BannerKings.Managers
                                 (bool, Estate) isGentry = behavior.IsGentryClan(estate.Owner.Clan);
                                 if (isGentry.Item1 && isGentry.Item2 == estate && estate.Owner.MapFaction == clan.MapFaction)
                                 {
-                                    list.Add(estate.Owner);
+                                    set.Add(estate.Owner);
                                 }
                             }
                         }
@@ -319,21 +324,21 @@ namespace BannerKings.Managers
                     {
                         if (deJure.Clan == clan)
                         {
-                            list.Add(deJure);
+                            set.Add(deJure);
                         }
                         else
                         {
                             var suzerain = CalculateHeroSuzerain(deJure);
                             if (suzerain != null && suzerain.deJure == clan.Leader && clan.MapFaction == vassal.deJure.MapFaction)
                             {
-                                list.Add(deJure);
+                                set.Add(deJure);
                             }
                         }
                     }
                 }
             }
 
-            return list;
+            return set.ToList();
         }
 
         public Dictionary<Clan, List<FeudalTitle>> CalculateVassals(Clan suzerainClan, Clan targetClan = null)
@@ -464,6 +469,37 @@ namespace BannerKings.Managers
             if (action.ActionTaker == Hero.MainHero)
             {
 
+            }
+        }
+
+        public void CreateTitle(TitleAction action)
+        {
+            var currentOwner = action.Title.deJure;
+            InformationManager.DisplayMessage(new InformationMessage(
+                new TextObject("{=D50E4DZk}{REVOKER} has revoked the {TITLE}.")
+                    .SetTextVariable("REVOKER", action.ActionTaker.EncyclopediaLinkWithName)
+                    .SetTextVariable("TITLE", action.Title.FullName)
+                    .ToString()));
+            var impact = new BKTitleModel().GetRelationImpact(action.Title);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.ActionTaker, currentOwner, impact);
+
+            action.Title.RemoveClaim(action.ActionTaker);
+            action.Title.AddClaim(currentOwner, ClaimType.Previous_Owner, true);
+            ExecuteOwnershipChange(currentOwner, action.ActionTaker, action.Title, true);
+
+            if (action.Gold > 0)
+            {
+                action.ActionTaker.ChangeHeroGold((int)-action.Gold);
+            }
+
+            if (action.Influence > 0)
+            {
+                action.ActionTaker.Clan.Influence -= action.Influence;
+            }
+
+            if (action.Renown > 0)
+            {
+                action.ActionTaker.Clan.Renown -= action.Renown;
             }
         }
 

@@ -620,18 +620,10 @@
     <string id="tpH62HBy" text="Contract" />
     <string id="yRn9AcwU" text="Review this kingdom's contract, signed by lords that join it." />
     <string id="nbV21qZv" text="Found Kingdom" />
-    <string id="jeNEcVGi" text="Propose a change in government structure, altering the allowed succession forms and aspects of settlement governance. Depending on the government choice, an appropriate succession type will be enforced as well." />
     <string id="rTUgik07" text="Succession" />
-    <string id="ie9VdKpd" text="Propose a change in the realm's succession, altering how the next sovereign is chosen." />
     <string id="aELuNrRC" text="Inheritance" />
-    <string id="PXXY56Vd" text="Propose a change in clan inheritances, that is, who becomes the clan leader once the leader dies." />
-    <string id="LESrJQvC" text="Gender Law" />
-    <string id="kXUWrDRZ" text="Propose a change in gender laws, dictating whether males and females are viewed equally in various aspects." />
     <string id="ztoYKWVA" text="Founding a new Kingdom" />
     <string id="CSRMOcCm" text="Founding Dukedoms" />
-    <string id="JgLZ27UL" text="Select up to 3 dukedoms that will compose your kingdom. The kingdom's contract will follow the first dukedom's contract. Dukedom titles from other clans in the faction may be included as well." />
-    <string id="TJJzW4VL" text="Select a {LAW} to be voted on. Starting an election costs {INFLUENCE} influence." />
-    <string id="F7iMS7Tz" text="{LAW} - ({SUPPORT}% support)" />
     <string id="tRp08jyH" text="Battanian" />
     <string id="VtNL32g2" text="Sturgian" />
     <string id="ZdFBNgoJ" text="Khuzait" />
@@ -664,9 +656,6 @@
     <string id="4jUw7j4u" text="Your kingdom is not part of {CULTURE} culture." />
     <string id="gcdyXvXR" text="You do not adhere to a faith that is part of the {RELIGION} faith group." />
     <string id="btzaJMMD" text="Your kingdom is not de facto ruler of {SETTLEMENT}" />
-    <string id="BLugLsWR" text="Unite Greater Battania" />
-    <string id="jHzaifoJ" text="This title is already founded! de Jure is {DE_JURE.LINK} and de Facto is {DE_FACTO.LINK}." />
-    <string id="NVcg68Lz" text="You do not adhere to the {RELIGION} faith." />
     <string id="z69WpCc8" text="Merchants Guild" />
     <string id="qLVinLay" text="Masons Guild" />
     <string id="VPDXcJu7" text="Metalsmiths Guild" />
@@ -1042,7 +1031,6 @@
     <string id="hmtRGrpt" text="Items Produced:" />
     <string id="0RAPEDaT" text="Goods locally produced by the population." />
     <string id="Re0UyaL5" text="Tariff:" />
-    <string id="UgD3or79" text="Percentage of an item's value charged as tax when sold." />
     <string id="MhzdyoWG" text="Administrative Cost:" />
     <string id="ay7jnvEJ" text="Costs associated with the settlement administration, including those of active policies and decisions, deducted on tax revenue." />
     <string id="UADFWZgq" text="Militia Cap:" />
@@ -1109,7 +1097,6 @@
     <string id="0HiZjcrv" text="Infantry troops are {EFFECT1}% faster on the map\nYou and your formation deal {EFFECT2}% less damage when mounted" />
     <string id="ycDyfToX" text="Combat experience in tournaments increased by {EFFECT1}%\nTrade penalty increased by {EFFECT2}%" />
     <string id="axhJNG0M" text="Ritter" />
-    <string id="Df3Fdnuw" text="Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title." />
     <string id="oBxXQmTb" text="Request Council Position" />
     <string id="7aLyDGEt" text="Request a position in your suzerain's council." />
     <string id="oXv9Zi3y" text="Relinquish {POSITION}" />
@@ -1356,7 +1343,6 @@
     <string id="uYDaqbt6" text="Approval by {HERO}" />
     <string id="9RG3GwJD" text="Common born" />
     <string id="QEy4Ddar" text="Estate properties" />
-    <string id="r2y7UeGc" text="Workshop taxes from demesnes" />
     <string id="WYDGftvz" text="Notable aids" />
     <string id="6CKOfX2U" text="Workshop taxes" />
     <string id="s2gxPA2Q" text="Market gold" />
@@ -1508,21 +1494,14 @@
     <string id="u4JwjfVz" text="Assume a culture different than your current. Cultures can be assumed from settlements, your spouse or your faction leader. Direct family members will assume the culture as well. Assuming a culture yields a significant negative impact on clan renown." />
     <string id="zV5itG5E" text="The {CLAN} has assumed the {CULTURE} culture." />
     <string id="Tdi4brSb" text="Calradia" />
-    <string id="fKXLiUti" text="Propose Contract Change" />
     <string id="Ba2hpnco" text="Propose a contract change to your faction's titles." />
     <string id="akMdyYw0" text="Your faction has no contract. Found a kigdom-level title for your faction first." />
     <string id="qCfmQGiD" text="Contract changes can not be proposed during wars." />
     <string id="nsQZHLQf" text="A contract-altering proposal is already being voted on." />
-    <string id="mXhTPXZq" text="Contract Change" />
-    <string id="B5e1fznG" text="Propose a change to you faction's contract. These changes may be the form of governance, succession, clan inheritance or gender laws." />
     <string id="YgefyGT4" text="Propose Demesne Law Change" />
     <string id="1z57WDgP" text="Demesne Law Change" />
     <string id="Uq1b1dmT" text="Propose a change to your faction's demesne laws. These laws describe a multitude of aspects of your faction, such as slavery, duties of lower classes and tenure of estates. Laws that have been enacted for less than 1 year may not be changed." />
     <string id="n0kVmshx" text="Select a demesne {LAW} to be voted on. All the Peers of the realm will vote on it." />
-    <string id="EKBkrvse" text="Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm. The new empire will have a feudal contract with hereditary succcession.\n\n" />
-    <string id="DnbZbcT7" text="Your kingdom has no title associated with it. Found a de Jure kingdom title for your faction." />
-    <string id="YQhz7MP4" text="You are not a faction leader." />
-    <string id="5M28g8TK" text="Greater Battania" />
     <string id="RH2NC5ij" text="Organize Feast" />
     <string id="8XXOBM1L" text="Organize a feast. Summon lords of the realm to one of your towns or castles, and celebrate with bountiful food. Feasts are an opportunity to improve relations with your Peers. However, some planning is necessary - you don't want your guests out of food or alcohol! Despite all planning, some unfortunate events may occur...\n" />
     <string id="gn6WKs03" text="Cannot organize feasts during wars" />
@@ -1719,7 +1698,6 @@
     <string id="M03ZVW56" text="Summon {HERO} to your army. They are a vassal and currently lead {TROOPS} troops. Calling them will cost {INFLUENCE} influence." />
     <string id="djtn6LCe" text="Summon {HERO} to your army. They are landed gentry and will return to their property once the army is finished. Their estate can provide {TROOPS} troops. Calling them will cost {INFLUENCE} influence.\n\n{READY}" />
     <string id="QDf3sOgR" text="Summon your vassals to fulfill their duties." />
-    <string id="YZfBWynb" text="{HERO} has called his banners! {TROOPS} troops are gathering for war." />
     <string id="MeYrOaFb" text="No adequate fief to make a feast" />
     <string id="L9NQ0yOu" text="Your clan has reached it's companion limit." />
     <string id="tV52TCT8" text="Allow locals to sell off their excess production in the designated marketplace. Travelling merchants and individuals will stop by to trade. Adds village consumption of town goods and boosts hearth growth." />
@@ -2249,8 +2227,6 @@
     <string id="DWiRFSfS" text="Banner Kings - Important Concepts" />
     <string id="sFJ0pObc" text="Anything else?" />
     <string id="UKybEESB" text="Let me check your ranks." />
-    <string id="dxwTedS0" text="Not enough piety." />
-    <string id="hVJNXynE" text="Not enough influence." />
     <string id="cM7fEchf" text="{HERO} was installed as a preacher at {FIEF}" />
     <string id="MwCfjHL6" text="Can I learn about specific topics?" />
     <string id="69KyJPSL" text="{CLERGYMAN_TOPICS}" />
@@ -2307,7 +2283,6 @@
     <string id="AW5mYHB5" text="Cohesion boost to armies to they last longer, to counter balance the presence of more parties. Vanilla is 0%, 50% decreases cohesion loss by half. Default: 50%." />
     <string id="gDK2LRib" text="Maximum number of bandit parties in the world map. Vanilla is 150. Default: 150." />
     <string id="xTEWx9Zd" text="Acts endorsed by this group. Promoting any of these laws, policies or engaging in wars with these justifications (Casus Belli) will evoke the group's support." />
-    <string id="fE6RYz1k" text="Laws" />
     <string id="kP1H1dTq" text="Policies" />
     <string id="fiV2P3dD" text="Acts shunned by this group. Promoting any of these laws or policies reduce the group's support." />
     <string id="CJTfnQZR" text="Every group is capable of pushing demands for the ruler. Each demand requires a certain level of group influence. Supportive groups will push for less demands. Thus, high-support, low-influence groups are the least likely to push for any demands." />
@@ -2323,9 +2298,7 @@
     <string id="TrckwZCf" text="Family" />
     <string id="NMjbJsbD" text="Vassal" />
     <string id="PmNJnrJZ" text="Guest" />
-    <string id="8EX6VriS" text="Workforce" />
     <string id="A0MLAHO6" text="Non-Slaves" />
-    <string id="8xhVr4rK" text="Slaves" />
     <string id="DjzNUuoT" text="You are now camping in the vicinity of {FIEF}." />
     <string id="pZRUL363" text="Dismantle Camp" />
     <string id="PQaR5Cin" text="Truce Offering" />
@@ -2347,7 +2320,6 @@
     <string id="1KYFwcr7" text="Reputation from gained renown." />
     <string id="bLLovmn9" text="Reputation" />
     <string id="oV2MhyoO" text="Leading an Army" />
-    <string id="ARR7o0D8" text="{DESCRIPTION}\n\nOne-Handed: {1H}\nTwo-Handed: {2H}\nPolearm: {POLEARM}" />
     <string id="akA3mNVY" text="Sargeant" />
     <string id="xqjWas2R" text="The backbone of infantry armies, the sargeant specializes in one-handed combat and foot movement. Handles well an extra polearm but poorly any type of ranged weapons. Better with a shield." />
     <string id="Qs9pvZFC" text="Line Breaker" />
@@ -2366,7 +2338,6 @@
     <string id="Qf9prhMy" text="Increased Pay" />
     <string id="6a12xd7A" text="Increase the revenue of your mercenary contract by 5% per level." />
     <string id="NWcM56ZP" text="You fail to meet the requirements or privilege is already maxed out.\n\nPoints: {POINTS}\nMax level: {LEVEL}" />
-    <string id="jvVup6nx" text="Workshop Grant" />
     <string id="ViDeTjkQ" text="Acquire a workshop property. The property will be situated in one of the towns of your contractor." />
     <string id="9PCO8Wkn" text="Your contractor is not currently capable of granting a workshop, due to lacking themselves or funds to subsidize the acquisition of one. Alternatively, you've reached your workshop limit.\nPoints: {POINTS}\nMax level: {LEVEL}" />
     <string id="7OaTLJKt" text="You are now the owner of {WORKSHOP} at {TOWN}!" />
@@ -2395,10 +2366,6 @@
     <string id="EoCMnvLM" text="A large infrastructure that allows easy access to the city by ships, and thus the flow of goods and money. Harbors output fish products, increase local trade power and prosperity." />
     <string id="YSv8Dzw1" text="Port" />
     <string id="CjjO5qs6" text="Infrastructure that allows easy access to town by ships, and thus the flow of goods and money. Ports output fish products, increase local trade power and prosperity." />
-    <string id="pJAF5pzO" text="Nobles" />
-    <string id="d0YJZ6Z1" text="Craftsmen" />
-    <string id="h9UDWQcM" text="Tenants" />
-    <string id="jH7cWD5r" text="Serfs" />
     <string id="UZNcONWY" text="Princes" />
     <string id="7SrQncCu" text="{HERO} research project is now {RESEARCH}." />
     <string id="bfzcDHdP" text="{HERO} has stopped researching {RESEARCH}: innovation is fully researched." />
@@ -2413,7 +2380,6 @@
     <string id="OqSj1HBK" text="Forum" />
     <string id="sLDyMt8s" text="A Calradian invention, the Forum is the center of town life, where announcements are made, sentences passed, and emperors are named. It is the marble heart of a city, and itself a form of art." />
     <string id="oD2NsLEO" text="Enables the construction of forums" />
-    <string id="rQmTMDxF" text="Theater" />
     <string id="0wsqttef" text="It is unclear whether Calradians or Laconians first invented Theaters. More than a building, theaters are a cultural innovation - common folk gather to watch elaborate, classical works of both tragedy and comedy. In many ways, theaters stablish a cultural foundation and promote cultural values through the stories told in them." />
     <string id="wnS5gm2Z" text="Enables the construction of theaters" />
     <string id="mX96pT3Z" text="Aqueducts" />
@@ -2486,7 +2452,6 @@
     <string id="vTg1TpWq" text="Militarism of {FIEF}" />
     <string id="byjOdZ8U" text="Prosperity of {TOWN}" />
     <string id="8xNix2pu" text="Yearly income" />
-    <string id="cVOU505N" text="Stability" />
     <string id="iNKRzazP" text="Towns (x{COUNT})" />
     <string id="CqNOH2qW" text="Villages (x{COUNT})" />
     <string id="Ce2gcy3j" text="Dignataries (x{MEMBERS})" />
@@ -2507,13 +2472,11 @@
     <string id="xSxKo7Gq" text="Hostile faith to {FAITH}" />
     <string id="T4kiLZJR" text="Untolerated faith to {FAITH}" />
     <string id="OgpTY8c6" text="Faith match with {KINGDOM}" />
-    <string id="wwYABLRd" text="Clan Influence Limit" />
     <string id="mH6dkHSp" text="Power of {HERO}" />
     <string id="3w3G1VQk" text="Missing holy site ({FIEF})" />
     <string id="goy63pDb" text="Missing faith seat ({FIEF})" />
     <string id="BPgMgury" text="Holy site ({FIEF})" />
     <string id="z0ifBnEL" text="Faith seat ({FIEF})" />
-    <string id="Jh6FdJFE" text="Highest title level" />
     <string id="m6qYgCZ2" text="Household member" />
     <string id="RDxuKgC6" text="Republican government only allows revoking of dukes." />
     <string id="EecVkFHJ" text="Imperial government requires being de Jure faction leader." />
@@ -2522,10 +2485,8 @@
     <string id="zp4c76pS" text="De facto unlanded title holder" />
     <string id="ymbhLtjf" text="De jure suzerain of this title" />
     <string id="yhTbvYFh" text="{FACTION} suffered {CASUALTIES} casualties" />
-    <string id="e3MgNF7a" text="Raid of {VILLAGE}" />
     <string id="idg6MqLK" text="Attacker captives (x{TOTAL})" />
     <string id="a9OLSCt0" text="Objective fulfilled ({OBJECTIVE})" />
-    <string id="DyKbVdPa" text="Defener captives (x{TOTAL})" />
     <string id="pA8rNnUH" text="Raid" />
     <string id="WKBvL5Qc" text="Population of {FIEF}" />
     <string id="KWcY6gEF" text="{FIEF} has same faith as it's realm" />
@@ -2547,7 +2508,6 @@
     <string id="qR61PqMa" text="Shared culture" />
     <string id="vrm5pNf3" text="Honor of {HERO}" />
     <string id="Pcy4iFnT" text="Shared faith" />
-    <string id="gyHK87NL" text="Faith differences" />
     <string id="hAAOEqaJ" text="Peace interest" />
     <string id="TCVWRr8K" text="Paying tributes (x{COUNT})" />
     <string id="s21vTPmS" text="{THREAT}% threat relative to all possible enemies" />
@@ -2559,20 +2519,15 @@
     <string id="tvtoXveu" text="We are paying tribute to {FACTION}" />
     <string id="fvd0nAa3" text="Defensive stance against {FACTION}" />
     <string id="nnYfQnWv" text="{HERO1}`s opinion of {HERO2}" />
-    <string id="nAz6xfjt" text="{FACTION1} ruler`s opinion of {FACTION2} ruler" />
     <string id="ew3Ga8Lu" text="{THREAT}% threat relative to possible enemies" />
     <string id="KcLdYKrY" text="Difference in strength" />
     <string id="SRN3KdjF" text="Unworthy opponent" />
     <string id="Z7AW5i79" text="Enemy significantly stronger" />
     <string id="MvV0HUdo" text="Difference in controlled fiefs" />
-    <string id="cpVyc2Xc" text="Fief stability in {FACTION}" />
     <string id="UaofTriA" text="Recently started war" />
     <string id="Nxrd7yym" text="Fatigue over this war" />
     <string id="fLSny0R8" text="{HERO}'s {TRAIT} personality" />
-    <string id="PSrEtF5L" text="Government" />
-    <string id="Q0AgGuB0" text="Production efficiency" />
     <string id="yjbfHwog" text="Private slaves" />
-    <string id="UPhMZ859" text="Castle" />
     <string id="kiBf4bre" text="Trade pact with {KINGDOM}" />
     <string id="NVoUn9ro" text="{GROUP} support" />
     <string id="0uSRkuoe" text="A trade pact is possible." />
@@ -2620,7 +2575,6 @@
     <string id="5Gphhg0D" text="No Front" />
     <string id="GTQCGxvy" text="In Effect" />
     <string id="er8kmimQ" text="Not Present" />
-    <string id="5n3dJTGc" text="None" />
     <string id="d92ORtRp" text="Implicit (Alliance)" />
     <string id="F4Vv8Lc8" text="Groups" />
     <string id="poddfSLQ" text="{TRAIT} is considered virtuous" />
@@ -2659,8 +2613,6 @@
     <string id="pdyn2oZQ" text="Gender Laws" />
     <string id="ozbmXS2t" text="Gender laws determine what gender is or not favorable for positions of power and take precedence in clan inheritances. You may propose a change to the gender law process that will be voted on by the peers.{newline}{newline}For more information, search for Gender Laws in Encyclopedia." />
     <string id="KABMkiJO" text="Propose" />
-    <string id="aELuNrRC" text="Inheritance" />
-    <string id="LESrJQvC" text="Gender Law" />
     <string id="AnFLBw7F" text="Interest Groups" />
     <string id="k7QVZnaK" text="Radical Groups" />
     <string id="GatcoJXF" text="Shipping Lanes" />
@@ -2668,8 +2620,6 @@
     <string id="PJmuMrrY" text="Trade Power:" />
     <string id="D6mnTxzM" text="Manpower from every non-noble population class. Available classes are affected by kingdom demesne laws. Peasant manpower compromises the majority of military forces." />
     <string id="jhSJLHp1" text="Possible Recruits:" />
-    <string id="PA0b7FJk" text="These are the troops the notables may directly muster, not accounting for further trainning. The chance of each one is correlated to its population class' manpower in relation to the overall manpower.\n\n" />
-    <string id="QfGQBr8Z" text="{newline}-- {TYPE}: {CHANCE}" />
     <string id="tUZshvxh" text="{TROOP}{LIST}" />
     <string id="umTZshjG" text="{DESCRIPTION}\n\nDemand for this class: {DEMAND}\nExplanations:\n{EXPLANATIONS}" />
     <string id="xBXyqjL3" text="The amount of research this settlement produces towards innovations. This research is used for the settlement's culture innovations. Assimilating a fief will make it research towards your culture instead of the previous." />
@@ -2685,7 +2635,6 @@
     <string id="kO0MyA6z" text="Removing {HERO} will cost you {PIETY}{PIETY_ICON} and {INFLUENCE}{INFLUENCE_ICON}. Moreover, due to their influence over the populace, the fief will suffer a loyalty hit of {LOYALTY} points reduction." />
     <string id="P1XuHMXg" text="{HERO} was removed as a preacher at {FIEF}" />
     <string id="tDfLwHfm" text="{CLAN} Career in {KINGDOM}" />
-    <string id="77D4i3pG" text="Privileges" />
     <string id="2uHBLzKE" text="No privileges yet! Acquire Career Points through service time and merit. Request privileges by spending these points." />
     <string id="9GCLaXGO" text="Service Time" />
     <string id="KXn0ibbd" text="Levy Character" />
@@ -2721,7 +2670,6 @@
     <string id="g0Pc7Awk" text="Holy Sites" />
     <string id="wprHBRFq" text="Holy sites are the fiefs directly connected to the religion's divinities or cults. Holding such sites is important for religious Fervor. In addition, being blessed by a Divinity in its holy site adds double the blessing duration.{newline}{newline}Sites:{SITES}" />
     <string id="s1CgckUZ" text="{HOLY_SITE}: {DIVINITY}" />
-    <string id="AfsRi9wL" text="Fervor" />
     <string id="mzqED2gB" text="{TEXT}\n\n{DESCRIPTION}" />
     <string id="mZR7knaH" text="No factors yet" />
     <string id="q8tYdtw5" text="Royalists" />
@@ -2769,8 +2717,6 @@
     <string id="AvndY1C2" text="Not in a party" />
     <string id="TFXtC96A" text="Not party leader" />
     <string id="EcMwWGrw" text="Will you make camp in this position? Dismantling the camp will have the party disorganized for a couple hours." />
-    <string id="q6cxgOou" text="Commander" />
-    <string id="k4oyM9dT" text="Steward" />
     <string id="ymwU30nA" text="The era of the Calradoi was the period in which the Imperium reigned unmatched. " />
     <string id="FEJnz4oY" text="Internecine Age" />
     <string id="UjhXMGN4" text="With the advent of the battle of Pendraic and death of emperor Arenicos Pethros, the former Imperium has shattered into civil war - an Internecine." />
@@ -2782,7 +2728,6 @@
     <string id="rMbnANLs" text="Gods of Fate" />
     <string id="dTiAb57A" text="According to the Junme, the world revolves around the concept of Urthr - or in other words, fate. The gods are stewards of the Great Oak that mankind inhabits, keeping its roots and leaves from rotting. Moreover, the gods are the force of justice that fights Ásbani, the God-Devouring Serpent. The gods of fate, they say, give man what is just - rewards to those who are brave and virtuous, and punishment to the wicked, for they do not weave what choices a man makes, but they do the consequences." />
     <string id="5n79UcKp" text="Signicantly increased renown and influence from battles" />
-    <string id="iE8OCyCv" text="Gods" />
     <string id="PNCUXEeh" text="Gundar" />
     <string id="aGjvnUcL" text="Ancestor Hero" />
     <string id="Debe88Qc" text="Arkina" />
@@ -2874,7 +2819,6 @@
     <string id="F72Gfcyg" text="Agnatic" />
     <string id="A4pJzFUm" text="Enatic" />
     <string id="onDTTX11" text="- Every year, an election for ruler takes place (Republican succession){newline}- Settlement production quality +10%{newline}- Settlement loyalty +1{newline}- Settlement mercantilism +50%" />
-    <string id="SW29YLBZ" text="Imperial" />
     <string id="G6WHqN14" text="The Calradoi Imperial government was created after its original Republic. Unlike feudal monarchies, the empire, though often hereditary, is built on a different ethos. Though a Senate may exist, it is more often than not a formality than an effective political force. All property is considered ultimately the emperor's, and thus their vassals are mere administrators, rather than owners of their domains. In theory, ruling families only inherit their properties by the emperor's grace, who temporarily holds them in the family head's death, before granting it back to them. In truth, many emperors cannot afford to not concede to such influential families. Imperial fiefs are highly integrated, with security and assimilation as priorities." />
     <string id="nMxCoz9E" text="- Settlement cultural weight +40%{newline}- Settlement security +1{newline}- Settlement mercantilism +20%" />
     <string id="7FEVXuj2" text="Tribal" />
@@ -2899,14 +2843,11 @@
     <string id="zO9KbLmQ" text="+++ Inheritance score (for clan inheritors)\n++ Title claim\n+ Clan tier" />
     <string id="xHWTU9Z9" text="- Any Full Peerage clan leader" />
     <string id="F35YO1hR" text="+++ Political traits\n++ Clan tier\n++ Skills\n+ Age" />
-    <string id="uUmEcuV8" text="Age" />
     <string id="DO0DJddX" text="Theocratic Elective" />
     <string id="FxdcWtEc" text="-Every clan leader of same faith as current ruler" />
     <string id="uS6zw1vO" text="++ Piety\n++ Virtues\n++ Zealotry\n+ Skills\n+ Clan tier" />
-    <string id="0EVuzzOU" text="Piety" />
     <string id="XNxbaSa8" text="Battanian Elective" />
     <string id="rtGNUhGU" text="The Battanian succession is traditionally reliant upon renown. Caladog fen Gruffendoc is a notorious exception, who managed to leverage his close relationship to the previous High King, Aeril fen Uthelhain, to rally the traditional houses behind him. Yet, the tradition of renowned, strong leaders remains - Battanians care little for 'legal arguments' such as claims, and instead respect force and name. Family members of the ruler are generally preferred, but will quickly be cast aside once a stronger option presents itself." />
-    <string id="o8Ngf6oX" text="- Inheritance candidates of current ruler\n- Any clan leader of clan tier 5 or higher" />
     <string id="ydo55teN" text="+++ Clan tier\n++ Skills\n+ Inheritance score (for clan inheritors)\n+ Military power" />
     <string id="dnq6qC7y" text="Military power" />
     <string id="Xfwnn1HM" text="-Inheritance candidates of current ruler\n- Title claimants\n- Anyone with title of count or higher and clan tier 5 or higher" />
@@ -2923,7 +2864,6 @@
     <string id="Y0YnorOk" text="Military Duties (Serfs)" />
     <string id="Yv7wL46p" text="Agricultural Duties (Serfs)" />
     <string id="1sEEZco9" text="Lax Duties (Serfs)" />
-    <string id="vKtLDRp6" text="Criminal" />
     <string id="Nx8wnMQb" text="Production task allows your workforce to produce goods wtihout hinderances. This task yields the most productivity and thus income by the estate." />
     <string id="dujKXYCD" text="Land expansion task sets part of your workforce to expand the estate's useful acreage. They wont be productive and thus the income is reduced. Increased acreage allows more population capacity." />
     <string id="NZTEBOw6" text="Acreage" />
@@ -2933,7 +2873,6 @@
     <string id="7nBuzpGs" text="The maximum capacity of people this estate can support. Population grows naturally, or can be grown directly by adding slaves to the estate." />
     <string id="3MPOYqBt" text="Manpower Capacity" />
     <string id="yWiaG3WM" text="The maximum capacity of people this estate's retinue can be. The retinue is determined by the estate's population, local task and militarism." />
-    <string id="eMZikYJ3" text="Production" />
     <string id="MX44kzxQ" text="Represents the share of the village's production that is owned by this estate. The estate's income equals the total village production * estate's production share * (1 - tax rate)." />
     <string id="OXrRc2H1" text="Estate Value" />
     <string id="A0Zgn9HD" text="Last Income" />
@@ -2978,7 +2917,6 @@
     <string id="qQbNuioA" text=", a member of your household" />
     <string id="npdeYCOm" text=" of the {CLAN}" />
     <string id="sJrbtFwD" text=", a local dignatary" />
-    <string id="1z57WDgP" text="Demesne Law Change" />
     <string id="ORfB9aOJ" text="Accept the demand to pass the {LAW} law. They will be satisfied with this outcome." />
     <string id="WWs1WShV" text="The {GROUP} is satisfied! {LAW} is now enacted in the realm." />
     <string id="dYhoJxo6" text="There are currently no supported policies that aren't already enacted, or shunned policies that are not enacted." />
@@ -3100,5 +3038,137 @@
     <string id="xWMAda9w" text="An offering to Horsa, the prophet Horse-God, to honor him for giving us the spirit to carve our kingdom." />
     <string id="FE5xFScd" text="{?PLAYER.GENDER}My lady{?}My lord{\\?}, a high quality is expected, so it may be worthy of your ancestors. Horsa came to this land and planted his spear to claim it. Now we give back to him, faithfully. Will you offer the {BLADE}?" />
     <string id="HfOqj748" text="Warhorse Sacrifice" />
+    <string id="t6GBuiJX" text="Your spouse has solved an issue for {HERO}" />
+    <string id="Kjb25TsU" text="Loot Scale" />
+    <string id="g9Sa4rmA" text="The scale of loot dropped by troops. When under 100%, items will randomly be eliminated from the loot pool. Vanilla is 100%. Default: 50%." />
+    <string id="smqPaUHR" text="Clan Renown Scaling" />
+    <string id="G08wtvco" text="The scale of renown points required for clans to level up in tier. Vanilla is 100%. Default: 300%." />
+    <string id="iZcJtDkH" text="World Companions Limit" />
+    <string id="6m4y9ujC" text="The max limit of wanderers in the world, available at taverns. The limit is relative to all existing cities in the map. Vanilla is 60%, and amounts to less than 1 wanderer per town, BK amounts to 1 per town. Default: 100%." />
+    <string id="VFTH237z" text="Creating a title sets you as its legal holder, rather than no legal holder at all. The title's laws, such as Succession and Government laws, will match those of your current primary title." />
+    <string id="bLwFU6mw" text="Create" />
+    <string id="gp1fPcSo" text="De Jure Holder" />
+    <string id="5n3dJTGc" text="None" />
+    <string id="AiTyaUSW" text="Sponsor" />
+    <string id="b0smO4NW" text="Support" />
+    <string id="Q6aobVvq" text="Claim Strength" />
+    <string id="cnshSfx9" text="Access to volunteers is determined mostly by the Drating law (Demesne law) assocaited with the title of this fief. Laws are only changable through the kingdom repsented by a Kingdom-level title that rulers over this fief (see Demesne Hierarchy). Relationship, perks and other factors are secondary to the law's effects." />
+    <string id="AJRV3Ex3" text="The {ALLY} has refused to help the {DEFENDER} in their war effort!" />
+    <string id="xqGUkJZH" text="The group {GROUP} has formed under the leadership of {LEADER}." />
+    <string id="3azYg7UM" text="{DESCRIPTION}{newline}{newline}One-Handed: {ONEHANDED}{newline}Two-Handed: {TWOHANDED}{newline}Polearm: {POLEARM}{newline}Riding: {RIDING}{newline}Athletics: {ATHLETICS}{newline}Throwing: {THROWING}{newline}Bow: {BOW}{newline}Crossbow: {CROSSBOW}" />
+    <string id="3MDmvuVf" text="Daily piety gain: +{a0}" />
+    <string id="vTyRD6cM" text="Faith presence in fiefs: +{a0}%" />
+    <string id="Jh0vPbET" text="Spouse score improvement (half for other clan members): +{a0}%" />
+    <string id="Ojp1qZdC" text="Legitimacy (as ruler): +{a0}%" />
+    <string id="yEbrBMJC" text="Demesne limit: +{a0}%" />
+    <string id="UkiSUHE6" text="Vassal limit: +{a0}%" />
+    <string id="7oP8Hj7c" text="Language learning speed: +{a0}%" />
+    <string id="GuYLFezW" text="Book reading speed: +{a0}%" />
+    <string id="zwd8fwK7" text="Lifestyle progress speed: +{a0}%" />
+    <string id="Zyao3x8F" text="Personal research progress: +{a0}" />
+    <string id="ft4CKf5O" text="Fief production efficiency: +{a0}%" />
+    <string id="H8jSy770" text="Fief production quality: +{a0}%" />
+    <string id="wMcipFaM" text="Party supply efficiency: +{a0}%" />
+    <string id="dSjTJUjU" text="Fief stability: +{a0}" />
+    <string id="vSqWjxNU" text="Fief trade power: +{a0}%" />
+    <string id="0P1gM2Kb" text="Invalid character {CHAR} from recruits path {PATH}" />
+    <string id="0k2rUZbZ" text="Mercenaries can not fulfill council roles." />
+    <string id="Ssi15mFy" text="Revenues of {CLAN}" />
+    <string id="ZQgfSkQ8" text="Generosity of the group leader" />
+    <string id="8JtaP3Ak" text="Political relevance of {CLAN}" />
+    <string id="JHcib2AV" text="Willingness to join this group" />
+    <string id="1RD1OWYP" text="Influence limit of {CLAN}" />
+    <string id="Gq5BnNiN" text="Reluctance" />
+    <string id="KDH6VoKQ" text="Legitimacy of {HERO}" />
+    <string id="s7sxJgWg" text="{HERO1}`s ambition of ruling" />
+    <string id="PMpAhYvn" text="De Jure holder of {KINGDOM} (theoretical)" />
+    <string id="ueQMwDQe" text="De Facto holder of {KINGDOM} (theoretical)" />
+    <string id="7NPiKyo0" text="{HERO} is a {KNIGHT}" />
+    <string id="GpKQomFn" text="No de jure owner, title must be created." />
+    <string id="rkrK9Js5" text="You can not usurp from your vassal, revoke instead." />
+    <string id="JFcNv7no" text="You must be the de facto holder of {TITLE} to inherit the sovereign title {SOVEREIGN}." />
+    <string id="sN05SxWb" text="To usurp a duchy-level title, you need to control the majority of its direct vassals." />
+    <string id="hz42Pe9J" text="{RAIDS} raids by {FACTION}" />
+    <string id="eTaEWbFK" text="Defender captives (x{TOTAL})" />
+    <string id="CfiavKU4" text="{HERO} is the established owner of {FIEF}" />
+    <string id="OQmLP0qp" text="{HERO} is de jure holder of {TITLE}" />
+    <string id="FUyGdaRm" text="{HERO} is a legal claimant of {TITLE}" />
+    <string id="sAb8WSFG" text="Last conquered by {CLAN} ({LAW})" />
+    <string id="Tk8HfVjp" text="{HERO} is a claimant of {TITLE} ({LAW})" />
+    <string id="ow8Bo8qm" text="Owns {FIEF} ({LAW})" />
+    <string id="P7tvtWh6" text="Current Demesne Limit {CURRENT}/{LIMIT}" />
+    <string id="LebeA6tg" text="Already at war with {FACTION}" />
+    <string id="7ix3cKGX" text="{FACTION} should defend its few fiefs rather than attacking" />
+    <string id="bwVkTDdv" text="{FACTION1} controls more than twice the fiefs than {FACTION2}" />
+    <string id="EOe81mg7" text="Craftsmen consumption" />
+    <string id="CB6A3Eor" text="Tenants consumption" />
+    <string id="DcEELxKF" text="Not a Full Peer" />
+    <string id="1WT6A7nG" text="Carrying animals while on desert (inventory, party and prisoners)" />
+    <string id="BqaxcvqV" text="Carrying animals while in snow or blizzard (inventory, party and prisoners)" />
+    <string id="Cz0aNGdW" text="Highest title of rank {RANK}" />
+    <string id="Jph09YjR" text="Alcohol supplies" />
+    <string id="EYGfTj7F" text="Animal products  supplies" />
+    <string id="Zz8Op0OS" text="Textiles supplies" />
+    <string id="wtBW7t3v" text="Wood supplies" />
+    <string id="26yWZwHo" text="{CLASS} taxes" />
+    <string id="GKtDoLCd" text="Taxes from {WORKSHOP} ({OWNER})" />
+    <string id="2vBXHPsS" text="Goods consumed by the populace ({TARIFF}% tariffs)" />
+    <string id="aPEQXOTV" text="Relationship with {HERO}" />
+    <string id="fWnWwmqn" text="Drafting Demesne Law ({LAW}) in {TITLE}" />
+    <string id="sVGeHKpm" text="Tariffs determine the percentage of sale revenues that are owned to the fief's lord. This applies both to trade between the fief and free parties, as well as the fief and its population. Thus, the more goods the population consumes, the more tariffs they yield." />
+    <string id="ridNrfno" text="These are the troops the notables may directly muster, not accounting for further trainning. The chance of each one is correlated to its population class' manpower in relation to the overall manpower." />
+    <string id="Og5Ks2R2" text="{newline}{TYPE}: {CHANCE}" />
+    <string id="ipGDmaBZ" text="Claimant" />
+    <string id="0XhSiqsR" text="A claimant group supports replacing the realm's current ruler with a claimant. The claimant must be a valid candidate under the realm's Succession law. The stronger a candidate, the more likely others will join the Claimant group. Current ruler's legitimacy and personal relationship with individual lords are also very important factors. In case the claimant is of the same clan as the current ruler, this means that they would become the family head themselves." />
+    <string id="EYqxJOKQ" text="This demand requires at least {INFLUENCE}% group radicalism." />
+    <string id="kcjyuGpA" text="Rebellion" />
+    <string id="t8HQqf4z" text="A rebellion war is fought by former radical groups over a realm, after their demand was rejected by their ruler. Rebels seek to enforce their demand by force.{newline}{newline}Objective: Survive as a rebellion for over 2 years with at least 1 fief." />
+    <string id="EOpunWCA" text="Survive for 2 years" />
+    <string id="1NHS00eA" text="The {ALLY} has joined the {DEFENDER} in their war effort!" />
+    <string id="WpjPTcJt" text="{HERO} has called {?PLAYER.GENDER}her{?}his{\\? banners! {TROOPS} troops are gathering for war." />
+    <string id="thijhbki" text="Establish a new Title" />
+    <string id="e0t4jZoO" text="Found Empire" />
+    <string id="Zi7h8WK3" text="Found an Empire-level title. An Empire is the highest form of title, ruling over kingdoms. Empires may absorb kingdom titles as their vassals through the process of De Jure Drift.{newline}{newline}" />
+    <string id="eH3B6qgm" text="The realm {REALM} is not represented by a Kingdom-level title. Found a Kingdom first, and then an Empire." />
+    <string id="F5BEyddZ" text="Your realm, {REALM} is already attached to the Empire-level title {TITLE}." />
+    <string id="miyAGkb6" text="Founding Dukedom" />
+    <string id="AVzvekuX" text="Select a dukedom that will compose your kingdom. The kingdom's contract will follow this dukedom's contract in terms of Succession, Inheritance and so on. Future dukedoms may be assimilated into the kingdom by the process of De Jure Drift." />
+    <string id="XpFaiiny" text="Establish your own kingdom title. This new title will be bound to your Kingdom faction, and represent it in terms of Demesne laws, Succession and Inheritance laws, and all other types of laws attached to titles. Your faction must be one that is not already represented by a sovereign-level title (Kingdom or Empire titles)." />
+    <string id="TGyoYia6" text="The realm {REALM} is already represented by a sovereign title ({TITLE})" />
+    <string id="k4oyM9dT" text="Steward" />
+    <string id="Ei6ahKw3" text="- Inheritance candidates of current ruler\n- Any clan leader of clan tier 3 or higher" />
+    <string id="q7Bk0wGf" text="Administer the laws of the {TITLE}, a legal dominion represented by the {REALM}." />
+    <string id="LprJYC1C" text="Administering the laws of the {TITLE} is not possible, as this title is subjected to the laws of {SOVEREIGN}." />
+    <string id="69rAwxib" text="Accept the demand to cede your rulership to the {CLAIMANT}. You will keep your properties and titles, but be replaced as a ruler. They will be satisfied with this outcome." />
+    <string id="53q6oUzO" text="The {GROUP} is satisfied! {CLAIMANT} will now rule the {REALM}." />
+    <string id="2MvkhB8h" text="Deny the demand to cede rulership to the {CLAIMANT}, lead by {HERO}. They will not like this outcome." />
+    <string id="9Tdt2RiC" text="Civil War" />
+    <string id="s3dhcwG2" text="A civil war breaks out! {RULER} has rejected the demand of your {GROUP} group. You and your fellow group members are now in open war with the original realm." />
+    <string id="Yjq7GL10" text="Install {CLAIMANT}" />
+    <string id="zdQMSQf4" text="Demand that the ruler cede rulership to the claimant backed by the group." />
+    <string id="BKAdUzjo" text="The {GROUP} is pushing for you to cede rulership to {CLAIMANT}. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {STRENGTH}% military strength relative to your loyalist forces." />
+    <string id="UoPv1RvG" text="{HERO} {ROLE}, a family of {PEERAGE}.{newline}{newline}{REASON}{newline}{newline}Claim strength: {RESULT}{newline}-----{newline}{EXPLANATION}" />
+    <string id="F2N7WBbz" text="This person is willing to back your radical group." />
+    <string id="bn3YBXvb" text="{NAME} - {SCORE}" />
+    <string id="YjfTwnhj" text="As leader of a claimant group, you must choose the claimant that shall be backed by the group. This decision is final and will not change until the entire claimant group is unmade.{newline}{newline}Possible claimants are all the possible successors of the {TITLE} according to its {SUCCESSION} succession law." />
+    <string id="ABnd5G9h" text=", head of the {CLAN}" />
+    <string id="sKFZDhiA" text="The radical {GROUP} group has been dissolved." />
+    <string id="tMCr5Ln7" text="Title Demand" />
+    <string id="2xWSvbVc" text="Invite Members" />
+    <string id="Un7UY83V" text="Creation Chance" />
+    <string id="oVr1RVY0" text="{EXPLANATION}" />
+    <string id="Bfkjk1o0" text="There is no {GROUP} currently active in the {REALM}. At any time, non-ruling clan leaders may start a radical group according to their interests, political leverage, relationships and support of the ruler." />
+    <string id="ds1KP4Qc" text="Leave Group" />
+    <string id="9SnWS77u" text="Join Group" />
+    <string id="znEakOmv" text="Radicalism" />
+    <string id="ZgRQ1v2d" text="Demand" />
+    <string id="9G5uYwk6" text="Strength" />
+    <string id="iaCoQ8Px" text="The military strength of the group's participants, in comparison to all other non-participants of the realm. 100% strength would mean that both sides have equal strength." />
+    <string id="30S3yEVo" text="Make Ultimatum" />
+    <string id="8CtOagZE" text="Make an ultimatum to your ruler demanding they accept your terms. If rejected, you and your group peers will be denounced as enemies of the realm, and a civil war will begin." />
+    <string id="vmbdT2Wf" text="Invite other members to your group. Only the group's leader can invite other members, at the expense of their influence. Members will be avaiable or not to be invited according to their willingness to participate in the group. Willing lords and ladies may also occasionally join the group on their own volition, without any costs to the leader." />
+    <string id="GFAEtBRb" text="{HERO} leads the {CLAN}, a family of {PEERAGE}.{newline}Fiefs: {FIEFS}{newline}Estates: {ESTATES}{newline}{newline}{REASON}{newline}{newline}Willingness: {RESULT}{newline}-----{newline}{EXPLANATION}" />
+    <string id="RdWAc9p5" text="This person is not willing to back your radical group." />
+    <string id="vRvVDXgC" text="Push for a demand as a radical {GROUP} group. Once created, you can not abandon the group without suffering consequences. Other members will join based on how they like you, the demand and their perception of the ruler.{newline}{newline}A radical group slowly gathers Radicalism, so long their combined forces are equal or greater to 50% of the loyalist forces. The group  can push an ultimatum to the ruler once Radicalism reaches the minimum defined threshold set by the demand type." />
   </strings>
 </base>

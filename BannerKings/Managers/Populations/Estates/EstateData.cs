@@ -86,6 +86,17 @@ namespace BannerKings.Managers.Populations.Estates
 
         public void DestroyEstate(Estate estate) => Estates.Remove(estate);
 
+        public void CreateEstates(PopulationData data)
+        {
+            if (Estates.Count < BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber)
+            {
+                var estate = Estate.CreateNotableEstate(null, data, this);
+                if (estate != null)
+                {
+                    Estates.Add(estate);
+                }
+            }
+        }
 
         internal override void Update(PopulationData data = null)
         {
@@ -138,15 +149,7 @@ namespace BannerKings.Managers.Populations.Estates
                     }
                 }
 
-
-                if (Estates.Count < BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber)
-                {
-                    var estate = Estate.CreateNotableEstate(null, data, this);
-                    if (estate != null)
-                    {
-                        Estates.Add(estate);
-                    }
-                }
+                CreateEstates(data);
             }, 
             this.GetType().Name,
             false);

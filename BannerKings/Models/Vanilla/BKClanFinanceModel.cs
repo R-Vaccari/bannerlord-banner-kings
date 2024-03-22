@@ -69,7 +69,7 @@ namespace BannerKings.Models.Vanilla
             return (int)result;
         }
 
-        private int GetWorkshopTaxes(Workshop workshop)
+        public int GetWorkshopTaxes(Workshop workshop)
         {
             var result = 0;
             if (workshopTaxes.ContainsKey(workshop))
@@ -149,33 +149,10 @@ namespace BannerKings.Models.Vanilla
             int totalNotablesAids = 0;
             foreach (var town in clan.Fiefs)
             {
-                foreach (var wk in town.Workshops)
-                {
-                    if (wk.Owner != clan.Leader && wk.WorkshopType.StringId != "artisans")
-                    {
-                        totalWorkshopTaxes += GetWorkshopTaxes(wk);
-                    }
-                }
-
                 if (!BannerKingsConfig.Instance.AI.AcceptNotableAid(clan, BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement)))
                 {
                     continue;
                 }
-
-                foreach (var notable in town.Settlement.Notables.Where(notable => notable.SupporterOf == clan && notable.Gold > 5000))
-                {
-                    totalNotablesAids += 200;
-                    if (applyWithdrawals)
-                    {
-                        notable.Gold -= 200;
-                    }
-                }
-            }
-
-            if (totalWorkshopTaxes > 0)
-            {
-                result.Add(totalWorkshopTaxes,
-                    new TextObject("{=r2y7UeGc}Workshop taxes from demesnes"));
             }
 
             if (totalNotablesAids > 0)

@@ -3,7 +3,6 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Skills;
-using System.Linq;
 using BannerKings.Managers.Traits;
 using BannerKings.Utils;
 using System.Collections.Generic;
@@ -13,6 +12,9 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.Library;
+using Helpers;
+using BannerKings.Campaign.Skills;
+using BannerKings.Extensions;
 
 namespace BannerKings.Models.BKModels
 {
@@ -37,6 +39,14 @@ namespace BannerKings.Models.BKModels
                     }
 
                     result.Add(hero.GetTraitLevel(BKTraits.Instance.Zealous) * 0.2f, BKTraits.Instance.Zealous.Name);
+
+                    SkillHelper.AddSkillBonusForCharacter(BKSkills.Instance.Theology, 
+                        BKSkillEffects.Instance.PietyGain,
+                        hero.CharacterObject, 
+                        ref result,
+                        hero.GetSkillValue(BKSkills.Instance.Theology), 
+                        true, 
+                        0);
 
                     if (rel.FavoredCultures.Contains(hero.Culture))
                     {
@@ -369,7 +379,32 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            foreach (Settlement settlement in Settlement.All)
+            if (religion.Faith.FaithSeat != null)
+            {
+                Settlement settlement = religion.Faith.FaithSeat;
+                var rel = settlement.PopulationData().ReligionData.DominantReligion;
+                if (rel != null && rel.Equals(religion))
+                {
+                    result.Add(0.15f, new TextObject("{=z0ifBnEL}Faith seat ({FIEF})")
+                       .SetTextVariable("FIEF", settlement.Name));
+                }
+                else result.Add(-0.15f, new TextObject("{=goy63pDb}Missing faith seat ({FIEF})")
+                       .SetTextVariable("FIEF", settlement.Name));
+            }
+
+            foreach (Settlement settlement in holySites)
+            {
+                var rel = settlement.PopulationData().ReligionData.DominantReligion;
+                if (rel != null && rel.Equals(religion))
+                {
+                    result.Add(0.05f, new TextObject("{=BPgMgury}Holy site ({FIEF})")
+                        .SetTextVariable("FIEF", settlement.Name));
+                }
+                else result.Add(-0.05f, new TextObject("{=3w3G1VQk}Missing holy site ({FIEF})")
+                    .SetTextVariable("FIEF", settlement.Name));
+            }
+
+            /*foreach (Settlement settlement in Settlement.All)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 if (data?.ReligionData == null)
@@ -425,7 +460,7 @@ namespace BannerKings.Models.BKModels
 
             result.Add(towns, GameTexts.FindText("str_towns"));
             result.Add(castles, GameTexts.FindText("str_castles"));
-            result.Add(villages, GameTexts.FindText("str_villages"));
+            result.Add(villages, GameTexts.FindText("str_villages"));*/
 
             float clans = 0f;
             float kingdomsCount = Kingdom.All.Count;
@@ -521,6 +556,14 @@ namespace BannerKings.Models.BKModels
                     DefaultDivinities.Instance.AseraSecondary3))
                 {
                     result.AddFactor(0.15f, DefaultDivinities.Instance.AseraSecondary1.Name);
+                }
+
+                if (settlement.Town != null)
+                {
+                    SkillHelper.AddSkillBonusForTown(BKSkills.Instance.Theology,
+                        BKSkillEffects.Instance.FaithPresence,
+                        settlement.Town,
+                        ref result);
                 }
             }
 

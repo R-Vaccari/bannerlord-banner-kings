@@ -2,7 +2,10 @@
 using System.Linq;
 using BannerKings.Behaviours.Criminality;
 using BannerKings.Behaviours.Diplomacy.Groups;
+using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Campaign.Economy.Markets;
+using BannerKings.Campaign.Skills;
 using BannerKings.Managers;
 using BannerKings.Managers.AI;
 using BannerKings.Managers.Court;
@@ -21,6 +24,7 @@ using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Recruits;
 using BannerKings.Managers.Shipping;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
@@ -28,7 +32,6 @@ using BannerKings.Managers.Traits;
 using BannerKings.Models.BKModels;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 
@@ -48,8 +51,9 @@ namespace BannerKings
 
         private List<ITypeInitializer> modInitializers = new List<ITypeInitializer>();
 
-        public bool FirstUse { get; private set; } = true;
+        public bool FirstUse { get; internal set; } = true;
         public string TitlesGeneratorPath { get; set; } = BasePath.Name + "Modules/BannerKings/ModuleData/titles.xml";
+        public string RecruitsXmlPath { get; set; }
 
         public AIBehavior AI = new();
 
@@ -79,9 +83,9 @@ namespace BannerKings
         public BKSmithingModel SmithingModel { get; } = new();
         public ICultureModel CultureModel { get; set; } = new BKCultureModel();
         public IReligionModel ReligionModel { get; set; } = new BKReligionModel();
-        public BKVolunteerModel VolunteerModel { get; } = new();
+        public BKVolunteerModel VolunteerModel { get; set; } = new BKVolunteerModel();
         public LegitimacyModel LegitimacyModel { get; set; } = new BKLegitimacyModel();
-        public BKGrowthModel GrowthModel { get; } = new();
+        public GrowthModel GrowthModel { get; set; } = new BKGrowthModel();
         public BKVillageProductionModel VillageProductionModel { get; } = new();
         public BKProsperityModel ProsperityModel { get; } = new();
         public BKTaxModel TaxModel { get; } = new();
@@ -94,6 +98,7 @@ namespace BannerKings
         public IPartyNeedsModel PartyNeedsModel { get; } = new BKPartyNeedsModel();
         public BKDiplomacyModel DiplomacyModel { get; } = new();
         public BKKingdomDecisionModel KingdomDecisionModel { get; } = new();
+        public IMercenaryModel MercenaryModel { get; } = new MercenaryModel();
 
         static BannerKingsConfig()
         {
@@ -133,6 +138,7 @@ namespace BannerKings
 
         public void Initialize()
         {
+            BKSkillEffects.Instance.AddVanilla();
             DefaultPopulationNames.Instance.Initialize();
             DefaultTitleNames.Instance.Initialize();
             BKTraits.Instance.Initialize();
@@ -150,6 +156,8 @@ namespace BannerKings
             DefaultCouncilPositions.Instance.Initialize();
             DefaultCasusBelli.Instance.Initialize();
             BKTraits.Instance.Initialize();
+            DefaultDemands.Instance.Initialize();
+            DefaultRadicalGroups.Instance.Initialize();
             DefaultInterestGroup.Instance.Initialize();
             DefaultCriminalSentences.Instance.Initialize();
             DefaultCrimes.Instance.Initialize();
@@ -161,6 +169,8 @@ namespace BannerKings
             DefaultGovernments.Instance.Initialize();
             DefaultContractAspects.Instance.Initialize();
             DefaultShippingLanes.Instance.Initialize();
+            DefaultMarketGroups.Instance.Initialize();
+            DefaultRecruitSpawns.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();
@@ -172,7 +182,7 @@ namespace BannerKings
             Initialize();
 
             ReligionsManager = new ReligionsManager();
-            PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
+            PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>());
             PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>());
             TitleManager = new TitleManager();
             TitleGenerator.InitializeTitles();

@@ -76,7 +76,7 @@ namespace BannerKings.Behaviours
             var lf = education.Lifestyle;
             if (skill == lf.FirstSkill || skill == lf.SecondSkill)
             {
-                education.AddProgress(education.StandartLifestyleProgress / 10f);
+                education.AddProgress(education.CurrentLifestyleRate.ResultNumber / 10f);
             }
         }
 

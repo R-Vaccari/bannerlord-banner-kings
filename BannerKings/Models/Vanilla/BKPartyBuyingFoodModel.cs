@@ -8,8 +8,8 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKPartyBuyingFoodModel : DefaultPartyFoodBuyingModel
     {
-        public override float MinimumDaysFoodToLastWhileBuyingFoodFromTown => 100f;
-        public override float MinimumDaysFoodToLastWhileBuyingFoodFromVillage => 40f;
+        public override float MinimumDaysFoodToLastWhileBuyingFoodFromTown => 50f;
+        public override float MinimumDaysFoodToLastWhileBuyingFoodFromVillage => 30f;
 
         public override void FindItemToBuy(MobileParty mobileParty, Settlement settlement, out ItemRosterElement itemElement, out float itemElementsPrice)
         {

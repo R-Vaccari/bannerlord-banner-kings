@@ -120,7 +120,7 @@ namespace BannerKings.Behaviours
         private bool ShouldHaveWorkshop(Hero hero, int cost)
         {
             return hero == hero.Clan.Leader && hero.Clan.Gold >= (int) (cost * 2f) &&
-                   hero.OwnedCaravans.Count < 1 + hero.Clan.Tier;
+                   hero.OwnedWorkshops.Count < 1 + hero.Clan.Tier;
         }
     }
 }

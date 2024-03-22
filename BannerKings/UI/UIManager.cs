@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BannerKings.Managers.Court.Members;
-using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
-using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.Vanilla;
@@ -194,12 +192,11 @@ namespace BannerKings.UI
                 if (__instance.IsLord && namingSetting != DefaultSettings.Instance.NamingNoTitles &&
                     BannerKingsConfig.Instance.TitleManager != null)
                 {
-                    var kingdom = __instance.Clan?.Kingdom;
                     var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(__instance);
                     if (title != null)
                     {
                         var honorary = Utils.TextHelper.GetTitleHonorary(title.TitleType, __instance.IsFemale,
-                            kingdom != null ? kingdom.Culture : __instance.Culture);
+                            __instance.Culture);
                         var name = (TextObject) __instance.GetType()
                             .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
                             .GetValue(__instance);
@@ -238,10 +235,11 @@ namespace BannerKings.UI
                                 .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
                                 .GetValue(__instance);
 
+                            var clan = __instance.Clan;
                             if (leader == __instance.Spouse)
                             {
                                 var honorary = Utils.TextHelper.GetTitleHonorary(leaderTitle.TitleType, __instance.IsFemale,
-                                    kingdom != null ? kingdom.Culture : __instance.Culture);
+                                    clan != null ? clan.Culture : __instance.Culture);
 
                                 __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
                                     .SetTextVariable("TITLE", honorary)
@@ -252,7 +250,7 @@ namespace BannerKings.UI
                                 (leader.Children.Contains(__instance) || leader.Siblings.Contains(__instance)))
                             { 
                                 var honorary = Utils.TextHelper.GetPrinceTitles(__instance.IsFemale,
-                                    kingdom != null ? kingdom.Culture : __instance.Culture);
+                                    clan != null ? clan.Culture : __instance.Culture);
 
                                 __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
                                     .SetTextVariable("TITLE", honorary)
@@ -322,23 +320,19 @@ namespace BannerKings.UI
         [HarmonyPatch(typeof(SkillIconVisualWidget), "SkillId", MethodType.Setter)]
         internal class SkillIconOnLateUpdatePatch
         {
-            private static bool Prefix(SkillIconVisualWidget __instance, string value)
+            private static bool Prefix(ref string value)
             {
-                var text = value switch
+                if (value == "Lordship" || value == "Scholarship" || value == "Theology")
                 {
-                    "Lordship" => "leadership",
-                    "Scholarship" => "Steward",
-                    "Theology" => "charm",
-                    _ => value
-                };
-
-                var skillId = __instance.GetType().GetField("_skillId", BindingFlags.Instance | BindingFlags.NonPublic);
-                if (skillId != null)
-                {
-                    skillId.SetValue(__instance, text);
+                    value = value switch
+                    {
+                        "Lordship" => "leadership",
+                        "Scholarship" => "Steward",
+                        "Theology" => "charm",
+                    };
                 }
 
-                return false;
+                return true;
             }
         }
 

@@ -85,6 +85,8 @@
 		<string id="bk_gold" text="Gold{@Plural}loads of gold{\@}" />
 		<string id="bk_mead" text="Mead{@Plural}barrels of mead{\@}" />
 		<string id="bk_marble" text="Marble{@Plural}blocks of marble{\@}" />
+		<string id="bk_egg" text="Eggs{@Plural}crates of eggs{\@}" />
+		<string id="bk_dyes" text="Dyes{@Plural}jars of dyes{\@}" />
 
 		<string id="bk_primogeniture" text="Primogeniture" />
 		<string id="bk_ultimogeniture" text="Ultimogeniture" />

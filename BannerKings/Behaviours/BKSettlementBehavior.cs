@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Buildings;
+using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Policies;
@@ -114,7 +114,7 @@ namespace BannerKings.Behaviours
 
         private void DailySettlementTick(Settlement settlement)
         {
-            if (settlement == null || settlement.StringId.Contains("tutorial") || settlement.StringId.Contains("Ruin"))
+            if (settlement == null || (!settlement.IsVillage && !settlement.IsCastle && !settlement.IsTown))
             {
                 return;
             }
@@ -125,6 +125,8 @@ namespace BannerKings.Behaviours
             TickTown(settlement);
             TickCastle(settlement);
             TickVillage(settlement);
+            HandleMarketGold(settlement);
+            HandleIssues(settlement);
         }
 
         private void HandleIssues(Settlement settlement)
@@ -165,14 +167,19 @@ namespace BannerKings.Behaviours
         {
             handler.AddSkillXp(DefaultSkills.Steward, 1000f * TaleWorlds.CampaignSystem.Campaign.Current.Models.IssueModel.GetIssueDifficultyMultiplier());
 
-            if (BannerKingsConfig.Instance.CourtManager.HasCurrentTask(clanLeader.Clan,
-                DefaultCouncilTasks.Instance.ManageDemesne, out var competence))
+            bool manage = BannerKingsConfig.Instance.CourtManager.HasCurrentTask(clanLeader.Clan,
+                DefaultCouncilTasks.Instance.ManageDemesne, out var competence);
+            if (clanLeader == Hero.MainHero && manage)
             {
+                InformationManager.DisplayMessage(new InformationMessage(
+                    new TextObject("{=t6GBuiJX}Your spouse has solved an issue for {HERO}")
+                    .SetTextVariable("HERO", issue.IssueOwner.Name).ToString(),
+                    Color.FromUint(TextHelper.COLOR_LIGHT_YELLOW)));
                 issue.CompleteIssueWithLordSolutionWithRefuseCounterOffer();
             }
             else
             {
-                issue.CompleteIssueWithAiLord(null);
+                issue.CompleteIssueWithAiLord(manage ? clanLeader : handler);
             }
         }
 
@@ -181,10 +188,9 @@ namespace BannerKings.Behaviours
             if (settlement.Town != null)
             {
                 var town = settlement.Town;
-                HandleItemAvailability(town);
+                //HandleItemAvailability(town);
                 //HandleExcessWorkforce(data, town);
                 //HandleExcessFood(town);
-                HandleMarketGold(town);
                 HandleGarrison(town);
             }
         }
@@ -398,28 +404,32 @@ namespace BannerKings.Behaviours
             }
         }
 
-        private void HandleMarketGold(Town town)
+        private void HandleMarketGold(Settlement settlement)
         {
             ExceptionUtils.TryCatch(() =>
             {
-                if (!town.IsTown)
+                int gold = settlement.SettlementComponent.Gold;
+                int maxGold = BannerKingsConfig.Instance.EconomyModel.GetSettlementMarketGoldLimit(settlement);
+                if (gold < maxGold * 0.2f)
                 {
-                    return;
-                }
-
-                if (town.Gold < 50000)
-                {
-                    var notable = town.Settlement.Notables.FirstOrDefault(x => x.Gold >= 30000);
+                    var notable = settlement.Notables.FirstOrDefault(x => x.Gold >= 30000);
                     if (notable != null)
                     {
-                        town.ChangeGold(1000);
+                        settlement.SettlementComponent.ChangeGold(1000);
                         notable.ChangeHeroGold(-1000);
                         notable.AddPower(10f);
                     }
                 }
-                else if (town.Gold > 100000)
+                else if (gold > maxGold)
                 {
-                    town.ChangeGold((int)(town.Gold * -0.01f));
+                    settlement.SettlementComponent.ChangeGold((int)(gold * -0.01f));
+                    var notable = settlement.Notables.GetRandomElement();
+                    if (notable != null)
+                    {
+                        int toTake = (int)(gold * -0.005f);
+                        settlement.SettlementComponent.ChangeGold(-toTake);
+                        notable.ChangeHeroGold(toTake);
+                    }
                 }
             }, GetType().Name);
         }

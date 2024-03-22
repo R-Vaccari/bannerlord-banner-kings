@@ -42,11 +42,21 @@ namespace BannerKings.Behaviours
 
             if (Game.Current.GameType is CampaignStoryMode)
             {
-                StoryModeEvents.OnStoryModeTutorialEndedEvent.AddNonSerializedListener(this, OnCharacterCreationOver);
+                StoryModeEvents.OnStoryModeTutorialEndedEvent.AddNonSerializedListener(this,
+                () => 
+                {
+                    OnCharacterCreationOver();
+                    GiveClansResources();
+                });
             }
             else
             {
-                CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCharacterCreationOver);
+                 CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, 
+                () => 
+                {
+                    OnCharacterCreationOver();
+                    GiveClansResources();
+                });
             }
         }
 
@@ -186,6 +196,19 @@ namespace BannerKings.Behaviours
             if (!hasSeenInquiry)
             {
                 CheckShowStartOptions();
+            }
+        }
+
+        private void GiveClansResources()
+        {
+            foreach (Clan clan in Clan.NonBanditFactions)
+            {
+                if (clan.Kingdom == null || clan == Clan.PlayerClan) continue;
+
+                int gold = (int)(clan.Tier * 25000f);
+                float influence = clan.Tier * 200f;
+                clan.Leader.ChangeHeroGold(gold);
+                GainKingdomInfluenceAction.ApplyForDefault(clan.Leader, influence);
             }
         }
 

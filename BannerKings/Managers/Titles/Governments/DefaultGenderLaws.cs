@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Titles.Governments
@@ -17,6 +16,7 @@ namespace BannerKings.Managers.Titles.Governments
                 yield return Agnatic;
                 yield return Cognatic;
                 yield return Enatic;
+                foreach (var item in ModAdditions) yield return item;
             }
         }
 

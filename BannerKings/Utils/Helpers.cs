@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml;
 using BannerKings.Managers.Cultures;
-using BannerKings.Managers.Titles;
+using BannerKings.Managers.Items;
 using BannerKings.Managers.Traits;
 using Helpers;
 using TaleWorlds.CampaignSystem;
@@ -22,13 +25,23 @@ namespace BannerKings.Utils
 {
     public static class Helpers
     {
+        internal static XmlDocument CreateDocumentFromXmlFile(string xmlPath)
+        {
+            var xmlDocument = new XmlDocument();
+            var streamReader = new StreamReader(xmlPath);
+            var xml = streamReader.ReadToEnd();
+            xmlDocument.LoadXml(xml);
+            streamReader.Close();
+            return xmlDocument;
+        }
+
         public static void ApplyFeat(FeatObject feat, PartyBase party, ref ExplainedNumber result)
         {
             if (PartyBaseHelper.HasFeat(party, feat))
             {
                 if (feat.IncrementType == FeatObject.AdditionType.Add)
-                    result.Add(feat.EffectBonus, feat.Name);
-                else result.AddFactor(feat.EffectBonus, feat.Name);
+                    result.Add(feat.EffectBonus, GameTexts.FindText("str_culture"));
+                else result.AddFactor(feat.EffectBonus, GameTexts.FindText("str_culture"));
             }
         }
 
@@ -273,26 +286,43 @@ namespace BannerKings.Utils
             return culture;
         }
 
+        public static List<ItemCategory> LuxuryCategories => new List<ItemCategory>(10)
+            {
+                DefaultItemCategories.Jewelry,
+                DefaultItemCategories.Velvet,          
+                DefaultItemCategories.WarHorse,
+                DefaultItemCategories.RangedWeapons4,
+                DefaultItemCategories.MeleeWeapons4,
+                DefaultItemCategories.HorseEquipment4,
+                DefaultItemCategories.RangedWeapons5,
+                DefaultItemCategories.MeleeWeapons5,
+                DefaultItemCategories.HorseEquipment5,
+                BKItemCategories.Instance.Spice,
+                BKItemCategories.Instance.Marble
+            };
+
+        public static List<ItemCategory> IndustrialCategories => new List<ItemCategory>(15)
+            {
+                DefaultItemCategories.Pottery,
+                DefaultItemCategories.Linen,
+                DefaultItemCategories.Wood,
+                DefaultItemCategories.Leather,
+                DefaultItemCategories.Oil,
+                DefaultItemCategories.RangedWeapons3,
+                DefaultItemCategories.MeleeWeapons3,
+                DefaultItemCategories.HorseEquipment3,
+                DefaultItemCategories.PackAnimal,
+                DefaultItemCategories.Fur,
+                BKItemCategories.Instance.Ink,
+                BKItemCategories.Instance.Limestone,
+                BKItemCategories.Instance.Papyrus
+            };
+
         public static ConsumptionType GetTradeGoodConsumptionType(ItemCategory item)
         {
-            var id = item.StringId;
-            if (item.Properties == Property.BonusToFoodStores)
-            {
-                return ConsumptionType.Food;
-            }
-
-            if (id is "silver" or "jewelry" or "spice" or "velvet" or "war_horse" ||
-                id.EndsWith("4") || id.EndsWith("5"))
-            {
-                return ConsumptionType.Luxury;
-            }
-
-            if (id is "wool" or "pottery" or "cotton" or "flax" or "linen" or "leather" or "tools" 
-                || id.EndsWith("3") || id.Contains("horse"))
-            {
-                return ConsumptionType.Industrial;
-            }
-
+            if (LuxuryCategories.Contains(item)) return ConsumptionType.Luxury; 
+            else if (IndustrialCategories.Contains(item)) return ConsumptionType.Industrial;    
+            else if (item.Properties == Property.BonusToFoodStores) return ConsumptionType.Food;
             return ConsumptionType.General;
         }
 

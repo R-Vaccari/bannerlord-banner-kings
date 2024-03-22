@@ -27,24 +27,14 @@ namespace BannerKings.Managers
         {
             var newDic = new Dictionary<Hero, EducationData>();
             foreach (var pair in Educations)
-            {
                 if (pair.Key != null && pair.Value != null)
-                {
-                    if (!newDic.ContainsKey(pair.Key))
-                    {
+                    if (!newDic.ContainsKey(pair.Key) && pair.Key.IsAlive)
                         newDic.Add(pair.Key, pair.Value);
-                    }
-                }
-            }
 
             Educations.Clear();
             foreach (var pair in newDic)
-            {
                 if (!Educations.ContainsKey(pair.Key))
-                {
                     Educations.Add(pair.Key, pair.Value);
-                }
-            }
         }
 
         public EducationData InitHeroEducation(Hero hero, Dictionary<Language, float> startingLanguages = null)
@@ -57,10 +47,9 @@ namespace BannerKings.Managers
             if (startingLanguages != null)
             {
                 var startData = new EducationData(hero, startingLanguages);
-                Educations.Add(hero, startData);
+                Educations[hero] = startData;
                 return startData;
             }
-
 
             var languages = new Dictionary<Language, float>();
             var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Cultures.Contains(hero.Culture)) 
@@ -88,7 +77,7 @@ namespace BannerKings.Managers
             }
 
             var data = new EducationData(hero, languages);
-            Educations.Add(hero, data);
+            Educations[hero] = data;
 
             return data;
         }

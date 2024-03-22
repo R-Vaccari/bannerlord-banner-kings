@@ -45,7 +45,6 @@ namespace BannerKings.Components
             reference.PrisonRoster.RemoveIf(roster => roster.Number > 0);
             GiveMounts(ref caravan);
             GiveFood(ref caravan);
-            BannerKingsConfig.Instance.PopulationManager.AddParty(caravan);
         }
 
         public override void TickHourly()

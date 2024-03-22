@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Titles.Governments
@@ -16,6 +15,8 @@ namespace BannerKings.Managers.Titles.Governments
                 yield return Primogeniture;
                 yield return Ultimogeniture;
                 yield return Seniority;
+                foreach (Inheritance item in ModAdditions)
+                    yield return item;
             }
         }
 
@@ -53,10 +54,10 @@ namespace BannerKings.Managers.Titles.Governments
 
             Seniority.Initialize(new TextObject("{=HOoAoUV7}Seniority"),
                 new TextObject("{=HOoAoUV7}Seniority inheritance gives no precedence to any particular member of a household. The main criteria is their age, meaning that household members without blood ties may take precedence over children or close relatives. Whether the eldest man or woman will be chosen depends on the Gender Law in place."),
-                0f,
-                0f,
-                0f,
-                0f,
+                100f,
+                100f,
+                100f,
+                100f,
                 -0.4f,
                 0.4f,
                 1f);

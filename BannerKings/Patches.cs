@@ -158,7 +158,7 @@ namespace BannerKings.Patches
                 foreach (Clan clan in __instance.Kingdom.Clans)
                 {
                     var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
-                    if (council != null && council.Peerage != null)
+                    if (council != null && council.Peerage != null && !clan.IsUnderMercenaryService)
                     {
                         if (council.Peerage.CanVote)
                         {
@@ -558,72 +558,16 @@ namespace BannerKings.Patches
             private static bool CalculateMeritOfOutcomePrefix(SettlementClaimantDecision __instance,
                DecisionOutcome candidateOutcome, ref float __result)
             {
-                SettlementClaimantDecision.ClanAsDecisionOutcome clanAsDecisionOutcome = (SettlementClaimantDecision.ClanAsDecisionOutcome)candidateOutcome;
-                Clan clan = clanAsDecisionOutcome.Clan;
+                SettlementClaimantDecision.ClanAsDecisionOutcome clanAsDecisionOutcome = (SettlementClaimantDecision.ClanAsDecisionOutcome)candidateOutcome;  
                 Settlement s = __instance.Settlement;
-
-                ExplainedNumber result = new ExplainedNumber(0f);
-
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, DefaultDivinities.Instance.AseraMain))
-                {
-                    result.AddFactor(0.2f);
-                }
-
-                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(s);
-                if (title != null && title.HeroHasValidClaim(clan.Leader))
-                {
-                    result.Add(150f);
-                }
-
-                FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(clan.Kingdom);
-                if (sovereign != null)
-                {
-                    if (sovereign.Contract.HasContractAspect(DefaultContractAspects.Instance.ConquestMight))
-                    {
-                        if (s.Town != null)
-                        {
-                            if (clan == s.Town.LastCapturedBy)
-                            {
-                                result.Add(1000f);
-                            }
-                        }
-                    }
-                    else if (sovereign.Contract.HasContractAspect(DefaultContractAspects.Instance.ConquestClaim))
-                    {
-                        
-                        if (title != null)
-                        {
-                            if (title.deJure == clan.Leader)
-                            {
-                                result.Add(1000f);
-                            }
-                            else if (title.HeroHasValidClaim(clan.Leader))
-                            {
-                                result.Add(500f);
-                            }
-                        }
-                    }
-                    else if (sovereign.Contract.HasContractAspect(DefaultContractAspects.Instance.ConquestDistributed))
-                    {
-                        foreach (Settlement fief in clan.Settlements)
-                        {
-                            if (fief.IsTown) result.Add(-300f);
-                            else if (fief.IsCastle) result.Add(-200f);
-                            else result.Add(-75f);
-                        }
-                    }
-                }
-
-                var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(clan.Leader).ResultNumber;
-                var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(clan).ResultNumber;
-                float factor = current / limit;
-                result.Add(1000f * (1f - factor));
+                ExplainedNumber result = BannerKingsConfig.Instance.DiplomacyModel.CalculateHeroFiefScore(s,
+                    clanAsDecisionOutcome.Clan.Leader);
 
                 __result = result.ResultNumber;
                 return false;
             }
 
-            [HarmonyPostfix]
+           /* [HarmonyPostfix]
             [HarmonyPatch("ShouldBeCancelledInternal")]
             private static void ShouldBeCancelledInternalPostfix(SettlementClaimantDecision __instance, ref bool __result)
             {
@@ -631,7 +575,7 @@ namespace BannerKings.Patches
                 {
                     __result = true;
                 }
-            }
+            }*/
         }
     }
 }

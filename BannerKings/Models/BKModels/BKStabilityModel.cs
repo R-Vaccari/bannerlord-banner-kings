@@ -1,11 +1,14 @@
 using System.Linq;
+using BannerKings.Campaign.Skills;
 using BannerKings.Managers.Buildings;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -197,6 +200,11 @@ namespace BannerKings.Models.BKModels
                     result.Add(0.06f, DefaultDivinities.Instance.DarusosianSecondary2.Name);
                 }
 
+                SkillHelper.AddSkillBonusForTown(DefaultSkills.Steward,
+                      BKSkillEffects.Instance.Stability,
+                      settlement.Town,
+                      ref result);
+
                 var demesneLimit = CalculateDemesneLimit(settlement.Owner).ResultNumber;
                 var currentDemesne = CalculateCurrentDemesne(settlement.OwnerClan).ResultNumber;
                 if (currentDemesne > demesneLimit)
@@ -265,7 +273,17 @@ namespace BannerKings.Models.BKModels
         {
             if (title.Fief != null)
             {
-                return GetSettlementDemesneWight(title.Fief);
+                float result = GetSettlementDemesneWight(title.Fief);
+                Settlement settlement = title.Fief;
+                if (settlement.IsVillage) result *= 10f;
+                else if (settlement.Town != null)
+                {
+                    CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(title.deJure.Clan);
+                    if (data.Location == settlement.Town) return 0f;
+                }
+
+                if (settlement.Culture != title.deJure.Culture) result *= 2f;
+                return result;
             }
 
             return GetUnlandedDemesneWight(title.TitleType);
@@ -405,6 +423,14 @@ namespace BannerKings.Models.BKModels
                 result.AddFactor(-0.2f, DefaultLifestyles.Instance.Jawwal.Name);
             }
 
+            SkillHelper.AddSkillBonusForCharacter(BKSkills.Instance.Lordship,
+                BKSkillEffects.Instance.DemesneLimit,
+                hero.CharacterObject,
+                ref result,
+                hero.GetSkillValue(BKSkills.Instance.Lordship),
+                true,
+                0);
+
             return result;
         }
 
@@ -485,6 +511,14 @@ namespace BannerKings.Models.BKModels
             {
                 result.Add(bonus, new TextObject("Highest title level"));
             }
+
+            SkillHelper.AddSkillBonusForCharacter(BKSkills.Instance.Lordship,
+                BKSkillEffects.Instance.VassalLimit,
+                hero.CharacterObject,
+                ref result,
+                hero.GetSkillValue(BKSkills.Instance.Lordship),
+                true,
+                0);
 
             return result;
         }

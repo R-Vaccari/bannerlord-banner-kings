@@ -77,6 +77,20 @@ namespace BannerKings.Behaviours
             }
         }
 
+        internal void NullManagers()
+        {
+            populationManager = null;
+            titleManager = null;
+            courtManager = null;
+            policyManager = null;
+            religionsManager = null;
+            educationsManager = null;
+            innovationsManager = null;
+            goalsManager = null;
+            firstUse = true;
+            BannerKingsConfig.Instance.FirstUse = true;
+        }
+
         private void OnGameCreated(CampaignGameStarter starter)
         {
             if (firstUse)

@@ -20,6 +20,7 @@ namespace BannerKings.Managers.Shipping
                 yield return Perassic;
                 yield return Junme;
                 yield return Western;
+                foreach (var lane in ModAdditions) yield return lane;
             }
         }
 

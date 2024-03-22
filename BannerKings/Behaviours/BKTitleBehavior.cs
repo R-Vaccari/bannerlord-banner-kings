@@ -12,6 +12,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+
 namespace BannerKings.Behaviours
 {
     public class BKTitleBehavior : BannerKingsBehavior
@@ -188,6 +189,10 @@ namespace BannerKings.Behaviours
             foreach (var duchy in BannerKingsConfig.Instance.TitleManager.GetAllTitlesByType(TitleType.Dukedom))
             {
                 duchy.TickClaims();
+                CheckClaimants(duchy);
+
+                if (duchy.deJure == null) continue;
+
                 var faction = duchy.deJure.Clan.Kingdom;
                 if (faction == null || faction != duchy.DeFacto.Clan.Kingdom)
                 {
@@ -208,7 +213,51 @@ namespace BannerKings.Behaviours
             foreach (var kingdom in BannerKingsConfig.Instance.TitleManager.GetAllTitlesByType(TitleType.Kingdom))
             {
                 kingdom.TickClaims();
+                CheckClaimants(kingdom);
+
+                if (kingdom.deJure == null) continue;
+
+                var faction = kingdom.deJure.Clan.Kingdom;
+                if (faction == null || faction != kingdom.DeFacto.Clan.Kingdom) continue;  
+
+                var currentFactionSovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
+                if (currentFactionSovereign != null && currentFactionSovereign.TitleType == TitleType.Empire)
+                {
+                    kingdom.TickDrift(currentFactionSovereign);
+                }
             }
+        }
+
+        private void CheckClaimants(FeudalTitle feudalTitle) 
+        {
+            var claimants = BannerKingsConfig.Instance.TitleModel.GetClaimants(feudalTitle);
+            var actions = new List<TitleAction>(); 
+            foreach (var claimant in claimants)
+            {
+                if (claimant.Key != Hero.MainHero)
+                {
+                    TitleAction action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Claim,
+                        feudalTitle,
+                        claimant.Key);
+                    if (action.Possible && action.IsWilling) actions.Add(action);
+                }
+            }
+
+            foreach (var action in actions) action.TakeAction(null);
+
+            actions.Clear();
+            foreach (var claim in feudalTitle.Claims)
+            {
+                if (claim.Key != Hero.MainHero && feudalTitle.HeroHasValidClaim(claim.Key))
+                {
+                    TitleAction action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Usurp,
+                        feudalTitle,
+                        claim.Key);
+                    if (action.Possible && action.IsWilling) actions.Add(action);
+                }
+            }
+
+            foreach (var action in actions) action.TakeAction(null);
         }
 
         private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail,
@@ -299,14 +348,14 @@ namespace BannerKings.Behaviours
                     if (BannerKingsConfig.Instance.TitleManager.HasSuzerain(title))
                     {
                         var suzerain = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(title);
-                        if (suzerain.deJure.IsAlive && !clan.Heroes.Contains(suzerain.deJure))
+                        if (suzerain.deJure != null && suzerain.deJure.IsAlive && !clan.Heroes.Contains(suzerain.deJure))
                         {
                             BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, suzerain.deJure, title);
                             continue;
                         }
                     }
 
-                    if (title.Sovereign != null)
+                    if (title.Sovereign != null && title.Sovereign.deJure != null)
                     {
                         if (title.Sovereign.deJure != title.deJure && title.Sovereign.deJure.IsAlive)
                         {

@@ -1,3 +1,5 @@
+using BannerKings.Behaviours.Diplomacy.Groups;
+using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Extensions;
 using System.Collections.Generic;
@@ -19,6 +21,7 @@ namespace BannerKings.Behaviours.Diplomacy
     {
         private Dictionary<Kingdom, KingdomDiplomacy> kingdomDiplomacies = new Dictionary<Kingdom, KingdomDiplomacy>();
         private List<War> wars = new List<War>();
+        private List<Kingdom> rebelling = new List<Kingdom>();
 
         public bool WillJoinWar(IFaction attacker, IFaction defender, IFaction ally, DeclareWarAction.DeclareWarDetail detail)
             => BannerKingsConfig.Instance.DiplomacyModel.WillJoinWar(attacker, defender, ally, detail).ResultNumber > 0f;
@@ -32,8 +35,22 @@ namespace BannerKings.Behaviours.Diplomacy
                 {
                     war.AddAlly(attacker, ally);
                 }
+                else
+                {
+                    if (attacker == Hero.MainHero.MapFaction || ally == Hero.MainHero.MapFaction)
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage(
+                        new TextObject("{=AJRV3Ex3}The {ALLY} has refused to help the {DEFENDER} in their war effort!")
+                        .SetTextVariable("ALLY", ally.Name)
+                        .SetTextVariable("DEFENDER", defender.Name)
+                        .ToString(),
+                        Color.FromUint(Utils.TextHelper.COLOR_LIGHT_RED)));
+                    }
+                }
             }
         }
+
+        public bool IsRebelling(Kingdom kingdom) => rebelling.Contains(kingdom);
 
         public War GetWar(IFaction faction1, IFaction faction2)
         {
@@ -45,6 +62,17 @@ namespace BannerKings.Behaviours.Diplomacy
 
             return wars.FirstOrDefault(x => (x.Attacker == faction1 || x.Defender == faction1) &&
             (x.Attacker == faction2 || x.Defender == faction2));
+        }
+
+        public War GetAllyWar(IFaction defender, IFaction attacker, IFaction ally)
+        {
+            if (wars == null)
+            {
+                wars = new List<War>();
+                return null;
+            }
+
+            return wars.FirstOrDefault(x => x.Defender == defender && x.Attacker == attacker && x.DefenderAllies.Contains(ally));
         }
 
         public CasusBelli GetWarJustification(IFaction faction1, IFaction faction2)
@@ -75,8 +103,18 @@ namespace BannerKings.Behaviours.Diplomacy
 
         public void TriggerJustifiedWar(CasusBelli justification, Kingdom attacker, Kingdom defender)
         {
-            wars.Add(new War(attacker, defender, justification));
-            InformationManager.DisplayMessage(new InformationMessage(justification.WarDeclaredText.ToString()));
+            if (justification != null)
+            {
+                wars.Add(new War(attacker, defender, justification));
+                InformationManager.DisplayMessage(new InformationMessage(justification.WarDeclaredText.ToString()));
+            }
+        }
+
+        public void TriggerRebelWar(Kingdom attacker, Kingdom defender, RadicalDemand demand)
+        {
+            //rebelling.Add(kingdom);
+            wars.Add(new War(attacker, defender, DefaultCasusBelli.Instance.Rebellion, null, demand));
+            InformationManager.DisplayMessage(new InformationMessage(DefaultCasusBelli.Instance.Rebellion.WarDeclaredText.ToString()));
         }
 
         public void ConsiderTruce(Kingdom proposer, Kingdom proposed, float years, bool kingdomBudget = false)
@@ -181,7 +219,6 @@ namespace BannerKings.Behaviours.Diplomacy
             else MakeTradePact(proposer, proposed);
         }
 
-
         public void MakeTradePact(Kingdom proposer, Kingdom proposed)
         {
             int influence = MBRandom.RoundRandomized(BannerKingsConfig.Instance.DiplomacyModel.GetPactInfluenceCost(proposer,
@@ -219,6 +256,7 @@ namespace BannerKings.Behaviours.Diplomacy
             CampaignEvents.RulingClanChanged.AddNonSerializedListener(this, OnRulerChanged);
             CampaignEvents.MakePeace.AddNonSerializedListener(this, OnMakePeace);
             CampaignEvents.KingdomDestroyedEvent.AddNonSerializedListener(this, OnKingdomDestroyed);
+            CampaignEvents.OnClanChangedKingdomEvent.AddNonSerializedListener(this, OnClanChangedKingdom);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -234,6 +272,20 @@ namespace BannerKings.Behaviours.Diplomacy
             if (wars == null)
             {
                 wars = new List<War>();
+            }
+        }
+
+        private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom,
+           ChangeKingdomAction.ChangeKingdomActionDetail detail, bool showNotification = true)
+        {
+            KingdomDiplomacy diplomacy = GetKingdomDiplomacy(oldKingdom);
+            if (diplomacy != null)
+            {
+                foreach (Hero hero in clan.Heroes)
+                {
+                    InterestGroup group = diplomacy.GetHeroGroup(hero);
+                    if (group != null) group.RemoveMember(hero, true);
+                }
             }
         }
 
@@ -314,10 +366,15 @@ namespace BannerKings.Behaviours.Diplomacy
             }
             
             InitializeDiplomacies();
+            var toRemove = new List<War>();
             foreach (War war in wars)
             {
                 war.Update();
+                if (!war.Attacker.IsAtWarWith(war.Defender)) toRemove.Add(war);
             }
+
+            foreach (War war in toRemove)
+                wars.Remove(war);
 
             foreach (var pair in kingdomDiplomacies)
             {
@@ -326,58 +383,63 @@ namespace BannerKings.Behaviours.Diplomacy
 
             RunWeekly(() =>
             {
-                Kingdom kingdom = Kingdom.All.GetRandomElementWithPredicate(x => !x.IsEliminated && x.RulingClan != Clan.PlayerClan);
+                ConsiderAIDiplomacy();
+            },
+            GetType().Name);
+        }
 
-                foreach (var target in Kingdom.All)
+        private void ConsiderAIDiplomacy()
+        {
+            Kingdom kingdom = Kingdom.All.GetRandomElementWithPredicate(x => !x.IsEliminated && x.RulingClan != Clan.PlayerClan);
+
+            foreach (var target in Kingdom.All)
+            {
+                if (target.IsEliminated) continue;
+
+                TextObject pactReason;
+                if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTradePactAllowed(kingdom, target, out pactReason) &&
+                    MBRandom.RandomFloat < MBRandom.RandomFloat)
                 {
-                    if (target.IsEliminated) continue;
-
-                    TextObject pactReason;
-                    if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTradePactAllowed(kingdom, target, out pactReason) &&
+                    if (kingdom.RulingClan.Influence >=
+                    BannerKingsConfig.Instance.DiplomacyModel.GetTradePactInfluenceCost(kingdom, target)
+                        .ResultNumber * 2f)
+                    {
+                        ConsiderTradePact(kingdom, target);
+                        break;
+                    }
+                }
+                else
+                {
+                    TextObject truceReason;
+                    if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTruceAllowed(kingdom, target, out truceReason) &&
                         MBRandom.RandomFloat < MBRandom.RandomFloat)
                     {
-                        if (kingdom.RulingClan.Influence >= 
-                        BannerKingsConfig.Instance.DiplomacyModel.GetTradePactInfluenceCost(kingdom, target)
-                            .ResultNumber * 2f)
+                        if (kingdom.RulingClan.Gold >= BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(kingdom, target)
+                            .ResultNumber * 3f)
                         {
-                            ConsiderTradePact(kingdom, target);
+                            ConsiderTruce(kingdom, target, 3f);
                             break;
                         }
                     }
                     else
                     {
-                        TextObject truceReason;
-                        if (BannerKingsConfig.Instance.KingdomDecisionModel.IsTruceAllowed(kingdom, target, out truceReason) &&
+                        TextObject allianceReason;
+                        if (BannerKingsConfig.Instance.KingdomDecisionModel.IsAllianceAllowed(kingdom, target, out allianceReason) &&
                             MBRandom.RandomFloat < MBRandom.RandomFloat)
                         {
-                            if (kingdom.RulingClan.Gold >= BannerKingsConfig.Instance.DiplomacyModel.GetTruceDenarCost(kingdom, target)
+                            if (kingdom.RulingClan.Gold >= BannerKingsConfig.Instance.DiplomacyModel.GetAllianceDenarCost(kingdom, target)
                                 .ResultNumber * 3f)
                             {
-                                ConsiderTruce(kingdom, target, 3f);
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            TextObject allianceReason;
-                            if (BannerKingsConfig.Instance.KingdomDecisionModel.IsAllianceAllowed(kingdom, target, out allianceReason) &&
-                                MBRandom.RandomFloat < MBRandom.RandomFloat)
-                            {
-                                if (kingdom.RulingClan.Gold >= BannerKingsConfig.Instance.DiplomacyModel.GetAllianceDenarCost(kingdom, target)
-                                    .ResultNumber * 3f)
-                                {
-                                    if (target != Hero.MainHero.MapFaction && !BannerKingsConfig.Instance.DiplomacyModel.WillAcceptAlliance(target, kingdom)) 
-                                        continue;
+                                if (target != Hero.MainHero.MapFaction && !BannerKingsConfig.Instance.DiplomacyModel.WillAcceptAlliance(target, kingdom))
+                                    continue;
 
-                                    ConsiderAlliance(kingdom, target);
-                                    break;
-                                }
+                                ConsiderAlliance(kingdom, target);
+                                break;
                             }
                         }
                     }
                 }
-            },
-            GetType().Name);
+            }
         }
 
         private void OnNewGameCreated(CampaignGameStarter starter)
@@ -467,6 +529,19 @@ namespace BannerKings.Behaviours.Diplomacy
                         war.RecalculateFronts();
                     }
                 }
+
+                if (attacker.IsKingdomFaction)
+                {
+                    KingdomDiplomacy diplomacy = GetKingdomDiplomacy(attacker as Kingdom);
+                    foreach (Settlement s in newOwner.Clan.Settlements)
+                    {
+                        foreach (Hero notable in s.Notables)
+                        {
+                            InterestGroup group = diplomacy.GetHeroGroup(notable);
+                            if (group != null) group.RemoveMember(notable, true);
+                        }
+                    }
+                }
             }
         }
 
@@ -533,6 +608,13 @@ namespace BannerKings.Behaviours.Diplomacy
             {
                 MakeTruce(faction1 as Kingdom, faction2 as Kingdom, 1f);
             }
+
+            War war = GetWar(faction1, faction2);
+            if (war != null)
+            {
+                war.EndWar();
+                wars.Remove(war);
+            }
         }
 
         private void OnWarDeclared(IFaction faction1, IFaction faction2, DeclareWarAction.DeclareWarDetail detail)
@@ -550,7 +632,7 @@ namespace BannerKings.Behaviours.Diplomacy
 
             foreach (IFaction ally in faction2.GetAllies())
             {
-                WillJoinWar(faction1, faction2, ally, detail);
+                CallToWar(faction1, faction2, ally, detail);
             }
         }
     }

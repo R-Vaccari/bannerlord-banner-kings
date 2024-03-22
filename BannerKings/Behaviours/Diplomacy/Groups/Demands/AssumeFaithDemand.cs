@@ -107,7 +107,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             DueDate = CampaignTime.Never;
         }
 
-        public override Demand GetCopy(InterestGroup group)
+        public override Demand GetCopy(DiplomacyGroup group)
         {
             AssumeFaithDemand demand = new AssumeFaithDemand();
             demand.Group = group;
@@ -180,8 +180,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
                 new TextObject("{=1rWYDHQj}The {GROUP} is pushing for you to assume the {RELIGION} faith, the legal faith of the realm. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
-                .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(Group).ResultNumber * 100f).ToString("0.00"))
-                .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(Group).ResultNumber * 100f).ToString("0.00"))
+                .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(Group as InterestGroup).ResultNumber * 100f).ToString("0.00"))
+                .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(Group as InterestGroup).ResultNumber * 100f).ToString("0.00"))
                 .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
                 .SetTextVariable("LEADER", Group.Leader.Name)
                 .SetTextVariable("RELIGION", Religion.Faith.GetFaithName())
@@ -241,13 +241,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 {
                     PositiveAnswer.Fulfill(Group.FactionLeader);
                 }
-                else if (Group.Leader == Hero.MainHero)
-                {
-                    ShowPlayerDemandAnswers();
-                }
                 else
                 {
-                    DoAiChoice();
+                    PushForDemand();
                 }
             }
         }

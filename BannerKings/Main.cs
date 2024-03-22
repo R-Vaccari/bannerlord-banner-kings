@@ -22,7 +22,7 @@ using TaleWorlds.MountAndBlade;
 using BannerKings.Managers.Innovations.Eras;
 using BannerKings.Behaviours.Innovations;
 using BannerKings.Behaviours.Shipping;
-using BannerKings.Campaign;
+using BannerKings.Campaign.Skills;
 
 namespace BannerKings
 {
@@ -131,11 +131,14 @@ namespace BannerKings
             campaignStarter.AddModel(new BKBanditModel());
             campaignStarter.AddModel(new BKPartyTrainningModel());
             campaignStarter.AddModel(new BKDiplomacyModel());
-            campaignStarter.AddModel(new BKTargetScoreModel());
+            //campaignStarter.AddModel(new BKTargetScoreModel());
             campaignStarter.AddModel(new BKPartyBuyingFoodModel());
+            campaignStarter.AddModel(new BKCategorySelector());
+            campaignStarter.AddModel(new BKSettlementAccessModel());
 
             BKAttributes.Instance.Initialize();
             BKSkills.Instance.Initialize();
+            BKSkillEffects.Instance.Initialize();
             BKPerks.Instance.Initialize();   
             BKPolicies.Instance.Initialize();
             DefaultEras.Instance.Initialize();
@@ -146,7 +149,7 @@ namespace BannerKings
             DefaultCustomTroopPresets.Instance.Initialize();
 
             UIManager.Instance.SetScreen(new BannerKingsScreen());
-            TaleWorlds.CampaignSystem.Campaign.Current.TournamentManager = new BKTournamentManager();
+            //TaleWorlds.CampaignSystem.Campaign.Current.TournamentManager = new BKTournamentManager();
         }
 
         protected override void OnSubModuleLoad()
