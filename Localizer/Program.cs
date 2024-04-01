@@ -206,21 +206,21 @@ namespace Localizer
 
             Console.WriteLine($"Localizing {texts.Count} texts in {filesToLocalize.Count} files..");
             var resUsedTexts = 0;
-            for (var textIndex = 1; textIndex < texts.Count; textIndex++)
+            for (var textIndex = 0; textIndex < texts.Count; textIndex++)
             {
                 if (textIndex % 100 == 0)
                 {
-                    Console.WriteLine($"Localized {textIndex}/{texts.Count} texts..");
+                    Console.WriteLine($"Localized {textIndex + 1}/{texts.Count} texts..");
                 }
 
-                var text = texts[textIndex - 1];
+                var text = texts[textIndex];
                 var textToLocalize = $"{{=!}}{text}";
                 (string ID, string Text) localizedText;
 
                 if (_existingLocalizations.ContainsValue(text))
                 {
                     var localizationID = _existingLocalizations.FirstOrDefault(el => el.Value == text).Key;
-                    localizedText = (localizationID, text.Replace("{=!}", $"{{={localizationID}}}"));
+                    localizedText = (localizationID, textToLocalize.Replace("{=!}", $"{{={localizationID}}}"));
 
                     resUsedTexts++;
                 }
