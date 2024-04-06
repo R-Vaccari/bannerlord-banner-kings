@@ -103,7 +103,7 @@ namespace BannerKings.Managers.Titles.Governments
                 });
 
             Tribal.Initialize(new TextObject("{=7FEVXuj2}Tribal"),
-                new TextObject("{=N5eNBATb}Most non-Imperial societies are organized in the 'tribal' manner, for example: the Battanians who united under a High-Kingdom to fight their common enemy, the Nahawasi as a tribe confederation with the purpose of protecting trade and prosperity. Tribal administrations are often more descentralized and autonomous than otherwise, and legal arguments often have no place against military force and cultural tradition."),
+                new TextObject("{=!}Most non-Imperial societies are organized in the 'tribal' manner, for example: the Battanians who united under a High-Kingdom to fight their common enemy, the Nahasawi as a tribe confederation with the purpose of protecting trade and prosperity. Tribal administrations are often more descentralized and autonomous than otherwise, and legal arguments often have no place against military force and cultural tradition."),
                 new TextObject("{=C1WUnGZJ}- Settlement militia +1{newline}- Settlement draft efficiency +20%{newline}- Settlement mercantilism +30%"),
                 0.3f,
                 -0.7f,

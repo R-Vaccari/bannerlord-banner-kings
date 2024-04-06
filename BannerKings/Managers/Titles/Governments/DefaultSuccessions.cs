@@ -14,6 +14,8 @@ namespace BannerKings.Managers.Titles.Governments
 {
     public class DefaultSuccessions : DefaultTypeInitializer<DefaultSuccessions, Succession>
     {
+        public Dictionary<string, Succession> KingdomIdealSuccessions { get; } = new Dictionary<string, Succession>();
+
         public Succession FeudalElective { get; } = new Succession("FeudalElective");
         public Succession TribalElective { get; } = new Succession("TribalElective");
         public Succession WilundingElective { get; } = new Succession("WilundingElective");
@@ -45,45 +47,39 @@ namespace BannerKings.Managers.Titles.Governments
 
         public Succession GetKingdomIdealSuccession(string id, Government government)
         {
-            if (id == "vlandia")
+            Succession result;
+            if (!KingdomIdealSuccessions.TryGetValue(id, out result))
             {
-                return WilundingElective;
+                if (government.Equals(DefaultGovernments.Instance.Feudal))
+                {
+                    result = FeudalElective;
+                }
+                else if (government.Equals(DefaultGovernments.Instance.Republic))
+                {
+                    result = Republic;
+                }
+                else if (government.Equals(DefaultGovernments.Instance.Imperial))
+                {
+                    result = Imperial;
+                }
+                else result = TribalElective;
             }
 
-            if (id == "battania")
-            {
-                return BattanianElective;
-            }
-
-            if (id == "empire_w")
-            {
-                return Dictatorship;
-            }
-
-            if (id == "aserai")
-            {
-                return AseraiElective;
-            }
-
-            if (government.Equals(DefaultGovernments.Instance.Feudal))
-            {
-                return FeudalElective;
-            }
-            else if (government.Equals(DefaultGovernments.Instance.Republic))
-            {
-                return Republic;
-            }
-            else if (government.Equals(DefaultGovernments.Instance.Imperial))
-            {
-                return Imperial;
-            }
-            else return TribalElective;
+            return result;
         }
 
         public override void Initialize()
         {
-            AseraiElective.Initialize(new TextObject("{=7GEoJHN8}Nahawasi Elective"),
-               new TextObject("{=NeZdtSoB}The Nahawasi succession is most interested in the economic prosperity of the realm, for trade is the blood that keeps the Nahasa clans alive. A strong leader, the Aserai say, is one both brave, so they may defeat their enemies, and generous, so they may be loved by those under their protection. Moreover, in keeping with the traditions of Banu Asera, the Nahawasi place value in the religious integrity and scholarly tendencies of their leader, or in other words, that they understand and seek Truth. A fool leader is no worse than a craven one."),
+            KingdomIdealSuccessions["vlandia"] = WilundingElective;
+            KingdomIdealSuccessions["empire_w"] = Dictatorship;
+            KingdomIdealSuccessions["aserai"] = AseraiElective;
+            KingdomIdealSuccessions["empire"] = Republic;
+            KingdomIdealSuccessions["empire_s"] = Imperial;
+            KingdomIdealSuccessions["khuzait"] = TribalElective;
+            KingdomIdealSuccessions["sturgia"] = TribalElective;
+
+            AseraiElective.Initialize(new TextObject("{=!}Nahasawi Elective"),
+               new TextObject("{=!}The Nahasawi succession is most interested in the economic prosperity of the realm, for trade is the blood that keeps the Nahasa clans alive. A strong leader, the Aserai say, is one both brave, so they may defeat their enemies, and generous, so they may be loved by those under their protection. Moreover, in keeping with the traditions of Banu Asera, the Nahasawi place value in the religious integrity and scholarly tendencies of their leader, or in other words, that they understand and seek Truth. A fool leader is no worse than a craven one."),
                true,
                -0.7f,
                1f,
@@ -125,6 +121,9 @@ namespace BannerKings.Managers.Titles.Governments
                    result.Add(candidate.GetSkillValue(DefaultSkills.Charm) / 2f, DefaultSkills.Charm.Name);
 
                    result.Add(candidate.Clan.Tier * 25f, GameTexts.FindText("str_clan_tier_bonus"));
+
+                   if (candidate.MapFaction != currentLeader.MapFaction)
+                       result.AddFactor(-0.5f, new TextObject("{=!}Foreign candidate"));
                    return result;
                });
 
@@ -194,6 +193,9 @@ namespace BannerKings.Managers.Titles.Governments
                    result.Add(candidate.GetSkillValue(DefaultSkills.Charm) / 3f, DefaultSkills.Charm.Name);
 
                    result.Add(candidate.Clan.Tier * 75f, GameTexts.FindText("str_clan_tier_bonus"));
+                   if (candidate.MapFaction != currentLeader.MapFaction)
+                       result.AddFactor(-0.5f, new TextObject("{=!}Foreign candidate"));
+
                    return result;
                });
 
@@ -265,6 +267,9 @@ namespace BannerKings.Managers.Titles.Governments
                    result.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(candidate.Clan).ResultNumber / 3f,
                        new TextObject("{=nViu6JKF}Influence cap"));
 
+                   if (candidate.MapFaction != currentLeader.MapFaction)
+                       result.AddFactor(-0.5f, new TextObject("{=!}Foreign candidate"));
+
                    return result;
                });
 
@@ -334,6 +339,8 @@ namespace BannerKings.Managers.Titles.Governments
                     }
 
                     result.Add(candidate.Clan.Tier * 25f, GameTexts.FindText("str_clan_tier_bonus"));
+                    if (candidate.MapFaction != currentLeader.MapFaction)
+                        result.AddFactor(-0.5f, new TextObject("{=!}Foreign candidate"));
                     return result;
                 });
 
@@ -385,7 +392,9 @@ namespace BannerKings.Managers.Titles.Governments
                    //{
 
                    //}
-                   
+                   if (candidate.MapFaction != currentLeader.MapFaction)
+                       result.AddFactor(-0.5f, new TextObject("{=!}Foreign candidate"));
+
                    return result;
                });
 
@@ -442,6 +451,8 @@ namespace BannerKings.Managers.Titles.Governments
                     result.Add(candidate.GetSkillValue(DefaultSkills.Charm) / 3f, DefaultSkills.Charm.Name);
 
                     result.Add(candidate.Clan.Tier * 25f, GameTexts.FindText("str_clan_tier_bonus"));
+                    if (candidate.MapFaction != currentLeader.MapFaction)
+                        result.AddFactor(-0.5f, new TextObject("{=!}Foreign candidate"));
                     return result;
                 });
 
@@ -498,7 +509,8 @@ namespace BannerKings.Managers.Titles.Governments
                     result.Add(candidate.GetSkillValue(DefaultSkills.Charm) / 2f, DefaultSkills.Charm.Name);
 
                     result.Add(candidate.Clan.Tier * 75f, GameTexts.FindText("str_clan_tier_bonus"));
-
+                    if (candidate.MapFaction != currentLeader.MapFaction)
+                        result.AddFactor(-0.5f, new TextObject("{=!}Foreign candidate"));
                     return result;
                 });
 
@@ -572,6 +584,8 @@ namespace BannerKings.Managers.Titles.Governments
 
                     result.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(candidate.Clan).ResultNumber / 4f,
                        new TextObject("{=nViu6JKF}Influence cap"));
+                    if (candidate.MapFaction != currentLeader.MapFaction)
+                        result.AddFactor(-0.5f, new TextObject("{=!}Foreign candidate"));
                     return result;
                 });
 
@@ -640,6 +654,8 @@ namespace BannerKings.Managers.Titles.Governments
                     result.Add(candidate.GetSkillValue(DefaultSkills.Charm) / 2f, DefaultSkills.Charm.Name);
 
                     result.Add(candidate.Clan.Tier * 25f, GameTexts.FindText("str_clan_tier_bonus"));
+                    if (candidate.MapFaction != currentLeader.MapFaction)
+                        result.AddFactor(-0.5f, new TextObject("{=!}Foreign candidate"));
                     return result;
                 });
 
@@ -714,6 +730,8 @@ namespace BannerKings.Managers.Titles.Governments
                     result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) / 3f, DefaultSkills.Leadership.Name);
 
                     result.Add(candidate.Clan.Tier * 25f, GameTexts.FindText("str_clan_tier_bonus"));
+                    if (candidate.MapFaction != currentLeader.MapFaction)
+                        result.AddFactor(-0.5f, new TextObject("{=!}Foreign candidate"));
                     return result;
                 });
         }

@@ -78,7 +78,7 @@ namespace BannerKings.Managers.Education.Languages
                 }, 
                 GetIntelligibles(Calradian));
 
-            Aseran.Initialize(new TextObject("{=7GEoJHN8}Nahawasi"), 
+            Aseran.Initialize(new TextObject("{=!}Nahasawi"), 
                 new TextObject("{=gM4s1KQf}Although the Aserai peoples speak a multitude of dialects, scattered across the oases, springs and coasts of the Nahasa, a distinct tradition of literalism and poety has established a common variation that has been embraced by the higher Aserai classes."),
                 new List<CultureObject>(1)
                 {

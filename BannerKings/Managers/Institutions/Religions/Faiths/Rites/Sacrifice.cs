@@ -74,11 +74,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             }
 
             var piety = GetPietyReward();
-            KillCharacterAction.ApplyByExecution(input, actionTaker, false);
+            KillCharacterAction.ApplyByMurder(input, actionTaker, false);
             MBInformationManager.AddQuickInformation(new TextObject("{=d8ecHZ0P}{SACRIFICE} was ritually sacrificed by {HERO}.")
                     .SetTextVariable("HERO", actionTaker.Name)
                     .SetTextVariable("SACRIFICE", input.Name),
-                0, actionTaker.CharacterObject, "event:/ui/notification/relation");
+                0, 
+                actionTaker.CharacterObject, 
+                "event:/ui/notification/relation");
 
             BannerKingsConfig.Instance.ReligionsManager.AddPiety(actionTaker, piety, actionTaker.Clan == Clan.PlayerClan);
             actionTaker.AddSkillXp(BKSkills.Instance.Theology, piety * 1.2f);

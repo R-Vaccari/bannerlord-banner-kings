@@ -4,6 +4,7 @@ using BannerKings.Behaviours.Criminality;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.Campaign.Culture;
 using BannerKings.Campaign.Economy.Markets;
 using BannerKings.Campaign.Skills;
 using BannerKings.Managers;
@@ -30,6 +31,7 @@ using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Managers.Traits;
 using BannerKings.Models.BKModels;
+using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -99,6 +101,7 @@ namespace BannerKings
         public BKDiplomacyModel DiplomacyModel { get; } = new();
         public BKKingdomDecisionModel KingdomDecisionModel { get; } = new();
         public IMercenaryModel MercenaryModel { get; } = new MercenaryModel();
+        public RelationsModel RelationsModel { get; } = new BKRelationsModel();
 
         static BannerKingsConfig()
         {
@@ -171,6 +174,7 @@ namespace BannerKings
             DefaultShippingLanes.Instance.Initialize();
             DefaultMarketGroups.Instance.Initialize();
             DefaultRecruitSpawns.Instance.Initialize();
+            DefaultCulturalStandings.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();

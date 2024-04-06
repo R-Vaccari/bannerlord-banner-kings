@@ -63,6 +63,7 @@ using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Goals;
 using BannerKings.Behaviours.Shipping;
 using BannerKings.Campaign;
+using BannerKings.Behaviours.Relations;
 
 namespace BannerKings
 {
@@ -213,6 +214,8 @@ namespace BannerKings
             AddClassDefinition(typeof(RadicalDemand), 157);
             AddClassDefinition(typeof(ClaimantDemand), 158);
             AddClassDefinition(typeof(RadicalGroup), 159);
+            AddClassDefinition(typeof(HeroRelations), 160);
+            AddClassDefinition(typeof(RelationsModifier), 161); 
 
             AddClassDefinition(typeof(MercenaryCareer), 1000);
             AddClassDefinition(typeof(MercenaryPrivilege), 1001);
@@ -276,7 +279,6 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Hero, List<Crime>>));
             ConstructContainerDefinition(typeof(Dictionary<MobileParty, PartySupplies>));
             ConstructContainerDefinition(typeof(List<CourtExpense>));
-
             ConstructContainerDefinition(typeof(List<MercenaryPrivilege>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, List<MercenaryPrivilege>>));
             ConstructContainerDefinition(typeof(Dictionary<Clan, MercenaryCareer>));
@@ -287,7 +289,11 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Hero, Dictionary<Goal, CampaignTime>>));
             ConstructContainerDefinition(typeof(Dictionary<ContractDuty, CampaignTime>));
             ConstructContainerDefinition(typeof(List<ContractAspect>));
-            ConstructContainerDefinition(typeof(Dictionary<MobileParty, Travel>)); 
+            ConstructContainerDefinition(typeof(Dictionary<MobileParty, Travel>));
+
+            ConstructContainerDefinition(typeof(List<RelationsModifier>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, List<RelationsModifier>>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, HeroRelations>));
         }
     }
 }

@@ -1,21 +1,52 @@
 ﻿using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Traits;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 
-namespace BannerKings.Behaviours
+namespace BannerKings.Behaviours.Relations
 {
     public class BKRelationsBehavior : BannerKingsBehavior
     {
+        private Dictionary<Hero, HeroRelations> relations;
+        private Dictionary<Hero, CampaignTime> lastUpdated;
+
+        public HeroRelations GetRelations(Hero hero)
+        {
+            if (!relations.ContainsKey(hero)) relations.Add(hero, new HeroRelations(hero));
+            return relations[hero];
+        }
+
         public override void RegisterEvents()
         {
-            CampaignEvents.MapEventEnded.AddNonSerializedListener(this, (MapEvent mapEvent) =>
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, (starter) =>
+            {
+                SetRelations();
+            });
+
+            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, (starter) =>
+            {
+                SetRelations();
+            });
+
+            CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, (Hero hero) =>
+            {
+                if (lastUpdated.ContainsKey(hero) && lastUpdated[hero].ElapsedWeeksUntilNow < 1f) return;
+                RunWeekly(() =>
+                {
+                    HeroRelations relations = GetRelations(hero);
+                    relations.UpdateRelations();
+                    lastUpdated.Add(hero, CampaignTime.Now);
+                },
+                 GetType().Name,
+                false);
+            });
+
+            CampaignEvents.MapEventEnded.AddNonSerializedListener(this, (mapEvent) =>
             {
                 if (mapEvent.HasWinner)
                 {
@@ -42,7 +73,7 @@ namespace BannerKings.Behaviours
             });
 
             CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this,
-                (Settlement settlement, bool openToClaim, Hero newOwner, Hero oldOwner, Hero capturerHero, ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail) =>
+                (settlement, openToClaim, newOwner, oldOwner, capturerHero, detail) =>
                 {
                     if (detail != ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.BySiege) return;
 
@@ -66,7 +97,7 @@ namespace BannerKings.Behaviours
 
                         if (oldOwner.Culture == notable.Culture)
                         {
-                            if (newOwner.Culture != notable.Culture) 
+                            if (newOwner.Culture != notable.Culture)
                             {
                                 relation -= 20f;
                             }
@@ -84,6 +115,20 @@ namespace BannerKings.Behaviours
 
         public override void SyncData(IDataStore dataStore)
         {
+            dataStore.SyncData("bk_hero_relations", ref relations);
+
+            if (relations == null) relations = new Dictionary<Hero, HeroRelations>(500);
+            if (lastUpdated == null) lastUpdated = new Dictionary<Hero, CampaignTime>(500);
+        }
+
+        private void SetRelations()
+        {
+            if (relations == null) relations = new Dictionary<Hero, HeroRelations>(Hero.AllAliveHeroes.Count);
+            foreach (Hero hero in Hero.AllAliveHeroes)
+                if (!relations.ContainsKey(hero)) relations.Add(hero, new HeroRelations(hero));
+
+            foreach (Hero hero in Hero.DeadOrDisabledHeroes)
+                if (hero.IsDead && relations.ContainsKey(hero)) relations.Remove(hero);
         }
     }
 }

@@ -24,6 +24,7 @@ using BannerKings.Managers.Cultures;
 using BannerKings.UI.VanillaTabs.TownManagement;
 using TaleWorlds.CampaignSystem.Election;
 using static TaleWorlds.CampaignSystem.Election.SettlementClaimantDecision;
+using BannerKings.Behaviours.Relations;
 
 namespace BannerKings.UI
 {
@@ -68,36 +69,6 @@ namespace BannerKings.UI
                 >= 0.1f => new TextObject("{=oJCm9gDS}Novice"),
                 _ => new TextObject("{=DAp3eXTr}Incompetent")
             };
-
-            return text;
-        }
-
-        public static TextObject GetFaithTypeName(Faith faith)
-        {
-            TextObject text = null;
-            if (faith is MonotheisticFaith)
-            {
-                text = new TextObject("{=x5cTibqS}Monotheism");
-            }
-            else
-            {
-                text = new TextObject("{=FUnQKZ8K}Polytheism");
-            }
-
-            return text;
-        }
-
-        public static TextObject GetFaithTypeDescription(Faith faith)
-        {
-            TextObject text = null;
-            if (faith is MonotheisticFaith)
-            {
-                text = new TextObject("{=x5cTibqS}Monotheism");
-            }
-            else
-            {
-                text = new TextObject("{=FUnQKZ8K}Polytheism");
-            }
 
             return text;
         }
@@ -166,13 +137,45 @@ namespace BannerKings.UI
                     hero.Clan.Name.ToString(), 0));
             }
 
-            properties.Add(new TooltipProperty(new TextObject("Capital").ToString(),
+            properties.Add(new TooltipProperty(new TextObject("{=!}Capital").ToString(),
                     MBRandom.RoundRandomized(workshop.Capital).ToString(), 0));
 
             ExplainedNumber result = BannerKingsConfig.Instance.WorkshopModel.GetBuyingCostExplained(workshop, Hero.MainHero, true);
             TooltipAddEmptyLine(properties);
 
             properties.Add(new TooltipProperty(new TextObject("{=f7t4saJu}Value").ToString(), " ", 0));
+            properties.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
+
+            var explanation = CampaignUIHelper.GetTooltipForAccumulatingPropertyWithResult(String.Empty,
+                MBRandom.RoundRandomized(result.ResultNumber),
+                ref result);
+            explanation.RemoveAt(0);
+            properties.AddRange(explanation);
+
+            return properties;
+        }
+
+        public static List<TooltipProperty> GetRelationsTargetTooltip(List<RelationsModifier> modifiers, HeroRelations relations, Hero target)
+        {
+            List<TooltipProperty> properties = new List<TooltipProperty>
+            {
+                new TooltipProperty(new TextObject("{=!}Relations Target").ToString(),
+                string.Empty,
+                0,
+                onlyShowWhenExtended: false,
+                TooltipProperty.TooltipPropertyFlags.Title),
+
+                new TooltipProperty(new TextObject("{=!}Hero").ToString(),
+                target.Name.ToString(), 0),
+
+                new TooltipProperty(new TextObject("{=!}Current Relations").ToString(),
+                target.GetRelation(relations.Hero).ToString(), 0),
+            };
+
+            ExplainedNumber result = BannerKingsConfig.Instance.RelationsModel.CalculateModifiersExplained(modifiers, true);
+            TooltipAddEmptyLine(properties);
+
+            properties.Add(new TooltipProperty(new TextObject("{=!}Target").ToString(), " ", 0));
             properties.Add(new TooltipProperty("", string.Empty, 0, false, TooltipProperty.TooltipPropertyFlags.RundownSeperator));
 
             var explanation = CampaignUIHelper.GetTooltipForAccumulatingPropertyWithResult(String.Empty,

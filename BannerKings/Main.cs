@@ -23,6 +23,7 @@ using BannerKings.Managers.Innovations.Eras;
 using BannerKings.Behaviours.Innovations;
 using BannerKings.Behaviours.Shipping;
 using BannerKings.Campaign.Skills;
+using BannerKings.Behaviours.Relations;
 
 namespace BannerKings
 {

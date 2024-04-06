@@ -33,4 +33,15 @@ namespace BannerKings.UI.Extensions.Encyclopedia
 
         [PrefabExtensionXmlNodes] public IEnumerable<XmlNode> Nodes => nodes;
     }
+
+    [PrefabExtension("EncyclopediaHeroPage", "descendant::GridWidget[@Id='StatsGrid']/ItemTemplate/ListPanel[1]",
+        "EncyclopediaClanPage")]
+    internal class ReplaceHeroInfoExtension : PrefabExtensionInsertPatch
+    {
+        public override InsertType Type => InsertType.Replace;
+
+        [PrefabExtensionText]
+        public string Xml =>
+            "<Widget WidthSizePolicy=\"CoverChildren\" HeightSizePolicy=\"CoverChildren\" VerticalAlignment=\"Center\" UpdateChildrenStates=\"true\" MarginTop=\"12\" MarginBottom=\"5\" MarginLeft=\"20\" MarginRight=\"20\"><Children><ListPanel HeightSizePolicy = \"CoverChildren\" WidthSizePolicy=\"CoverChildren\" MarginLeft=\"15\" MarginTop=\"3\" ><Children><AutoHideRichTextWidget HeightSizePolicy = \"CoverChildren\" WidthSizePolicy=\"CoverChildren\" VerticalAlignment=\"Center\" Brush=\"Encyclopedia.Stat.DefinitionText\" Text=\"@Definition\" MarginRight=\"5\"/><AutoHideRichTextWidget HeightSizePolicy = \"CoverChildren\" WidthSizePolicy=\"CoverChildren\" VerticalAlignment=\"Center\" Brush=\"Encyclopedia.Stat.ValueText\" Text=\"@Value\" PositionYOffset=\"1\" /></Children></ListPanel><HintWidget DataSource = \"{Hint}\" WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"Fixed\" SuggestedHeight=\"15\" SuggestedWidth=\"100\" VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\" Command.HoverBegin=\"ExecuteBeginHint\" Command.HoverEnd=\"ExecuteEndHint\" /></Children></Widget>";
+    }
 }

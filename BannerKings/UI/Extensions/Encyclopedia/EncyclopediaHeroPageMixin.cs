@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Behaviours.Relations;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Traits;
 using BannerKings.Utils.Extensions;
@@ -53,6 +55,17 @@ namespace BannerKings.UI.Extensions.Encyclopedia
             if (!addedFields)
             {
                 TraitGroups.Clear();
+
+                if (hero != Hero.MainHero)
+                {
+                    HeroRelations relations = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKRelationsBehavior>()
+                        .GetRelations(Hero.MainHero);
+                    List<RelationsModifier> modifiers = BannerKingsConfig.Instance.RelationsModel.CalculateModifiers(relations, hero);
+                    heroPageVM.Stats.Add(new StringPairItemVM(new TextObject("{=!}Relation Target:").ToString(),
+                        relations.GetRelationsFinalTarget(modifiers).ToString(),
+                        new BasicTooltipViewModel(() => UIHelper.GetRelationsTargetTooltip(modifiers, relations, hero))));
+                }
+
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
                 var languages = education.Languages.Keys;
                 heroPageVM.Stats.Add(new StringPairItemVM(new TextObject("{=yCaxpVGh}Languages:").ToString(),
@@ -72,7 +85,7 @@ namespace BannerKings.UI.Extensions.Encyclopedia
                 {
                     float progress = BannerKingsConfig.Instance.TitleManager.GetKnightInfluence(hero) / 350f;
                     heroPageVM.Stats.Add(new StringPairItemVM(new TextObject("{=MuZ2tL8E}Clan Creation:").ToString(),
-                        (progress * 100f).ToString("0.00") + '%',
+                        UIHelper.FormatValue(progress),
                         new BasicTooltipViewModel(() =>
                         new TextObject("{=2GvHUPV9}As a knight or knightess, this person will eventually attemp to lead their own household. Their progress is determined by the influence of the lordships they hold. This does not apply to direct relatives of the family leader.")
                         .ToString())));
