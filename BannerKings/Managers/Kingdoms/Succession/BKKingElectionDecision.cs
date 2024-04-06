@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Institutions.Religions.Faiths;
+﻿using BannerKings.Actions;
+using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,21 +38,8 @@ namespace BannerKings.Managers.Kingdoms.Succession
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
             base.ApplyChosenOutcome(chosenOutcome);
-            var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Kingdom);
-            if (title != null)
-            {
-                var deJure = title.deJure;
-                var king = ((KingSelectionDecisionOutcome)chosenOutcome).King;
-                if (deJure != king)
-                {
-                    BannerKingsConfig.Instance.TitleManager.InheritTitle(deJure, king, title);
-                }
-
-                if (king.Clan.Leader != king)
-                {
-                    king.Clan.SetLeader(king);
-                }
-            }
+            var king = ((KingSelectionDecisionOutcome)chosenOutcome).King;
+            KingdomActions.SetRulerWithTitle(king, Kingdom);
         }
 
         public override float DetermineSupport(Clan clan, DecisionOutcome possibleOutcome)
