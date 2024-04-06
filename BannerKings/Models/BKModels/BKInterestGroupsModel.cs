@@ -401,7 +401,7 @@ namespace BannerKings.Models.BKModels
                 clanInfluences.Add(clan, f);
             }
 
-            result.Add(-0.2f + (clanInfluences[hero.Clan] / totalClanInfluence), new TextObject("Reluctance"));
+            result.Add(-0.1f + (clanInfluences[hero.Clan] / totalClanInfluence), new TextObject("{=!}Reluctance"));
             Hero ruler = diplomacy.Kingdom.Leader;
             float support = -MBMath.Map(diplomacy.Legitimacy, 0f, 1f, -0.5f, 0.5f);
             result.Add(support, new TextObject("{=KDH6VoKQ}Legitimacy of {HERO}")
@@ -416,7 +416,7 @@ namespace BannerKings.Models.BKModels
             if (interestGroup != null)
             {
                 float groupSupport = -MBMath.Map(interestGroup.Support.ResultNumber, 0f, 1f, -0.1f, 0.1f);
-                result.Add(groupSupport, new TextObject("Support from interest group ({GROUP})")
+                result.Add(groupSupport, new TextObject("{=!}Support from interest group ({GROUP})")
                         .SetTextVariable("GROUP", interestGroup.Name));
             }
 
