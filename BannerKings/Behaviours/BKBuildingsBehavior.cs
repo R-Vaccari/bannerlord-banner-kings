@@ -468,7 +468,8 @@ namespace BannerKings.Behaviours
                         }
                     }
 
-                    InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(settlement.Culture);
+                    PopulationData popData = settlement.PopulationData();
+                    InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(popData.CultureData.DominantCulture);
                     if (data == null) continue;
 
                     var availableBuildings = data.GetAvailableBuildings(settlement);
