@@ -14,7 +14,7 @@ namespace BannerKings.Actions
         {
             if (name == null)
             {
-                name = GetRandomName(culture, settlement);
+                name = GetRandomAvailableName(culture, settlement);
             }
 
             var names = new List<string>();
@@ -94,12 +94,12 @@ namespace BannerKings.Actions
             hero.Clan = clan;
         }
 
-        public static TextObject GetRandomName(CultureObject culture, Settlement settlement)
+        public static TextObject GetRandomAvailableName(CultureObject culture, Settlement settlement)
         {
             TextObject random;
             if (culture.ClanNameList.Count > 1)
             {
-                random = culture.ClanNameList.GetRandomElement();
+                random = culture.ClanNameList.FirstOrDefault(x => IsAvailable(x, culture));
             }
             else
             {
@@ -108,6 +108,22 @@ namespace BannerKings.Actions
             }
 
             return random;
+        }
+
+        private static bool IsAvailable(TextObject name, CultureObject culture)
+        {
+            var names = new List<string>();
+            foreach (var existingClan in Clan.All.ToList().FindAll(x => x.Culture == culture))
+            {
+                names.Add(existingClan.Name.ToString());
+            }
+
+            if (names.Any(x => x.Contains(name.ToString()) || x.ToString().Equals(name.ToString())))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
