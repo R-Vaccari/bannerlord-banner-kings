@@ -78,20 +78,23 @@ namespace BannerKings.Managers
         public void ApplyCouncilEffect(ref ExplainedNumber result, Hero councilOwner, CouncilMember position,
             CouncilTask task, float maxEffect, bool factor)
         {
-            var council = GetCouncil(councilOwner.Clan);
-            var existingPosition = council.GetCouncilPosition(position);
-            if (existingPosition != null && existingPosition.CurrentTask.StringId == task.StringId)
+            if (position != null && position.PrimarySkill != null)
             {
-                var competence = existingPosition.Competence.ResultNumber;
-                if (competence != 0f)
+                var council = GetCouncil(councilOwner.Clan);
+                var existingPosition = council.GetCouncilPosition(position);
+                if (existingPosition != null && existingPosition.CurrentTask.StringId == task.StringId)
                 {
-                    if (!factor)
+                    var competence = existingPosition.Competence.ResultNumber;
+                    if (competence != 0f)
                     {
-                        result.Add(maxEffect * competence, new TextObject("{=5TbiMahb}Council effect"));
-                    }
-                    else
-                    {
-                        result.AddFactor(maxEffect * competence, new TextObject("{=5TbiMahb}Council effect"));
+                        if (!factor)
+                        {
+                            result.Add(maxEffect * competence, new TextObject("{=5TbiMahb}Council effect"));
+                        }
+                        else
+                        {
+                            result.AddFactor(maxEffect * competence, new TextObject("{=5TbiMahb}Council effect"));
+                        }
                     }
                 }
             }
