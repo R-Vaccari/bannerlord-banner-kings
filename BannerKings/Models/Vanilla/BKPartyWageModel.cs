@@ -23,6 +23,16 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKPartyWageModel : DefaultPartyWageModel
     {
+        private float baseWage = 0f;
+        private float BaseWage
+        {
+            get
+            {
+                if (baseWage == 0f) baseWage = BannerKingsSettings.Instance.BaseWage;
+                return baseWage;
+            }
+        }
+
         private void CalculatePartialGarrisonWageReduction(float troopRatio, MobileParty mobileParty, PerkObject perk, ref ExplainedNumber garrisonWageReductionMultiplier, bool isSecondaryEffect)
         {
             if (troopRatio > 0f && mobileParty.CurrentSettlement.Town.Governor != null && PerkHelper.GetPerkValueForTown(perk, mobileParty.CurrentSettlement.Town))
@@ -52,7 +62,7 @@ namespace BannerKings.Models.Vanilla
                 TroopRosterElement elementCopyAtIndex = mobileParty.MemberRoster.GetElementCopyAtIndex(i);
                 CharacterObject character = elementCopyAtIndex.Character;
                 int num14 = flag ? elementCopyAtIndex.Number : (elementCopyAtIndex.Number - elementCopyAtIndex.WoundedNumber);
-                int wage = (int)Math.Max(character.TroopWage * BannerKingsSettings.Instance.BaseWage, 1);
+                int wage = (int)Math.Max(character.TroopWage * BaseWage, 1);
 
                 if (character.Occupation == Occupation.Mercenary)
                 {
