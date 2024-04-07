@@ -55,7 +55,7 @@ namespace BannerKings.Behaviours.Relations
         public void UpdateRelations()
         {
             CleanRelations();
-            foreach (Hero hero2 in Hero.AllAliveHeroes)
+            foreach (Hero hero2 in GetHeroesToUpdate())
             {
                 if (hero2 == Hero) continue;
 
@@ -64,6 +64,44 @@ namespace BannerKings.Behaviours.Relations
                 if (relation > target) ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero, hero2, -2, false);
                 else if (relation < target) ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero, hero2, 2, false);
             }
+        }
+
+        private HashSet<Hero> GetHeroesToUpdate()
+        {
+            HashSet<Hero> heroes = new HashSet<Hero>(20);
+            if (Hero.CurrentSettlement != null)
+            {
+                foreach (Hero notable in Hero.CurrentSettlement.Notables)
+                    heroes.Add(notable);
+
+                foreach (var party in Hero.CurrentSettlement.Parties)
+                    if (party.LeaderHero != null)
+                        heroes.Add(party.LeaderHero);
+            }
+
+            if (Hero.MapFaction != null && Hero.MapFaction.IsKingdomFaction)
+            {
+                Kingdom kingdom = (Kingdom)Hero.MapFaction;
+                foreach (var clan in kingdom.Clans)
+                    heroes.Add(clan.Leader);
+
+                foreach (Kingdom k in Kingdom.All)
+                    heroes.Add(k.Leader);
+            }
+
+            if (Hero.Clan != null)
+            {
+                foreach (Hero hero in Hero.Clan.Heroes) heroes.Add(hero); 
+                foreach (Hero hero in Hero.Clan.Companions) heroes.Add(hero);
+            }
+            else if (Hero.IsNotable)
+            {
+                Clan clan = Hero.CurrentSettlement.OwnerClan;
+                foreach (Hero hero in clan.Heroes) heroes.Add(hero);
+                foreach (Hero hero in clan.Companions) heroes.Add(hero);
+            }
+
+            return heroes;
         }
 
         public void CleanRelations()
