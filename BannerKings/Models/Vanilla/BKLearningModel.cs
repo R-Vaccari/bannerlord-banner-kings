@@ -137,7 +137,7 @@ namespace BannerKings.Models.Vanilla
 
             if (hero.GetPerkValue(BKPerks.Instance.ScholarshipMagnumOpus))
             {
-                result.Add(0.02f * hero.GetSkillValue(BKSkills.Instance.Scholarship) - 230, BKPerks.Instance.ScholarshipMagnumOpus.Name);
+                result.Add(0.02f * (hero.GetSkillValue(BKSkills.Instance.Scholarship) - 230), BKPerks.Instance.ScholarshipMagnumOpus.Name);
             }
 
             result.LimitMin(0.05f);
