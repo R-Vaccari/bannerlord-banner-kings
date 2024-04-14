@@ -115,7 +115,7 @@ namespace BannerKings.Models.BKModels
                 var contract = clanTitle != null ? clanTitle.Contract : null;
                 var explanation = BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(leader,
                     hero, contract, true);
-                explanations.Add(hero, explanation);
+                if (!explanations.ContainsKey(hero)) explanations.Add(hero, explanation);
             }
 
             return (from x in explanations
