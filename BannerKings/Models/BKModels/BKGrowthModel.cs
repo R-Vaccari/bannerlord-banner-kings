@@ -4,6 +4,7 @@ using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Settings;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -116,6 +117,8 @@ namespace BannerKings.Models.BKModels
                     result.AddFactor(0.4f, new TextObject("{=fQVyeiJb}Capital"));
                 }
             }
+
+            result.AddFactor(BannerKingsSettings.Instance.Populations - 1f, new TextObject("{=!}Populations Setting"));
 
             return result;
         }

@@ -68,6 +68,16 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public float LootScale { get; set; } = 0.5f;
 
+
+
+        [SettingPropertyFloatingInteger("{=!}Population Sizes", minValue: 0.5f, maxValue: 2f, "#0%", RequireRestart = false, HintText = "{=!}Change the max size for fief populations. Populations are the very core of fiefs, impacting the economy very significantly, military volunteers, construction, and all else. Default: 100%.")]
+        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        public float Populations { get; set; } = 1f;
+
+        [SettingPropertyFloatingInteger("{=!}Innovations Speed", minValue: 0.5f, maxValue: 2f, "#0%", RequireRestart = false, HintText = "{=!}Change the speed of innovations development. Every culture has its own innovations, some significantly impact the performance of their fiefs economy. Default: 100%.")]
+        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        public float Innovations { get; set; } = 1f;
+
         [SettingPropertyFloatingInteger("{=smqPaUHR}Clan Renown Scaling", minValue: 1f, maxValue: 10f, "#0%", RequireRestart = false, HintText = "{=G08wtvco}The scale of renown points required for clans to level up in tier. Vanilla is 100%. Default: 300%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float ClanRenown { get; set; } = 3f;

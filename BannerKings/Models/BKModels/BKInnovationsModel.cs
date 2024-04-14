@@ -3,6 +3,7 @@ using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
@@ -104,6 +105,7 @@ namespace BannerKings.Models.BKModels
             result.Add(villages, new TextObject("{=CqNOH2qW}Villages (x{COUNT})")
                 .SetTextVariable("COUNT", villageCount));
 
+            result.AddFactor(BannerKingsSettings.Instance.Innovations - 1f, new TextObject("{=!}Innovations Setting"));
             return result;
         }
     }
