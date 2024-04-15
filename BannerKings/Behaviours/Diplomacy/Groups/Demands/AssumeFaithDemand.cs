@@ -239,7 +239,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             {
                 if (RulerReligion == Religion)
                 {
-                    PositiveAnswer.Fulfill(Group.FactionLeader);
+                    Fulfill(PositiveAnswer, Group.Leader);
                 }
                 else
                 {

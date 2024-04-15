@@ -23,9 +23,10 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         public abstract Demand GetCopy(DiplomacyGroup group);
 
         [SaveableProperty(9)] public DiplomacyGroup Group { get; set; }
-        public CampaignTime DueDate { get; protected set; }
+        [SaveableProperty(10)] public CampaignTime DueDate { get; protected set; }
 
-        public bool IsDueDate => Active && DueDate.GetDayOfYear == CampaignTime.Now.GetDayOfYear && DueDate.GetYear == CampaignTime.Now.GetYear;
+        public bool IsDueDate => Active && ((DueDate.GetDayOfYear == CampaignTime.Now.GetDayOfYear && DueDate.GetYear == CampaignTime.Now.GetYear)
+            || DueDate.IsPast);
 
         public abstract DemandResponse PositiveAnswer { get; }
         public abstract DemandResponse NegativeAnswer { get; }

@@ -324,22 +324,11 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             {
                 Kingdom kingdom = Group.FactionLeader.MapFaction as Kingdom;
                 bool finished = false;
-                if (Enact && kingdom.ActivePolicies.Contains(Policy))
-                {
-                    PositiveAnswer.Fulfill(Group.FactionLeader);
-                    finished = true;
-                }
+                if (Enact && kingdom.ActivePolicies.Contains(Policy))finished = true;
+                else if (!Enact && !kingdom.ActivePolicies.Contains(Policy))finished = true;         
 
-                if (!Enact && !kingdom.ActivePolicies.Contains(Policy))
-                {
-                    PositiveAnswer.Fulfill(Group.FactionLeader);
-                    finished = true;
-                }
-
-                if (finished)
-                {
-                    PushForDemand();
-                }
+                if (!finished) PushForDemand();
+                else Fulfill(PositiveAnswer, Group.Leader);
             }
         }
     }

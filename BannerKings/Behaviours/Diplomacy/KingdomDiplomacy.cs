@@ -35,8 +35,8 @@ namespace BannerKings.Behaviours.Diplomacy
             }
         }
 
-        public BKExplainedNumber LegitimacyTarget => BannerKingsConfig.Instance.LegitimacyModel.CalculateEffect(this, false);
-        public BKExplainedNumber LegitimacyTargetExplained => BannerKingsConfig.Instance.LegitimacyModel.CalculateEffect(this, true);
+        public BKExplainedNumber LegitimacyTarget => BannerKingsConfig.Instance.LegitimacyModel.CalculateKingdomLegitimacy(this, false);
+        public BKExplainedNumber LegitimacyTargetExplained => BannerKingsConfig.Instance.LegitimacyModel.CalculateKingdomLegitimacy(this, true);
 
         public KingdomDiplomacy(Kingdom kingdom)
         {

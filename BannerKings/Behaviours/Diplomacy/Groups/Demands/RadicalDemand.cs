@@ -27,10 +27,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         {
             if (Group != null)
             {
-                Group.Members.Clear();
-                Group.SetLeader(null);
-
-                if (Group.KingdomDiplomacy.Kingdom == Clan.PlayerClan.MapFaction)
+                if (Group.Leader == Hero.MainHero && Group.KingdomDiplomacy.Kingdom == Clan.PlayerClan.MapFaction)
                 {
                     InformationManager.DisplayMessage(new InformationMessage(
                         new TextObject("{=sKFZDhiA}The radical {GROUP} group has been dissolved.")
@@ -38,6 +35,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                         .ToString(),
                         Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
                 }
+
+                Group.Members.Clear();
+                Group.SetLeader(null);
             }
         }
     }

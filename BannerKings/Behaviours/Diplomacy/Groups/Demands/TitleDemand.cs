@@ -1,12 +1,9 @@
-using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
 using BannerKings.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -422,7 +419,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             {
                 if (Title.deJure == Benefactor)
                 {
-                    PositiveAnswer.Fulfill(Group.FactionLeader);
+                    Fulfill(PositiveAnswer, Group.Leader);
                 }
                 else
                 {

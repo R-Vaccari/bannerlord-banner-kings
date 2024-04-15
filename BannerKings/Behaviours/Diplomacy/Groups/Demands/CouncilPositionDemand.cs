@@ -414,7 +414,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             {
                 if (Position.Member == Benefactor)
                 {
-                    PositiveAnswer.Fulfill(Group.FactionLeader);
+                    Fulfill(PositiveAnswer, Group.FactionLeader);
                 }
                 else 
                 {
