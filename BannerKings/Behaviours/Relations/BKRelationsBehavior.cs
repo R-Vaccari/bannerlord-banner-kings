@@ -35,12 +35,13 @@ namespace BannerKings.Behaviours.Relations
 
             CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, (Hero hero) =>
             {
+                if (lastUpdated == null) lastUpdated = new Dictionary<Hero, CampaignTime>(Hero.AllAliveHeroes.Count);
                 if (lastUpdated.ContainsKey(hero) && lastUpdated[hero].ElapsedWeeksUntilNow < 1f) return;
                 RunWeekly(() =>
                 {
                     HeroRelations relations = GetRelations(hero);
                     relations.UpdateRelations();
-                    lastUpdated.Add(hero, CampaignTime.Now);
+                    lastUpdated[hero] = CampaignTime.Now;
                 },
                  GetType().Name,
                 false);
@@ -124,6 +125,7 @@ namespace BannerKings.Behaviours.Relations
         private void SetRelations()
         {
             if (relations == null) relations = new Dictionary<Hero, HeroRelations>(Hero.AllAliveHeroes.Count);
+            if (lastUpdated == null) lastUpdated = new Dictionary<Hero, CampaignTime>(Hero.AllAliveHeroes.Count);
             foreach (Hero hero in Hero.AllAliveHeroes)
                 if (!relations.ContainsKey(hero)) relations.Add(hero, new HeroRelations(hero));
 
