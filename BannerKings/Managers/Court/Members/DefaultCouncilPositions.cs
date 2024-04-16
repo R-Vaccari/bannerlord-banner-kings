@@ -93,7 +93,30 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
+                    if (hero.IsLord)
+                    {
+                        if (!hero.IsClanLeader())
+                        {
+                            return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
+                        }
+
+                        if (hero.Clan.Fiefs.Count == 0)
+                        {
+                            return new(false, new TextObject("{=!}{CLAN} must have at least one fief.")
+                                .SetTextVariable("CLAN", hero.Clan.Name));
+                        }
+
+                        if (position.IsRoyal)
+                        {
+                            CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero);
+                            if (data.Peerage == null || !data.Peerage.IsFullPeerage)
+                            {
+                                return new(false, new TextObject("{=!}The {POSITION} is a royal position, thus {CLAN} must have Full Peerage.")
+                                .SetTextVariable("CLAN", hero.Clan.Name)
+                                .SetTextVariable("POSITION", position.GetCulturalName()));
+                            }
+                        }
+                    }
                     return new(true, null);
                 }, 
                 (CouncilMember member) =>
@@ -138,7 +161,30 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
+                    if (hero.IsLord)
+                    {
+                        if (!hero.IsClanLeader())
+                        {
+                            return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
+                        }
+
+                        if (hero.Clan.Fiefs.Count == 0)
+                        {
+                            return new(false, new TextObject("{=!}{CLAN} must have at least one fief.")
+                                .SetTextVariable("CLAN", hero.Clan.Name));
+                        }
+
+                        if (position.IsRoyal)
+                        {
+                            CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero);
+                            if (data.Peerage == null || !data.Peerage.IsFullPeerage)
+                            {
+                                return new(false, new TextObject("{=!}The {POSITION} is a royal position, thus {CLAN} must have Full Peerage.")
+                                .SetTextVariable("CLAN", hero.Clan.Name)
+                                .SetTextVariable("POSITION", position.GetCulturalName()));
+                            }
+                        }
+                    }
                     return new(true, null);
                 },
                 (CouncilMember member) =>
@@ -183,7 +229,30 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
+                    if (hero.IsLord)
+                    {
+                        if (!hero.IsClanLeader())
+                        {
+                            return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
+                        }
+
+                        if (hero.Clan.Fiefs.Count == 0)
+                        {
+                            return new(false, new TextObject("{=!}{CLAN} must have at least one fief.")
+                                .SetTextVariable("CLAN", hero.Clan.Name));
+                        }
+
+                        if (position.IsRoyal)
+                        {
+                            CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero);
+                            if (data.Peerage == null || !data.Peerage.IsFullPeerage)
+                            {
+                                return new(false, new TextObject("{=!}The {POSITION} is a royal position, thus {CLAN} must have Full Peerage.")
+                                .SetTextVariable("CLAN", hero.Clan.Name)
+                                .SetTextVariable("POSITION", position.GetCulturalName()));
+                            }
+                        }
+                    }
                     return new(true, null);
                 },
                 (CouncilMember member) =>
@@ -228,7 +297,30 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
+                    if (hero.IsLord)
+                    {
+                        if (!hero.IsClanLeader())
+                        {
+                            return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
+                        }
+
+                        if (hero.Clan.Fiefs.Count == 0)
+                        {
+                            return new(false, new TextObject("{=!}{CLAN} must have at least one fief.")
+                                .SetTextVariable("CLAN", hero.Clan.Name));
+                        }
+
+                        if (position.IsRoyal)
+                        {
+                            CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero);
+                            if (data.Peerage == null || !data.Peerage.IsFullPeerage)
+                            {
+                                return new(false, new TextObject("{=!}The {POSITION} is a royal position, thus {CLAN} must have Full Peerage.")
+                                .SetTextVariable("CLAN", hero.Clan.Name)
+                                .SetTextVariable("POSITION", position.GetCulturalName()));
+                            }
+                        }
+                    }
                     return new(true, null);
                 },
                 (CouncilMember member) =>
@@ -273,7 +365,31 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    if (!hero.IsClanLeader()) return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
+                    if (hero.IsLord)
+                    {
+                        if (!hero.IsClanLeader())
+                        {
+                            return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
+                        }
+
+                        if (hero.Clan.Fiefs.Count == 0)
+                        {
+                            return new(false, new TextObject("{=!}{CLAN} must have at least one fief.")
+                                .SetTextVariable("CLAN", hero.Clan.Name));
+                        }
+
+                        if (position.IsRoyal)
+                        {
+                            CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero);
+                            if (data.Peerage == null || !data.Peerage.IsFullPeerage)
+                            {
+                                return new(false, new TextObject("{=!}The {POSITION} is a royal position, thus {CLAN} must have Full Peerage.")
+                                .SetTextVariable("CLAN", hero.Clan.Name)
+                                .SetTextVariable("POSITION", position.GetCulturalName()));
+                            }
+                        }
+                    }
+
                     return new(true, null);
                 },
                 (CouncilMember member) =>
@@ -308,6 +424,31 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
+                    if (hero.IsLord)
+                    {
+                        if (!hero.IsClanLeader())
+                        {
+                            return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
+                        }
+
+                        if (hero.Clan.Fiefs.Count == 0)
+                        {
+                            return new(false, new TextObject("{=!}{CLAN} must have at least one fief.")
+                                .SetTextVariable("CLAN", hero.Clan.Name));
+                        }
+
+                        if (position.IsRoyal)
+                        {
+                            CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero);
+                            if (data.Peerage == null || !data.Peerage.IsFullPeerage)
+                            {
+                                return new(false, new TextObject("{=!}The {POSITION} is a royal position, thus {CLAN} must have Full Peerage.")
+                                .SetTextVariable("CLAN", hero.Clan.Name)
+                                .SetTextVariable("POSITION", position.GetCulturalName()));
+                            }
+                        }
+                    }  
+
                     return new (true, null);
                 },
                 (CouncilMember member) =>
