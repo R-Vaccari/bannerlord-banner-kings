@@ -172,7 +172,8 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=1hzAykcg}Smith-God"),
                 200,
                 new TextObject("{=7ZzktggC}Wilund is the celestial smith. The world is his foundry. The thunder of the storm and the thunder of hooves are the song of his hammer. The black rain of a thousand arrows of war are the sparks upon his anvil. When he tempers life, a thousand men die and a thousand more are born."),
-                new TextObject("{=aFno1r43}We, the Wilunding, owe him a great debt. The Smith came onto this land so that we may forge it into our kingdom. We shall repay him with a thousand years more of conquest."));
+                new TextObject("{=aFno1r43}We, the Wilunding, owe him a great debt. The Smith came onto this land so that we may forge it into our kingdom. We shall repay him with a thousand years more of conquest."),
+                Settlement.All.First(x => x.StringId == "town_V8"));
 
             Osric.Initialize(new TextObject("{=ok75Pgtz}Osric Iron-Arm"),
                 new TextObject("{=NmpGxMLX}Deemed to be the first Vlandic king in Calradia, Osric is responsible for the conquest of Pravend, formerly an imperial capital. While they see it as a trivial game of conquest from a petty tribal warlord, Osric's achievements, in the minds of the Wilunding, prove the prophecy that they are, indeed, promised this fertile land for their taking. Osric is said to have killed the Calradic gods so that the Wilunding instead prosper, and so many among these now call themselves Osrickin."),
