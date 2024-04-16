@@ -46,10 +46,10 @@ namespace BannerKings.Models.Vanilla
             switch (criminal)
             {
                 case CriminalPolicy.Execution:
-                    baseResult.Add(0.5f, new TextObject("Criminal policy"));
+                    baseResult.Add(0.5f, new TextObject("{=!}Criminal policy"));
                     break;
                 case CriminalPolicy.Forgiveness:
-                    baseResult.Add(1f, new TextObject("Criminal policy"));
+                    baseResult.Add(1f, new TextObject("{=!}Criminal policy"));
                     break;
             }
 

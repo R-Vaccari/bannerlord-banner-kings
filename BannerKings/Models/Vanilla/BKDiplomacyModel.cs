@@ -25,6 +25,11 @@ namespace BannerKings.Models.Vanilla
     {
         public float TRADE_PACT_INFLUENCE_CAP { get;} = 100f;
 
+        public override float GetRelationIncreaseFactor(Hero hero1, Hero hero2, float relationChange)
+        {
+            return relationChange;
+        }
+
         public ExplainedNumber CalculateHeroFiefScore(Settlement settlement, Hero annexing, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0f, explanations);

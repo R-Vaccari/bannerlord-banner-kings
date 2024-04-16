@@ -15,10 +15,10 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Models.Vanilla.Abstract;
 using BannerKings.Settings;
 using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -27,7 +27,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKInfluenceModel : DefaultClanPoliticsModel
+    public class BKInfluenceModel : InfluenceModel
     {
         public ExplainedNumber GetBequeathPeerageCost(Kingdom kingdom, bool explanations = false)
         {
@@ -70,7 +70,7 @@ namespace BannerKings.Models.Vanilla
             return 10f + MathF.Max(CalculateInfluenceChange(clan).ResultNumber, 5f) * 0.025f * CampaignTime.DaysInYear;
         }
 
-        public ExplainedNumber CalculateInfluenceCap(Clan clan, bool includeDescriptions = false)
+        public override ExplainedNumber CalculateInfluenceCap(Clan clan, bool includeDescriptions = false)
         {
             ExplainedNumber result = new ExplainedNumber(50f, includeDescriptions);
             result.Add(clan.Tier * 175f, GameTexts.FindText("str_clan_tier_bonus"));

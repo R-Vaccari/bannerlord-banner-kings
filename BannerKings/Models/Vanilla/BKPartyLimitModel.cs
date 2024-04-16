@@ -11,12 +11,11 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.Vanilla
 {
-    internal class BKPartyLimitModel : DefaultPartySizeLimitModel
+    public class BKPartyLimitModel : DefaultPartySizeLimitModel
     {
         public override ExplainedNumber GetPartyMemberSizeLimit(PartyBase party, bool includeDescriptions = false)
         {

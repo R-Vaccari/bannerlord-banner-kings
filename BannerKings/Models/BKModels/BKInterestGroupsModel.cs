@@ -4,6 +4,7 @@ using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Traits;
+using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Utils.Extensions;
 using BannerKings.Utils.Models;
 using System.Collections.Generic;
@@ -17,9 +18,9 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
 {
-    public class BKInterestGroupsModel
+    public class BKInterestGroupsModel : GroupsModel
     {
-        public bool WillHeroCreateGroup(DiplomacyGroup group, Hero hero, KingdomDiplomacy diplomacy)
+        public override bool WillHeroCreateGroup(DiplomacyGroup group, Hero hero, KingdomDiplomacy diplomacy)
         {
             if (hero == Hero.MainHero || !CanHeroCreateAGroup(hero, diplomacy)) return false;
 
@@ -376,7 +377,7 @@ namespace BannerKings.Models.BKModels
             return CanHeroJoinAGroup(hero, diplomacy) && hero.IsClanLeader() && diplomacy.Kingdom.Leader != hero;
         }
 
-        public BKExplainedNumber CalculateHeroJoinChance(Hero hero, DiplomacyGroup group, KingdomDiplomacy diplomacy, bool explanations = false)
+        public override BKExplainedNumber CalculateHeroJoinChance(Hero hero, DiplomacyGroup group, KingdomDiplomacy diplomacy, bool explanations = false)
         {
             var result = new BKExplainedNumber(0f, explanations);
             result.LimitMin(-1f);
@@ -390,7 +391,7 @@ namespace BannerKings.Models.BKModels
                CalculateHeroJoinRadicalGroup(hero, (RadicalGroup)group, diplomacy, ref result);
         }
 
-        public BKExplainedNumber CalculateHeroJoinRadicalGroup(Hero hero, RadicalGroup group, KingdomDiplomacy diplomacy, ref BKExplainedNumber result)
+        public override BKExplainedNumber CalculateHeroJoinRadicalGroup(Hero hero, RadicalGroup group, KingdomDiplomacy diplomacy, ref BKExplainedNumber result)
         {
             Dictionary<Clan, float> clanInfluences = new Dictionary<Clan, float>();
             float totalClanInfluence = 0f;
@@ -517,23 +518,6 @@ namespace BannerKings.Models.BKModels
             }
 
             result.Add(hero.GetTraitLevel(group.MainTrait) * 0.15f);
-            return result;
-        }
-
-        public BKExplainedNumber CalculateHeroCreateRadicallGroup(Hero hero, KingdomDiplomacy diplomacy, bool explanations = false)
-        {
-            BKExplainedNumber result = new BKExplainedNumber(0f, explanations);
-
-            InterestGroup group = diplomacy.GetHeroGroup(hero);
-            if (group != null)
-            {
-
-            }
-
-            Hero leader = diplomacy.Kingdom.Leader;
-            float relation = hero.GetRelation(leader) / 100f;
-            result.AddFactor(-relation);
-
             return result;
         }
 

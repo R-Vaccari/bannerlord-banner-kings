@@ -13,7 +13,7 @@ namespace BannerKings.Models.BKModels
 {
     public class BKLegitimacyModel : LegitimacyModel
     {
-        public override BKExplainedNumber CalculateEffect(KingdomDiplomacy diplomacy, bool explanations = false)
+        public override BKExplainedNumber CalculateKingdomLegitimacy(KingdomDiplomacy diplomacy, bool explanations = false)
         {
             Kingdom kingdom = diplomacy.Kingdom;
             Hero leader = kingdom.Leader;
@@ -22,7 +22,7 @@ namespace BannerKings.Models.BKModels
             else return CalculateLegitimacy(leader, false, diplomacy, explanations);
         }
 
-        public BKExplainedNumber CalculateLegitimacy(Hero hero, bool compareToRuler, KingdomDiplomacy diplomacy, bool explanations = false)
+        public override BKExplainedNumber CalculateLegitimacy(Hero hero, bool compareToRuler, KingdomDiplomacy diplomacy, bool explanations = false)
         {
             var result = new BKExplainedNumber(0f, explanations);
             Kingdom kingdom = diplomacy.Kingdom;
