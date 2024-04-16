@@ -128,6 +128,7 @@ namespace BannerKings.Behaviours.Diplomacy
             var list = new List<CasusBelli>();
             foreach (var kingdom in Kingdom.All)
             {
+                if (kingdom == Kingdom || !Kingdom.GetStanceWith(kingdom).IsNeutral || HasValidTruce(kingdom)) continue;
                 list.AddRange(GetTargetKingdomCasusBelli(kingdom));
             }
 
