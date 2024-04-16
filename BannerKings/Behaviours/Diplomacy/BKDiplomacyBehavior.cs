@@ -565,41 +565,21 @@ namespace BannerKings.Behaviours.Diplomacy
             RunWeekly(() =>
             {
                 KingdomDiplomacy diplomacy = GetKingdomDiplomacy(clan.Kingdom);
-                if (diplomacy == null)
-                {
-                    return;
-                }
+                if (diplomacy == null) return;
 
                 DiplomacyModel diplomacyModel = TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel;
-                if (clan.Influence < (float)diplomacyModel.GetInfluenceCostOfProposingWar(clan))
-                {
-                    return;
-                }
+                if (clan.Influence < (float)diplomacyModel.GetInfluenceCostOfProposingWar(clan)) return;
 
                 List<CasusBelli> casi = diplomacy.GetAvailableCasusBelli();
-                if (casi.Count == 0)
-                {
-                    return;
-                }
+                if (casi.Count == 0) return;
 
-                foreach (CasusBelli casus in casi)
-                {
-                    if (clan.Kingdom.UnresolvedDecisions.Any(x => x.GetType() is DeclareWarDecision || x.GetType() is BKDeclareWarDecision))
-                    {
-                        break;
-                    }
-
-                    BKDeclareWarDecision declareWarDecision = new BKDeclareWarDecision(casus, clan, casus.Defender);
-                    float support = new KingdomElection(declareWarDecision).GetLikelihoodForOutcome(0);
-                    if (support > 0.4f)
-                    {
-                        clan.Kingdom.AddDecision(declareWarDecision);
-                        break;
-                    }
-                }
+                CasusBelli casus = casi.GetRandomElement();
+                BKDeclareWarDecision declareWarDecision = new BKDeclareWarDecision(casus, clan, casus.Defender);
+                float support = new KingdomElection(declareWarDecision).GetLikelihoodForOutcome(0);
+                if (support > 0.4f) clan.Kingdom.AddDecision(declareWarDecision);
             },
             GetType().Name,
-            false);
+            false);     
         }
       
         private void OnMakePeace(IFaction faction1, IFaction faction2, MakePeaceAction.MakePeaceDetail detail)
