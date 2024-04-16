@@ -260,7 +260,7 @@ namespace BannerKings.UI.Management
                 {
                     float chance = BannerKingsConfig.Instance.VolunteerModel.GetPopTypeSpawnChance(data, type) * 
                         (spawn.GetChance(type) / weights[type]);
-                    recruitWeights[type].Add(spawn.Troop, chance);
+                    recruitWeights[type][spawn.Troop] = chance;
                 }
             }
 
