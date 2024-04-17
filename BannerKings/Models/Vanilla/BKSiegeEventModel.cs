@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using BannerKings.Managers.Skills;
 using BannerKings.Settings;
+using BannerKings.Utils;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Siege;
@@ -13,7 +16,7 @@ namespace BannerKings.Models.Vanilla
         public override float GetConstructionProgressPerHour(SiegeEngineType type, SiegeEvent siegeEvent,
             ISiegeEventSide side)
         {
-            var result = base.GetConstructionProgressPerHour(type, siegeEvent, side);
+            var result = base.GetConstructionProgressPerHour(type, siegeEvent, side);        
             var effectiveSiegePartyForSide = GetEffectiveSiegePartyForSide(siegeEvent, side.BattleSide);
             if (effectiveSiegePartyForSide is {LeaderHero: { }})
             {
@@ -24,13 +27,23 @@ namespace BannerKings.Models.Vanilla
                     result *= 1.2f;
                 }
             }
-
+     
             if (BannerKingsSettings.Instance.LongerSieges > 0f)
             {
                 result *= (1f - BannerKingsSettings.Instance.LongerSieges);
             }
-
-            return result;
+            ExplainedNumber explaineResult = new ExplainedNumber(result);
+            #region DefaultPerks.Steward.Sweatshops
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+            {
+                if (siegeEvent?.BesiegerCamp.LeaderParty != null && siegeEvent.BesiegerCamp.LeaderParty.HasPerk(DefaultPerks.Steward.Sweatshops, checkSecondaryRole: true))
+                {
+                    explaineResult.AddFactor(-DefaultPerks.Steward.Sweatshops.SecondaryBonus);
+                }
+                DefaultPerks.Steward.Sweatshops.AddScaledPerkBonus(ref explaineResult, false, effectiveSiegePartyForSide, DefaultSkills.Steward, 0, 10, 100, Utils.Helpers.SkillScale.OnlyQuartermaster, minValue: 0f, maxValue: 0.5f);
+            }
+            #endregion
+            return explaineResult.ResultNumber;
         }
 
         public override IEnumerable<SiegeEngineType> GetPrebuiltSiegeEnginesOfSettlement(Settlement settlement)

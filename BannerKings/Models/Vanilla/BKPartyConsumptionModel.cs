@@ -2,6 +2,7 @@ using BannerKings.Components;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using BannerKings.Settings;
+using BannerKings.Utils;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -15,14 +16,14 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKPartyConsumptionModel : PartyFoodModel
     {
-        public override int NumberOfMenOnMapToEatOneFood 
-        { 
+        public override int NumberOfMenOnMapToEatOneFood
+        {
             get
             {
                 int result = 20;
                 result += (int)(BannerKingsSettings.Instance.SlowerParties * 20f);
                 return result;
-            } 
+            }
         }
 
         public override float BirdFood => 0.025f;
@@ -115,7 +116,18 @@ namespace BannerKings.Models.Vanilla
                 result.Add(value, DefaultPerks.Roguery.Promises.Name, null);
             }
             PerkHelper.AddPerkBonusForParty(DefaultPerks.Athletics.Spartan, party, false, ref result);
-            PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.WarriorsDiet, party, true, ref result);
+
+            #region DefaultPerks.Steward.WarriorsDiet
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+            {        
+                DefaultPerks.Steward.WarriorsDiet.AddScaledPerkBonus(ref result, false, party,  DefaultSkills.Steward, 0, 15, 100, Utils.Helpers.SkillScale.OnlyQuartermaster, minValue: -0.3f, maxValue:0);
+            }
+            else
+            {
+                PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.WarriorsDiet, party, true, ref result);
+            }
+            #endregion
+
             if (party.EffectiveQuartermaster != null)
             {
                 PerkHelper.AddEpicPerkBonusForCharacter(DefaultPerks.Steward.PriceOfLoyalty, party.EffectiveQuartermaster.CharacterObject, DefaultSkills.Steward, true, ref result, 250);
@@ -129,10 +141,31 @@ namespace BannerKings.Models.Vanilla
             {
                 PerkHelper.AddPerkBonusForTown(DefaultPerks.Athletics.StrongLegs, party.CurrentSettlement.Town, ref result);
             }
+
+            #region DefaultPerks.Steward.StiffUpperLip
             if (party.Army != null)
             {
-                PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.StiffUpperLip, party, true, ref result);
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                {
+                    DefaultPerks.Steward.StiffUpperLip.AddScaledPerkBonus(ref result, false, party, DefaultSkills.Steward, 0, 15, 100, Utils.Helpers.SkillScale.OnlyQuartermaster, minValue: -0.3f, maxValue: 0);
+                }
+                else
+                {
+                    PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.StiffUpperLip, party, true, ref result);
+                }
             }
+            #endregion
+            #region DefaultPerks.Steward.WarriorsDiet
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+            {
+                DefaultPerks.Steward.WarriorsDiet.AddScaledPerkBonus(ref result, false, party, DefaultSkills.Steward, 0, 15, 100, Utils.Helpers.SkillScale.OnlyQuartermaster, minValue: -0.3f, maxValue: 0);
+            }
+            else
+            {
+                PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.WarriorsDiet, party, true, ref result);
+            }
+            #endregion
+
             SiegeEvent siegeEvent = party.SiegeEvent;
             if (((siegeEvent != null) ? siegeEvent.BesiegerCamp : null) != null)
             {

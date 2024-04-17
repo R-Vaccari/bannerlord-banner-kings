@@ -149,5 +149,27 @@ namespace BannerKings.Settings
             HintText = "{=gDK2LRib}Maximum number of bandit parties in the world map. Vanilla is 150. Default: 150.")]
         [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
         public int BanditPartiesLimit { get; set; } = 150;
+
+
+
+
+        [SettingPropertyBool("Enable Useful Perks", Order =0,  HintText = "Enable perks to scale up with skill level Default: True.")]
+        [SettingPropertyGroup("Useful Perks")]
+        public bool EnableUsefulPerks { get; set; } = true;
+
+
+        [SettingPropertyBool("Enable Perks From All Party Members", Order = 1, HintText = "Enable perks to become effective from all party members with a reduced ratio. Default setting is True.")]
+        [SettingPropertyGroup("Useful Perks")]
+        public bool EnableUsefulPerksFromAllPartyMembers { get; set; } = true;
+
+        [SettingPropertyBool("Enable Governor Perks From Settlement Owner", Order = 2, HintText = "Enable governor perks to become effective from settlement owners with a reduced ratio. Default setting is True.")]
+        [SettingPropertyGroup("Useful Perks")]
+        public bool EnableUsefulGovernorPerksFromSettlementOwner { get; set; } = true;
+
+
+        [SettingPropertyBool("Enable Useful Steward Perks", Order = 3, HintText = "Enable perks to scale up with skill level Default: True.")]
+        [SettingPropertyGroup("Useful Perks")]
+        public bool EnableUsefulStewardPerks { get; set; } = true;
+
     }
 }
