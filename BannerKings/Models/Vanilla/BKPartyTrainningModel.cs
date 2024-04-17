@@ -1,11 +1,14 @@
-﻿using BannerKings.Utils;
+﻿using BannerKings.Settings;
+using BannerKings.Utils;
 using Helpers;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 
 namespace BannerKings.Models.Vanilla
@@ -28,7 +31,7 @@ namespace BannerKings.Models.Vanilla
 
         public override ExplainedNumber GetEffectiveDailyExperience(MobileParty mobileParty, TroopRosterElement troop)
         {
-            ExplainedNumber result = default(ExplainedNumber);
+            ExplainedNumber result = default;
             ExceptionUtils.TryCatch(() =>
             {
                 if (troop.Character.Culture == null) return;
@@ -99,14 +102,39 @@ namespace BannerKings.Models.Vanilla
                         PerkHelper.AddPerkBonusForParty(DefaultPerks.Scouting.Unburdened, mobileParty, false, ref result);
                     }
                 }
-                if (mobileParty.IsActive && mobileParty.HasPerk(DefaultPerks.Steward.SevenVeterans, false) && troop.Character.Tier >= 4)
+                #region DefaultPerks.Steward.SevenVeterans
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    result.Add((float)this.GetPerkExperiencesForTroops(DefaultPerks.Steward.SevenVeterans), null, null);
+                    if (mobileParty.IsActive && troop.Character.Tier >= 4)
+                    {
+                        DefaultPerks.Steward.SevenVeterans.AddScaledPerkBonus(ref result, false, mobileParty, DefaultSkills.Steward, 25, 25, 100, Utils.Helpers.SkillScale.Both, minValue: 0, maxValue: 60f);
+                    }
                 }
-                if (mobileParty.IsActive && mobileParty.HasPerk(DefaultPerks.Steward.DrillSergant, false))
+                else
                 {
-                    result.Add((float)this.GetPerkExperiencesForTroops(DefaultPerks.Steward.DrillSergant), null, null);
+                    if (mobileParty.IsActive && mobileParty.HasPerk(DefaultPerks.Steward.SevenVeterans, false) && troop.Character.Tier >= 4)
+                    {
+                        result.Add((float)this.GetPerkExperiencesForTroops(DefaultPerks.Steward.SevenVeterans), null, null);
+                    }
                 }
+                #endregion
+                #region DefaultPerks.Steward.DrillSergant
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                {
+                    if (mobileParty.IsActive)
+                    {
+                        DefaultPerks.Steward.DrillSergant.AddScaledPerkBonus(ref result, false, mobileParty, DefaultSkills.Steward, 25, 25, 100, Utils.Helpers.SkillScale.Both, minValue: 0, maxValue: 30f);
+                    }
+                }
+                else
+                {
+                    if (mobileParty.IsActive && mobileParty.HasPerk(DefaultPerks.Steward.DrillSergant, false))
+                    {
+                        result.Add((float)this.GetPerkExperiencesForTroops(DefaultPerks.Steward.DrillSergant), null, null);
+                    }
+                }
+                #endregion
+
                 if (troop.Character.Culture.IsBandit)
                 {
                     PerkHelper.AddPerkBonusForParty(DefaultPerks.Roguery.NoRestForTheWicked, mobileParty, true, ref result);
@@ -114,7 +142,7 @@ namespace BannerKings.Models.Vanilla
             },
             GetType().Name,
             false);
-           
+
             return result;
         }
     }

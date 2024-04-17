@@ -23,6 +23,47 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKPartyWageModel : DefaultPartyWageModel
     {
+        int GetHeroWageAfterBerkBonus(float baseWage, Hero heroObject, MobileParty mobileParty)
+        {
+            ExplainedNumber paidInPromiseExplainedNumber = new ExplainedNumber(baseWage);
+            Clan clan = heroObject.Clan;
+            #region Steward.PaidInPromise
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+            {
+                if (clan?.Leader != null)
+                {
+                    var min = -0.4f;
+
+                    var totalbouns = DefaultPerks.Steward.PaidInPromise.AddScaledPersonlOrClanLeaderPerkBonusWithClanAndFamilyMembers(ref paidInPromiseExplainedNumber, false, clan.Leader, DefaultSkills.Steward, 20, 100, 0, minValue: min, maxValue: 0);
+                    if (heroObject.GetPerkValue(DefaultPerks.Steward.PaidInPromise))
+                    {
+                        var bounsFactor = DefaultPerks.Steward.PaidInPromise.PrimaryBonus * (heroObject.GetSkillValue(DefaultSkills.Steward) / 30);
+
+                        if (totalbouns + bounsFactor < min)
+                        {
+                            paidInPromiseExplainedNumber.AddFactor(-0.4f - totalbouns, DefaultPerks.Steward.PaidInPromise.Name);
+                        }
+                        else
+                        {
+                            paidInPromiseExplainedNumber.AddFactor(bounsFactor, DefaultPerks.Steward.PaidInPromise.Name);
+
+                        }
+
+                    }
+                    return MathF.Round(paidInPromiseExplainedNumber.ResultNumber);
+                }
+
+            }
+            else
+            {
+                if (mobileParty.LeaderHero != null && mobileParty.LeaderHero.GetPerkValue(DefaultPerks.Steward.PaidInPromise))
+                {
+                    return MathF.Round(baseWage * (1f + DefaultPerks.Steward.PaidInPromise.PrimaryBonus));
+                }
+            }
+            return MathF.Round(baseWage);
+            #endregion
+        }
         private void CalculatePartialGarrisonWageReduction(float troopRatio, MobileParty mobileParty, PerkObject perk, ref ExplainedNumber garrisonWageReductionMultiplier, bool isSecondaryEffect)
         {
             if (troopRatio > 0f && mobileParty.CurrentSettlement.Town.Governor != null && PerkHelper.GetPerkValueForTown(perk, mobileParty.CurrentSettlement.Town))
@@ -65,16 +106,13 @@ namespace BannerKings.Models.Vanilla
                 {
                     Hero heroObject = elementCopyAtIndex.Character.HeroObject;
                     Clan clan = character.HeroObject.Clan;
-                    if (heroObject != ((clan != null) ? clan.Leader : null))
+                    if (heroObject != (clan?.Leader))
                     {
-                        if (mobileParty.LeaderHero != null && mobileParty.LeaderHero.GetPerkValue(DefaultPerks.Steward.PaidInPromise))
-                        {
-                            num3 += MathF.Round(wage * (1f + DefaultPerks.Steward.PaidInPromise.PrimaryBonus));
-                        }
-                        else
-                        {
-                            num3 += wage;
-                        }
+                        num3 += GetHeroWageAfterBerkBonus(wage, heroObject, mobileParty);
+                    }
+                    else
+                    {
+                        num3 += wage;
                     }
                 }
                 else if (character.Culture != null)
@@ -165,11 +203,32 @@ namespace BannerKings.Models.Vanilla
                         float troopRatio3 = (float)num6 / (float)mobileParty.MemberRoster.TotalRegulars;
                         this.CalculatePartialGarrisonWageReduction(troopRatio3, mobileParty, DefaultPerks.Crossbow.PeasantLeader, ref result, true);
                     }
+                    #region Steward.StiffUpperLip
                     else if (mobileParty.CurrentSettlement.IsCastle)
                     {
-                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.StiffUpperLip, mobileParty.CurrentSettlement.Town, ref result);
+
+                        if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                        {
+                            DefaultPerks.Steward.StiffUpperLip.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, mobileParty.CurrentSettlement.Town, DefaultSkills.Steward, 20, 40, 100, minValue: -0.3f, maxValue: 0);
+                        }
+                        else
+                        {
+                            PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.StiffUpperLip, mobileParty.CurrentSettlement.Town, ref result);
+                        }
+
                     }
-                    PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.DrillSergant, mobileParty.CurrentSettlement.Town, ref result);
+                    #endregion
+                    #region Steward.DrillSergant
+                    if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                    {
+                        DefaultPerks.Steward.DrillSergant.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, mobileParty.CurrentSettlement.Town, DefaultSkills.Steward, 20, 40, 100, minValue: -0.3f, maxValue: 0);
+                    }
+                    else
+                    {
+                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.DrillSergant, mobileParty.CurrentSettlement.Town, ref result);
+                    }
+                    #endregion
+
                     if (mobileParty.CurrentSettlement.Culture.HasFeat(DefaultCulturalFeats.EmpireGarrisonWageFeat))
                     {
                         result.AddFactor(DefaultCulturalFeats.EmpireGarrisonWageFeat.EffectBonus, GameTexts.FindText("str_culture", null));
@@ -185,8 +244,8 @@ namespace BannerKings.Models.Vanilla
                 }
             }
             result.Add(explainedNumber.ResultNumber, null, null);
-            float value = (mobileParty.LeaderHero != null && mobileParty.LeaderHero.Clan != null && mobileParty.LeaderHero.Clan.Kingdom != null && 
-                !mobileParty.LeaderHero.Clan.IsUnderMercenaryService && 
+            float value = (mobileParty.LeaderHero != null && mobileParty.LeaderHero.Clan != null && mobileParty.LeaderHero.Clan.Kingdom != null &&
+                !mobileParty.LeaderHero.Clan.IsUnderMercenaryService &&
                 mobileParty.LeaderHero.Clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.MilitaryCoronae)) ? 0.1f : 0f;
             if (mobileParty.HasPerk(DefaultPerks.Trade.SwordForBarter, true))
             {
@@ -217,18 +276,41 @@ namespace BannerKings.Models.Vanilla
             }
             result.AddFactor(value, DefaultPolicies.MilitaryCoronae.Name);
             result.AddFactor(explainedNumber2.ResultNumber - 1f, null);
-            if (PartyBaseHelper.HasFeat(mobileParty.Party, DefaultCulturalFeats.AseraiIncreasedWageFeat))
+            //if (PartyBaseHelper.HasFeat(mobileParty.Party, DefaultCulturalFeats.AseraiIncreasedWageFeat))
+            //{
+            //    result.AddFactor(DefaultCulturalFeats.AseraiIncreasedWageFeat.EffectBonus, null);
+            //}
+            #region Steward.Frugal
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                result.AddFactor(DefaultCulturalFeats.AseraiIncreasedWageFeat.EffectBonus, null);
+                DefaultPerks.Steward.Frugal.AddScaledPerkBonus(ref result, false, mobileParty, DefaultSkills.Steward, 0, 20, 100, Utils.Helpers.SkillScale.OnlyQuartermaster, minValue: -0.3f, maxValue: 0);
             }
-            if (mobileParty.HasPerk(DefaultPerks.Steward.Frugal, false))
+            else
             {
-                result.AddFactor(DefaultPerks.Steward.Frugal.PrimaryBonus, DefaultPerks.Steward.Frugal.Name);
+                if (mobileParty.HasPerk(DefaultPerks.Steward.Frugal, false))
+                {
+                    result.AddFactor(DefaultPerks.Steward.Frugal.PrimaryBonus, DefaultPerks.Steward.Frugal.Name);
+                }
             }
-            if (mobileParty.Army != null && mobileParty.HasPerk(DefaultPerks.Steward.EfficientCampaigner, true))
+            #endregion
+            #region Steward.EfficientCampaigner
+            if (mobileParty.Army != null)
             {
-                result.AddFactor(DefaultPerks.Steward.EfficientCampaigner.SecondaryBonus, DefaultPerks.Steward.EfficientCampaigner.Name);
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                {
+                    DefaultPerks.Steward.EfficientCampaigner.AddScaledPerkBonus(ref result, true, mobileParty, DefaultSkills.Steward, 0, 30, 100, Utils.Helpers.SkillScale.OnlyQuartermaster, minValue: -0.4f, maxValue: 0);
+                }
+                else
+                {
+                    if (mobileParty.HasPerk(DefaultPerks.Steward.EfficientCampaigner, true))
+                    {
+                        result.AddFactor(DefaultPerks.Steward.EfficientCampaigner.SecondaryBonus, DefaultPerks.Steward.EfficientCampaigner.Name);
+                    }
+                }
             }
+            #endregion
+
+
             if (mobileParty.SiegeEvent != null && mobileParty.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(mobileParty.Party, MapEvent.BattleTypes.Siege) && mobileParty.HasPerk(DefaultPerks.Steward.MasterOfWarcraft, false))
             {
                 result.AddFactor(DefaultPerks.Steward.MasterOfWarcraft.PrimaryBonus, DefaultPerks.Steward.MasterOfWarcraft.Name);
@@ -293,7 +375,9 @@ namespace BannerKings.Models.Vanilla
                         }
                         else
                         {
-                            result.Add(BannerKingsConfig.Instance.CompanionModel.GetHeroWage(hero), 
+                            var heroWage = BannerKingsConfig.Instance.CompanionModel.GetHeroWage(hero);
+                            heroWage = GetHeroWageAfterBerkBonus(heroWage, hero, mobileParty);
+                            result.Add(heroWage,
                                 elementCopyAtIndex.Character.Name);
                         }
                     }
@@ -317,7 +401,7 @@ namespace BannerKings.Models.Vanilla
                     result.AddFactor(mountedProportion * -0.1f, BKPerks.Instance.CataphractEquites.Name);
                 }
 
-                if (mobileParty.SiegeEvent != null && education.Lifestyle != null && 
+                if (mobileParty.SiegeEvent != null && education.Lifestyle != null &&
                     education.Lifestyle.Equals(DefaultLifestyles.Instance.SiegeEngineer))
                 {
                     result.AddFactor(-0.3f, DefaultLifestyles.Instance.SiegeEngineer.Name);
@@ -341,6 +425,18 @@ namespace BannerKings.Models.Vanilla
         public override int GetTroopRecruitmentCost(CharacterObject troop, Hero buyerHero, bool withoutItemCost = false)
         {
             var result = new ExplainedNumber(base.GetTroopRecruitmentCost(troop, buyerHero, withoutItemCost));
+
+            #region Steward.Frugal
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks && buyerHero != null && buyerHero.IsPartyLeader)
+            {
+                if (buyerHero.GetPerkValue(DefaultPerks.Steward.Frugal))
+                {
+                    result.AddFactor(-DefaultPerks.Steward.Frugal.SecondaryBonus, null);
+                }
+                DefaultPerks.Steward.Frugal.AddScaledPerkBonus(ref result, true, buyerHero.PartyBelongedTo, DefaultSkills.Steward, 20, 0, 100, Utils.Helpers.SkillScale.OnlyPartyLeader, minValue: -0.4f, maxValue: 0);
+            }
+
+            #endregion
             result.LimitMin(GetCharacterWage(troop) * 10f);
 
             ExceptionUtils.TryCatch(() =>
@@ -418,8 +514,8 @@ namespace BannerKings.Models.Vanilla
             },
             GetType().Name,
             false);
-            
-            return (int) result.ResultNumber;
+
+            return (int)result.ResultNumber;
         }
     }
 }

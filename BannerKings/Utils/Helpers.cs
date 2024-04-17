@@ -6,6 +6,7 @@ using System.Xml;
 using BannerKings.Managers.Cultures;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Traits;
+using BannerKings.Settings;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.AgentOrigins;
@@ -54,7 +55,7 @@ namespace BannerKings.Utils
                 hero.SetTraitLevel(trait, final);
                 if (hero == Hero.MainHero)
                 {
-                    string value = GameTexts.FindText("str_trait_name_" + trait.StringId.ToLower(), 
+                    string value = GameTexts.FindText("str_trait_name_" + trait.StringId.ToLower(),
                         (level + MathF.Abs(trait.MinValue)).ToString())
                         .ToString();
 
@@ -170,15 +171,15 @@ namespace BannerKings.Utils
             var agent = new AgentData(new SimpleAgentOrigin(settlement.Culture.Musician, 0));
             var locCharacter = new LocationCharacter(agent,
                 new LocationCharacter.AddBehaviorsDelegate(SandBoxManager.Instance.AgentBehaviorManager.AddWandererBehaviors),
-                "musician", 
+                "musician",
                 true,
-                LocationCharacter.CharacterRelations.Neutral, 
+                LocationCharacter.CharacterRelations.Neutral,
                 ActionSetCode.GenerateActionSetNameWithSuffix(agent.AgentMonster, agent.AgentIsFemale, "_musician"),
                 true, false, null, false, false, true);
 
             settlement.LocationComplex.GetLocationWithId("lordshall")
                 .AddLocationCharacters(delegate { return locCharacter; },
-                settlement.Culture, 
+                settlement.Culture,
                 LocationCharacter.CharacterRelations.Neutral, 1);
 
             var townsmanSuffix = FaceGen.GetMonsterWithSuffix(settlement.Culture.Townsman.Race, "_settlement");
@@ -186,12 +187,12 @@ namespace BannerKings.Utils
             var townsman = new LocationCharacter(new AgentData(
                 new SimpleAgentOrigin(settlement.Culture.Townsman, -1, null, default(UniqueTroopDescriptor)))
                 .Monster(tuple.Item2)
-                .Age(MBRandom.RandomInt(30, 60)), 
-                new LocationCharacter.AddBehaviorsDelegate(SandBoxManager.Instance.AgentBehaviorManager.AddOutdoorWandererBehaviors), 
-                null, 
-                false, 
-                LocationCharacter.CharacterRelations.Friendly, 
-                tuple.Item1, 
+                .Age(MBRandom.RandomInt(30, 60)),
+                new LocationCharacter.AddBehaviorsDelegate(SandBoxManager.Instance.AgentBehaviorManager.AddOutdoorWandererBehaviors),
+                null,
+                false,
+                LocationCharacter.CharacterRelations.Friendly,
+                tuple.Item1,
                 true, false, null, false, false, true);
 
             settlement.LocationComplex.GetLocationWithId("lordshall")
@@ -235,7 +236,7 @@ namespace BannerKings.Utils
             return count;
         }
 
-        public static TextObject GetClassName(PopType type, CultureObject culture) => 
+        public static TextObject GetClassName(PopType type, CultureObject culture) =>
             DefaultPopulationNames.Instance.GetPopulationName(culture, type).Name;
 
         public static string GetConsumptionHint(ConsumptionType type)
@@ -273,7 +274,7 @@ namespace BannerKings.Utils
                         nobleRecruit = nobleRecruit.UpgradeTargets[0];
                     }
                 }
-            }, 
+            },
             Type.GetType("BannerKings.Utils.Helpers").Name,
             false);
 
@@ -286,10 +287,27 @@ namespace BannerKings.Utils
             return culture;
         }
 
+        public static IEnumerable<CharacterObject> GetAllPartyHeros(this MobileParty mobileParty)
+        {
+            Hero leader = mobileParty.LeaderHero ?? mobileParty.Owner;
+            if (leader != null)
+            {
+
+                for (var i = 0; i < mobileParty.MemberRoster.Count; i++)
+                {
+                    var elementCopyAtIndex = mobileParty.MemberRoster.GetElementCopyAtIndex(i);
+                    if (elementCopyAtIndex.Character.IsHero)
+                    {
+                        yield return elementCopyAtIndex.Character;
+                    }
+                }
+            }
+        }
+
         public static List<ItemCategory> LuxuryCategories => new List<ItemCategory>(10)
             {
                 DefaultItemCategories.Jewelry,
-                DefaultItemCategories.Velvet,          
+                DefaultItemCategories.Velvet,
                 DefaultItemCategories.WarHorse,
                 DefaultItemCategories.RangedWeapons4,
                 DefaultItemCategories.MeleeWeapons4,
@@ -320,8 +338,8 @@ namespace BannerKings.Utils
 
         public static ConsumptionType GetTradeGoodConsumptionType(ItemCategory item)
         {
-            if (LuxuryCategories.Contains(item)) return ConsumptionType.Luxury; 
-            else if (IndustrialCategories.Contains(item)) return ConsumptionType.Industrial;    
+            if (LuxuryCategories.Contains(item)) return ConsumptionType.Luxury;
+            else if (IndustrialCategories.Contains(item)) return ConsumptionType.Industrial;
             else if (item.Properties == Property.BonusToFoodStores) return ConsumptionType.Food;
             return ConsumptionType.General;
         }
@@ -351,5 +369,262 @@ namespace BannerKings.Utils
 
             return ConsumptionType.None;
         }
+
+        #region PerkHelpers
+        public static void AddScaledGovernerPerkBonusForTownWithTownHeros(this PerkObject perk, ref ExplainedNumber bonuses, Town town, SkillObject scaleSkill, float everySkillGoverner, float everySkillOwner, float everySkillMember, float? minValue = null, float? maxValue = null)
+        {
+            float value = 0;
+            if (!(perk.PrimaryRole == SkillEffect.PerkRole.Governor || perk.SecondaryRole == SkillEffect.PerkRole.Governor))
+            {
+                return;
+            }
+            var perkbouns = perk.PrimaryRole == SkillEffect.PerkRole.Governor ? perk.PrimaryBonus : perk.SecondaryBonus;
+            Hero governor = town.Governor;
+            if (BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers && town.OwnerClan != null && everySkillMember > 0)
+            {
+                var garrisonHeros = town.Settlement.HeroesWithoutParty.Where(d => d.Clan == town.OwnerClan && d.GetPerkValue(perk) && d != town.Governor && !d.IsClanLeader);
+                if (garrisonHeros.Any())
+                {
+                    value += garrisonHeros.Sum(d => perkbouns * (d.GetSkillValue(scaleSkill) / everySkillMember));
+                }
+            }
+
+            if (BannerKingsSettings.Instance.EnableUsefulGovernorPerksFromSettlementOwner && town.OwnerClan?.Leader != null && town.OwnerClan.Leader.GetPerkValue(perk))
+            {
+                if (governor == null && town.OwnerClan.Leader.CurrentSettlement != null && town.OwnerClan.Leader.CurrentSettlement == town.Settlement)
+                {
+                    if (everySkillGoverner > 0)
+                    {
+                        value += perkbouns * (town.OwnerClan.Leader.GetSkillValue(scaleSkill) / everySkillGoverner);
+                    }
+                }
+                else
+                {
+                    if (everySkillOwner > 0)
+                    {
+                        value += perkbouns * (town.OwnerClan.Leader.GetSkillValue(scaleSkill) / everySkillOwner);
+                    }
+                }
+            }
+            if (governor != null && governor.GetPerkValue(perk) && governor.CurrentSettlement != null && governor.CurrentSettlement == town.Settlement && everySkillGoverner > 0)
+            {
+                value += perkbouns * (town.Governor.GetSkillValue(scaleSkill) / everySkillGoverner);
+            }
+            if (!value.ApproximatelyEqualsTo(0f))
+            {
+                if (minValue.HasValue && value < minValue.Value)
+                {
+                    value = minValue.Value;
+                }
+                if (maxValue.HasValue && value > maxValue.Value)
+                {
+                    value = maxValue.Value;
+                }
+                if (perk.PrimaryRole == SkillEffect.PerkRole.Governor)
+                {
+                    AddToStat(ref bonuses, perk.PrimaryIncrementType, value, perk.Name);
+                }
+                else
+                {
+                    AddToStat(ref bonuses, perk.SecondaryIncrementType, value, perk.Name);
+                }
+            }
+        }
+
+        public enum SkillScale
+        {
+            None,
+            OnlyQuartermaster,
+            OnlyPartyLeader,
+            QuartermasterFirst,
+            PartyLeaderFirst,
+            TheGreater,
+            Both
+        }
+        public static void AddScaledPerkBonus(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, MobileParty mobileParty, SkillObject scaleSkill, float everySkillLeader, float everySkillQuartermaster, float everySkillMember, SkillScale skillScale, float? minValue = null, float? maxValue = null)
+        {
+            var value = 0f;
+            var perkbouns = isSecondary ? perk.SecondaryBonus : perk.PrimaryBonus;
+            var perkRole = isSecondary ? perk.SecondaryRole : perk.PrimaryRole;
+
+            Hero choosenHero = null;
+
+            if (skillScale != SkillScale.None)
+            {
+                float? choosenValue = null;
+                if (everySkillQuartermaster > 0 && skillScale != SkillScale.OnlyPartyLeader &&
+                    (skillScale == SkillScale.Both ||
+                    skillScale == SkillScale.TheGreater ||
+                    skillScale == SkillScale.QuartermasterFirst ||
+                    skillScale == SkillScale.PartyLeaderFirst ||
+                    (perkRole == SkillEffect.PerkRole.Quartermaster && skillScale == SkillScale.OnlyQuartermaster))
+                )
+                {
+                    choosenHero = mobileParty.EffectiveQuartermaster;
+                    if (choosenHero != null && choosenHero.GetPerkValue(perk))
+                    {
+
+                        choosenValue = perkbouns * choosenHero.GetSkillValue(scaleSkill) / everySkillQuartermaster;
+
+                    }
+                }
+
+                if (everySkillLeader > 0 && skillScale != SkillScale.OnlyQuartermaster &&
+                    (skillScale == SkillScale.Both ||
+                    skillScale == SkillScale.TheGreater ||
+                    skillScale == SkillScale.QuartermasterFirst ||
+                    skillScale == SkillScale.PartyLeaderFirst ||
+                    (perkRole == SkillEffect.PerkRole.PartyLeader && skillScale == SkillScale.OnlyPartyLeader))
+                )
+                {
+                    choosenHero = mobileParty.LeaderHero;
+                    if (choosenHero != null && choosenHero.GetPerkValue(perk))
+                    {
+
+                        var newvalue = perkbouns * choosenHero.GetSkillValue(scaleSkill) / everySkillLeader;
+                        if (skillScale == SkillScale.QuartermasterFirst && !choosenValue.HasValue)
+                        {
+                            choosenValue = newvalue;
+                        }
+                        else if (skillScale == SkillScale.TheGreater && newvalue > choosenValue)
+                        {
+                            choosenValue = newvalue;
+                        }
+                        else if (skillScale == SkillScale.Both && mobileParty.LeaderHero != mobileParty.EffectiveQuartermaster)
+                        {
+                            if (!choosenValue.HasValue)
+                            {
+                                choosenValue = newvalue;
+                            }
+                            else
+                            {
+                                choosenValue += newvalue;
+                            }
+                        }
+                        else if (skillScale == SkillScale.OnlyPartyLeader || skillScale == SkillScale.PartyLeaderFirst)
+                        {
+                            choosenValue = newvalue;
+                        }
+
+
+                    }
+                }
+                if (choosenValue.HasValue)
+                {
+                    value += choosenValue.Value;
+                }
+
+            }
+            if (BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers && everySkillMember > 0)
+            {
+                var mobilePartyHeros = mobileParty.GetAllPartyHeros();
+                var partyHeros = mobilePartyHeros.Where(d => d.GetPerkValue(perk) && d.HeroObject != choosenHero);
+                value += partyHeros.Sum(d => perkbouns * (d.GetSkillValue(scaleSkill) / everySkillMember));
+            }
+
+            if (!value.ApproximatelyEqualsTo(0f))
+            {
+                if (minValue.HasValue && value < minValue.Value)
+                {
+                    value = minValue.Value;
+                }
+                if (maxValue.HasValue && value > maxValue.Value)
+                {
+                    value = maxValue.Value;
+                }
+
+                if (isSecondary)
+                {
+                    AddToStat(ref bonuses, perk.SecondaryIncrementType, value, perk.Name);
+                }
+                else
+                {
+                    AddToStat(ref bonuses, perk.PrimaryIncrementType, value, perk.Name);
+                }
+            }
+        }
+        public static float AddScaledPersonlOrClanLeaderPerkBonusWithClanAndFamilyMembers(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, Hero person, SkillObject scaleSkill, float everySkillPerson, float everySkillFamilyMembers, float everySkillClanMembers, float? minValue = null, float? maxValue = null)
+        {
+            if (person == null)
+            {
+                return 0f;
+            }
+            var value = 0f;
+            var perkbouns = isSecondary ? perk.SecondaryBonus : perk.PrimaryBonus;
+            var perkRole = isSecondary ? perk.SecondaryRole : perk.PrimaryRole;
+
+            if (BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            {
+                var familyMembers = new List<Hero>() { person.Father, person.Mother, person.Spouse };
+                if (person.Siblings != null)
+                {
+                    familyMembers.AddRange(person.Siblings);
+                }
+                if (person.Children != null)
+                {
+                    familyMembers.AddRange(person.Children);
+                }
+
+                familyMembers = familyMembers.Where(d => d != null && d.IsAlive).ToList();
+
+                List<Hero> otherClanMembers = (person.Clan?.Companions) ?? new List<Hero>();
+                otherClanMembers = otherClanMembers.Union((person.Clan?.Lords) ?? new List<Hero>()).ToList();
+                otherClanMembers = otherClanMembers.Where(d => d.IsAlive && !familyMembers.Contains(d)).ToList();
+
+                if (everySkillFamilyMembers > 0)
+                {
+                    familyMembers = familyMembers.Where(d => d.GetPerkValue(perk) && d != person).ToList();
+                    value += familyMembers.Sum(d => perkbouns * (d.GetSkillValue(scaleSkill) / everySkillFamilyMembers));
+                }
+
+                if (everySkillClanMembers > 0)
+                {
+                    otherClanMembers = otherClanMembers.Where(d => d.GetPerkValue(perk) && d != person).ToList();
+                    value += otherClanMembers.Sum(d => perkbouns * (d.GetSkillValue(scaleSkill) / everySkillClanMembers));
+                }
+            }
+            if (everySkillPerson > 0 && person.GetPerkValue(perk))
+            {
+                value += perkbouns * person.GetSkillValue(scaleSkill) / everySkillPerson;
+            }
+
+
+            if (!value.ApproximatelyEqualsTo(0f))
+            {
+                if (minValue.HasValue && value < minValue.Value)
+                {
+                    value = minValue.Value;
+                }
+                if (maxValue.HasValue && value > maxValue.Value)
+                {
+                    value = maxValue.Value;
+                }
+
+                if (isSecondary)
+                {
+                    AddToStat(ref bonuses, perk.SecondaryIncrementType, value, perk.Name);
+                    return value;
+                }
+                else
+                {
+                    AddToStat(ref bonuses, perk.PrimaryIncrementType, value, perk.Name);
+                    return value;
+                }
+            }
+            return 0f;
+        }
+        private static void AddToStat(ref ExplainedNumber stat, SkillEffect.EffectIncrementType effectIncrementType, float number, TextObject text)
+        {
+            switch (effectIncrementType)
+            {
+                case SkillEffect.EffectIncrementType.Add:
+                    stat.Add(number, text);
+                    break;
+                case SkillEffect.EffectIncrementType.AddFactor:
+                    stat.AddFactor(number, text);
+                    break;
+            }
+        }
+        #endregion
     }
 }
