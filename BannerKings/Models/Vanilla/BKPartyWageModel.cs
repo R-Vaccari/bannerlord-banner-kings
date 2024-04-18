@@ -203,7 +203,6 @@ namespace BannerKings.Models.Vanilla
                     #region Steward.StiffUpperLip
                     else if (mobileParty.CurrentSettlement.IsCastle)
                     {
-
                         if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                         {
                             DefaultPerks.Steward.StiffUpperLip.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, mobileParty.CurrentSettlement.Town, DefaultSkills.Steward, 20, 40, 100, minValue: -0.3f, maxValue: 0);

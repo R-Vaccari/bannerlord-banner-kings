@@ -369,12 +369,12 @@ namespace BannerKings.Utils
         }
 
         #region PerkHelpers
-        public static void AddScaledGovernerPerkBonusForTownWithTownHeros(this PerkObject perk, ref ExplainedNumber bonuses, Town town, SkillObject scaleSkill, float everySkillGoverner, float everySkillOwner, float everySkillMember, float? minValue = null, float? maxValue = null)
+        public static float AddScaledGovernerPerkBonusForTownWithTownHeros(this PerkObject perk, ref ExplainedNumber bonuses, Town town, SkillObject scaleSkill, float everySkillGoverner, float everySkillOwner, float everySkillMember, float? minValue = null, float? maxValue = null)
         {
             float value = 0;
             if (!(perk.PrimaryRole == SkillEffect.PerkRole.Governor || perk.SecondaryRole == SkillEffect.PerkRole.Governor))
             {
-                return;
+                return 0f;
             }
             var perkbouns = perk.PrimaryRole == SkillEffect.PerkRole.Governor ? perk.PrimaryBonus : perk.SecondaryBonus;
             Hero governor = town.Governor;
@@ -408,25 +408,7 @@ namespace BannerKings.Utils
             {
                 value += perkbouns * (town.Governor.GetSkillValue(scaleSkill) / everySkillGoverner);
             }
-            if (!value.ApproximatelyEqualsTo(0f))
-            {
-                if (minValue.HasValue && value < minValue.Value)
-                {
-                    value = minValue.Value;
-                }
-                if (maxValue.HasValue && value > maxValue.Value)
-                {
-                    value = maxValue.Value;
-                }
-                if (perk.PrimaryRole == SkillEffect.PerkRole.Governor)
-                {
-                    AddToStat(ref bonuses, perk.PrimaryIncrementType, value, perk.Name);
-                }
-                else
-                {
-                    AddToStat(ref bonuses, perk.SecondaryIncrementType, value, perk.Name);
-                }
-            }
+            return AddBonusToStat(perk, ref bonuses, perk.SecondaryRole == SkillEffect.PerkRole.Governor , minValue, maxValue, ref value);
         }
 
         public enum SkillScale
@@ -439,7 +421,7 @@ namespace BannerKings.Utils
             TheGreater,
             Both
         }
-        public static void AddScaledPerkBonus(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, MobileParty mobileParty, SkillObject scaleSkill, float everySkillLeader, float everySkillQuartermaster, float everySkillMember, SkillScale skillScale, float? minValue = null, float? maxValue = null)
+        public static float AddScaledPerkBonus(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, MobileParty mobileParty, SkillObject scaleSkill, float everySkillLeader, float everySkillQuartermaster, float everySkillMember, SkillScale skillScale, float? minValue = null, float? maxValue = null)
         {
             var value = 0f;
             var perkbouns = isSecondary ? perk.SecondaryBonus : perk.PrimaryBonus;
@@ -514,26 +496,7 @@ namespace BannerKings.Utils
                 value += partyHeros.Sum(d => perkbouns * (d.GetSkillValue(scaleSkill) / everySkillMember));
             }
 
-            if (!value.ApproximatelyEqualsTo(0f))
-            {
-                if (minValue.HasValue && value < minValue.Value)
-                {
-                    value = minValue.Value;
-                }
-                if (maxValue.HasValue && value > maxValue.Value)
-                {
-                    value = maxValue.Value;
-                }
-
-                if (isSecondary)
-                {
-                    AddToStat(ref bonuses, perk.SecondaryIncrementType, value, perk.Name);
-                }
-                else
-                {
-                    AddToStat(ref bonuses, perk.PrimaryIncrementType, value, perk.Name);
-                }
-            }
+            return AddBonusToStat(perk, ref bonuses, isSecondary, minValue, maxValue, ref value);
         }
         public static float AddScaledPersonlOrClanLeaderPerkBonusWithClanAndFamilyMembers(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, Hero person, SkillObject scaleSkill, float everySkillPerson, float everySkillFamilyMembers, float everySkillClanMembers, float? minValue = null, float? maxValue = null)
         {
@@ -579,6 +542,11 @@ namespace BannerKings.Utils
             {
                 value += perkbouns * person.GetSkillValue(scaleSkill) / everySkillPerson;
             }
+            return AddBonusToStat(perk, ref bonuses, isSecondary, minValue, maxValue, ref value);
+        }
+
+        private static float AddBonusToStat(PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, float? minValue, float? maxValue, ref float value)
+        {
             if (!value.ApproximatelyEqualsTo(0f))
             {
                 if (minValue.HasValue && value < minValue.Value)
@@ -603,6 +571,7 @@ namespace BannerKings.Utils
             }
             return 0f;
         }
+
         private static void AddToStat(ref ExplainedNumber stat, SkillEffect.EffectIncrementType effectIncrementType, float number, TextObject text)
         {
             switch (effectIncrementType)
