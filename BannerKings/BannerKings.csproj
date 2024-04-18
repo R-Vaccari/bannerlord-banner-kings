@@ -8,6 +8,7 @@
 		<Nullable>disable</Nullable>
 		<ModuleId>$(MSBuildProjectName)</ModuleId>
 		<ModuleName>$(MSBuildProjectName)</ModuleName>
+		<OtherTestingMods>$(OTHER_TESTING_MODS)</OtherTestingMods>
 		<GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>
 		<OutputPath>C:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerKings\bin\Win64_Shipping_Client</OutputPath>
 	</PropertyGroup>
