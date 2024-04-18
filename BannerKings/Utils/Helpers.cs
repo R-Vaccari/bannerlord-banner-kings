@@ -201,7 +201,6 @@ namespace BannerKings.Utils
                LocationCharacter.CharacterRelations.Friendly, 10);
         }
 
-
         public static bool IsClanLeader(Hero hero)
         {
             return hero.Clan != null && hero.Clan.Leader == hero;
@@ -292,7 +291,6 @@ namespace BannerKings.Utils
             Hero leader = mobileParty.LeaderHero ?? mobileParty.Owner;
             if (leader != null)
             {
-
                 for (var i = 0; i < mobileParty.MemberRoster.Count; i++)
                 {
                     var elementCopyAtIndex = mobileParty.MemberRoster.GetElementCopyAtIndex(i);
@@ -463,9 +461,7 @@ namespace BannerKings.Utils
                     choosenHero = mobileParty.EffectiveQuartermaster;
                     if (choosenHero != null && choosenHero.GetPerkValue(perk))
                     {
-
                         choosenValue = perkbouns * choosenHero.GetSkillValue(scaleSkill) / everySkillQuartermaster;
-
                     }
                 }
 
@@ -480,7 +476,6 @@ namespace BannerKings.Utils
                     choosenHero = mobileParty.LeaderHero;
                     if (choosenHero != null && choosenHero.GetPerkValue(perk))
                     {
-
                         var newvalue = perkbouns * choosenHero.GetSkillValue(scaleSkill) / everySkillLeader;
                         if (skillScale == SkillScale.QuartermasterFirst && !choosenValue.HasValue)
                         {
@@ -505,15 +500,12 @@ namespace BannerKings.Utils
                         {
                             choosenValue = newvalue;
                         }
-
-
                     }
                 }
                 if (choosenValue.HasValue)
                 {
                     value += choosenValue.Value;
                 }
-
             }
             if (BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers && everySkillMember > 0)
             {
@@ -587,8 +579,6 @@ namespace BannerKings.Utils
             {
                 value += perkbouns * person.GetSkillValue(scaleSkill) / everySkillPerson;
             }
-
-
             if (!value.ApproximatelyEqualsTo(0f))
             {
                 if (minValue.HasValue && value < minValue.Value)

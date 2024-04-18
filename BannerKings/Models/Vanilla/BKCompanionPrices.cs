@@ -15,7 +15,6 @@ namespace BannerKings.Models.Vanilla
     {
         public override int GetCompanionHiringPrice(Hero companion) => GetHiringPrice(companion, true);
 
-
         public int GetHiringPrice(Hero companion, bool addGearCosts)
         {
             var explainedNumber = new ExplainedNumber(0f);
@@ -71,14 +70,11 @@ namespace BannerKings.Models.Vanilla
             {
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-
                     DefaultPerks.Steward.PaidInPromise.AddScaledPersonlOrClanLeaderPerkBonusWithClanAndFamilyMembers(ref explainedNumber, false, Hero.MainHero, DefaultSkills.Steward, 20, 100, 0, minValue: -0.4f, maxValue: 0);
                 }
                 else
                 {
-
                     explainedNumber.AddFactor(DefaultPerks.Steward.PaidInPromise.PrimaryBonus * 0.01f, null);
-
                 }
             }
             #endregion

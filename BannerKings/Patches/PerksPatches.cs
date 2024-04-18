@@ -44,14 +44,12 @@ namespace BannerKings.Patches
                         rolesText.AddRange(RegisterPerkPatch.PerksAdditionalSecondaryRoles[perk.StringId].Select(d => GameTexts.FindText("role", d.ToString())));
                     }
                     textObject.SetTextVariable("PRIMARY_ROLE", NormalizeAdditionalRoles(perk.SecondaryRole, string.Join(" - ", rolesText)));
-
                 }
 
                 __result = textObject;
             }
             static string NormalizeAdditionalRoles(SkillEffect.PerkRole perkRole, string text)
             {
-
                 if (perkRole == SkillEffect.PerkRole.Governor)
                 {
                     var partyOwner = GameTexts.FindText("role", SkillEffect.PerkRole.PartyOwner.ToString()).ToString();
@@ -77,7 +75,6 @@ namespace BannerKings.Patches
             public static Dictionary<string, List<SkillEffect.PerkRole>> PerksAdditionalSecondaryRoles { get; set; } = new Dictionary<string, List<SkillEffect.PerkRole>>();
             static void Postfix()
             {
-
                 if (BannerKingsSettings.Instance.EnableUsefulPerks)
                 {
                     if (BannerKingsSettings.Instance.EnableUsefulStewardPerks)
@@ -101,8 +98,6 @@ namespace BannerKings.Patches
                            "Reduce party food consumption by {VALUE}% for every 15 levels of steward skill if hero is the party quartermaster,\nReduce party food consumption by {VALUE}% for every 100 levels of steward skill if hero is a party member. (max -30%)",
                            "Reduce party food consumption by {VALUE}% for every 15 levels of steward skill if hero is the party quartermaster. (max -30%)",
                            SkillEffect.PerkRole.PartyMember);
-
-
                         #endregion
                         #region StewardDrillSergant (done)
                         ChangePerkRequirement("StewardDrillSergant", 2);
@@ -110,7 +105,6 @@ namespace BannerKings.Patches
                             "{VALUE} daily experience to troops in your party for every 25 levels of steward skill if hero is the party quartermaster or party leader,\n{VALUE} daily experience to troops in your party for every 100 levels of steward skill if hero is a party member. (max +30)",
                             "{VALUE} daily experience to troops in your party for every 25 levels of steward skill if hero is the party quartermaster or party leader. (max +30)"
                             , SkillEffect.PerkRole.PartyLeader, SkillEffect.PerkRole.PartyMember);
-
 
                         ChangePerk("StewardDrillSergant", true, -0.01f,
                             "{VALUE}% garrison wages in the town/castle for every 20 levels of steward skill if the hero is the town/castle governer,\n{VALUE}% garrison wages in the town/castle for every 40 levels of steward skill if the hero is a town owner, \n{VALUE}% garrison wages in the town/castle for every 100 levels of steward skill if the hero is staying in town that belongs to his clan.(max -30%)",
@@ -220,38 +214,13 @@ namespace BannerKings.Patches
                         #endregion
 
                     }
-
                 }
-
-            }
-            private static readonly int[] Requirements =
-            {
-                 20,
-                 40,
-                 60,
-                 80,
-                 100,
-                 120,
-                 140,
-                 160,
-                 180,
-                 200,
-                 220,
-                 260,
-                 280,
-                 300,
-                 320,
-             };
-            public static int GetTierCost(int tierIndex)
-            {
-                return Requirements[tierIndex - 1];
             }
             private static void ChangePerkRequirement(string perkId, int tierIndex)
             {
                 var perk = AllPerks.FirstOrDefault(d => d.StringId == perkId);
                 if (perk != null)
                 {
-
                     perk.SetPrivatePropertyValue("RequiredSkillValue", (float)BKPerks.GetTierCost(tierIndex));
                     perk.AlternativePerk?.SetPrivatePropertyValue("RequiredSkillValue", (float)BKPerks.GetTierCost(tierIndex));
                 }
@@ -268,9 +237,7 @@ namespace BannerKings.Patches
                     else
                     {
                         perk.SetPrivatePropertyValue("PrimaryRole", newRole);
-                    }
-                   
-                    
+                    }                                     
                 }
             }
             private static void ChangePerk(string perkId, bool isSecondary, float bonus, string description1, string description2, params SkillEffect.PerkRole[] additionalSecondaryRoles)
@@ -294,13 +261,11 @@ namespace BannerKings.Patches
                             PerkHelper.SetDescriptionTextVariable(perk.PrimaryDescription, perk.PrimaryBonus, perk.PrimaryIncrementType);
                             PerksAdditionalPrimaryRoles.Add(perkId, additionalSecondaryRoles.ToList());
                         }
-
                     }
                     else
                     {
                         if (isSecondary)
                         {
-
                             perk.SetPrivatePropertyValue("SecondaryBonus", bonus);
                             perk.SetPrivatePropertyValue("SecondaryDescription", new TextObject(description2, null));
                             PerkHelper.SetDescriptionTextVariable(perk.SecondaryDescription, perk.SecondaryBonus, perk.SecondaryIncrementType);
@@ -313,7 +278,6 @@ namespace BannerKings.Patches
                             PerkHelper.SetDescriptionTextVariable(perk.PrimaryDescription, perk.PrimaryBonus, perk.PrimaryIncrementType);
                             PerksAdditionalPrimaryRoles.Add(perkId, additionalSecondaryRoles.ToList());
                         }
-
                     }
                 }
             }

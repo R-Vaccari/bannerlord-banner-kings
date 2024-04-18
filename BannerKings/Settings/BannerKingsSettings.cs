@@ -43,7 +43,6 @@ namespace BannerKings.Settings
             DefaultSettings.Instance.NamingNoTitles
         }, selectedIndex: 0);
 
-
         [SettingPropertyFloatingInteger("{=9G8cJYQd}Tax Income", minValue: 0.2f, maxValue: 2f, "#0%", RequireRestart = false, HintText = "{=VFRd9aNe}Affects the volume of settlement taxes. May SEVERELY impact AI and it's ability to recruit/keep troops. Default: 100%.")]
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public float TaxIncome { get; set; } = 1f;
@@ -150,13 +149,9 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
         public int BanditPartiesLimit { get; set; } = 150;
 
-
-
-
         [SettingPropertyBool("Enable Useful Perks", Order =0,  HintText = "Enable perks to scale up with skill level Default: True.")]
         [SettingPropertyGroup("Useful Perks")]
         public bool EnableUsefulPerks { get; set; } = true;
-
 
         [SettingPropertyBool("Enable Perks From All Party Members", Order = 1, HintText = "Enable perks to become effective from all party members with a reduced ratio. Default setting is True.")]
         [SettingPropertyGroup("Useful Perks")]
@@ -166,10 +161,8 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("Useful Perks")]
         public bool EnableUsefulGovernorPerksFromSettlementOwner { get; set; } = true;
 
-
         [SettingPropertyBool("Enable Useful Steward Perks", Order = 3, HintText = "Enable perks to scale up with skill level Default: True.")]
         [SettingPropertyGroup("Useful Perks")]
         public bool EnableUsefulStewardPerks { get; set; } = true;
-
     }
 }

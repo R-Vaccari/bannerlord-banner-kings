@@ -46,13 +46,10 @@ namespace BannerKings.Models.Vanilla
                         else
                         {
                             paidInPromiseExplainedNumber.AddFactor(bounsFactor, DefaultPerks.Steward.PaidInPromise.Name);
-
                         }
-
                     }
                     return MathF.Round(paidInPromiseExplainedNumber.ResultNumber);
                 }
-
             }
             else
             {
@@ -215,7 +212,6 @@ namespace BannerKings.Models.Vanilla
                         {
                             PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.StiffUpperLip, mobileParty.CurrentSettlement.Town, ref result);
                         }
-
                     }
                     #endregion
                     #region Steward.DrillSergant
@@ -309,7 +305,6 @@ namespace BannerKings.Models.Vanilla
                 }
             }
             #endregion
-
 
             if (mobileParty.SiegeEvent != null && mobileParty.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(mobileParty.Party, MapEvent.BattleTypes.Siege) && mobileParty.HasPerk(DefaultPerks.Steward.MasterOfWarcraft, false))
             {

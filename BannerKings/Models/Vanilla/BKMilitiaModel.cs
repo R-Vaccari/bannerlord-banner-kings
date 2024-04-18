@@ -140,7 +140,6 @@ namespace BannerKings.Models.Vanilla
                     }
                     DefaultPerks.Steward.SevenVeterans.AddScaledGovernerPerkBonusForTownWithTownHeros(ref baseResult, settlement.Town, DefaultSkills.Steward, 50, 100, 150, minValue: 0, maxValue: 10f);
                 }
-
             }
             #endregion
 
