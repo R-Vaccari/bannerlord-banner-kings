@@ -199,7 +199,7 @@ namespace BannerKings.Utils
         private static float GetFamilyMembersPerkBonus(PerkObject perk, Hero person, SkillObject scaleSkill, float everySkillFamilyMembers)
         {
             float value = 0;
-            if (BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            if (BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers && everySkillFamilyMembers > 0)
             {
                 var familyMembers = person.GetActiveFamilyMembers();
                 value += CalculatePerkBonusForMembers(familyMembers, perk, perk.PrimaryBonus, scaleSkill, everySkillFamilyMembers);
@@ -210,7 +210,7 @@ namespace BannerKings.Utils
         private static float GetOtherClanMembersPerkBonus(PerkObject perk, Hero person, SkillObject scaleSkill, float everySkillClanMembers)
         {
             float value = 0;
-            if (BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            if (BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers && everySkillClanMembers > 0)
             {
                 var otherClanMembers = person.GetActiveClanCompanions();
                 value += CalculatePerkBonusForMembers(otherClanMembers, perk, perk.PrimaryBonus, scaleSkill, everySkillClanMembers);
@@ -220,7 +220,12 @@ namespace BannerKings.Utils
 
         private static float CalculatePerkBonusForMembers(List<Hero> members, PerkObject perk, float perkbouns, SkillObject scaleSkill, float everySkill)
         {
-            return members.Where(d => d.GetPerkValue(perk)).Sum(d => perkbouns * (d.GetSkillValue(scaleSkill) / everySkill));
+            float value = 0;
+            if (everySkill > 0)
+            {
+                value = members.Where(d => d.GetPerkValue(perk)).Sum(d => perkbouns * (d.GetSkillValue(scaleSkill) / everySkill));
+            }
+            return value;
         }
 
         private static float AddBonusToStat(PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, float? minValue, float? maxValue, ref float value)

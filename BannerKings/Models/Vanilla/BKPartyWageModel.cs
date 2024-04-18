@@ -106,16 +106,17 @@ namespace BannerKings.Models.Vanilla
 
                 if (character.IsHero)
                 {
-                    Hero heroObject = elementCopyAtIndex.Character.HeroObject;
-                    Clan clan = character.HeroObject.Clan;
-                    if (heroObject != (clan?.Leader))
-                    {
-                        num3 += GetHeroWageAfterBerkBonus(wage, heroObject, mobileParty);
-                    }
-                    else
-                    {
-                        num3 += wage;
-                    }
+                    //remove this to fix bug that hero wage are doubled
+                    //Hero heroObject = elementCopyAtIndex.Character.HeroObject;
+                    //Clan clan = character.HeroObject.Clan;
+                    //if (heroObject != (clan?.Leader))
+                    //{
+                    //    num3 += GetHeroWageAfterBerkBonus(wage, heroObject, mobileParty);
+                    //}
+                    //else
+                    //{
+                    //    num3 += wage;
+                    //}
                 }
                 else if (character.Culture != null)
                 {

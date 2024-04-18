@@ -321,7 +321,7 @@ namespace BannerKings.Utils
 
         public static IEnumerable<CharacterObject> GetAllPartyHeros(this MobileParty mobileParty)
         {
-            Hero leader = mobileParty.LeaderHero ?? mobileParty.Owner;
+            Hero leader = mobileParty?.LeaderHero ?? mobileParty?.Owner;
             if (leader != null)
             {
                 for (var i = 0; i < mobileParty.MemberRoster.Count; i++)
