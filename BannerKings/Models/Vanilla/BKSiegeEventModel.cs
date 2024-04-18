@@ -8,6 +8,7 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Siege;
 using TaleWorlds.Core;
+using static BannerKings.Utils.PerksHelpers;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -40,7 +41,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     explaineResult.AddFactor(-DefaultPerks.Steward.Sweatshops.SecondaryBonus);
                 }
-                DefaultPerks.Steward.Sweatshops.AddScaledPerkBonus(ref explaineResult, false, effectiveSiegePartyForSide, DefaultSkills.Steward, 0, 10, 100, Utils.Helpers.SkillScale.OnlyQuartermaster, minValue: 0f, maxValue: 0.5f);
+                PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.Sweatshops, ref explaineResult, false, effectiveSiegePartyForSide, DefaultSkills.Steward, (float)0, (float)10, (float)100, SkillScale.OnlyQuartermaster, minValue: (float?)0f, maxValue: (float?)0.5f);
             }
             #endregion
             return explaineResult.ResultNumber;

@@ -14,10 +14,12 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
 		<DebugType>portable</DebugType>
+		<Optimize>False</Optimize>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
 		<DebugType>portable</DebugType>
+		<Optimize>True</Optimize>
 	</PropertyGroup>
 
 	<ItemGroup>

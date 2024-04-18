@@ -11,6 +11,7 @@ using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Siege;
 using TaleWorlds.Core;
+using static BannerKings.Utils.PerksHelpers;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -119,8 +120,8 @@ namespace BannerKings.Models.Vanilla
 
             #region DefaultPerks.Steward.WarriorsDiet
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
-            {        
-                DefaultPerks.Steward.WarriorsDiet.AddScaledPerkBonus(ref result, false, party,  DefaultSkills.Steward, 0, 15, 100, Utils.Helpers.SkillScale.OnlyQuartermaster, minValue: -0.3f, maxValue:0);
+            {
+                PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.WarriorsDiet, ref result, false, party, DefaultSkills.Steward, (float)0, (float)15, (float)100, SkillScale.OnlyQuartermaster, minValue: (float?)-0.3f, maxValue: 0);
             }
             else
             {
@@ -147,7 +148,7 @@ namespace BannerKings.Models.Vanilla
             {
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    DefaultPerks.Steward.StiffUpperLip.AddScaledPerkBonus(ref result, false, party, DefaultSkills.Steward, 0, 15, 100, Utils.Helpers.SkillScale.OnlyQuartermaster, minValue: -0.3f, maxValue: 0);
+                    PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.StiffUpperLip, ref result, false, party, DefaultSkills.Steward, (float)0, (float)15, (float)100, SkillScale.OnlyQuartermaster, minValue: (float?)-0.3f, maxValue: 0);
                 }
                 else
                 {
@@ -158,7 +159,7 @@ namespace BannerKings.Models.Vanilla
             #region DefaultPerks.Steward.WarriorsDiet
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                DefaultPerks.Steward.WarriorsDiet.AddScaledPerkBonus(ref result, false, party, DefaultSkills.Steward, 0, 15, 100, Utils.Helpers.SkillScale.OnlyQuartermaster, minValue: -0.3f, maxValue: 0);
+                PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.WarriorsDiet, ref result, false, party, DefaultSkills.Steward, (float)0, (float)15, (float)100, SkillScale.OnlyQuartermaster, minValue: (float?)-0.3f, maxValue: 0);
             }
             else
             {

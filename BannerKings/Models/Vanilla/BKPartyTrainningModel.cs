@@ -10,6 +10,7 @@ using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using static BannerKings.Utils.PerksHelpers;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -107,7 +108,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (mobileParty.IsActive && troop.Character.Tier >= 4)
                     {
-                        DefaultPerks.Steward.SevenVeterans.AddScaledPerkBonus(ref result, false, mobileParty, DefaultSkills.Steward, 25, 25, 100, Utils.Helpers.SkillScale.Both, minValue: 0, maxValue: 60f);
+                        PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.SevenVeterans, ref result, false, mobileParty, DefaultSkills.Steward, (float)25, (float)25, (float)100, SkillScale.Both, minValue: 0, maxValue: (float?)60f);
                     }
                 }
                 else
@@ -123,7 +124,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (mobileParty.IsActive)
                     {
-                        DefaultPerks.Steward.DrillSergant.AddScaledPerkBonus(ref result, false, mobileParty, DefaultSkills.Steward, 25, 25, 100, Utils.Helpers.SkillScale.Both, minValue: 0, maxValue: 30f);
+                        PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.DrillSergant, ref result, false, mobileParty, DefaultSkills.Steward, (float)25, (float)25, (float)100, SkillScale.Both, minValue: 0, maxValue: (float?)30f);
                     }
                 }
                 else

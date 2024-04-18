@@ -18,6 +18,7 @@ using BannerKings.Behaviours.Retainer;
 using BannerKings.Settings;
 using BannerKings.Behaviours.Mercenary;
 using System;
+using static BannerKings.Utils.PerksHelpers;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -89,6 +90,10 @@ namespace BannerKings.Models.Vanilla
             {
                 TroopRosterElement elementCopyAtIndex = mobileParty.MemberRoster.GetElementCopyAtIndex(i);
                 CharacterObject character = elementCopyAtIndex.Character;
+                if (character.IsPlayerCharacter)
+                {
+                    continue;
+                }
                 int num14 = flag ? elementCopyAtIndex.Number : (elementCopyAtIndex.Number - elementCopyAtIndex.WoundedNumber);
                 int wage = (int)Math.Max(character.TroopWage * BannerKingsSettings.Instance.BaseWage, 1);
 
@@ -271,14 +276,14 @@ namespace BannerKings.Models.Vanilla
             }
             result.AddFactor(value, DefaultPolicies.MilitaryCoronae.Name);
             result.AddFactor(explainedNumber2.ResultNumber - 1f, null);
-            //if (PartyBaseHelper.HasFeat(mobileParty.Party, DefaultCulturalFeats.AseraiIncreasedWageFeat))
-            //{
-            //    result.AddFactor(DefaultCulturalFeats.AseraiIncreasedWageFeat.EffectBonus, null);
-            //}
+            if (PartyBaseHelper.HasFeat(mobileParty.Party, DefaultCulturalFeats.AseraiIncreasedWageFeat))
+            {
+                result.AddFactor(DefaultCulturalFeats.AseraiIncreasedWageFeat.EffectBonus, null);
+            }
             #region Steward.Frugal
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                DefaultPerks.Steward.Frugal.AddScaledPerkBonus(ref result, false, mobileParty, DefaultSkills.Steward, 0, 20, 100, Utils.Helpers.SkillScale.OnlyQuartermaster, minValue: -0.3f, maxValue: 0);
+                PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.Frugal, ref result, false, mobileParty, DefaultSkills.Steward, (float)0, (float)20, (float)100, SkillScale.OnlyQuartermaster, minValue: (float?)-0.3f, maxValue: 0);
             }
             else
             {
@@ -293,7 +298,7 @@ namespace BannerKings.Models.Vanilla
             {
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    DefaultPerks.Steward.EfficientCampaigner.AddScaledPerkBonus(ref result, true, mobileParty, DefaultSkills.Steward, 0, 30, 100, Utils.Helpers.SkillScale.OnlyQuartermaster, minValue: -0.4f, maxValue: 0);
+                    PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.EfficientCampaigner, ref result, true, mobileParty, DefaultSkills.Steward, (float)0, (float)30, (float)100, SkillScale.OnlyQuartermaster, minValue: (float?)-0.4f, maxValue: 0);
                 }
                 else
                 {
@@ -427,7 +432,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     result.AddFactor(-DefaultPerks.Steward.Frugal.SecondaryBonus, null);
                 }
-                DefaultPerks.Steward.Frugal.AddScaledPerkBonus(ref result, true, buyerHero.PartyBelongedTo, DefaultSkills.Steward, 20, 0, 100, Utils.Helpers.SkillScale.OnlyPartyLeader, minValue: -0.4f, maxValue: 0);
+                PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.Frugal, ref result, true, buyerHero.PartyBelongedTo, DefaultSkills.Steward, (float)20, (float)0, (float)100, SkillScale.OnlyPartyLeader, minValue: (float?)-0.4f, maxValue: 0);
             }
 
             #endregion
