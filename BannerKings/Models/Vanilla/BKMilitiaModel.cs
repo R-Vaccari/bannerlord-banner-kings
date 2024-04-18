@@ -138,7 +138,7 @@ namespace BannerKings.Models.Vanilla
                     {
                         baseResult.Add(-DefaultPerks.Steward.SevenVeterans.SecondaryBonus, DefaultPerks.Steward.SevenVeterans.Name);
                     }
-                    DefaultPerks.Steward.SevenVeterans.AddScaledGovernerPerkBonusForTownWithTownHeros(ref baseResult, settlement.Town, DefaultSkills.Steward, 50, 100, 150, minValue: 0, maxValue: 10f);
+                    DefaultPerks.Steward.SevenVeterans.AddScaledGovernerPerkBonusForTownWithTownHeros(ref baseResult, true,settlement.Town, DefaultSkills.Steward, 50, 100, 150, minValue: 0, maxValue: 10f);
                 }
             }
             #endregion

@@ -696,7 +696,15 @@ namespace BannerKings.Patches
                         PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.ContentTrades, town, ref explainedNumber2);
                         PerkHelper.AddPerkBonusForTown(DefaultPerks.Crossbow.Steady, town, ref explainedNumber2);
                         PerkHelper.AddPerkBonusForTown(DefaultPerks.Roguery.SaltTheEarth, town, ref explainedNumber2);
-                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.GivingHands, town, ref explainedNumber2);
+                        if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                        {
+                            DefaultPerks.Steward.GivingHands.AddScaledGovernerPerkBonusForTownWithTownHeros(ref explainedNumber2,true, town, DefaultSkills.Steward, 30, 90, 120, minValue: 0, maxValue: 0.3f);
+                        }
+                        else
+                        {
+                            PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.GivingHands, town, ref explainedNumber2);
+                        }
+                        
                         if (applyWithdrawals)
                         {
                             town.TradeTaxAccumulated -= num;

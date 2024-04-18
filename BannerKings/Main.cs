@@ -117,6 +117,7 @@ namespace BannerKings
             campaignStarter.AddModel(new BKPartyConsumptionModel());
             campaignStarter.AddModel(new BKWallHitpointModel());
             campaignStarter.AddModel(new BKInventoryCapacityModel());
+            campaignStarter.AddModel(new BKItemDiscardModel());
             campaignStarter.AddModel(new BKMapVisibilityModel());
             campaignStarter.AddModel(new BKPartyImpairmentModel());
             campaignStarter.AddModel(BannerKingsConfig.Instance.CrimeModel);

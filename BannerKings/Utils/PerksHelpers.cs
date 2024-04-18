@@ -24,19 +24,19 @@ namespace BannerKings.Utils
             Both
         }
 
-        public static float AddScaledGovernerPerkBonusForTownWithTownHeros(this PerkObject perk, ref ExplainedNumber bonuses, Town town, SkillObject scaleSkill, float everySkillGoverner, float everySkillOwner, float everySkillMember, float? minValue = null, float? maxValue = null)
+        public static float AddScaledGovernerPerkBonusForTownWithTownHeros(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, Town town, SkillObject scaleSkill, float everySkillGoverner, float everySkillOwner, float everySkillMember, float? minValue = null, float? maxValue = null)
         {
             float value = 0;
             if (!(perk.PrimaryRole == SkillEffect.PerkRole.Governor || perk.SecondaryRole == SkillEffect.PerkRole.Governor))
             {
                 return 0f;
             }
+            var bonus = isSecondary ? perk.SecondaryBonus : perk.PrimaryBonus;
+            value += GetGovernorPerkBonus(perk, town, scaleSkill, everySkillGoverner, bonus);
+            value += GetOwnerClanPerkBonus(perk, town, scaleSkill, everySkillGoverner, everySkillOwner, bonus);
+            value += GetGarrisonHerosPerkBonus(perk, perk.SecondaryRole == SkillEffect.PerkRole.Governor, town, scaleSkill, everySkillMember);
 
-            value += GetGovernorPerkBonus(perk, town, scaleSkill, everySkillGoverner);
-            value += GetOwnerClanPerkBonus(perk, town, scaleSkill, everySkillGoverner, everySkillOwner);
-            value += GetGarrisonHerosPerkBonus(perk, town, scaleSkill, everySkillMember);
-
-            return AddBonusToStat(perk, ref bonuses, perk.SecondaryRole == SkillEffect.PerkRole.Governor, minValue, maxValue, ref value);
+            return AddBonusToStat(perk, ref bonuses, isSecondary, minValue, maxValue, ref value);
         }
 
         public static float AddScaledPerkBonus(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, MobileParty mobileParty, SkillObject scaleSkill, float everySkillLeader, float everySkillQuartermaster, float everySkillMember, SkillScale skillScale, float? minValue = null, float? maxValue = null)
@@ -108,7 +108,7 @@ namespace BannerKings.Utils
                 }
             }
 
-            value += GetPartyHerosPerkBonus(perk, mobileParty, scaleSkill, everySkillMember, chosenHero);
+            value += GetPartyHerosPerkBonus(perk, isSecondary, mobileParty, scaleSkill, everySkillMember, chosenHero);
 
             return AddBonusToStat(perk, ref bonuses, isSecondary, minValue, maxValue, ref value);
         }
@@ -134,7 +134,7 @@ namespace BannerKings.Utils
             return AddBonusToStat(perk, ref bonuses, isSecondary, minValue, maxValue, ref value);
         }
 
-        private static float GetGarrisonHerosPerkBonus(PerkObject perk, Town town, SkillObject scaleSkill, float everySkillMember)
+        private static float GetGarrisonHerosPerkBonus(PerkObject perk, bool isSecondary, Town town, SkillObject scaleSkill, float everySkillMember)
         {
             float value = 0;
             if (BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers && town.OwnerClan != null && everySkillMember > 0)
@@ -142,13 +142,13 @@ namespace BannerKings.Utils
                 var garrisonHeros = town.Settlement.HeroesWithoutParty.Where(d => d.Clan == town.OwnerClan && d.GetPerkValue(perk) && d != town.Governor && !d.IsClanLeader);
                 if (garrisonHeros.Any())
                 {
-                    value += garrisonHeros.Sum(d => perk.PrimaryBonus * (d.GetSkillValue(scaleSkill) / everySkillMember));
+                    value += garrisonHeros.Sum(d => (isSecondary ? perk.SecondaryBonus : perk.PrimaryBonus) * (d.GetSkillValue(scaleSkill) / everySkillMember));
                 }
             }
             return value;
         }
 
-        private static float GetOwnerClanPerkBonus(PerkObject perk, Town town, SkillObject scaleSkill, float everySkillGoverner, float everySkillOwner)
+        private static float GetOwnerClanPerkBonus(PerkObject perk, Town town, SkillObject scaleSkill, float everySkillGoverner, float everySkillOwner, float bonus)
         {
             float value = 0;
             if (BannerKingsSettings.Instance.EnableUsefulGovernorPerksFromSettlementOwner && town.OwnerClan?.Leader != null && town.OwnerClan.Leader.GetPerkValue(perk))
@@ -158,39 +158,39 @@ namespace BannerKings.Utils
                 {
                     if (everySkillGoverner > 0)
                     {
-                        value += perk.PrimaryBonus * (town.OwnerClan.Leader.GetSkillValue(scaleSkill) / everySkillGoverner);
+                        value += bonus * (town.OwnerClan.Leader.GetSkillValue(scaleSkill) / everySkillGoverner);
                     }
                 }
                 else
                 {
                     if (everySkillOwner > 0)
                     {
-                        value += perk.PrimaryBonus * (town.OwnerClan.Leader.GetSkillValue(scaleSkill) / everySkillOwner);
+                        value += bonus * (town.OwnerClan.Leader.GetSkillValue(scaleSkill) / everySkillOwner);
                     }
                 }
             }
             return value;
         }
 
-        private static float GetGovernorPerkBonus(PerkObject perk, Town town, SkillObject scaleSkill, float everySkillGoverner)
+        private static float GetGovernorPerkBonus(PerkObject perk, Town town, SkillObject scaleSkill, float everySkillGoverner, float bonus)
         {
             float value = 0;
             Hero governor = town.Governor;
             if (governor != null && governor.GetPerkValue(perk) && governor.CurrentSettlement != null && governor.CurrentSettlement == town.Settlement && everySkillGoverner > 0)
             {
-                value += perk.PrimaryBonus * (town.Governor.GetSkillValue(scaleSkill) / everySkillGoverner);
+                value += bonus * (town.Governor.GetSkillValue(scaleSkill) / everySkillGoverner);
             }
             return value;
         }
 
-        private static float GetPartyHerosPerkBonus(PerkObject perk, MobileParty mobileParty, SkillObject scaleSkill, float everySkillMember, Hero choosenHero)
+        private static float GetPartyHerosPerkBonus(PerkObject perk, bool isSecondary, MobileParty mobileParty, SkillObject scaleSkill, float everySkillMember, Hero choosenHero)
         {
             float value = 0;
             if (BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers && everySkillMember > 0)
             {
                 var mobilePartyHeros = mobileParty.GetAllPartyHeros();
                 var partyHeros = mobilePartyHeros.Where(d => d.GetPerkValue(perk) && d.HeroObject != choosenHero);
-                value += partyHeros.Sum(d => perk.PrimaryBonus * (d.GetSkillValue(scaleSkill) / everySkillMember));
+                value += partyHeros.Sum(d => (isSecondary ? perk.SecondaryBonus : perk.PrimaryBonus) * (d.GetSkillValue(scaleSkill) / everySkillMember));
             }
             return value;
         }

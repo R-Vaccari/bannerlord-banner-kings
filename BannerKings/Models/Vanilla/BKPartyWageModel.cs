@@ -211,7 +211,7 @@ namespace BannerKings.Models.Vanilla
                     {
                         if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                         {
-                            DefaultPerks.Steward.StiffUpperLip.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, mobileParty.CurrentSettlement.Town, DefaultSkills.Steward, 20, 40, 100, minValue: -0.3f, maxValue: 0);
+                            DefaultPerks.Steward.StiffUpperLip.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result,true, mobileParty.CurrentSettlement.Town, DefaultSkills.Steward, 20, 40, 100, minValue: -0.3f, maxValue: 0);
                         }
                         else
                         {
@@ -222,7 +222,7 @@ namespace BannerKings.Models.Vanilla
                     #region Steward.DrillSergant
                     if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                     {
-                        DefaultPerks.Steward.DrillSergant.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, mobileParty.CurrentSettlement.Town, DefaultSkills.Steward, 20, 40, 100, minValue: -0.3f, maxValue: 0);
+                        DefaultPerks.Steward.DrillSergant.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, true, mobileParty.CurrentSettlement.Town, DefaultSkills.Steward, 20, 40, 100, minValue: -0.3f, maxValue: 0);
                     }
                     else
                     {
