@@ -399,8 +399,6 @@ namespace BannerKings.Utils
             }
 
             return ConsumptionType.None;
-        }
-
-       
+        }     
     }
 }

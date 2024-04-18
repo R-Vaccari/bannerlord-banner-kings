@@ -134,8 +134,6 @@ namespace BannerKings.Utils
             return AddBonusToStat(perk, ref bonuses, isSecondary, minValue, maxValue, ref value);
         }
 
-
-
         private static float GetGarrisonHerosPerkBonus(PerkObject perk, Town town, SkillObject scaleSkill, float everySkillMember)
         {
             float value = 0;
@@ -185,7 +183,6 @@ namespace BannerKings.Utils
             return value;
         }
 
-
         private static float GetPartyHerosPerkBonus(PerkObject perk, MobileParty mobileParty, SkillObject scaleSkill, float everySkillMember, Hero choosenHero)
         {
             float value = 0;
@@ -220,8 +217,6 @@ namespace BannerKings.Utils
             }
             return value;
         }
-
-
 
         private static float CalculatePerkBonusForMembers(List<Hero> members, PerkObject perk, float perkbouns, SkillObject scaleSkill, float everySkill)
         {

@@ -129,7 +129,6 @@ namespace BannerKings.Patches
                 var totalValueOfItemsAtCategory = __instance.GetPrivateFieldValue<Dictionary<ItemCategory, int>>("_totalValueOfItemsAtCategory");
                 if (totalValueOfItemsAtCategory.Count()>=10)
                 {
-
                     foreach (Town town in Town.AllFiefs)
                     {
                         if (town.Owner.Settlement != caravanParty.CurrentSettlement && !town.IsUnderSiege && !town.MapFaction.IsAtWarWith(caravanParty.MapFaction)
