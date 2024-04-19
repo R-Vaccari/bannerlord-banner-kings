@@ -209,7 +209,7 @@ namespace BannerKings.Utils
         public static bool IsCloseFamily(this Hero hero, Hero family)
         {
             return hero.Father == family || hero.Mother == family || hero.Children.Contains(family) ||
-                   hero.Siblings.Contains(family) || hero.Spouse == family;
+              hero.Siblings.Contains(family) || hero.Spouse == family || hero.Children.Any(d => d.Children.Contains(family)) || hero.Siblings.Any(d => d.Children.Contains(family));
         }
         public static List<Hero> GetActiveFamilyMembers(this Hero person)
         {

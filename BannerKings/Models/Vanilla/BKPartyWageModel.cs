@@ -360,11 +360,16 @@ namespace BannerKings.Models.Vanilla
                     if (elementCopyAtIndex.Character.IsHero)
                     {
                         Hero hero = elementCopyAtIndex.Character.HeroObject;
+                       
                         if (hero == mobileParty.LeaderHero)
                         {
                             continue;
                         }
-
+                        //family members should be free
+                        if (mobileParty.ActualClan?.Leader != null && hero.IsCloseFamily(mobileParty.ActualClan?.Leader))
+                        {
+                            continue;
+                        }
                         if (hero == Hero.MainHero)
                         {
                             Contract contract = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKRetainerBehavior>().GetContract();

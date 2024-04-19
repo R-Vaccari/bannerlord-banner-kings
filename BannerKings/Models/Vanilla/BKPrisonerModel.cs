@@ -1,8 +1,14 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Settings;
+using BannerKings.Utils;
+using Helpers;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
+using static BannerKings.Utils.PerksHelpers;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -37,5 +43,26 @@ namespace BannerKings.Models.Vanilla
             }
             return result;
         }
+        public override float CalculateInfluenceGainAfterTroopDonation(PartyBase donatingParty, CharacterObject donatedCharacter, Settlement donatedSettlement)
+        {
+            Hero leaderHero = donatingParty.LeaderHero;
+            ExplainedNumber explainedNumber = new ExplainedNumber(donatedCharacter.GetPower() * 1.2f, false, null);
+
+            #region DefaultPerks.Steward.Relocation
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks && donatingParty.MobileParty != null)
+            {
+                PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.Relocation, ref explainedNumber, false, donatingParty.MobileParty, DefaultSkills.Steward, 0, 10, 50, SkillScale.OnlyQuartermaster, minValue: 0, maxValue: 0.5f);
+            }
+            else
+            {
+                if (leaderHero != null && leaderHero.GetPerkValue(DefaultPerks.Steward.Relocation))
+                {
+                    PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.Relocation, donatingParty.MobileParty, true, ref explainedNumber);
+                }
+            }
+            #endregion
+            return explainedNumber.ResultNumber;
+        }
+
     }
 }

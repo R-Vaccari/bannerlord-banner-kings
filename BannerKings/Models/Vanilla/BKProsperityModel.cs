@@ -9,6 +9,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Settings;
 using BannerKings.Utils;
 using Helpers;
 using TaleWorlds.CampaignSystem;
@@ -38,6 +39,21 @@ namespace BannerKings.Models.Vanilla
             var baseResult = base.CalculateHearthChange(village, includeDescriptions);
             //if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
             // new BKGrowthModel().CalculateHearthGrowth(village, ref baseResult);
+
+            #region DefaultPerks.Steward.Relocation
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks && village?.Bound != null)
+            {
+                var governor = village.Bound?.Town?.Governor;
+                //remove the bonus added by base CalculateHearthChange
+                if (governor != null && governor.GetPerkValue(DefaultPerks.Steward.AidCorps) && governor.CurrentSettlement != null && governor.CurrentSettlement == village.Bound?.Town?.Settlement)
+                {
+                    baseResult.AddFactor(-DefaultPerks.Steward.AidCorps.SecondaryBonus, DefaultPerks.Steward.AidCorps.Name);
+                }                
+                PerksHelpers.AddScaledGovernerPerkBonusForTownWithTownHeros(DefaultPerks.Steward.Relocation, ref baseResult, true, village.Bound.Town, DefaultSkills.Steward, 15, 50, 80, minValue: 0, maxValue: 0.4f);
+            }
+
+            #endregion
+
 
             var owner = village.GetActualOwner();
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(owner);
@@ -124,7 +140,7 @@ namespace BannerKings.Models.Vanilla
                     Utils.TextHelper.GetConsumptionSatisfactionText((ConsumptionType)i));
             }
 
-            int foodLimitForBonus = (int) (fortification.FoodStocksUpperLimit() * 0.8f);
+            int foodLimitForBonus = (int)(fortification.FoodStocksUpperLimit() * 0.8f);
             if (fortification.FoodStocks >= foodLimitForBonus)
             {
                 explainedNumber.Add(0.5f, new TextObject("{=9Jyv5XNX}Well fed populace"));
@@ -154,7 +170,7 @@ namespace BannerKings.Models.Vanilla
 
             if (fortification.IsTown)
             {
-                var num3 = fortification.SoldItems.Sum(delegate(Town.SellLog x)
+                var num3 = fortification.SoldItems.Sum(delegate (Town.SellLog x)
                 {
                     if (x.Category.Properties != ItemCategory.Property.BonusToProsperity)
                     {
@@ -172,7 +188,7 @@ namespace BannerKings.Models.Vanilla
                 var merchantEffect = merchantGold < 20000f ? merchantGold / 10000f - 2f :
                     merchantGold >= 200000f ? MathF.Min(200000f * 0.000005f - 1f, 2f) : 0f;
                 explainedNumber.Add(merchantEffect, new TextObject("{=Crsf0YLd}Merchants wealth"));
-            } 
+            }
 
             if (fortification.Governor != null)
             {
@@ -186,8 +202,8 @@ namespace BannerKings.Models.Vanilla
             {
                 var num4 = 0f;
                 foreach (var building in from x in fortification.Buildings
-                            where !x.BuildingType.IsDefaultProject && x.CurrentLevel > 0
-                            select x)
+                                         where !x.BuildingType.IsDefaultProject && x.CurrentLevel > 0
+                                         select x)
                 {
                     num4 += DefaultPerks.Engineering.Apprenticeship.SecondaryBonus;
                 }
@@ -275,7 +291,7 @@ namespace BannerKings.Models.Vanilla
                     explainedNumber.Add(0.5f, DefaultDivinities.Instance.Oca.Name);
                 }
 
-                if (CultureUtils.IsDevseg(fortification.Culture) && 
+                if (CultureUtils.IsDevseg(fortification.Culture) &&
                     BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader, DefaultDivinities.Instance.Iltanlar, religion))
                 {
                     explainedNumber.Add(0.8f, DefaultDivinities.Instance.Iltanlar.Name);

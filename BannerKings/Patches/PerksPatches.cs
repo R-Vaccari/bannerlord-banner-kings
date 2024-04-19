@@ -90,9 +90,9 @@ namespace BannerKings.Patches
             {
                 if (BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    #region Steward
-                    #region StewardFrugal (done)
-                    ChangePerkRequirement("StewardFrugal", 1);
+                    #region DefaultPerks.Steward
+                    #region DefaultPerks.Steward.Frugal (done)
+                    
                     ChangePerk("StewardFrugal", false, -0.01f,
                         "Reduce party wages by {VALUE}% for every 20 levels of steward skill if hero is the party quartermaster,\nReduce party wages by {VALUE}% for every 100 levels of steward skill if hero is a party member. (max -30%)",
                         "Reduce party wages by {VALUE}% for every 20 levels of steward skill if hero is the party quartermaster. (max -40%)"
@@ -103,15 +103,15 @@ namespace BannerKings.Patches
                         "Reduce recruitment costs by {VALUE}% for every 20 levels of steward skill if hero is the party party leader. (max -40%)",
                         SkillEffect.PerkRole.PartyMember);
                     #endregion
-                    #region StewardWarriorsDiet (done)    
+                    #region DefaultPerks.Steward.WarriorsDiet (done)    
 
                     ChangePerk("StewardWarriorsDiet", false, -0.01f,
                        "Reduce party food consumption by {VALUE}% for every 15 levels of steward skill if hero is the party quartermaster,\nReduce party food consumption by {VALUE}% for every 100 levels of steward skill if hero is a party member. (max -30%)",
                        "Reduce party food consumption by {VALUE}% for every 15 levels of steward skill if hero is the party quartermaster. (max -30%)",
                        SkillEffect.PerkRole.PartyMember);
                     #endregion
-                    #region StewardDrillSergant (done)
-                    ChangePerkRequirement("StewardDrillSergant", 2);
+                    #region DefaultPerks.Steward.DrillSergant (done)
+                   
                     ChangePerk("StewardDrillSergant", false, 1f,
                         "{VALUE} daily experience to troops in your party for every 25 levels of steward skill if hero is the party quartermaster or party leader,\n{VALUE} daily experience to troops in your party for every 100 levels of steward skill if hero is a party member. (max +30)",
                         "{VALUE} daily experience to troops in your party for every 25 levels of steward skill if hero is the party quartermaster or party leader. (max +30)"
@@ -123,7 +123,7 @@ namespace BannerKings.Patches
                         , SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember);
 
                     #endregion
-                    #region StewardSevenVeterans (done)
+                    #region DefaultPerks.Steward.SevenVeterans (done)
                     //this._stewardSevenVeterans.Initialize("{=2ryLuN2i}Seven Veterans", DefaultSkills.Steward, this.GetTierCost(2), this._stewardDrillSergant, "{=gX0edfpK}{VALUE} daily experience for tier 4+ troops in your party.", SkillEffect.PerkRole.Quartermaster, 4f, SkillEffect.EffectIncrementType.Add, "{=g9gTYB8u}{VALUE} militia recruitment in the governed settlement.", SkillEffect.PerkRole.Governor, 1f, SkillEffect.EffectIncrementType.Add, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
                     ChangePerk("StewardSevenVeterans", false, 2f,
                         "{VALUE} daily experience to tier 4+ troops in your party for every 25 levels of steward skill if hero is the party quartermaster or party leader,\n{VALUE} daily experience to tier 4+ troops in your party for every 100 levels of steward skill if hero is a party member. (max +60)",
@@ -136,7 +136,7 @@ namespace BannerKings.Patches
                          , SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember);
 
                     #endregion
-                    #region StewardStiffUpperLip (not tested)
+                    #region DefaultPerks.Steward.StiffUpperLip (not tested)
                     //this._stewardStiffUpperLip.Initialize("{=QUeJ4gc3}Stiff Upper Lip", DefaultSkills.Steward, this.GetTierCost(3), this._stewardSweatshops, "{=y9AsEMnV}{VALUE}% food consumption in your party while it is part of an army.", SkillEffect.PerkRole.Quartermaster, -0.1f, SkillEffect.EffectIncrementType.AddFactor, "{=1FPpHasQ}{VALUE}% garrison wages in the governed castle.", SkillEffect.PerkRole.Governor, -0.2f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);          
                     ChangePerk("StewardStiffUpperLip", false, -0.01f,
                        "Reduce party food consumption while it is part of an army by {VALUE}% for every 15 levels of steward skill if hero is the party quartermaster,\nReduce party food consumption while it is part of an army by {VALUE}% for every 100 levels of steward skill if hero is a party member. (max -30%)",
@@ -149,7 +149,7 @@ namespace BannerKings.Patches
                         , SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember);
 
                     #endregion
-                    #region StewardSweatshops (not tested)
+                    #region DefaultPerks.Steward.Sweatshops (not tested)
                     //this._stewardSweatshops.Initialize("{=jbAtOsIy}Sweatshops", DefaultSkills.Steward, this.GetTierCost(3), this._stewardStiffUpperLip, "{=6wqJA77K}{VALUE}% production rate to owned workshops.", SkillEffect.PerkRole.Personal, 0.2f, SkillEffect.EffectIncrementType.AddFactor, "{=rA9nzrAr}{VALUE}% siege engine build rate in your party.", SkillEffect.PerkRole.Quartermaster, 0.2f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
                     ChangePerk("StewardSweatshops", false, 0.01f,
                       "{VALUE}% production rate to owned workshops for every 10 levels of steward skill,\n{VALUE}% production rate to owned workshops for every 40 levels of steward skill if the hero is family member,\n{VALUE}% production rate to owned workshops for every 100 levels of steward skill if the hero is clan member. (max +100%)",
@@ -162,7 +162,7 @@ namespace BannerKings.Patches
                        SkillEffect.PerkRole.PartyMember);
 
                     #endregion
-                    #region StewardPaidInPromise (not tested)
+                    #region DefaultPerks.Steward.PaidInPromise (not tested)
                     //this._stewardPaidInPromise.Initialize("{=CPxbG7Zp}Paid in Promise", DefaultSkills.Steward, this.GetTierCost(4), this._stewardEfficientCampaigner, "{=H9tQfeBr}{VALUE}% companion wages and recruitment fees.", SkillEffect.PerkRole.PartyLeader, -0.25f, SkillEffect.EffectIncrementType.AddFactor, "{=1eKRHLur}Discarded armors are donated to troops for increased experience.", SkillEffect.PerkRole.Quartermaster, 0f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
                     ChangePerkRole("StewardPaidInPromise", SkillEffect.PerkRole.ClanLeader);
                     ChangePerk("StewardPaidInPromise", false, -0.01f,
@@ -176,7 +176,7 @@ namespace BannerKings.Patches
                    , SkillEffect.PerkRole.PartyLeader, SkillEffect.PerkRole.PartyMember);
 
                     #endregion
-                    #region StewardEfficientCampaigner (not tested)
+                    #region DefaultPerks.Steward.EfficientCampaigner (not tested)
                     //this._stewardEfficientCampaigner.Initialize("{=sC53NYcA}Efficient Campaigner", DefaultSkills.Steward, this.GetTierCost(4), this._stewardPaidInPromise, "{=5t6cveXT}{VALUE} extra food for each food taken during village raids for your party.", SkillEffect.PerkRole.PartyLeader, 1f, SkillEffect.EffectIncrementType.Add, "{=JhFCoWbE}{VALUE}% troop wages in your party while it is part of an army.", SkillEffect.PerkRole.Quartermaster, -0.25f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
                     //ChangePerk("StewardEfficientCampaigner", false, 1f,
                     // "{VALUE} extra food for each food taken during village raids for every 50 levels of steward skill if the hero is party leader,\n{VALUE} extra food taken during village raids for every 150 levels of steward skill if the hero is party member. (max 10)",
@@ -189,9 +189,9 @@ namespace BannerKings.Patches
                      , SkillEffect.PerkRole.PartyMember);
 
                     #endregion
-                    #region StewardGivingHands
+                    #region DefaultPerks.Steward.GivingHands
                     //this._stewardGivingHands.Initialize("{=VsqyzWYY}Giving Hands", DefaultSkills.Steward, this.GetTierCost(5), this._stewardLogistician, "{=WaGKvsfc}Discarded weapons are donated to troops for increased experience.", SkillEffect.PerkRole.Quartermaster, 0f, SkillEffect.EffectIncrementType.AddFactor, "{=Eo958e7R}{VALUE}% tariff income in the governed settlement.", SkillEffect.PerkRole.Governor, 0.1f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
-                    
+
                     ChangePerk("StewardForeseeableFuture", false, 0.02f,
                   "Discarded weapons are donated to troops for increased experience.\n{VALUE}% bonus experience from donated weapons for every 10 levels of steward skill if the hero is the party quartermaster or party leader,\n{VALUE}% bonus experience from donated weapons for every 50 levels of steward skill if the hero is a party member.(max +150%)",
                   "Discarded weapons are donated to troops for increased experience.\n{VALUE}% bonus experience from donated weapons for every 10 levels of steward skill if the hero is the party quartermaster or party leader. (max +150%)"
@@ -203,7 +203,7 @@ namespace BannerKings.Patches
                        , SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember);
 
                     #endregion
-                    #region StewardLogistician
+                    #region DefaultPerks.Steward.Logistician
                     //this._stewardLogistician.Initialize("{=U2buPiec}Logistician", DefaultSkills.Steward, this.GetTierCost(5), this._stewardGivingHands, "{=sG9WGOeN}{VALUE} party morale when number of mounts is greater than number of foot troops in your party.", SkillEffect.PerkRole.Quartermaster, 4f, SkillEffect.EffectIncrementType.Add, "{=Z1n0w5Kc}{VALUE}% tax income.", SkillEffect.PerkRole.Governor, 0.1f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
                     ChangePerk("StewardLogistician", false, 1f,
                        "{VALUE} party morale when number of mounts is greater than number of foot troops in your party for every 30 levels of steward skill if hero is the party quartermaster or party leader,\n{VALUE} party morale when number of mounts is greater than number of foot troops in your party for every 150 levels of steward skill if hero is a party member. (max +30)",
@@ -216,11 +216,25 @@ namespace BannerKings.Patches
                       , SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember);
 
                     #endregion
-                    #region
+                    #region DefaultPerks.Steward.Relocation
                     //this._stewardRelocation.Initialize("{=R6dnhblo}Relocation", DefaultSkills.Steward, this.GetTierCost(6), this._stewardAidCorps, "{=urSSNtUD}{VALUE}% influence gain from donating troops.", SkillEffect.PerkRole.Quartermaster, 0.25f, SkillEffect.EffectIncrementType.AddFactor, "{=XmqJb7RN}{VALUE}% effect from boosting projects in the governed settlement.", SkillEffect.PerkRole.Governor, 0.2f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
+                    ChangePerk("StewardRelocation", false, 0.01f,
+                     "{VALUE}% influence gain from donating troops for every 10 levels of steward skill if hero is the party quartermaster,\n{VALUE}% influence gain from donating troops for every 50 levels of steward skill if hero is a party member. (max +50%)",
+                     "{VALUE}% influence gain from donating troops for every 10 levels of steward skill if hero is the party quartermaster. (max +50%)"
+                     ,  SkillEffect.PerkRole.PartyMember);
+
+                    ChangePerk("StewardRelocation", true, 0.01f,
+                        "{VALUE}% effect from boosting projects for every 15 levels of steward skill if the hero is the settlement governer,\n{VALUE}% effect from boosting projects  for every 50 levels of steward skill if the hero is a settlement owner, \n{VALUE}% effect from boosting projects for every 80 levels of steward skill if the hero is staying in settlement that belongs to his clan.(max 40%)",
+                        "{VALUE}% effect from boosting projects for every 15 levels of steward skill if the hero is the settlement governer,\n{VALUE}% effect from boosting projects  for every 50 levels of steward skill if the hero is a settlement owner.(max 40%)"
+                        , SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember);
                     #endregion
-                    #region
+                    #region DefaultPerks.Steward.AidCorps
                     //this._stewardAidCorps.Initialize("{=4FdtVyj1}Aid Corps", DefaultSkills.Steward, this.GetTierCost(6), this._stewardRelocation, "{=ZLbCqt23}Wounded troops in your party are no longer paid wages.", SkillEffect.PerkRole.Quartermaster, 0f, SkillEffect.EffectIncrementType.AddFactor, "{=ULY7byYc}{VALUE}% hearth growth in villages bound to the governed settlement.", SkillEffect.PerkRole.Governor, 0.2f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
+                    
+                    ChangePerk("StewardAidCorps", true, 0.01f,
+                      "{VALUE}% hearth growth for every 15 levels of steward skill the in villages bound to the settlement governed by the hero,\n{VALUE}% hearth growth for every 15 levels of steward skill the in villages bound to the settlement owned by the hero, \n{VALUE}% hearth growth for every 15 levels of steward skill in villages bound to the settlement where the hero is staying, only if settlement belong to his clan.(max 40%)",
+                      "{VALUE}% hearth growth for every 15 levels of steward skill the in villages bound to the settlement governed by the hero,\n{VALUE}% hearth growth for every 15 levels of steward skill the in villages bound to the settlement owned by the hero.(max 40%)"
+                      , SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember);
                     #endregion
                     #region
                     //this._stewardGourmet.Initialize("{=63lHFDSG}Gourmet", DefaultSkills.Steward, this.GetTierCost(7), this._stewardSoundReserves, "{=KDtcsKUs}Double the morale bonus from having diverse food in your party.", SkillEffect.PerkRole.Quartermaster, 2f, SkillEffect.EffectIncrementType.AddFactor, "{=q2ZDAm2v}{VALUE}% garrison food consumption during sieges in the governed settlement.", SkillEffect.PerkRole.Governor, -0.1f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
