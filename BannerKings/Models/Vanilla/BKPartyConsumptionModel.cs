@@ -170,10 +170,25 @@ namespace BannerKings.Models.Vanilla
             SiegeEvent siegeEvent = party.SiegeEvent;
             if (((siegeEvent != null) ? siegeEvent.BesiegerCamp : null) != null)
             {
-                if (party.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(party.Party, MapEvent.BattleTypes.Siege) && party.HasPerk(DefaultPerks.Steward.SoundReserves, true))
+                #region DefaultPerks.Steward.SoundReserves
+
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.SoundReserves, party, false, ref result);
+                    if (party.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(party.Party, MapEvent.BattleTypes.Siege))
+                    {
+                        PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.SoundReserves, ref result, true, party, DefaultSkills.Steward, (float)0, (float)20, (float)100, SkillScale.OnlyQuartermaster, minValue: (float?)-0.3f, maxValue: 0);
+                    }
                 }
+                else
+                {
+                    if (party.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(party.Party, MapEvent.BattleTypes.Siege) && party.HasPerk(DefaultPerks.Steward.SoundReserves, true))
+                    {
+                        PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.SoundReserves, party, false, ref result);
+                    }
+                }
+
+                #endregion
+
                 if (party.HasPerk(DefaultPerks.Steward.MasterOfPlanning, false))
                 {
                     result.AddFactor(DefaultPerks.Steward.MasterOfPlanning.PrimaryBonus, DefaultPerks.Steward.MasterOfPlanning.Name);

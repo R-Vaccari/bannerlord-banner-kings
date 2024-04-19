@@ -1,5 +1,8 @@
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Settings;
+using BannerKings.Utils;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Issues;
@@ -91,32 +94,39 @@ namespace BannerKings.Models.Vanilla
 
             result.Add(marketConsumption, new TextObject("{=3hEk7Bdk}Market consumption"));
 
-            if (town.Governor != null)
+            if (town.IsUnderSiege)
             {
-                if (town.IsUnderSiege)
+                #region DefaultPerks.Steward.Gourmet
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    if (town.Governor.GetPerkValue(DefaultPerks.Steward.Gourmet))
+                    DefaultPerks.Steward.Gourmet.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, true, town, DefaultSkills.Steward, 15, 60, 90, minValue: -0.3f, maxValue: 0);
+                }
+                else
+                {
+                    if (town.Governor != null&&town.Governor.GetPerkValue(DefaultPerks.Steward.Gourmet))
                     {
                         result.AddFactor(DefaultPerks.Steward.Gourmet.SecondaryBonus, DefaultPerks.Steward.Gourmet.Name);
                     }
-
+                }
+                #endregion
+                if (town.Governor != null)
+                {
                     if (town.Governor.GetPerkValue(DefaultPerks.Medicine.TriageTent))
                     {
                         result.AddFactor(DefaultPerks.Medicine.TriageTent.SecondaryBonus,
                             DefaultPerks.Medicine.TriageTent.Name);
                     }
-                }
+                }              
+            }
+            if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Roguery.DirtyFighting))
+            {
+                result.Add(DefaultPerks.Roguery.DirtyFighting.SecondaryBonus, DefaultPerks.Roguery.DirtyFighting.Name);
+            }
 
-                if (town.Governor.GetPerkValue(DefaultPerks.Roguery.DirtyFighting))
-                {
-                    result.Add(DefaultPerks.Roguery.DirtyFighting.SecondaryBonus, DefaultPerks.Roguery.DirtyFighting.Name);
-                }
-
-                if (result.ResultNumber > 0f && town.Governor.GetPerkValue(DefaultPerks.Steward.MasterOfWarcraft))
-                {
-                    result.AddFactor(-DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus,
-                        DefaultPerks.Steward.MasterOfWarcraft.Name);
-                }
+            if (town.Governor != null &&  result.ResultNumber > 0f && town.Governor.GetPerkValue(DefaultPerks.Steward.MasterOfWarcraft))
+            {
+                result.AddFactor(-DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus,
+                    DefaultPerks.Steward.MasterOfWarcraft.Name);
             }
 
             GetSettlementFoodChangeDueToIssues(town, ref result);
@@ -127,7 +137,7 @@ namespace BannerKings.Models.Vanilla
         {
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             var result = GetPopulationFoodConsumption(data);
-            var finalResult = (int) (maxStocks / (result.ResultNumber * -1f));
+            var finalResult = (int)(maxStocks / (result.ResultNumber * -1f));
             return finalResult;
         }
 
@@ -246,7 +256,7 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
 
-                if (b is {CurrentLevel: > 0})
+                if (b is { CurrentLevel: > 0 })
                 {
                     result.AddFactor(b.CurrentLevel * (town.IsCastle ? 0.5f : 0.3f), b.Name);
                 }
@@ -262,7 +272,7 @@ namespace BannerKings.Models.Vanilla
                     {
                         result.AddFactor(0.1f, DefaultDemesneLaws.Instance.SerfsAgricultureDuties.Name);
                     }
-                }   
+                }
             }
 
             return result;

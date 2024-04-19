@@ -39,7 +39,7 @@ namespace BannerKings.Utils
             return AddBonusToStat(perk, ref bonuses, isSecondary, minValue, maxValue, ref value);
         }
 
-        public static float AddScaledPerkBonus(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, MobileParty mobileParty, SkillObject scaleSkill, float everySkillLeader, float everySkillQuartermaster, float everySkillMember, SkillScale skillScale, float? minValue = null, float? maxValue = null)
+        public static float AddScaledPerkBonus(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, MobileParty mobileParty, SkillObject scaleSkill, float everySkillLeader, float everySkillQuartermaster, float everySkillMember, SkillScale skillScale, float? minValue = null, float? maxValue = null, TextObject name = null)
         {
             var value = 0f;
             var perkbouns = isSecondary ? perk.SecondaryBonus : perk.PrimaryBonus;
@@ -110,7 +110,7 @@ namespace BannerKings.Utils
 
             value += GetPartyHerosPerkBonus(perk, isSecondary, mobileParty, scaleSkill, everySkillMember, chosenHero);
 
-            return AddBonusToStat(perk, ref bonuses, isSecondary, minValue, maxValue, ref value);
+            return AddBonusToStat(perk, ref bonuses, isSecondary, minValue, maxValue, ref value,name);
         }
 
         public static float AddScaledPersonlOrClanLeaderPerkBonusWithClanAndFamilyMembers(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, Hero person, SkillObject scaleSkill, float everySkillPerson, float everySkillFamilyMembers, float everySkillClanMembers, float? minValue = null, float? maxValue = null)
@@ -228,7 +228,7 @@ namespace BannerKings.Utils
             return value;
         }
 
-        private static float AddBonusToStat(PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, float? minValue, float? maxValue, ref float value)
+        private static float AddBonusToStat(PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, float? minValue, float? maxValue, ref float value, TextObject name = null)
         {
             if (!value.ApproximatelyEqualsTo(0f))
             {
@@ -243,12 +243,12 @@ namespace BannerKings.Utils
 
                 if (isSecondary)
                 {
-                    AddToStat(ref bonuses, perk.SecondaryIncrementType, value, perk.Name);
+                    AddToStat(ref bonuses, perk.SecondaryIncrementType, value, name ?? perk.Name);
                     return value;
                 }
                 else
                 {
-                    AddToStat(ref bonuses, perk.PrimaryIncrementType, value, perk.Name);
+                    AddToStat(ref bonuses, perk.PrimaryIncrementType, value, name ?? perk.Name);
                     return value;
                 }
             }
