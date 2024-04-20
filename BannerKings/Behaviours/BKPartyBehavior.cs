@@ -479,7 +479,7 @@ namespace BannerKings.Behaviours
             }
 
             int fee = data.EconomicData.CaravanFee(party);
-            if (fee > 0)
+            if (fee > 0&& target.Town!=null)
             {
                 party.PartyTradeGold -= fee;
                 target.Town.TradeTaxAccumulated += fee;

@@ -127,7 +127,7 @@ namespace BannerKings.Patches
                 CampaignTime lastHomeVisitTimeOfCaravan;
                 dic.TryGetValue(caravanParty, out lastHomeVisitTimeOfCaravan);
                 var totalValueOfItemsAtCategory = __instance.GetPrivateFieldValue<Dictionary<ItemCategory, int>>("_totalValueOfItemsAtCategory");
-                if (totalValueOfItemsAtCategory.Count()>=10)
+                if (totalValueOfItemsAtCategory.Count() >= 10)
                 {
                     foreach (Town town in Town.AllFiefs)
                     {
@@ -698,13 +698,13 @@ namespace BannerKings.Patches
                         PerkHelper.AddPerkBonusForTown(DefaultPerks.Roguery.SaltTheEarth, town, ref explainedNumber2);
                         if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                         {
-                            DefaultPerks.Steward.GivingHands.AddScaledGovernerPerkBonusForTownWithTownHeros(ref explainedNumber2,true, town, DefaultSkills.Steward, 30, 90, 120, minValue: 0, maxValue: 0.3f);
+                            DefaultPerks.Steward.GivingHands.AddScaledGovernerPerkBonusForTownWithTownHeros(ref explainedNumber2, true, town);
                         }
                         else
                         {
                             PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.GivingHands, town, ref explainedNumber2);
                         }
-                        
+
                         if (applyWithdrawals)
                         {
                             town.TradeTaxAccumulated -= num;

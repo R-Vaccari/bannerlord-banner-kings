@@ -115,11 +115,11 @@ namespace BannerKings.Models.Vanilla
                     ExplainedNumber bonuses = new ExplainedNumber(num * item.Amount);
                     if (item.EquipmentElement.Item.HasArmorComponent)
                     {
-                        PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.PaidInPromise, ref bonuses, true, MobileParty.MainParty, DefaultSkills.Steward, 10, 10, 50, SkillScale.Both, minValue: 0, maxValue: 1.5f);
+                        DefaultPerks.Steward.PaidInPromise.AddScaledPerkBonus(ref bonuses, true, MobileParty.MainParty);
                     }
                     else if (item.EquipmentElement.Item.HasWeaponComponent)
                     {
-                        PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.GivingHands, ref bonuses, false, MobileParty.MainParty, DefaultSkills.Steward, 10, 10, 50, SkillScale.Both, minValue: 0, maxValue: 1.5f);
+                        DefaultPerks.Steward.GivingHands.AddScaledPerkBonus(ref bonuses, false, MobileParty.MainParty);
                     }
                     return (int)bonuses.ResultNumber;
                 }

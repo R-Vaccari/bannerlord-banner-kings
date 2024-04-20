@@ -51,7 +51,7 @@ namespace BannerKings.Models.Vanilla
             #region DefaultPerks.Steward.Relocation
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks && donatingParty.MobileParty != null)
             {
-                PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.Relocation, ref explainedNumber, false, donatingParty.MobileParty, DefaultSkills.Steward, 0, 10, 50, SkillScale.OnlyQuartermaster, minValue: 0, maxValue: 0.5f);
+                DefaultPerks.Steward.Relocation.AddScaledPerkBonus(ref explainedNumber, false, donatingParty.MobileParty);
             }
             else
             {

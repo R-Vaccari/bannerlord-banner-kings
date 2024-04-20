@@ -38,7 +38,7 @@ namespace BannerKings.Models.Vanilla
             #region DefaultPerks.Steward.Sweatshops
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                DefaultPerks.Steward.Sweatshops.AddScaledPersonlOrClanLeaderPerkBonusWithClanAndFamilyMembers(ref result, false, workshop.Owner, DefaultSkills.Steward, 10, 40, 100, minValue: 0, maxValue: 1f);
+                DefaultPerks.Steward.Sweatshops.AddScaledPersonlOrClanLeaderPerkBonusWithClanAndFamilyMembers(ref result, false, workshop.Owner);
             }
             else
             {

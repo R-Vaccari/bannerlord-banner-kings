@@ -48,8 +48,8 @@ namespace BannerKings.Models.Vanilla
                 if (governor != null && governor.GetPerkValue(DefaultPerks.Steward.AidCorps) && governor.CurrentSettlement != null && governor.CurrentSettlement == village.Bound?.Town?.Settlement)
                 {
                     baseResult.AddFactor(-DefaultPerks.Steward.AidCorps.SecondaryBonus, DefaultPerks.Steward.AidCorps.Name);
-                }                
-                PerksHelpers.AddScaledGovernerPerkBonusForTownWithTownHeros(DefaultPerks.Steward.Relocation, ref baseResult, true, village.Bound.Town, DefaultSkills.Steward, 15, 50, 80, minValue: 0, maxValue: 0.4f);
+                }
+                DefaultPerks.Steward.Relocation.AddScaledGovernerPerkBonusForTownWithTownHeros( ref baseResult, true, village.Bound.Town);
             }
 
             #endregion

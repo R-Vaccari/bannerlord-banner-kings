@@ -150,19 +150,30 @@ namespace BannerKings.Settings
         public int BanditPartiesLimit { get; set; } = 150;
 
         [SettingPropertyBool("Enable Useful Perks", Order =0,  HintText = "Enable perks to scale up with skill level Default: True.")]
-        [SettingPropertyGroup("Useful Perks")]
-        public bool EnableUsefulPerks { get; set; } = true;
+        [SettingPropertyGroup("Useful Skills and Perks")]
+        public bool EnableUsefulPerks { get; set; } = true;       
 
         [SettingPropertyBool("Enable Perks From All Party Members", Order = 1, HintText = "Enable perks to become effective from all party members with a reduced ratio. Default setting is True.")]
-        [SettingPropertyGroup("Useful Perks")]
+        [SettingPropertyGroup("Useful Skills and Perks")]
         public bool EnableUsefulPerksFromAllPartyMembers { get; set; } = true;
 
+
+        [SettingPropertyBool("Enable Skills From All Party Members", Order = 1, HintText = "Enable skills effects to become effective from all party members with a reduced ratio. Default setting is True.")]
+        [SettingPropertyGroup("Useful Skills and Perks")]
+        public bool EnableUsefulSkillsFromAllPartyMembers { get; set; } = true;
+
         [SettingPropertyBool("Enable Governor Perks From Settlement Owner", Order = 2, HintText = "Enable governor perks to become effective from settlement owners with a reduced ratio. Default setting is True.")]
-        [SettingPropertyGroup("Useful Perks")]
+        [SettingPropertyGroup("Useful Skills and Perks")]
         public bool EnableUsefulGovernorPerksFromSettlementOwner { get; set; } = true;
 
-        [SettingPropertyBool("Enable Useful Steward Perks", Order = 3, HintText = "Enable perks to scale up with skill level Default: True.")]
-        [SettingPropertyGroup("Useful Perks")]
+
+        [SettingPropertyBool("Enable Useful Steward Skills", Order = 3, HintText = "Enable steward skills effects to scale up with skill level Default: True.")]
+        [SettingPropertyGroup("Useful Skills and Perks")]
+        public bool EnableUsefulStewardSkills { get; set; } = true;
+
+
+        [SettingPropertyBool("Enable Useful Steward Perks", Order = 3, HintText = "Enable steward perks to scale up with skill level Default: True.")]
+        [SettingPropertyGroup("Useful Skills and Perks")]
         public bool EnableUsefulStewardPerks { get; set; } = true;
     }
 }

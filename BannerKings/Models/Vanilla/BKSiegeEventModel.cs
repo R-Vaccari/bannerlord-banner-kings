@@ -41,7 +41,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     explaineResult.AddFactor(-DefaultPerks.Steward.Sweatshops.SecondaryBonus);
                 }
-                PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.Sweatshops, ref explaineResult, false, effectiveSiegePartyForSide, DefaultSkills.Steward, (float)0, (float)10, (float)100, SkillScale.OnlyQuartermaster, minValue: (float?)0f, maxValue: (float?)0.5f);
+                DefaultPerks.Steward.Sweatshops.AddScaledPerkBonus(ref explaineResult, false, effectiveSiegePartyForSide);
             }
             #endregion
             return explaineResult.ResultNumber;

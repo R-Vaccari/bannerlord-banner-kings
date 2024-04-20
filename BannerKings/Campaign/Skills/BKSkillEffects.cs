@@ -1,4 +1,5 @@
 using BannerKings.Managers.Skills;
+using BannerKings.Settings;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -30,17 +31,17 @@ namespace BannerKings.Campaign.Skills
         public override void Initialize()
         {
             PietyGain = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("PietyGain"));
-            PietyGain.Initialize(new TextObject("{=3MDmvuVf}Daily piety gain: +{a0}"), 
+            PietyGain.Initialize(new TextObject("{=3MDmvuVf}Daily piety gain: +{a0}"),
                 new SkillObject[]
                 {
                     BKSkills.Instance.Theology
-                }, 
-                SkillEffect.PerkRole.Personal, 
-                0.01f, 
+                },
+                SkillEffect.PerkRole.Personal,
+                0.01f,
                 SkillEffect.PerkRole.None,
-                0f, 
-                SkillEffect.EffectIncrementType.Add, 
-                0f, 
+                0f,
+                SkillEffect.EffectIncrementType.Add,
+                0f,
                 0f);
 
             FaithPresence = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("FaithPresence"));
@@ -201,34 +202,68 @@ namespace BannerKings.Campaign.Skills
                 0f,
                 0f);
 
-            SupplyEfficiency = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("SupplyEfficiency"));
-            SupplyEfficiency.Initialize(new TextObject("{=wMcipFaM}Party supply efficiency: +{a0}%"),
-                new SkillObject[]
-                {
-                    DefaultSkills.Steward
-                },
-                SkillEffect.PerkRole.Quartermaster,
-                0.15f,
-                SkillEffect.PerkRole.None,
-                0f,
-                SkillEffect.EffectIncrementType.AddFactor,
-                0f,
-                0f);
 
-            Stability = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("Stability"));
-            Stability.Initialize(new TextObject("{=dSjTJUjU}Fief stability: +{a0}"),
-                new SkillObject[]
-                {
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardSkills && BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            {
+                SupplyEfficiency = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("SupplyEfficiency"));
+                SupplyEfficiency.Initialize(new TextObject("{=wMcipFaM}Party supply efficiency: +{a0}%"),
+                    new SkillObject[]
+                    {
                     DefaultSkills.Steward
-                },
-                SkillEffect.PerkRole.Governor,
-                0.001f,
-                SkillEffect.PerkRole.None,
-                0f,
-                SkillEffect.EffectIncrementType.Add,
-                0f,
-                0f);
+                    },
+                    SkillEffect.PerkRole.Quartermaster,
+                    0.15f,
+                    SkillEffect.PerkRole.PartyMember,
+                    0.015f,
+                    SkillEffect.EffectIncrementType.AddFactor,
+                    0f,
+                    0f);
 
+                Stability = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("Stability"));
+                Stability.Initialize(new TextObject("{=dSjTJUjU}Fief stability: +{a0}"),
+                    new SkillObject[]
+                    {
+                    DefaultSkills.Steward
+                    },
+                    SkillEffect.PerkRole.Governor,
+                    0.001f,
+                    SkillEffect.PerkRole.ClanLeader,
+                    0.0001f,
+                    SkillEffect.EffectIncrementType.Add,
+                    0f,
+                    0f);
+            }
+            else
+            {
+                SupplyEfficiency = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("SupplyEfficiency"));
+                SupplyEfficiency.Initialize(new TextObject("{=wMcipFaM}Party supply efficiency: +{a0}%"),
+                    new SkillObject[]
+                    {
+                    DefaultSkills.Steward
+                    },
+                    SkillEffect.PerkRole.Quartermaster,
+                    0.15f,
+                    SkillEffect.PerkRole.None,
+                    0f,
+                    SkillEffect.EffectIncrementType.AddFactor,
+                    0f,
+                    0f);
+
+                Stability = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("Stability"));
+                Stability.Initialize(new TextObject("{=dSjTJUjU}Fief stability: +{a0}"),
+                    new SkillObject[]
+                    {
+                    DefaultSkills.Steward
+                    },
+                    SkillEffect.PerkRole.Governor,
+                    0.001f,
+                    SkillEffect.PerkRole.None,
+                    0f,
+                    SkillEffect.EffectIncrementType.Add,
+                    0f,
+                    0f);
+
+            }
             TradePower = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("TradePower"));
             TradePower.Initialize(new TextObject("{=vSqWjxNU}Fief trade power: +{a0}%"),
                 new SkillObject[]

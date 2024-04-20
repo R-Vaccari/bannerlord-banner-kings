@@ -61,8 +61,4 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" PrivateAssets="all" IncludeAssets="compile" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Patches\" />
-	</ItemGroup>
-
 </Project>

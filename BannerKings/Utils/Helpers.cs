@@ -213,14 +213,19 @@ namespace BannerKings.Utils
         }
         public static List<Hero> GetActiveFamilyMembers(this Hero person)
         {
-            return person.Clan?.Heroes?.Where(h => h != person && h.IsActive && h.IsCloseFamily(person))?.ToList()??new List<Hero>();
+            return person.Clan?.Heroes?.Where(h => h != person && h.IsActive && h.IsCloseFamily(person))?.ToList() ?? new List<Hero>();
         }
 
         public static List<Hero> GetActiveClanCompanions(this Hero person)
         {
-            return person.Clan?.Companions?.Where(d => d.IsActive)?.ToList()??new List<Hero>();
+            var x = person.Clan?.Companions?.Where(d => d.IsActive)?.ToList() ?? new List<Hero>();
+            return x;
         }
-
+        public static List<Hero> GetActiveClanLordsNotFamilyMemebrs(this Hero person)
+        {
+            var x = person.Clan?.Lords?.Where(d => d.IsActive && d != person && !d.IsCloseFamily(person))?.ToList() ?? new List<Hero>();
+            return x;
+        }
         public static List<Hero> GetFamilyMembers(this Hero person)
         {
             var familyMembers = new List<Hero>() { person.Father, person.Mother, person.Spouse };
@@ -399,6 +404,6 @@ namespace BannerKings.Utils
             }
 
             return ConsumptionType.None;
-        }     
+        }
     }
 }

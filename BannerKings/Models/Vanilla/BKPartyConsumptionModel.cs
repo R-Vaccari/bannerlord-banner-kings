@@ -121,7 +121,7 @@ namespace BannerKings.Models.Vanilla
             #region DefaultPerks.Steward.WarriorsDiet
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.WarriorsDiet, ref result, false, party, DefaultSkills.Steward, (float)0, (float)15, (float)100, SkillScale.OnlyQuartermaster, minValue: (float?)-0.3f, maxValue: 0);
+                DefaultPerks.Steward.WarriorsDiet.AddScaledPerkBonus(ref result, false, party);
             }
             else
             {
@@ -148,7 +148,7 @@ namespace BannerKings.Models.Vanilla
             {
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.StiffUpperLip, ref result, false, party, DefaultSkills.Steward, (float)0, (float)15, (float)100, SkillScale.OnlyQuartermaster, minValue: (float?)-0.3f, maxValue: 0);
+                    DefaultPerks.Steward.StiffUpperLip.AddScaledPerkBonus(ref result, false, party);
                 }
                 else
                 {
@@ -159,7 +159,7 @@ namespace BannerKings.Models.Vanilla
             #region DefaultPerks.Steward.WarriorsDiet
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.WarriorsDiet, ref result, false, party, DefaultSkills.Steward, (float)0, (float)15, (float)100, SkillScale.OnlyQuartermaster, minValue: (float?)-0.3f, maxValue: 0);
+                DefaultPerks.Steward.WarriorsDiet.AddScaledPerkBonus(ref result, false, party);
             }
             else
             {
@@ -176,7 +176,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (party.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(party.Party, MapEvent.BattleTypes.Siege))
                     {
-                        PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.SoundReserves, ref result, true, party, DefaultSkills.Steward, (float)0, (float)20, (float)100, SkillScale.OnlyQuartermaster, minValue: (float?)-0.3f, maxValue: 0);
+                        DefaultPerks.Steward.SoundReserves.AddScaledPerkBonus(ref result, true, party);
                     }
                 }
                 else

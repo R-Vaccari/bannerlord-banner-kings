@@ -290,8 +290,8 @@ namespace BannerKings.Models.Vanilla
                 #region DefaultPerks.Steward.Relocation
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    var explainedNumber = new ExplainedNumber(0f, false);                  
-                    result += (int)(PerksHelpers.AddScaledGovernerPerkBonusForTownWithTownHeros(DefaultPerks.Steward.Relocation, ref explainedNumber, true, town, DefaultSkills.Steward, 15, 50, 80, minValue: 0, maxValue: 0.4f)*100);
+                    var explainedNumber = new ExplainedNumber(0f, false);
+                    result += (int)(DefaultPerks.Steward.Relocation.AddScaledGovernerPerkBonusForTownWithTownHeros(ref explainedNumber, true,  town) * 100);
                 }
                 else
                 {
@@ -423,7 +423,23 @@ namespace BannerKings.Models.Vanilla
                 {
                     SkillHelper.AddSkillBonusForTown(DefaultSkills.Engineering,
                         DefaultSkillEffects.TownProjectBuildingBonus, town, ref result);
-                    PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.ForcedLabor, town, ref result);
+
+                    if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                    {
+                        if (town?.Settlement?.Party?.PrisonRoster != null && town.Settlement.Party.PrisonRoster.TotalManCount > 4)
+                        {
+                            var factor = (float)(town.Settlement.Party.PrisonRoster.TotalHealthyCount / 5);
+                            DefaultPerks.Steward.GivingHands.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, true, town, factor);
+                        }
+                    }
+                    else
+                    {
+                        if (town.Governor.GetPerkValue(DefaultPerks.Steward.ForcedLabor) && town.Settlement?.Party?.PrisonRoster?.TotalManCount > 0)
+                        {
+                            float value2 = MathF.Min(0.3f, (float)(town.Settlement.Party.PrisonRoster.TotalManCount / 3) * DefaultPerks.Steward.ForcedLabor.SecondaryBonus);
+                            result.AddFactor(value2, DefaultPerks.Steward.ForcedLabor.Name);
+                        }
+                    }
 
                     if (!town.BuildingsInProgress.IsEmpty())
                     {

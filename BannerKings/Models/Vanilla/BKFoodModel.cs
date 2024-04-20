@@ -99,7 +99,7 @@ namespace BannerKings.Models.Vanilla
                 #region DefaultPerks.Steward.Gourmet
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    DefaultPerks.Steward.Gourmet.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, true, town, DefaultSkills.Steward, 15, 60, 90, minValue: -0.3f, maxValue: 0);
+                    DefaultPerks.Steward.Gourmet.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, true, town);
                 }
                 else
                 {

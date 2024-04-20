@@ -37,14 +37,14 @@ namespace BannerKings.Models.Vanilla
             {
                 int troopRecruitmentCost = partyWageModel.GetTroopRecruitmentCost(upgradeTarget, null, true);
                 int troopRecruitmentCost2 = partyWageModel.GetTroopRecruitmentCost(characterObject, null, true);
-                bool flag = characterObject.Occupation == Occupation.Mercenary || characterObject.Occupation == Occupation.Gangster;
-                var initCost = (troopRecruitmentCost - troopRecruitmentCost2) / ((!flag) ? 2f : 3f);
-                ExplainedNumber explainedNumber = new ExplainedNumber((float)(troopRecruitmentCost - troopRecruitmentCost2) / ((!flag) ? 2f : 3f), false, null);
+                bool isMercenary = characterObject.Occupation == Occupation.Mercenary || characterObject.Occupation == Occupation.Gangster;
+                var initCost = (troopRecruitmentCost - troopRecruitmentCost2) / ((!isMercenary) ? 2f : 3f);
+                ExplainedNumber explainedNumber = new ExplainedNumber((float)(troopRecruitmentCost - troopRecruitmentCost2) / ((!isMercenary) ? 2f : 3f), false, null);
 
                 #region DefaultPerks.Steward.SoundReserves
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.SoundReserves, ref explainedNumber, false, party.MobileParty, DefaultSkills.Steward, (float)0, (float)20, (float)100, SkillScale.OnlyQuartermaster, minValue: (float?)-0.3f, maxValue: 0);
+                    DefaultPerks.Steward.SoundReserves.AddScaledPerkBonus(ref explainedNumber, false, party.MobileParty);
                 }
                 else
                 {
@@ -71,10 +71,22 @@ namespace BannerKings.Models.Vanilla
                 {
                     explainedNumber.AddFactor(DefaultCulturalFeats.SturgianRecruitUpgradeFeat.EffectBonus, GameTexts.FindText("str_culture", null));
                 }
-                if (flag && party.MobileParty.HasPerk(DefaultPerks.Steward.Contractors, false))
+                #region DefaultPerks.Steward.Contractors
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.Contractors, party.MobileParty, true, ref explainedNumber);
+                    if (isMercenary )
+                    {
+                        DefaultPerks.Steward.Contractors.AddScaledPerkBonus(ref explainedNumber, false, party.MobileParty);
+                    }
                 }
+                else
+                {
+                    if (isMercenary && party.MobileParty.HasPerk(DefaultPerks.Steward.Contractors, false))
+                    {
+                        PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.Contractors, party.MobileParty, true, ref explainedNumber);
+                    }
+                }
+                #endregion
                 //make sure the cost is at least 1/4 of the initial cost
                 return (int)(MBMath.ClampFloat(explainedNumber.ResultNumber, initCost / 4, explainedNumber.ResultNumber));
             }

@@ -318,7 +318,7 @@ namespace BannerKings.Models.Vanilla
 
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    DefaultPerks.Steward.Logistician.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result,true, village.Bound.Town, DefaultSkills.Steward, 30, 90, 120, minValue: 0, maxValue: 0.3f);
+                    DefaultPerks.Steward.Logistician.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result,true, village.Bound.Town);
                 }
                 else
                 {

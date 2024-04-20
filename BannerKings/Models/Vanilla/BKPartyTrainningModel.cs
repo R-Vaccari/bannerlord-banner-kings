@@ -108,7 +108,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (mobileParty.IsActive && troop.Character.Tier >= 4)
                     {
-                        PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.SevenVeterans, ref result, false, mobileParty, DefaultSkills.Steward, (float)25, (float)25, (float)100, SkillScale.Both, minValue: 0, maxValue: (float?)60f);
+                        DefaultPerks.Steward.SevenVeterans.AddScaledPerkBonus(ref result, false, mobileParty);
                     }
                 }
                 else
@@ -124,7 +124,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (mobileParty.IsActive)
                     {
-                        PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.DrillSergant, ref result, false, mobileParty, DefaultSkills.Steward, (float)25, (float)25, (float)100, SkillScale.Both, minValue: 0, maxValue: (float?)30f);
+                        DefaultPerks.Steward.DrillSergant.AddScaledPerkBonus(ref result, false, mobileParty);
                     }
                 }
                 else

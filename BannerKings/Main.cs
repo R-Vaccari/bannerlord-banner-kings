@@ -112,6 +112,7 @@ namespace BannerKings
             campaignStarter.AddModel(new BKMapTrackModel());
             campaignStarter.AddModel(new BKAgentDamageModel());
             campaignStarter.AddModel(new BKAgentStatsModel());
+            campaignStarter.AddModel(new BKBuildingEffectModel());
             campaignStarter.AddModel(new BKPartySpeedModel());
             campaignStarter.AddModel(new BKBattleSimulationModel());
             campaignStarter.AddModel(new BKPartyConsumptionModel());
