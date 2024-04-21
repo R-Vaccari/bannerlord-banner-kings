@@ -28,7 +28,9 @@ namespace BannerKings.Utils
             Both,
             Other,
         }
-        public static float AddScaledGovernerPerkBonusForTownWithTownHeros(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, Town town, float? factor = null)
+        public static float AddScaledGovernerPerkBonusForTownWithTownHeros(this PerkObject perk,
+                                                                           ref ExplainedNumber bonuses, bool isSecondary,
+                                                                           Town town, float? factor = null)
         {
             if (perk != null && PerksAndSkillsPatches.StewardPerksData.ContainsKey(perk.StringId))
             {
@@ -40,7 +42,9 @@ namespace BannerKings.Utils
             }
             return 0;
         }
-        public static float AddScaledPerkBonus(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, MobileParty mobileParty, float? factor = null, TextObject nameOverride = null)
+        public static float AddScaledPerkBonus(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary,
+                                               MobileParty mobileParty, float? factor = null,
+                                               TextObject nameOverride = null)
         {
             if (perk != null && PerksAndSkillsPatches.StewardPerksData.ContainsKey(perk.StringId))
             {
@@ -53,7 +57,10 @@ namespace BannerKings.Utils
             return 0;
         }
 
-        public static float AddScaledPersonlOrClanLeaderPerkBonusWithClanAndFamilyMembers(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, Hero person, float? factor = null)
+        public static float AddScaledPersonlOrClanLeaderPerkBonusWithClanAndFamilyMembers(this PerkObject perk,
+                                                                                          ref ExplainedNumber bonuses,
+                                                                                          bool isSecondary, Hero person,
+                                                                                          float? factor = null)
         {
             if (perk != null && PerksAndSkillsPatches.StewardPerksData.ContainsKey(perk.StringId))
             {
@@ -242,7 +249,7 @@ namespace BannerKings.Utils
             if (BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers && everySkillMember > 0)
             {
                 var mobilePartyHeros = mobileParty.GetAllPartyHeros();
-                var partyHeros = mobilePartyHeros.Where(d => d.HeroObject?.IsActive ?? false && d.GetPerkValue(perk) && d.HeroObject != choosenHero);
+                var partyHeros = mobilePartyHeros.Where(d => (d.HeroObject?.IsActive ?? false) && d.GetPerkValue(perk) && d.HeroObject != choosenHero);
                 value += partyHeros.Sum(d => (isSecondary ? perk.SecondaryBonus : perk.PrimaryBonus) * (MathF.Max(0, d.GetSkillValue(scaleSkill) - startAtSkill) / everySkillMember));
             }
             return value;

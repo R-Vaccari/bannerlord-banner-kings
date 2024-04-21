@@ -2,7 +2,6 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Settings;
 using BannerKings.Utils;
-using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Issues;
@@ -103,7 +102,7 @@ namespace BannerKings.Models.Vanilla
                 }
                 else
                 {
-                    if (town.Governor != null&&town.Governor.GetPerkValue(DefaultPerks.Steward.Gourmet))
+                    if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Steward.Gourmet))
                     {
                         result.AddFactor(DefaultPerks.Steward.Gourmet.SecondaryBonus, DefaultPerks.Steward.Gourmet.Name);
                     }
@@ -116,19 +115,26 @@ namespace BannerKings.Models.Vanilla
                         result.AddFactor(DefaultPerks.Medicine.TriageTent.SecondaryBonus,
                             DefaultPerks.Medicine.TriageTent.Name);
                     }
-                }              
+                }
             }
             if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Roguery.DirtyFighting))
             {
                 result.Add(DefaultPerks.Roguery.DirtyFighting.SecondaryBonus, DefaultPerks.Roguery.DirtyFighting.Name);
             }
-
-            if (town.Governor != null &&  result.ResultNumber > 0f && town.Governor.GetPerkValue(DefaultPerks.Steward.MasterOfWarcraft))
+            #region DefaultPerks.Steward.MasterOfWarcraft
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                result.AddFactor(-DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus,
-                    DefaultPerks.Steward.MasterOfWarcraft.Name);
+                DefaultPerks.Steward.MasterOfWarcraft.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, true, town);   
             }
-
+            else
+            {
+                if (town.Governor != null && result.ResultNumber > 0f && town.Governor.GetPerkValue(DefaultPerks.Steward.MasterOfWarcraft))
+                {
+                    result.AddFactor(DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus,
+                        DefaultPerks.Steward.MasterOfWarcraft.Name);
+                }
+            }
+            #endregion
             GetSettlementFoodChangeDueToIssues(town, ref result);
             return result;
         }

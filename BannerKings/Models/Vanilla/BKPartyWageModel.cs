@@ -277,7 +277,7 @@ namespace BannerKings.Models.Vanilla
                         result.AddFactor(value3, DefaultPerks.Steward.Contractors.Name);
                     }
                 }
-            }           
+            }
             #endregion
             if (mobileParty.HasPerk(DefaultPerks.Trade.MercenaryConnections, true))
             {
@@ -297,7 +297,7 @@ namespace BannerKings.Models.Vanilla
             #region Steward.Frugal
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                DefaultPerks.Steward.Frugal.AddScaledPerkBonus( ref result, false, mobileParty);
+                DefaultPerks.Steward.Frugal.AddScaledPerkBonus(ref result, false, mobileParty);
             }
             else
             {
@@ -312,7 +312,7 @@ namespace BannerKings.Models.Vanilla
             {
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    DefaultPerks.Steward.EfficientCampaigner.AddScaledPerkBonus( ref result, true, mobileParty);
+                    DefaultPerks.Steward.EfficientCampaigner.AddScaledPerkBonus(ref result, true, mobileParty);
                 }
                 else
                 {
@@ -324,14 +324,37 @@ namespace BannerKings.Models.Vanilla
             }
             #endregion
 
-            if (mobileParty.SiegeEvent != null && mobileParty.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(mobileParty.Party, MapEvent.BattleTypes.Siege) && mobileParty.HasPerk(DefaultPerks.Steward.MasterOfWarcraft, false))
+            #region DefaultPerks.Steward.MasterOfWarcraft
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                result.AddFactor(DefaultPerks.Steward.MasterOfWarcraft.PrimaryBonus, DefaultPerks.Steward.MasterOfWarcraft.Name);
+                if (mobileParty.SiegeEvent != null && mobileParty.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(mobileParty.Party, MapEvent.BattleTypes.Siege))
+                {
+                    DefaultPerks.Steward.MasterOfWarcraft.AddScaledPerkBonus(ref result, false, mobileParty);
+                }
             }
-            if (mobileParty.EffectiveQuartermaster != null)
+            else
             {
-                PerkHelper.AddEpicPerkBonusForCharacter(DefaultPerks.Steward.PriceOfLoyalty, mobileParty.EffectiveQuartermaster.CharacterObject, DefaultSkills.Steward, true, ref result, 250);
+                if (mobileParty.SiegeEvent != null && mobileParty.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(mobileParty.Party, MapEvent.BattleTypes.Siege) && mobileParty.HasPerk(DefaultPerks.Steward.MasterOfWarcraft, false))
+                {
+                    result.AddFactor(DefaultPerks.Steward.MasterOfWarcraft.PrimaryBonus, DefaultPerks.Steward.MasterOfWarcraft.Name);
+                }
             }
+            #endregion
+
+            #region DefaultPerks.Steward.PriceOfLoyalty
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+            {
+                DefaultPerks.Steward.PriceOfLoyalty.AddScaledPerkBonus(ref result, false, mobileParty);
+            }
+            else
+            {
+                if (mobileParty.EffectiveQuartermaster != null)
+                {
+                    PerkHelper.AddEpicPerkBonusForCharacter(DefaultPerks.Steward.PriceOfLoyalty, mobileParty.EffectiveQuartermaster.CharacterObject, DefaultSkills.Steward, true, ref result, 250);
+                }
+            }
+            #endregion
+
             if (mobileParty.CurrentSettlement != null && mobileParty.LeaderHero != null && mobileParty.LeaderHero.GetPerkValue(DefaultPerks.Trade.ContentTrades))
             {
                 result.AddFactor(DefaultPerks.Trade.ContentTrades.SecondaryBonus, DefaultPerks.Trade.ContentTrades.Name);
@@ -373,7 +396,7 @@ namespace BannerKings.Models.Vanilla
                     if (elementCopyAtIndex.Character.IsHero)
                     {
                         Hero hero = elementCopyAtIndex.Character.HeroObject;
-                       
+
                         if (hero == mobileParty.LeaderHero)
                         {
                             continue;

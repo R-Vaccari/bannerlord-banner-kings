@@ -42,10 +42,19 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
                 #endregion
-                if (building.Town.Governor != null && building.Town.Governor.GetPerkValue(DefaultPerks.Steward.MasterOfPlanning))
+                #region DefaultPerks.Steward.MasterOfPlanning
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    explainedNumber.AddFactor(DefaultPerks.Steward.MasterOfPlanning.SecondaryBonus, DefaultPerks.Steward.MasterOfPlanning.Name);
+                    DefaultPerks.Steward.MasterOfPlanning.AddScaledGovernerPerkBonusForTownWithTownHeros(ref explainedNumber, true, building.Town);
                 }
+                else
+                {
+                    if (building.Town.Governor != null && building.Town.Governor.GetPerkValue(DefaultPerks.Steward.MasterOfPlanning))
+                    {
+                        explainedNumber.AddFactor(DefaultPerks.Steward.MasterOfPlanning.SecondaryBonus, DefaultPerks.Steward.MasterOfPlanning.Name);
+                    }
+                }
+                #endregion
                 Hero governor = building.Town.Governor;
                 if (governor != null && governor.GetPerkValue(DefaultPerks.Charm.PublicSpeaker) && (building.BuildingType == DefaultBuildingTypes.SettlementMarketplace || building.BuildingType == DefaultBuildingTypes.FestivalsAndGamesDaily || building.BuildingType == DefaultBuildingTypes.SettlementForum))
                 {

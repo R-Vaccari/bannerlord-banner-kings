@@ -21,6 +21,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
+using static TaleWorlds.CampaignSystem.CharacterDevelopment.DefaultPerks;
 using TaxType = BannerKings.Managers.Policies.BKTaxPolicy.TaxType;
 
 namespace BannerKings.Models.Vanilla
@@ -176,6 +177,19 @@ namespace BannerKings.Models.Vanilla
         {
             ExplainedNumber baseResult = base.CalculateTownTax(town, includeDescriptions);
             baseResult.LimitMin(0f);
+
+            #region DefaultPerks.Steward.PriceOfLoyalty
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+            {
+                if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Steward.PriceOfLoyalty))
+                {
+                    int num = town.Governor.GetSkillValue(DefaultSkills.Steward) - TaleWorlds.CampaignSystem.Campaign.Current.Models.CharacterDevelopmentModel.MinSkillRequiredForEpicPerkBonus;
+                    var removedValue = -DefaultPerks.Steward.PriceOfLoyalty.SecondaryBonus * (float)num;
+                    baseResult.AddFactor(removedValue, DefaultPerks.Steward.PriceOfLoyalty.Name);
+                }
+                Steward.PriceOfLoyalty.AddScaledGovernerPerkBonusForTownWithTownHeros(ref baseResult, true, town);
+            }
+            #endregion
             if (BannerKingsConfig.Instance.PopulationManager != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
@@ -318,7 +332,7 @@ namespace BannerKings.Models.Vanilla
 
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    DefaultPerks.Steward.Logistician.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result,true, village.Bound.Town);
+                    DefaultPerks.Steward.Logistician.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, true, village.Bound.Town);
                 }
                 else
                 {
