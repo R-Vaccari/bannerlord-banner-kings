@@ -108,7 +108,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (mobileParty.IsActive && troop.Character.Tier >= 4)
                     {
-                        DefaultPerks.Steward.SevenVeterans.AddScaledPerkBonus(ref result, false, mobileParty);
+                        DefaultPerks.Steward.SevenVeterans.AddScaledPartyPerkBonus(ref result, false, mobileParty);
                     }
                 }
                 else
@@ -124,7 +124,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (mobileParty.IsActive)
                     {
-                        DefaultPerks.Steward.DrillSergant.AddScaledPerkBonus(ref result, false, mobileParty);
+                        DefaultPerks.Steward.DrillSergant.AddScaledPartyPerkBonus(ref result, false, mobileParty);
                     }
                 }
                 else

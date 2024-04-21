@@ -121,7 +121,7 @@ namespace BannerKings.Models.Vanilla
             #region DefaultPerks.Steward.WarriorsDiet
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                DefaultPerks.Steward.WarriorsDiet.AddScaledPerkBonus(ref result, false, party);
+                DefaultPerks.Steward.WarriorsDiet.AddScaledPartyPerkBonus(ref result, false, party);
             }
             else
             {
@@ -131,7 +131,7 @@ namespace BannerKings.Models.Vanilla
             #region DefaultPerks.Steward.PriceOfLoyalty
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                DefaultPerks.Steward.PriceOfLoyalty.AddScaledPerkBonus(ref result, false, party);
+                DefaultPerks.Steward.PriceOfLoyalty.AddScaledPartyPerkBonus(ref result, false, party);
             }
             else
             {
@@ -156,7 +156,7 @@ namespace BannerKings.Models.Vanilla
             {
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    DefaultPerks.Steward.StiffUpperLip.AddScaledPerkBonus(ref result, false, party);
+                    DefaultPerks.Steward.StiffUpperLip.AddScaledPartyPerkBonus(ref result, false, party);
                 }
                 else
                 {
@@ -167,7 +167,7 @@ namespace BannerKings.Models.Vanilla
             #region DefaultPerks.Steward.WarriorsDiet
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                DefaultPerks.Steward.WarriorsDiet.AddScaledPerkBonus(ref result, false, party);
+                DefaultPerks.Steward.WarriorsDiet.AddScaledPartyPerkBonus(ref result, false, party);
             }
             else
             {
@@ -183,7 +183,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (party.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(party.Party, MapEvent.BattleTypes.Siege))
                     {
-                        DefaultPerks.Steward.SoundReserves.AddScaledPerkBonus(ref result, true, party);
+                        DefaultPerks.Steward.SoundReserves.AddScaledPartyPerkBonus(ref result, true, party);
                     }
                 }
                 else
@@ -198,7 +198,7 @@ namespace BannerKings.Models.Vanilla
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
 
-                    DefaultPerks.Steward.MasterOfPlanning.AddScaledPerkBonus(ref result, false, party);
+                    DefaultPerks.Steward.MasterOfPlanning.AddScaledPartyPerkBonus(ref result, false, party);
                 }
                 else
                 {

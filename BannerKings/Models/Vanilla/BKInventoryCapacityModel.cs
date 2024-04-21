@@ -50,7 +50,7 @@ namespace BannerKings.Models.Vanilla
                 if (mobileParty.PrisonRoster.TotalHealthyCount > 0)
                 {
                   
-                    DefaultPerks.Steward.ForcedLabor.AddScaledPerkBonus(ref partyCarryingCapacity, false, mobileParty);
+                    DefaultPerks.Steward.ForcedLabor.AddScaledPartyPerkBonus(ref partyCarryingCapacity, false, mobileParty);
                     result.Add(partyCarryingCapacity.ResultNumber, DefaultPerks.Steward.ForcedLabor.Name);
                 }
             }
@@ -68,7 +68,7 @@ namespace BannerKings.Models.Vanilla
                 if (mobileParty.PrisonRoster.TotalHealthyCount>0)
                 {
                     ExplainedNumber prisonersCarryingCapacity = new ExplainedNumber(mobileParty.PrisonRoster.TotalHealthyCount, includeDescriptions, null);
-                    DefaultPerks.Steward.ForcedLabor.AddScaledPerkBonus(ref prisonersCarryingCapacity, false, mobileParty);
+                    DefaultPerks.Steward.ForcedLabor.AddScaledPartyPerkBonus(ref prisonersCarryingCapacity, false, mobileParty);
                     result.Add(prisonersCarryingCapacity.ResultNumber, DefaultPerks.Steward.ForcedLabor.Name);
                 }              
             }
@@ -94,7 +94,7 @@ namespace BannerKings.Models.Vanilla
             #region DefaultPerks.Steward.ArenicosMules
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                DefaultPerks.Steward.ArenicosMules.AddScaledPerkBonus(ref explainedNumber, false, mobileParty);
+                DefaultPerks.Steward.ArenicosMules.AddScaledPartyPerkBonus(ref explainedNumber, false, mobileParty);
             }
             else
             {

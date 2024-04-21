@@ -22,18 +22,18 @@ namespace BannerKings.Patches
                 if (!getSecondary && perk.PrimaryRole != SkillEffect.PerkRole.None)
                 {
                     rolesText.Add(GameTexts.FindText("role", perk.PrimaryRole.ToString()));
-                    if (StewardPerksData.ContainsKey(perk.StringId) && StewardPerksData[perk.StringId].PrimaryPerk?.AdditionalRoles != null)
+                    if (AllPerksData.ContainsKey(perk.StringId) && AllPerksData[perk.StringId].PrimaryPerk?.AdditionalRoles != null)
                     {
-                        rolesText.AddRange(StewardPerksData[perk.StringId].PrimaryPerk.AdditionalRoles.Select(d => GameTexts.FindText("role", d.ToString())));
+                        rolesText.AddRange(AllPerksData[perk.StringId].PrimaryPerk.AdditionalRoles.Select(d => GameTexts.FindText("role", d.ToString())));
                     }
                     textObject.SetTextVariable("PRIMARY_ROLE", NormalizeAdditionalRoles(perk.PrimaryRole, string.Join(" - ", rolesText)));
                 }
                 else if (getSecondary && perk.SecondaryRole != SkillEffect.PerkRole.None)
                 {
                     rolesText.Add(GameTexts.FindText("role", perk.SecondaryRole.ToString()));
-                    if (StewardPerksData.ContainsKey(perk.StringId) && StewardPerksData[perk.StringId].SecondaryPerk?.AdditionalRoles != null)
+                    if (AllPerksData.ContainsKey(perk.StringId) && AllPerksData[perk.StringId].SecondaryPerk?.AdditionalRoles != null)
                     {
-                        rolesText.AddRange(StewardPerksData[perk.StringId].SecondaryPerk.AdditionalRoles.Select(d => GameTexts.FindText("role", d.ToString())));
+                        rolesText.AddRange(AllPerksData[perk.StringId].SecondaryPerk.AdditionalRoles.Select(d => GameTexts.FindText("role", d.ToString())));
                     }
                     textObject.SetTextVariable("PRIMARY_ROLE", NormalizeAdditionalRoles(perk.SecondaryRole, string.Join(" - ", rolesText)));
                 }
@@ -58,6 +58,6 @@ namespace BannerKings.Patches
                 }
                 return text;
             }
-        }
+        } 
     }
 }

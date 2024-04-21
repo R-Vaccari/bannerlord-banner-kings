@@ -172,8 +172,16 @@ namespace BannerKings.Settings
         public bool EnableUsefulStewardSkills { get; set; } = true;
 
 
-        [SettingPropertyBool("Enable Useful Steward Perks", Order = 3, HintText = "Enable steward perks to scale up with skill level Default: True.")]
+        [SettingPropertyBool("Enable Useful Steward Perks", Order = 4, HintText = "Enable steward perks to scale up with skill level Default: True.")]
         [SettingPropertyGroup("Useful Skills and Perks")]
         public bool EnableUsefulStewardPerks { get; set; } = true;
+
+        [SettingPropertyBool("Enable Useful Medicine Skills", Order = 5, HintText = "Enable Medicine skills effects to scale up with skill level Default: True.")]
+        [SettingPropertyGroup("Useful Skills and Perks")]
+        public bool EnableUsefulMedicineSkills { get; set; } = true;
+
+        [SettingPropertyBool("Enable Useful Medicine Perks", Order = 6, HintText = "Enable Medicine perks to scale up with skill level Default: True.")]
+        [SettingPropertyGroup("Useful Skills and Perks")]
+        public bool EnableUsefulMedicinePerks { get; set; } = true;
     }
 }

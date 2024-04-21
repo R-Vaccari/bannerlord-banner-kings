@@ -1,6 +1,10 @@
 ﻿using System;
 using BannerKings.Managers.Court.Members.Tasks;
+using BannerKings.Settings;
+using BannerKings.Utils;
+using Helpers;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
@@ -21,6 +25,28 @@ namespace BannerKings.Models.Vanilla
                 bonuses.Add(-num, _starvingText);
             }
             return bonuses;
+        }
+        public override int GetHeroesEffectedHealingAmount(Hero hero, float healingRate)
+        {
+            ExplainedNumber explainedNumber = new ExplainedNumber(healingRate, false, null);
+
+            #region DefaultPerks.Medicine
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulMedicinePerks)
+            {              
+                DefaultPerks.Medicine.SelfMedication.AddScaledPersonalPerkBonus(ref explainedNumber, false, hero);
+            }
+            else
+            {
+                PerkHelper.AddPerkBonusForCharacter(DefaultPerks.Medicine.SelfMedication, hero.CharacterObject, true, ref explainedNumber);
+            }
+            #endregion
+
+            float resultNumber = explainedNumber.ResultNumber;
+            if (resultNumber - (float)((int)resultNumber) > MBRandom.RandomFloat)
+            {
+                return (int)resultNumber + 1;
+            }
+            return (int)resultNumber;
         }
 
         public override ExplainedNumber GetDailyHealingHpForHeroes(MobileParty party, bool includeDescriptions = false)

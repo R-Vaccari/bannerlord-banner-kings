@@ -44,7 +44,7 @@ namespace BannerKings.Patches.Perks
                     #region DefaultPerks.Steward.Logistician
                     if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                     {
-                        DefaultPerks.Steward.Logistician.AddScaledPerkBonus(ref bonus, false, party);
+                        DefaultPerks.Steward.Logistician.AddScaledPartyPerkBonus(ref bonus, false, party);
                     }
                     else
                     {

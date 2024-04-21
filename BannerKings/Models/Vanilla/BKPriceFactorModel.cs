@@ -130,7 +130,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (item.HorseComponent != null && item.HorseComponent.IsPackAnimal)
                     {
-                        DefaultPerks.Steward.ArenicosMules.AddScaledPerkBonus(ref stat, true, clientParty);
+                        DefaultPerks.Steward.ArenicosMules.AddScaledPartyPerkBonus(ref stat, true, clientParty);
                     }
                 }
                 else
@@ -153,7 +153,7 @@ namespace BannerKings.Models.Vanilla
                     #region DefaultPerks.Steward.ArenicosHorses
                     if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                     {
-                        DefaultPerks.Steward.ArenicosHorses.AddScaledPerkBonus(ref stat, true, clientParty);
+                        DefaultPerks.Steward.ArenicosHorses.AddScaledPartyPerkBonus(ref stat, true, clientParty);
                     }
                     else
                     {

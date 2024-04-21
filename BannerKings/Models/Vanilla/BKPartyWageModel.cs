@@ -263,7 +263,7 @@ namespace BannerKings.Models.Vanilla
                 float mercenaryRatio = (float)mercenaryCount / mobileParty.MemberRoster.TotalRegulars;
                 if (mercenaryRatio > 0f)
                 {
-                    DefaultPerks.Steward.Contractors.AddScaledPerkBonus(ref result, false, mobileParty, mercenaryRatio);
+                    DefaultPerks.Steward.Contractors.AddScaledPartyPerkBonus(ref result, false, mobileParty, mercenaryRatio);
                 }
             }
             else
@@ -297,7 +297,7 @@ namespace BannerKings.Models.Vanilla
             #region Steward.Frugal
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                DefaultPerks.Steward.Frugal.AddScaledPerkBonus(ref result, false, mobileParty);
+                DefaultPerks.Steward.Frugal.AddScaledPartyPerkBonus(ref result, false, mobileParty);
             }
             else
             {
@@ -312,7 +312,7 @@ namespace BannerKings.Models.Vanilla
             {
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    DefaultPerks.Steward.EfficientCampaigner.AddScaledPerkBonus(ref result, true, mobileParty);
+                    DefaultPerks.Steward.EfficientCampaigner.AddScaledPartyPerkBonus(ref result, true, mobileParty);
                 }
                 else
                 {
@@ -329,7 +329,7 @@ namespace BannerKings.Models.Vanilla
             {
                 if (mobileParty.SiegeEvent != null && mobileParty.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(mobileParty.Party, MapEvent.BattleTypes.Siege))
                 {
-                    DefaultPerks.Steward.MasterOfWarcraft.AddScaledPerkBonus(ref result, false, mobileParty);
+                    DefaultPerks.Steward.MasterOfWarcraft.AddScaledPartyPerkBonus(ref result, false, mobileParty);
                 }
             }
             else
@@ -344,7 +344,7 @@ namespace BannerKings.Models.Vanilla
             #region DefaultPerks.Steward.PriceOfLoyalty
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                DefaultPerks.Steward.PriceOfLoyalty.AddScaledPerkBonus(ref result, false, mobileParty);
+                DefaultPerks.Steward.PriceOfLoyalty.AddScaledPartyPerkBonus(ref result, false, mobileParty);
             }
             else
             {
@@ -474,7 +474,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     result.AddFactor(-DefaultPerks.Steward.Frugal.SecondaryBonus, null);
                 }
-                DefaultPerks.Steward.Frugal.AddScaledPerkBonus(ref result, true, buyerHero.PartyBelongedTo);
+                DefaultPerks.Steward.Frugal.AddScaledPartyPerkBonus(ref result, true, buyerHero.PartyBelongedTo);
             }
 
             #endregion

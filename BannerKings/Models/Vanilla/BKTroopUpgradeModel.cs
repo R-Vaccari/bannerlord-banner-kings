@@ -44,7 +44,7 @@ namespace BannerKings.Models.Vanilla
                 #region DefaultPerks.Steward.SoundReserves
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    DefaultPerks.Steward.SoundReserves.AddScaledPerkBonus(ref explainedNumber, false, party.MobileParty);
+                    DefaultPerks.Steward.SoundReserves.AddScaledPartyPerkBonus(ref explainedNumber, false, party.MobileParty);
                 }
                 else
                 {
@@ -76,7 +76,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (isMercenary )
                     {
-                        DefaultPerks.Steward.Contractors.AddScaledPerkBonus(ref explainedNumber, false, party.MobileParty);
+                        DefaultPerks.Steward.Contractors.AddScaledPartyPerkBonus(ref explainedNumber, false, party.MobileParty);
                     }
                 }
                 else

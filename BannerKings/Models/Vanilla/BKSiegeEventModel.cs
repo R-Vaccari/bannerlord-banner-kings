@@ -41,7 +41,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     explaineResult.AddFactor(-DefaultPerks.Steward.Sweatshops.SecondaryBonus);
                 }
-                DefaultPerks.Steward.Sweatshops.AddScaledPerkBonus(ref explaineResult, false, effectiveSiegePartyForSide);
+                DefaultPerks.Steward.Sweatshops.AddScaledPartyPerkBonus(ref explaineResult, false, effectiveSiegePartyForSide);
             }
             #endregion
             return explaineResult.ResultNumber;

@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours;
+﻿    using BannerKings.Behaviours;
 using BannerKings.Managers.Items;
 using BannerKings.Settings;
 using HarmonyLib;

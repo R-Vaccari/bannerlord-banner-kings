@@ -51,7 +51,7 @@ namespace BannerKings.Models.Vanilla
             #region DefaultPerks.Steward.Relocation
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks && donatingParty.MobileParty != null)
             {
-                DefaultPerks.Steward.Relocation.AddScaledPerkBonus(ref explainedNumber, false, donatingParty.MobileParty);
+                DefaultPerks.Steward.Relocation.AddScaledPartyPerkBonus(ref explainedNumber, false, donatingParty.MobileParty);
             }
             else
             {
