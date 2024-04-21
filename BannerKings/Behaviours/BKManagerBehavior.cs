@@ -1,4 +1,5 @@
 using BannerKings.Managers;
+using BannerKings.Managers.Items;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 
@@ -100,6 +101,8 @@ namespace BannerKings.Behaviours
                 BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
                 BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
             }
+
+            BKItems.Instance.AdjustPrices();
         }
 
         private void OnGameLoaded(CampaignGameStarter starter)
@@ -124,6 +127,8 @@ namespace BannerKings.Behaviours
                     }
                 }
             }
+
+            BKItems.Instance.AdjustPrices();
         }
 
         private void OnGameEarlyLoaded(CampaignGameStarter starter)

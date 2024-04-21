@@ -68,6 +68,10 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public float LootScale { get; set; } = 0.5f;
 
+        [SettingProperty("{=!}Experimental Prices", RequireRestart = false, HintText = "{=!}Reduce prices across the board, reducing all sources of passive revenue for player and AI, deflating the economy. Default: false.")]
+        [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
+        public bool ExperimentalPrices { get; set; } = false;
+
 
 
         [SettingPropertyFloatingInteger("{=!}Population Sizes", minValue: 0.5f, maxValue: 2f, "#0%", RequireRestart = false, HintText = "{=!}Change the max size for fief populations. Populations are the very core of fiefs, impacting the economy very significantly, military volunteers, construction, and all else. Default: 100%.")]

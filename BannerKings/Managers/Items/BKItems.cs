@@ -1,4 +1,7 @@
+using BannerKings.Settings;
 using System.Collections.Generic;
+using System.Linq;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -353,6 +356,171 @@ namespace BannerKings.Managers.Items
                 new TextObject("{=w7yf8SAj}Aseran Papyrus{@Plural}collection of Aseran Papyrus{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book, 1000, 1.5f, ItemObject.ItemTypeEnum.Goods);
+        }
+
+        public void AdjustPrices()
+        {
+            if (BannerKingsSettings.Instance.ExperimentalPrices)
+            {
+                var items = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+                InitializeTradeGood(items.First(x => x.StringId == "fur"),
+                    new TextObject("{=ADJBbfbQ}Fur{@Plural}packs of fur{\\@}"),
+                    "hung_fur_b",
+                    DefaultItemCategories.Fur,
+                    150,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods);
+
+                InitializeTradeGood(items.First(x => x.StringId == "pottery"),
+                    new TextObject("{=awQrcrt2}Pottery{@Plural}crates of pottery{\\@}"),
+                    "merchandise_pottery",
+                    DefaultItemCategories.Pottery,
+                    100,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods);
+
+                InitializeTradeGood(items.First(x => x.StringId == "pottery"),
+                    new TextObject("{=awQrcrt2}Pottery{@Plural}crates of pottery{\\@}"),
+                    "merchandise_pottery",
+                    DefaultItemCategories.Pottery,
+                    100,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods);
+
+                InitializeTradeGood(items.First(x => x.StringId == "linen"),
+                    new TextObject("{=DvGueBrU}Linen{@Plural}rolls of linen{\\@}"),
+                    "merchandise_linen",
+                    DefaultItemCategories.Linen,
+                    100,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods);
+
+                InitializeTradeGood(items.First(x => x.StringId == "leather"),
+                    new TextObject("{=ufnnUxKb}Leather{@Plural}crates of leather{\\@}"),
+                    "merchandise_leather_a",
+                    DefaultItemCategories.Leather,
+                    130,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods);
+
+                InitializeTradeGood(items.First(x => x.StringId == "cotton"),
+                    new TextObject("{=Vqu67a3b}Raw Silk{@Plural}bolts of silk{\\@}"),
+                    "merchandise_raw_silk",
+                    DefaultItemCategories.Cotton,
+                    40,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods);
+
+                InitializeTradeGood(items.First(x => x.StringId == "wool"),
+                    new TextObject("{=WVqaRKUm}Wool{@Plural}loads of wool{\\@}"),
+                    "merchandise_wool",
+                    DefaultItemCategories.Wool,
+                    30,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods);
+
+                InitializeTradeGood(items.First(x => x.StringId == "velvet"),
+                    new TextObject("{=O8TpGSDA}Velvet{@Plural}rolls of velvet{\\@}"),
+                    "merchandise_velvet",
+                    DefaultItemCategories.Velvet,
+                    220,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods);
+
+                InitializeTradeGood(items.First(x => x.StringId == "oil"),
+                    new TextObject("{=lULBZ714}Oil{@Plural}amphorae of oil{\\@}"),
+                    "amphora_slim",
+                    DefaultItemCategories.Oil,
+                    110,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods);
+
+                InitializeTradeGood(items.First(x => x.StringId == "beer"),
+                    new TextObject("{=HiSzYWeh}Beer{@Plural}casks of beer{\\@}"),
+                    "bd_barrel_a",
+                    DefaultItemCategories.Beer,
+                    40,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods,
+                    true);
+
+                InitializeTradeGood(items.First(x => x.StringId == "wine"),
+                    new TextObject("{=ELsDFwAD}Wine{@Plural}amphorae of wine{\\@}"),
+                    "amphora_slim",
+                    DefaultItemCategories.Wine,
+                    35,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods);
+
+                InitializeTradeGood(items.First(x => x.StringId == "olives"),
+                    new TextObject("{=45kZUyjh}Olives{@Plural}barrels of olives{\\@}"),
+                    "bd_barrel_a",
+                    DefaultItemCategories.Olives,
+                    12,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods,
+                    true);
+
+                InitializeTradeGood(items.First(x => x.StringId == "date_fruit"),
+                    new TextObject("{=NtsdmmW9}Date Fruit{@Plural}sacks of date fruit{\\@}"),
+                    "bd_barrel_a",
+                    DefaultItemCategories.DateFruit,
+                    15,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods,
+                    true);
+
+                InitializeTradeGood(items.First(x => x.StringId == "grape"),
+                    new TextObject("{=ZgVVPGTb}Grapes{@Plural}sacks of grapes{\\@}"),
+                    "kitchen_basket_grape_b",
+                    DefaultItemCategories.Grape,
+                    10,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods,
+                    true);
+
+                InitializeTradeGood(items.First(x => x.StringId == "butter"),
+                    new TextObject("{=VbL6GFmy}Butter{@Plural}casks of butter{\\@}"),
+                    "merchandise_cheese_b",
+                    DefaultItemCategories.Butter,
+                    20,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods,
+                    true);
+
+                InitializeTradeGood(items.First(x => x.StringId == "cheese"),
+                    new TextObject("{=WSk5Sibs}Cheese{@Plural}barrels of cheese{\\@}"),
+                    "merchandise_cheese_b",
+                    DefaultItemCategories.Cheese,
+                    25,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods,
+                    true);
+
+                InitializeTradeGood(DefaultItems.Tools,
+                    new TextObject("{=n3cjEB0X}Tools{@Plural}loads of tools{\\@}"),
+                    "bd_pickaxe_b",
+                    DefaultItemCategories.Tools,
+                    120,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods);
+
+                InitializeTradeGood(DefaultItems.IronOre,
+                    new TextObject("{=Kw6BkhIf}Iron Ore{@Plural}loads of iron ore{\\@}"),
+                    "iron_ore",
+                    DefaultItemCategories.Iron,
+                    32,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods);
+
+                InitializeTradeGood(DefaultItems.Hides,
+                    new TextObject("{=4kvKQuXM}Hides{@Plural}loads of hide{\\@}"),
+                    "merchandise_hides_b",
+                    DefaultItemCategories.Hides,
+                    35,
+                    10f,
+                    ItemObject.ItemTypeEnum.Goods);
+            }
         }
 
         private static void InitializeTradeGood(ItemObject item, TextObject name, string meshName, ItemCategory category,
