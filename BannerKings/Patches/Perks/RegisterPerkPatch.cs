@@ -293,21 +293,35 @@ namespace BannerKings.Patches
         #endregion
         #region DefaultPerks.Medicine
         public static Dictionary<string, PerkData> MedicinePerksData { get; set; } = new Dictionary<string, PerkData>()
-        {    //Medicine.SelfMedication             
-             {"MedicineSelfMedication",
+        {   //Medicine.SelfMedication             
+            {"MedicineSelfMedication",
             //this._medicineSelfMedication.Initialize("{=TLGvIdJB}Self Medication", DefaultSkills.Medicine, this.GetTierCost(1), this._medicinePreventiveMedicine, "{=bLAw2di4}{VALUE}% healing rate.", SkillEffect.PerkRole.Personal, 0.3f, SkillEffect.EffectIncrementType.AddFactor, "{=V53EYEXx}{VALUE}% combat movement speed.", SkillEffect.PerkRole.Personal, 0.02f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             new PerkData()
             {
-                PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.4f ,EverySkillMain =10 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.Personal,
-                                               AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                               Description1 = "{VALUE} healing rate for every {EVERYSKILLMAIN} medicine point for the hero. (max {MINMAXVALUE})",
-                                               Description2 = "{VALUE} healing rate for every {EVERYSKILLMAIN} medicine point for the hero. (max {MINMAXVALUE})"},
-                SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.005f ,MinBonus=0 ,MaxBonus = 0.1f ,EverySkillMain =20 ,EverySkillSecondary = 20 ,EverySkillOthers = 100 ,SkillScale = SkillScale.Personal,
-                                               AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                               Description1 = "{VALUE} combat movement speed for every {EVERYSKILLMAIN} medicine point for the hero. (max {MINMAXVALUE})",
-                                               Description2 = "{VALUE} combat movement speed for every {EVERYSKILLMAIN} medicine point for the hero. (max {MINMAXVALUE})"}}
+                PrimaryPerk  =  new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.02f ,MinBonus=0 ,MaxBonus = 0.6f ,EverySkillMain =10 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.Personal,
+                                AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
+                                Description1 = "{VALUE} healing rate for every {EVERYSKILLMAIN} medicine point for the hero. (max {MINMAXVALUE})",
+                                Description2 = "{VALUE} healing rate for every {EVERYSKILLMAIN} medicine point for the hero. (max {MINMAXVALUE})"},
+                SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.005f ,MinBonus=0 ,MaxBonus = 0.075f ,EverySkillMain =20 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.Personal,
+                                AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
+                                Description1 = "{VALUE} combat movement speed for every {EVERYSKILLMAIN} medicine point for the hero. (max {MINMAXVALUE})",
+                                Description2 = "{VALUE} combat movement speed for every {EVERYSKILLMAIN} medicine point for the hero. (max {MINMAXVALUE})"}}
             },
+            //Medicine.PreventiveMedicine             
+            {"MedicinePreventiveMedicine",
             //this._medicinePreventiveMedicine.Initialize("{=wI393cla}Preventive Medicine", DefaultSkills.Medicine, this.GetTierCost(1), this._medicineSelfMedication, "{=Ti9auMiO}{VALUE} hit points.", SkillEffect.PerkRole.Personal, 5f, SkillEffect.EffectIncrementType.Add, "{=10cVZTTm}{VALUE}% recovery of lost hit points after each battle.", SkillEffect.PerkRole.Personal, 0.3f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
+            new PerkData()
+            {
+                PrimaryPerk  =  new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 1f ,MinBonus=0 ,MaxBonus = 20f ,EverySkillMain =15 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.Personal,
+                                AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
+                                Description1 = "{VALUE} hit points for the hero for every {EVERYSKILLMAIN} medicine point. (max {MINMAXVALUE})",
+                                Description2 = "{VALUE} hit points for the hero for every {EVERYSKILLMAIN} medicine point. (max {MINMAXVALUE})"},
+                SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.02f ,MinBonus=0 ,MaxBonus = 0.6f ,EverySkillMain =10 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.Personal,
+                                AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
+                                Description1 = "{VALUE} recovery of lost hit points after each battle for every {EVERYSKILLMAIN} medicine point for the hero. (max {MINMAXVALUE})",
+                                Description2 = "{VALUE} recovery of lost hit points after each battle for every {EVERYSKILLMAIN} medicine point for the hero. (max {MINMAXVALUE})"} }
+
+            },
             //this._medicineTriageTent.Initialize("{=EU4JjLqV}Triage Tent", DefaultSkills.Medicine, this.GetTierCost(2), this._medicineWalkItOff, "{=ZMPhsLdx}{VALUE}% healing rate when stationary on the campaign map.", SkillEffect.PerkRole.Surgeon, 0.3f, SkillEffect.EffectIncrementType.AddFactor, "{=Mn714dPH}{VALUE}% food consumption for besieged governed settlement.", SkillEffect.PerkRole.Governor, -0.05f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             //this._medicineWalkItOff.Initialize("{=0pyLfrGZ}Walk It Off", DefaultSkills.Medicine, this.GetTierCost(2), this._medicineTriageTent, "{=NtCBRiLH}{VALUE}% healing rate when moving on the campaign map.", SkillEffect.PerkRole.Surgeon, 0.15f, SkillEffect.EffectIncrementType.AddFactor, "{=4YNqWPEu}{VALUE} hit points recovery after each offensive battle.", SkillEffect.PerkRole.Personal, 10f, SkillEffect.EffectIncrementType.Add, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             //this._medicineSledges.Initialize("{=TyB6y5bh}Sledges", DefaultSkills.Medicine, this.GetTierCost(3), this._medicineDoctorsOath, "{=bFOfZmwC}{VALUE}% party speed penalty from the wounded.", SkillEffect.PerkRole.Surgeon, -0.5f, SkillEffect.EffectIncrementType.AddFactor, "{=dfULyKsz}{VALUE} hit points to mounts in your party.", SkillEffect.PerkRole.PartyLeader, 15f, SkillEffect.EffectIncrementType.Add, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);

@@ -8,6 +8,7 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.Vanilla
@@ -63,6 +64,37 @@ namespace BannerKings.Models.Vanilla
             }
 
             return result;
+        }
+
+        public override int GetBattleEndHealingAmount(MobileParty party, CharacterObject character)
+        {
+            float num = 0f;
+            if (character.IsHero)
+            {
+                Hero heroObject = character.HeroObject;
+                if (heroObject.GetPerkValue(DefaultPerks.Medicine.PreventiveMedicine))
+                {
+                    #region DefaultPerks.Medicine.PreventiveMedicine
+                    if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulMedicinePerks)
+                    {
+                        ExplainedNumber expnum = new ExplainedNumber(heroObject.MaxHitPoints - heroObject.HitPoints);
+                        var healRate= DefaultPerks.Medicine.PreventiveMedicine.AddScaledPersonalPerkBonus(ref expnum, true, heroObject);
+                        num += ((float)(heroObject.MaxHitPoints - heroObject.HitPoints)) * healRate;
+                    }
+                    else
+                    {
+                        num += (float)(heroObject.MaxHitPoints - heroObject.HitPoints) * DefaultPerks.Medicine.PreventiveMedicine.SecondaryBonus;
+                    }
+                    #endregion
+
+                   
+                }
+                if (party.MapEventSide == party.MapEvent.AttackerSide && heroObject.GetPerkValue(DefaultPerks.Medicine.WalkItOff))
+                {
+                    num += DefaultPerks.Medicine.WalkItOff.SecondaryBonus;
+                }
+            }
+            return MathF.Round(num);
         }
     }
 }
