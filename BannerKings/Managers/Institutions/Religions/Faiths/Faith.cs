@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
+using BannerKings.Managers.Institutions.Religions.Doctrines.Marriage;
+using BannerKings.Managers.Institutions.Religions.Doctrines.War;
+using BannerKings.Managers.Institutions.Religions.Faiths.Groups;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -16,8 +19,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
     public abstract class Faith : MBObjectBase
     {
-        protected FaithGroup faithGroup;
-        protected Divinity mainGod;
         protected List<Divinity> pantheon;
         protected Dictionary<int, CharacterObject> presets;
         protected List<Rite> rites;
@@ -36,10 +37,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         public MBReadOnlyList<Rite> Rites => new MBReadOnlyList<Rite>(rites);
         public MBReadOnlyDictionary<TraitObject, bool> Traits => traits.GetReadOnlyDictionary();
-        public FaithGroup FaithGroup => faithGroup;
-        public Divinity MainGod => mainGod;
+        public FaithGroup FaithGroup { get; private set; }
+        public Divinity MainGod { get; private set; }
         public FeastType FeastType { get; private set; }
         public List<Doctrine> Doctrines { get; private set; }
+        public WarDoctrine WarDoctrine { get; private set; }
+        public MarriageDoctrine MarriageDoctrine { get; private set; }  
         public bool Active { get; set; } = true;
         public List<Settlement> HolySites
         {
@@ -55,21 +58,24 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             }
         }
 
-        protected void Initialize(Divinity mainGod, 
+        public void Initialize(Divinity mainGod, 
             Dictionary<TraitObject, bool> traits, 
             FaithGroup faithGroup,
             List<Doctrine> doctrines,
+            MarriageDoctrine marriageDoctrine,
+            WarDoctrine warDoctrine,
             List<Rite> rites = null,
             FeastType feastType = FeastType.None)
         {
-            this.mainGod = mainGod;
+            MainGod = mainGod;
             this.traits = traits;
-            this.faithGroup = faithGroup;
+            FaithGroup = faithGroup;
             rites ??= new List<Rite>();
-
             this.rites = rites;
             Doctrines = doctrines;
             FeastType = feastType;
+            MarriageDoctrine = marriageDoctrine;
+            WarDoctrine = warDoctrine;
         }
 
         public FaithStance GetStance(Faith otherFaith)
@@ -89,7 +95,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 return stances[otherFaith];
             }
 
-            if (faithGroup == otherFaith.faithGroup)
+            if (FaithGroup == otherFaith.FaithGroup)
             {
                 return FaithStance.Tolerated;
             }
@@ -147,7 +153,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract bool IsHeroNaturalFaith(Hero hero);
         public abstract TextObject GetFaithName();
         public abstract TextObject GetFaithDescription();
-        public Divinity GetMainDivinity() => mainGod;
+        public Divinity GetMainDivinity() => MainGod;
         public MBReadOnlyList<Divinity> GetSecondaryDivinities() => new MBReadOnlyList<Divinity>(pantheon);
         public abstract TextObject GetCultsDescription();
         public abstract int GetMaxClergyRank();

@@ -27,7 +27,8 @@ namespace BannerKings.Managers.Goals
                 yield return FoundKingdomGoal;
                 yield return CalradicEmpireGoal;
                 yield return RelocateCourtGoal;
-                yield return SentenceCriminal;              
+                yield return SentenceCriminal;
+                yield return FaithLeaderDecision;
                 foreach (Goal item in ModAdditions)
                 {
                     yield return item;
@@ -35,6 +36,7 @@ namespace BannerKings.Managers.Goals
             }
         }
 
+        public Goal FaithLeaderDecision { get; } = new FaithLeaderDecision();
         public Goal LevyDuty { get; } = new LevyDuty();
         internal Goal AssumeCulture { get; private set; }
         internal Goal CalradicEmpireGoal { get; private set; }

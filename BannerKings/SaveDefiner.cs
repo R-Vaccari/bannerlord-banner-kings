@@ -64,6 +64,7 @@ using BannerKings.Managers.Goals;
 using BannerKings.Behaviours.Shipping;
 using BannerKings.Campaign;
 using BannerKings.Behaviours.Relations;
+using BannerKings.Managers.Institutions.Religions.Faiths.Groups;
 
 namespace BannerKings
 {
@@ -142,9 +143,11 @@ namespace BannerKings
             AddClassDefinition(typeof(AseraFaith), 76);
             AddClassDefinition(typeof(AmraFaith), 77);
             AddClassDefinition(typeof(DarusosianFaith), 78);
+            AddClassDefinition(typeof(FaithGroup), 79);
+            AddClassDefinition(typeof(AppointedGroup), 80);
+            AddClassDefinition(typeof(LandedPreacherGroup), 81);
+            AddClassDefinition(typeof(DisorganizedGroup), 82);
 
-
-            AddClassDefinition(typeof(CanticlesFaith), 86);
             AddEnumDefinition(typeof(RiteType), 87);
             AddClassDefinition(typeof(EducationData), 88);
             AddClassDefinition(typeof(BookType), 89);

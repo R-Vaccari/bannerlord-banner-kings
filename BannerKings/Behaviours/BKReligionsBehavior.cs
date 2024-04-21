@@ -12,7 +12,6 @@ using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Traits;
 using HarmonyLib;
-using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
@@ -263,9 +262,8 @@ namespace BannerKings.Behaviours
             else if (count == 1)
             {
                 var hero = settlement.Notables.First(x => x.IsPreacher);
-                BannerKingsConfig.Instance.ReligionsManager.AddClergyman(religion, hero, settlement);
+                religion.AddClergyman(settlement, hero);
             }
-
 
             if (toRemove.Count > 0)
             {
@@ -545,6 +543,7 @@ namespace BannerKings.Behaviours
         {
             foreach (var religion in ReligionsManager.GetReligions())
             {
+                religion.Faith.FaithGroup.EvaluateMakeNewLeader(religion);
                 foreach (var hero in ReligionsManager.GetFaithfulHeroes(religion))
                 {
                     ReligionsManager.AddPiety(religion, hero, BannerKingsConfig.Instance.ReligionModel.CalculatePietyChange(hero).ResultNumber);

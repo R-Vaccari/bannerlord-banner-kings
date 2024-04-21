@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BannerKings.Managers.Institutions.Religions.Faiths.Groups;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
