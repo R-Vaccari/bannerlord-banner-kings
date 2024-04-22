@@ -1,10 +1,12 @@
-﻿using BannerKings.Patches;
+﻿using BannerKings.Managers.Court.Members;
+using BannerKings.Patches;
 using BannerKings.Settings;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Numerics;
+using System.Xml.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Party;
@@ -12,6 +14,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using static TaleWorlds.CampaignSystem.SkillEffect;
 
 namespace BannerKings.Utils
 {
@@ -38,21 +41,38 @@ namespace BannerKings.Utils
                 var data = isSecondary ? PerksAndSkillsPatches.AllPerksData[perk.StringId].SecondaryPerk : PerksAndSkillsPatches.AllPerksData[perk.StringId].PrimaryPerk;
                 if (data != null)
                 {
-                    return AddScaledGovernerPerkBonusForTownWithTownHeros(perk, ref bonuses, isSecondary, town, data.ScaleOnSkill, data.EverySkillMain, data.EverySkillSecondary, data.EverySkillOthers, data.StartSkillLevel, data.MinBonus, data.MaxBonus, factor);
+                    return AddScaledGovernerPerkBonusForTownWithTownHeros(perk, ref bonuses, isSecondary, town, data.ScaleOnSkill, data.EverySkillMain, data.EverySkillSecondary, data.EverySkillOthers, data.StartSkillLevel, data.CourtRoyalPosition, data.CourtPosition, data.EverySkillRoyalCourtMember, data.EverySkillCourtMember, data.MinBonus, data.MaxBonus, factor);
                 }
             }
             return 0;
         }
         public static float AddScaledPartyPerkBonus(this PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary,
                                                MobileParty mobileParty, float? factor = null,
-                                               TextObject nameOverride = null)
+                                               TextObject nameOverride = null,
+                                                        bool removeOriginalValue = false)
         {
             if (perk != null && PerksAndSkillsPatches.AllPerksData.ContainsKey(perk.StringId))
             {
                 var data = isSecondary ? PerksAndSkillsPatches.AllPerksData[perk.StringId].SecondaryPerk : PerksAndSkillsPatches.AllPerksData[perk.StringId].PrimaryPerk;
                 if (data != null)
                 {
-                    return AddScaledPartyPerkBonus(perk, ref bonuses, isSecondary, mobileParty, data.ScaleOnSkill, data.StartSkillLevel, data.EverySkillMain, data.EverySkillSecondary, data.EverySkillOthers, data.SkillScale, data.MinBonus, data.MaxBonus, nameOverride, factor);
+                    if (removeOriginalValue)
+                    {
+                        var hero = GetPartySpecializedRole(mobileParty, isSecondary ? perk.SecondaryRole : perk.PrimaryRole) ?? mobileParty.LeaderHero;
+                        if (hero != null && hero.GetPerkValue(perk))
+                        {
+                            if (isSecondary)
+                            {
+                                AddToStat(ref bonuses, perk.SecondaryIncrementType, -perk.SecondaryBonus, perk.Name);
+                            }
+                            else
+                            {
+                                AddToStat(ref bonuses, perk.PrimaryIncrementType, -perk.PrimaryBonus, perk.Name);
+                            }
+                        }
+
+                    }
+                    return AddScaledPartyPerkBonus(perk, ref bonuses, isSecondary, mobileParty, data.ScaleOnSkill, data.StartSkillLevel, data.EverySkillMain, data.EverySkillSecondary, data.EverySkillOthers, data.SkillScale, data.CourtRoyalPosition, data.CourtPosition, data.EverySkillRoyalCourtMember, data.EverySkillCourtMember, data.MinBonus, data.MaxBonus, nameOverride, factor);
                 }
             }
             return 0;
@@ -62,16 +82,16 @@ namespace BannerKings.Utils
                                                       TextObject nameOverride = null)
         {
             if (perk != null && PerksAndSkillsPatches.AllPerksData.ContainsKey(perk.StringId))
-                {
+            {
                 var data = isSecondary ? PerksAndSkillsPatches.AllPerksData[perk.StringId].SecondaryPerk : PerksAndSkillsPatches.AllPerksData[perk.StringId].PrimaryPerk;
                 if (data != null)
                 {
-                    return AddScaledPersonalPerkBonus(perk, ref bonuses, isSecondary, hero, data.ScaleOnSkill, data.StartSkillLevel, data.EverySkillMain,   data.MinBonus, data.MaxBonus, nameOverride, factor);
+                    return AddScaledPersonalPerkBonus(perk, ref bonuses, isSecondary, hero, data.ScaleOnSkill, data.StartSkillLevel, data.EverySkillMain, data.MinBonus, data.MaxBonus, nameOverride, factor);
                 }
             }
             return 0;
         }
-        public static float AddScaledPersonlOrClanLeaderPerkBonusWithClanAndFamilyMembers(this PerkObject perk,
+        public static float AddScaledClanLeaderPerkBonusWithClanAndFamilyMembers(this PerkObject perk,
                                                                                           ref ExplainedNumber bonuses,
                                                                                           bool isSecondary, Hero person,
                                                                                           float? factor = null)
@@ -81,13 +101,13 @@ namespace BannerKings.Utils
                 var data = isSecondary ? PerksAndSkillsPatches.AllPerksData[perk.StringId].SecondaryPerk : PerksAndSkillsPatches.AllPerksData[perk.StringId].PrimaryPerk;
                 if (data != null)
                 {
-                    return AddScaledPersonlOrClanLeaderPerkBonusWithClanAndFamilyMembers(perk, ref bonuses, isSecondary, person, data.ScaleOnSkill, data.EverySkillMain, data.EverySkillSecondary, data.EverySkillOthers, data.SkillScale, data.StartSkillLevel, data.MinBonus, data.MaxBonus, factor);
+                    return AddScaledClanLeaderPerkBonusWithClanAndFamilyMembers(perk, ref bonuses, isSecondary, person, data.ScaleOnSkill, data.EverySkillMain, data.EverySkillSecondary, data.EverySkillOthers, data.SkillScale, data.StartSkillLevel, data.CourtRoyalPosition, data.CourtPosition, data.EverySkillRoyalCourtMember, data.EverySkillCourtMember, data.MinBonus, data.MaxBonus, factor);
                 }
             }
             return 0;
         }
 
-        static float AddScaledGovernerPerkBonusForTownWithTownHeros(PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, Town town, SkillObject scaleSkill, float everySkillGoverner, float everySkillOwner, float everySkillMember, int startAtSkill, float? minValue = null, float? maxValue = null, float? factor = null)
+        static float AddScaledGovernerPerkBonusForTownWithTownHeros(PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, Town town, SkillObject scaleSkill, float everySkillGoverner, float everySkillOwner, float everySkillMember, int startAtSkill, string royalCourtPosition, string courtPosition, float royalCourtEverySkill, float courtEverySkill, float? minValue = null, float? maxValue = null, float? factor = null)
         {
             float value = 0;
             if (!(perk.PrimaryRole == SkillEffect.PerkRole.Governor || perk.SecondaryRole == SkillEffect.PerkRole.Governor))
@@ -97,7 +117,8 @@ namespace BannerKings.Utils
             var bonus = isSecondary ? perk.SecondaryBonus : perk.PrimaryBonus;
             value += GetGovernorPerkBonus(perk, town, scaleSkill, everySkillGoverner, bonus, startAtSkill);
             value += GetOwnerClanPerkBonus(perk, town, scaleSkill, everySkillGoverner, everySkillOwner, bonus, startAtSkill);
-            value += GetGarrisonHerosPerkBonus(perk, perk.SecondaryRole == SkillEffect.PerkRole.Governor, town, scaleSkill, everySkillMember, startAtSkill);
+            value += GetGarrisonHerosPerkBonus(perk, isSecondary, town, scaleSkill, everySkillMember, startAtSkill);
+            value += GetCourtMembersPerkBonus(perk, isSecondary, town.OwnerClan, scaleSkill, royalCourtPosition, courtPosition, royalCourtEverySkill, courtEverySkill, startAtSkill);
             if (factor.HasValue)
             {
                 value = value * factor.Value;
@@ -117,7 +138,7 @@ namespace BannerKings.Utils
             }
             return AddBonusToStat(perk, ref bonuses, isSecondary, minValue, maxValue, ref value, name);
         }
-        static float AddScaledPartyPerkBonus(PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, MobileParty mobileParty, SkillObject scaleSkill, int startAtSkill, float everySkillLeader, float everySkillPartySpecializedRole, float everySkillMember, SkillScale skillScale, float? minValue = null, float? maxValue = null, TextObject name = null, float? factor = null)
+        static float AddScaledPartyPerkBonus(PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, MobileParty mobileParty, SkillObject scaleSkill, int startAtSkill, float everySkillLeader, float everySkillPartySpecializedRole, float everySkillMember, SkillScale skillScale, string royalCourtPosition, string courtPosition, float royalCourtEverySkill, float courtEverySkill, float? minValue = null, float? maxValue = null, TextObject name = null, float? factor = null)
         {
             var value = 0f;
             var perkbouns = isSecondary ? perk.SecondaryBonus : perk.PrimaryBonus;
@@ -188,6 +209,7 @@ namespace BannerKings.Utils
             }
 
             value += GetPartyHerosPerkBonus(perk, isSecondary, mobileParty, scaleSkill, everySkillMember, chosenHero, startAtSkill);
+            value += GetCourtMembersPerkBonus(perk, isSecondary, mobileParty?.ActualClan, scaleSkill, royalCourtPosition, courtPosition, royalCourtEverySkill, courtEverySkill, startAtSkill);
             if (factor.HasValue)
             {
                 value = value * factor.Value;
@@ -207,13 +229,15 @@ namespace BannerKings.Utils
                     return mobileParty.EffectiveScout;
                 case SkillEffect.PerkRole.Quartermaster:
                     return mobileParty.EffectiveQuartermaster;
+                case SkillEffect.PerkRole.PartyLeader:
+                    return mobileParty.LeaderHero;
                 default:
                     break;
             }
             return null;
         }
 
-        static float AddScaledPersonlOrClanLeaderPerkBonusWithClanAndFamilyMembers(PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, Hero person, SkillObject scaleSkill, float everySkillPerson, float everySkillFamilyMembers, float everySkillClanMembers, SkillScale skillScale, int startAtSkill, float? minValue = null, float? maxValue = null, float? factor = null)
+        static float AddScaledClanLeaderPerkBonusWithClanAndFamilyMembers(PerkObject perk, ref ExplainedNumber bonuses, bool isSecondary, Hero person, SkillObject scaleSkill, float everySkillClanLeader, float everySkillFamilyMembers, float everySkillClanMembers, SkillScale skillScale, int startAtSkill, string royalCourtPosition, string courtPosition, float royalCourtEverySkill, float courtEverySkill, float? minValue = null, float? maxValue = null, float? factor = null)
         {
             if (person == null)
             {
@@ -223,12 +247,12 @@ namespace BannerKings.Utils
             var perkbouns = isSecondary ? perk.SecondaryBonus : perk.PrimaryBonus;
 
             value += GetFamilyMembersPerkBonus(perk, isSecondary, person, scaleSkill, everySkillFamilyMembers, startAtSkill);
-
             value += GetOtherClanMembersPerkBonus(perk, isSecondary, person, scaleSkill, everySkillClanMembers, startAtSkill);
+            value += GetCourtMembersPerkBonus(perk, isSecondary, person.Clan, scaleSkill, royalCourtPosition, courtPosition, royalCourtEverySkill, courtEverySkill, startAtSkill);
 
-            if (everySkillPerson > 0 && person.GetPerkValue(perk))
+            if (everySkillClanLeader > 0 && person.GetPerkValue(perk))
             {
-                value += perkbouns * MathF.Max(0, person.GetSkillValue(scaleSkill) - startAtSkill) / everySkillPerson;
+                value += perkbouns * MathF.Max(0, person.GetSkillValue(scaleSkill) - startAtSkill) / everySkillClanLeader;
             }
             if (factor.HasValue)
             {
@@ -298,6 +322,39 @@ namespace BannerKings.Utils
                 var mobilePartyHeros = mobileParty.GetAllPartyHeros();
                 var partyHeros = mobilePartyHeros.Where(d => (d.HeroObject?.IsActive ?? false) && d.GetPerkValue(perk) && d.HeroObject != choosenHero);
                 value += partyHeros.Sum(d => (isSecondary ? perk.SecondaryBonus : perk.PrimaryBonus) * (MathF.Max(0, d.GetSkillValue(scaleSkill) - startAtSkill) / everySkillMember));
+            }
+            return value;
+        }
+        private static float GetCourtMembersPerkBonus(PerkObject perk, bool isSecondary, Clan clan, SkillObject scaleSkill, string royalCourtPositionId, string courtPositionId, float royalCourtEverySkill, float courtEverySkill, int startAtSkill)
+        {
+            if (clan == null)
+                return 0;
+            float value = 0;
+            if (!string.IsNullOrEmpty(courtPositionId) && courtEverySkill > 0)
+            {
+                var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+                var courtPosition = DefaultCouncilPositions.Instance.GetById(courtPositionId);
+                if (courtPosition != null)
+                {
+                    var courtMember = council.GetCouncilPosition(courtPosition);
+                    if (courtMember != null && courtMember.Member != null && courtMember.Member.GetPerkValue(perk))
+                    {
+                        value += (isSecondary ? perk.SecondaryBonus : perk.PrimaryBonus) * (MathF.Max(0, courtMember.Member.GetSkillValue(scaleSkill) - startAtSkill) / courtEverySkill);
+                    }
+                }
+            }
+            if (clan.Kingdom != null && clan.Kingdom.RulingClan != null && !string.IsNullOrEmpty(royalCourtPositionId) && royalCourtEverySkill > 0)
+            {
+                var royalCouncil = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan.Kingdom.RulingClan);
+                var royalCourtPosition = DefaultCouncilPositions.Instance.GetById(royalCourtPositionId);
+                if (royalCourtPosition != null)
+                {
+                    var royalCourtMember = royalCouncil.GetCouncilPosition(royalCourtPosition);
+                    if (royalCourtMember != null && royalCourtMember.Member != null && royalCourtMember.Member.GetPerkValue(perk))
+                    {
+                        value += (isSecondary ? perk.SecondaryBonus : perk.PrimaryBonus) * (MathF.Max(0, royalCourtMember.Member.GetSkillValue(scaleSkill) - startAtSkill) / courtEverySkill);
+                    }
+                }
             }
             return value;
         }

@@ -9,7 +9,7 @@ namespace BannerKings.Patches.Perks
     {
         public PerkSubData PrimaryPerk { get; set; }
         public PerkSubData SecondaryPerk { get; set; }
-       
+
         private static void ChangePerkRole(PerkObject perk, SkillEffect.PerkRole newRole, bool isSecondary = false)
         {
             if (perk != null)
@@ -31,14 +31,9 @@ namespace BannerKings.Patches.Perks
                 if (SecondaryPerk != null)
                 {
                     perk.SetPrivatePropertyValue("SecondaryBonus", SecondaryPerk.BonusEverySkill);
-                    if (BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
-                    {
-                        perk.SetPrivatePropertyValue("SecondaryDescription", SecondaryPerk.GetFormattedDescription1(perk.SecondaryIncrementType));
-                    }
-                    else
-                    {
-                        perk.SetPrivatePropertyValue("SecondaryDescription", SecondaryPerk.GetFormattedDescription2(perk.SecondaryIncrementType));
-                    }                    
+
+                    perk.SetPrivatePropertyValue("SecondaryDescription", SecondaryPerk.GetFormattedDescription(perk.SecondaryIncrementType));
+
                     if (SecondaryPerk.Role.HasValue)
                     {
                         ChangePerkRole(perk, SecondaryPerk.Role.Value, true);
@@ -47,14 +42,9 @@ namespace BannerKings.Patches.Perks
                 if (PrimaryPerk != null)
                 {
                     perk.SetPrivatePropertyValue("PrimaryBonus", PrimaryPerk.BonusEverySkill);
-                    if (BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
-                    {
-                        perk.SetPrivatePropertyValue("PrimaryDescription", PrimaryPerk.GetFormattedDescription1(perk.PrimaryIncrementType));
-                    }
-                    else
-                    {
-                        perk.SetPrivatePropertyValue("PrimaryDescription", PrimaryPerk.GetFormattedDescription2(perk.PrimaryIncrementType));
-                    }
+
+                    perk.SetPrivatePropertyValue("PrimaryDescription", PrimaryPerk.GetFormattedDescription(perk.PrimaryIncrementType));
+
                     if (PrimaryPerk.Role.HasValue)
                     {
                         ChangePerkRole(perk, PrimaryPerk.Role.Value, false);

@@ -31,26 +31,25 @@ namespace BannerKings.Models.Vanilla
             #region Steward.PaidInPromise
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                if (clan?.Leader != null)
+
+                var min = -0.4f;
+
+                var totalbouns = DefaultPerks.Steward.PaidInPromise.AddScaledClanLeaderPerkBonusWithClanAndFamilyMembers(ref paidInPromiseExplainedNumber, false, clan.Leader);
+                if (heroObject.GetPerkValue(DefaultPerks.Steward.PaidInPromise))
                 {
-                    var min = -0.4f;
+                    var bounsFactor = DefaultPerks.Steward.PaidInPromise.PrimaryBonus * (heroObject.GetSkillValue(DefaultSkills.Steward) / 30);
 
-                    var totalbouns = DefaultPerks.Steward.PaidInPromise.AddScaledPersonlOrClanLeaderPerkBonusWithClanAndFamilyMembers(ref paidInPromiseExplainedNumber, false, clan.Leader);
-                    if (heroObject.GetPerkValue(DefaultPerks.Steward.PaidInPromise))
+                    if (totalbouns + bounsFactor < min)
                     {
-                        var bounsFactor = DefaultPerks.Steward.PaidInPromise.PrimaryBonus * (heroObject.GetSkillValue(DefaultSkills.Steward) / 30);
-
-                        if (totalbouns + bounsFactor < min)
-                        {
-                            paidInPromiseExplainedNumber.AddFactor(-0.4f - totalbouns, DefaultPerks.Steward.PaidInPromise.Name);
-                        }
-                        else
-                        {
-                            paidInPromiseExplainedNumber.AddFactor(bounsFactor, DefaultPerks.Steward.PaidInPromise.Name);
-                        }
+                        paidInPromiseExplainedNumber.AddFactor(-0.4f - totalbouns, DefaultPerks.Steward.PaidInPromise.Name);
                     }
-                    return MathF.Round(paidInPromiseExplainedNumber.ResultNumber);
+                    else
+                    {
+                        paidInPromiseExplainedNumber.AddFactor(bounsFactor, DefaultPerks.Steward.PaidInPromise.Name);
+                    }
                 }
+                return MathF.Round(paidInPromiseExplainedNumber.ResultNumber);
+
             }
             else
             {
@@ -470,11 +469,8 @@ namespace BannerKings.Models.Vanilla
             #region Steward.Frugal
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks && buyerHero != null && buyerHero.IsPartyLeader)
             {
-                if (buyerHero.GetPerkValue(DefaultPerks.Steward.Frugal))
-                {
-                    result.AddFactor(-DefaultPerks.Steward.Frugal.SecondaryBonus, null);
-                }
-                DefaultPerks.Steward.Frugal.AddScaledPartyPerkBonus(ref result, true, buyerHero.PartyBelongedTo);
+
+                DefaultPerks.Steward.Frugal.AddScaledPartyPerkBonus(ref result, true, buyerHero.PartyBelongedTo, removeOriginalValue: true);
             }
 
             #endregion

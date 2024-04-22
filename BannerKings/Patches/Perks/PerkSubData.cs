@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Managers.Court.Members;
+using BannerKings.Settings;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -18,11 +20,22 @@ namespace BannerKings.Patches.Perks
         public SkillObject ScaleOnSkill { get; set; }
         public float EverySkillMain { get; set; } = 0;
         public float EverySkillSecondary { get; set; } = 0;
+
+        public float EverySkillCourtMember { get; set; } = 0;
+        public string CourtPosition { get; set; } = "";
+
+        public float EverySkillRoyalCourtMember { get; set; } = 0;
+        public string CourtRoyalPosition { get; set; } = "";
+
         public float EverySkillOthers { get; set; } = 0;
         public SkillScale SkillScale { get; set; } = SkillScale.None;
 
-        public string Description1 { get; set; }
-        public string Description2 { get; set; }
+        public string DescriptionMain { get; set; }
+        public string DescriptionSecondary { get; set; }
+        public string DescriptionCourt { get; set; }
+        public string DescriptionRoylCourt { get; set; }
+        public string DescriptionOthers { get; set; }
+        public string DescriptionMax { get; set; } = " (total max {MINMAXVALUE})";
 
         public SkillEffect.PerkRole? Role { get; set; }
 
@@ -30,14 +43,42 @@ namespace BannerKings.Patches.Perks
 
 
 
-        public TextObject GetFormattedDescription1(SkillEffect.EffectIncrementType incrementType)
+        public TextObject GetFormattedDescription(SkillEffect.EffectIncrementType incrementType)
         {
-            return GetFormattedDesc(Description1, incrementType);
+            var desc = "";
+            if (!string.IsNullOrWhiteSpace(DescriptionMain))
+            {
+                desc += GetFormattedDesc(DescriptionMain, incrementType);
+            }
+            if (!string.IsNullOrWhiteSpace(DescriptionSecondary)&& BannerKingsSettings.Instance.EnableUsefulGovernorPerksFromSettlementOwner)
+            {
+                desc += ",\n";
+                desc += GetFormattedDesc(DescriptionSecondary, incrementType);
+            }
+            if (!string.IsNullOrWhiteSpace(DescriptionRoylCourt))
+            {
+                desc += ",\n";
+                desc += GetFormattedDesc(DescriptionRoylCourt, incrementType);
+            }
+            if (!string.IsNullOrWhiteSpace(DescriptionCourt))
+            {
+                desc += ",\n";
+                desc += GetFormattedDesc(DescriptionCourt, incrementType);
+            }
+            if (!string.IsNullOrWhiteSpace(DescriptionOthers)&& BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            {
+                desc += ",\n";
+                desc += GetFormattedDesc(DescriptionOthers, incrementType);
+            }
+
+            desc += ".";
+            if (!string.IsNullOrWhiteSpace(DescriptionMax))
+            {
+                desc += GetFormattedDesc(DescriptionMax, incrementType);
+            }
+            return new TextObject(desc);
         }
-        public TextObject GetFormattedDescription2(SkillEffect.EffectIncrementType incrementType)
-        {
-            return GetFormattedDesc(Description1, incrementType);
-        }
+
         private TextObject GetFormattedDesc(string desc, SkillEffect.EffectIncrementType incrementType)
         {
             TextObject textObject = new TextObject(desc);
@@ -57,7 +98,11 @@ namespace BannerKings.Patches.Perks
             description.SetTextVariable("MINVALUE", text);
             text = GetFormattedValueText(MinBonus == 0 ? MaxBonus : MinBonus, effectIncrementType);
             description.SetTextVariable("MINMAXVALUE", text);
-            if (EverySkillMain>1)
+            text = DefaultCouncilPositions.Instance.GetPositionName(CourtPosition, false).ToString();
+            description.SetTextVariable("COURTPOSITION", text.ToLower());
+            text = DefaultCouncilPositions.Instance.GetPositionName(CourtPosition, true).ToString();
+            description.SetTextVariable("ROYALCOURTPOSITION", text.ToLower());
+            if (EverySkillMain > 1)
             {
                 description.SetTextVariable("EVERYSKILLMAIN", EverySkillMain);
             }
@@ -76,11 +121,19 @@ namespace BannerKings.Patches.Perks
             if (EverySkillOthers > 1)
             {
                 description.SetTextVariable("EVERYSKILLOTHERS", EverySkillOthers);
-            }else
+            }
+            else
             {
                 description.SetTextVariable("EVERYSKILLOTHERS", "");
             }
-           
+            if (EverySkillCourtMember > 1)
+            {
+                description.SetTextVariable("EVERYSKILLCOURTMEMBER", EverySkillCourtMember);
+            }
+            else
+            {
+                description.SetTextVariable("EVERYSKILLCOURTMEMBER", "");
+            }
             description.SetTextVariable("STARTSKILLLEVEL", StartSkillLevel);
         }
 

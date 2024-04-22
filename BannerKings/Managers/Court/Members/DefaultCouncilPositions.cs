@@ -5,36 +5,232 @@ using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Managers.Traits;
 using BannerKings.Utils.Extensions;
+using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using static TaleWorlds.CampaignSystem.CampaignBehaviors.LordConversationsCampaignBehavior;
 
 namespace BannerKings.Managers.Court.Members
 {
+
     public class DefaultCouncilPositions : DefaultTypeInitializer<DefaultCouncilPositions, CouncilMember>
     {
-        public CouncilMember Marshal { get; set; } = new CouncilMember("Marshall");
-        public CouncilMember Steward { get; set; } = new CouncilMember("Steward");
-        public CouncilMember Chancellor { get; set; } = new CouncilMember("Chancellor");
-        public CouncilMember Spiritual { get; set; } = new CouncilMember("Spiritual");
-        public CouncilMember Spymaster { get; set; } = new CouncilMember("Spymaster");
-        public CouncilMember Philosopher { get; set; } = new CouncilMember("Philosopher");
-        public CouncilMember Castellan { get; set; } = new CouncilMember("Castellan");
-        public CouncilMember Constable { get; set; } = new CouncilMember("Constable");
-        public CouncilMember CourtPhysician { get; set; } = new CouncilMember("CourtPhysician");
-        public CouncilMember CourtSmith { get; set; } = new CouncilMember("CourtSmith");
-        public CouncilMember CourtMusician { get; set; } = new CouncilMember("CourtMusician");
-        public CouncilMember Antiquarian { get; set; } = new CouncilMember("Antiquarian");
-        public CouncilMember Elder { get; set; } = new CouncilMember("Elder");
-        public CouncilMember Spouse { get; set; } = new CouncilMember("Spouse");
-        public CouncilMember LegionCommander1 { get; set; } = new CouncilMember("LegionCommander1");
-        public CouncilMember LegionCommander2 { get; set; } = new CouncilMember("LegionCommander2");
-        public CouncilMember LegionCommander3 { get; set; } = new CouncilMember("LegionCommander3");
-        public CouncilMember LegionCommander4 { get; set; } = new CouncilMember("LegionCommander4");
-        public CouncilMember LegionCommander5 { get; set; } = new CouncilMember("LegionCommander5");
+        public const string MARSHL = "Marshall";
+        public const string STEWARD = "Steward";
+        public const string CHANCELLOR = "Chancellor";
+        public const string SPIRITUAL = "Spiritual";
+        public const string SPYMASTER = "Spymaster";
+        public const string PHILOSOPHER = "Philosopher";
+        public const string CASTELLAN = "Castellan";
+        public const string CONSTABLE = "Constable";
+        public const string COURT_PHYSICIAN = "CourtPhysician";
+        public const string COURT_SMITH = "CourtSmith";
+        public const string COURT_MUSICIAN = "CourtMusician";
+        public const string ANTIQUARIAN = "Antiquarian";
+        public const string ELDER = "Elder";
+        public const string SPOUSE = "Spouse";
+        public const string LEGION_COMMANDER1 = "LegionCommander1";
+        public const string LEGION_COMMANDER2 = "LegionCommander2";
+        public const string LEGION_COMMANDER3 = "LegionCommander3";
+        public const string LEGION_COMMANDER4 = "LegionCommander4";
+        public const string LEGION_COMMANDER5 = "LegionCommander5";
 
+        public CouncilMember Marshal { get; set; } = new CouncilMember(MARSHL);
+        public CouncilMember Steward { get; set; } = new CouncilMember(STEWARD);
+        public CouncilMember Chancellor { get; set; } = new CouncilMember(CHANCELLOR);
+        public CouncilMember Spiritual { get; set; } = new CouncilMember(SPIRITUAL);
+        public CouncilMember Spymaster { get; set; } = new CouncilMember(SPYMASTER);
+        public CouncilMember Philosopher { get; set; } = new CouncilMember(PHILOSOPHER);
+        public CouncilMember Castellan { get; set; } = new CouncilMember(CASTELLAN);
+        public CouncilMember Constable { get; set; } = new CouncilMember(CONSTABLE);
+        public CouncilMember CourtPhysician { get; set; } = new CouncilMember(COURT_PHYSICIAN);
+        public CouncilMember CourtSmith { get; set; } = new CouncilMember(COURT_SMITH);
+        public CouncilMember CourtMusician { get; set; } = new CouncilMember(COURT_MUSICIAN);
+        public CouncilMember Antiquarian { get; set; } = new CouncilMember(ANTIQUARIAN);
+        public CouncilMember Elder { get; set; } = new CouncilMember(ELDER);
+        public CouncilMember Spouse { get; set; } = new CouncilMember(SPOUSE);
+        public CouncilMember LegionCommander1 { get; set; } = new CouncilMember(LEGION_COMMANDER1);
+        public CouncilMember LegionCommander2 { get; set; } = new CouncilMember(LEGION_COMMANDER2);
+        public CouncilMember LegionCommander3 { get; set; } = new CouncilMember(LEGION_COMMANDER3);
+        public CouncilMember LegionCommander4 { get; set; } = new CouncilMember(LEGION_COMMANDER4);
+        public CouncilMember LegionCommander5 { get; set; } = new CouncilMember(LEGION_COMMANDER5);
+
+
+        Dictionary<string, Func<string, bool, TextObject>> getCulturalNameFuncs = new Dictionary<string, Func<string, bool, TextObject>>()
+        {
+            {MARSHL , (string cultureStringId,bool isRoyal) =>
+                {
+                    if (isRoyal)
+                    {
+                        if (cultureStringId == "battania") return new TextObject("{=iTWqZLM4}Ard Marasgal");
+                        if (cultureStringId == "empire") return new TextObject("{=MqHWpT0K}Magister Domesticus");
+                        if (cultureStringId == "khuzait") return new TextObject("{=Qtt0vXAT}Tumetu-iin Noyan");
+
+                        return new TextObject("{=7TxiJwdM}Grand Marshal");
+                    }
+
+                    if (cultureStringId == "battania") return new TextObject("{=2SU2KRvB}Marasgal");
+                    if (cultureStringId == "khuzait") return new TextObject("{=hfqCCmZi}Jagutu-iin Darga");
+                    if (cultureStringId == "empire") return new TextObject("{=Qk2mgePL}Domesticus");
+
+                    return new TextObject("{=SCsGXova}Marshal");
+                }
+            },
+            {STEWARD , (string cultureStringId,bool isRoyal) =>
+                {
+                     var id = cultureStringId;
+                    if (isRoyal)
+                    {
+                        if (id == "battania") return new TextObject("{=M6eW9798}Ard Sheumarlan");
+                        if (id == "empire") return new TextObject("{=8sSPs8QV}Magister Sacrarum Largitionum");
+
+                        return new TextObject("{=3OSi32pX}High Steward");
+                    }
+
+                    if (id == "battania") return new TextObject("{=DJkHjoo4}Sheumarlan");
+                    if (id == "empire") return new TextObject("{=uP0GHCjS}Praefectus Largitionum");
+
+                    return new TextObject("{=k4oyM9dT}Steward");
+
+                }
+            },
+            {CHANCELLOR, (string cultureStringId,bool isRoyal) =>
+            {
+                    var id = cultureStringId;
+                    if (isRoyal)
+                    {
+                        if (id == "battania") return new TextObject("{=wWNKVNgU}Ard Seansalair");
+                        if (id == "empire") return new TextObject("{=RHT0X2ZU}Magister Cancellarius");
+
+                        return new TextObject("{=EYfcHKO1}High Chancellor");
+                    }
+
+                    if (id == "battania") return new TextObject("{=pA79P1LE}Seansalair");
+                    if (id == "empire") return new TextObject("{=qRVOadig}Cancellarius");
+
+                    return new TextObject("{=tgz9ut5s}Chancellor");
+                }
+            },
+            {SPYMASTER,(string cultureStringId,bool isRoyal) =>
+                {
+                    var id = cultureStringId;
+                    if (isRoyal)
+                    {
+                        if (id == "battania") return new TextObject("{=fTuydBMn}Ard Treòraiche");
+                        if (id == "empire") return new TextObject("{=HWfVPgFa}Magister Officiorum");
+                        if (id == "khuzait") return new TextObject("{=7PLFhL3m}Cherbi");
+
+                        return new TextObject("{=08umUPH5}Grand Spymaster");
+                    }
+
+                    if (id == "battania") return new TextObject("{=FQe5GXkp}Treòraiche");
+                    if (id == "khuzait") return new TextObject("{=FsFE8NSM}Khevtuul");
+                    if (id == "empire") return new TextObject("{=bZCeizLU}Custodis");
+
+                    return new TextObject("{=ZJ8eRkS2}Spymaster");
+                }
+            },
+            {SPIRITUAL, (string cultureStringId,bool isRoyal) =>
+            {
+                    var id = cultureStringId;
+                    if (isRoyal)
+                    {
+                        if (id == "battania") return new TextObject("{=PkQ9BKTk}Ard Draoidh");
+                        if (id == "sturgia") return new TextObject("{=ogAzFznn}Volkhvs");
+                        if (id == "aserai") return new TextObject("{=!Murshid");
+
+                        return new TextObject("{=rhL4NnWR}High Seneschal");
+                    }
+
+                    if (id == "battania") return new TextObject("{=ELf8YFXe}Draoidh");
+                    if (id == "sturgia") return new TextObject("{=ogAzFznn}Volkhvs");
+                    if (id == "aserai") return new TextObject("Murshid");
+
+                    return new TextObject("{=ZNzX7SKR}Seneschal");
+                }
+            },
+            {COURT_PHYSICIAN, (string cultureStringId,bool isRoyal) =>
+            {
+                return new TextObject("{=Gc1CyVPk}Court Physician");
+            }
+            },
+            { COURT_SMITH, (string cultureStringId,bool isRoyal) =>
+            {
+                return new TextObject("{=fWxtaYqn}Court Smith");
+            }
+            },
+            { COURT_MUSICIAN, (string cultureStringId,bool isRoyal) =>
+            {
+                return new TextObject("{=O951oUMh}Court Musician");
+            }
+            },
+            { ANTIQUARIAN, (string cultureStringId,bool isRoyal) =>
+            {
+                return new TextObject("{=KfZ29QpZ}Antiquarian");
+            }
+            },
+            { CASTELLAN, (string cultureStringId,bool isRoyal) =>
+            {
+                return new TextObject("{=Y3yvvUct}Castellan");
+            }
+            },
+            { CONSTABLE, (string cultureStringId,bool isRoyal) =>
+            {
+                return new TextObject("{=65dCSoEB}Constable");
+            }
+            },
+            { ELDER, (string cultureStringId,bool isRoyal) =>
+            {
+                return new TextObject("{=1A5Q6wHM}Elder");
+            }
+            },
+            { SPOUSE, (string cultureStringId,bool isRoyal) =>
+            {
+                return GameTexts.FindText("str_spouse");
+            }
+            },
+            { LEGION_COMMANDER1, (string cultureStringId,bool isRoyal) =>
+            {
+                var id = cultureStringId;
+                if (id == "empire") return new TextObject("{=507REJPh}Legatus");
+                return new TextObject("{=dYPtzd3b}Legate");
+            }
+            },
+            { LEGION_COMMANDER2, (string cultureStringId,bool isRoyal) =>
+            {
+                var id = cultureStringId;
+                if (id == "empire") return new TextObject("{=507REJPh}Legatus");
+                return new TextObject("{=dYPtzd3b}Legate");
+            }
+            },
+            { LEGION_COMMANDER3, (string cultureStringId,bool isRoyal) =>
+            {
+                var id = cultureStringId;
+                if (id == "empire") return new TextObject("{=507REJPh}Legatus");
+                return new TextObject("{=dYPtzd3b}Legate");
+            }
+            },
+            { LEGION_COMMANDER4, (string cultureStringId,bool isRoyal) =>
+            {
+                var id = cultureStringId;
+                if (id == "empire") return new TextObject("{=507REJPh}Legatus");
+                return new TextObject("{=dYPtzd3b}Legate");
+            }
+             },
+            { LEGION_COMMANDER5, (string cultureStringId,bool isRoyal) =>
+            {
+                var id = cultureStringId;
+                if (id == "empire") return new TextObject("{=507REJPh}Legatus");
+                return new TextObject("{=dYPtzd3b}Legate");
+            }
+            }
+
+        };
         public override IEnumerable<CouncilMember> All
         {
             get
@@ -78,7 +274,7 @@ namespace BannerKings.Managers.Court.Members
                     CouncilPrivileges.NOBLE_EXCLUSIVE
                 },
                 (CouncilData data) =>
-                 {
+                {
                     var kingdom = data.Clan.Kingdom;
                     if (kingdom != null)
                     {
@@ -95,13 +291,10 @@ namespace BannerKings.Managers.Court.Members
                 {
                     if (!hero.IsClanLeader()) return new(false, new TextObject("{=MEEdhZQY}Hero must be a clan leader."));
                     return new(true, null);
-                }, 
+                },
                 (CouncilMember member) =>
                 {
-                    var id = member.Culture.StringId;
-                    if (id == "empire") return new TextObject("{=507REJPh}Legatus");
-
-                    return new TextObject("{=dYPtzd3b}Legate");
+                    return getCulturalNameFuncs[LEGION_COMMANDER1].Invoke(member.Culture.StringId, member.IsRoyal);
                 },
                 new Dictionary<TraitObject, float>()
                 {
@@ -143,10 +336,7 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember member) =>
                 {
-                    var id = member.Culture.StringId;
-                    if (id == "empire") return new TextObject("{=507REJPh}Legatus");
-
-                    return new TextObject("{=dYPtzd3b}Legate");
+                    return getCulturalNameFuncs[LEGION_COMMANDER2].Invoke(member.Culture.StringId, member.IsRoyal);
                 },
                 new Dictionary<TraitObject, float>()
                 {
@@ -188,10 +378,7 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember member) =>
                 {
-                    var id = member.Culture.StringId;
-                    if (id == "empire") return new TextObject("{=507REJPh}Legatus");
-
-                    return new TextObject("{=dYPtzd3b}Legate");
+                    return getCulturalNameFuncs[LEGION_COMMANDER3].Invoke(member.Culture.StringId, member.IsRoyal);
                 },
                 new Dictionary<TraitObject, float>()
                 {
@@ -233,10 +420,7 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember member) =>
                 {
-                    var id = member.Culture.StringId;
-                    if (id == "empire") return new TextObject("{=507REJPh}Legatus");
-
-                    return new TextObject("{=dYPtzd3b}Legate");
+                    return getCulturalNameFuncs[LEGION_COMMANDER4].Invoke(member.Culture.StringId, member.IsRoyal);
                 },
                 new Dictionary<TraitObject, float>()
                 {
@@ -252,8 +436,8 @@ namespace BannerKings.Managers.Court.Members
                 {
                     DefaultCouncilTasks.Instance.GatherLegion.GetCopy()
                 },
-                new List<CouncilPrivileges>() 
-                { 
+                new List<CouncilPrivileges>()
+                {
                     CouncilPrivileges.ARMY_PRIVILEGE,
                     CouncilPrivileges.NOBLE_EXCLUSIVE
                 },
@@ -278,10 +462,7 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember member) =>
                 {
-                    var id = member.Culture.StringId;
-                    if (id == "empire") return new TextObject("{=507REJPh}Legatus");
-
-                    return new TextObject("{=dYPtzd3b}Legate");
+                    return getCulturalNameFuncs[LEGION_COMMANDER5].Invoke(member.Culture.StringId, member.IsRoyal);
                 },
                 new Dictionary<TraitObject, float>()
                 {
@@ -293,12 +474,12 @@ namespace BannerKings.Managers.Court.Members
             Marshal.Initialize(
                 DefaultSkills.Leadership,
                 DefaultSkills.Tactics,
-                new List<CouncilTask>() 
-                { 
+                new List<CouncilTask>()
+                {
                     DefaultCouncilTasks.Instance.OrganizeMiltia.GetCopy(),
                     DefaultCouncilTasks.Instance.EncourageMilitarism.GetCopy()
                 },
-                new List<CouncilPrivileges>() 
+                new List<CouncilPrivileges>()
                 {
                     CouncilPrivileges.ARMY_PRIVILEGE
                 },
@@ -308,25 +489,11 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    return new (true, null);
+                    return new(true, null);
                 },
                 (CouncilMember member) =>
                 {
-                    var id = member.Culture.StringId;
-                    if (member.IsRoyal)
-                    {
-                        if (id == "battania") return new TextObject("{=iTWqZLM4}Ard Marasgal");
-                        if (id == "empire") return new TextObject("{=MqHWpT0K}Magister Domesticus");
-                        if (id == "khuzait") return new TextObject("{=Qtt0vXAT}Tumetu-iin Noyan");
-
-                        return new TextObject("{=7TxiJwdM}Grand Marshal");
-                    }
-
-                    if (id == "battania") return new TextObject("{=2SU2KRvB}Marasgal");
-                    if (id == "khuzait") return new TextObject("{=hfqCCmZi}Jagutu-iin Darga");
-                    if (id == "empire") return new TextObject("{=Qk2mgePL}Domesticus");
-
-                    return new TextObject("{=SCsGXova}Marshal");
+                    return getCulturalNameFuncs[MARSHL].Invoke(member.Culture.StringId, member.IsRoyal);
                 });
 
             Steward.Initialize(
@@ -349,19 +516,7 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember member) =>
                 {
-                    var id = member.Culture.StringId;
-                    if (member.IsRoyal)
-                    {
-                        if (id == "battania") return new TextObject("{=M6eW9798}Ard Sheumarlan");
-                        if (id == "empire") return new TextObject("{=8sSPs8QV}Magister Sacrarum Largitionum");
-
-                        return new TextObject("{=3OSi32pX}High Steward");
-                    }
-
-                    if (id == "battania") return new TextObject("{=DJkHjoo4}Sheumarlan");
-                    if (id == "empire") return new TextObject("{=uP0GHCjS}Praefectus Largitionum");
-
-                    return new TextObject("{=k4oyM9dT}Steward");
+                    return getCulturalNameFuncs[STEWARD].Invoke(member.Culture.StringId, member.IsRoyal);
                 },
                 new Dictionary<TraitObject, float>()
                 {
@@ -389,19 +544,7 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember member) =>
                 {
-                    var id = member.Culture.StringId;
-                    if (member.IsRoyal)
-                    {
-                        if (id == "battania") return new TextObject("{=wWNKVNgU}Ard Seansalair");
-                        if (id == "empire") return new TextObject("{=RHT0X2ZU}Magister Cancellarius");
-
-                        return new TextObject("{=EYfcHKO1}High Chancellor");
-                    }
-
-                    if (id == "battania") return new TextObject("{=pA79P1LE}Seansalair");
-                    if (id == "empire") return new TextObject("{=qRVOadig}Cancellarius");
-
-                    return new TextObject("{=tgz9ut5s}Chancellor");
+                    return getCulturalNameFuncs[CHANCELLOR].Invoke(member.Culture.StringId, member.IsRoyal);
                 });
 
             Spymaster.Initialize(
@@ -423,21 +566,7 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember member) =>
                 {
-                    var id = member.Culture.StringId;
-                    if (member.IsRoyal)
-                    {
-                        if (id == "battania") return new TextObject("{=fTuydBMn}Ard Treòraiche");
-                        if (id == "empire") return new TextObject("{=HWfVPgFa}Magister Officiorum");
-                        if (id == "khuzait") return new TextObject("{=7PLFhL3m}Cherbi");
-
-                        return new TextObject("{=08umUPH5}Grand Spymaster");
-                    }
-
-                    if (id == "battania") return new TextObject("{=FQe5GXkp}Treòraiche");
-                    if (id == "khuzait") return new TextObject("{=FsFE8NSM}Khevtuul");
-                    if (id == "empire") return new TextObject("{=bZCeizLU}Custodis");
-
-                    return new TextObject("{=ZJ8eRkS2}Spymaster");
+                    return getCulturalNameFuncs[SPYMASTER].Invoke(member.Culture.StringId, member.IsRoyal);
                 },
                  new Dictionary<TraitObject, float>()
                 {
@@ -453,7 +582,7 @@ namespace BannerKings.Managers.Court.Members
                     DefaultCouncilTasks.Instance.PromoteFaith.GetCopy(),
                     DefaultCouncilTasks.Instance.CultivatePiety.GetCopy()
                 },
-                new List<CouncilPrivileges>() 
+                new List<CouncilPrivileges>()
                 {
                     CouncilPrivileges.CLERGYMEN_EXCLUSIVE
                 },
@@ -472,27 +601,12 @@ namespace BannerKings.Managers.Court.Members
                         matchingFaith = heroReligion != null && heroReligion.Equals(clanReligion);
                     }
 
-                    return new (BannerKingsConfig.Instance.ReligionsManager.IsPreacher(hero) && matchingFaith, 
+                    return new(BannerKingsConfig.Instance.ReligionsManager.IsPreacher(hero) && matchingFaith,
                         new TextObject("{=1A5Q6wHM}The candidate must be a preacher of matching faith with the council leader."));
                 },
                 (CouncilMember member) =>
                 {
-                    var id = member.Culture.StringId;
-                    if (member.IsRoyal)
-                    {
-
-                        if (id == "battania") return new TextObject("{=PkQ9BKTk}Ard Draoidh");
-                        if (id == "sturgia") return new TextObject("{=ogAzFznn}Volkhvs");
-                        if (id == "aserai") return new TextObject("{=!Murshid");
-
-                        return new TextObject("{=rhL4NnWR}High Seneschal");
-                    }
-
-                    if (id == "battania") return new TextObject("{=ELf8YFXe}Draoidh");
-                    if (id == "sturgia") return new TextObject("{=ogAzFznn}Volkhvs");
-                    if (id == "aserai") return new TextObject("Murshid");
-
-                    return new TextObject("{=ZNzX7SKR}Seneschal");
+                    return getCulturalNameFuncs[SPIRITUAL].Invoke(member.Culture.StringId, member.IsRoyal);
                 });
 
             Spouse.Initialize(
@@ -509,11 +623,11 @@ namespace BannerKings.Managers.Court.Members
                 },
                 (CouncilMember position, Hero hero) =>
                 {
-                    return new (hero.Spouse == position.Clan.Leader, new TextObject("{=ZQujL7sW}The candidate must be a/the spouse of the council leader."));
+                    return new(hero.Spouse == position.Clan.Leader, new TextObject("{=ZQujL7sW}The candidate must be a/the spouse of the council leader."));
                 },
                 (CouncilMember member) =>
                 {
-                    return GameTexts.FindText("str_spouse");
+                    return getCulturalNameFuncs[SPOUSE].Invoke(member.Culture.StringId, member.IsRoyal);
                 });
 
             CourtPhysician.Initialize(
@@ -534,7 +648,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember member) =>
                {
-                   return new TextObject("{=Gc1CyVPk}Court Physician");
+                   return getCulturalNameFuncs[COURT_PHYSICIAN].Invoke(member.Culture.StringId, member.IsRoyal);
                },
                new Dictionary<TraitObject, float>()
                {
@@ -560,7 +674,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember member) =>
                {
-                   return new TextObject("{=fWxtaYqn}Court Smith");
+                   return getCulturalNameFuncs[COURT_SMITH].Invoke(member.Culture.StringId, member.IsRoyal);
                });
 
             CourtMusician.Initialize(
@@ -581,7 +695,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember member) =>
                {
-                   return new TextObject("{=O951oUMh}Court Musician");
+                   return getCulturalNameFuncs[COURT_MUSICIAN].Invoke(member.Culture.StringId, member.IsRoyal);
                },
                new Dictionary<TraitObject, float>()
                {
@@ -606,7 +720,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember member) =>
                {
-                   return new TextObject("{=KfZ29QpZ}Antiquarian");
+                   return getCulturalNameFuncs[ANTIQUARIAN].Invoke(member.Culture.StringId, member.IsRoyal);
                },
                new Dictionary<TraitObject, float>()
                {
@@ -631,7 +745,7 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember member) =>
                {
-                   return new TextObject("{=Y3yvvUct}Castellan");
+                   return getCulturalNameFuncs[CASTELLAN].Invoke(member.Culture.StringId, member.IsRoyal);
                });
 
             Constable.Initialize(
@@ -650,11 +764,11 @@ namespace BannerKings.Managers.Court.Members
                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                        if (sovereign != null)
                        {
-                           return data.IsRoyal && (sovereign.Contract.Government == DefaultGovernments.Instance.Feudal || 
+                           return data.IsRoyal && (sovereign.Contract.Government == DefaultGovernments.Instance.Feudal ||
                            sovereign.Contract.Government == DefaultGovernments.Instance.Imperial);
                        }
                    }
-                   
+
                    return false;
                },
                (CouncilMember position, Hero hero) =>
@@ -663,8 +777,17 @@ namespace BannerKings.Managers.Court.Members
                },
                (CouncilMember member) =>
                {
-                   return new TextObject("{=65dCSoEB}Constable");
+                   return getCulturalNameFuncs[CONSTABLE].Invoke(member.Culture.StringId, member.IsRoyal);
                });
+        }
+
+        public TextObject GetPositionName(string courtPosition, bool isRoyal)
+        {
+            if (courtPosition.IsEmpty() || !getCulturalNameFuncs.ContainsKey(courtPosition))
+            {
+                return new TextObject("");
+            }
+            return getCulturalNameFuncs[courtPosition].Invoke(PartyBase.MainParty.Culture.StringId, isRoyal);
         }
     }
 }

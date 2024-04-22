@@ -6,6 +6,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
+using BannerKings.Managers.Court.Members;
 
 namespace BannerKings.Patches
 {
@@ -24,7 +25,18 @@ namespace BannerKings.Patches
                     rolesText.Add(GameTexts.FindText("role", perk.PrimaryRole.ToString()));
                     if (AllPerksData.ContainsKey(perk.StringId) && AllPerksData[perk.StringId].PrimaryPerk?.AdditionalRoles != null)
                     {
-                        rolesText.AddRange(AllPerksData[perk.StringId].PrimaryPerk.AdditionalRoles.Select(d => GameTexts.FindText("role", d.ToString())));
+                        rolesText.AddRange(AllPerksData[perk.StringId].PrimaryPerk.AdditionalRoles.Select(d =>
+                        {
+                            if (d == (SkillEffect.PerkRole)15)
+                            {
+                                return DefaultCouncilPositions.Instance.GetPositionName(AllPerksData[perk.StringId].PrimaryPerk.CourtPosition, false);
+                            }
+                            if (d == (SkillEffect.PerkRole)16)
+                            {
+                                return DefaultCouncilPositions.Instance.GetPositionName(AllPerksData[perk.StringId].PrimaryPerk.CourtPosition, true);
+                            }
+                            return GameTexts.FindText("role", d.ToString());
+                        }));
                     }
                     textObject.SetTextVariable("PRIMARY_ROLE", NormalizeAdditionalRoles(perk.PrimaryRole, string.Join(" - ", rolesText)));
                 }
@@ -33,7 +45,18 @@ namespace BannerKings.Patches
                     rolesText.Add(GameTexts.FindText("role", perk.SecondaryRole.ToString()));
                     if (AllPerksData.ContainsKey(perk.StringId) && AllPerksData[perk.StringId].SecondaryPerk?.AdditionalRoles != null)
                     {
-                        rolesText.AddRange(AllPerksData[perk.StringId].SecondaryPerk.AdditionalRoles.Select(d => GameTexts.FindText("role", d.ToString())));
+                        rolesText.AddRange(AllPerksData[perk.StringId].SecondaryPerk.AdditionalRoles.Select(d =>
+                        {
+                            if (d == (SkillEffect.PerkRole)15)
+                            {
+                                return DefaultCouncilPositions.Instance.GetPositionName(AllPerksData[perk.StringId].SecondaryPerk.CourtPosition, false);
+                            }
+                            if (d == (SkillEffect.PerkRole)16)
+                            {
+                                return DefaultCouncilPositions.Instance.GetPositionName(AllPerksData[perk.StringId].SecondaryPerk.CourtPosition, true);
+                            }
+                            return GameTexts.FindText("role", d.ToString());
+                        }));
                     }
                     textObject.SetTextVariable("PRIMARY_ROLE", NormalizeAdditionalRoles(perk.SecondaryRole, string.Join(" - ", rolesText)));
                 }
@@ -58,6 +81,6 @@ namespace BannerKings.Patches
                 }
                 return text;
             }
-        } 
+        }
     }
 }

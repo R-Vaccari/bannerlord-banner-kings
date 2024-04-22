@@ -70,7 +70,7 @@ namespace BannerKings.Models.Vanilla
             {
                 if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    DefaultPerks.Steward.PaidInPromise.AddScaledPersonlOrClanLeaderPerkBonusWithClanAndFamilyMembers(ref explainedNumber, false, Hero.MainHero);
+                    DefaultPerks.Steward.PaidInPromise.AddScaledClanLeaderPerkBonusWithClanAndFamilyMembers(ref explainedNumber, false, Hero.MainHero);
                 }
                 else
                 {

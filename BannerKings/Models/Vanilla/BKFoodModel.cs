@@ -108,14 +108,23 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
                 #endregion
-                if (town.Governor != null)
+                #region DefaultPerks.Medicine.TriageTent
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    if (town.Governor.GetPerkValue(DefaultPerks.Medicine.TriageTent))
+                    var x = DefaultPerks.Medicine.TriageTent.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, true, town);
+                }
+                else
+                {
+                    if (town.Governor != null)
                     {
-                        result.AddFactor(DefaultPerks.Medicine.TriageTent.SecondaryBonus,
-                            DefaultPerks.Medicine.TriageTent.Name);
+                        if (town.Governor.GetPerkValue(DefaultPerks.Medicine.TriageTent))
+                        {
+                            result.AddFactor(DefaultPerks.Medicine.TriageTent.SecondaryBonus,
+                                DefaultPerks.Medicine.TriageTent.Name);
+                        }
                     }
                 }
+                #endregion              
             }
             if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Roguery.DirtyFighting))
             {
@@ -124,7 +133,7 @@ namespace BannerKings.Models.Vanilla
             #region DefaultPerks.Steward.MasterOfWarcraft
             if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                DefaultPerks.Steward.MasterOfWarcraft.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, true, town);   
+                DefaultPerks.Steward.MasterOfWarcraft.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, true, town);
             }
             else
             {
