@@ -8,6 +8,7 @@ using BannerKings.Utils.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Party;
@@ -787,7 +788,17 @@ namespace BannerKings.Managers.Court.Members
             {
                 return new TextObject("");
             }
-            return getCulturalNameFuncs[courtPosition].Invoke(PartyBase.MainParty.Culture.StringId, isRoyal);
+            var name = getCulturalNameFuncs[courtPosition].Invoke(PartyBase.MainParty.Culture.StringId, isRoyal);
+            var originalName = getCulturalNameFuncs[courtPosition].Invoke("", isRoyal);
+            if (name.ToString() == originalName.ToString())
+            {
+                return name;
+            }
+            else
+            {
+                return new TextObject($"{name}({originalName})");
+            }
+
         }
     }
 }

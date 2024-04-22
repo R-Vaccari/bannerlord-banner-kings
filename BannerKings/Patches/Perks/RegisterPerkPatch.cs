@@ -29,12 +29,13 @@ namespace BannerKings.Patches
                    new PerkData (){
                         PrimaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =20 ,EverySkillSecondary = 20 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                      DescriptionMain = "{VALUE} party wages for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                      DescriptionOthers = "{VALUE} party wages for every {EVERYSKILLOTHERS} steward point if the hero is a party member"},
+                                      DescriptionMain = "{VALUE} party wages for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+
+                                      DescriptionOthers = "{VALUE} party wages for each {EVERYSKILLOTHERS} steward point if the hero is a party member"},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =20 ,EverySkillSecondary = 20 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartyLeader,
                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                      DescriptionMain = "{VALUE} recruitment costs for every {EVERYSKILLMAIN} steward point if the hero is the party leader",
-                                      DescriptionOthers = "{VALUE} recruitment costs for every {EVERYSKILLOTHERS} steward point if the hero is a party member"}
+                                      DescriptionMain = "{VALUE} recruitment costs for each {EVERYSKILLMAIN} steward point if the hero is the party leader",
+                                      DescriptionOthers = "{VALUE} recruitment costs for each {EVERYSKILLOTHERS} steward point if the hero is a party member"}
                    }
                 },
                 //Steward.WarriorsDiet                
@@ -43,39 +44,40 @@ namespace BannerKings.Patches
                    new PerkData(){
                         PrimaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =15 ,EverySkillSecondary = 15 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.Quartermaster },
-                                      DescriptionMain = "{VALUE} party food consumption for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                      DescriptionOthers = "{VALUE} party food consumption for every {EVERYSKILLOTHERS} steward point if the hero is a party member" }
+                                      DescriptionMain = "{VALUE} party food consumption for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                      DescriptionOthers = "{VALUE} party food consumption for each {EVERYSKILLOTHERS} steward point if the hero is a party member" }
                    }
                 },
                 //Steward.DrillSergant               
                 {"StewardDrillSergant",
                   //this._stewardSevenVeterans.Initialize("{=2ryLuN2i}Seven Veterans", DefaultSkills.Steward, this.GetTierCost(2), this._stewardDrillSergant, "{=gX0edfpK}{VALUE} daily experience for tier 4+ troops in your party", SkillEffect.PerkRole.Quartermaster, 4f, SkillEffect.EffectIncrementType.Add, "{=g9gTYB8u}{VALUE} militia recruitment in the governed settlement", SkillEffect.PerkRole.Governor, 1f, SkillEffect.EffectIncrementType.Add, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
                   new PerkData(){
-                        PrimaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 1f ,MinBonus=0 ,MaxBonus = 30 ,EverySkillMain =25 ,EverySkillSecondary = 25 ,EverySkillOthers = 100 ,SkillScale = SkillScale.Both,
-                                      AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyLeader, SkillEffect.PerkRole.PartyMember },
-                                      DescriptionMain = "{VALUE} daily experience to troops in your party for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster or the party leader",
-                                      DescriptionOthers = "{VALUE} daily experience to troops in your party for every {EVERYSKILLOTHERS} steward point if the hero is a party member",
-                                               },
+                        PrimaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 1f ,MinBonus=0 ,MaxBonus = 30 ,EverySkillMain =25 ,EverySkillSecondary = 25 ,EverySkillOthers = 100 ,SkillScale = SkillScale.Both,EverySkillCourtMember = 60, CourtPosition =DefaultCouncilPositions.MARSHL,
+                                      AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyLeader, (SkillEffect.PerkRole)15, SkillEffect.PerkRole.PartyMember },
+                                      DescriptionMain = "{VALUE} daily experience to troops in your party for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster or the party leader",
+                                      DescriptionCourt="{VALUE} daily experience to troops in your party for each {EVERYSKILLCOURTMEMBER} steward point if the hero is the clan {COURTPOSITION}",
+                                      DescriptionOthers = "{VALUE} daily experience to troops in your party for each {EVERYSKILLOTHERS} steward point if the hero is a party member",},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f,MaxBonus = 0 ,EverySkillMain =20 ,EverySkillSecondary = 40 ,EverySkillOthers = 100 ,SkillScale = SkillScale.Other,
                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember },
-                                      DescriptionMain = "{VALUE} garrison wages in the settlement for every {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
-                                      DescriptionSecondary = "{VALUE} garrison wages in the settlement for every {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
-                                      DescriptionOthers = "{VALUE} garrison wages in the settlement for every {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
+                                      DescriptionMain = "{VALUE} garrison wages in the settlement for each {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
+                                      DescriptionSecondary = "{VALUE} garrison wages in the settlement for each {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
+                                      DescriptionOthers = "{VALUE} garrison wages in the settlement for each {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
                 },
                 //Steward.SevenVeterans
                 {"StewardSevenVeterans",
                    //this._stewardSevenVeterans.Initialize("{=2ryLuN2i}Seven Veterans", DefaultSkills.Steward, this.GetTierCost(2), this._stewardDrillSergant, "{=gX0edfpK}{VALUE} daily experience for tier 4+ troops in your party", SkillEffect.PerkRole.Quartermaster, 4f, SkillEffect.EffectIncrementType.Add, "{=g9gTYB8u}{VALUE} militia recruitment in the governed settlement", SkillEffect.PerkRole.Governor, 1f, SkillEffect.EffectIncrementType.Add, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
                    new PerkData(){
-                        PrimaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 2f ,MinBonus=0 ,MaxBonus = 60 ,EverySkillMain =25 ,EverySkillSecondary = 25 ,EverySkillOthers = 100 ,SkillScale = SkillScale.Both,
-                                      AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyLeader, SkillEffect.PerkRole.PartyMember },
-                                      DescriptionMain = "{VALUE} daily experience to tier 4+ troops in your party for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster or the party leader",
-                                      DescriptionOthers = "{VALUE} daily experience to tier 4+ troops in your party for every {EVERYSKILLOTHERS} steward point if the hero is a party member",
+                        PrimaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 2f ,MinBonus=0 ,MaxBonus = 60 ,EverySkillMain =25 ,EverySkillSecondary = 25 ,EverySkillOthers = 100 ,SkillScale = SkillScale.Both,EverySkillCourtMember = 60, CourtPosition =DefaultCouncilPositions.MARSHL,
+                                      AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyLeader, (SkillEffect.PerkRole)15, SkillEffect.PerkRole.PartyMember },
+                                      DescriptionMain = "{VALUE} daily experience to tier 4+ troops in your party for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster or the party leader",
+                                       DescriptionCourt="{VALUE} daily experience to tier 4+ troops in your party for each {EVERYSKILLCOURTMEMBER} steward point if the hero is the clan {COURTPOSITION}",
+                                      DescriptionOthers = "{VALUE} daily experience to tier 4+ troops in your party for each {EVERYSKILLOTHERS} steward point if the hero is a party member",
                                                                       },
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 1f ,MinBonus=0 ,MaxBonus = 10 ,EverySkillMain =50 ,EverySkillSecondary = 100 ,EverySkillOthers = 150 ,SkillScale = SkillScale.Other,
                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember },
-                                      DescriptionMain = "{VALUE} militia recruitment in the settlement for every {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
-                                      DescriptionSecondary = "{VALUE} militia recruitment in the settlement for every {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
-                                      DescriptionOthers = "{VALUE} militia recruitment in the settlement for every {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
+                                      DescriptionMain = "{VALUE} militia recruitment in the settlement for each {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
+                                      DescriptionSecondary = "{VALUE} militia recruitment in the settlement for each {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
+                                      DescriptionOthers = "{VALUE} militia recruitment in the settlement for each {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
                 },
                 //Steward.StiffUpperLip
                 {"StewardStiffUpperLip",
@@ -83,13 +85,13 @@ namespace BannerKings.Patches
                   new PerkData(){
                         PrimaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =15 ,EverySkillSecondary = 15 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                      DescriptionMain = "{VALUE} party food consumption while it is part of an army for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                      DescriptionOthers = "{VALUE} party food consumption while it is part of an army for every {EVERYSKILLOTHERS} steward point if the hero is a party member" },
+                                      DescriptionMain = "{VALUE} party food consumption while it is part of an army for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                      DescriptionOthers = "{VALUE} party food consumption while it is part of an army for each {EVERYSKILLOTHERS} steward point if the hero is a party member" },
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =20 ,EverySkillSecondary = 40 ,EverySkillOthers = 100 ,SkillScale = SkillScale.Other,
                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember },
-                                      DescriptionMain = "{VALUE} garrison wages in the castle for every {EVERYSKILLMAIN} steward point if the hero is the castle governer",
-                                      DescriptionSecondary = "{VALUE} garrison wages in the castle for every {EVERYSKILLSECONDARY} steward point if the hero is the castle owner",
-                                      DescriptionOthers = "{VALUE} garrison wages in the castle for every {EVERYSKILLOTHERS} steward point if the hero is staying in castle that belongs to his clan"}}
+                                      DescriptionMain = "{VALUE} garrison wages in the castle for each {EVERYSKILLMAIN} steward point if the hero is the castle governer",
+                                      DescriptionSecondary = "{VALUE} garrison wages in the castle for each {EVERYSKILLSECONDARY} steward point if the hero is the castle owner",
+                                      DescriptionOthers = "{VALUE} garrison wages in the castle for each {EVERYSKILLOTHERS} steward point if the hero is staying in castle that belongs to his clan"}}
                 },              
                 //Steward.Sweatshops                
                 {"StewardSweatshops",
@@ -97,13 +99,13 @@ namespace BannerKings.Patches
                   new PerkData(){
                         PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 1f ,EverySkillMain =10 ,EverySkillSecondary = 40 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                      DescriptionMain = "{VALUE} production rate to clan owned workshops for every {EVERYSKILLMAIN} steward point",
-                                      DescriptionSecondary = "{VALUE} production rate to clan owned workshops for every {EVERYSKILLSECONDARY} steward point if the hero is a family member",
-                                      DescriptionOthers = "{VALUE} production rate to clan owned workshops for every {EVERYSKILLOTHERS} steward point if the hero is clan member"},
+                                      DescriptionMain = "{VALUE} production rate to clan owned workshops for each {EVERYSKILLMAIN} steward point",
+                                      DescriptionSecondary = "{VALUE} production rate to clan owned workshops for each {EVERYSKILLSECONDARY} steward point if the hero is a family member",
+                                      DescriptionOthers = "{VALUE} production rate to clan owned workshops for each {EVERYSKILLOTHERS} steward point if the hero is clan member"},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.5f ,EverySkillMain =10 ,EverySkillSecondary = 10 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                      DescriptionMain = "Increase siege engine build rate in your party by {VALUE} for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                      DescriptionOthers = "Increase siege engine build rate in your party by {VALUE} for every {EVERYSKILLOTHERS} steward point if the hero is a party member"}}
+                                      DescriptionMain = "Increase siege engine build rate in your party by {VALUE} for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                      DescriptionOthers = "Increase siege engine build rate in your party by {VALUE} for each {EVERYSKILLOTHERS} steward point if the hero is a party member"}}
                 },
                 //Steward.PaidInPromise               
                 {"StewardPaidInPromise",
@@ -111,13 +113,13 @@ namespace BannerKings.Patches
                   new PerkData(){
                         PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.4f ,MaxBonus = 0 ,EverySkillMain =20 ,EverySkillSecondary = 100 ,EverySkillOthers = 30 ,SkillScale = SkillScale.Other,Role =SkillEffect.PerkRole.ClanLeader,
                                                              AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.Captain, SkillEffect.PerkRole.PartyMember },
-                                                             DescriptionMain = "Reduce all clan companions wages and recruitment fees by {VALUE} for every {EVERYSKILLMAIN} steward point if the hero is a clan leader",
-                                                             DescriptionSecondary="Reduce all clan companions wages and recruitment fees by {VALUE} for every {EVERYSKILLSECONDARY} steward point if the hero is a family member" ,
-                                                             DescriptionOthers = "Reduce the companion wages by {VALUE} for every {EVERYSKILLOTHERS} steward point if the hero is the companion"},
+                                                             DescriptionMain = "Reduce all clan companions wages and recruitment fees by {VALUE} for each {EVERYSKILLMAIN} steward point if the hero is a clan leader",
+                                                             DescriptionSecondary="Reduce all clan companions wages and recruitment fees by {VALUE} for each {EVERYSKILLSECONDARY} steward point if the hero is a family member" ,
+                                                             DescriptionOthers = "Reduce the companion wages by {VALUE} for each {EVERYSKILLOTHERS} steward point if the hero is the companion"},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.02f ,MinBonus=0 ,MaxBonus = 1.5f ,EverySkillMain =10 ,EverySkillSecondary = 10 ,EverySkillOthers = 50 ,SkillScale = SkillScale.Both,
                                                              AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyLeader,SkillEffect.PerkRole.PartyMember },
-                                                             DescriptionMain = "Discarded armors are donated to troops for increased experience.\n{VALUE} bonus experience from donated armors for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster or the party leader",
-                                                             DescriptionOthers = "{VALUE} bonus experience from donated armors for every {EVERYSKILLOTHERS} steward point if the hero is a party member"}
+                                                             DescriptionMain = "Discarded armors are donated to troops for increased experience.\n{VALUE} bonus experience from donated armors for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster or the party leader",
+                                                             DescriptionOthers = "{VALUE} bonus experience from donated armors for each {EVERYSKILLOTHERS} steward point if the hero is a party member"}
                                                          }
                 }, 
                 //Steward.ForeseeableFuture               
@@ -126,13 +128,13 @@ namespace BannerKings.Patches
                   new PerkData(){
                         PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.02f ,MinBonus=0 ,MaxBonus = 1.5f ,EverySkillMain =10 ,EverySkillSecondary = 10 ,EverySkillOthers = 50 ,SkillScale = SkillScale.Both,
                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                       DescriptionMain = "Discarded weapons are donated to troops for increased experience.\n{VALUE} bonus experience from donated weapons for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster or the party leader",
-                                       DescriptionOthers = "{VALUE} bonus experience from donated weapons for every {EVERYSKILLOTHERS} steward point if the hero is a party member"},
+                                       DescriptionMain = "Discarded weapons are donated to troops for increased experience.\n{VALUE} bonus experience from donated weapons for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster or the party leader",
+                                       DescriptionOthers = "{VALUE} bonus experience from donated weapons for each {EVERYSKILLOTHERS} steward point if the hero is a party member"},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.3f ,EverySkillMain =30 ,EverySkillSecondary = 90 ,EverySkillOthers = 120 ,SkillScale = SkillScale.Other,
                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember },
-                                       DescriptionMain = "{VALUE} tariff income in the settlement for every {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
-                                       DescriptionSecondary = "{VALUE} tariff income in the settlement for every {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
-                                       DescriptionOthers = "{VALUE} tariff income in the settlement for every {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan" }}
+                                       DescriptionMain = "{VALUE} tariff income in the settlement for each {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
+                                       DescriptionSecondary = "{VALUE} tariff income in the settlement for each {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
+                                       DescriptionOthers = "{VALUE} tariff income in the settlement for each {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan" }}
                 },
                 //Steward.EfficientCampaigner               
                 {"StewardEfficientCampaigner",
@@ -140,8 +142,8 @@ namespace BannerKings.Patches
                   new PerkData(){
                         SecondaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.02f ,MinBonus=-0.4f ,MaxBonus = 0 ,EverySkillMain =30 ,EverySkillSecondary = 30 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                       DescriptionMain = "While the party is part of an army reduce its wages by {VALUE} for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                       DescriptionOthers = "While the party is part of an army reduce its wages by {VALUE} for every {EVERYSKILLOTHERS} steward point if the hero is a party member"}}
+                                       DescriptionMain = "While the party is part of an army reduce its wages by {VALUE} for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                       DescriptionOthers = "While the party is part of an army reduce its wages by {VALUE} for each {EVERYSKILLOTHERS} steward point if the hero is a party member"}}
                 },
                 //Steward.Logistician                
                 {"StewardLogistician",
@@ -149,13 +151,13 @@ namespace BannerKings.Patches
                   new PerkData(){
                         PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 1 ,MinBonus=0 ,MaxBonus = 20f ,EverySkillMain =60 ,EverySkillSecondary = 60 ,EverySkillOthers = 150 ,SkillScale = SkillScale.Both,
                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyLeader, SkillEffect.PerkRole.PartyMember },
-                                       DescriptionMain = "{VALUE} party morale when number of mounts is greater than number of foot troops in your party for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster or the party leader",
-                                       DescriptionOthers = "{VALUE} party morale when number of mounts is greater than number of foot troops in your party for every {EVERYSKILLOTHERS} steward point if the hero is a party member"},
+                                       DescriptionMain = "{VALUE} party morale when number of mounts is greater than number of foot troops in your party for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster or the party leader",
+                                       DescriptionOthers = "{VALUE} party morale when number of mounts is greater than number of foot troops in your party for each {EVERYSKILLOTHERS} steward point if the hero is a party member"},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.3f ,EverySkillMain =30 ,EverySkillSecondary = 90 ,EverySkillOthers = 120 ,SkillScale = SkillScale.Other,
                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember },
-                                       DescriptionMain = "{VALUE} tax income in the settlement for every {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
-                                       DescriptionSecondary = "{VALUE} tax income in the settlement for every {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
-                                       DescriptionOthers = "{VALUE} tax income in the settlement for every {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}
+                                       DescriptionMain = "{VALUE} tax income in the settlement for each {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
+                                       DescriptionSecondary = "{VALUE} tax income in the settlement for each {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
+                                       DescriptionOthers = "{VALUE} tax income in the settlement for each {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}
                                      }
                 },
                 //Steward.Relocation
@@ -164,13 +166,13 @@ namespace BannerKings.Patches
                   new PerkData(){
                         PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.5f ,EverySkillMain =10 ,EverySkillSecondary = 10 ,EverySkillOthers = 50 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                       DescriptionMain = "{VALUE} influence gain from donating troops for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                       DescriptionOthers = "{VALUE} influence gain from donating troops for every {EVERYSKILLOTHERS} steward point if the hero is a party member"},
+                                       DescriptionMain = "{VALUE} influence gain from donating troops for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                       DescriptionOthers = "{VALUE} influence gain from donating troops for each {EVERYSKILLOTHERS} steward point if the hero is a party member"},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.4f ,EverySkillMain =15 ,EverySkillSecondary = 50 ,EverySkillOthers = 80 ,SkillScale = SkillScale.Other,
                                         AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember },
-                                        DescriptionMain = "{VALUE} effect from boosting projects for every {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
-                                        DescriptionSecondary = "{VALUE} effect from boosting projects for every {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
-                                        DescriptionOthers = "{VALUE} effect from boosting projects for every {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
+                                        DescriptionMain = "{VALUE} effect from boosting projects for each {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
+                                        DescriptionSecondary = "{VALUE} effect from boosting projects for each {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
+                                        DescriptionOthers = "{VALUE} effect from boosting projects for each {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
                 },
                 //Steward.AidCorps                
                 {"StewardAidCorps",
@@ -178,23 +180,24 @@ namespace BannerKings.Patches
                   new PerkData(){
                         SecondaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.4f ,EverySkillMain =15 ,EverySkillSecondary = 50 ,EverySkillOthers = 80 ,SkillScale = SkillScale.Other,
                                          AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                         DescriptionMain = "{VALUE} hearth growth in villages bound to the settlement for every {EVERYSKILLMAIN} steward point if the hero is the settlement governor",
-                                         DescriptionSecondary = "{VALUE} hearth growth for every {EVERYSKILLSECONDARY} steward point in villages bound to the settlement owned by the hero",
-                                         DescriptionOthers = "{VALUE} hearth growth for every {EVERYSKILLOTHERS} steward point in villages bound to the settlement where the hero is staying if settlement belong to his clan"}}
+                                         DescriptionMain = "{VALUE} hearth growth in villages bound to the settlement for each {EVERYSKILLMAIN} steward point if the hero is the settlement governor",
+                                         DescriptionSecondary = "{VALUE} hearth growth for each {EVERYSKILLSECONDARY} steward point in villages bound to the settlement owned by the hero",
+                                         DescriptionOthers = "{VALUE} hearth growth for each {EVERYSKILLOTHERS} steward point in villages bound to the settlement where the hero is staying if settlement belong to his clan"}}
                  },
                 //Steward.Gourmet             
                 {"StewardGourmet",
                   //this._stewardGourmet.Initialize("{=63lHFDSG}Gourmet", DefaultSkills.Steward, this.GetTierCost(7), this._stewardSoundReserves, "{=KDtcsKUs}Double the morale bonus from having diverse food in your party", SkillEffect.PerkRole.Quartermaster, 2f, SkillEffect.EffectIncrementType.AddFactor, "{=q2ZDAm2v}{VALUE} garrison food consumption during sieges in the governed settlement", SkillEffect.PerkRole.Governor, -0.1f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
                   new PerkData(){
-                        PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.05f ,MinBonus=0 ,MaxBonus = 1f ,EverySkillMain =0 ,EverySkillSecondary = 0 ,EverySkillOthers = 20 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
-                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
+                        PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.05f ,MinBonus=0 ,MaxBonus = 1f ,EverySkillMain =0 ,EverySkillSecondary = 0 ,EverySkillOthers = 20 ,SkillScale = SkillScale.OnlyPartySpecializedRole,EverySkillCourtMember = 20, CourtPosition =DefaultCouncilPositions.SPOUSE,
+                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ (SkillEffect.PerkRole)15, SkillEffect.PerkRole.PartyMember },
                                        DescriptionMain = "Double the morale bonus from having diverse food in your party if the hero is the party quartermaster",
-                                       DescriptionOthers = "{VALUE} morale bonus from having diverse food in your party for every {EVERYSKILLOTHERS} steward point if the hero is a party member"},
+                                       DescriptionCourt="{VALUE} morale bonus from having diverse food in your party for each {EVERYSKILLCOURTMEMBER} steward point if the hero is the court {COURTPOSITION}",              
+                                       DescriptionOthers = "{VALUE} morale bonus from having diverse food in your party for each {EVERYSKILLOTHERS} steward point if the hero is a party member"},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =15 ,EverySkillSecondary = 60 ,EverySkillOthers = 90 ,SkillScale = SkillScale.Other,
                                         AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember },
-                                        DescriptionMain = "{VALUE} garrison food consumption during sieges in the settlement for every {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
-                                        DescriptionSecondary ="{VALUE} garrison food consumption during sieges in the settlement for every {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
-                                        DescriptionOthers = "{VALUE} garrison food consumption during sieges in the settlement for every {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
+                                        DescriptionMain = "{VALUE} garrison food consumption during sieges in the settlement for each {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
+                                        DescriptionSecondary ="{VALUE} garrison food consumption during sieges in the settlement for each {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
+                                        DescriptionOthers = "{VALUE} garrison food consumption during sieges in the settlement for each {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
                 },
                 //Steward.SoundReserves                
                 {"StewardSoundReserves",
@@ -202,40 +205,43 @@ namespace BannerKings.Patches
                   new PerkData(){
                         PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =20 ,EverySkillSecondary = 20 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                       DescriptionMain = "{VALUE} troop upgrade costs for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                       DescriptionOthers = "{VALUE} troop upgrade costs for every {EVERYSKILLOTHERS} steward point if the hero is a party member"},
-                        SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =20 ,EverySkillSecondary = 20 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
-                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                        DescriptionMain = "{VALUE} food consumption during sieges in your party for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                        DescriptionOthers = "{VALUE} food consumption during sieges in your party for every {EVERYSKILLOTHERS} steward point if the hero is a party member"}}
+                                       DescriptionMain = "{VALUE} troop upgrade costs for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                       DescriptionOthers = "{VALUE} troop upgrade costs for each {EVERYSKILLOTHERS} steward point if the hero is a party member"},
+                        SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =20 ,EverySkillSecondary = 20 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,EverySkillCourtMember = 20, CourtPosition =DefaultCouncilPositions.SPOUSE,
+                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ (SkillEffect.PerkRole)15, SkillEffect.PerkRole.PartyMember },
+                                        DescriptionMain = "{VALUE} food consumption during sieges in your party for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                         DescriptionCourt="{VALUE} food consumption during sieges in your party for each {EVERYSKILLCOURTMEMBER} steward point if the hero is the court {COURTPOSITION}",
+                                        DescriptionOthers = "{VALUE} food consumption during sieges in your party for each {EVERYSKILLOTHERS} steward point if the hero is a party member"}}
                 },
                 //Steward.ForcedLabor 
                 {"StewardForcedLabor",
                   //this._stewardForcedLabor.Initialize("{=cWyqiNrf}Forced Labor", DefaultSkills.Steward, this.GetTierCost(8), this._stewardContractors, "{=HrOTTjgo}Prisoners in your party provide carry capacity as if they are standard troops", SkillEffect.PerkRole.Quartermaster, 0f, SkillEffect.EffectIncrementType.AddFactor, "{=T9Viygs8}{VALUE} construction speed per every 3 prisoners", SkillEffect.PerkRole.Governor, 0.01f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
                   new PerkData(){
-                        PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.3f ,EverySkillMain =10 ,EverySkillSecondary = 10 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
-                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                       DescriptionMain = "Prisoners in your party provide carry capacity as if they are standard troops.\n{VALUE} extra prisoners carry capacity for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                       DescriptionOthers = "{VALUE} extra prisoners carry capacity for every {EVERYSKILLOTHERS} steward point if the hero is a party member"},
+                        PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.3f ,EverySkillMain =10 ,EverySkillSecondary = 10 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,EverySkillCourtMember = 100, CourtPosition =DefaultCouncilPositions.SPYMASTER,
+                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ (SkillEffect.PerkRole)15,SkillEffect.PerkRole.PartyMember },
+                                       DescriptionMain = "Prisoners in your party provide carry capacity as if they are standard troops.\n{VALUE} extra prisoners carry capacity for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                       DescriptionCourt="{VALUE} extra prisoners carry capacity for each {EVERYSKILLCOURTMEMBER} steward point if the hero is the clan {COURTPOSITION}",
+                                       DescriptionOthers = "{VALUE} extra prisoners carry capacity for each {EVERYSKILLOTHERS} steward point if the hero is a party member"},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 2f ,EverySkillMain =30 ,EverySkillSecondary = 90 ,EverySkillOthers = 120 ,SkillScale = SkillScale.Other,
                                         AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember },
-                                        DescriptionMain = "{VALUE} construction speed per 5 prisoners for every {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
-                                        DescriptionSecondary = "{VALUE} construction speed per 5 prisoners for every {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
-                                        DescriptionOthers = "{VALUE} construction speed per 5 prisoners for every {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
+                                        DescriptionMain = "{VALUE} construction speed per 5 prisoners for each {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
+                                        DescriptionSecondary = "{VALUE} construction speed per 5 prisoners for each {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
+                                        DescriptionOthers = "{VALUE} construction speed per 5 prisoners for each {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
                 },
                 //Steward.Contractors
                 {"StewardContractors",
                   //this._stewardContractors.Initialize("{=Pg5enC8c}Contractors", DefaultSkills.Steward, this.GetTierCost(8), this._stewardForcedLabor, "{=4220dQ4j}{VALUE} wages and upgrade costs of the mercenary troops in your party", SkillEffect.PerkRole.Quartermaster, -0.25f, SkillEffect.EffectIncrementType.AddFactor, "{=xiTD2qUv}{VALUE} town project effects in the governed settlement", SkillEffect.PerkRole.Governor, 0.1f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);     
                   new PerkData(){
-                        PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =20 ,EverySkillSecondary = 20 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
-                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                       DescriptionMain = "{VALUE} wages and upgrade costs of the mercenary troops in your party for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                       DescriptionOthers = "{VALUE} wages and upgrade costs of the mercenary troops in your party for every {EVERYSKILLOTHERS} steward point if the hero is a party member"},
+                        PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =20 ,EverySkillSecondary = 20 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,EverySkillCourtMember = 100, CourtPosition =DefaultCouncilPositions.CHANCELLOR,
+                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ (SkillEffect.PerkRole)15, SkillEffect.PerkRole.PartyMember },
+                                        DescriptionMain = "{VALUE} wages and upgrade costs of the mercenary troops in your party for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                        DescriptionCourt="{VALUE} wages and upgrade costs of the mercenary troops in your party for each {EVERYSKILLCOURTMEMBER} steward point if the hero is the clan {COURTPOSITION}",
+                                        DescriptionOthers = "{VALUE} wages and upgrade costs of the mercenary troops in your party for each {EVERYSKILLOTHERS} steward point if the hero is a party member"},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.3f ,EverySkillMain =30 ,EverySkillSecondary = 90 ,EverySkillOthers = 120 ,SkillScale = SkillScale.Other,
                                         AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember },
-                                        DescriptionMain = "{VALUE} town project effects in the settlement for every {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
-                                        DescriptionSecondary = "{VALUE} town project effects in the settlement for every {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
-                                        DescriptionOthers = "{VALUE} town project effects in the settlement for every {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
+                                        DescriptionMain = "{VALUE} town project effects in the settlement for each {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
+                                        DescriptionSecondary = "{VALUE} town project effects in the settlement for each {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
+                                        DescriptionOthers = "{VALUE} town project effects in the settlement for each {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
                 },
                 //Steward.ArenicosMules
                 {"StewardArenicosMules",
@@ -243,12 +249,12 @@ namespace BannerKings.Patches
                 new PerkData{
                         PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.8f ,EverySkillMain =10 ,EverySkillSecondary = 10 ,EverySkillOthers = 50 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                       DescriptionMain = "{VALUE} carrying capacity for pack animals in your party for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                       DescriptionOthers = "{VALUE} carrying capacity for pack animals in your party for every {EVERYSKILLOTHERS} steward point if the hero is a party member"},
+                                       DescriptionMain = "{VALUE} carrying capacity for pack animals in your party for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                       DescriptionOthers = "{VALUE} carrying capacity for pack animals in your party for each {EVERYSKILLOTHERS} steward point if the hero is a party member"},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =20 ,EverySkillSecondary = 20 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
                                         AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                        DescriptionMain = "{VALUE} trade penalty for trading pack animals for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                        DescriptionOthers = "{VALUE} trade penalty for trading pack animals for every {EVERYSKILLOTHERS} steward point if the hero is a party member"}}
+                                        DescriptionMain = "{VALUE} trade penalty for trading pack animals for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                        DescriptionOthers = "{VALUE} trade penalty for trading pack animals for each {EVERYSKILLOTHERS} steward point if the hero is a party member"}}
                 },
                 //Steward.ArenicosHorses
                 {"StewardArenicosHorses",
@@ -256,13 +262,13 @@ namespace BannerKings.Patches
                 new PerkData(){
                         PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.4f ,EverySkillMain =20 ,EverySkillSecondary = 20 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                       DescriptionMain = "{VALUE} carrying capacity for troops in your party for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                       DescriptionOthers = "{VALUE} carrying capacity for troops in your party for every {EVERYSKILLOTHERS} steward point if the hero is a party member"},
+                                       DescriptionMain = "{VALUE} carrying capacity for troops in your party for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                       DescriptionOthers = "{VALUE} carrying capacity for troops in your party for each {EVERYSKILLOTHERS} steward point if the hero is a party member"},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =20 ,EverySkillSecondary = 20 ,EverySkillOthers = 100 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
                                         AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
                                         Role = SkillEffect.PerkRole.Quartermaster,
-                                        DescriptionMain = "{VALUE} trade penalty for trading mounts for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                        DescriptionOthers = "{VALUE} trade penalty for trading mounts for every {EVERYSKILLOTHERS} steward point if the hero is a party member"}}
+                                        DescriptionMain = "{VALUE} trade penalty for trading mounts for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                        DescriptionOthers = "{VALUE} trade penalty for trading mounts for each {EVERYSKILLOTHERS} steward point if the hero is a party member"}}
                 },
                 //Steward.MasterOfPlanning
                 {"StewardMasterOfPlanning",
@@ -270,13 +276,13 @@ namespace BannerKings.Patches
                 new PerkData{
                         PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.5f ,MaxBonus = 0 ,EverySkillMain =15 ,EverySkillSecondary = 15 ,EverySkillOthers = 90 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                       DescriptionMain = "{VALUE} food consumption while your party is in a siege camp for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                       DescriptionOthers = "{VALUE} food consumption while your party is in a siege camp for every {EVERYSKILLOTHERS} steward point if the hero is a party member"},
+                                       DescriptionMain = "{VALUE} food consumption while your party is in a siege camp for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                       DescriptionOthers = "{VALUE} food consumption while your party is in a siege camp for each {EVERYSKILLOTHERS} steward point if the hero is a party member"},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.4f ,EverySkillMain =15 ,EverySkillSecondary = 15 ,EverySkillOthers = 90 ,SkillScale = SkillScale.Other,
                                         AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner,SkillEffect.PerkRole.PartyMember },
-                                        DescriptionMain = "{VALUE} effectiveness to continuous projects in the governed settlement for every {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
-                                        DescriptionSecondary = "{VALUE} effectiveness to continuous projects for every {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
-                                        DescriptionOthers = "{VALUE} effectiveness to continuous projects for every {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
+                                        DescriptionMain = "{VALUE} effectiveness to continuous projects in the governed settlement for each {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
+                                        DescriptionSecondary = "{VALUE} effectiveness to continuous projects for each {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
+                                        DescriptionOthers = "{VALUE} effectiveness to continuous projects for each {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
                 },                              
                 //Steward.MasterOfWarcraft
                 {"StewardMasterOfWarcraft",
@@ -284,27 +290,34 @@ namespace BannerKings.Patches
                 new PerkData(){
                         PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =30 ,EverySkillSecondary = 30 ,EverySkillOthers = 120 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
-                                       DescriptionMain = "{VALUE} troop wages while your party is in a siege camp for every {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
-                                       DescriptionOthers = "{VALUE} troop wages while your party is in a siege camp for every {EVERYSKILLOTHERS} steward point if the hero is a party member"},
+                                       DescriptionMain = "{VALUE} troop wages while your party is in a siege camp for each {EVERYSKILLMAIN} steward point if the hero is the party quartermaster",
+                                       DescriptionOthers = "{VALUE} troop wages while your party is in a siege camp for each {EVERYSKILLOTHERS} steward point if the hero is a party member"},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.15f ,MaxBonus = 0 ,EverySkillMain =50 ,EverySkillSecondary = 100 ,EverySkillOthers = 150 ,SkillScale = SkillScale.Other,
                                         AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember },
-                                        DescriptionMain = "{VALUE} food consumption of town population in the governed settlement for every {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
-                                        DescriptionSecondary = "{VALUE} food consumption of town population in the governed settlement for every {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
-                                        DescriptionOthers = "{VALUE} food consumption of town population for every {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
+                                        DescriptionMain = "{VALUE} food consumption of town population in the governed settlement for each {EVERYSKILLMAIN} steward point if the hero is the settlement governer",
+                                        DescriptionSecondary = "{VALUE} food consumption of town population in the governed settlement for each {EVERYSKILLSECONDARY} steward point if the hero is the settlement owner",
+                                        DescriptionOthers = "{VALUE} food consumption of town population for each {EVERYSKILLOTHERS} steward point if the hero is staying in a settlement that belongs to his clan"}}
                 },
                 //Steward.PriceOfLoyalty
                 {"StewardPriceOfLoyalty",
                 //this._stewardPriceOfLoyalty.Initialize("{=eVTnUmSB}Price of Loyalty", DefaultSkills.Steward, this.GetTierCost(11), null, "{=sYrG8rNy}{VALUE} to food consumption, wages and combat related morale loss for each steward point above 250 in your party", SkillEffect.PerkRole.Quartermaster, -0.005f, SkillEffect.EffectIncrementType.AddFactor, "{=lwp50FuF}{VALUE} tax income for each skill point above 200 in the governed settlement", SkillEffect.PerkRole.Governor, 0.005f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
                 new PerkData{
-                    PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.005f ,MinBonus=-20f ,MaxBonus = 0 ,EverySkillMain =1 ,EverySkillSecondary = 10 ,EverySkillOthers = 30 ,StartSkillLevel=200,SkillScale = SkillScale.OnlyPartySpecializedRole,
-                                                      AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
+                    PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.005f ,MinBonus=-20f ,MaxBonus = 0 ,EverySkillMain =5 ,EverySkillSecondary = 0 ,EverySkillOthers = 25 ,StartSkillLevel=200,SkillScale = SkillScale.OnlyPartySpecializedRole,CourtPosition = DefaultCouncilPositions.STEWARD,RoyalCourtPosition = DefaultCouncilPositions.STEWARD,EverySkillCourtMember = 20,EverySkillRoyalCourtMember = 20,
+                                                      AdditionalRoles = new List<SkillEffect.PerkRole>(){ (SkillEffect.PerkRole)15 , (SkillEffect.PerkRole)16, SkillEffect.PerkRole.PartyMember },
                                                       DescriptionMain = "{VALUE} to food consumption, wages and combat related morale loss for each steward point above {STARTSKILLLEVEL} in your party if the hero is the party quartermaster",
-                                                      DescriptionOthers = "{VALUE} to food consumption and wages for each {EVERYSKILLSECONDARY} steward point above {STARTSKILLLEVEL} in your party if the hero is a party member"},
-                    SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.005f ,MinBonus=0 ,MaxBonus = 20 ,EverySkillMain =1 ,EverySkillSecondary = 1 ,EverySkillOthers = 10 ,StartSkillLevel=200,SkillScale = SkillScale.Other,
-                                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember },
+                                                      DescriptionCourt="{VALUE} to food consumption and wages for each {EVERYSKILLCOURTMEMBER} steward point if the hero is the clan {COURTPOSITION}",
+                                                      DescriptionRoylCourt="{VALUE} to food consumption and wages for each {EVERYSKILLROYALCOURTMEMBER} steward point if the hero is the Kingdom {ROYALCOURTPOSITION}",
+                                                      DescriptionOthers = "{VALUE} to food consumption and wages for each {EVERYSKILLOTHERS} steward point above {STARTSKILLLEVEL} in your party if the hero is a party member",
+                                                      DescriptionMax = ""},
+                                                        
+                    SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.005f ,MinBonus=0 ,MaxBonus = 20 ,EverySkillMain =5 ,EverySkillSecondary = 20 ,EverySkillOthers = 25 ,StartSkillLevel=200,SkillScale = SkillScale.Other,CourtPosition = DefaultCouncilPositions.STEWARD,RoyalCourtPosition = DefaultCouncilPositions.STEWARD,EverySkillCourtMember = 25,EverySkillRoyalCourtMember = 25,
+                                                       AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner, (SkillEffect.PerkRole)15, (SkillEffect.PerkRole)16, SkillEffect.PerkRole.PartyMember },
                                                        DescriptionMain = "{VALUE} tax income for each {EVERYSKILLMAIN} steward point above {STARTSKILLLEVEL} in the governed settlement by the hero",
+                                                       DescriptionCourt="{VALUE} tax income for each {EVERYSKILLCOURTMEMBER} steward point if the hero is the clan {COURTPOSITION}", 
+                                                       DescriptionRoylCourt="{VALUE} tax income for each {EVERYSKILLROYALCOURTMEMBER} steward point if the hero is the Kingdom {ROYALCOURTPOSITION}", 
                                                        DescriptionSecondary ="{VALUE} tax income for each {EVERYSKILLSECONDARY} steward point above {STARTSKILLLEVEL} in the settlement if the hero is the settlement owner",
-                                                       DescriptionOthers = "{VALUE} tax income for each {EVERYSKILLOTHERS} steward point above {STARTSKILLLEVEL} if the hero is staying in a settlement that belongs to his clan"}}
+                                                       DescriptionOthers = "{VALUE} tax income for each {EVERYSKILLOTHERS} steward point above {STARTSKILLLEVEL} if the hero is staying in a settlement that belongs to his clan",
+                                                       DescriptionMax = ""}}
                 },
             };
         #endregion
@@ -317,12 +330,12 @@ namespace BannerKings.Patches
             {
                 PrimaryPerk  =  new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.02f ,MinBonus=0 ,MaxBonus = 0.6f ,EverySkillMain =10 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.Personal,
                                 AdditionalRoles = new List<SkillEffect.PerkRole>(){ },
-                                DescriptionMain = "{VALUE} healing rate for every {EVERYSKILLMAIN} medicine point for the hero",
-                                DescriptionOthers = "{VALUE} healing rate for every {EVERYSKILLMAIN} medicine point for the hero"},
+                                DescriptionMain = "{VALUE} healing rate for each {EVERYSKILLMAIN} medicine point for the hero",
+                                DescriptionOthers = "{VALUE} healing rate for each {EVERYSKILLMAIN} medicine point for the hero"},
                 SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.005f ,MinBonus=0 ,MaxBonus = 0.075f ,EverySkillMain =20 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.Personal,
                                 AdditionalRoles = new List<SkillEffect.PerkRole>(){  },
-                                DescriptionMain = "{VALUE} combat movement speed for every {EVERYSKILLMAIN} medicine point for the hero",
-                                DescriptionOthers = "{VALUE} combat movement speed for every {EVERYSKILLMAIN} medicine point for the hero"}}
+                                DescriptionMain = "{VALUE} combat movement speed for each {EVERYSKILLMAIN} medicine point for the hero",
+                                DescriptionOthers = "{VALUE} combat movement speed for each {EVERYSKILLMAIN} medicine point for the hero"}}
             },
             //Medicine.PreventiveMedicine             
             {"MedicinePreventiveMedicine",
@@ -331,10 +344,10 @@ namespace BannerKings.Patches
             {
                 PrimaryPerk  =  new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 1f ,MinBonus=0 ,MaxBonus = 20f ,EverySkillMain =15 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.Personal,
                                 AdditionalRoles = new List<SkillEffect.PerkRole>(){ },
-                                DescriptionMain = "{VALUE} hit points for the hero for every {EVERYSKILLMAIN} medicine point"},
+                                DescriptionMain = "{VALUE} hit points for the hero for each {EVERYSKILLMAIN} medicine point"},
                 SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.02f ,MinBonus=0 ,MaxBonus = 0.6f ,EverySkillMain =10 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.Personal,
                                 AdditionalRoles = new List<SkillEffect.PerkRole>(){  },
-                                DescriptionMain = "{VALUE} recovery of lost hit points after each battle for every {EVERYSKILLMAIN} medicine point for the hero"} }
+                                DescriptionMain = "{VALUE} recovery of lost hit points after each battle for each {EVERYSKILLMAIN} medicine point for the hero"} }
 
             },
             //Medicine.TriageTent             
@@ -344,28 +357,28 @@ namespace BannerKings.Patches
             {
                 PrimaryPerk  =  new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.5f ,EverySkillMain =10 ,EverySkillSecondary = 10 ,EverySkillOthers = 60 ,SkillScale = SkillScale.OnlyPartySpecializedRole,EverySkillCourtMember = 100, CourtPosition =DefaultCouncilPositions.COURT_PHYSICIAN,
                                 AdditionalRoles = new List<SkillEffect.PerkRole>(){  (SkillEffect.PerkRole)15, SkillEffect.PerkRole.PartyMember },
-                                DescriptionMain = "{VALUE} healing rate when stationary on the campaign map for every {EVERYSKILLMAIN} medicine point for the hero",
-                                DescriptionCourt="{VALUE} healing rate when stationary on the campaign map for every {EVERYSKILLCOURTMEMBER} medicine point if the hero is the clan {COURTPOSITION}",
-                                DescriptionOthers = "{VALUE} healing rate when stationary on the campaign map for every {EVERYSKILLOTHERS} medicine point if the hero is a party member"},
+                                DescriptionMain = "{VALUE} healing rate when stationary on the campaign map for each {EVERYSKILLMAIN} medicine point for the hero",
+                                DescriptionCourt="{VALUE} healing rate when stationary on the campaign map for each {EVERYSKILLCOURTMEMBER} medicine point if the hero is the clan {COURTPOSITION}",
+                                DescriptionOthers = "{VALUE} healing rate when stationary on the campaign map for each {EVERYSKILLOTHERS} medicine point if the hero is a party member"},
                 SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = -0.005f ,MinBonus=-0.1f ,MaxBonus = 0 ,EverySkillMain =30 ,EverySkillSecondary = 60 ,EverySkillOthers = 120 ,SkillScale = SkillScale.Other,
                                 AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner,SkillEffect.PerkRole.PartyMember },
-                                DescriptionMain = "{VALUE} food consumption for besieged settlement for every {EVERYSKILLMAIN} medicine point if the hero is the settlement governer",
-                                DescriptionSecondary = "{VALUE} food consumption for besieged settlement for every {EVERYSKILLSECONDARY} medicine point if the hero is the settlement owner",
-                                DescriptionOthers = "{VALUE} food consumption for besieged governed settlement for every {EVERYSKILLOTHERS} medicine point if the hero is staying in a settlement that belongs to his clan"} }
+                                DescriptionMain = "{VALUE} food consumption for besieged settlement for each {EVERYSKILLMAIN} medicine point if the hero is the settlement governer",
+                                DescriptionSecondary = "{VALUE} food consumption for besieged settlement for each {EVERYSKILLSECONDARY} medicine point if the hero is the settlement owner",
+                                DescriptionOthers = "{VALUE} food consumption for besieged governed settlement for each {EVERYSKILLOTHERS} medicine point if the hero is staying in a settlement that belongs to his clan"} }
             },
             //Medicine.WalkItOff             
             {"MedicineWalkItOff",
             //this._medicineWalkItOff.Initialize("{=0pyLfrGZ}Walk It Off", DefaultSkills.Medicine, this.GetTierCost(2), this._medicineTriageTent, "{=NtCBRiLH}{VALUE}% healing rate when moving on the campaign map", SkillEffect.PerkRole.Surgeon, 0.15f, SkillEffect.EffectIncrementType.AddFactor, "{=4YNqWPEu}{VALUE} hit points recovery after each offensive battle", SkillEffect.PerkRole.Personal, 10f, SkillEffect.EffectIncrementType.Add, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             new PerkData()
             {
-                PrimaryPerk  =  new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.25f ,EverySkillMain =20 ,EverySkillSecondary = 20 ,EverySkillOthers = 120 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
+                PrimaryPerk  =  new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.25f ,EverySkillMain =20 ,EverySkillSecondary = 20 ,EverySkillOthers = 120 ,SkillScale = SkillScale.OnlyPartySpecializedRole , EverySkillCourtMember = 100, CourtPosition =DefaultCouncilPositions.COURT_PHYSICIAN,
                                                AdditionalRoles = new List<SkillEffect.PerkRole>(){  (SkillEffect.PerkRole)15, SkillEffect.PerkRole.PartyMember },
-                                               DescriptionMain = "{VALUE} healing rate when moving on the campaign map for every {EVERYSKILLMAIN} medicine point for the hero",
-                                               DescriptionCourt= "{VALUE} healing rate when moving on the campaign map for every {EVERYSKILLCOURTMEMBER} medicine point if the hero is the clan {COURTPOSITION}",
-                                               DescriptionOthers = "{VALUE} healing rate when moving on the campaign map for every {EVERYSKILLOTHERS} medicine point if the hero is a party member"},
+                                               DescriptionMain = "{VALUE} healing rate when moving on the campaign map for each {EVERYSKILLMAIN} medicine point for the hero",
+                                               DescriptionCourt= "{VALUE} healing rate when moving on the campaign map for each {EVERYSKILLCOURTMEMBER} medicine point if the hero is the clan {COURTPOSITION}",
+                                               DescriptionOthers = "{VALUE} healing rate when moving on the campaign map for each {EVERYSKILLOTHERS} medicine point if the hero is a party member"},
                 SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 1f ,MinBonus=0 ,MaxBonus = 30f ,EverySkillMain =10 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.Personal,
                                                AdditionalRoles = new List<SkillEffect.PerkRole>(){  },
-                                               DescriptionMain = "{VALUE} hit points recovery after each offensive battle for every {EVERYSKILLMAIN} medicine point for the hero"}}
+                                               DescriptionMain = "{VALUE} hit points recovery after each offensive battle for each {EVERYSKILLMAIN} medicine point for the hero"}}
             },
             //this._medicineSledges.Initialize("{=TyB6y5bh}Sledges", DefaultSkills.Medicine, this.GetTierCost(3), this._medicineDoctorsOath, "{=bFOfZmwC}{VALUE}% party speed penalty from the wounded", SkillEffect.PerkRole.Surgeon, -0.5f, SkillEffect.EffectIncrementType.AddFactor, "{=dfULyKsz}{VALUE} hit points to mounts in your party", SkillEffect.PerkRole.PartyLeader, 15f, SkillEffect.EffectIncrementType.Add, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             //this._medicineDoctorsOath.Initialize("{=PAwDV08b}Doctor's Oath", DefaultSkills.Medicine, this.GetTierCost(3), this._medicineSledges, "{=XPB1iBkh}Your medicine skill also applies to enemy casualties, increasing potential prisoners", SkillEffect.PerkRole.Surgeon, 0f, SkillEffect.EffectIncrementType.AddFactor, "{=Ti9auMiO}{VALUE} hit points", SkillEffect.PerkRole.Personal, 5f, SkillEffect.EffectIncrementType.Add, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
@@ -376,14 +389,14 @@ namespace BannerKings.Patches
             //this._medicinePristineStreets.Initialize("{=72tbUfrz}Pristine Streets", DefaultSkills.Medicine, this.GetTierCost(6), this._medicineBushDoctor, "{=JMMVcpA0}{VALUE} settlement prosperity every day in governed settlements", SkillEffect.PerkRole.Governor, 1f, SkillEffect.EffectIncrementType.Add, "{=R9O0Y64L}{VALUE}% party healing rate while waiting in towns", SkillEffect.PerkRole.Surgeon, 0.2f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             //this._medicineBushDoctor.Initialize("{=HGrsb7k2}Bush Doctor", DefaultSkills.Medicine, this.GetTierCost(6), this._medicinePristineStreets, "{=ULY7byYc}{VALUE}% hearth growth in villages bound to the governed settlement", SkillEffect.PerkRole.Governor, 0.2f, SkillEffect.EffectIncrementType.AddFactor, "{=UaKTuz1l}{VALUE}% party healing rate while waiting in villages", SkillEffect.PerkRole.Surgeon, 0.2f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             //this._medicinePerfectHealth.Initialize("{=cGuPMx4p}Perfect Health", DefaultSkills.Medicine, this.GetTierCost(7), this._medicineHealthAdvise, "{=1yqMERf2}{VALUE}% recovery rate for each type of food in party inventory", SkillEffect.PerkRole.Surgeon, 0.05f, SkillEffect.EffectIncrementType.AddFactor, "{=QsMEML5E}{VALUE}% animal production rate in villages bound to the governed settlement", SkillEffect.PerkRole.Governor, 0.1f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
-            //this._medicineHealthAdvise.Initialize("{=NxcvQlAk}Health Advice", DefaultSkills.Medicine, this.GetTierCost(7), this._medicinePerfectHealth, "{=uRvym4tq}Chance of recovery from death due to old age for every clan member", SkillEffect.PerkRole.ClanLeader, 0f, SkillEffect.EffectIncrementType.AddFactor, "{=ioYR1Grc}Wounded troops do not decrease morale in battles", SkillEffect.PerkRole.Surgeon, 0f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
+            //this._medicineHealthAdvise.Initialize("{=NxcvQlAk}Health Advice", DefaultSkills.Medicine, this.GetTierCost(7), this._medicinePerfectHealth, "{=uRvym4tq}Chance of recovery from death due to old age for each clan member", SkillEffect.PerkRole.ClanLeader, 0f, SkillEffect.EffectIncrementType.AddFactor, "{=ioYR1Grc}Wounded troops do not decrease morale in battles", SkillEffect.PerkRole.Surgeon, 0f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             //this._medicinePhysicianOfPeople.Initialize("{=5o6pSbCx}Physician of People", DefaultSkills.Medicine, this.GetTierCost(8), this._medicineCleanInfrastructure, "{=F7bbkYx4}{VALUE} loyalty per day in the governed settlement", SkillEffect.PerkRole.Governor, 1f, SkillEffect.EffectIncrementType.Add, "{=bNsaUb42}{VALUE}% chance to recover from lethal wounds for tier 1 and 2 troops", SkillEffect.PerkRole.Surgeon, 0.3f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             //this._medicineCleanInfrastructure.Initialize("{=CZ4y5NAf}Clean Infrastructure", DefaultSkills.Medicine, this.GetTierCost(8), this._medicinePhysicianOfPeople, "{=S9XsuYap}{VALUE} prosperity bonus from civilian projects in the governed settlement", SkillEffect.PerkRole.Governor, 1f, SkillEffect.EffectIncrementType.Add, "{=dYyFWmGB}{VALUE}% recovery rate from raids in villages bound to the governed settlement", SkillEffect.PerkRole.Governor, 0.3f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             //this._medicineCheatDeath.Initialize("{=cpg0oHZJ}Cheat Death", DefaultSkills.Medicine, this.GetTierCost(9), this._medicineFortitudeTonic, "{=n2xL3okw}Cheat death due to old age once", SkillEffect.PerkRole.Personal, 0f, SkillEffect.EffectIncrementType.Add, "{=b1IKTI8t}{VALUE}% chance to die when you fall unconscious in battle", SkillEffect.PerkRole.Surgeon, -0.5f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             //this._medicineFortitudeTonic.Initialize("{=ib2SMG9b}Fortitude Tonic", DefaultSkills.Medicine, this.GetTierCost(9), this._medicineCheatDeath, "{=v9NohO6l}{VALUE} hit points to other heroes in your party", SkillEffect.PerkRole.PartyLeader, 10f, SkillEffect.EffectIncrementType.Add, "{=Ti9auMiO}{VALUE} hit points", SkillEffect.PerkRole.Personal, 5f, SkillEffect.EffectIncrementType.Add, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
-            //this._medicineHelpingHands.Initialize("{=KavZKNaa}Helping Hands", DefaultSkills.Medicine, this.GetTierCost(10), this._medicineBattleHardened, "{=6NOzUcGN}{VALUE}% troop recovery rate for every 10 troop in your party", SkillEffect.PerkRole.Surgeon, 0.02f, SkillEffect.EffectIncrementType.AddFactor, "{=iHuzmdm2}{VALUE}% prosperity loss from starvation", SkillEffect.PerkRole.Governor, -0.5f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
+            //this._medicineHelpingHands.Initialize("{=KavZKNaa}Helping Hands", DefaultSkills.Medicine, this.GetTierCost(10), this._medicineBattleHardened, "{=6NOzUcGN}{VALUE}% troop recovery rate for each 10 troop in your party", SkillEffect.PerkRole.Surgeon, 0.02f, SkillEffect.EffectIncrementType.AddFactor, "{=iHuzmdm2}{VALUE}% prosperity loss from starvation", SkillEffect.PerkRole.Governor, -0.5f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             //this._medicineBattleHardened.Initialize("{=oSbRD72H}Battle Hardened", DefaultSkills.Medicine, this.GetTierCost(10), this._medicineHelpingHands, "{=qWpabhp6}{VALUE} experience to wounded units at the end of the battle", SkillEffect.PerkRole.Surgeon, 25f, SkillEffect.EffectIncrementType.Add, "{=3tLU4AG7}{VALUE}% siege attrition loss in the governed settlement", SkillEffect.PerkRole.Governor, -0.25f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
-            //this._medicineMinisterOfHealth.Initialize("{=rtTjuJTc}Minister of Health", DefaultSkills.Medicine, this.GetTierCost(11), null, "{=cwFyqrfv}{VALUE} hit point to troops for every skill point above 250", SkillEffect.PerkRole.Personal, 1f, SkillEffect.EffectIncrementType.Add, "", SkillEffect.PerkRole.None, 0f, SkillEffect.EffectIncrementType.Invalid, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
+            //this._medicineMinisterOfHealth.Initialize("{=rtTjuJTc}Minister of Health", DefaultSkills.Medicine, this.GetTierCost(11), null, "{=cwFyqrfv}{VALUE} hit point to troops for each skill point above 250", SkillEffect.PerkRole.Personal, 1f, SkillEffect.EffectIncrementType.Add, "", SkillEffect.PerkRole.None, 0f, SkillEffect.EffectIncrementType.Invalid, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
         };
         #endregion
         [HarmonyPatch(typeof(DefaultPerks), "RegisterAll")]

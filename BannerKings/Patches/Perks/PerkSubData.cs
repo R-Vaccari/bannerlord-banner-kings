@@ -25,7 +25,7 @@ namespace BannerKings.Patches.Perks
         public string CourtPosition { get; set; } = "";
 
         public float EverySkillRoyalCourtMember { get; set; } = 0;
-        public string CourtRoyalPosition { get; set; } = "";
+        public string RoyalCourtPosition { get; set; } = "";
 
         public float EverySkillOthers { get; set; } = 0;
         public SkillScale SkillScale { get; set; } = SkillScale.None;
@@ -35,7 +35,7 @@ namespace BannerKings.Patches.Perks
         public string DescriptionCourt { get; set; }
         public string DescriptionRoylCourt { get; set; }
         public string DescriptionOthers { get; set; }
-        public string DescriptionMax { get; set; } = " (total max {MINMAXVALUE})";
+        public string DescriptionMax { get; set; } = " (max total {MINMAXVALUE})";
 
         public SkillEffect.PerkRole? Role { get; set; }
 
@@ -133,6 +133,14 @@ namespace BannerKings.Patches.Perks
             else
             {
                 description.SetTextVariable("EVERYSKILLCOURTMEMBER", "");
+            }
+            if (EverySkillRoyalCourtMember > 1)
+            {
+                description.SetTextVariable("EVERYSKILLROYALCOURTMEMBER", EverySkillCourtMember);
+            }
+            else
+            {
+                description.SetTextVariable("EVERYSKILLROYALCOURTMEMBER", "");
             }
             description.SetTextVariable("STARTSKILLLEVEL", StartSkillLevel);
         }

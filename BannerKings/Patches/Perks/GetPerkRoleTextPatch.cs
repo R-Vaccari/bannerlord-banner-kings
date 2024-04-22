@@ -60,7 +60,10 @@ namespace BannerKings.Patches
                     }
                     textObject.SetTextVariable("PRIMARY_ROLE", NormalizeAdditionalRoles(perk.SecondaryRole, string.Join(" - ", rolesText)));
                 }
-
+                if (textObject.ToString().Trim().Replace(" ", "") == "()")
+                {
+                    __result = new TextObject("");
+                }
                 __result = textObject;
             }
             static string NormalizeAdditionalRoles(SkillEffect.PerkRole perkRole, string text)

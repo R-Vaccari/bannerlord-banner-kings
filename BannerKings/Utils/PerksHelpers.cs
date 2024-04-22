@@ -41,7 +41,7 @@ namespace BannerKings.Utils
                 var data = isSecondary ? PerksAndSkillsPatches.AllPerksData[perk.StringId].SecondaryPerk : PerksAndSkillsPatches.AllPerksData[perk.StringId].PrimaryPerk;
                 if (data != null)
                 {
-                    return AddScaledGovernerPerkBonusForTownWithTownHeros(perk, ref bonuses, isSecondary, town, data.ScaleOnSkill, data.EverySkillMain, data.EverySkillSecondary, data.EverySkillOthers, data.StartSkillLevel, data.CourtRoyalPosition, data.CourtPosition, data.EverySkillRoyalCourtMember, data.EverySkillCourtMember, data.MinBonus, data.MaxBonus, factor);
+                    return AddScaledGovernerPerkBonusForTownWithTownHeros(perk, ref bonuses, isSecondary, town, data.ScaleOnSkill, data.EverySkillMain, data.EverySkillSecondary, data.EverySkillOthers, data.StartSkillLevel, data.RoyalCourtPosition, data.CourtPosition, data.EverySkillRoyalCourtMember, data.EverySkillCourtMember, data.MinBonus, data.MaxBonus, factor);
                 }
             }
             return 0;
@@ -72,7 +72,7 @@ namespace BannerKings.Utils
                         }
 
                     }
-                    return AddScaledPartyPerkBonus(perk, ref bonuses, isSecondary, mobileParty, data.ScaleOnSkill, data.StartSkillLevel, data.EverySkillMain, data.EverySkillSecondary, data.EverySkillOthers, data.SkillScale, data.CourtRoyalPosition, data.CourtPosition, data.EverySkillRoyalCourtMember, data.EverySkillCourtMember, data.MinBonus, data.MaxBonus, nameOverride, factor);
+                    return AddScaledPartyPerkBonus(perk, ref bonuses, isSecondary, mobileParty, data.ScaleOnSkill, data.StartSkillLevel, data.EverySkillMain, data.EverySkillSecondary, data.EverySkillOthers, data.SkillScale, data.RoyalCourtPosition, data.CourtPosition, data.EverySkillRoyalCourtMember, data.EverySkillCourtMember, data.MinBonus, data.MaxBonus, nameOverride, factor);
                 }
             }
             return 0;
@@ -101,7 +101,7 @@ namespace BannerKings.Utils
                 var data = isSecondary ? PerksAndSkillsPatches.AllPerksData[perk.StringId].SecondaryPerk : PerksAndSkillsPatches.AllPerksData[perk.StringId].PrimaryPerk;
                 if (data != null)
                 {
-                    return AddScaledClanLeaderPerkBonusWithClanAndFamilyMembers(perk, ref bonuses, isSecondary, person, data.ScaleOnSkill, data.EverySkillMain, data.EverySkillSecondary, data.EverySkillOthers, data.SkillScale, data.StartSkillLevel, data.CourtRoyalPosition, data.CourtPosition, data.EverySkillRoyalCourtMember, data.EverySkillCourtMember, data.MinBonus, data.MaxBonus, factor);
+                    return AddScaledClanLeaderPerkBonusWithClanAndFamilyMembers(perk, ref bonuses, isSecondary, person, data.ScaleOnSkill, data.EverySkillMain, data.EverySkillSecondary, data.EverySkillOthers, data.SkillScale, data.StartSkillLevel, data.RoyalCourtPosition, data.CourtPosition, data.EverySkillRoyalCourtMember, data.EverySkillCourtMember, data.MinBonus, data.MaxBonus, factor);
                 }
             }
             return 0;
