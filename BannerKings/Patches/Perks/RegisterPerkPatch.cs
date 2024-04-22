@@ -191,7 +191,7 @@ namespace BannerKings.Patches
                         PrimaryPerk  = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.05f ,MinBonus=0 ,MaxBonus = 1f ,EverySkillMain =0 ,EverySkillSecondary = 0 ,EverySkillOthers = 20 ,SkillScale = SkillScale.OnlyPartySpecializedRole,EverySkillCourtMember = 20, CourtPosition =DefaultCouncilPositions.SPOUSE,
                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ (SkillEffect.PerkRole)15, SkillEffect.PerkRole.PartyMember },
                                        DescriptionMain = "Double the morale bonus from having diverse food in your party if the hero is the party quartermaster",
-                                       DescriptionCourt="{VALUE} morale bonus from having diverse food in your party for each {EVERYSKILLCOURTMEMBER} steward point if the hero is the court {COURTPOSITION}",              
+                                       DescriptionCourt="{VALUE} morale bonus from having diverse food in your party for each {EVERYSKILLCOURTMEMBER} steward point if the hero is the court {COURTPOSITION}",
                                        DescriptionOthers = "{VALUE} morale bonus from having diverse food in your party for each {EVERYSKILLOTHERS} steward point if the hero is a party member"},
                         SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = -0.01f ,MinBonus=-0.3f ,MaxBonus = 0 ,EverySkillMain =15 ,EverySkillSecondary = 60 ,EverySkillOthers = 90 ,SkillScale = SkillScale.Other,
                                         AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner, SkillEffect.PerkRole.PartyMember },
@@ -309,12 +309,12 @@ namespace BannerKings.Patches
                                                       DescriptionRoylCourt="{VALUE} to food consumption and wages for each {EVERYSKILLROYALCOURTMEMBER} steward point if the hero is the Kingdom {ROYALCOURTPOSITION}",
                                                       DescriptionOthers = "{VALUE} to food consumption and wages for each {EVERYSKILLOTHERS} steward point above {STARTSKILLLEVEL} in your party if the hero is a party member",
                                                       DescriptionMax = ""},
-                                                        
+
                     SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Steward ,BonusEverySkill = 0.005f ,MinBonus=0 ,MaxBonus = 20 ,EverySkillMain =5 ,EverySkillSecondary = 20 ,EverySkillOthers = 25 ,StartSkillLevel=200,SkillScale = SkillScale.Other,CourtPosition = DefaultCouncilPositions.STEWARD,RoyalCourtPosition = DefaultCouncilPositions.STEWARD,EverySkillCourtMember = 25,EverySkillRoyalCourtMember = 25,
                                                        AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyOwner, (SkillEffect.PerkRole)15, (SkillEffect.PerkRole)16, SkillEffect.PerkRole.PartyMember },
                                                        DescriptionMain = "{VALUE} tax income for each {EVERYSKILLMAIN} steward point above {STARTSKILLLEVEL} in the governed settlement by the hero",
-                                                       DescriptionCourt="{VALUE} tax income for each {EVERYSKILLCOURTMEMBER} steward point if the hero is the clan {COURTPOSITION}", 
-                                                       DescriptionRoylCourt="{VALUE} tax income for each {EVERYSKILLROYALCOURTMEMBER} steward point if the hero is the Kingdom {ROYALCOURTPOSITION}", 
+                                                       DescriptionCourt="{VALUE} tax income for each {EVERYSKILLCOURTMEMBER} steward point if the hero is the clan {COURTPOSITION}",
+                                                       DescriptionRoylCourt="{VALUE} tax income for each {EVERYSKILLROYALCOURTMEMBER} steward point if the hero is the Kingdom {ROYALCOURTPOSITION}",
                                                        DescriptionSecondary ="{VALUE} tax income for each {EVERYSKILLSECONDARY} steward point above {STARTSKILLLEVEL} in the settlement if the hero is the settlement owner",
                                                        DescriptionOthers = "{VALUE} tax income for each {EVERYSKILLOTHERS} steward point above {STARTSKILLLEVEL} if the hero is staying in a settlement that belongs to his clan",
                                                        DescriptionMax = ""}}
@@ -323,21 +323,19 @@ namespace BannerKings.Patches
         #endregion
         #region DefaultPerks.Medicine
         public static Dictionary<string, PerkData> MedicinePerksData { get; set; } = new Dictionary<string, PerkData>()
-        {   //Medicine.SelfMedication             
+        {   //Medicine.SelfMedication  (need testing)          
             {"MedicineSelfMedication",
             //this._medicineSelfMedication.Initialize("{=TLGvIdJB}Self Medication", DefaultSkills.Medicine, this.GetTierCost(1), this._medicinePreventiveMedicine, "{=bLAw2di4}{VALUE}% healing rate", SkillEffect.PerkRole.Personal, 0.3f, SkillEffect.EffectIncrementType.AddFactor, "{=V53EYEXx}{VALUE}% combat movement speed", SkillEffect.PerkRole.Personal, 0.02f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             new PerkData()
             {
                 PrimaryPerk  =  new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.02f ,MinBonus=0 ,MaxBonus = 0.6f ,EverySkillMain =10 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.Personal,
                                 AdditionalRoles = new List<SkillEffect.PerkRole>(){ },
-                                DescriptionMain = "{VALUE} healing rate for each {EVERYSKILLMAIN} medicine point for the hero",
-                                DescriptionOthers = "{VALUE} healing rate for each {EVERYSKILLMAIN} medicine point for the hero"},
+                                DescriptionMain = "{VALUE} healing rate for each {EVERYSKILLMAIN} medicine point for the hero"},
                 SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.005f ,MinBonus=0 ,MaxBonus = 0.075f ,EverySkillMain =20 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.Personal,
                                 AdditionalRoles = new List<SkillEffect.PerkRole>(){  },
-                                DescriptionMain = "{VALUE} combat movement speed for each {EVERYSKILLMAIN} medicine point for the hero",
-                                DescriptionOthers = "{VALUE} combat movement speed for each {EVERYSKILLMAIN} medicine point for the hero"}}
+                                DescriptionMain = "{VALUE} combat movement speed for each {EVERYSKILLMAIN} medicine point for the hero"}}
             },
-            //Medicine.PreventiveMedicine             
+            //Medicine.PreventiveMedicine (need testing)            
             {"MedicinePreventiveMedicine",
             //this._medicinePreventiveMedicine.Initialize("{=wI393cla}Preventive Medicine", DefaultSkills.Medicine, this.GetTierCost(1), this._medicineSelfMedication, "{=Ti9auMiO}{VALUE} hit points", SkillEffect.PerkRole.Personal, 5f, SkillEffect.EffectIncrementType.Add, "{=10cVZTTm}{VALUE}% recovery of lost hit points after each battle", SkillEffect.PerkRole.Personal, 0.3f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             new PerkData()
@@ -350,14 +348,14 @@ namespace BannerKings.Patches
                                 DescriptionMain = "{VALUE} recovery of lost hit points after each battle for each {EVERYSKILLMAIN} medicine point for the hero"} }
 
             },
-            //Medicine.TriageTent             
+            //Medicine.TriageTent (need testing)            
             {"MedicineTriageTent",
             //this._medicineTriageTent.Initialize("{=EU4JjLqV}Triage Tent", DefaultSkills.Medicine, this.GetTierCost(2), this._medicineWalkItOff, "{=ZMPhsLdx}{VALUE}% healing rate when stationary on the campaign map", SkillEffect.PerkRole.Surgeon, 0.3f, SkillEffect.EffectIncrementType.AddFactor, "{=Mn714dPH}{VALUE}% food consumption for besieged governed settlement", SkillEffect.PerkRole.Governor, -0.05f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             new PerkData()
             {
                 PrimaryPerk  =  new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.5f ,EverySkillMain =10 ,EverySkillSecondary = 10 ,EverySkillOthers = 60 ,SkillScale = SkillScale.OnlyPartySpecializedRole,EverySkillCourtMember = 100, CourtPosition =DefaultCouncilPositions.COURT_PHYSICIAN,
                                 AdditionalRoles = new List<SkillEffect.PerkRole>(){  (SkillEffect.PerkRole)15, SkillEffect.PerkRole.PartyMember },
-                                DescriptionMain = "{VALUE} healing rate when stationary on the campaign map for each {EVERYSKILLMAIN} medicine point for the hero",
+                                DescriptionMain = "{VALUE} healing rate when stationary on the campaign map for each {EVERYSKILLMAIN} medicine point if the hero is the party surgeon",
                                 DescriptionCourt="{VALUE} healing rate when stationary on the campaign map for each {EVERYSKILLCOURTMEMBER} medicine point if the hero is the clan {COURTPOSITION}",
                                 DescriptionOthers = "{VALUE} healing rate when stationary on the campaign map for each {EVERYSKILLOTHERS} medicine point if the hero is a party member"},
                 SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = -0.005f ,MinBonus=-0.1f ,MaxBonus = 0 ,EverySkillMain =30 ,EverySkillSecondary = 60 ,EverySkillOthers = 120 ,SkillScale = SkillScale.Other,
@@ -366,22 +364,43 @@ namespace BannerKings.Patches
                                 DescriptionSecondary = "{VALUE} food consumption for besieged settlement for each {EVERYSKILLSECONDARY} medicine point if the hero is the settlement owner",
                                 DescriptionOthers = "{VALUE} food consumption for besieged governed settlement for each {EVERYSKILLOTHERS} medicine point if the hero is staying in a settlement that belongs to his clan"} }
             },
-            //Medicine.WalkItOff             
+            //Medicine.WalkItOff (need testing)            
             {"MedicineWalkItOff",
             //this._medicineWalkItOff.Initialize("{=0pyLfrGZ}Walk It Off", DefaultSkills.Medicine, this.GetTierCost(2), this._medicineTriageTent, "{=NtCBRiLH}{VALUE}% healing rate when moving on the campaign map", SkillEffect.PerkRole.Surgeon, 0.15f, SkillEffect.EffectIncrementType.AddFactor, "{=4YNqWPEu}{VALUE} hit points recovery after each offensive battle", SkillEffect.PerkRole.Personal, 10f, SkillEffect.EffectIncrementType.Add, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             new PerkData()
             {
                 PrimaryPerk  =  new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 0.01f ,MinBonus=0 ,MaxBonus = 0.25f ,EverySkillMain =20 ,EverySkillSecondary = 20 ,EverySkillOthers = 120 ,SkillScale = SkillScale.OnlyPartySpecializedRole , EverySkillCourtMember = 100, CourtPosition =DefaultCouncilPositions.COURT_PHYSICIAN,
                                                AdditionalRoles = new List<SkillEffect.PerkRole>(){  (SkillEffect.PerkRole)15, SkillEffect.PerkRole.PartyMember },
-                                               DescriptionMain = "{VALUE} healing rate when moving on the campaign map for each {EVERYSKILLMAIN} medicine point for the hero",
+                                               DescriptionMain = "{VALUE} healing rate when moving on the campaign map for each {EVERYSKILLMAIN} medicine point if the hero is the party surgeon",
                                                DescriptionCourt= "{VALUE} healing rate when moving on the campaign map for each {EVERYSKILLCOURTMEMBER} medicine point if the hero is the clan {COURTPOSITION}",
                                                DescriptionOthers = "{VALUE} healing rate when moving on the campaign map for each {EVERYSKILLOTHERS} medicine point if the hero is a party member"},
                 SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 1f ,MinBonus=0 ,MaxBonus = 30f ,EverySkillMain =10 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.Personal,
                                                AdditionalRoles = new List<SkillEffect.PerkRole>(){  },
                                                DescriptionMain = "{VALUE} hit points recovery after each offensive battle for each {EVERYSKILLMAIN} medicine point for the hero"}}
             },
+            //Medicine.Sledges             
+            {"MedicineSledges",
             //this._medicineSledges.Initialize("{=TyB6y5bh}Sledges", DefaultSkills.Medicine, this.GetTierCost(3), this._medicineDoctorsOath, "{=bFOfZmwC}{VALUE}% party speed penalty from the wounded", SkillEffect.PerkRole.Surgeon, -0.5f, SkillEffect.EffectIncrementType.AddFactor, "{=dfULyKsz}{VALUE} hit points to mounts in your party", SkillEffect.PerkRole.PartyLeader, 15f, SkillEffect.EffectIncrementType.Add, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
+            new PerkData()
+            {
+                PrimaryPerk  =  new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = -0.05f ,MinBonus=-0.75f ,MaxBonus = 0 ,EverySkillMain =30 ,EverySkillSecondary = 30 ,EverySkillOthers = 120 ,SkillScale = SkillScale.OnlyPartySpecializedRole,
+                                               AdditionalRoles = new List<SkillEffect.PerkRole>(){   SkillEffect.PerkRole.PartyMember },
+                                               DescriptionMain   = "{VALUE} party speed penalty from the wounded for each {EVERYSKILLMAIN} medicine point if the hero is the party surgeon",
+                                               DescriptionOthers = "{VALUE} party speed penalty from the wounded for each {EVERYSKILLOTHERS} medicine point if the hero is a party member"},
+                SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 1f ,MinBonus=0 ,MaxBonus = 30f ,EverySkillMain =10 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.OnlyPartyLeader,
+                                               AdditionalRoles = new List<SkillEffect.PerkRole>(){ SkillEffect.PerkRole.PartyMember },
+                                               DescriptionMain = "{VALUE} hit points to mounts in your party for each {EVERYSKILLMAIN} medicine point if the hero is the party leader",
+                                               DescriptionOthers = "{VALUE} hit points to mounts in your party for each {EVERYSKILLOTHERS} medicine point if the hero is a party member"}}
+            },
+             //Medicine.DoctorsOath             
+            {"MedicineDoctorsOath",          
             //this._medicineDoctorsOath.Initialize("{=PAwDV08b}Doctor's Oath", DefaultSkills.Medicine, this.GetTierCost(3), this._medicineSledges, "{=XPB1iBkh}Your medicine skill also applies to enemy casualties, increasing potential prisoners", SkillEffect.PerkRole.Surgeon, 0f, SkillEffect.EffectIncrementType.AddFactor, "{=Ti9auMiO}{VALUE} hit points", SkillEffect.PerkRole.Personal, 5f, SkillEffect.EffectIncrementType.Add, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
+            new PerkData()
+            {            
+                SecondaryPerk = new PerkSubData(){ ScaleOnSkill =DefaultSkills.Medicine ,BonusEverySkill = 1f ,MinBonus=0 ,MaxBonus = 30f ,EverySkillMain =10 ,EverySkillSecondary = 0 ,EverySkillOthers = 0 ,SkillScale = SkillScale.Personal,
+                                                              AdditionalRoles = new List<SkillEffect.PerkRole>(){  },
+                                                              DescriptionMain = "{VALUE} hit points for the hero for each {EVERYSKILLMAIN} medicine point"}
+            }}
             //this._medicineBestMedicine.Initialize("{=ei1JSeco}Best Medicine", DefaultSkills.Medicine, this.GetTierCost(4), this._medicineGoodLodging, "{=L3kTYA2p}{VALUE}% healing rate while party morale is above 70", SkillEffect.PerkRole.Surgeon, 0.15f, SkillEffect.EffectIncrementType.AddFactor, "{=At6b9vHF}{VALUE} relationship per day with a random notable over age 40 when party is in a town", SkillEffect.PerkRole.Personal, 1f, SkillEffect.EffectIncrementType.Add, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             //this._medicineGoodLodging.Initialize("{=RXo3edjn}Good Lodging", DefaultSkills.Medicine, this.GetTierCost(4), this._medicineBestMedicine, "{=NjMR2ypH}{VALUE}% healing rate while resting in settlements", SkillEffect.PerkRole.Surgeon, 0.2f, SkillEffect.EffectIncrementType.AddFactor, "{=ZH3U43xW}{VALUE} relationship per day with a random noble over age 40 when party is in a town", SkillEffect.PerkRole.Personal, 1f, SkillEffect.EffectIncrementType.Add, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
             //this._medicineSiegeMedic.Initialize("{=ObwbbEqE}Siege Medic", DefaultSkills.Medicine, this.GetTierCost(5), this._medicineVeterinarian, "{=Gyy4rwnD}{VALUE}% chance of troops getting wounded instead of getting killed during siege bombardment", SkillEffect.PerkRole.Surgeon, 0.5f, SkillEffect.EffectIncrementType.AddFactor, "{=Nxh6aX2E}{VALUE}% chance to recover from lethal wounds during siege bombardment", SkillEffect.PerkRole.Surgeon, 0.3f, SkillEffect.EffectIncrementType.AddFactor, TroopUsageFlags.Undefined, TroopUsageFlags.Undefined);
@@ -406,7 +425,7 @@ namespace BannerKings.Patches
 
             static void Postfix()
             {
-                
+
                 if (BannerKingsSettings.Instance.EnableUsefulPerks)
                 {
                     if (BannerKingsSettings.Instance.EnableUsefulStewardPerks)
