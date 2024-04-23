@@ -4,6 +4,7 @@ using BannerKings.Managers.Skills;
 using BannerKings.Settings;
 using BannerKings.Utils;
 using Helpers;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
@@ -62,12 +63,20 @@ namespace BannerKings.Models.BKModels
                     ref result,
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
                     false,
-                    0);
+                    0);             
+            }
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardSkills && BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            {
+                var herosStewardSkill = needs.Party.GetAllPartyHeros().Where(d => d.HeroObject?.IsActive ?? false).Sum(d => d.HeroObject.GetSkillValue(DefaultSkills.Steward));
+                if (herosStewardSkill > 0)
+                {
+                    result.Add(herosStewardSkill * BKSkillEffects.Instance.SupplyEfficiency.SecondaryBonus, new TextObject("Party Members Steward Skill"));
+                }
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
-                result.Add(element.Number * AlcoholPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
+                result.Add(element.Number * AlcoholPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor,
                     new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
                     .SetTextVariable("TROOP_NAME", element.Character.Name)
                     .SetTextVariable("COUNT", element.Number));
@@ -95,13 +104,20 @@ namespace BannerKings.Models.BKModels
                     false,
                     0);
             }
-
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardSkills && BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            {
+                var herosStewardSkill = needs.Party.GetAllPartyHeros().Where(d => d.HeroObject?.IsActive ?? false).Sum(d => d.HeroObject.GetSkillValue(DefaultSkills.Steward));
+                if (herosStewardSkill > 0)
+                {
+                    result.Add(herosStewardSkill * BKSkillEffects.Instance.SupplyEfficiency.SecondaryBonus, new TextObject("Party Members Steward Skill"));
+                }
+            }
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
                 FormationClass formation = element.Character.GetFormationClass();
                 if (formation == FormationClass.Ranged || formation == FormationClass.HorseArcher)
                 {
-                    result.Add(element.Number * ArrowsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
+                    result.Add(element.Number * ArrowsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor,
                         new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
                         .SetTextVariable("TROOP_NAME", element.Character.Name)
                         .SetTextVariable("COUNT", element.Number));
@@ -130,10 +146,17 @@ namespace BannerKings.Models.BKModels
                     false,
                     0);
             }
-
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardSkills && BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            {
+                var herosStewardSkill = needs.Party.GetAllPartyHeros().Where(d => d.HeroObject?.IsActive ?? false).Sum(d => d.HeroObject.GetSkillValue(DefaultSkills.Steward));
+                if (herosStewardSkill > 0)
+                {
+                    result.Add(herosStewardSkill * BKSkillEffects.Instance.SupplyEfficiency.SecondaryBonus, new TextObject("Party Members Steward Skill"));
+                }
+            }
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
-                result.Add(element.Number * ClothPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
+                result.Add(element.Number * ClothPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor,
                     new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
                     .SetTextVariable("TROOP_NAME", element.Character.Name)
                     .SetTextVariable("COUNT", element.Number));
@@ -161,12 +184,19 @@ namespace BannerKings.Models.BKModels
                     false,
                     0);
             }
-
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardSkills && BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            {
+                var herosStewardSkill = needs.Party.GetAllPartyHeros().Where(d => d.HeroObject?.IsActive ?? false).Sum(d => d.HeroObject.GetSkillValue(DefaultSkills.Steward));
+                if (herosStewardSkill > 0)
+                {
+                    result.Add(herosStewardSkill * BKSkillEffects.Instance.SupplyEfficiency.SecondaryBonus, new TextObject("Party Members Steward Skill"));
+                }
+            }
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
                 if (element.Character.IsMounted)
                 {
-                    result.Add(element.Number * HorsesPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
+                    result.Add(element.Number * HorsesPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor,
                         new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
                         .SetTextVariable("TROOP_NAME", element.Character.Name)
                         .SetTextVariable("COUNT", element.Number));
@@ -195,10 +225,17 @@ namespace BannerKings.Models.BKModels
                     false,
                     0);
             }
-
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardSkills && BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            {
+                var herosStewardSkill = needs.Party.GetAllPartyHeros().Where(d => d.HeroObject?.IsActive ?? false).Sum(d => d.HeroObject.GetSkillValue(DefaultSkills.Steward));
+                if (herosStewardSkill > 0)
+                {
+                    result.Add(herosStewardSkill * BKSkillEffects.Instance.SupplyEfficiency.SecondaryBonus, new TextObject("Party Members Steward Skill"));
+                }
+            }
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
-                result.Add(element.Number * AnimalProductsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
+                result.Add(element.Number * AnimalProductsPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor,
                     new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
                     .SetTextVariable("TROOP_NAME", element.Character.Name)
                     .SetTextVariable("COUNT", element.Number));
@@ -226,7 +263,14 @@ namespace BannerKings.Models.BKModels
                     false,
                     0);
             }
-
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardSkills && BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            {
+                var herosStewardSkill = needs.Party.GetAllPartyHeros().Where(d => d.HeroObject?.IsActive ?? false).Sum(d => d.HeroObject.GetSkillValue(DefaultSkills.Steward));
+                if (herosStewardSkill > 0)
+                {
+                    result.Add(herosStewardSkill * BKSkillEffects.Instance.SupplyEfficiency.SecondaryBonus, new TextObject("Party Members Steward Skill"));
+                }
+            }
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
                 if (element.Character == null || element.Character.Equipment == null) continue;
@@ -243,7 +287,7 @@ namespace BannerKings.Models.BKModels
                     }
                 },
                 GetType().Name,
-                false); 
+                false);
             }
 
             return result;
@@ -268,7 +312,14 @@ namespace BannerKings.Models.BKModels
                     false,
                     0);
             }
-
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardSkills && BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            {
+                var herosStewardSkill = needs.Party.GetAllPartyHeros().Where(d => d.HeroObject?.IsActive ?? false).Sum(d => d.HeroObject.GetSkillValue(DefaultSkills.Steward));
+                if (herosStewardSkill > 0)
+                {
+                    result.Add(herosStewardSkill * BKSkillEffects.Instance.SupplyEfficiency.SecondaryBonus, new TextObject("Party Members Steward Skill"));
+                }
+            }
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
                 if (!element.Character.IsRanged)
@@ -302,7 +353,14 @@ namespace BannerKings.Models.BKModels
                     false,
                     0);
             }
-
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardSkills && BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            {
+                var herosStewardSkill = needs.Party.GetAllPartyHeros().Where(d => d.HeroObject?.IsActive ?? false).Sum(d => d.HeroObject.GetSkillValue(DefaultSkills.Steward));
+                if (herosStewardSkill > 0)
+                {
+                    result.Add(herosStewardSkill * BKSkillEffects.Instance.SupplyEfficiency.SecondaryBonus, new TextObject("Party Members Steward Skill"));
+                }
+            }
             float siege = 0f;
             TextObject siegeText = null;
             if (needs.Party.SiegeEvent != null)
@@ -332,8 +390,8 @@ namespace BannerKings.Models.BKModels
                         .SetTextVariable("TROOP_NAME", element.Character.Name)
                         .SetTextVariable("COUNT", element.Number));
                 }
-            } 
-           
+            }
+
             return result;
         }
 
@@ -356,7 +414,14 @@ namespace BannerKings.Models.BKModels
                     false,
                     0);
             }
-
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardSkills && BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            {
+                var herosStewardSkill = needs.Party.GetAllPartyHeros().Where(d => d.HeroObject?.IsActive ?? false).Sum(d => d.HeroObject.GetSkillValue(DefaultSkills.Steward));
+                if (herosStewardSkill > 0)
+                {
+                    result.Add(herosStewardSkill * BKSkillEffects.Instance.SupplyEfficiency.SecondaryBonus, new TextObject("Party Members Steward Skill"));
+                }
+            }
             float siege = 0f;
             TextObject siegeText = null;
             if (needs.Party.SiegeEvent != null)
@@ -381,7 +446,7 @@ namespace BannerKings.Models.BKModels
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
             {
-                result.Add(element.Number * WoodPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor, 
+                result.Add(element.Number * WoodPerSoldier * BannerKingsSettings.Instance.PartySuppliesFactor,
                     new TextObject("{=5Jr8zfXD}{TROOP_NAME}(x{COUNT})")
                     .SetTextVariable("TROOP_NAME", element.Character.Name)
                     .SetTextVariable("COUNT", element.Number));

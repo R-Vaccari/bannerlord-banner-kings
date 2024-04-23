@@ -10,13 +10,18 @@ using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.BKModels;
 using BannerKings.Settings;
+using BannerKings.Utils;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
+using static TaleWorlds.CampaignSystem.CharacterDevelopment.DefaultPerks;
 using TaxType = BannerKings.Managers.Policies.BKTaxPolicy.TaxType;
 
 namespace BannerKings.Models.Vanilla
@@ -172,6 +177,19 @@ namespace BannerKings.Models.Vanilla
         {
             ExplainedNumber baseResult = base.CalculateTownTax(town, includeDescriptions);
             baseResult.LimitMin(0f);
+
+            #region DefaultPerks.Steward.PriceOfLoyalty
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+            {
+                if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Steward.PriceOfLoyalty))
+                {
+                    int num = town.Governor.GetSkillValue(DefaultSkills.Steward) - TaleWorlds.CampaignSystem.Campaign.Current.Models.CharacterDevelopmentModel.MinSkillRequiredForEpicPerkBonus;
+                    var removedValue = -DefaultPerks.Steward.PriceOfLoyalty.SecondaryBonus * (float)num;
+                    baseResult.AddFactor(removedValue, DefaultPerks.Steward.PriceOfLoyalty.Name);
+                }
+                Steward.PriceOfLoyalty.AddScaledGovernerPerkBonusForTownWithTownHeros(ref baseResult, true, town);
+            }
+            #endregion
             if (BannerKingsConfig.Instance.PopulationManager != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
@@ -187,11 +205,11 @@ namespace BannerKings.Models.Vanilla
 
                     baseResult.Add(GetTenantTaxRate(title, data, taxType), new TextObject("{=26yWZwHo}{CLASS} taxes")
                         .SetTextVariable("CLASS", DefaultPopulationNames.Instance.GetPopulationName(town.Culture, PopType.Tenants).Name));
-                    
+
                     baseResult.Add(GetSerfTaxRate(title, data, taxType), new TextObject("{=26yWZwHo}{CLASS} taxes")
                         .SetTextVariable("CLASS", DefaultPopulationNames.Instance.GetPopulationName(town.Culture, PopType.Serfs).Name));
 
-                    baseResult.Add(GetSlaveTaxRate(title, data, taxType),new TextObject("{=26yWZwHo}{CLASS} taxes")
+                    baseResult.Add(GetSlaveTaxRate(title, data, taxType), new TextObject("{=26yWZwHo}{CLASS} taxes")
                         .SetTextVariable("CLASS", DefaultPopulationNames.Instance.GetPopulationName(town.Culture, PopType.Slaves).Name));
 
                     foreach (Workshop wk in town.Workshops)
@@ -256,7 +274,7 @@ namespace BannerKings.Models.Vanilla
 
                     CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan);
                     CalculateDueTax(data, baseResult.ResultNumber);
-                    CalculateDueWages(council,baseResult.ResultNumber);
+                    CalculateDueWages(council, baseResult.ResultNumber);
 
                     var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
                     baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
@@ -307,17 +325,25 @@ namespace BannerKings.Models.Vanilla
                 result.AddFactor(-0.05f, DefaultPolicies.LandTax.Name);
             }
 
-            var governor = village.Bound.Town.Governor;
-            if (governor != null)
+
+            if (village?.Bound?.Town != null)
             {
-                if (governor.GetPerkValue(DefaultPerks.Scouting.ForestKin))
+                var governor = village.Bound.Town.Governor;
+
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                {
+                    DefaultPerks.Steward.Logistician.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, true, village.Bound.Town);
+                }
+                else
+                {
+                    if (governor != null && governor.GetPerkValue(DefaultPerks.Steward.Logistician))
+                    {
+                        result.AddFactor(0.1f, DefaultPerks.Steward.Logistician.Name);
+                    }
+                }
+                if (governor != null && governor.GetPerkValue(DefaultPerks.Scouting.ForestKin))
                 {
                     result.AddFactor(0.1f, DefaultPerks.Scouting.ForestKin.Name);
-                }
-
-                if (governor.GetPerkValue(DefaultPerks.Steward.Logistician))
-                {
-                    result.AddFactor(0.1f, DefaultPerks.Steward.Logistician.Name);
                 }
             }
 
@@ -373,7 +399,7 @@ namespace BannerKings.Models.Vanilla
                 var cost = position.AdministrativeCosts();
                 if (cost > 0f)
                 {
-                    position.DueWage = (int) (result * cost);
+                    position.DueWage = (int)(result * cost);
                 }
             }
         }

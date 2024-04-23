@@ -2,6 +2,7 @@ using BannerKings.Components;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using BannerKings.Settings;
+using BannerKings.Utils;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -10,19 +11,20 @@ using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Siege;
 using TaleWorlds.Core;
+using static BannerKings.Utils.PerksHelpers;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKPartyConsumptionModel : PartyFoodModel
     {
-        public override int NumberOfMenOnMapToEatOneFood 
-        { 
+        public override int NumberOfMenOnMapToEatOneFood
+        {
             get
             {
                 int result = 20;
                 result += (int)(BannerKingsSettings.Instance.SlowerParties * 20f);
                 return result;
-            } 
+            }
         }
 
         public override float BirdFood => 0.025f;
@@ -115,11 +117,30 @@ namespace BannerKings.Models.Vanilla
                 result.Add(value, DefaultPerks.Roguery.Promises.Name, null);
             }
             PerkHelper.AddPerkBonusForParty(DefaultPerks.Athletics.Spartan, party, false, ref result);
-            PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.WarriorsDiet, party, true, ref result);
-            if (party.EffectiveQuartermaster != null)
+
+            #region DefaultPerks.Steward.WarriorsDiet
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
             {
-                PerkHelper.AddEpicPerkBonusForCharacter(DefaultPerks.Steward.PriceOfLoyalty, party.EffectiveQuartermaster.CharacterObject, DefaultSkills.Steward, true, ref result, 250);
+                DefaultPerks.Steward.WarriorsDiet.AddScaledPartyPerkBonus(ref result, false, party);
             }
+            else
+            {
+                PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.WarriorsDiet, party, true, ref result);
+            }
+            #endregion
+            #region DefaultPerks.Steward.PriceOfLoyalty
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+            {
+                DefaultPerks.Steward.PriceOfLoyalty.AddScaledPartyPerkBonus(ref result, false, party);
+            }
+            else
+            {
+                if (party.EffectiveQuartermaster != null)
+                {
+                    PerkHelper.AddEpicPerkBonusForCharacter(DefaultPerks.Steward.PriceOfLoyalty, party.EffectiveQuartermaster.CharacterObject, DefaultSkills.Steward, true, ref result, 250);
+                }
+            }
+            #endregion
             TerrainType faceTerrainType = TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace);
             if (faceTerrainType == TerrainType.Forest || faceTerrainType == TerrainType.Steppe)
             {
@@ -129,21 +150,64 @@ namespace BannerKings.Models.Vanilla
             {
                 PerkHelper.AddPerkBonusForTown(DefaultPerks.Athletics.StrongLegs, party.CurrentSettlement.Town, ref result);
             }
+
+            #region DefaultPerks.Steward.StiffUpperLip
             if (party.Army != null)
             {
-                PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.StiffUpperLip, party, true, ref result);
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                {
+                    DefaultPerks.Steward.StiffUpperLip.AddScaledPartyPerkBonus(ref result, false, party);
+                }
+                else
+                {
+                    PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.StiffUpperLip, party, true, ref result);
+                }
             }
+            #endregion
+            #region DefaultPerks.Steward.WarriorsDiet
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+            {
+                DefaultPerks.Steward.WarriorsDiet.AddScaledPartyPerkBonus(ref result, false, party);
+            }
+            else
+            {
+                PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.WarriorsDiet, party, true, ref result);
+            }
+            #endregion
+
             SiegeEvent siegeEvent = party.SiegeEvent;
             if (((siegeEvent != null) ? siegeEvent.BesiegerCamp : null) != null)
             {
-                if (party.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(party.Party, MapEvent.BattleTypes.Siege) && party.HasPerk(DefaultPerks.Steward.SoundReserves, true))
+                #region DefaultPerks.Steward.SoundReserves
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
                 {
-                    PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.SoundReserves, party, false, ref result);
+                    if (party.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(party.Party, MapEvent.BattleTypes.Siege))
+                    {
+                        DefaultPerks.Steward.SoundReserves.AddScaledPartyPerkBonus(ref result, true, party);
+                    }
                 }
-                if (party.HasPerk(DefaultPerks.Steward.MasterOfPlanning, false))
+                else
                 {
-                    result.AddFactor(DefaultPerks.Steward.MasterOfPlanning.PrimaryBonus, DefaultPerks.Steward.MasterOfPlanning.Name);
+                    if (party.SiegeEvent.BesiegerCamp.HasInvolvedPartyForEventType(party.Party, MapEvent.BattleTypes.Siege) && party.HasPerk(DefaultPerks.Steward.SoundReserves, true))
+                    {
+                        PerkHelper.AddPerkBonusForParty(DefaultPerks.Steward.SoundReserves, party, false, ref result);
+                    }
                 }
+                #endregion
+                #region DefaultPerks.Steward.MasterOfPlanning
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                {
+
+                    DefaultPerks.Steward.MasterOfPlanning.AddScaledPartyPerkBonus(ref result, false, party);
+                }
+                else
+                {
+                    if (party.HasPerk(DefaultPerks.Steward.MasterOfPlanning, false))
+                    {
+                        result.AddFactor(DefaultPerks.Steward.MasterOfPlanning.PrimaryBonus, DefaultPerks.Steward.MasterOfPlanning.Name);
+                    }
+                }
+                #endregion
             }
         }
 

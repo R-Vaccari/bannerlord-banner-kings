@@ -8,7 +8,10 @@ using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Settings;
+using BannerKings.Utils;
 using HarmonyLib;
+using Newtonsoft.Json.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -28,6 +31,7 @@ using TaleWorlds.GauntletUI.GamepadNavigation;
 using TaleWorlds.Library;
 using TaleWorlds.LinQuick;
 using TaleWorlds.Localization;
+using static BannerKings.Utils.PerksHelpers;
 using static TaleWorlds.CampaignSystem.Election.KingSelectionKingdomDecision;
 using static TaleWorlds.CampaignSystem.Issues.CaravanAmbushIssueBehavior;
 using static TaleWorlds.CampaignSystem.Issues.EscortMerchantCaravanIssueBehavior;
@@ -62,7 +66,7 @@ namespace BannerKings.Patches
             [HarmonyPatch("UpdateVolunteersOfNotablesInSettlement", MethodType.Normal)]
             private static bool UpdateVolunteersPrefix(Settlement settlement)
             {
-                if ((settlement.Town != null && !settlement.Town.InRebelliousState && settlement.Notables != null) || 
+                if ((settlement.Town != null && !settlement.Town.InRebelliousState && settlement.Notables != null) ||
                     (settlement.IsVillage && !settlement.Village.Bound.Town.InRebelliousState))
                 {
                     var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
@@ -219,7 +223,7 @@ namespace BannerKings.Patches
                     }
                 }
 
-                 disabledReason = TextObject.Empty;
+                disabledReason = TextObject.Empty;
                 __result = true;
                 return false;
             }
@@ -234,7 +238,7 @@ namespace BannerKings.Patches
             private static bool Prefix(Army __instance)
             {
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
-                TextObject leaderName = __instance.ArmyOwner != null ? 
+                TextObject leaderName = __instance.ArmyOwner != null ?
                     __instance.ArmyOwner.Name : ((__instance.LeaderParty.PartyComponent.PartyOwner != null) ?
                     __instance.LeaderParty.PartyComponent.PartyOwner.Name : TextObject.Empty);
                 TextObject result = new TextObject("{=nbmctMLk}{LEADER_NAME}{.o} Army");
@@ -283,7 +287,7 @@ namespace BannerKings.Patches
     namespace Fixes
     {
         // Fix crash on wanderer same gender child born
-       
+
 
         [HarmonyPatch(typeof(GauntletGamepadNavigationManager), "OnWidgetNavigationStatusChanged")]
         internal class NavigationPatch
@@ -399,26 +403,14 @@ namespace BannerKings.Patches
         {
             private static bool Prefix(MobileParty party, ref ExplainedNumber result)
             {
-                var num = MBMath.ClampFloat(party.ItemRoster.FoodVariety - 5f, -5f, 5f);
-                if (num != 0f && (num >= 0f || party.LeaderHero == null ||
-                                    !party.LeaderHero.GetPerkValue(DefaultPerks.Steward.WarriorsDiet)))
-                {
-                    if (num > 0f && party.HasPerk(DefaultPerks.Steward.Gourmet))
-                    {
-                        result.Add(num * DefaultPerks.Steward.Gourmet.PrimaryBonus,
-                            DefaultPerks.Steward.Gourmet.Name);
-                        return false;
-                    }
-
-                    result.Add(num, GameTexts.FindText("str_food_bonus_morale"));
-                }
+                var num = MBMath.ClampFloat(party.ItemRoster.FoodVariety - 5f, -5f, 10f);
 
                 var totalModifiers = 0f;
                 var modifierRate = 0f;
                 foreach (var element in party.ItemRoster.ToList().FindAll(x => x.EquipmentElement.Item.IsFood))
                 {
                     var modifier = element.EquipmentElement.ItemModifier;
-                    if (modifier != null)
+                     if (modifier != null)
                     {
                         totalModifiers++;
                         modifierRate += modifier.PriceMultiplier;
@@ -427,9 +419,53 @@ namespace BannerKings.Patches
 
                 if (modifierRate != 0f)
                 {
-                    result.Add(MBMath.ClampFloat(modifierRate / totalModifiers, -5f, 5f),
+                    result.AddFactor(MBMath.ClampFloat((modifierRate / totalModifiers) - 1, -2f, 2f)/3,
                         new TextObject("{=oy3mdLFG}Food quality"));
                 }
+                if (num != 0f)
+                {
+                    if (num > 0f)
+                    {
+                        if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                        {
+                            if (party != null)
+                            {
+                                ExplainedNumber explainedNumber = new ExplainedNumber(num);
+                                if (party.HasPerk(DefaultPerks.Steward.Gourmet))
+                                {
+                                    explainedNumber.AddFactor(1, new TextObject("Quartermaster " + DefaultPerks.Steward.Gourmet.Name.ToString()));
+                                }
+                                //PerksHelpers.AddScaledPerkBonus(DefaultPerks.Steward.Gourmet, ref result, false, party, DefaultSkills.Steward, 0,0, 20, SkillScale.None, minValue: 0f, maxValue: 1, );  var mobilePartyHeros = mobileParty.GetAllPartyHeros();
+                                var partyHeros = party.GetAllPartyHeros().Where(d => d.GetPerkValue(DefaultPerks.Steward.Gourmet) && d.HeroObject != party.EffectiveQuartermaster);
+                                var bns = partyHeros.Sum(d => DefaultPerks.Steward.Gourmet.PrimaryBonus * (d.GetSkillValue(DefaultSkills.Steward) / 20));
+                                explainedNumber.AddFactor(bns, new TextObject("Party Hero's " + DefaultPerks.Steward.Gourmet.Name.ToString()));
+                                result.Add(explainedNumber.ResultNumber, DefaultPerks.Steward.Gourmet.Name);
+                            }
+                        }
+                        else
+                        {
+                            result.Add(num * DefaultPerks.Steward.Gourmet.PrimaryBonus, DefaultPerks.Steward.Gourmet.Name);
+                        }
+                    }
+                    else if (num > 0f)
+                    {
+                        result.Add(num, GameTexts.FindText("str_food_bonus_morale"));
+                    }
+                    else
+                    {
+                        var hasWarriorsDiet = party.LeaderHero != null && party.LeaderHero.GetPerkValue(DefaultPerks.Steward.WarriorsDiet);
+                        hasWarriorsDiet = hasWarriorsDiet || (party.EffectiveQuartermaster != null && party.EffectiveQuartermaster.GetPerkValue(DefaultPerks.Steward.WarriorsDiet));
+                        if (num < 0f && !hasWarriorsDiet)
+                        {
+
+                            result.Add(num, GameTexts.FindText("str_food_bonus_morale"));
+                        }
+                    }
+
+
+                }
+
+
 
                 return false;
             }
@@ -464,11 +500,11 @@ namespace BannerKings.Patches
             private static void OutcomeMeritPostfix(ref float __result, KingdomPolicyDecision __instance,
                 Clan clan, DecisionOutcome possibleOutcome)
             {
-                KingdomPolicyDecision.PolicyDecisionOutcome policyDecisionOutcome = 
+                KingdomPolicyDecision.PolicyDecisionOutcome policyDecisionOutcome =
                     possibleOutcome as KingdomPolicyDecision.PolicyDecisionOutcome;
                 BKDiplomacyBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>();
                 KingdomDiplomacy diplomacy = behavior.GetKingdomDiplomacy(clan.Kingdom);
-     
+
                 if (diplomacy != null)
                 {
                     InterestGroup group = diplomacy.GetHeroGroup(clan.Leader);
@@ -504,7 +540,7 @@ namespace BannerKings.Patches
                 if (title != null)
                 {
                     var deJure = title.deJure;
-                    var king = ((KingSelectionDecisionOutcome) chosenOutcome).King;
+                    var king = ((KingSelectionDecisionOutcome)chosenOutcome).King;
                     if (deJure != king)
                     {
                         BannerKingsConfig.Instance.TitleManager.InheritTitle(deJure, king, title);
@@ -514,7 +550,7 @@ namespace BannerKings.Patches
 
             [HarmonyPrefix]
             [HarmonyPatch("CalculateMeritOfOutcomeForClan", MethodType.Normal)]
-            private static bool CalculateMeritOfOutcomeForClanPrefix(KingSelectionKingdomDecision __instance, Clan clan, 
+            private static bool CalculateMeritOfOutcomeForClanPrefix(KingSelectionKingdomDecision __instance, Clan clan,
                 DecisionOutcome candidateOutcome, ref float __result)
             {
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
@@ -558,7 +594,7 @@ namespace BannerKings.Patches
             private static bool CalculateMeritOfOutcomePrefix(SettlementClaimantDecision __instance,
                DecisionOutcome candidateOutcome, ref float __result)
             {
-                SettlementClaimantDecision.ClanAsDecisionOutcome clanAsDecisionOutcome = (SettlementClaimantDecision.ClanAsDecisionOutcome)candidateOutcome;  
+                SettlementClaimantDecision.ClanAsDecisionOutcome clanAsDecisionOutcome = (SettlementClaimantDecision.ClanAsDecisionOutcome)candidateOutcome;
                 Settlement s = __instance.Settlement;
                 ExplainedNumber result = BannerKingsConfig.Instance.DiplomacyModel.CalculateHeroFiefScore(s,
                     clanAsDecisionOutcome.Clan.Leader);
@@ -567,15 +603,15 @@ namespace BannerKings.Patches
                 return false;
             }
 
-           /* [HarmonyPostfix]
-            [HarmonyPatch("ShouldBeCancelledInternal")]
-            private static void ShouldBeCancelledInternalPostfix(SettlementClaimantDecision __instance, ref bool __result)
-            {
-                if (!__instance.Settlement.Town.IsOwnerUnassigned)
-                {
-                    __result = true;
-                }
-            }*/
+            /* [HarmonyPostfix]
+             [HarmonyPatch("ShouldBeCancelledInternal")]
+             private static void ShouldBeCancelledInternalPostfix(SettlementClaimantDecision __instance, ref bool __result)
+             {
+                 if (!__instance.Settlement.Town.IsOwnerUnassigned)
+                 {
+                     __result = true;
+                 }
+             }*/
         }
     }
 }

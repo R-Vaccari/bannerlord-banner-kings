@@ -48,6 +48,7 @@ namespace BannerKings.Managers.Court
         public void PostInitialize()
         {
             CouncilMember c = DefaultCouncilPositions.Instance.GetById(this);
+
             Initialize(c.PrimarySkill, c.SecondarySkill, c.Tasks, c.Privileges,
                 c.isAdequate, c.isValidCandidateInternal, c.getCulturalName);
             SetStrings();
