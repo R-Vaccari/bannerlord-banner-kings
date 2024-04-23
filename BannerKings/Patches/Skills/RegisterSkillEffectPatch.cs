@@ -27,5 +27,15 @@ namespace BannerKings.Patches
                 }
             }
         }
+
+        [HarmonyPatch(typeof(Hero), "SetSkillValue")]
+        public static class SetSkillValuePatch
+        {
+            public static void Prefix(SkillObject skill, ref int value)
+            {
+                if (BannerKingsSettings.Instance?.SkillLimit > 300)
+                    value = BannerKingsSettings.Instance?.SkillLimit ?? 300;
+            }
+        }
     }
 }

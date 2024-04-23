@@ -12,7 +12,7 @@ namespace BannerKings.Settings
         private int volunteersLimit = 10;
         public override string Id => "BannerKings";
         public override string DisplayName => new TextObject("{=WaBMVVH9}Banner Kings").ToString();
-        public override string FolderName => "BannerKings"; 
+        public override string FolderName => "BannerKings";
         public override string FormatType => "json2";
 
         [SettingProperty("{=K8qLtDh3}Feasts", RequireRestart = true, HintText = "{=Ctj7k5TV}Enable the ability to trigger feasts for player and AI. Default: True.")]
@@ -107,7 +107,7 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public bool CraftingWaitingTime { get; set; } = true;
 
-        [SettingPropertyFloatingInteger("{=iBLGdG1Y}Party Supplies", minValue: 0f, maxValue: 2f, "#0%", RequireRestart = false, 
+        [SettingPropertyFloatingInteger("{=iBLGdG1Y}Party Supplies", minValue: 0f, maxValue: 2f, "#0%", RequireRestart = false,
             HintText = "{=uURHROGF}Affects the party supplies requirement factor. 0% means the feature is functionally disabled. 100% is the standard rate of items consumption, 200% means doube the rate, resulting in more expensive parties. May affect AI party limit sizes. Default: 100%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float PartySuppliesFactor { get; set; } = 0.5f;
@@ -129,8 +129,8 @@ namespace BannerKings.Settings
             }
         }
 
-        [SettingProperty("{=CHVW1U24}De Re Militari Bandits", 
-            RequireRestart = false, 
+        [SettingProperty("{=CHVW1U24}De Re Militari Bandits",
+            RequireRestart = false,
             HintText = "{=bAt2AWmj}If you have De Re Militari (DRM) mod, enabling this allows bandit heroes and parties to use DRM's new bandits. Enabling it without DRM will break your game. Default: false.")]
         [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
         public bool DRMBandits { get; set; } = false;
@@ -149,39 +149,50 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=k2Vw7iNm}Bandits")]
         public int BanditPartiesLimit { get; set; } = 150;
 
-        [SettingPropertyBool("Enable Useful Perks", Order =0,  HintText = "Enable perks to scale up with skill level Default: True.")]
-        [SettingPropertyGroup("Useful Skills and Perks")]
-        public bool EnableUsefulPerks { get; set; } = true;       
 
-        [SettingPropertyBool("Enable Perks From All Party Members", Order = 1, HintText = "Enable perks to become effective from all party members with a reduced ratio. Default setting is True.")]
+
+        [SettingPropertyInteger("Skill Limit", 300, 1000, "0",
+          Order = 1, RequireRestart = false, HintText = "Skills maximum limit Default(Vanilla): 300.")]
+        [SettingPropertyGroup("Useful Skills and Perks")]
+        public int SkillLimit { get; set; } = 300;
+
+        [SettingPropertyBool("Enable Useful Perks", Order = 1, HintText = "Enable perks to scale up with skill level Default: True.")]
+        [SettingPropertyGroup("Useful Skills and Perks")]
+        public bool EnableUsefulPerks { get; set; } = true;
+
+        [SettingPropertyBool("Enable Perks From All Party Members", Order = 2, HintText = "Enable perks to become effective from all party members with a reduced ratio. Default setting is True.")]
         [SettingPropertyGroup("Useful Skills and Perks")]
         public bool EnableUsefulPerksFromAllPartyMembers { get; set; } = true;
 
 
-        [SettingPropertyBool("Enable Skills From All Party Members", Order = 1, HintText = "Enable skills effects to become effective from all party members with a reduced ratio. Default setting is True.")]
+        [SettingPropertyBool("Enable Skills From All Party/town Members", Order = 3, HintText = "Enable skills effects to become effective from all party members with a reduced ratio. Default setting is True.")]
         [SettingPropertyGroup("Useful Skills and Perks")]
         public bool EnableUsefulSkillsFromAllPartyMembers { get; set; } = true;
 
-        [SettingPropertyBool("Enable Governor Perks From Settlement Owner", Order = 2, HintText = "Enable governor perks to become effective from settlement owners with a reduced ratio. Default setting is True.")]
+        [SettingPropertyBool("Enable Skills From Settlement Owner", Order = 4, HintText = "Enable governor perks to become effective from settlement owners with a reduced ratio. Default setting is True.")]
         [SettingPropertyGroup("Useful Skills and Perks")]
         public bool EnableUsefulGovernorPerksFromSettlementOwner { get; set; } = true;
 
 
-        [SettingPropertyBool("Enable Useful Steward Skills", Order = 3, HintText = "Enable steward skills effects to scale up with skill level Default: True.")]
+        [SettingPropertyBool("Enable Useful Steward Skills", Order = 5, HintText = "Enable steward skills effects to scale up with skill level Default: True.")]
         [SettingPropertyGroup("Useful Skills and Perks")]
         public bool EnableUsefulStewardSkills { get; set; } = true;
 
 
-        [SettingPropertyBool("Enable Useful Steward Perks", Order = 4, HintText = "Enable steward perks to scale up with skill level Default: True.")]
+        [SettingPropertyBool("Enable Useful Steward Perks", Order = 6, HintText = "Enable steward perks to scale up with skill level Default: True.")]
         [SettingPropertyGroup("Useful Skills and Perks")]
         public bool EnableUsefulStewardPerks { get; set; } = true;
 
-        [SettingPropertyBool("Enable Useful Medicine Skills", Order = 5, HintText = "Enable Medicine skills effects to scale up with skill level Default: True.")]
+        [SettingPropertyBool("Enable Useful Medicine Skills", Order = 7, HintText = "Enable Medicine skills effects to scale up with skill level Default: True.")]
         [SettingPropertyGroup("Useful Skills and Perks")]
         public bool EnableUsefulMedicineSkills { get; set; } = true;
 
-        [SettingPropertyBool("Enable Useful Medicine Perks", Order = 6, HintText = "Enable Medicine perks to scale up with skill level Default: True.")]
+        [SettingPropertyBool("Enable Useful Medicine Perks", Order = 8, HintText = "Enable Medicine perks to scale up with skill level Default: True.")]
         [SettingPropertyGroup("Useful Skills and Perks")]
         public bool EnableUsefulMedicinePerks { get; set; } = true;
+
+
+       
+
     }
 }
