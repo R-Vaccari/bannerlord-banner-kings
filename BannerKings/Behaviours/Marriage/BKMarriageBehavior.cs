@@ -18,38 +18,41 @@ namespace BannerKings.Behaviours.Marriage
 {
     public class BKMarriageBehavior : CampaignBehaviorBase
     {
-        /*private Dictionary<Hero, List<MarriageOffer>> marriageOffers = new Dictionary<Hero, List<MarriageOffer>>();
-
-        public MarriageOffer GetHeroMarriageOffers(Hero proposer, Hero proposed)
-        {
-            if (marriageOffers.ContainsKey(proposer))
-            {
-                return marriageOffers[proposer].FirstOrDefault(x => x.Proposed == proposed);
-            }
-
-            return null;
-        }
-
-        public bool IsHeroOfferAccepted(Hero proposer, Hero proposed)
-        {
-            if (marriageOffers.ContainsKey(proposer))
-            {
-                var offer = marriageOffers[proposer].FirstOrDefault(x => x.Proposed == proposed);
-                if (offer != null)
-                {
-                    return offer.Accepted;
-                }
-            }
-
-            return false;
-        } */
-
         private MarriageContract proposedMarriage;
         private List<Hero> flirtedWith = new List<Hero>();
+        private Dictionary<Hero, HeroMarriage> heroMarriages;
 
         public void SetProposedMarriage(MarriageContract contract)
         {
             proposedMarriage = contract;
+        }
+
+        public List<Hero> GetHeroSpouses(Hero hero)
+        {
+            List<Hero> list = new List<Hero>(3);
+            list.AddRange(GetHeroMarriage(hero).Spouses);
+
+            return list;
+        }
+
+        public List<Hero> GetHeroConcubines(Hero hero)
+        {
+            List<Hero> list = new List<Hero>(3);
+            list.AddRange(GetHeroMarriage(hero).Concubines);
+
+            return list;
+        }
+
+        public HeroMarriage GetHeroMarriage(Hero hero)
+        {
+            HeroMarriage heroMarriage = null;
+            if (!heroMarriages.TryGetValue (hero, out heroMarriage))
+            {
+                heroMarriages[hero] = new HeroMarriage(hero);
+                heroMarriage = heroMarriages[hero];
+            }
+
+            return heroMarriage;
         }
 
         public MarriageContract GetProposedMarriage() => proposedMarriage;
@@ -64,10 +67,8 @@ namespace BannerKings.Behaviours.Marriage
             dataStore.SyncData("bannerkings-heroes-flirted", ref flirtedWith);
             dataStore.SyncData("bannerkings-player-betrothal", ref proposedMarriage);
 
-            if (flirtedWith == null)
-            {
-                flirtedWith = new List<Hero>();
-            }
+            if (flirtedWith == null) flirtedWith = new List<Hero>();
+            if (heroMarriages == null) heroMarriages = new Dictionary<Hero, HeroMarriage>(Hero.AllAliveHeroes.Count);
         }
 
         public bool IsCoupleMatchedByFamily(Hero proposer, Hero proposed) => proposedMarriage != null && proposedMarriage.Confirmed
