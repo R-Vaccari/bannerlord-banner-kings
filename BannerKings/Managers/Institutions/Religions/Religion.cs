@@ -3,7 +3,6 @@ using System.Linq;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
-using BannerKings.Managers.Institutions.Religions.Leaderships;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -20,7 +19,6 @@ namespace BannerKings.Managers.Institutions.Religions
     {
         [SaveableField(4)] private Dictionary<Settlement, Clergyman> clergy; 
         [field: SaveableField(3)] public Faith Faith { get; private set; }
-        public HeadOfFaith HeadOfFaith { get; private set; }
 
         public Religion(string id) : base(id)
         {
@@ -34,9 +32,28 @@ namespace BannerKings.Managers.Institutions.Religions
             FavoredCultures = favoredCultures;
         }
 
+        internal void PostInitialize()
+        {
+            Faith faith = DefaultFaiths.Instance.GetById(Faith.StringId);
+            if (clergy == null) clergy = new Dictionary<Settlement, Clergyman>();
+            Religion rel = DefaultReligions.Instance.GetById(this);
+            FavoredCultures = rel.FavoredCultures;
+            Faith = faith;
+
+            var presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(faith.GetId()));
+            foreach (var preset in presets)
+            {
+                var number = int.Parse(preset.StringId[preset.StringId.Length - 1].ToString());
+                faith.AddPreset(number, preset);
+            }
+        }
+
+        public MBReadOnlyDictionary<Settlement, Clergyman> Clergy => clergy.GetReadOnlyDictionary();
+        public ExplainedNumber Fervor => BannerKingsConfig.Instance.ReligionModel.CalculateFervor(this);
         public List<CultureObject> FavoredCultures { get; private set; }
         public MBReadOnlyList<Rite> Rites => new MBReadOnlyList<Rite>(Faith.Rites);
         public CultureObject MainCulture => FavoredCultures[0];
+        public Hero FaithLeader => Faith.FaithGroup.Leader;
 
         public bool HasDoctrine(Doctrine doctrine)
         {
@@ -75,37 +92,10 @@ namespace BannerKings.Managers.Institutions.Religions
             }
         }
 
-        public MBReadOnlyDictionary<Settlement, Clergyman> Clergy => clergy.GetReadOnlyDictionary();
-        public ExplainedNumber Fervor => BannerKingsConfig.Instance.ReligionModel.CalculateFervor(this);
-
-        internal void PostInitialize()
-        {
-            Faith faith = DefaultFaiths.Instance.GetById(Faith.StringId);
-            StringId = faith.GetId();
-            if (clergy == null) clergy = new Dictionary<Settlement, Clergyman>();
-            Religion rel = DefaultReligions.Instance.GetById(this);
-            FavoredCultures = rel.FavoredCultures;
-            Faith = faith;
-
-            var presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(faith.GetId()));
-            foreach (var preset in presets)
-            {
-                var number = int.Parse(preset.StringId[preset.StringId.Length - 1].ToString());
-                faith.AddPreset(number, preset);
-            }
-        }
-
         public void AddClergyman(Settlement settlement, Hero hero)
         {
             var clergyman = new Clergyman(hero, Faith.GetIdealRank(settlement));
-            if (clergy.ContainsKey(settlement))
-            {
-                clergy[settlement] = clergyman;
-            }
-            else
-            {
-                clergy.Add(settlement, clergyman);
-            }
+            clergy[settlement] = clergyman;
         }
 
         public Clergyman GetClergyman(Settlement settlement)

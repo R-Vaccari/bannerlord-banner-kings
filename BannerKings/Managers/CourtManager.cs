@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Court;
-using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
-using BannerKings.Managers.Institutions.Religions.Leaderships;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;

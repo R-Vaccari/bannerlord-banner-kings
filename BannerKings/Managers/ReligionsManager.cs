@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using TaleWorlds.CampaignSystem;
@@ -51,6 +50,8 @@ namespace BannerKings.Managers
         [SaveableProperty(1)] private Dictionary<Religion, Dictionary<Hero, FaithfulData>> Religions { get; set; }
 
         private Dictionary<Hero, Religion> HeroesCache { get; set; }
+
+        public List<Religion> GetReligions() => Religions.Keys.ToList();
 
         public void InitializeReligions()
         {
@@ -206,11 +207,6 @@ namespace BannerKings.Managers
             }
         }
 
-        public void AddClergyman(Religion religion, Hero hero, Settlement settlement)
-        {
-            religion.AddClergyman(settlement, hero);
-        }
-
         public void AddToReligion(Hero hero, Religion religion)
         {
             Religion rel = GetHeroReligion(hero);
@@ -257,39 +253,6 @@ namespace BannerKings.Managers
             }
         }
 
-        public void ShowPopup()
-        {
-            if (GetHeroReligion(Hero.MainHero) != null)
-            {
-                return;
-            }
-
-            var elements = new List<InquiryElement>();
-            foreach (var religion in Religions.Keys)
-            {
-                elements.Add(new InquiryElement(religion, 
-                    new TextObject("{=Eu97WkgX}{RELIGION} - {PIETY} piety").SetTextVariable("RELIGION", religion.Faith.GetFaithName())
-                    .SetTextVariable("PIETY", GetStartingPiety(religion)).ToString(), 
-                    null, 
-                    true, 
-                    religion.Faith.GetFaithDescription().ToString()));
-            }
-                
-            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=VrzR1ZzZ}Your faith").ToString(),
-                new TextObject("{=ASWWGeQ3}You look up to the skies and realize there must be something more. You feel there must be a higher purpose for yourself, and people expect you to defend a certain faith. Upholding your cultural forefathers' faith would be considered most pious. Similarly, following a faith that accepts your culture would be pious, however not as much as your true ancestry. Alternatively, having a completely different faith is possible, though a less walked path. What is your faith?")
-                    .ToString(),
-                elements, 
-                true, 
-                1,
-                1,
-                GameTexts.FindText("str_done").ToString(), string.Empty, delegate(List<InquiryElement> element)
-                {
-                    var religion = (Religion) element[0].Identifier;
-                    Religions[religion].Add(Hero.MainHero, new FaithfulData(GetStartingPiety(religion)));
-                }, null));
-        }
-
         public bool HasBlessing(Hero hero, Divinity blessing, Religion rel = null)
         {
             if (rel == null)
@@ -331,10 +294,6 @@ namespace BannerKings.Managers
             return rel != null ? Religions[rel][hero] : null;
         }
 
-        public List<Religion> GetReligions()
-        {
-            return Religions.Keys.ToList();
-        }
 
         public void AddBlessing(Divinity divinity, Hero hero, Religion religion, bool notify = false)
         {
