@@ -469,7 +469,9 @@ namespace BannerKings.Patches
                     MethodInfo AddExpensesFromPartiesAndGarrisons = DefaultClanFinanceModel
                         .GetType()
                         .GetMethod("AddExpensesFromPartiesAndGarrisons", BindingFlags.Instance | BindingFlags.NonPublic);
-                    AddExpensesFromPartiesAndGarrisons.Invoke(__instance, new object[] { clan, goldChange, applyWithdrawals, includeDetails });
+                    var partiesArr = new object[] { clan, goldChange, applyWithdrawals, includeDetails };
+                    AddExpensesFromPartiesAndGarrisons.Invoke(__instance, partiesArr);
+                    goldChange = (ExplainedNumber)partiesArr[1];
                     if (!clan.IsUnderMercenaryService)
                     {
                         MethodInfo AddExpensesForHiredMercenaries = DefaultClanFinanceModel
@@ -478,14 +480,22 @@ namespace BannerKings.Patches
                         MethodInfo AddExpensesForTributes = DefaultClanFinanceModel
                            .GetType()
                            .GetMethod("AddExpensesForTributes", BindingFlags.Instance | BindingFlags.NonPublic);
-                        AddExpensesForHiredMercenaries.Invoke(__instance, new object[] { clan, goldChange, applyWithdrawals });
-                        AddExpensesForTributes.Invoke(__instance, new object[] { clan, goldChange, applyWithdrawals });
+                        var mercsArr = new object[] { clan, goldChange, applyWithdrawals };
+                        AddExpensesForHiredMercenaries.Invoke(__instance, mercsArr);
+                        goldChange = (ExplainedNumber)mercsArr[1];
+
+                        var tributesArr = new object[] { clan, goldChange, applyWithdrawals };
+                        AddExpensesForTributes.Invoke(__instance, tributesArr);
+                        goldChange = (ExplainedNumber)tributesArr[1];
                     }
 
                     MethodInfo AddExpensesForAutoRecruitment = DefaultClanFinanceModel
                         .GetType()
                         .GetMethod("AddExpensesForAutoRecruitment", BindingFlags.Instance | BindingFlags.NonPublic);
-                    AddExpensesForAutoRecruitment.Invoke(__instance, new object[] { clan, goldChange, applyWithdrawals });
+                    var recruitmentArr = new object[] { clan, goldChange, applyWithdrawals };
+                    AddExpensesForAutoRecruitment.Invoke(__instance, recruitmentArr);
+                    goldChange = (ExplainedNumber)recruitmentArr[1];
+
                     if (clan.Gold > 100000 && clan.Kingdom != null && clan.Leader != Hero.MainHero && !clan.IsUnderMercenaryService)
                     {
                         int num = (int)(((float)clan.Gold - 100000f) * 0.001f);
@@ -500,7 +510,9 @@ namespace BannerKings.Patches
                         MethodInfo AddPaymentForDebts = DefaultClanFinanceModel
                             .GetType()
                             .GetMethod("AddPaymentForDebts", BindingFlags.Instance | BindingFlags.NonPublic);
-                        AddPaymentForDebts.Invoke(__instance, new object[] { clan, goldChange, applyWithdrawals });
+                        var debtArr = new object[] { clan, goldChange, applyWithdrawals };
+                        AddPaymentForDebts.Invoke(__instance, debtArr);
+                        goldChange = (ExplainedNumber)debtArr[1];
                     }
                     
                     if (Clan.PlayerClan == clan)
@@ -508,7 +520,9 @@ namespace BannerKings.Patches
                         MethodInfo AddPlayerExpenseForWorkshops = DefaultClanFinanceModel
                             .GetType()
                             .GetMethod("AddPlayerExpenseForWorkshops", BindingFlags.Instance | BindingFlags.NonPublic);
-                        AddPlayerExpenseForWorkshops.Invoke(__instance, new object[] { goldChange });
+                        var workshopArr = new object[] { goldChange };
+                        AddPlayerExpenseForWorkshops.Invoke(__instance, workshopArr);
+                        goldChange = (ExplainedNumber)workshopArr[0];
                     }
                     
                     return false;
@@ -729,10 +743,10 @@ namespace BannerKings.Patches
                     goldChange.Add(villageTotal, new TextObject("{=GikQuojv}Village Demesnes"));
                     if (!includeDetails)
                     {
-                        goldChange.Add(explainedNumber.ResultNumber, new TextObject("{=AewK9qME}Settlement Income", null), null);
+                        goldChange.Add(explainedNumber.ResultNumber, new TextObject("{=!}Walled Demesnes", null), null);
                         return false;
                     }
-                    goldChange.AddFromExplainedNumber(explainedNumber, new TextObject("{=AewK9qME}Settlement Income", null));
+                    goldChange.AddFromExplainedNumber(explainedNumber, new TextObject("{=!}Walled Demesnes", null));
                     return false;
                 }
 
