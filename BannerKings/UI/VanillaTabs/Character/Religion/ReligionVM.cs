@@ -176,16 +176,39 @@ namespace BannerKings.UI.VanillaTabs.Character.Religion
 
             //Aspects.Add(new ReligionElementVM(currentReligion.Faith.GetMainDivinitiesDescription(),
             //    currentReligion.Faith.GetMainDivinity().Name, currentReligion.Faith.GetMainDivinity().Description));
-            Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith Group"), currentReligion.Faith.FaithGroup.Name,
+            Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith Group"), 
+                currentReligion.Faith.FaithGroup.Name,
                 currentReligion.Faith.FaithGroup.Description));
+
+            Aspects.Add(new ReligionElementVM(new TextObject("{=gL6y1Pgr}Faith Seat"),
+                currentReligion.Faith.FaithSeat != null ? currentReligion.Faith.FaithSeat.Name : new TextObject("{=!}None"),
+                new TextObject("{=ZvpbQfPP}The Faith Seat is the most religiously important fief within the faith. When the Seat is not held by a member of the faith, it loses a great deal of fervor. The holder of the Seat is given extra influence limit and piety according to the stability of the Seat, and thus is encouraged to give it good management.")));
+
+            Hero leader = currentReligion.Faith.FaithGroup.Leader;
+            TextObject leaderName = leader != null ? leader.Name : new TextObject("{=!}None");
+            if (currentReligion.Faith.FaithGroup.ShouldHaveLeader) leaderName = new TextObject("{=!}Not Possible");
+            Aspects.Add(new ReligionElementVM(new TextObject("{=!}Head of Faith"),
+                leaderName,
+                currentReligion.Faith.FaithGroup.Explanation));
+
+            var marriage = currentReligion.Faith.MarriageDoctrine;
+            Aspects.Add(new ReligionElementVM(new TextObject("{=!}Marriage Doctrine"),
+                marriage.Name,
+                new TextObject("{=!}{EXPLANATION}{newline}{newline}{newline}Consorts:{newline}{CONSORTS}{newline}{newline}Consanguinity:{newline}{CONSANGUINITY}{newline}{newline}Tolerance:{newline}{TOLERANCE}")
+                .SetTextVariable("EXPLANATION", marriage.Description)
+                .SetTextVariable("CONSORTS", marriage.ConsortsExplanation)
+                .SetTextVariable("CONSANGUINITY", marriage.ConsanguinityExplanation)
+                .SetTextVariable("TOLERANCE", marriage.UntoleratedExplanation)
+                ));
+
+            Aspects.Add(new ReligionElementVM(new TextObject("{=!}Warfare Doctrine"),
+                currentReligion.Faith.WarDoctrine.Name,
+                currentReligion.Faith.WarDoctrine.Description));
+
             //Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith"), UIHelper.GetFaithTypeName(currentReligion.Faith),
             //    UIHelper.GetFaithTypeDescription(currentReligion.Faith)));
             Aspects.Add(new ReligionElementVM(new TextObject("{=EjTxnGJp}Culture"), currentReligion.MainCulture.Name,
                 new TextObject("{=6NYxLhjH}The main culture associated with this faith.")));
-
-            Aspects.Add(new ReligionElementVM(new TextObject("{=gL6y1Pgr}Faith Seat"),
-                currentReligion.Faith.FaithSeat != null ? currentReligion.Faith.FaithSeat.Name : new TextObject("Nonexistent"),
-                new TextObject("{=ZvpbQfPP}The Faith Seat is the most religiously important fief within the faith. When the Seat is not held by a member of the faith, it loses a great deal of fervor. The holder of the Seat is given extra influence limit and piety according to the stability of the Seat, and thus is encouraged to give it good management.")));
 
             if (sites.Count > 0)
             {
