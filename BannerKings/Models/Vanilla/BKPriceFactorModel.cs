@@ -72,7 +72,7 @@ namespace BannerKings.Models.Vanilla
 
                 if (settlement.IsCastle)
                 {
-                    inStoreValue += merchant.ItemRoster.GetItemNumber(itemRosterElement.Item) * 10f;
+                    inStoreValue += merchant.ItemRoster.GetItemNumber(itemRosterElement.Item);
                 }
             }
 
