@@ -5,6 +5,7 @@ using BannerKings.Utils.Models;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -138,49 +139,68 @@ namespace BannerKings.Behaviours.Diplomacy
         private List<CasusBelli> GetTargetKingdomCasusBelli(Kingdom targetKingdom)
         {
             var list = new List<CasusBelli>();
-            foreach (var fief in targetKingdom.Fiefs)
+
+            foreach (CasusBelli justification in DefaultCasusBelli.Instance.All)
             {
-                CasusBelli liberation = DefaultCasusBelli.Instance.CulturalLiberation.GetCopy();
-                liberation.SetInstanceData(Kingdom, targetKingdom, fief.Settlement);
-                if (liberation.IsAdequate(Kingdom, liberation.Defender, liberation))
+                if (justification.RequiresClaimant)
                 {
-                    list.Add(liberation);
+                    if (justification.RequiresFief)
+                    {
+                        foreach (var fief in targetKingdom.Fiefs)
+                        {
+                            foreach (Clan clan in Kingdom.Clans)
+                            {
+                                if (clan.IsUnderMercenaryService) continue;
+
+                                justification.SetInstanceData(Kingdom, targetKingdom, 
+                                    BannerKingsConfig.Instance.TitleManager.GetTitle(fief.Settlement), 
+                                    clan.Leader);
+                                if (justification.IsAdequate(Kingdom, justification.Defender, justification))
+                                    list.Add(justification);
+                            }
+                        }
+
+                        continue;
+                    }
+
+                    foreach (Clan clan in Kingdom.Clans)
+                    {
+                        if (clan.IsUnderMercenaryService) continue;
+
+                        justification.SetInstanceData(Kingdom, targetKingdom, null, clan.Leader);
+                        if (justification.IsAdequate(Kingdom, justification.Defender, justification))
+                            list.Add(justification);
+                    }
+                    
+                    continue;
                 }
+
+                if (justification.RequiresFief)
+                {
+                    foreach (var fief in targetKingdom.Fiefs)
+                    {
+                        justification.SetInstanceData(Kingdom, targetKingdom, fief.Settlement);
+                        if (justification.IsAdequate(Kingdom, justification.Defender, justification))
+                            list.Add(justification);
+                    }
+
+                    continue;
+                }
+                
+                justification.SetInstanceData(Kingdom, targetKingdom);
+                if (justification.IsAdequate(Kingdom, targetKingdom, justification))
+                    list.Add(justification);          
             }
 
-            CasusBelli suppressThreat = DefaultCasusBelli.Instance.SuppressThreat.GetCopy();
-            suppressThreat.SetInstanceData(Kingdom, targetKingdom);
-            if (suppressThreat.IsAdequate(Kingdom, targetKingdom, suppressThreat))
+            foreach (CasusBelli justification in DefaultCasusBelli.Instance.All)
             {
-                list.Add(suppressThreat);
-            }
-
-            CasusBelli greatRaid = DefaultCasusBelli.Instance.GreatRaid.GetCopy();
-            greatRaid.SetInstanceData(Kingdom, targetKingdom);
-            if (greatRaid.IsAdequate(Kingdom, targetKingdom, greatRaid))
-            {
-                list.Add(greatRaid);
-            }
-
-            CasusBelli invasion = DefaultCasusBelli.Instance.Invasion.GetCopy();
-            invasion.SetInstanceData(Kingdom, targetKingdom);
-            if (invasion.IsAdequate(Kingdom, targetKingdom, invasion))
-            {
-                list.Add(invasion);
-            }
-
-            CasusBelli superiority = DefaultCasusBelli.Instance.ImperialSuperiority.GetCopy();
-            superiority.SetInstanceData(Kingdom, targetKingdom);
-            if (superiority.IsAdequate(Kingdom, targetKingdom, superiority))
-            {
-                list.Add(superiority);
-            }
-
-            CasusBelli reconquest = DefaultCasusBelli.Instance.ImperialReconquest.GetCopy();
-            reconquest.SetInstanceData(Kingdom, targetKingdom);
-            if (reconquest.IsAdequate(Kingdom, targetKingdom, reconquest))
-            {
-                list.Add(reconquest);
+                if (!justification.RequiresFief) continue;
+                foreach (var fief in targetKingdom.Fiefs)
+                {
+                    justification.SetInstanceData(Kingdom, targetKingdom, fief.Settlement);
+                    if (justification.IsAdequate(Kingdom, justification.Defender, justification))
+                        list.Add(justification);
+                }
             }
 
             return list;
