@@ -18,6 +18,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -356,6 +357,11 @@ namespace BannerKings.Behaviours
         {
             if (newKingdom != null)
             {
+                if (detail == ChangeKingdomAction.ChangeKingdomActionDetail.JoinAsMercenary)
+                {
+                    AddDownPayment(clan, newKingdom); 
+                }
+
                 var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
                 if (council != null)
                 {
@@ -419,6 +425,19 @@ namespace BannerKings.Behaviours
                     }
                 }
             }
+        }
+
+        private void AddDownPayment(Clan mercenaryClan, Kingdom kingdom)
+        {
+            int gold = (int)BannerKingsConfig.Instance.DiplomacyModel.GetMercenaryDownPayment(mercenaryClan, kingdom).ResultNumber;
+            int result = MathF.Min(gold, kingdom.KingdomBudgetWallet);
+            kingdom.KingdomBudgetWallet -= result;
+            mercenaryClan.Leader.ChangeHeroGold(result);
+            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}The {CLAN} has received {GOLD}{GOLD_ICON} as earnest-money for their service.")
+                .SetTextVariable("CLAN", mercenaryClan.Name)
+                .SetTextVariable("GOLD", result)
+                .ToString(),
+                Color.FromUint(TextHelper.COLOR_LIGHT_BLUE)));
         }
 
         private void OnHeroGetsBusy(Hero hero, HeroGetsBusyReasons heroGetsBusyReason)
@@ -529,6 +548,8 @@ namespace BannerKings.Behaviours
                 }
             }
 
+            ConvertTroopsMercenaries(clan);
+
             if (clan == Clan.PlayerClan || clan.IsUnderMercenaryService || clan.IsMinorFaction || clan.IsBanditFaction)
             {
                 return;
@@ -547,6 +568,57 @@ namespace BannerKings.Behaviours
             RunCouncilTasks(clan);
             DismissParties(clan);
             JoinArmies(clan);
+        }
+
+        private void ConvertTroopsMercenaries(Clan clan)
+        {
+            if (!clan.IsClanTypeMercenary) return;
+
+            List<CharacterObject> troops = new List<CharacterObject>(); 
+            PartyTemplateObject template = clan.DefaultPartyTemplate;
+            foreach (var stack in template.Stacks) troops.Add(stack.Character);
+
+            foreach (WarPartyComponent party in clan.WarPartyComponents)
+            {
+                foreach (var element in party.MobileParty.MemberRoster.GetTroopRoster())
+                {
+                    if (element.Number < 1) continue;
+
+                    CharacterObject troop = element.Character;
+                    if (!troops.Contains(troop))
+                    {
+                        CharacterObject merc = troops.FirstOrDefault(x => x.Level == troop.Level);
+                        if (merc == null) merc = clan.BasicTroop;
+
+                        if (MBRandom.RandomFloat < MercenaryConversionChance(merc, troop))
+                        {
+                            party.MobileParty.MemberRoster.AddToCounts(troop, -1);
+                            party.MobileParty.MemberRoster.AddToCounts(merc, 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        private float MercenaryConversionChance(CharacterObject merc, CharacterObject troop)
+        {
+            float chance = 0.05f;
+            if (merc.Culture == troop.Culture) chance += 0.5f;
+
+            if (merc.IsMounted)
+            {
+                if (troop.IsMounted) chance += 0.2f;
+            }
+            else if (merc.IsRanged)
+            {
+                if (troop.IsRanged) chance += 0.2f;
+            }
+            else
+            {
+                if (!troop.IsMounted && !troop.IsRanged) chance += 0.2f;
+            }
+
+            return chance;
         }
 
         private void JoinArmies(Clan clan)
