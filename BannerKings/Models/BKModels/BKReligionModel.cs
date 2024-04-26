@@ -117,6 +117,13 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
+        public ExplainedNumber CreateFaithLeaderCost(Religion religion, Hero creator, Hero leader, bool descriptions = false)
+        {
+            var result = new ExplainedNumber(500f, descriptions);
+
+            return result;
+        }
+
         public ExplainedNumber GetAppointInfluence(Hero appointer, ReligionData data, bool descriptions = false)
         {
             var result = new ExplainedNumber(50f, descriptions);

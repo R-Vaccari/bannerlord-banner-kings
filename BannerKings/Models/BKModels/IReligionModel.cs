@@ -19,5 +19,6 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateReligionWeight(Religion religion, Settlement settlement);
         public float GetNotableFactor(Hero notable, Settlement settlement);
         public ExplainedNumber CalculatePietyChange(Hero hero, bool descriptions = false);
+        public ExplainedNumber CreateFaithLeaderCost(Religion religion, Hero creator, Hero leader, bool descriptions = false);
     }
 }

@@ -1,19 +1,17 @@
 using BannerKings.Managers.Institutions.Religions;
-using BannerKings.Managers.Institutions.Religions.Faiths;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using static BannerKings.Behaviours.Feasts.Feast;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
     internal class FaithLeaderDecision : Goal
     {
         private Hero leader;
-        public FaithLeaderDecision(Hero fulfiller = null, FeastType type = FeastType.Normal) : base("goal_organize_feast_decision", GoalCategory.Kingdom, GoalUpdateType.Manual, fulfiller)
+        public FaithLeaderDecision(Hero fulfiller = null) : base("goal_organize_feast_decision", GoalCategory.Kingdom, GoalUpdateType.Manual, fulfiller)
         {
             var name = new TextObject("{=!}Create Faith Leader");
             var description = new TextObject("{=!}As a ruler, endorse a new leader for your faith group. The possible faith leaders vary according to how the faith group works. A Faith Leader is important to push the faith's fervor, as well as sanctioning holy wars.\n");
@@ -51,7 +49,6 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(new TextObject("{=!}The faith group {GROUP} already has a leader. A new Head of Faith can be created once there are none occupying this position.")
                     .SetTextVariable("GROUP", religion.Faith.FaithGroup.Name));
             }
-
 
             return failedReasons.Count == 0;
         }
@@ -121,7 +118,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public override void DoAiDecision()
         {
-            return;
-        }
+                return;
+            }
     }
 }
