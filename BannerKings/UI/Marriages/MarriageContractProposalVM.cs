@@ -1,4 +1,5 @@
 using BannerKings.Behaviours.Marriage;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.UI.Items;
 using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
@@ -16,8 +17,8 @@ namespace BannerKings.UI.Marriages
         private MBBindingList<Hero> proposerCandidates, proposedCandidates;
         private HeroVM proposedHero, proposerHero;
         private bool proposedSelected, proposerSelected, arrangedMarriage, invertedClan, canInvertClan,
-            canChangeArrangedMarriage, canCreateAlliance, alliance, feast;
-        private DecisionElement invertedClanToggle, arrangedMarriageToggle, allianceToggle, feastToggle;
+            canChangeArrangedMarriage, canCreateAlliance, alliance, feast, isSecondaryPartner;
+        private DecisionElement invertedClanToggle, arrangedMarriageToggle, allianceToggle, feastToggle, secondaryPartnerToggle;
         private HintViewModel influenceCostHint, dowryValueHint, willAcceptHint,
             proposerSpouseHint, proposedSpouseHint;
         private string dowryValueText, influenceCostText, finalClanText, willAcceptText,
@@ -56,7 +57,7 @@ namespace BannerKings.UI.Marriages
                 new TextObject("{=HMOHcfzh}Arrange the marriage without consulting the spouses. While their personal relations are still considered, the to-be-spouses have no power to dictate the marriage result. If you are one of the spouses, this means no Courting phase - the marriage is sealed off right away."));
 
             AllianceToggle = new DecisionElement()
-                .SetAsBooleanOption(new TextObject("{=n6gncAsu}Alliance Pact").ToString(),
+                .SetAsBooleanOption(new TextObject("{=!}Alliance").ToString(),
                 false,
                 delegate (bool value)
                 {
@@ -66,7 +67,7 @@ namespace BannerKings.UI.Marriages
                 new TextObject("{=DrZ2KnbO}Join both houses in alliance. By doing so, both houses are bound to not enter in conflict with each other when it comes to internal matters of the kingdom. Instead, if they are the leading houses of separate kingdoms, it would prevent a war between both realms. Subject houses may still fight each other if their sovereigns declare war."));
 
             FeastToggle = new DecisionElement()
-                .SetAsBooleanOption(new TextObject("{=BNF7CWaY}Feast Celebration").ToString(),
+                .SetAsBooleanOption(new TextObject("{=!}Feast").ToString(),
                 false,
                 delegate (bool value)
                 {
@@ -74,6 +75,16 @@ namespace BannerKings.UI.Marriages
                     RefreshValues();
                 },
                 new TextObject("{=a3fxEHyJ}Arrange a feast to celebrate the marriage. A selection of families within the realm will be invited, and as a host you ought to provide them a quality celebration. Doing so will allow you to improve your standing with them, as well as bring your family renown."));
+
+            SecondaryPartnerToggle = new DecisionElement()
+                .SetAsBooleanOption(new TextObject("{=!}Secondary Partner").ToString(),
+                false,
+                delegate (bool value)
+                {
+                    isSecondaryPartner = value;
+                    RefreshValues();
+                },
+                new TextObject("{=!}Have the proposed become a secondary spouse or concubine/consort. The ability to have a secondary partner is entirely dictated by your religion, as well as if such partner is a secondary spouse or concubine/consort. Secondary spouses are diplomatically binding (allow for alliances). Concubines/consorts are not binding, and are thus an offer less interesting to the proposed. Only family leaders can have secondary partners."));
 
             RefreshValues();
         }
@@ -192,6 +203,24 @@ namespace BannerKings.UI.Marriages
                     .SetTextVariable("HINT", dowry.GetExplanations());
             }
 
+            bool canHaveCosorts = false;
+            if (ProposedHero != null)
+            {
+                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(ProposerHero.Hero);
+                canHaveCosorts = religion.Faith.MarriageDoctrine.Consorts > 0;
+                if (religion.Faith.MarriageDoctrine.IsConcubinage && isSecondaryPartner) CanCreateAlliance = false;
+            }
+
+            /*if (religion != null)
+            {
+                BKMarriageBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>();
+                MarriageDoctrine doctrine = religion.Faith.MarriageDoctrine;
+                if (doctrine.IsConcubinage) hasSecondaryPartnerSlots = behavior.GetHeroConcubines(ProposerHero.Hero).Count < doctrine.Consorts;
+                else hasSecondaryPartnerSlots = behavior.GetHeroSpouses(ProposerHero.Hero).Count < doctrine.Consorts;
+            }*/
+
+            SecondaryPartnerToggle.Enabled = ProposerHero != null && ProposerHero.Hero.IsClanLeader() && canHaveCosorts;
+
             AllianceToggle.Enabled = CanCreateAlliance;
             if (!CanCreateAlliance)
             {
@@ -217,14 +246,8 @@ namespace BannerKings.UI.Marriages
 
             if (InvertedClan)
             {
-                if (finalClan == Clan.PlayerClan)
-                {
-                    finalClan = ProposedHero.Hero.Clan;
-                }
-                else
-                {
-                    finalClan = Clan.PlayerClan;
-                }
+                if (finalClan == Clan.PlayerClan) finalClan = ProposedHero.Hero.Clan;  
+                else finalClan = Clan.PlayerClan; 
             }
 
             return finalClan;
@@ -302,7 +325,8 @@ namespace BannerKings.UI.Marriages
                                (int)BannerKingsConfig.Instance.MarriageModel.GetInfluenceCost(ProposedHero.Hero, true).ResultNumber,
                                ArrangedMarriage,
                                alliance,
-                               feast
+                               feast,
+                               isSecondaryPartner
                                ));
             }
 
@@ -532,6 +556,20 @@ namespace BannerKings.UI.Marriages
                 if (value != feastToggle)
                 {
                     feastToggle = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public DecisionElement SecondaryPartnerToggle
+        {
+            get => secondaryPartnerToggle;
+            set
+            {
+                if (value != secondaryPartnerToggle)
+                {
+                    secondaryPartnerToggle = value;
                     OnPropertyChangedWithValue(value);
                 }
             }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Behaviours.Marriage;
 using BannerKings.Behaviours.Relations;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Traits;
@@ -9,6 +10,7 @@ using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.Pages;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Generic;
@@ -24,15 +26,18 @@ namespace BannerKings.UI.Extensions.Encyclopedia
         private bool addedFields;
         private readonly EncyclopediaHeroPageVM heroPageVM;
         private MBBindingList<TraitGroupVM> traitGroups;
+        private MBBindingList<HeroVM> spouses;
 
         public EncyclopediaHeroPageMixin(EncyclopediaHeroPageVM vm) : base(vm)
         {
             heroPageVM = vm;
             TraitGroups = new MBBindingList<TraitGroupVM>();
+            Spouses = new MBBindingList<HeroVM>();
         }
 
         [DataSourceProperty] public string CultureText => GameTexts.FindText("str_culture").ToString();
         [DataSourceProperty] public string MarriageText => new TextObject("{=mxVj1euY}Marriage").ToString();
+        [DataSourceProperty] public string SpousesText => new TextObject("{=!}Secondary Partners").ToString();
 
         [DataSourceProperty]
         public MBBindingList<TraitGroupVM> TraitGroups
@@ -55,6 +60,7 @@ namespace BannerKings.UI.Extensions.Encyclopedia
             if (!addedFields)
             {
                 TraitGroups.Clear();
+                Spouses.Clear();
 
                 if (hero != Hero.MainHero)
                 {
@@ -138,7 +144,28 @@ namespace BannerKings.UI.Extensions.Encyclopedia
                         new BasicTooltipViewModel(() => trait.Description.ToString())));
                 }
 
+                BKMarriageBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>();
+                foreach (Hero concubine in behavior.GetHeroPartners(hero))
+                    Spouses.Add(new HeroVM(concubine, true));
+
+                foreach (Hero concubine in behavior.GetHeroPartners(hero))
+                    Spouses.Add(new HeroVM(concubine, true));
+
                 addedFields = true;
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<HeroVM> Spouses
+        {
+            get => spouses;
+            set
+            {
+                if (value != spouses)
+                {
+                    spouses = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
 

@@ -224,107 +224,138 @@
 													</Children>
 												</ListPanel>
 												
-												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight"
+												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"  StackLayout.LayoutMethod="HorizontalLeftToRight"
 														   MarginTop="20" MarginLeft="35" MarginRight="35">
 													<Children>
 													
-														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight"
-																   DataSource="{InvertedClanToggle}" HorizontalAlignment="Center" MarginTop="20" IsEnabled="@Enabled">
+														<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="120" StackLayout.LayoutMethod="HorizontalLeftToRight"
+																   DataSource="{InvertedClanToggle}" HorizontalAlignment="Center" MarginTop="20">
 															<Children>
 																<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
 																		SuggestedHeight="40" MarginRight="5" HorizontalAlignment="Center" VerticalAlignment="Center"
 																		Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="20" Text="@Description" />
 																		
 																<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
-																			  SuggestedWidth="30" SuggestedHeight="30" MarginLeft="5"
+																			  SuggestedWidth="30" SuggestedHeight="30" MarginLeft="5" IsEnabled="@Enabled"
 																			  Brush="SPOptions.Checkbox.Empty.Button" ButtonType="Toggle"
 																			  IsSelected="@OptionValueAsBoolean" ToggleIndicator="ToggleIndicator"
 																			  UpdateChildrenStates="true" HorizontalAlignment="Center" VerticalAlignment="Center">
 																	<Children>
 																		<ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
 																					 Brush="SPOptions.Checkbox.Full.Button" />
-																		<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
-																					Command.HoverEnd="ExecuteEndHint" />
-																	</Children>
-																</ButtonWidget>
-															</Children>
-														</ListPanel>
-			
-														
-														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight"
-																   DataSource="{AllianceToggle}" IsEnabled="@Enabled" HorizontalAlignment="Center" MarginTop="20">
-															<Children>
-																<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
-																		SuggestedHeight="40" MarginRight="5" HorizontalAlignment="Center" VerticalAlignment="Center"
-																		Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="20" Text="@Description" />
 																		
-																<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
-																			  SuggestedWidth="30" SuggestedHeight="30" MarginLeft="5"
-																			  Brush="SPOptions.Checkbox.Empty.Button" ButtonType="Toggle"
-																			  IsSelected="@OptionValueAsBoolean" ToggleIndicator="ToggleIndicator"
-																			  UpdateChildrenStates="true" HorizontalAlignment="Center" VerticalAlignment="Center">
-																	<Children>
-																		<ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
-																					 Brush="SPOptions.Checkbox.Full.Button" />
-																		<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
-																					Command.HoverEnd="ExecuteEndHint" />
 																	</Children>
 																</ButtonWidget>
+																
+																<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																					HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																					Command.HoverEnd="ExecuteEndHint" />
 															</Children>
 														</ListPanel>
 														
-														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight"
-																   DataSource="{ArrangedMarriageToggle}" IsEnabled="@Enabled" HorizontalAlignment="Center" MarginTop="20">
+														<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="120" StackLayout.LayoutMethod="HorizontalLeftToRight"
+																   DataSource="{AllianceToggle}" HorizontalAlignment="Center" MarginTop="20" MarginLeft="20">
 															<Children>
 																<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
 																		SuggestedHeight="40" MarginRight="5" HorizontalAlignment="Center" VerticalAlignment="Center"
 																		Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="20" Text="@Description" />
 																		
 																<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
-																			  SuggestedWidth="30" SuggestedHeight="30" MarginLeft="5"
+																			  SuggestedWidth="30" SuggestedHeight="30" MarginLeft="5" IsEnabled="@Enabled"
 																			  Brush="SPOptions.Checkbox.Empty.Button" ButtonType="Toggle"
 																			  IsSelected="@OptionValueAsBoolean" ToggleIndicator="ToggleIndicator"
 																			  UpdateChildrenStates="true" HorizontalAlignment="Center" VerticalAlignment="Center">
 																	<Children>
 																		<ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
 																					 Brush="SPOptions.Checkbox.Full.Button" />
-																		<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
-																					Command.HoverEnd="ExecuteEndHint" />
+																		
 																	</Children>
 																</ButtonWidget>
+																
+																<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																					HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																					Command.HoverEnd="ExecuteEndHint" />
 															</Children>
 														</ListPanel>
 														
-														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight"
-																   DataSource="{FeastToggle}" HorizontalAlignment="Center" MarginTop="20">
+														<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="180" StackLayout.LayoutMethod="HorizontalLeftToRight"
+																   DataSource="{ArrangedMarriageToggle}" HorizontalAlignment="Center" MarginTop="20" MarginLeft="20">
 															<Children>
 																<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
 																		SuggestedHeight="40" MarginRight="5" HorizontalAlignment="Center" VerticalAlignment="Center"
 																		Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="20" Text="@Description" />
 																		
 																<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
-																			  SuggestedWidth="30" SuggestedHeight="30" MarginLeft="5"
+																			  SuggestedWidth="30" SuggestedHeight="30" MarginLeft="5" IsEnabled="@Enabled"
 																			  Brush="SPOptions.Checkbox.Empty.Button" ButtonType="Toggle"
 																			  IsSelected="@OptionValueAsBoolean" ToggleIndicator="ToggleIndicator"
 																			  UpdateChildrenStates="true" HorizontalAlignment="Center" VerticalAlignment="Center">
 																	<Children>
 																		<ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
 																					 Brush="SPOptions.Checkbox.Full.Button" />
-																		<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
-																					Command.HoverEnd="ExecuteEndHint" />
+																		
 																	</Children>
 																</ButtonWidget>
+																
+																<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																					HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																					Command.HoverEnd="ExecuteEndHint" />
+															</Children>
+														</ListPanel>
+																								
+														<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="120" StackLayout.LayoutMethod="HorizontalLeftToRight"
+																   DataSource="{FeastToggle}" HorizontalAlignment="Center" MarginTop="20" MarginLeft="50">
+															<Children>
+															
+																<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																		SuggestedHeight="40" MarginRight="5" HorizontalAlignment="Center" VerticalAlignment="Center"
+																		Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="20" Text="@Description" />
+																		
+																<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+																			  SuggestedWidth="30" SuggestedHeight="30" MarginLeft="5" IsEnabled="@Enabled"
+																			  Brush="SPOptions.Checkbox.Empty.Button" ButtonType="Toggle"
+																			  IsSelected="@OptionValueAsBoolean" ToggleIndicator="ToggleIndicator"
+																			  UpdateChildrenStates="true" HorizontalAlignment="Center" VerticalAlignment="Center">
+																	<Children>
+																		<ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
+																					 Brush="SPOptions.Checkbox.Full.Button" />		
+																	</Children>
+																</ButtonWidget>
+																
+																<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																					HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																					Command.HoverEnd="ExecuteEndHint" />
+															</Children>
+														</ListPanel>
+														
+														<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="150" StackLayout.LayoutMethod="HorizontalLeftToRight"
+																   DataSource="{SecondaryPartnerToggle}" HorizontalAlignment="Center" MarginTop="20" MarginLeft="20">
+															<Children>
+															
+																<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																		SuggestedHeight="40" MarginRight="5" HorizontalAlignment="Center" VerticalAlignment="Center"
+																		Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="20" Text="@Description" />
+																		
+																<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+																			  SuggestedWidth="30" SuggestedHeight="30" MarginLeft="5" IsEnabled="@Enabled"
+																			  Brush="SPOptions.Checkbox.Empty.Button" ButtonType="Toggle"
+																			  IsSelected="@OptionValueAsBoolean" ToggleIndicator="ToggleIndicator"
+																			  UpdateChildrenStates="true" HorizontalAlignment="Center" VerticalAlignment="Center">
+																	<Children>
+																		<ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
+																					 Brush="SPOptions.Checkbox.Full.Button" />
+																		
+																	</Children>
+																</ButtonWidget>
+																
+																<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																					HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																					Command.HoverEnd="ExecuteEndHint" />
 															</Children>
 														</ListPanel>
 													
 													</Children>
 												</ListPanel>
-												
-												
 											</Children>
 										</ListPanel>
 									</Children>

@@ -34,6 +34,35 @@ namespace BannerKings.UI.Extensions.Encyclopedia
         [PrefabExtensionXmlNodes] public IEnumerable<XmlNode> Nodes => nodes;
     }
 
+    [PrefabExtension("EncyclopediaHeroPage",
+        "descendant::ListPanel[@Id='RightSideList']/Children/Widget[1]/Children/ListPanel[1]/Children",
+        "EncyclopediaHeroPage")]
+    internal class EncyclopediaHeroPageExtension2 : PrefabExtensionInsertPatch
+    {
+        private readonly List<XmlNode> nodes;
+
+        public EncyclopediaHeroPageExtension2()
+        {
+            var partners1 = new XmlDocument();
+            partners1.LoadXml(
+                "<EncyclopediaDivider Id=\"PartnersDivider\" MarginTop=\"50\" Parameter.Title=\"@SpousesText\" Parameter.ItemList=\"..\\AlliesGrid\" GamepadNavigationIndex=\"0\"/>");
+            var partners2 = new XmlDocument();
+            partners2.LoadXml(
+                "<NavigationScopeTargeter ScopeID=\"EncyclopediaHeroAlliesContentScope\" ScopeParent=\"..\\PartnersGrid\" ScopeMovements=\"Horizontal\" AlternateScopeMovements=\"Vertical\" AlternateMovementStepSize=\"7\" />");
+            var partners3 = new XmlDocument();
+            partners3.LoadXml(
+                "<NavigatableGridWidget Id=\"PartnersGrid\" DataSource=\"{Spouses}\" WidthSizePolicy = \"StretchToParent\" HeightSizePolicy = \"CoverChildren\" SuggestedWidth=\"350\" SuggestedHeight=\"350\" DefaultCellWidth=\"100\" DefaultCellHeight=\"100\" HorizontalAlignment=\"Left\" ColumnCount=\"7\" MarginTop=\"10\" MarginLeft=\"15\" AutoScrollYOffset=\"35\"><ItemTemplate><EncyclopediaSubPageElement/></ItemTemplate></NavigatableGridWidget>");
+
+            nodes = new List<XmlNode>
+                {partners1, partners2, partners3 };
+        }
+
+        public override InsertType Type => InsertType.Child;
+        public override int Index => 9;
+
+        [PrefabExtensionXmlNodes] public IEnumerable<XmlNode> Nodes => nodes;
+    }
+
     [PrefabExtension("EncyclopediaHeroPage", "descendant::GridWidget[@Id='StatsGrid']/ItemTemplate/ListPanel[1]",
         "EncyclopediaClanPage")]
     internal class ReplaceHeroInfoExtension : PrefabExtensionInsertPatch
