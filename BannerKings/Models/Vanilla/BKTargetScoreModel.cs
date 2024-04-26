@@ -32,7 +32,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     result *= justification.RaidWeight;
                 }
-                else if (defaultBehavior == AiBehavior.BesiegeSettlement)
+                else if (defaultBehavior == AiBehavior.BesiegeSettlement || defaultBehavior == AiBehavior.DefendSettlement)
                 {
                     result *= justification.ConquestWeight;
                 }
@@ -48,18 +48,6 @@ namespace BannerKings.Models.Vanilla
             IFaction targetFaction = targetSettlement.MapFaction;
             if (targetFaction != mobileParty.MapFaction && targetFaction.IsAtWarWith(mobileParty.MapFaction))
             {
-                StanceLink stance = mobileParty.MapFaction.GetStanceWith(targetFaction);
-                if (missionType == Army.ArmyTypes.Besieger || missionType == Army.ArmyTypes.Raider)
-                {
-                    if (stance.BehaviorPriority == 2) result *= 2f;
-                    else if (stance.BehaviorPriority == 1) result *= 0.5f;
-                }
-                else if (missionType == Army.ArmyTypes.Defender)
-                {
-                    if (stance.BehaviorPriority == 2) result *= 0.5f;
-                    else if (stance.BehaviorPriority == 1) result *= 2f;
-                }
-
                 War war = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
                     .GetWar(mobileParty.MapFaction, targetFaction);
                 if (war == null)
@@ -68,15 +56,15 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 CasusBelli justification = war.CasusBelli;
-                if (justification.Fief == targetSettlement && missionType == Army.ArmyTypes.Besieger)
+                if (justification.Fief == targetSettlement && (missionType == Army.ArmyTypes.Besieger || missionType == Army.ArmyTypes.Defender))
                 {
-                    result *= 4f;
+                    result *= 1.5f;
                 }
 
                 if (targetSettlement.Town != null && (targetSettlement.Town == war.DefenderFront || 
                     targetSettlement.Town == war.AttackerFront))
                 {
-                    result *= 2f;
+                    result *= 1.25f;
                 }
             }
 
