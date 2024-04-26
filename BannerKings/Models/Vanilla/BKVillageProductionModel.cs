@@ -274,7 +274,7 @@ namespace BannerKings.Models.Vanilla
 
                 var maxWorkforce = acres * landData.GetRequiredLabor("wood");
                 var workforce = Math.Min(maxWorkforce, serfs + slaves);
-                result.Add(workforce * landData.GetAcreOutput("wood") * (item.StringId is "hardwood" ? 30f : 15f));
+                result.Add(workforce * landData.GetAcreOutput("wood") * (item.StringId is "hardwood" ? 10f : 5f));
                 var serfFactor = serfs / slaves;
                 if (serfFactor > 0f)
                 {
