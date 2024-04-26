@@ -147,6 +147,7 @@ namespace BannerKings
             AddClassDefinition(typeof(AppointedGroup), 80);
             AddClassDefinition(typeof(LandedPreacherGroup), 81);
             AddClassDefinition(typeof(DisorganizedGroup), 82);
+            AddClassDefinition(typeof(HeroMarriage), 83);
 
             AddEnumDefinition(typeof(RiteType), 87);
             AddClassDefinition(typeof(EducationData), 88);
@@ -297,6 +298,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(List<RelationsModifier>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, List<RelationsModifier>>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, HeroRelations>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, HeroMarriage>)); 
         }
     }
 }
