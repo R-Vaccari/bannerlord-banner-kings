@@ -7,7 +7,15 @@ namespace BannerKings.Behaviours.Marriage
 {
     public class MarriageContract
     {
-        public MarriageContract(Hero proposer, Hero proposed, Clan finalClan, int dowry, int influence, bool arrangedMarriage, bool alliance, bool feast)
+        public MarriageContract(Hero proposer, 
+            Hero proposed, 
+            Clan finalClan, 
+            int dowry, 
+            int influence, 
+            bool arrangedMarriage, 
+            bool alliance, 
+            bool feast,
+            bool isSecondary)
         {
             Proposer = proposer;
             Proposed = proposed;
@@ -17,6 +25,7 @@ namespace BannerKings.Behaviours.Marriage
             ArrangedMarriage = arrangedMarriage;
             Alliance = alliance;
             Feast = feast;
+            IsSecondary = isSecondary;
         }
 
         [SaveableProperty(1)] public Hero Proposer { get; private set; }
@@ -26,9 +35,9 @@ namespace BannerKings.Behaviours.Marriage
         [SaveableProperty(5)] public int Influence { get; private set; }
         [SaveableProperty(6)] public bool ArrangedMarriage { get; private set; }
         [SaveableProperty(7)] public bool Alliance { get; private set; }
-        [SaveableProperty(8)] public bool Feast { get; private set;  }
-
+        [SaveableProperty(8)] public bool Feast { get; private set; }
         [SaveableProperty(9)] public bool Confirmed { get; set; }
+        [SaveableProperty(10)] public bool IsSecondary { get; private set; }
 
         public (TextObject, bool) IsContractAdequate()
         {

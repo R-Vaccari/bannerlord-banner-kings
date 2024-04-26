@@ -1,6 +1,7 @@
 using BannerKings.Actions;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Dialogue;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.UI;
 using HarmonyLib;
 using System.Collections.Generic;
@@ -27,25 +28,19 @@ namespace BannerKings.Behaviours.Marriage
             proposedMarriage = contract;
         }
 
-        public List<Hero> GetHeroSpouses(Hero hero)
+        public List<Hero> GetHeroPartners(Hero hero)
         {
             List<Hero> list = new List<Hero>(3);
-            list.AddRange(GetHeroMarriage(hero).Spouses);
+            list.AddRange(GetHeroMarriage(hero).Partners);
 
             return list;
         }
 
-        public List<Hero> GetHeroConcubines(Hero hero)
-        {
-            List<Hero> list = new List<Hero>(3);
-            list.AddRange(GetHeroMarriage(hero).Concubines);
-
-            return list;
-        }
+        public void AddPartner(Hero hero, Hero concubine) => GetHeroMarriage(hero).Partners.Add(concubine);
 
         public HeroMarriage GetHeroMarriage(Hero hero)
         {
-            HeroMarriage heroMarriage = null;
+            HeroMarriage heroMarriage;
             if (!heroMarriages.TryGetValue (hero, out heroMarriage))
             {
                 heroMarriages[hero] = new HeroMarriage(hero);
@@ -60,12 +55,27 @@ namespace BannerKings.Behaviours.Marriage
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
+            CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, (System.Action<Hero, Hero, KillCharacterAction.KillCharacterActionDetail, bool>)((Hero victim,
+                Hero killer,
+                KillCharacterAction.KillCharacterActionDetail detail,
+                bool showNotification) =>
+            {
+                foreach (HeroMarriage marriage in heroMarriages.Values)
+                {
+                    if (marriage.Partners.Contains(victim))
+                        marriage.Partners.Remove(victim);   
+                }
+
+                if (heroMarriages.ContainsKey(victim))
+                    heroMarriages.Remove(victim);
+            }));
         }
 
         public override void SyncData(IDataStore dataStore)
         {
             dataStore.SyncData("bannerkings-heroes-flirted", ref flirtedWith);
             dataStore.SyncData("bannerkings-player-betrothal", ref proposedMarriage);
+            dataStore.SyncData("bannerkings-hero-marriages", ref heroMarriages);
 
             if (flirtedWith == null) flirtedWith = new List<Hero>();
             if (heroMarriages == null) heroMarriages = new Dictionary<Hero, HeroMarriage>(Hero.AllAliveHeroes.Count);
@@ -535,6 +545,13 @@ namespace BannerKings.Behaviours.Marriage
                 {
                     FactionManager.DeclareAlliance(proposedMarriage.Proposer.MapFaction,
                         proposedMarriage.Proposed.MapFaction);
+                }
+
+                if (proposedMarriage.IsSecondary)
+                {
+                    Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(proposedMarriage.Proposer);
+                    if (religion.Faith.MarriageDoctrine.IsConcubinage) AddPartner(proposedMarriage.Proposer, proposedMarriage.Proposed);
+                    else AddPartner(proposedMarriage.Proposer, proposedMarriage.Proposed);
                 }
 
                 proposedMarriage = null;

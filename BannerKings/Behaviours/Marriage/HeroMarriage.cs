@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Marriage
 {
@@ -9,12 +10,10 @@ namespace BannerKings.Behaviours.Marriage
         public HeroMarriage(Hero hero)
         {
             Hero = hero;
-            Concubines = new List<Hero>();
-            Spouses = new List<Hero>(); 
+            Partners = new List<Hero>();
         }
 
-        public Hero Hero { get; private set; }
-        public List<Hero> Concubines { get; private set; }
-        public List<Hero> Spouses { get; private set; }
+        [SaveableProperty(1)] public Hero Hero { get; private set; }
+        [SaveableProperty(2)] public List<Hero> Partners { get; private set; }
     }
 }

@@ -1,12 +1,13 @@
+using BannerKings.Behaviours.Marriage;
 using BannerKings.Campaign.Skills;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Utils;
 using BannerKings.Utils.Extensions;
-using Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -18,7 +19,10 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKMarriageModel : DefaultMarriageModel
     {
-        public ExplainedNumber IsMarriageAdequate(Hero proposer, Hero secondHero, bool explanations = false)
+        public ExplainedNumber IsMarriageAdequate(Hero proposer, 
+            Hero secondHero,
+            bool isConsort = false, 
+            bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
 
@@ -26,16 +30,9 @@ namespace BannerKings.Models.Vanilla
             var proposedScore = GetSpouseScore(secondHero).ResultNumber;
             result.Add(proposerScore - proposedScore, new TextObject("{=NeydSXjc}Score differences"));
 
-            ExceptionUtils.TryCatch(() =>
+            ExceptionUtils.TryCatch((System.Action)(() =>
             {
-                if (proposer.Culture != secondHero.Culture)
-                {
-                    result.Add(-50f, GameTexts.FindText("str_culture"));
-                }
-                else
-                {
-                    result.Add(50f, GameTexts.FindText("str_culture"));
-                }
+                result.Add(proposer.Culture != secondHero.Culture  ? - 50f : 50f, GameTexts.FindText("str_culture"));
 
                 var proposerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(proposer);
                 var proposedReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(secondHero);
@@ -48,11 +45,11 @@ namespace BannerKings.Models.Vanilla
                         FaithStance stance = proposedReligion.GetStance(proposerReligion.Faith);
                         if (stance == FaithStance.Hostile)
                         {
-                            factor = -100f;
+                            factor = -1000f;
                         }
                         else if (stance == FaithStance.Tolerated)
                         {
-                            factor = -20f;
+                            if (!proposerReligion.Faith.MarriageDoctrine.AcceptsUntolerated) factor = -1000f;
                         }
                     }
 
@@ -68,7 +65,35 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
 
-                if (!IsCoupleSuitableForMarriage(proposer, secondHero))
+                if (proposerReligion != null)
+                {
+                    CheckReligionSuitability(proposerReligion, proposedReligion, ref result, proposer, secondHero);
+
+                    if (isConsort)
+                    {
+                        BKMarriageBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>();
+                        if (proposerReligion.Faith.MarriageDoctrine.IsConcubinage && 
+                        behavior.GetHeroPartners(proposer).Count() >= proposerReligion.Faith.MarriageDoctrine.Consorts)
+                        {
+                            result.Add(-1000f, new TextObject("{=!}{HERO} is already at the limit of concubines")
+                                .SetTextVariable("HERO", proposer.Name));
+                        }
+
+                        if (!proposerReligion.Faith.MarriageDoctrine.IsConcubinage &&
+                        behavior.GetHeroPartners(proposer).Count() >= proposerReligion.Faith.MarriageDoctrine.Consorts)
+                        {
+                            result.Add(-1000f, new TextObject("{=!}{HERO} is already at the limit of secondary spouses")
+                                .SetTextVariable("HERO", proposer.Name));
+                        }
+                    }
+                }
+
+                if (proposedReligion != null)
+                {
+                    CheckReligionSuitability(proposedReligion, proposerReligion, ref result, secondHero, proposer);
+                }
+
+                if (!base.IsCoupleSuitableForMarriage(proposer, secondHero))
                 {
                     Hero playerCourting = Romance.GetCourtedHeroInOtherClan(proposer, secondHero);
                     if (playerCourting != null && playerCourting != secondHero)
@@ -84,11 +109,6 @@ namespace BannerKings.Models.Vanilla
                         result.Add(-1000f, new TextObject("{=jb7sCNT2}{HERO} is currently courting {COURTING}")
                             .SetTextVariable("HERO", secondHero.Name)
                             .SetTextVariable("COURTING", aiCourting.Name));
-                    }
-
-                    if (DiscoverAncestors(proposer, 3).Intersect(DiscoverAncestors(secondHero, 3)).Any())
-                    {
-                        result.Add(-1000f, new TextObject("{=1d2DhozK}Spouses are too closely related."));
                     }
 
                     if (proposer.IsFemale == secondHero.IsFemale)
@@ -108,22 +128,41 @@ namespace BannerKings.Models.Vanilla
                             .SetTextVariable("HERO", secondHero.Name));
                     }
 
-                    if (!IsClanSuitableForMarriage(proposer.Clan))
+                    if (!base.IsClanSuitableForMarriage(proposer.Clan))
                     {
                         result.Add(-1000f, new TextObject("{=vjSgVRAm}{CLAN} is not adequate for marriage.")
                                                     .SetTextVariable("CLAN", proposer.Clan.Name));
                     }
 
-                    if (!IsClanSuitableForMarriage(secondHero.Clan))
+                    if (!base.IsClanSuitableForMarriage(secondHero.Clan))
                     {
                         result.Add(-1000f, new TextObject("{=vjSgVRAm}{CLAN} is not adequate for marriage.")
                                                     .SetTextVariable("CLAN", secondHero.Clan.Name));
                     }
                 }
-            },
+            }),
             GetType().Name);
 
             return result;
+        }
+
+        private void CheckReligionSuitability(Religion religion, Religion otherReligion, ref ExplainedNumber result, 
+            Hero religionsHero, Hero otherHero)
+        {
+            int generations = religion.Faith.MarriageDoctrine.Consanguinity;
+            if (DiscoverAncestors(religionsHero, generations).Intersect(DiscoverAncestors(otherHero, generations)).Any())
+            {
+                result.Add(-1000f, new TextObject("{=1d2DhozK}Spouses are too closely related."));
+            }
+
+            if (!religion.Faith.MarriageDoctrine.AcceptsUntolerated)
+            {
+                if (otherHero == null || religion.GetStance(otherReligion.Faith) != FaithStance.Tolerated)
+                {
+                    result.Add(-1000f, new TextObject("{=!}The {FAITH} faith does not accept spouses from untolerated faiths.")
+                        .SetTextVariable("FAITH", religion.Faith.GetFaithName()));
+                }
+            }
         }
 
         public ExplainedNumber GetSpouseScore(Hero hero, bool explanations = false)
@@ -231,7 +270,7 @@ namespace BannerKings.Models.Vanilla
                 result.AddFactor(-0.2f, new TextObject("{=2kF9z7Tq}Infertile"));
             }
 
-            if (hero.Spouse != null && hero.Spouse.IsDead)
+            if (hero.IsFemale && hero.Spouse != null && hero.Spouse.IsDead)
             {
                 result.AddFactor(-0.2f, new TextObject("{=aML45YiV}Widow"));
             }
