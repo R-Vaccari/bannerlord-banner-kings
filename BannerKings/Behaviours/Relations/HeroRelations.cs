@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 
@@ -61,7 +62,7 @@ namespace BannerKings.Behaviours.Relations
 
                 int target = GetRelationsTarget(hero2);
                 int relation = Hero.GetRelation(hero2);
-                if (relation > target) ApplyRelation(hero2, -5);
+                if (relation > target) ApplyRelation(hero2, -1);
                 else if (relation < target) ApplyRelation(hero2, 1);
             }
         }

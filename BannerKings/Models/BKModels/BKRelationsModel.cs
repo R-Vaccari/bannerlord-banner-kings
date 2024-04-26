@@ -42,13 +42,13 @@ namespace BannerKings.Models.BKModels
             if (Utils.Helpers.IsCloseFamily(target, hero)) 
                 results.Add(new RelationsModifier(CloseFamilyModifier, new TextObject("{=!}Close family")));
 
-            if (target.IsLord)
+            if (hero.IsLord)
             {
-                if (hero.IsLord)
+                if (target.IsLord)
                 {
-                    foreach (FeudalTitle title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(target))
+                    foreach (FeudalTitle title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero))
                     {
-                        if (title.HeroHasValidClaim(hero))
+                        if (title.HeroHasValidClaim(target))
                         {
                             results.Add(new RelationsModifier(GetClaimRelationImpact(title), 
                                 new TextObject("{=!}{HERO} has a claim on title {TITLE}")
@@ -56,22 +56,22 @@ namespace BannerKings.Models.BKModels
                                 .SetTextVariable("TITLE", title.FullName)));
                         }
                     }
-                }
 
-                if (!target.IsClanLeader)
-                {
-                    Hero leader = target.Clan.Leader;
-                    if (leader != null) results.Add(new RelationsModifier(
-                        (int)(hero.GetRelation(leader) / 3f),
-                        new TextObject("{=!}Relation with clan leader {LEADER}")
-                        .SetTextVariable("LEADER", leader.Name)));
+                    if (!target.IsClanLeader)
+                    {
+                        Hero leader = target.Clan.Leader;
+                        if (leader != null) results.Add(new RelationsModifier(
+                            (int)(hero.GetRelation(leader) / 3f),
+                            new TextObject("{=!}Relation with clan leader {LEADER}")
+                            .SetTextVariable("LEADER", leader.Name)));
+                    }
                 }
             }
-            else if (target.IsNotable)
+            else if (hero.IsNotable)
             {
-                if (hero.IsLord)
+                if (target.IsLord)
                 {
-                    Settlement settlement = target.CurrentSettlement;
+                    Settlement settlement = hero.CurrentSettlement;
                     FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
                     if (title.DeFacto == hero && title.deJure != hero) 
                         results.Add(new RelationsModifier(IlegitimateFiefModifier,
