@@ -18,6 +18,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using System;
+using TaleWorlds.Core;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -28,6 +29,183 @@ namespace BannerKings.Models.Vanilla
         public override float GetRelationIncreaseFactor(Hero hero1, Hero hero2, float relationChange)
         {
             return relationChange;
+        }
+
+        public override float GetScoreOfKingdomToHireMercenary(Kingdom kingdom, Clan mercenaryClan) =>
+            KingdomRecruitMercenary(kingdom, mercenaryClan).ResultNumber;
+
+        public ExplainedNumber KingdomRecruitMercenary(Kingdom kingdom, Clan mercenaryClan, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(base.GetScoreOfKingdomToHireMercenary(kingdom, mercenaryClan), explanations);
+
+            Hero ruler = kingdom.RulingClan.Leader;
+            if (mercenaryClan.IsOutlaw)
+            {
+                result.AddFactor(ruler.GetTraitLevel(DefaultTraits.Honor) * -0.2f, 
+                    new TextObject("{=!}{HERO}'s opinion of outlaws")
+                    .SetTextVariable("HERO", ruler.Name));
+            }
+
+            float zealotry = 1f;
+            if (mercenaryClan.IsSect)
+            {
+                zealotry += ruler.GetTraitLevel(BKTraits.Instance.Zealous) * 0.2f;
+            }
+
+            if (mercenaryClan.IsMafia)
+            {
+                result.AddFactor(ruler.GetTraitLevel(DefaultTraits.Generosity) * 0.2f,
+                    new TextObject("{=!}{HERO}'s opinion of mafias")
+                    .SetTextVariable("HERO", ruler.Name));
+            }
+
+            result.AddFactor(ruler.GetTraitLevel(BKTraits.Instance.Humble) * 0.1f,
+                    new TextObject("{=!}Personality trait ({TRAIT})")
+                    .SetTextVariable("TRAIT", BKTraits.Instance.Humble.Name));
+
+            Religion rulerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(kingdom.RulingClan.Leader);
+            Religion mercenaryReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(mercenaryClan.Leader);
+
+            if (rulerReligion != null)
+            {
+                if (mercenaryReligion != null)
+                {
+                    FaithStance stance = rulerReligion.GetStance(mercenaryReligion.Faith);
+                    if (stance == FaithStance.Tolerated)
+                    {
+                        if (mercenaryClan.IsSect && rulerReligion.Faith.Equals(mercenaryReligion.Faith))
+                            result.AddFactor(1f * zealotry, new TextObject("{=!}Shared faith (Sect)"));
+                        else result.Add(0.25f * zealotry, new TextObject("{=Pcy4iFnT}Shared faith"));
+                    }
+                    else if (stance == FaithStance.Untolerated) result.Add(-0.3f * zealotry, new TextObject("{=!}Faith differences"));
+                    else result.Add(-0.5f * zealotry, new TextObject("{=!}Faith differences"));
+                }
+                else result.Add(-0.3f * zealotry, new TextObject("{=!}Faith differences"));
+            }
+
+            if (mercenaryClan.Culture == kingdom.Culture) result.AddFactor(0.2f, GameTexts.FindText("str_culture"));
+
+            result.AddFactor(mercenaryClan.Leader.GetRelation(kingdom.RulingClan.Leader) * 0.01f,
+                new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
+                .SetTextVariable("HERO1", ruler.Name)
+                .SetTextVariable("HERO2", mercenaryClan.Leader.Name));
+
+            return result;
+        }
+
+        public ExplainedNumber GetMercenaryDownPayment(Clan mercenaryClan, Kingdom kingdom, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(kingdom.KingdomBudgetWallet * 0.05f, 
+                explanations, 
+                new TextObject("{=!}Kingdom budget of {BUDGET}")
+                .SetTextVariable("BUDGET", kingdom.KingdomBudgetWallet));
+            result.Add(mercenaryClan.TotalStrength * mercenaryClan.MercenaryAwardMultiplier / 2f, new TextObject("{=!}Military force of {CLAN}")
+                .SetTextVariable("CLAN", mercenaryClan.Name));
+
+            if (mercenaryClan.IsSect) result.AddFactor(-0.8f, new TextObject("{=!}Sect"));
+
+
+            return result;
+        }
+
+        public ExplainedNumber GetMercenaryPietyCost(Clan mercenaryClan, Kingdom kingdom, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(0, explanations);
+            
+
+            if (mercenaryClan.IsSect)
+            {
+                Hero ruler = kingdom.RulingClan.Leader;
+                float pietyGain = BannerKingsConfig.Instance.ReligionModel.CalculatePietyChange(ruler).ResultNumber;
+                result.Add(mercenaryClan.TotalStrength * mercenaryClan.MercenaryAwardMultiplier / 2f, new TextObject("{=!}Military force of {CLAN}")
+                .SetTextVariable("CLAN", mercenaryClan.Name));
+
+                result.Add(pietyGain * 500f, new TextObject("{=!}Piety"));
+            }
+
+            return result;
+        }
+
+        public override float GetScoreOfMercenaryToJoinKingdom(Clan mercenaryClan, Kingdom kingdom) =>
+            MercenaryJoinScore(mercenaryClan, kingdom).ResultNumber;     
+
+        public ExplainedNumber MercenaryJoinScore(Clan mercenaryClan, Kingdom kingdom, bool explanations = false)
+        {
+            if (mercenaryClan == Clan.PlayerClan) return new ExplainedNumber(0f, false);
+
+            ExplainedNumber result = new ExplainedNumber(base.GetScoreOfMercenaryToJoinKingdom(mercenaryClan, kingdom), explanations);
+            Religion mercenaryReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(mercenaryClan.Leader);
+            Religion rulerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(kingdom.RulingClan.Leader);
+
+            if (mercenaryReligion != null && (rulerReligion == null || mercenaryReligion.GetStance(rulerReligion.Faith) == FaithStance.Tolerated))
+            {
+                if (mercenaryClan.IsSect) result.Add(1000f, new TextObject("{=!}Shared faith"));
+                else if (!mercenaryClan.IsOutlaw) result.Add(400f, new TextObject("{=!}Shared faith")); 
+            }
+
+            if (!mercenaryClan.IsOutlaw)
+            {
+                if (mercenaryClan.Culture == kingdom.Culture)
+                {
+                    result.Add(250f, GameTexts.FindText("str_culture"));
+                }
+            }
+
+            float relationsFactor = 5f;
+            if (mercenaryClan.IsOutlaw) relationsFactor = 7f;
+            else if (mercenaryClan.IsSect) relationsFactor = 2.5f;
+
+            result.Add(MathF.Max(mercenaryClan.Leader.GetRelation(kingdom.RulingClan.Leader), 0) * relationsFactor,
+                new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
+                .SetTextVariable("HERO1", mercenaryClan.Leader.Name)
+                .SetTextVariable("HERO2", kingdom.RulingClan.Leader.Name));
+            return result;
+        }
+
+        public override float GetScoreOfMercenaryToLeaveKingdom(Clan mercenaryClan, Kingdom kingdom)
+        {
+            float leave = MercenaryLeaveScore(mercenaryClan, kingdom).ResultNumber;
+            return leave;
+        }
+
+        public ExplainedNumber MercenaryLeaveScore(Clan mercenaryClan, Kingdom kingdom, bool explanations = false)
+        {
+            if (mercenaryClan.LastFactionChangeTime.ElapsedDaysUntilNow < CampaignTime.DaysInSeason * 2f) 
+                return new ExplainedNumber(-MathF.Abs(MercenaryJoinScore(mercenaryClan, kingdom).ResultNumber), explanations);
+
+            ExplainedNumber result = new ExplainedNumber(base.GetScoreOfMercenaryToLeaveKingdom(mercenaryClan, kingdom), explanations);
+            Religion mercenaryReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(mercenaryClan.Leader);
+            Religion rulerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(kingdom.RulingClan.Leader);
+
+            if (mercenaryReligion != null && (rulerReligion == null || mercenaryReligion.GetStance(rulerReligion.Faith) != FaithStance.Tolerated))
+            {
+                if (mercenaryClan.IsSect) result.Add(1000f, new TextObject("{=!}Faith differences"));
+                else if (!mercenaryClan.IsOutlaw)
+                {
+                    if (rulerReligion == null || mercenaryReligion.GetStance(rulerReligion.Faith) == FaithStance.Untolerated)
+                        result.Add(150f, new TextObject("{=!}Faith differences"));
+                    else result.Add(350f, new TextObject("{=!}Faith differences"));
+                }
+            }
+
+            if (!mercenaryClan.IsOutlaw)
+            {
+                if (mercenaryClan.Culture != kingdom.Culture)
+                {
+                    result.Add(100f, GameTexts.FindText("str_culture"));
+                }
+            }
+
+            float relationsFactor = 5f;
+            if (mercenaryClan.IsOutlaw) relationsFactor = 7f;
+            else if (mercenaryClan.IsSect) relationsFactor = 2.5f;
+
+            result.Add(MathF.Min(mercenaryClan.Leader.GetRelation(kingdom.RulingClan.Leader), 0) * relationsFactor,
+                new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
+                .SetTextVariable("HERO1", mercenaryClan.Leader.Name)
+                .SetTextVariable("HERO2", kingdom.RulingClan.Leader.Name));
+
+            return result;
         }
 
         public ExplainedNumber CalculateHeroFiefScore(Settlement settlement, Hero annexing, bool explanations = false)
@@ -458,6 +636,11 @@ namespace BannerKings.Models.Vanilla
                                 .SetTextVariable("CASUS", justification.Name));
                             GetPersonalityCasusBelliEffect(ref result, num, evaluatingClan, justification);
                         }
+
+                        if (justifications.Count == 0)
+                        {
+                            result.Add(-2000f, new TextObject("{=!}No war justifications"));
+                        }
                     }
                     else
                     {
@@ -500,20 +683,20 @@ namespace BannerKings.Models.Vanilla
 
             if (stance.BehaviorPriority == 1)
             {
-                result.Add(-baseNumber, new TextObject("{=fvd0nAa3}Defensive stance against {FACTION}")
+                result.Add(-MathF.Abs(baseNumber) * 1.2f, new TextObject("{=fvd0nAa3}Defensive stance against {FACTION}")
                     .SetTextVariable("FACTION", factionDeclaredWar.Name));
             }
 
             if (evaluatingClan != null)
             {
                 float relations = evaluatingClan.Leader.GetRelation(factionDeclaredWar.Leader);
-                result.Add(baseNumber * (-relations / 100f), new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
+                result.Add(MathF.Abs(baseNumber) * (-relations / 100f), new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
                     .SetTextVariable("HERO1", evaluatingClan.Leader.Name)
                 .SetTextVariable("HERO2", factionDeclaredWar.Leader.Name));
             }
 
             float threatFactor = CalculateThreatFactor(factionDeclaresWar, factionDeclaredWar);
-            result.Add(baseNumber * threatFactor * 2f, new TextObject("{=ew3Ga8Lu}{THREAT}% threat relative to possible enemies")
+            result.Add(MathF.Abs(baseNumber) * threatFactor * 2f, new TextObject("{=ew3Ga8Lu}{THREAT}% threat relative to possible enemies")
                 .SetTextVariable("THREAT", (threatFactor * 100f).ToString("0.0")));
 
             float attackerStrength = factionDeclaresWar.TotalStrength;
@@ -524,17 +707,17 @@ namespace BannerKings.Models.Vanilla
             }
 
             float strengthFactor = (attackerStrength / defenderStrength) - 1f;
-            result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.6f, -2f, 0.5f), new TextObject("{=KcLdYKrY}Difference in strength"));
+            result.Add(MathF.Abs(baseNumber) * MathF.Clamp(strengthFactor * 0.6f, -2f, 0.5f), new TextObject("{=KcLdYKrY}Difference in strength"));
 
-            if (factionDeclaredWar.Fiefs.Count < factionDeclaresWar.Fiefs.Count / 2f)
+            /*if (factionDeclaredWar.Fiefs.Count < factionDeclaresWar.Fiefs.Count / 2f)
             {
                 float fiefFactor = factionDeclaredWar.Fiefs.Count / factionDeclaresWar.Fiefs.Count;
-                result.Add(-baseNumber * (2f - fiefFactor), new TextObject("{=SRN3KdjF}Unworthy opponent"));
-            }
+                result.Add(-MathF.Abs(baseNumber) * (2f - fiefFactor), new TextObject("{=SRN3KdjF}Unworthy opponent"));
+            }*/
 
             if (defenderStrength >= attackerStrength * 1.5f)
             {
-                result.Add(baseNumber * MathF.Clamp(strengthFactor * 0.5f, -5f, -0.4f), new TextObject("{=Z7AW5i79}Enemy significantly stronger"));
+                result.Add(MathF.Abs(baseNumber) * MathF.Clamp(strengthFactor * 0.5f, -5f, -0.4f), new TextObject("{=Z7AW5i79}Enemy significantly stronger"));
             }
 
             float attackerFiefs = factionDeclaresWar.Fiefs.Count;
@@ -550,10 +733,10 @@ namespace BannerKings.Models.Vanilla
             }
 
             float fiefsFactor = (attackerFiefs  / defenderFiefs) - 1f;
-            result.Add(baseNumber * MathF.Clamp(fiefsFactor * 0.1f, -2f, 2f), new TextObject("{=MvV0HUdo}Difference in controlled fiefs"));
+            result.Add(MathF.Abs(baseNumber) * MathF.Clamp(fiefsFactor * 0.1f, -2f, 2f), new TextObject("{=MvV0HUdo}Difference in controlled fiefs"));
 
-            if (attackerFiefs >= defenderFiefs * 2f)
-                result.Add(-baseNumber, new TextObject("{=bwVkTDdv}{FACTION1} controls more than twice the fiefs than {FACTION2}")
+            if (defenderFiefs >= attackerFiefs * 2f)
+                result.Add(-MathF.Abs(baseNumber), new TextObject("{=bwVkTDdv}{FACTION1} controls more than twice the fiefs than {FACTION2}")
                     .SetTextVariable("FACTION1", factionDeclaredWar.Name)
                     .SetTextVariable("FACTION2", factionDeclaresWar.Name));
 
@@ -600,7 +783,8 @@ namespace BannerKings.Models.Vanilla
                     {
                         float distance = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(border.Item1, border.Item2);
                         float factor = (TaleWorlds.CampaignSystem.Campaign.AverageDistanceBetweenTwoFortifications / distance) - 1f;
-                        result.Add(MathF.Clamp(baseNumber * factor * 2f, baseNumber * -2f, 0f), new TextObject("{=fiHYU8X3}Distance between realms"));
+                        float baseAbs = MathF.Abs(baseNumber);
+                        result.Add(MathF.Clamp(baseAbs * factor * 2f, baseAbs * -2f, 0f), new TextObject("{=fiHYU8X3}Distance between realms"));
                     }
                 }
 
