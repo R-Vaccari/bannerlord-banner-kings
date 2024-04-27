@@ -40,6 +40,8 @@ namespace BannerKings.Behaviours.Marriage
 
         public HeroMarriage GetHeroMarriage(Hero hero)
         {
+            if (heroMarriages == null) heroMarriages = new Dictionary<Hero, HeroMarriage>();
+
             HeroMarriage heroMarriage;
             if (!heroMarriages.TryGetValue (hero, out heroMarriage))
             {
@@ -60,6 +62,7 @@ namespace BannerKings.Behaviours.Marriage
                 KillCharacterAction.KillCharacterActionDetail detail,
                 bool showNotification) =>
             {
+                if (heroMarriages == null) heroMarriages = new Dictionary<Hero, HeroMarriage> ();
                 foreach (HeroMarriage marriage in heroMarriages.Values)
                 {
                     if (marriage.Partners.Contains(victim))
