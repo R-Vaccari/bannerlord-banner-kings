@@ -1,3 +1,4 @@
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Traits;
@@ -21,6 +22,8 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         public CasusBelli FiefClaim { get; } = new CasusBelli("fief_claim");
         public CasusBelli SuppressThreat { get; } = new CasusBelli("SuppressThreat");
         public CasusBelli Rebellion { get; } = new CasusBelli("Rebellion");
+        public CasusBelli HolyWar { get; } = new CasusBelli("HolyWar");
+        public CasusBelli DivineReclamation { get; } = new CasusBelli("DivineReclamation");
         public override IEnumerable<CasusBelli> All
         {
             get
@@ -99,11 +102,11 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
             CulturalLiberation.Initialize(new TextObject("{=kyB8tkgY}Cultural Liberation"),
                 new TextObject("{=WsSwHEk4}Liberate a fief of your people from the rule of foreigners. Any town or castle that is mostly composed by our culture is reason enough for us to rule it rather than foreigners.\n\nObjective: Capture the selected target."),
-                new TextObject("{=kyB8tkgY}Conquer the target fief"),
+                new TextObject("{=!}Conquer the target fief"),
                 1.3f,
                 0.5f,
                 1f,
-                10000f,
+                7500f,
                 (War war) =>
                 {
                     return war.CasusBelli.Fief != null && (war.CasusBelli.Fief.MapFaction == war.Attacker ||
@@ -136,15 +139,16 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     { DefaultTraits.Valor, -0.1f },
                     { BKTraits.Instance.Ambitious, -0.1f }
                 },
-                new TextObject("{=zcmfRF08}The {ATTACKER} marches to war! {FIEF} is being liberated from the oppresion of {DEFENDER}!"));
+                new TextObject("{=zcmfRF08}The {ATTACKER} marches to war! {FIEF} is being liberated from the oppresion of {DEFENDER}!"),
+                true);
 
             FiefClaim.Initialize(new TextObject("{=kyB8tkgY}Claim Fief"),
                 new TextObject("{=kyB8tkgY}Conquer a fief claimed by your realm. The benefactor of the conquest will always be the claimant, regardless of other ownership procedures.\n\nObjective: Capture the selected target."),
-                new TextObject("{=kyB8tkgY}Conquer the target fief"),
+                new TextObject("{=!}Conquer the target fief"),
                 1.2f,
                 0.7f,
                 1f,
-                7500f,
+                5000f,
                 (War war) =>
                 {
                     return war.CasusBelli.Fief != null && (war.CasusBelli.Fief.MapFaction == war.Attacker ||
@@ -168,9 +172,119 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 },
                 new Dictionary<TraitObject, float>()
                 {
-
+                    { BKTraits.Instance.Just, 0.5f },
+                    { DefaultTraits.Mercy, 0.1f },
+                    { DefaultTraits.Generosity, -0.3f },
+                    { DefaultTraits.Oligarchic, 0.2f },
+                    { DefaultTraits.Valor, 0.1f },
+                    { BKTraits.Instance.Ambitious, 0.3f }
                 },
-                new TextObject("{=zcmfRF08}The {ATTACKER} marches to war! {FIEF} is being liberated from the oppresion of {DEFENDER}!"));
+                new TextObject("{=!}The {ATTACKER} marches to war! {FIEF} is claimed by the {DEFENDER} as their rightful land!"),
+                true);
+
+            HolyWar.Initialize(new TextObject("{=!}Holy War"),
+                new TextObject("{=!}Wage holy war on a faith considered hostile to your own. Different faiths accept different types of holy wars at different piety costs.\n\nObjective: Capture a fief."),
+                new TextObject("{=kyB8tkgY}Conquer a fief"),
+                1.3f,
+                0.3f,
+                0.6f,
+                5000f,
+                (War war) =>
+                {
+                    StanceLink attackerLink = war.Attacker.GetStanceWith(war.Defender);
+                    List<Settlement> attackerConquests = DiplomacyHelper.GetSuccessfullSiegesInWarForFaction(war.Attacker,
+                       attackerLink, (Settlement x) => x.Town != null);
+
+                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture && x.MapFaction == war.Attacker).Count >= 1;
+                },
+                (War war) =>
+                {
+                    Religion religion1 = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(war.Attacker.Leader);
+                    Religion religion2 = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(war.Defender.Leader);
+                    return religion1 == null || religion2 == null || 
+                    religion1.GetStance(religion2.Faith) != Managers.Institutions.Religions.Faiths.FaithStance.Hostile;
+                },
+                (IFaction faction1, IFaction faction2, CasusBelli casusBelli) =>
+                {
+                    bool isHostile = false;
+                    Religion religion1 = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(faction1.Leader);
+                    Religion religion2 = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(faction2.Leader);
+                    if (religion1 != null && religion2 != null)
+                    {
+                        isHostile = religion1.GetStance(religion2.Faith) == Managers.Institutions.Religions.Faiths.FaithStance.Hostile;
+                    }
+
+                    return isHostile && religion1 != null && religion1.Faith.WarDoctrine.HeroHasPiety(faction1.Leader, casusBelli);
+                },
+                (Kingdom kingdom) =>
+                {
+                    return true;
+                },
+                new Dictionary<TraitObject, float>()
+                {
+                    { BKTraits.Instance.Zealous, 0.5f },
+                    { DefaultTraits.Mercy, -0.1f },
+                    { DefaultTraits.Generosity, -0.3f },
+                    { DefaultTraits.Egalitarian, -0.4f },
+                    { DefaultTraits.Authoritarian, 0.2f },
+                    { DefaultTraits.Valor, 0.3f },
+                    { DefaultTraits.Honor, 0.1f },
+                    { BKTraits.Instance.Ambitious, 0.1f }
+                },
+                new TextObject("{=!}The {ATTACKER} marches to war! They wage holy war on the {DEFENDER}!"),
+                false,
+                false,
+                (War war) => TakePiety(war));
+
+            DivineReclamation.Initialize(new TextObject("{=!}Divine Reclamation"),
+               new TextObject("{=!}Wage holy war on a realm that holds a holy site or faith seat of your own faith. War success depends on capturing the specific selected target. Different faiths accept different types of holy wars at different piety costs.\n\nObjective: Capture the selected target."),
+               new TextObject("{=!}Conquer the target fief"),
+               1.3f,
+               0.3f,
+               0.6f,
+               5000f,
+               (War war) =>
+               {
+                   return war.CasusBelli.Fief != null && (war.CasusBelli.Fief.MapFaction == war.Attacker ||
+                   war.CasusBelli.Fief.OwnerClan.Kingdom == war.Attacker);
+               },
+               (War war) =>
+               {
+                   var targetFaction = war.CasusBelli.Fief.MapFaction;
+                   return targetFaction != war.Defender && targetFaction != war.Attacker;
+               },
+               (IFaction faction1, IFaction faction2, CasusBelli casusBelli) =>
+               {
+                   bool isHostile = false;
+                   Religion religion1 = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(faction1.Leader);
+                   Religion religion2 = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(faction2.Leader);
+                   if (religion1 != null && religion2 != null)
+                   {
+                       isHostile = religion1.GetStance(religion2.Faith) == Managers.Institutions.Religions.Faiths.FaithStance.Hostile;
+                   }
+
+                   return isHostile && religion1 != null && religion1.Faith.WarDoctrine.HeroHasPiety(faction1.Leader, casusBelli) &&
+                   casusBelli.Fief != null && casusBelli.Fief.MapFaction == faction2;
+               },
+               (Kingdom kingdom) =>
+               {
+                   return true;
+               },
+               new Dictionary<TraitObject, float>()
+               {
+                    { BKTraits.Instance.Zealous, 0.5f },
+                    { DefaultTraits.Mercy, -0.1f },
+                    { DefaultTraits.Generosity, -0.3f },
+                    { DefaultTraits.Egalitarian, -0.4f },
+                    { DefaultTraits.Authoritarian, 0.2f },
+                    { DefaultTraits.Valor, 0.3f },
+                    { DefaultTraits.Honor, 0.1f },
+                    { BKTraits.Instance.Ambitious, 0.1f }
+               },
+               new TextObject("{=!}The {ATTACKER} marches to war! The holy place of {FIEF} is to be reclaimed!"),
+               true,
+               false,
+               (War war) => TakePiety(war));
 
             Invasion.Initialize(new TextObject("{=yz3sGus6}Invasion"),
                 new TextObject("{=6yqojVsh}Invade a foreign kingdom as is the way of our ancestors. Seize their property and stablish our own rule.\n\nObjective: Capture 2 or more fiefs of the enemy's culture."),
@@ -178,7 +292,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 1.5f,
                 0.2f,
                 0.8f,
-                8000f,
+                5000f,
                 (War war) =>
                 {
                     StanceLink attackerLink = war.Attacker.GetStanceWith(war.Defender);
@@ -220,7 +334,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 0.5f,
                 3f,
                 0.8f,
-                8000f,
+                5000f,
                 (War war) =>
                 {
                     StanceLink attackerLink = war.Attacker.GetStanceWith(war.Defender);
@@ -370,6 +484,14 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     { DefaultTraits.Mercy, -0.1f }
                 },
                 new TextObject("{=J6KMLMX1}The {ATTACKER} is marching on {DEFENDER}! They claim to be the rightful heir of the Empire."));
+        }
+
+        private void TakePiety(War war)
+        {
+            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(war.Attacker.Leader);
+            BannerKingsConfig.Instance.ReligionsManager.AddPiety(religion,
+                war.Attacker.Leader,
+                -religion.Faith.WarDoctrine.Justifications[war.CasusBelli]);
         }
     }
 }

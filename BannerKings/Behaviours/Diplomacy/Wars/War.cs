@@ -24,6 +24,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             Demand = demand;
 
             RecalculateFronts();
+            CasusBelli?.OnStart(this);
         }
 
         public void RecalculateFronts()
@@ -199,6 +200,8 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 bool success = Attacker.GetStanceWith(Defender).GetDailyTributePaid(Defender) > 0;
                 Demand.EndRebellion(Attacker as Kingdom, Defender as Kingdom, success);
             }
+
+            CasusBelli.OnFinish(this);
         }
     }
 }

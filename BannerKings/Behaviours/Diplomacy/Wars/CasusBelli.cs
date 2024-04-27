@@ -16,13 +16,29 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         private Func<IFaction, IFaction, CasusBelli, bool> isAdequate;
         private Func<Kingdom, bool> showAsOption;
         private TextObject warDeclaredText;
+        private Action<War> onFinish, onStart;
+
         public CasusBelli(string id) : base(id)
         {
         }
 
-        public void Initialize(TextObject name, TextObject description, TextObject objectiveText, float conquest, float raid, float capture, float declareWarScore,
-            Func<War, bool> isFulfilled, Func<War, bool> isInvalid, Func<IFaction, IFaction, CasusBelli, bool> isAdequate,
-            Func<Kingdom, bool> showAsOption, Dictionary<TraitObject, float> traitWeights, TextObject warDeclaredText)
+        public void Initialize(TextObject name, 
+            TextObject description, 
+            TextObject objectiveText, 
+            float conquest, 
+            float raid, 
+            float capture, 
+            float declareWarScore,
+            Func<War, bool> isFulfilled, 
+            Func<War, bool> isInvalid, 
+            Func<IFaction, IFaction, CasusBelli, bool> isAdequate,
+            Func<Kingdom, bool> showAsOption, 
+            Dictionary<TraitObject, float> traitWeights, 
+            TextObject warDeclaredText, 
+            bool requiresFief = false,
+            bool requiresClaimant = false,
+            Action<War> onStart = null,
+            Action<War> onFinish = null)
         {
             Initialize(name, description);
             ObjectiveText = objectiveText;
@@ -36,6 +52,10 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             CaptureWeight = capture;
             DeclareWarScore = declareWarScore;
             this.warDeclaredText = warDeclaredText;
+            RequiresFief = requiresFief;
+            RequiresClaimant = requiresClaimant;
+            this.onStart = onStart;
+            this.onFinish = onFinish;
         }
 
         public CasusBelli GetCopy()
@@ -56,11 +76,22 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 copy.WarDeclaredText);
         }
 
+        public void OnStart(War war)
+        {
+            if (onStart != null) onStart(war);
+        }
+
+        public void OnFinish(War war)
+        {
+            if (onFinish != null) onFinish(war);
+        }
+
         public void SetInstanceData(Kingdom attacker, Kingdom defender, Settlement fief = null)
         {
             Attacker = attacker;
             Defender = defender;
             Fief = fief;
+            if (Fief != null) Title = BannerKingsConfig.Instance.TitleManager.GetTitle(Fief);
         }
 
         public void SetInstanceData(Kingdom attacker, Kingdom defender, FeudalTitle title, Hero claimant)
@@ -70,6 +101,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             Fief = title.Fief;
             Title = title;
             Claimant = claimant;
+            if (Fief != null) Title = BannerKingsConfig.Instance.TitleManager.GetTitle(Fief);
         }
 
         [SaveableProperty(10)] public Kingdom Attacker { get; private set; }
@@ -95,6 +127,8 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             : Name;
 
         public float DeclareWarScore { get; private set; }
+        public bool RequiresFief { get; private set; }
+        public bool RequiresClaimant { get; private set; }
         private Dictionary<TraitObject, float> TraitWeights { get; set; }
         public float ConquestWeight { get; private set; }
         public float CaptureWeight { get; private set; }
