@@ -183,10 +183,10 @@ namespace BannerKings.Behaviours.Diplomacy
             proposed.RulingClan.Leader.ChangeHeroGold(denars);
 
             var diplomacy1 = GetKingdomDiplomacy(proposer);
-            diplomacy1.AddTruce(proposed, years);
+            if (diplomacy1 != null) diplomacy1.AddTruce(proposed, years);
 
             var diplomacy2 = GetKingdomDiplomacy(proposed);
-            diplomacy2.AddTruce(proposer, years);
+            if (diplomacy2 != null) diplomacy2.AddTruce(proposer, years);
 
             InformationManager.DisplayMessage(new InformationMessage(
                 new TextObject("{=4S5vs7AB}The lords of {KINGDOM1} and {KINGDOM2} have settled on a truce until {DATE}.")
