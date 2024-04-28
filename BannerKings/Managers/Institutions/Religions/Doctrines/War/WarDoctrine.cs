@@ -1,5 +1,6 @@
 ﻿using BannerKings.Behaviours.Diplomacy.Wars;
 using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Doctrines.War
@@ -19,5 +20,15 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines.War
 
         public Dictionary<CasusBelli, int> Justifications { get; private set; }
         public bool AcceptsJustification(CasusBelli belli) => Justifications.ContainsKey(belli);
+        public bool HeroHasPiety(Hero hero, CasusBelli belli)
+        {
+            if (AcceptsJustification(belli))
+            {
+                float piety = BannerKingsConfig.Instance.ReligionsManager.GetPiety(hero);
+                return piety >= Justifications[belli];
+            }
+
+            return false;
+        }
     }
 }
