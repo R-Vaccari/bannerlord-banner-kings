@@ -27,6 +27,24 @@ namespace BannerKings.Patches
 {
     internal class FixesPatches
     {
+        [HarmonyPatch(typeof(MobilePartyHelper))]
+        internal class MobilePartyHelperPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("CanTroopGainXp")]
+            private static bool CanTroopGainXpPrefix(PartyBase owner, CharacterObject character, ref bool __result, out int gainableMaxXp)
+            {
+                gainableMaxXp = 0;
+                if (character.UpgradeTargets == null)
+                {
+                    __result = false;
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
         [HarmonyPatch(typeof(GarrisonTroopsCampaignBehavior))]
         internal class GarrisonTroopsCampaignBehaviorPatches
         {
