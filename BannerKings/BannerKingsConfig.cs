@@ -21,6 +21,7 @@ using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
+using BannerKings.Managers.Institutions.Religions.Doctrines.Marriage;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
@@ -69,7 +70,7 @@ namespace BannerKings
         public InnovationsManager InnovationsManager { get; private set; }
         public GoalManager GoalManager { get; private set; }
 
-        public BKInterestGroupsModel InterestGroupsModel { get; } = new();
+        public BKInterestGroupsModel InterestGroupsModel { get; set; } = new();
         public BKConstructionModel ConstructionModel { get; } = new();
         public BKInfluenceModel InfluenceModel { get; } = new();
         public BKTitleModel TitleModel { get; } = new();
@@ -175,6 +176,8 @@ namespace BannerKings
             DefaultMarketGroups.Instance.Initialize();
             DefaultRecruitSpawns.Instance.Initialize();
             DefaultCulturalStandings.Instance.Initialize();
+            DefaultMarriageDoctrines.Instance.Initialize();
+            DefaultWarDoctrines.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();
