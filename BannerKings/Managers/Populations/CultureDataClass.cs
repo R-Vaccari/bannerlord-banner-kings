@@ -32,18 +32,18 @@ namespace BannerKings.Managers.Populations
         public ExplainedNumber AcceptanceGain => BannerKingsConfig.Instance.CultureModel.CalculateAcceptanceGain(this);
 
 
-        internal float Assimilation
+        public float Assimilation
         {
             get => assimilation;
             set => assimilation = MBMath.ClampFloat(value, 0f, 1f);
         }
 
-        internal float Acceptance
+        public float Acceptance
         {
             get => acceptance;
             set => acceptance = MBMath.ClampFloat(value, 0f, 1f);
         }
 
-        internal CultureObject Culture => culture;
+        public CultureObject Culture => culture;
     }
 }
