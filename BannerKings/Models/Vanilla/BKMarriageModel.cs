@@ -231,6 +231,12 @@ namespace BannerKings.Models.Vanilla
                     BKSkills.Instance.Lordship.Name);
             }
 
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
+                   DefaultDivinities.Instance.Arkina))
+            {
+                result.AddFactor(0.2f, DefaultDivinities.Instance.Arkina.Name);
+            }
+
             return result;
         }
 
