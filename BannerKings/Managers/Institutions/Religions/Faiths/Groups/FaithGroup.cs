@@ -1,7 +1,13 @@
-﻿using BannerKings.Managers.Skills;
+﻿using BannerKings.Behaviours.Diplomacy;
+using BannerKings.Extensions;
+using BannerKings.Managers.Court;
+using BannerKings.Managers.Court.Members;
+using BannerKings.Managers.Populations;
+using BannerKings.Managers.Skills;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
@@ -12,23 +18,104 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Groups
     {
         public FaithGroup(string id) : base(id)
         {
-
         }
 
-        public void Initialize(TextObject name, TextObject description)
+        public void Initialize(TextObject name, TextObject title, TextObject description)
         {
             this.name = name;
             this.description = description;
+            Title = title;
         }
 
         [SaveableProperty(4)] public Hero Leader { get; private set; }
-        public abstract bool ShouldHaveLeader{ get; }
+        public abstract bool ShouldHaveLeader { get; }
         public abstract bool IsPreacher { get; }
         public abstract bool IsTemporal { get; }
         public abstract bool IsPolitical { get; }
         public abstract TextObject Explanation { get; }
-        public abstract void EvaluateMakeNewLeader(Religion religion);
-        public abstract List<Hero> EvaluatePossibleLeaders(Religion religion);
+        public TextObject Title { get; private set; }
+
+        public bool HasValidLeader() => Leader != null && Leader.IsAlive;
+
+        public void TickLeadership(Religion religion)
+        {
+            if (Leader == null || Leader.IsAlive) return;
+
+            Hero hero = null;
+            if (IsPreacher)
+            {
+                Settlement faithSeat = religion.Faith.FaithSeat;
+                PopulationData data = faithSeat.PopulationData();
+                if (data.ReligionData != null && data.ReligionData.DominantReligion != null &&
+                    data.ReligionData.DominantReligion.Equals(religion))
+                {
+                    foreach (var clergy in religion.Clergy)
+                    {
+                        if (clergy.Key == faithSeat)
+                        {
+                            hero = clergy.Value.Hero;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (IsTemporal)
+            {
+                if (Leader.Clan != null && !Leader.Clan.IsEliminated && Leader.Clan.Leader != Leader)
+                {
+                    hero = Leader.Clan.Leader;
+                }
+            }
+
+            if (hero != null) MakeHeroLeader(religion, hero);
+        }
+
+        public List<Hero> EvaluatePossibleLeaders(Religion religion)
+        {
+            List<Hero> results = new List<Hero>();
+
+            if (IsPolitical)
+            {
+                foreach (Kingdom k in Kingdom.All)
+                {
+                    KingdomDiplomacy kd = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
+                        .GetKingdomDiplomacy(k);
+                    if (kd != null)
+                    {
+                        CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(k.RulingClan);
+                        CouncilMember councilPosition = council.GetCouncilPosition(DefaultCouncilPositions.Instance.Spiritual);
+                        if (councilPosition != null && councilPosition.Member != null)
+                        {
+                            Religion heroReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(councilPosition.Member);
+                            if (heroReligion.Faith.FaithGroup.Equals(religion.Faith.FaithGroup))
+                            {
+                                results.Add(councilPosition.Member);
+                            }
+                        }
+                    }
+                }
+            }
+            
+
+            if (IsPreacher)
+            {
+                Hero result = null;
+                Settlement faithSeat = religion.Faith.FaithSeat;
+                foreach (var clergy in religion.Clergy)
+                {
+                    if (clergy.Key == faithSeat)
+                    {
+                        result = clergy.Value.Hero;
+                        break;
+                    }
+                }
+
+                results.Add(result);
+            }
+
+            return results;
+        }
 
         public void MakeHeroLeader(Religion religion, Hero leader, Hero creator = null)
         {
