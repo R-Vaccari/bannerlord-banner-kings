@@ -1,28 +1,16 @@
-﻿using System.Collections.Generic;
-using BannerKings.Managers.Institutions.Religions.Doctrines;
-using BannerKings.Managers.Institutions.Religions.Doctrines.Marriage;
-using BannerKings.Managers.Institutions.Religions.Doctrines.War;
-using BannerKings.Managers.Institutions.Religions.Faiths.Groups;
-using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
-using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using static BannerKings.Behaviours.Feasts.Feast;
+﻿using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
     public abstract class PolytheisticFaith : Faith
     {
-        public void Initialize(Divinity mainGod, 
-            List<Divinity> pantheon, 
-            Dictionary<TraitObject, bool> traits, 
-            FaithGroup faithGroup,
-            List<Doctrine> doctrines,
-            MarriageDoctrine marriageDoctrine,
-            WarDoctrine warDoctrine,
-            List<Rite> rites = null, 
-            FeastType feastType = FeastType.None)
-        {
-            Initialize(mainGod, traits, faithGroup, doctrines, marriageDoctrine, warDoctrine, rites, feastType);
-            this.pantheon = pantheon;
-        }
+        public override TextObject GetFaithTypeName() => new TextObject("{=!}Polytheism");
+        public override TextObject GetFaithTypeExplanation() => new TextObject("{=!}Polytheists believe in the existence of multiple gods or goddesses, all of which may be worthy of worship. As such, they are open to the belief that the gods of other faiths do, in fact, exist.");
+
+        public override float BlessingCostFactor => 1.3f;
+        public override float FaithStrengthFactor => 0.7f;
+        public override float JoinSocietyCost => 0.5f;
+        public override float VirtueFactor => 0.5f;
+        public override float ConversionCost => 1.3f;
     }
 }

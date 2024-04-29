@@ -5,6 +5,7 @@ using BannerKings.Managers.Institutions.Religions.Doctrines.Marriage;
 using BannerKings.Managers.Institutions.Religions.Doctrines.War;
 using BannerKings.Managers.Institutions.Religions.Faiths.Groups;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
+using BannerKings.Managers.Institutions.Religions.Faiths.Societies;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -23,7 +24,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         protected Dictionary<int, CharacterObject> presets;
         protected List<Rite> rites;
 
-        [SaveableField(1)] protected Dictionary<Faith, FaithStance> stances;
+        [SaveableField(4)] protected Dictionary<Faith, FaithStance> stances;
+        [SaveableField(5)] protected FaithGroup faithGroup;
 
         protected Dictionary<TraitObject, bool> traits;
 
@@ -37,45 +39,43 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         public MBReadOnlyList<Rite> Rites => new MBReadOnlyList<Rite>(rites);
         public MBReadOnlyDictionary<TraitObject, bool> Traits => traits.GetReadOnlyDictionary();
-        public FaithGroup FaithGroup { get; private set; }
+        public FaithGroup FaithGroup
+        {
+            get => faithGroup;
+            private set => faithGroup = value;
+        }
+
         public Divinity MainGod { get; private set; }
         public FeastType FeastType { get; private set; }
         public List<Doctrine> Doctrines { get; private set; }
         public WarDoctrine WarDoctrine { get; private set; }
-        public MarriageDoctrine MarriageDoctrine { get; private set; }  
+        public MarriageDoctrine MarriageDoctrine { get; private set; }
+        public List<Society> Societies { get; private set; }
         public bool Active { get; set; } = true;
-        public List<Settlement> HolySites
-        {
-            get
-            {
-                List<Settlement> sites = new List<Settlement>(pantheon.Count);
-                foreach (Divinity d in pantheon)
-                {
-                    if (d.Shrine != null) sites.Add(d.Shrine);
-                }
 
-                return sites;
-            }
-        }
-
-        public void Initialize(Divinity mainGod, 
+        public void Initialize(Divinity mainGod,
+            List<Divinity> pantheon,
             Dictionary<TraitObject, bool> traits, 
             FaithGroup faithGroup,
             List<Doctrine> doctrines,
             MarriageDoctrine marriageDoctrine,
             WarDoctrine warDoctrine,
-            List<Rite> rites = null,
+            List<Rite> rites,
+            List<Society> societies,
             FeastType feastType = FeastType.None)
         {
+            if (FaithGroup == null) FaithGroup = faithGroup;
+            else FaithGroup.Initialize(faithGroup.Name, faithGroup.Title, faithGroup.Description);
+
             MainGod = mainGod;
+            this.pantheon = pantheon;
             this.traits = traits;
-            FaithGroup = faithGroup;
-            rites ??= new List<Rite>();
             this.rites = rites;
             Doctrines = doctrines;
             FeastType = feastType;
             MarriageDoctrine = marriageDoctrine;
             WarDoctrine = warDoctrine;
+            Societies = societies;
         }
 
         public FaithStance GetStance(Faith otherFaith)
@@ -110,43 +110,26 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         public void AddStance(Faith faith, FaithStance stance)
         {
-            if (faith == this)
-            {
-                return;
-            }
-
-            if (stances.ContainsKey(faith))
-            {
-                stances[faith] = stance;
-            }
-            else
-            {
-                stances.Add(faith, stance);
-            }
+            if (faith == this) return;
+            stances[faith] = stance;
         }
 
-        public void AddPreset(int rank, CharacterObject preset)
-        {
-            if (!presets.ContainsKey(rank))
-            {
-                presets.Add(rank, preset);
-            }
-            else
-            {
-                presets[rank] = preset;
-            }
-        }
+        public void AddPreset(int rank, CharacterObject preset) => presets[rank] = preset;
+            
 
         public CharacterObject GetPreset(int rank)
         {
-            if (presets.ContainsKey(rank))
-            {
-                return presets[rank];
-            }
-
+            if (presets.ContainsKey(rank)) return presets[rank];
             return null;
         }
 
+        public abstract float JoinSocietyCost { get; }
+        public abstract float FaithStrengthFactor { get; }
+        public abstract float BlessingCostFactor { get; }
+        public abstract float VirtueFactor { get; }
+        public abstract float ConversionCost { get; }
+        public abstract TextObject GetFaithTypeName();
+        public abstract TextObject GetFaithTypeExplanation();
         public abstract TextObject GetZealotsGroupName();
         public abstract TextObject GetInductionExplanationText();
         public abstract bool IsCultureNaturalFaith(CultureObject culture);
