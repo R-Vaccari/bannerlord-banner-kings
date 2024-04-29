@@ -105,7 +105,7 @@ namespace BannerKings.UI.Marriages
 
             foreach (var hero in Clan.PlayerClan.Heroes)
             {
-                if (!hero.IsChild && !hero.IsDead && (hero.Spouse == null || hero.Spouse.IsDead))
+                if (!hero.IsChild && !hero.IsDead)
                 {
                     if (ProposedHero != null && ProposedHero.Hero.IsFemale == hero.IsFemale)
                     {

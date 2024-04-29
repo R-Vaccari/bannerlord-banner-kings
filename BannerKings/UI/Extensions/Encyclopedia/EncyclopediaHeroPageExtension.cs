@@ -45,7 +45,7 @@ namespace BannerKings.UI.Extensions.Encyclopedia
         {
             var partners1 = new XmlDocument();
             partners1.LoadXml(
-                "<EncyclopediaDivider Id=\"PartnersDivider\" MarginTop=\"50\" Parameter.Title=\"@SpousesText\" Parameter.ItemList=\"..\\AlliesGrid\" GamepadNavigationIndex=\"0\"/>");
+                "<EncyclopediaDivider Id=\"PartnersDivider\" MarginTop=\"50\" Parameter.Title=\"@SpousesText\" Parameter.ItemList=\"..\\PartnersGrid\" GamepadNavigationIndex=\"0\"/>");
             var partners2 = new XmlDocument();
             partners2.LoadXml(
                 "<NavigationScopeTargeter ScopeID=\"EncyclopediaHeroAlliesContentScope\" ScopeParent=\"..\\PartnersGrid\" ScopeMovements=\"Horizontal\" AlternateScopeMovements=\"Vertical\" AlternateMovementStepSize=\"7\" />");
@@ -58,7 +58,7 @@ namespace BannerKings.UI.Extensions.Encyclopedia
         }
 
         public override InsertType Type => InsertType.Child;
-        public override int Index => 9;
+        public override int Index => 10;
 
         [PrefabExtensionXmlNodes] public IEnumerable<XmlNode> Nodes => nodes;
     }
