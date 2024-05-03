@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
@@ -89,17 +88,25 @@ namespace BannerKings.Managers.Institutions.Religions
             GodsFate.Initialize(new TextObject("{=rMbnANLs}Gods of Fate"),
               new TextObject("{=dTiAb57A}According to the Junme, the world revolves around the concept of Urthr - or in other words, fate. The gods are stewards of the Great Oak that mankind inhabits, keeping its roots and leaves from rotting. Moreover, the gods are the force of justice that fights Ásbani, the God-Devouring Serpent. The gods of fate, they say, give man what is just - rewards to those who are brave and virtuous, and punishment to the wicked, for they do not weave what choices a man makes, but they do the consequences."),
               new TextObject("{=5n79UcKp}Signicantly increased renown and influence from battles"),
-              new TextObject("Gods"));
+              new TextObject("{=!}Gods"));
 
             Gundar.Initialize(new TextObject("{=PNCUXEeh}Gundar"),
-               new TextObject("{=dTiAb57A}According to the Junme, the world revolves around the concept of Urthr - or in other words, fate. The gods are stewards of the Great Oak that mankind inhabits, keeping its roots and leaves from rotting. Moreover, the gods are the force of justice that fights Ásbani, the God-Devouring Serpent. The gods of fate, they say, give man what is just - rewards to those who are brave and virtuous, and punishment to the wicked, for they do not weave what choices a man makes, but they do the consequences."),
-               new TextObject("{=!}"),
-               new TextObject("{=aGjvnUcL}Ancestor Hero"));
+               new TextObject("{=!}Gundar was a Jumne adventurer and warlord, like many that came to Calradia before and after him. Unlike most, however, Gunder chose a diplomatic approach to his conquest. By mending the differences between the Sturgiski and the Vakken, Gundar was accepted as a chieftain, whose domain grew to the current grand Sturgian principality. His descendants, the Vagiroving, still rule as princes."),
+               new TextObject("{=!}Increased legitimacy for rulers in Vakken, Sturgian or Jumne realms{newline}Improved chances for clans to accept joining your realm"),
+               new TextObject("{=aGjvnUcL}Ancestor Hero"),
+               300,
+               null,
+               null,
+               Settlement.All.First(x => x.StringId == "town_S2"));
 
             Arkina.Initialize(new TextObject("{=Debe88Qc}Arkina"),
-               new TextObject("{=dTiAb57A}According to the Junme, the world revolves around the concept of Urthr - or in other words, fate. The gods are stewards of the Great Oak that mankind inhabits, keeping its roots and leaves from rotting. Moreover, the gods are the force of justice that fights Ásbani, the God-Devouring Serpent. The gods of fate, they say, give man what is just - rewards to those who are brave and virtuous, and punishment to the wicked, for they do not weave what choices a man makes, but they do the consequences."),
-               new TextObject("{=!}"),
-               new TextObject("{=aGjvnUcL}Ancestor Heroine"));
+               new TextObject("{=!}Arkina, greatest of the Gundaroving princesses. The princess, widow of the murdered Balgardian prince, took revenge on the Revylian prince and his kinsmen, the perpetrators of her husband's murder. Through her bloody schemes, follow by marriage and truce pacts, Arkina integrated Revyl into the Gundaroving realm and settled her power as a sovereign princess."),
+               new TextObject("{=!}Improved Spouse Score{newline}Improved chances for hostile schemes"),
+               new TextObject("{=aGjvnUcL}Ancestor Heroine"),
+               300,
+               null,
+               null,
+               Settlement.All.First(x => x.StringId == "town_S7"));
 
             SheWolf.Initialize(new TextObject("{=BxXxL1VY}Great She-Wolf"),
                 new TextObject("{=yAkUWMYm}Many among the eastern Devseg, such as the Khuzaits, count themselves among the descendants of the Great She-Wolf. The She-Wolf, it is said, nursed a wounded young boy back to health, who later impregnated her. 12 sons she had, half-wolf, half-man. To be counted as a descendent of the She-wolf is a great honor."),
