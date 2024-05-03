@@ -10,6 +10,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Shipping;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Governments;
+using BannerKings.Models.Vanilla.Abstract;
 using Helpers;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -189,7 +190,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber GetCaravanPrice(Settlement settlement, Hero buyer, bool isLarge = false)
+        public override ExplainedNumber GetCaravanPrice(Settlement settlement, Hero buyer, bool isLarge = false)
         {
             var cost = new ExplainedNumber(isLarge ? 22500 : 15000, true);
 
@@ -352,7 +353,7 @@ namespace BannerKings.Models.Vanilla
 
         public override int GetTownGoldChange(Town town) => (int)GetMerchantIncome(town).ResultNumber;
 
-        public ExplainedNumber GetMerchantIncome(Town town, bool explanations = false)
+        public override ExplainedNumber GetMerchantIncome(Town town, bool explanations = false)
         {
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
             if (data == null) return new ExplainedNumber(base.GetTownGoldChange(town));

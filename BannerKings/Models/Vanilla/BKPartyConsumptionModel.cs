@@ -1,6 +1,7 @@
 using BannerKings.Components;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
+using BannerKings.Models.Vanilla.Abstract;
 using BannerKings.Settings;
 using Helpers;
 using TaleWorlds.CampaignSystem;

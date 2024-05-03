@@ -3,10 +3,12 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 
-namespace BannerKings.Models.Vanilla
+namespace BannerKings.Models.Vanilla.Abstract
 {
     public abstract class EconomyModel : DefaultSettlementEconomyModel
     {
+        public abstract ExplainedNumber GetMerchantIncome(Town town, bool explanations = false);
+        public abstract ExplainedNumber GetCaravanPrice(Settlement settlement, Hero buyer, bool isLarge = false);
         public abstract int GetSettlementMarketGoldLimit(Settlement settlememt);
         public abstract int GetNotableCaravanLimit(Hero notable);
         public abstract ExplainedNumber CalculateTradePower(Settlement settlement, bool descriptions = false);

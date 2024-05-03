@@ -11,15 +11,15 @@ using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using MarriageModel = BannerKings.Models.Vanilla.Abstract.MarriageModel;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKMarriageModel : DefaultMarriageModel
+    public class BKMarriageModel : MarriageModel
     {
-        public ExplainedNumber IsMarriageAdequate(Hero proposer, 
+        public override ExplainedNumber IsMarriageAdequate(Hero proposer, 
             Hero secondHero,
             bool isConsort = false, 
             bool explanations = false)
@@ -165,7 +165,7 @@ namespace BannerKings.Models.Vanilla
             }
         }
 
-        public ExplainedNumber GetSpouseScore(Hero hero, bool explanations = false)
+        public override ExplainedNumber GetSpouseScore(Hero hero, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
             result.LimitMin(hero.Level * 2f);
@@ -240,7 +240,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber GetDowryValue(Hero hero, bool arrangedMarriage = false, bool explanations = false)
+        public override ExplainedNumber GetDowryValue(Hero hero, bool arrangedMarriage = false, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
             result.LimitMin(hero.Level * 250f);
@@ -284,11 +284,10 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber GetInfluenceCost(Hero proposed, bool explanations = false)
+        public override ExplainedNumber GetInfluenceCost(Hero proposed, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
             result.Add(proposed.Clan.Tier * 20f, proposed.Clan.Name);
-
 
             return result;
         }
@@ -354,7 +353,7 @@ namespace BannerKings.Models.Vanilla
             return score;
         }
 
-        public IEnumerable<Hero> DiscoverAncestors(Hero hero, int n)
+        public override IEnumerable<Hero> DiscoverAncestors(Hero hero, int n)
         {
             if (hero == null)
             {

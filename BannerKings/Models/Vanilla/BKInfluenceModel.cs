@@ -29,7 +29,7 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKInfluenceModel : InfluenceModel
     {
-        public ExplainedNumber GetBequeathPeerageCost(Kingdom kingdom, bool explanations = false)
+        public override ExplainedNumber GetBequeathPeerageCost(Kingdom kingdom, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(200f, explanations);
             float cap = CalculateInfluenceCap(kingdom.RulingClan).ResultNumber;
@@ -53,7 +53,7 @@ namespace BannerKings.Models.Vanilla
             return peers;
         }
 
-        public ExplainedNumber GetMinimumPeersQuantity(Kingdom kingdom, bool explanations = false)
+        public override ExplainedNumber GetMinimumPeersQuantity(Kingdom kingdom, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(1f, explanations);
             if (kingdom != null)
@@ -65,7 +65,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public float GetRejectKnighthoodCost(Clan clan)
+        public override float GetRejectKnighthoodCost(Clan clan)
         {
             return 10f + MathF.Max(CalculateInfluenceChange(clan).ResultNumber, 5f) * 0.025f * CampaignTime.DaysInYear;
         }
@@ -345,7 +345,7 @@ namespace BannerKings.Models.Vanilla
             return MathF.Max(0f, nobles * factor);
         }
         
-        public ExplainedNumber CalculateSettlementInfluence(Settlement settlement, PopulationData data, bool includeDescriptions = false)
+        public override ExplainedNumber CalculateSettlementInfluence(Settlement settlement, PopulationData data, bool includeDescriptions = false)
         {
             var settlementResult = new ExplainedNumber(0f, includeDescriptions);
             settlementResult.LimitMin(0f);

@@ -1,7 +1,7 @@
 ﻿using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 
-namespace BannerKings.Models
+namespace BannerKings.Models.Vanilla.Abstract
 {
     public abstract class PartyFoodModel : DefaultMobilePartyFoodConsumptionModel
     {
@@ -10,8 +10,8 @@ namespace BannerKings.Models
         public abstract float CattleFood { get; }
         public abstract float PigFood { get; }
         public abstract float HorseFood { get; }
-        public abstract float WarhorseFood { get; } 
-        public abstract float SheepFood { get; }    
+        public abstract float WarhorseFood { get; }
+        public abstract float SheepFood { get; }
         public abstract float CalculateAnimalFoodNeed(MobileParty party, bool ignoreCamels);
     }
 }

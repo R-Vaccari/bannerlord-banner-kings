@@ -5,19 +5,19 @@ using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Models.Vanilla.Abstract;
 using BannerKings.Settings;
 using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKArmyManagementModel : DefaultArmyManagementCalculationModel
+    public class BKArmyManagementModel : ArmyModel
     {
-        public bool CanCreateArmy(Hero armyLeader)
+        public override bool CanCreateArmy(Hero armyLeader)
         {
             if (armyLeader.Clan == null) return false;
 

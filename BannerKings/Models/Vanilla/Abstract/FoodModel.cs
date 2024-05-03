@@ -3,9 +3,9 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 
-namespace BannerKings.Models.Vanilla
+namespace BannerKings.Models.Vanilla.Abstract
 {
-    public abstract class IFoodModel : DefaultSettlementFoodModel
+    public abstract class FoodModel : DefaultSettlementFoodModel
     {
         public abstract float NobleFood { get; }
         public abstract float CraftsmanFood { get; }

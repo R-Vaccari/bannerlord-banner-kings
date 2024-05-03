@@ -21,6 +21,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Recruits;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles;
+using BannerKings.Models.Vanilla.Abstract;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -29,7 +30,7 @@ namespace BannerKings.Models.Vanilla
         public override int MaximumIndexHeroCanRecruitFromHero(Hero buyerHero, Hero sellerHero, int useValueAsRelation = -101)
           => (int)Math.Floor(CalculateMaximumRecruitmentIndex(buyerHero, sellerHero, useValueAsRelation, false).ResultNumber);
 
-        public ExplainedNumber CalculateMaximumRecruitmentIndex(Hero buyerHero, Hero sellerHero, int useValueAsRelation = -101, bool explanations = false)
+        public override ExplainedNumber CalculateMaximumRecruitmentIndex(Hero buyerHero, Hero sellerHero, int useValueAsRelation = -101, bool explanations = false)
         {
             var result = new ExplainedNumber(1f, explanations);
             result.LimitMin(0f);
@@ -288,7 +289,7 @@ namespace BannerKings.Models.Vanilla
             else return base.GetBasicVolunteer(sellerHero);
         }
 
-        public float GetPopTypeSpawnChance(PopulationData data, PopType popType)
+        public override float GetPopTypeSpawnChance(PopulationData data, PopType popType)
         {
             float popFactor = data.MilitaryData.GetManpower(popType);
             if (popType == PopType.Nobles)
@@ -365,7 +366,7 @@ namespace BannerKings.Models.Vanilla
             return explainedNumber;
         }
 
-        public ExplainedNumber GetMilitarism(Settlement settlement)
+        public override ExplainedNumber GetMilitarism(Settlement settlement)
         {
             var explainedNumber = new ExplainedNumber(0.1f, true);
 
@@ -392,7 +393,7 @@ namespace BannerKings.Models.Vanilla
             return explainedNumber;
         }
 
-        public List<ValueTuple<PopType, float>> GetMilitaryClasses(Settlement settlement)
+        public override List<ValueTuple<PopType, float>> GetMilitaryClasses(Settlement settlement)
         {
             var list = new List<ValueTuple<PopType, float>>(4);
             float militarism = GetMilitarism(settlement).ResultNumber;

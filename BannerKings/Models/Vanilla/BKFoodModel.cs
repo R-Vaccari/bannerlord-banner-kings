@@ -1,5 +1,6 @@
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Models.Vanilla.Abstract;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Issues;
@@ -12,7 +13,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKFoodModel : IFoodModel
+    public class BKFoodModel : FoodModel
     {
         public override float NobleFood => -0.075f;
         public override float CraftsmanFood => -0.040f;
