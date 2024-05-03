@@ -12,6 +12,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
     {
         OFFERING,
         SACRIFICE,
-        DONATION
+        DONATION,
+        TOTEM
     }
 }
