@@ -10,7 +10,9 @@ namespace BannerKings.Managers.Goals.Decisions
 {
     internal class FaithLeaderDecision : Goal
     {
-        private Hero leader;
+        private Hero faithLeader;
+        private Religion religion;
+
         public FaithLeaderDecision(Hero fulfiller = null) : base("goal_organize_feast_decision", GoalCategory.Kingdom, GoalUpdateType.Manual, fulfiller)
         {
             var name = new TextObject("{=!}Create Faith Leader");
@@ -56,26 +58,26 @@ namespace BannerKings.Managers.Goals.Decisions
         public override void ShowInquiry()
         {
             var leaders = new List<InquiryElement>();
-            Religion playerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
-            foreach (Hero hero in playerReligion.Faith.FaithGroup.EvaluatePossibleLeaders(playerReligion))
+            religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
+            foreach (Hero hero in religion.Faith.FaithGroup.EvaluatePossibleLeaders(religion))
             {
-                float cost = BannerKingsConfig.Instance.ReligionModel.CreateFaithLeaderCost(playerReligion, Hero.MainHero, hero).ResultNumber;
+                float cost = BannerKingsConfig.Instance.ReligionModel.CreateFaithLeaderCost(religion, Hero.MainHero, hero).ResultNumber;
                 float piety = BannerKingsConfig.Instance.ReligionsManager.GetPiety(Hero.MainHero);
                 TextObject explanation = new TextObject("{=!}{HERO} is a candidate to become faith leader for the {GROUP} from within the {FAITH}. Their opinion of you is {OPINION}.")
                     .SetTextVariable("HERO", hero.Name)
-                    .SetTextVariable("FAITH", playerReligion.Faith.GetName())
+                    .SetTextVariable("FAITH", religion.Faith.GetName())
                     .SetTextVariable("OPINION", hero.GetRelationWithPlayer());
 
                 bool faction = hero.MapFaction == Clan.PlayerClan.MapFaction;
                 if (!faction) explanation = new TextObject("{=!}{HERO} is a candidate to become faith leader for the {GROUP} from within the {FAITH}. They are not part of your realm, and therefore not endorsed by you.")
                     .SetTextVariable("HERO", hero.Name)
-                    .SetTextVariable("FAITH", playerReligion.Faith.GetName())
+                    .SetTextVariable("FAITH", religion.Faith.GetName())
                     .SetTextVariable("OPINION", hero.GetRelationWithPlayer());
 
                 bool hasPiety = piety >= cost;
                 if (!hasPiety) explanation = new TextObject("{=!}{HERO} is a candidate to become faith leader for the {GROUP} from within the {FAITH}. You do not have enough piety to endorse them.")
                     .SetTextVariable("HERO", hero.Name)
-                    .SetTextVariable("FAITH", playerReligion.Faith.GetName())
+                    .SetTextVariable("FAITH", religion.Faith.GetName())
                     .SetTextVariable("OPINION", hero.GetRelationWithPlayer());
 
                 leaders.Add(new InquiryElement(hero, 
@@ -92,9 +94,9 @@ namespace BannerKings.Managers.Goals.Decisions
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=!}Faith Leader").ToString(),
                 new TextObject("{=!}As a ruler, you are able to endorse a new leader for the {GROUP}. The candidate must be part of your realm and of the {FAITH} faith. This leader will represent all faiths within the faith group.{newline}{newline}Holding positive opinion from your faith leader can yield different advantages. Valid candidates according to the traditions of the faith group are as follows: {EXPLANATION}")
-                .SetTextVariable("GROUP", playerReligion.Faith.FaithGroup.Name) 
-                .SetTextVariable("EXPLANATION", playerReligion.Faith.FaithGroup.Explanation)
-                .SetTextVariable("FAITH", playerReligion.Faith.GetName())
+                .SetTextVariable("GROUP", religion.Faith.FaithGroup.Name) 
+                .SetTextVariable("EXPLANATION", religion.Faith.FaithGroup.Explanation)
+                .SetTextVariable("FAITH", religion.Faith.GetName())
                 .ToString(),
                 leaders,
                 true,
@@ -104,7 +106,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 String.Empty,
                 delegate (List<InquiryElement> list)
                 {
-                    leader = (Hero)list[0].Identifier;
+                    faithLeader = (Hero)list[0].Identifier;
                     ApplyGoal();
                 },
                 null));
@@ -112,13 +114,32 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public override void ApplyGoal()
         {
-            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(GetFulfiller());
-            religion.Faith.FaithGroup.MakeHeroLeader(religion, leader, GetFulfiller()); 
+            religion.Faith.FaithGroup.MakeHeroLeader(religion, faithLeader, GetFulfiller()); 
         }
 
         public override void DoAiDecision()
         {
-                return;
+            if (!IsAvailable()) return;
+
+            if (!IsFulfilled(out List<TextObject> reasons)) return;
+
+            List<ValueTuple<Hero, float>> options = new List<(Hero, float)>();
+            religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(GetFulfiller());
+            foreach (Hero hero in religion.Faith.FaithGroup.EvaluatePossibleLeaders(religion))
+            {
+                if (hero.MapFaction != GetFulfiller().MapFaction) continue;
+
+                float score = 1f;
+                score += GetFulfiller().GetRelation(hero) / 100f;
+                options.Add((hero, score));
             }
+
+            Hero result = MBRandom.ChooseWeighted(options);
+            if (result != null)
+            {
+                faithLeader = result;
+                ApplyGoal();
+            }
+        }
     }
 }
