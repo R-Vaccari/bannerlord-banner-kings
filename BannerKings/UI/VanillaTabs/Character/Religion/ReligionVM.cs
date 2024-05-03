@@ -153,7 +153,7 @@ namespace BannerKings.UI.VanillaTabs.Character.Religion
             SecondaryDivinities.Add(new ReligionElementVM(mainDivinity.SecondaryTitle, mainDivinity.Name,
                     new TextObject("{=77isPS24}{EFFECTS}\nPiety cost: {COST}")
                     .SetTextVariable("EFFECTS", mainDivinity.Description)
-                    .SetTextVariable("COST", mainDivinity.BlessingCost(hero)), mainDivinity.Effects));
+                    .SetTextVariable("COST", mainDivinity.BlessingCost(hero, currentReligion.Faith)), mainDivinity.Effects));
 
             Dictionary<Settlement, Divinity> sites = new Dictionary<Settlement, Divinity>(SecondaryDivinities.Count);
             if (mainDivinity.Shrine != null)
@@ -166,7 +166,7 @@ namespace BannerKings.UI.VanillaTabs.Character.Religion
                 SecondaryDivinities.Add(new ReligionElementVM(divinity.SecondaryTitle, divinity.Name,
                     new TextObject("{=77isPS24}{EFFECTS}\nPiety cost: {COST}")
                     .SetTextVariable("EFFECTS", divinity.Description)
-                    .SetTextVariable("COST", divinity.BlessingCost(hero)), divinity.Effects));
+                    .SetTextVariable("COST", divinity.BlessingCost(hero, currentReligion.Faith)), divinity.Effects));
 
                 if (divinity.Shrine != null)
                 {
@@ -204,6 +204,17 @@ namespace BannerKings.UI.VanillaTabs.Character.Religion
             Aspects.Add(new ReligionElementVM(new TextObject("{=!}Warfare Doctrine"),
                 currentReligion.Faith.WarDoctrine.Name,
                 currentReligion.Faith.WarDoctrine.Description));
+
+            Aspects.Add(new ReligionElementVM(new TextObject("{=!}Faith Type"),
+                currentReligion.Faith.GetFaithTypeName(),
+                new TextObject("{=!}{EXPLANATION}{newline}{newline}Effects:{newline}Faith Presence: {PRESENCE}{newline}Conversion Cost: {CONVERSION}{newline}Blessing Cost: {BLESSING}{newline}Virtue Piety: {VIRTUE}{newline}Join Society Cost: {SOCIETY}")
+                .SetTextVariable("EXPLANATION", currentReligion.Faith.GetFaithTypeExplanation())
+                .SetTextVariable("SOCIETY", FormatValue(currentReligion.Faith.JoinSocietyCost))
+                .SetTextVariable("VIRTUE", FormatValue(currentReligion.Faith.VirtueFactor))
+                .SetTextVariable("BLESSING", FormatValue(currentReligion.Faith.BlessingCostFactor))
+                .SetTextVariable("CONVERSION", FormatValue(currentReligion.Faith.ConversionCost))
+                .SetTextVariable("PRESENCE", FormatValue(currentReligion.Faith.FaithStrengthFactor))
+                ));
 
             //Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith"), UIHelper.GetFaithTypeName(currentReligion.Faith),
             //    UIHelper.GetFaithTypeDescription(currentReligion.Faith)));

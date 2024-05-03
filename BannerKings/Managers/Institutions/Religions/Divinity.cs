@@ -1,3 +1,4 @@
+using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Skills;
 using System;
 using TaleWorlds.CampaignSystem;
@@ -15,8 +16,11 @@ namespace BannerKings.Managers.Institutions.Religions
         {
         }
 
-        public void Initialize(TextObject name, TextObject description, TextObject effects,
-            TextObject secondaryTitle = null, int blessingCost = 300, 
+        public void Initialize(TextObject name, 
+            TextObject description, 
+            TextObject effects,
+            TextObject secondaryTitle = null, 
+            int blessingCost = 300, 
             TextObject dialogue = null,
             TextObject lastDialogue = null,
             Settlement shrine = null, 
@@ -34,9 +38,9 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public int BaseBlessingCost => blessingCost;
 
-        public int BlessingCost(Hero hero)
+        public int BlessingCost(Hero hero, Faith faith)
         {
-            float baseCost = blessingCost;
+            float baseCost = blessingCost * faith.BlessingCostFactor;
             if (hero.GetPerkValue(BKPerks.Instance.TheologyBlessed))
             {
                 baseCost *= 0.9f;

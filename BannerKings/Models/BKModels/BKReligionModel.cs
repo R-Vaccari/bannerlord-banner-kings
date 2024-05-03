@@ -15,12 +15,14 @@ using TaleWorlds.Library;
 using Helpers;
 using BannerKings.Campaign.Skills;
 using BannerKings.Extensions;
+using BannerKings.Models.BKModels.Abstract;
+using BannerKings.Managers.Institutions.Religions.Faiths.Societies;
 
 namespace BannerKings.Models.BKModels
 {
-    public class BKReligionModel : IReligionModel
+    public class BKReligionModel : ReligionModel
     {
-        public ExplainedNumber CalculatePietyChange(Hero hero, bool descriptions = false)
+        public override ExplainedNumber CalculatePietyChange(Hero hero, bool descriptions = false)
         {
             var result = new ExplainedNumber(0f, descriptions);
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
@@ -34,7 +36,7 @@ namespace BannerKings.Models.BKModels
                         int traitLevel = hero.GetTraitLevel(trait);
                         if (traitLevel != 0)
                         {
-                            result.Add(traitLevel * 0.2f * (tuple.Value ? 1f : -1f), trait.Name);
+                            result.Add(traitLevel * 0.2f * (tuple.Value ? 1f : -1f) * rel.Faith.VirtueFactor, trait.Name);
                         }
                     }
 
@@ -117,14 +119,14 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CreateFaithLeaderCost(Religion religion, Hero creator, Hero leader, bool descriptions = false)
+        public override ExplainedNumber CreateFaithLeaderCost(Religion religion, Hero creator, Hero leader, bool descriptions = false)
         {
             var result = new ExplainedNumber(500f, descriptions);
 
             return result;
         }
 
-        public ExplainedNumber GetAppointInfluence(Hero appointer, ReligionData data, bool descriptions = false)
+        public override ExplainedNumber GetAppointInfluence(Hero appointer, ReligionData data, bool descriptions = false)
         {
             var result = new ExplainedNumber(50f, descriptions);
 
@@ -134,7 +136,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber GetAppointCost(Hero appointer, ReligionData data, bool descriptions = false)
+        public override ExplainedNumber GetAppointCost(Hero appointer, ReligionData data, bool descriptions = false)
         {
             var result = new ExplainedNumber(300f, descriptions);
 
@@ -143,7 +145,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber GetRemoveInfluence(Hero appointer, Hero removed, ReligionData data, bool descriptions = false)
+        public override ExplainedNumber GetRemoveInfluence(Hero appointer, Hero removed, ReligionData data, bool descriptions = false)
         {
             var result = new ExplainedNumber(50f, descriptions);
 
@@ -156,7 +158,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber GetRemoveCost(Hero appointer, Hero removed, ReligionData data, bool descriptions = false)
+        public override ExplainedNumber GetRemoveCost(Hero appointer, Hero removed, ReligionData data, bool descriptions = false)
         {
             var result = new ExplainedNumber(200f, descriptions);
             result.AddFactor(GetNotableFactor(removed, data.Settlement), 
@@ -166,7 +168,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber GetRemoveLoyaltyCost(Hero appointer, Hero removed, ReligionData data, bool descriptions = false)
+        public override ExplainedNumber GetRemoveLoyaltyCost(Hero appointer, Hero removed, ReligionData data, bool descriptions = false)
         {
             var result = new ExplainedNumber(0f, descriptions);
             result.Add(GetNotableFactor(removed, data.Settlement) * 50f,
@@ -209,7 +211,7 @@ namespace BannerKings.Models.BKModels
             return DefaultReligions.Instance.All.FirstOrDefault(x => x.Faith.IsCultureNaturalFaith(kingdom.Culture));
         }*/
 
-        public ExplainedNumber GetConversionLikelihood(Hero converter, Hero converted)
+        public override ExplainedNumber GetConversionLikelihood(Hero converter, Hero converted)
         {
             var result = new ExplainedNumber(15f, false);
             result.LimitMin(-1f);
@@ -250,7 +252,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber GetConversionInfluenceCost(Hero notable, Hero converter)
+        public override ExplainedNumber GetConversionInfluenceCost(Hero notable, Hero converter)
         {
             var result = new ExplainedNumber(15f, false);
             result.LimitMin(15f);
@@ -280,7 +282,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber GetConversionPietyCost(Hero converted, Hero converter)
+        public override ExplainedNumber GetConversionPietyCost(Hero converted, Hero converter, Religion religion)
         {
             var result = new ExplainedNumber(40f, false);
             result.LimitMin(40f);
@@ -302,17 +304,18 @@ namespace BannerKings.Models.BKModels
 
             result.Add(MathF.Clamp(40f * -GetConversionLikelihood(converter, converted).ResultNumber, -10f, 40f),
                 new TextObject("{=bYHRQmAW}Willingness to convert"));
-
             if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(converter,
-                DefaultDivinities.Instance.DarusosianMain))
+                DefaultDivinities.Instance.DarusosianMain,
+                religion))
             {
                 result.AddFactor(-0.2f, DefaultDivinities.Instance.DarusosianMain.Name);
             }
 
+            result.AddFactor(religion.Faith.ConversionCost - 1f, religion.Faith.GetFaithTypeName());
             return result;
         }
 
-        public ExplainedNumber CalculateTensionTarget(ReligionData data)
+        public override ExplainedNumber CalculateTensionTarget(ReligionData data)
         {
             var result = new ExplainedNumber(0f, true);
             result.LimitMin(0f);
@@ -361,15 +364,11 @@ namespace BannerKings.Models.BKModels
             }
         }
 
-        public ExplainedNumber CalculateFervor(Religion religion)
+        public override ExplainedNumber CalculateFervor(Religion religion)
         {
             ExplainedNumber result = new ExplainedNumber(0.3f, true);
             result.LimitMin(0f);
             result.LimitMax(1f);
-
-            float villages = 0f;
-            float castles = 0f;
-            float towns = 0f;
 
             List<Settlement> holySites = new List<Settlement>(3);
             var mainDivinity = religion.Faith.GetMainDivinity();
@@ -515,7 +514,7 @@ namespace BannerKings.Models.BKModels
             return 0f;
         }
 
-        public ExplainedNumber CalculateReligionWeight(Religion religion, Settlement settlement)
+        public override ExplainedNumber CalculateReligionWeight(Religion religion, Settlement settlement)
         {
             var result = new ExplainedNumber(0f, true);
             if (settlement == null)
@@ -575,10 +574,11 @@ namespace BannerKings.Models.BKModels
             }
 
             result.AddFactor(religion.Fervor.ResultNumber, new TextObject("{=AfsRi9wL}Fervor"));
+            result.AddFactor(religion.Faith.FaithStrengthFactor - 1f, religion.Faith.GetFaithTypeName());
             return result;
         }
 
-        public float GetNotableFactor(Hero notable, Settlement settlement)
+        public override float GetNotableFactor(Hero notable, Settlement settlement)
         {
             var totalPower = 0f;
             foreach (var hero in settlement.Notables)
@@ -625,6 +625,15 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
+            return result;
+        }
+
+        public override ExplainedNumber GetJoinSocietyCost(Hero hero, Society society, bool descriptions = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(400f, descriptions);
+            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+
+            result.AddFactor(religion.Faith.JoinSocietyCost - 1f, religion.Faith.GetFaithTypeName());
             return result;
         }
     }

@@ -310,7 +310,7 @@ namespace BannerKings.Managers
                         .SetTextVariable("DIVINITY", divinity.Name),
                     0, hero.CharacterObject, "event:/ui/notification/relation");
             }
-            AddPiety(religion, hero, -divinity.BlessingCost(hero), notify);
+            AddPiety(religion, hero, -divinity.BlessingCost(hero, religion.Faith), notify);
         }
 
         public Religion GetReligionById(string id)

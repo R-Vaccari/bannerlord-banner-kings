@@ -368,7 +368,7 @@ namespace BannerKings.Behaviours
             BannerKingsConfig.Instance.ReligionsManager.AddToReligion(notable, rel);   
 
             var influence = BannerKingsConfig.Instance.ReligionModel.GetConversionInfluenceCost(notable, converter).ResultNumber;
-            var piety = BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(notable, converter).ResultNumber;
+            var piety = BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(notable, converter, rel).ResultNumber;
             BannerKingsConfig.Instance.ReligionsManager.AddPiety(converter, -piety, true);
             GainKingdomInfluenceAction.ApplyForDefault(converter, -influence);
             if (!councilConversion)
@@ -405,7 +405,9 @@ namespace BannerKings.Behaviours
                 return false;
             }
 
-            var piety = BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero, Hero.MainHero).ResultNumber;
+            var piety = BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero, 
+                Hero.MainHero,
+                BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero)).ResultNumber;
             if (BannerKingsConfig.Instance.ReligionsManager.GetPiety(Hero.MainHero) < piety)
             {
                 hintText = new TextObject("{=dxwTedS0}Not enough piety.");
@@ -442,7 +444,8 @@ namespace BannerKings.Behaviours
                 .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.ReligionModel.GetConversionInfluenceCost(notable,
                 Hero.MainHero).ResultNumber.ToString("0"))
                 .SetTextVariable("PIETY", BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(notable,
-                Hero.MainHero).ResultNumber.ToString("0")));
+                Hero.MainHero,
+                BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero)).ResultNumber.ToString("0")));
             return IsPlayerNotable() && IsFaithDifferent();
         }
 

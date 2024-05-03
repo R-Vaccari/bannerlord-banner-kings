@@ -233,7 +233,9 @@ namespace BannerKings.Behaviours
                     }
 
                     int piety = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionsManager.GetPiety(Hero.MainHero));
-                    int cost = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero, Hero.MainHero).ResultNumber);
+                    int cost = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero, 
+                        Hero.MainHero, 
+                        BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero)).ResultNumber);
                     reason = TextObject.Empty;
                     if (piety < cost)
                     {
@@ -281,7 +283,9 @@ namespace BannerKings.Behaviours
                 (out TextObject reason) =>
                 {
                     int piety = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionsManager.GetPiety(Hero.MainHero));
-                    int cost = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero, Hero.MainHero).ResultNumber);
+                    int cost = MBRandom.RoundRandomized(BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero, 
+                        Hero.MainHero,
+                        BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero)).ResultNumber);
                     reason = TextObject.Empty;
                     if (piety < cost)
                     {
