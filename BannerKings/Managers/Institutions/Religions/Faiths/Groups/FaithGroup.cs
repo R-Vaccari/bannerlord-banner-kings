@@ -117,7 +117,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Groups
             return results;
         }
 
-        public void MakeHeroLeader(Religion religion, Hero leader, Hero creator = null)
+        public void MakeHeroLeader(Religion religion, Hero leader, Hero creator = null, bool notify = true)
         {
             if (creator != null)
             {
@@ -136,11 +136,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Groups
 
             }
 
-            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{HERO} is now the faith leader for the followers of the {GROUP}.")
-                .SetTextVariable("HERO", leader.Name)
-                .SetTextVariable("GROUP", Name)
-                .ToString(),
-                Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
+            if (notify)
+                InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{HERO} is now the faith leader for the followers of the {GROUP}.")
+                    .SetTextVariable("HERO", leader.Name)
+                    .SetTextVariable("GROUP", Name)
+                    .ToString(),
+                    Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
             Leader = leader;
             if (creator != null)
             {

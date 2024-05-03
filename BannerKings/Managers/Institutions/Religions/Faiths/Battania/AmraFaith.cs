@@ -275,24 +275,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
             return text;
         }
 
-        public override string GetId()
-        {
-            return "amra";
-        }
+        public override string GetId() => "amra";     
 
         public override int GetIdealRank(Settlement settlement)
         {
-            if (settlement.IsVillage)
-            {
-                if (MBRandom.RandomInt(1, 100) < 50)
-                {
-                    return 2;
-                }
-
-                return 1;
-            }
-
-            return 0;
+            if (MBRandom.RandomInt(1, 100) < 30) return 1;
+            return 2;
         }
 
         public override int GetMaxClergyRank()
@@ -302,15 +290,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
 
         public override TextObject GetRankTitle(int rank)
         {
-            TextObject text = null;
-            if (rank == 2)
-            {
-                text = new TextObject("{=apvDLyKQ}Brithem");
-            }
-            else
-            {
-                text = new TextObject("{=9CL79r92}Bandrui");
-            }
+            TextObject text;
+            if (rank == 2) text = new TextObject("{=apvDLyKQ}Brithem");
+            else text = new TextObject("{=9CL79r92}Bandrui");
 
             return text;
         }

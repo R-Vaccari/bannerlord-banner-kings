@@ -6,7 +6,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 {
-    public class AseraFaith : MonotheisticFaith
+    public class AseraFaith : HenotheisticFaith
     {
         public override Settlement FaithSeat => Settlement.All.First(x => x.StringId == "town_A1");
 
