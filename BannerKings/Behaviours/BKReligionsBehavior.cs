@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BannerKings.Extensions;
 using BannerKings.Managers;
+using BannerKings.Managers.Goals.Decisions;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
@@ -51,6 +52,19 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
             CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
             CampaignEvents.MapEventEnded.AddNonSerializedListener(this, EventEnded);
+            CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, () =>
+            {
+                foreach (Religion religion in BannerKingsConfig.Instance.ReligionsManager.GetReligions())
+                {
+                    if (religion.Faith.FaithGroup.ShouldHaveLeader)
+                    {
+                        Hero leader = religion.Faith.FaithGroup.EvaluatePossibleLeaders(religion).GetRandomElement();
+                        if (leader != null)
+                            religion.Faith.FaithGroup.MakeHeroLeader(religion, leader, null, false);
+                    }
+                }
+            });
+
             //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
         }
 
@@ -415,17 +429,13 @@ namespace BannerKings.Behaviours
 
         private void OnDailyTickHero(Hero hero)
         {
-            if (hero == null || hero.IsChild)
-            {
-                return;
-            }
+            if (hero == null || hero.IsChild) return;
 
             TickFaithXp(hero);
 
-            if (hero.Clan != null && hero.Clan == Clan.PlayerClan)
-            {
-                return;
-            }
+            if (hero.Clan != null && hero.Clan == Clan.PlayerClan) return;
+
+            TickRuler(hero);
 
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
             if (rel == null)
@@ -516,6 +526,19 @@ namespace BannerKings.Behaviours
             }
         }
 
+        private void TickRuler(Hero hero)
+        {
+            if (hero.MapFaction == null || hero != hero.MapFaction.Leader || !hero.MapFaction.IsKingdomFaction) return;
+
+            RunWeekly(() =>
+            {
+                FaithLeaderDecision decision = new FaithLeaderDecision(hero);
+                decision.DoAiDecision();
+            },
+            GetType().Name,
+            false);
+        }
+
         private void TickFaithXp(Hero hero)
         {
             float piety = BannerKingsConfig.Instance.ReligionModel.CalculatePietyChange(hero).ResultNumber;
@@ -543,7 +566,7 @@ namespace BannerKings.Behaviours
         {
             foreach (var religion in ReligionsManager.GetReligions())
             {
-                religion.Faith.FaithGroup.EvaluateMakeNewLeader(religion);
+                religion.Faith.FaithGroup.TickLeadership(religion);
                 foreach (var hero in ReligionsManager.GetFaithfulHeroes(religion))
                 {
                     ReligionsManager.AddPiety(religion, hero, BannerKingsConfig.Instance.ReligionModel.CalculatePietyChange(hero).ResultNumber);
@@ -848,10 +871,23 @@ namespace BannerKings.Behaviours
             var piety = ReligionsManager.GetPiety(religion, Hero.MainHero);
 
             var list = religion.Faith.GetSecondaryDivinities()
-                .Select(div => new InquiryElement(div, div.Name.ToString(), null, piety >= div.BlessingCost(Hero.MainHero), new TextObject("{=oFfExhaM}{DESCRIPTION}\n{EFFECTS}").SetTextVariable("DESCRIPTION", div.Description)
+                .Select(div => new InquiryElement(div, 
+                div.Name.ToString(), 
+                null, 
+                piety >= div.BlessingCost(Hero.MainHero, religion.Faith), 
+                new TextObject("{=oFfExhaM}{DESCRIPTION}\n{EFFECTS}").SetTextVariable("DESCRIPTION", div.Description)
                     .SetTextVariable("EFFECTS", div.Effects)
                     .ToString()))
-                .ToList();
+            .ToList();
+
+            Divinity mainDivinity = religion.Faith.GetMainDivinity();
+            list.Add(new InquiryElement(mainDivinity,
+                mainDivinity.Name.ToString(),
+                null,
+                piety >= mainDivinity.BlessingCost(Hero.MainHero, religion.Faith),
+                new TextObject("{=oFfExhaM}{DESCRIPTION}\n{EFFECTS}").SetTextVariable("DESCRIPTION", mainDivinity.Description)
+                    .SetTextVariable("EFFECTS", mainDivinity.Effects)
+                    .ToString()));
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 religion.Faith.GetCultsDescription().ToString(),
@@ -901,7 +937,7 @@ namespace BannerKings.Behaviours
                 var piety = ReligionsManager.GetPiety(playerReligion, Hero.MainHero);
                 foreach (var divinity in religion.Faith.GetSecondaryDivinities())
                 {
-                    var cost = divinity.BlessingCost(Hero.MainHero);
+                    var cost = divinity.BlessingCost(Hero.MainHero, playerReligion.Faith);
                     var optionPossible = piety >= cost;
                     if (optionPossible)
                     {
