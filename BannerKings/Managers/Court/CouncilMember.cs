@@ -188,7 +188,7 @@ namespace BannerKings.Managers.Court
             if (clanReligion != null && clanReligion.HasDoctrine(DefaultDoctrines.Instance.Legalism))
             {
                 var candidateReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(candidate);
-                if (candidateReligion == null || candidateReligion != clanReligion)
+                if (candidateReligion == null || clanReligion.GetStance(candidateReligion.Faith) != Institutions.Religions.Faiths.FaithStance.Tolerated)
                 {
                     return new(false, new TextObject("{=MZuuw80X}The {FAITH} requires councilors of same faith due to it's Legalism.")
                         .SetTextVariable("FAITH", clanReligion.Faith.GetFaithName()));
