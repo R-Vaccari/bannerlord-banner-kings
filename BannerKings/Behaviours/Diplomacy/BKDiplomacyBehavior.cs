@@ -245,11 +245,10 @@ namespace BannerKings.Behaviours.Diplomacy
         {
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
             CampaignEvents.WarDeclared.AddNonSerializedListener(this, OnWarDeclared);
-            CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnDailyTickClan);
+            CampaignEvents.WeeklyTickEvent.AddNonSerializedListener(this, OnWeeklyTick);
             CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnNewGameCreated);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnNewGameCreated);
             CampaignEvents.KingdomCreatedEvent.AddNonSerializedListener(this, OnKingdomCreated);
-            CampaignEvents.AiHourlyTickEvent.AddNonSerializedListener(this, OnAiHourlyTick);
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
             CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
@@ -272,6 +271,34 @@ namespace BannerKings.Behaviours.Diplomacy
             if (wars == null)
             {
                 wars = new List<War>();
+            }
+        }
+
+        private void OnWeeklyTick()
+        {
+            DiplomacyModel diplomacyModel = TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel;
+            foreach (Kingdom k in Kingdom.All)
+            {
+                if (k.IsEliminated || k == Hero.MainHero.MapFaction) continue;
+
+                KingdomDiplomacy diplomacy = GetKingdomDiplomacy(k);
+                if (diplomacy == null) continue;
+
+                List<CasusBelli> casi = diplomacy.GetAvailableCasusBelli();
+                if (casi.Count == 0) continue;
+
+                CasusBelli casus = casi.GetRandomElement();
+                BKDeclareWarDecision declareWarDecision = new BKDeclareWarDecision(casus, k.RulingClan, casus.Defender);
+                KingdomElection election = new KingdomElection(declareWarDecision);
+
+                foreach (Clan clan in k.Clans)
+                {
+                    if (clan.Influence < (float)diplomacyModel.GetInfluenceCostOfProposingWar(clan)) continue;
+
+                    Supporter supporter = election.PossibleOutcomes[0].SupporterList.FirstOrDefault(x => x.Clan == clan);
+                    if (supporter != null && supporter.SupportWeight == Supporter.SupportWeights.FullyPush)
+                            clan.Kingdom.AddDecision(declareWarDecision);
+                }
             }
         }
 
@@ -360,20 +387,7 @@ namespace BannerKings.Behaviours.Diplomacy
 
                 float strength = kingdom.TotalStrength;
                 int fiefs = kingdom.Fiefs.Count;
-                foreach (Kingdom k in Kingdom.All)
-                {
-                    if (k == kingdom) continue;
-
-                    StanceLink stance = kingdom.GetStanceWith(k);
-                    if (fiefs == 1) stance.BehaviorPriority = 1;
-                    else
-                    {
-                        if (strength >= k.TotalStrength * 1.5f) stance.BehaviorPriority = 2;
-                        else if (k.TotalStrength >= strength * 1.5f) stance.BehaviorPriority = 1;
-                        else stance.BehaviorPriority = 0;
-                    }
-                }
-
+                
                 float highestStrength = 0f;
                 foreach (Kingdom k in FactionManager.GetEnemyKingdoms(kingdom))
                 {
@@ -554,38 +568,6 @@ namespace BannerKings.Behaviours.Diplomacy
         private void OnKingdomCreated(Kingdom kingdom)
         {
             kingdomDiplomacies.Add(kingdom, new KingdomDiplomacy(kingdom));
-        }
-
-        private void OnAiHourlyTick(MobileParty party, PartyThinkParams p)
-        {
-
-        }
-
-        private void OnDailyTickClan(Clan clan)
-        {
-            if (clan.Kingdom == null || clan == Clan.PlayerClan || clan != clan.Kingdom.RulingClan)
-            {
-                return;
-            }
-
-            RunWeekly(() =>
-            {
-                KingdomDiplomacy diplomacy = GetKingdomDiplomacy(clan.Kingdom);
-                if (diplomacy == null) return;
-
-                DiplomacyModel diplomacyModel = TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel;
-                if (clan.Influence < (float)diplomacyModel.GetInfluenceCostOfProposingWar(clan)) return;
-
-                List<CasusBelli> casi = diplomacy.GetAvailableCasusBelli();
-                if (casi.Count == 0) return;
-
-                CasusBelli casus = casi.GetRandomElement();
-                BKDeclareWarDecision declareWarDecision = new BKDeclareWarDecision(casus, clan, casus.Defender);
-                float support = new KingdomElection(declareWarDecision).GetLikelihoodForOutcome(0);
-                if (support > 0.4f) clan.Kingdom.AddDecision(declareWarDecision);
-            },
-            GetType().Name,
-            false);     
         }
       
         private void OnMakePeace(IFaction faction1, IFaction faction2, MakePeaceAction.MakePeaceDetail detail)

@@ -591,20 +591,6 @@ namespace BannerKings.Models.Vanilla
                     .SetTextVariable("COUNT", tributeCount));
             }
 
-            /*float totalThreat = 0f;
-            foreach (Kingdom k in Kingdom.All)
-            {
-                if (k != factionDeclaredWar && k != factionDeclaresWar)
-                {
-                    totalThreat += k.TotalStrength;
-                }
-            }
-
-            float threatFactor = factionDeclaredWar.TotalStrength / totalThreat;
-            result.Add(10000f * threatFactor,
-                new TextObject("{=s21vTPmS}{THREAT}% threat relative to all possible enemies")
-                .SetTextVariable("THREAT", (threatFactor * 100f).ToString("0.0"))); */
-
             if (factionDeclaredWar.IsKingdomFaction && factionDeclaresWar.IsKingdomFaction)
             {
                 var attackerKingdom = (Kingdom)factionDeclaresWar;
@@ -681,7 +667,8 @@ namespace BannerKings.Models.Vanilla
                     .SetTextVariable("FACTION", factionDeclaredWar.Name));
             }*/
 
-            if (stance.BehaviorPriority == 1)
+
+            if (factionDeclaresWar.Fiefs.Count == 1 || factionDeclaredWar.TotalStrength >= factionDeclaresWar.TotalStrength * 1.4f)
             {
                 result.Add(-MathF.Abs(baseNumber) * 1.2f, new TextObject("{=fvd0nAa3}Defensive stance against {FACTION}")
                     .SetTextVariable("FACTION", factionDeclaredWar.Name));
