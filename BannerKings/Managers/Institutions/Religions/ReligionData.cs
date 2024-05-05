@@ -126,15 +126,9 @@ namespace BannerKings.Managers.Institutions.Religions
                 AddHeroesReligion();
             }
 
-            if (dominant == null)
-            {
-                return;
-            }
-
-            if (Religions.Count > 1)
-            {
-                BalanceReligions(dominant);
-            }
+            if (DominantReligion == null) return;
+            
+            if (Religions.Count > 1) BalanceReligions(dominant);
 
             foreach (Religion rel in Religions.Keys)
             {

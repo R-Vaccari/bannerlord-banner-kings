@@ -54,6 +54,13 @@ namespace BannerKings.Behaviours
             CampaignEvents.MapEventEnded.AddNonSerializedListener(this, EventEnded);
             CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, () =>
             {
+                foreach (Settlement settlement in Settlement.All)
+                {
+                    PopulationData data = settlement.PopulationData();
+                    if (data != null && data.ReligionData != null)
+                        data.ReligionData.Update(data);
+                }
+
                 foreach (Religion religion in BannerKingsConfig.Instance.ReligionsManager.GetReligions())
                 {
                     if (religion.Faith.FaithGroup.ShouldHaveLeader)

@@ -142,7 +142,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Groups
                     .SetTextVariable("GROUP", Name)
                     .ToString(),
                     Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
+            
             Leader = leader;
+            if (Title != null) religion.SetClergyName(leader, Title);
+            Leader.AddPower(150f);
+
             if (creator != null)
             {
                 creator.AddSkillXp(BKSkills.Instance.Theology, 5000);

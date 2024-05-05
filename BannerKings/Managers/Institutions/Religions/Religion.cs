@@ -10,6 +10,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.MountAndBlade.Diamond.Ranked;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.SaveSystem;
 
@@ -165,15 +166,20 @@ namespace BannerKings.Managers.Institutions.Religions
                 Faith.GetId(), rank));
         }
 
+        public void SetClergyName(Hero hero, TextObject title)
+        {
+            var firstName = hero.FirstName;
+            var fullName = new TextObject("{=6MHqUBXt}{RELIGIOUS_TITLE} {NAME}")
+                .SetTextVariable("RELIGIOUS_TITLE", title)
+                .SetTextVariable("NAME", firstName);
+            hero.SetName(fullName, firstName);
+        }
+
         private Hero GenerateClergymanHero(CharacterObject preset, Settlement settlement, int rank)
         {
             Settlement culturalSettlement = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == preset.Culture);
             var hero = HeroCreator.CreateSpecialHero(preset, culturalSettlement != null ? culturalSettlement : settlement);
-            var firstName = hero.FirstName;
-            var fullName = new TextObject("{=6MHqUBXt}{RELIGIOUS_TITLE} {NAME}")
-                .SetTextVariable("RELIGIOUS_TITLE", Faith.GetRankTitle(rank))
-                .SetTextVariable("NAME", firstName);
-            hero.SetName(fullName, firstName);
+            SetClergyName(hero, Faith.GetRankTitle(rank));
             return hero;
         }
 
