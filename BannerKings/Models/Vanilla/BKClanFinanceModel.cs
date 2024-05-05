@@ -143,8 +143,6 @@ namespace BannerKings.Models.Vanilla
             }
 
             var kingdom = clan.Kingdom;
-            var wkModel = (BKWorkshopModel)TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel;
-
             int totalWorkshopTaxes = 0;
             int totalNotablesAids = 0;
             foreach (var town in clan.Fiefs)
@@ -222,15 +220,18 @@ namespace BannerKings.Models.Vanilla
         {
             var totalWorkshopExpenses = 0;
 
-            var wkModel = (BKWorkshopModel)TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel;
-            foreach (var wk in clan.Leader.OwnedWorkshops)
+            if (TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel is BKWorkshopModel)
             {
-                if (wk.Settlement.OwnerClan == clan)
+                var wkModel = (BKWorkshopModel)TaleWorlds.CampaignSystem.Campaign.Current.Models.WorkshopModel;
+                foreach (var wk in clan.Leader.OwnedWorkshops)
                 {
-                    continue;
-                }
+                    if (wk.Settlement.OwnerClan == clan)
+                    {
+                        continue;
+                    }
 
-                totalWorkshopExpenses += GetWorkshopTaxes(wk);
+                    totalWorkshopExpenses += GetWorkshopTaxes(wk);
+                }
             }
 
             if (totalWorkshopExpenses > 0)
