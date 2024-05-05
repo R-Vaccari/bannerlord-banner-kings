@@ -148,7 +148,9 @@ namespace BannerKings
             AddClassDefinition(typeof(LandedPreacherGroup), 81);
             AddClassDefinition(typeof(DisorganizedGroup), 82);
             AddClassDefinition(typeof(HeroMarriage), 83);
-
+            AddClassDefinition(typeof(TemporalGroup), 84);
+            AddClassDefinition(typeof(DualisticFaith), 85);
+            AddClassDefinition(typeof(HenotheisticFaith), 86);
             AddEnumDefinition(typeof(RiteType), 87);
             AddClassDefinition(typeof(EducationData), 88);
             AddClassDefinition(typeof(BookType), 89);
