@@ -366,7 +366,7 @@ namespace BannerKings.Models.BKModels
 
         public override ExplainedNumber CalculateFervor(Religion religion)
         {
-            ExplainedNumber result = new ExplainedNumber(0.3f, true);
+            ExplainedNumber result = new ExplainedNumber(0.4f, true);
             result.LimitMin(0f);
             result.LimitMax(1f);
 
@@ -389,10 +389,16 @@ namespace BannerKings.Models.BKModels
             {
                 Settlement settlement = religion.Faith.FaithSeat;
                 var rel = settlement.PopulationData().ReligionData.DominantReligion;
-                if (rel != null && rel.Equals(religion))
+                if (rel != null) 
                 {
-                    result.Add(0.15f, new TextObject("{=z0ifBnEL}Faith seat ({FIEF})")
-                       .SetTextVariable("FIEF", settlement.Name));
+                    if (rel.Equals(religion)) 
+                        result.Add(0.15f, new TextObject("{=z0ifBnEL}Faith seat ({FIEF})")
+                           .SetTextVariable("FIEF", settlement.Name));
+                    else if (rel.Faith.FaithGroup.Equals(religion.Faith.FaithGroup))
+                        result.Add(0.075f, new TextObject("{=!}Faith seat ({FIEF}) held by {RELIGION} ({GROUP} group")
+                            .SetTextVariable("RELIGION", rel.Faith.GetFaithName())
+                            .SetTextVariable("GROUP", rel.Faith.FaithGroup.Name)
+                            .SetTextVariable("FIEF", settlement.Name));
                 }
                 else result.Add(-0.15f, new TextObject("{=goy63pDb}Missing faith seat ({FIEF})")
                        .SetTextVariable("FIEF", settlement.Name));
