@@ -186,7 +186,7 @@ namespace BannerKings.UI.VanillaTabs.Character.Religion
 
             Hero leader = currentReligion.Faith.FaithGroup.Leader;
             TextObject leaderName = leader != null ? leader.Name : new TextObject("{=!}None");
-            if (currentReligion.Faith.FaithGroup.ShouldHaveLeader) leaderName = new TextObject("{=!}Not Possible");
+            if (!currentReligion.Faith.FaithGroup.ShouldHaveLeader) leaderName = new TextObject("{=!}Not Possible");
             Aspects.Add(new ReligionElementVM(new TextObject("{=!}Head of Faith"),
                 leaderName,
                 currentReligion.Faith.FaithGroup.Explanation));
