@@ -25,6 +25,7 @@ namespace BannerKings.Models.Vanilla
             bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
+            if (secondHero.Clan == null || proposer.Clan == null) return new ExplainedNumber(-10000f);
 
             var proposerScore = GetSpouseScore(proposer).ResultNumber * 1.1f;
             var proposedScore = GetSpouseScore(secondHero).ResultNumber;
