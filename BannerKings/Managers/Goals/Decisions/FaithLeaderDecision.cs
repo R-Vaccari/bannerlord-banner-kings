@@ -8,17 +8,27 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
-    internal class FaithLeaderDecision : Goal
+    public class FaithLeaderDecision : Goal
     {
         private Hero faithLeader;
         private Religion religion;
 
-        public FaithLeaderDecision(Hero fulfiller = null) : base("goal_organize_feast_decision", GoalCategory.Kingdom, GoalUpdateType.Manual, fulfiller)
+        public FaithLeaderDecision(Hero fulfiller = null) : base("goal_faith_leader_decision", fulfiller)
         {
-            var name = new TextObject("{=!}Create Faith Leader");
-            var description = new TextObject("{=!}As a ruler, endorse a new leader for your faith group. The possible faith leaders vary according to how the faith group works. A Faith Leader is important to push the faith's fervor, as well as sanctioning holy wars.\n");
+        }
 
-            Initialize(name, description);
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Religious;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            FaithLeaderDecision copy = new FaithLeaderDecision(fulfiller);
+            return copy;
         }
 
         public override bool IsAvailable() => GetFulfiller().Clan.Kingdom != null && 
@@ -45,10 +55,16 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(new TextObject("{=!}The faith group {GROUP} does not accept a leader.")
                     .SetTextVariable("GROUP", religion.Faith.FaithGroup.Name));
             }
-   
+
+            if (!religion.Faith.FaithGroup.CanReligionMakeLeader(religion))
+            {
+                failedReasons.Add(new TextObject("{=!}Your religion cannot make a leader for the {GROUP}, another faith of the group has significantly more fervor than yours.")
+                    .SetTextVariable("GROUP", religion.Faith.FaithGroup.Name));
+            }
+
             if (religion.Faith.FaithGroup.Leader != null && religion.Faith.FaithGroup.Leader.IsAlive)
             {
-                failedReasons.Add(new TextObject("{=!}The faith group {GROUP} already has a leader. A new Head of Faith can be created once there are none occupying this position.")
+                failedReasons.Add(new TextObject("{=!}The faith group {GROUP} already has a leader. A new Faith Leader can be created once there are none occupying this position.")
                     .SetTextVariable("GROUP", religion.Faith.FaithGroup.Name));
             }
 

@@ -71,9 +71,27 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Groups
             if (hero != null) MakeHeroLeader(religion, hero);
         }
 
+        public bool CanReligionMakeLeader(Religion religion)
+        {
+            float fervor = BannerKingsConfig.Instance.ReligionModel.CalculateFervor(religion).ResultNumber;
+            foreach (Religion r in BannerKingsConfig.Instance.ReligionsManager.GetReligions())
+            {
+                if (r.Equals(religion)) continue;
+
+                if (r.Faith.FaithGroup.Equals(religion.Faith.FaithGroup))
+                {
+                    float f = BannerKingsConfig.Instance.ReligionModel.CalculateFervor(religion).ResultNumber;
+                    if (f >= fervor + 0.2f) return false;
+                }
+            }
+
+            return true;
+        }
+
         public List<Hero> EvaluatePossibleLeaders(Religion religion)
         {
             List<Hero> results = new List<Hero>();
+            if (!CanReligionMakeLeader(religion)) return results;
 
             if (IsPolitical)
             {
@@ -152,6 +170,15 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Groups
                 creator.AddSkillXp(BKSkills.Instance.Theology, 5000);
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(creator, leader, 20);
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is FaithGroup)
+            {
+                return StringId == ((FaithGroup)obj).StringId;  
+            }
+            return base.Equals(obj);
         }
     }
 }
