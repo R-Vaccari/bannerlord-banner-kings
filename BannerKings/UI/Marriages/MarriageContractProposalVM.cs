@@ -207,8 +207,11 @@ namespace BannerKings.UI.Marriages
             if (ProposedHero != null)
             {
                 Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(ProposerHero.Hero);
-                canHaveCosorts = religion.Faith.MarriageDoctrine.Consorts > 0;
-                if (religion.Faith.MarriageDoctrine.IsConcubinage && isSecondaryPartner) CanCreateAlliance = false;
+                if (religion != null)
+                {
+                    canHaveCosorts = religion.Faith.MarriageDoctrine.Consorts > 0;
+                    if (religion.Faith.MarriageDoctrine.IsConcubinage && isSecondaryPartner) CanCreateAlliance = false;
+                }
             }
 
             /*if (religion != null)
@@ -220,7 +223,6 @@ namespace BannerKings.UI.Marriages
             }*/
 
             SecondaryPartnerToggle.Enabled = ProposerHero != null && ProposerHero.Hero.IsClanLeader() && canHaveCosorts;
-
             AllianceToggle.Enabled = CanCreateAlliance;
             if (!CanCreateAlliance)
             {
