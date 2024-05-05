@@ -135,7 +135,6 @@ namespace BannerKings.Models.Vanilla
         public override ExplainedNumber GetPopulationFoodConsumption(PopulationData data)
         {
             var result = new ExplainedNumber();
-            result.LimitMin(-3000f);
             result.LimitMax(0f);
             var citySerfs = data.GetTypeCount(PopType.Serfs);
             if (citySerfs > 0)
@@ -174,12 +173,7 @@ namespace BannerKings.Models.Vanilla
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(data.Settlement, "decision_ration"))
             {
-                result.AddFactor(-0.4f, new TextObject("{=w6bLP4DB}Enforce rations decision"));
-            }
-
-            if (data.Settlement.IsCastle)
-            {
-                result.AddFactor(-0.1f, new TextObject("{=j0bzPuzg}Castle rations"));
+                result.Add(result.ResultNumber * -0.4f, new TextObject("{=w6bLP4DB}Enforce rations decision"));
             }
 
             return result;
