@@ -288,6 +288,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(40f);
             result.LimitMax(150f);
 
+            if (religion == null) return new ExplainedNumber(10000f);
+
             result.Add(converted.GetRelation(converter) * -0.1f);
 
             if (converted.IsNotable)
