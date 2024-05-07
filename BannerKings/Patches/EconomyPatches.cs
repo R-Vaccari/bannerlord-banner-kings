@@ -250,7 +250,7 @@ namespace BannerKings.Patches
                 float caravans = hero.OwnedCaravans.Count;
                 __result = hero.PartyBelongedTo == null &&
                     caravans < BannerKingsConfig.Instance.EconomyModel.GetNotableCaravanLimit(hero) && 
-                    hero.Power > (50f + (caravans * 75f)) &&
+                    hero.Power > (50f + (caravans * 150f)) &&
                     (hero.IsFugitive || hero.IsReleased || hero.IsNotSpawned || hero.IsActive) && 
                     !hero.IsTemplate && 
                     hero.CanLeadParty();
