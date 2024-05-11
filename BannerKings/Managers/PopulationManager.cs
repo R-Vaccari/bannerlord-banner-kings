@@ -43,6 +43,9 @@ namespace BannerKings.Managers
         }
 
         [SaveableProperty(1)] private Dictionary<Settlement, PopulationData> Populations { get; set; }
+        private Dictionary<Settlement, PopulationData> VillagesCache { get; set; }
+        private Dictionary<Settlement, PopulationData> TownsCache { get; set; }
+        private Dictionary<Settlement, PopulationData> CastleCache { get; set; }
         private Dictionary<Hero, List<Estate>> Estates { get; set; }
 
         public void PostInitialize()
@@ -52,12 +55,20 @@ namespace BannerKings.Managers
                 Estates = new Dictionary<Hero, List<Estate>>();
             }
 
+            CastleCache = new Dictionary<Settlement, PopulationData>(Town.AllCastles.Count);
+            TownsCache = new Dictionary<Settlement, PopulationData>(Town.AllTowns.Count);
+            VillagesCache = new Dictionary<Settlement, PopulationData>(Village.All.Count);
             foreach (var data in Populations.Values)
             {
                 data.VillageData?.ReInitializeBuildings();
                 if (data.EstateData != null)
                     foreach (var estate in data.EstateData.Estates)
-                        estate.PostInitialize();    
+                        estate.PostInitialize();
+
+                Settlement settlement = data.Settlement;
+                if (settlement.IsVillage) VillagesCache[settlement] = data;
+                else if (settlement.IsTown) TownsCache[settlement] = data;
+                else if (settlement.IsCastle) VillagesCache[settlement] = data;
             }
         }
 
@@ -90,16 +101,22 @@ namespace BannerKings.Managers
                     return null;
                 }
 
-                var equal = Populations.FirstOrDefault(x => x.Key.StringId == settlement.StringId).Key;
-                if (equal != null)
-                {
-                    return Populations[equal];
-                }
-                else
+                PopulationData data = null;
+                if (settlement.IsVillage) VillagesCache.TryGetValue(settlement, out data);
+                else if (settlement.IsTown) TownsCache.TryGetValue(settlement, out data);
+                else if (settlement.IsCastle) CastleCache.TryGetValue(settlement, out data);
+
+                if (data == null)
                 {
                     InitializeSettlementPops(settlement);
-                    return Populations[settlement];
+                    var equal = Populations.FirstOrDefault(x => x.Key.StringId == settlement.StringId).Key;
+                    if (equal != null)
+                    {
+                        data = Populations[equal];
+                    }
                 }
+
+                return data;
             }
             catch (Exception ex)
             {
