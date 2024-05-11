@@ -1,25 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Managers.Cultures;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
+using BannerKings.Models.BKModels.Abstract;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using TaleWorlds.MountAndBlade.Launcher.Library.UserDatas;
 
 namespace BannerKings.Models.BKModels
 {
-    public class BKTitleModel : IBannerKingsModel
+    public class BKTitleModel : TitleModel
     {
-        public ExplainedNumber CalculateEffect(Settlement settlement)
-        {
-            return new ExplainedNumber();
-        }
-
-        public ExplainedNumber GetSuccessionHeirScore(Hero currentLeader, Hero candidate, FeudalTitle title, bool explanations = false)
+        public override ExplainedNumber GetSuccessionHeirScore(Hero currentLeader, Hero candidate, FeudalTitle title, bool explanations = false)
         {
             FeudalContract contract = title.Contract;
             var succession = contract.Succession;
@@ -33,7 +28,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber GetInheritanceHeirScore(Hero currentLeader, Hero candidate, FeudalContract contract, bool explanations = false)
+        public override ExplainedNumber GetInheritanceHeirScore(Hero currentLeader, Hero candidate, FeudalContract contract, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
             if (contract == null)
@@ -82,68 +77,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateSuccessionLine(FeudalTitle title, Clan clan, Hero victim = null, int count = 6)
-        {
-            var leader = victim != null ? victim : clan.Leader;
-            var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(leader, title);
-            var explanations = new Dictionary<Hero, ExplainedNumber>();
-
-            foreach (Hero hero in candidates)
-            {
-                var explanation = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(leader,
-                    hero, title, true);
-                explanations.Add(hero, explanation);
-            }
-
-            var result = from x in explanations
-                          orderby x.Value.ResultNumber descending
-                          select x;
-
-            if (count > 0) return result.Take(count);
-            else return result;
-        }
-
-        public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateInheritanceLine(Clan clan, Hero victim = null, int count = 6)
-        {
-            var leader = victim != null ? victim : clan.Leader;
-            var candidates = BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(leader);
-            var explanations = new Dictionary<Hero, ExplainedNumber>();
-            var clanTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(leader);
-
-            foreach (Hero hero in candidates)
-            {
-                var contract = clanTitle != null ? clanTitle.Contract : null;
-                var explanation = BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(leader,
-                    hero, contract, true);
-                if (!explanations.ContainsKey(hero)) explanations.Add(hero, explanation);
-            }
-
-            return (from x in explanations
-                    orderby x.Value.ResultNumber descending
-                    select x).Take(count);
-        }
-
-        public HashSet<Hero> GetSuccessionCandidates(Hero currentLeader, FeudalTitle title)
-        {
-            Succession succession = title.Contract.Succession;
-            return succession.GetSuccessionCandidates(currentLeader, title); ;
-        }
-
-        public List<Hero> GetInheritanceCandidates(Hero currentLeader)
-        {
-            var list = new List<Hero>();
-            foreach (var x in currentLeader.Clan.Heroes)
-            {
-                if (!x.IsChild && x != currentLeader && x.IsAlive && x.Occupation == Occupation.Lord)
-                {
-                    list.Add(x);
-                }
-            }
-
-            return list;
-        }
-
-        public ExplainedNumber GetGrantKnighthoodCost(Hero grantor)
+        public override ExplainedNumber GetGrantKnighthoodCost(Hero grantor)
         {
             var result = new ExplainedNumber(120f, true);
             var highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(grantor);
@@ -173,7 +107,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public TitleAction GetFoundKingdom(Kingdom faction, Hero founder)
+        public override TitleAction GetFoundKingdom(Kingdom faction, Hero founder)
         {
             var foundAction = new TitleAction(ActionType.Found, null, founder)
             {
@@ -239,9 +173,75 @@ namespace BannerKings.Models.BKModels
             return foundAction;
         }
 
-        public TitleAction GetAction(ActionType type, FeudalTitle title, Hero taker, Hero receiver = null)
+        public override TitleAction GetFoundEmpire(Kingdom faction, Hero founder)
         {
-            return type switch
+            var foundAction = new TitleAction(ActionType.Found, null, founder)
+            {
+                Gold = 500000 + BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(founder.Clan).ResultNumber * CampaignTime.DaysInYear,
+                Influence = 1000 + BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceChange(founder.Clan).ResultNumber * CampaignTime.DaysInYear * 0.1f,
+                Renown = 100
+            };
+
+            if (faction == null)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=JDFpx1eN}No kingdom.");
+                return foundAction;
+            }
+
+            var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
+            if (title != null)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=eTMvobFw}Faction sovereign title already exists.");
+                return foundAction;
+            }
+
+            if (faction.Leader != founder)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=Z2tSyHfC}Not leader of current faction.");
+                return foundAction;
+            }
+
+            var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(founder);
+            if (titles.Any(x => x.TitleType == TitleType.Empire))
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}Cannot found an Empire-level title while already being a de Jure Empire-level title holder.");
+                return foundAction;
+            }
+
+            if (titles.Count(x => x.TitleType == TitleType.Kingdom) < 2)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}Cannot found an Empire-level title without holding at least 2 Kingdom-level titles.");
+                return foundAction;
+            }
+
+            if (faction.Clans.Count < 3)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=ZTj1JVuN}Cannot found a kingdom for a faction with less than 3 clans.");
+                return foundAction;
+            }
+
+            if (founder.Gold < foundAction.Gold || founder.Clan.Influence < foundAction.Influence)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=oXeDiAaA}You lack the required resources.");
+                return foundAction;
+            }
+
+            foundAction.Possible = true;
+            foundAction.Reason = new TextObject("{=!}Empire can be founded.");
+            ApplyDiscounts(foundAction);
+            return foundAction;
+        }
+
+        public override TitleAction GetAction(ActionType type, FeudalTitle title, Hero taker, Hero receiver = null)
+        {
+            TitleAction action =  type switch
             {
                 ActionType.Usurp => GetUsurp(title, taker),
                 ActionType.Revoke => GetRevoke(title, taker),
@@ -249,29 +249,57 @@ namespace BannerKings.Models.BKModels
                 ActionType.Create => GetCreate(title, taker),
                 _ => GetGrant(title, taker)
             };
+            ApplyDiscounts(action);
+            return action;
         }
 
         private TitleAction GetCreate(FeudalTitle title, Hero creator)
         {
-            var claimAction = new TitleAction(ActionType.Claim, title, creator)
+            var createAction = new TitleAction(ActionType.Create, title, creator)
             {
                 Gold = GetGoldUsurpCost(title) * 0.1f,
                 Influence = GetInfluenceUsurpCost(title) * 0.2f,
                 Renown = GetRenownUsurpCost(title) * 0.2f
             };
 
-            if (creator.Gold < claimAction.Gold || creator.Clan.Influence < claimAction.Influence)
+            Kingdom faction = creator.Clan.Kingdom;
+            if (faction == null)
             {
-                claimAction.Possible = false;
-                claimAction.Reason = new TextObject("{=zuKjwXH6}Missing required resources.");
-                return claimAction;
+                createAction.Possible = false;
+                createAction.Reason = new TextObject("{=JDFpx1eN}No kingdom.");
+                return createAction;
             }
 
-            claimAction.Possible = true;
-            claimAction.Reason = new TextObject("{=zMnXdAxp}You may claim this title.");
-            ApplyDiscounts(claimAction);
+            if (faction.Leader != creator)
+            {
+                createAction.Possible = false;
+                createAction.Reason = new TextObject("{=Z2tSyHfC}Not leader of current faction.");
+                return createAction;
+            }
 
-            return claimAction;
+            if (creator.Gold < createAction.Gold || creator.Clan.Influence < createAction.Influence)
+            {
+                createAction.Possible = false;
+                createAction.Reason = new TextObject("{=zuKjwXH6}Missing required resources.");
+                return createAction;
+            }
+
+            List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(creator);
+            TitleType titleType = title.TitleType + 1;
+            if (!titles.Any(x => x.TitleType <= titleType))
+            {
+                CulturalTitleName name1 = DefaultTitleNames.Instance.GetTitleName(creator.Culture, titleType);
+                CulturalTitleName name2 = DefaultTitleNames.Instance.GetTitleName(creator.Culture, title.TitleType);
+                createAction.Possible = false;
+                createAction.Reason = new TextObject("{=!}You must De Jure hold at least one title of {NAME1} level or higher in order to create a {NAME2}.")
+                    .SetTextVariable("NAME1", name1.Description)
+                    .SetTextVariable("NAME2", name2.Description);
+                return createAction;
+            }
+
+            createAction.Possible = true;
+            createAction.Reason = new TextObject("{=!}You may create this title.");
+            return createAction;
         }
 
         private TitleAction GetClaim(FeudalTitle title, Hero claimant)
@@ -358,8 +386,6 @@ namespace BannerKings.Models.BKModels
 
             claimAction.Possible = true;
             claimAction.Reason = new TextObject("{=zMnXdAxp}You may claim this title.");
-            ApplyDiscounts(claimAction);
-
             return claimAction;
         }
 
@@ -464,7 +490,6 @@ namespace BannerKings.Models.BKModels
 
             revokeAction.Possible = true;
             revokeAction.Reason = new TextObject("{=f5Be67QF}You may grant away this title.");
-            ApplyDiscounts(revokeAction);
             return revokeAction;
         }
 
@@ -526,7 +551,6 @@ namespace BannerKings.Models.BKModels
             grantAction.Possible = true;
             grantAction.Influence = GetInfluenceUsurpCost(title) * 0.33f;
             grantAction.Reason = new TextObject("{=f5Be67QF}You may grant away this title.");
-            ApplyDiscounts(grantAction);
             return grantAction;
         }
 
@@ -643,8 +667,6 @@ namespace BannerKings.Models.BKModels
 
             usurpData.Possible = false;
             usurpData.Reason = new TextObject("{=5ysthcWa}No rightful claim.");
-
-            ApplyDiscounts(usurpData);
             return usurpData;
         }
 
@@ -685,52 +707,6 @@ namespace BannerKings.Models.BKModels
             }
         }
 
-        public List<Hero> GetGrantCandidates(Hero grantor)
-        {
-            var heroes = new List<Hero>();
-            var kingdom = grantor.Clan.Kingdom;
-            if (kingdom != null)
-                foreach (var clan in kingdom.Clans)
-                    if (!clan.IsUnderMercenaryService && clan != grantor.Clan)
-                        heroes.Add(clan.Leader);
-
-            return heroes;
-        }
-
-        public Dictionary<Hero, TextObject> GetClaimants(FeudalTitle title)
-        {
-            var claimants = new Dictionary<Hero, TextObject>(4);
-            var deFacto = title.DeFacto;
-            if (deFacto != title.deJure)
-            {
-                if (title.Fief == null)
-                {
-                    if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(deFacto))
-                        claimants[deFacto] = new TextObject("{=XRMMs6QY}De facto title holder");         
-                }
-                else claimants[deFacto] = new TextObject("{=zp4c76pS}De facto unlanded title holder");
-            }
-
-            if (title.Sovereign != null &&
-                title.Sovereign.deJure != null &&
-                title.Sovereign.deJure != title.deJure &&
-                !claimants.ContainsKey(title.Sovereign.deJure))
-            {
-                claimants[title.Sovereign.deJure] = new TextObject("{=pkZ0J4Fo}De jure sovereign of this title");
-            }
-
-            if (title.Vassals != null && title.Vassals.Count > 0)
-                foreach (var vassal in title.Vassals)
-                    if (vassal.deJure != null && vassal.deJure != title.deJure && !claimants.ContainsKey(vassal.deJure))
-                        claimants[vassal.deJure] = new TextObject("{=J07mQQ6k}De jure vassal of this title");
-
-            FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(title);
-            if (suzerain != null && suzerain.deJure != null)
-                claimants[suzerain.deJure] = new TextObject("{=ymbhLtjf}De jure suzerain of this title");   
-
-            return claimants;
-        }
-
         private float GetInfluenceUsurpCost(FeudalTitle title)
         {
             return 500f / ((float) title.TitleType + 1f);
@@ -741,7 +717,7 @@ namespace BannerKings.Models.BKModels
             return 100f / ((float) title.TitleType + 1f);
         }
 
-        public float GetGoldUsurpCost(FeudalTitle title)
+        public override float GetGoldUsurpCost(FeudalTitle title)
         {
             var gold = 100000f / ((float) title.TitleType + 1f);
             if (title.Fief != null)
@@ -753,7 +729,7 @@ namespace BannerKings.Models.BKModels
             return gold;
         }
 
-        public int GetRelationImpact(FeudalTitle title)
+        public override int GetRelationImpact(FeudalTitle title)
         {
             var result = title.TitleType switch
             {
@@ -768,7 +744,7 @@ namespace BannerKings.Models.BKModels
             return -result;
         }
 
-        public int GetSkillReward(TitleType title, ActionType type)
+        public override int GetSkillReward(TitleType title, ActionType type)
         {
             if (type == ActionType.Found)
             {
