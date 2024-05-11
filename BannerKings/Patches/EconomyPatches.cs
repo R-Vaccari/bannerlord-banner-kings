@@ -93,24 +93,18 @@ namespace BannerKings.Patches
               .GetType()
               .GetMethod("BuyGoods", BindingFlags.Instance | BindingFlags.NonPublic);
 
-           /* [HarmonyPostfix]
+            [HarmonyPostfix]
             [HarmonyPatch("GetTradeScoreForTown", MethodType.Normal)]
             private static void GetTradeScoreForTownPostfix(ref float __result, MobileParty caravanParty, Town town,
                     CampaignTime lastHomeVisitTimeOfCaravan,
                     float caravanFullness, bool distanceCut)
             {
-                if (BannerKingsConfig.Instance.PopulationManager != null)
+                var data = town.Settlement.PopulationData();
+                if (data != null)
                 {
-                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                    if (data != null)
-                    {
-                        if (__result > 0f) __result *= data.EconomicData.CaravanAttraction.ResultNumber;
-                        __result -= data.EconomicData.CaravanFee(caravanParty) / 10f;
-                    }
+                    __result *= data.EconomicData.CaravanAttraction.ResultNumber;
                 }
-
-                if (lastHomeVisitTimeOfCaravan.ElapsedWeeksUntilNow < 1f) __result -= 50f;
-            }*/
+            }
 
             [HarmonyPrefix]
             [HarmonyPatch("FindNextDestinationForCaravan", MethodType.Normal)]

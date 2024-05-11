@@ -222,6 +222,7 @@ namespace BannerKings.Models.Vanilla
         public override ExplainedNumber CalculateTradePower(Settlement settlement, bool descriptions = false)
         {
             ExplainedNumber result = new ExplainedNumber(1f, descriptions);
+            result.LimitMin(0f);
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             result.Add(data.EconomicData.Mercantilism.ResultNumber / 2f, new TextObject("{=5eHCGMEK}Mercantilism"));
@@ -291,7 +292,7 @@ namespace BannerKings.Models.Vanilla
 
                 if (settlement.IsCastle)
                 {
-                    result.AddFactor(-0.4f, new TextObject("{=UPhMZ859}Castle"));
+                    result.AddFactor(-0.25f, new TextObject("{=UPhMZ859}Castle"));
                 }
             }
 
@@ -389,7 +390,6 @@ namespace BannerKings.Models.Vanilla
             Occupation occupation = notable.Occupation;
             if (occupation == Occupation.Merchant) return 2;
             else if (occupation == Occupation.Artisan) return 1;
-            else if (occupation == Occupation.GangLeader) return 1;
 
             return 0;
         }
