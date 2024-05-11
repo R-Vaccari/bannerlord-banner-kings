@@ -583,14 +583,6 @@ namespace BannerKings.Models.Vanilla
             WarStats attackerStats = CalculateWarStats(factionDeclaresWar, factionDeclaredWar);
             float attackerScore = attackerStats.Strength + attackerStats.ValueOfSettlements - (attackerStats.TotalStrengthOfEnemies * 1.25f);
 
-            if (factionDeclaresWar.IsKingdomFaction)
-            {
-                var tributes = factionDeclaresWar.Stances.ToList().FindAll(x => x.GetDailyTributePaid(x.Faction2) > 0);
-                int tributeCount = tributes.Count;
-                result.Add(baseNumber * -0.15f * tributeCount, new TextObject("{=TCVWRr8K}Paying tributes (x{COUNT})")
-                    .SetTextVariable("COUNT", tributeCount));
-            }
-
             if (factionDeclaredWar.IsKingdomFaction && factionDeclaresWar.IsKingdomFaction)
             {
                 var attackerKingdom = (Kingdom)factionDeclaresWar;
@@ -609,7 +601,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     if (diplomacy.HasTradePact(defenderKingdom))
                     {
-                        result.Add(baseNumber * - 0.25f, new TextObject("{=DPK2KdUk}Trade pact between both realms"));
+                        result.Add(MathF.Abs(baseNumber) * - 0.25f, new TextObject("{=DPK2KdUk}Trade pact between both realms"));
                     }
 
                     if (casusBelli == null)
@@ -637,7 +629,7 @@ namespace BannerKings.Models.Vanilla
                     }
 
                     baseNumber = result.BaseNumber;
-                    result.Add(baseNumber * -diplomacy.Fatigue, new TextObject("{=Rdmm1Kmh}General war fatigue of {FACTION}")
+                    result.Add(MathF.Abs(baseNumber) * -diplomacy.Fatigue, new TextObject("{=Rdmm1Kmh}General war fatigue of {FACTION}")
                         .SetTextVariable("FACTION", diplomacy.Kingdom.Name));
                 }
 
@@ -648,10 +640,18 @@ namespace BannerKings.Models.Vanilla
                         WarStats enemyStats = CalculateWarStats(factionDeclaresWar, enemyKingdom);
                         float enemyScore = enemyStats.Strength + enemyStats.ValueOfSettlements - (enemyStats.TotalStrengthOfEnemies * 1.25f);
                         float f = 2f - (attackerScore / (enemyScore * 5f));
-                        result.Add(-baseNumber * f, new TextObject("{=epNrP2AT}Existing war with {FACTION}")
+                        result.Add(-MathF.Abs(baseNumber) * f, new TextObject("{=epNrP2AT}Existing war with {FACTION}")
                         .SetTextVariable("FACTION", enemyKingdom.Name));
                     }
                 }
+            }
+
+            if (factionDeclaresWar.IsKingdomFaction)
+            {
+                var tributes = factionDeclaresWar.Stances.ToList().FindAll(x => x.GetDailyTributePaid(x.Faction2) > 0);
+                int tributeCount = tributes.Count;
+                result.Add(MathF.Abs(baseNumber) * -0.1f * tributeCount, new TextObject("{=TCVWRr8K}Paying tributes (x{COUNT})")
+                    .SetTextVariable("COUNT", tributeCount));
             }
 
             StanceLink stance = factionDeclaresWar.GetStanceWith(factionDeclaredWar);
@@ -734,10 +734,10 @@ namespace BannerKings.Models.Vanilla
 
                 float score = MathF.Clamp(war.CalculateWarScore(war.Attacker, false).ResultNumber /
                     war.TotalWarScore.ResultNumber, -1f, 1f) * 2f;
-                result.Add(baseNumber * (war.Attacker == factionDeclaresWar ? -score : score));
+                result.Add(MathF.Abs(baseNumber) * (war.Attacker == factionDeclaresWar ? -score : score));
 
                 float fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, factionDeclaresWar).ResultNumber * 4f;
-                result.Add(baseNumber * -fatigue, new TextObject("{=Nxrd7yym}Fatigue over this war"));
+                result.Add(MathF.Abs(baseNumber) * -fatigue, new TextObject("{=Nxrd7yym}Fatigue over this war"));
             }
             else
             {
@@ -754,10 +754,10 @@ namespace BannerKings.Models.Vanilla
 
                             float score = MathF.Clamp(war.CalculateWarScore(war.Attacker, false).ResultNumber /
                                 war.TotalWarScore.ResultNumber, -1f, 1f) * 2f;
-                            result.Add(baseNumber * (war.Attacker == factionDeclaresWar ? -score : score));
+                            result.Add(MathF.Abs(baseNumber) * (war.Attacker == factionDeclaresWar ? -score : score));
 
                             float fatigue = BannerKingsConfig.Instance.WarModel.CalculateFatigue(war, factionDeclaresWar).ResultNumber * 4f;
-                            result.Add(baseNumber * -fatigue, new TextObject("{=Nxrd7yym}Fatigue over this war"));
+                            result.Add(MathF.Abs(baseNumber) * -fatigue, new TextObject("{=Nxrd7yym}Fatigue over this war"));
                         }
                     }
                     
@@ -785,7 +785,7 @@ namespace BannerKings.Models.Vanilla
                 Hero leader = evaluating.Leader;
                 float traits = leader.GetTraitLevel(DefaultTraits.Valor) - leader.GetTraitLevel(DefaultTraits.Mercy) +
                     leader.GetTraitLevel(BKTraits.Instance.AptitudeViolence);
-                result.Add(baseNumber * (traits / 4f));
+                result.Add(MathF.Abs(baseNumber) * (traits / 4f));
 
                 float enemies = 1f;
                 if (evaluating.Kingdom != null) enemies += FactionManager.GetEnemyKingdoms(evaluating.Kingdom).Count();
@@ -793,11 +793,11 @@ namespace BannerKings.Models.Vanilla
                 int gold = (int)(leader.Gold / enemies);
                 if (gold < 50000)
                 {
-                    result.Add(result.BaseNumber * -0.8f);
+                    result.Add(MathF.Abs(result.BaseNumber) * -0.8f);
                 }
                 else if (gold < 100000)
                 {
-                    result.Add(result.BaseNumber * -0.4f);
+                    result.Add(MathF.Abs(result.BaseNumber) * -0.4f);
                 }
             }
 
