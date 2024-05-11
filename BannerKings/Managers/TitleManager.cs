@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using BannerKings.Actions;
 using BannerKings.Behaviours;
 using BannerKings.Managers.Populations;
@@ -219,24 +220,21 @@ namespace BannerKings.Managers
                 if (deJure)
                 {
                     title.deJure = newOwner;
-                    DeJuresCache[oldOwner].Remove(title);
-                    if (DeJuresCache.ContainsKey(newOwner))
+                    if (oldOwner != null)
                     {
-                        DeJuresCache[newOwner].Add(title);
-                    }
-                    else
-                    {
-                        DeJuresCache.Add(newOwner, new List<FeudalTitle> {title});
-                    }
-
-                    if (DeJuresCache[oldOwner].Count == 0)
-                    {
-                        DeJuresCache.Remove(oldOwner);
-                        if (Knights.ContainsKey(oldOwner))
+                        DeJuresCache[oldOwner].Remove(title);
+                        if (DeJuresCache[oldOwner].Count == 0)
                         {
-                            Knights.Remove(oldOwner);
+                            DeJuresCache.Remove(oldOwner);
+                            if (Knights.ContainsKey(oldOwner))
+                            {
+                                Knights.Remove(oldOwner);
+                            }
                         }
-                    }
+                    }                
+                    
+                    if (DeJuresCache.ContainsKey(newOwner)) DeJuresCache[newOwner].Add(title);
+                    else DeJuresCache.Add(newOwner, new List<FeudalTitle> {title});
                 }
                 else title.deFacto = newOwner;   
             }
@@ -365,7 +363,8 @@ namespace BannerKings.Managers
 
                 foreach (var vassal in title.Vassals)
                 {
-                    if (vassal.deJure.Clan == suzerainClan || (targetClan != null && vassal.deJure.Clan != targetClan))
+                    if (vassal.deJure == null || vassal.deJure.Clan == suzerainClan || 
+                        (targetClan != null && vassal.deJure.Clan != targetClan))
                     {
                         continue;
                     }
@@ -474,18 +473,21 @@ namespace BannerKings.Managers
 
         public void CreateTitle(TitleAction action)
         {
-            var currentOwner = action.Title.deJure;
-            InformationManager.DisplayMessage(new InformationMessage(
-                new TextObject("{=D50E4DZk}{REVOKER} has revoked the {TITLE}.")
-                    .SetTextVariable("REVOKER", action.ActionTaker.EncyclopediaLinkWithName)
-                    .SetTextVariable("TITLE", action.Title.FullName)
-                    .ToString()));
-            var impact = new BKTitleModel().GetRelationImpact(action.Title);
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.ActionTaker, currentOwner, impact);
+            FeudalTitle title = action.Title;
+            CultureObject culture = action.ActionTaker.Culture;
+            title.SetFullName(new TextObject("{=wMius2i9}{TITLE} of {NAME}")
+                .SetTextVariable("TITLE", Utils.TextHelper.GetTitlePrefix(title.TitleType, culture))
+                .SetTextVariable("NAME", title.shortName));
 
-            action.Title.RemoveClaim(action.ActionTaker);
-            action.Title.AddClaim(currentOwner, ClaimType.Previous_Owner, true);
-            ExecuteOwnershipChange(currentOwner, action.ActionTaker, action.Title, true);
+            MBInformationManager.AddQuickInformation(new TextObject("{=dFTm4AbE}The {TITLE} has been founded by {FOUNDER}.")
+                .SetTextVariable("FOUNDER", action.ActionTaker.EncyclopediaLinkWithName)
+                .SetTextVariable("TITLE", title.FullName),
+                0,
+                null,
+                Utils.Helpers.GetKingdomDecisionSound());
+
+            title.RemoveClaim(action.ActionTaker);
+            ExecuteOwnershipChange(null, action.ActionTaker, title, true);
 
             if (action.Gold > 0)
             {
@@ -494,13 +496,16 @@ namespace BannerKings.Managers
 
             if (action.Influence > 0)
             {
-                action.ActionTaker.Clan.Influence -= action.Influence;
+                GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
             }
 
             if (action.Renown > 0)
             {
-                action.ActionTaker.Clan.Renown -= action.Renown;
+                GainRenownAction.Apply(action.ActionTaker, action.Renown);
             }
+
+            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship,
+                BannerKingsConfig.Instance.TitleModel.GetSkillReward(title.TitleType, action.Type));
         }
 
         public void RevokeTitle(TitleAction action)

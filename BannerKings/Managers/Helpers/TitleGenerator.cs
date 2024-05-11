@@ -6,9 +6,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 using BannerKings.Managers.Titles.Governments;
-using BannerKings.Managers.Skills;
 using BannerKings.UI.Cutscenes;
-using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 
 namespace BannerKings.Managers.Helpers
@@ -44,43 +42,39 @@ namespace BannerKings.Managers.Helpers
 
         public static void FoundKingdom(TitleAction action)
         {
-            var title = CreateKingdom(action.ActionTaker, action.ActionTaker.Clan.Kingdom, TitleType.Kingdom, new List<FeudalTitle>(action.Vassals), action.Title.Contract);
-            action.ActionTaker.Clan.AddRenown(action.Renown);
+            FeudalTitle newTitle = CreateKingdom(action.ActionTaker, action.ActionTaker.Clan.Kingdom, TitleType.Kingdom, new List<FeudalTitle>(action.Vassals), action.Title.Contract);
 
-            action.Title.DriftTitle(title, false);
+            action.Title.DriftTitle(newTitle, false);
             foreach (var vassal in action.Vassals)
             {
-                vassal.DriftTitle(title);
+                vassal.DriftTitle(newTitle);
             }
 
-            action.ActionTaker.ChangeHeroGold(-(int)action.Gold);
-            GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
-            MBInformationManager.AddQuickInformation(new TextObject("{=dFTm4AbE}The {TITLE} has been founded by {FOUNDER}.")
-                    .SetTextVariable("FOUNDER", action.ActionTaker.EncyclopediaLinkWithName)
-                    .SetTextVariable("TITLE", title.FullName),
-                0, null, "event:/ui/notification/relation");
-            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship,
-                BannerKingsConfig.Instance.TitleModel.GetSkillReward(TitleType.Kingdom, action.Type));
+            TitleAction newAction = BannerKingsConfig.Instance.TitleModel.GetFoundKingdom(action.ActionTaker.Clan.Kingdom, 
+                action.ActionTaker);
+            newAction.SetTile(newTitle);
+
+            BannerKingsConfig.Instance.TitleManager.CreateTitle(newAction);
         }
 
         public static void FoundEmpire(TitleAction action, TextObject factionName, string stringId = null, string contractType = null)
         {
             var kingdom = action.ActionTaker.Clan.Kingdom;
             kingdom.ChangeKingdomName(factionName, factionName);
-            var title = CreateEmpire(action.ActionTaker, kingdom, new List<FeudalTitle>(action.Vassals),
+            var newTitle = CreateEmpire(action.ActionTaker, kingdom, new List<FeudalTitle>(action.Vassals),
                 GenerateContract(contractType), stringId);
-            action.ActionTaker.Clan.AddRenown(action.Renown);
 
             foreach (var vassal in action.Vassals)
             {
-                vassal.DriftTitle(title);
+                vassal.DriftTitle(newTitle);
             }
 
-            action.ActionTaker.ChangeHeroGold(-(int)action.Gold);
-            GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
-            MBInformationManager.ShowSceneNotification(new EmpireFoundedScene(kingdom, title));
-            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship,
-                BannerKingsConfig.Instance.TitleModel.GetSkillReward(TitleType.Empire, action.Type));
+            TitleAction newAction = BannerKingsConfig.Instance.TitleModel.GetFoundEmpire(action.ActionTaker.Clan.Kingdom,
+                action.ActionTaker);
+            newAction.SetTile(newTitle);
+
+            BannerKingsConfig.Instance.TitleManager.CreateTitle(newAction);
+            MBInformationManager.ShowSceneNotification(new EmpireFoundedScene(kingdom, newTitle));
         }
 
         private static Hero GetDeJure(string heroId, Settlement settlement)

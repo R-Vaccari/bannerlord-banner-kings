@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BannerKings.Managers.Cultures;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -10,11 +11,23 @@ namespace BannerKings.Managers.Goals.Decisions
 {
     public class FoundKingdomGoal : Goal
     {
-        public FoundKingdomGoal() : base("goal_found_kingdom", GoalCategory.Unique, GoalUpdateType.Hero)
+        public FoundKingdomGoal(Hero fulfiller = null) : base("goal_found_kingdom", fulfiller)
         {
-            var name = new TextObject("{=nbV21qZv}Found Kingdom");
-            var description = new TextObject("{=XpFaiiny}Establish your own kingdom title. This new title will be bound to your Kingdom faction, and represent it in terms of Demesne laws, Succession and Inheritance laws, and all other types of laws attached to titles. Your faction must be one that is not already represented by a sovereign-level title (Kingdom or Empire titles).");
-            Initialize(name, description);
+        }
+
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Kingdom;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            FoundKingdomGoal copy = new FoundKingdomGoal(fulfiller);
+            copy.Initialize(Name, Description);
+            return copy;
         }
 
         public override bool IsAvailable()
@@ -25,22 +38,13 @@ namespace BannerKings.Managers.Goals.Decisions
         public override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
+            Hero fulfiller = GetFulfiller();
+            TitleAction action = BannerKingsConfig.Instance.TitleModel.GetFoundKingdom(fulfiller.Clan.Kingdom, fulfiller);
+            if (!action.Possible)
+            {
+                failedReasons.Add(action.Reason);
+            }
 
-            if (Clan.PlayerClan.Kingdom == null)
-            {
-                failedReasons.Add(new TextObject("{=JDFpx1eN}No kingdom."));
-            }
-            else
-            {
-                var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
-                if (title != null)
-                {
-                    failedReasons.Add(new TextObject("{=TGyoYia6}The realm {REALM} is already represented by a sovereign title ({TITLE})")
-                        .SetTextVariable("REALM", Clan.PlayerClan.Kingdom.Name)
-                        .SetTextVariable("TITLE", title.FullName));
-                }
-            }
-            
             return failedReasons.IsEmpty();
         }
 
@@ -51,16 +55,16 @@ namespace BannerKings.Managers.Goals.Decisions
             var kingdom = clan.Kingdom;
             var action = BannerKingsConfig.Instance.TitleModel.GetFoundKingdom(kingdom, hero);
 
+            CulturalTitleName culturalTitle = DefaultTitleNames.Instance.GetTitleName(hero.Culture, TitleType.Kingdom);
             InformationManager.ShowInquiry(new InquiryData(
                 new TextObject("{=ztoYKWVA}Founding a new Kingdom").ToString(),
-                new TextObject("{=5VhaJ732}Found a new title for your kingdom. The title will legitimize your position and allow the de Jure domain of the kingdom to expand through de Jure drift of dukedoms, as well as extend your influence as a suzerain. Founding a title would increase your clan's renown by {RENOWN}. \n \nCosts: {GOLD} {GOLD_ICON}, {INFLUENCE} {INFLUENCE_ICON} \n\nCan form kingdom: {POSSIBLE} \n\nExplanation: {REASON}")
-                    .SetTextVariable("POSSIBLE", GameTexts.FindText(action.Possible ? "str_yes" : "str_no"))
-                    .SetTextVariable("GOLD", $"{(int) action.Gold:n0}")
-                    .SetTextVariable("INFLUENCE", (int) action.Influence)
-                    .SetTextVariable("INFLUENCE_ICON", "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
-                    .SetTextVariable("RENOWN", action.Renown)
-                    .SetTextVariable("REASON", action.Reason)
-                    .ToString(),
+                new TextObject("{=5VhaJ732}Found a new title for your kingdom. The title will legitimize your position and allow the de Jure domain of the kingdom to expand through de Jure drift of dukedoms, as well as extend your influence as a suzerain. By founding an Empire, you shall be styled as {TITLE}. Founding a title would increase your clan's renown by {RENOWN}.{newline}{newline}Costs: {GOLD} {GOLD_ICON}, {INFLUENCE} {INFLUENCE_ICON}")
+                .SetTextVariable("TITLE", hero.IsFemale ? culturalTitle.Female : culturalTitle.Name)
+                .SetTextVariable("GOLD", $"{(int) action.Gold:n0}")
+                .SetTextVariable("INFLUENCE", (int) action.Influence)
+                .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON)
+                .SetTextVariable("RENOWN", action.Renown)
+                .ToString(),
                 action.Possible,
                 true,
                 GameTexts.FindText("str_accept").ToString(),

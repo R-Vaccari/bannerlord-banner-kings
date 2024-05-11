@@ -520,8 +520,17 @@ namespace BannerKings.UI
                         affirmativeText = new TextObject("{=iLpAKttu}Revoke");
                         break;
                     case ActionType.Create:
+                        FeudalTitle title = titleAction.Title;
+                        CultureObject culture = action.ActionTaker.Culture;
+                        CulturalTitleName culturalName = DefaultTitleNames.Instance.GetTitleName(culture, title.TitleType);
+                        TextObject name = new TextObject("{=wMius2i9}{TITLE} of {NAME}")
+                            .SetTextVariable("TITLE", culturalName.Description)
+                            .SetTextVariable("NAME", title.shortName);
+
                         description =
-                            new TextObject("{=VFTH237z}Creating a title sets you as its legal holder, rather than no legal holder at all. The title's laws, such as Succession and Government laws, will match those of your current primary title.");
+                            new TextObject("{=!}Creating a title sets you as its legal holder, rather than no legal holder at all. The title's laws, such as Succession and Government laws, will match those of your current primary title.{newline}{newline}By creating this title, you shall be styled as {STYLED} (if it will be your highest title), and your new domain named {TITLE}.")
+                                .SetTextVariable("TITLE", name)
+                                .SetTextVariable("STYLED", Hero.MainHero.IsFemale ? culturalName.Female : culturalName.Name);
                         affirmativeText = new TextObject("{=bLwFU6mw}Create");
                         break;
                     case ActionType.Claim:

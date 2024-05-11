@@ -60,7 +60,7 @@ namespace BannerKings.UI.Titles
                     {
                         var createButton = new DecisionElement().SetAsButtonOption(new TextObject("{=bLwFU6mw}Create").ToString(),
                             () => UIHelper.ShowActionPopup(createAction, this),
-                            new TextObject("{=!}"));
+                            new TextObject("{=VFTH237z}Creating a title sets you as its legal holder, rather than no legal holder at all. The title's laws, such as Succession and Government laws, will match those of your current primary title."));
                         createButton.Enabled = createAction.Possible;
                         Decisions.Add(createButton);
                     }

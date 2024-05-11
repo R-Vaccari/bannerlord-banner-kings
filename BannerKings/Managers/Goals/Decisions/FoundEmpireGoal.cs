@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using BannerKings.Managers.Cultures;
+using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -10,11 +12,23 @@ namespace BannerKings.Managers.Goals.Decisions
 {
     public class FoundEmpireGoal : Goal
     {
-        public FoundEmpireGoal() : base("goal_found_kingdom", GoalCategory.Unique, GoalUpdateType.Hero)
+        public FoundEmpireGoal(Hero fulfiller = null) : base("goal_found_empire", fulfiller)
         {
-            var name = new TextObject("{=e0t4jZoO}Found Empire");
-            var description = new TextObject("{=Zi7h8WK3}Found an Empire-level title. An Empire is the highest form of title, ruling over kingdoms. Empires may absorb kingdom titles as their vassals through the process of De Jure Drift.{newline}{newline}");
-            Initialize(name, description);
+        }
+
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Unique;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            FoundEmpireGoal copy = new FoundEmpireGoal(fulfiller);
+            copy.Initialize(Name, Description);
+            return copy;
         }
 
         public override bool IsAvailable() => true;      
@@ -23,24 +37,11 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             failedReasons = new List<TextObject>();
 
-            if (Clan.PlayerClan.Kingdom == null)
+            Hero fulfiller = GetFulfiller();
+            TitleAction action = BannerKingsConfig.Instance.TitleModel.GetFoundEmpire(fulfiller.Clan.Kingdom, fulfiller);
+            if (!action.Possible)
             {
-                failedReasons.Add(new TextObject("{=JDFpx1eN}No kingdom."));
-            }
-            else
-            {
-                var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
-                if (title == null)
-                {
-                    failedReasons.Add(new TextObject("{=eH3B6qgm}The realm {REALM} is not represented by a Kingdom-level title. Found a Kingdom first, and then an Empire.")
-                        .SetTextVariable("REALM", Clan.PlayerClan.Kingdom.Name));
-                }
-                else if (title.TitleType == TitleType.Empire)
-                {
-                    failedReasons.Add(new TextObject("{=F5BEyddZ}Your realm, {REALM} is already attached to the Empire-level title {TITLE}.")
-                            .SetTextVariable("REALM", Clan.PlayerClan.Kingdom.Name)
-                            .SetTextVariable("TITLE", title.FullName));
-                }
+                failedReasons.Add(action.Reason);
             }
             
             return failedReasons.IsEmpty();
@@ -51,67 +52,72 @@ namespace BannerKings.Managers.Goals.Decisions
             var hero = GetFulfiller();
             var clan = hero.Clan;
             var kingdom = clan.Kingdom;
-            var action = BannerKingsConfig.Instance.TitleModel.GetFoundKingdom(kingdom, hero);
+            var action = BannerKingsConfig.Instance.TitleModel.GetFoundEmpire(kingdom, hero);
 
-            InformationManager.ShowInquiry
-            (
-                new InquiryData
-                (
-                    new TextObject("{=thijhbki}Establish a new Title").ToString(),
-                    new TextObject("{=qjD2WwBH}Do you want to establish the title {TITLE}?\nThis will cost you {GOLD}{GOLD_ICON} and {INFLUENCE}{INFLUENCE_ICON}.\nAs a reward your clan will earn {RENOWN} renown.")
-                        .SetTextVariable("TITLE", name)
-                        .SetTextVariable("GOLD", (int)action.Gold)
-                        .SetTextVariable("INFLUENCE", action.Influence)
-                        .SetTextVariable("INFLUENCE_ICON", "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
-                        .SetTextVariable("RENOWN", 100)
-                        .ToString(),
-                    true,
-                    true,
-                    GameTexts.FindText("str_accept").ToString(),
-                    GameTexts.FindText("str_cancel").ToString(),
-                    ApplyGoal,
-                    null
-                ),
-                true
-            );
+            CulturalTitleName culturalTitle = DefaultTitleNames.Instance.GetTitleName(hero.Culture, TitleType.Empire);
+            InformationManager.ShowInquiry(new InquiryData(
+                new TextObject("{=!}Form your {EMPIRE} (1/2)")
+                .SetTextVariable("EMPIRE", culturalTitle.Description)
+                .ToString(),
+                new TextObject("{=!}Empires are the highest possible types of title. Being an Empire holder maximizes your political leverage through increased influence cap, demesne limit, vassal limit, among other benefits. By founding an Empire, you shall be styled as {TITLE}.{newline}{newline}Additionally, founding an Empire-level title shall increase your renown by {RENOWN}.{newline}{newline}Costs: {GOLD} {GOLD_ICON}, {INFLUENCE} {INFLUENCE_ICON}")
+                .SetTextVariable("EMPIRE", culturalTitle.Description)
+                .SetTextVariable("TITLE", hero.IsFemale ? culturalTitle.Female : culturalTitle.Name)
+                .SetTextVariable("GOLD", $"{(int)action.Gold:n0}")
+                .SetTextVariable("INFLUENCE", (int)action.Influence)
+                .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON)
+                .SetTextVariable("RENOWN", action.Renown)
+                .ToString(),
+                true,
+                true,
+                GameTexts.FindText("str_accept", null).ToString(),
+                GameTexts.FindText("str_selection_widget_cancel", null).ToString(),
+                () => ApplyGoal(),
+                null));
         }
 
         public override void ApplyGoal()
         {
             var hero = GetFulfiller();
             var kingdom = hero.Clan.Kingdom;
-            var action = BannerKingsConfig.Instance.TitleModel.GetFoundKingdom(kingdom, hero);
+            var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+            TitleAction action = BannerKingsConfig.Instance.TitleModel.GetFoundEmpire(hero.Clan.Kingdom, hero);
+            action.SetVassals(new List<FeudalTitle>() { title });
 
-            var duchies = new List<InquiryElement>();
-            foreach (var clan in kingdom.Clans)
+            if (hero == Hero.MainHero)
             {
-                var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
-                foreach (var title in titles)
-                {
-                    if (title.TitleType == TitleType.Dukedom)
-                    {
-                        duchies.Add(new InquiryElement(title, title.FullName.ToString(), null));
-                    }
-                }
-            }
-
-            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=miyAGkb6}Founding Dukedom").ToString(),
-                new TextObject("{=AVzvekuX}Select a dukedom that will compose your kingdom. The kingdom's contract will follow this dukedom's contract in terms of Succession, Inheritance and so on. Future dukedoms may be assimilated into the kingdom by the process of De Jure Drift.")
+                CulturalTitleName culturalTitle = DefaultTitleNames.Instance.GetTitleName(hero.Culture, TitleType.Empire);
+                InformationManager.ShowTextInquiry(new TextInquiryData(
+                    new TextObject("{=!}Form your {EMPIRE} (2/2)")
+                    .SetTextVariable("EMPIRE", culturalTitle.Description)
                     .ToString(),
-                duchies,
-                true,
-                1,
-                1,
-                GameTexts.FindText("str_done").ToString(),
-                string.Empty,
-                delegate(List<InquiryElement> list)
-                {
-                    var firstDukedom = (FeudalTitle) list[0].Identifier;
-                    action.SetTile(firstDukedom);
-                    action.TakeAction(null);
-                }, 
-                null));
+                    new TextObject("{=!}By founding an Empire, you shall be styled as {TITLE}. Your empire will need a name. Write down its name, keeping in mind the title's full name will be '{EMPIRE} of [Chosen name]'. Founding an Empire-level title shall increase your renown by {RENOWN}.{newline}{newline}Costs: {GOLD} {GOLD_ICON}, {INFLUENCE} {INFLUENCE_ICON}")
+                    .SetTextVariable("EMPIRE", culturalTitle.Description)
+                    .SetTextVariable("TITLE", hero.IsFemale ? culturalTitle.Female : culturalTitle.Name)
+                    .SetTextVariable("GOLD", $"{(int)action.Gold:n0}")
+                    .SetTextVariable("INFLUENCE", (int)action.Influence)
+                    .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON)
+                    .SetTextVariable("RENOWN", action.Renown)
+                    .ToString(), 
+                    true, 
+                    true, 
+                    GameTexts.FindText("str_accept", null).ToString(), 
+                    GameTexts.FindText("str_selection_widget_cancel", null).ToString(), 
+                    delegate (string name)
+                    {
+                        TitleGenerator.FoundEmpire(action, new TextObject("{=!}" + name));
+                    }, 
+                    null));
+            }
+            else TitleGenerator.FoundEmpire(action, title.shortName);
+        }
+
+        private static (float Gold, float Influence) GetCosts(Hero hero)
+        {
+            return
+            (
+                500000 + BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(hero.Clan).ResultNumber * CampaignTime.DaysInYear,
+                1000 + BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceChange(hero.Clan).ResultNumber * CampaignTime.DaysInYear * 0.1f
+            );
         }
 
         public override void DoAiDecision()
