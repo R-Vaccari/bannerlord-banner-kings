@@ -94,6 +94,12 @@ namespace BannerKings.Models.Vanilla
                     CheckReligionSuitability(proposedReligion, proposerReligion, ref result, secondHero, proposer);
                 }
 
+                if (!isConsort && proposer.Spouse != null && proposer.Spouse.IsAlive)
+                {
+                    result.Add(-1000f, new TextObject("{=!}{HERO} already has a primary spouse")
+                        .SetTextVariable("HERO", proposer.Name));
+                }
+
                 if (!base.IsCoupleSuitableForMarriage(proposer, secondHero))
                 {
                     Hero playerCourting = Romance.GetCourtedHeroInOtherClan(proposer, secondHero);
@@ -171,8 +177,7 @@ namespace BannerKings.Models.Vanilla
             var result = new ExplainedNumber(0f, explanations);
             result.LimitMin(hero.Level * 2f);
 
-            var clan = hero.Clan;
-            var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
+            var clan = hero.Clan;            
             result.Add(clan.Tier * 100f, clan.Name);
             result.Add(hero.Level * 10f, GameTexts.FindText("str_level"));
 
@@ -180,9 +185,9 @@ namespace BannerKings.Models.Vanilla
             {
                 result.Add(150f, GameTexts.FindText("role", "ClanLeader"));
             }
-            else if (title != null)
+            else
             {
-                if (IsClanHeir(title, hero))
+                if (IsClanHeir(hero))
                 {
                     result.Add(100, new TextObject("{=aoD1zKmp}{HERO} is the expected heir to {CLAN}")
                         .SetTextVariable("HERO", hero.Name)
@@ -197,6 +202,7 @@ namespace BannerKings.Models.Vanilla
                     .SetTextVariable("CLAN", clan.Name));
             }
 
+            var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
             if (title != null)
             {
                 result.Add(500f / (1.2f * ((float)title.TitleType + 1)), new TextObject("{=KaxKgMg1}{CLAN} holds {TITLE}")
@@ -249,8 +255,7 @@ namespace BannerKings.Models.Vanilla
             result.Add(GetClanTierDowry(hero.Clan.Tier), hero.Clan.Name);
             result.Add(hero.Level * 2500f, GameTexts.FindText("str_level"));
 
-            var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero.Clan.Leader);
-            if (title != null && IsClanHeir(title, hero))
+            if (IsClanHeir(hero))
             {
                 result.AddFactor(0.5f, new TextObject("{=aoD1zKmp}{HERO} is the expected heir to {CLAN}")
                     .SetTextVariable("HERO", hero.Name)
@@ -336,10 +341,11 @@ namespace BannerKings.Models.Vanilla
             return result * 1.25f;
         }
 
-        public bool IsClanHeir(FeudalTitle title, Hero hero)
+        public bool IsClanHeir(Hero hero)
         {
             var sorted = BannerKingsConfig.Instance.TitleModel.CalculateInheritanceLine(hero.Clan);
-            return sorted.First().Key == hero;
+            if (sorted.IsEmpty()) return false;
+            else return sorted.First().Key == hero;
         }
 
         private float GetPeerageScore(Peerage peerage)
