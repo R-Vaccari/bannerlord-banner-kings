@@ -385,10 +385,9 @@ namespace BannerKings.Models.Vanilla
 
         public override int GetNotableCaravanLimit(Hero notable)
         {
-            Occupation occupation = notable.Occupation;
-            if (occupation == Occupation.Merchant) return 3;
-            else if (occupation == Occupation.Artisan) return 2;
-            else if (occupation == Occupation.GangLeader) return 1;
+            if (notable.IsMerchant) return 3;
+            else if (notable.IsArtisan) return 2;
+            else if (notable.IsGangLeader) return 1;
 
             return 0;
         }

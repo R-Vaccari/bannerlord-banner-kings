@@ -74,7 +74,8 @@ namespace BannerKings.Patches
             [HarmonyPatch("ConditionsHold")]
             private static bool ConditionsHoldPrefix(Hero issueGiver, ref Settlement selectedHideout, ref bool __result)
             {
-                if (issueGiver.CurrentSettlement == null || issueGiver.CurrentSettlement.IsVillage)
+                if (issueGiver.CurrentSettlement == null || issueGiver.CurrentSettlement.IsVillage || 
+                    Utils.Helpers.IsNonBaseGameSettlement(issueGiver.CurrentSettlement))
                 {
                     __result = false;
                     return false;
