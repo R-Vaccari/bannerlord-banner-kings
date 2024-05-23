@@ -351,5 +351,11 @@ namespace BannerKings.Utils
 
             return ConsumptionType.None;
         }
+
+        public static bool IsNonBaseGameSettlement(Settlement s)
+        {
+            return s != null && !s.IsHideout && !s.IsTown && !s.IsVillage && !s.IsCastle 
+                && s.SettlementComponent as RetirementSettlementComponent == null;
+        }
     }
 }

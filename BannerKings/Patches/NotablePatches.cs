@@ -23,6 +23,9 @@ namespace BannerKings.Patches
         {
             private static bool Prefix(Occupation neededOccupation, ref Hero __result, Settlement forcedHomeSettlement = null)
             {
+                if (Utils.Helpers.IsNonBaseGameSettlement(forcedHomeSettlement))
+                    return true;
+                
                 Settlement settlement = forcedHomeSettlement ?? SettlementHelper.GetRandomTown(null);
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 IEnumerable<CharacterObject> enumerable;
@@ -122,6 +125,9 @@ namespace BannerKings.Patches
         {
             private static bool Prefix(Settlement settlement)
             {
+                if (Utils.Helpers.IsNonBaseGameSettlement(settlement))
+                    return true;
+
                 var list = new List<Occupation>();
                 if (settlement.IsTown)
                 {
@@ -203,6 +209,9 @@ namespace BannerKings.Patches
         {
             private static bool Prefix(Settlement settlement)
             {
+                if (Utils.Helpers.IsNonBaseGameSettlement(settlement))
+                    return true;
+
                 if ((settlement.IsTown || settlement.IsCastle) && settlement.Town.Governor != null)
                 {
                     var governor = settlement.Town.Governor;
