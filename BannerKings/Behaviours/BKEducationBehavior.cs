@@ -208,6 +208,9 @@ namespace BannerKings.Behaviours
 
         private void InitializeEducation(Hero hero, bool addExtraLanguages = false)
         {
+            if (Utils.Helpers.IsNonBaseGameSettlement(hero.BornSettlement))
+                return;
+
             Dictionary<Language, float> startingLanguages = null;
             if (hero.Clan != null && hero != hero.Clan.Leader && hero.Clan.Leader != null)
             {

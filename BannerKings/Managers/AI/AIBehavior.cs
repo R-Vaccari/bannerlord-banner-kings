@@ -215,17 +215,17 @@ namespace BannerKings.Managers.AI
                         {
                             if (hero.IsNotable)
                             {
-                                if (occupation == Occupation.GangLeader)
+                                if (hero.IsGangLeader)
                                 {
                                     rogueWeight += 2;
                                 }
 
-                                if (occupation == Occupation.Artisan)
+                                if (hero.IsArtisan)
                                 {
                                     artisanWeight += 2;
                                 }
 
-                                if (occupation == Occupation.Merchant)
+                                if (hero.IsMerchant)
                                 {
                                     merchantWeight += 2;
                                 }

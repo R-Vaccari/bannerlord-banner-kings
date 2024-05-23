@@ -142,7 +142,8 @@ namespace BannerKings.Behaviours.PartyNeeds
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
             if (target == null || party == null || hero == null || !party.IsLordParty ||
-                hero == Hero.MainHero || (!target.IsVillage && target.IsFortification))
+                hero == Hero.MainHero || (!target.IsVillage && target.IsFortification) || 
+                Utils.Helpers.IsNonBaseGameSettlement(target))
             {
                 return;
             }
