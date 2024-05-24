@@ -60,6 +60,9 @@ namespace BannerKings.UI.Extensions
             PlayerFatigueHeader = new TextObject("{=0ksQ2otA}Our Fatigue").ToString();
             EnemyFatigueHeader = new TextObject("{=eesjwvUR}Enemy Fatigue").ToString();
 
+            Kingdom currentKingdom = kingdomDiplomacy.CurrentSelectedDiplomacyItem.Faction1 as Kingdom;
+            Kingdom targetKingdom = kingdomDiplomacy.CurrentSelectedDiplomacyItem.Faction2 as Kingdom;
+
             if (war != null)
             {
                 WarExists = true;
@@ -99,8 +102,6 @@ namespace BannerKings.UI.Extensions
             else if (kingdomDiplomacy.CurrentSelectedDiplomacyItem is KingdomTruceItemVM)
             {
                 PeaceExists = true;
-                Kingdom currentKingdom = kingdomDiplomacy.CurrentSelectedDiplomacyItem.Faction1 as Kingdom;
-                Kingdom targetKingdom = kingdomDiplomacy.CurrentSelectedDiplomacyItem.Faction2 as Kingdom;
                 var bkDiplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(currentKingdom);
                 
                 if (bkDiplomacy.HasTradePact(targetKingdom))
@@ -129,12 +130,8 @@ namespace BannerKings.UI.Extensions
                 }
                 else
                 {
-                    AllianceText = new TextObject("None").ToString();
+                    AllianceText = new TextObject("{=!}None").ToString();
                 }
-
-
-                KingdomElection election = new KingdomElection(new BKDeclareWarDecision(null, currentKingdom.RulingClan, targetKingdom));
-                WarSupportText = UIHelper.FormatValue(election.GetLikelihoodForOutcome(0));
 
                 TradePactHint = new BasicTooltipViewModel(() =>
                 {
@@ -142,8 +139,11 @@ namespace BannerKings.UI.Extensions
                 });
 
                 AllianceHint = new BasicTooltipViewModel(() => UIHelper.GetAllianceHint(currentKingdom, targetKingdom));
-                WarSupportHint = new BasicTooltipViewModel(() => UIHelper.GetWarSupportHint(currentKingdom, targetKingdom));
             }
+
+            KingdomElection election = new KingdomElection(new BKDeclareWarDecision(null, currentKingdom.RulingClan, targetKingdom));
+            WarSupportText = UIHelper.FormatValue(election.GetLikelihoodForOutcome(0));
+            WarSupportHint = new BasicTooltipViewModel(() => UIHelper.GetWarSupportHint(currentKingdom, targetKingdom));
         }
 
         [DataSourceProperty]
