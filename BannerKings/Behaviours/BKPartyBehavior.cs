@@ -283,10 +283,7 @@ namespace BannerKings.Behaviours
 
         private void DailySettlementTick(Settlement settlement)
         {
-            if (settlement == null || !settlement.IsTown)
-            {
-                return;
-            }
+            if (settlement == null || settlement.Town == null) return;    
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_slaves_export") &&
                 DecideSendSlaveCaravan(settlement) && !settlement.IsUnderSiege)
