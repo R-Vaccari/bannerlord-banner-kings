@@ -1,6 +1,7 @@
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Titles;
 using BannerKings.Utils.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -140,67 +141,48 @@ namespace BannerKings.Behaviours.Diplomacy
         {
             var list = new List<CasusBelli>();
 
-            foreach (CasusBelli justification in DefaultCasusBelli.Instance.All)
+            foreach (CasusBelli cb in DefaultCasusBelli.Instance.All)
             {
+                CasusBelli justification = cb.GetCopy();
+                if (justification.RequiresFief && !justification.RequiresClaimant)
+                {
+                    foreach (var fief in targetKingdom.Fiefs)
+                    {
+                        CasusBelli c = justification.GetCopy();
+                        c.SetInstanceData(Kingdom, targetKingdom, fief.Settlement);
+                        if (c.IsAdequate(Kingdom, c.Defender, c))
+                            list.Add(c);
+                    }
+
+                    continue;
+                }
+
                 if (justification.RequiresClaimant)
                 {
-                    if (justification.RequiresFief)
+                    foreach (FeudalTitle title in BannerKingsConfig.Instance.TitleManager.AllTitles)
                     {
-                        foreach (var fief in targetKingdom.Fiefs)
+                        if (title.deJure != null && title.deJure.MapFaction != null && title.deJure.MapFaction == targetKingdom)
                         {
                             foreach (Clan clan in Kingdom.Clans)
                             {
                                 if (clan.IsUnderMercenaryService) continue;
 
-                                justification.SetInstanceData(Kingdom, targetKingdom, 
-                                    BannerKingsConfig.Instance.TitleManager.GetTitle(fief.Settlement), 
+                                CasusBelli c = justification.GetCopy();
+                                c.SetInstanceData(Kingdom,
+                                    targetKingdom,
+                                    title,
                                     clan.Leader);
-                                if (justification.IsAdequate(Kingdom, justification.Defender, justification))
-                                    list.Add(justification);
+
+                                if (c.IsAdequate(Kingdom, c.Defender, c))
+                                    list.Add(c);
                             }
                         }
-
-                        continue;
                     }
-
-                    foreach (Clan clan in Kingdom.Clans)
-                    {
-                        if (clan.IsUnderMercenaryService) continue;
-
-                        justification.SetInstanceData(Kingdom, targetKingdom, null, clan.Leader);
-                        if (justification.IsAdequate(Kingdom, justification.Defender, justification))
-                            list.Add(justification);
-                    }
-                    
-                    continue;
                 }
 
-                if (justification.RequiresFief)
-                {
-                    foreach (var fief in targetKingdom.Fiefs)
-                    {
-                        justification.SetInstanceData(Kingdom, targetKingdom, fief.Settlement);
-                        if (justification.IsAdequate(Kingdom, justification.Defender, justification))
-                            list.Add(justification);
-                    }
-
-                    continue;
-                }
-                
                 justification.SetInstanceData(Kingdom, targetKingdom);
                 if (justification.IsAdequate(Kingdom, targetKingdom, justification))
                     list.Add(justification);          
-            }
-
-            foreach (CasusBelli justification in DefaultCasusBelli.Instance.All)
-            {
-                if (!justification.RequiresFief) continue;
-                foreach (var fief in targetKingdom.Fiefs)
-                {
-                    justification.SetInstanceData(Kingdom, targetKingdom, fief.Settlement);
-                    if (justification.IsAdequate(Kingdom, justification.Defender, justification))
-                        list.Add(justification);
-                }
             }
 
             return list;

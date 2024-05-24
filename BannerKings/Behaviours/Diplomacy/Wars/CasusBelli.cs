@@ -61,9 +61,23 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         public CasusBelli GetCopy()
         {
             var copy = new CasusBelli(StringId);
-            copy.Initialize(Name, Description, ObjectiveText, ConquestWeight, RaidWeight, CaptureWeight,
-                DeclareWarScore, IsFulfilled, IsInvalid, IsAdequate, ShowAsOption, 
-                TraitWeights, warDeclaredText);
+            copy.Initialize(Name, 
+                Description, 
+                ObjectiveText, 
+                ConquestWeight, 
+                RaidWeight, 
+                CaptureWeight,
+                DeclareWarScore, 
+                IsFulfilled, 
+                IsInvalid, 
+                IsAdequate, 
+                ShowAsOption, 
+                TraitWeights, 
+                warDeclaredText,
+                RequiresFief,
+                RequiresClaimant,
+                onStart,
+                onFinish);
             return copy;
         }
 
