@@ -143,7 +143,6 @@ namespace BannerKings.Models.Vanilla
             }
 
             var kingdom = clan.Kingdom;
-            int totalWorkshopTaxes = 0;
             int totalNotablesAids = 0;
             foreach (var town in clan.Fiefs)
             {

@@ -357,9 +357,7 @@ namespace BannerKings.Models.Vanilla
         public override ExplainedNumber GetMerchantIncome(Town town, bool explanations = false)
         {
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-            if (data == null) return new ExplainedNumber(base.GetTownGoldChange(town));
-
-            ExplainedNumber result = new ExplainedNumber(town.Prosperity / 3.5f, explanations);
+            ExplainedNumber result = new ExplainedNumber(town.Prosperity / 1.5f, explanations);
             float slaves = data.GetTypeCount(PopType.Slaves);
             var privateSlaves = slaves * (1f - data.EconomicData.StateSlaves);
             var tax = 0.05f;
