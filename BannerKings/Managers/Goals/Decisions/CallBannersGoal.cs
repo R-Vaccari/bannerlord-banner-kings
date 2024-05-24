@@ -22,12 +22,24 @@ namespace BannerKings.Managers.Goals.Decisions
         List<BannerOption> allBanners = new List<BannerOption>();
         List<InquiryElement> elements = new List<InquiryElement>();
 
-        public CallBannersGoal(Hero fulfiller = null) : base("goal_found_kingdom", GoalCategory.Kingdom, GoalUpdateType.Hero, fulfiller)
+        public CallBannersGoal(Hero fulfiller = null) : base("goal_found_kingdom", fulfiller)
         {
-            var name = new TextObject("{=zzjbxN9h}Call Banners");
-            var description = new TextObject("Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title.");
-            Initialize(name, description);
-            Refresh();
+        }
+
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Kingdom;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            CallBannersGoal copy = new CallBannersGoal(fulfiller);
+            copy.Initialize(Name, Description);
+            copy.Refresh();
+            return copy;
         }
 
         public override bool IsAvailable()
@@ -260,7 +272,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 return;
             }
 
-            if (IsFulfilled(out List<TextObject> reasons))
+            if (!IsFulfilled(out List<TextObject> reasons))
             {
                 return;
             }
@@ -284,7 +296,6 @@ namespace BannerKings.Managers.Goals.Decisions
 
             ApplyGoal();
         }
-
         private class BannerOption
         {
             public BannerOption(Hero clan, float influence, MobileParty party, Estate estate = null)

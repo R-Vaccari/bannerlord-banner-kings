@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Helpers;
-using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Extensions;
@@ -12,17 +11,26 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
-    internal class CalradicEmpireGoal : Goal
+    public class CalradicEmpireGoal : Goal
     {
-        private readonly List<Settlement> settlements;
+        private List<Settlement> settlements;
 
-        public CalradicEmpireGoal() : base("goal_calradic_empire", GoalCategory.Unique, GoalUpdateType.Settlement)
+        public CalradicEmpireGoal(Hero fulfiller = null) : base("goal_calradic_empire", fulfiller)
         {
-            var name = new TextObject("{=cZzO6kya}Reform the Imperium Calradium");
-            var description = new TextObject("{=WCde02Um}Reestablish the former Calradian Empire. The Empire spanned most of the continent before emperor Arenicos died without a clear heir. By reforming the empire, you crush the validity of claimants, and ahead of you lies a new path for greatness. You must bring all imperial duchies under control of your realm.\n\n");
+        }
 
-            Initialize(name, description);
+        public override bool TickClanLeaders => true;
 
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Unique;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            CalradicEmpireGoal copy = new CalradicEmpireGoal(fulfiller);
+            copy.Initialize(Name, Description);
             var duchyStringIds = new List<string>
             {
                 "Lakonia",
@@ -37,10 +45,11 @@ namespace BannerKings.Managers.Goals.Decisions
                 "Tanaesis"
             };
 
-            settlements = BannerKingsConfig.Instance.TitleManager.GetAllTitlesByType(TitleType.Dukedom)
+            copy.settlements = BannerKingsConfig.Instance.TitleManager.GetAllTitlesByType(TitleType.Dukedom)
                 .Where(t => duchyStringIds.Contains(t.shortName.ToString()))
                 .SelectMany(t => t.Vassals.Select(v => v.Fief))
                 .ToList();
+            return copy;
         }
 
         public override bool IsAvailable()

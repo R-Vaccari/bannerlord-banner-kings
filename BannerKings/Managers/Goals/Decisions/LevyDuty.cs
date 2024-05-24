@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Titles;
@@ -5,6 +6,7 @@ using BannerKings.Managers.Titles.Governments;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
@@ -13,10 +15,24 @@ namespace BannerKings.Managers.Goals.Decisions
     {
         private ContractDuty duty;
         private Hero vassal;
-        public LevyDuty(Hero fulfiller = null) : base("LevyDuty", GoalCategory.Kingdom, GoalUpdateType.Hero, fulfiller)
+
+        public LevyDuty(Hero fulfiller = null) : base("goal_levy_duty", fulfiller)
         {
-            Initialize(new TextObject("{=C8eDVQJw}Levy Duty"),
-                new TextObject("{=C8eDVQJw}Levy Duty"));
+        }
+
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Kingdom;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            LevyDuty copy = new LevyDuty(fulfiller);
+            copy.Initialize(Name, Description);
+            return copy;
         }
 
         public override bool IsAvailable()
@@ -139,10 +155,42 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public override void DoAiDecision()
         {
-            Hero fulfiller = GetFulfiller();
-           
+            if (!IsFulfilled(out var reasons)) return;
 
-            ApplyGoal();
+            Hero fulfiller = GetFulfiller();
+            MBList<ValueTuple<Hero, float>> heroes = new MBList<(Hero, float)>();
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(fulfiller.Clan.Kingdom);
+            foreach (var vassal in BannerKingsConfig.Instance.TitleManager.CalculateAllVassals(fulfiller.Clan))
+            {
+                heroes.Add(new ValueTuple<Hero, float>(vassal, 1f));
+            }
+
+            Hero hero = MBRandom.ChooseWeighted(heroes);
+            if (hero != null)
+            {
+                List<ContractDuty> dutyOptions = new List<ContractDuty>();
+                foreach (var aspect in title.Contract.ContractAspects)
+                {
+                    if (aspect is ContractDuty)
+                    {
+                        bool available = true;
+                        ContractDuty contractDuty = (ContractDuty)aspect;
+                        FeudalTitle vassalHighest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
+                        if (vassalHighest == null || vassalHighest.HasTimePassedForDuty(contractDuty) || contractDuty.CanFulfill(fulfiller, vassal))
+                        {
+                            available = false;
+                        }
+
+                        if (available) dutyOptions.Add(contractDuty);
+                    }
+                }
+
+                if (dutyOptions.Count > 0)
+                {
+                    duty = dutyOptions.GetRandomElement();
+                    ApplyGoal();
+                }
+            }
         }
     }
 }

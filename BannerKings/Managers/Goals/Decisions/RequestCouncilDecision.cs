@@ -8,16 +8,27 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
-    internal class RequestCouncilDecision : Goal
+    public class RequestCouncilDecision : Goal
     {
         private CouncilAction chosenAction;
 
-        public RequestCouncilDecision() : base("goal_request_council_decision", GoalCategory.Kingdom, GoalUpdateType.Manual)
+        public RequestCouncilDecision(Hero fulfiller = null) : base("goal_request_council_decision", fulfiller)
         {
-            var name = new TextObject("{=oBxXQmTb}Request Council Position");
-            var description = new TextObject("{=7aLyDGEt}Request a position in your suzerain's council.");
+        }
 
-            Initialize(name, description);
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Kingdom;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            RequestCouncilDecision copy = new RequestCouncilDecision(fulfiller);
+            copy.Initialize(Name, Description);
+            return copy;
         }
 
         public override bool IsAvailable()

@@ -28,6 +28,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public override Goal GetCopy(Hero fulfiller)
         {
             FaithLeaderDecision copy = new FaithLeaderDecision(fulfiller);
+            copy.Initialize(Name, Description);
             return copy;
         }
 

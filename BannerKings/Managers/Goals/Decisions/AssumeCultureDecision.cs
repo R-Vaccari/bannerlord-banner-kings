@@ -7,16 +7,27 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
-    internal class AssumeCultureDecision : Goal
+    public class AssumeCultureDecision : Goal
     {
         private CultureObject culture;
 
-        public AssumeCultureDecision() : base("goal_assume_cukture_decision", GoalCategory.Personal, GoalUpdateType.Manual)
+        public AssumeCultureDecision(Hero fulfiller = null) : base("goal_assume_culture_decision", fulfiller)
         {
-            var name = new TextObject("{=LcqUwqJz}Assume Culture");
-            var description = new TextObject("{=XCancyYB}Assume a culture different than your current. Cultures can be assumed from settlements, your spouse or your faction leader. Direct family members will assume the culture as well. Assuming a culture yields a significant negative impact on clan renown.\n\n");
+        }
 
-            Initialize(name, description);
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Personal;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            AssumeCultureDecision copy = new AssumeCultureDecision(fulfiller);
+            copy.Initialize(Name, Description);
+            return copy;
         }
 
         private HashSet<CultureObject> GetCultureOptions()
@@ -119,7 +130,6 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public override void DoAiDecision()
         {
-            throw new NotImplementedException();
         }
     }
 }

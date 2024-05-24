@@ -1,7 +1,5 @@
 using BannerKings.Managers.Kingdoms.Peerage;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Election;
@@ -11,14 +9,25 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
-    internal class RequestPeerageDecision : Goal
+    public class RequestPeerageDecision : Goal
     {
-        public RequestPeerageDecision(Hero fulfiller = null) : base("goal_request_peerage_decision", GoalCategory.Kingdom, GoalUpdateType.Manual)
+        public RequestPeerageDecision(Hero fulfiller = null) : base("goal_request_peerage_decision", fulfiller)
         {
-            var name = new TextObject("{=sdpM1PD3}Request Full Peerage");
-            var description = new TextObject("{=O7LLRFEX}Request the recognition of your family as a full Peer of the realm. A full Peer does not have legal restrictions on voting, starting elections, granting knighthood, hosting a council or being awarded fiefs. They are the very top of the realm's nobility. Successfully requesting Peerage will require renown (clan tier 4 minimum is recommended) and having good relations with full Peers. Holding property (caravans, workshops, estates, lordships) is a good positive factor as well.\n");
-            Fulfiller = fulfiller;
-            Initialize(name, description);
+        }
+
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Kingdom;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            RequestPeerageDecision copy = new RequestPeerageDecision(fulfiller);
+            copy.Initialize(Name, Description);
+            return copy;
         }
 
         public override bool IsAvailable()

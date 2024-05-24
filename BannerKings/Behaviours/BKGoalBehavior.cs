@@ -1,14 +1,10 @@
-﻿using BannerKings.Managers;
-using BannerKings.Managers.Goals;
+﻿using BannerKings.Managers.Goals;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Behaviours
 {
-    internal class BKGoalBehavior : CampaignBehaviorBase
+    public class BKGoalBehavior : CampaignBehaviorBase
     {
-        private static GoalManager GoalManager => BannerKingsConfig.Instance.GoalManager;
-
         public override void SyncData(IDataStore dataStore)
         {
 
@@ -18,8 +14,7 @@ namespace BannerKings.Behaviours
         {
             CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCreationEnded);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
-            //CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTickHeroEvent);
-            //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, OnDailyTickSettlementEvent);
+            CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTickHeroEvent);
         }
 
         private void OnCreationEnded()
@@ -34,12 +29,19 @@ namespace BannerKings.Behaviours
 
         private void OnDailyTickHeroEvent(Hero hero)
         {
-            GoalManager.UpdateHeroGoals();
-        }
+            bool notable = hero.IsNotable;
+            bool clan = hero.Clan != null;
+            bool leader = clan && hero.Clan.Leader != hero;
+            bool clanMember = clan && !leader;
+            foreach (Goal goal in DefaultGoals.Instance.All)
+            {
+                bool run = false;
+                if (notable && goal.TickNotables) run = true;
+                else if (clanMember && goal.TickClanMembers) run = true;
+                else if (leader && goal.TickClanLeaders) run = true;
 
-        private void OnDailyTickSettlementEvent(Settlement settlement)
-        {
-            GoalManager.UpdateSettlementGoals();
+                if (run) goal.GetCopy(hero).DoAiDecision();
+            }
         }
     }
 }

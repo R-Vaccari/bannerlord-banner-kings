@@ -13,18 +13,30 @@ using static BannerKings.Behaviours.Feasts.Feast;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
-    internal class OrganizeFeastDecision : Goal
+    public class OrganizeFeastDecision : Goal
     {
         private Town feastPlace;
         private List<Clan> guests;
         private float influenceCost;
         private FeastType type;
-        public OrganizeFeastDecision(Hero fulfiller = null, FeastType type = FeastType.Normal) : base("goal_organize_feast_decision", GoalCategory.Kingdom, GoalUpdateType.Manual, fulfiller)
-        {
-            var name = new TextObject("{=RH2NC5ij}Organize Feast");
-            var description = new TextObject("{=8XXOBM1L}Organize a feast. Summon lords of the realm to one of your towns or castles, and celebrate with bountiful food. Feasts are an opportunity to improve relations with your Peers. However, some planning is necessary - you don't want your guests out of food or alcohol! Despite all planning, some unfortunate events may occur...\n");
 
-            Initialize(name, description);
+        public OrganizeFeastDecision(Hero fulfiller = null, Behaviours.Feasts.Feast.FeastType type = FeastType.Normal) : base("goal_organize_feast_decision", fulfiller)
+        {
+        }
+
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Kingdom;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            OrganizeFeastDecision copy = new OrganizeFeastDecision(fulfiller);
+            copy.Initialize(Name, Description);
+            return copy;
         }
 
         public override bool IsAvailable()

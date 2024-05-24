@@ -6,16 +6,23 @@ namespace BannerKings.Managers.Goals
 {
     public abstract class Goal : BannerKingsObject
     {
-        public readonly GoalUpdateType goalUpdateType;
-        public readonly GoalCategory goalType;
-        protected Hero Fulfiller;
-
-        public Goal(string stringId, GoalCategory goalType, GoalUpdateType goalUpdateType, Hero fulfiller = null) : base(stringId)
+        public Goal(string stringId, Hero fulfiller = null) : base(stringId)
         {
-            this.goalType = goalType;
-            this.goalUpdateType = goalUpdateType;
             Fulfiller = fulfiller;
         }
+
+        protected void FinishGoal()
+        {
+            BannerKingsConfig.Instance.GoalManager.AddGoal(Fulfiller, this);
+        }
+
+        public abstract Goal GetCopy(Hero fulfiller);
+
+        protected Hero Fulfiller { get; set; }
+        public abstract bool TickClanLeaders { get; }
+        public abstract bool TickClanMembers { get; }
+        public abstract bool TickNotables { get; }
+        public abstract GoalCategory Category { get; }
 
         public List<TextObject> FailedReasons
         {

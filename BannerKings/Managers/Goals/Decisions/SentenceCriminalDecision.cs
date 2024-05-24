@@ -13,11 +13,23 @@ namespace BannerKings.Managers.Goals.Decisions
         private CriminalSentence sentence;
         private Crime crime;
 
-        public SentenceCriminalDecision(Hero fulfiller = null) : base("goal_sentence_criminal",
-            GoalCategory.Kingdom, GoalUpdateType.Hero, fulfiller)
+        public SentenceCriminalDecision(Hero fulfiller = null) : base("goal_sentence_criminal", fulfiller)
         {
-            Initialize(new TextObject("{=pKoKaKNd}Sentence Criminal"),
-                new TextObject("{=R6X7JFKz}As a Peer within a realm, you are able to sentence those found to be criminals that you hold within your dungeons."));
+        }
+
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Criminal;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            SentenceCriminalDecision copy = new SentenceCriminalDecision(fulfiller);
+            copy.Initialize(Name, Description);
+            return copy;
         }
 
         public override void DoAiDecision()

@@ -14,14 +14,24 @@ namespace BannerKings.Managers.Goals.Decisions
         private BKEducationBehavior behavior;
         private BookType book;
 
-        public AcquireBookDecision() : base("goal_acquire_book", GoalCategory.Personal, GoalUpdateType.Manual)
+        public AcquireBookDecision(Hero fulfiller = null) : base("goal_acquire_book", fulfiller)
         {
-            var name = new TextObject("{=DNAVAvqp}Acquire Book");
-            var description = new TextObject("{=b4tSEcHn}Acquire a book from local book seller. Books can be read for skill improvements and progression in Scholarship.");
-
-            Initialize(name, description);
-
             behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKEducationBehavior>();
+        }
+
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Personal;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            AcquireBookDecision copy = new AcquireBookDecision(fulfiller);
+            copy.Initialize(Name, Description);
+            return copy;
         }
 
         public override bool IsAvailable() => true;

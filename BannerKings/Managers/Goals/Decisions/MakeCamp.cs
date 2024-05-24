@@ -9,10 +9,23 @@ namespace BannerKings.Managers.Goals.Decisions
 {
     public class MakeCamp : Goal
     {
-        public MakeCamp(Hero fulfiller = null) : base("MakeCamp", GoalCategory.Personal, GoalUpdateType.Hero, fulfiller)
+        public MakeCamp(Hero fulfiller = null) : base("goal_camp", fulfiller)
         {
-            Initialize(new TextObject("{=XRknzX3j}Make Camp"),
-                new TextObject("{=C8eDVQJw}Levy Duty"));
+        }
+
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => true;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Personal;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            MakeCamp copy = new MakeCamp(fulfiller);
+            copy.Initialize(Name, Description);
+            return copy;
         }
 
         public override bool IsAvailable() => true;

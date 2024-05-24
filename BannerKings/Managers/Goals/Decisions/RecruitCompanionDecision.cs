@@ -9,19 +9,30 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
-    internal class RecruitCompanionDecision : Goal
+    public class RecruitCompanionDecision : Goal
     {
         private List<CompanionType> companionTypes;
         private CompanionType selectedCompanionType;
         private CultureObject selectedCulture;
 
-        public RecruitCompanionDecision() : base("goal_recruit_companion_decision", GoalCategory.Personal, GoalUpdateType.Manual)
+        public RecruitCompanionDecision(Hero fulfiller = null) : base("goal_recruit_companion_decision", fulfiller)
         {
-            var name = new TextObject("{=HcGkCnSH}Seek Guests");
-            var description = new TextObject("{=Ug94AACX}Invite guests to your court. They will live within your court for some time, where you can reliably find them. Seeking out guests costs influence relative to your House's position. Guests of different cultures and expertises can be sought out, for different costs.");
-
-            Initialize(name, description);
             companionTypes = new List<CompanionType>();
+        }
+
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Personal;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            RecruitCompanionDecision copy = new RecruitCompanionDecision(fulfiller);
+            copy.Initialize(Name, Description);
+            return copy;
         }
 
         private void UpdateTypes()

@@ -10,16 +10,27 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
-    internal class DemesneLawChangeDecision : Goal
+    public class DemesneLawChangeDecision : Goal
     {
         private LawChangeOption chosenAction;
 
-        public DemesneLawChangeDecision() : base("goal_contract_law_change", GoalCategory.Kingdom, GoalUpdateType.Manual)
+        public DemesneLawChangeDecision(Hero fulfiller = null) : base("goal_contract_law_change", fulfiller)
         {
-            var name = new TextObject("{=YgefyGT4}Propose Demesne Law Change");
-            var description = new TextObject("{=Ba2hpnco}Propose a contract change to your faction's titles.");
+        }
 
-            Initialize(name, description);
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Kingdom;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            DemesneLawChangeDecision copy = new DemesneLawChangeDecision(fulfiller);
+            copy.Initialize(Name, Description);
+            return copy;
         }
 
         public override bool IsAvailable()

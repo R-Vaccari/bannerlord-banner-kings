@@ -8,16 +8,27 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
-    internal class MoveCourtDecision : Goal
+    public class MoveCourtDecision : Goal
     {
         private Town town;
 
-        public MoveCourtDecision() : base("goal_move_court", GoalCategory.Personal, GoalUpdateType.Manual)
+        public MoveCourtDecision(Hero fulfiller = null) : base("goal_move_court", fulfiller)
         {
-            var name = new TextObject("{=v094GOtN}Relocate Court");
-            var description = new TextObject("{=ojVEsng4}Relocate your House's court to a different castle or town.");
+        }
 
-            Initialize(name, description);
+        public override bool TickClanLeaders => true;
+
+        public override bool TickClanMembers => false;
+
+        public override bool TickNotables => false;
+
+        public override GoalCategory Category => GoalCategory.Personal;
+
+        public override Goal GetCopy(Hero fulfiller)
+        {
+            MoveCourtDecision copy = new MoveCourtDecision(fulfiller);
+            copy.Initialize(Name, Description);
+            return copy;
         }
 
         public override bool IsAvailable()
