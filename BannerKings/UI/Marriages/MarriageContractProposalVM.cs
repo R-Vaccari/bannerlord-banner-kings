@@ -204,7 +204,7 @@ namespace BannerKings.UI.Marriages
             }
 
             bool canHaveCosorts = false;
-            if (ProposedHero != null)
+            if (ProposerHero != null)
             {
                 Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(ProposerHero.Hero);
                 if (religion != null)
