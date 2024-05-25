@@ -1,10 +1,10 @@
+using BannerKings.Extensions;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Populations;
 using BannerKings.UI.VanillaTabs.TownManagement;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using HarmonyLib;
-using Mono.Cecil.Cil;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -19,16 +19,14 @@ namespace BannerKings.UI.Extensions
     [ViewModelMixin("RefreshTownManagementStats")]
     public class TownManagementMixin : BaseViewModelMixin<TownManagementVM>
     {
-        private readonly TownManagementVM townManagement;
         private MBBindingList<MaterialItemVM> materials;
         private bool missingPolicy, missingMaterials, missingGovernor;
         private PopulationData data;
 
         public TownManagementMixin(TownManagementVM vm) : base(vm)
         {
-            townManagement = vm;
             materials = new MBBindingList<MaterialItemVM>();
-            data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
+            data = Settlement.CurrentSettlement.PopulationData();
         }
 
         [DataSourceProperty] public string ArmorText => new TextObject("{=h40bm0cG}Craft").ToString();
@@ -38,6 +36,7 @@ namespace BannerKings.UI.Extensions
 
         public override void OnRefresh()
         {
+            ViewModel.IsTown = true;
             Materials.Clear();
             MissingPolicy = !BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
                 (int)WorkforcePolicy.Construction);
