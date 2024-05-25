@@ -24,30 +24,22 @@ namespace BannerKings.Managers
             return time;
         }
 
+        public void AddGoal(Hero fulfiller, Goal goal)
+        {
+            if (!heroGoals.ContainsKey(fulfiller)) heroGoals[fulfiller] = new Dictionary<Goal, CampaignTime>(1);
+            heroGoals[fulfiller].Add(goal, CampaignTime.Now);
+        }
+
         public GoalManager()
         {
             heroGoals = new Dictionary<Hero, Dictionary<Goal, CampaignTime>>(50);
             PostInitialize();
         }
 
-        private static IEnumerable<Goal> AvailableGoals => DefaultGoals.Instance.All;
-
         public void PostInitialize()
         {
             if (heroGoals == null) heroGoals = new Dictionary<Hero, Dictionary<Goal, CampaignTime>>(50);
             DefaultGoals.Instance.Initialize();
-        }
-
-        public static void UpdateHeroGoals()
-        {
-            var goals = AvailableGoals.Where(goal => goal.goalUpdateType == GoalUpdateType.Hero).ToList();
-            UpdateGoals(goals);
-        }
-
-        public static void UpdateSettlementGoals()
-        {
-            var goals = AvailableGoals.Where(goal => goal.goalUpdateType == GoalUpdateType.Settlement).ToList();
-            UpdateGoals(goals);
         }
 
         private static void UpdateGoals(IEnumerable<Goal> goals)

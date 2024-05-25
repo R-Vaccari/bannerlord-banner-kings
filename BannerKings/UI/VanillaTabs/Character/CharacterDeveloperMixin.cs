@@ -7,6 +7,7 @@ using Bannerlord.UIExtenderEx.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -134,8 +135,9 @@ namespace BannerKings.UI.VanillaTabs.Character
             var criminalDecisions = new List<InquiryElement>();
             var uniqueDecisions = new List<InquiryElement>();
 
-            foreach (var goal in DefaultGoals.Instance.All)
+            foreach (var template in DefaultGoals.Instance.All)
             {
+                Goal goal = template.GetCopy(Hero.MainHero);
                 if (goal.IsAvailable())
                 {
                     var enabled = goal.IsFulfilled(out var reasons);
@@ -152,19 +154,19 @@ namespace BannerKings.UI.VanillaTabs.Character
                         enabled,
                         hint);
 
-                    if (goal.goalType == GoalCategory.Personal)
+                    if (goal.Category == GoalCategory.Personal)
                     {
                         personalDecisions.Add(element);
                     }
-                    else if (goal.goalType == GoalCategory.Kingdom)
+                    else if (goal.Category == GoalCategory.Kingdom)
                     {
                         kingdomDecisions.Add(element);
                     }
-                    else if (goal.goalType == GoalCategory.Religious)
+                    else if (goal.Category == GoalCategory.Religious)
                     {
                         religiousDecisions.Add(element);
                     }
-                    else if (goal.goalType == GoalCategory.Criminal)
+                    else if (goal.Category == GoalCategory.Criminal)
                     {
                         criminalDecisions.Add(element);
                     }
@@ -195,7 +197,7 @@ namespace BannerKings.UI.VanillaTabs.Character
             kingdomDecisions.Count > 0,
             new TextObject("{=Tcir35E5}Kingdom decisions affect your realm as a whole or your family's position in the realm.").ToString()));
 
-            /*options.Add(new InquiryElement(
+            options.Add(new InquiryElement(
             new DecisionCategoryOption(
                 new TextObject("{=8uURr54W}Religious"),
                 new TextObject("{=8uURr54W}Religious decisions are ways for you interact with the world through your faith."),
@@ -203,7 +205,7 @@ namespace BannerKings.UI.VanillaTabs.Character
             new TextObject("{=8uURr54W}Religious").ToString(),
             null,
             religiousDecisions.Count > 0,
-            new TextObject("{=8uURr54W}Religious decisions are ways for you interact with the world through your faith.").ToString()));*/
+            new TextObject("{=8uURr54W}Religious decisions are ways for you interact with the world through your faith.").ToString()));
 
             options.Add(new InquiryElement(
             new DecisionCategoryOption(
