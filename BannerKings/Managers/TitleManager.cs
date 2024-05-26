@@ -931,6 +931,8 @@ namespace BannerKings.Managers
 
                 foreach (var title in allTitles)
                 {
+                    if (title.deFacto == null || title.deJure == null) continue;
+
                     if (title.deFacto.MapFaction == lord.MapFaction && (title.deFacto == title.deJure ||
                                                                         title.deJure.MapFaction == lord.MapFaction)
                                                                     && (int) title.TitleType >= (int) threshold)
