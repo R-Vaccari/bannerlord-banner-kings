@@ -290,16 +290,20 @@ namespace BannerKings.Behaviours.Diplomacy
             int count = 0;
             foreach (Kingdom target in Kingdom.All.Where(x => !x.IsEliminated && x != k && x.GetStanceWith(k).IsNeutral))
             {
-                if (count == 2) break;
+                if (count == 4) break;
                 count++;
-                BKDeclareWarDecision declareWarDecision = new BKDeclareWarDecision(casi.GetRandomElement(), 
-                    clan, 
-                    target);
-                float support = new KingdomElection(declareWarDecision).GetLikelihoodForOutcome(0);
-                if (support > 0.3f)
+                CasusBelli cb = casi.GetRandomElementWithPredicate(x => x.Defender == target);
+                if (cb != null)
                 {
-                    clan.Kingdom.AddDecision(declareWarDecision);
-                    break;
+                    BKDeclareWarDecision declareWarDecision = new BKDeclareWarDecision(cb,
+                                        clan,
+                                        target);
+                    float support = new KingdomElection(declareWarDecision).GetLikelihoodForOutcome(0);
+                    if (support > 0.3f)
+                    {
+                        clan.Kingdom.AddDecision(declareWarDecision);
+                        break;
+                    }
                 }
             }
 
