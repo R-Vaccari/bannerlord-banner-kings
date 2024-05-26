@@ -28,6 +28,8 @@ using BannerKings.Campaign;
 using TaleWorlds.CampaignSystem.Inventory;
 using BannerKings.Campaign.Economy.Markets;
 using TaleWorlds.CampaignSystem.Party.PartyComponents;
+using TaleWorlds.CampaignSystem.MapEvents;
+using TaleWorlds.CampaignSystem.Roster;
 
 namespace BannerKings.Patches
 {
@@ -772,10 +774,43 @@ namespace BannerKings.Patches
             [HarmonyPatch("GetCurrentMarketData")]
             private static void GetPricePostfix(ref IMarketData __result)
             {
-				Settlement settlement = MobileParty.MainParty.CurrentSettlement;
-                if (settlement != null && settlement.IsCastle)
+                if (TaleWorlds.CampaignSystem.Campaign.Current.GameMode == CampaignGameMode.Campaign)
                 {
-                    __result = settlement.Town.MarketData;
+                    Settlement settlement = MobileParty.MainParty.CurrentSettlement;
+                    if (settlement != null && settlement.IsCastle)
+                    {
+                        __result = settlement.Town.MarketData;
+                    }
+                }    
+            }
+        }
+
+        [HarmonyPatch(typeof(MapEvent), "LootDefeatedParties")]
+        public class SiegePatch
+        {
+            static bool Prefix(ref bool playerCaptured, ref ItemRoster __state, object lootCollector, MapEvent __instance)
+            {
+                __state = new ItemRoster();
+                var mapEventSide = __instance.GetMapEventSide(__instance.DefeatedSide);
+                foreach (var party in mapEventSide.Parties
+                             .Select(mapEventParty => mapEventParty.Party)
+                             .Where(party => party?.IsSettlement == true && party.Settlement?.IsCastle == true))
+                {
+
+                    __state.Add(party.ItemRoster);
+                    party.ItemRoster.Clear();
+                }
+                return true;
+            }
+
+            static void Postfix(ref bool playerCaptured, object lootCollector, MapEvent __instance, ItemRoster __state)
+            {
+                var mapEventSide = __instance.GetMapEventSide(__instance.DefeatedSide);
+                foreach (var party in mapEventSide.Parties
+                             .Select(mapEventParty => mapEventParty.Party)
+                             .Where(party => party?.IsSettlement == true && party.Settlement?.IsCastle == true))
+                {
+                    party.ItemRoster.Add(__state);
                 }
             }
         }
