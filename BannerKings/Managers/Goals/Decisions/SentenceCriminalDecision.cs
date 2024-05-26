@@ -34,7 +34,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public override void DoAiDecision()
         {
-            throw new NotImplementedException();
+
         }
 
         public override void ApplyGoal()

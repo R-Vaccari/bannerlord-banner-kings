@@ -176,7 +176,7 @@ namespace BannerKings.Managers.Goals.Decisions
                         bool available = true;
                         ContractDuty contractDuty = (ContractDuty)aspect;
                         FeudalTitle vassalHighest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
-                        if (vassalHighest == null || vassalHighest.HasTimePassedForDuty(contractDuty) || contractDuty.CanFulfill(fulfiller, vassal))
+                        if (vassalHighest == null || vassalHighest.HasTimePassedForDuty(contractDuty) || contractDuty.CanFulfill(fulfiller, hero))
                         {
                             available = false;
                         }
@@ -188,6 +188,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 if (dutyOptions.Count > 0)
                 {
                     duty = dutyOptions.GetRandomElement();
+                    vassal = hero;
                     ApplyGoal();
                 }
             }

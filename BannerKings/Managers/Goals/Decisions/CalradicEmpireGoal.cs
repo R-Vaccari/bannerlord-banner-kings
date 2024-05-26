@@ -197,7 +197,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public override void DoAiDecision()
         {
             //TODO: Implement the AI decision for this goal.
-            ApplyGoal();
+            //ApplyGoal();
         }
 
         private static (float Gold, float Influence) GetCosts(Hero hero)

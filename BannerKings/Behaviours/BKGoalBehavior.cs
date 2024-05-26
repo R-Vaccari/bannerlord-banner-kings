@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Goals;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 
 namespace BannerKings.Behaviours
 {
@@ -40,7 +41,7 @@ namespace BannerKings.Behaviours
                 else if (clanMember && goal.TickClanMembers) run = true;
                 else if (leader && goal.TickClanLeaders) run = true;
 
-                if (run) goal.GetCopy(hero).DoAiDecision();
+                if (run && MBRandom.RandomFloat < 0.05f) goal.GetCopy(hero).DoAiDecision();
             }
         }
     }
