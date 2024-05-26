@@ -3,9 +3,9 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem.GameComponents;
 
-namespace BannerKings.Models.BKModels
+namespace BannerKings.Models.Vanilla.Abstract
 {
-    public abstract class ITaxModel : DefaultSettlementTaxModel
+    public abstract class TaxModel : DefaultSettlementTaxModel
     {
         public abstract float NobleTaxOutput { get; }
         public abstract float CraftsmanTaxOutput { get; }

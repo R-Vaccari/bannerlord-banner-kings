@@ -4,7 +4,7 @@ using TaleWorlds.CampaignSystem;
 using BannerKings.Managers.Populations.Estates;
 using static BannerKings.Managers.PopulationManager;
 
-namespace BannerKings.Models.BKModels
+namespace BannerKings.Models.BKModels.Abstract
 {
     public abstract class GrowthModel
     {

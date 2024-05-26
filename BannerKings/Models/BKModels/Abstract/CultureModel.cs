@@ -2,9 +2,9 @@
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem;
 
-namespace BannerKings.Models.BKModels
+namespace BannerKings.Models.BKModels.Abstract
 {
-    public interface ICultureModel
+    public interface CultureModel
     {
         public ExplainedNumber CalculateEffect(Settlement settlement, CultureDataClass data);
         public ExplainedNumber CalculateCultureWeight(Settlement settlement, CultureDataClass data, float baseWeight = 0f);

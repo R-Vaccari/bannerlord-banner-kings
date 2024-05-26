@@ -2,9 +2,9 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 
-namespace BannerKings.Models.BKModels
+namespace BannerKings.Models.BKModels.Abstract
 {
-    public abstract class IMercenaryModel
+    public abstract class MercenaryModel
     {
         public abstract bool IsEquipmentAdequate(ItemObject item, CharacterObject troop, bool levy);
         public abstract IEnumerable<ItemCategory> GetLevyCategories();

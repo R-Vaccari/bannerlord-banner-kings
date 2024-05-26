@@ -1,6 +1,7 @@
 using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.Campaign.Skills;
 using BannerKings.Managers.Skills;
+using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Settings;
 using BannerKings.Utils;
 using Helpers;

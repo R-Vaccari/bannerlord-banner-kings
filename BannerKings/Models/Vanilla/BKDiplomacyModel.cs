@@ -760,8 +760,6 @@ namespace BannerKings.Models.Vanilla
                             result.Add(MathF.Abs(baseNumber) * -fatigue, new TextObject("{=Nxrd7yym}Fatigue over this war"));
                         }
                     }
-                    
-                    if (!isInAllyWar) result.Add(-15000f);
                 }
                 else
                 {

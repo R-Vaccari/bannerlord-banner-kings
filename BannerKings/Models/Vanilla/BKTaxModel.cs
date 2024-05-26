@@ -9,6 +9,7 @@ using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.BKModels;
+using BannerKings.Models.Vanilla.Abstract;
 using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -21,7 +22,7 @@ using TaxType = BannerKings.Managers.Policies.BKTaxPolicy.TaxType;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKTaxModel : ITaxModel
+    public class BKTaxModel : TaxModel
     {
         public override float NobleTaxOutput => 1.2f;
 

@@ -1,7 +1,7 @@
 ﻿using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem;
 
-namespace BannerKings.Models.BKModels
+namespace BannerKings.Models.BKModels.Abstract
 {
     public abstract class StabilityModel
     {

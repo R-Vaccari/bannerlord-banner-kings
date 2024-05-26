@@ -1,4 +1,5 @@
 ﻿using BannerKings.Campaign.Economy.Markets;
+using BannerKings.Models.BKModels.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using TaleWorlds.Core;
 
 namespace BannerKings.Models.BKModels
 {
-    public class MercenaryModel : IMercenaryModel
+    public class BKMercenaryModel : MercenaryModel
     {
         public override IEnumerable<ItemCategory> GetLevyCategories()
         {

@@ -5,6 +5,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
+using BannerKings.Models.BKModels.Abstract;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -13,7 +14,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
 {
-    public class BKCultureModel : ICultureModel
+    public class BKCultureModel : CultureModel
     {
         public ExplainedNumber CalculateAcceptanceGain(CultureDataClass data)
         {

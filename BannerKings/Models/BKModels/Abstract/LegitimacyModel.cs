@@ -2,7 +2,7 @@
 using BannerKings.Utils.Models;
 using TaleWorlds.CampaignSystem;
 
-namespace BannerKings.Models.BKModels
+namespace BannerKings.Models.BKModels.Abstract
 {
     public abstract class LegitimacyModel
     {

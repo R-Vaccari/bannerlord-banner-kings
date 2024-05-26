@@ -1,7 +1,7 @@
 ﻿using BannerKings.Behaviours.PartyNeeds;
 using TaleWorlds.CampaignSystem;
 
-namespace BannerKings.Models.BKModels
+namespace BannerKings.Models.BKModels.Abstract
 {
     public interface IPartyNeedsModel
     {

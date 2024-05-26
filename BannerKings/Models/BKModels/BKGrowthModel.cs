@@ -4,6 +4,7 @@ using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Settings;
 using System.Linq;
 using TaleWorlds.CampaignSystem;

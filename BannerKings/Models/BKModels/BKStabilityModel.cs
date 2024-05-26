@@ -8,6 +8,7 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
+using BannerKings.Models.BKModels.Abstract;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;

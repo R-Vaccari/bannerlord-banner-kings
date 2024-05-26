@@ -16,35 +16,22 @@ namespace BannerKings.Models.Vanilla
                 result *= 1.15f;
             }
 
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero, DefaultDivinities.Instance.SheWolf, rel))
+            {
+                result *= 1.25f;
+            }
+
             if (hero.Spouse != null)
             {
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Spouse, DefaultDivinities.Instance.SheWolf, rel))
+                {
+                    result *= 1.25f;
+                }
+
                 var spouseRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero.Spouse);
                 if (spouseRel != null && spouseRel.HasDoctrine(DefaultDoctrines.Instance.Childbirth))
                 {
                     result *= 1.15f;
-                }
-            }
-
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero, DefaultDivinities.Instance.Mehns))
-            {
-                result *= 1.25f;
-            }
-
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero, DefaultDivinities.Instance.SheWolf))
-            {
-                result *= 1.25f;
-            }
-
-            if (hero.Spouse != null)
-            {
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Spouse, DefaultDivinities.Instance.SheWolf))
-                {
-                    result *= 1.25f;
-                }
-
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Spouse, DefaultDivinities.Instance.Mehns))
-                {
-                    result *= 1.25f;
                 }
             }
 

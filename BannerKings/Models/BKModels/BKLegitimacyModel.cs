@@ -5,6 +5,7 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Utils.Models;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
