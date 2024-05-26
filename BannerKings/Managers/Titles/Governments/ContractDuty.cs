@@ -1,6 +1,7 @@
 using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -56,8 +57,8 @@ namespace BannerKings.Managers.Titles.Governments
                     PopupText.ToString(),
                     CanFulfill(suzerain, vassal),
                     true,
-                    new TextObject().ToString(),
-                    new TextObject().ToString(),
+                    GameTexts.FindText("str_accept").ToString(),
+                    GameTexts.FindText("str_reject").ToString(),
                     () => FinishDuty(suzerain, vassal),
                     () => FailDuty(suzerain, vassal)
                     ));

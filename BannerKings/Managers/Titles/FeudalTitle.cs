@@ -111,6 +111,8 @@ namespace BannerKings.Managers.Titles
             return CampaignTime.Zero;
         }
 
+        public bool HasTimePassedForDuty(ContractDuty duty) => GetDutyTime(duty).ElapsedSeasonsUntilNow < duty.SeasonsDelay;
+
         public Dictionary<FeudalTitle, float> DeJureDrifts
         {
             get
@@ -206,6 +208,11 @@ namespace BannerKings.Managers.Titles
         public bool Active => deJure != null || deFacto != null;
 
         public bool IsSovereignLevel => (int) TitleType <= 1;
+
+        public void SetFullName(TextObject name)
+        {
+            FullName = name;
+        }
 
         public void SetName(TextObject shortName)
         {
