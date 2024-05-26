@@ -97,6 +97,7 @@ namespace BannerKings.Behaviours
             if (firstUse)
             {
                 BannerKingsConfig.Instance.InitializeManagersFirstTime();
+                BannerKingsConfig.Instance.PopulationManager.PostInitialize();
                 BannerKingsConfig.Instance.TitleManager.PostInitialize();
                 BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
                 BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
