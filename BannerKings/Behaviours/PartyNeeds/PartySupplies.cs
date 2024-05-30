@@ -3,7 +3,7 @@ using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
-using BannerKings.Models.BKModels;
+using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Settings;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -58,7 +58,9 @@ namespace BannerKings.Behaviours.PartyNeeds
                 DefaultItemCategories.Meat,
                 DefaultItemCategories.Cheese,
                 DefaultItemCategories.Butter,
-                DefaultItemCategories.Fish
+                DefaultItemCategories.Fish,
+                BKItemCategories.Instance.Honey,
+                BKItemCategories.Instance.Eggs
             };
 
             toolsCategories = new List<ItemCategory>(1)
