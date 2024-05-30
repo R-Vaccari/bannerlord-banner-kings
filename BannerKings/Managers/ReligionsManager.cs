@@ -262,7 +262,8 @@ namespace BannerKings.Managers
              
             if (rel != null)
             {
-                return Religions[rel][hero].Blessing == blessing;
+                if (Religions.ContainsKey(rel) && Religions[rel].ContainsKey(hero))
+                    return Religions[rel][hero].Blessing == blessing;
             }
 
             return false;
