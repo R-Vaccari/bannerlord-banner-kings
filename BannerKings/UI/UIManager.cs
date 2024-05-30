@@ -115,17 +115,42 @@ namespace BannerKings.UI
             }
         }
 
-
         [HarmonyPatch(typeof(MapNotificationVM), "PopulateTypeDictionary")]
         internal class PopulateNotificationsPatch
         {
             private static void Postfix(MapNotificationVM __instance)
             {
-                var dic = (Dictionary<Type, Type>) __instance.GetType().GetField("_itemConstructors",
+                var dic = (Dictionary<Type, Type>)__instance.GetType().GetField("_itemConstructors",
                         BindingFlags.Instance | BindingFlags.NonPublic)
                     .GetValue(__instance);
                 dic.Add(typeof(DemesneLimitNotification), typeof(DemesneLimitNotificationVM));
                 dic.Add(typeof(UnlandedDemesneLimitNotification), typeof(DemesneLimitNotificationVM));
+            }
+        }
+
+        [HarmonyPatch(typeof(CampaignUIHelper), "GetSettlementConsumptionTooltip")]
+        internal class GetSettlementConsumptionTooltipPatch
+        {
+            private static bool Prefix(Settlement settlement, ref List<TooltipProperty> __result)
+            {
+                List<TooltipProperty> list = new List<TooltipProperty>();
+                list.Add(new TooltipProperty("", GameTexts.FindText("str_consumption", null).ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title));
+                if (settlement.Town != null)
+                {
+                    using (IEnumerator<Town.SellLog> enumerator = settlement.Town.SoldItems.GetEnumerator())
+                    {
+                        while (enumerator.MoveNext())
+                        {
+                            Town.SellLog sellLog = enumerator.Current;
+                            list.Add(new TooltipProperty(sellLog.Category.GetName().ToString(), sellLog.Number.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+                        }
+                        __result = list;
+                        return false;
+                    }
+                }
+                Debug.FailedAssert("Only towns' consumptions are tracked", "C:\\Develop\\MB3\\Source\\Bannerlord\\TaleWorlds.CampaignSystem.ViewModelCollection\\CampaignUIHelper.cs", "GetSettlementConsumptionTooltip", 1157);
+                __result = list;
+                return false;
             }
         }
 
