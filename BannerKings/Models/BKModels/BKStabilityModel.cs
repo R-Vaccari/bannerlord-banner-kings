@@ -270,26 +270,6 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public float GetTitleScore(FeudalTitle title)
-        {
-            if (title.Fief != null)
-            {
-                float result = GetSettlementDemesneWight(title.Fief);
-                Settlement settlement = title.Fief;
-                if (settlement.IsVillage) result *= 10f;
-                else if (settlement.Town != null)
-                {
-                    CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(title.deJure.Clan);
-                    if (data.Location == settlement.Town) return 0f;
-                }
-
-                if (settlement.Culture != title.deJure.Culture) result *= 2f;
-                return result;
-            }
-
-            return GetUnlandedDemesneWight(title.TitleType);
-        }
-
         public float GetUnlandedDemesneWight(TitleType type)
         {
             var value = type switch

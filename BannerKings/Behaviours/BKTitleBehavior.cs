@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Extensions;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -32,10 +34,8 @@ namespace BannerKings.Behaviours
 
         private void OnDailyTickHero(Hero hero)
         {
-            if (hero == null)
-            {
-                return;
-            }
+            if (hero == null || !hero.IsClanLeader || hero == Hero.MainHero || hero.Clan.Fiefs.Count == 0) return;
+            
 
             if (hero.IsChild || hero.Occupation != Occupation.Lord || hero.Clan == null ||
                 hero.Clan.IsMinorFaction || !BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(hero))
@@ -45,12 +45,9 @@ namespace BannerKings.Behaviours
 
             if (hero.Clan != null && hero == hero.Clan.Leader)
             {
-                if (BannerKingsSettings.Instance.AIManagement)
-                {
-                    CheckOverDemesneLimit(hero);
-                    CheckOverUnlandedDemesneLimit(hero);
-                    //CheckOverVassalLimit(hero);
-                }
+                CheckOverDemesneLimit(hero);
+                CheckOverUnlandedDemesneLimit(hero);
+                //CheckOverVassalLimit(hero);
             }
         }
 
@@ -81,30 +78,164 @@ namespace BannerKings.Behaviours
             }
 
             var diff = current - limit;
-            if (diff < 0.5f)
-            {
-                return;
-            }
+            if (diff < 0.1f) return;  
 
             RunWeekly(() =>
             {
-                var title = BannerKingsConfig.Instance.AI.ChooseTitleToGive(hero, diff);
-                if (title == null)
-                {
-                    return;
-                }
+                var settlement = ChooseTitleToGive(hero);
+                if (settlement == null) return;
 
-                var receiver = BannerKingsConfig.Instance.AI.ChooseVassalToGiftLandedTitle(hero, title);
-                if (receiver == null)
-                {
-                    return;
-                }
+                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                Hero receiver = ChooseVassalToGiftLandedTitle(hero, title);
+                if (receiver == null) return;
 
-                var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, hero);
-                BannerKingsConfig.Instance.TitleManager.GrantTitle(action, receiver);
+                if (title.deJure == hero)
+                {
+                    if (title.TitleType == TitleType.Lordship && BannerKingsConfig.Instance.StabilityModel.IsHeroOverVassalLimit(hero))
+                        return;
+
+                    var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, hero);
+                    BannerKingsConfig.Instance.TitleManager.GrantTitle(action, receiver);
+                }
+                else if (settlement.Town != null) ChangeOwnerOfSettlementAction.ApplyByGift(settlement, receiver);
             },
             GetType().Name,
             false);
+        }
+
+        public float GetSettlementScore(Settlement settlement)
+        {
+            float result = 0f;
+
+            if (settlement.IsVillage) result = 0.7f;
+            else if (settlement.Town != null)
+            {
+                CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(settlement.OwnerClan);
+                if (data.Location == settlement.Town) return 0f;
+
+                result = settlement.IsTown ? 0.1f : 0.5f;
+            }
+
+            if (settlement.LastThreatTime.ElapsedYearsUntilNow < 1f) result *= 1.3f;
+            if (settlement.Culture != settlement.OwnerClan.Culture) result *= 1.5f;
+
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+            if (title.deJure == settlement.OwnerClan.Leader) result *= 0.4f;
+
+            return result;
+        }
+
+        private Settlement ChooseTitleToGive(Hero giver, bool landed = true)
+        {
+            var candidates = new List<(Settlement, float)>();
+            foreach (Settlement settlement in giver.Clan.Settlements)
+            {
+                var value = GetSettlementScore(settlement);
+                if (value <= 0f) continue;
+                candidates.Add(new ValueTuple<Settlement, float>(settlement, value));    
+            }
+
+            return MBRandom.ChooseWeighted(candidates);
+        }
+
+        public Hero ChooseVassalToGiftLandedTitle(Hero giver, FeudalTitle titleToGive)
+        {
+            var candidates = new List<(Hero, float)>();
+
+            if (titleToGive.TitleType != TitleType.Lordship)
+            {
+                var vassals = BannerKingsConfig.Instance.TitleManager.CalculateVassals(giver.Clan);
+                foreach (var pair in vassals)
+                {
+                    var leader = pair.Key.Leader;
+                    if (BannerKingsConfig.Instance.StabilityModel.IsHeroOverUnlandedDemesneLimit(leader))
+                    {
+                        continue;
+                    }
+
+                    float score = 100;
+                    score += giver.GetRelation(leader);
+                    if (pair.Value.Count > 0)
+                    {
+                        var type = titleToGive.TitleType;
+                        foreach (var title in pair.Value)
+                        {
+                            if (title.TitleType == type)
+                            {
+                                score -= 60;
+                            }
+                            else if (title.TitleType < type)
+                            {
+                                score -= 120;
+                            }
+                            else if (titleToGive.Vassals.Contains(title))
+                            {
+                                score += 40;
+                            }
+                        }
+                    }
+
+                    if (BannerKingsConfig.Instance.TitleModel.GetGrantCandidates(giver).Contains(leader))
+                    {
+                        candidates.Add(new ValueTuple<Hero, float>(leader, score));
+                    }
+                }
+            }
+            else
+            {
+                foreach (var companion in giver.Clan.Companions)
+                {
+                    float score = 100;
+                    score += companion.GetSkillValue(DefaultSkills.Leadership);
+                    score += companion.GetSkillValue(DefaultSkills.Tactics);
+
+                    candidates.Add(new ValueTuple<Hero, float>(companion, score));
+                }
+            }
+
+            return MBRandom.ChooseWeighted(candidates);
+        }
+
+        private Hero ChooseVassalToGiftUnlandedTitle(Hero giver, FeudalTitle titleToGive, Dictionary<Clan, List<FeudalTitle>> vassals)
+        {
+            var candidates = new List<(Hero, float)>();
+            foreach (var pair in vassals)
+            {
+                var leader = pair.Key.Leader;
+                if (BannerKingsConfig.Instance.StabilityModel.IsHeroOverUnlandedDemesneLimit(leader))
+                {
+                    continue;
+                }
+
+                float score = 100;
+                score += giver.GetRelation(leader);
+                if (pair.Value.Count > 0)
+                {
+                    var type = titleToGive.TitleType;
+                    foreach (var title in pair.Value)
+                    {
+                        if (title.TitleType == type)
+                        {
+                            score -= 60;
+                        }
+                        else if (title.TitleType < type)
+                        {
+                            score -= 120;
+                        }
+                        else if (titleToGive.Vassals.Contains(title))
+                        {
+                            score += 40;
+                        }
+                    }
+                }
+
+                if (BannerKingsConfig.Instance.TitleModel.GetGrantCandidates(giver).Contains(leader))
+                {
+                    candidates.Add(new ValueTuple<Hero, float>(leader, score));
+                }
+            }
+
+            return MBRandom.ChooseWeighted(candidates);
         }
 
         private void CheckOverUnlandedDemesneLimit(Hero hero)
@@ -130,26 +261,20 @@ namespace BannerKings.Behaviours
             var random = vassals.Keys.ToList().GetRandomElement();
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, random.Leader, -2);
 
-            RunWeekly(() =>
+            /*RunWeekly(() =>
             {
                 var diff = current - limit;
-                var title = BannerKingsConfig.Instance.AI.ChooseTitleToGive(hero, diff, false);
-                if (title == null || title.TitleType != TitleType.Dukedom)
-                {
-                    return;
-                }
+                var title = ChooseTitleToGive(hero, diff, false);
+                if (title == null || title.TitleType != TitleType.Dukedom) return;
 
-                var receiver = BannerKingsConfig.Instance.AI.ChooseVassalToGiftUnlandedTitle(hero, title, vassals);
-                if (receiver == null)
-                {
-                    return;
-                }
+                var receiver = ChooseVassalToGiftUnlandedTitle(hero, title, vassals);
+                if (receiver == null) return;
 
                 var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, hero);
                 BannerKingsConfig.Instance.TitleManager.GrantTitle(action, receiver);
             },
             GetType().Name,
-            false);
+            false);*/
         }
 
         private void CheckOverVassalLimit(Hero hero)
