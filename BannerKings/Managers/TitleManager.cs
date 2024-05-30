@@ -595,6 +595,24 @@ namespace BannerKings.Managers
             {
                 ClanActions.JoinClan(receiver, grantor.Clan);
             }
+
+            if (receiver == Hero.MainHero)
+            {
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}{GRANTOR} has decided to grant you the {TITLE}")
+                    .SetTextVariable("GRANTOR", grantor.Name)
+                    .SetTextVariable("TITLE", action.Title.FullName), 
+                    300, 
+                    grantor.CharacterObject,
+                    Utils.Helpers.GetKingdomDecisionSound());
+
+                InformationManager.DisplayMessage(new InformationMessage(
+                    new TextObject("{=!}{GRANTOR} of the {CLAN} has decided to grant you the {TITLE} in a gesture of good will.")
+                    .SetTextVariable("GRANTOR", grantor.Name)
+                    .SetTextVariable("CLAN", grantor.Clan.Name)
+                    .SetTextVariable("TITLE", action.Title.FullName)
+                    .ToString(),
+                    Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
+            }
         }
 
         public void UsurpTitle(Hero oldOwner, TitleAction action)
