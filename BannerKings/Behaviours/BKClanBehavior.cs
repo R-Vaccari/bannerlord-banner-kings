@@ -361,11 +361,6 @@ namespace BannerKings.Behaviours
         {
             if (newKingdom != null)
             {
-                if (detail == ChangeKingdomAction.ChangeKingdomActionDetail.JoinAsMercenary)
-                {
-                    AddDownPayment(clan, newKingdom); 
-                }
-
                 var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
                 if (council != null)
                 {
@@ -429,19 +424,6 @@ namespace BannerKings.Behaviours
                     }
                 }
             }
-        }
-
-        private void AddDownPayment(Clan mercenaryClan, Kingdom kingdom)
-        {
-            int gold = (int)BannerKingsConfig.Instance.DiplomacyModel.GetMercenaryDownPayment(mercenaryClan, kingdom).ResultNumber;
-            int result = MathF.Min(gold, kingdom.KingdomBudgetWallet);
-            kingdom.KingdomBudgetWallet -= result;
-            mercenaryClan.Leader.ChangeHeroGold(result);
-            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}The {CLAN} has received {GOLD}{GOLD_ICON} as earnest-money for their service.")
-                .SetTextVariable("CLAN", mercenaryClan.Name)
-                .SetTextVariable("GOLD", result)
-                .ToString(),
-                Color.FromUint(TextHelper.COLOR_LIGHT_BLUE)));
         }
 
         private void OnHeroGetsBusy(Hero hero, HeroGetsBusyReasons heroGetsBusyReason)

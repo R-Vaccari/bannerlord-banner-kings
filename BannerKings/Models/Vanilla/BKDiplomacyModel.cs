@@ -19,6 +19,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using System;
 using TaleWorlds.Core;
+using BannerKings.Behaviours.Mercenary;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -37,11 +38,12 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber KingdomRecruitMercenary(Kingdom kingdom, Clan mercenaryClan, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(base.GetScoreOfKingdomToHireMercenary(kingdom, mercenaryClan), explanations);
+            float baseNumber = MathF.Abs(result.BaseNumber);
 
             Hero ruler = kingdom.RulingClan.Leader;
             if (mercenaryClan.IsOutlaw)
             {
-                result.AddFactor(ruler.GetTraitLevel(DefaultTraits.Honor) * -0.2f, 
+                result.Add(baseNumber * (ruler.GetTraitLevel(DefaultTraits.Honor) * -0.2f), 
                     new TextObject("{=!}{HERO}'s opinion of outlaws")
                     .SetTextVariable("HERO", ruler.Name));
             }
@@ -54,12 +56,12 @@ namespace BannerKings.Models.Vanilla
 
             if (mercenaryClan.IsMafia)
             {
-                result.AddFactor(ruler.GetTraitLevel(DefaultTraits.Generosity) * 0.2f,
+                result.Add(baseNumber * (ruler.GetTraitLevel(DefaultTraits.Generosity) * 0.2f),
                     new TextObject("{=!}{HERO}'s opinion of mafias")
                     .SetTextVariable("HERO", ruler.Name));
             }
 
-            result.AddFactor(ruler.GetTraitLevel(BKTraits.Instance.Humble) * 0.1f,
+            result.Add(baseNumber * (ruler.GetTraitLevel(BKTraits.Instance.Humble) * 0.1f),
                     new TextObject("{=!}Personality trait ({TRAIT})")
                     .SetTextVariable("TRAIT", BKTraits.Instance.Humble.Name));
 
@@ -74,21 +76,61 @@ namespace BannerKings.Models.Vanilla
                     if (stance == FaithStance.Tolerated)
                     {
                         if (mercenaryClan.IsSect && rulerReligion.Faith.Equals(mercenaryReligion.Faith))
-                            result.AddFactor(1f * zealotry, new TextObject("{=!}Shared faith (Sect)"));
-                        else result.Add(0.25f * zealotry, new TextObject("{=Pcy4iFnT}Shared faith"));
+                            result.Add(baseNumber * (1f * zealotry), new TextObject("{=!}Shared faith (Sect)"));
+                        else result.Add(baseNumber * (0.25f * zealotry), new TextObject("{=Pcy4iFnT}Shared faith"));
                     }
                     else if (stance == FaithStance.Untolerated) result.Add(-0.3f * zealotry, new TextObject("{=!}Faith differences"));
-                    else result.Add(-0.5f * zealotry, new TextObject("{=!}Faith differences"));
+                    else result.Add(baseNumber * (-0.5f * zealotry), new TextObject("{=!}Faith differences"));
                 }
-                else result.Add(-0.3f * zealotry, new TextObject("{=!}Faith differences"));
+                else result.Add(baseNumber * (-0.3f * zealotry), new TextObject("{=!}Faith differences"));
             }
 
-            if (mercenaryClan.Culture == kingdom.Culture) result.AddFactor(0.2f, GameTexts.FindText("str_culture"));
+            if (mercenaryClan.Culture == kingdom.Culture) result.Add(baseNumber * 0.2f, GameTexts.FindText("str_culture"));
 
-            result.AddFactor(mercenaryClan.Leader.GetRelation(kingdom.RulingClan.Leader) * 0.01f,
+            result.Add(baseNumber * (mercenaryClan.Leader.GetRelation(kingdom.RulingClan.Leader) * 0.01f),
                 new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
                 .SetTextVariable("HERO1", ruler.Name)
                 .SetTextVariable("HERO2", mercenaryClan.Leader.Name));
+
+            MercenaryCareer career = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>()
+                .GetCareer(mercenaryClan);
+
+            if (career != null)
+            {
+                if (career.ContractDueDate.IsFuture)
+                    result.Add(baseNumber * -0.8f, new TextObject("{=!}Contract due date"));
+
+                result.Add(baseNumber * (career.Reputation - 0.5f), new TextObject("{=!}Reputation"));
+            }
+
+            foreach (Kingdom enemy in FactionManager.GetEnemyKingdoms(kingdom))
+                result.Add(baseNumber * 0.1f, enemy.Name);
+
+            return result;
+        }
+
+        public override float GetScoreOfKingdomToSackMercenary(Kingdom kingdom, Clan mercenaryClan) =>
+            KingdomSackMercenary(kingdom, mercenaryClan).ResultNumber;
+
+        public ExplainedNumber KingdomSackMercenary(Kingdom kingdom, Clan mercenaryClan, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(base.GetScoreOfKingdomToSackMercenary(kingdom, mercenaryClan), explanations);
+
+            Hero ruler = kingdom.RulingClan.Leader;
+            if (result.ResultNumber > 0)
+            {
+                MercenaryCareer career = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>()
+                    .GetCareer(mercenaryClan);
+
+                if (career != null)
+                {
+                    if (career.ContractDueDate.IsFuture)
+                        result.AddFactor(-0.8f, new TextObject("{=!}Contract due date"));
+                }
+
+                if (!FactionManager.GetEnemyKingdoms(kingdom).Any())
+                    result.AddFactor(1f, new TextObject("{=!}Kingdom has no enemies"));
+            }
 
             return result;
         }
@@ -99,19 +141,27 @@ namespace BannerKings.Models.Vanilla
                 explanations, 
                 new TextObject("{=!}Kingdom budget of {BUDGET}")
                 .SetTextVariable("BUDGET", kingdom.KingdomBudgetWallet));
+            result.LimitMin(0f);
+
             result.Add(mercenaryClan.TotalStrength * mercenaryClan.MercenaryAwardMultiplier / 2f, new TextObject("{=!}Military force of {CLAN}")
                 .SetTextVariable("CLAN", mercenaryClan.Name));
 
+            MercenaryCareer career = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetCareer(mercenaryClan);
+            if (career != null)
+            {
+                result.AddFactor(career.Reputation - 1f, new TextObject("{=!}Mercenary reputation ({REPUTATION}%)")
+                .SetTextVariable("REPUTATION", (career.Reputation * 100f).ToString())); 
+            } 
+            else result.AddFactor(-1f, new TextObject("{=!}Mercenary reputation ({REPUTATION}%)")
+                .SetTextVariable("REPUTATION", 0f));
+
             if (mercenaryClan.IsSect) result.AddFactor(-0.8f, new TextObject("{=!}Sect"));
-
-
             return result;
         }
 
         public ExplainedNumber GetMercenaryPietyCost(Clan mercenaryClan, Kingdom kingdom, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
-            
 
             if (mercenaryClan.IsSect)
             {
@@ -170,41 +220,48 @@ namespace BannerKings.Models.Vanilla
 
         public ExplainedNumber MercenaryLeaveScore(Clan mercenaryClan, Kingdom kingdom, bool explanations = false)
         {
-            if (mercenaryClan.LastFactionChangeTime.ElapsedDaysUntilNow < CampaignTime.DaysInSeason * 2f) 
-                return new ExplainedNumber(-MathF.Abs(MercenaryJoinScore(mercenaryClan, kingdom).ResultNumber), explanations);
+            float num = 0.005f * MathF.Min(200f, mercenaryClan.LastFactionChangeTime.ElapsedDaysUntilNow);
+            ExplainedNumber result = new ExplainedNumber(10000f * num - 5000f, explanations);
+            MercenaryCareer career = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>()
+                .GetCareer(mercenaryClan);
 
-            ExplainedNumber result = new ExplainedNumber(base.GetScoreOfMercenaryToLeaveKingdom(mercenaryClan, kingdom), explanations);
-            Religion mercenaryReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(mercenaryClan.Leader);
-            Religion rulerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(kingdom.RulingClan.Leader);
-
-            if (mercenaryReligion != null && (rulerReligion == null || mercenaryReligion.GetStance(rulerReligion.Faith) != FaithStance.Tolerated))
+            if (career != null)
             {
-                if (mercenaryClan.IsSect) result.Add(1000f, new TextObject("{=!}Faith differences"));
-                else if (!mercenaryClan.IsOutlaw)
+                if (career.ContractDueDate.IsFuture)
+                    result.AddFactor(-0.8f, new TextObject("{=!}Contract due date"));
+
+                Religion mercenaryReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(mercenaryClan.Leader);
+                Religion rulerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(kingdom.RulingClan.Leader);
+
+                if (mercenaryReligion != null && (rulerReligion == null || mercenaryReligion.GetStance(rulerReligion.Faith) != FaithStance.Tolerated))
                 {
-                    if (rulerReligion == null || mercenaryReligion.GetStance(rulerReligion.Faith) == FaithStance.Untolerated)
-                        result.Add(150f, new TextObject("{=!}Faith differences"));
-                    else result.Add(350f, new TextObject("{=!}Faith differences"));
+                    if (mercenaryClan.IsSect) result.Add(1000f, new TextObject("{=!}Faith differences"));
+                    else if (!mercenaryClan.IsOutlaw)
+                    {
+                        if (rulerReligion == null || mercenaryReligion.GetStance(rulerReligion.Faith) == FaithStance.Untolerated)
+                            result.Add(150f, new TextObject("{=!}Faith differences"));
+                        else result.Add(350f, new TextObject("{=!}Faith differences"));
+                    }
                 }
-            }
 
-            if (!mercenaryClan.IsOutlaw)
-            {
-                if (mercenaryClan.Culture != kingdom.Culture)
+                if (!mercenaryClan.IsOutlaw)
                 {
-                    result.Add(100f, GameTexts.FindText("str_culture"));
+                    if (mercenaryClan.Culture != kingdom.Culture)
+                    {
+                        result.Add(100f, GameTexts.FindText("str_culture"));
+                    }
                 }
+
+                float relationsFactor = 5f;
+                if (mercenaryClan.IsOutlaw) relationsFactor = 7f;
+                else if (mercenaryClan.IsSect) relationsFactor = 2.5f;
+
+                result.Add(MathF.Min(mercenaryClan.Leader.GetRelation(kingdom.RulingClan.Leader), 0) * relationsFactor,
+                    new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
+                    .SetTextVariable("HERO1", mercenaryClan.Leader.Name)
+                    .SetTextVariable("HERO2", kingdom.RulingClan.Leader.Name));
             }
-
-            float relationsFactor = 5f;
-            if (mercenaryClan.IsOutlaw) relationsFactor = 7f;
-            else if (mercenaryClan.IsSect) relationsFactor = 2.5f;
-
-            result.Add(MathF.Min(mercenaryClan.Leader.GetRelation(kingdom.RulingClan.Leader), 0) * relationsFactor,
-                new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
-                .SetTextVariable("HERO1", mercenaryClan.Leader.Name)
-                .SetTextVariable("HERO2", kingdom.RulingClan.Leader.Name));
-
+            
             return result;
         }
 

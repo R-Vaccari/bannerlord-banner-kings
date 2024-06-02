@@ -15,6 +15,8 @@ using TaleWorlds.Localization;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Party;
 using SandBox.View.Map;
+using TaleWorlds.CampaignSystem.BarterSystem.Barterables;
+using TaleWorlds.CampaignSystem.CampaignBehaviors.BarterBehaviors;
 
 namespace BannerKings.Patches
 {
@@ -117,6 +119,22 @@ namespace BannerKings.Patches
             private static bool Prefix(Clan clan, Kingdom kingdom, IFaction otherFaction, ref bool __result)
             {
                 __result = false;
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(DiplomaticBartersBehavior), "ConsiderClanLeaveAsMercenary")]
+        internal class ConsiderClanLeaveAsMercenaryPatch
+        {
+            private static bool Prefix(Clan clan)
+            {
+                LeaveKingdomAsClanBarterable leaveKingdomAsClanBarterable = new LeaveKingdomAsClanBarterable(clan.Leader, null);
+                MercenaryJoinKingdomBarterable mercenaryJoinKingdomBarterable = new MercenaryJoinKingdomBarterable(clan.Leader, null, clan.Kingdom);
+                if (leaveKingdomAsClanBarterable.GetValueForFaction(clan) > mercenaryJoinKingdomBarterable.GetValueForFaction(clan))
+                {
+                    leaveKingdomAsClanBarterable.Apply();
+                }
+
                 return false;
             }
         }

@@ -2,6 +2,7 @@ using BannerKings.Managers.Populations.Estates;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
@@ -13,7 +14,7 @@ namespace BannerKings.Behaviours.Mercenary
 {
     public class MercenaryCareer
     {
-        internal MercenaryCareer(Clan clan, Kingdom kingdom)
+        public MercenaryCareer(Clan clan, Kingdom kingdom)
         {
             Clan = clan;
             Kingdom = kingdom;
@@ -37,6 +38,7 @@ namespace BannerKings.Behaviours.Mercenary
         [SaveableProperty(8)] private Dictionary<Kingdom, CampaignTime> PrivilegeTimes { get; set; }
 
         [SaveableProperty(9)] public int ServiceDays { get; private set; }
+        [SaveableProperty(10)] public CampaignTime ContractDueDate { get; private set; }
 
         public void AddPoints()
         {
@@ -44,12 +46,7 @@ namespace BannerKings.Behaviours.Mercenary
             PrivilegeTimes[Kingdom] = CampaignTime.YearsFromNow(-1f);
         }
 
-        public void ChangeKingdom(Kingdom kingdom)
-        {
-            Kingdom = kingdom;
-        }
-
-        internal void PostInitialize()
+        public void PostInitialize()
         {
             foreach (var pair in LevyTroops)
             {
@@ -70,14 +67,14 @@ namespace BannerKings.Behaviours.Mercenary
                         copy.MaxLevel, copy.IsAvailable, copy.OnPrivilegeAdded);
                 }
             }
+
+            if (Clan.IsUnderMercenaryService && Kingdom != null) ContractDueDate = CampaignTime.YearsFromNow(1f);
+            else ContractDueDate = CampaignTime.Never;
         }
 
-        internal void Tick(float progress)
+        public void Tick(float progress)
         {
-            if (!Clan.IsUnderMercenaryService)
-            {
-                return;
-            }
+            if (!Clan.IsUnderMercenaryService || Kingdom == null) return;
 
             KingdomProgress[Kingdom] += progress;
             ServiceDays++;
@@ -94,28 +91,75 @@ namespace BannerKings.Behaviours.Mercenary
                     list.RemoveAt(0);
                 }
             }
+
+            if (ContractDueDate.IsNow || ContractDueDate.IsPast)
+            {
+                if (Clan == Clan.PlayerClan)
+                {
+                    if (BannerKingsConfig.Instance.DiplomacyModel.GetScoreOfKingdomToHireMercenary(Kingdom, Clan) >
+                        BannerKingsConfig.Instance.DiplomacyModel.GetScoreOfKingdomToSackMercenary(Kingdom, Clan))
+                    {
+                        InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Mercenary Contract").ToString(),
+                            new TextObject("{=!}The due date for your service to the {KINGDOM} has come. They are willing to extend your service as their hireling for another year, until {DATE}. Accepting this proposal will make you contract-bound to serve another year, and make it unlikely for them to preemptively release you from your service. By rejecting this proposal you may leave or be released at any time without any consequences.")
+                            .SetTextVariable("KINGDOM", Kingdom.Name)
+                            .SetTextVariable("DATE", CampaignTime.YearsFromNow(1f).ToString())
+                            .ToString(),
+                            true,
+                            true,
+                            GameTexts.FindText("str_accept").ToString(),
+                            GameTexts.FindText("str_reject").ToString(),
+                            () => ExtendTime(),
+                            null,
+                            Utils.Helpers.GetKingdomDecisionSound()),
+                            true,
+                            true);
+                    }
+                }
+                else if (Kingdom.RulingClan == Clan.PlayerClan)
+                {
+                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Mercenary Contract").ToString(),
+                            new TextObject("{=!}The due date for your service to the {CLAN} has come. It is your choice to extend the binding of the contract for another year, until {DATE}. Doing so will make it unlikely for them to preemptively leave their service. They will also expect to not be release from this duty - releasing them before the due date will negatively impact their predisposition towards you.")
+                            .SetTextVariable("CLAN", Clan.Name)
+                            .SetTextVariable("DATE", CampaignTime.YearsFromNow(1f).ToString())
+                            .ToString(),
+                            true,
+                            true,
+                            GameTexts.FindText("str_accept").ToString(),
+                            GameTexts.FindText("str_reject").ToString(),
+                            () => ExtendTime(),
+                            null,
+                            Utils.Helpers.GetKingdomDecisionSound()),
+                            true,
+                            true);
+                }
+            }
         }
 
-        internal bool HasPrivilegeCurrentKingdom(MercenaryPrivilege privilege) => KingdomPrivileges[Kingdom].Any(x => x.Equals(privilege));
+        public bool HasPrivilegeCurrentKingdom(MercenaryPrivilege privilege) => KingdomPrivileges[Kingdom].Any(x => x.Equals(privilege));
 
-        internal void AddReputation(float reputation, TextObject reason)
+        public void AddReputation(float reputation, TextObject reason)
         {
             Reputation += reputation;
             Reputation = MathF.Clamp(Reputation, 0f, 1f);
 
             if (Clan == Clan.PlayerClan)
             {
-                MBInformationManager.AddQuickInformation(new TextObject("{=H7GxnhBB}You have gained {REPUTATION}% mercenary reputation! {REASON}")
-                    .SetTextVariable("REPUTATION", reputation * 100f)
-                    .SetTextVariable("REASON", reason));
+                if (reputation > 0f)
+                    MBInformationManager.AddQuickInformation(new TextObject("{=H7GxnhBB}You have gained {REPUTATION}% mercenary reputation! {REASON}")
+                        .SetTextVariable("REPUTATION", reputation * 100f)
+                        .SetTextVariable("REASON", reason));
+                else
+                    MBInformationManager.AddQuickInformation(new TextObject("{=!}You have lost {REPUTATION}% mercenary reputation! {REASON}")
+                        .SetTextVariable("REPUTATION", MathF.Abs(reputation * 100f))
+                        .SetTextVariable("REASON", reason));
             }
         }
 
-        internal bool HasTimePassedForPrivilege(Kingdom kingdom) => PrivilegeTimes[kingdom].ElapsedSeasonsUntilNow >= 2f;
+        public bool HasTimePassedForPrivilege(Kingdom kingdom) => PrivilegeTimes[kingdom].ElapsedSeasonsUntilNow >= 2f;
 
-        internal CampaignTime GetPrivilegeTime(Kingdom kingdom) => PrivilegeTimes[kingdom];
+        public CampaignTime GetPrivilegeTime(Kingdom kingdom) => PrivilegeTimes[kingdom];
 
-        internal int GetPrivilegeLevelCurrentKingdom(MercenaryPrivilege privilege)
+        public int GetPrivilegeLevelCurrentKingdom(MercenaryPrivilege privilege)
         {
             int result = 0;
             var current = KingdomPrivileges[Kingdom].FirstOrDefault(x => x.Equals(privilege));
@@ -156,7 +200,7 @@ namespace BannerKings.Behaviours.Mercenary
             return KingdomProgress[Kingdom] > privilege.Points && HasTimePassedForPrivilege(Kingdom);
         }
 
-        internal void AddKingdom(Kingdom kingdom)
+        public void AddKingdom(Kingdom kingdom)
         {
             Kingdom = kingdom;
             if (!KingdomPrivileges.ContainsKey(kingdom))
@@ -175,7 +219,56 @@ namespace BannerKings.Behaviours.Mercenary
             }
         }
 
-        internal float GetPoints(Kingdom kingdom)
+        public void RemoveKingdom(Kingdom kingdom, bool fired = false)
+        {
+            if (Kingdom != kingdom) return;
+
+            float daysLeft = ContractDueDate.RemainingDaysFromNow;
+            if (daysLeft > 0)
+            {
+                Hero ruler = kingdom.RulingClan.Leader;
+                float relation = -MBMath.Map(daysLeft, 1, CampaignTime.DaysInYear, 15, 50);
+                if (!fired)
+                {
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Clan.Leader, ruler, (int)relation);
+                    AddReputation(relation * 0.005f, new TextObject("{=!}Left service with {DAYS} days remaining.")
+                        .SetTextVariable("DAYS", (int)daysLeft));
+
+                    foreach (Hero member in Clan.Lords)
+                    {
+                        if (member == Clan.Leader) continue;
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(member, ruler, (int)(relation / 2f));
+                    }
+                }
+                else
+                {
+                    if (Clan != Clan.PlayerClan)
+                    {
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(ruler, Clan.Leader, (int)relation);
+                        foreach (Hero member in Clan.Lords)
+                        {
+                            if (member == Clan.Leader) continue;
+                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(ruler, member, (int)(relation / 2f));
+                        }
+                    }
+                    else
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage(
+                            new TextObject("{=!}The lords of {KINGDOM} have decided to release you from your service with {DAYS} left in the contract.")
+                            .SetTextVariable("KINGDOM", kingdom.Name)
+                            .SetTextVariable("DAYS", (int)daysLeft)
+                            .ToString(),
+                            Color.FromUint(Utils.TextHelper.COLOR_LIGHT_RED)));
+                    }
+                }
+            }
+
+            Kingdom = null;
+        }
+
+        public void ExtendTime() => ContractDueDate = CampaignTime.YearsFromNow(1f);
+
+        public float GetPoints(Kingdom kingdom)
         {
             if (KingdomProgress.ContainsKey(kingdom))
             {

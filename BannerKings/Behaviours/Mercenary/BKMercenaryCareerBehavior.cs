@@ -1,3 +1,4 @@
+using BannerKings.Utils;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -5,11 +6,12 @@ using TaleWorlds.CampaignSystem.GameMenus;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Mercenary
 {
-    internal class BKMercenaryCareerBehavior : CampaignBehaviorBase
+    public class BKMercenaryCareerBehavior : BannerKingsBehavior
     {
         private Dictionary<Clan, MercenaryCareer> careers = new Dictionary<Clan, MercenaryCareer>();
 
@@ -132,7 +134,7 @@ namespace BannerKings.Behaviours.Mercenary
             }
 
             var career = careers[hero.Clan];
-            career.AddReputation(gainedRenown / 50f, new TaleWorlds.Localization.TextObject("{=1KYFwcr7}Reputation from gained renown."));
+            career.AddReputation(gainedRenown / 100f, new TextObject("{=1KYFwcr7}Reputation from gained renown."));
         }
 
         private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom,
@@ -140,36 +142,78 @@ namespace BannerKings.Behaviours.Mercenary
         {
             if (detail == ChangeKingdomAction.ChangeKingdomActionDetail.JoinAsMercenary)
             {
+                AddDownPayment(clan, newKingdom);
                 AddCareer(clan, newKingdom);
             }
+
+            if (detail == ChangeKingdomAction.ChangeKingdomActionDetail.LeaveAsMercenary)
+            {
+                MercenaryCareer career = GetCareer(clan);
+                if (career != null) career.RemoveKingdom(oldKingdom);
+            }
+        }
+
+        private void AddDownPayment(Clan mercenaryClan, Kingdom kingdom)
+        {
+            int gold = (int)BannerKingsConfig.Instance.DiplomacyModel.GetMercenaryDownPayment(mercenaryClan, kingdom).ResultNumber;
+            int result = MathF.Min(gold, kingdom.KingdomBudgetWallet);
+            kingdom.KingdomBudgetWallet -= result;
+            mercenaryClan.Leader.ChangeHeroGold(result);
+            if (mercenaryClan == Clan.PlayerClan)
+                InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}The {CLAN} has received {GOLD}{GOLD_ICON} as earnest-money for their service.")
+                    .SetTextVariable("CLAN", mercenaryClan.Name)
+                    .SetTextVariable("GOLD", result)
+                    .ToString(),
+                    Color.FromUint(TextHelper.COLOR_LIGHT_BLUE)));
         }
 
         private void OnClanDailyTick(Clan clan)
         {
             if (clan.IsUnderMercenaryService)
             {
-                if (!careers.ContainsKey(clan))
-                {
-                    AddCareer(clan, clan.Kingdom);
-                }
+                if (!careers.ContainsKey(clan)) AddCareer(clan, clan.Kingdom);
                 else
                 {
-                    careers[clan].Tick(GetDailyCareerPointsGain(clan).ResultNumber);
+                    var career = careers[clan];
+                    career.Tick(GetDailyCareerPointsGain(clan).ResultNumber);
+                }
+            }
+            else if (clan.Kingdom != null && clan.Kingdom.RulingClan == clan)
+            {
+                List<Clan> toFire = new List<Clan>();
+                foreach (Clan merc in clan.Kingdom.Clans)
+                {
+                    if (!merc.IsUnderMercenaryService) continue;
+
+                    var career = GetCareer(merc);
+                    if (career == null) continue;
+
+                    RunWeekly(() =>
+                    {
+                        if (BannerKingsConfig.Instance.DiplomacyModel.GetScoreOfKingdomToSackMercenary(clan.Kingdom, merc) >
+                        BannerKingsConfig.Instance.DiplomacyModel.GetScoreOfKingdomToHireMercenary(clan.Kingdom, merc))
+                        {
+                            toFire.Add(merc);
+                        }
+                    },
+                    GetType().Name,
+                    false);
+                }
+
+                foreach (Clan merc in toFire)
+                {
+                    var career = GetCareer(merc);
+                    career.RemoveKingdom(merc.Kingdom, true);
+                    ChangeKingdomAction.ApplyByLeaveKingdomAsMercenary(merc);
                 }
             }
         }
 
         private void AddCareer(Clan clan, Kingdom kingdom)
         {
-            if (kingdom == null)
-            {
-                return;
-            }
-
-            if (!careers.ContainsKey(clan))
-            {
-                careers.Add(clan, new MercenaryCareer(clan, kingdom));
-            }
+            if (kingdom == null) return;
+            
+            if (!careers.ContainsKey(clan)) careers.Add(clan, new MercenaryCareer(clan, kingdom));
 
             careers[clan].AddKingdom(kingdom);
         }

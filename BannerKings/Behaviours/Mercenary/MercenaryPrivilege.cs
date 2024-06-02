@@ -4,7 +4,7 @@ using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Mercenary
 {
-    internal class MercenaryPrivilege : BannerKingsObject
+    public class MercenaryPrivilege : BannerKingsObject
     {
         private Func<MercenaryCareer, bool> isAvailable;
         private Func<MercenaryCareer, bool> onAdded;
