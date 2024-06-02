@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BannerKings.Extensions;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
-using BannerKings.Settings;
 using BannerKings.UI.Notifications;
 using HarmonyLib;
 using SandBox.CampaignBehaviors;

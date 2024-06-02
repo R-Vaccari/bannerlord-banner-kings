@@ -1,5 +1,4 @@
-﻿using BannerKings.Managers.AI;
-using BannerKings.Managers.Education.Lifestyles;
+﻿using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using BannerKings.Utils;
 using System.Collections.Generic;

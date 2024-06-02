@@ -11,8 +11,6 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
-using TaleWorlds.Core;
-using TaleWorlds.LinQuick;
 
 namespace BannerKings.Behaviours
 {
@@ -234,10 +232,27 @@ namespace BannerKings.Behaviours
 
         public void AiHourlyTick(MobileParty mobileParty, PartyThinkParams p)
         {
-            if (playerArmyDuty == null || mobileParty != playerArmyDuty.Party)
+            TickDuty(mobileParty);
+            if (mobileParty != MobileParty.MainParty && mobileParty.Army != null && mobileParty.Army.LeaderParty == mobileParty)
             {
-                return;
+                List<AiBehavior> behaviors = new List<AiBehavior>()
+                {
+                    AiBehavior.BesiegeSettlement,
+                    AiBehavior.RaidSettlement,
+                    AiBehavior.DefendSettlement
+                };
+
+                if (mobileParty.Ai.HourCounter == 1 && !mobileParty.Ai.IsDisabled && behaviors.Contains(mobileParty.DefaultBehavior))
+                {
+                    mobileParty.Ai.DisableForHours(6);
+                    mobileParty.Ai.HourCounter = 0;
+                }
             }
+        }
+
+        private void TickDuty(MobileParty mobileParty)
+        {
+            if (playerArmyDuty == null || mobileParty != playerArmyDuty.Party) return;
 
             var army = mobileParty.Army;
             if (army == null)
