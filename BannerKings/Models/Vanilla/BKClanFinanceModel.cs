@@ -143,21 +143,6 @@ namespace BannerKings.Models.Vanilla
             }
 
             var kingdom = clan.Kingdom;
-            int totalNotablesAids = 0;
-            foreach (var town in clan.Fiefs)
-            {
-                if (!BannerKingsConfig.Instance.AI.AcceptNotableAid(clan, BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement)))
-                {
-                    continue;
-                }
-            }
-
-            if (totalNotablesAids > 0)
-            {
-                result.Add(totalNotablesAids,
-                    new TextObject("{=WYDGftvz}Notable aids"));
-            }
-
             var dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassals(clan);
             if (dictionary.Count >= 0)
             {
