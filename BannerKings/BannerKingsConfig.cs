@@ -8,7 +8,6 @@ using BannerKings.Campaign.Culture;
 using BannerKings.Campaign.Economy.Markets;
 using BannerKings.Campaign.Skills;
 using BannerKings.Managers;
-using BannerKings.Managers.AI;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Grace;
 using BannerKings.Managers.Court.Members;
@@ -59,8 +58,6 @@ namespace BannerKings
         public string TitlesGeneratorPath { get; set; } = BasePath.Name + "Modules/BannerKings/ModuleData/titles.xml";
         public string RecruitsXmlPath { get; set; }
 
-        public AIBehavior AI = new();
-
         public bool wipeData = false;
         public PopulationManager PopulationManager { get; private set; }
         public PolicyManager PolicyManager { get; private set; }
@@ -74,7 +71,7 @@ namespace BannerKings
         public BKInterestGroupsModel InterestGroupsModel { get; set; } = new();
         public BKConstructionModel ConstructionModel { get; } = new();
         public InfluenceModel InfluenceModel { get; set; } = new BKInfluenceModel();
-        public BKTitleModel TitleModel { get; } = new();
+        public TitleModel TitleModel { get; } = new BKTitleModel();
         public BKStabilityModel StabilityModel { get; } = new();
         public BKClanFinanceModel ClanFinanceModel { get; } = new();
         public BKEducationModel EducationModel { get; } = new();
@@ -85,8 +82,8 @@ namespace BannerKings
         public BKWorkshopModel WorkshopModel { get; } = new();
         public BKAdministrativeModel AdministrativeModel { get; } = new();
         public BKSmithingModel SmithingModel { get; } = new();
-        public ICultureModel CultureModel { get; set; } = new BKCultureModel();
-        public IReligionModel ReligionModel { get; set; } = new BKReligionModel();
+        public CultureModel CultureModel { get; set; } = new BKCultureModel();
+        public ReligionModel ReligionModel { get; set; } = new BKReligionModel();
         public VolunteerModel VolunteerModel { get; set; } = new BKVolunteerModel();
         public LegitimacyModel LegitimacyModel { get; set; } = new BKLegitimacyModel();
         public GrowthModel GrowthModel { get; set; } = new BKGrowthModel();
@@ -102,7 +99,7 @@ namespace BannerKings
         public IPartyNeedsModel PartyNeedsModel { get; } = new BKPartyNeedsModel();
         public BKDiplomacyModel DiplomacyModel { get; } = new();
         public BKKingdomDecisionModel KingdomDecisionModel { get; } = new();
-        public IMercenaryModel MercenaryModel { get; } = new MercenaryModel();
+        public MercenaryModel MercenaryModel { get; } = new BKMercenaryModel();
         public RelationsModel RelationsModel { get; } = new BKRelationsModel();
 
         static BannerKingsConfig()
