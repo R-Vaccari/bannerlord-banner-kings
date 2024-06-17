@@ -217,6 +217,8 @@ namespace BannerKings.Behaviours.Mercenary
             {
                 PrivilegeTimes.Add(kingdom, CampaignTime.Now);
             }
+
+            ContractDueDate = CampaignTime.YearsFromNow(1f);
         }
 
         public void RemoveKingdom(Kingdom kingdom, bool fired = false)
@@ -264,12 +266,15 @@ namespace BannerKings.Behaviours.Mercenary
             }
 
             Kingdom = null;
+            ContractDueDate = CampaignTime.Never;
         }
 
         public void ExtendTime() => ContractDueDate = CampaignTime.YearsFromNow(1f);
 
         public float GetPoints(Kingdom kingdom)
         {
+            if (kingdom == null) return 0f;
+
             if (KingdomProgress.ContainsKey(kingdom))
             {
                 return KingdomProgress[kingdom];
@@ -281,6 +286,8 @@ namespace BannerKings.Behaviours.Mercenary
         internal List<MercenaryPrivilege> GetPrivileges(Kingdom kingdom)
         {
             var list = new List<MercenaryPrivilege>();
+            if (kingdom == null) return list;
+
             foreach (var kingdomPrivilege in KingdomPrivileges[kingdom])
             {
                 list.Add(kingdomPrivilege);
