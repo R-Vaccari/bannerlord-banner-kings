@@ -280,6 +280,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public void Fulfill(DemandResponse response, Hero fulfiller)
         {
+            SetTexts();
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(fulfiller, Group.Leader, response.Relation);
             bool success = response.Fulfill(fulfiller);
 
