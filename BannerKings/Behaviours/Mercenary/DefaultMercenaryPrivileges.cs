@@ -3,6 +3,7 @@ using BannerKings.Managers.Court;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -65,7 +66,7 @@ namespace BannerKings.Behaviours.Mercenary
                     var workshop = MercenaryCareer.GetWorkshopPrivilege(career);
                     if (workshop != null)
                     {
-                        workshop.ChangeOwnerOfWorkshop(career.Clan.Leader, workshop.WorkshopType, BannerKingsConfig.Instance.WorkshopModel.InitialCapital);
+                        ChangeOwnerOfWorkshopAction.ApplyByDeath(workshop, career.Clan.Leader);
                         MBInformationManager.AddQuickInformation(new TextObject("{=7OaTLJKt}You are now the owner of {WORKSHOP} at {TOWN}!")
                             .SetTextVariable("WORKSHOP", workshop.Name)
                             .SetTextVariable("TOWN", workshop.Settlement.Name),
