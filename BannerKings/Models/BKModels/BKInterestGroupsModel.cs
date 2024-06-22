@@ -443,7 +443,7 @@ namespace BannerKings.Models.BKModels
                 {
                     if (demand.Claimant != hero)
                     {
-                        float relationClaimant = -MBMath.Map(hero.GetRelation(demand.Claimant), -100f, 100f, -0.25f, 0.25f);
+                        float relationClaimant = MBMath.Map(hero.GetRelation(demand.Claimant), -100f, 100f, -0.25f, 0.25f);
                         result.Add(relationClaimant, new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
                             .SetTextVariable("HERO1", hero.Name)
                             .SetTextVariable("HERO2", demand.Claimant.Name));
