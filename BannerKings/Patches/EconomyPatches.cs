@@ -24,12 +24,12 @@ using BannerKings.Utils.Extensions;
 using System.Reflection;
 using TaleWorlds.CampaignSystem.GameComponents;
 using BannerKings.Managers.Innovations;
-using BannerKings.Campaign;
 using TaleWorlds.CampaignSystem.Inventory;
-using BannerKings.Campaign.Economy.Markets;
 using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Roster;
+using BannerKings.CampaignContent;
+using BannerKings.CampaignContent.Economy.Markets;
 
 namespace BannerKings.Patches
 {
@@ -95,19 +95,6 @@ namespace BannerKings.Patches
               .GetType()
               .GetMethod("BuyGoods", BindingFlags.Instance | BindingFlags.NonPublic);
 
-            [HarmonyPostfix]
-            [HarmonyPatch("GetTradeScoreForTown", MethodType.Normal)]
-            private static void GetTradeScoreForTownPostfix(ref float __result, MobileParty caravanParty, Town town,
-                    CampaignTime lastHomeVisitTimeOfCaravan,
-                    float caravanFullness, bool distanceCut)
-            {
-                var data = town.Settlement.PopulationData();
-                if (data != null)
-                {
-                    __result *= data.EconomicData.CaravanAttraction.ResultNumber;
-                }
-            }
-
             [HarmonyPrefix]
             [HarmonyPatch("FindNextDestinationForCaravan", MethodType.Normal)]
             private static bool FindNextDestinationForCaravan(CaravansCampaignBehavior __instance, MobileParty caravanParty, bool distanceCut, ref Town __result)
@@ -136,6 +123,9 @@ namespace BannerKings.Patches
                             caravanFullness, 
                             distanceCut
                         });
+
+                        var data = town.Settlement.PopulationData();
+                        if (data != null) tradeScoreForTown *= data.EconomicData.CaravanAttraction.ResultNumber;
 
                         if (tradeScoreForTown > num)
                         {
@@ -265,7 +255,7 @@ namespace BannerKings.Patches
                     {
                         spawnSettlement = Town.AllTowns.GetRandomElement<Town>().Settlement;
                     }
-                    else if (settlement.IsTown)
+                    else if (settlement.Town != null)
                     {
                         spawnSettlement = settlement;
                     }
