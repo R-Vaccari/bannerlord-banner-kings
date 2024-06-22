@@ -34,10 +34,14 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms.Mercenary
         public MercenaryCareer Career { get; private set; }
 
         [DataSourceProperty]
-        public string CareerText => new TextObject("{=tDfLwHfm}{CLAN} Career in {KINGDOM}")
+        public string CareerText => Career != null && Career.Kingdom != null ? 
+            new TextObject("{=tDfLwHfm}{CLAN} Career in {KINGDOM}")
             .SetTextVariable("CLAN", Clan.PlayerClan.Name)
             .SetTextVariable("KINGDOM", Career?.Kingdom.Name)
-            .ToString();
+            .ToString() 
+            : 
+            "";
+
         [DataSourceProperty] public string RequestPrivilegeText => new TextObject("{=ZYyxmOv9}Request").ToString();
         [DataSourceProperty] public string PrivilegesText => new TextObject("Privileges").ToString();
         [DataSourceProperty] public string NoPrivilegesText => new TextObject("{=2uHBLzKE}No privileges yet! Acquire Career Points through service time and merit. Request privileges by spending these points.").ToString();
@@ -69,7 +73,7 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms.Mercenary
         {
             base.RefreshValues();
 
-            if (Career != null)
+            if (Career != null && Career.Kingdom != null && Clan.PlayerClan.IsUnderMercenaryService)
             {
                 Privileges.Clear();
                 PointsText = Career.GetPoints(Career.Kingdom).ToString();
