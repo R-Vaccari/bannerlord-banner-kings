@@ -2,7 +2,7 @@
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 
-namespace BannerKings.Campaign.Economy.Markets
+namespace BannerKings.CampaignContent.Economy.Markets
 {
     public class DefaultMarketGroups : DefaultTypeInitializer<DefaultMarketGroups, MarketGroup>
     {

@@ -1,5 +1,5 @@
 using BannerKings.Behaviours.PartyNeeds;
-using BannerKings.Campaign.Skills;
+using BannerKings.CampaignContent.Skills;
 using BannerKings.Managers.Skills;
 using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Settings;

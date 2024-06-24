@@ -5,7 +5,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Campaign.Skills
+namespace BannerKings.CampaignContent.Skills
 {
     public class BKSkillEffects : DefaultTypeInitializer<BKSkillEffects, SkillEffect>
     {
@@ -30,17 +30,17 @@ namespace BannerKings.Campaign.Skills
         public override void Initialize()
         {
             PietyGain = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("PietyGain"));
-            PietyGain.Initialize(new TextObject("{=3MDmvuVf}Daily piety gain: +{a0}"), 
+            PietyGain.Initialize(new TextObject("{=3MDmvuVf}Daily piety gain: +{a0}"),
                 new SkillObject[]
                 {
                     BKSkills.Instance.Theology
-                }, 
-                SkillEffect.PerkRole.Personal, 
-                0.01f, 
+                },
+                SkillEffect.PerkRole.Personal,
+                0.01f,
                 SkillEffect.PerkRole.None,
-                0f, 
-                SkillEffect.EffectIncrementType.Add, 
-                0f, 
+                0f,
+                SkillEffect.EffectIncrementType.Add,
+                0f,
                 0f);
 
             FaithPresence = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("FaithPresence"));

@@ -6,7 +6,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Campaign
+namespace BannerKings.CampaignContent
 {
     public class BKVillageTypes : DefaultTypeInitializer<BKVillageTypes, VillageType>
     {

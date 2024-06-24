@@ -2,7 +2,7 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Campaign.Economy.Markets
+namespace BannerKings.CampaignContent.Economy.Markets
 {
     public class MarketGroup : BannerKingsObject
     {

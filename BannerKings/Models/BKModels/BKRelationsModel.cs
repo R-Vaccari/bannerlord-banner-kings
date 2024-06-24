@@ -1,5 +1,5 @@
 ﻿using BannerKings.Behaviours.Relations;
-using BannerKings.Campaign.Culture;
+using BannerKings.CampaignContent.Culture;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Traits;

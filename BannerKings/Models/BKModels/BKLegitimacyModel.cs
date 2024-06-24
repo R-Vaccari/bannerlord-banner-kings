@@ -1,5 +1,5 @@
 using BannerKings.Behaviours.Diplomacy;
-using BannerKings.Campaign.Skills;
+using BannerKings.CampaignContent.Skills;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;

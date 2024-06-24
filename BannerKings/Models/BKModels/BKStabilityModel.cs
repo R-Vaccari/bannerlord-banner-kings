@@ -1,5 +1,5 @@
 using System.Linq;
-using BannerKings.Campaign.Skills;
+using BannerKings.CampaignContent.Skills;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Education.Lifestyles;

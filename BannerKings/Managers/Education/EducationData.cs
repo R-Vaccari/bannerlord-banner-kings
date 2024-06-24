@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using BannerKings.Campaign.Skills;
+using BannerKings.CampaignContent.Skills;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education.Lifestyles;

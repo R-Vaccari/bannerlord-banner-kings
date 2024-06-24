@@ -3,7 +3,7 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.TournamentGames;
 
-namespace BannerKings.Campaign
+namespace BannerKings.CampaignContent
 {
     public class BKTournamentManager : TournamentManager
     {

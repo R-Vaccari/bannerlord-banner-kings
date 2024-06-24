@@ -2,7 +2,7 @@
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 
-namespace BannerKings.Campaign.Culture
+namespace BannerKings.CampaignContent.Culture
 {
     public class CulturalStanding : BannerKingsObject
     {
@@ -10,7 +10,7 @@ namespace BannerKings.Campaign.Culture
         private Dictionary<CultureObject, int> Standings { get; set; }
 
         public CulturalStanding(string id, CultureObject culture) : base(id)
-        { 
+        {
             Culture = culture;
             Standings = new Dictionary<CultureObject, int>(5);
         }
@@ -20,7 +20,7 @@ namespace BannerKings.Campaign.Culture
             if (culture.StringId != Culture.StringId)
                 Standings[culture] = relation;
         }
-        
+
         public int GetStanding(CultureObject culture)
         {
             int result = 0;

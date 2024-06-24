@@ -13,10 +13,10 @@ using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.Library;
 using Helpers;
-using BannerKings.Campaign.Skills;
 using BannerKings.Extensions;
 using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Managers.Institutions.Religions.Faiths.Societies;
+using BannerKings.CampaignContent.Skills;
 
 namespace BannerKings.Models.BKModels
 {

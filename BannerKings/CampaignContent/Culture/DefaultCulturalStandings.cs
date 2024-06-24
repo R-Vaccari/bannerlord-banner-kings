@@ -2,7 +2,7 @@
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 
-namespace BannerKings.Campaign.Culture
+namespace BannerKings.CampaignContent.Culture
 {
     public class DefaultCulturalStandings : DefaultTypeInitializer<DefaultCulturalStandings, CulturalStanding>
     {
@@ -22,7 +22,7 @@ namespace BannerKings.Campaign.Culture
                 yield return Aserai;
                 yield return Empire;
                 yield return Sturgia;
-                foreach (var item in ModAdditions)   
+                foreach (var item in ModAdditions)
                     yield return item;
             }
         }

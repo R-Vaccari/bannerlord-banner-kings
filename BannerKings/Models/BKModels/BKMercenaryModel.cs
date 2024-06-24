@@ -1,4 +1,4 @@
-﻿using BannerKings.Campaign.Economy.Markets;
+﻿using BannerKings.CampaignContent.Economy.Markets;
 using BannerKings.Models.BKModels.Abstract;
 using System;
 using System.Collections.Generic;
