@@ -1,9 +1,8 @@
-using BannerKings.Managers.Skills;
+using BannerKings.Managers.Institutions.Religions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -105,6 +104,40 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override float MinimumGroupInfluence => 0.2f;
 
+        protected override TextObject PlayerPromptText
+        {
+            get
+            {
+                TextObject enactText;
+                if (Enact) enactText = new TextObject("{=tA5qf6B1}As a policy supported by the group, they demand it to be enacted.");
+                else enactText = new TextObject("{=thaUwMx7}As a policy shunned by the group, they demand it to be repealed.");
+
+                return new TextObject("{=EAWEvkPr}The {GROUP} group is demanding the chane of state to the {POLICY} policy. {ENACT_TEXT} You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
+                .SetTextVariable("GROUP", Group.Name)
+                .SetTextVariable("POLICY", Policy.Name)
+                .SetTextVariable("ENACT_TEXT", enactText);
+            }
+        }
+
+        protected override TextObject PlayerAnswersText
+        {
+            get
+            {
+                TextObject enactText;
+                if (Enact) enactText = new TextObject("{=tA5qf6B1}As a policy supported by the group, they demand it to be enacted.");
+                else enactText = new TextObject("{=thaUwMx7}As a policy shunned by the group, they demand it to be repealed.");
+
+                return new TextObject("{=17xuAnQx}The {GROUP} is pushing for the state of {POLICY} to be changed. {POLICY_TEXT} The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
+                .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport((Group as InterestGroup)).ResultNumber * 100f).ToString("0.00"))
+                .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence((Group as InterestGroup)).ResultNumber * 100f).ToString("0.00"))
+                .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
+                .SetTextVariable("LEADER", Group.Leader.Name)
+                .SetTextVariable("POLICY", Policy.Name)
+                .SetTextVariable("POLICY_TEXT", enactText)
+                .SetTextVariable("GROUP", Group.Name);
+            }
+        }
+
         public override IEnumerable<DemandResponse> DemandResponses
         {
             get
@@ -125,7 +158,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             return demand;
         }
 
-        public override void SetUp()
+        protected override void SetUpInternally()
         {
             Kingdom kingdom = Group.FactionLeader.MapFaction as Kingdom;
             Policy = (Group as InterestGroup).SupportedPolicies.GetRandomElementWithPredicate(x => !kingdom.ActivePolicies.Contains(x));
@@ -137,19 +170,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             if (Policy != null)
             {
                 Enact = (Group as InterestGroup).SupportedPolicies.Contains(Policy);
-                if (Group.Members.Contains(Hero.MainHero))
-                {
-                    ShowPlayerDemandOptions();
-                }
-
-                if (Group.FactionLeader == Hero.MainHero)
-                {
-                    ShowPlayerPrompt();
-                }
-            }
-            else
-            {
-                Finish();
             }
         }
 
@@ -174,90 +194,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
             return new(true, new TextObject("{=WvxUuqmj}This demand is possible."));
         }
-
-        public override void ShowPlayerPrompt()
-        {
-            TextObject enactText;
-            if (Enact)
-            {
-                enactText = new TextObject("{=tA5qf6B1}As a policy supported by the group, they demand it to be enacted.");
-            }
-            else
-            {
-                enactText = new TextObject("{=thaUwMx7}As a policy shunned by the group, they demand it to be repealed.");
-            }
-
-            InformationManager.ShowInquiry(new InquiryData(Name.ToString(),
-                new TextObject("{=EAWEvkPr}The {GROUP} group is demanding the chane of state to the {POLICY} policy. {ENACT_TEXT} You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
-                .SetTextVariable("GROUP", Group.Name)
-                .SetTextVariable("POLICY", Policy.Name)
-                .SetTextVariable("ENACT_TEXT", enactText)
-                .ToString(),
-                true,
-                true,
-                new TextObject("{=j90Aa0xG}Resolve").ToString(),
-                new TextObject("{=sbwMaTwx}Postpone").ToString(),
-                () =>
-                {
-                    ShowPlayerDemandAnswers();
-                },
-                () =>
-                {
-                    DueDate = CampaignTime.DaysFromNow(7f);
-                },
-                Utils.Helpers.GetKingdomDecisionSound()),
-                true,
-                true);
-        }
-
-        public override void ShowPlayerDemandAnswers()
-        {
-            List<InquiryElement> options = new List<InquiryElement>();
-            foreach (var answer in DemandResponses)
-            {
-                options.Add(new InquiryElement(answer,
-                    answer.Name.ToString(),
-                    null,
-                    answer.IsAdequate(Hero.MainHero),
-                    answer.Description.ToString()));
-            }
-
-            TextObject enactText;
-            if (Enact)
-            {
-                enactText = new TextObject("{=tA5qf6B1}As a policy supported by the group, they demand it to be enacted.");
-            }
-            else
-            {
-                enactText = new TextObject("{=thaUwMx7}As a policy shunned by the group, they demand it to be repealed.");
-            }
-
-            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
-                new TextObject("{=17xuAnQx}The {GROUP} is pushing for the state of {POLICY} to be changed. {POLICY_TEXT} The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
-                .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport((Group as InterestGroup)).ResultNumber * 100f).ToString("0.00"))
-                .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence((Group as InterestGroup)).ResultNumber * 100f).ToString("0.00"))
-                .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
-                .SetTextVariable("LEADER", Group.Leader.Name)
-                .SetTextVariable("POLICY", Policy.Name)
-                .SetTextVariable("POLICY_TEXT", enactText)
-                .SetTextVariable("GROUP", Group.Name)
-                .ToString(),
-                options,
-                false,
-                1,
-                1,
-                GameTexts.FindText("str_accept").ToString(),
-                String.Empty,
-                (List<InquiryElement> list) =>
-                {
-                    DemandResponse response = (DemandResponse)list[0].Identifier;
-                    Fulfill(response, Hero.MainHero);
-                },
-                null,
-                Utils.Helpers.GetKingdomDecisionSound()),
-                true);
-        }
-
+      
         public override void ShowPlayerDemandOptions()
         {
             SetTexts();
@@ -291,10 +228,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 }
             }
 
-            bool playerLead = Group.Leader == Hero.MainHero;
-            TextObject description;
-
-            description = new TextObject("{=kyB8tkgY}Choose the benefactor for the {POSITION} position.");
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString() + " (1/2)",
                 new TextObject("{=A3UyJ3SH}As a leader of your group you can decide what policy ought to be changed. These can be policies supported by the group that are currently inactive, or active policies that are shunned by the group.").ToString(),
                 policies,
@@ -318,18 +251,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             DueDate = CampaignTime.Never;
         }
 
-        public override void Tick()
-        {
-            if (IsDueDate)
-            {
-                Kingdom kingdom = Group.FactionLeader.MapFaction as Kingdom;
-                bool finished = false;
-                if (Enact && kingdom.ActivePolicies.Contains(Policy))finished = true;
-                else if (!Enact && !kingdom.ActivePolicies.Contains(Policy))finished = true;         
-
-                if (!finished) PushForDemand();
-                else Fulfill(PositiveAnswer, Group.Leader);
-            }
-        }
+        protected override bool IsFulfilled() => (Enact && Group.KingdomDiplomacy.Kingdom.ActivePolicies.Contains(Policy)) ||
+            (!Enact && !Group.KingdomDiplomacy.Kingdom.ActivePolicies.Contains(Policy));
     }
 }

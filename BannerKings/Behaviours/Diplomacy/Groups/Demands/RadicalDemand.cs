@@ -21,6 +21,22 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
         }
 
+        public new void ShowPlayerPrompt()
+        {
+            SetTexts();
+            InformationManager.ShowInquiry(new InquiryData(Name.ToString(),
+                PlayerPromptText.ToString(),
+                true,
+                false,
+                new TextObject("{=j90Aa0xG}Resolve").ToString(),
+                "",
+                () => ShowPlayerDemandAnswers(),
+                null,
+                Utils.Helpers.GetKingdomDecisionSound()),
+                true,
+                true);
+        }
+
         public abstract void EndRebellion(Kingdom rebels, Kingdom original, bool success);
 
         protected void FinishRadicalDemand()
@@ -39,6 +55,11 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 Group.Members.Clear();
                 Group.SetLeader(null);
             }
+        }
+
+        public new void Tick()
+        {
+            if (!Active) Finish();
         }
     }
 }

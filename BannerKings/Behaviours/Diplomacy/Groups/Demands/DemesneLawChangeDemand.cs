@@ -1,11 +1,9 @@
-using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -111,6 +109,18 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
         }
 
+        protected override TextObject PlayerPromptText => new TextObject("{=OpQHhMmS}The {GROUP} group is demanding the enactment of the {LAW} law. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
+                .SetTextVariable("GROUP", Group.Name)
+                .SetTextVariable("LAW", Law.Name);
+
+        protected override TextObject PlayerAnswersText => new TextObject("{=5hFXX5rW}The {GROUP} is pushing for the enactment of the {LAW} law. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
+                .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport((Group as InterestGroup)).ResultNumber * 100f).ToString("0.00"))
+                .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence((Group as InterestGroup)).ResultNumber * 100f).ToString("0.00"))
+                .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
+                .SetTextVariable("LEADER", Group.Leader.Name)
+                .SetTextVariable("LAW", Law.Name)
+                .SetTextVariable("GROUP", Group.Name);
+
         public override Demand GetCopy(DiplomacyGroup group)
         {
             DemesneLawChangeDemand demand = new DemesneLawChangeDemand();
@@ -118,7 +128,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             return demand;
         }
 
-        public override void SetUp()
+        protected override void SetUpInternally()
         {
             Kingdom kingdom = Group.FactionLeader.MapFaction as Kingdom;
             FeudalTitle kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
@@ -138,25 +148,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     }
                     Law = options.GetRandomElement();
                 }
-
-                if (Law != null)
-                {
-                    if (Group.Members.Contains(Hero.MainHero))
-                    {
-                        ShowPlayerDemandOptions();
-                    }
-
-                    if (Group.FactionLeader == Hero.MainHero)
-                    {
-                        ShowPlayerPrompt();
-                    }
-                }
-                else
-                {
-                    Finish();
-                }
             }
-            else Finish();  
         }
 
         public override (bool, TextObject) IsDemandCurrentlyAdequate()
@@ -179,68 +171,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
 
             return new(true, new TextObject("{=WvxUuqmj}This demand is possible."));
-        }
-
-        public override void ShowPlayerPrompt()
-        {
-            SetTexts();
-            InformationManager.ShowInquiry(new InquiryData(Name.ToString(),
-                new TextObject("{=OpQHhMmS}The {GROUP} group is demanding the enactment of the {LAW} law. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
-                .SetTextVariable("GROUP", Group.Name)
-                .SetTextVariable("LAW", Law.Name)
-                .ToString(),
-                true,
-                true,
-                new TextObject("{=j90Aa0xG}Resolve").ToString(),
-                new TextObject("{=sbwMaTwx}Postpone").ToString(),
-                () =>
-                {
-                    ShowPlayerDemandAnswers();
-                },
-                () =>
-                {
-                    DueDate = CampaignTime.DaysFromNow(7f);
-                },
-                Utils.Helpers.GetKingdomDecisionSound()),
-                true,
-                true);
-        }
-
-        public override void ShowPlayerDemandAnswers()
-        {
-            List<InquiryElement> options = new List<InquiryElement>();
-            foreach (var answer in DemandResponses)
-            {
-                options.Add(new InquiryElement(answer,
-                    answer.Name.ToString(),
-                    null,
-                    answer.IsAdequate(Hero.MainHero),
-                    answer.Description.ToString()));
-            }
-
-            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
-                new TextObject("{=5hFXX5rW}The {GROUP} is pushing for the enactment of the {LAW} law. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
-                .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport((Group as InterestGroup)).ResultNumber * 100f).ToString("0.00"))
-                .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence((Group as InterestGroup)).ResultNumber * 100f).ToString("0.00"))
-                .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
-                .SetTextVariable("LEADER", Group.Leader.Name)
-                .SetTextVariable("LAW", Law.Name)
-                .SetTextVariable("GROUP", Group.Name)
-                .ToString(),
-                options,
-                false,
-                1,
-                1,
-                GameTexts.FindText("str_accept").ToString(),
-                String.Empty,
-                (List<InquiryElement> list) =>
-                {
-                    DemandResponse response = (DemandResponse)list[0].Identifier;
-                    Fulfill(response, Hero.MainHero);
-                },
-                null,
-                Utils.Helpers.GetKingdomDecisionSound()),
-                true);
         }
 
         public override void ShowPlayerDemandOptions()
@@ -289,17 +219,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             DueDate = CampaignTime.Never;
         }
 
-        public override void Tick()
-        {
-            Kingdom kingdom = Group.FactionLeader.MapFaction as Kingdom;
-            if (Title.Contract.DemesneLaws.Contains(Law))
-            {
-                PositiveAnswer.Fulfill(Group.FactionLeader);
-            }
-            else
-            {
-                PushForDemand();
-            }
-        }
+        protected override bool IsFulfilled() => Title.Contract.DemesneLaws.Contains(Law);
     }
 }

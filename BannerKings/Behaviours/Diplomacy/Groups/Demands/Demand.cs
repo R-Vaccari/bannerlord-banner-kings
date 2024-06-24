@@ -1,4 +1,6 @@
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
+using BannerKings.Managers.Titles;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -30,6 +32,61 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public abstract DemandResponse PositiveAnswer { get; }
         public abstract DemandResponse NegativeAnswer { get; }
+
+        protected abstract TextObject PlayerPromptText { get; }
+        protected abstract TextObject PlayerAnswersText { get; }
+
+        public void ShowPlayerPrompt()
+        {
+            SetTexts();
+            InformationManager.ShowInquiry(new InquiryData(Name.ToString(),
+                PlayerPromptText.ToString(),
+                true,
+                true,
+                new TextObject("{=j90Aa0xG}Resolve").ToString(),
+                new TextObject("{=sbwMaTwx}Postpone").ToString(),
+                () =>
+                {
+                    ShowPlayerDemandAnswers();
+                },
+                () =>
+                {
+                    DueDate = CampaignTime.DaysFromNow(7f);
+                },
+                Utils.Helpers.GetKingdomDecisionSound()),
+                true,
+                true);
+        }
+
+        public void ShowPlayerDemandAnswers()
+        {
+            List<InquiryElement> options = new List<InquiryElement>();
+            foreach (var answer in DemandResponses)
+            {
+                options.Add(new InquiryElement(answer,
+                    answer.Name.ToString(),
+                    null,
+                    answer.IsAdequate(Hero.MainHero),
+                    answer.Description.ToString()));
+            }
+
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
+                PlayerAnswersText.ToString(),
+                options,
+                false,
+                1,
+                1,
+                GameTexts.FindText("str_accept").ToString(),
+                String.Empty,
+                (List<InquiryElement> list) =>
+                {
+                    DemandResponse response = (DemandResponse)list[0].Identifier;
+                    Fulfill(response, Hero.MainHero);
+                },
+                null,
+                Utils.Helpers.GetKingdomDecisionSound()),
+                true);
+        }
 
         public DemandResponse DisputeLordship => new DemandResponse(new TextObject("{=RYmV2PEY}Dispute (Lordship)"),
                    new TextObject("{=RYmV2PEY}Dispute on legal terms the efficacy of this demand. {LEADER} may or not be compelled to conceded, based on their Lordship ({LEADER_LORDSHIP}) against yours ({PLAYER_LORDSHIP}). Whether the group is satisfied or not depends on the leader being convinced.\nMinimum Lordship: {LORDSHIP}")
@@ -223,13 +280,38 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public abstract bool Active { get; }
 
-        public abstract void SetUp();
+        public void SetUp()
+        {
+            SetUpInternally();
+
+            if (Active)
+            {
+                if (Group.Leader == Hero.MainHero)
+                {
+                    ShowPlayerDemandOptions();
+                }
+
+                if (Group.FactionLeader == Hero.MainHero)
+                {
+                    ShowPlayerPrompt();
+                }
+            }
+            else Finish();
+        }
+
+        protected abstract void SetUpInternally();
+        protected abstract bool IsFulfilled();
         public abstract void ShowPlayerDemandOptions();
-        public abstract void ShowPlayerPrompt();
-        public abstract void ShowPlayerDemandAnswers();
         public abstract ValueTuple<bool, TextObject> IsDemandCurrentlyAdequate();
         public abstract IEnumerable<DemandResponse> DemandResponses { get; }
-        public abstract void Tick();
+        public void Tick()
+        {
+            if (IsDueDate)
+            {
+                if (IsFulfilled()) Fulfill(PositiveAnswer, Group.FactionLeader);
+                else PushForDemand();
+            }
+        }
         public abstract void Finish();
 
         public void PushForDemand()

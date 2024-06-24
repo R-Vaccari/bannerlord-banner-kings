@@ -135,6 +135,17 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
         }
 
+        protected override TextObject PlayerPromptText => new TextObject("{=!}The {GROUP} group is pushing for you to cede rulership to {CLAIMANT}. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
+                .SetTextVariable("GROUP", Group.Name)
+                .SetTextVariable("CLAIMANT", Claimant.Name);
+
+        protected override TextObject PlayerAnswersText => new TextObject("{=BKAdUzjo}The {GROUP} is pushing for you to cede rulership to {CLAIMANT}. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {STRENGTH}% military strength relative to your loyalist forces.")
+                .SetTextVariable("STRENGTH", (Group as RadicalGroup).PowerProportion)
+                .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
+                .SetTextVariable("LEADER", Group.Leader.Name)
+                .SetTextVariable("CLAIMANT", Claimant.Name)
+                .SetTextVariable("GROUP", Group.Name);
+
         public override void EndRebellion(Kingdom rebels, Kingdom original, bool success)
         {
             List<Clan> rebelClans = new List<Clan>(rebels.Clans);
@@ -191,76 +202,24 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
         }
 
-        public override void SetUp()
+        protected override void SetUpInternally()
         {
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Group.KingdomDiplomacy.Kingdom);
             if (title == null) return;
-            
-            if (Group.Leader == Hero.MainHero)
-            {
-                ShowPlayerDemandOptions();
-            }
-            else
-            {
-                IEnumerable<KeyValuePair<Hero, ExplainedNumber>> claimants = BannerKingsConfig.Instance.TitleModel
-                    .CalculateSuccessionLine(title, Group.KingdomDiplomacy.Kingdom.RulingClan, null, -1);
-                List<(Hero, float)> results = new List<(Hero, float)>();
-                foreach (var tuple in claimants)
-                {
-                    Claimant = tuple.Key;
-                    results.Add(new (tuple.Key,
-                        BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroJoinChance(Group.Leader, Group, Group.KingdomDiplomacy)
-                        .ResultNumber));
-                }
 
-                Claimant = null;
-                Claimant = MBRandom.ChooseWeighted(results);
+            IEnumerable<KeyValuePair<Hero, ExplainedNumber>> claimants = BannerKingsConfig.Instance.TitleModel
+                .CalculateSuccessionLine(title, Group.KingdomDiplomacy.Kingdom.RulingClan, null, -1);
+            List<(Hero, float)> results = new List<(Hero, float)>();
+            foreach (var tuple in claimants)
+            {
+                Claimant = tuple.Key;
+                results.Add(new (tuple.Key,
+                    BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroJoinChance(Group.Leader, Group, Group.KingdomDiplomacy)
+                    .ResultNumber));
             }
 
-            if (Claimant != null)
-            {
-                if (Group.FactionLeader == Hero.MainHero)
-                {
-                    ShowPlayerPrompt();
-                }
-            }
-            else Finish();
-        }
-
-        public override void ShowPlayerDemandAnswers()
-        {
-            List<InquiryElement> options = new List<InquiryElement>();
-            foreach (var answer in DemandResponses)
-            {
-                options.Add(new InquiryElement(answer,
-                    answer.Name.ToString(),
-                    null,
-                    answer.IsAdequate(Hero.MainHero),
-                    answer.Description.ToString()));
-            }
-
-            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
-                new TextObject("{=BKAdUzjo}The {GROUP} is pushing for you to cede rulership to {CLAIMANT}. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {STRENGTH}% military strength relative to your loyalist forces.")
-                .SetTextVariable("STRENGTH", (Group as RadicalGroup).PowerProportion)
-                .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
-                .SetTextVariable("LEADER", Group.Leader.Name)
-                .SetTextVariable("CLAIMANT", Claimant.Name)
-                .SetTextVariable("GROUP", Group.Name)
-                .ToString(),
-                options,
-                false,
-                1,
-                1,
-                GameTexts.FindText("str_accept").ToString(),
-                String.Empty,
-                (List<InquiryElement> list) =>
-                {
-                    DemandResponse response = (DemandResponse)list[0].Identifier;
-                    Fulfill(response, Hero.MainHero);
-                },
-                null,
-                Utils.Helpers.GetKingdomDecisionSound()),
-                true);
+            Claimant = null;
+            Claimant = MBRandom.ChooseWeighted(results);
         }
 
         public override void ShowPlayerDemandOptions()
@@ -316,13 +275,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 }));
         }
 
-        public override void ShowPlayerPrompt()
-        {
-        }
-
-        public override void Tick()
-        {
-            if (!Active) Finish();
-        }
+        protected override bool IsFulfilled() => Claimant.Clan == Group.KingdomDiplomacy.Kingdom.RulingClan;
     }
 }

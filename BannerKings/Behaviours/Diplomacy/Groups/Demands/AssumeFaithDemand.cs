@@ -1,8 +1,6 @@
 using BannerKings.Managers.Institutions.Religions;
-using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
@@ -101,6 +99,18 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
         }
 
+        protected override TextObject PlayerPromptText => new TextObject("{=yHWrKsKr}The {GROUP} group is demanding you assume the {RELIGION} faith. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
+                .SetTextVariable("GROUP", Group.Name)
+                .SetTextVariable("RELIGION", Religion.Faith.GetFaithName());
+
+        protected override TextObject PlayerAnswersText => new TextObject("{=1rWYDHQj}The {GROUP} is pushing for you to assume the {RELIGION} faith, the legal faith of the realm. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
+                .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(Group as InterestGroup).ResultNumber * 100f).ToString("0.00"))
+                .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(Group as InterestGroup).ResultNumber * 100f).ToString("0.00"))
+                .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
+                .SetTextVariable("LEADER", Group.Leader.Name)
+                .SetTextVariable("RELIGION", Religion.Faith.GetFaithName())
+                .SetTextVariable("GROUP", Group.Name);
+
         public override void Finish()
         {
             Religion = null;
@@ -144,108 +154,19 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 new TextObject("{=RYmV2PEY}Demand that the ruler assume the legal faith of the realm."));
         }
 
-        public override void SetUp()
+        protected override void SetUpInternally()
         {
             Religion kingdomReligion = Group.KingdomDiplomacy.Religion;
             if (kingdomReligion != null)
             {
                 Religion = kingdomReligion;
-                if (Group.Members.Contains(Hero.MainHero))
-                {
-                    ShowPlayerDemandOptions();
-                }
-
-                if (Group.FactionLeader == Hero.MainHero)
-                {
-                    ShowPlayerPrompt();
-                }
             }
-            else
-            {
-                Finish();
-            }
-        }
-
-        public override void ShowPlayerDemandAnswers()
-        {
-            List<InquiryElement> options = new List<InquiryElement>();
-            foreach (var answer in DemandResponses)
-            {
-                options.Add(new InquiryElement(answer,
-                    answer.Name.ToString(),
-                    null,
-                    answer.IsAdequate(Hero.MainHero),
-                    answer.Description.ToString()));
-            }
-
-            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
-                new TextObject("{=1rWYDHQj}The {GROUP} is pushing for you to assume the {RELIGION} faith, the legal faith of the realm. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {INFLUENCE}% influence in the realm and {SUPPORT}% support towards you.")
-                .SetTextVariable("SUPPORT", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupSupport(Group as InterestGroup).ResultNumber * 100f).ToString("0.00"))
-                .SetTextVariable("INFLUENCE", (BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(Group as InterestGroup).ResultNumber * 100f).ToString("0.00"))
-                .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
-                .SetTextVariable("LEADER", Group.Leader.Name)
-                .SetTextVariable("RELIGION", Religion.Faith.GetFaithName())
-                .SetTextVariable("GROUP", Group.Name)
-                .ToString(),
-                options,
-                false,
-                1,
-                1,
-                GameTexts.FindText("str_accept").ToString(),
-                String.Empty,
-                (List<InquiryElement> list) =>
-                {
-                    DemandResponse response = (DemandResponse)list[0].Identifier;
-                    Fulfill(response, Hero.MainHero);
-                },
-                null,
-                Utils.Helpers.GetKingdomDecisionSound()),
-                true);
         }
 
         public override void ShowPlayerDemandOptions()
         {
         }
 
-        public override void ShowPlayerPrompt()
-        {
-            SetTexts();
-            InformationManager.ShowInquiry(new InquiryData(Name.ToString(),
-                new TextObject("{=yHWrKsKr}The {GROUP} group is demanding you assume the {RELIGION} faith. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
-                .SetTextVariable("GROUP", Group.Name)
-                .SetTextVariable("RELIGION", Religion.Faith.GetFaithName())
-                .ToString(),
-                true,
-                true,
-                new TextObject("{=j90Aa0xG}Resolve").ToString(),
-                new TextObject("{=sbwMaTwx}Postpone").ToString(),
-                () =>
-                {
-                    ShowPlayerDemandAnswers();
-                },
-                () =>
-                {
-                    DueDate = CampaignTime.DaysFromNow(7f);
-                },
-                Utils.Helpers.GetKingdomDecisionSound()),
-                true,
-                true);
-        }
-
-        public override void Tick()
-        {
-            if (Religion != null) Religion.PostInitialize();
-            if (IsDueDate)
-            {
-                if (RulerReligion == Religion)
-                {
-                    Fulfill(PositiveAnswer, Group.Leader);
-                }
-                else
-                {
-                    PushForDemand();
-                }
-            }
-        }
+        protected override bool IsFulfilled() => RulerReligion == Religion;
     }
 }
