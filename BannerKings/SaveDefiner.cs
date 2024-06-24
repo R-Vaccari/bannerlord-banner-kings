@@ -62,9 +62,11 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Eastern;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Goals;
 using BannerKings.Behaviours.Shipping;
-using BannerKings.Campaign;
 using BannerKings.Behaviours.Relations;
 using BannerKings.Managers.Institutions.Religions.Faiths.Groups;
+using BannerKings.Managers.Institutions.Religions.Faiths.Societies;
+using BannerKings.CampaignContent;
+using BannerKings.Behaviours;
 
 namespace BannerKings
 {
@@ -102,6 +104,8 @@ namespace BannerKings
             AddEnumDefinition(typeof(TitleType), 25);
             AddEnumDefinition(typeof(FeudalDuties), 26);
             AddEnumDefinition(typeof(FeudalRights), 27);
+            AddClassDefinition(typeof(BKCaravansBehavior.TradeActionLog), 28);
+            AddEnumDefinition(typeof(BKCaravansBehavior.PlayerInteraction), 29);
 
             AddClassDefinition(typeof(TitleManager), 32);
             AddClassDefinition(typeof(CouncilMember), 34);
@@ -221,7 +225,10 @@ namespace BannerKings
             AddClassDefinition(typeof(ClaimantDemand), 158);
             AddClassDefinition(typeof(RadicalGroup), 159);
             AddClassDefinition(typeof(HeroRelations), 160);
-            AddClassDefinition(typeof(RelationsModifier), 161); 
+            AddClassDefinition(typeof(RelationsModifier), 161);
+            AddClassDefinition(typeof(Society), 162);
+            AddClassDefinition(typeof(SocietyRank), 163);
+
 
             AddClassDefinition(typeof(MercenaryCareer), 1000);
             AddClassDefinition(typeof(MercenaryPrivilege), 1001);
@@ -300,7 +307,11 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(List<RelationsModifier>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, List<RelationsModifier>>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, HeroRelations>));
-            ConstructContainerDefinition(typeof(Dictionary<Hero, HeroMarriage>)); 
+            ConstructContainerDefinition(typeof(Dictionary<Hero, HeroMarriage>));
+
+            ConstructContainerDefinition(typeof(Dictionary<MobileParty, BKCaravansBehavior.PlayerInteraction>));
+            ConstructContainerDefinition(typeof(List<BKCaravansBehavior.TradeActionLog>));
+            ConstructContainerDefinition(typeof(Dictionary<MobileParty, List<BKCaravansBehavior.TradeActionLog>>));
         }
     }
 }

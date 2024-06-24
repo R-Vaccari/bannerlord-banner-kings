@@ -260,7 +260,7 @@ namespace BannerKings.Behaviours.Shipping
             Town town = null;
             try
             {
-                CaravansCampaignBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<CaravansCampaignBehavior>();
+                BKCaravansBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCaravansBehavior>();
                 var thinkMethod = behavior.GetType().GetMethod("ThinkNextDestination",
                                 BindingFlags.NonPublic | BindingFlags.Instance);
                 town = (Town)thinkMethod.Invoke(behavior, new object[] { party });

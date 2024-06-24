@@ -1,5 +1,5 @@
 using BannerKings.Behaviours;
-using BannerKings.Campaign.Skills;
+using BannerKings.CampaignContent.Skills;
 using BannerKings.Extensions;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Court.Members;
@@ -30,14 +30,14 @@ namespace BannerKings.Models.Vanilla
     {
         private static readonly float CRAFTSMEN_EFFECT_CAP = 0.4f;
 
-
-        public override ExplainedNumber CalculateMercantilism(Settlement settlement)
+        public override ExplainedNumber CalculateMercantilism(PopulationData data, bool descriptions = false)
         {
-            var result = new ExplainedNumber(0.1f, true);
+            var result = new ExplainedNumber(0.1f, descriptions);
             result.LimitMin(0f);
             result.LimitMax(1f);
 
-            var titleData = settlement.PopulationData().TitleData;
+            Settlement settlement = data.Settlement;
+            var titleData = data.TitleData;
             if (titleData != null)
             {
                 var title = titleData.Title;
@@ -55,6 +55,9 @@ namespace BannerKings.Models.Vanilla
 
             return result;
         }
+
+        public override ExplainedNumber CalculateMercantilism(Settlement settlement, bool descriptions = false) =>
+            CalculateMercantilism(settlement.PopulationData(), descriptions);
 
         public override ExplainedNumber CalculateProductionEfficiency(Settlement settlement, bool explanations = false, PopulationData data = null)
         {
@@ -219,18 +222,18 @@ namespace BannerKings.Models.Vanilla
             return cost;
         }
 
-        public override ExplainedNumber CalculateTradePower(Settlement settlement, bool descriptions = false)
+        public override ExplainedNumber CalculateTradePower(PopulationData data, bool descriptions = false)
         {
             ExplainedNumber result = new ExplainedNumber(1f, descriptions);
             result.LimitMin(0f);
 
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            Settlement settlement = data.Settlement;
             result.Add(data.EconomicData.Mercantilism.ResultNumber / 2f, new TextObject("{=5eHCGMEK}Mercantilism"));
             result.AddFactor(data.MilitaryData.Militarism.ResultNumber * -1f, new TextObject("{=m66LFb9g}Militarism"));
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
                 DefaultCouncilPositions.Instance.Steward,
-                DefaultCouncilTasks.Instance.DevelopEconomy, 
+                DefaultCouncilTasks.Instance.DevelopEconomy,
                 0.15f, false);
 
             foreach (var lane in DefaultShippingLanes.Instance.GetSettlementLanes(settlement))
@@ -259,7 +262,7 @@ namespace BannerKings.Models.Vanilla
                     float factor = MathF.Clamp(settlement.Town.Gold / 10000000f, 0.1f, 0.5f);
                     result.AddFactor(factor, new TextObject("{=s2gxPA2Q}Market gold"));
                 }
-                
+
                 var capital = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(settlement.OwnerClan.Kingdom);
                 if (capital == settlement.Town)
                 {
@@ -275,10 +278,10 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result,
-                   settlement.OwnerClan.Leader, 
+                   settlement.OwnerClan.Leader,
                    DefaultCouncilPositions.Instance.Constable,
                    DefaultCouncilTasks.Instance.EnforceLaw,
-                   0.05f, 
+                   0.05f,
                    true);
 
                 Hero governor = settlement.Town.Governor;
@@ -298,6 +301,9 @@ namespace BannerKings.Models.Vanilla
 
             return result;
         }
+
+        public override ExplainedNumber CalculateTradePower(Settlement settlement, bool descriptions = false) =>
+            CalculateTradePower(settlement.PopulationData(), descriptions);
 
         public override float GetDailyDemandForCategory(Town town, ItemCategory category, int extraProsperity)
         {

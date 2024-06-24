@@ -31,6 +31,7 @@ namespace BannerKings.Managers.Populations
 
         public Guild Guild => guild;
         public float Tariff => BannerKingsConfig.Instance.TaxModel.GetTownTaxRatio(settlement.Town);
+        public float TradePower { get; private set; } = 1f;
 
         public int CaravanFee(MobileParty caravan)
         {
@@ -79,9 +80,6 @@ namespace BannerKings.Managers.Populations
             ? BannerKingsConfig.Instance.EconomyModel.GetMerchantIncome(settlement.Town).ResultNumber
             : 0f;
 
-        public ExplainedNumber CaravanAttraction =>
-            BannerKingsConfig.Instance.EconomyModel.CalculateTradePower(settlement);
-
         public ExplainedNumber Mercantilism => BannerKingsConfig.Instance.EconomyModel.CalculateMercantilism(settlement);
 
         public ExplainedNumber ProductionEfficiency =>
@@ -106,6 +104,7 @@ namespace BannerKings.Managers.Populations
 
         internal override void Update(PopulationData data)
         {
+            TradePower = BannerKingsConfig.Instance.EconomyModel.CalculateTradePower(data).ResultNumber;
             /*
             if (guild == null && settlement.IsTown)
             {

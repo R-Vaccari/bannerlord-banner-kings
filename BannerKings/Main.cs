@@ -22,8 +22,10 @@ using TaleWorlds.MountAndBlade;
 using BannerKings.Managers.Innovations.Eras;
 using BannerKings.Behaviours.Innovations;
 using BannerKings.Behaviours.Shipping;
-using BannerKings.Campaign.Skills;
 using BannerKings.Behaviours.Relations;
+using BannerKings.CampaignContent.Skills;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using System.Linq;
 
 namespace BannerKings
 {
@@ -80,6 +82,9 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKMercenaryCareerBehavior());
             campaignStarter.AddBehavior(new BKRelationsBehavior());
             campaignStarter.AddBehavior(new BKSettlementBehavior());
+            campaignStarter.AddBehavior(new BKCaravansBehavior());
+            //campaignStarter.RemoveBehavior(campaignStarter.CampaignBehaviors.First(x => x.GetType() == typeof(CaravansCampaignBehavior)));
+
 
             campaignStarter.AddModel(new BKPrisonerModel());
             campaignStarter.AddModel(BannerKingsConfig.Instance.CompanionModel);

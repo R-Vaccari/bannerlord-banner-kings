@@ -11,9 +11,11 @@ namespace BannerKings.Models.Vanilla.Abstract
         public abstract ExplainedNumber GetCaravanPrice(Settlement settlement, Hero buyer, bool isLarge = false);
         public abstract int GetSettlementMarketGoldLimit(Settlement settlememt);
         public abstract int GetNotableCaravanLimit(Hero notable);
+        public abstract ExplainedNumber CalculateTradePower(PopulationData data, bool descriptions = false);
         public abstract ExplainedNumber CalculateTradePower(Settlement settlement, bool descriptions = false);
         public abstract ExplainedNumber CalculateProductionQuality(Settlement settlement);
-        public abstract ExplainedNumber CalculateMercantilism(Settlement settlement);
+        public abstract ExplainedNumber CalculateMercantilism(PopulationData data, bool descriptions = false);
+        public abstract ExplainedNumber CalculateMercantilism(Settlement settlement, bool descriptions = false);
         public abstract ExplainedNumber CalculateProductionEfficiency(Settlement settlement, bool explanations = false, PopulationData data = null);
     }
 }
