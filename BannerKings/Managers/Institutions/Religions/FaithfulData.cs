@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
+using BannerKings.Managers.Institutions.Religions.Faiths.Societies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -12,6 +13,11 @@ namespace BannerKings.Managers.Institutions.Religions
         [SaveableField(5)] private CampaignTime blessingEndDate;
 
         [SaveableField(3)] private readonly Dictionary<RiteType, CampaignTime> performedRites;
+
+        [field: SaveableField(1)] public float Piety { get; private set; }
+        //[field: SaveableField(2)] public Society Society { get; private set; }
+        //[field: SaveableField(4)] public SocietyRank SocietyRank { get; private set; }
+        [field: SaveableField(6)] public float SocietyDevotion { get; private set; }
 
         public FaithfulData(float piety)
         {
@@ -50,26 +56,23 @@ namespace BannerKings.Managers.Institutions.Religions
         }
 
         public bool CanReceiveBlessing() => blessingEndDate.RemainingDaysFromNow <= 0f;
-
-        [field: SaveableField(1)] public float Piety { get; private set; }
-
-        public void AddPiety(float piety)
-        {
-            Piety += piety;
-        }
+        public void AddPiety(float piety) => Piety += piety;
+        
 
         public void AddBlessing(Divinity blessing, Hero hero, bool isIdefiniteMembership = false)
         {
             Blessing = blessing;
-            if (isIdefiniteMembership)
-            {
-                blessingEndDate = CampaignTime.Never;
-            }
-            else
-            {
-                blessingEndDate = CampaignTime.YearsFromNow(GetBlessingYearsWindow(blessing, hero));
-            }
+            if (isIdefiniteMembership) blessingEndDate = CampaignTime.Never;
+            else blessingEndDate = CampaignTime.YearsFromNow(GetBlessingYearsWindow(blessing, hero));        
         }
+
+        /*public void AddSociety(Society society, SocietyRank rank = null)
+        {
+            Society = society;
+            rank ??= society.FirstRank;
+            SocietyRank = rank;
+            SocietyDevotion = 0f;
+        }*/
 
         public bool HasTimePassedForRite(RiteType type, float years)
         {

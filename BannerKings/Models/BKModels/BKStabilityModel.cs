@@ -1,9 +1,7 @@
 using System.Linq;
 using BannerKings.CampaignContent.Skills;
 using BannerKings.Managers.Buildings;
-using BannerKings.Managers.Court;
 using BannerKings.Managers.Education.Lifestyles;
-using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -179,26 +177,6 @@ namespace BannerKings.Models.BKModels
                 {
                     result.Add(-0.1f, new TextObject("{=cCQO7noU}{LIFESTYLE} lifestyle")
                         .SetTextVariable("LIFESTYLE", DefaultLifestyles.Instance.Mercenary.Name));
-                }
-
-                Hero leader = town.OwnerClan.Leader;
-                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(leader);
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader, 
-                    DefaultDivinities.Instance.WindHeaven, religion))
-                {
-                    result.Add(0.08f, DefaultDivinities.Instance.WindHeaven.Name);
-                }
-
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader,
-                   DefaultDivinities.Instance.DarusosianSecondary2, religion))
-                {
-                    result.Add(0.04f, DefaultDivinities.Instance.DarusosianSecondary2.Name);
-                }
-
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader,
-                    DefaultDivinities.Instance.TreeloreMain, religion) && religion.FavoredCultures.Contains(town.Culture))
-                {
-                    result.Add(0.06f, DefaultDivinities.Instance.DarusosianSecondary2.Name);
                 }
 
                 SkillHelper.AddSkillBonusForTown(DefaultSkills.Steward,

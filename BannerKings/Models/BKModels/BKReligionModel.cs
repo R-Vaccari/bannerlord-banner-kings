@@ -273,12 +273,6 @@ namespace BannerKings.Models.BKModels
                 result.AddFactor(tension.ResultNumber);
             }
 
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(converter,
-                DefaultDivinities.Instance.DarusosianMain))
-            {
-                result.AddFactor(-0.2f, DefaultDivinities.Instance.DarusosianMain.Name);
-            }
-
             return result;
         }
 
@@ -306,12 +300,6 @@ namespace BannerKings.Models.BKModels
 
             result.Add(MathF.Clamp(40f * -GetConversionLikelihood(converter, converted).ResultNumber, -10f, 40f),
                 new TextObject("{=bYHRQmAW}Willingness to convert"));
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(converter,
-                DefaultDivinities.Instance.DarusosianMain,
-                religion))
-            {
-                result.AddFactor(-0.2f, DefaultDivinities.Instance.DarusosianMain.Name);
-            }
 
             result.AddFactor(religion.Faith.ConversionCost - 1f, religion.Faith.GetFaithTypeName());
             return result;
@@ -342,12 +330,6 @@ namespace BannerKings.Models.BKModels
                 {
                     result.AddFactor(tuple.Value * tensionFactor, rel.Faith.GetFaithName());
                 }
-            }
-
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(data.Settlement.OwnerClan.Leader, 
-                DefaultDivinities.Instance.WindHeaven))
-            {
-                result.AddFactor(-0.2f, DefaultDivinities.Instance.WindHeaven.Name);
             }
 
             return result;
@@ -561,17 +543,7 @@ namespace BannerKings.Models.BKModels
                     result.AddFactor(0.05f, BKPerks.Instance.TheologyPreacher.Name);
                 }
 
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.VlandiaSecondary1))
-                {
-                    result.AddFactor(0.1f, DefaultDivinities.Instance.VlandiaSecondary1.Name);
-                }
-
-                if (owner.Culture != settlement.Culture && BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner,
-                    DefaultDivinities.Instance.AseraSecondary3))
-                {
-                    result.AddFactor(0.15f, DefaultDivinities.Instance.AseraSecondary1.Name);
-                }
-
+  
                 if (settlement.Town != null)
                 {
                     SkillHelper.AddSkillBonusForTown(BKSkills.Instance.Theology,

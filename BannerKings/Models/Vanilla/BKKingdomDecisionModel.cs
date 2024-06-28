@@ -54,7 +54,7 @@ namespace BannerKings.Models.Vanilla
 
             float influence = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(kingdom1.RulingClan)
                 .ResultNumber;
-            if (influence < BannerKingsConfig.Instance.DiplomacyModel.TRADE_PACT_INFLUENCE_CAP)
+            if (influence < 100)
             {
                 reason = new TextObject("{=2xqYdW60}You do not have enough influence cap to sustain another pact.");
                 return false;

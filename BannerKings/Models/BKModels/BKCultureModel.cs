@@ -1,6 +1,4 @@
 using BannerKings.Managers.Buildings;
-using BannerKings.Managers.Goals;
-using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -16,7 +14,7 @@ namespace BannerKings.Models.BKModels
 {
     public class BKCultureModel : CultureModel
     {
-        public ExplainedNumber CalculateAcceptanceGain(CultureDataClass data)
+        public override ExplainedNumber CalculateAcceptanceGain(CultureDataClass data)
         {
             var result = new ExplainedNumber(0f, true);
             var settlement = data.Settlement;
@@ -84,7 +82,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber GetConversionCost(Hero notable, Hero converter)
+        public override ExplainedNumber GetConversionCost(Hero notable, Hero converter)
         {
             var result = new ExplainedNumber(30f, false);
             result.LimitMin(30f);
@@ -108,16 +106,16 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(converter,
-                DefaultDivinities.Instance.DarusosianMain)) 
+            /*if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(converter,
+                BKCEDivinities.Instance.DarusosianMain)) 
             {
-                result.AddFactor(-0.3f, DefaultDivinities.Instance.DarusosianMain.Name);
-            }
+                result.AddFactor(-0.3f, BKCEDivinities.Instance.DarusosianMain.Name);
+            }*/
 
             return result;
         }
 
-        public ExplainedNumber CalculateCultureWeight(Settlement settlement, CultureDataClass data, float baseWeight = 0f)
+        public override ExplainedNumber CalculateCultureWeight(Settlement settlement, CultureDataClass data, float baseWeight = 0f)
         {
             var result = new ExplainedNumber(baseWeight, true);
 
@@ -211,7 +209,7 @@ namespace BannerKings.Models.BKModels
         }
 
 
-        public ExplainedNumber CalculateEffect(Settlement settlement, CultureDataClass data)
+        public override ExplainedNumber CalculateEffect(Settlement settlement, CultureDataClass data)
         {
             var popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             var ownerCulture = settlement.OwnerClan.Culture;

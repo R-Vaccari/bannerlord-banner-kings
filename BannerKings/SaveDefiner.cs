@@ -25,12 +25,7 @@ using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Innovations.Eras;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
-using BannerKings.Managers.Institutions.Religions.Faiths.Asera;
-using BannerKings.Managers.Institutions.Religions.Faiths.Battania;
-using BannerKings.Managers.Institutions.Religions.Faiths.Empire;
-using BannerKings.Managers.Institutions.Religions.Faiths.Northern;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
-using BannerKings.Managers.Institutions.Religions.Faiths.Vlandia;
 using BannerKings.Managers.Kingdoms.Contract;
 using BannerKings.Managers.Kingdoms.Council;
 using BannerKings.Managers.Kingdoms.Peerage;
@@ -58,7 +53,6 @@ using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Populations.Estates.Estate;
 using CasusBelli = BannerKings.Behaviours.Diplomacy.Wars.CasusBelli;
-using BannerKings.Managers.Institutions.Religions.Faiths.Eastern;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Goals;
 using BannerKings.Behaviours.Shipping;
@@ -144,9 +138,7 @@ namespace BannerKings
             AddClassDefinition(typeof(Clergyman), 73);
             AddClassDefinition(typeof(PolytheisticFaith), 74);
             AddClassDefinition(typeof(MonotheisticFaith), 75);
-            AddClassDefinition(typeof(AseraFaith), 76);
-            AddClassDefinition(typeof(AmraFaith), 77);
-            AddClassDefinition(typeof(DarusosianFaith), 78);
+
             AddClassDefinition(typeof(FaithGroup), 79);
             AddClassDefinition(typeof(AppointedGroup), 80);
             AddClassDefinition(typeof(LandedPreacherGroup), 81);
@@ -183,7 +175,7 @@ namespace BannerKings
             AddClassDefinition(typeof(BannerKingsComponent), 112);
             AddClassDefinition(typeof(GarrisonPartyComponent), 113);
             AddClassDefinition(typeof(WorkshopData), 114);
-            AddClassDefinition(typeof(TreeloreFaith), 115);
+ 
             AddClassDefinition(typeof(CouncilTask), 116);
             AddClassDefinition(typeof(TargetedCouncilTask<>), 117);     
             AddClassDefinition(typeof(OverseeSanitation), 118);
@@ -208,9 +200,10 @@ namespace BannerKings
             AddClassDefinition(typeof(PartySupplies), 141);
             AddClassDefinition(typeof(CourtGrace), 142);
             AddClassDefinition(typeof(CourtExpense), 143);
-            AddClassDefinition(typeof(Osfeyd), 144);
+
+            
             AddClassDefinition(typeof(Era), 145);
-            AddClassDefinition(typeof(SixWinds), 146);
+          
             AddClassDefinition(typeof(Government), 147);
             AddClassDefinition(typeof(Succession), 148);
             AddClassDefinition(typeof(Inheritance), 149);

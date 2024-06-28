@@ -13,17 +13,17 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Election;
-using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using System;
 using TaleWorlds.Core;
 using BannerKings.Behaviours.Mercenary;
+using BannerKings.Models.Vanilla.Abstract;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKDiplomacyModel : DefaultDiplomacyModel
+    public class BKDiplomacyModel : DiplomacyModel
     {
         public float TRADE_PACT_INFLUENCE_CAP { get;} = 100f;
 
@@ -135,7 +135,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber GetMercenaryDownPayment(Clan mercenaryClan, Kingdom kingdom, bool explanations = false)
+        public override ExplainedNumber GetMercenaryDownPayment(Clan mercenaryClan, Kingdom kingdom, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(kingdom.KingdomBudgetWallet * 0.05f, 
                 explanations, 
@@ -218,7 +218,7 @@ namespace BannerKings.Models.Vanilla
             return leave;
         }
 
-        public ExplainedNumber MercenaryLeaveScore(Clan mercenaryClan, Kingdom kingdom, bool explanations = false)
+        public override ExplainedNumber MercenaryLeaveScore(Clan mercenaryClan, Kingdom kingdom, bool explanations = false)
         {
             float num = 0.005f * MathF.Min(200f, mercenaryClan.LastFactionChangeTime.ElapsedDaysUntilNow);
             ExplainedNumber result = new ExplainedNumber(10000f * num - 5000f, explanations);
@@ -265,15 +265,15 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber CalculateHeroFiefScore(Settlement settlement, Hero annexing, bool explanations = false)
+        public override ExplainedNumber CalculateHeroFiefScore(Settlement settlement, Hero annexing, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0f, explanations);
             Clan clan = annexing.Clan;
 
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(annexing, DefaultDivinities.Instance.AseraMain))
+            /*if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(annexing, DefaultDivinities.Instance.AseraMain))
             {
                 result.AddFactor(0.2f, DefaultDivinities.Instance.AseraMain.Name);
-            }
+            }*/
 
             if (settlement.Owner == annexing)
             {
@@ -396,7 +396,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber WillJoinWar(IFaction attacker, IFaction defender, IFaction ally,
+        public override ExplainedNumber WillJoinWar(IFaction attacker, IFaction defender, IFaction ally,
             DeclareWarAction.DeclareWarDetail detail, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
@@ -439,7 +439,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber GetPactInfluenceCost(Kingdom proposer, Kingdom proposed, bool explanations = false)
+        public override ExplainedNumber GetPactInfluenceCost(Kingdom proposer, Kingdom proposed, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
             float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason) / 2f;
@@ -459,7 +459,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public bool IsTruceAcceptable(Kingdom proposer, Kingdom proposed, bool explanations = false)
+        public override bool IsTruceAcceptable(Kingdom proposer, Kingdom proposed, bool explanations = false)
         {
             if (proposed == proposer) return false;
             
@@ -467,7 +467,7 @@ namespace BannerKings.Models.Vanilla
             return peace > 0;
         }
 
-        public bool IsTradeAcceptable(Kingdom proposer, Kingdom proposed, bool explanations = false)
+        public override bool IsTradeAcceptable(Kingdom proposer, Kingdom proposed, bool explanations = false)
         {
             if (proposed == proposer) return false;
 
@@ -477,7 +477,7 @@ namespace BannerKings.Models.Vanilla
             return peace > 0 && influence > TRADE_PACT_INFLUENCE_CAP;
         }
 
-        public ExplainedNumber GetTruceDenarCost(Kingdom proposer, Kingdom proposed, float years = 3f, bool explanations = false)
+        public override ExplainedNumber GetTruceDenarCost(Kingdom proposer, Kingdom proposed, float years = 3f, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
             float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason) / 2f;
@@ -489,7 +489,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber GetAllianceDesire(Kingdom proposer, Kingdom proposed, bool explanations = false)
+        public override ExplainedNumber GetAllianceDesire(Kingdom proposer, Kingdom proposed, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
             result.Add(-100f, new TextObject("{=Gq5BnNiN}Reluctance"));
@@ -542,9 +542,9 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public bool WillAcceptAlliance(Kingdom proposer, Kingdom proposed) => GetAllianceDesire(proposer, proposed).ResultNumber > 0f;
+        public override bool WillAcceptAlliance(Kingdom proposer, Kingdom proposed) => GetAllianceDesire(proposer, proposed).ResultNumber > 0f;
 
-        public ExplainedNumber GetAllianceDenarCost(Kingdom proposer, Kingdom proposed, bool explanations = false)
+        public override ExplainedNumber GetAllianceDenarCost(Kingdom proposer, Kingdom proposed, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
             float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason) / 2f;
@@ -566,7 +566,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber GetTradePactInfluenceCost(Kingdom proposer, Kingdom proposed, bool explanations = false)
+        public override ExplainedNumber GetTradePactInfluenceCost(Kingdom proposer, Kingdom proposed, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(100, explanations);
             foreach (var fief in proposer.Fiefs)
@@ -622,7 +622,7 @@ namespace BannerKings.Models.Vanilla
             return threat.TotalStrength / totalThreat;
         }
 
-        public ExplainedNumber GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan,
+        public override ExplainedNumber GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan,
            out TextObject warReason, CasusBelli casusBelli = null, bool explanations = false)
         {
             warReason = TextObject.Empty;

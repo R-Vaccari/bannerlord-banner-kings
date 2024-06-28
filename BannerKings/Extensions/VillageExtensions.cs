@@ -1,4 +1,4 @@
-﻿using BannerKings.Campaign;
+﻿using BannerKings.CampaignContent;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 

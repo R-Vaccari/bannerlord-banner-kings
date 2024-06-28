@@ -1,5 +1,4 @@
 ﻿using BannerKings.Managers.Education.Lifestyles;
-using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
@@ -34,12 +33,6 @@ namespace BannerKings.Models.Vanilla
                 {
                     result.AddFactor(0.25f, BKPerks.Instance.CommanderWarband.Name);
                 }
-
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader,
-                   DefaultDivinities.Instance.Wilund))
-                {
-                    result.AddFactor(0.3f, DefaultDivinities.Instance.Wilund.Name);
-                }
             }
 
             return result;
@@ -61,35 +54,6 @@ namespace BannerKings.Models.Vanilla
                 if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Cataphract))
                 {
                     result.AddFactor(0.12f, DefaultLifestyles.Instance.Cataphract.Name);
-                }
-
-                Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(leader); 
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader,
-                    DefaultDivinities.Instance.VlandiaMain,
-                    rel))
-                {
-                    result.AddFactor(0.15f, DefaultDivinities.Instance.VlandiaMain.Name);
-                }
-
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader,
-                    DefaultDivinities.Instance.Wilund,
-                    rel))
-                {
-                    result.AddFactor(0.3f, DefaultDivinities.Instance.Wilund.Name);
-                }
-
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader,
-                    DefaultDivinities.Instance.GodsFate,
-                    rel))
-                {
-                    result.AddFactor(0.6f, DefaultDivinities.Instance.GodsFate.Name);
-                }
-
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader,
-                   DefaultDivinities.Instance.WindEast,
-                   rel))
-                {
-                    result.AddFactor(0.4f, DefaultDivinities.Instance.WindWest.Name);
                 }
             }
 

@@ -69,38 +69,38 @@ namespace BannerKings
         public GoalManager GoalManager { get; private set; }
 
         public BKInterestGroupsModel InterestGroupsModel { get; set; } = new();
-        public BKConstructionModel ConstructionModel { get; } = new();
+        public BKConstructionModel ConstructionModel { get; set; } = new();
         public InfluenceModel InfluenceModel { get; set; } = new BKInfluenceModel();
-        public TitleModel TitleModel { get; } = new BKTitleModel();
-        public BKStabilityModel StabilityModel { get; } = new();
-        public BKClanFinanceModel ClanFinanceModel { get; } = new();
-        public BKEducationModel EducationModel { get; } = new();
-        public BKCouncilModel CouncilModel { get; } = new();
-        public BKLearningModel LearningModel { get; } = new();
+        public TitleModel TitleModel { get; set; } = new BKTitleModel();
+        public BKStabilityModel StabilityModel { get; set; } = new();
+        public BKClanFinanceModel ClanFinanceModel { get; set; } = new();
+        public BKEducationModel EducationModel { get; set; } = new();
+        public BKCouncilModel CouncilModel { get; set; } = new();
+        public BKLearningModel LearningModel { get; set; } = new();
         public BKInnovationsModel InnovationsModel { get; } = new();
         public EconomyModel EconomyModel { get; set; } = new BKEconomyModel();
-        public BKWorkshopModel WorkshopModel { get; } = new();
+        public BKWorkshopModel WorkshopModel { get; set; } = new();
         public BKAdministrativeModel AdministrativeModel { get; } = new();
-        public BKSmithingModel SmithingModel { get; } = new();
+        public BKSmithingModel SmithingModel { get; set; } = new();
         public CultureModel CultureModel { get; set; } = new BKCultureModel();
         public ReligionModel ReligionModel { get; set; } = new BKReligionModel();
         public VolunteerModel VolunteerModel { get; set; } = new BKVolunteerModel();
         public LegitimacyModel LegitimacyModel { get; set; } = new BKLegitimacyModel();
         public GrowthModel GrowthModel { get; set; } = new BKGrowthModel();
-        public BKVillageProductionModel VillageProductionModel { get; } = new();
-        public BKProsperityModel ProsperityModel { get; } = new();
-        public BKTaxModel TaxModel { get; } = new();
-        public BKEstatesModel EstatesModel { get; } = new();
+        public BKVillageProductionModel VillageProductionModel { get; set; } = new();
+        public BKProsperityModel ProsperityModel { get; set; } = new();
+        public BKTaxModel TaxModel { get; set; } = new();
+        public BKEstatesModel EstatesModel { get; set; } = new();
         public MarriageModel MarriageModel { get; set; } = new BKMarriageModel();
         public ArmyModel ArmyManagementModel { get; set; } = new BKArmyManagementModel();
-        public BKWarModel WarModel { get; } = new();
-        public BKCrimeModel CrimeModel { get; } = new();
-        public BKCompanionPrices CompanionModel { get; } = new();
-        public IPartyNeedsModel PartyNeedsModel { get; } = new BKPartyNeedsModel();
-        public BKDiplomacyModel DiplomacyModel { get; } = new();
-        public BKKingdomDecisionModel KingdomDecisionModel { get; } = new();
-        public MercenaryModel MercenaryModel { get; } = new BKMercenaryModel();
-        public RelationsModel RelationsModel { get; } = new BKRelationsModel();
+        public BKWarModel WarModel { get; set; } = new();
+        public BKCrimeModel CrimeModel { get; set; } = new();
+        public BKCompanionPrices CompanionModel { get; set; } = new();
+        public IPartyNeedsModel PartyNeedsModel { get; set; } = new BKPartyNeedsModel();
+        public DiplomacyModel DiplomacyModel { get; set; } = new BKDiplomacyModel();
+        public BKKingdomDecisionModel KingdomDecisionModel { get; set; } = new();
+        public MercenaryModel MercenaryModel { get; set; } = new BKMercenaryModel();
+        public RelationsModel RelationsModel { get; set; } = new BKRelationsModel();
 
         static BannerKingsConfig()
         {

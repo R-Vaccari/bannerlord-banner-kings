@@ -1,5 +1,4 @@
 ﻿using BannerKings.Managers.Education.Lifestyles;
-using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Utils;
@@ -402,12 +401,6 @@ namespace BannerKings.Models.Vanilla
 
                     if (buyerHero.Clan != null)
                     {
-                        if (troop.Culture.StringId == "aserai" && BannerKingsConfig.Instance.ReligionsManager
-                            .HasBlessing(buyerHero, DefaultDivinities.Instance.AseraSecondary2))
-                        {
-                            result.AddFactor(-0.1f);
-                        }
-
                         var buyerKingdom = buyerHero.Clan.Kingdom;
                         if (buyerKingdom != null && troop.Culture != buyerHero.Culture)
                         {

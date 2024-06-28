@@ -1,9 +1,7 @@
-﻿using BannerKings.Managers.Institutions.Religions;
-using BannerKings.Managers.Populations.Villages;
+﻿using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.MapEvents;
-using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -53,15 +51,6 @@ namespace BannerKings.Models.Vanilla
                     if (palisade > 0)
                     {
                         result *= 1f - 0.12f * palisade;
-                    }
-                }
-
-                if (attacker.LeaderHero != null && settlement.Culture.StringId != "battania")
-                {
-                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(attacker.LeaderHero,
-                            DefaultDivinities.Instance.AmraSecondary2))
-                    {
-                        result *= 1.15f;
                     }
                 }
             }

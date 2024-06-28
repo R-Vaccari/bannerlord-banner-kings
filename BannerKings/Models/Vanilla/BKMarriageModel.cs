@@ -5,7 +5,6 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Skills;
-using BannerKings.Managers.Titles;
 using BannerKings.Utils;
 using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
@@ -236,12 +235,6 @@ namespace BannerKings.Models.Vanilla
                 result.AddFactor(BKSkillEffects.Instance.SpouseScore.GetSecondaryValue(
                     hero.Clan.Leader.GetSkillValue(BKSkills.Instance.Lordship)) * 0.01f,
                     BKSkills.Instance.Lordship.Name);
-            }
-
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
-                   DefaultDivinities.Instance.Arkina))
-            {
-                result.AddFactor(0.2f, DefaultDivinities.Instance.Arkina.Name);
             }
 
             return result;

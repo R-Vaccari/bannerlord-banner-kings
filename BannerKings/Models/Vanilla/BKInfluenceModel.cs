@@ -157,11 +157,6 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, DefaultDivinities.Instance.WindSouth))
-            {
-                result.AddFactor(0.15f, DefaultDivinities.Instance.WindSouth.Name);
-            }
-
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
             if (council.CourtGrace != null)
             {
@@ -228,15 +223,6 @@ namespace BannerKings.Models.Vanilla
                     int level = career.GetPrivilegeLevelCurrentKingdom(DefaultMercenaryPrivileges.Instance.IncreasedPay);
                     baseResult.Add((float)(mercenaryChange * level * 0.05f), DefaultMercenaryPrivileges.Instance.IncreasedPay.Name);
                 }
-            }
-
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, DefaultDivinities.Instance.DarusosianSecondary1))
-            {
-                baseResult.Add(2f, DefaultDivinities.Instance.DarusosianSecondary1.Name);
-            }
-            else if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, DefaultDivinities.Instance.VlandiaSecondary1))
-            {
-                baseResult.Add(2f, DefaultDivinities.Instance.VlandiaSecondary1.Name);
             }
 
             if (education.HasPerk(BKPerks.Instance.OutlawPlunderer))

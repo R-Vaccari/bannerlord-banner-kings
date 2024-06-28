@@ -25,7 +25,7 @@ namespace BannerKings.Models.Vanilla
                     result = (int) (result * 1.15f);
                 }
 
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader, DefaultDivinities.Instance.AmraSecondary1))
+                /*if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader, DefaultDivinities.Instance.AmraSecondary1))
                 {
                     var faceTerrainType = TaleWorlds.CampaignSystem.Campaign.Current.MapSceneWrapper
                                                   .GetFaceTerrainType(strikerParty.MobileParty.CurrentNavigationFace);
@@ -33,7 +33,7 @@ namespace BannerKings.Models.Vanilla
                     {
                         result = (int)(result * 1.08f);
                     }
-                }
+                }*/
             }
 
             var strikerInnovations = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(strikerTroop.Culture);

@@ -10,19 +10,12 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
-using BannerKings.Managers.Titles;
-using BannerKings.Managers.Traits;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.CampaignBehaviors;
-using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
-using TaleWorlds.CampaignSystem.Election;
-using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -40,7 +33,6 @@ namespace BannerKings.Behaviours
         public override void RegisterEvents()
         {
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, OnDailyTickSettlement);
-            CampaignEvents.RaidCompletedEvent.AddNonSerializedListener(this, OnRaidCompleted);
             CampaignEvents.HeroCreated.AddNonSerializedListener(this, OnHeroCreated);
             CampaignEvents.HeroComesOfAgeEvent.AddNonSerializedListener(this, OnHeroComesOfAge);
             CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTickHero);
@@ -49,7 +41,6 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
-            CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
             CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
             CampaignEvents.MapEventEnded.AddNonSerializedListener(this, EventEnded);
             CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, () =>
@@ -192,25 +183,6 @@ namespace BannerKings.Behaviours
             }
         }
 
-        private void OnOwnerChanged(Settlement settlement, bool openToClaim, Hero newOwner, Hero oldOwner,
-            Hero capturerHero,
-            ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
-        {
-            if (capturerHero == null)
-            {
-                return;
-            }
-            
-            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(capturerHero, DefaultDivinities.Instance.Osric))
-            {
-                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
-                if (title != null && title.deJure != capturerHero)
-                {
-                    title.AddClaim(capturerHero, ClaimType.Fabricated);
-                }
-            }
-        }
-
         private void OnDailyTickSettlement(Settlement settlement)
         {
             if (settlement == null || settlement.Notables == null)
@@ -309,44 +281,6 @@ namespace BannerKings.Behaviours
             }
         }
 
-        private void OnRaidCompleted(BattleSideEnum winnerSide, RaidEventComponent mapEvent)
-        {
-            foreach (var mapEventParty in mapEvent.AttackerSide.Parties)
-            {
-                if (mapEventParty.Party.IsActive)
-                {
-                    var mobileParty = mapEventParty.Party.MobileParty;
-                    if (mobileParty != null && mobileParty.LeaderHero != null)
-                    {
-                        var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(mobileParty.LeaderHero);
-                        if (rel == null) continue;
-
-                        var settlementCulture = mapEvent.MapEventSettlement.Culture;
-                        if (settlementCulture.StringId != "battania")
-                        {
-                            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(mobileParty.LeaderHero,
-                                DefaultDivinities.Instance.AmraSecondary2, rel))
-                            {
-                                GainRenownAction.Apply(mobileParty.LeaderHero, 10f);
-                            }
-                        }
-
-                        if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(mobileParty.LeaderHero,
-                                DefaultDivinities.Instance.TreeloreMain, rel) && !rel.FavoredCultures.Contains(settlementCulture))
-                        {
-                            GainRenownAction.Apply(mobileParty.LeaderHero, 10f);
-                        }
-
-                        if (rel.MainCulture != settlementCulture && rel.HasDoctrine(DefaultDoctrines.Instance.Reavers))
-                        {
-                            BannerKingsConfig.Instance.ReligionsManager.AddPiety(rel, mobileParty.LeaderHero,
-                                mapEvent.MapEventSettlement.Village.Hearth, true);
-                        }
-                    }
-                }
-            }
-        }
-
         private void OnHeroCreated(Hero hero, bool bornNaturally)
         {
             if (hero == null)
@@ -362,37 +296,6 @@ namespace BannerKings.Behaviours
                 if (rel != null && rel.HasDoctrine(DefaultDoctrines.Instance.Childbirth))
                 {
                     hero.Clan.AddRenown(25f, true);
-                }
-            }
-
-            if (bornNaturally)
-            {
-                if (hero.Father != null)
-                {
-                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Father, DefaultDivinities.Instance.SheWolf))
-                    {
-                        TraitObject random = BKTraits.Instance.CongenitalTraits.GetRandomElementInefficiently();
-                        hero.SetTraitLevel(random, 1);
-                    }
-
-                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Father, DefaultDivinities.Instance.WindNorth))
-                    {
-                        BannerKingsConfig.Instance.ReligionsManager.AddPiety(hero.Father, 150f, true);
-                    }
-                }
-
-                if (hero.Mother != null)
-                {
-                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Mother, DefaultDivinities.Instance.SheWolf))
-                    {
-                        TraitObject random = BKTraits.Instance.CongenitalTraits.GetRandomElementInefficiently();
-                        hero.SetTraitLevel(random, 1);
-                    }
-
-                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero.Mother, DefaultDivinities.Instance.WindNorth))
-                    {
-                        BannerKingsConfig.Instance.ReligionsManager.AddPiety(hero.Mother, 150f, true);
-                    }
                 }
             }
         }
@@ -439,10 +342,7 @@ namespace BannerKings.Behaviours
             if (hero == null || hero.IsChild) return;
 
             TickFaithXp(hero);
-
             if (hero.Clan != null && hero.Clan == Clan.PlayerClan) return;
-
-            TickRuler(hero);
 
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
             if (rel == null)
@@ -460,90 +360,6 @@ namespace BannerKings.Behaviours
 
                 AddHeroToIdealReligion(hero);
             } 
-            else
-            {
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
-                    DefaultDivinities.Instance.AseraSecondary2) && hero.IsPartyLeader)
-                {
-                    int aserai = 0;
-                    foreach (TroopRosterElement element in hero.PartyBelongedTo.MemberRoster.GetTroopRoster())
-                    {
-                        if (element.Character.Culture.StringId == "aserai")
-                        {
-                            aserai += element.Number;
-                        }
-                    }
-
-                    if (aserai == hero.PartyBelongedTo.MemberRoster.TotalManCount)
-                    {
-                        GainRenownAction.Apply(hero, 0.5f);
-                    }
-                }
-
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
-                    DefaultDivinities.Instance.AseraSecondary1) && MBRandom.RandomFloat < 0.3f) 
-                {
-                    Clan random = Clan.All.GetRandomElementWithPredicate(x => x.Culture.StringId == "aserai" && x != hero.Clan);
-                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, random.Leader, 2);
-                }
-
-                if (hero.IsPartyLeader && MBRandom.RandomFloat < 0.05f && 
-                    BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero, DefaultDivinities.Instance.VlandiaSecondary2))
-                {
-                    int count = MBRandom.RandomInt(1, 4);
-                    var character = Game.Current.ObjectManager.GetObject<CharacterObject>("canticles_zealot_tier4");
-                    TroopRosterElement element = new TroopRosterElement(character);
-                    element.Number = count;
-                    hero.PartyBelongedTo.MemberRoster.Add(element);
-                    
-                    if (hero == Hero.MainHero)
-                    {
-                        InformationManager.DisplayMessage(
-                            new InformationMessage(new TextObject("{=KGqPK07Z}{COUNT} {UNIT} zealots have joined your party!")
-                            .SetTextVariable("COUNT", count)
-                            .SetTextVariable("UNIT", character.Name)
-                            .ToString(), 
-                            Color.ConvertStringToColor("#00CCFF")));
-                    }
-                }
-
-                if (CampaignTime.Now.GetDayOfSeason == 1 && BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
-                    DefaultDivinities.Instance.DarusosianSecondary1))
-                {
-                    var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero);
-                    var kingdom = Kingdom.All.FirstOrDefault(x => x.StringId == "empire_s");
-                    if (kingdom != null)
-                    {
-                        var empireTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-                        if (empireTitle != null)
-                        {
-                            var bonus = 0f;
-                            foreach (var title in titles)
-                            {
-                                if (title.Sovereign == empireTitle)
-                                {
-                                    bonus += 2f / (float)title.TitleType;
-                                }
-                            }
-
-                            GainRenownAction.Apply(hero, bonus);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void TickRuler(Hero hero)
-        {
-            if (hero.MapFaction == null || hero != hero.MapFaction.Leader || !hero.MapFaction.IsKingdomFaction) return;
-
-            RunWeekly(() =>
-            {
-                FaithLeaderDecision decision = new FaithLeaderDecision(hero);
-                decision.DoAiDecision();
-            },
-            GetType().Name,
-            false);
         }
 
         private void TickFaithXp(Hero hero)
@@ -791,49 +607,6 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_pretalk",
                 "{=G4ALCxaA}Never mind.",
                 null, null);
-
-            starter.AddPlayerLine("bk_blessing_recruit_battania_bandits", "bandit_attacker", "common_encounter_ultimatum_answer",
-                "{=2QtnvGFq}I am oathbound to the Na Sidhfir. As men of the wilds, will you join me?",
-                RecruitBattaniaBanditsOnCondition,
-                RecruitBattaniaBanditsOnConseqence, 
-                100, 
-                null, 
-                null);
-        }
-
-        private bool RecruitBattaniaBanditsOnCondition()
-        {
-            var party = MobileParty.ConversationParty;
-            var blessed = BannerKingsConfig.Instance.ReligionsManager.HasBlessing(Hero.MainHero, 
-                DefaultDivinities.Instance.AmraSecondary1);
-            return party.IsBandit && party.MapFaction.Culture.StringId == "forest_bandits" && 
-                party.MemberRoster.Count < 21 && blessed;
-        }
-
-        private void RecruitBattaniaBanditsOnConseqence()
-        {
-            var list = new List<MobileParty>
-            {
-                MobileParty.MainParty
-            };
-            var list2 = new List<MobileParty>();
-            if (PlayerEncounter.EncounteredMobileParty != null)
-            {
-                list2.Add(PlayerEncounter.EncounteredMobileParty);
-            }
-            if (PlayerEncounter.Current != null)
-            {
-                PlayerEncounter.Current.FindAllNpcPartiesWhoWillJoinEvent(ref list, ref list2);
-            }
-            var troopsToJoinPlayerParty = GetTroopsToJoinPlayerParty(list2);
-            PartyScreenManager.OpenScreenAsLoot(troopsToJoinPlayerParty, TroopRoster.CreateDummyTroopRoster(), PlayerEncounter.EncounteredParty.Name, troopsToJoinPlayerParty.TotalManCount, null);
-            for (var i = list2.Count - 1; i >= 0; i--)
-            {
-                var mobileParty = list2[i];
-                CampaignEventDispatcher.Instance.OnBanditPartyRecruited(mobileParty);
-                DestroyPartyAction.Apply(MobileParty.MainParty.Party, mobileParty);
-            }
-            PlayerEncounter.LeaveEncounter = true;
         }
 
         private bool InductionOnClickable(out TextObject hintText)
@@ -1087,12 +860,9 @@ namespace BannerKings.Behaviours
         }
 
 
-        private bool IsPreacher()
-        {
-            return Hero.OneToOneConversationHero.IsPreacher &&
+        private bool IsPreacher() => Hero.OneToOneConversationHero.IsPreacher &&
                    BannerKingsConfig.Instance.ReligionsManager != null &&
                    ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
-        }
 
         private bool OnConditionClergymanGreeting()
         {
@@ -1130,129 +900,6 @@ namespace BannerKings.Behaviours
             MBTextManager.SetTextVariable("CLERGYMAN_INDUCTION_LAST",
                 religion.Faith.GetClergyInductionLast(clergyman.Rank));
             MBTextManager.SetTextVariable("CLERGYMAN_BLESSING_ACTION", religion.Faith.GetBlessingAction());
-        }
-
-        private TroopRoster GetTroopsToJoinPlayerParty(List<MobileParty> parties)
-        {
-            var troopRoster = TroopRoster.CreateDummyTroopRoster();
-            foreach (var mobileParty in parties)
-            {
-                if (mobileParty.IsBandit && !mobileParty.IsLordParty)
-                {
-                    for (var i = 0; i < mobileParty.MemberRoster.Count; i++)
-                    {
-                        if (!mobileParty.MemberRoster.GetCharacterAtIndex(i).IsHero)
-                        {
-                            troopRoster.AddToCounts(mobileParty.MemberRoster.GetCharacterAtIndex(i), mobileParty.MemberRoster.GetElementNumber(i), false, 0, 0, true, -1);
-                        }
-                    }
-                    for (var j = 0; j < mobileParty.PrisonRoster.Count; j++)
-                    {
-                        if (!mobileParty.PrisonRoster.GetCharacterAtIndex(j).IsHero)
-                        {
-                            troopRoster.AddToCounts(mobileParty.PrisonRoster.GetCharacterAtIndex(j), mobileParty.PrisonRoster.GetElementNumber(j), false, 0, 0, true, -1);
-                        }
-                    }
-                }
-            }
-            return troopRoster;
-        }
-    }
-
-    namespace Patches
-    {
-        [HarmonyPatch(typeof(KingdomDecision), "GetInfluenceCostOfSupport")]
-        internal class GetInfluenceCostOfSupportPatch
-        {
-            private static void Postfix(ref int __result, Clan clan, Supporter.SupportWeights supportWeight)
-            {
-                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, 
-                    DefaultDivinities.Instance.AseraSecondary1))
-                {
-                    var result = __result;
-                    __result = (int)(result * 0.7f);
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "conversation_puritan_preacher_introduction_on_condition")]
-        internal class PuritanPreacherPatch
-        {
-            private static void Postfix(ref bool __result)
-            {
-                if (BannerKingsConfig.Instance.ReligionsManager == null)
-                {
-                    return;
-                }
-
-                if (!Hero.OneToOneConversationHero.IsPreacher)
-                {
-                    return;
-                }
-
-                var bannerKings = BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
-                __result = !bannerKings;
-            }
-        }
-
-        [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "conversation_minor_faction_preacher_introduction_on_condition")]
-        internal class MinorFactionPreacherPatch
-        {
-            private static void Postfix(ref bool __result)
-            {
-                if (BannerKingsConfig.Instance.ReligionsManager == null)
-                {
-                    return;
-                }
-
-                if (!Hero.OneToOneConversationHero.IsPreacher)
-                {
-                    return;
-                }
-
-                var bannerKings = BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
-                __result = !bannerKings;
-            }
-        }
-
-        [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "conversation_mystic_preacher_introduction_on_condition")]
-        internal class MysticPreacherPatch
-        {
-            private static void Postfix(ref bool __result)
-            {
-                if (BannerKingsConfig.Instance.ReligionsManager == null)
-                {
-                    return;
-                }
-
-                if (!Hero.OneToOneConversationHero.IsPreacher)
-                {
-                    return;
-                }
-
-                var bannerKings = BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
-                __result = !bannerKings;
-            }
-        }
-
-        [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "conversation_messianic_preacher_introduction_on_condition")]
-        internal class MessianicPatch
-        {
-            private static void Postfix(ref bool __result)
-            {
-                if (BannerKingsConfig.Instance.ReligionsManager == null)
-                {
-                    return;
-                }
-
-                if (!Hero.OneToOneConversationHero.IsPreacher)
-                {
-                    return;
-                }
-
-                var bannerKings = BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
-                __result = !bannerKings;
-            }
         }
     }
 }
