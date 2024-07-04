@@ -385,7 +385,7 @@ namespace BannerKings.Models.Vanilla
                 result.Add(privateSlaves * tax, new TextObject("{=yjbfHwog}Private slaves"));
             }
 
-            if (town.IsCastle) result.AddFactor(-0.5f, new TextObject("{=kyB8tkgY}Castle"));
+
             return result;
         }
 
