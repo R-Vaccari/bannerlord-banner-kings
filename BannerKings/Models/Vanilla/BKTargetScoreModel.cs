@@ -56,9 +56,17 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 CasusBelli justification = war.CasusBelli;
-                if (justification.Fief == targetSettlement && (missionType == Army.ArmyTypes.Besieger || missionType == Army.ArmyTypes.Defender))
+                if (justification.Fief == targetSettlement)
                 {
-                    result *= 1.5f;
+                    if (missionType == Army.ArmyTypes.Besieger || missionType == Army.ArmyTypes.Defender)
+                        result *= 1.5f;
+                    else if (targetSettlement.IsVillage &&
+                        justification.Fief.Town != null &&
+                        justification.Fief.BoundVillages.Contains(targetSettlement.Village) &&
+                        missionType == Army.ArmyTypes.Raider)
+                    {
+                        result *= 1.3f;
+                    }
                 }
 
                 if (targetSettlement.Town != null && (targetSettlement.Town == war.DefenderFront || 

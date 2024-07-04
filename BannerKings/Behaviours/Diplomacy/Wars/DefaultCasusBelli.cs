@@ -47,7 +47,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=t8HQqf4z}A rebellion war is fought by former radical groups over a realm, after their demand was rejected by their ruler. Rebels seek to enforce their demand by force.{newline}{newline}Objective: Survive as a rebellion for over 2 years with at least 1 fief."),
                 new TextObject("{=EOpunWCA}Survive for 2 years"),
                 2f,
-                0.1f,
+                0.7f,
                 1f,
                 5000f,
                 (War war) =>
@@ -68,7 +68,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=WsSwHEk4}Liberate a fief of your people from the rule of foreigners. Any town or castle that is mostly composed by our culture is reason enough for us to rule it rather than foreigners.\n\nObjective: Capture the selected target."),
                 new TextObject("{=kyB8tkgY}Conquer a fief"),
                 1.3f,
-                0.5f,
+                1f,
                 1f,
                 2500f,
                 (War war) =>
@@ -104,7 +104,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=WsSwHEk4}Liberate a fief of your people from the rule of foreigners. Any town or castle that is mostly composed by our culture is reason enough for us to rule it rather than foreigners.\n\nObjective: Capture the selected target."),
                 new TextObject("{=!}Conquer the target fief"),
                 1.3f,
-                0.5f,
+                0.8f,
                 1f,
                 7500f,
                 (War war) =>
@@ -146,7 +146,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=kyB8tkgY}Conquer a fief claimed by your realm. The benefactor of the conquest will always be the claimant, regardless of other ownership procedures.\n\nObjective: Capture the selected target."),
                 new TextObject("{=!}Conquer the target fief"),
                 1.2f,
-                0.7f,
+                1f,
                 1f,
                 5000f,
                 (War war) =>
@@ -186,7 +186,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=!}Wage holy war on a faith considered hostile to your own. Different faiths accept different types of holy wars at different piety costs.\n\nObjective: Capture a fief."),
                 new TextObject("{=kyB8tkgY}Conquer a fief"),
                 1.3f,
-                0.3f,
+                1f,
                 0.6f,
                 5000f,
                 (War war) =>
@@ -240,7 +240,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                new TextObject("{=!}Wage holy war on a realm that holds a holy site or faith seat of your own faith. War success depends on capturing the specific selected target. Different faiths accept different types of holy wars at different piety costs.\n\nObjective: Capture the selected target."),
                new TextObject("{=!}Conquer the target fief"),
                1.3f,
-               0.3f,
+               0.6f,
                0.6f,
                5000f,
                (War war) =>
@@ -290,7 +290,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=6yqojVsh}Invade a foreign kingdom as is the way of our ancestors. Seize their property and stablish our own rule.\n\nObjective: Capture 2 or more fiefs of the enemy's culture."),
                 new TextObject("{=kyB8tkgY}Conquer Fiefs"),
                 1.5f,
-                0.2f,
+                1.2f,
                 0.8f,
                 5000f,
                 (War war) =>
@@ -372,7 +372,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=EFqkRSpY}Subjugate barbarians with our Imperial might as the original Empire once did. Strength is the language that they understand.\n\nObjective: Capture 1 or more fiefs of the enemy's culture."),
                 new TextObject("{=kyB8tkgY}Conquer 2 fiefs"),
                 1f,
-                0.4f,
+                0.7f,
                 1.8f,
                 5000f,
                 (War war) =>
@@ -446,7 +446,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 new TextObject("{=PXJD1at9}Subjugate pretenders of the Empire. As rightful heirs of the Calradian Empire, any other kingdom that claims to be so ought to be subjugated and annexed by any means necessary.\n\nObjective: Capture 1 or more fiefs of the enemy's culture."),
                 new TextObject("{=kyB8tkgY}Conquer Fiefs"),
                 1.5f,
-                0.1f,
+                0.6f,
                 0.8f,
                 8000f,
                 (War war) =>
