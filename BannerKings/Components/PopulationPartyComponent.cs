@@ -253,37 +253,17 @@ namespace BannerKings.Components
                     if (target.IsVillage)
                     {
                         if (target.Village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided)
-                        {
-                            MobileParty.Ai.SetMoveModeHold();
-                        }
-                        else
-                        {
                             MobileParty.Ai.SetMoveGoToSettlement(target);
-                        }
+                        else MobileParty.Ai.SetMoveGoToSettlement(HomeSettlement);
                     }
-                    else
-                    {
-                        if (!target.IsUnderSiege)
-                        {
-                            MobileParty.Ai.SetMoveGoToSettlement(target);
-                        }
-                        else
-                        {
-                            MobileParty.Ai.SetMoveModeHold();
-                        }
-                    }
+                    else MobileParty.Ai.SetMoveGoToSettlement(!target.IsUnderSiege ? target : HomeSettlement);
                 }
             }
             else
             {
                 if (Home != null && Home.MapFaction == MobileParty.MapFaction && !Home.IsUnderSiege)
-                {
                     MobileParty.Ai.SetMoveGoToSettlement(Home);
-                }
-                else
-                {
-                    DestroyPartyAction.Apply(null, MobileParty);
-                }
+                else DestroyPartyAction.Apply(null, MobileParty);
             }
         }
     }
