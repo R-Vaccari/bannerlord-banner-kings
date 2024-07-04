@@ -228,7 +228,7 @@ namespace BannerKings.Models.Vanilla
             result.LimitMin(0f);
 
             Settlement settlement = data.Settlement;
-            result.Add(data.EconomicData.Mercantilism.ResultNumber / 2f, new TextObject("{=5eHCGMEK}Mercantilism"));
+            result.Add(data.EconomicData.Mercantilism.ResultNumber / 3f, new TextObject("{=5eHCGMEK}Mercantilism"));
             result.AddFactor(data.MilitaryData.Militarism.ResultNumber * -1f, new TextObject("{=m66LFb9g}Militarism"));
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
@@ -266,7 +266,7 @@ namespace BannerKings.Models.Vanilla
                 var capital = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(settlement.OwnerClan.Kingdom);
                 if (capital == settlement.Town)
                 {
-                    result.AddFactor(0.4f, new TextObject("{=fQVyeiJb}Capital"));
+                    result.AddFactor(0.2f, new TextObject("{=fQVyeiJb}Capital"));
                 }
 
                 Building building = settlement.Town.Buildings.FirstOrDefault(x => x.BuildingType.StringId == BKBuildings.Instance.Harbor.StringId ||
@@ -274,7 +274,7 @@ namespace BannerKings.Models.Vanilla
                 if (building != null && building.CurrentLevel > 0)
                 {
                     bool harbor = building.BuildingType.StringId == BKBuildings.Instance.Harbor.StringId;
-                    result.AddFactor((harbor ? 0.12f : 0.7f) * building.CurrentLevel, building.Name);
+                    result.AddFactor((harbor ? 0.8f : 0.4f) * building.CurrentLevel, building.Name);
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result,
