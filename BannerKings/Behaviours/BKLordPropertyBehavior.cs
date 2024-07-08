@@ -24,7 +24,7 @@ namespace BannerKings.Behaviours
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (party?.LeaderHero == null || !party.IsLordParty)
+            if (party?.LeaderHero == null || !party.IsLordParty || Utils.Helpers.IsNonBaseGameSettlement(target))
             {
                 return;
             }

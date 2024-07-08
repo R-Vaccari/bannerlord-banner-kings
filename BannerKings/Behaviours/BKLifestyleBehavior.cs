@@ -28,7 +28,8 @@ namespace BannerKings.Behaviours
 
         private void OnSettlementEntered(MobileParty mobileParty, Settlement settlement, Hero hero)
         {
-            if (mobileParty != null && mobileParty.IsCaravan && mobileParty.Owner != null && settlement.Notables != null)
+            if (mobileParty != null && mobileParty.IsCaravan && mobileParty.Owner != null && settlement.Notables != null
+                && !Utils.Helpers.IsNonBaseGameSettlement(settlement))
             {
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.Owner);
                 if (education.HasPerk(BKPerks.Instance.CaravaneerOutsideConnections) && MBRandom.RandomFloat < 0.1f)
@@ -48,7 +49,7 @@ namespace BannerKings.Behaviours
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
             if (education.Lifestyle == DefaultLifestyles.Instance.Outlaw && character.IsHero)
             {
-                if (character.Occupation != Occupation.GangLeader ||
+                if (!character.HeroObject.IsGangLeader ||
                     character.HeroObject.GetTraitLevel(DefaultTraits.Honor) >= 0)
                 {
                     var random = MBRandom.RandomFloat;
