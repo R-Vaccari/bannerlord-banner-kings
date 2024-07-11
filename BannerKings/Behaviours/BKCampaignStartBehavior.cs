@@ -12,6 +12,7 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Behaviours
 {
@@ -47,6 +48,7 @@ namespace BannerKings.Behaviours
                 {
                     OnCharacterCreationOver();
                     GiveClansResources();
+                    GiveTownsResources();
                 });
             }
             else
@@ -56,6 +58,7 @@ namespace BannerKings.Behaviours
                 {
                     OnCharacterCreationOver();
                     GiveClansResources();
+                    GiveTownsResources();
                 });
             }
         }
@@ -199,11 +202,19 @@ namespace BannerKings.Behaviours
             }
         }
 
+        private void GiveTownsResources()
+        {
+            foreach (Town town in Town.AllFiefs)
+            {
+                town.ChangeGold((int)(town.Prosperity * 10f));
+            }
+        }
+
         private void GiveClansResources()
         {
             foreach (Clan clan in Clan.NonBanditFactions)
             {
-                if (clan.Kingdom == null || clan == Clan.PlayerClan) continue;
+                if (clan == Clan.PlayerClan) continue;
 
                 int gold = (int)(clan.Tier * 25000f);
                 float influence = clan.Tier * 200f;
