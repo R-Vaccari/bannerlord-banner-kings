@@ -411,14 +411,6 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public override int GetInfluenceCostOfAnnexation(Clan proposingClan)
-        {
-            float result = base.GetInfluenceCostOfAnnexation(proposingClan);
-            result += BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(proposingClan).ResultNumber * 0.25f;
-
-            return (int)result;
-        }
-
         public override void GetHeroesForEffectiveRelation(Hero hero1, Hero hero2, out Hero effectiveHero1, out Hero effectiveHero2)
         {
             effectiveHero1 = hero1;

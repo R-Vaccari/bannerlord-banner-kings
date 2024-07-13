@@ -1,5 +1,4 @@
 using BannerKings.Managers.Court;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -46,7 +45,7 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             IsFulfilled(out var failedReasons);
             var options = new List<InquiryElement>();
-            Clan leadingClan = Clan.PlayerClan.Kingdom.RulingClan;
+            Clan leadingClan = GetFulfiller().Clan.Kingdom.RulingClan;
             CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(leadingClan);
 
             foreach (CouncilMember member in council.Positions)

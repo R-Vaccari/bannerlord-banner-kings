@@ -1,4 +1,3 @@
-using BannerKings.Managers.Court;
 using BannerKings.Managers.Kingdoms.Peerage;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -7,7 +6,6 @@ using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static System.Collections.Specialized.BitVector32;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
@@ -53,7 +51,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var decision = new PeerageKingdomDecision(clan.Kingdom.RulingClan, clan);
             if (clan.Influence < decision.GetProposalInfluenceCost())
             {
-                failedReasons.Add(new TextObject("{=!}You do not have enough influence ({INFLUENCE}{INFLUENCE_ICON})")
+                failedReasons.Add(new TextObject("{=!}You do not have enough influence ({INFLUENCE}{INFLUENCE_ICON}).")
                     .SetTextVariable("INFLUENCE", decision.GetProposalInfluenceCost())
                     .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON));
             }

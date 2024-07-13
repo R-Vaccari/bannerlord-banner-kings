@@ -33,7 +33,7 @@ namespace BannerKings.Models.BKModels
             var result = new ExplainedNumber(0f, explanations);
             if (contract == null)
             {
-                contract = new FeudalContract(null, null,
+                contract = new FeudalContract(
                     DefaultGovernments.Instance.Feudal, 
                     DefaultSuccessions.Instance.FeudalElective, 
                     DefaultInheritances.Instance.Seniority, 

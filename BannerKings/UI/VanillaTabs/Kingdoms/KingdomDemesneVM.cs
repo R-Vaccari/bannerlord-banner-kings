@@ -305,26 +305,22 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms
         private BKContractChangeDecision GetDecision(ContractAspect aspect)
         {
             FeudalContract contract;
-            if (aspect is Government) contract = new FeudalContract(null,
-                        null,
+            if (aspect is Government) contract = new FeudalContract(
                         aspect as Government,
                         Title.Contract.Succession,
                         Title.Contract.Inheritance,
                         Title.Contract.GenderLaw);
-            else if (aspect is Succession) contract = new FeudalContract(null,
-                null,
+            else if (aspect is Succession) contract = new FeudalContract(
                 Title.Contract.Government,
                 aspect as Succession,
                 Title.Contract.Inheritance,
                 Title.Contract.GenderLaw);
-            else if (aspect is Inheritance) contract = new FeudalContract(null,
-                null,
+            else if (aspect is Inheritance) contract = new FeudalContract(
                 Title.Contract.Government,
                 Title.Contract.Succession,
                 aspect as Inheritance,
                 Title.Contract.GenderLaw);
-            else contract = new FeudalContract(null,
-                null,
+            else contract = new FeudalContract(
                 Title.Contract.Government,
                 Title.Contract.Succession,
                 Title.Contract.Inheritance,

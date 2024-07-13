@@ -30,6 +30,7 @@ namespace BannerKings.Managers.Goals
                 yield return RelocateCourtGoal;
                 yield return SentenceCriminal;
                 yield return FaithLeaderDecision;
+                yield return MergeArmy;
                 foreach (Goal item in ModAdditions)
                 {
                     yield return item;
@@ -53,11 +54,19 @@ namespace BannerKings.Managers.Goals
         public Goal SentenceCriminal { get; } = new SentenceCriminalDecision();
         public Goal FoundEmpire { get; } = new FoundEmpireGoal();
         public Goal MakeCamp { get; } = new MakeCamp();
+        public Goal MergeArmy { get; } = new MergeArmyGoal();
+        public Goal PetitionRight { get; } = new PetitionRightGoal();
 
         public override void Initialize()
         {
             MakeCamp.Initialize(new TextObject("{=XRknzX3j}Make Camp"),
                 null);
+
+            PetitionRight.Initialize(new TextObject("{=!}Petition Right"),
+                new TextObject("{=!}Petition a right to your suzerain"));
+
+            MergeArmy.Initialize(new TextObject("{=!}Merge Armies"),
+                new TextObject("{=!}Summon another existing army within your realm to merge with yours. The army to be merged must not be otherwise preoccupied, such as in a battle or in a siege. The leader of said army must be of same or lower rank than yours - a county holder cannot summon a duchy holder. Merging an army costs a reduced amount of influence compared to gathering it by yourself."));
 
             FoundEmpire.Initialize(new TextObject("{=e0t4jZoO}Found Empire"),
                  new TextObject("{=Zi7h8WK3}Found an Empire-level title. An Empire is the highest form of title, ruling over kingdoms. Empires may absorb kingdom titles as their vassals through the process of De Jure Drift.{newline}{newline}"));

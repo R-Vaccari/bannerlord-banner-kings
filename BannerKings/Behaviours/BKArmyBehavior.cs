@@ -165,7 +165,7 @@ namespace BannerKings.Behaviours
             }
         }
 
-        private void EvaluateSummonPlayer(FeudalTitle playerTitle, Army army, MobileParty joinningParty = null)
+        /*private void EvaluateSummonPlayer(FeudalTitle playerTitle, Army army, MobileParty joinningParty = null)
         {
             
              return;
@@ -199,7 +199,7 @@ namespace BannerKings.Behaviours
                 playerArmyDuty = new AuxiliumDuty(CampaignTime.DaysFromNow(days), suzerainParty, completion, settlement,
                     army.Name);
             }
-        }
+        }*/
 
         private MobileParty EvaluateSuzerainParty(Army army, Hero target, MobileParty joinningParty = null)
         {

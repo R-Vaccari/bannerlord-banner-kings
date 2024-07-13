@@ -308,9 +308,10 @@ namespace BannerKings.Patches
             {
                 if (BannerKingsConfig.Instance.TitleManager != null)
                 {
-                    var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
+                    /*var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
                     return title is { Contract: { } } &&
-                           title.Contract.Rights.Contains(FeudalRights.Assistance_Rights);
+                           title.Contract.Rights.Contains(FeudalRights.Assistance_Rights); */
+                    return false;
                 }
 
                 return true;
