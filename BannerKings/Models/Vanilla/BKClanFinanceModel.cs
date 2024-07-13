@@ -158,7 +158,7 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            if (!clan.IsUnderMercenaryService && clan.Kingdom != null && FactionManager.GetEnemyKingdoms(clan.Kingdom).Any())
+            /*if (!clan.IsUnderMercenaryService && clan.Kingdom != null && FactionManager.GetEnemyKingdoms(clan.Kingdom).Any())
             {
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                 if (title is {Contract: { }} &&
@@ -188,7 +188,7 @@ namespace BannerKings.Models.Vanilla
                         result.Add(payment, new TextObject("{=r1iYHSWx}Army compensation rights"));
                     }
                 }
-            }
+            }*/
 
             var positions = BannerKingsConfig.Instance.CourtManager.GetHeroPositions(clan.Leader);
             if (positions != null)

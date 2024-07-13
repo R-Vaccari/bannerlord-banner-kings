@@ -96,10 +96,9 @@ namespace BannerKings
             AddClassDefinition(typeof(FeudalTitle), 23);
             AddClassDefinition(typeof(FeudalContract), 24);
             AddEnumDefinition(typeof(TitleType), 25);
-            AddEnumDefinition(typeof(FeudalDuties), 26);
-            AddEnumDefinition(typeof(FeudalRights), 27);
             AddClassDefinition(typeof(BKCaravansBehavior.TradeActionLog), 28);
             AddEnumDefinition(typeof(BKCaravansBehavior.PlayerInteraction), 29);
+            AddClassDefinition(typeof(FreeCompanyComponent), 30);
 
             AddClassDefinition(typeof(TitleManager), 32);
             AddClassDefinition(typeof(CouncilMember), 34);
@@ -222,7 +221,6 @@ namespace BannerKings
             AddClassDefinition(typeof(Society), 162);
             AddClassDefinition(typeof(SocietyRank), 163);
 
-
             AddClassDefinition(typeof(MercenaryCareer), 1000);
             AddClassDefinition(typeof(MercenaryPrivilege), 1001);
             AddClassDefinition(typeof(CustomTroop), 1002);
@@ -242,8 +240,6 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<FeudalTitle, Hero>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, FeudalTitle>));
             ConstructContainerDefinition(typeof(List<FeudalTitle>));
-            ConstructContainerDefinition(typeof(Dictionary<FeudalDuties, float>));
-            ConstructContainerDefinition(typeof(List<FeudalRights>));
             ConstructContainerDefinition(typeof(Dictionary<Clan, CouncilData>));
             ConstructContainerDefinition(typeof(List<CouncilMember>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, ClaimType>));

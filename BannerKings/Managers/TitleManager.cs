@@ -707,7 +707,7 @@ namespace BannerKings.Managers
                 goto GIVE;
             }
 
-            if (!sovereign.Contract.ContractAspects.Contains(DefaultContractAspects.Instance.Enfoeffment))
+            if (!sovereign.Contract.ContractAspects.Contains(DefaultContractAspects.Instance.Enfeoffment))
             {
                 return;
             }
@@ -1051,42 +1051,11 @@ namespace BannerKings.Managers
 
         public string GetContractText(FeudalTitle title)
         {
-            TextObject text = new TextObject("{=AkTU4Qwg}You, {NAME}, formally accept to be henceforth bound to the {TITLE}, fulfill your duties as well as uphold your rights, what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death." +
-                "\n\nDuties\n{DUTY1}\n{DUTY2}\n\nRights\n{RIGHT1}\n{RIGHT2}")
+            TextObject text = new TextObject("{=AkTU4Qwg}You, {NAME}, formally accept to be henceforth bound to the {TITLE}, fulfill your duties as well as uphold your rights, what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death.")
                 .SetTextVariable("NAME", Hero.MainHero.Name)
-                .SetTextVariable("TITLE", title.FullName)
-                .SetTextVariable("RIGHT1", GetRightString(title.Contract.Rights.ElementAt(0)))
-                .SetTextVariable("RIGHT2", GetRightString(title.Contract.Rights.ElementAt(1)))
-                .SetTextVariable("DUTY1", GetDutyString(title.Contract.Duties.ElementAt(0)))
-                .SetTextVariable("DUTY2", GetDutyString(title.Contract.Duties.ElementAt(1)));
+                .SetTextVariable("TITLE", title.FullName);
 
             return text.ToString();
-        }
-
-        private TextObject GetDutyString(KeyValuePair<FeudalDuties, float> pair)
-        {
-            FeudalDuties duty = pair.Key;
-            float factor = pair.Value;
-            GameTexts.SetVariable("DUTY_FACTOR", (factor * 100f).ToString("0") + '%');
-            var text = duty switch
-            {
-                FeudalDuties.Taxation => new TextObject("{=wWpgZ1QE}You are due {DUTY_FACTOR} of your fiefs' income to your suzerain."),
-                FeudalDuties.Auxilium => new TextObject("{=kk4HK4wg}You are obliged to militarily participate in armies, for {DUTY_FACTOR} of their durations."),
-                _ => new TextObject("{=bcVxdc0x}You are obliged to contribute to {DUTY_FACTOR} of your suzerain's ransom.")
-            };
-
-            return text;
-        }
-
-        private TextObject GetRightString(FeudalRights right)
-        {
-            return right switch
-            {
-                FeudalRights.Absolute_Land_Rights => new TextObject("{=pmw8kEKb}You are entitled to ownership of any conquered lands whose title you own."),
-                FeudalRights.Enfoeffement_Rights => new TextObject("{=kEvL0vNU}You are entitled to be granted land in case you have none, whenever possible."),
-                FeudalRights.Conquest_Rights => new TextObject("{=7TCkYXav}You are entitled to the ownership of any lands you conquered by yourself."),
-                _ => new TextObject("{=!}")
-            };
         }
     }
 }

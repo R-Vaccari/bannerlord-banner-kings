@@ -54,7 +54,9 @@ namespace BannerKings.Managers.Titles.Governments
             if (vassal == Hero.MainHero)
             {
                 InformationManager.ShowInquiry(new InquiryData(Name.ToString(),
-                    PopupText.ToString(),
+                    PopupText.SetTextVariable("SUZERAIN", suzerain.Name)
+                    .SetTextVariable("RESULT", CalculateDuty(suzerain, vassal))
+                    .ToString(),
                     CanFulfill(suzerain, vassal),
                     true,
                     GameTexts.FindText("str_accept").ToString(),

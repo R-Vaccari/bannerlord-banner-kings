@@ -9,11 +9,9 @@ namespace BannerKings.Managers.Titles
 {
     public class FeudalContract
     {
-        public FeudalContract(Dictionary<FeudalDuties, float> duties, List<FeudalRights> rights, Government government,
+        public FeudalContract(Government government,
             Succession succession, Inheritance inheritance, GenderLaw genderLaw)
         {
-            Duties = duties;
-            Rights = rights;
             Government = government;
             Succession = succession;
             Inheritance = inheritance;
@@ -21,9 +19,6 @@ namespace BannerKings.Managers.Titles
             DemesneLaws = new List<DemesneLaw>(8);
             ContractAspects = new List<ContractAspect>();
         }
-
-        [SaveableProperty(1)] public Dictionary<FeudalDuties, float> Duties { get; set; }
-        [SaveableProperty(2)] public List<FeudalRights> Rights { get; set; }
         [SaveableProperty(3)] public Government Government { get; private set; }
         [SaveableProperty(4)] public Succession Succession { get; private set; }
         [SaveableProperty(5)] public Inheritance Inheritance { get; private set; }
@@ -124,22 +119,5 @@ namespace BannerKings.Managers.Titles
         Ransom,
         Taxation,
         Auxilium
-    }
-
-    public enum FeudalRights
-    {
-        Absolute_Land_Rights,
-        Conquest_Rights,
-        Enfoeffement_Rights,
-        Assistance_Rights,
-        Army_Compensation_Rights
-    }
-
-    public enum LegitimacyType
-    {
-        Lawful,
-        Lawful_Foreigner,
-        Unlawful,
-        Unlawful_Foreigner
     }
 }

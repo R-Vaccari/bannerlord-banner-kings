@@ -32,6 +32,55 @@ namespace BannerKings.Models.Vanilla
             return relationChange;
         }
 
+        public override ExplainedNumber WillSuzerainAcceptRight(ContractRight right, Hero suzerain, Hero vassal)
+        {
+            ExplainedNumber cost = new ExplainedNumber(-10f);
+            cost.Add(suzerain.GetRelation(vassal), new TextObject("{=aPEQXOTV}Relationship with {HERO}")
+                .SetTextVariable("HERO", vassal.Name));
+
+            return cost;
+        }
+
+        public override int GetInfluenceCostOfAnnexation(Clan proposingClan) =>
+            MathF.Round(GetAnnexationCostExplained(proposingClan).ResultNumber);
+
+        public override ExplainedNumber GetAnnexationCostExplained(Clan proposingClan, Town town = null)
+        {
+            ExplainedNumber cost = new ExplainedNumber(200f);
+            cost.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(proposingClan).ResultNumber * 0.2f,
+                new TextObject("{=wwYABLRd}Clan Influence Limit"));
+
+            if (proposingClan.Kingdom != null)
+            {
+                if (proposingClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.FeudalInheritance))
+                {
+                    cost.AddFactor(1f);
+                }
+
+                if (proposingClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.PrecarialLandTenure) && proposingClan == proposingClan.Kingdom.RulingClan)
+                {
+                    cost.AddFactor(-0.5f);
+                }
+            }
+
+            if (town != null) 
+            {
+                if (town.IsOwnerUnassigned) cost.AddFactor(-0.5f, new TextObject("{=!}Contested fief"));
+            }
+
+            GetPerkEffectsOnKingdomDecisionInfluenceCost(proposingClan, ref cost);
+            return cost;
+        }
+
+        protected void GetPerkEffectsOnKingdomDecisionInfluenceCost(Clan proposingClan, ref ExplainedNumber cost)
+        {
+            if (proposingClan.Leader.GetPerkValue(DefaultPerks.Charm.Firebrand))
+            {
+                cost.AddFactor(DefaultPerks.Charm.Firebrand.PrimaryBonus, DefaultPerks.Charm.Firebrand.Name);
+            }
+        }
+
+
         public override float GetScoreOfKingdomToHireMercenary(Kingdom kingdom, Clan mercenaryClan) =>
             KingdomRecruitMercenary(kingdom, mercenaryClan).ResultNumber;
 

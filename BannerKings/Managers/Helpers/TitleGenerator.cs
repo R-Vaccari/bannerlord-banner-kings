@@ -40,9 +40,13 @@ namespace BannerKings.Managers.Helpers
             return title;
         }
 
-        public static void FoundKingdom(TitleAction action)
+        public static void FoundKingdom(TitleAction action, FeudalContract contract = null)
         {
-            FeudalTitle newTitle = CreateKingdom(action.ActionTaker, action.ActionTaker.Clan.Kingdom, TitleType.Kingdom, new List<FeudalTitle>(action.Vassals), action.Title.Contract);
+            FeudalTitle newTitle = CreateKingdom(action.ActionTaker, 
+                action.ActionTaker.Clan.Kingdom, 
+                TitleType.Kingdom, 
+                new List<FeudalTitle>(action.Vassals),
+                contract != null ? contract : action.Title.Contract);
 
             action.Title.DriftTitle(newTitle, false);
             foreach (var vassal in action.Vassals)
@@ -110,35 +114,23 @@ namespace BannerKings.Managers.Helpers
             var contract = type switch
             {
                 "feudal_elective" => new FeudalContract(
-                    new Dictionary<FeudalDuties, float> { { FeudalDuties.Ransom, 0.20f }, { FeudalDuties.Auxilium, 0.4f } },
-                    new List<FeudalRights> { FeudalRights.Absolute_Land_Rights, FeudalRights.Enfoeffement_Rights },
                     DefaultGovernments.Instance.Feudal, 
                     DefaultSuccessions.Instance.FeudalElective,
                     DefaultInheritances.Instance.Primogeniture,
                     DefaultGenderLaws.Instance.Agnatic),
                 "imperial" => new FeudalContract(
-                    new Dictionary<FeudalDuties, float> { { FeudalDuties.Ransom, 0.10f }, { FeudalDuties.Taxation, 0.4f } },
-                    new List<FeudalRights> { FeudalRights.Assistance_Rights, FeudalRights.Army_Compensation_Rights },
                      DefaultGovernments.Instance.Feudal, DefaultSuccessions.Instance.FeudalElective,
                      DefaultInheritances.Instance.Primogeniture,
                      DefaultGenderLaws.Instance.Agnatic),
                 "tribal" => new FeudalContract(
-                    new Dictionary<FeudalDuties, float>
-                    {
-                        {FeudalDuties.Taxation, 0.125f}, {FeudalDuties.Auxilium, 0.66f}
-                    }, new List<FeudalRights> { FeudalRights.Conquest_Rights, FeudalRights.Absolute_Land_Rights },
                      DefaultGovernments.Instance.Feudal, DefaultSuccessions.Instance.FeudalElective,
                      DefaultInheritances.Instance.Primogeniture,
                      DefaultGenderLaws.Instance.Agnatic),
                 "republic" => new FeudalContract(
-                    new Dictionary<FeudalDuties, float> { { FeudalDuties.Ransom, 0.10f }, { FeudalDuties.Taxation, 0.4f } },
-                    new List<FeudalRights> { FeudalRights.Assistance_Rights, FeudalRights.Army_Compensation_Rights },
                      DefaultGovernments.Instance.Republic, DefaultSuccessions.Instance.Republic,
                      DefaultInheritances.Instance.Primogeniture,
                      DefaultGenderLaws.Instance.Agnatic),
                 _ => new FeudalContract(
-                    new Dictionary<FeudalDuties, float> { { FeudalDuties.Ransom, 0.20f }, { FeudalDuties.Auxilium, 0.4f } },
-                    new List<FeudalRights> { FeudalRights.Absolute_Land_Rights, FeudalRights.Enfoeffement_Rights },
                      DefaultGovernments.Instance.Feudal, DefaultSuccessions.Instance.Hereditary,
                      DefaultInheritances.Instance.Primogeniture,
                      DefaultGenderLaws.Instance.Agnatic)
@@ -150,8 +142,6 @@ namespace BannerKings.Managers.Helpers
         public static FeudalContract GenerateContract(string government, string succession, string inheritance, string genderLaw)
         {
             return new FeudalContract(
-                    new Dictionary<FeudalDuties, float> { { FeudalDuties.Ransom, 0.20f }, { FeudalDuties.Auxilium, 0.4f } },
-                    new List<FeudalRights> { FeudalRights.Absolute_Land_Rights, FeudalRights.Enfoeffement_Rights },
                     DefaultGovernments.Instance.GetById(government), 
                     DefaultSuccessions.Instance.GetById(succession), 
                     DefaultInheritances.Instance.GetById(inheritance),

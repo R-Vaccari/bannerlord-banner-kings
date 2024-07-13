@@ -387,12 +387,12 @@ namespace BannerKings.Models.Vanilla
                 return;
             }
 
-            var contract = titleData.Title.Contract;
+            /*var contract = titleData.Title.Contract;
             if (contract != null && contract.Duties.ContainsKey(FeudalDuties.Taxation))
             {
                 var factor = MBMath.ClampFloat(contract.Duties[FeudalDuties.Taxation], 0f, 0.8f);
                 titleData.Title.DueTax = result * factor;
-            }
+            }*/
         }
 
         public override float GetTownTaxRatio(Town town)

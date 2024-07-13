@@ -47,7 +47,7 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            var contract = playerTitle.Contract;
+            /*var contract = playerTitle.Contract;
             if (contract == null || !contract.Duties.ContainsKey(FeudalDuties.Ransom))
             {
                 return;
@@ -56,7 +56,7 @@ namespace BannerKings.Behaviours
             var completion = contract.Duties[FeudalDuties.Ransom];
             float ransom =
                 TaleWorlds.CampaignSystem.Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(released.CharacterObject);
-            playerRansomDuty = new RansomDuty(CampaignTime.DaysFromNow(2), released, ransom * completion);
+            playerRansomDuty = new RansomDuty(CampaignTime.DaysFromNow(2), released, ransom * completion);*/
         }
     }
 }
