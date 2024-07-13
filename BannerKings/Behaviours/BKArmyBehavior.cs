@@ -115,8 +115,7 @@ namespace BannerKings.Behaviours
         public void OnPartyJoinedArmyEvent(MobileParty party)
         {
             var playerKingdom = Clan.PlayerClan.Kingdom;
-            if (playerKingdom == null || playerKingdom != party.LeaderHero.Clan.Kingdom ||
-                BannerKingsConfig.Instance.TitleManager == null || party == MobileParty.MainParty)
+            if (playerKingdom == null || playerKingdom != party.MapFaction || party == MobileParty.MainParty)
             {
                 return;
             }
