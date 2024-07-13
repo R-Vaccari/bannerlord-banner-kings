@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
@@ -564,23 +565,39 @@ namespace BannerKings.Behaviours
             PartyTemplateObject template = clan.DefaultPartyTemplate;
             foreach (var stack in template.Stacks) troops.Add(stack.Character);
 
-            foreach (WarPartyComponent party in clan.WarPartyComponents)
+            if (clan.Kingdom != null)
             {
-                foreach (var element in party.MobileParty.MemberRoster.GetTroopRoster())
+                foreach (WarPartyComponent party in clan.WarPartyComponents)
                 {
-                    if (element.Number < 1) continue;
-
-                    CharacterObject troop = element.Character;
-                    if (!troops.Contains(troop))
+                    foreach (var element in party.MobileParty.MemberRoster.GetTroopRoster())
                     {
-                        CharacterObject merc = troops.FirstOrDefault(x => x.Level == troop.Level);
-                        if (merc == null) merc = clan.BasicTroop;
+                        if (element.Number < 1) continue;
 
-                        if (MBRandom.RandomFloat < MercenaryConversionChance(merc, troop))
+                        CharacterObject troop = element.Character;
+                        if (!troops.Contains(troop))
                         {
-                            party.MobileParty.MemberRoster.AddToCounts(troop, -1);
-                            party.MobileParty.MemberRoster.AddToCounts(merc, 1);
+                            CharacterObject merc = troops.FirstOrDefault(x => x.Level == troop.Level);
+                            if (merc == null) merc = clan.BasicTroop;
+
+                            if (MBRandom.RandomFloat < MercenaryConversionChance(merc, troop))
+                            {
+                                party.MobileParty.MemberRoster.AddToCounts(troop, -1);
+                                party.MobileParty.MemberRoster.AddToCounts(merc, 1);
+                            }
                         }
+                    }
+                }
+            }
+            else
+            {
+                foreach (WarPartyComponent party in clan.WarPartyComponents)
+                {
+                    int count = MathF.Min(MBRandom.RandomInt(3, 5),
+                        party.MobileParty.LimitedPartySize - party.MobileParty.MemberRoster.TotalManCount);
+                    if (count > 0)
+                    {
+                        var troop = troops.GetRandomElement();
+                        party.MobileParty.MemberRoster.AddToCounts(troop, count);
                     }
                 }
             }
@@ -588,8 +605,8 @@ namespace BannerKings.Behaviours
 
         private float MercenaryConversionChance(CharacterObject merc, CharacterObject troop)
         {
-            float chance = 0.05f;
-            if (merc.Culture == troop.Culture) chance += 0.5f;
+            float chance = 0.1f;
+            if (merc.Culture == troop.Culture) chance += 0.7f;
 
             if (merc.IsMounted)
             {
