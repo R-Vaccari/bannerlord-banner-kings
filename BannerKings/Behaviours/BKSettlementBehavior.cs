@@ -31,6 +31,7 @@ using BannerKings.Managers.Institutions.Religions;
 using static BannerKings.Managers.PopulationManager;
 using System.Reflection;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
+using BannerKings.Actions;
 
 namespace BannerKings.Behaviours
 {
@@ -46,6 +47,13 @@ namespace BannerKings.Behaviours
         {
         }
 
+        public static List<ConquestAction> GetConquestActions(Hero hero) =>
+            new List<ConquestAction>()
+            {
+
+            };
+ 
+
         private void TickSettlementData(Settlement settlement)
         {
             UpdateSettlementPops(settlement);
@@ -57,12 +65,24 @@ namespace BannerKings.Behaviours
             Clan previousSettlementOwner,
             Dictionary<MobileParty, float> partyContributions)
         {
-            if (settlement?.Town == null ||
-                BannerKingsConfig.Instance.PopulationManager == null)
-            {
-                return;
-            }
+            if (settlement?.Town == null) return;
 
+            SiegeConsequences(settlement, aftermathType, attackerParty);
+        }
+
+        private void ConquestAction(Settlement settlement,
+            SiegeAftermathAction.SiegeAftermath aftermathType,
+            MobileParty attackerParty)
+        {
+            if (attackerParty == MobileParty.MainParty)
+            {
+            }
+        }
+
+        private void SiegeConsequences(Settlement settlement,
+            SiegeAftermathAction.SiegeAftermath aftermathType,
+            MobileParty attackerParty)
+        {
             float stabilityLoss = 0f;
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             if (aftermathType == SiegeAftermathAction.SiegeAftermath.ShowMercy)
@@ -86,20 +106,18 @@ namespace BannerKings.Behaviours
                     MBRandom.RandomFloatRanged(0.16f, 0.24f);
                 stabilityLoss = aftermathType == SiegeAftermathAction.SiegeAftermath.Pillage ? 0.25f : 0.45f;
                 int killTotal = (int)(data.TotalPop * shareToKill);
+                if (killTotal < 1) if (killTotal <= 1f) return;
+
+                int toKill = killTotal;
                 var weights = GetDesiredPopTypes(settlement).Select(pair => new ValueTuple<PopType, float>(pair.Key, pair.Value[0])).ToList();
 
-                if (killTotal <= 0)
-                {
-                    return;
-                }
-
-                while (killTotal > 0)
+                while (toKill > 0)
                 {
                     var random = MBRandom.RandomInt(10, 20);
                     var target = MBRandom.ChooseWeighted(weights);
                     var finalNum = MBMath.ClampInt(random, 0, data.GetTypeCount(target));
                     data.UpdatePopType(target, -finalNum);
-                    killTotal -= finalNum;
+                    toKill -= finalNum;
                 }
 
                 InformationManager.DisplayMessage(new InformationMessage(
@@ -131,17 +149,10 @@ namespace BannerKings.Behaviours
 
         private void HandleIssues(Settlement settlement)
         {
-            if (settlement.Town == null)
-            {
-                return;
-            }
+            if (settlement.Town == null) return;
 
             Hero governor = settlement.Town.Governor;
-            if (governor == null)
-            {
-                return;
-            }
-
+            if (governor == null) return;
             RunWeekly(() =>
             {
                 IssueBase issue = null;
