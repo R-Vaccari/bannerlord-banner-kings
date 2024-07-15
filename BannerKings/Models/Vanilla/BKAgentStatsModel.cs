@@ -1,7 +1,12 @@
 ﻿using BannerKings.Managers.Skills;
+using Helpers;
 using SandBox.GameComponents;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
 namespace BannerKings.Models.Vanilla
@@ -35,7 +40,8 @@ namespace BannerKings.Models.Vanilla
                                     result *= 1.1f;
                                 }
 
-                            } else
+                            }
+                            else
                             {
                                 if (education.HasPerk(BKPerks.Instance.RitterIronHorses))
                                 {
@@ -58,7 +64,7 @@ namespace BannerKings.Models.Vanilla
                 return;
             }
 
-            if (agent.Formation is not {Captain: {IsHero: true}})
+            if (agent.Formation is not { Captain: { IsHero: true } })
             {
                 return;
             }
@@ -81,7 +87,7 @@ namespace BannerKings.Models.Vanilla
                         agentDrivenProperties.MountManeuver *= 1.08f;
                     }
 
-                    if (agent.MountAgent.Monster.StringId == "camel" &&data.HasPerk(BKPerks.Instance.JawwalCamelMaster))
+                    if (agent.MountAgent.Monster.StringId == "camel" && data.HasPerk(BKPerks.Instance.JawwalCamelMaster))
                     {
                         agentDrivenProperties.MountSpeed *= 1.08f;
                     }
@@ -90,15 +96,17 @@ namespace BannerKings.Models.Vanilla
                     {
                         agentDrivenProperties.MountSpeed *= 1.05f;
                     }
-                } 
-                else 
+                }
+                else
                 {
                     if (data.HasPerk(BKPerks.Instance.FianFennid))
                     {
                         agentDrivenProperties.ThrustOrRangedReadySpeedMultiplier *= 1.1f;
-                    } 
+                    }
                 }
             }
         }
+
+       
     }
 }

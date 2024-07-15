@@ -1,9 +1,12 @@
-﻿using Helpers;
+﻿using BannerKings.Settings;
+using BannerKings.Utils;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.ObjectSystem;
 
 namespace BannerKings.Models.Vanilla
@@ -11,7 +14,6 @@ namespace BannerKings.Models.Vanilla
     public class BKCompanionPrices : DefaultCompanionHiringPriceCalculationModel
     {
         public override int GetCompanionHiringPrice(Hero companion) => GetHiringPrice(companion, true);
-        
 
         public int GetHiringPrice(Hero companion, bool addGearCosts)
         {
@@ -51,7 +53,7 @@ namespace BannerKings.Models.Vanilla
 
                 explainedNumber.Add(num / 2f);
             }
-            
+
             explainedNumber.Add(companion.CharacterObject.Level * 10);
             var skills = MBObjectManager.Instance.GetObjectTypeList<SkillObject>();
             foreach (var skill in skills)
@@ -63,10 +65,19 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
+            #region Steward.PaidInPromise 
             if (Hero.MainHero.IsPartyLeader && Hero.MainHero.GetPerkValue(DefaultPerks.Steward.PaidInPromise))
             {
-                explainedNumber.AddFactor(DefaultPerks.Steward.PaidInPromise.PrimaryBonus * 0.01f);
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                {
+                    DefaultPerks.Steward.PaidInPromise.AddScaledClanLeaderPerkBonusWithClanAndFamilyMembers(ref explainedNumber, false, Hero.MainHero);
+                }
+                else
+                {
+                    explainedNumber.AddFactor(DefaultPerks.Steward.PaidInPromise.PrimaryBonus * 0.01f, null);
+                }
             }
+            #endregion
 
             if (Hero.MainHero.PartyBelongedTo != null)
             {
@@ -89,7 +100,8 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            return MBRandom.RoundRandomized(totalCost * 0.005f);
+            return MathF.Round(totalCost * 0.005f);
+            //return MBRandom.RoundRandomized(totalCost * 0.005f);//party wage keep changing every hour because of random value
         }
 
         public int GetCostFactor(SkillObject skill)

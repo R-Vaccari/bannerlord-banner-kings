@@ -15,6 +15,7 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKPartyMoraleModel : DefaultPartyMoraleModel
     {
+
         public override ExplainedNumber GetEffectivePartyMorale(MobileParty mobileParty, bool includeDescription = false)
         {
             var result = base.GetEffectivePartyMorale(mobileParty, includeDescription);
