@@ -1,19 +1,17 @@
-﻿using BannerKings.Managers.Kingdoms.Peerage;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.CampaignSystem.Settlements;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
+using System.Linq;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
     public class PetitionRightGoal : Goal
     {
+        private ContractRight chosenRight;
         public PetitionRightGoal(Hero fulfiller = null) : base("goal_claim_fief", fulfiller)
         {
         }
@@ -47,13 +45,13 @@ namespace BannerKings.Managers.Goals.Decisions
 
             if (clan.IsUnderMercenaryService)
             {
-                failedReasons.Add(new TextObject("{=!}Mercenaries cannot claim fiefs"));
+                failedReasons.Add(new TextObject("{=!}Mercenaries cannot petition rights."));
             }
 
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(GetFulfiller());
             if (title == null)
             {
-                failedReasons.Add(new TextObject("{=!}You must have at least one title in order to petition rights"));
+                failedReasons.Add(new TextObject("{=!}You must have at least one title in order to petition rights."));
             }
 
             return failedReasons.Count == 0;
@@ -73,65 +71,69 @@ namespace BannerKings.Managers.Goals.Decisions
                 ContractRight right = (ContractRight)aspect;
                 bool canFulfill = right.CanFulfill(suzerain, GetFulfiller());
                 ExplainedNumber accept = BannerKingsConfig.Instance.DiplomacyModel.WillSuzerainAcceptRight(right, suzerain, GetFulfiller());
+                ExplainedNumber influence = BannerKingsConfig.Instance.DiplomacyModel.GetRightInnfluenceCost(right, suzerain, GetFulfiller());
+                int cost = MBRandom.RoundRandomized(influence.ResultNumber);
 
-                TextObject hint = new TextObject("{=!}{SUZERAIN} will fulfil this request.")
-                        .SetTextVariable("SUZERAIN", suzerain.Name);
+                TextObject hint = new TextObject("{=!}{DESCRIPTION}{newline}{newline}{EFFECTS}{newline}{newline}{EXPLANATION}")
+                    .SetTextVariable("DESCRIPTION", right.Description)
+                    .SetTextVariable("EFFECTS", right.EffectText);
+                    
                 if (!canFulfill)
                 {
-                    hint = new TextObject("{=!}{SUZERAIN} cannot fulfil this request at this time.")
-                        .SetTextVariable("SUZERAIN", suzerain.Name);
+                    hint = hint.SetTextVariable("EXPLANATION", new TextObject("{=!}{SUZERAIN} cannot fulfil this request at this time.")
+                        .SetTextVariable("SUZERAIN", suzerain.Name));
                 }
-
-                if (accept.ResultNumber < 1f)
+                else if (accept.ResultNumber < 1f)
                 {
-                    hint = new TextObject("{=!}{SUZERAIN} is not willing to fulfil your request.{newline}{newline}Explanations:{newline}{EXPLANATION}")
+                    hint = hint.SetTextVariable("EXPLANATION", 
+                        new TextObject("{=!}{SUZERAIN} is not willing to fulfil your request.{newline}{newline}Explanations:{newline}{EXPLANATION}")
                         .SetTextVariable("EXPLANATION", accept.GetExplanations())
-                        .SetTextVariable("SUZERAIN", suzerain.Name);
+                        .SetTextVariable("SUZERAIN", suzerain.Name));
+                }
+                else
+                {
+                    hint = hint.SetTextVariable("EXPLANATION",
+                        new TextObject("{=!}{SUZERAIN} will fulfil this request.")
+                       .SetTextVariable("SUZERAIN", suzerain.Name));
                 }
 
                 options.Add(new InquiryElement(right,
-                    new TextObject("{=oFfExhaM}{DESCRIPTION}\n{EFFECTS}")
-                    .SetTextVariable("DESCRIPTION", right.Description)
-                    .SetTextVariable("EFFECTS", right.EffectText)
+                    new TextObject("{=Hyfgj4Mw}{TYPE} - {INFLUENCE}{INFLUENCE_ICON}")
+                    .SetTextVariable("TYPE", right.Name)
+                    .SetTextVariable("INFLUENCE", cost)
+                    .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON)
                     .ToString(),
                     null,
-                    canFulfill && accept.ResultNumber >= 1f,
-                    hint.ToString()));
+                    canFulfill && accept.ResultNumber >= 1f ,
+                    hint.ToString()));;
             }
 
-            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Petition Right").ToString(),
-                new TextObject("{=!}Petition the fulfilment of one of your rights by your suzerain, {SUZERAIN}. Your suzerain may or may not be willing or able to fulfil your request. Your rights are defined in the contract of your realm's title. Your suzerain is defined by your highest title.")
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                Name.ToString(),
+                new TextObject("{=!}Petition the fulfilment of one of your rights by your suzerain, {SUZERAIN}. Your suzerain may or may not be willing (according to their opinion) or able to fulfil your request. Your rights are defined in the contract of your realm's title. Your suzerain is defined by your highest title.")
                 .SetTextVariable("SUZERAIN", suzerain.Name)
                 .ToString(),
+                options,
                 true,
-                true,
-                GameTexts.FindText("str_selection_widget_accept").ToString(),
-                GameTexts.FindText("str_selection_widget_cancel").ToString(),
-                () => ApplyGoal(),
-                null));
+                1,
+                1,
+                GameTexts.FindText("str_done").ToString(),
+                GameTexts.FindText("str_cancel").ToString(),
+                delegate (List<InquiryElement> selectedOptions)
+                {
+                    chosenRight = (ContractRight)selectedOptions.First().Identifier;
+                    ApplyGoal();
+                },
+                null,
+                string.Empty));
         }
 
         public override void ApplyGoal()
         {
-            Clan clan = GetFulfiller().Clan;
-            var decision = new PeerageKingdomDecision(clan.Kingdom.RulingClan, clan);
-            if (clan != Clan.PlayerClan)
-            {
-                var election = new KingdomElection(decision);
-                if (election.GetLikelihoodForOutcome(0) < 0.4f) return;
-            }
-
-            clan.Kingdom.AddDecision(decision, false);
-            GainKingdomInfluenceAction.ApplyForDefault(GetFulfiller(), -decision.GetProposalInfluenceCost());
-
-            if (clan == Clan.PlayerClan)
-            {
-                MBInformationManager.AddQuickInformation(new TextObject("{=5YsS2g7T}The Peers of {KINGDOM} will now vote on your request.")
-                .SetTextVariable("KINGDOM", Clan.PlayerClan.Kingdom.Name),
-                0,
-                null,
-                Utils.Helpers.GetKingdomDecisionSound());
-            }
+            Hero suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(GetFulfiller()).deJure;
+            ExplainedNumber influence = BannerKingsConfig.Instance.DiplomacyModel.GetRightInnfluenceCost(chosenRight, suzerain, GetFulfiller());
+            GainKingdomInfluenceAction.ApplyForDefault(GetFulfiller(), influence.ResultNumber);
+            chosenRight.Execute(suzerain, GetFulfiller());
         }
 
         public override void DoAiDecision()

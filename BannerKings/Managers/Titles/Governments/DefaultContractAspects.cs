@@ -79,10 +79,10 @@ namespace BannerKings.Managers.Titles.Governments
         public override void Initialize()
         {
             ConquestDistributed.Initialize(new TextObject("{=RYmV2PEY}Distributed Conquest"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}An Imperial invention, made to counter the 'barbaric' idea of conquest through might, which incites the creation of despots and dictators. It is up to the state to lawfully distribute dominions and thus diffuse power."),
                 new TextObject("{=!}Ability to directly petition a fief as a fiefless peer, and your suzerain has 2 or more fiefs{newline}Ownership votes favour clans with less properties"),
                 true,
-                0,
+                150,
                 ContractAspect.AspectTypes.Conquest,
                 (ContractRight right, Hero suzerain, Hero vassal) =>
                 {
@@ -99,10 +99,10 @@ namespace BannerKings.Managers.Titles.Governments
                 });
 
             ConquestClaim.Initialize(new TextObject("{=kyB8tkgY}Conquest by Claim"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}A 'sophisticated' view on ownership, based on legal frameworks. One that holds a lawful claim to a domain should therefore be awarded its control, regardless of other factors."),
                 new TextObject("{=!}Ability to directly petition a fief as holder of its title{newline}Title claimants of the fief are stronger candidates on ownership votes"),
                 true,
-                0,
+                150,
                 ContractAspect.AspectTypes.Conquest,
                 (ContractRight right, Hero suzerain, Hero vassal) =>
                 {
@@ -130,10 +130,10 @@ namespace BannerKings.Managers.Titles.Governments
                 });
 
             ConquestMight.Initialize(new TextObject("{=kyB8tkgY}Conquest by Might"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}A long tradition within Calradia. To conquer through the sword makes the bounty rightfully yours."),
                 new TextObject("{=!}Ability to directly petition a fief you conquered{newline}Settlement conquerors are stronger candidates on ownership votes"),
                 true,
-                0,
+                150,
                 ContractAspect.AspectTypes.Conquest,
                 (ContractRight right, Hero suzerain, Hero vassal) =>
                 {
