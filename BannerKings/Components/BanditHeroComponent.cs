@@ -64,6 +64,10 @@ namespace BannerKings.Components
             int partyLimit = party.LimitedPartySize;
             if (party.CurrentSettlement == null)
             {
+                if (party.MemberRoster.TotalManCount < partyLimit * 0.2f)
+                {
+                    party.Ai.SetMoveGoToSettlement(Hideout.Settlement);
+                }
 
                 if (party.Food < 10)
                 {

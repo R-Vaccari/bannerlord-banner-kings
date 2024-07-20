@@ -95,7 +95,6 @@ namespace BannerKings.Behaviours
         private void OnPartyHourlyTick(MobileParty party)
         {
             TickBandits(party);
-            TickBanditHeroes(party);
         }
 
         private void OnPartyDailyTick(MobileParty party)
@@ -168,21 +167,6 @@ namespace BannerKings.Behaviours
                 {
                     SetFollow(heroParty, party);
                 }
-            }
-        }
-
-        private void TickBanditHeroes(MobileParty party)
-        {
-            if (party.PartyComponent is not BanditHeroComponent)
-            {
-                return;
-            }
-
-            float partyLimit = TaleWorlds.CampaignSystem.Campaign.Current.Models.PartySizeLimitModel.GetPartyMemberSizeLimit(party.Party).ResultNumber;
-            BanditHeroComponent component = (BanditHeroComponent)party.PartyComponent;
-            if (party.MemberRoster.TotalManCount < partyLimit * 0.2f)
-            {
-                party.Ai.SetMoveGoToSettlement(component.Hideout.Settlement);
             }
         }
 
