@@ -260,8 +260,8 @@ namespace BannerKings.Behaviours
         {
             float caravans = hero.OwnedCaravans.Count;
             return hero.PartyBelongedTo == null &&
-                    caravans < BannerKingsConfig.Instance.EconomyModel.GetNotableCaravanLimit(hero) &&
-                    hero.Power > (50f + (caravans * 150f)) &&
+                    caravans < 1 &&
+                    (hero.IsMerchant || hero.Power > 300f) &&
                     (hero.IsFugitive || hero.IsReleased || hero.IsNotSpawned || hero.IsActive) &&
                     !hero.IsTemplate &&
                     hero.CanLeadParty();
@@ -358,9 +358,13 @@ namespace BannerKings.Behaviours
 
         private void DailyTickHero(Hero hero)
         {
-            if (hero != Hero.MainHero && ShouldHaveCaravan(hero))
+            if (hero != Hero.MainHero && hero.IsNotable && ShouldHaveCaravan(hero))
             {
                 SpawnCaravan(hero, false);
+                if (hero.OwnedCaravans.Count > 1)
+                {
+                    DestroyPartyAction.Apply(null, hero.OwnedCaravans.GetRandomElement().MobileParty);
+                }
             }
         }
 
