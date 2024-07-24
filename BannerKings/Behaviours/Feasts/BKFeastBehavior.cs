@@ -1,5 +1,4 @@
 using BannerKings.Behaviours.Marriage;
-using BannerKings.Managers.Goals.Decisions;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -20,7 +19,7 @@ namespace BannerKings.Behaviours.Feasts
 
         public override void RegisterEvents()
         {
-            CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnDailyTickClan);
+            //CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnDailyTickClan);
             CampaignEvents.DailyTickTownEvent.AddNonSerializedListener(this, OnDailyTickTown);
             CampaignEvents.HourlyTickSettlementEvent.AddNonSerializedListener(this, OnSettlementHourlyTick);
             CampaignEvents.OnMissionStartedEvent.AddNonSerializedListener(this, OnMissionStarted);
@@ -269,15 +268,6 @@ namespace BannerKings.Behaviours.Feasts
 
             Feast feast = feasts[town];
             feast.Tick(false);
-        }
-
-        private void OnDailyTickClan(Clan clan)
-        {
-            if (clan.Kingdom != null && clan != Clan.PlayerClan && MBRandom.RandomFloat <= 0.05f)
-            {
-                var decision = new OrganizeFeastDecision(clan.Leader);
-                decision.DoAiDecision();
-            }
         }
 
         public bool IsFeastTown(Settlement settlement) => settlement.Town != null && feasts.ContainsKey(settlement.Town);

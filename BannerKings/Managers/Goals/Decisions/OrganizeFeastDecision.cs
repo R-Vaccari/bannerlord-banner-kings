@@ -134,7 +134,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 new TextObject("{=RH2NC5ij}Organize Feast").ToString(),
                 new TextObject("{=s71kzA2t}Choose where to hold your feast. The feast food and alcohol will be taken from the settlement Stash.").ToString(),
                 list,
-                false,
+                true,
                 1,
                 1,
                 GameTexts.FindText("str_accept").ToString(),
@@ -147,7 +147,7 @@ namespace BannerKings.Managers.Goals.Decisions
                         new TextObject("{=Usb3B69i}Feast Guests").ToString(),
                         new TextObject("{=S9S5PCrP}Choose the guests for your feast. Pick at least 3 different clans from your realm. Mind you, guests will have expectations. They will want food in large variety, of good quality and plentiful. They will also expect a lot of alcohol, and the host to be present.").ToString(),
                         clanList,
-                        false,
+                        true,
                         1,
                         clanList.Count,
                         GameTexts.FindText("str_accept").ToString(),
@@ -199,27 +199,21 @@ namespace BannerKings.Managers.Goals.Decisions
         public override void DoAiDecision()
         {
             var reasons = new List<TextObject>();
-            if (!IsFulfilled(out reasons))
-            {
-                return;
-            }
+            if (!IsFulfilled(out reasons)) return;
+            
 
             var fulfiller = GetFulfiller();
-            if (fulfiller.Gold < 80000)
-            {
-                return;
-            }
+            if (fulfiller.Gold < 80000) return;
+            
 
             if (fulfiller.Clan.Kingdom.UnresolvedDecisions.Any(x => x is DeclareWarDecision))
-            {
                 return;
-            }
 
             var behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKFeastBehavior>();
-            if (behavior.KingdomHasFeast(fulfiller.Clan.Kingdom))
-            {
-                return;
-            }
+            if (behavior.KingdomHasFeast(fulfiller.Clan.Kingdom)) return;
+            
+
+            if (0.05f < MBRandom.RandomFloat) return;
 
             var guests = new List<Clan>();
             float influenceSum = 0f;
