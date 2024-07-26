@@ -274,7 +274,7 @@ namespace BannerKings.Models.Vanilla
                 if (building != null && building.CurrentLevel > 0)
                 {
                     bool harbor = building.BuildingType.StringId == BKBuildings.Instance.Harbor.StringId;
-                    result.AddFactor((harbor ? 0.8f : 0.4f) * building.CurrentLevel, building.Name);
+                    result.Add((harbor ? 0.2f : 0.15f) * building.CurrentLevel, building.Name);
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result,
