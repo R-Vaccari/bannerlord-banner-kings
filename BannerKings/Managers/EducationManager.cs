@@ -201,11 +201,7 @@ namespace BannerKings.Managers
 
         public bool CanRead(BookType book, Hero hero)
         {
-            var readBooks = Educations[hero].Books;
-            if (readBooks.ContainsKey(book) && readBooks[book] >= 1f)
-            {
-                return false;
-            }
+            if (Educations[hero].HasRead(book)) return false;
 
             return hero.GetPerkValue(BKPerks.Instance.ScholarshipLiterate) && BannerKingsConfig.Instance.EducationModel.CalculateBookReadingRate(book, hero).ResultNumber >= 0.2f;
         }

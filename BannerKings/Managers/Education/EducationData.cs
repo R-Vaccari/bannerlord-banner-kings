@@ -89,6 +89,8 @@ namespace BannerKings.Managers.Education
         [field: SaveableField(9)] public float LifestyleProgress { get; private set; }
         [field: SaveableField(10)] public Innovation Research { get; private set; }
 
+        public bool HasRead(BookType book) => Books.ContainsKey(book) && Books[book] >= 1f;
+
         public void ResetProgress()
         {
             LifestyleProgress = 0f;
