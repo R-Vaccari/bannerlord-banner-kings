@@ -1,4 +1,5 @@
 using BannerKings.Behaviours.Marriage;
+using BannerKings.Settings;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -20,13 +21,16 @@ namespace BannerKings.Behaviours.Feasts
         public override void RegisterEvents()
         {
             //CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnDailyTickClan);
-            CampaignEvents.DailyTickTownEvent.AddNonSerializedListener(this, OnDailyTickTown);
-            CampaignEvents.HourlyTickSettlementEvent.AddNonSerializedListener(this, OnSettlementHourlyTick);
-            CampaignEvents.OnMissionStartedEvent.AddNonSerializedListener(this, OnMissionStarted);
-            CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, HourlyTickParty);
-            CampaignEvents.AfterSettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
-            CampaignEvents.WarDeclared.AddNonSerializedListener(this, OnWarDeclared);
-            CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
+            if (BannerKingsSettings.Instance.Feasts)
+            {
+                CampaignEvents.DailyTickTownEvent.AddNonSerializedListener(this, OnDailyTickTown);
+                CampaignEvents.HourlyTickSettlementEvent.AddNonSerializedListener(this, OnSettlementHourlyTick);
+                CampaignEvents.OnMissionStartedEvent.AddNonSerializedListener(this, OnMissionStarted);
+                CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, HourlyTickParty);
+                CampaignEvents.AfterSettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
+                CampaignEvents.WarDeclared.AddNonSerializedListener(this, OnWarDeclared);
+                CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
+            }
         }
 
         public override void SyncData(IDataStore dataStore)

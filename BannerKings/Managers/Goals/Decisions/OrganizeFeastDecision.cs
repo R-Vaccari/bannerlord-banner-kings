@@ -1,4 +1,5 @@
 using BannerKings.Behaviours.Feasts;
+using BannerKings.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -199,8 +200,9 @@ namespace BannerKings.Managers.Goals.Decisions
         public override void DoAiDecision()
         {
             var reasons = new List<TextObject>();
+            if (!BannerKingsSettings.Instance.Feasts) return;
+
             if (!IsFulfilled(out reasons)) return;
-            
 
             var fulfiller = GetFulfiller();
             if (fulfiller.Gold < 80000) return;

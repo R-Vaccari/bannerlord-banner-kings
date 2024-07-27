@@ -66,10 +66,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKCapitalBehavior());
             campaignStarter.AddBehavior(new BKMarriageBehavior());
             campaignStarter.AddBehavior(new BKRetainerBehavior());
-            if (BannerKingsSettings.Instance.Feasts)
-            {
-                campaignStarter.AddBehavior(new BKFeastBehavior());
-            }
+            campaignStarter.AddBehavior(new BKFeastBehavior());
             
             campaignStarter.AddBehavior(new BKWorkshopBehavior());
             campaignStarter.AddBehavior(new BKGentryBehavior());
@@ -83,6 +80,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKRelationsBehavior());
             campaignStarter.AddBehavior(new BKSettlementBehavior());
             campaignStarter.AddBehavior(new BKCaravansBehavior());
+            campaignStarter.AddBehavior(new BKMercenaryCompanyBehavior());
             //campaignStarter.RemoveBehavior(campaignStarter.CampaignBehaviors.First(x => x.GetType() == typeof(CaravansCampaignBehavior)));
 
 
