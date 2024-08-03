@@ -43,7 +43,7 @@ namespace BannerKings.Behaviours.Marriage
         {
             (TextObject, bool) result = new(new TextObject("{=8gnBUVuM}The proposal is adequate."), true);
 
-            var willAccept = BannerKingsConfig.Instance.MarriageModel.IsMarriageAdequate(Proposer, Proposed, true);
+            var willAccept = BannerKingsConfig.Instance.MarriageModel.IsMarriageAdequate(Proposer, Proposed, IsSecondary, true);
             if (willAccept.ResultNumber < 1f)
             {
                 var text = DialogueHelper.GetRandomText(Hero.OneToOneConversationHero, DialogueHelper.GetMarriageInadequateTexts(this));
