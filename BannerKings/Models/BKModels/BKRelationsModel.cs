@@ -1,5 +1,6 @@
 ﻿using BannerKings.Behaviours.Relations;
 using BannerKings.CampaignContent.Culture;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Traits;
@@ -80,11 +81,14 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            TextObject explanation;
-            FaithStance faithStance = Utils.ReligionUtils.CalculateStanceBetweenHeroes(hero, target, out explanation);
-            if (faithStance == FaithStance.Hostile) results.Add(new RelationsModifier(HostileFaithModifier, explanation));  
-            else if (faithStance == FaithStance.Untolerated) results.Add(new RelationsModifier(UntoleratedFaithModifier, explanation));
-            else results.Add(new RelationsModifier(ToleratedFaithModifier, explanation));
+            if (!DefaultReligions.Instance.All.IsEmpty())
+            {
+                TextObject explanation;
+                FaithStance faithStance = Utils.ReligionUtils.CalculateStanceBetweenHeroes(hero, target, out explanation);
+                if (faithStance == FaithStance.Hostile) results.Add(new RelationsModifier(HostileFaithModifier, explanation));
+                else if (faithStance == FaithStance.Untolerated) results.Add(new RelationsModifier(UntoleratedFaithModifier, explanation));
+                else results.Add(new RelationsModifier(ToleratedFaithModifier, explanation));
+            }
 
             foreach (TraitObject trait in BKTraits.Instance.PersonalityTraits)
             {
