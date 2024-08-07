@@ -1,12 +1,15 @@
 ﻿using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Traits;
+using System.Collections;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
+using static TaleWorlds.InputSystem.HotKey;
 
 namespace BannerKings.Behaviours.Relations
 {
@@ -31,6 +34,59 @@ namespace BannerKings.Behaviours.Relations
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, (starter) =>
             {
                 SetRelations();
+            });
+
+            CampaignEvents.KingdomDecisionConcluded.AddNonSerializedListener(this, (KingdomDecision decision, DecisionOutcome outcome, bool playerChooser) =>
+            {
+                HeroRelations relations = GetRelations(outcome.SponsorClan.Leader);
+                foreach (Supporter supporter in outcome.SupporterList)
+                {
+                    if (supporter.Clan != outcome.SponsorClan)
+                    {
+                        int modifier = 0;
+                        switch (supporter.SupportWeight)
+                        {
+                            case Supporter.SupportWeights.FullyPush:
+                                modifier = 25; break;
+                            case Supporter.SupportWeights.StronglyFavor:
+                                modifier = 15; break;
+                            case Supporter.SupportWeights.SlightlyFavor:
+                                modifier = 8; break;
+                            default:
+                                modifier = 0; break;
+                        }
+
+                        relations.AddModifier(Hero.MainHero, new RelationsModifier(modifier,
+                        new TaleWorlds.Localization.TextObject("{=!}Support on decision '{DECISION}' ({DATE})")
+                            .SetTextVariable("QUEST", decision.GetGeneralTitle())
+                            .SetTextVariable("DATE", CampaignTime.Now.ToString()),
+                            CampaignTime.YearsFromNow(5f)));
+                    }
+                }
+            });
+
+            CampaignEvents.OnQuestCompletedEvent.AddNonSerializedListener(this, (QuestBase quest, QuestBase.QuestCompleteDetails details) =>
+            {
+                HeroRelations relations = GetRelations(quest.QuestGiver);
+                int modifier = 0;
+                switch (details)
+                {
+                    case QuestBase.QuestCompleteDetails.Success:
+                        modifier = 10; break;
+                    case QuestBase.QuestCompleteDetails.FailWithBetrayal: 
+                        modifier = -20; break;
+                    case QuestBase.QuestCompleteDetails.Invalid:
+                        modifier = 0; break;
+                    default:
+                        modifier = -10; break;
+                }
+
+                if (modifier != 0)
+                    relations.AddModifier(Hero.MainHero, new RelationsModifier(modifier,
+                        new TaleWorlds.Localization.TextObject("{=!}{QUEST} ({DATE})")
+                        .SetTextVariable("QUEST", quest.Title)
+                        .SetTextVariable("DATE", CampaignTime.Now.ToString()),
+                        CampaignTime.YearsFromNow(5f)));
             });
 
             CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, (Hero hero) =>
