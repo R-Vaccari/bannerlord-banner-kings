@@ -12,10 +12,15 @@ namespace BannerKings.Components
 {
     public abstract class BannerKingsComponent : PartyComponent
     {
-        public BannerKingsComponent(Settlement target, string stringName)
+        protected BannerKingsComponent(Settlement target, string stringName)
         {
             Home = target;
             this.stringName = stringName;
+        }
+
+        protected BannerKingsComponent(Settlement target)
+        {
+            Home = target;
         }
 
         [SaveableProperty(1)] protected Settlement Home { get; set; }
