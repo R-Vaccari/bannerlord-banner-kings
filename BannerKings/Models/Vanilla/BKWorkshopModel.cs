@@ -2,8 +2,8 @@ using BannerKings.Behaviours.Workshops;
 using BannerKings.Extensions;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
+using BannerKings.Models.Vanilla.Abstract;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
@@ -11,16 +11,13 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKWorkshopModel : DefaultWorkshopModel
+    public class BKWorkshopModel : WorkshopModel
     {
         public override int DefaultWorkshopCountInSettlement => 6;
 
-        public int GetUpgradeCost(Workshop workshop)
-        {
-            return GetCostForPlayer(workshop) / (4 + workshop.Level());
-        }
+        public override int GetUpgradeCost(Workshop workshop) => GetCostForPlayer(workshop) / (4 + workshop.Level()); 
 
-        public ExplainedNumber GetProductionQuality(Workshop workshop, bool explanations = false)
+        public override ExplainedNumber GetProductionQuality(Workshop workshop, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(workshop.Settlement);
@@ -48,7 +45,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber GetDailyExpense(Workshop workshop, bool includeDescriptions = false)
+        public override ExplainedNumber GetDailyExpense(Workshop workshop, bool includeDescriptions = false)
         {
             var result = new ExplainedNumber(0f, includeDescriptions);
 
@@ -102,7 +99,7 @@ namespace BannerKings.Models.Vanilla
             return (int) result;
         }
 
-        public ExplainedNumber GetBuyingCostExplained(Workshop workshop, Hero buyer, bool descriptions = false)
+        public override ExplainedNumber GetBuyingCostExplained(Workshop workshop, Hero buyer, bool descriptions = false)
         {
             ExplainedNumber result = new ExplainedNumber(base.GetCostForPlayer(workshop), descriptions, 
                 new TextObject("{=LiC18pJC}Equipment costs"));
@@ -129,7 +126,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public int GetInventoryCost(Workshop workshop)
+        public override int GetInventoryCost(Workshop workshop)
         {
             int cost = 0;
             WorkshopData data = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKWorkshopBehavior>().GetInventory(workshop);
@@ -145,7 +142,7 @@ namespace BannerKings.Models.Vanilla
             return cost;
         }
 
-        public ExplainedNumber GetProductionEfficiency(Workshop workshop, bool explanations = false)
+        public override ExplainedNumber GetProductionEfficiency(Workshop workshop, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
             result.Add(BannerKingsConfig.Instance.EconomyModel.CalculateProductionEfficiency(workshop.Settlement, false, workshop.Settlement.PopulationData()).ResultNumber, 
@@ -159,7 +156,7 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public ExplainedNumber CalculateWorkshopTax(Settlement settlement, Hero payer)
+        public override ExplainedNumber CalculateWorkshopTax(Settlement settlement, Hero payer)
         {
             var result = new ExplainedNumber();
             result.LimitMin(0f);

@@ -79,7 +79,7 @@ namespace BannerKings
         public BKLearningModel LearningModel { get; set; } = new();
         public BKInnovationsModel InnovationsModel { get; } = new();
         public EconomyModel EconomyModel { get; set; } = new BKEconomyModel();
-        public BKWorkshopModel WorkshopModel { get; set; } = new();
+        public WorkshopModel WorkshopModel { get; set; } = new BKWorkshopModel();
         public BKAdministrativeModel AdministrativeModel { get; } = new();
         public BKSmithingModel SmithingModel { get; set; } = new();
         public CultureModel CultureModel { get; set; } = new BKCultureModel();
