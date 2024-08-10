@@ -1,4 +1,5 @@
 using BannerKings.Behaviours;
+using BannerKings.Components;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
@@ -79,6 +80,11 @@ namespace BannerKings.Models.Vanilla
                         baseResult.AddFactor(0.05f, BKPerks.Instance.FianHighlander.Name);
                     }
                 }
+            }
+
+            if (mobileParty.PartyComponent is BannerKingsComponent)
+            {
+                baseResult.AddFactor(0.3f);
             }
 
             if (mobileParty.LeaderHero == Hero.MainHero && TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
