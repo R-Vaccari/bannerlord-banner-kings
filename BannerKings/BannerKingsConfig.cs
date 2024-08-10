@@ -7,6 +7,7 @@ using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.CampaignContent.Culture;
 using BannerKings.CampaignContent.Economy.Markets;
 using BannerKings.CampaignContent.Skills;
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Grace;
@@ -29,7 +30,6 @@ using BannerKings.Managers.Recruits;
 using BannerKings.Managers.Shipping;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
-using BannerKings.Managers.Traits;
 using BannerKings.Models.BKModels;
 using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Models.Vanilla;
@@ -140,6 +140,7 @@ namespace BannerKings
 
         public void Initialize()
         {
+            BKSkillEffects.Instance.Initialize();
             BKSkillEffects.Instance.AddVanilla();
             DefaultPopulationNames.Instance.Initialize();
             DefaultTitleNames.Instance.Initialize();
@@ -157,7 +158,6 @@ namespace BannerKings
             DefaultCouncilTasks.Instance.Initialize();
             DefaultCouncilPositions.Instance.Initialize();
             DefaultCasusBelli.Instance.Initialize();
-            BKTraits.Instance.Initialize();
             DefaultDemands.Instance.Initialize();
             DefaultRadicalGroups.Instance.Initialize();
             DefaultInterestGroup.Instance.Initialize();
@@ -176,6 +176,7 @@ namespace BannerKings
             DefaultCulturalStandings.Instance.Initialize();
             DefaultMarriageDoctrines.Instance.Initialize();
             DefaultWarDoctrines.Instance.Initialize();
+            DefaultTraitEffects.Instance.Initialize();
             foreach (ITypeInitializer init in modInitializers)
             {
                 init.Initialize();

@@ -142,7 +142,6 @@ namespace BannerKings
 
             BKAttributes.Instance.Initialize();
             BKSkills.Instance.Initialize();
-            BKSkillEffects.Instance.Initialize();
             BKPerks.Instance.Initialize();   
             BKPolicies.Instance.Initialize();
             DefaultEras.Instance.Initialize();
