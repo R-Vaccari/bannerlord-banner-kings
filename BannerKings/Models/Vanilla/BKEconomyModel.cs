@@ -229,7 +229,7 @@ namespace BannerKings.Models.Vanilla
 
             Settlement settlement = data.Settlement;
             result.Add(data.EconomicData.Mercantilism.ResultNumber / 3f, new TextObject("{=5eHCGMEK}Mercantilism"));
-            result.AddFactor(data.MilitaryData.Militarism.ResultNumber * -1f, new TextObject("{=m66LFb9g}Militarism"));
+            result.Add(data.MilitaryData.Militarism.ResultNumber * -1f, new TextObject("{=m66LFb9g}Militarism"));
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
                 DefaultCouncilPositions.Instance.Steward,
@@ -240,14 +240,9 @@ namespace BannerKings.Models.Vanilla
             {
                 float laneResult = 0f;
                 foreach (Settlement port in lane.Ports)
-                {
-                    if (port.IsTown)
-                    {
-                        laneResult += 0.1f;
-                    }
-                }
+                    if (port.IsTown) laneResult += 0.06f;
 
-                result.Add(laneResult, lane.Name);
+                result.Add(MathF.Min(laneResult, 0.4f), lane.Name);
             }
 
             if (settlement.Town != null)
@@ -255,18 +250,18 @@ namespace BannerKings.Models.Vanilla
                 if (settlement.Town.Gold < 50000)
                 {
                     float factor = MathF.Clamp(-1f + (settlement.Town.Gold * 0.00001f), -0.8f, -0.2f);
-                    result.AddFactor(factor, new TextObject("{=s2gxPA2Q}Market gold"));
+                    result.Add(factor, new TextObject("{=s2gxPA2Q}Market gold"));
                 }
                 else if (settlement.Town.Gold >= 1000000)
                 {
                     float factor = MathF.Clamp(settlement.Town.Gold / 10000000f, 0.1f, 0.5f);
-                    result.AddFactor(factor, new TextObject("{=s2gxPA2Q}Market gold"));
+                    result.Add(factor, new TextObject("{=s2gxPA2Q}Market gold"));
                 }
 
                 var capital = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(settlement.OwnerClan.Kingdom);
                 if (capital == settlement.Town)
                 {
-                    result.AddFactor(0.2f, new TextObject("{=fQVyeiJb}Capital"));
+                    result.Add(0.2f, new TextObject("{=fQVyeiJb}Capital"));
                 }
 
                 Building building = settlement.Town.Buildings.FirstOrDefault(x => x.BuildingType.StringId == BKBuildings.Instance.Harbor.StringId ||
@@ -274,7 +269,7 @@ namespace BannerKings.Models.Vanilla
                 if (building != null && building.CurrentLevel > 0)
                 {
                     bool harbor = building.BuildingType.StringId == BKBuildings.Instance.Harbor.StringId;
-                    result.Add((harbor ? 0.2f : 0.15f) * building.CurrentLevel, building.Name);
+                    result.Add((harbor ? 0.1f : 0.08f) * building.CurrentLevel, building.Name);
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result,
@@ -293,10 +288,7 @@ namespace BannerKings.Models.Vanilla
                        ref result);
                 }
 
-                if (settlement.IsCastle)
-                {
-                    result.AddFactor(-0.25f, new TextObject("{=UPhMZ859}Castle"));
-                }
+                if (settlement.IsCastle) result.AddFactor(-0.25f, new TextObject("{=UPhMZ859}Castle"));
             }
 
             return result;
