@@ -1,8 +1,8 @@
 using System.Collections.Generic;
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Skills;
-using BannerKings.Managers.Traits;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;

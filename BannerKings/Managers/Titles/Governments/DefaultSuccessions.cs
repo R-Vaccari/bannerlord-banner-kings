@@ -1,7 +1,7 @@
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
-using BannerKings.Managers.Traits;
 using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
 using System.Linq;

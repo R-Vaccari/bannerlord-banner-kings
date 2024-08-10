@@ -1,7 +1,6 @@
-﻿using BannerKings.Managers.Institutions.Religions;
+﻿using BannerKings.CampaignContent.Traits;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
-using BannerKings.Managers.Traits;
-using System.Collections;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -9,7 +8,6 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
-using static TaleWorlds.InputSystem.HotKey;
 
 namespace BannerKings.Behaviours.Relations
 {

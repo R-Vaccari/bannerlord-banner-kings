@@ -1,9 +1,9 @@
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Groups.Demands;
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
-using BannerKings.Managers.Traits;
 using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Utils.Extensions;
 using BannerKings.Utils.Models;
@@ -371,7 +371,6 @@ namespace BannerKings.Models.BKModels
 
         public bool CanHeroJoinARadicalGroup(Hero hero, KingdomDiplomacy diplomacy) => CanHeroJoinAGroup(hero, diplomacy) && hero.IsClanLeader();
         
-
         public bool CanHeroCreateAGroup(Hero hero, KingdomDiplomacy diplomacy)
         {
             return CanHeroJoinAGroup(hero, diplomacy) && hero.IsClanLeader() && diplomacy.Kingdom.Leader != hero;

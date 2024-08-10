@@ -1,5 +1,5 @@
-﻿using BannerKings.Managers.Helpers;
-using BannerKings.Managers.Traits;
+﻿using BannerKings.CampaignContent.Traits;
+using BannerKings.Managers.Helpers;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;

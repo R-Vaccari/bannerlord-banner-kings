@@ -7,8 +7,8 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using BannerKings.Managers.Traits;
 using BannerKings.Settings;
+using BannerKings.CampaignContent.Traits;
 
 namespace BannerKings.Models.Vanilla
 {

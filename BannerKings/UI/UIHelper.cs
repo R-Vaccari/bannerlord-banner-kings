@@ -25,6 +25,8 @@ using BannerKings.UI.VanillaTabs.TownManagement;
 using TaleWorlds.CampaignSystem.Election;
 using static TaleWorlds.CampaignSystem.Election.SettlementClaimantDecision;
 using BannerKings.Behaviours.Relations;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using BannerKings.CampaignContent.Traits;
 
 namespace BannerKings.UI
 {
@@ -1083,6 +1085,33 @@ namespace BannerKings.UI
                 new TooltipProperty(new TextObject("{=A0MLAHO6}Non-Slaves").ToString(), estate.Population.ToString(), 0),
                       new TooltipProperty(new TextObject("Slaves").ToString(), estate.Slaves.ToString(), 0)
             };
+
+            return list;
+        }
+
+        public static List<TooltipProperty> GetTraitTooltip(Hero hero, TraitObject trait)
+        {
+            var list = new List<TooltipProperty>
+            {
+                new TooltipProperty("", trait.Name.ToString() + "           ", 0, false, TooltipProperty.TooltipPropertyFlags.Title),
+            };
+
+            TooltipAddEmptyLine(list);
+            list.Add(new TooltipProperty(string.Empty, trait.Description.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.MultiLine));
+            TooltipAddEmptyLine(list);
+
+            var effects = DefaultTraitEffects.Instance.GetTraitEffects(trait);
+            if (effects.Count > 0)
+            {
+                list.Add(new TooltipProperty(new TextObject("{=!}Effects").ToString(), " ", 0));
+                TooltipAddSeperator(list);
+                TooltipAddEmptyLine(list);
+                foreach (TraitEffect effect in effects)
+                {
+                    TextObject textObject = GameTexts.FindText("role", effect.Role.ToString());
+                    list.Add(new TooltipProperty(textObject.ToString(), effect.GetDescription(hero.GetTraitLevel(trait)).ToString(), 0));
+                }
+            }          
 
             return list;
         }

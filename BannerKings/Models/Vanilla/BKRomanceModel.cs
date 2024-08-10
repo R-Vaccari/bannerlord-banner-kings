@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Traits;
+﻿using BannerKings.CampaignContent.Traits;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 

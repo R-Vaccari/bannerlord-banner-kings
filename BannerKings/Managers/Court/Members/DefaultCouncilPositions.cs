@@ -1,9 +1,8 @@
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Court.Members.Tasks;
-using BannerKings.Managers.Goals;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles.Laws;
-using BannerKings.Managers.Traits;
 using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;

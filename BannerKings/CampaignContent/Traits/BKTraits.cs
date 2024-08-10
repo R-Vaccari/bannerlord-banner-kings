@@ -4,7 +4,7 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Managers.Traits
+namespace BannerKings.CampaignContent.Traits
 {
     public class BKTraits : DefaultTypeInitializer<BKTraits, TraitObject>
     {
@@ -90,12 +90,12 @@ namespace BannerKings.Managers.Traits
             }
         }
 
-        public IEnumerable<TraitObject> LifestyleTraits 
-        { 
+        public IEnumerable<TraitObject> LifestyleTraits
+        {
             get
             {
                 yield return Musician;
-            } 
+            }
         }
 
         public IEnumerable<TraitObject> MedicalTraits
@@ -109,13 +109,13 @@ namespace BannerKings.Managers.Traits
         public override void Initialize()
         {
             DefaultTraits.Egalitarian.Initialize(new TextObject("{=HMFb1gaq}Egalitarian"),
-                new TextObject("{=hAPFMwLa}Egalitarianism is a political stance of those that defy the Calradian systems of hierarchy. Egalitarians seek to distribute power and resources, and as such defend policies and laws that favor the general people and/or petty lords. Women often tend more towards this stance, given theyr are often disfavored in matters of kingdom law."), 
+                new TextObject("{=hAPFMwLa}Egalitarianism is a political stance of those that defy the Calradian systems of hierarchy. Egalitarians seek to distribute power and resources, and as such defend policies and laws that favor the general people and/or petty lords. Women often tend more towards this stance, given theyr are often disfavored in matters of kingdom law."),
                 false, 0, 20);
             DefaultTraits.Oligarchic.Initialize(new TextObject("{=hR6Zo6pD}Oligarchic"),
                 new TextObject("{=0z6kNO8s}Oligarchism is the political stance of those that find themselves in a powerful group and seek to preserve that power. The ultimate example of oligarchists are dukes - lords of high station that, more often than not, seek to pass policies and laws that preserve their power, at the expense of lower groups, or even their ruler. Oligarchists understand their strength lies in supporting each other, as a power structure rather than singular powerful individuals, and so seek to fortify their class as a whole, as opposed to exclusively themselves. Oligarchic lords often support feudal and republic governments, as well as any elective form of succession, which limit the power of the ruling dynasty and allow them to thrive."),
                 false, 0, 20);
             DefaultTraits.Authoritarian.Initialize(new TextObject("{=NaMPa4ML}Authoritarian"),
-                new TextObject("{=c1iNCzxq}Authoritarism describes the political support of strong rule. This often means strength through might - iron first ruling. Rulers, more than anyone, stand to benefit from such political views. Authoritarian lords often support laws and policies that benefit the ruling dynasty, in favor of said strong rule. Of course, many times it comes at the expense of others, such as the vassal lords, or the general population. Authoritarian minded lords are often aligned with monarchies, empires and succession forms that are not elective - for that would mean uncertain heirs, and inevitably weak rulers."), 
+                new TextObject("{=c1iNCzxq}Authoritarism describes the political support of strong rule. This often means strength through might - iron first ruling. Rulers, more than anyone, stand to benefit from such political views. Authoritarian lords often support laws and policies that benefit the ruling dynasty, in favor of said strong rule. Of course, many times it comes at the expense of others, such as the vassal lords, or the general population. Authoritarian minded lords are often aligned with monarchies, empires and succession forms that are not elective - for that would mean uncertain heirs, and inevitably weak rulers."),
                 false, 0, 20);
 
             CongenitalAttractive = Game.Current.ObjectManager.RegisterPresumedObject(new TraitObject("CongenitalAttractive"));
@@ -141,14 +141,14 @@ namespace BannerKings.Managers.Traits
 
             Seductive = Game.Current.ObjectManager.RegisterPresumedObject(new TraitObject("Seductive"));
             Seductive.Initialize(new TextObject("{=x384LrUe}Seductiveness"),
-                new TextObject("{=nQSFYo3v}Seductiveness is one's ability to sexually charm someone else. Seductive persons have an easier time coupling with their spouses and are more liked as marriage prospects.\nEffects:\nIncreased fertility\nCharacters are more sexually attracted to you"),
+                new TextObject("{=!}Seductiveness is one's ability to sexually charm someone else. Seductive persons have an easier time coupling with their spouses and are more liked as marriage prospects."),
                 true,
                 -2,
                 2);
 
             Just = Game.Current.ObjectManager.RegisterPresumedObject(new TraitObject("Just"));
             Just.Initialize(new TextObject("{=1q03XzNp}Justice"),
-                new TextObject("{=VAfGPUOw}Justice is the appropriate punishment and reward for a given deed. Just rulers are often respected by their vassals for delivering appropriate sentences, but also adequately rewarding loyalty.\nEffects:\nIncreased settlement stability\nDecreased relation loss from political disagreements"),
+                new TextObject("{=!}Justice is the appropriate punishment and reward for a given deed. Just rulers are often respected by their vassals for delivering appropriate sentences, but also adequately rewarding loyalty."),
                 true,
                 -2,
                 2);

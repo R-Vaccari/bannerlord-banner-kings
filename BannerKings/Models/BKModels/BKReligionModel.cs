@@ -3,7 +3,6 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Skills;
-using BannerKings.Managers.Traits;
 using BannerKings.Utils;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -17,6 +16,7 @@ using BannerKings.Extensions;
 using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Managers.Institutions.Religions.Faiths.Societies;
 using BannerKings.CampaignContent.Skills;
+using BannerKings.CampaignContent.Traits;
 
 namespace BannerKings.Models.BKModels
 {

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Behaviours.Marriage;
 using BannerKings.Behaviours.Relations;
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Titles;
-using BannerKings.Managers.Traits;
 using BannerKings.Utils.Extensions;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
@@ -111,7 +111,7 @@ namespace BannerKings.UI.Extensions.Encyclopedia
                     personality.Traits.Add(new StringPairItemVM(new TextObject("{=B5Bx8p70}{TRAIT}:")
                         .SetTextVariable("TRAIT", trait.Name.ToString()).ToString(),
                         value,
-                        new BasicTooltipViewModel(() => trait.Description.ToString())));
+                        new BasicTooltipViewModel(() => UIHelper.GetTraitTooltip(hero, trait))));
                 }
 
                 var aptitudes = new TraitGroupVM(new TextObject("{=p2qS5hym}Aptitudes"));
@@ -128,7 +128,7 @@ namespace BannerKings.UI.Extensions.Encyclopedia
                     aptitudes.Traits.Add(new StringPairItemVM(new TextObject("{=B5Bx8p70}{TRAIT}:")
                         .SetTextVariable("TRAIT", trait.Name.ToString()).ToString(),
                         value,
-                        new BasicTooltipViewModel(() => trait.Description.ToString())));
+                        new BasicTooltipViewModel(() => UIHelper.GetTraitTooltip(hero, trait))));
                 }
 
                 var political = new TraitGroupVM(new TextObject("{=HOeiJpH0}Political"));
@@ -141,7 +141,7 @@ namespace BannerKings.UI.Extensions.Encyclopedia
                     political.Traits.Add(new StringPairItemVM(new TextObject("{=B5Bx8p70}{TRAIT}:")
                         .SetTextVariable("TRAIT", trait.Name.ToString()).ToString(),
                         (result * 100f).ToString("0.0") + '%',
-                        new BasicTooltipViewModel(() => trait.Description.ToString())));
+                        new BasicTooltipViewModel(() => UIHelper.GetTraitTooltip(hero, trait))));
                 }
 
                 BKMarriageBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>();
