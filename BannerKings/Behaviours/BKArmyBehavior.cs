@@ -124,7 +124,7 @@ namespace BannerKings.Behaviours
                 BannerKingsConfig.Instance.TitleManager.GetHighestTitleWithinFaction(Hero.MainHero, playerKingdom);
             if (playerTitle != null)
             {
-                EvaluateSummonPlayer(playerTitle, party.Army, party);
+               // EvaluateSummonPlayer(playerTitle, party.Army, party);
             }
         }
 
@@ -161,7 +161,7 @@ namespace BannerKings.Behaviours
                 BannerKingsConfig.Instance.TitleManager.GetHighestTitleWithinFaction(Hero.MainHero, playerKingdom);
             if (playerTitle != null)
             {
-                EvaluateSummonPlayer(playerTitle, army);
+                //EvaluateSummonPlayer(playerTitle, army);
             }
         }
 
