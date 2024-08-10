@@ -18,6 +18,7 @@ namespace BannerKings.Behaviours.Relations
 
         public void AddModifier(Hero hero2, RelationsModifier modifier)
         {
+            if (!Relations.ContainsKey(hero2)) Relations[hero2] = new List<RelationsModifier>(); 
             Relations[hero2].Add(modifier);
         }
 
