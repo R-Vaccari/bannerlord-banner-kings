@@ -29,6 +29,14 @@ namespace BannerKings.CampaignContent.Skills
 
         public override void Initialize()
         {
+            DefaultSkillEffects.CharmRelationBonus.Initialize(new TextObject("{=c5dsio8Q}Relation increase with NPCs +{a0}%"), 
+                new SkillObject[1] 
+                { 
+                    DefaultSkills.Charm 
+                }, 
+                SkillEffect.PerkRole.Personal, 
+                0.2f);
+
             PietyGain = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("PietyGain"));
             PietyGain.Initialize(new TextObject("{=3MDmvuVf}Daily piety gain: +{a0}"),
                 new SkillObject[]
