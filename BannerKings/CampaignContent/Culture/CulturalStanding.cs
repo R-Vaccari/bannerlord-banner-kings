@@ -24,7 +24,7 @@ namespace BannerKings.CampaignContent.Culture
         public int GetStanding(CultureObject culture)
         {
             int result = 0;
-            if (culture.StringId == Culture.StringId) result = 5;
+            if (culture.StringId == Culture.StringId) result = 10;
             else
             {
                 var standing = Standings.FirstOrDefault(x => x.Key.StringId == culture.StringId);
