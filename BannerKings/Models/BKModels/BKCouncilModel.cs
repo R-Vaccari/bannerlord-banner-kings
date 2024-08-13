@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Grace;
 using BannerKings.Managers.Education.Languages;
@@ -7,6 +8,7 @@ using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
@@ -205,6 +207,8 @@ namespace BannerKings.Models.BKModels
                     result.AddFactor(position.CurrentTask.Efficiency - 1f, new TextObject("{=ARQYxT6t}Task Efficiency"));
                 }
             }
+
+            Utils.Helpers.ApplyTraitEffect(hero, DefaultTraitEffects.Instance.CalculatingCouncil, ref result);
 
             return result;
         }

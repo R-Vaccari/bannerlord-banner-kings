@@ -1,5 +1,6 @@
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.CampaignContent.Skills;
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
@@ -8,6 +9,7 @@ using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Utils.Models;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
@@ -148,7 +150,9 @@ namespace BannerKings.Models.BKModels
 
             result.AddFactor(BKSkillEffects.Instance.Legitimacy.GetPrimaryValue(
                 hero.GetSkillValue(BKSkills.Instance.Lordship)) * 0.01f,
-                new TextObject("{=UxAl9iyi}Personal"));
+            new TextObject("{=UxAl9iyi}Personal"));
+
+            Utils.Helpers.ApplyTraitEffect(hero, DefaultTraitEffects.Instance.ValorLegitimacy, ref result);
 
             return result;
         }

@@ -13,6 +13,7 @@ namespace BannerKings.Models.BKModels.Abstract
         public abstract int IlegitimateFiefModifier { get; }
         public abstract int CloseFamilyModifier { get; }
         public abstract int PersonalityTraitModifier { get; }
+        public abstract int VassalModifier { get; }
         public abstract List<RelationsModifier> CalculateModifiers(HeroRelations heroRelations, Hero target);
         public abstract ExplainedNumber CalculateModifiersExplained(HeroRelations heroRelations, Hero target, bool explained = false);
         public abstract ExplainedNumber CalculateModifiersExplained(List<RelationsModifier> modifiers, bool explained = false);

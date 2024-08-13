@@ -1,3 +1,4 @@
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Extensions;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Education;
@@ -131,6 +132,8 @@ namespace BannerKings.Models.Vanilla
 
             result.Add(result.ResultNumber * -BannerKingsSettings.Instance.CohesionBoost, 
                 new TaleWorlds.Localization.TextObject("{=hpWaDjNM}Army Cohesion Boost"));
+
+            Utils.Helpers.ApplyTraitEffect(army.LeaderParty.LeaderHero, DefaultTraitEffects.Instance.CalculatingCohesion, ref result);
             return result;
         }
 

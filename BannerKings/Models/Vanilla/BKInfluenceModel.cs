@@ -3,6 +3,7 @@ using BannerKings.Behaviours;
 using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Mercenary;
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Extensions;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Court;
@@ -171,6 +172,8 @@ namespace BannerKings.Models.Vanilla
                     .SetTextVariable("EXPECTED", expectedGrace.ToString("0.0"))
                     .SetTextVariable("GRACE", council.CourtGrace.Grace.ToString("0.0")));
             }
+
+            Utils.Helpers.ApplyTraitEffect(clan.Leader, DefaultTraitEffects.Instance.HonorInfluence, ref result);
 
             if (council.Peerage == null || council.Peerage.IsLesserPeerage)
             {

@@ -1,9 +1,9 @@
 ﻿using BannerKings.Behaviours.Relations;
 using BannerKings.CampaignContent.Culture;
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
-using BannerKings.Managers.Traits;
 using BannerKings.Models.BKModels.Abstract;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -27,7 +27,8 @@ namespace BannerKings.Models.BKModels
 
         public override int CloseFamilyModifier => 10;
 
-        public override int PersonalityTraitModifier => 10;
+        public override int PersonalityTraitModifier => 8;
+        public override int VassalModifier => 5;
 
         public override List<RelationsModifier> CalculateModifiers(HeroRelations heroRelations, Hero target)
         {
@@ -53,7 +54,7 @@ namespace BannerKings.Models.BKModels
                         {
                             results.Add(new RelationsModifier(GetClaimRelationImpact(title), 
                                 new TextObject("{=!}{HERO} has a claim on title {TITLE}")
-                                .SetTextVariable("HERO", hero.Name)
+                                .SetTextVariable("HERO", target.Name)
                                 .SetTextVariable("TITLE", title.FullName)));
                         }
                     }
@@ -66,6 +67,30 @@ namespace BannerKings.Models.BKModels
                             new TextObject("{=!}Relation with clan leader {LEADER}")
                             .SetTextVariable("LEADER", leader.Name)));
                     }
+                    else
+                    {
+                        Kingdom kingdom = hero.Clan.Kingdom;
+                        if (kingdom != null)
+                        {
+                            if (target.Clan.Kingdom == kingdom)
+                            {
+                                if (hero.Clan == kingdom.RulingClan)
+                                {
+                                    results.Add(new RelationsModifier(VassalModifier, new TextObject("{=!}Vassal")));
+                                }
+                                else if (target.Clan == kingdom.RulingClan)
+                                {
+                                    ExplainedNumber justRuler = new ExplainedNumber(0f);
+                                    Utils.Helpers.ApplyTraitEffect(target, DefaultTraitEffects.Instance.JustRuler, ref justRuler);
+                                    if (justRuler.ResultNumber != 0f)
+                                    {
+                                        results.Add(new RelationsModifier((int)justRuler.ResultNumber, 
+                                            DefaultTraitEffects.Instance.JustRuler.Trait.Name));
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             else if (hero.IsNotable)
@@ -76,8 +101,16 @@ namespace BannerKings.Models.BKModels
                     FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
                     if (title.DeFacto == hero && title.deJure != hero) 
                         results.Add(new RelationsModifier(IlegitimateFiefModifier,
-                        new TextObject("{=!}Ilegitimate rule of {FIEF}")
+                        new TextObject("{=!}Illegitimate rule of {FIEF}")
                         .SetTextVariable("FIEF", settlement.Name)));
+
+                    ExplainedNumber justLord = new ExplainedNumber(0f);
+                    Utils.Helpers.ApplyTraitEffect(target, DefaultTraitEffects.Instance.JustLord, ref justLord);
+                    if (justLord.ResultNumber != 0f)
+                    {
+                        results.Add(new RelationsModifier((int)justLord.ResultNumber,
+                            DefaultTraitEffects.Instance.JustLord.Trait.Name));
+                    }
                 }
             }
 
@@ -106,6 +139,14 @@ namespace BannerKings.Models.BKModels
                 if (value != 0f) results.Add(new RelationsModifier((int)value,
                     new TextObject("{=!}Political trait ({TRAIT})")
                     .SetTextVariable("TRAIT", trait.Name)));
+            }
+
+            ExplainedNumber honor = new ExplainedNumber(0f);
+            Utils.Helpers.ApplyTraitEffect(target, DefaultTraitEffects.Instance.HonorRelation, ref honor);
+            if (honor.ResultNumber != 0f)
+            {
+                results.Add(new RelationsModifier((int)honor.ResultNumber,
+                    DefaultTraitEffects.Instance.HonorRelation.Trait.Name));
             }
 
             return results;

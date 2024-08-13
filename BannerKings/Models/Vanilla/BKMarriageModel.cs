@@ -124,13 +124,13 @@ namespace BannerKings.Models.Vanilla
 
                     if (!proposer.CanMarry())
                     {
-                        result.Add(-1000f, new TextObject("{=Ug3zXQdc}{HERO} is not available for marriage.")
+                        result.Add(-1000f, new TextObject("{=!}{HERO} is currently held captive, involved in a battle or army")
                             .SetTextVariable("HERO", proposer.Name));
                     }
 
                     if (!secondHero.CanMarry())
                     {
-                        result.Add(-1000f, new TextObject("{=Ug3zXQdc}{HERO} is not available for marriage.")
+                        result.Add(-1000f, new TextObject("{=!}{HERO} is currently held captive, involved in a battle or army")
                             .SetTextVariable("HERO", secondHero.Name));
                     }
 
@@ -150,6 +150,21 @@ namespace BannerKings.Models.Vanilla
             GetType().Name);
 
             return result;
+        }
+
+        public override bool IsSuitableForMarriage(Hero maidenOrSuitor)
+        {
+            if (maidenOrSuitor.IsAlive && maidenOrSuitor.PartyBelongedToAsPrisoner == null && maidenOrSuitor.Spouse == null && maidenOrSuitor.IsLord && !maidenOrSuitor.IsMinorFactionHero && !maidenOrSuitor.IsNotable && maidenOrSuitor.PartyBelongedTo?.MapEvent == null && maidenOrSuitor.PartyBelongedTo?.Army == null)
+            {
+                if (maidenOrSuitor.IsFemale)
+                {
+                    return maidenOrSuitor.CharacterObject.Age >= (float)MinimumMarriageAgeFemale;
+                }
+
+                return maidenOrSuitor.CharacterObject.Age >= (float)MinimumMarriageAgeMale;
+            }
+
+            return false;
         }
 
         private void CheckReligionSuitability(Religion religion, Religion otherReligion, ref ExplainedNumber result, 

@@ -15,6 +15,7 @@ using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles;
+using BannerKings.CampaignContent.Traits;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -131,6 +132,14 @@ namespace BannerKings.Models.Vanilla
                 DefaultCouncilTasks.Instance.OrganizeMiltia,
                 1f, 
                 false);
+
+            if (settlement.Town != null)
+            {
+                if (settlement.Town.Governor != null)
+                {
+                    Utils.Helpers.ApplyTraitEffect(settlement.Town.Governor, DefaultTraitEffects.Instance.ValorGovernor, ref baseResult);
+                }
+            }
 
             return baseResult;
         }

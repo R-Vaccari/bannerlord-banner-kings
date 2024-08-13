@@ -1,5 +1,6 @@
 ﻿using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.CampaignContent.Traits;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -35,6 +36,16 @@ namespace BannerKings.Models.Vanilla
                 else if (defaultBehavior == AiBehavior.BesiegeSettlement || defaultBehavior == AiBehavior.DefendSettlement)
                 {
                     result *= justification.ConquestWeight;
+                }
+
+                if (defaultBehavior == AiBehavior.BesiegeSettlement)
+                {
+                    Utils.Helpers.ApplyTraitEffect(mobileParty.LeaderHero, DefaultTraitEffects.Instance.ValorCommander, ref result);
+                }
+
+                if (defaultBehavior == AiBehavior.RaidSettlement)
+                {
+                    Utils.Helpers.ApplyTraitEffect(mobileParty.LeaderHero, DefaultTraitEffects.Instance.MercyRaid, ref result);
                 }
             }
 

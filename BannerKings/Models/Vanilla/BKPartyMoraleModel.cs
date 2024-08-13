@@ -1,8 +1,10 @@
 using BannerKings.Behaviours;
 using BannerKings.Behaviours.PartyNeeds;
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
+using BannerKings.Utils.Models;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -30,6 +32,8 @@ namespace BannerKings.Models.Vanilla
                 {
                     result.Add(3f, BKPerks.Instance.AugustCommander.Name);
                 }
+
+                Utils.Helpers.ApplyTraitEffect(mobileParty.LeaderHero, DefaultTraitEffects.Instance.ValorMorale, ref result);
 
                 /*float foreigners = 0f;
                 foreach (TroopRosterElement element in mobileParty.MemberRoster.GetTroopRoster())

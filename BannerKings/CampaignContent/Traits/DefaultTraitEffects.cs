@@ -102,12 +102,13 @@ namespace BannerKings.CampaignContent.Traits
             ValorGovernor.Initialize(new TextObject("{=!}Fief militia: {EFFECT}"),
                 DefaultTraits.Valor,
                 SkillEffect.PerkRole.Governor,
-                0.2f);
+                0.3f);
 
-            HonorDiplomacy.Initialize(new TextObject("{=!}Costs for making diplomatic pacts: {EFFECT}"),
+            HonorDiplomacy.Initialize(new TextObject("{=!}Desirability of amicable diplomatic pacts: {EFFECT}%"),
                 DefaultTraits.Honor,
                 SkillEffect.PerkRole.Ruler,
-                3f);
+                0.15f,
+                true);
 
             HonorInfluence.Initialize(new TextObject("{=!}Clan influence limit: {EFFECT}%"),
                 DefaultTraits.Honor,
@@ -128,7 +129,7 @@ namespace BannerKings.CampaignContent.Traits
 
             GenerosityIncome.Initialize(new TextObject("{=!}Fief revenues: {EFFECT}%"),
                 DefaultTraits.Generosity,
-                SkillEffect.PerkRole.ClanLeader,
+                SkillEffect.PerkRole.Governor,
                 -0.1f,
                 true);
 
@@ -155,10 +156,10 @@ namespace BannerKings.CampaignContent.Traits
                 -0.1f,
                 true);
 
-            CalculatingSupplies.Initialize(new TextObject("{=!}Party Supplies efficiency: {EFFECT}%"),
+            CalculatingSupplies.Initialize(new TextObject("{=!}Party Supplies necessity: {EFFECT}%"),
                 DefaultTraits.Calculating,
                 SkillEffect.PerkRole.Quartermaster,
-                0.12f);
+                -0.12f);
 
             CalculatingCouncil.Initialize(new TextObject("{=!}Competency as council member: {EFFECT}%"),
                 DefaultTraits.Calculating,

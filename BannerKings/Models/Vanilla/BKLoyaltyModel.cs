@@ -1,4 +1,5 @@
 using System.Linq;
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Policies;
@@ -134,6 +135,11 @@ namespace BannerKings.Models.Vanilla
                 DefaultCouncilPositions.Instance.Chancellor,
                 DefaultCouncilTasks.Instance.OverseeDignataries,
                 1f, false);
+
+            if (town.Governor != null)
+            {
+                Utils.Helpers.ApplyTraitEffect(town.Governor, DefaultTraitEffects.Instance.MercyLoyalty, ref baseResult);
+            }
 
             return baseResult;
         }

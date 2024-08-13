@@ -1,6 +1,6 @@
 using BannerKings.Behaviours.PartyNeeds;
 using BannerKings.CampaignContent.Skills;
-using BannerKings.Managers.Skills;
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Settings;
 using BannerKings.Utils;
@@ -64,6 +64,8 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
                     false,
                     0);
+
+                Utils.Helpers.ApplyTraitEffect(quarterMaster, DefaultTraitEffects.Instance.CalculatingSupplies, ref result);
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -95,6 +97,8 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
                     false,
                     0);
+
+                Utils.Helpers.ApplyTraitEffect(quarterMaster, DefaultTraitEffects.Instance.CalculatingSupplies, ref result);
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -130,6 +134,8 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
                     false,
                     0);
+
+                Utils.Helpers.ApplyTraitEffect(quarterMaster, DefaultTraitEffects.Instance.CalculatingSupplies, ref result);
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -161,6 +167,8 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
                     false,
                     0);
+
+                Utils.Helpers.ApplyTraitEffect(quarterMaster, DefaultTraitEffects.Instance.CalculatingSupplies, ref result);
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -195,6 +203,8 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
                     false,
                     0);
+
+                Utils.Helpers.ApplyTraitEffect(quarterMaster, DefaultTraitEffects.Instance.CalculatingSupplies, ref result);
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -226,6 +236,8 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
                     false,
                     0);
+
+                Utils.Helpers.ApplyTraitEffect(quarterMaster, DefaultTraitEffects.Instance.CalculatingSupplies, ref result);
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -268,6 +280,8 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
                     false,
                     0);
+
+                Utils.Helpers.ApplyTraitEffect(quarterMaster, DefaultTraitEffects.Instance.CalculatingSupplies, ref result);
             }
 
             foreach (TroopRosterElement element in needs.Party.MemberRoster.GetTroopRoster())
@@ -302,6 +316,8 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
                     false,
                     0);
+
+                Utils.Helpers.ApplyTraitEffect(quarterMaster, DefaultTraitEffects.Instance.CalculatingSupplies, ref result);
             }
 
             float siege = 0f;
@@ -356,6 +372,8 @@ namespace BannerKings.Models.BKModels
                     quarterMaster.GetSkillValue(DefaultSkills.Steward),
                     false,
                     0);
+
+                Utils.Helpers.ApplyTraitEffect(quarterMaster, DefaultTraitEffects.Instance.CalculatingSupplies, ref result);
             }
 
             float siege = 0f;

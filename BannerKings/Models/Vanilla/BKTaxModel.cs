@@ -1,4 +1,5 @@
 using BannerKings.Behaviours;
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Extensions;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Court;
@@ -262,6 +263,11 @@ namespace BannerKings.Models.Vanilla
                     var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
                     baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
                 }
+            }
+
+            if (town.Governor != null)
+            {
+                Utils.Helpers.ApplyTraitEffect(town.Governor, DefaultTraitEffects.Instance.GenerosityIncome, ref baseResult);
             }
 
             return baseResult;

@@ -210,13 +210,13 @@ namespace BannerKings.CampaignContent.Skills
                 0f);
 
             SupplyEfficiency = Game.Current.ObjectManager.RegisterPresumedObject(new SkillEffect("SupplyEfficiency"));
-            SupplyEfficiency.Initialize(new TextObject("{=wMcipFaM}Party supply efficiency: +{a0}%"),
+            SupplyEfficiency.Initialize(new TextObject("{=!}Party supply necessity: {a0}%"),
                 new SkillObject[]
                 {
                     DefaultSkills.Steward
                 },
                 SkillEffect.PerkRole.Quartermaster,
-                0.15f,
+                -0.15f,
                 SkillEffect.PerkRole.None,
                 0f,
                 SkillEffect.EffectIncrementType.AddFactor,

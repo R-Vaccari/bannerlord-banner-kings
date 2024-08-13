@@ -17,6 +17,8 @@ using BannerKings.Behaviours.Retainer;
 using BannerKings.Settings;
 using BannerKings.Behaviours.Mercenary;
 using System;
+using BannerKings.CampaignContent.Traits;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -331,6 +333,8 @@ namespace BannerKings.Models.Vanilla
                 {
                     result.AddFactor(-0.3f, DefaultLifestyles.Instance.SiegeEngineer.Name);
                 }
+
+                Utils.Helpers.ApplyTraitEffect(leader, DefaultTraitEffects.Instance.GenerosityPartyCost, ref result);
             }
 
             if (mobileParty.IsCaravan && mobileParty.Owner != null)
@@ -340,7 +344,6 @@ namespace BannerKings.Models.Vanilla
                 {
                     result.AddFactor(-0.1f, BKPerks.Instance.CaravaneerDealer.Name);
                 }
-
                 result.AddFactor(-0.25f, GameTexts.FindText("str_party_type", "Caravan"));
             }
 

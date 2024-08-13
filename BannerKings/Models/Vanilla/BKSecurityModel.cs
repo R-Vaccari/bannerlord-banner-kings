@@ -1,4 +1,5 @@
 using BannerKings.Behaviours;
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Policies;
@@ -68,6 +69,11 @@ namespace BannerKings.Models.Vanilla
                 town.OwnerClan.Leader, DefaultCouncilPositions.Instance.Constable,
                 DefaultCouncilTasks.Instance.EnforceLaw,
                 0.3f, false);
+
+            if (town.Governor != null)
+            {
+                Utils.Helpers.ApplyTraitEffect(town.Governor, DefaultTraitEffects.Instance.CalculatingCohesion, ref baseResult);
+            }
 
             return baseResult;
         }
