@@ -10,6 +10,7 @@ namespace BannerKings.Models.Vanilla.Abstract
 {
     public abstract class DiplomacyModel : DefaultDiplomacyModel
     {
+        public abstract ExplainedNumber GetRightInnfluenceCost(ContractRight right, Hero suzerain, Hero vassal);
         public abstract ExplainedNumber WillSuzerainAcceptRight(ContractRight right, Hero suzerain, Hero vassal);
         public abstract ExplainedNumber GetAnnexationCostExplained(Clan proposingClan, Town town = null);
         public abstract ExplainedNumber CalculateHeroFiefScore(Settlement settlement, Hero annexing, bool explanations = false);

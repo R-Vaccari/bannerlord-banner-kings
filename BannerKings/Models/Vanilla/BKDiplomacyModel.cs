@@ -5,7 +5,6 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles;
-using BannerKings.Managers.Traits;
 using BannerKings.Utils.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +19,7 @@ using System;
 using TaleWorlds.Core;
 using BannerKings.Behaviours.Mercenary;
 using BannerKings.Models.Vanilla.Abstract;
+using BannerKings.CampaignContent.Traits;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -29,7 +29,19 @@ namespace BannerKings.Models.Vanilla
 
         public override float GetRelationIncreaseFactor(Hero hero1, Hero hero2, float relationChange)
         {
-            return relationChange;
+            if (relationChange == 1f) return 1f;
+
+            ExplainedNumber stat = new ExplainedNumber(base.GetRelationIncreaseFactor(hero1, hero2, relationChange));
+            Utils.Helpers.ApplyTraitEffect(hero2, DefaultTraitEffects.Instance.GenerosityRelation, ref stat);
+
+            return stat.ResultNumber;
+        }
+
+        public override ExplainedNumber GetRightInnfluenceCost(ContractRight right, Hero suzerain, Hero vassal)
+        {
+            ExplainedNumber cost = new ExplainedNumber(right.Influence);
+
+            return cost;
         }
 
         public override ExplainedNumber WillSuzerainAcceptRight(ContractRight right, Hero suzerain, Hero vassal)
@@ -69,6 +81,41 @@ namespace BannerKings.Models.Vanilla
             }
 
             GetPerkEffectsOnKingdomDecisionInfluenceCost(proposingClan, ref cost);
+            Utils.Helpers.ApplyTraitEffect(proposingClan.Leader, DefaultTraitEffects.Instance.CalculatingProposals, ref cost);
+            return cost;
+        }
+
+        public override int GetInfluenceCostOfExpellingClan(Clan proposingClan) =>
+            MathF.Round(GetInfluenceCostOfExpellingClanExplained(proposingClan).ResultNumber);
+        
+
+        public ExplainedNumber GetInfluenceCostOfExpellingClanExplained(Clan proposingClan)
+        {
+            ExplainedNumber cost = new ExplainedNumber(200f);
+            cost.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(proposingClan).ResultNumber * 0.2f,
+                new TextObject("{=wwYABLRd}Clan Influence Limit"));
+
+            GetPerkEffectsOnKingdomDecisionInfluenceCost(proposingClan, ref cost);
+            Utils.Helpers.ApplyTraitEffect(proposingClan.Leader, DefaultTraitEffects.Instance.CalculatingProposals, ref cost);
+            return cost;
+        }
+
+        public override int GetInfluenceCostOfProposingWar(Clan proposingClan) =>
+            MathF.Round(GetInfluenceCostOfProposingWarExplained(proposingClan).ResultNumber);
+
+        public ExplainedNumber GetInfluenceCostOfProposingWarExplained(Clan proposingClan)
+        {
+            ExplainedNumber cost = new ExplainedNumber(200f);
+            if (proposingClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.WarTax) && proposingClan == proposingClan.Kingdom.RulingClan)
+            {
+                cost.AddFactor(1f);
+            }
+
+            cost.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(proposingClan).ResultNumber * 0.2f,
+                new TextObject("{=wwYABLRd}Clan Influence Limit"));
+
+            GetPerkEffectsOnKingdomDecisionInfluenceCost(proposingClan, ref cost);
+            Utils.Helpers.ApplyTraitEffect(proposingClan.Leader, DefaultTraitEffects.Instance.CalculatingProposals, ref cost);
             return cost;
         }
 
@@ -80,6 +127,19 @@ namespace BannerKings.Models.Vanilla
             }
         }
 
+        public override int GetInfluenceCostOfProposingPeace(Clan proposingClan) =>
+            MathF.Round(GetInfluenceCostOfProposingPeaceExplained(proposingClan).ResultNumber);
+
+        public ExplainedNumber GetInfluenceCostOfProposingPeaceExplained(Clan proposingClan)
+        {
+            ExplainedNumber cost = new ExplainedNumber(100f);
+            cost.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(proposingClan).ResultNumber * 0.2f,
+                new TextObject("{=wwYABLRd}Clan Influence Limit"));
+
+            GetPerkEffectsOnKingdomDecisionInfluenceCost(proposingClan, ref cost);
+            Utils.Helpers.ApplyTraitEffect(proposingClan.Leader, DefaultTraitEffects.Instance.CalculatingProposals, ref cost);
+            return cost;
+        }
 
         public override float GetScoreOfKingdomToHireMercenary(Kingdom kingdom, Clan mercenaryClan) =>
             KingdomRecruitMercenary(kingdom, mercenaryClan).ResultNumber;
@@ -431,12 +491,6 @@ namespace BannerKings.Models.Vanilla
             }
         }
 
-        public override int GetInfluenceCostOfProposingWar(Clan proposingClan)
-        {
-            int result = base.GetInfluenceCostOfProposingWar (proposingClan);
-            return result;
-        }
-
         public override ExplainedNumber WillJoinWar(IFaction attacker, IFaction defender, IFaction ally,
             DeclareWarAction.DeclareWarDetail detail, bool explanations = false)
         {
@@ -579,6 +633,8 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
             }
+
+            Utils.Helpers.ApplyTraitEffect(proposer.RulingClan.Leader, DefaultTraitEffects.Instance.HonorDiplomacy, ref result);
 
             return result;
         }

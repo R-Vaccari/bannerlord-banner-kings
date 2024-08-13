@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Relations
@@ -69,9 +71,10 @@ namespace BannerKings.Behaviours.Relations
 
         private void ApplyRelation(Hero target, int relationChange)
         {
-            int value = Hero.GetRelation(target) + relationChange;
-            value = MBMath.ClampInt(value, -100, 100);
-            Hero.SetPersonalRelation(target, value);
+            int current = Hero.GetRelation(target);
+            InformationManager.DisplayMessage(new InformationMessage(current.ToString() + "to target " + (current + relationChange)));
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero, target, relationChange, false);
+            InformationManager.DisplayMessage(new InformationMessage(Hero.GetRelation(target).ToString()));
         }
 
         private HashSet<Hero> GetHeroesToUpdate()
