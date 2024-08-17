@@ -14,17 +14,17 @@ namespace BannerKings.Behaviours.Mercenary
 {
     public class MercenaryCareer
     {
-        public MercenaryCareer(Clan clan, Kingdom kingdom)
+        public MercenaryCareer(Clan clan, Kingdom kingdom, float reputation = 0f)
         {
             Clan = clan;
             Kingdom = kingdom;
-            Reputation = 0f;
+            Reputation = reputation;
             KingdomPrivileges = new Dictionary<Kingdom, List<MercenaryPrivilege>>();
             KingdomProgress = new Dictionary<Kingdom, float>();
             LevyTroops = new Dictionary<CultureObject, CustomTroop>();
             ProfessionalTroops = new Dictionary<CultureObject, CustomTroop>();
             PrivilegeTimes = new Dictionary<Kingdom, CampaignTime>();
-            AddKingdom(kingdom);
+            if (kingdom != null) AddKingdom(kingdom);
         }
 
         [SaveableProperty(1)] public Clan Clan { get; private set; }
@@ -135,7 +135,7 @@ namespace BannerKings.Behaviours.Mercenary
             }
         }
 
-        public bool HasPrivilegeCurrentKingdom(MercenaryPrivilege privilege) => KingdomPrivileges[Kingdom].Any(x => x.Equals(privilege));
+        public bool HasPrivilegeCurrentKingdom(MercenaryPrivilege privilege) => Kingdom != null && KingdomPrivileges[Kingdom].Any(x => x.Equals(privilege));
 
         public void AddReputation(float reputation, TextObject reason)
         {

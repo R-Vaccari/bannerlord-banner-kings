@@ -246,10 +246,9 @@ namespace BannerKings.Models.Vanilla
 
         public override ExplainedNumber GetMercenaryDownPayment(Clan mercenaryClan, Kingdom kingdom, bool explanations = false)
         {
-            ExplainedNumber result = new ExplainedNumber(kingdom.KingdomBudgetWallet * 0.05f, 
+            ExplainedNumber result = new ExplainedNumber(kingdom.RulingClan.Gold * 0.05f, 
                 explanations, 
-                new TextObject("{=!}Kingdom budget of {BUDGET}")
-                .SetTextVariable("BUDGET", kingdom.KingdomBudgetWallet));
+                new TextObject("{=!}Ruler's wealth"));
             result.LimitMin(0f);
 
             result.Add(mercenaryClan.TotalStrength * mercenaryClan.MercenaryAwardMultiplier / 2f, new TextObject("{=!}Military force of {CLAN}")

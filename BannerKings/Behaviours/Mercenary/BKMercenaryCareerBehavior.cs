@@ -156,10 +156,10 @@ namespace BannerKings.Behaviours.Mercenary
         private void AddDownPayment(Clan mercenaryClan, Kingdom kingdom)
         {
             int gold = (int)BannerKingsConfig.Instance.DiplomacyModel.GetMercenaryDownPayment(mercenaryClan, kingdom).ResultNumber;
-            int result = MathF.Min(gold, kingdom.KingdomBudgetWallet);
-            kingdom.KingdomBudgetWallet -= result;
+            int result = MathF.Min(gold, kingdom.RulingClan.Gold);
+            kingdom.RulingClan.Leader.ChangeHeroGold(-result);
             mercenaryClan.Leader.ChangeHeroGold(result);
-            if (mercenaryClan == Clan.PlayerClan)
+            //if (mercenaryClan == Clan.PlayerClan)
                 InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}The {CLAN} has received {GOLD}{GOLD_ICON} as earnest-money for their service.")
                     .SetTextVariable("CLAN", mercenaryClan.Name)
                     .SetTextVariable("GOLD", result)
@@ -209,18 +209,23 @@ namespace BannerKings.Behaviours.Mercenary
             }
         }
 
-        private void AddCareer(Clan clan, Kingdom kingdom)
+        private void AddCareer(Clan clan, Kingdom kingdom, float reputation = 0f)
         {
-            if (kingdom == null) return;
-            
-            if (!careers.ContainsKey(clan)) careers.Add(clan, new MercenaryCareer(clan, kingdom));
-
-            careers[clan].AddKingdom(kingdom);
+            if (!careers.ContainsKey(clan)) careers.Add(clan, new MercenaryCareer(clan, kingdom, reputation));
         }
 
         private void InitCareers()
         {
-            foreach (var clan in Clan.All)
+            foreach (var clan in Clan.NonBanditFactions)
+            {
+                if (clan.IsClanTypeMercenary && clan != Clan.PlayerClan)
+                {
+                    float reputation = MBRandom.RandomFloatRanged(0.2f, 0.6f);
+                    AddCareer(clan, null, reputation);
+                }
+            }
+
+            foreach (var clan in Clan.NonBanditFactions)
             {
                 if (clan.IsUnderMercenaryService)
                 {
