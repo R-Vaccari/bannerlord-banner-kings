@@ -409,63 +409,17 @@ namespace BannerKings.Behaviours
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (party == null || party == MobileParty.MainParty)
-            {
-                return;
-            }
+            if (party == null || party == MobileParty.MainParty) return;
 
             if (party.IsLordParty) TryBuyingFood(party, target);
 
             AddRealisticIncome(party, target);
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target);
-            if (data == null)
-            {
-                return;
-            }
+            if (data == null) return;
 
-            AddGarrisonParty(party, target, data);
+            AddPatrolBehavior(party, target, data);
             AddCaravanFees(party, target, data);
             AddPopulationPartyBehavior(party, target, data);
-        }
-
-        private void AddGarrisonParty(MobileParty party, Settlement settlement, PopulationData data)
-        {
-            if (party.PartyComponent is GarrisonPartyComponent)
-            {
-                var component = party.PartyComponent as GarrisonPartyComponent;
-                if (settlement != component.HomeSettlement)
-                {
-                    return;
-                }
-
-                if (settlement.Town.GarrisonParty == null)
-                {
-                    settlement.AddGarrisonParty();
-                }
-
-                foreach (var element in party.MemberRoster.GetTroopRoster())
-                {
-                    settlement.Town.GarrisonParty.MemberRoster.AddToCounts(element.Character, 
-                        element.Number, 
-                        false, 
-                        element.WoundedNumber);
-                }
-
-                foreach (var element in party.PrisonRoster.GetTroopRoster())
-                {
-                    bool hero = element.Character.IsHero;
-                    if (!hero)
-                    {
-                        data.UpdatePopType(PopType.Slaves, element.Number, true);
-                    }
-                    else
-                    {
-                        TakePrisonerAction.Apply(settlement.Party, element.Character.HeroObject);
-                    }
-                }
-
-                DestroyPartyAction.Apply(null, party);
-            }
         }
 
         private void AddCaravanFees(MobileParty party, Settlement target, PopulationData data)
@@ -480,6 +434,33 @@ namespace BannerKings.Behaviours
             {
                 party.PartyTradeGold -= fee;
                 target.Town.TradeTaxAccumulated += fee;
+            }
+        }
+        private void AddPatrolBehavior(MobileParty party, Settlement target, PopulationData data)
+        {
+            if (party.PartyComponent is BannerKings.Components.GarrisonPartyComponent && target.Town != null &&
+                target == party.HomeSettlement && target.Town.GarrisonParty != null)
+            {
+                foreach (TroopRosterElement element in party.MemberRoster.GetTroopRoster())
+                {
+                    party.MemberRoster.AddToCounts(element.Character, -element.Number);
+                    target.Town.GarrisonParty.MemberRoster.AddToCounts(element.Character, element.Number);
+                }
+
+                foreach (TroopRosterElement element in party.PrisonRoster.GetTroopRoster())
+                {
+                    if (element.Character.IsHero)
+                    {
+                        TakePrisonerAction.Apply(target.Party, element.Character.HeroObject);
+                    } 
+                    else
+                    {
+                        data.UpdatePopulation(target, element.Number, PopType.Slaves);
+                    }
+                    party.MemberRoster.AddToCounts(element.Character, -element.Number); 
+                }
+
+                DestroyPartyAction.Apply(null, party);
             }
         }
 
