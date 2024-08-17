@@ -36,29 +36,32 @@ namespace BannerKings.Behaviours.Relations
 
             CampaignEvents.KingdomDecisionConcluded.AddNonSerializedListener(this, (KingdomDecision decision, DecisionOutcome outcome, bool playerChooser) =>
             {
-                HeroRelations relations = GetRelations(outcome.SponsorClan.Leader);
-                foreach (Supporter supporter in outcome.SupporterList)
+                if (outcome != null && outcome.SupporterList != null)
                 {
-                    if (supporter.Clan != outcome.SponsorClan)
+                    HeroRelations relations = GetRelations(outcome.SponsorClan.Leader);
+                    foreach (Supporter supporter in outcome.SupporterList)
                     {
-                        int modifier = 0;
-                        switch (supporter.SupportWeight)
+                        if (supporter.Clan != outcome.SponsorClan)
                         {
-                            case Supporter.SupportWeights.FullyPush:
-                                modifier = 25; break;
-                            case Supporter.SupportWeights.StronglyFavor:
-                                modifier = 15; break;
-                            case Supporter.SupportWeights.SlightlyFavor:
-                                modifier = 8; break;
-                            default:
-                                modifier = 0; break;
-                        }
+                            int modifier = 0;
+                            switch (supporter.SupportWeight)
+                            {
+                                case Supporter.SupportWeights.FullyPush:
+                                    modifier = 25; break;
+                                case Supporter.SupportWeights.StronglyFavor:
+                                    modifier = 15; break;
+                                case Supporter.SupportWeights.SlightlyFavor:
+                                    modifier = 8; break;
+                                default:
+                                    modifier = 0; break;
+                            }
 
-                        relations.AddModifier(Hero.MainHero, new RelationsModifier(modifier,
-                        new TaleWorlds.Localization.TextObject("{=!}Support on decision '{DECISION}' ({DATE})")
-                            .SetTextVariable("QUEST", decision.GetGeneralTitle())
-                            .SetTextVariable("DATE", CampaignTime.Now.ToString()),
-                            CampaignTime.YearsFromNow(5f)));
+                            relations.AddModifier(Hero.MainHero, new RelationsModifier(modifier,
+                            new TaleWorlds.Localization.TextObject("{=!}Support on decision '{DECISION}' ({DATE})")
+                                .SetTextVariable("QUEST", decision.GetGeneralTitle())
+                                .SetTextVariable("DATE", CampaignTime.Now.ToString()),
+                                CampaignTime.YearsFromNow(5f)));
+                        }
                     }
                 }
             });

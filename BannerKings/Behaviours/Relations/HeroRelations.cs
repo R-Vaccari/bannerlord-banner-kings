@@ -71,10 +71,7 @@ namespace BannerKings.Behaviours.Relations
 
         private void ApplyRelation(Hero target, int relationChange)
         {
-            int current = Hero.GetRelation(target);
-            InformationManager.DisplayMessage(new InformationMessage(current.ToString() + "to target " + (current + relationChange)));
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero, target, relationChange, false);
-            InformationManager.DisplayMessage(new InformationMessage(Hero.GetRelation(target).ToString()));
         }
 
         private HashSet<Hero> GetHeroesToUpdate()
