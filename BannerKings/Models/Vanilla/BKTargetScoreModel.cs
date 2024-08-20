@@ -32,6 +32,11 @@ namespace BannerKings.Models.Vanilla
                 if (defaultBehavior == AiBehavior.RaidSettlement)
                 {
                     result *= justification.RaidWeight;
+
+                    if (mobileParty.TargetSettlement != null && mobileParty.TargetSettlement.Culture != mobileParty.ActualClan.Culture)
+                    {
+                        result *= 1.3f;
+                    }
                 }
                 else if (defaultBehavior == AiBehavior.BesiegeSettlement || defaultBehavior == AiBehavior.DefendSettlement)
                 {
