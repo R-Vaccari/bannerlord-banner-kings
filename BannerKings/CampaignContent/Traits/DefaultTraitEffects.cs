@@ -91,7 +91,7 @@ namespace BannerKings.CampaignContent.Traits
             ValorLegitimacy.Initialize(new TextObject("{=!}Legitimacy: {EFFECT}"),
                 DefaultTraits.Valor,
                 SkillEffect.PerkRole.Ruler,
-                3f);
+                0.03f);
 
             ValorCommander.Initialize(new TextObject("{=!}Likelihood to besiege fiefs: {EFFECT}%"),
                 DefaultTraits.Valor,
