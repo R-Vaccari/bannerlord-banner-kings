@@ -206,7 +206,7 @@ namespace BannerKings.Behaviours
         {
             foreach (Town town in Town.AllFiefs)
             {
-                town.ChangeGold((int)(town.Prosperity * 10f));
+                town.ChangeGold((int)(town.Prosperity * 20f));
             }
         }
 
