@@ -6,10 +6,12 @@ using System.Xml;
 using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Cultures;
 using BannerKings.Managers.Items;
+using BannerKings.Utils.Models;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.AgentOrigins;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Conversation.Persuasion;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -42,6 +44,39 @@ namespace BannerKings.Utils
                 if (feat.IncrementType == FeatObject.AdditionType.Add)
                     result.Add(feat.EffectBonus, GameTexts.FindText("str_culture"));
                 else result.AddFactor(feat.EffectBonus, GameTexts.FindText("str_culture"));
+            }
+        }
+
+        public static void ApplyTraitEffect(Hero hero, CampaignContent.Traits.TraitEffect traitEffect, ref ExplainedNumber result)
+        {
+            if (traitEffect != null &&  traitEffect.Trait != null && hero != null)
+            {
+                float level = hero.GetTraitLevel(traitEffect.Trait);
+                if (level != 0)
+                {
+                    if (!traitEffect.AddFactor) result.Add(traitEffect.BonusPerPoint * level, traitEffect.Trait.Name);
+                    else result.AddFactor(traitEffect.BonusPerPoint * level, traitEffect.Trait.Name);
+                }
+            }
+        }
+
+        public static void ApplyTraitEffect(Hero hero, CampaignContent.Traits.TraitEffect traitEffect, ref float result)
+        {
+            float level = hero.GetTraitLevel(traitEffect.Trait);
+            if (level != 0)
+            {
+                if (!traitEffect.AddFactor) result += traitEffect.BonusPerPoint * level;
+                else result *= 1f + (traitEffect.BonusPerPoint * level);
+            }
+        }
+
+        public static void ApplyTraitEffect(Hero hero, CampaignContent.Traits.TraitEffect traitEffect, ref BKExplainedNumber result)
+        {
+            float level = hero.GetTraitLevel(traitEffect.Trait);
+            if (level != 0)
+            {
+                if (!traitEffect.AddFactor) result.Add(traitEffect.BonusPerPoint * level, traitEffect.Trait.Name);
+                else result.AddFactor(traitEffect.BonusPerPoint * level, traitEffect.Trait.Name);
             }
         }
 
