@@ -39,7 +39,7 @@ namespace BannerKings.Behaviours
                 bool run = false;
                 if (notable && goal.TickNotables) run = true;
                 else if (clanMember && goal.TickClanMembers) run = true;
-                else if (leader && goal.TickClanLeaders) run = true;
+                else if (leader && goal.TickClanLeaders && hero != Hero.MainHero) run = true;
 
                 if (run && MBRandom.RandomFloat < 0.05f) goal.GetCopy(hero).DoAiDecision();
             }
