@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using BannerKings.Extensions;
-using BannerKings.UI.CampaignStart;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -354,6 +352,14 @@ namespace BannerKings.Behaviours
             DeleteExpiredTradeRumorTakenCaravans();
             DeleteExpiredLootedCaravans();
             CreatePriceDataCache();
+            List<MobileParty> list = new List<MobileParty>(MobileParty.AllCaravanParties);
+            foreach (MobileParty caravan in list)
+            {
+                if (caravan.Owner == null || caravan.Owner.IsAlive || caravan.Owner.Clan == null) continue;
+
+                if (caravan.Owner.Clan.IsEliminated) DestroyPartyAction.Apply(null, caravan);
+                else CaravanPartyComponent.TransferCaravanOwnership(caravan, caravan.Owner.Clan.Leader, caravan.HomeSettlement);
+            }
         }
 
         private void DailyTickHero(Hero hero)
