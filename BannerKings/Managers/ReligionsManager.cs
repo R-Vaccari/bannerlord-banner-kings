@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
+using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -52,6 +53,18 @@ namespace BannerKings.Managers
         private Dictionary<Hero, Religion> HeroesCache { get; set; }
 
         public List<Religion> GetReligions() => Religions.Keys.ToList();
+
+        public void ExecuteRite(Rite rite, Hero hero)
+        {
+            FaithfulData data = GetFaithfulData(hero);
+            if (rite is ContextualRite)
+            {
+                ContextualRite context = (ContextualRite)rite;
+                data.AddPerformedRite(context.GetRiteType());
+            }
+
+            rite.Execute(hero);
+        }
 
         public void InitializeReligions()
         {

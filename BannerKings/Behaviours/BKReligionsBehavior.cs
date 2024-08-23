@@ -823,7 +823,7 @@ namespace BannerKings.Behaviours
                 {
                     var rite = (Rite?) x[0].Identifier;
                     selectedRite = rite;
-                    rite.Execute(Hero.MainHero);
+                    ReligionsManager.ExecuteRite(rite, Hero.MainHero);
                 },
                 null,
                 string.Empty));
