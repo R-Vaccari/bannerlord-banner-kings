@@ -1,7 +1,5 @@
 using SandBox.View.Map;
-using System.Collections.Generic;
 using System.Linq;
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -12,9 +10,8 @@ namespace BannerKings.Components
 {
     public class GarrisonPartyComponent : BannerKingsComponent
     {
-        public GarrisonPartyComponent(MobileParty target, Settlement origin) : base(origin, "{=YfLY43hV}Garrison from {ORIGIN}")
+        public GarrisonPartyComponent(Settlement origin) : base(origin, "{=!}Patrol from {ORIGIN}")
         {
-            TargetParty = target;
             HoursPatrolled = 0;
         }
 
@@ -24,35 +21,29 @@ namespace BannerKings.Components
 
         [SaveableProperty(4)] public int HoursPatrolled { get; private set; }
 
-        public static MobileParty CreateParty(Settlement origin, MobileParty target)
+        public static MobileParty CreateParty(Settlement origin)
         {
             string id = GetPartyId(origin);
-            if (MobileParty.All.FirstOrDefault(x => x.StringId == id) != null)
-            {
-                return null;
-            }
+            if (MobileParty.All.FirstOrDefault(x => x.StringId == id) != null) return null;
+
+            var minimum = 30;
+            var garrisonRoster = origin.Town.GarrisonParty.MemberRoster;
+            var maximum = (int)(garrisonRoster.TotalHealthyCount * 0.5f);
+            if (maximum < 30) return null;
 
             var patrol = MobileParty.CreateParty(GetPartyId(origin),
-                new GarrisonPartyComponent(target, origin),
+                new GarrisonPartyComponent(origin),
                 delegate (MobileParty mobileParty)
                 {
                     mobileParty.SetPartyUsedByQuest(true);
                     mobileParty.Party.SetVisualAsDirty();
                     mobileParty.Ai.SetInitiative(1f, 0.5f, float.MaxValue);
-                    mobileParty.ShouldJoinPlayerBattles = true;
+                    mobileParty.ShouldJoinPlayerBattles = false;
                     mobileParty.Aggressiveness = 1f;
-                    mobileParty.Ai.DisableAi();
-                    mobileParty.Ai.SetMoveEngageParty(target);
+                    mobileParty.ActualClan = origin.OwnerClan;
                 });
-            TroopRoster members = new TroopRoster(patrol.Party);
-            var garrisonRoster = origin.Town.GarrisonParty.MemberRoster;
-            var minimum = target.MemberRoster.TotalHealthyCount;
-            var maximum = (int)(garrisonRoster.TotalHealthyCount * 0.5f);
-            if (maximum < minimum || minimum < 25)
-            {
-                return null;
-            }
 
+            TroopRoster members = new TroopRoster(patrol.Party);
             for (int i = 0; i < MBRandom.RandomInt(minimum, maximum); i++)
             {
                 int index = MBRandom.RandomInt(0, garrisonRoster.GetTroopRoster().Count - 1);
@@ -63,42 +54,19 @@ namespace BannerKings.Components
 
             PartyVisualManager.Current.GetVisualOfParty(patrol.Party).OnStartup();
             patrol.InitializeMobilePartyAtPosition(members, new TroopRoster(patrol.Party), origin.GatePosition);
+            GiveMounts(ref patrol);
             return patrol;
         }
 
         public override void TickHourly()
         {
-            /*var garrisonPartyPower = MobileParty.GetTotalStrengthWithFollowers();
-            IEnumerable<MobileParty> enemies = MobileParty.FindPartiesAroundPosition(Home.GatePosition,
-                40f,
-                (MobileParty p) =>
-                {
-                    return p.MapFaction.IsKingdomFaction && p.MapFaction.IsAtWarWith(MobileParty.MapFaction) &&
-                    p.GetTotalStrengthWithFollowers() > garrisonPartyPower;
-                });
-
-            if (enemies.Any())
+            if (MobileParty.MapEvent == null)
             {
-                ReturnHome();
-                return;
+                if (HoursPatrolled > 48 && MobileParty.TargetParty == null) ReturnHome();
+                else if (MobileParty.Ai.DefaultBehavior != AiBehavior.EngageParty) 
+                    MobileParty.Ai.SetMovePatrolAroundSettlement(Home.BoundVillages.GetRandomElement().Settlement);
             }
-
-            if (TargetParty != null && TargetParty.IsActive &&
-                garrisonPartyPower >= TargetParty.GetTotalStrengthWithFollowers() &&
-                TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(TargetParty, Home) <= 10f)
-            {
-                MobileParty.SetMoveEngageParty(TargetParty);
-            }
-            else if (HoursPatrolled < 12)
-            {
-                MobileParty.SetMovePatrolAroundSettlement(Home);
-                HoursPatrolled++;
-            }
-            else
-            {
-                ReturnHome();
-            }*/
-            ReturnHome();
+            HoursPatrolled++;
         }
 
         private void ReturnHome() => MobileParty.Ai.SetMoveGoToSettlement(Home);
