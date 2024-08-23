@@ -72,7 +72,7 @@ namespace BannerKings.Models.Vanilla
 
             if (town.Governor != null)
             {
-                Utils.Helpers.ApplyTraitEffect(town.Governor, DefaultTraitEffects.Instance.CalculatingCohesion, ref baseResult);
+                Utils.Helpers.ApplyTraitEffect(town.Governor, DefaultTraitEffects.Instance.CalculatingSecurity, ref baseResult);
             }
 
             return baseResult;
