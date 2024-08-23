@@ -72,6 +72,22 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public bool ExperimentalPrices { get; set; } = false;
 
+        [SettingProperty("{=!}Rotting Food", RequireRestart = false, HintText = "{=!}Foodstuffs in settlement stocks rots over time. Each rots at a different rate (ie, grain rots slowly, honey does not rot). Granaries decrease rotting rates. May affect performance. Default: false.")]
+        [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
+        public bool RottingFood { get; set; } = false;
+
+        [SettingProperty("{=!}Delete Overproduction", RequireRestart = false, HintText = "{=!}Delete non-food, non-equipment trade goods in excessive quantities at town stocks. Default: true.")]
+        [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
+        public bool DeleteOverProduction { get; set; } = true;
+
+        [SettingProperty("{=!}Spawn Quality Equipment", RequireRestart = false, HintText = "{=!}Spawn high quality equipment (armor, bardings, etc) into city markets. Forces a supply of elite equipment that otherwise depends mostly on workshops such that finding good items for player is easier. Default: false.")]
+        [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
+        public bool SpawnEquipment { get; set; } = false;
+
+        [SettingProperty("{=!}Patrol Parties", RequireRestart = false, HintText = "{=!}Spawn patrol parties around towns. A few criteria must be met such as loyalty and security thresholds. Patrol troops leave and rejoin garrison forces. Prisoners are sold or enslaved. Does not interfere with any other sorts of patrols from other mods. Default: true.")]
+        [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
+        public bool PatrolParties { get; set; } = true;
+
 
 
         [SettingPropertyFloatingInteger("{=!}Population Sizes", minValue: 0.5f, maxValue: 2f, "#0%", RequireRestart = false, HintText = "{=!}Change the max size for fief populations. Populations are the very core of fiefs, impacting the economy very significantly, military volunteers, construction, and all else. Default: 100%.")]

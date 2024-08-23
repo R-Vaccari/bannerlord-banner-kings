@@ -754,6 +754,13 @@ namespace BannerKings.Patches
 
                 return true;
             }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("DeleteOverproducedItems", MethodType.Normal)]
+            private static bool Prefix(Town town)
+            {
+                return false;
+            }
         }
 
         private static float CalculateBudget(Town town, float demand, ItemCategory category)

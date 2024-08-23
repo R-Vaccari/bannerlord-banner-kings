@@ -32,19 +32,41 @@ using static BannerKings.Managers.PopulationManager;
 using System.Reflection;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using BannerKings.Actions;
+using BannerKings.Settings;
 
 namespace BannerKings.Behaviours
 {
     public class BKSettlementBehavior : BannerKingsBehavior
     {
+        private Dictionary<ItemCategory, float> rottingRates;
+
         public override void RegisterEvents()
         {
             CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, (CampaignGameStarter starter) =>
+            {
+                rottingRates = new Dictionary<ItemCategory, float>()
+                {
+                    { DefaultItemCategories.Grain, 1f / (CampaignTime.DaysInYear * 2f) },
+                    { DefaultItemCategories.Meat, 1f / 0.1f },
+                    { DefaultItemCategories.Fish, 1f / 0.05f },
+                    { DefaultItemCategories.Cheese, 1f / CampaignTime.DaysInWeek },
+                    { DefaultItemCategories.Butter, 1f / (CampaignTime.DaysInWeek * 3f) },
+                };
+            });
         }
 
         public override void SyncData(IDataStore dataStore)
         {
+            rottingRates = new Dictionary<ItemCategory, float>()
+            {
+                { DefaultItemCategories.Grain, 1f / (CampaignTime.DaysInYear * 2f) },
+                { DefaultItemCategories.Meat, 1f / 0.1f },
+                { DefaultItemCategories.Fish, 1f / 0.05f },
+                { DefaultItemCategories.Cheese, 1f / CampaignTime.DaysInWeek },
+                { DefaultItemCategories.Butter, 1f / (CampaignTime.DaysInWeek * 3f) },
+            };
         }
 
         public static List<ConquestAction> GetConquestActions(Hero hero) =>
@@ -147,6 +169,32 @@ namespace BannerKings.Behaviours
             HandleIssues(settlement);
         }
 
+        private void DeleteOverProduction(Town town)
+        {
+            ItemRoster itemRoster = town.Owner.ItemRoster;
+            for (int i = itemRoster.Count - 1; i >= 0; i--)
+            {
+                ItemRosterElement elementCopyAtIndex = itemRoster.GetElementCopyAtIndex(i);
+                ItemObject item = elementCopyAtIndex.EquipmentElement.Item;
+                
+                int amount = elementCopyAtIndex.Amount;
+                if (amount > 0 && (item.IsCraftedByPlayer || item.IsBannerItem))
+                {
+                    itemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -amount);
+                }
+                else 
+                {
+                    if (!BannerKingsSettings.Instance.DeleteOverProduction) continue;
+
+                    if (!item.IsFood && !item.IsAnimal && item.IsTradeGood && !item.HasArmorComponent && !item.HasWeaponComponent &&
+                        elementCopyAtIndex.Amount > 500)
+                    {
+                        itemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -(int)(elementCopyAtIndex.Amount * 0.02f));
+                    }
+                }
+            }
+        }
+
         private void HandleIssues(Settlement settlement)
         {
             if (settlement.Town == null) return;
@@ -199,10 +247,11 @@ namespace BannerKings.Behaviours
             if (settlement.Town != null)
             {
                 var town = settlement.Town;
-                //HandleItemAvailability(town);
+                HandleItemAvailability(town);
                 //HandleExcessWorkforce(data, town);
                 //HandleExcessFood(town);
                 HandleGarrison(town);
+                DeleteOverProduction(settlement.Town);
             }
         }
 
@@ -371,9 +420,18 @@ namespace BannerKings.Behaviours
 
         private void HandleGarrison(Town town)
         {
-            if (town.IsUnderSiege)
+            if (!BannerKingsSettings.Instance.PatrolParties) return;
+
+            var garrison = town.GarrisonParty;
+            if (town.IsUnderSiege || garrison == null || garrison.MemberRoster.TotalHealthyCount < 100) return;
+
+            if (MBRandom.RandomFloat < 0.05f && town.Security > 50f && town.Loyalty > 30f)
             {
-                return;
+                MobileParty garrisonParty = GarrisonPartyComponent.CreateParty(town.Settlement);
+                if (garrisonParty != null)
+                {
+                    (garrisonParty.PartyComponent as GarrisonPartyComponent).TickHourly();
+                }
             }
 
             /*var parties = new Mobile();
@@ -387,32 +445,6 @@ namespace BannerKings.Behaviours
             {
                 EvaluateSendGarrison(town.Settlement, party);
             }*/
-        }
-
-        private void EvaluateSendGarrison(Settlement origin, MobileParty target)
-        {
-            if (origin == null || target == null)
-            {
-                return;
-            }
-
-            var distance = TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(target, origin);
-            if (distance > 10f)
-            {
-                return;
-            }
-
-            var garrison = origin.Town.GarrisonParty;
-            if (origin.IsUnderSiege || garrison == null || garrison.MemberRoster.TotalHealthyCount < 100)
-            {
-                return;
-            }
-
-            MobileParty garrisonParty = GarrisonPartyComponent.CreateParty(origin, target);
-            if (garrisonParty != null)
-            {
-                (garrisonParty.PartyComponent as GarrisonPartyComponent).TickHourly();
-            }
         }
 
         private void HandleMarketGold(Settlement settlement)
@@ -447,6 +479,8 @@ namespace BannerKings.Behaviours
 
         private void HandleItemAvailability(Town town)
         {
+            if (!BannerKingsSettings.Instance.SpawnEquipment) return;
+
             RunWeekly(() =>
             {
                 if (!town.IsTown)
@@ -593,6 +627,9 @@ namespace BannerKings.Behaviours
         {
             if (settlement.IsCastle)
             {
+                HandleGarrison(settlement.Town);
+                DeleteOverProduction(settlement.Town);
+
                 ItemConsumptionBehavior itemBehavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<ItemConsumptionBehavior>();
                 itemBehavior.GetType().GetMethod("MakeConsumptionInTown", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
                     .Invoke(itemBehavior, new object[] { settlement.Town, new Dictionary<ItemCategory, int>(10) });
@@ -714,51 +751,46 @@ namespace BannerKings.Behaviours
 
         private void TickRotting(Settlement settlement)
         {
-            RunWeekly(() =>
+            if (!BannerKingsSettings.Instance.RottingFood) return;
+
+            var party = settlement.Party;
+            var roster = party?.ItemRoster;
+            if (roster == null) return;       
+
+            var maxStorage = 1000f;
+            float factor = 1f;
+            if (settlement.Town != null)
             {
-                var party = settlement.Party;
-                var roster = party?.ItemRoster;
-                if (roster == null)
+                Building building = settlement.Town.Buildings.FirstOrDefault(x => x.BuildingType.StringId == DefaultBuildingTypes.CastleGranary.StringId ||
+                                        x.BuildingType.StringId == DefaultBuildingTypes.SettlementGranary.StringId);
+                if (building != null && building.CurrentLevel > 0)
                 {
-                    return;
+                    factor -= building.CurrentLevel * 0.25f;
                 }
-
-                var maxStorage = 1000f;
-                if (settlement.Town != null)
-                {
-                    maxStorage += settlement.Town.Buildings.Where(b => b.BuildingType == DefaultBuildingTypes.CastleGranary || b.BuildingType == DefaultBuildingTypes.SettlementGranary).Sum(b => b.CurrentLevel * 5000f);
-                }
-
-                RotRosterFood(roster, maxStorage);
-                if (settlement.Stash != null)
-                {
-                    RotRosterFood(settlement.Stash, settlement.IsCastle ? maxStorage : 1000f);
-                }
-            },
-            GetType().Name,
-            false);
-        }
-
-        private void RotRosterFood(ItemRoster roster, float maxStorage)
-        {
-            if (!(roster.TotalFood > maxStorage))
-            {
-                return;
             }
 
-            var toRot = (int)(roster.TotalFood * 0.01f);
-            foreach (var element in roster.ToList().FindAll(x => x.EquipmentElement.Item != null &&
-                                                                 x.EquipmentElement.Item.ItemCategory.Properties ==
-                                                                 ItemCategory.Property.BonusToFoodStores))
+            RotRosterFood(roster, maxStorage);
+            if (settlement.Stash != null)
             {
-                if (toRot <= 0)
-                {
-                    break;
-                }
+                RotRosterFood(settlement.Stash, settlement.IsCastle ? maxStorage : 1000f);
+            }
+        }
 
-                var result = (int)MathF.Min(MBRandom.RandomFloatRanged(10f, toRot), (float)element.Amount);
-                roster.AddToCounts(element.EquipmentElement, -result);
-                toRot -= result;
+        private void RotRosterFood(ItemRoster roster, float factor)
+        {
+            foreach (ItemRosterElement element in roster)
+            {
+                if (element.Amount < 10) continue;
+
+                ItemCategory category = element.EquipmentElement.Item.ItemCategory;
+                if (category.Properties != ItemCategory.Property.BonusToFoodStores) continue;
+
+                if (!rottingRates.ContainsKey(category)) continue;
+
+                if (rottingRates[category] * factor < MBRandom.RandomFloat) continue;
+
+                var result = (int)MBRandom.RandomFloatRanged(1f, element.Amount * rottingRates[category]);
+                roster.AddToCounts(element.EquipmentElement.Item, -result);
             }
         }
 
