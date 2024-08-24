@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
+using BannerKings.Actions;
 using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
@@ -58,6 +58,27 @@ namespace BannerKings.Behaviours
                     EvaluateRecruitKnight(clan, true);
                     EvaluateRecruitKnight(clan, true);
                 }
+            });
+
+            CampaignEvents.RebelliousClanDisbandedAtSettlement.AddNonSerializedListener(this, (Settlement settlement, Clan clan) =>
+            {
+                TextObject finalName;
+                TextObject textObject = ClanActions.GetRandomAvailableName(settlement.Culture, settlement);
+                if (textObject == null)
+                {
+                    textObject = settlement.Culture.ClanNameList.GetRandomElement();
+                }
+
+                TextObject origin;
+                if (!textObject.GetVariableValue("ORIGIN_SETTLEMENT", out origin))
+                {
+                    finalName = new TextObject("{=!}{CLAN}-{SETTLEMENT}")
+                        .SetTextVariable("CLAN", textObject);
+                }
+                else finalName = textObject.SetTextVariable("ORIGIN_SETTLEMENT", settlement.Name);
+
+                clan.ChangeClanName(finalName, finalName);
+                MakeRebelKingdom(clan);
             });
         }
 
@@ -478,6 +499,32 @@ namespace BannerKings.Behaviours
                 clan.Leader.AddSkillXp(BKSkills.Instance.Lordship, councillours * 10f);
             }
 
+            MakeRebelKingdom(clan);
+            AddPeerage(clan);
+            ConvertTroopsMercenaries(clan);
+
+            if (clan == Clan.PlayerClan || clan.IsUnderMercenaryService || clan.IsMinorFaction || clan.IsBanditFaction)
+            {
+                return;
+            }
+
+            string name = GetType().Name;
+            RunWeekly(() =>
+            {
+                EvaluateRecruitKnight(clan);
+                EvaluateRecruitCompanion(clan);
+            },
+            name,
+            false);
+           
+            SetCompanionParty(clan);
+            RunCouncilTasks(clan);
+            DismissParties(clan);
+            JoinArmies(clan);
+        }
+
+        private void AddPeerage(Clan clan)
+        {
             if (!clan.IsUnderMercenaryService && clan.Kingdom != null)
             {
                 var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
@@ -534,27 +581,39 @@ namespace BannerKings.Behaviours
                     }
                 }
             }
+        }
 
-            ConvertTroopsMercenaries(clan);
-
-            if (clan == Clan.PlayerClan || clan.IsUnderMercenaryService || clan.IsMinorFaction || clan.IsBanditFaction)
+        private void MakeRebelKingdom(Clan clan)
+        {
+            if (clan.Kingdom == null && 
+                clan != Clan.PlayerClan &&
+                clan.Settlements.Count > 0 && 
+                clan.Heroes.Count > 0 && 
+                !clan.IsEliminated && 
+                !clan.IsRebelClan && 
+                !clan.IsClanTypeMercenary &&
+                !clan.IsBanditFaction)
             {
-                return;
+                TextObject name = KingdomActions.GetKingdomName(clan);
+                if (name != null)
+                {
+                    Campaign.Current.KingdomManager.CreateKingdom(name,
+                        name, 
+                        clan.Culture, 
+                        clan, 
+                        null, 
+                        null, 
+                        null, 
+                        null);
+
+                    InformationManager.DisplayMessage(new InformationMessage(
+                        new TextObject("{=!}The {CLAN}, raised from a peasants rebellion, has now consolidated into the {KINGDOM}!")
+                        .SetTextVariable("CLAN", clan.Name)
+                        .SetTextVariable("KINGDOM", name)
+                        .ToString(),
+                        Color.FromUint(TextHelper.COLOR_LIGHT_YELLOW)));
+                }
             }
-
-            string name = GetType().Name;
-            RunWeekly(() =>
-            {
-                EvaluateRecruitKnight(clan);
-                EvaluateRecruitCompanion(clan);
-            },
-            name,
-            false);
-           
-            SetCompanionParty(clan);
-            RunCouncilTasks(clan);
-            DismissParties(clan);
-            JoinArmies(clan);
         }
 
         private void ConvertTroopsMercenaries(Clan clan)
@@ -605,6 +664,8 @@ namespace BannerKings.Behaviours
 
         private float MercenaryConversionChance(CharacterObject merc, CharacterObject troop)
         {
+            return 1f;
+
             float chance = 0.1f;
             if (merc.Culture == troop.Culture) chance += 0.7f;
 
