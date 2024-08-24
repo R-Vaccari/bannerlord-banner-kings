@@ -4,6 +4,7 @@ using BannerKings.Managers.Duties;
 using BannerKings.Managers.Goals.Decisions;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.Vanilla;
+using BannerKings.Settings;
 using HarmonyLib;
 using Helpers;
 using System.Collections.Generic;
@@ -230,19 +231,23 @@ namespace BannerKings.Behaviours
         public void AiHourlyTick(MobileParty mobileParty, PartyThinkParams p)
         {
             TickDuty(mobileParty);
-            if (mobileParty != MobileParty.MainParty && mobileParty.Army != null && mobileParty.Army.LeaderParty == mobileParty)
+
+            if (BannerKingsSettings.Instance.ArmyConsistency)
             {
-                List<AiBehavior> behaviors = new List<AiBehavior>()
+                if (mobileParty != MobileParty.MainParty && mobileParty.Army != null && mobileParty.Army.LeaderParty == mobileParty)
+                {
+                    List<AiBehavior> behaviors = new List<AiBehavior>()
                 {
                     AiBehavior.BesiegeSettlement,
                     AiBehavior.RaidSettlement,
                     AiBehavior.DefendSettlement
                 };
 
-                if (mobileParty.Ai.HourCounter == 1 && !mobileParty.Ai.IsDisabled && behaviors.Contains(mobileParty.DefaultBehavior))
-                {
-                    mobileParty.Ai.DisableForHours(6);
-                    mobileParty.Ai.HourCounter = 0;
+                    if (mobileParty.Ai.HourCounter == 1 && !mobileParty.Ai.IsDisabled && behaviors.Contains(mobileParty.DefaultBehavior))
+                    {
+                        mobileParty.Ai.DisableForHours(6);
+                        mobileParty.Ai.HourCounter = 0;
+                    }
                 }
             }
         }

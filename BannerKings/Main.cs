@@ -23,9 +23,6 @@ using BannerKings.Managers.Innovations.Eras;
 using BannerKings.Behaviours.Innovations;
 using BannerKings.Behaviours.Shipping;
 using BannerKings.Behaviours.Relations;
-using BannerKings.CampaignContent.Skills;
-using TaleWorlds.CampaignSystem.CampaignBehaviors;
-using System.Linq;
 
 namespace BannerKings
 {
@@ -139,6 +136,9 @@ namespace BannerKings
             campaignStarter.AddModel(new BKPartyBuyingFoodModel());
             campaignStarter.AddModel(new BKCategorySelector());
             campaignStarter.AddModel(new BKSettlementAccessModel());
+
+
+            if (BannerKingsSettings.Instance.ArmyGoal) campaignStarter.AddModel(new BKTargetScoreModel());
 
             BKAttributes.Instance.Initialize();
             BKSkills.Instance.Initialize();

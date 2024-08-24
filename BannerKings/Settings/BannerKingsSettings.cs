@@ -160,6 +160,15 @@ namespace BannerKings.Settings
             }
         }
 
+        [SettingProperty("{=!}Experimental AI", RequireRestart = true, HintText = "{=!}Alter army decision making based on leader traits, Casus Belli of the war, war Fronts, war target fief, etc. Affects how armies decide to defend, besiege or raid. Default: true.")]
+        [SettingPropertyGroup("{=!}Armies")]
+        public bool ArmyGoal { get; set; } = true;
+
+        [SettingProperty("{=!}Army Consistent Objectives", RequireRestart = false, HintText = "{=!}Improve consistency of army objectives by forcing them to not change objective every hour. Stops army from going back and forth in the same place due to changing priorities. Default: true.")]
+        [SettingPropertyGroup("{=!}Armies")]
+        public bool ArmyConsistency { get; set; } = true;
+
+
         [SettingProperty("{=CHVW1U24}De Re Militari Bandits", 
             RequireRestart = false, 
             HintText = "{=bAt2AWmj}If you have De Re Militari (DRM) mod, enabling this allows bandit heroes and parties to use DRM's new bandits. Enabling it without DRM will break your game. Default: false.")]
