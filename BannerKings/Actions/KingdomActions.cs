@@ -1,5 +1,9 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Titles;
+using System.Linq;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Actions
 {
@@ -20,6 +24,26 @@ namespace BannerKings.Actions
                     BannerKingsConfig.Instance.TitleManager.InheritTitle(deJure, ruler, title);
                 }
             }
+        }
+
+        public static TextObject GetKingdomName(Clan rulers)
+        {
+            TextObject result = rulers.Name;
+
+            FeudalTitle highestTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(rulers.Leader);
+            if (highestTitle != null) result = highestTitle.FullName;
+            else
+            {
+                Settlement settlement = rulers.Settlements.FirstOrDefault();
+                if (settlement != null)
+                {
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                    if (title != null) result = title.FullName;
+
+                }
+            }
+
+            return result;
         }
     }
 }
