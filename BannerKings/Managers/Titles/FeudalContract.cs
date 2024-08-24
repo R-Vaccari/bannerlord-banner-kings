@@ -3,6 +3,7 @@ using BannerKings.Managers.Titles.Laws;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Titles
@@ -48,30 +49,43 @@ namespace BannerKings.Managers.Titles
             }
 
             if (ContractAspects == null) ContractAspects = new List<ContractAspect>();
+            else foreach (var aspect in ContractAspects)
+            {
+                aspect.PostInitialize();
+            }
+
+            if (ContractAspects.IsEmpty())
+            {
+                foreach (var aspect in DefaultContractAspects.Instance.GetIdealKingdomAspects(id, Government))
+                    ContractAspects.Add(aspect); 
+            }
             else
             {
-                foreach (var aspect in ContractAspects)
+                ContractAspects.Reverse();
+                foreach (var aspect in new List<ContractAspect>(ContractAspects)) 
                 {
-                    aspect.PostInitialize();
+                    ContractAspect existing = ContractAspects.FirstOrDefault(x => x.AspectType == aspect.AspectType && x.StringId != aspect.StringId);
+                    if (existing != null) ContractAspects.Remove(existing);
                 }
-            }
 
-            foreach (var aspect in DefaultContractAspects.Instance.GetIdealKingdomAspects(id, Government))
-            {
-                if (!ContractAspects.Any(x => x.StringId == aspect.StringId))
-                    ContractAspects.Add(aspect);
+                ContractAspect conquest = ContractAspects.FirstOrDefault(x => x.AspectType == ContractAspect.AspectTypes.Conquest);
+                if (conquest == null) ContractAspects.Add(DefaultContractAspects.Instance.GetIdealKingdomAspects(id, Government)
+                    .First(x => x.AspectType == ContractAspect.AspectTypes.Conquest));
+
+                ContractAspect taxes = ContractAspects.FirstOrDefault(x => x.AspectType == ContractAspect.AspectTypes.Taxes);
+                if (taxes == null) ContractAspects.Add(DefaultContractAspects.Instance.GetIdealKingdomAspects(id, Government)
+                    .First(x => x.AspectType == ContractAspect.AspectTypes.Taxes));
             }
         }
 
-        public bool HasContractAspect(ContractAspect aspect)  
+        public void AddAspect(ContractAspect aspect)
         {
-            if (ContractAspects != null)
-            {
-                ContractAspects.Contains(aspect);
-            }
-
-            return false;
+            ContractAspect existing = ContractAspects.FirstOrDefault(x => x.AspectType == aspect.AspectType);
+            if (existing != null) ContractAspects.Remove(existing);
+            ContractAspects.Add(aspect);
         }
+
+        public bool HasContractAspect(ContractAspect aspect) => ContractAspects.Contains(aspect);
 
         public DemesneLaw GetLawByType(DemesneLawTypes law) => DemesneLaws.FirstOrDefault(x => x.LawType == law);
 
@@ -80,11 +94,7 @@ namespace BannerKings.Managers.Titles
         public void EnactLaw(DemesneLaw law)
         {
             var existingLaw = DemesneLaws.FirstOrDefault(x => x.LawType == law.LawType);
-            if (existingLaw != null)
-            {
-                DemesneLaws.Remove(existingLaw);
-            }
-
+            if (existingLaw != null) DemesneLaws.Remove(existingLaw);
             DemesneLaws.Add(law.GetCopy());
         }
 
