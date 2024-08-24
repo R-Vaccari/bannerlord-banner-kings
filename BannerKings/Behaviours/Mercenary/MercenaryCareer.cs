@@ -74,6 +74,7 @@ namespace BannerKings.Behaviours.Mercenary
 
         public void Tick(float progress)
         {
+            if (Clan.IsUnderMercenaryService) Kingdom = Clan.Kingdom;
             if (!Clan.IsUnderMercenaryService || Kingdom == null) return;
 
             KingdomProgress[Kingdom] += progress;
