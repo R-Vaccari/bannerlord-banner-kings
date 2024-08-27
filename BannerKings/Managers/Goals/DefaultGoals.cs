@@ -30,6 +30,7 @@ namespace BannerKings.Managers.Goals
                 yield return RelocateCourtGoal;
                 yield return SentenceCriminal;
                 yield return FaithLeaderDecision;
+                yield return PetitionRight;
                 yield return MergeArmy;
                 foreach (Goal item in ModAdditions)
                 {
@@ -63,7 +64,7 @@ namespace BannerKings.Managers.Goals
                 null);
 
             PetitionRight.Initialize(new TextObject("{=!}Petition Right"),
-                new TextObject("{=!}Petition a right to your suzerain"));
+                new TextObject("{=!}Petition the fulfilment of one of your rights by your suzerain, {SUZERAIN}. Your suzerain may or may not be willing or able to fulfil your request. Your rights are defined in the contract of your realm's title. Your suzerain is defined by your highest title.{newline}{newline}"));
 
             MergeArmy.Initialize(new TextObject("{=!}Merge Armies"),
                 new TextObject("{=!}Summon another existing army within your realm to merge with yours. The army to be merged must not be otherwise preoccupied, such as in a battle or in a siege. The leader of said army must be of same or lower rank than yours - a county holder cannot summon a duchy holder. Merging an army costs a reduced amount of influence compared to gathering it by yourself."));
