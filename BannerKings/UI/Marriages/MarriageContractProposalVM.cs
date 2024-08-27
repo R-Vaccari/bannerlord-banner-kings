@@ -184,7 +184,7 @@ namespace BannerKings.UI.Marriages
                 }
 
                var willAccept = BannerKingsConfig.Instance.MarriageModel.IsMarriageAdequate(ProposerHero.Hero,
-                    ProposedHero.Hero, true);
+                    ProposedHero.Hero, isSecondaryPartner, true);
                 WillAcceptText = GameTexts.FindText(willAccept.ResultNumber >= 1f ? "str_yes" : "str_no").ToString();
                 WillAcceptHint.HintText = new TextObject("{=u9GPa1eQ}Whether or not their clan will accept this proposal. This is mainly dicatated by the different of value between the spouses, but also influence by their relationship with each other and the clan's trust towards you, as well as other kingdom-related matters, such as matching cultures and faiths.\n\n{REASON}")
                     .SetTextVariable("REASON", willAccept.GetExplanations());
