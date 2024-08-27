@@ -231,15 +231,19 @@ namespace BannerKings.Managers.Court
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Owner);
                 if (education.HasPerk(BKPerks.Instance.AugustDeFacto))
                 {
-                    var random = GetOccupiedPositions().GetRandomElement().Member;
-                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Owner, random, 1, false);
-                    if (Owner == Hero.MainHero)
+                    var positions = GetOccupiedPositions();
+                    if (positions.Count > 0) 
                     {
-                        InformationManager.DisplayMessage(new InformationMessage(
-                            new TextObject("{=rLgCZZDO}You improved relations with {HERO} due to {PERK} lifestyle perk.")
-                                .SetTextVariable("HERO", random.Name)
-                                .SetTextVariable("PERK", BKPerks.Instance.AugustDeFacto.Name)
-                                .ToString()));
+                        var random = positions.GetRandomElement().Member;
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Owner, random, 1, false);
+                        if (Owner == Hero.MainHero)
+                        {
+                            InformationManager.DisplayMessage(new InformationMessage(
+                                new TextObject("{=rLgCZZDO}You improved relations with {HERO} due to {PERK} lifestyle perk.")
+                                    .SetTextVariable("HERO", random.Name)
+                                    .SetTextVariable("PERK", BKPerks.Instance.AugustDeFacto.Name)
+                                    .ToString()));
+                        }
                     }
                 }
             }
