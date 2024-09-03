@@ -191,31 +191,34 @@ namespace BannerKings.Behaviours.Feasts
 
         private void HourlyTickParty(MobileParty party)
         {
-            if (!party.IsLordParty || party.LeaderHero == null || party.LeaderHero == Hero.MainHero)
-            {
-                return;
-            }
+            if (!party.IsLordParty || party.LeaderHero == null || party.LeaderHero == Hero.MainHero) return;  
 
             var clan = party.LeaderHero.Clan;
-            if (clan == null)
-            {
-                return;
-            }
-
+            if (clan == null) return;
+            
             var kingdom = clan.Kingdom;
-            if (kingdom == null)
-            {
-                return;
-            }
+            if (kingdom == null) return;
 
             foreach (var town in kingdom.Fiefs)
             {
                 if (feasts.ContainsKey(town) && (feasts[town].Guests.Contains(clan) || feasts[town].Host.Clan == clan))
                 {
+                    if (party.ActualClan == Clan.PlayerClan && !feasts[town].SendPlayerHousehold) continue;
+
                     if (party.CurrentSettlement != town.Settlement)
                     {
-                        party.Ai.DisableAi();
-                        party.Ai.SetMoveGoToSettlement(town.Settlement);
+                        if (party.MapEvent == null)
+                        {
+                            if (party.GetNumDaysForFoodToLast() < 3)
+                            {
+                                party.Ai.EnableAi();
+                            }
+                            else
+                            {
+                                party.Ai.DisableAi();
+                                party.Ai.SetMoveGoToSettlement(town.Settlement);
+                            }
+                        }
                     }
                 }
             }

@@ -25,6 +25,30 @@ namespace BannerKings.Behaviours.Feasts
             EndDate = endDate;
             MarriageContract = marriageContract;
             AutoManaged = autoManaged;
+
+            if (host != Hero.MainHero && guests.Contains(Clan.PlayerClan))
+            {
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Feast Invitation").ToString(),
+                    new TextObject("{=!}{HOST} invites you to their feast at {TOWN}. The feast ends at {DATE} and {CLANS} families were invited. Participating is optional, but the host would appreciate your presence.{MARRIAGE}{RELIGION}{newline}{newline}Would you like your household members to participate in the feast? If yes, your family and knights leading war parties will start moving to the feast.")
+                    .SetTextVariable("HOST", host.Name)
+                    .SetTextVariable("DATE", endDate.ToString())
+                    .SetTextVariable("TOWN", town.Name)
+                    .SetTextVariable("CLANS", guests.Count)
+                    .SetTextVariable("MARRIAGE", marriageContract != null ? new TextObject("{=!}The feast celebrates the union between {PROPOSER} and {PROPOSED}.")
+                        .SetTextVariable("PROPOSER", marriageContract.Proposer.Name)
+                        .SetTextVariable("PROPOSED", marriageContract.Proposed.Name)
+                        : 
+                        new TextObject("{=!}No marriage is being celebrated in this feast."))
+                    .SetTextVariable("RELIGION", type == FeastType.Normal ? new TextObject("{=!}The feast is not a religious event.") : new TextObject("{=!}The feast is a religious celebration."))
+                    .ToString(),
+                    true,
+                    true,
+                    GameTexts.FindText("str_selection_widget_accept").ToString(),
+                    GameTexts.FindText("str_selection_widget_cancel").ToString(),
+                    () => SendPlayerHousehold = true,
+                    () => SendPlayerHousehold = false));
+            }
+            Type = type;
         }
 
         public static float FoodConsumptionRatio => 0.5f;
@@ -48,6 +72,7 @@ namespace BannerKings.Behaviours.Feasts
 
         [SaveableProperty(12)] public MarriageContract MarriageContract { get; private set; }
         [SaveableProperty(13)] public bool AutoManaged { get; private set; }
+        [SaveableProperty(14)] public bool SendPlayerHousehold { get; private set; }
 
         private float GeneralSatisfaction => ((FoodQuality / 7f) + (FoodQuantity / 7f) +
                 (FoodVariety / 7f) + (Alcohol / 7f) + (HostPresence / Ticks)) / 5f;
