@@ -68,7 +68,7 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms.Groups
                 result.LimitMin(0f);
                 result.LimitMax(1f);
                 foreach (Hero hero in KingdomDiplomacy.Kingdom.Heroes)
-                    if (BannerKingsConfig.Instance.InterestGroupsModel.CanHeroCreateAGroup(hero, KingdomDiplomacy))
+                    if (BannerKingsConfig.Instance.InterestGroupsModel.CanHeroJoinARadicalGroup(hero, KingdomDiplomacy))
                         heroes.Add(hero);
 
                 float total = 0f;
