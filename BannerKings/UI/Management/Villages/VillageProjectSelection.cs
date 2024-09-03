@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
@@ -57,7 +58,8 @@ namespace BannerKings.UI.Management.Villages
                     new Action<SettlementProjectVM, bool>(OnCurrentProjectSelection),
                     new Action<SettlementProjectVM>(OnCurrentProjectSet),
                     new Action(OnResetCurrentProject),
-                    building);
+                    building,
+                    Hero.MainHero.CurrentSettlement);
                 AvailableProjects.Add(VillageBuildingProjectVM);
                 if (VillageBuildingProjectVM.Building.BuildingType.StringId == villageData.CurrentBuilding.BuildingType.StringId)
                 {
@@ -74,7 +76,8 @@ namespace BannerKings.UI.Management.Villages
                         new Action<SettlementProjectVM, bool>(OnCurrentProjectSelection),
                         new Action<SettlementProjectVM>(OnCurrentProjectSet),
                         new Action(OnResetCurrentProject),
-                        building2);
+                        building2,
+                        Hero.MainHero.CurrentSettlement);
                     DailyDefaultList.Add(VillageBuildingDailyProjectVM);
                     if (VillageBuildingDailyProjectVM.Building.BuildingType.StringId ==
                         villageData.CurrentDefault.BuildingType.StringId)
