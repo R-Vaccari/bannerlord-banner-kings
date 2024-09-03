@@ -1,11 +1,10 @@
 ﻿using BannerKings.Managers.Innovations;
-using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.Core;
+using TaleWorlds.Library;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -45,7 +44,7 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            return (int)result;
+            return (int)MathF.Max(1f, result);
         }
     }
 }
