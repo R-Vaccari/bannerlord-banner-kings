@@ -1,6 +1,4 @@
 using BannerKings.Managers.Skills;
-using BannerKings.Managers.Titles.Laws;
-using BannerKings.Managers.Titles;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -9,7 +7,6 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.MountAndBlade.View;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
@@ -282,6 +279,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public void SetUp()
         {
+            if (Group.Leader != Hero.MainHero) InviteMembers();
             SetUpInternally();
 
             if (Active)
@@ -297,6 +295,32 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 }
             }
             else Finish();
+        }
+
+        private void InviteMembers()
+        {
+            if (Group.IsRadicalGroup)
+            {
+                List<Hero> heroes = new List<Hero>(30);
+                foreach (Hero hero in Group.KingdomDiplomacy.Kingdom.Heroes)
+                {
+                    if (BannerKingsConfig.Instance.InterestGroupsModel.CanHeroJoinARadicalGroup(hero, Group.KingdomDiplomacy) &&
+                        BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroJoinChance(hero, Group, Group.KingdomDiplomacy).ResultNumber > 0f)
+                        heroes.Add(hero);
+                }
+
+                float influenceCap = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(Group.Leader.Clan).ResultNumber;
+                foreach (Hero hero in heroes)
+                {
+                    float cost = BannerKingsConfig.Instance.InterestGroupsModel.InviteToGroupInfluenceCost(Group, hero, Group.KingdomDiplomacy).ResultNumber;
+                    float influence = Group.Leader.Clan.Influence;
+                    if (influence > cost && influence > influenceCap * 0.1f)
+                    {
+                        Group.AddMember(hero);
+                        ChangeClanInfluenceAction.Apply(Group.Leader.Clan, -cost);
+                    }
+                }
+            }
         }
 
         protected abstract void SetUpInternally();
@@ -376,8 +400,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     (Group as RadicalGroup).TriggerRevolt();
                 }
 
-                Game.Current.GameStateManager.PopState(0);
-                UISoundsHelper.PlayUISound("event:/ui/default");
+                //Game.Current.GameStateManager.PopState(0);
+                //UISoundsHelper.PlayUISound("event:/ui/default");
             }
             else
             {
