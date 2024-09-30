@@ -154,6 +154,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         public override (bool, TextObject) IsDemandCurrentlyAdequate()
         {
             Kingdom kingdom = Group.FactionLeader.MapFaction as Kingdom;
+            if (kingdom == null || kingdom.IsEliminated) 
+                return new(false, new TextObject("{=!}"));
+
             PolicyObject policy = (Group as InterestGroup).SupportedPolicies.FirstOrDefault(x => !kingdom.ActivePolicies.Contains(x));
             if (policy == null)
             {

@@ -18,6 +18,8 @@ namespace BannerKings.Behaviours.Relations
 
         public HeroRelations GetRelations(Hero hero)
         {
+            if (hero == null) return null;
+
             if (!relations.ContainsKey(hero)) relations.Add(hero, new HeroRelations(hero));
             return relations[hero];
         }
@@ -39,28 +41,31 @@ namespace BannerKings.Behaviours.Relations
                 if (outcome != null && outcome.SupporterList != null)
                 {
                     HeroRelations relations = GetRelations(outcome.SponsorClan.Leader);
-                    foreach (Supporter supporter in outcome.SupporterList)
+                    if (relations != null)
                     {
-                        if (supporter.Clan != outcome.SponsorClan)
+                        foreach (Supporter supporter in outcome.SupporterList)
                         {
-                            int modifier = 0;
-                            switch (supporter.SupportWeight)
+                            if (supporter.Clan != outcome.SponsorClan)
                             {
-                                case Supporter.SupportWeights.FullyPush:
-                                    modifier = 25; break;
-                                case Supporter.SupportWeights.StronglyFavor:
-                                    modifier = 15; break;
-                                case Supporter.SupportWeights.SlightlyFavor:
-                                    modifier = 8; break;
-                                default:
-                                    modifier = 0; break;
-                            }
+                                int modifier = 0;
+                                switch (supporter.SupportWeight)
+                                {
+                                    case Supporter.SupportWeights.FullyPush:
+                                        modifier = 25; break;
+                                    case Supporter.SupportWeights.StronglyFavor:
+                                        modifier = 15; break;
+                                    case Supporter.SupportWeights.SlightlyFavor:
+                                        modifier = 8; break;
+                                    default:
+                                        modifier = 0; break;
+                                }
 
-                            relations.AddModifier(Hero.MainHero, new RelationsModifier(modifier,
-                            new TaleWorlds.Localization.TextObject("{=!}Support on decision '{DECISION}' ({DATE})")
-                                .SetTextVariable("QUEST", decision.GetGeneralTitle())
-                                .SetTextVariable("DATE", CampaignTime.Now.ToString()),
-                                CampaignTime.YearsFromNow(5f)));
+                                relations.AddModifier(Hero.MainHero, new RelationsModifier(modifier,
+                                new TaleWorlds.Localization.TextObject("{=!}Support on decision '{DECISION}' ({DATE})")
+                                    .SetTextVariable("QUEST", decision.GetGeneralTitle())
+                                    .SetTextVariable("DATE", CampaignTime.Now.ToString()),
+                                    CampaignTime.YearsFromNow(5f)));
+                            }
                         }
                     }
                 }
@@ -68,26 +73,29 @@ namespace BannerKings.Behaviours.Relations
 
             CampaignEvents.OnQuestCompletedEvent.AddNonSerializedListener(this, (QuestBase quest, QuestBase.QuestCompleteDetails details) =>
             {
-                HeroRelations relations = GetRelations(quest.QuestGiver);
-                int modifier = 0;
-                switch (details)
+                if (quest.QuestGiver != null)
                 {
-                    case QuestBase.QuestCompleteDetails.Success:
-                        modifier = 10; break;
-                    case QuestBase.QuestCompleteDetails.FailWithBetrayal: 
-                        modifier = -20; break;
-                    case QuestBase.QuestCompleteDetails.Invalid:
-                        modifier = 0; break;
-                    default:
-                        modifier = -10; break;
-                }
+                    HeroRelations relations = GetRelations(quest.QuestGiver);
+                    int modifier = 0;
+                    switch (details)
+                    {
+                        case QuestBase.QuestCompleteDetails.Success:
+                            modifier = 10; break;
+                        case QuestBase.QuestCompleteDetails.FailWithBetrayal:
+                            modifier = -20; break;
+                        case QuestBase.QuestCompleteDetails.Invalid:
+                            modifier = 0; break;
+                        default:
+                            modifier = -10; break;
+                    }
 
-                if (modifier != 0)
-                    relations.AddModifier(Hero.MainHero, new RelationsModifier(modifier,
-                        new TaleWorlds.Localization.TextObject("{=!}{QUEST} ({DATE})")
-                        .SetTextVariable("QUEST", quest.Title)
-                        .SetTextVariable("DATE", CampaignTime.Now.ToString()),
-                        CampaignTime.YearsFromNow(5f)));
+                    if (modifier != 0)
+                        relations.AddModifier(Hero.MainHero, new RelationsModifier(modifier,
+                            new TaleWorlds.Localization.TextObject("{=!}{QUEST} ({DATE})")
+                            .SetTextVariable("QUEST", quest.Title)
+                            .SetTextVariable("DATE", CampaignTime.Now.ToString()),
+                            CampaignTime.YearsFromNow(5f)));
+                }
             });
 
             CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, (Hero hero) =>
