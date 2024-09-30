@@ -77,27 +77,33 @@ namespace BannerKings.Models.Vanilla
             result.Add(clan.Tier * 175f, GameTexts.FindText("str_clan_tier_bonus"));
             result.LimitMin(clan.Tier * 50f);
 
+            float fiefs = 0f;
             foreach (var fief in clan.Fiefs)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(fief.Settlement);
                 if (data != null)
                 {
-                    result.Add(CalculateSettlementInfluence(fief.Settlement, data, false).ResultNumber * 20f, fief.Name);
+                    fiefs += CalculateSettlementInfluence(fief.Settlement, data, false).ResultNumber * 20f;
                 }
             }
 
+            result.Add(fiefs, new TextObject("{=!}Walled Demesnes"));
+
+            float villages = 0f;
             foreach (var village in clan.GetActualVillages())
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
                 if (data != null)
                 {
-                    result.Add(CalculateSettlementInfluence(village.Settlement, data, false).ResultNumber * 25f, village.Name);
+                    villages += CalculateSettlementInfluence(village.Settlement, data, false).ResultNumber * 25f;
                 }
             }
 
+            result.Add(villages, new TextObject("{=GikQuojv}Village Demesnes"));
+
             foreach (var title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
             {
-                result.Add(600 / ((int)title.TitleType * 8f), title.FullName);
+                result.Add(700 / (((int)title.TitleType + 1) * 8f), title.FullName);
             }
 
             if (clan.Kingdom != null)
