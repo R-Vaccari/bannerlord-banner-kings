@@ -24,7 +24,7 @@ namespace BannerKings.Models.BKModels
         {
             if (hero == Hero.MainHero || !CanHeroCreateAGroup(hero, diplomacy)) return false;
 
-            if (diplomacy.RadicalGroups.Any(x => x.Equals(group))) return false;
+            if (diplomacy.RadicalGroups.Any(x => x.Equals(group) && x.IsGroupActive)) return false;
 
             if (group.CanHeroJoin(hero, diplomacy))
             {
@@ -111,8 +111,8 @@ namespace BannerKings.Models.BKModels
 
             if (group.StringId == DefaultInterestGroup.Instance.Commoners.StringId)
                 foreach (var fief in diplomacy.Kingdom.Fiefs)
-                    if (fief.Loyalty <= 25f) result.Add(CalculateTownInfluence(fief).ResultNumber / diplomacy.Kingdom.Fiefs.Count,
-                            new TextObject("{=K0pRPse7}{TOWN}'s loyalty is low"));
+                    if (fief.Loyalty <= 25f) result.Add(CalculateTownInfluence(fief).ResultNumber / MathF.Max(1f, (float)diplomacy.Kingdom.Fiefs.Count),
+                            new TextObject("{=K0pRPse7}{TOWN}'s loyalty is low").SetTextVariable("TOWN", fief.Name));
 
             return result;
         }
@@ -401,7 +401,7 @@ namespace BannerKings.Models.BKModels
                 clanInfluences.Add(clan, f);
             }
 
-            result.Add(-0.1f + (clanInfluences[hero.Clan] / totalClanInfluence), new TextObject("{=!}Reluctance"));
+            result.Add(-0.08f + (clanInfluences[hero.Clan] / totalClanInfluence), new TextObject("{=!}Reluctance"));
             Hero ruler = diplomacy.Kingdom.Leader;
             float support = -MBMath.Map(diplomacy.Legitimacy, 0f, 1f, -0.5f, 0.5f);
             result.Add(support, new TextObject("{=KDH6VoKQ}Legitimacy of {HERO}")
