@@ -401,7 +401,7 @@ namespace BannerKings.Models.BKModels
                 clanInfluences.Add(clan, f);
             }
 
-            result.Add(-0.08f + (clanInfluences[hero.Clan] / totalClanInfluence), new TextObject("{=!}Reluctance"));
+            result.Add(-0.11f + (clanInfluences[hero.Clan] / totalClanInfluence), new TextObject("{=!}Reluctance"));
             Hero ruler = diplomacy.Kingdom.Leader;
             float support = -MBMath.Map(diplomacy.Legitimacy, 0f, 1f, -0.5f, 0.5f);
             result.Add(support, new TextObject("{=KDH6VoKQ}Legitimacy of {HERO}")
