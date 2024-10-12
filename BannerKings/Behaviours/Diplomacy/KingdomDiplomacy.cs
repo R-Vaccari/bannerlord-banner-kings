@@ -37,6 +37,11 @@ namespace BannerKings.Behaviours.Diplomacy
             }
         }
 
+        public void AddLegitimacy(float legitimacy)
+        {
+            Legitimacy = MathF.Min(1f, Legitimacy + legitimacy);
+        }
+
         public BKExplainedNumber LegitimacyTarget => BannerKingsConfig.Instance.LegitimacyModel.CalculateKingdomLegitimacy(this, false);
         public BKExplainedNumber LegitimacyTargetExplained => BannerKingsConfig.Instance.LegitimacyModel.CalculateKingdomLegitimacy(this, true);
 
@@ -276,7 +281,7 @@ namespace BannerKings.Behaviours.Diplomacy
                 //Religion = BannerKingsConfig.Instance.ReligionModel.GetKingdomStateReligion(Kingdom);
             }
 
-            Legitimacy += LegitimacyChange;
+            AddLegitimacy(LegitimacyChange);
 
             foreach (var group in Groups)
             {
