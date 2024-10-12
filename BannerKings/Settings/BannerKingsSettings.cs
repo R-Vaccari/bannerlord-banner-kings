@@ -193,5 +193,10 @@ namespace BannerKings.Settings
             HintText = "{=!}Defines the base 'reluctance' factor for AI joining or creating radical groups. The bigger, the less they partake in groups. Default: 15%.")]
         [SettingPropertyGroup("{=!}Diplomacy")]
         public float RadicalGroup { get; set; } = 0.35f;
+
+        [SettingPropertyInteger("{=!}Rebels Starting Years Offset", minValue: 0, maxValue: 3, "#0", RequireRestart = false,
+            HintText = "{=!}Defines the amount of years, counting from the starting campaign year, that radical groups will need before starting to form. May help letting relationships build so groups are more randomized. Default: 1.")]
+        [SettingPropertyGroup("{=!}Diplomacy")]
+        public int RadicalGroupYears { get; set; } = 1;
     }
 }

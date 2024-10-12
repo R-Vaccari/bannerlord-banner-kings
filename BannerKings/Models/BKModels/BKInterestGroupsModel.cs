@@ -328,7 +328,7 @@ namespace BannerKings.Models.BKModels
                 return false;
             }
 
-            if (hero.IsLord && hero.MapFaction.Leader == hero)
+            if (hero.IsLord && hero.MapFaction.IsKingdomFaction && hero.MapFaction.Leader == hero)
             {
                 return false;
             }
@@ -370,7 +370,9 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public bool CanHeroJoinARadicalGroup(Hero hero, KingdomDiplomacy diplomacy) => CanHeroJoinAGroup(hero, diplomacy) && hero.IsClanLeader();
+        public bool CanHeroJoinARadicalGroup(Hero hero, KingdomDiplomacy diplomacy) => CanHeroJoinAGroup(hero, diplomacy) && 
+            hero.IsClanLeader() &&
+            diplomacy.GetHeroRadicalGroup(hero) == null;
         
         public bool CanHeroCreateAGroup(Hero hero, KingdomDiplomacy diplomacy)
         {
@@ -393,6 +395,9 @@ namespace BannerKings.Models.BKModels
 
         public override BKExplainedNumber CalculateHeroJoinRadicalGroup(Hero hero, RadicalGroup group, KingdomDiplomacy diplomacy, ref BKExplainedNumber result)
         {
+            if ((CampaignData.CampaignStartTime + CampaignTime.Years(BannerKingsSettings.Instance.RadicalGroupYears)).IsFuture)
+                return result; 
+            
             Dictionary<Clan, float> clanInfluences = new Dictionary<Clan, float>();
             float totalClanInfluence = 0f;
             foreach (var clan in diplomacy.Kingdom.Clans)
@@ -401,14 +406,14 @@ namespace BannerKings.Models.BKModels
                 totalClanInfluence += f;
                 clanInfluences.Add(clan, f);
             }
-
+            
             result.Add(-BannerKingsSettings.Instance.RadicalGroup + (clanInfluences[hero.Clan] / totalClanInfluence), new TextObject("{=!}Reluctance"));
             Hero ruler = diplomacy.Kingdom.Leader;
-            float support = -MBMath.Map(diplomacy.Legitimacy, 0f, 1f, -0.5f, 0.5f);
+            float support = -MBMath.Map(diplomacy.Legitimacy, 0f, 1f, -0.25f, 0.25f);
             result.Add(support, new TextObject("{=KDH6VoKQ}Legitimacy of {HERO}")
                 .SetTextVariable("HERO", ruler.Name));
 
-            float relation = -MBMath.Map(hero.GetRelation(ruler), -100f, 100f, -0.75f, 0.75f);
+            float relation = -MBMath.Map(hero.GetRelation(ruler), -100f, 100f, -0.4f, 0.4f);
             result.Add(relation, new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
                     .SetTextVariable("HERO1", hero.Name)
                     .SetTextVariable("HERO2", ruler.Name));
@@ -423,7 +428,7 @@ namespace BannerKings.Models.BKModels
 
             if (group.Leader != null && hero != group.Leader)
             {
-                float relationLeader = -MBMath.Map(hero.GetRelation(group.Leader), -100f, 100f, -0.25f, 0.25f);
+                float relationLeader = -MBMath.Map(hero.GetRelation(group.Leader), -100f, 100f, -0.15f, 0.15f);
                 result.Add(relationLeader, new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
                     .SetTextVariable("HERO1", hero.Name)
                     .SetTextVariable("HERO2", group.Leader.Name));
