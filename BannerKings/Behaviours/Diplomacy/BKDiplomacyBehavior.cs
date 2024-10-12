@@ -387,7 +387,7 @@ namespace BannerKings.Behaviours.Diplomacy
             foreach (War war in toRemove)
                 wars.Remove(war);
 
-            foreach (var pair in kingdomDiplomacies)
+            foreach (var pair in new Dictionary<Kingdom, KingdomDiplomacy>(kingdomDiplomacies))
             {
                 pair.Value.Update();
             }
