@@ -183,10 +183,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             TickInternal();
 
             if (!CurrentDemand.Active) CurrentDemand.SetUp();
-            if (Leader == null || FactionLeader == null || !CurrentDemand.Active)
-            {
-                return;
-            }
+            if (Leader == null || FactionLeader == null || !CurrentDemand.Active) return; 
 
             float proportion = PowerProportion;
             if (proportion >= 0.5f) Radicalism += 0.01f;
@@ -213,7 +210,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
                 demand.Finish();
             }
 
-            foreach (Hero member in Members)
+            var members = new List<Hero>();
+            members.AddRange(Members);
+            foreach (Hero member in members)
             {
                 float joinChance = BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroJoinChance(member, this, KingdomDiplomacy)
                     .ResultNumber;
@@ -250,7 +249,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
              }*/
 
             Kingdom originalKingdom = KingdomDiplomacy.Kingdom;
-            Kingdom rebelKingdom = RebellionActions.CreateRebelKingdom(this, Leader.Clan, rebels, KingdomDiplomacy.Kingdom);
+            Kingdom rebelKingdom = RebellionActions.CreateRebelKingdom(Leader.Clan, rebels, KingdomDiplomacy.Kingdom);
             foreach (Clan clan in rebels)
             {
                 foreach (var party in clan.WarPartyComponents)

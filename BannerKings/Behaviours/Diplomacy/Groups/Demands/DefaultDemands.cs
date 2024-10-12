@@ -10,6 +10,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         public Demand AssumeFaith { get; } = new AssumeFaithDemand();
         public Demand DemandTitle { get; } = new TitleDemand();
         public RadicalDemand Claimant { get; } = new ClaimantDemand();
+        public RadicalDemand Secession { get; } = new SecessionDemand();
         /*public Demand PolicyChange { get; } = new Demand("policy_change");
         = new Demand("law_change");
         public Demand CeaseWar { get; } = new Demand("cease_war");
@@ -24,6 +25,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 yield return AssumeFaith;
                 yield return DemandTitle;
                 yield return Claimant;
+                yield return Secession;
                 foreach (Demand demand in ModAdditions)
                 {
                     yield return demand;

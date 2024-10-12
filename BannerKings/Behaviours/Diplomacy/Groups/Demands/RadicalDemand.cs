@@ -61,5 +61,15 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         {
             if (!Active) Finish();
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is RadicalDemand)
+            {
+                return base.Equals(obj) && StringId == (obj as RadicalDemand).StringId;
+            }
+
+            return false;
+        }
     }
 }

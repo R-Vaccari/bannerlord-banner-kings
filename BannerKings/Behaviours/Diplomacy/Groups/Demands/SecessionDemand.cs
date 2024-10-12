@@ -1,6 +1,7 @@
 using BannerKings.Actions;
 using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Titles;
+using BannerKings.Utils.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,20 +16,18 @@ using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 {
-    public class ClaimantDemand : RadicalDemand
+    public class SecessionDemand : RadicalDemand
     {
-        public ClaimantDemand() : base("Claimant")
+        public SecessionDemand() : base("Secession")
         {
             SetTexts();
         }
 
-        protected override bool IsFulfilled() => Claimant.Clan == Group.KingdomDiplomacy.Kingdom.RulingClan;
-
-        [SaveableProperty(1)] public Hero Claimant { get; set; }
+        [SaveableProperty(1)] public Clan Rebel { get; private set; }
 
         public override DemandResponse PositiveAnswer => new DemandResponse(new TextObject("{=kyB8tkgY}Concede"),
-                    new TextObject("{=69rAwxib}Accept the demand to cede your rulership to the {CLAIMANT}. You will keep your properties and titles, but be replaced as a ruler. They will be satisfied with this outcome.")
-                    .SetTextVariable("CLAIMANT", Claimant.Name),
+                    new TextObject("{=!}Accept the demand to cede independence to the members of the Secession group led by {HERO}. They will be satisfied with this outcome.")
+                    .SetTextVariable("HERO", Group.Leader.Name),
                     new TextObject("{=Pr6r49e8}On {DATE}, the {GROUP} were conceded their {DEMAND} demand.")
                     .SetTextVariable("DATE", CampaignTime.Now.ToString())
                     .SetTextVariable("GROUP", Group.Name)
@@ -52,34 +51,26 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                         if (fulfiller == Hero.MainHero || Group.Members.Contains(Hero.MainHero))
                         {
                             InformationManager.DisplayMessage(new InformationMessage(
-                                new TextObject("{=53q6oUzO}The {GROUP} is satisfied! {CLAIMANT} will now rule the {REALM}.")
+                                new TextObject("{=53q6oUzO}The {GROUP} is satisfied! The members of the group will now organize themselves in a newly made realm.")
                                 .SetTextVariable("GROUP", Group.Name)
-                                .SetTextVariable("CLAIMANT", Claimant.Name)
-                                .SetTextVariable("REALM", Group.KingdomDiplomacy.Kingdom.Name)
                                 .ToString(),
                                 Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
                         }
 
-                        ChangeRulingClanAction.Apply(Group.KingdomDiplomacy.Kingdom, Claimant.Clan);
-
                         foreach (Hero member1 in Group.Members)
-                        {
                             foreach (Hero member2 in Group.Members)
-                            {
                                 if (member1 != member2) ChangeRelationAction.ApplyRelationChangeBetweenHeroes(member1, member2, 5);
-                            }
 
-                            if (member1 != Claimant)
-                                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(member1, Claimant, 20);
-                        }
+                        RebellionActions.CreateRebelKingdom(Group.Leader.Clan, 
+                            Group.Members.ConvertAll(x => x.Clan), 
+                            Group.KingdomDiplomacy.Kingdom);
 
                         return true;
                     });
 
         public override DemandResponse NegativeAnswer => new DemandResponse(new TextObject("{=PoAmUqGR}Reject"),
-                   new TextObject("{=!}Deny the demand to cede rulership to the {CLAIMANT}, led by {HERO}. They will not like this outcome.")
-                   .SetTextVariable("CLAIMANT", Claimant.Name)
-                   .SetTextVariable("HERO", Group.Leader.Name),
+                   new TextObject("{=!}Deny the demand to cede independence to the rebels led by {HERO}. They will not like this outcome.")
+                   .SetTextVariable("HERO", Rebel.Leader.Name),
                    new TextObject("{=icR6DbJR}On {DATE}, the {GROUP} were rejected their {DEMAND} demand.")
                    .SetTextVariable("DATE", CampaignTime.Now.ToString())
                    .SetTextVariable("GROUP", Group.Name)
@@ -129,7 +120,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override float MinimumGroupInfluence => 0.75f;
 
-        public override bool Active => Claimant != null && Claimant.IsAlive;
+        public override bool Active => Rebel != null && !Rebel.IsEliminated;
+        protected override bool IsFulfilled() => Rebel.Kingdom != Group.KingdomDiplomacy.Kingdom;
 
         public override IEnumerable<DemandResponse> DemandResponses
         {
@@ -140,25 +132,21 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
         }
 
-        protected override TextObject PlayerPromptText => new TextObject("{=!}The {GROUP} group is pushing for you to cede rulership to {CLAIMANT}. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
-                .SetTextVariable("GROUP", Group.Name)
-                .SetTextVariable("CLAIMANT", Claimant.Name);
+        protected override TextObject PlayerPromptText => new TextObject("{=!}The {GROUP} group is pushing for the independence of its members. You may choose to resolve it now or postpone the decision. If so, the group will demand a definitive answer 7 days from now.")
+                .SetTextVariable("GROUP", Group.Name);
 
-        protected override TextObject PlayerAnswersText => new TextObject("{=BKAdUzjo}The {GROUP} is pushing for you to cede rulership to {CLAIMANT}. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {STRENGTH}% military strength relative to your loyalist forces.")
+        protected override TextObject PlayerAnswersText => new TextObject("{=BKAdUzjo}The {GROUP} is pushing for the independenc of its members. The group is currently lead by {LEADER}{LEADER_ROLE}. The group currently has {STRENGTH}% military strength relative to your loyalist forces.")
                 .SetTextVariable("STRENGTH", (Group as RadicalGroup).PowerProportion)
                 .SetTextVariable("LEADER_ROLE", GetHeroRoleText(Group.Leader))
                 .SetTextVariable("LEADER", Group.Leader.Name)
-                .SetTextVariable("CLAIMANT", Claimant.Name)
                 .SetTextVariable("GROUP", Group.Name);
 
         public override void EndRebellion(Kingdom rebels, Kingdom original, bool success)
         {
-            TextObject text = success ? new TextObject("{=!}The rebels of the {REBELS}, led by {LEADER} have been successful in their rebellion! {CLAIMANT} will now rule over the {KINGDOM}...") 
-                .SetTextVariable("KINGDOM", original.Name)
-                .SetTextVariable("CLAIMANT", Claimant.Name)
+            TextObject text = success ? new TextObject("{=!}The rebels of the {REBELS}, led by {LEADER} have been successful in their rebellion! {LEADER} has newfound legitimacy as the sovereign ruler of the {REBELS}...")
                 .SetTextVariable("LEADER", rebels.RulingClan.Leader.Name)
                 .SetTextVariable("REBELS", rebels.Name)
-                : 
+                :
                 new TextObject("{=!}The rebels of the {REBELS}, led by {LEADER} have failed their rebellion... Their judgement falls now to {RULER}.")
                 .SetTextVariable("RULER", original.RulingClan.Leader.Name)
                 .SetTextVariable("REBELS", rebels.Name)
@@ -166,18 +154,22 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             InformationManager.DisplayMessage(new InformationMessage(text.ToString(),
                 Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
 
-            ReintegrateMembers(rebels, original);
-            DestroyKingdomAction.Apply(rebels);
-            if (success) KingdomActions.SetRulerWithTitle(Claimant, original);
-            else
+            KingdomDiplomacy diplomacy = Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(rebels);
+            if (diplomacy != null)
             {
+                diplomacy.AddLegitimacy(0.2f);
+            }
 
+            if (!success)
+            {
+                ReintegrateMembers(rebels, original);
+                DestroyKingdomAction.Apply(rebels);
             }
         }
 
         public override void Finish()
         {
-            Claimant = null;
+            Rebel = null;
             DueDate = CampaignTime.Never;
 
             FinishRadicalDemand();
@@ -185,9 +177,9 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public override Demand GetCopy(DiplomacyGroup group)
         {
-            ClaimantDemand demand = new ClaimantDemand();
+            SecessionDemand demand = new SecessionDemand();
             demand.Group = group;
-            demand.Claimant = Claimant;
+            demand.Rebel = Rebel;
             return demand;
         }
 
@@ -204,76 +196,64 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         }
 
         public override void SetTexts()
-        {  
-            if (Claimant != null)
-            {
-                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Group.KingdomDiplomacy.Kingdom);
-                Initialize(new TextObject("{=Yjq7GL10}Install {CLAIMANT}").SetTextVariable("CLAIMANT", Claimant.Name),
-                    new TextObject("{=!}Members of the group demand that {CLAIMANT} be made sovereign ruler in stead of {RULER}. They defend {CLAIMANT} is a more legitimate ruler on the grounds of {SUCCESSION} succession laws as per the traditions of the {TITLE}, and are willing to impose their views.")
-                    .SetTextVariable("RULER", Group.KingdomDiplomacy.Kingdom.RulingClan.Leader.Name) 
-                    .SetTextVariable("SUCCESSION", title.Contract.Succession.Name)
-                    .SetTextVariable("TITLE", title.FullName)
-                    .SetTextVariable("CLAIMANT", Claimant.Name));
-            }
-            else
-            {
-                Initialize(new TextObject("{=!}Claimant"),
-                    new TextObject("{=0XhSiqsR}A claimant group supports replacing the realm's current ruler with a claimant. The claimant must be a valid candidate under the realm's Succession law. The stronger a candidate, the more likely others will join the Claimant group. Current ruler's legitimacy and personal relationship with individual lords are also very important factors. In case the claimant is of the same clan as the current ruler, this means that they would become the family head themselves."));
-            }
+        {
+            if (Rebel == null) Initialize(new TextObject("{=!}Secession"),
+                    new TextObject("{=!}Demand secession from the current realm. Group members are reorganized in a newly founded realm lead by a ruler of their choosing. Secession apologists do not pursue any changes in their existing realm - only to leave it for a realm of their own making. Unlike independence apologists, secession group members will be bound together in a single new realm. Members will be persuaded to join according to their opinions of their current ruler and the ruler-to-be supported by the group."));
+            else Initialize(new TextObject("{=!}Secession for {REBEL}").SetTextVariable("REBEL", Rebel.Name),
+                    new TextObject("{=!}Members of the group demand that they be let go of the {KINGDOM}, such that they may organize themselves in a new realm, led by {REBEL}.")
+                    .SetTextVariable("KINGDOM", Group.KingdomDiplomacy.Kingdom.Name)
+                    .SetTextVariable("REBEL", Rebel.Name));
         }
 
         protected override void SetUpInternally()
         {
-            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Group.KingdomDiplomacy.Kingdom);
-            if (title == null) return;
-
-            IEnumerable<KeyValuePair<Hero, ExplainedNumber>> claimants = BannerKingsConfig.Instance.TitleModel
-                .CalculateSuccessionLine(title, Group.KingdomDiplomacy.Kingdom.RulingClan, null, -1);
-            List<(Hero, float)> results = new List<(Hero, float)>();
-            foreach (var tuple in claimants)
+            List<(Clan, float)> results = new List<(Clan, float)>();
+            foreach (Clan clan in Group.MemberClans)
             {
-                Claimant = tuple.Key;
-                results.Add(new (tuple.Key,
-                    BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroJoinChance(Group.Leader, Group, Group.KingdomDiplomacy)
+                results.Add(new (clan,
+                    BannerKingsConfig.Instance.InterestGroupsModel.CalculateClanInfluence(clan, Group.KingdomDiplomacy)
                     .ResultNumber));
             }
 
-            Claimant = null;
-            Claimant = MBRandom.ChooseWeighted(results);
+            Rebel = MBRandom.ChooseWeighted(results);
         }
 
         public override void ShowPlayerDemandOptions()
         {
-            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Group.KingdomDiplomacy.Kingdom);
-            IEnumerable<KeyValuePair<Hero, ExplainedNumber>> claimants = BannerKingsConfig.Instance.TitleModel
-                    .CalculateSuccessionLine(title, Group.KingdomDiplomacy.Kingdom.RulingClan, null, -1);
             List<InquiryElement> list = new List<InquiryElement>();
-            foreach (var tuple in claimants)
+            var playerClan = Clan.PlayerClan;
+            list.Add(new InquiryElement(playerClan,
+                playerClan.Name.ToString(),
+                new ImageIdentifier(playerClan.Banner)));
+
+            foreach (Clan clan in Group.KingdomDiplomacy.Kingdom.Clans)
             {
-                Hero hero = tuple.Key;
-                TextObject hint = new TextObject("{=UoPv1RvG}{HERO} {ROLE}, a family of {PEERAGE}.{newline}{newline}{REASON}{newline}{newline}Claim strength: {RESULT}{newline}-----{newline}{EXPLANATION}")
+                if (clan == Group.KingdomDiplomacy.Kingdom.RulingClan || clan == playerClan) continue;
+
+                Hero hero = clan.Leader;
+                BKExplainedNumber join = BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroJoinChance(hero,
+                    Group,
+                    Group.KingdomDiplomacy);
+                
+                TextObject hint = new TextObject("{=UoPv1RvG}{HERO} {ROLE}, a family of {PEERAGE} and holder of {FIEFS} fiefs.{newline}Willingness to join group: {RESULT}{newline}-----{newline}{EXPLANATION}")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("ROLE", GetHeroRoleText(hero))
                     .SetTextVariable("FIEFS", hero.Clan.Fiefs.Count)
                     .SetTextVariable("PEERAGE", BannerKingsConfig.Instance.CourtManager.GetCouncil(hero.Clan).Peerage.Name)
                     .SetTextVariable("REASON", new TextObject("{=F2N7WBbz}This person is willing to back your radical group."))
-                    .SetTextVariable("RESULT", tuple.Value.ResultNumber)
-                    .SetTextVariable("EXPLANATION", tuple.Value.GetExplanations());
+                    .SetTextVariable("RESULT", join.ResultNumber)
+                    .SetTextVariable("EXPLANATION", join.GetExplanations());
 
-                list.Add(new InquiryElement(hero,
-                    new TextObject("{=bn3YBXvb}{NAME} - {SCORE}")
-                    .SetTextVariable("NAME", hero.Name)
-                    .SetTextVariable("SCORE", tuple.Value.ResultNumber.ToString("0"))
-                    .ToString(),
-                    new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject, true)),
-                    true,
+                list.Add(new InquiryElement(clan,
+                    clan.Name.ToString(),
+                    new ImageIdentifier(clan.Banner),
+                    join.ResultNumber > 0f,
                     hint.ToString()));
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(Name.ToString(),
-                new TextObject("{=YjfTwnhj}As leader of a claimant group, you must choose the claimant that shall be backed by the group. This decision is final and will not change until the entire claimant group is unmade.{newline}{newline}Possible claimants are all the possible successors of the {TITLE} according to its {SUCCESSION} succession law.")
-                .SetTextVariable("TITLE", title.FullName)
-                .SetTextVariable("SUCCESSION", title.Contract.Succession.Name)
+                new TextObject("{=!}As leader of the secession group, you must choose who would rule the newly founded realm that secedes from the {KINGDOM}. This decision is final and will not change until the entire group is unmade.{newline}{newline}You may chose yourself or any other peers that would be willing to join the group.")
+                .SetTextVariable("KINGDOM", Group.KingdomDiplomacy.Kingdom.Name)
                 .ToString(),
                 list,
                 true,
@@ -283,8 +263,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 String.Empty,
                 (List<InquiryElement> list) =>
                 {
-                    Hero hero = (Hero)list[0].Identifier;
-                    Claimant = hero;
+                    Clan clan = (Clan)list[0].Identifier;
+                    Rebel = clan;
                     SetTexts();
                     (Group as RadicalGroup).ViewModel.RefreshValues();
                 },
@@ -294,5 +274,5 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     (Group as RadicalGroup).ViewModel.RefreshValues();
                 }));
         }
-    }
+    } 
 }
