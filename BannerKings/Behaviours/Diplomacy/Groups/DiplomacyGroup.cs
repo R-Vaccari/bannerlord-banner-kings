@@ -19,12 +19,21 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         [SaveableProperty(12)] public List<Hero> Members { get; protected set; }
         [SaveableProperty(9)] public Dictionary<Hero, CampaignTime> JoinTime { get; protected set; }
 
+        public List<Clan> MemberClans => Members.ConvertAll(x => x.Clan);
+
         public Hero FactionLeader => KingdomDiplomacy.Kingdom.Leader;
 
         public abstract bool IsInterestGroup { get; }
         public abstract Demand CurrentDemand { get; }
         public bool IsRadicalGroup => !IsInterestGroup;
-        public bool IsGroupActive => Leader != null && Leader.IsAlive;
+        public bool IsGroupActive
+        {
+            get
+            {
+                bool leader = Leader != null && Leader.IsAlive;
+                return IsInterestGroup ? leader : leader && CurrentDemand.Active;
+            }
+        }
 
         public abstract void SetNewLeader(KingdomDiplomacy diplomacy);
         public abstract bool CanHeroJoin(Hero hero, KingdomDiplomacy diplomacy);

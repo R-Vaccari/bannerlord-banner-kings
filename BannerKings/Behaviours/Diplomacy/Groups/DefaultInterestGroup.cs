@@ -1,8 +1,8 @@
 using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.Behaviours.Diplomacy.Wars;
+using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Titles.Laws;
-using BannerKings.Managers.Traits;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
