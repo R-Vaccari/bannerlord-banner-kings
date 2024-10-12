@@ -5,21 +5,17 @@ using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Grace;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Titles;
+using BannerKings.Models.BKModels.Abstract;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
 {
-    public class BKCouncilModel : IBannerKingsModel
+    public class BKCouncilModel : CouncilModel
     {
-        public ExplainedNumber CalculateEffect(Settlement settlement)
-        {
-            return new ExplainedNumber();
-        }
-        public ExplainedNumber CalculateAdmCosts(CouncilData data, bool explanations = false)
+        public override ExplainedNumber CalculateAdmCosts(CouncilData data, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
             result.LimitMin(0f);
@@ -44,7 +40,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateGraceTarget(CouncilData data, bool explanations = false)
+        public override ExplainedNumber CalculateGraceTarget(CouncilData data, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
             result.LimitMin(0f);
@@ -92,7 +88,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateExpectedGrace(CouncilData data, bool explanations = false)
+        public override ExplainedNumber CalculateExpectedGrace(CouncilData data, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
             result.LimitMin(0f);
@@ -142,7 +138,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateRelocateCourtPrice(Clan clan, Town target, bool explanations = false)
+        public override ExplainedNumber CalculateRelocateCourtPrice(Clan clan, Town target, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber * 5f, 
                 explanations);
@@ -160,7 +156,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateHeroCompetence(Hero hero, CouncilMember position, bool ignoreTask = false, bool explanations = false)
+        public override ExplainedNumber CalculateHeroCompetence(Hero hero, CouncilMember position, bool ignoreTask = false, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0f, explanations);
             result.LimitMin(0f);
@@ -213,45 +209,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public (bool, string) IsCouncilRoyal(Clan clan)
-        {
-            var explanation = new TextObject("{=WJFzmFHu}Legal crown council.");
-
-            var kingdom = clan.Kingdom;
-            if (kingdom == null)
-            {
-                explanation = new TextObject("{=JDFpx1eN}No kingdom.");
-                return new ValueTuple<bool, string>(false, explanation.ToString());
-            }
-
-            if (clan.Kingdom.RulingClan != clan)
-            {
-                explanation = new TextObject("{=RWoYaSfD}Not the ruling clan.");
-                return new ValueTuple<bool, string>(false, explanation.ToString());
-            }
-
-            var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-            if (sovereign == null)
-            {
-                explanation = new TextObject("{=CGOqUHZb}Does not hold faction's sovereign title.");
-                return new ValueTuple<bool, string>(false, explanation.ToString());
-            }
-
-            return new ValueTuple<bool, string>(true, explanation.ToString());
-        }
-
-        public bool WillAcceptAction(CouncilAction action, Hero hero)
-        {
-            if (action.Type != CouncilActionType.REQUEST)
-            {
-                return true;
-            }
-
-            return action.Possible;
-        }
-
-
-        public CouncilAction GetAction(CouncilActionType type, CouncilData council, Hero requester,
+        public override CouncilAction GetAction(CouncilActionType type, CouncilData council, Hero requester,
             CouncilMember targetPosition, CouncilMember currentPosition = null,
             bool appointed = false)
         {

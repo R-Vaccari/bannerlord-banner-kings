@@ -341,7 +341,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateDemesneLimit(Hero hero, bool descriptions = false)
+        public override ExplainedNumber CalculateDemesneLimit(Hero hero, bool descriptions = false)
         {
             var result = new ExplainedNumber(0.5f, descriptions);
             result.LimitMin(0.5f);
@@ -393,7 +393,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateVassalLimit(Hero hero)
+        public override ExplainedNumber CalculateVassalLimit(Hero hero)
         {
             var result = new ExplainedNumber(0.5f, true);
             result.LimitMin(0f);
