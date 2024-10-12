@@ -5,6 +5,7 @@ using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Models.BKModels.Abstract;
+using BannerKings.Settings;
 using BannerKings.Utils.Extensions;
 using BannerKings.Utils.Models;
 using System.Collections.Generic;
@@ -401,13 +402,13 @@ namespace BannerKings.Models.BKModels
                 clanInfluences.Add(clan, f);
             }
 
-            result.Add(-0.11f + (clanInfluences[hero.Clan] / totalClanInfluence), new TextObject("{=!}Reluctance"));
+            result.Add(-BannerKingsSettings.Instance.RadicalGroup + (clanInfluences[hero.Clan] / totalClanInfluence), new TextObject("{=!}Reluctance"));
             Hero ruler = diplomacy.Kingdom.Leader;
             float support = -MBMath.Map(diplomacy.Legitimacy, 0f, 1f, -0.5f, 0.5f);
             result.Add(support, new TextObject("{=KDH6VoKQ}Legitimacy of {HERO}")
                 .SetTextVariable("HERO", ruler.Name));
 
-            float relation = -MBMath.Map(hero.GetRelation(ruler), -100f, 100f, -0.5f, 0.5f);
+            float relation = -MBMath.Map(hero.GetRelation(ruler), -100f, 100f, -0.75f, 0.75f);
             result.Add(relation, new TextObject("{=nnYfQnWv}{HERO1}`s opinion of {HERO2}")
                     .SetTextVariable("HERO1", hero.Name)
                     .SetTextVariable("HERO2", ruler.Name));
