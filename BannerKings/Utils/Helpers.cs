@@ -11,7 +11,6 @@ using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.AgentOrigins;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.Conversation.Persuasion;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -37,13 +36,38 @@ namespace BannerKings.Utils
             return xmlDocument;
         }
 
+        public static void ApplyPerk(PerkObject perk, Hero hero, ref ExplainedNumber result, bool primary = true)
+        {
+            if (hero.GetPerkValue(perk))
+            {
+                if (primary)
+                {
+                    if (perk.PrimaryIncrementType == SkillEffect.EffectIncrementType.Add)
+                        result.Add(perk.PrimaryBonus, perk.Name);
+                    else result.AddFactor(perk.PrimaryBonus, perk.Name);
+                }
+                else
+                {
+                    if (perk.SecondaryIncrementType == SkillEffect.EffectIncrementType.Add)
+                        result.Add(perk.SecondaryBonus, perk.Name);
+                    else result.AddFactor(perk.SecondaryBonus, perk.Name);
+                }
+            }
+        }
+
         public static void ApplyFeat(FeatObject feat, PartyBase party, ref ExplainedNumber result)
         {
-            if (PartyBaseHelper.HasFeat(party, feat))
+            try
             {
-                if (feat.IncrementType == FeatObject.AdditionType.Add)
-                    result.Add(feat.EffectBonus, GameTexts.FindText("str_culture"));
-                else result.AddFactor(feat.EffectBonus, GameTexts.FindText("str_culture"));
+                if (PartyBaseHelper.HasFeat(party, feat))
+                {
+                    if (feat.IncrementType == FeatObject.AdditionType.Add)
+                        result.Add(feat.EffectBonus, GameTexts.FindText("str_culture"));
+                    else result.AddFactor(feat.EffectBonus, GameTexts.FindText("str_culture"));
+                }
+            } catch (NullReferenceException e)
+            {
+
             }
         }
 

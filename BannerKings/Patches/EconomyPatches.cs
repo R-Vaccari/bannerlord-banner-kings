@@ -515,10 +515,10 @@ namespace BannerKings.Patches
                     goldChange.Add(villageTotal, new TextObject("{=GikQuojv}Village Demesnes"));
                     if (!includeDetails)
                     {
-                        goldChange.Add(explainedNumber.ResultNumber, new TextObject("{=!}Walled Demesnes", null), null);
+                        goldChange.Add(explainedNumber.ResultNumber, new TextObject("{=!}Walled Demesnes"), null);
                         return false;
                     }
-                    goldChange.AddFromExplainedNumber(explainedNumber, new TextObject("{=!}Walled Demesnes", null));
+                    goldChange.AddFromExplainedNumber(explainedNumber, new TextObject("{=!}Walled Demesnes"));
                     return false;
                 }
 
