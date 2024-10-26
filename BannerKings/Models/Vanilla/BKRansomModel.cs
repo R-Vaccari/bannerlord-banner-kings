@@ -19,15 +19,8 @@ namespace BannerKings.Models.Vanilla
                     var crime =((BKCriminalPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "criminal"))
                         .Policy;
                     if (crime == CriminalPolicy.Enslavement)
-                    {
                         result = (int)BannerKingsConfig.Instance.GrowthModel.CalculateSlavePrice(settlement).ResultNumber;
-                    }
-                    else
-                    {
-                        result = (int)(result * 0.5f);
-                    }
                 }
-
 
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(sellerHero);
                 if (prisoner.IsHero && education.HasPerk(BKPerks.Instance.OutlawKidnapper))
