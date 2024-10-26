@@ -90,6 +90,8 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(-1f);
             result.LimitMax(1f);
 
+            if (attacker.IsEliminated || defender.IsEliminated) return result;
+
             StanceLink attackerLink = attacker.GetStanceWith(defender);
             CasusBelli justification = war.CasusBelli;
             float totalWarScore = CalculateTotalWarScore(war).ResultNumber;
