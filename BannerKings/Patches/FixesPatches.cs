@@ -18,6 +18,7 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -27,6 +28,18 @@ namespace BannerKings.Patches
 {
     internal class FixesPatches
     {
+        [HarmonyPatch(typeof(BuildingHelper))]
+        internal class BuildingHelperPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("GetProgressOfBuilding")]
+            private static bool GetProgressOfBuildingPrefix(Building building, Town town, ref float __result)
+            {
+                __result = building.BuildingProgress / (float)building.GetConstructionCost();
+                return false;
+            }
+        }
+
         [HarmonyPatch(typeof(MobilePartyHelper))]
         internal class MobilePartyHelperPatches
         {
