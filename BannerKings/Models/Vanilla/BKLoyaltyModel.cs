@@ -149,7 +149,6 @@ namespace BannerKings.Models.Vanilla
         {
             var result = new ExplainedNumber(0f, includeDescriptions);
             GetSettlementLoyaltyChangeDueToFoodStocks(town, ref result);
-            GetSettlementLoyaltyChangeDueToGovernorCulture(town, ref result);
             GetSettlementLoyaltyChangeDueToOwnerCulture(town, ref result);
             GetSettlementLoyaltyChangeDueToPolicies(town, ref result);
             GetSettlementLoyaltyChangeDueToProjects(town, ref result);
@@ -217,13 +216,8 @@ namespace BannerKings.Models.Vanilla
                         return;
                     }
 
-                    explainedNumber.Add(MathF.Abs(result) * (town.Governor.Culture == town.Culture ? 0.1f : -0.1f), GovernorCultureText);
-
-                    var lordshipAdaptivePerk = BKPerks.Instance.LordshipAdaptive;
-                    if (town.Culture != town.Governor.Culture && town.Governor.GetPerkValue(lordshipAdaptivePerk))
-                    {
-                        explainedNumber.AddFactor(-0.15f, lordshipAdaptivePerk.Name);
-                    }
+                    explainedNumber.Add(MathF.Abs(result) * (town.Governor.Culture == town.Culture ? 0.1f : 
+                        (town.Governor.GetPerkValue(BKPerks.Instance.LordshipAdaptive) ? -0.085f : -0.1f)), GovernorCultureText);
                 } 
             }
             else if (town.Settlement.OwnerClan.Culture != town.Settlement.Culture) // vanilla behavior
@@ -292,19 +286,6 @@ namespace BannerKings.Models.Vanilla
                 {
                     explainedNumber.Add(-1f, DefaultPolicies.DebasementOfTheCurrency.Name);
                 }
-            }
-        }
-
-        private void GetSettlementLoyaltyChangeDueToGovernorCulture(Town town, ref ExplainedNumber explainedNumber)
-        {
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
-            {
-                // Ignore if populated. Governor effect is calculated in GetSettlementLoyaltyChangeDueToOwnerCulture
-            }
-            else if (town.Governor != null)
-            {
-                explainedNumber.Add(town.Governor.Culture == town.Culture ? 1f : -1f, GovernorCultureText);
             }
         }
 
