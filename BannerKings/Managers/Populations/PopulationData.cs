@@ -12,7 +12,6 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
-using static HarmonyLib.Code;
 
 namespace BannerKings.Managers.Populations
 {
@@ -154,11 +153,6 @@ namespace BannerKings.Managers.Populations
         {
             if (target == PopType.None)
             {
-                if (settlement.Owner == Hero.MainHero)
-                {
-                    InformationManager.DisplayMessage(new InformationMessage());
-                }
-
                 var divisibleNegative = pops * -1f > 20;
                 if (pops > 20 || divisibleNegative)
                 {

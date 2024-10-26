@@ -158,8 +158,7 @@ namespace BannerKings.Managers.CampaignStart
                 () =>
                 {
                     var templates = Game.Current.ObjectManager.GetObjectTypeList<PartyTemplateObject>();
-                    var template = templates.FirstOrDefault(x =>
-                        x.StringId == "caravan_template_" + Hero.MainHero.Culture.StringId);
+                    var template = Hero.MainHero.Culture.CaravanPartyTemplate;
                     var party = MobileParty.MainParty;
 
                     var items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
