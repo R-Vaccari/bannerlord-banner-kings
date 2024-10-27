@@ -248,7 +248,6 @@ namespace BannerKings.Behaviours.Diplomacy
             CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnNewGameCreated);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnNewGameCreated);
             CampaignEvents.KingdomCreatedEvent.AddNonSerializedListener(this, OnKingdomCreated);
-            CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
             CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnOwnerChanged);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.RulingClanChanged.AddNonSerializedListener(this, OnRulerChanged);
@@ -380,6 +379,19 @@ namespace BannerKings.Behaviours.Diplomacy
             var toRemove = new List<War>();
             foreach (War war in wars)
             {
+                if (war.CasusBelli != null && war.CasusBelli.IsInvalid(war))
+                {
+                    toRemove.Add(war);
+                    InformationManager.DisplayMessage(new InformationMessage(
+                        new TextObject("{=!}The {CB} justification between the {ATTACKER} and {DEFENDER} has ended inconclusively.")
+                        .SetTextVariable("CB", war.CasusBelli.Name)
+                        .SetTextVariable("ATTACKER", war.Attacker.Name)
+                        .SetTextVariable("DEFENDER", war.Defender.Name)
+                        .ToString(), 
+                        Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
+                    continue;
+                }
+
                 war.Update();
                 if (!war.Attacker.IsAtWarWith(war.Defender)) toRemove.Add(war);
             }
@@ -410,6 +422,7 @@ namespace BannerKings.Behaviours.Diplomacy
                     OnKingdomDestroyed(kingdom);
                     continue;
                 }
+                else if (kingdom.Clans.Count == 0) DestroyKingdomAction.Apply(kingdom);
 
                 float strength = kingdom.TotalStrength;
                 int fiefs = kingdom.Fiefs.Count;
