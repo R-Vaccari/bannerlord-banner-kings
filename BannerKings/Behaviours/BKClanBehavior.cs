@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Actions;
+using BannerKings.Behaviours.Diplomacy;
 using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
@@ -72,7 +73,7 @@ namespace BannerKings.Behaviours
                 TextObject origin;
                 if (!textObject.GetVariableValue("ORIGIN_SETTLEMENT", out origin))
                 {
-                    finalName = new TextObject("{=!}{CLAN}-{SETTLEMENT}")
+                    finalName = new TextObject("{=!}{CLAN}")
                         .SetTextVariable("CLAN", textObject);
                 }
                 else finalName = textObject.SetTextVariable("ORIGIN_SETTLEMENT", settlement.Name);
@@ -612,6 +613,21 @@ namespace BannerKings.Behaviours
                         .SetTextVariable("KINGDOM", name)
                         .ToString(),
                         Color.FromUint(TextHelper.COLOR_LIGHT_YELLOW)));
+
+                    Kingdom rebel = clan.Kingdom;
+    
+                    uint color1 = 0;
+                    uint color2 = 0;
+                    foreach (Kingdom kingdom in FactionManager.GetEnemyKingdoms(rebel))
+                    {
+                        Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().TriggerRebelWar(clan.Kingdom,
+                            kingdom,
+                            null);
+                        color1 = kingdom.Color;
+                        color2 = kingdom.Color2;
+                    }
+
+                    RebellionActions.InitializeKingdom(rebel, name, color1, color2);
                 }
             }
         }
