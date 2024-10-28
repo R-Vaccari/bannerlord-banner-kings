@@ -57,7 +57,8 @@ namespace BannerKings.UI.Management.Villages
                     new Action<SettlementProjectVM, bool>(OnCurrentProjectSelection),
                     new Action<SettlementProjectVM>(OnCurrentProjectSet),
                     new Action(OnResetCurrentProject),
-                    building);
+                    building, 
+                    currentSettlement);
                 AvailableProjects.Add(VillageBuildingProjectVM);
                 if (VillageBuildingProjectVM.Building.BuildingType.StringId == villageData.CurrentBuilding.BuildingType.StringId)
                 {
@@ -74,7 +75,8 @@ namespace BannerKings.UI.Management.Villages
                         new Action<SettlementProjectVM, bool>(OnCurrentProjectSelection),
                         new Action<SettlementProjectVM>(OnCurrentProjectSet),
                         new Action(OnResetCurrentProject),
-                        building2);
+                        building2, 
+                        currentSettlement);
                     DailyDefaultList.Add(VillageBuildingDailyProjectVM);
                     if (VillageBuildingDailyProjectVM.Building.BuildingType.StringId ==
                         villageData.CurrentDefault.BuildingType.StringId)
