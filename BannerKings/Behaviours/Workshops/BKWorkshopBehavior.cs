@@ -225,6 +225,12 @@ namespace BannerKings.Behaviours.Workshops
             {
                 AddInventory(workshop);
                 inventories[workshop].Tick();
+
+                if (workshop.Owner == null)
+                {
+                    Hero notableOwnerForWorkshop = Campaign.Current.Models.WorkshopModel.GetNotableOwnerForWorkshop(workshop);
+                    ChangeOwnerOfWorkshopAction.ApplyByDeath(workshop, notableOwnerForWorkshop);
+                }
             }
         }
 

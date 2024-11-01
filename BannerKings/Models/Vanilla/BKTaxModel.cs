@@ -198,7 +198,7 @@ namespace BannerKings.Models.Vanilla
 
                     foreach (Workshop wk in town.Workshops)
                     {
-                        if (wk.Owner != town.OwnerClan.Leader)
+                        if (wk.Owner != null && wk.Owner != town.OwnerClan.Leader)
                         {
                             baseResult.Add(BannerKingsConfig.Instance.ClanFinanceModel.GetWorkshopTaxes(wk),
                                 new TextObject("{=GKtDoLCd}Taxes from {WORKSHOP} ({OWNER})")
