@@ -19,6 +19,7 @@ using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -28,6 +29,27 @@ namespace BannerKings.Patches
 {
     internal class FixesPatches
     {
+
+        [HarmonyPatch(typeof(Workshop))]
+        internal class WorkshopPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("ChangeOwnerOfWorkshop")]
+            private static bool ChangeOwnerOfWorkshopPrefix(Workshop __instance, Hero newOwner, WorkshopType type, int capital)
+            {
+                if (__instance.Owner != null) return true;
+
+                AccessTools.Field(__instance.GetType(), "_owner").SetValue(__instance, newOwner);
+                __instance.Owner.AddOwnedWorkshop(__instance);
+                AccessTools.Field(__instance.GetType(), "Capital").SetValue(__instance, capital);
+                if (type != __instance.WorkshopType)
+                    __instance.ChangeWorkshopProduction(type);
+                
+                return false;
+            }
+        }
+        
+        
         [HarmonyPatch(typeof(BuildingHelper))]
         internal class BuildingHelperPatches
         {
