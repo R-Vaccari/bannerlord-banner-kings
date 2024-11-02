@@ -30,6 +30,14 @@ namespace BannerKings.Behaviours
             CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnPartyDailyTick);
             CampaignEvents.RaidCompletedEvent.AddNonSerializedListener(this, OnRaidCompleted);
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
+            CampaignEvents.MobilePartyDestroyed.AddNonSerializedListener(this, (MobileParty party, PartyBase destroyerParty) =>
+            {
+                foreach (var tuple in new Dictionary<Hero, MobileParty>(bandits))
+                {
+                    if (tuple.Value == party)
+                        bandits.Remove(tuple.Key);
+                }
+            });
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -163,9 +171,12 @@ namespace BannerKings.Behaviours
 
             foreach (var heroParty in bandits.Values)
             {
-                if (TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(party, heroParty) <= 10f)
+                if (heroParty != null && heroParty.IsActive)
                 {
-                    SetFollow(heroParty, party);
+                    if (TaleWorlds.CampaignSystem.Campaign.Current.Models.MapDistanceModel.GetDistance(party, heroParty) <= 10f)
+                    {
+                        SetFollow(heroParty, party);
+                    }
                 }
             }
         }
