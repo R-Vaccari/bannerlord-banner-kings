@@ -198,5 +198,15 @@ namespace BannerKings.Settings
             HintText = "{=!}Defines the amount of years, counting from the starting campaign year, that radical groups will need before starting to form. May help letting relationships build so groups are more randomized. Default: 1.")]
         [SettingPropertyGroup("{=!}Diplomacy")]
         public int RadicalGroupYears { get; set; } = 1;
+
+        [SettingPropertyInteger("{=!}Friend Threshold", minValue: 10, maxValue: 90, "#0", RequireRestart = false,
+            HintText = "{=!}Defines the relationship threshold for heroes to consider each other friends. Vanilla is 10. Default: 50.")]
+        [SettingPropertyGroup("{=!}Diplomacy")]
+        public int FriendlyThreshold { get; set; } = 50;
+
+        [SettingPropertyInteger("{=!}Enemy Threshold", minValue: -90, maxValue: -10, "#0", RequireRestart = false,
+            HintText = "{=!}Defines the relationship threshold for heroes to consider each other enemies. Vanilla is -10. Default: -50.")]
+        [SettingPropertyGroup("{=!}Diplomacy")]
+        public int HostileThreshold { get; set; } = -50;
     }
 }
