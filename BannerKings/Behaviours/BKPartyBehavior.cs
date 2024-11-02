@@ -121,6 +121,8 @@ namespace BannerKings.Behaviours
                 {
                     party.RemovePartyLeader();
                 }
+
+                HandleBandits(party);
             }
         }
 
@@ -173,6 +175,21 @@ namespace BannerKings.Behaviours
             VillagersCastleTick(party);
             AddCustomPartyBehaviors(party);
             GoBuyFood(party);
+            HandleBandits(party);
+        }
+
+        private void HandleBandits(MobileParty party)
+        {
+            if (party.IsLordParty && party != MobileParty.MainParty)
+            {
+                foreach (var element in party.PrisonRoster.GetTroopRoster())
+                {
+                    if (element.Character != null && element.Character.IsHero && element.Character.Occupation == Occupation.Bandit)
+                    {
+                        party.PrisonRoster.AddToCounts(element.Character, -element.Number);
+                    }
+                }
+            }
         }
 
         private void GoBuyFood(MobileParty lordParty)
