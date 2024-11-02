@@ -305,11 +305,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
                     return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture && x.MapFaction == war.Attacker).Count >= 2;
                 },
-                (War war) =>
-                {
-                    var targetFaction = war.CasusBelli.Fief.MapFaction;
-                    return targetFaction != war.Defender && targetFaction != war.Attacker;
-                },
+                (War war) => war.Defender.Fiefs.Count == 0,
                 (IFaction faction1, IFaction faction2, CasusBelli casusBelli) =>
                 {
                     var id = faction1.StringId;
@@ -347,11 +343,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
                     return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture).Count >= 8;
                 },
-                (War war) =>
-                {
-                    var targetFaction = war.CasusBelli.Fief.MapFaction;
-                    return targetFaction != war.Defender && targetFaction != war.Attacker;
-                },
+                (War war) => war.Defender.Fiefs.Count == 0,
                 (IFaction faction1, IFaction faction2, CasusBelli casusBelli) =>
                 {
                     var id = faction1.StringId;
@@ -387,11 +379,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
                     return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture && x.MapFaction == war.Attacker).Count >= 2;
                 },
-                (War war) =>
-                {
-                    var targetFaction = war.CasusBelli.Fief.MapFaction;
-                    return targetFaction != war.Defender && targetFaction != war.Attacker;
-                },
+                (War war) => war.Defender.Fiefs.Count == 0,
                 (IFaction faction1, IFaction faction2, CasusBelli casusBelli) =>
                 {
                     bool adequateKingdom = false;
@@ -461,11 +449,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
                     return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture && x.MapFaction == war.Attacker).Count >= 1;
                 },
-                (War war) =>
-                {
-                    var targetFaction = war.CasusBelli.Fief.MapFaction;
-                    return targetFaction != war.Defender && targetFaction != war.Attacker;
-                },
+                (War war) => war.Defender.Fiefs.Count == 0,
                 (IFaction faction1, IFaction faction2, CasusBelli casusBelli) =>
                 {
                     bool hasFiefs = faction2.Fiefs.ToList().FindAll(x => x.Culture == faction2.Culture).Count() >= 1;

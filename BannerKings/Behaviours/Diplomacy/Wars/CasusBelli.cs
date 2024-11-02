@@ -159,7 +159,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
         }
 
         public bool IsFulfilled(War war) => isFulfilled(war);
-        public bool IsInvalid(War war) => isInvalid(war);
+        public bool IsInvalid(War war) => !war.Attacker.IsEliminated && !war.Defender.IsEliminated && isInvalid(war);
         public bool IsAdequate(IFaction faction1, IFaction faction2, CasusBelli casusBelli) => isAdequate(faction1, faction2, casusBelli);
         public bool ShowAsOption(Kingdom kingdom) => showAsOption(kingdom);
 
