@@ -1,6 +1,5 @@
 using BannerKings.Actions;
 using BannerKings.Behaviours.Diplomacy.Groups.Demands;
-using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -112,8 +111,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             }
         }
 
-        public override bool CanHeroJoin(Hero hero, KingdomDiplomacy diplomacy) => hero.MapFaction == diplomacy.Kingdom &&
-            hero.MapFaction.Leader != hero && hero.IsClanLeader();
+        public override bool CanHeroJoin(Hero hero, KingdomDiplomacy diplomacy) => 
+            BannerKingsConfig.Instance.InterestGroupsModel.CanHeroJoinARadicalGroup(hero, KingdomDiplomacy);
 
         public override bool CanHeroLeave(Hero hero, KingdomDiplomacy diplomacy)
         {

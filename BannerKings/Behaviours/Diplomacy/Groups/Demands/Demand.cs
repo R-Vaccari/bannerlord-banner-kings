@@ -304,7 +304,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                 List<Hero> heroes = new List<Hero>(30);
                 foreach (Hero hero in Group.KingdomDiplomacy.Kingdom.Heroes)
                 {
-                    if (BannerKingsConfig.Instance.InterestGroupsModel.CanHeroJoinARadicalGroup(hero, Group.KingdomDiplomacy) &&
+                    if (Group.CanHeroJoin(hero, Group.KingdomDiplomacy) &&
                         BannerKingsConfig.Instance.InterestGroupsModel.CalculateHeroJoinChance(hero, Group, Group.KingdomDiplomacy).ResultNumber > 0f)
                         heroes.Add(hero);
                 }
