@@ -192,7 +192,7 @@ namespace BannerKings.UI.Marriages
                 Clan finalClan = GetFinalClan();
                 FinalClanText = finalClan.Name.ToString();
 
-                var influence = BannerKingsConfig.Instance.MarriageModel.GetInfluenceCost(ProposedHero.Hero, true);
+                var influence = BannerKingsConfig.Instance.MarriageModel.GetInfluenceCost(ProposerHero.Hero, ProposedHero.Hero, true);
                 InfluenceCostText = ((int)influence.ResultNumber).ToString();
                 InfluenceCostHint.HintText = new TextObject("{=gJMje5q5}The influence cost associated with this marriage. Influence is associated with the social standing of the other clan. A clan of high standing, such as those leading kingdoms, are valuable marriage targets both within and outside their factions. Thus, the more important a clan is, the more influence is associated with marrying them.\n\n{HINT}")
                     .SetTextVariable("HINT", influence.GetExplanations());
@@ -324,7 +324,7 @@ namespace BannerKings.UI.Marriages
                                ProposedHero.Hero,
                                GetFinalClan(),
                                (int)BannerKingsConfig.Instance.MarriageModel.GetDowryValue(GetDowryHero(), ArrangedMarriage, true).ResultNumber,
-                               (int)BannerKingsConfig.Instance.MarriageModel.GetInfluenceCost(ProposedHero.Hero, true).ResultNumber,
+                               (int)BannerKingsConfig.Instance.MarriageModel.GetInfluenceCost(ProposerHero.Hero,ProposedHero.Hero, true).ResultNumber,
                                ArrangedMarriage,
                                alliance,
                                feast,

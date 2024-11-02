@@ -83,7 +83,7 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms.Mercenary
                     .SetTextVariable("DAYS", Career.ServiceDays)
                     .ToString();
 
-                var pointsGain = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetDailyCareerPointsGain(Career.Clan, true);
+                var pointsGain = BannerKingsConfig.Instance.MercenaryModel.GetDailyCareerPointsGain(Clan.PlayerClan, Career, true);
                 DailyPointsGainText = FormatFloatGain(pointsGain.ResultNumber);
                 DailyPointsGainHint = new HintViewModel(new TextObject("{=!}" + pointsGain.GetExplanations()));
 
