@@ -38,7 +38,7 @@ namespace BannerKings.Models.Vanilla
                 return false;
             }
 
-            if (!BannerKingsConfig.Instance.DiplomacyModel.IsTradeAcceptable(kingdom1, kingdom2))
+            if (!BannerKingsConfig.Instance.DiplomacyModel.WillAcceptTrade(kingdom1, kingdom2))
             {
                 reason = new TextObject("{=KK3ZwTsE}{KINGDOM} is not interested in a trade pact with your realm.")
                     .SetTextVariable("KINGDOM", kingdom2.Name);

@@ -16,8 +16,11 @@ namespace BannerKings.Models.Vanilla.Abstract
         public abstract ExplainedNumber CalculateHeroFiefScore(Settlement settlement, Hero annexing, bool explanations = false);
         public abstract ExplainedNumber MercenaryLeaveScore(Clan mercenaryClan, Kingdom kingdom, bool explanations = false);
         public abstract ExplainedNumber GetTruceDenarCost(Kingdom proposer, Kingdom proposed, float years = 3f, bool explanations = false);
+        public abstract void AddProposeDiplomacyCostEffects(Hero proposer, ref ExplainedNumber result);
+        public abstract void AddAmicablePactDesireEffects(Kingdom proposer, Kingdom proposed, ref ExplainedNumber result, bool explanations = false);
+        public abstract ExplainedNumber GetTradeDesire(Kingdom proposer, Kingdom proposed, bool explanations = false);
         public abstract ExplainedNumber GetAllianceDesire(Kingdom proposer, Kingdom proposed, bool explanations = false);
-        public abstract bool IsTradeAcceptable(Kingdom proposer, Kingdom proposed, bool explanations = false);
+        public abstract bool WillAcceptTrade(Kingdom proposer, Kingdom proposed, bool explanations = false);
         public abstract bool IsTruceAcceptable(Kingdom proposer, Kingdom proposed, bool explanations = false);
         public abstract bool WillAcceptAlliance(Kingdom proposer, Kingdom proposed);
         public abstract ExplainedNumber GetAllianceDenarCost(Kingdom proposer, Kingdom proposed, bool explanations = false);

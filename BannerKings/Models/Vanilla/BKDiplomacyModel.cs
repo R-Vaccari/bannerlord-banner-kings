@@ -20,12 +20,16 @@ using TaleWorlds.Core;
 using BannerKings.Behaviours.Mercenary;
 using BannerKings.Models.Vanilla.Abstract;
 using BannerKings.CampaignContent.Traits;
+using BannerKings.Managers.Skills;
+using BannerKings.Settings;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKDiplomacyModel : DiplomacyModel
     {
         public float TRADE_PACT_INFLUENCE_CAP { get;} = 100f;
+        public override int MaxNeutralRelationLimit => BannerKingsSettings.Instance.FriendlyThreshold;
+        public override int MinNeutralRelationLimit => BannerKingsSettings.Instance.HostileThreshold;
 
         public override float GetRelationIncreaseFactor(Hero hero1, Hero hero2, float relationChange)
         {
@@ -51,6 +55,12 @@ namespace BannerKings.Models.Vanilla
                 .SetTextVariable("HERO", vassal.Name));
 
             return cost;
+        }
+
+        public override void AddProposeDiplomacyCostEffects(Hero proposer, ref ExplainedNumber result)
+        {
+            Utils.Helpers.ApplyTraitEffect(proposer, DefaultTraitEffects.Instance.CalculatingProposals, ref result);
+            Utils.Helpers.ApplyPerk(BKPerks.Instance.LordshipSenateOrator, proposer, ref result, false);
         }
 
         public override int GetInfluenceCostOfAnnexation(Clan proposingClan) =>
@@ -81,13 +91,12 @@ namespace BannerKings.Models.Vanilla
             }
 
             GetPerkEffectsOnKingdomDecisionInfluenceCost(proposingClan, ref cost);
-            Utils.Helpers.ApplyTraitEffect(proposingClan.Leader, DefaultTraitEffects.Instance.CalculatingProposals, ref cost);
+            AddProposeDiplomacyCostEffects(proposingClan.Leader, ref cost);
             return cost;
         }
 
         public override int GetInfluenceCostOfExpellingClan(Clan proposingClan) =>
             MathF.Round(GetInfluenceCostOfExpellingClanExplained(proposingClan).ResultNumber);
-        
 
         public ExplainedNumber GetInfluenceCostOfExpellingClanExplained(Clan proposingClan)
         {
@@ -96,7 +105,7 @@ namespace BannerKings.Models.Vanilla
                 new TextObject("{=wwYABLRd}Clan Influence Limit"));
 
             GetPerkEffectsOnKingdomDecisionInfluenceCost(proposingClan, ref cost);
-            Utils.Helpers.ApplyTraitEffect(proposingClan.Leader, DefaultTraitEffects.Instance.CalculatingProposals, ref cost);
+            AddProposeDiplomacyCostEffects(proposingClan.Leader, ref cost);
             return cost;
         }
 
@@ -115,7 +124,7 @@ namespace BannerKings.Models.Vanilla
                 new TextObject("{=wwYABLRd}Clan Influence Limit"));
 
             GetPerkEffectsOnKingdomDecisionInfluenceCost(proposingClan, ref cost);
-            Utils.Helpers.ApplyTraitEffect(proposingClan.Leader, DefaultTraitEffects.Instance.CalculatingProposals, ref cost);
+            AddProposeDiplomacyCostEffects(proposingClan.Leader, ref cost);
             return cost;
         }
 
@@ -137,7 +146,7 @@ namespace BannerKings.Models.Vanilla
                 new TextObject("{=wwYABLRd}Clan Influence Limit"));
 
             GetPerkEffectsOnKingdomDecisionInfluenceCost(proposingClan, ref cost);
-            Utils.Helpers.ApplyTraitEffect(proposingClan.Leader, DefaultTraitEffects.Instance.CalculatingProposals, ref cost);
+            AddProposeDiplomacyCostEffects(proposingClan.Leader, ref cost);
             return cost;
         }
 
@@ -264,6 +273,7 @@ namespace BannerKings.Models.Vanilla
                 .SetTextVariable("REPUTATION", 0f));
 
             if (mercenaryClan.IsSect) result.AddFactor(-0.8f, new TextObject("{=!}Sect"));
+            Utils.Helpers.ApplyPerk(BKPerks.Instance.LordshipSellswordCareer, mercenaryClan.Leader, ref result);
             return result;
         }
 
@@ -298,7 +308,9 @@ namespace BannerKings.Models.Vanilla
             if (mercenaryReligion != null && (rulerReligion == null || mercenaryReligion.GetStance(rulerReligion.Faith) == FaithStance.Tolerated))
             {
                 if (mercenaryClan.IsSect) result.Add(1000f, new TextObject("{=!}Shared faith"));
-                else if (!mercenaryClan.IsOutlaw) result.Add(400f, new TextObject("{=!}Shared faith")); 
+                else if (!mercenaryClan.IsOutlaw) result.Add(400f, new TextObject("{=!}Shared faith"));
+
+                Utils.Helpers.ApplyPerk(BKPerks.Instance.TheologySect, kingdom.RulingClan.Leader, ref result);
             }
 
             if (!mercenaryClan.IsOutlaw)
@@ -549,7 +561,8 @@ namespace BannerKings.Models.Vanilla
                 //result.Add((100000f - peace) * MathF.Sqrt(years), clan.Name);
             }
            
-            result.AddFactor(-peace / 100000f, new TextObject("{=!}"));
+            result.AddFactor(-peace / 100000f, new TextObject("{=hAAOEqaJ}Peace interest"));
+            AddProposeDiplomacyCostEffects(proposer.Leader, ref result);
             return result;
         }
 
@@ -561,15 +574,8 @@ namespace BannerKings.Models.Vanilla
             return peace > 0;
         }
 
-        public override bool IsTradeAcceptable(Kingdom proposer, Kingdom proposed, bool explanations = false)
-        {
-            if (proposed == proposer) return false;
-
-            float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason);
-            float influence = BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(proposed.RulingClan)
-                .ResultNumber;
-            return peace > 0 && influence > TRADE_PACT_INFLUENCE_CAP;
-        }
+        public override bool WillAcceptTrade(Kingdom proposer, Kingdom proposed, bool explanations = false) => 
+            GetTradeDesire(proposer, proposed, explanations).ResultNumber > 0f;
 
         public override ExplainedNumber GetTruceDenarCost(Kingdom proposer, Kingdom proposed, float years = 3f, bool explanations = false)
         {
@@ -580,6 +586,33 @@ namespace BannerKings.Models.Vanilla
             float relation = proposed.RulingClan.Leader.GetRelation(proposer.RulingClan.Leader) / 150f;
             result.AddFactor(-relation, new TextObject("{=BlidMNGT}Relation"));
 
+            return result;
+        }
+
+        public override void AddAmicablePactDesireEffects(Kingdom proposer, Kingdom proposed, ref ExplainedNumber result, bool explanations = false)
+        {
+            result.Add(proposer.RulingClan.Leader.GetTraitLevel(DefaultTraits.Honor) * 15f,
+                new TextObject("{=vrm5pNf3}Honor of {HERO}")
+                .SetTextVariable("HERO", proposer.RulingClan.Leader.Name));
+
+            Utils.Helpers.ApplyTraitEffect(proposer.RulingClan.Leader, DefaultTraitEffects.Instance.HonorDiplomacy, ref result);
+            Utils.Helpers.ApplyPerk(BKPerks.Instance.LordshipDiplomaticTies, proposer.Leader, ref result);
+        }
+
+        public override ExplainedNumber GetTradeDesire(Kingdom proposer, Kingdom proposed, bool explanations = false)
+        {
+            ExplainedNumber result = new ExplainedNumber(0, explanations);
+            result.Add(-50f, new TextObject("{=Gq5BnNiN}Reluctance"));
+
+            result.Add(proposed.Leader.GetTraitLevel(DefaultTraits.Generosity) * 10f, 
+                new TextObject("{=wMius2i9}{TITLE} of {NAME}")
+                .SetTextVariable("TITLE", DefaultTraits.Generosity.Name)
+                .SetTextVariable("NAME", proposed.Leader.Name));
+
+            float relation = proposed.RulingClan.Leader.GetRelation(proposer.RulingClan.Leader);
+            result.Add(relation / 3f, new TextObject("{=BlidMNGT}Relation"));
+
+            AddAmicablePactDesireEffects(proposer, proposed, ref result, explanations);
             return result;
         }
 
@@ -609,9 +642,6 @@ namespace BannerKings.Models.Vanilla
                 result.Add(10f, new TextObject("{=qR61PqMa}Shared culture"));
             }
 
-            result.Add(proposer.RulingClan.Leader.GetTraitLevel(DefaultTraits.Honor) * 15f,
-                new TextObject("{=vrm5pNf3}Honor of {HERO}").SetTextVariable("HERO", proposer.RulingClan.Leader.Name));
-
             Religion proposerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(proposer.RulingClan.Leader);
             if (proposerReligion != null)
             {
@@ -633,8 +663,7 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            Utils.Helpers.ApplyTraitEffect(proposer.RulingClan.Leader, DefaultTraitEffects.Instance.HonorDiplomacy, ref result);
-
+            AddAmicablePactDesireEffects(proposer, proposed, ref result, explanations);
             return result;
         }
 
@@ -681,6 +710,7 @@ namespace BannerKings.Models.Vanilla
 
             float peace = GetScoreOfDeclaringPeace(proposed, proposer, proposed, out TextObject reason);
             result.AddFactor(peace / -60000f, new TextObject("{=hAAOEqaJ}Peace interest"));
+            AddProposeDiplomacyCostEffects(proposer.Leader, ref result);
             return result;
         }
 
