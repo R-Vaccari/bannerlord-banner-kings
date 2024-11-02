@@ -55,6 +55,12 @@ namespace BannerKings.Behaviours
                     { DefaultItemCategories.Butter, 1f / (CampaignTime.DaysInWeek * 3f) },
                 };
             });
+
+            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, (CampaignGameStarter starter) =>
+            {
+                foreach (Town t in Town.AllFiefs)
+                    KillBandits(t.Settlement);
+            });
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -159,6 +165,7 @@ namespace BannerKings.Behaviours
                 return;
             }
 
+            KillBandits(settlement);
             TickSettlementData(settlement);
             TickRotting(settlement);
             TickManagement(settlement);
@@ -167,6 +174,20 @@ namespace BannerKings.Behaviours
             TickVillage(settlement);
             HandleMarketGold(settlement);
             HandleIssues(settlement);
+        }
+
+        private void KillBandits(Settlement settlement)
+        {
+            if (settlement.Town != null && settlement.Town.GarrisonParty != null)
+            {
+                foreach (var element in settlement.Town.GarrisonParty.PrisonRoster.GetTroopRoster())
+                {
+                    if (element.Character != null && element.Character.IsHero && element.Character.Occupation == Occupation.Bandit)
+                    {
+                        settlement.Town.GarrisonParty.PrisonRoster.AddToCounts(element.Character, -element.Number);
+                    }
+                }
+            }
         }
 
         private void DeleteOverProduction(Town town)
@@ -627,6 +648,7 @@ namespace BannerKings.Behaviours
         {
             if (settlement.IsCastle)
             {
+                CheckRebellion(settlement);
                 HandleGarrison(settlement.Town);
                 DeleteOverProduction(settlement.Town);
 
@@ -672,6 +694,46 @@ namespace BannerKings.Behaviours
                     ConsumeStash(settlement);
                 }
             }
+        }
+
+        private void CheckRebellion(Settlement castle)
+        {
+            if (castle.Party.MapEvent == null && castle.Party.SiegeEvent == null && !castle.OwnerClan.IsRebelClan && Settlement.CurrentSettlement != castle)
+            {
+                bool inRebelliousState = castle.Town.InRebelliousState;
+                castle.Town.InRebelliousState = (castle.Town.Loyalty <= (float)Campaign.Current.Models.SettlementLoyaltyModel.RebelliousStateStartLoyaltyThreshold);
+                if (inRebelliousState != castle.Town.InRebelliousState)
+                    CampaignEventDispatcher.Instance.TownRebelliousStateChanged(castle.Town, castle.Town.InRebelliousState);
+                
+                if (MBRandom.RandomFloat < 0.25f && CheckRebellionEvent(castle))
+                {
+                    Campaign.Current.GetCampaignBehavior<RebellionsCampaignBehavior>().StartRebellionEvent(castle);
+                }
+            }
+            /*if (castle.IsTown && castle.OwnerClan.IsRebelClan)
+            {
+                float num = MBMath.Map((float)(this._rebelClansAndDaysPassedAfterCreation[castle.OwnerClan] - 1), 0f, 30f, (float)Campaign.Current.Models.SettlementLoyaltyModel.LoyaltyBoostAfterRebellionStartValue, 0f);
+                castle.Town.Loyalty += num;
+            }*/
+        }
+
+        private static bool CheckRebellionEvent(Settlement settlement)
+        {
+            if (settlement.Town.Loyalty <= (float)Campaign.Current.Models.SettlementLoyaltyModel.RebellionStartLoyaltyThreshold)
+            {
+                float militia = settlement.Militia;
+                MobileParty garrisonParty = settlement.Town.GarrisonParty;
+                float num = (garrisonParty != null) ? garrisonParty.Party.TotalStrength : 0f;
+                foreach (MobileParty mobileParty in settlement.Parties)
+                {
+                    if (mobileParty.IsLordParty && FactionManager.IsAlliedWithFaction(mobileParty.MapFaction, settlement.MapFaction))
+                    {
+                        num += mobileParty.Party.TotalStrength;
+                    }
+                }
+                return militia >= num * 1.4f;
+            }
+            return false;
         }
 
         private void TickVillage(Settlement settlement)
