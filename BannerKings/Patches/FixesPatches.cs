@@ -3,6 +3,7 @@ using BannerKings.Managers.Items;
 using BannerKings.Settings;
 using HarmonyLib;
 using Helpers;
+using SandBox;
 using SandBox.View.Map;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.MountAndBlade;
 using static TaleWorlds.CampaignSystem.Issues.EscortMerchantCaravanIssueBehavior;
 
 namespace BannerKings.Patches
@@ -143,6 +145,23 @@ namespace BannerKings.Patches
             {
                 BKManagerBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKManagerBehavior>();
                 behavior.NullManagers();
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(MapScene))]
+        internal class MapScenePatches
+        {
+
+            [HarmonyPrefix]
+            [HarmonyPatch("GetAccessiblePointNearPosition")]
+            private static bool GetAccessiblePointNearPosition(MapScene __instance, Vec2 position, float radius, ref Vec2 __result)
+            {
+                Vec2 vector = MBMapScene.GetAccessiblePointNearPosition(__instance.Scene, position, radius);
+                while (!PartyBase.IsPositionOkForTraveling(vector))
+                {
+                    vector = MBMapScene.GetAccessiblePointNearPosition(__instance.Scene, position, radius);
+                }
                 return true;
             }
         }
