@@ -62,7 +62,7 @@ namespace BannerKings.Models.Vanilla
             float result =  base.GetTargetScoreForFaction(targetSettlement, missionType, mobileParty, ourStrength, numberOfEnemyFactionSettlements, totalEnemyMobilePartyStrength);   
 
             IFaction targetFaction = targetSettlement.MapFaction;
-            if (targetFaction != mobileParty.MapFaction && targetFaction.IsAtWarWith(mobileParty.MapFaction))
+            if (mobileParty.Army != null && targetFaction != mobileParty.MapFaction && targetFaction.IsAtWarWith(mobileParty.MapFaction))
             {
                 War war = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
                     .GetWar(mobileParty.MapFaction, targetFaction);
@@ -75,20 +75,20 @@ namespace BannerKings.Models.Vanilla
                 if (justification.Fief == targetSettlement)
                 {
                     if (missionType == Army.ArmyTypes.Besieger || missionType == Army.ArmyTypes.Defender)
-                        result *= 1.5f;
+                        result *= 1.2f;
                     else if (targetSettlement.IsVillage &&
                         justification.Fief.Town != null &&
                         justification.Fief.BoundVillages.Contains(targetSettlement.Village) &&
                         missionType == Army.ArmyTypes.Raider)
                     {
-                        result *= 1.3f;
+                        result *= 1.1f;
                     }
                 }
 
                 if (targetSettlement.Town != null && (targetSettlement.Town == war.DefenderFront || 
                     targetSettlement.Town == war.AttackerFront))
                 {
-                    result *= 1.25f;
+                    result *= 1.05f;
                 }
             }
 
