@@ -152,7 +152,6 @@ namespace BannerKings.Managers.Skills
 
         #endregion  Gladiator
 
-
         #region  Ritter
 
         public PerkObject RitterIronHorses { get; private set; }
@@ -173,7 +172,6 @@ namespace BannerKings.Managers.Skills
 
         #endregion  Jawwal
 
-
         #region  Varyag
 
         public PerkObject VaryagShieldBrother { get; private set; }
@@ -184,24 +182,23 @@ namespace BannerKings.Managers.Skills
 
         #endregion  Varyag
 
-
         #region Lordship
 
         public PerkObject LordshipEconomicAdministration { get; private set; }
-
         public PerkObject LordshipTraditionalist { get; private set; }
-
         public PerkObject LordshipAdaptive { get; private set; }
-
         public PerkObject LordshipAccolade { get; private set; }
-
         public PerkObject LordshipManorLord { get; private set; }
-
         public PerkObject LordshipMilitaryAdministration { get; private set; }
-
         public PerkObject LordshipClaimant { get; private set; }
-
         public PerkObject LordshipPatron { get; private set; }
+        public PerkObject LordshipCourtly { get; private set; } // council owner
+        public PerkObject LordshipAdvisor { get; private set; } // serve as councilman bonus
+        public PerkObject LordshipAristocraticRites { get; private set; } // grace
+        public PerkObject LordshipSenateOrator { get; private set; } // influence cap, diplomacy?
+        public PerkObject LordshipDiplomaticTies { get; private set; } // ease of diplomacy pacts
+        public PerkObject LordshipRogueConnections { get; private set; } // mercenary bonuses
+        public PerkObject LordshipSellswordCareer { get; private set; } 
 
         #endregion Lordship
 
@@ -245,6 +242,10 @@ namespace BannerKings.Managers.Skills
         public PerkObject TheologyRitesOfPassage { get; private set; }
         public PerkObject TheologyPreacher { get; private set; }
         public PerkObject TheologyLithurgy { get; private set; }
+        public PerkObject TheologyMatrimony { get; private set; } // + spouse score
+        public PerkObject TheologyConvert { get; private set; } // + converter outros
+        public PerkObject TheologyArchPriest { get; private set; } // head of faith
+        public PerkObject TheologySect { get; private set; } // sect mercenary bonus
 
         #endregion  Theology
 
@@ -505,7 +506,6 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             #endregion Siege
-
 
             #region Jawwal
 
@@ -838,7 +838,6 @@ namespace BannerKings.Managers.Skills
 
             #endregion Ritter
 
-
             #region Varyag
 
             VaryagShieldBrother = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleVaryagShieldBrother"));
@@ -875,7 +874,6 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             #endregion Varyag
-
 
             #region Gladiator
 
@@ -924,7 +922,7 @@ namespace BannerKings.Managers.Skills
             TheologyFaithful = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyFaithful"));
             TheologyFaithful.Initialize("{=mnpTkVYf}Faithful", BKSkills.Instance.Theology, 
                 GetTierCost(1),
-                LordshipAdaptive,
+                null,
                 "{=8zbXJZWL}Piety gain is increased by +0.2 daily.",
                 SkillEffect.PerkRole.Personal, 0.2f,
                 SkillEffect.EffectIncrementType.Add,
@@ -935,7 +933,7 @@ namespace BannerKings.Managers.Skills
             TheologyBlessed = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyBlessed"));
             TheologyBlessed.Initialize("{=hmysbhA8}Blessed", BKSkills.Instance.Theology, 
                 GetTierCost(2),
-                LordshipAdaptive,
+                null,
                 "{=p2ekwXZR}Blessings last a season longer.",
                 SkillEffect.PerkRole.Personal, 0.2f,
                 SkillEffect.EffectIncrementType.Add,
@@ -946,7 +944,7 @@ namespace BannerKings.Managers.Skills
             TheologyReligiousTeachings = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyReligiousTeachings"));
             TheologyReligiousTeachings.Initialize("{=jAXfadxv}Religious Teachings", BKSkills.Instance.Theology, 
                 GetTierCost(3),
-                LordshipAdaptive,
+                null,
                 "{=c7v8hrEa}Children receive 1 extra Wisdom when becoming adults.",
                 SkillEffect.PerkRole.Personal, 0.2f,
                 SkillEffect.EffectIncrementType.Add,
@@ -960,7 +958,7 @@ namespace BannerKings.Managers.Skills
             TheologyPreacher.Initialize("{=9TwjtYhb}Preacher", BKSkills.Instance.Theology, 
                 GetTierCost(4),
                 TheologyRitesOfPassage,
-                "{=J6oPqQmt}Settlement religious tensions reduced by X%.",
+                "{=!}Settlement religious tensions reduced by 5%.",
                 SkillEffect.PerkRole.Personal, 0.2f,
                 SkillEffect.EffectIncrementType.Add,
                 "{=J6oPqQmt}Settlement conversion speed increased by 5%.",
@@ -984,8 +982,52 @@ namespace BannerKings.Managers.Skills
                 "{=4hNMnjUh}Randomly receive relations with religious notables in your settlements.",
                 SkillEffect.PerkRole.Personal, 0.2f,
                 SkillEffect.EffectIncrementType.Add,
-                "{=kb6BZ0EY}Some unspecified settlement impact",
+                "{=!}Increased Relations Target with preachers",
+                SkillEffect.PerkRole.Ruler, 5f,
+                SkillEffect.EffectIncrementType.Add);
+
+            TheologyMatrimony = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyMatrimony"));
+            TheologyMatrimony.Initialize("{=!}Holy Matrimony", BKSkills.Instance.Theology,
+                GetTierCost(6),
+                TheologyConvert,
+                "{=!}When marrying into your faith, get 5% more Spouse Score.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Reduced marriage influence costs by 15% for your clan.",
+                SkillEffect.PerkRole.ClanLeader, -0.15f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            TheologyConvert = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyConvert"));
+            TheologyConvert.Initialize("{=!}Converter", BKSkills.Instance.Theology,
+                GetTierCost(6),
+                TheologyMatrimony,
+                "{=!}Converting others requires 10% less influence and piety.",
+                SkillEffect.PerkRole.Personal, -0.1f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Clan members are more likely to accept converting to your faith.",
+                SkillEffect.PerkRole.Ruler, 4f,
+                SkillEffect.EffectIncrementType.Add);
+
+            TheologyArchPriest = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyArchPriest"));
+            TheologyArchPriest.Initialize("{=!}Arch Priest", BKSkills.Instance.Theology,
+                GetTierCost(7),
+                TheologySect,
+                "{=!}Increased Relations Target with leader of your faith.",
+                SkillEffect.PerkRole.Personal, 5f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}Reduced cost to appoint new preachers.",
                 SkillEffect.PerkRole.Ruler, 1f,
+                SkillEffect.EffectIncrementType.Add);
+
+            TheologySect = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologySect"));
+            TheologySect.Initialize("{=!}Sect", BKSkills.Instance.Theology,
+                GetTierCost(7),
+                TheologyArchPriest,
+                "{=!}Religious mercenary clans are more likely to serve you.",
+                SkillEffect.PerkRole.Ruler, 0.1f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Gain piety while serving as mercenary to a realm of your faith.",
+                SkillEffect.PerkRole.ClanLeader, 0.1f,
                 SkillEffect.EffectIncrementType.Add);
 
             #endregion Theology
@@ -995,7 +1037,7 @@ namespace BannerKings.Managers.Skills
             LordshipTraditionalist = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipTraditionalist"));
             LordshipAdaptive = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAdaptive"));
             LordshipTraditionalist.Initialize("{=uVzu9bd1}Traditionalist", BKSkills.Instance.Lordship, 
-                GetTierCost(1),
+                GetTierCost(3),
                 LordshipAdaptive,
                 "{=rEZSUexA}Increased cultural assimilation speed by 10%",
                 SkillEffect.PerkRole.Ruler, 0.1f,
@@ -1005,10 +1047,10 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.Add);
 
             LordshipAdaptive.Initialize("{=G8gRRBpj}Adaptive", BKSkills.Instance.Lordship,
-                GetTierCost(1),
+                GetTierCost(3),
                 LordshipTraditionalist,
-                "{=PseNxgTc}Reduced loyalty bonus from different cultures by 15%",
-                SkillEffect.PerkRole.Ruler, 0.1f,
+                "{=!}Reduced loyalty onus from different cultures by 15%",
+                SkillEffect.PerkRole.Governor, 0.1f,
                 SkillEffect.EffectIncrementType.Add,
                 "{=EVeiLBOF}Increased settlement stability target by flat 2%",
                 SkillEffect.PerkRole.Ruler, 1f,
@@ -1036,10 +1078,32 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.ClanLeader, 0.2f,
                 SkillEffect.EffectIncrementType.Add);
 
+            LordshipSellswordCareer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipSellswordCareer"));
+            LordshipSellswordCareer.Initialize("{=!}Sellsword Career", BKSkills.Instance.Lordship,
+                GetTierCost(1),
+                LordshipRogueConnections,
+                "{=!}Mercenary Career point gain increased by 15%.",
+                SkillEffect.PerkRole.ClanLeader, 0.15f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Earnest-money and firing payments increased by 10%.",
+                SkillEffect.PerkRole.ClanLeader, 0.1f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            LordshipRogueConnections = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipRogueConnections"));
+            LordshipRogueConnections.Initialize("{=!}Rogue Connections", BKSkills.Instance.Lordship,
+                GetTierCost(1),
+                LordshipSellswordCareer,
+                "{=!}Mercenary clans are 10% more willing to join / stay in service.",
+                SkillEffect.PerkRole.Ruler, 0.2f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Mercenary earnest-money and firing payments are 5% cheaper.",
+                SkillEffect.PerkRole.Ruler, 0.1f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
             LordshipMilitaryAdministration = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipMilitaryAdministration"));
             LordshipEconomicAdministration = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipEconomicAdministration"));
             LordshipMilitaryAdministration.Initialize("{=wzJW8mFC}Military Administration", BKSkills.Instance.Lordship, 
-                GetTierCost(3), 
+                GetTierCost(4), 
                 LordshipEconomicAdministration,
                 "{=tqWtfNch}Increased settlement militarism in settlements by 2%",
                 SkillEffect.PerkRole.Ruler, 0.02f,
@@ -1049,7 +1113,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             LordshipEconomicAdministration.Initialize("{=SEB2hNAG}Economic Administration", BKSkills.Instance.Lordship, 
-                GetTierCost(3),
+                GetTierCost(4),
                 LordshipMilitaryAdministration,
                 "{=w2KEdfGJ}Increased settlement production efficiency by 10%",
                 SkillEffect.PerkRole.Ruler, 0.2f,
@@ -1061,7 +1125,7 @@ namespace BannerKings.Managers.Skills
             LordshipClaimant = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipClaimant"));
             LordshipPatron = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipPatron"));
             LordshipClaimant.Initialize("{=6hY9WysN}Claimant", BKSkills.Instance.Lordship, 
-                GetTierCost(4), 
+                GetTierCost(5), 
                 LordshipPatron,
                 "{=6hY9WysN}Claims are built 30% faster",
                 SkillEffect.PerkRole.Ruler, 0.3f,
@@ -1071,14 +1135,69 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             LordshipPatron.Initialize("{=aHL9od5c}Patron", BKSkills.Instance.Lordship, 
-                GetTierCost(4),
+                GetTierCost(5),
                 LordshipClaimant,
                 "{=moMBKpGt}Grating titles yields renown",
-                SkillEffect.PerkRole.Ruler, 0.2f,
+                SkillEffect.PerkRole.ClanLeader, 0.2f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=jndzbOjF}Amicable actions (grant, negotiate) yield more positive relation",
-                SkillEffect.PerkRole.Ruler, 0.1f,
+                SkillEffect.PerkRole.ClanLeader, 0.1f,
                 SkillEffect.EffectIncrementType.AddFactor);
+
+            LordshipCourtly = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipCourtly")); 
+            LordshipCourtly.Initialize("{=!}Courtly Cerimonies", BKSkills.Instance.Lordship,
+                GetTierCost(6),
+                LordshipAdvisor,
+                "{=!}Council members are 5% more effective at their tasks.",
+                SkillEffect.PerkRole.ClanLeader, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Filled in council positions yield 10% more Grace.",
+                SkillEffect.PerkRole.ClanLeader, 0.1f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            LordshipAdvisor = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAdvisor"));
+            LordshipAdvisor.Initialize("{=!}Advisor", BKSkills.Instance.Lordship,
+                GetTierCost(6),
+                LordshipCourtly,
+                "{=!}Personal competence for council tasks increased by 15%",
+                SkillEffect.PerkRole.ClanLeader, 0.15f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Influence cap from council positions fulfilled by you increased by 25%",
+                SkillEffect.PerkRole.ClanLeader, 1.25f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            LordshipAristocraticRites = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAristocraticRites"));
+            LordshipAristocraticRites.Initialize("{=!}Aristocratic Rites", BKSkills.Instance.Lordship,
+                GetTierCost(7),
+                LordshipSenateOrator,
+                "{=!}Grace is increased by 4%, doubly so as ruler.",
+                SkillEffect.PerkRole.ClanLeader, 0.04f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Increased vassal limit by 1.",
+                SkillEffect.PerkRole.ClanLeader, 1f,
+                SkillEffect.EffectIncrementType.Add);
+
+            LordshipSenateOrator = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipSenateOrator"));
+            LordshipSenateOrator.Initialize("{=!}Senate Orator", BKSkills.Instance.Lordship,
+                GetTierCost(7),
+                LordshipAristocraticRites,
+                "{=!}Influence cap increased by 6% for non-rulers.",
+                SkillEffect.PerkRole.ClanLeader, 0.06f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Proposing diplomatic actions, such as warfare, costs 8% less influence.",
+                SkillEffect.PerkRole.ClanLeader, 0.1f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            LordshipDiplomaticTies = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipDiplomaticTies"));
+            LordshipDiplomaticTies.Initialize("{=!}Diplomatic Ties", BKSkills.Instance.Lordship,
+                GetTierCost(8),
+                LordshipPatron,
+                "{=!}Foreign rulers are more willing to make amicable diplomatic pacts.",
+                SkillEffect.PerkRole.Ruler, 10f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}Increased Relations Target with foreign rulers.",
+                SkillEffect.PerkRole.Ruler, 3f,
+                SkillEffect.EffectIncrementType.Add);
 
             #endregion Lordship
 

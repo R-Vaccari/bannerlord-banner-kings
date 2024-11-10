@@ -2,6 +2,7 @@ using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Groups;
 using BannerKings.Behaviours.Diplomacy.Groups.Demands;
 using BannerKings.CampaignContent.Traits;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Models.BKModels.Abstract;
@@ -323,20 +324,13 @@ namespace BannerKings.Models.BKModels
 
         public bool CanHeroJoinAGroup(Hero hero, KingdomDiplomacy diplomacy)
         {
-            if (diplomacy.Kingdom != hero.MapFaction)
-            {
-                return false;
-            }
+            if (diplomacy.Kingdom != hero.MapFaction) return false;
+            
+            if (hero.IsLord && hero.MapFaction.IsKingdomFaction && hero.MapFaction.Leader == hero) return false;
 
-            if (hero.IsLord && hero.MapFaction.IsKingdomFaction && hero.MapFaction.Leader == hero)
-            {
-                return false;
-            }
+            if (hero.IsChild || hero.IsDead) return false;
 
-            if (hero.IsChild || hero.IsDead)
-            {
-                return false;
-            }
+            if (hero.Clan != null && hero.Clan.IsUnderMercenaryService) return false;
 
             return true;
         }
@@ -376,7 +370,12 @@ namespace BannerKings.Models.BKModels
         
         public bool CanHeroCreateAGroup(Hero hero, KingdomDiplomacy diplomacy)
         {
-            return CanHeroJoinAGroup(hero, diplomacy) && hero.IsClanLeader() && diplomacy.Kingdom.Leader != hero;
+            bool peerage = false;
+            CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero.Clan);
+            if (council.Peerage != null && council.Peerage.CanVote) peerage = true;
+
+            return CanHeroJoinAGroup(hero, diplomacy) && hero.IsClanLeader() && diplomacy.Kingdom.Leader != hero &&
+            hero.Clan.Fiefs.Count > 0 && peerage;
         }
 
         public override BKExplainedNumber CalculateHeroJoinChance(Hero hero, DiplomacyGroup group, KingdomDiplomacy diplomacy, bool explanations = false)

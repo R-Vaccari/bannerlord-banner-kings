@@ -17,6 +17,7 @@ using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Managers.Institutions.Religions.Faiths.Societies;
 using BannerKings.CampaignContent.Skills;
 using BannerKings.CampaignContent.Traits;
+using System;
 
 namespace BannerKings.Models.BKModels
 {
@@ -110,6 +111,14 @@ namespace BannerKings.Models.BKModels
                         {
                             result.Add(1f * pietyCompetence, DefaultCouncilTasks.Instance.CultivatePiety.Name);
                         }
+
+                        if (hero.Clan.IsUnderMercenaryService)
+                        {
+                            if (rel.Equals(BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero.Clan.Kingdom.Leader)))
+                            {
+                                Utils.Helpers.ApplyPerk(BKPerks.Instance.TheologySect, hero, ref result, false);
+                            }
+                        }
                     }
                 },
                 GetType().Name,
@@ -140,7 +149,7 @@ namespace BannerKings.Models.BKModels
         {
             var result = new ExplainedNumber(300f, descriptions);
 
-
+            Utils.Helpers.ApplyPerk(BKPerks.Instance.TheologyArchPriest, appointer, ref result, false);
             result.AddFactor(data.Tension.ResultNumber, new TextObject("{=T88BUMMU}Religious tensions"));
             return result;
         }
@@ -235,11 +244,11 @@ namespace BannerKings.Models.BKModels
                     FaithStance stance = convertedRel.GetStance(rel.Faith);
                     if (stance == FaithStance.Untolerated)
                     {
-                        result.Add(-0.3f, new TextObject("{=gyHK87NL}Faith differences"));
+                        result.AddFactor(-0.3f, new TextObject("{=gyHK87NL}Faith differences"));
                     }
                     else if (stance == FaithStance.Hostile)
                     {
-                        result.Add(-0.9f, new TextObject("{=gyHK87NL}Faith differences"));
+                        result.AddFactor(-0.9f, new TextObject("{=gyHK87NL}Faith differences"));
                     }
                 }
 
@@ -247,7 +256,9 @@ namespace BannerKings.Models.BKModels
                 {
                     result.AddFactor(0.15f, new TextObject("{=PUjDWe5j}Culture"));
                 }
-            } 
+
+                Utils.Helpers.ApplyPerk(BKPerks.Instance.TheologyConvert, converter, ref result, false);
+            }
 
             return result;
         }
@@ -273,6 +284,7 @@ namespace BannerKings.Models.BKModels
                 result.AddFactor(tension.ResultNumber);
             }
 
+            Utils.Helpers.ApplyPerk(BKPerks.Instance.TheologyConvert, converter, ref result);
             return result;
         }
 
@@ -302,6 +314,7 @@ namespace BannerKings.Models.BKModels
                 new TextObject("{=bYHRQmAW}Willingness to convert"));
 
             result.AddFactor(religion.Faith.ConversionCost - 1f, religion.Faith.GetFaithTypeName());
+            Utils.Helpers.ApplyPerk(BKPerks.Instance.TheologyConvert, converter, ref result);
             return result;
         }
 

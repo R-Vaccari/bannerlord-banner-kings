@@ -1,4 +1,6 @@
-﻿using BannerKings.CampaignContent.Economy.Markets;
+﻿using BannerKings.Behaviours.Mercenary;
+using BannerKings.CampaignContent.Economy.Markets;
+using BannerKings.Managers.Skills;
 using BannerKings.Models.BKModels.Abstract;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,28 @@ namespace BannerKings.Models.BKModels
 {
     public class BKMercenaryModel : MercenaryModel
     {
+
+        public override ExplainedNumber GetDailyCareerPointsGain(Clan clan, MercenaryCareer career, bool explanations = false)
+        {
+            var result = new ExplainedNumber(1f, explanations);
+            result.Add(clan.Tier / 2f, GameTexts.FindText("str_clan_tier_bonus"));
+            result.Add(career.Reputation * 2f, new TaleWorlds.Localization.TextObject("{=bLLovmn9}Reputation"));
+
+            foreach (var party in clan.WarPartyComponents)
+            {
+                if (party.MobileParty.Army != null)
+                {
+                    result.Add(1f, party.Name);
+                    if (party.MobileParty.Army.LeaderParty == party.MobileParty)
+                    {
+                        result.AddFactor(0.2f, new TaleWorlds.Localization.TextObject("{=oV2MhyoO}Leading an Army"));
+                    }
+                }
+            }
+
+            Utils.Helpers.ApplyPerk(BKPerks.Instance.LordshipSellswordCareer, clan.Leader, ref result);
+            return result;
+        }
         public override IEnumerable<ItemCategory> GetLevyCategories()
         {
             yield return DefaultItemCategories.Garment;

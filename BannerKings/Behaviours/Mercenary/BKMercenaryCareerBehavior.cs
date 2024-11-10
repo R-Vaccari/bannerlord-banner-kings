@@ -175,7 +175,7 @@ namespace BannerKings.Behaviours.Mercenary
                 else
                 {
                     var career = careers[clan];
-                    career.Tick(GetDailyCareerPointsGain(clan).ResultNumber);
+                    career.Tick(BannerKingsConfig.Instance.MercenaryModel.GetDailyCareerPointsGain(clan, careers[clan], false).ResultNumber);
                 }
             }
             else if (clan.Kingdom != null && clan.Kingdom.RulingClan == clan)
@@ -232,27 +232,6 @@ namespace BannerKings.Behaviours.Mercenary
                     AddCareer(clan, clan.Kingdom);
                 }
             }
-        }
-
-        internal ExplainedNumber GetDailyCareerPointsGain(Clan clan, bool explanations = false)
-        {
-            var result = new ExplainedNumber(1f, explanations);
-            result.Add(clan.Tier / 2f, GameTexts.FindText("str_clan_tier_bonus"));
-            result.Add(careers[clan].Reputation * 2f, new TaleWorlds.Localization.TextObject("{=bLLovmn9}Reputation"));
-
-            foreach (var party in clan.WarPartyComponents)
-            {
-                if (party.MobileParty.Army != null)
-                {
-                    result.Add(1f, party.Name);
-                    if (party.MobileParty.Army.LeaderParty == party.MobileParty)
-                    {
-                        result.AddFactor(0.2f, new TaleWorlds.Localization.TextObject("{=oV2MhyoO}Leading an Army"));
-                    }
-                }
-            }
-
-            return result;
         }
     }
 }

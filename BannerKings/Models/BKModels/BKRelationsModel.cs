@@ -3,9 +3,11 @@ using BannerKings.CampaignContent.Culture;
 using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels.Abstract;
 using System.Collections.Generic;
+using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -110,6 +112,29 @@ namespace BannerKings.Models.BKModels
                     {
                         results.Add(new RelationsModifier((int)justLord.ResultNumber,
                             DefaultTraitEffects.Instance.JustLord.Trait.Name));
+                    }
+
+                    if (hero.IsPreacher)
+                    {
+                        Religion heroReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+                        Religion targetReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(target);
+                        if (heroReligion != null && heroReligion.Equals(targetReligion))
+                        {
+                            if (target.GetPerkValue(BKPerks.Instance.TheologyLithurgy))
+                            {
+                                results.Add(new RelationsModifier((int)BKPerks.Instance.TheologyLithurgy.SecondaryBonus,
+                                   BKPerks.Instance.TheologyLithurgy.Name));
+                            }
+
+                            if (hero == heroReligion.FaithLeader)
+                            {
+                                if (target.GetPerkValue(BKPerks.Instance.TheologyArchPriest))
+                                {
+                                    results.Add(new RelationsModifier((int)BKPerks.Instance.TheologyArchPriest.PrimaryBonus,
+                                       BKPerks.Instance.TheologyArchPriest.Name));
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -4,6 +4,7 @@ using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Grace;
 using BannerKings.Managers.Education.Languages;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels.Abstract;
 using TaleWorlds.CampaignSystem;
@@ -65,7 +66,7 @@ namespace BannerKings.Models.BKModels
             
             foreach (var position in data.Positions)
             {
-                if (position.Member != null) result.Add(CalculatePositionGrace(position).ResultNumber, 
+                if (position.Member != null) result.Add(CalculatePositionGrace(data, position).ResultNumber, 
                     new TextObject("{=Bn4akxdA}{POSITION} position fulfilled by {HERO}")
                     .SetTextVariable("POSITION", position.GetCulturalName())
                     .SetTextVariable("HERO", position.Member.Name));
@@ -74,7 +75,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculatePositionGrace(CouncilMember position, bool explanations = false)
+        public ExplainedNumber CalculatePositionGrace(CouncilData data, CouncilMember position, bool explanations = false)
         {
             ExplainedNumber result = new ExplainedNumber(0, explanations);
             if (position.Member == null)
@@ -83,7 +84,8 @@ namespace BannerKings.Models.BKModels
             }
 
             result.Add(position.InfluenceCosts() * 150f, new TextObject("{=5zVvff39}Position's influence"));
-            result.AddFactor(position.Competence.ResultNumber, new TextObject("Competence"));
+            result.AddFactor(position.Competence.ResultNumber, new TextObject("{=!}Competence"));
+            Utils.Helpers.ApplyPerk(BKPerks.Instance.LordshipCourtly, data.Owner, ref result, false);
 
             return result;
         }
@@ -205,7 +207,8 @@ namespace BannerKings.Models.BKModels
             }
 
             Utils.Helpers.ApplyTraitEffect(hero, DefaultTraitEffects.Instance.CalculatingCouncil, ref result);
-
+            Utils.Helpers.ApplyPerk(BKPerks.Instance.LordshipCourtly, position.Clan.Leader, ref result);
+            Utils.Helpers.ApplyPerk(BKPerks.Instance.LordshipAdvisor, hero, ref result);
             return result;
         }
 

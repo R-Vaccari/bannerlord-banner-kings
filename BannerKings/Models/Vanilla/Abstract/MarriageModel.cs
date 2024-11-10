@@ -13,7 +13,7 @@ namespace BannerKings.Models.Vanilla.Abstract
 
         public abstract ExplainedNumber GetSpouseScore(Hero hero, bool explanations = false);
         public abstract ExplainedNumber GetDowryValue(Hero hero, bool arrangedMarriage = false, bool explanations = false);
-        public abstract ExplainedNumber GetInfluenceCost(Hero proposed, bool explanations = false);
+        public abstract ExplainedNumber GetInfluenceCost(Hero proposer, Hero proposed, bool explanations = false);
         public abstract IEnumerable<Hero> DiscoverAncestors(Hero hero, int n);
     }
 }

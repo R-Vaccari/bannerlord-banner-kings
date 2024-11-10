@@ -63,6 +63,8 @@ namespace BannerKings.Models.Vanilla
                     {
                         result.Add(50f, DefaultDoctrines.Instance.AncestorWorship.Name);
                     }
+
+                    Utils.Helpers.ApplyPerk(BKPerks.Instance.TheologyMatrimony, proposer, ref result);
                 }
 
                 if (proposerReligion != null)
@@ -298,11 +300,28 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public override ExplainedNumber GetInfluenceCost(Hero proposed, bool explanations = false)
+        public override ExplainedNumber GetInfluenceCost(Hero proposer, Hero proposed, bool explanations = false)
         {
-            var result = new ExplainedNumber(0f, explanations);
+            var result = new ExplainedNumber(10f, explanations);
             result.Add(proposed.Clan.Tier * 20f, proposed.Clan.Name);
+            result.Add(BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(proposed.Clan).ResultNumber * 0.1f,
+                new TextObject("{=!}Influence of {CLAN}").SetTextVariable("CLAN", proposed.Clan.Name));
 
+            if (proposed.IsClanLeader())
+            {
+                result.AddFactor(0.4f, GameTexts.FindText("role", "ClanLeader"));
+            } 
+            else
+            {
+                if (IsClanHeir(proposed))
+                {
+                    result.AddFactor(0.25f, new TextObject("{=aoD1zKmp}{HERO} is the expected heir to {CLAN}")
+                        .SetTextVariable("HERO", proposed.Name)
+                        .SetTextVariable("CLAN", proposed.Clan.Name));
+                }
+            }
+
+            Utils.Helpers.ApplyPerk(BKPerks.Instance.TheologyMatrimony, proposer.Clan.Leader, ref result);
             return result;
         }
 

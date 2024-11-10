@@ -10,7 +10,6 @@ using BannerKings.Managers.Court;
 using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Education.Lifestyles;
-using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
@@ -139,6 +138,10 @@ namespace BannerKings.Models.Vanilla
                         }
                     }
                 }
+                else
+                {
+                    Utils.Helpers.ApplyPerk(BKPerks.Instance.LordshipSenateOrator, clan.Leader, ref result);
+                }
 
                 if (clan.Culture.StringId != clan.Kingdom.Culture.StringId)
                 {
@@ -158,7 +161,11 @@ namespace BannerKings.Models.Vanilla
             {
                 foreach (CouncilMember position in positions)
                 {
-                    result.AddFactor(position.InfluenceCosts(), new TextObject("{=yfBEQUdh}{POSITION} in {OWNER}'s council")
+                    float i = position.InfluenceCosts();
+                    if (clan.Leader.GetPerkValue(BKPerks.Instance.LordshipAdvisor))
+                        i *= BKPerks.Instance.LordshipAdvisor.SecondaryBonus;
+
+                    result.AddFactor(i, new TextObject("{=yfBEQUdh}{POSITION} in {OWNER}'s council")
                     .SetTextVariable("POSITION", position.Name)
                     .SetTextVariable("OWNER", position.Clan.Leader.Name));
                 }

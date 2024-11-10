@@ -22,6 +22,7 @@ using BannerKings.Models.Vanilla.Abstract;
 using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Skills;
 using BannerKings.Settings;
+using System.Linq.Expressions;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -215,10 +216,15 @@ namespace BannerKings.Models.Vanilla
 
             if (career != null)
             {
-                if (career.ContractDueDate.IsFuture)
-                    result.Add(baseNumber * -0.8f, new TextObject("{=!}Contract due date"));
+                float factor = mercenaryClan.Tier switch
+                {
+                    < 2 => 0.0f,
+                    < 3 => 0.15f,
+                    < 4 => 0.3f,
+                    _ => 0.5f
+                };
 
-                result.Add(baseNumber * (career.Reputation - 0.5f), new TextObject("{=!}Reputation"));
+                result.Add(baseNumber * (career.Reputation - factor), new TextObject("{=!}Reputation"));
             }
 
             foreach (Kingdom enemy in FactionManager.GetEnemyKingdoms(kingdom))
@@ -247,7 +253,7 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 if (!FactionManager.GetEnemyKingdoms(kingdom).Any())
-                    result.AddFactor(1f, new TextObject("{=!}Kingdom has no enemies"));
+                    result.AddFactor(0.5f, new TextObject("{=!}Kingdom has no enemies"));
             }
 
             return result;
