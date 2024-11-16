@@ -44,14 +44,6 @@ namespace BannerKings.Managers
 
                 data.PostInitialize();
             }
-
-            foreach (var culture in TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<CultureObject>())
-            {
-                InnovationData data = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
-                if (data == null) continue;
-
-                data.Era.TriggerEra(culture);
-            }
         }
 
         public void UpdateInnovations()

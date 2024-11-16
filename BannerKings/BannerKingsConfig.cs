@@ -75,7 +75,7 @@ namespace BannerKings
         public BKStabilityModel StabilityModel { get; set; } = new();
         public BKClanFinanceModel ClanFinanceModel { get; set; } = new();
         public BKEducationModel EducationModel { get; set; } = new();
-        public BKCouncilModel CouncilModel { get; set; } = new();
+        public CouncilModel CouncilModel { get; set; } = new BKCouncilModel();
         public BKLearningModel LearningModel { get; set; } = new();
         public BKInnovationsModel InnovationsModel { get; } = new();
         public EconomyModel EconomyModel { get; set; } = new BKEconomyModel();

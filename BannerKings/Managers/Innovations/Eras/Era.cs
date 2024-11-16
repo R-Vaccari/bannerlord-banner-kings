@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
@@ -24,7 +23,7 @@ namespace BannerKings.Managers.Innovations.Eras
             Era e = DefaultEras.Instance.GetById(this);
             Initialize(e.Name, e.Description, e.PreviousEra);
 
-            if (Advancements == null) Advancements = new List<BKTroopAdvancement>(50);
+            if (Advancements == null) Advancements = e.Advancements;
         }
 
         public Era PreviousEra { get; private set; }
