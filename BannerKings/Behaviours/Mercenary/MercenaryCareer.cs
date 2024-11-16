@@ -1,8 +1,10 @@
 using BannerKings.Managers.Populations.Estates;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
@@ -245,6 +247,12 @@ namespace BannerKings.Behaviours.Mercenary
                 }
                 else
                 {
+                    float generosity = kingdom.RulingClan.Leader.GetTraitLevel(DefaultTraits.Generosity);
+                    float cashBack = 0.5f + (generosity * 0.25f);
+                    float reward = Clan.Influence * (1f / Campaign.Current.Models.ClanFinanceModel.RevenueSmoothenFraction()) * Clan.MercenaryAwardMultiplier;
+                    int finalReward = MathF.Ceiling(reward * daysLeft * cashBack);
+                    GiveGoldAction.ApplyBetweenCharacters(kingdom.RulingClan.Leader, Clan.Leader, finalReward, true);
+
                     if (Clan != Clan.PlayerClan)
                     {
                         ChangeRelationAction.ApplyRelationChangeBetweenHeroes(ruler, Clan.Leader, (int)relation);
@@ -257,11 +265,15 @@ namespace BannerKings.Behaviours.Mercenary
                     else
                     {
                         InformationManager.DisplayMessage(new InformationMessage(
-                            new TextObject("{=!}The lords of {KINGDOM} have decided to release you from your service with {DAYS} left in the contract.")
+                            new TextObject("{=!}The lords of {KINGDOM} have decided to release you from your service with {DAYS} left in the contract. Due to their generosity, {RULER} has sent you {GOLD}{GOLD_ICON} for your remaining {INFLUENCE}{INFLUENCE_ICON}.")
                             .SetTextVariable("KINGDOM", kingdom.Name)
                             .SetTextVariable("DAYS", (int)daysLeft)
+                            .SetTextVariable("RULER", kingdom.RulingClan.Leader.Name)
+                            .SetTextVariable("GOLD", finalReward)
+                            .SetTextVariable("INFLUENCE", (int)Clan.Influence)
+                            .SetTextVariable("INFLUENCE_ICON", Utils.TextHelper.INFLUENCE_ICON)
                             .ToString(),
-                            Color.FromUint(Utils.TextHelper.COLOR_LIGHT_RED)));
+                            Color.FromUint(Utils.TextHelper.COLOR_LIGHT_YELLOW)));
                     }
                 }
             }
