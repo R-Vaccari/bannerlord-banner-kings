@@ -14,8 +14,17 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 {
     public class CouncilPositionDemand : Demand
     {
-        [SaveableProperty(1)] private CouncilMember Position { get; set; }
-        [SaveableProperty(2)] private Hero Benefactor { get; set; }
+        [SaveableProperty(10)] private CouncilMember Position { get; set; }
+        [SaveableProperty(11)] private Hero Benefactor { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            bool same = false;
+            if (obj is CouncilPositionDemand) same = (obj as CouncilPositionDemand).Position == Position &&
+                    (obj as CouncilPositionDemand).Benefactor == Benefactor;
+
+            return base.Equals(obj) && same;
+        }
 
         public CouncilPositionDemand() : base("CouncilPosition")
         {

@@ -16,6 +16,15 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         [SaveableProperty(10)] private DemesneLaw Law { get; set; }
         [SaveableProperty(11)] private FeudalTitle Title { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            bool same = false;
+            if (obj is DemesneLawChangeDemand) same = (obj as DemesneLawChangeDemand).Law == Law &&
+                    (obj as DemesneLawChangeDemand).Title == Title;
+
+            return base.Equals(obj) && same;
+        }
+
         public DemesneLawChangeDemand() : base("DemesneLawChange")
         {
             SetTexts();

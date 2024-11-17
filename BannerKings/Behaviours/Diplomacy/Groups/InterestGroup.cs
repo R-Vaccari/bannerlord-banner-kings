@@ -90,13 +90,19 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             var current = CurrentDemand;
             if (current != null)
             {
+                if (current.Group != this)
+                {
+                    var demandCopies = new List<Demand>();
+                    foreach (var demand in PossibleDemands)
+                        demandCopies.Add(demand);
+                    PossibleDemands.Clear();
+                    foreach (var demand in demandCopies)
+                        PossibleDemands.Add(demand.GetCopy(this));
+                }
                 current.Tick();
             }
 
-            if (Leader == Hero.MainHero || Leader == null || FactionLeader == null)
-            {
-                return;
-            }
+            if (Leader == Hero.MainHero || Leader == null || FactionLeader == null) return;
 
             var influence = BannerKingsConfig.Instance.InterestGroupsModel.CalculateGroupInfluence(this);
             foreach (Demand demand in PossibleDemands)

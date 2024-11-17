@@ -1,4 +1,3 @@
-using BannerKings.Managers.Institutions.Religions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +13,15 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
     {
         [SaveableProperty(10)] private PolicyObject Policy { get; set; }
         [SaveableProperty(11)] private bool Enact { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            bool same = false;
+            if (obj is PolicyChangeDemand) same = (obj as PolicyChangeDemand).Policy == Policy &&
+                    (obj as PolicyChangeDemand).Enact == Enact;
+
+            return base.Equals(obj) && same;
+        }
 
         public PolicyChangeDemand() : base("PolicyChange")
         {

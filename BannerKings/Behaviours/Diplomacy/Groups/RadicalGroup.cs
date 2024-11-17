@@ -14,7 +14,6 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 {
     public class RadicalGroup : DiplomacyGroup
     {
-        private RadicalDemand demand;
         public ViewModel ViewModel { get; private set; }
         public RadicalGroup(string stringId) : base(stringId)
         {
@@ -23,13 +22,13 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
         public void Initialize(TextObject name, TextObject description, RadicalDemand demand)
         {
             Initialize(name, description);
-            this.demand = demand;
+            Demand = demand;
         }
 
         public void PostInitialize()
         {
             RadicalGroup r = DefaultRadicalGroups.Instance.GetById(this);
-            Initialize(r.name, r.description, r.demand);
+            Initialize(r.name, r.description, r.Demand);
             CurrentDemand.SetTexts();
             CurrentDemand.Group = this;
         }
@@ -48,7 +47,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             AddMember(leader);
             SetLeader(leader);
             ViewModel = viewModel;
-            demand = (RadicalDemand)CurrentDemand.GetCopy(this);
+            Demand = (RadicalDemand)CurrentDemand.GetCopy(this);
             if (leader == Hero.MainHero) CurrentDemand.ShowPlayerDemandOptions();
             else CurrentDemand.SetUp();
         }
@@ -82,7 +81,8 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
         public TextObject KingdomName { get; private set; }
         [SaveableProperty(13)] public float Radicalism { get; private set; } = 0.25f;
-        public override Demand CurrentDemand => demand;
+        [SaveableProperty(14)] private RadicalDemand Demand { get; set; }
+        public override Demand CurrentDemand => Demand;
         public override bool IsInterestGroup => false;
 
         public override void AddMember(Hero hero)
@@ -179,6 +179,10 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
 
         public override void Tick()
         {
+            if (CurrentDemand.Group != this)
+                Demand = (RadicalDemand)CurrentDemand.GetCopy(this);
+
+            if (!IsGroupActive) return;
             TickInternal();
 
             if (!CurrentDemand.Active) CurrentDemand.SetUp();
@@ -206,7 +210,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             else if (Radicalism <= 0f)
             {
                 Radicalism = 0f;
-                demand.Finish();
+                Demand.Finish();
             }
 
             var members = new List<Hero>();
@@ -262,7 +266,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups
             DeclareWarAction.ApplyByKingdomCreation(originalKingdom, rebelKingdom);
             TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().TriggerRebelWar(rebelKingdom, 
                 KingdomDiplomacy.Kingdom, 
-                (RadicalDemand)demand.GetCopy(null));
+                (RadicalDemand)Demand.GetCopy(null));
         }
 
         public override bool Equals(object obj)

@@ -14,7 +14,15 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             SetTexts();
         }
 
-        [SaveableProperty(1)] private Religion Religion { get; set; }
+        public override bool Equals(object obj)
+        {
+            bool same = false;
+            if (obj is AssumeFaithDemand) same = (obj as AssumeFaithDemand).Religion == Religion;
+
+            return base.Equals(obj) && same;
+        }
+
+        [SaveableProperty(10)] private Religion Religion { get; set; }
         private Religion RulerReligion => BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Group.KingdomDiplomacy.Kingdom.Leader);
 
         public override DemandResponse PositiveAnswer => new DemandResponse(new TextObject("{=kyB8tkgY}Concede"),

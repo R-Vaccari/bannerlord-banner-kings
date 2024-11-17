@@ -1,6 +1,5 @@
 using BannerKings.Actions;
 using BannerKings.CampaignContent.Traits;
-using BannerKings.Managers.Titles;
 using BannerKings.Utils.Models;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,6 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -23,7 +21,15 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             SetTexts();
         }
 
-        [SaveableProperty(1)] public Clan Rebel { get; private set; }
+        [SaveableProperty(100)] public Clan Rebel { get; private set; }
+
+        public override bool Equals(object obj)
+        {
+            bool same = false;
+            if (obj is SecessionDemand) same = (obj as SecessionDemand).Rebel == Rebel;
+
+            return base.Equals(obj) && same;
+        }
 
         public override DemandResponse PositiveAnswer => new DemandResponse(new TextObject("{=kyB8tkgY}Concede"),
                     new TextObject("{=!}Accept the demand to cede independence to the members of the Secession group led by {HERO}. They will be satisfied with this outcome.")

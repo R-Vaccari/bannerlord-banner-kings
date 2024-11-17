@@ -17,6 +17,13 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 {
     public class ClaimantDemand : RadicalDemand
     {
+        public override bool Equals(object obj)
+        {
+            bool same = false;
+            if (obj is ClaimantDemand) same = (obj as ClaimantDemand).Claimant == Claimant;
+
+            return base.Equals(obj) && same;
+        }
         public ClaimantDemand() : base("Claimant")
         {
             SetTexts();
@@ -24,7 +31,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         protected override bool IsFulfilled() => Claimant.Clan == Group.KingdomDiplomacy.Kingdom.RulingClan;
 
-        [SaveableProperty(1)] public Hero Claimant { get; set; }
+        [SaveableProperty(10)] public Hero Claimant { get; set; }
 
         public override DemandResponse PositiveAnswer => new DemandResponse(new TextObject("{=kyB8tkgY}Concede"),
                     new TextObject("{=69rAwxib}Accept the demand to cede your rulership to the {CLAIMANT}. You will keep your properties and titles, but be replaced as a ruler. They will be satisfied with this outcome.")

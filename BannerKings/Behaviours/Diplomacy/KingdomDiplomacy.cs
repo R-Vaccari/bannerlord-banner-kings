@@ -291,9 +291,8 @@ namespace BannerKings.Behaviours.Diplomacy
 
             foreach (var group in RadicalGroups)
             {
-                if (group.IsGroupActive) group.Tick();
-                else group.SetNewLeader(this);
-
+                group.Tick();
+                if (!group.IsGroupActive) group.SetNewLeader(this);
                 if (!group.IsGroupActive) group.CurrentDemand.Finish();
             } 
 

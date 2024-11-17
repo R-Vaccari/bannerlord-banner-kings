@@ -330,6 +330,11 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
         public abstract IEnumerable<DemandResponse> DemandResponses { get; }
         public void Tick()
         {
+            if (Group.IsRadicalGroup)
+            {
+                if (IsFulfilled()) Fulfill(PositiveAnswer, Group.FactionLeader);
+            }
+
             if (IsDueDate)
             {
                 if (IsFulfilled()) Fulfill(PositiveAnswer, Group.FactionLeader);
