@@ -22,13 +22,11 @@ using BannerKings.Models.Vanilla.Abstract;
 using BannerKings.CampaignContent.Traits;
 using BannerKings.Managers.Skills;
 using BannerKings.Settings;
-using System.Linq.Expressions;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKDiplomacyModel : DiplomacyModel
     {
-        public float TRADE_PACT_INFLUENCE_CAP { get;} = 100f;
         public override int MaxNeutralRelationLimit => BannerKingsSettings.Instance.FriendlyThreshold;
         public override int MinNeutralRelationLimit => BannerKingsSettings.Instance.HostileThreshold;
 
@@ -156,8 +154,27 @@ namespace BannerKings.Models.Vanilla
 
         public ExplainedNumber KingdomRecruitMercenary(Kingdom kingdom, Clan mercenaryClan, bool explanations = false)
         {
-            ExplainedNumber result = new ExplainedNumber(base.GetScoreOfKingdomToHireMercenary(kingdom, mercenaryClan), explanations);
+            int commanders = 0;
+            foreach (Clan clan in kingdom.Clans)
+                commanders += clan.CommanderLimit;
+
+            float baseResult = (kingdom.Fiefs.Count * 4f) - (kingdom.Fiefs.Count * commanders) * 12f;
+            ExplainedNumber result = new ExplainedNumber(MathF.Max(baseResult, 0f), 
+                explanations,
+                new TextObject("{=!}{KINGDOM} needs more fighting forces").SetTextVariable("KINGDOM", kingdom.Name));
+            float strength = kingdom.TotalStrength;
+            var enemies = FactionManager.GetEnemyKingdoms(kingdom);
+            foreach (Kingdom enemy in enemies)
+                result.Add(((enemy.TotalStrength * 1.1f) - strength) * 0.1f, new TextObject("{=!}War against {KINGDOM}")
+                    .SetTextVariable("KINGDOM", enemy.Name));
+
+            if (enemies.IsEmpty()) result.Add(-20f, new TextObject("{=!}No wars being fought"));
             float baseNumber = MathF.Abs(result.BaseNumber);
+
+            if (kingdom.KingdomBudgetWallet > 100000) result.AddFactor(0.1f, new TextObject("{=!}{KINGDOM} has significant budget for sellswords")
+                    .SetTextVariable("KINGDOM", kingdom.Name));
+            else if (kingdom.KingdomBudgetWallet > 50000) result.AddFactor(0.05f, new TextObject("{=!}{KINGDOM} has extra budget for sellswords")
+                    .SetTextVariable("KINGDOM", kingdom.Name));
 
             Hero ruler = kingdom.RulingClan.Leader;
             if (mercenaryClan.IsOutlaw)
@@ -195,13 +212,13 @@ namespace BannerKings.Models.Vanilla
                     if (stance == FaithStance.Tolerated)
                     {
                         if (mercenaryClan.IsSect && rulerReligion.Faith.Equals(mercenaryReligion.Faith))
-                            result.Add(baseNumber * (1f * zealotry), new TextObject("{=!}Shared faith (Sect)"));
-                        else result.Add(baseNumber * (0.25f * zealotry), new TextObject("{=Pcy4iFnT}Shared faith"));
+                            result.Add(baseNumber * (1f * zealotry) + 15f, new TextObject("{=!}Shared faith (Sect)"));
+                        else result.Add(baseNumber * (0.25f * zealotry) + 15f, new TextObject("{=Pcy4iFnT}Shared faith"));
                     }
-                    else if (stance == FaithStance.Untolerated) result.Add(-0.3f * zealotry, new TextObject("{=!}Faith differences"));
-                    else result.Add(baseNumber * (-0.5f * zealotry), new TextObject("{=!}Faith differences"));
+                    else if (stance == FaithStance.Untolerated) result.Add(baseNumber * (-0.3f * zealotry) - 25f, new TextObject("{=!}Faith differences"));
+                    else result.Add(baseNumber * (-0.5f * zealotry) - 60f, new TextObject("{=!}Faith differences"));
                 }
-                else result.Add(baseNumber * (-0.3f * zealotry), new TextObject("{=!}Faith differences"));
+                else result.Add(baseNumber * (-0.3f * zealotry) - 25f, new TextObject("{=!}Faith differences"));
             }
 
             if (mercenaryClan.Culture == kingdom.Culture) result.Add(baseNumber * 0.2f, GameTexts.FindText("str_culture"));
@@ -227,9 +244,6 @@ namespace BannerKings.Models.Vanilla
                 result.Add(baseNumber * (career.Reputation - factor), new TextObject("{=!}Reputation"));
             }
 
-            foreach (Kingdom enemy in FactionManager.GetEnemyKingdoms(kingdom))
-                result.Add(baseNumber * 0.1f, enemy.Name);
-
             return result;
         }
 
@@ -238,9 +252,11 @@ namespace BannerKings.Models.Vanilla
 
         public ExplainedNumber KingdomSackMercenary(Kingdom kingdom, Clan mercenaryClan, bool explanations = false)
         {
+            if (FactionManager.GetEnemyKingdoms(kingdom).Any() && kingdom.MercenaryWallet > 0)
+                return new ExplainedNumber(0f);
+
             ExplainedNumber result = new ExplainedNumber(base.GetScoreOfKingdomToSackMercenary(kingdom, mercenaryClan), explanations);
 
-            Hero ruler = kingdom.RulingClan.Leader;
             if (result.ResultNumber > 0)
             {
                 MercenaryCareer career = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>()
@@ -252,8 +268,9 @@ namespace BannerKings.Models.Vanilla
                         result.AddFactor(-0.8f, new TextObject("{=!}Contract due date"));
                 }
 
-                if (!FactionManager.GetEnemyKingdoms(kingdom).Any())
-                    result.AddFactor(0.5f, new TextObject("{=!}Kingdom has no enemies"));
+                foreach (Town town in kingdom.Fiefs)
+                    if (town.LastCapturedBy == mercenaryClan)
+                        result.Add(-0.15f, town.Name);
             }
 
             return result;
