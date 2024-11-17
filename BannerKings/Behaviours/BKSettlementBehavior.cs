@@ -270,7 +270,7 @@ namespace BannerKings.Behaviours
                 var town = settlement.Town;
                 HandleItemAvailability(town);
                 //HandleExcessWorkforce(data, town);
-                //HandleExcessFood(town);
+                HandleExcessFood(town);
                 HandleGarrison(town);
                 DeleteOverProduction(settlement.Town);
             }
@@ -576,11 +576,13 @@ namespace BannerKings.Behaviours
 
         private void HandleExcessFood(Town town)
         {
+            if (Campaign.Current.Models.SettlementFoodModel is not BKFoodModel) return;
+
             RunWeekly(() =>
             {
-                if (town.FoodStocks >= town.FoodStocksUpperLimit() - 10)
+                if (town.FoodStocks >= town.FoodStocksUpperLimit() * 0.95f)
                 {
-                    var items = new HashSet<ItemObject>();
+                    var items = new Dictionary<ItemObject, float>();
                     if (town.Villages.Count > 0)
                     {
                         foreach (var vil in town.Villages)
@@ -590,53 +592,28 @@ namespace BannerKings.Behaviours
                             {
                                 foreach (var tuple in BannerKingsConfig.Instance.PopulationManager.GetProductions(villagePopData))
                                 {
-                                    items.Add(tuple.Item1);
+                                    ItemObject item = tuple.Item1;
+                                    if (!item.IsFood && !(item.IsAnimal && item.HorseComponent.IsLiveStock)) continue;
+
+                                    if (items.ContainsKey(tuple.Item1)) items[tuple.Item1] += tuple.Item2;
+                                    else items.Add(tuple.Item1, tuple.Item2);
                                 }
                             }
                         }
                     }
-                    if (TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementFoodModel is not BKFoodModel)
-                    {
-                        return;
-                    }
 
-                    var foodModel = (BKFoodModel)TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementFoodModel;
+                    var foodModel = (BKFoodModel)Campaign.Current.Models.SettlementFoodModel;
                     var popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                    if (popData == null)
+                    if (popData == null) return;
+
+                    float excess = foodModel.GetPopulationFoodProduction(popData, town).ResultNumber - foodModel.GetPopulationFoodConsumption(popData).ResultNumber;
+                    float totalValue = items.Values.Sum();
+
+                    foreach (var pair in items)
                     {
-                        return;
-                    }
-
-                    var data = popData.LandData;
-                    var excess = foodModel.GetPopulationFoodProduction(popData, town).ResultNumber - 10 - foodModel.GetPopulationFoodConsumption(popData).ResultNumber;
-                    //float pasturePorportion = data.Pastureland / data.Acreage;
-
-                    var farmFood = MBMath.ClampFloat(data.Farmland * data.GetAcreOutput("farmland"), 0f, excess);
-                    if (town.IsCastle)
-                    {
-                        farmFood *= 0.1f;
-                    }
-
-                    while (farmFood > 1f)
-                    {
-                        foreach (var item in items)
-                        {
-                            if (!item.IsFood)
-                            {
-                                continue;
-                            }
-
-                            var count = farmFood > 10f
-                                ? (int)MBMath.ClampFloat(farmFood * MBRandom.RandomFloat, 0f, farmFood)
-                                : (int)farmFood;
-                            if (count == 0)
-                            {
-                                break;
-                            }
-
-                            BuyOutput(town, item, count, town.GetItemPrice(item));
-                            farmFood -= count;
-                        }
+                        ItemObject item = pair.Key;
+                        int count = (int)(excess * (pair.Value / totalValue));
+                        BuyOutput(town, item, count, (int)(town.GetItemPrice(item) / 2f));
                     }
                 }
             },
@@ -650,6 +627,7 @@ namespace BannerKings.Behaviours
             {
                 CheckRebellion(settlement);
                 HandleGarrison(settlement.Town);
+                HandleExcessFood(settlement.Town);
                 DeleteOverProduction(settlement.Town);
 
                 ItemConsumptionBehavior itemBehavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<ItemConsumptionBehavior>();
@@ -663,10 +641,8 @@ namespace BannerKings.Behaviours
                     runWk.Invoke(workshopBehavior, new object[] { settlement.Town, wk });
                 }
 
-                if (settlement.Town?.GarrisonParty == null)
-                {
-                    return;
-                }
+                if (settlement.Town?.GarrisonParty == null) return;
+                
 
                 Building barracks = settlement.Town.Buildings.FirstOrDefault(x => x.BuildingType.StringId == BKBuildings.Instance.CastleRetinue.StringId);
                 if (barracks != null && barracks.CurrentLevel > 0)
@@ -790,25 +766,8 @@ namespace BannerKings.Behaviours
         private void BuyOutput(Town town, ItemObject item, int count, int price)
         {
             var itemFinalPrice = (int)(price * (float)count);
-            if (town.IsTown)
-            {
-                town.Owner.ItemRoster.AddToCounts(item, count);
-                town.ChangeGold(-itemFinalPrice);
-            }
-            else
-            {
-                town.Settlement.Stash.AddToCounts(item, count);
-                town.OwnerClan.Leader.ChangeHeroGold(-itemFinalPrice);
-                if (town.OwnerClan.Leader == Hero.MainHero)
-                {
-                    InformationManager.DisplayMessage(new InformationMessage(
-                        new TextObject("{=OeCpEGzz}You have been charged {GOLD} for the excess production of {ITEM}, now in your stash at {CASTLE}.")
-                            .SetTextVariable("GOLD", $"{itemFinalPrice:n0}")
-                            .SetTextVariable("ITEM", item.Name)
-                            .SetTextVariable("CASTLE", town.Name)
-                            .ToString()));
-                }
-            }
+            town.Owner.ItemRoster.AddToCounts(item, count);
+            town.ChangeGold(-itemFinalPrice);
         }
 
         private void TickRotting(Settlement settlement)
