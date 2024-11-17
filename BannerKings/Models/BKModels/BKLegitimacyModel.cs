@@ -9,7 +9,7 @@ using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels.Abstract;
 using BannerKings.Utils.Models;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
@@ -145,11 +145,11 @@ namespace BannerKings.Models.BKModels
             int tier = hero.Clan.Tier;
             if (tier < 5)
             {
-                result.Add(-10f * (5f / tier), new TextObject());
+                result.Add(-8f * (5f / (float)MathF.Min(1, tier)), new TextObject("{=bbOk856z}Clan tier"));
             }
 
-            result.AddFactor(BKSkillEffects.Instance.Legitimacy.GetPrimaryValue(
-                hero.GetSkillValue(BKSkills.Instance.Lordship)) * 0.01f,
+            result.Add(MathF.Abs(result.BaseNumber) * (BKSkillEffects.Instance.Legitimacy.GetPrimaryValue(
+                hero.GetSkillValue(BKSkills.Instance.Lordship)) * 0.01f),
             new TextObject("{=UxAl9iyi}Personal"));
 
             Utils.Helpers.ApplyTraitEffect(hero, DefaultTraitEffects.Instance.ValorLegitimacy, ref result);
