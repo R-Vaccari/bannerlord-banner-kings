@@ -158,10 +158,11 @@ namespace BannerKings.Patches
             private static bool GetAccessiblePointNearPosition(MapScene __instance, Vec2 position, float radius, ref Vec2 __result)
             {
                 Vec2 vector = MBMapScene.GetAccessiblePointNearPosition(__instance.Scene, position, radius);
-                while (!PartyBase.IsPositionOkForTraveling(vector))
+                if (!PartyBase.IsPositionOkForTraveling(vector))
                 {
-                    vector = MBMapScene.GetAccessiblePointNearPosition(__instance.Scene, position, radius);
+                    vector = MBMapScene.GetAccessiblePointNearPosition(__instance.Scene, position, 1f);
                 }
+                __result = vector;
                 return true;
             }
         }
@@ -315,6 +316,131 @@ namespace BannerKings.Patches
                 }
 
                 return true;
+            }
+
+            /*[HarmonyPrefix]
+            [HarmonyPatch("FillPartyStacks")]
+            private static bool FillPartyStacksPrefix(MobileParty __instance, PartyTemplateObject pt, int troopNumberLimit = -1)
+            {
+                if (__instance.ActualClan != null && __instance.ActualClan.IsClanTypeMercenary)
+                {
+                    Console.Write("");
+                }
+
+                if (__instance.IsBandit)
+                {
+                    float playerProgress = Campaign.Current.PlayerProgress;
+                    float num = 0.4f + 0.8f * playerProgress;
+                    int num2 = MBRandom.RandomInt(2);
+                    float num3 = (num2 == 0) ? MBRandom.RandomFloat : (MBRandom.RandomFloat * MBRandom.RandomFloat * MBRandom.RandomFloat * 4f);
+                    float num4 = (num2 == 0) ? (num3 * 0.8f + 0.2f) : (1f + num3);
+                    float randomFloat = MBRandom.RandomFloat;
+                    float randomFloat2 = MBRandom.RandomFloat;
+                    float randomFloat3 = MBRandom.RandomFloat;
+                    float f = (pt.Stacks.Count > 0) ? ((float)pt.Stacks[0].MinValue + num * num4 * randomFloat * (float)(pt.Stacks[0].MaxValue - pt.Stacks[0].MinValue)) : 0f;
+                    float f2 = (pt.Stacks.Count > 1) ? ((float)pt.Stacks[1].MinValue + num * num4 * randomFloat2 * (float)(pt.Stacks[1].MaxValue - pt.Stacks[1].MinValue)) : 0f;
+                    float f3 = (pt.Stacks.Count > 2) ? ((float)pt.Stacks[2].MinValue + num * num4 * randomFloat3 * (float)(pt.Stacks[2].MaxValue - pt.Stacks[2].MinValue)) : 0f;
+                    __instance.AddElementToMemberRoster(pt.Stacks[0].Character, MBRandom.RoundRandomized(f), false);
+                    if (pt.Stacks.Count > 1)
+                    {
+                        __instance.AddElementToMemberRoster(pt.Stacks[1].Character, MBRandom.RoundRandomized(f2), false);
+                    }
+                    if (pt.Stacks.Count > 2)
+                    {
+                        __instance.AddElementToMemberRoster(pt.Stacks[2].Character, MBRandom.RoundRandomized(f3), false);
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (troopNumberLimit < 0)
+                    {
+                        float playerProgress2 = Campaign.Current.PlayerProgress;
+                        for (int i = 0; i < pt.Stacks.Count; i++)
+                        {
+                            int numberToAdd = (int)(playerProgress2 * (float)(pt.Stacks[i].MaxValue - pt.Stacks[i].MinValue)) + pt.Stacks[i].MinValue;
+                            CharacterObject character = pt.Stacks[i].Character;
+                            __instance.AddElementToMemberRoster(character, numberToAdd, false);
+                        }
+                        return false;
+                    }
+                    for (int j = 0; j < troopNumberLimit; j++)
+                    {
+                        int num5 = -1;
+                        float num6 = 0f;
+                        for (int k = 0; k < pt.Stacks.Count; k++)
+                        {
+                            num6 += ((__instance.IsGarrison && pt.Stacks[k].Character.IsRanged) ? 6f : ((__instance.IsGarrison && !pt.Stacks[k].Character.IsMounted) ? 2f : 1f)) * ((float)(pt.Stacks[k].MaxValue + pt.Stacks[k].MinValue) / 2f);
+                        }
+                        float num7 = MBRandom.RandomFloat * num6;
+                        for (int l = 0; l < pt.Stacks.Count; l++)
+                        {
+                            num7 -= ((__instance.IsGarrison && pt.Stacks[l].Character.IsRanged) ? 6f : ((__instance.IsGarrison && !pt.Stacks[l].Character.IsMounted) ? 2f : 1f)) * ((float)(pt.Stacks[l].MaxValue + pt.Stacks[l].MinValue) / 2f);
+                            if (num7 < 0f)
+                            {
+                                num5 = l;
+                                break;
+                            }
+                        }
+                        if (num5 < 0)
+                        {
+                            num5 = 0;
+                        }
+                        CharacterObject character2 = pt.Stacks[num5].Character;
+                        __instance.AddElementToMemberRoster(character2, 1, false);
+                    }
+                    bool isVillager = __instance.IsVillager;
+                }
+
+                return false;
+            }*/
+        }
+
+        [HarmonyPatch(typeof(LordPartyComponent))]
+        internal class LordPartyComponentPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("InitializeLordPartyProperties")]
+            private static bool InitializeLordPartyProperties(LordPartyComponent __instance, MobileParty mobileParty, Vec2 position, float spawnRadius, Settlement spawnSettlement)
+            {
+                Hero Owner = __instance.Owner;
+                mobileParty.AddElementToMemberRoster(Owner.CharacterObject, 1, insertAtFront: true);
+                mobileParty.ActualClan = Owner.Clan;
+                int troopNumberLimit = 0;
+                if (Owner != Hero.MainHero && Owner.Clan != Clan.PlayerClan)
+                {
+                    float factor = (Owner.Clan.IsRebelClan ? BannerKingsSettings.Instance.RebelSpawnSize
+                        : (Owner.Clan.IsClanTypeMercenary ? BannerKingsSettings.Instance.MercenarySpawnSize
+                            : BannerKingsSettings.Instance.NobleSpawnSize));
+                    if (BannerKingsSettings.Instance.SpawnSizeWar &&
+                        mobileParty.MapFaction.IsKingdomFaction &&
+                        FactionManager.GetEnemyKingdoms((Kingdom)mobileParty.MapFaction).Count() > 0)
+                        factor *= 0.5f;
+                    troopNumberLimit = (int)(mobileParty.Party.PartySizeLimit * factor);
+                }
+
+                if (!Campaign.Current.GameStarted)
+                {
+                    float randomFloat = MBRandom.RandomFloat;
+                    float num = MathF.Sqrt(MBRandom.RandomFloat);
+                    float num2 = 1f - randomFloat * num;
+                    troopNumberLimit = (int)((float)mobileParty.Party.PartySizeLimit * num2);
+                }
+                mobileParty.InitializeMobilePartyAroundPosition(Owner.Clan.DefaultPartyTemplate, position, spawnRadius, 0f, troopNumberLimit);
+                mobileParty.Party.SetVisualAsDirty();
+                if (spawnSettlement != null)
+                {
+                    mobileParty.Ai.SetMoveGoToSettlement(spawnSettlement);
+                }
+                mobileParty.Aggressiveness = 0.9f + 0.1f * (float)Owner.GetTraitLevel(DefaultTraits.Valor) - 0.05f * (float)Owner.GetTraitLevel(DefaultTraits.Mercy);
+                mobileParty.ItemRoster.Add(new ItemRosterElement(DefaultItems.Grain, MBRandom.RandomInt(15, 30)));
+                Owner.PassedTimeAtHomeSettlement = (int)(MBRandom.RandomFloat * 100f);
+                if (spawnSettlement != null)
+                {
+                    mobileParty.Ai.SetMoveGoToSettlement(spawnSettlement);
+                }
+
+                return false;
             }
         }
 
