@@ -99,8 +99,8 @@ namespace BannerKings.Patches
             [HarmonyPatch("MakeClanFinancialEvaluation", MethodType.Normal)]
             private static bool Prefix2(Clan clan)
             {
-                int num = clan.IsMinorFaction ? 10000 : 30000;
-                int num2 = clan.IsMinorFaction ? 30000 : 90000;
+                int num = MBRandom.RoundRandomized((clan.IsMinorFaction ? 10000 : 30000) * BannerKingsSettings.Instance.BaseWage);
+                int num2 = MBRandom.RoundRandomized((clan.IsMinorFaction ? 30000 : 90000) * BannerKingsSettings.Instance.BaseWage);
                 if (clan.Leader.Gold > num2)
                 {
                     using (List<WarPartyComponent>.Enumerator enumerator = clan.WarPartyComponents.GetEnumerator())
