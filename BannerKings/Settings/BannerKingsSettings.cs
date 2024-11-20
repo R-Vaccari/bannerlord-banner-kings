@@ -88,8 +88,6 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=2oJQ4Snn}Economy")]
         public bool PatrolParties { get; set; } = true;
 
-
-
         [SettingPropertyFloatingInteger("{=!}Population Sizes", minValue: 0.5f, maxValue: 2f, "#0%", RequireRestart = false, HintText = "{=!}Change the max size for fief populations. Populations are the very core of fiefs, impacting the economy very significantly, military volunteers, construction, and all else. Default: 100%.")]
         [SettingPropertyGroup("{=P8UecnYf}Balancing")]
         public float Populations { get; set; } = 1f;
@@ -160,6 +158,30 @@ namespace BannerKings.Settings
             }
         }
 
+        [SettingPropertyFloatingInteger("{=!}Mercenary Spawn Size", minValue: 0.1f, maxValue: 1f, "#0%", RequireRestart = false,
+            HintText = "{=!}Determines the % of a party's max size that will be filled with troops when they spawn. Only affects AI mercenary clans. Default: 50%.")]
+        [SettingPropertyGroup("{=!}Parties")]
+        public float MercenarySpawnSize { get; set; } = 0.5f;
+
+        [SettingPropertyFloatingInteger("{=!}Rebels Spawn Size", minValue: 0.1f, maxValue: 1f, "#0%", RequireRestart = false,
+            HintText = "{=!}Determines the % of a party's max size that will be filled with troops when they spawn. Only affects AI rebels clans. Default: 50%.")]
+        [SettingPropertyGroup("{=!}Parties")]
+        public float RebelSpawnSize { get; set; } = 0.5f;
+
+        [SettingPropertyFloatingInteger("{=!}Nobility Spawn Size", minValue: 0.1f, maxValue: 1f, "#0%", RequireRestart = false,
+            HintText = "{=!}Determines the % of a party's max size that will be filled with troops when they spawn. Only affects AI lord parties. Default: 25%.")]
+        [SettingPropertyGroup("{=!}Parties")]
+        public float NobleSpawnSize { get; set; } = 0.25f;
+
+        [SettingProperty("{=!}War Adjustment", RequireRestart = false, HintText = "{=!}Reduce spawn sizes by half when the party faction is at war. Prevents factions quickly recovering from battles, specially with higher spawn size percentages. Recommended unless using small spawn percentages. Default: true.")]
+        [SettingPropertyGroup("{=!}Parties")]
+        public bool SpawnSizeWar { get; set; } = true;
+
+        [SettingPropertyFloatingInteger("{=!}Raiding incentive", minValue: 0f, maxValue: 0.25f, "#0%", RequireRestart = false,
+            HintText = "{=!}Adds an incentive to parties and armies to raid villages. Higher numbers may make behaviour too deterministic. 0% means unaffected in relation to vanilla. Default: 10%.")]
+        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        public float RaidIncentive { get; set; } = 0.1f;
+
         [SettingProperty("{=!}Experimental AI", RequireRestart = true, HintText = "{=!}Alter army decision making based on leader traits, Casus Belli of the war, war Fronts, war target fief, etc. Affects how armies decide to defend, besiege or raid. Default: true.")]
         [SettingPropertyGroup("{=!}Armies")]
         public bool ArmyGoal { get; set; } = true;
@@ -167,7 +189,6 @@ namespace BannerKings.Settings
         [SettingProperty("{=!}Army Consistent Objectives", RequireRestart = false, HintText = "{=!}Improve consistency of army objectives by forcing them to not change objective every hour. Stops army from going back and forth in the same place due to changing priorities. Default: true.")]
         [SettingPropertyGroup("{=!}Armies")]
         public bool ArmyConsistency { get; set; } = true;
-
 
         [SettingProperty("{=CHVW1U24}De Re Militari Bandits", 
             RequireRestart = false, 
@@ -208,5 +229,15 @@ namespace BannerKings.Settings
             HintText = "{=!}Defines the relationship threshold for heroes to consider each other enemies. Vanilla is -10. Default: -50.")]
         [SettingPropertyGroup("{=!}Diplomacy")]
         public int HostileThreshold { get; set; } = -50;
+
+        [SettingPropertyInteger("{=!}Charm Xp Threshold", minValue: 1, maxValue: 10, "#0", RequireRestart = false,
+            HintText = "{=!}Defines the minimum relationship gain to trigger Charm experience gain. Any threshold above 1 by definition removes experience gain from relationship ticks caused by Relations Target (which is good). Vanilla is 1. Default: 5.")]
+        [SettingPropertyGroup("{=!}Diplomacy")]
+        public int CharmXpThreshold { get; set; } = 5;
+
+        [SettingPropertyFloatingInteger("{=!}Charm Xp Multiplier", minValue: 0.1f, maxValue: 1.5f, "#0%", RequireRestart = false,
+            HintText = "{=!}Affects the Charm experience gain from relationship changes. By default, Charm is too easy to gain. Vanilla is 100%. Default: 50%.")]
+        [SettingPropertyGroup("{=!}Diplomacy")]
+        public float CharmXpMultiplier { get; set; } = 0.5f;
     }
 }

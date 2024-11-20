@@ -30,14 +30,16 @@ namespace BannerKings.Models.Vanilla
         public override int MaxNeutralRelationLimit => BannerKingsSettings.Instance.FriendlyThreshold;
         public override int MinNeutralRelationLimit => BannerKingsSettings.Instance.HostileThreshold;
 
-        public override float GetRelationIncreaseFactor(Hero hero1, Hero hero2, float relationChange)
+        public override int GetCharmExperienceFromRelationGain(Hero hero, float relationChange, ChangeRelationAction.ChangeRelationDetail detail)
         {
-            if (relationChange == 1f) return 1f;
+            int xp = base.GetCharmExperienceFromRelationGain(hero, relationChange, detail);
+            if (xp < BannerKingsSettings.Instance.CharmXpThreshold) 
+                return 0;
 
-            ExplainedNumber stat = new ExplainedNumber(base.GetRelationIncreaseFactor(hero1, hero2, relationChange));
-            Utils.Helpers.ApplyTraitEffect(hero2, DefaultTraitEffects.Instance.GenerosityRelation, ref stat);
+            if (xp > 0)
+                xp = (int)MathF.Min(1f, xp * BannerKingsSettings.Instance.CharmXpMultiplier);
 
-            return stat.ResultNumber;
+            return xp;
         }
 
         public override ExplainedNumber GetRightInnfluenceCost(ContractRight right, Hero suzerain, Hero vassal)
@@ -171,9 +173,9 @@ namespace BannerKings.Models.Vanilla
             if (enemies.IsEmpty()) result.Add(-20f, new TextObject("{=!}No wars being fought"));
             float baseNumber = MathF.Abs(result.BaseNumber);
 
-            if (kingdom.KingdomBudgetWallet > 100000) result.AddFactor(0.1f, new TextObject("{=!}{KINGDOM} has significant budget for sellswords")
+            if (kingdom.KingdomBudgetWallet > 100000) result.Add(baseNumber * 0.1f, new TextObject("{=!}{KINGDOM} has significant budget for sellswords")
                     .SetTextVariable("KINGDOM", kingdom.Name));
-            else if (kingdom.KingdomBudgetWallet > 50000) result.AddFactor(0.05f, new TextObject("{=!}{KINGDOM} has extra budget for sellswords")
+            else if (kingdom.KingdomBudgetWallet > 50000) result.Add(baseNumber * 0.05f, new TextObject("{=!}{KINGDOM} has extra budget for sellswords")
                     .SetTextVariable("KINGDOM", kingdom.Name));
 
             Hero ruler = kingdom.RulingClan.Leader;
