@@ -30,5 +30,7 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines.War
 
             return false;
         }
+
+        public int GetPietyCost(CasusBelli cb) => AcceptsJustification(cb) ? Justifications[cb] : 0;
     }
 }

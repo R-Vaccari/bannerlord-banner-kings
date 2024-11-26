@@ -1,4 +1,5 @@
 ﻿using BannerKings.Behaviours.Diplomacy.Barterable;
+using BannerKings.Managers.Institutions.Religions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Election;
@@ -28,8 +29,15 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             DeclareWarDecisionOutcome outcome = (DeclareWarDecisionOutcome)chosenOutcome;
             if (outcome.ShouldWarBeDeclared)
             {
-                TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
+                Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
                     .TriggerJustifiedWar(CasusBelli, Kingdom, FactionToDeclareWarOn as Kingdom);
+
+                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(ProposerClan.Leader);
+                if (religion != null && religion.Faith.WarDoctrine.AcceptsJustification(CasusBelli))
+                {
+                    BannerKingsConfig.Instance.ReligionsManager.AddPiety(ProposerClan.Leader,
+                        religion.Faith.WarDoctrine.GetPietyCost(CasusBelli), true);
+                }
             }
         }
     }

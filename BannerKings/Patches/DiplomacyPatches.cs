@@ -17,6 +17,8 @@ using TaleWorlds.CampaignSystem.Party;
 using SandBox.View.Map;
 using TaleWorlds.CampaignSystem.BarterSystem.Barterables;
 using TaleWorlds.CampaignSystem.CampaignBehaviors.BarterBehaviors;
+using BannerKings.Utils;
+using BannerKings.Managers.Institutions.Religions;
 
 namespace BannerKings.Patches
 {
@@ -346,15 +348,31 @@ namespace BannerKings.Patches
             private static void ShowWarOptions(KingdomDiplomacy diplomacy, Kingdom enemyKingdom, KingdomDiplomacyVM __instance)
             {
                 var list = new List<InquiryElement>();
-                bool enabled = Clan.PlayerClan.Influence >= BannerKingsConfig.Instance.DiplomacyModel.GetInfluenceCostOfProposingWar(Clan.PlayerClan);
+                float influenceCost = BannerKingsConfig.Instance.DiplomacyModel.GetInfluenceCostOfProposingWar(Clan.PlayerClan);
+                bool enabled = Clan.PlayerClan.Influence >= influenceCost;
+
+                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
                 foreach (var casusBelli in diplomacy.GetAvailableCasusBelli(enemyKingdom))
                 {
                     float support = new KingdomElection(new BKDeclareWarDecision(casusBelli,
                         Clan.PlayerClan,
                         enemyKingdom)).GetLikelihoodForOutcome(0);
 
+                    bool isReligious = religion != null && religion.Faith.WarDoctrine.AcceptsJustification(casusBelli);
+                    TextObject piety = isReligious ? new TextObject("{=!}{PIETY}{PIETY_ICON}")
+                        .SetTextVariable("PIETY", religion.Faith.WarDoctrine.GetPietyCost(casusBelli))
+                        .SetTextVariable("PIETY_ICON", TextHelper.PIETY_ICON)
+                        :
+                        TextObject.Empty;
+
+                    if (enabled)
+                        enabled = religion.Faith.WarDoctrine.HeroHasPiety(Hero.MainHero, casusBelli);
+
                     list.Add(new InquiryElement(casusBelli,
-                    new TextObject("{=7eaVjOKn}{NAME} ({CHANCE}% approval)")
+                    new TextObject("{=!}{NAME} - {INFLUENCE}{INFLUENCE_ICON} {PIETY} ({CHANCE}% approval)")
+                    .SetTextVariable("INFLUENCE", MBRandom.RoundRandomized(influenceCost))
+                    .SetTextVariable("INFLUENCE_ICON", TextHelper.INFLUENCE_ICON)
+                    .SetTextVariable("PIETY", piety)
                     .SetTextVariable("NAME", casusBelli.QueryNameText)
                     .SetTextVariable("CHANCE", (support * 100).ToString("0.00")).ToString(),
                     null,
