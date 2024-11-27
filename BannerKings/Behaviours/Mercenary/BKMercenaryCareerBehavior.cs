@@ -159,7 +159,7 @@ namespace BannerKings.Behaviours.Mercenary
             int result = MathF.Min(gold, kingdom.RulingClan.Gold);
             kingdom.RulingClan.Leader.ChangeHeroGold(-result);
             mercenaryClan.Leader.ChangeHeroGold(result);
-            //if (mercenaryClan == Clan.PlayerClan)
+            if (mercenaryClan == Clan.PlayerClan)
                 InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}The {CLAN} has received {GOLD}{GOLD_ICON} as earnest-money for their service.")
                     .SetTextVariable("CLAN", mercenaryClan.Name)
                     .SetTextVariable("GOLD", result)
@@ -190,8 +190,7 @@ namespace BannerKings.Behaviours.Mercenary
 
                     RunWeekly(() =>
                     {
-                        if (BannerKingsConfig.Instance.DiplomacyModel.GetScoreOfKingdomToSackMercenary(clan.Kingdom, merc) >
-                        BannerKingsConfig.Instance.DiplomacyModel.GetScoreOfKingdomToHireMercenary(clan.Kingdom, merc))
+                        if (BannerKingsConfig.Instance.DiplomacyModel.GetScoreOfKingdomToHireMercenary(clan.Kingdom, merc) < 0f)
                         {
                             toFire.Add(merc);
                         }
@@ -203,8 +202,8 @@ namespace BannerKings.Behaviours.Mercenary
                 foreach (Clan merc in toFire)
                 {
                     var career = GetCareer(merc);
-                    career.RemoveKingdom(merc.Kingdom, true);
-                    ChangeKingdomAction.ApplyByLeaveKingdomAsMercenary(merc);
+                    if (career.LastDismissal.ElapsedSeasonsUntilNow > 1f)
+                        career.CheckFiring(merc.Kingdom);
                 }
             }
         }

@@ -1,4 +1,7 @@
 using BannerKings.Managers.Populations.Estates;
+using BannerKings.Models.Vanilla.Abstract;
+using BannerKings.Utils;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -41,6 +44,7 @@ namespace BannerKings.Behaviours.Mercenary
 
         [SaveableProperty(9)] public int ServiceDays { get; private set; }
         [SaveableProperty(10)] public CampaignTime ContractDueDate { get; private set; }
+        [SaveableProperty(11)] public CampaignTime LastDismissal { get; private set; }
 
         public void AddPoints()
         {
@@ -224,6 +228,171 @@ namespace BannerKings.Behaviours.Mercenary
             ContractDueDate = CampaignTime.YearsFromNow(1f);
         }
 
+        public void CheckFiring(Kingdom kingdom)
+        {
+            DiplomacyModel model = BannerKingsConfig.Instance.DiplomacyModel;
+            int remainingDays = (int)ContractDueDate.RemainingDaysFromNow;
+            bool earlyFiring = remainingDays > 0;
+
+            if (!earlyFiring) FireMercenary(kingdom);
+
+            if (Clan != Clan.PlayerClan)
+            {
+                if (model.WillMercenaryDeclareWar(kingdom, Clan).ResultNumber > 0f)
+                {
+                    foreach (Kingdom enemy in FactionManager.GetEnemyKingdoms(kingdom))
+                    {
+                        if (model.GetScoreOfKingdomToHireMercenary(enemy, Clan) > 0f &&
+                            model.GetScoreOfMercenaryToJoinKingdom(Clan, enemy) > 0f)
+                        {
+                            LeaveForEnemy(kingdom, enemy);
+                            if (kingdom == Hero.MainHero.MapFaction)
+                                InformationManager.DisplayMessage(new InformationMessage(
+                                    new TextObject("{=!}The {CLAN} has joined the {KINGDOM} in retaliation to being fired!")
+                                    .SetTextVariable("CLAN", Clan.Name)
+                                    .SetTextVariable("KINGDOM", enemy.Name)
+                                    .ToString(),
+                                    Color.FromUint(Utils.TextHelper.COLOR_LIGHT_RED)));
+                            return;
+                        }
+                    }
+                }
+      
+                if (model.GetScoreOfMercenaryToJoinKingdom(Clan, kingdom) > model.GetScoreOfMercenaryToLeaveKingdom(Clan, kingdom))
+                    RefuseDismissal(kingdom);
+                else FireMercenary(kingdom);
+            }
+            else ShowPlayerLeaveOptions(kingdom, remainingDays);
+        }
+
+        private void ShowPlayerLeaveOptions(Kingdom kingdom, int remainingDays)
+        {
+            DiplomacyModel model = BannerKingsConfig.Instance.DiplomacyModel;
+            int finalReward = GetFiringGoldReward(kingdom);
+            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Mercenary Dismissal").ToString(),
+                new TextObject("{=!}{RULER} has decided the {KINGDOM} shall no longer need the services of your company. As per contract, {DAYS} days of service remain, for which they are willing to pay {GOLD}{GOLD_ICON} as compensation.{newline}{newline}You can concede to their decision, or resist it. Resisting it may be done by continued service, or disbanding the {KINGDOM} and joining their enemies.")
+                .SetTextVariable("KINGDOM", kingdom.Name)
+                .SetTextVariable("RULER", kingdom.Leader.Name)
+                .SetTextVariable("DAYS", remainingDays)
+                .SetTextVariable("GOLD", finalReward)
+                .ToString(),
+                true,
+                true,
+                GameTexts.FindText("str_accept").ToString(),
+                new TextObject("{=!}Resist").ToString(),
+                () =>
+                {
+                    FireMercenary(kingdom);
+                },
+                () =>
+                {
+                    int influence = MBRandom.RoundRandomized(MathF.Min(Clan.Influence,
+                        BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(Clan).ResultNumber * 0.15f));
+
+                    var enemies = FactionManager.GetEnemyKingdoms(kingdom);
+                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Resisting Dismissal").ToString(),
+                        new TextObject("{=!}You may resist the dismissal by relenting to give on your contract, or by joining the enemies of the {KINGDOM} - if they have any. By denying your dismissal, you will lose {INFLUENCE}{INFLUENCE_ICON} and opinion with {RULER}.{newline}{newline}By joining their enemies, you shall be branded a criminal, hated by the ruler and your whole company be less regarded by all the royal households of {KINGDOM}.")
+                        .SetTextVariable("KINGDOM", kingdom.Name)
+                        .SetTextVariable("RULER", kingdom.Leader.Name)
+                        .SetTextVariable("INFLUENCE", influence)
+                        .SetTextVariable("INFLUENCE_ICON", TextHelper.INFLUENCE_ICON)
+                        .ToString(),
+                        true,
+                        !enemies.IsEmpty(),
+                        new TextObject("{=!}Reject Dismissal").ToString(),
+                        new TextObject("{=!}Join Enemies").ToString(),
+                        () =>
+                        {
+                            RefuseDismissal(kingdom);
+                        },
+                        () =>
+                        {
+                            List<InquiryElement> options = new List<InquiryElement>();
+                            foreach (Kingdom enemy in enemies)
+                            {
+                                bool enabled = model.GetScoreOfKingdomToHireMercenary(enemy, Clan) > 0f;
+                                TextObject hint = enabled ?
+                                    new TextObject("{=!}The {KINGDOM} is willing to accept you. They have a strength of {STRENGTH} relative to your current employers.")
+                                    .SetTextVariable("KINGDOM", enemy.Name)
+                                    .SetTextVariable("STRENGTH", ((enemy.TotalStrength / kingdom.TotalStrength) * 100f).ToString("0"))
+                                    :
+                                    new TextObject("{=!}The {KINGDOM} is not willing to accept you.")
+                                    .SetTextVariable("KINGDOM", enemy.Name);
+                                options.Add(new InquiryElement(enemy,
+                                    enemy.Name.ToString(),
+                                    new ImageIdentifier(enemy.Banner),
+                                    enabled,
+                                    hint.ToString()
+                                    ));
+                            }
+
+                            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                                new TextObject("{=!}Join Enemies").ToString(),
+                                new TextObject("{=!}By accusing the break of contract by {RULER}, you choose to join their enemies. Doing so will have you declared a criminal within the {KINGDOM}, and cause deep resent within their noble peers, specially so with {RULER}")
+                                .SetTextVariable("KINGDOM", kingdom.Name)
+                                .SetTextVariable("RULER", kingdom.Leader.Name)
+                                .ToString(),
+                                null,
+                                true,
+                                1,
+                                1,
+                                GameTexts.FindText("str_accept").ToString(),
+                                "",
+                                (List<InquiryElement> list) =>
+                                {
+                                    Kingdom enemy = (Kingdom)list.First().Identifier;
+                                    LeaveForEnemy(kingdom, enemy);
+                                },
+                                (List<InquiryElement> list) =>
+                                {
+                                    ShowPlayerLeaveOptions(kingdom, remainingDays);
+                                }));
+                        }));
+                },
+                Utils.Helpers.GetKingdomDecisionSound()),
+                true,
+                true);
+        }
+
+        private void RefuseDismissal(Kingdom kingdom)
+        {
+            LastDismissal = CampaignTime.Now;
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Clan.Leader, kingdom.Leader, -15);
+        }
+
+        private void LeaveForEnemy(Kingdom original, Kingdom enemy)
+        {
+            FireMercenary(original);
+            if (Clan == Clan.PlayerClan)
+                ChangeCrimeRatingAction.Apply(original, 100f - original.MainHeroCrimeRating, true);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Clan.Leader, original.Leader, -60);
+            foreach (Clan clan in original.Clans)
+                foreach (Hero hero in Clan.Heroes)
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(clan.Leader, hero, -10, false);
+  
+            ChangeKingdomAction.ApplyByJoinFactionAsMercenary(Clan, enemy);
+        }
+
+        public void FireMercenary(Kingdom kingdom)
+        {
+            if (Clan.Kingdom == kingdom)
+            {
+                RemoveKingdom(kingdom, false);
+                ChangeKingdomAction.ApplyByLeaveKingdomAsMercenary(Clan);
+            }
+        }
+
+        public int GetFiringGoldReward(Kingdom kingdom)
+        {
+            float generosity = kingdom.RulingClan.Leader.GetTraitLevel(DefaultTraits.Generosity);
+            float cashBack = 0.5f + (generosity * 0.25f);
+            float reward = Clan.Influence * (1f / Campaign.Current.Models.ClanFinanceModel.RevenueSmoothenFraction()) * Clan.MercenaryAwardMultiplier;
+            return MathF.Ceiling(reward * ContractDueDate.RemainingDaysFromNow * cashBack);
+        }
+
+        public float GetFiringRelationImpact() =>
+            ContractDueDate.RemainingDaysFromNow > 0 ? - MBMath.Map(ContractDueDate.RemainingDaysFromNow, 1, CampaignTime.DaysInYear, 15, 50) : 0;
+
         public void RemoveKingdom(Kingdom kingdom, bool fired = false)
         {
             if (Kingdom != kingdom) return;
@@ -247,10 +416,7 @@ namespace BannerKings.Behaviours.Mercenary
                 }
                 else
                 {
-                    float generosity = kingdom.RulingClan.Leader.GetTraitLevel(DefaultTraits.Generosity);
-                    float cashBack = 0.5f + (generosity * 0.25f);
-                    float reward = Clan.Influence * (1f / Campaign.Current.Models.ClanFinanceModel.RevenueSmoothenFraction()) * Clan.MercenaryAwardMultiplier;
-                    int finalReward = MathF.Ceiling(reward * daysLeft * cashBack);
+                    int finalReward = GetFiringGoldReward(kingdom);
                     GiveGoldAction.ApplyBetweenCharacters(kingdom.RulingClan.Leader, Clan.Leader, finalReward, true);
 
                     if (Clan != Clan.PlayerClan)
