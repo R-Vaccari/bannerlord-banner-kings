@@ -94,13 +94,13 @@ namespace BannerKings.UI.VanillaTabs.Kingdoms.Groups
                 if (Group.Members.Contains(Hero.MainHero))
                 {
                     IsActionEnabled = Group.CanHeroLeave(Hero.MainHero, KingdomDiplomacy);
-                    ActionName = new TextObject("Leave Group").ToString();
-                    ActionHint = new HintViewModel(new TextObject("Leave Group"));
+                    ActionName = new TextObject("{=!}Leave Group").ToString();
+                    ActionHint = new HintViewModel(new TextObject("{=!}Leave Group"));
                 }
                 else
                 {
                     IsActionEnabled = BannerKingsConfig.Instance.InterestGroupsModel.CanHeroJoinARadicalGroup(Hero.MainHero, KingdomDiplomacy);
-                    ActionName = new TextObject("Join Group").ToString();
+                    ActionName = new TextObject("{=!}Join Group").ToString();
                 }
 
                 Headers.Add(new StringPairItemVM(new TextObject("{=znEakOmv}Radicalism").ToString(),

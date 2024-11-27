@@ -76,7 +76,7 @@ namespace BannerKings.UI.Extensions.Encyclopedia
                 var languages = education.Languages.Keys;
                 heroPageVM.Stats.Add(new StringPairItemVM(new TextObject("{=yCaxpVGh}Languages:").ToString(),
                     education.Languages.Count.ToString(),
-                    new BasicTooltipViewModel(() => languages.Aggregate(string.Empty, (current, reason) => current + Environment.NewLine + reason))));
+                    new BasicTooltipViewModel(() => languages.Aggregate(string.Empty, (current, reason) => current + Environment.NewLine + reason.Name))));
 
                 if (education.Lifestyle != null)
                 {
