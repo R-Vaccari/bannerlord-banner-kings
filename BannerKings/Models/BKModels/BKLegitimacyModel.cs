@@ -145,7 +145,14 @@ namespace BannerKings.Models.BKModels
             int tier = hero.Clan.Tier;
             if (tier < 5)
             {
-                result.Add(-8f * (5f / (float)MathF.Min(1, tier)), new TextObject("{=bbOk856z}Clan tier"));
+                int factor = tier switch
+                {
+                    4 => -5,
+                    3 => -10,
+                    _ => -20
+                };
+
+                result.Add(factor, new TextObject("{=bbOk856z}Clan tier"));
             }
 
             result.Add(MathF.Abs(result.BaseNumber) * (BKSkillEffects.Instance.Legitimacy.GetPrimaryValue(
