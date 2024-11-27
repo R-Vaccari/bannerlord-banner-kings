@@ -37,9 +37,40 @@ namespace BannerKings.Models.Vanilla
                 return 0;
 
             if (xp > 0)
-                xp = (int)MathF.Min(1f, xp * BannerKingsSettings.Instance.CharmXpMultiplier);
+                xp = (int)MathF.Max(1f, xp * BannerKingsSettings.Instance.CharmXpMultiplier);
 
             return xp;
+        }
+
+        public override ExplainedNumber WillMercenaryDeclareWar(Kingdom kingdom, Clan firedMercenary, bool explanations = false)
+        {
+            ExplainedNumber cost = new ExplainedNumber(firedMercenary.Leader.GetTraitLevel(DefaultTraits.Honor) * -50f,
+                explanations,
+                new TextObject("{=vrm5pNf3}Honor of {HERO}")
+                .SetTextVariable("HERO", firedMercenary.Leader.Name));
+
+            float strength = firedMercenary.TotalStrength;
+            if (strength < (kingdom.TotalStrength - strength) * 0.1f)
+                cost.Add(-1000f, new TextObject("{=!}{CLAN} is too weak in relation to {KINGDOM}")
+                    .SetTextVariable("CLAN", firedMercenary.Name)
+                    .SetTextVariable("KINGDOM", kingdom.Name));
+
+            if (firedMercenary.IsOutlaw)
+                cost.Add(100f, new TextObject("{=!}{CLAN} are outlaws")
+                        .SetTextVariable("CLAN", firedMercenary.Name)
+                        .SetTextVariable("KINGDOM", kingdom.Name));
+
+            if (firedMercenary.IsMafia)
+                cost.Add(50f, new TextObject("{=!}{CLAN} are outlaws")
+                        .SetTextVariable("CLAN", firedMercenary.Name)
+                        .SetTextVariable("KINGDOM", kingdom.Name));
+
+            float desire = GetScoreOfMercenaryToJoinKingdom(firedMercenary, kingdom) -
+                GetScoreOfMercenaryToLeaveKingdom(firedMercenary, kingdom);
+            cost.Add(desire, new TextObject("{=!}Desire to leave {KINGDOM}")
+                        .SetTextVariable("KINGDOM", kingdom.Name));
+
+            return cost;
         }
 
         public override ExplainedNumber GetRightInnfluenceCost(ContractRight right, Hero suzerain, Hero vassal)
@@ -165,6 +196,9 @@ namespace BannerKings.Models.Vanilla
                 explanations,
                 new TextObject("{=!}{KINGDOM} needs more fighting forces").SetTextVariable("KINGDOM", kingdom.Name));
             float strength = kingdom.TotalStrength;
+            if (mercenaryClan.Kingdom == kingdom)
+                strength -= mercenaryClan.TotalStrength;
+
             var enemies = FactionManager.GetEnemyKingdoms(kingdom);
             foreach (Kingdom enemy in enemies)
                 result.Add(((enemy.TotalStrength * 1.1f) - strength) * 0.1f, new TextObject("{=!}War against {KINGDOM}")
@@ -244,6 +278,14 @@ namespace BannerKings.Models.Vanilla
                 };
 
                 result.Add(baseNumber * (career.Reputation - factor), new TextObject("{=!}Reputation"));
+
+                if (career.ContractDueDate.IsFuture)
+                    result.Add(baseNumber * (career.ContractDueDate.RemainingDaysFromNow / CampaignTime.DaysInYear), 
+                        new TextObject("{=!}Contract due date"));
+
+                foreach (Town town in kingdom.Fiefs)
+                    if (town.LastCapturedBy == mercenaryClan)
+                        result.Add(baseNumber  * 0.15f, town.Name);
             }
 
             return result;
