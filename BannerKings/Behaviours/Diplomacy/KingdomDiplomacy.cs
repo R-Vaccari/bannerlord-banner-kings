@@ -6,7 +6,7 @@ using BannerKings.Utils.Models;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -211,6 +211,13 @@ namespace BannerKings.Behaviours.Diplomacy
             }
         }
 
+        public void DissolveTradePactForcefully(Kingdom kingdom)
+        {
+            DissolveTradePact(kingdom, new TextObject("{=!}The {KINGDOM} is no longer interested.")
+                        .SetTextVariable("KINGDOM", Kingdom.Name));
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Kingdom.Leader, kingdom.Leader, -10);
+        }
+
         public void DissolveTruce(Kingdom kingdom, TextObject reason)
         {
             if (HasValidTruce(kingdom))
@@ -346,6 +353,14 @@ namespace BannerKings.Behaviours.Diplomacy
                     {
                         group.SetupRadicalGroup(hero, null);
                     }
+                }
+            }
+
+            foreach (Kingdom partner in TradePacts)
+            {
+                if (!BannerKingsConfig.Instance.DiplomacyModel.WillAcceptTrade(partner, Kingdom))
+                {
+                    DissolveTradePactForcefully(partner);
                 }
             }
         }

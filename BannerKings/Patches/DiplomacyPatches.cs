@@ -175,19 +175,13 @@ namespace BannerKings.Patches
             private static bool ButtonPopup(KingdomDiplomacyVM __instance, KingdomTruceItemVM item)
             {
                 IFaction enemy = item.Faction2;
-                if (!enemy.IsKingdomFaction)
-                {
-                    return true;
-                }
+                if (!enemy.IsKingdomFaction) return true;
 
                 Kingdom enemyKingdom = enemy as Kingdom;
                 Kingdom kingdom = item.Faction1 as Kingdom;
                 KingdomDiplomacy diplomacy = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>().GetKingdomDiplomacy(kingdom);
-                if (diplomacy == null)
-                {
-                    return true;
-                }
-
+                if (diplomacy == null) return true;
+                
                 if (kingdom.UnresolvedDecisions.Any(x => x is DeclareWarDecision || x is BKDeclareWarDecision))
                 {
                     InformationManager.DisplayMessage(new InformationMessage(
@@ -254,6 +248,22 @@ namespace BannerKings.Patches
                         new TextObject("{=qEYgKaNs}Propose a trade pact between both realms. A trade access pact establishes the exemptions of caravan tariffs between both realms, meaning that their caravans will not pay entry fees in your realm's fiefs, nor will your realm's caravans pay in theirs. The absence of fees stimulates caravans to circulate in these fiefs, strengthening mercantilism, prosperity and supply of different goods between both sides, while also diverging trade from other realms. A trade pact does not necessarily bring any revenue to lords. In fact, it may incur in some revenue loss due to the caravan fee exemptions.\n\n{POSSIBLE}")
                         .SetTextVariable("POSSIBLE", tradeHint)
                         .ToString()));
+
+                    if (!tradePossible)
+                    {
+                        if (diplomacy.HasTradePact(enemyKingdom))
+                        {
+                            Action<KingdomDiplomacy, Kingdom, KingdomDiplomacyVM> undoPact = ShowDissolveTradePact;
+                            list.Add(new InquiryElement(makePact,
+                                new TextObject("{=!}Undo Trade Pact").ToString(),
+                                null,
+                                playerRuler,
+                                new TextObject("{=!}Dissolve the trade access between your realm and the {KINGDOM}. This will discourage trade between both realms and make lords more likely to accept wars between them. {LEADER} may be displeased with this choice.")
+                                .SetTextVariable("KINGDOM", enemyKingdom.Name)
+                                .SetTextVariable("LEADER", enemyKingdom.RulingClan.Leader.Name)
+                                .ToString()));
+                        }
+                    }
 
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                         new TextObject("{=7OCs6wMk}Diplomatic Action").ToString(),
@@ -345,6 +355,25 @@ namespace BannerKings.Patches
                     null));
             }
 
+            private static void ShowDissolveTradePact(KingdomDiplomacy diplomacy, Kingdom enemyKingdom, KingdomDiplomacyVM __instance)
+            {
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Undo Trade Access").ToString(),
+                    new TextObject("{=!}Dissolve the trade access between your realm and the {KINGDOM}. This will discourage trade between both realms and make lords more likely to accept wars between them. {LEADER} may be displeased with this choice.")
+                    .SetTextVariable("KINGDOM", enemyKingdom.Name)
+                    .SetTextVariable("LEADER", enemyKingdom.RulingClan.Leader.Name)
+                    .ToString(),
+                    true,
+                    true,
+                    GameTexts.FindText("str_policy_propose").ToString(),
+                    GameTexts.FindText("str_selection_widget_cancel").ToString(),
+                    () =>
+                    {
+                        diplomacy.DissolveTradePactForcefully(enemyKingdom);
+                        __instance.RefreshValues();
+                    },
+                    null));
+            }
+
             private static void ShowWarOptions(KingdomDiplomacy diplomacy, Kingdom enemyKingdom, KingdomDiplomacyVM __instance)
             {
                 var list = new List<InquiryElement>();
@@ -365,7 +394,7 @@ namespace BannerKings.Patches
                         :
                         TextObject.Empty;
 
-                    if (enabled)
+                    if (enabled && isReligious)
                         enabled = religion.Faith.WarDoctrine.HeroHasPiety(Hero.MainHero, casusBelli);
 
                     list.Add(new InquiryElement(casusBelli,
