@@ -377,7 +377,7 @@ namespace BannerKings.Behaviours.Mercenary
         {
             if (Clan.Kingdom == kingdom)
             {
-                RemoveKingdom(kingdom, false);
+                RemoveKingdom(kingdom, true);
                 ChangeKingdomAction.ApplyByLeaveKingdomAsMercenary(Clan);
             }
         }
