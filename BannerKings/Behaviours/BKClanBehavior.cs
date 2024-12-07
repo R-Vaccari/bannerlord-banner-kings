@@ -731,16 +731,12 @@ namespace BannerKings.Behaviours
 
         private void DismissParties(Clan clan)
         {
-            if (!BannerKingsSettings.Instance.DismissParties)
-            {
-                return;
-            }
+            if (!BannerKingsSettings.Instance.DismissParties) return;
 
             Kingdom kingdom = clan.Kingdom;
-            if ( kingdom == null)
-            {
-                return;
-            }
+            if (kingdom == null) return;
+
+            if (clan.IsUnderMercenaryService) return;
 
             if (FactionManager.GetEnemyKingdoms(kingdom).Count() == 0)
             {
