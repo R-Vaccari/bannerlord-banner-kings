@@ -18,6 +18,29 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKArmyManagementModel : ArmyModel
     {
+        public bool CanHeroRecruitHero(Hero recruiter, Hero recruited)
+        {
+            return true;
+        }
+
+        public bool CanHeroRecruitMercs(Hero recruiter, Hero partyLeader) => 
+            (recruiter.MapFaction.IsKingdomFaction && recruiter.MapFaction.Leader == recruiter)
+            || (recruiter.Clan.IsUnderMercenaryService && partyLeader != null && partyLeader.Clan == recruiter.Clan);
+
+        public override bool CheckPartyEligibility(MobileParty party)
+        {
+            bool result = base.CheckPartyEligibility(party);
+            if (party.ActualClan != null)
+            {
+                if (party.ActualClan.IsUnderMercenaryService)
+                    result = CanHeroRecruitMercs(Hero.MainHero, party.LeaderHero);
+                else if (Clan.PlayerClan.IsUnderMercenaryService)
+                    result = false;
+            }  
+
+            return result;
+        }
+
         public override bool CanCreateArmy(Hero armyLeader)
         {
             if (armyLeader.Clan == null) return false;
@@ -25,16 +48,13 @@ namespace BannerKings.Models.Vanilla
             var kingdom = armyLeader.Clan.Kingdom;
             if (kingdom != null)
             {
-                if (kingdom.Leader == armyLeader)
-                {
-                    return true;
-                }
+                if (kingdom.Leader == armyLeader) return true;
+
+                if (armyLeader.Clan.IsUnderMercenaryService) return true;
 
                 CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
                 if (council.GetHeroPositions(armyLeader).Any(x => x.Privileges.Contains(CouncilPrivileges.ARMY_PRIVILEGE)))
-                {
                     return true;
-                }
 
                 FeudalTitle kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                 FeudalTitle heroTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(armyLeader);
@@ -65,25 +85,16 @@ namespace BannerKings.Models.Vanilla
         public override List<MobileParty> GetMobilePartiesToCallToArmy(MobileParty leaderParty)
         {
             List<MobileParty> results = base.GetMobilePartiesToCallToArmy(leaderParty);
+            List<MobileParty> toRemove = new List<MobileParty>();
             var kingdom = leaderParty.LeaderHero?.Clan.Kingdom;
             if (kingdom != null)
             {
                 FeudalTitle kingdomTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                 if (kingdomTitle != null && kingdomTitle.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyLegion))
                 {
-                    List<MobileParty> toRemove = new List<MobileParty>();
                     foreach (MobileParty p in results)
-                    {
                         if (p != leaderParty && p.LeaderHero != null && CanCreateArmy(p.LeaderHero))
-                        {
                             toRemove.Add(p);
-                        }
-                    }
-
-                    foreach (MobileParty p in toRemove)
-                    {
-                        results.Remove(p);
-                    }
                 }
 
                 foreach (var party in leaderParty.LeaderHero.Clan.WarPartyComponents)
@@ -95,7 +106,19 @@ namespace BannerKings.Models.Vanilla
                         results.Add(party.MobileParty);
                     }
                 }
+
+                foreach (MobileParty p in results)
+                {
+                    if (!CanHeroRecruitMercs(leaderParty.LeaderHero, p.LeaderHero))
+                        toRemove.Add(p);
+
+                    if (leaderParty.LeaderHero.Clan.IsUnderMercenaryService && !p.LeaderHero.Clan.IsUnderMercenaryService)
+                        toRemove.Add(p);
+                }
             }
+
+            foreach (MobileParty p in toRemove)
+                results.Remove(p);
 
             return results;
         }
@@ -105,7 +128,7 @@ namespace BannerKings.Models.Vanilla
             ExplainedNumber result =  base.CalculateDailyCohesionChange(army, includeDescriptions);
             result.LimitMax(-0.1f);
             
-            if (result.ResultNumber < 0f && army.LeaderParty != null && army.LeaderParty.LeaderHero != null)
+            if (army.LeaderParty != null && army.LeaderParty.LeaderHero != null)
             {
                 EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(army.LeaderParty.LeaderHero);
                 if (education.HasPerk(BKPerks.Instance.CommanderInspirer))
@@ -169,6 +192,14 @@ namespace BannerKings.Models.Vanilla
                 if(education.HasPerk(BKPerks.Instance.KheshigHonorGuard))
                 {
                     result *= 1.3f;
+                }
+
+                Clan clan = armyMemberParty.LeaderHero.Clan;
+                if (clan.IsUnderMercenaryService && 
+                    armyMemberParty.Army.LeaderParty.ActualClan != null &&
+                    armyMemberParty.Army.LeaderParty.ActualClan.IsUnderMercenaryService)
+                {
+                    result *= 0.5f;
                 }
             }
 
