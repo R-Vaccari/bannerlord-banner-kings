@@ -14,12 +14,18 @@ namespace BannerKings.Models.Vanilla
             if (sellerHero != null)
             {
                 var settlement = sellerHero.CurrentSettlement;
-                if (settlement != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement) && !prisoner.IsHero)
+                if (settlement != null)
                 {
-                    var crime =((BKCriminalPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "criminal"))
-                        .Policy;
-                    if (crime == CriminalPolicy.Enslavement)
-                        result = (int)BannerKingsConfig.Instance.GrowthModel.CalculateSlavePrice(settlement).ResultNumber;
+                    if (settlement.Town == null)
+                        return result;
+
+                    if (!prisoner.IsHero)
+                    {
+                        var crime = ((BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "criminal"))
+                                                .Policy;
+                        if (crime == CriminalPolicy.Enslavement)
+                            result = (int)BannerKingsConfig.Instance.GrowthModel.CalculateSlavePrice(settlement).ResultNumber;
+                    }
                 }
 
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(sellerHero);
