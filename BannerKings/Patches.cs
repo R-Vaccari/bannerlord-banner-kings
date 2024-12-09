@@ -51,7 +51,7 @@ namespace BannerKings.Patches
                 }
             }
 
-            [HarmonyPrefix]
+            /*[HarmonyPrefix]
             [HarmonyPatch("UpdateVolunteersOfNotablesInSettlement", MethodType.Normal)]
             private static bool UpdateVolunteersPrefix(Settlement settlement)
             {
@@ -135,6 +135,68 @@ namespace BannerKings.Patches
 
                 return false;
             }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("RecruitVolunteersFromNotable", MethodType.Normal)]
+            private static bool RecruitVolunteersFromNotablePrefix(RecruitmentCampaignBehavior __instance, MobileParty mobileParty, Settlement settlement)
+            {
+                if (mobileParty.ActualClan != null && mobileParty.ActualClan.IsClanTypeMercenary)
+                {
+                    Console.Write("");
+                }
+
+                if (((float)mobileParty.Party.NumberOfAllMembers + 0.5f) / (float)mobileParty.LimitedPartySize <= 1f)
+                {
+                    foreach (Hero hero in settlement.Notables)
+                    {
+                        if (hero.IsAlive)
+                        {
+                            if (mobileParty.IsWageLimitExceeded())
+                            {
+                                break;
+                            }
+                            int num = MBRandom.RandomInt(6);
+                            int num2 = Campaign.Current.Models.VolunteerModel.MaximumIndexHeroCanRecruitFromHero(mobileParty.IsGarrison ? mobileParty.Party.Owner : mobileParty.LeaderHero, hero, -101);
+                            for (int i = num; i < num + 6; i++)
+                            {
+                                int num3 = i % 6;
+                                if (num3 >= num2)
+                                {
+                                    break;
+                                }
+                                int num4 = (mobileParty.LeaderHero != null) ? ((int)MathF.Sqrt((float)mobileParty.LeaderHero.Gold / 10000f)) : 0;
+                                float num5 = MBRandom.RandomFloat;
+                                for (int j = 0; j < num4; j++)
+                                {
+                                    float randomFloat = MBRandom.RandomFloat;
+                                    if (randomFloat > num5)
+                                    {
+                                        num5 = randomFloat;
+                                    }
+                                }
+                                if (mobileParty.Army != null)
+                                {
+                                    float y = (mobileParty.Army.LeaderParty == mobileParty) ? 0.5f : 0.67f;
+                                    num5 = MathF.Pow(num5, y);
+                                }
+                                float num6 = (float)mobileParty.Party.NumberOfAllMembers / (float)mobileParty.LimitedPartySize;
+                                if (num5 > num6 - 0.1f)
+                                {
+                                    CharacterObject characterObject = hero.VolunteerTypes[num3];
+                                    if (characterObject != null && mobileParty.LeaderHero.Gold > Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(characterObject, mobileParty.LeaderHero, false) && mobileParty.PaymentLimit >= mobileParty.TotalWage + Campaign.Current.Models.PartyWageModel.GetCharacterWage(characterObject))
+                                    {
+                                        MethodInfo recruit = __instance.GetType().GetMethod("GetRecruitVolunteerFromIndividual", BindingFlags.NonPublic | BindingFlags.Instance);
+                                        recruit.Invoke(__instance, new object[] { mobileParty, characterObject, hero, num3 });
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return false;
+            }*/
         }
     }
 
@@ -560,15 +622,23 @@ namespace BannerKings.Patches
                 return false;
             }
 
-           /* [HarmonyPostfix]
-            [HarmonyPatch("ShouldBeCancelledInternal")]
-            private static void ShouldBeCancelledInternalPostfix(SettlementClaimantDecision __instance, ref bool __result)
+            [HarmonyPrefix]
+            [HarmonyPatch("IsAllowed")]
+            private static bool IsAllowedPrefix(SettlementClaimantDecision __instance, ref bool __result)
             {
-                if (!__instance.Settlement.Town.IsOwnerUnassigned)
-                {
-                    __result = true;
-                }
-            }*/
+                __result = __instance.DetermineInitialCandidates().Count() > 2;
+                return false;
+            }
+
+            /* [HarmonyPostfix]
+             [HarmonyPatch("ShouldBeCancelledInternal")]
+             private static void ShouldBeCancelledInternalPostfix(SettlementClaimantDecision __instance, ref bool __result)
+             {
+                 if (!__instance.Settlement.Town.IsOwnerUnassigned)
+                 {
+                     __result = true;
+                 }
+             }*/
         }
     }
 }
