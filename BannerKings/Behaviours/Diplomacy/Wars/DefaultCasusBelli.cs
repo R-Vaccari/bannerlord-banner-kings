@@ -486,10 +486,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
         private void TakePiety(War war)
         {
-            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(war.Attacker.Leader);
-            BannerKingsConfig.Instance.ReligionsManager.AddPiety(religion,
-                war.Attacker.Leader,
-                -religion.Faith.WarDoctrine.Justifications[war.CasusBelli]);
+            
         }
     }
 }
