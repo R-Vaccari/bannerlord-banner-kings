@@ -21,6 +21,8 @@ using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Armies;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -31,6 +33,38 @@ namespace BannerKings.Patches
 {
     internal class FixesPatches
     {
+        [HarmonyPatch(typeof(KingdomArmyVM))]
+        internal class KingdomArmyVMPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("RefreshCanManageArmy")]
+            private static bool RefreshCanManageArmyPrefix(KingdomArmyVM __instance)
+            {
+                TextObject hintText;
+                bool mapScreenActionIsEnabledWithReason = CampaignUIHelper.GetMapScreenActionIsEnabledWithReason(out hintText);
+                __instance.PlayerHasArmy = (MobileParty.MainParty.Army != null);
+                Kingdom kingdom = (Kingdom)__instance.GetType()
+                    .GetField("_kingdom", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                    .GetValue(__instance);
+
+                bool flag = kingdom != null;
+                bool flag2 = __instance.PlayerHasArmy && MobileParty.MainParty.Army.LeaderParty == MobileParty.MainParty;
+                __instance.CanCreateArmy = (mapScreenActionIsEnabledWithReason && flag && !__instance.PlayerHasArmy);
+                if (!flag)
+                    __instance.CreateArmyHint.HintText = new TextObject("{=XSQ0Y9gy}You need to be a part of a kingdom to create an army.", null);
+
+                if (__instance.PlayerHasArmy && !flag2)
+                    __instance.CreateArmyHint.HintText = new TextObject("{=NAA4pajB}You need to leave your current army to create a new one.", null);
+
+                if (!mapScreenActionIsEnabledWithReason)
+                    __instance.CreateArmyHint.HintText = hintText;
+
+                __instance.CreateArmyHint.HintText = TextObject.Empty;
+
+                return false;
+            }
+        }
+        
 
         [HarmonyPatch(typeof(Workshop))]
         internal class WorkshopPatches
@@ -50,7 +84,6 @@ namespace BannerKings.Patches
                 return false;
             }
         }
-        
         
         [HarmonyPatch(typeof(BuildingHelper))]
         internal class BuildingHelperPatches
