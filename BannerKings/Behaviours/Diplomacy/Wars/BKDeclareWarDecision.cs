@@ -31,13 +31,6 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
             {
                 Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
                     .TriggerJustifiedWar(CasusBelli, Kingdom, FactionToDeclareWarOn as Kingdom);
-
-                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(ProposerClan.Leader);
-                if (religion != null && religion.Faith.WarDoctrine.AcceptsJustification(CasusBelli))
-                {
-                    BannerKingsConfig.Instance.ReligionsManager.AddPiety(ProposerClan.Leader,
-                        religion.Faith.WarDoctrine.GetPietyCost(CasusBelli), true);
-                }
             }
         }
     }

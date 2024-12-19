@@ -1,4 +1,5 @@
 using BannerKings.CampaignContent.Traits;
+using BannerKings.Extensions;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Governments;
@@ -36,6 +37,8 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                 yield return FiefClaim;
                 yield return SuppressThreat;
                 yield return Rebellion;
+                yield return HolyWar;
+                yield return DivineReclamation;
                 foreach (var item in ModAdditions)
                     yield return item;
             }
@@ -43,6 +46,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
 
         public override void Initialize()
         {
+
             Rebellion.Initialize(new TextObject("{=kcjyuGpA}Rebellion"),
                 new TextObject("{=t8HQqf4z}A rebellion war is fought by former radical groups over a realm, after their demand was rejected by their ruler. Rebels seek to enforce their demand by force.{newline}{newline}Objective: Survive as a rebellion for over 2 years with at least 1 fief."),
                 new TextObject("{=EOpunWCA}Survive for 2 years"),
@@ -62,7 +66,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     { BKTraits.Instance.Ambitious, 0.1f },
                     { DefaultTraits.Valor, 0.2f }
                 },
-                new TextObject("{=v7CeGL18}The {ATTACKER} marches to war! They claim {DEFENDER} are an existential threat."));
+                new TextObject("{=!}The {ATTACKER} marches to war! They fight in a civil war against the loyalists of the {DEFENDER}."));
 
             SuppressThreat.Initialize(new TextObject("{=iN3RbEku}Suppress Threat"),
                 new TextObject("{=WsSwHEk4}Liberate a fief of your people from the rule of foreigners. Any town or castle that is mostly composed by our culture is reason enough for us to rule it rather than foreigners.\n\nObjective: Capture the selected target."),
@@ -143,7 +147,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     { DefaultTraits.Valor, -0.1f },
                     { BKTraits.Instance.Ambitious, -0.1f }
                 },
-                new TextObject("{=zcmfRF08}The {ATTACKER} marches to war! {FIEF} is being liberated from the oppresion of {DEFENDER}!"),
+                new TextObject("{=!}The {ATTACKER} marches to war! {FIEF} is being liberated from the oppression of {DEFENDER}!"),
                 true);
 
             FiefClaim.Initialize(new TextObject("{=kyB8tkgY}Claim Fief"),
@@ -218,7 +222,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                         isHostile = religion1.GetStance(religion2.Faith) == Managers.Institutions.Religions.Faiths.FaithStance.Hostile;
                     }
 
-                    return isHostile && religion1 != null && religion1.Faith.WarDoctrine.HeroHasPiety(faction1.Leader, casusBelli);
+                    return isHostile && religion1 != null;
                 },
                 (Kingdom kingdom) =>
                 {
@@ -260,19 +264,25 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                (IFaction faction1, IFaction faction2, CasusBelli casusBelli) =>
                {
                    bool isHostile = false;
-                   Religion religion1 = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(faction1.Leader);
-                   Religion religion2 = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(faction2.Leader);
-                   if (religion1 != null && religion2 != null)
+                   bool hasHolySite = false;
+                   if (casusBelli.Fief != null)
                    {
-                       isHostile = religion1.GetStance(religion2.Faith) == Managers.Institutions.Religions.Faiths.FaithStance.Hostile;
+                       Religion religion1 = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(faction1.Leader);
+                       Religion religion2 = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(faction2.Leader);
+                       if (religion1 != null && religion2 != null)
+                       {
+                           isHostile = religion1.GetStance(religion2.Faith) == Managers.Institutions.Religions.Faiths.FaithStance.Untolerated;
+                           if (isHostile)
+                               hasHolySite = religion1.Faith.GetSecondaryDivinities().Select(x => x.Shrine).Contains(casusBelli.Fief);
+                       }
                    }
 
-                   return isHostile && religion1 != null && religion1.Faith.WarDoctrine.HeroHasPiety(faction1.Leader, casusBelli) &&
-                   casusBelli.Fief != null && casusBelli.Fief.MapFaction == faction2;
+                   return isHostile && hasHolySite && casusBelli.Fief.MapFaction == faction2;
                },
                (Kingdom kingdom) =>
                {
-                   return true;
+                   KingdomDiplomacy diplomacy = kingdom.GetKingdomDiplomacy();
+                   return diplomacy != null && diplomacy.Religion != null;
                },
                new Dictionary<TraitObject, float>()
                {
@@ -291,7 +301,7 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                (War war) => TakePiety(war));
 
             Invasion.Initialize(new TextObject("{=yz3sGus6}Invasion"),
-                new TextObject("{=6yqojVsh}Invade a foreign kingdom as is the way of our ancestors. Seize their property and stablish our own rule.\n\nObjective: Capture 2 or more fiefs of the enemy's culture."),
+                new TextObject("{=!}Invade a foreign kingdom as is the way of our ancestors. Seize their property and stablish our own rule.\n\nObjective: Capture 1 or more fiefs of the enemy's culture."),
                 new TextObject("{=kyB8tkgY}Conquer Fiefs"),
                 1.2f,
                 1.2f,
@@ -303,13 +313,13 @@ namespace BannerKings.Behaviours.Diplomacy.Wars
                     List<Settlement> attackerConquests = DiplomacyHelper.GetSuccessfullSiegesInWarForFaction(war.Attacker,
                        attackerLink, (Settlement x) => x.Town != null);
 
-                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture && x.MapFaction == war.Attacker).Count >= 2;
+                    return attackerConquests.FindAll(x => x.Culture == war.Defender.Culture && x.MapFaction == war.Attacker).Count >= 1;
                 },
                 (War war) => war.Defender.Fiefs.Count == 0,
                 (IFaction faction1, IFaction faction2, CasusBelli casusBelli) =>
                 {
                     var id = faction1.StringId;
-                    bool hasFiefs = faction2.Fiefs.ToList().FindAll(x => x.Culture == faction2.Culture).Count() >= 2;
+                    bool hasFiefs = faction2.Fiefs.ToList().FindAll(x => x.Culture == faction2.Culture).Count() >= 1;
                     return (id == "vlandia" || id == "aserai") && faction2.Culture != faction1.Culture && hasFiefs;
                 },
                 (Kingdom kingdom) =>
