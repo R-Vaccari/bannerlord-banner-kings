@@ -1,3 +1,4 @@
+using BannerKings.Managers.Innovations.Eras;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
@@ -139,6 +140,12 @@ namespace BannerKings.Managers.Recruits
                         towns,
                         castles);
                     foreach (string fief in fiefs) spawn.AddFiefString(fief);
+
+                    foreach (Era era in DefaultEras.Instance.All)
+                        if (node.Attributes[era.StringId] != null)
+                            spawn.SetTroopAdvancement(era, node.Attributes[era.StringId].Value);
+                    
+
                     XmlSpawns.Add(spawn);
                 }
             }
