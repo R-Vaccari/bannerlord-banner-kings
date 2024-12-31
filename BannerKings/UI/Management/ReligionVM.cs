@@ -74,38 +74,45 @@ namespace BannerKings.UI.Management
 
             AppointEnabled = true;
             var playerFaith = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
-            foreach (var notable in settlement.Notables)
+            if (playerFaith == null)
             {
-                var rel = BannerKingsConfig.Instance.ReligionsManager
-                                           .GetHeroReligion(notable);
-
-                if (rel == null)
+                AppointEnabled = false;
+            }
+            else
+            {
+                foreach (var notable in settlement.Notables)
                 {
-                    continue;
-                }
+                    var rel = BannerKingsConfig.Instance.ReligionsManager
+                                               .GetHeroReligion(notable);
 
-                var factor = BannerKingsConfig.Instance.ReligionModel.GetNotableFactor(notable, settlement);
-                var result = FormatValue(factor / totalFaithsWeight);
-                NotablesList.Add(new InformationElement(new TextObject("{=69vRMwjd}{HERO} ({FAITH})")
-                    .SetTextVariable("HERO", notable.Name)
-                    .SetTextVariable("FAITH", rel.Faith.GetFaithName())
-                    .ToString(),
-                    result,
-                    new TextObject("{=GxcNDrXt}{HERO} holds sway over {PERCENTAGE} of the population. Changing their faith would strengthen the new faith's grip in the settlement.")
-                    .SetTextVariable("HERO", notable.Name)
-                    .SetTextVariable("PERCENTAGE", result)
-                    .ToString()));
-
-                if (notable.IsPreacher)
-                {
-                    var notableRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(notable);
-                    if (notableRel == playerFaith)
+                    if (rel == null)
                     {
-                        AppointEnabled = false;
+                        continue;
                     }
-                    else
+
+                    var factor = BannerKingsConfig.Instance.ReligionModel.GetNotableFactor(notable, settlement);
+                    var result = FormatValue(factor / totalFaithsWeight);
+                    NotablesList.Add(new InformationElement(new TextObject("{=69vRMwjd}{HERO} ({FAITH})")
+                        .SetTextVariable("HERO", notable.Name)
+                        .SetTextVariable("FAITH", rel.Faith.GetFaithName())
+                        .ToString(),
+                        result,
+                        new TextObject("{=GxcNDrXt}{HERO} holds sway over {PERCENTAGE} of the population. Changing their faith would strengthen the new faith's grip in the settlement.")
+                        .SetTextVariable("HERO", notable.Name)
+                        .SetTextVariable("PERCENTAGE", result)
+                        .ToString()));
+
+                    if (notable.IsPreacher)
                     {
-                        RemoveEnabled = true;
+                        var notableRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(notable);
+                        if (notableRel == playerFaith)
+                        {
+                            AppointEnabled = false;
+                        }
+                        else
+                        {
+                            RemoveEnabled = true;
+                        }
                     }
                 }
             }
