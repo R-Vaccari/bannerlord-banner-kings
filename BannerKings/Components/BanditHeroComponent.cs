@@ -90,13 +90,11 @@ namespace BannerKings.Components
                 if (raidTarget != null)
                 {
                     party.Ai.SetMoveRaidSettlement(raidTarget.Settlement);
-                    party.Ai.RecalculateShortTermAi();
                 }
 
                 if (robbingTarget != null)
                 {
                     party.Ai.SetMovePatrolAroundSettlement(robbingTarget);
-                    party.Ai.RecalculateShortTermAi();
                 }
             }
         }
