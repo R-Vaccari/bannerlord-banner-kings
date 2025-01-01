@@ -74,7 +74,7 @@ namespace BannerKings.Behaviours.Mercenary
                 }
             }
 
-            if (Clan.IsUnderMercenaryService && Kingdom != null) ContractDueDate = CampaignTime.YearsFromNow(1f);
+            if (ContractDueDate == CampaignTime.Never && Clan.IsUnderMercenaryService && Kingdom != null) ContractDueDate = CampaignTime.YearsFromNow(1f);
             else ContractDueDate = CampaignTime.Never;
         }
 
