@@ -1,6 +1,9 @@
 using BannerKings.Managers.Cultures;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 
@@ -14,6 +17,10 @@ namespace BannerKings.Utils
 
         public static string INFLUENCE_ICON = "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">";
         public static string PIETY_ICON = "<img src=\"SPGeneral\\MapOverlay\\Settlement\\icon_morale_big\" extend=\"7\">";
+
+        public static string GetTraitName(TraitObject trait, int level) =>
+            GameTexts.FindText("str_trait_name_" + trait.StringId.ToLower(), (level + MathF.Abs(trait.MinValue)).ToString()).ToString();
+
         public static TextObject GetConsumptionSatisfactionText(ConsumptionType type)
         {
             if (type == ConsumptionType.Luxury)
