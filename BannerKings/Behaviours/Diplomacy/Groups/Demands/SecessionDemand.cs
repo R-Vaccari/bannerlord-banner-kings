@@ -222,6 +222,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
             }
 
             Rebel = MBRandom.ChooseWeighted(results);
+            SetTexts();
         }
 
         public override void ShowPlayerDemandOptions()

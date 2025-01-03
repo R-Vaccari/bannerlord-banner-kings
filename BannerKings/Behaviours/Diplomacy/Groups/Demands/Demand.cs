@@ -279,11 +279,12 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
         public void SetUp()
         {
-            if (Group.Leader != Hero.MainHero) InviteMembers();
             SetUpInternally();
 
             if (Active)
             {
+                if (Group.Leader != Hero.MainHero) InviteMembers();
+
                 if (Group.Leader == Hero.MainHero)
                 {
                     ShowPlayerDemandOptions();
@@ -316,8 +317,30 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
                     float influence = Group.Leader.Clan.Influence;
                     if (influence > cost && influence > influenceCap * 0.1f)
                     {
-                        Group.AddMember(hero);
-                        ChangeClanInfluenceAction.Apply(Group.Leader.Clan, -cost);
+                        if (hero != Hero.MainHero)
+                        {
+                            Group.AddMember(hero);
+                            ChangeClanInfluenceAction.Apply(Group.Leader.Clan, -cost);
+                        }
+                        else InformationManager.ShowInquiry(new InquiryData(
+                            Name.ToString(),
+                            new TextObject("{=!}{DESCRIPTION}{newline}{newline}{LEADER} invites you to join them. Will you accept?")
+                            .SetTextVariable("DESCRIPTION", Description)
+                            .SetTextVariable("LEADER", Group.Leader.Name)
+                            .ToString(),
+                            true,
+                            true,
+                            GameTexts.FindText("str_accept").ToString(),
+                            GameTexts.FindText("str_cancel").ToString(),
+                            () =>
+                            {
+                                Group.AddMember(hero);
+                                ChangeClanInfluenceAction.Apply(Group.Leader.Clan, -cost);
+                            },
+                            null,
+                            Utils.Helpers.GetKingdomDecisionSound()),
+                            true,
+                            true);
                     }
                 }
             }

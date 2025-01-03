@@ -247,6 +247,7 @@ namespace BannerKings.Behaviours.Diplomacy.Groups.Demands
 
             Claimant = null;
             Claimant = MBRandom.ChooseWeighted(results);
+            SetTexts();
         }
 
         public override void ShowPlayerDemandOptions()
