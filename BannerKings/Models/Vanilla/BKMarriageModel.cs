@@ -18,6 +18,16 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKMarriageModel : MarriageModel
     {
+        public override Clan GetClanAfterMarriage(Hero firstHero, Hero secondHero)
+        {
+            MarriageContract contract = Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().GetMarriageContract();
+            if (contract != null && (firstHero == contract.Proposer || firstHero == contract.Proposed) &&
+                (secondHero == contract.Proposer || secondHero == contract.Proposed))
+                return contract.FinalClan;
+            
+            return base.GetClanAfterMarriage(firstHero, secondHero);
+        }
+
         public override ExplainedNumber IsMarriageAdequate(Hero proposer, 
             Hero secondHero,
             bool isConsort = false, 
@@ -27,8 +37,11 @@ namespace BannerKings.Models.Vanilla
             if (secondHero.Clan == null || proposer.Clan == null) return new ExplainedNumber(-10000f);
 
             var proposerScore = GetSpouseScore(proposer).ResultNumber * 1.1f;
-            var proposedScore = GetSpouseScore(secondHero).ResultNumber;
-            result.Add(proposerScore - proposedScore, new TextObject("{=NeydSXjc}Score differences"));
+            var proposedScore = GetSpouseScore(secondHero);
+            if (isConsort)
+                proposedScore.AddFactor(2f, new TextObject("{=!}Secondary spouse"));
+
+            result.Add(proposerScore - proposedScore.ResultNumber, new TextObject("{=NeydSXjc}Score differences"));
 
             ExceptionUtils.TryCatch((System.Action)(() =>
             {
@@ -156,7 +169,12 @@ namespace BannerKings.Models.Vanilla
 
         public override bool IsSuitableForMarriage(Hero maidenOrSuitor)
         {
-            if (maidenOrSuitor.IsAlive && maidenOrSuitor.PartyBelongedToAsPrisoner == null && maidenOrSuitor.Spouse == null && maidenOrSuitor.IsLord && !maidenOrSuitor.IsMinorFactionHero && !maidenOrSuitor.IsNotable && maidenOrSuitor.PartyBelongedTo?.MapEvent == null && maidenOrSuitor.PartyBelongedTo?.Army == null)
+            if (maidenOrSuitor.IsAlive && 
+                maidenOrSuitor.PartyBelongedToAsPrisoner == null && 
+                maidenOrSuitor.Clan != null &&
+                !maidenOrSuitor.Clan.IsBanditFaction &&
+                maidenOrSuitor.PartyBelongedTo?.MapEvent == null && 
+                maidenOrSuitor.PartyBelongedTo?.Army == null)
             {
                 if (maidenOrSuitor.IsFemale)
                 {

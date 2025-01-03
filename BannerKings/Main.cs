@@ -136,6 +136,7 @@ namespace BannerKings
             campaignStarter.AddModel(new BKPartyBuyingFoodModel());
             campaignStarter.AddModel(new BKCategorySelector());
             campaignStarter.AddModel(new BKSettlementAccessModel());
+            campaignStarter.AddModel(BannerKingsConfig.Instance.MarriageModel);
 
 
             if (BannerKingsSettings.Instance.ArmyGoal) campaignStarter.AddModel(new BKTargetScoreModel());

@@ -11,6 +11,8 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.BarterSystem.Barterables;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Encounters;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -22,6 +24,8 @@ namespace BannerKings.Behaviours.Marriage
         private MarriageContract proposedMarriage;
         private List<Hero> flirtedWith = new List<Hero>();
         private Dictionary<Hero, HeroMarriage> heroMarriages;
+
+        public MarriageContract GetMarriageContract() => proposedMarriage;
 
         public void SetProposedMarriage(MarriageContract contract)
         {
@@ -36,7 +40,26 @@ namespace BannerKings.Behaviours.Marriage
             return list;
         }
 
-        public void AddPartner(Hero hero, Hero concubine) => GetHeroMarriage(hero).Partners.Add(concubine);
+        public void AddPartner(Hero hero1, Hero hero2, Clan finalClan)
+        {
+            if (finalClan == hero1.Clan) MakeSecondaryPartner(hero1, hero2);
+            else MakeSecondaryPartner(hero2, hero1);
+        }
+
+        public void MakeSecondaryPartner(Hero hero, Hero partner)
+        {
+            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+            GetHeroMarriage(hero).Partners.Add(partner);
+            GetHeroMarriage(partner).PrimarySpouse = hero;
+            InformationManager.DisplayMessage(new InformationMessage(
+                new TextObject("{=!}{HERO1} and {HERO2} are now united as {DESCRIPTION} by the sacred traditions of {FAITH}!")
+                .SetTextVariable("HERO1", hero.Name)
+                .SetTextVariable("HERO2", partner.Name)
+                .SetTextVariable("DESCRIPTION", religion.Faith.MarriageDoctrine.IsConcubinage ? new TextObject("{=!}concubines") : new TextObject("{=!}secondary spouses"))
+                .SetTextVariable("FAITH", religion.Faith.GetFaithName())
+                .ToString(),
+                Color.FromUint(Utils.TextHelper.COLOR_LIGHT_BLUE)));
+        }
 
         public HeroMarriage GetHeroMarriage(Hero hero)
         {
@@ -45,7 +68,7 @@ namespace BannerKings.Behaviours.Marriage
             HeroMarriage heroMarriage;
             if (!heroMarriages.TryGetValue (hero, out heroMarriage))
             {
-                heroMarriages[hero] = new HeroMarriage(hero);
+                heroMarriages[hero] = new HeroMarriage();
                 heroMarriage = heroMarriages[hero];
             }
 
@@ -57,21 +80,38 @@ namespace BannerKings.Behaviours.Marriage
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
-            CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, (System.Action<Hero, Hero, KillCharacterAction.KillCharacterActionDetail, bool>)((Hero victim,
+            CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, (Hero victim,
                 Hero killer,
                 KillCharacterAction.KillCharacterActionDetail detail,
                 bool showNotification) =>
             {
-                if (heroMarriages == null) heroMarriages = new Dictionary<Hero, HeroMarriage> ();
+                if (heroMarriages == null) heroMarriages = new Dictionary<Hero, HeroMarriage>();
                 foreach (HeroMarriage marriage in heroMarriages.Values)
                 {
                     if (marriage.Partners.Contains(victim))
-                        marriage.Partners.Remove(victim);   
+                        marriage.Partners.Remove(victim);
                 }
 
                 if (heroMarriages.ContainsKey(victim))
                     heroMarriages.Remove(victim);
-            }));
+            });
+
+            CampaignEvents.OnGameLoadFinishedEvent.AddNonSerializedListener(this, () =>
+            {
+                foreach (var marriage in heroMarriages)
+                    if (marriage.Value.PrimarySpouse == marriage.Key)
+                        marriage.Value.PrimarySpouse = null;
+            });
+
+            CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, (Hero hero) =>
+            {
+                if (hero.IsFemale && !CampaignOptions.IsLifeDeathCycleDisabled && hero.IsAlive && hero.Age > (float)Campaign.Current.Models.AgeModel.HeroComesOfAge && (hero.Clan == null || !hero.Clan.IsRebelClan))
+                {
+                    HeroMarriage marriage = GetHeroMarriage(hero);
+                    if (hero.Age > 18f && marriage.PrimarySpouse != null && marriage.PrimarySpouse.IsAlive && !hero.IsPregnant)
+                        RefreshSpouseVisit(hero, marriage.PrimarySpouse);
+                }
+            });
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -82,6 +122,39 @@ namespace BannerKings.Behaviours.Marriage
 
             if (flirtedWith == null) flirtedWith = new List<Hero>();
             if (heroMarriages == null) heroMarriages = new Dictionary<Hero, HeroMarriage>(Hero.AllAliveHeroes.Count);
+        }
+
+        private void RefreshSpouseVisit(Hero hero, Hero spouse)
+        {
+            if (CheckAreNearby(hero, spouse) && MBRandom.RandomFloat <= Campaign.Current.Models.PregnancyModel.GetDailyChanceOfPregnancyForHero(hero))
+                MakePregnantAction.Apply(hero);  
+        }
+
+        private bool CheckAreNearby(Hero hero, Hero spouse)
+        {
+            Settlement settlement;
+            MobileParty mobileParty;
+            GetLocation(hero, out settlement, out mobileParty);
+            Settlement settlement2;
+            MobileParty mobileParty2;
+            GetLocation(spouse, out settlement2, out mobileParty2);
+            return (settlement != null && settlement == settlement2) || (mobileParty != null && mobileParty == mobileParty2) || (hero.Clan != Hero.MainHero.Clan && MBRandom.RandomFloat < 0.2f);
+        }
+
+        private void GetLocation(Hero hero, out Settlement heroSettlement, out MobileParty heroParty)
+        {
+            heroSettlement = hero.CurrentSettlement;
+            heroParty = hero.PartyBelongedTo;
+            MobileParty mobileParty = heroParty;
+            if (((mobileParty != null) ? mobileParty.AttachedTo : null) != null)
+            {
+                heroParty = heroParty.AttachedTo;
+            }
+            if (heroSettlement == null)
+            {
+                MobileParty mobileParty2 = heroParty;
+                heroSettlement = ((mobileParty2 != null) ? mobileParty2.CurrentSettlement : null);
+            }
         }
 
         public bool IsCoupleMatchedByFamily(Hero proposer, Hero proposed) => proposedMarriage != null && proposedMarriage.Confirmed
@@ -331,14 +404,14 @@ namespace BannerKings.Behaviours.Marriage
                 {
                     reason = new TextObject("{=hcvHjyDM}Marriage candidates are available.");
 
-                    if (!Clan.PlayerClan.Heroes.Any(x => !x.IsChild && x.Spouse == null))
+                    if (!Clan.PlayerClan.Heroes.Any(x => !x.IsChild))
                     {
                         reason = new TextObject("{=Ht8aufCz}{CLAN} has no available candidates")
                             .SetTextVariable("CLAN", Clan.PlayerClan.Name);
                         return false;
                     }
 
-                    if (!Hero.OneToOneConversationHero.Clan.Heroes.Any(x => !x.IsChild && x.Spouse == null))
+                    if (!Hero.OneToOneConversationHero.Clan.Heroes.Any(x => !x.IsChild))
                     {
                         reason = new TextObject("{=Ht8aufCz}{CLAN} has no available candidates")
                             .SetTextVariable("CLAN", Clan.PlayerClan.Name);
@@ -527,8 +600,10 @@ namespace BannerKings.Behaviours.Marriage
         {
             if (proposedMarriage != null)
             {
-                MarriageAction.Apply(proposedMarriage.Proposer, proposedMarriage.Proposed);
                 var finalClan = proposedMarriage.FinalClan;
+                if (proposedMarriage.IsSecondary) AddPartner(proposedMarriage.Proposer, proposedMarriage.Proposed, finalClan);
+                else MarriageAction.Apply(proposedMarriage.Proposer, proposedMarriage.Proposed);
+                
                 Hero proposerLeader = proposedMarriage.Proposer.Clan.Leader;
                 Hero proposedLeader = proposedMarriage.Proposed.Clan.Leader;
                 GainKingdomInfluenceAction.ApplyForDefault(proposerLeader, -proposedMarriage.Influence);
@@ -548,13 +623,6 @@ namespace BannerKings.Behaviours.Marriage
                 {
                     FactionManager.DeclareAlliance(proposedMarriage.Proposer.MapFaction,
                         proposedMarriage.Proposed.MapFaction);
-                }
-
-                if (proposedMarriage.IsSecondary)
-                {
-                    Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(proposedMarriage.Proposer);
-                    if (religion.Faith.MarriageDoctrine.IsConcubinage) AddPartner(proposedMarriage.Proposer, proposedMarriage.Proposed);
-                    else AddPartner(proposedMarriage.Proposer, proposedMarriage.Proposed);
                 }
 
                 proposedMarriage = null;

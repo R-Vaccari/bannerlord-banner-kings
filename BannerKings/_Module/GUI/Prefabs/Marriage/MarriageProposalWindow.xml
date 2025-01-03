@@ -328,7 +328,7 @@
 															</Children>
 														</ListPanel>
 														
-														<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="150" StackLayout.LayoutMethod="HorizontalLeftToRight"
+														<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="200" StackLayout.LayoutMethod="HorizontalLeftToRight"
 																   DataSource="{SecondaryPartnerToggle}" HorizontalAlignment="Center" MarginTop="20" MarginLeft="20">
 															<Children>
 															

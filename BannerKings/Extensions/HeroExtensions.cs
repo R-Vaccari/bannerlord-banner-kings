@@ -23,8 +23,16 @@ namespace BannerKings.Utils.Extensions
             return hero.Clan?.Kingdom?.Leader == hero;
         }
 
-        public static bool IsCommonBorn(this Hero hero) => hero.CharacterObject != null && hero.CharacterObject.OriginalCharacter != null
-            && hero.CharacterObject.OriginalCharacter.IsTemplate;
+        public static bool IsCommonBorn(this Hero hero)
+        {
+            bool mercenaryClan = hero.Clan != null && hero.Clan.IsClanTypeMercenary && hero.Father == null && hero.Mother == null;
+            bool genericChar = hero.CharacterObject != null &&
+                hero.CharacterObject.OriginalCharacter != null && 
+                hero.CharacterObject.OriginalCharacter.IsTemplate &&
+                hero.CharacterObject.OriginalCharacter.Occupation != Occupation.Lord;
+
+            return mercenaryClan || genericChar;
+        }
 
         public static List<Village> GetVillages(this Hero hero)
         {

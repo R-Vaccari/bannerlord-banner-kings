@@ -76,6 +76,12 @@ namespace BannerKings.Models.Vanilla
             result.Add(clan.Tier * 175f, GameTexts.FindText("str_clan_tier_bonus"));
             result.LimitMin(clan.Tier * 50f);
 
+            if (clan.Leader.Spouse != null)
+            {
+                if (clan.Leader.Spouse.IsCommonBorn())
+                    result.AddFactor(-0.1f, new TextObject("{=!}Primary spouse is common born"));
+            }
+
             float fiefs = 0f;
             foreach (var fief in clan.Fiefs)
             {

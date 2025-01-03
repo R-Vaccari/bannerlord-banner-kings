@@ -11,6 +11,7 @@ using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.Items;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.Pages;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Generic;
@@ -144,12 +145,16 @@ namespace BannerKings.UI.Extensions.Encyclopedia
                         new BasicTooltipViewModel(() => UIHelper.GetTraitTooltip(hero, trait))));
                 }
 
-                BKMarriageBehavior behavior = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>();
-                foreach (Hero concubine in behavior.GetHeroPartners(hero))
+                HeroMarriage marriage = Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().GetHeroMarriage(hero);
+                foreach (Hero concubine in marriage.Partners)
                     Spouses.Add(new HeroVM(concubine, true));
 
-                foreach (Hero concubine in behavior.GetHeroPartners(hero))
-                    Spouses.Add(new HeroVM(concubine, true));
+                if (marriage.PrimarySpouse != null)
+                {
+                    EncyclopediaFamilyMemberVM memberVM = new EncyclopediaFamilyMemberVM(marriage.PrimarySpouse, hero);
+                    memberVM.Role = new TextObject("{=!}Secondary Spouse").ToString();
+                    heroPageVM.Family.Add(memberVM);
+                }
 
                 addedFields = true;
             }
