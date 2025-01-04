@@ -169,7 +169,8 @@ namespace BannerKings.Behaviours
             ExceptionUtils.TryCatch(() =>
             {
                 if (party == null || !party.IsLordParty || party.WarPartyComponent == null || party.LeaderHero == null || 
-                party.ActualClan == null || party.ActualClan == Clan.PlayerClan)
+                party.ActualClan == null || party.ActualClan == Clan.PlayerClan || 
+                Utils.Helpers.IsNonBaseGameSettlement(target))
                 {
                     return;
                 }

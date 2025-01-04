@@ -1,5 +1,6 @@
 using BannerKings.Behaviours.Marriage;
 using BannerKings.Managers.Goals.Decisions;
+using BannerKings.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -220,7 +221,8 @@ namespace BannerKings.Behaviours.Feasts
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (hero != Hero.MainHero || target.Town == null || !feasts.ContainsKey(target.Town))
+            if (hero != Hero.MainHero || target.Town == null 
+                || Utils.Helpers.IsNonBaseGameSettlement(target) || !feasts.ContainsKey(target.Town))
             {
                 return;
             }

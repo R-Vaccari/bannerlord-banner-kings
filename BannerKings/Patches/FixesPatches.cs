@@ -35,6 +35,9 @@ namespace BannerKings.Patches
             private static bool GetGarrisonLeaveOrTakeDataOfPartyPrefix(MobileParty mobileParty, ref ValueTuple<int, int> __result)
             {
                 Settlement currentSettlement = mobileParty.CurrentSettlement;
+                if (Utils.Helpers.IsNonBaseGameSettlement(currentSettlement))
+                    return true;
+
                 int num = TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementGarrisonModel
                     .FindNumberOfTroopsToLeaveToGarrison(mobileParty, currentSettlement);
                 int item = 0;
@@ -71,7 +74,8 @@ namespace BannerKings.Patches
             [HarmonyPatch("ConditionsHold")]
             private static bool ConditionsHoldPrefix(Hero issueGiver, ref Settlement selectedHideout, ref bool __result)
             {
-                if (issueGiver.CurrentSettlement == null || issueGiver.CurrentSettlement.IsVillage)
+                if (issueGiver.CurrentSettlement == null || issueGiver.CurrentSettlement.IsVillage || 
+                    Utils.Helpers.IsNonBaseGameSettlement(issueGiver.CurrentSettlement))
                 {
                     __result = false;
                     return false;
@@ -254,6 +258,9 @@ namespace BannerKings.Patches
             private static bool GetSiegeAftermathInfluenceCostPrefix(MobileParty attackerParty, Settlement settlement, 
                 SiegeAftermathAction.SiegeAftermath aftermathType, ref float __result)
             {
+                if (Utils.Helpers.IsNonBaseGameSettlement(settlement))
+                    return true;
+
                 float result = 0f;
                 if (attackerParty.Army != null && aftermathType != SiegeAftermathAction.SiegeAftermath.Pillage)
                 {
@@ -327,6 +334,9 @@ namespace BannerKings.Patches
             [HarmonyPatch("DailyTickSettlement")]
             private static bool CreateTownOrderPrefix(CraftingCampaignBehavior __instance, Settlement settlement)
             {
+                if (Utils.Helpers.IsNonBaseGameSettlement(settlement))
+                    return true;
+
                 if (settlement.IsTown && __instance.CraftingOrders[settlement.Town].IsThereAvailableSlot())
                 {
                     List<Hero> list = new List<Hero>();
