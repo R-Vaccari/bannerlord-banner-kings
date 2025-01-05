@@ -2,7 +2,11 @@ using BannerKings.Behaviours.Workshops;
 using BannerKings.Extensions;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
+using BannerKings.Settings;
+using BannerKings.Utils;
+using Helpers;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
@@ -14,7 +18,35 @@ namespace BannerKings.Models.Vanilla
     public class BKWorkshopModel : DefaultWorkshopModel
     {
         public override int DefaultWorkshopCountInSettlement => 6;
+        public override ExplainedNumber GetEffectiveConversionSpeedOfProduction(Workshop workshop, float speed, bool includeDescription)
+        {
+            ExplainedNumber result = new ExplainedNumber(speed, includeDescription, new TextObject("{=basevalue}Base", null));
+            Settlement settlement = workshop.Settlement;
+            if (settlement.OwnerClan.Kingdom != null)
+            {
+                if (settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.ForgivenessOfDebts))
+                {
+                    result.AddFactor(-0.05f, DefaultPolicies.ForgivenessOfDebts.Name);
+                }
+                if (settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.StateMonopolies))
+                {
+                    result.AddFactor(-0.1f, DefaultPolicies.StateMonopolies.Name);
+                }
+            }
+            PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.MercenaryConnections, settlement.Town, ref result);
 
+            #region DefaultPerks.Steward.Sweatshops
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+            {
+                DefaultPerks.Steward.Sweatshops.AddScaledClanLeaderPerkBonusWithClanAndFamilyMembers(ref result, false, workshop.Owner);
+            }
+            else
+            {
+                PerkHelper.AddPerkBonusForCharacter(DefaultPerks.Steward.Sweatshops, workshop.Owner.CharacterObject, true, ref result);
+            }
+            #endregion
+            return result;
+        }
         public int GetUpgradeCost(Workshop workshop)
         {
             return GetCostForPlayer(workshop) / (4 + workshop.Level());
@@ -87,7 +119,7 @@ namespace BannerKings.Models.Vanilla
         {
             float result = base.GetCostForPlayer(workshop);
             result += (int)(GetDailyExpense(workshop).ResultNumber * 15f * CampaignTime.DaysInYear);
-            
+
             if (workshop.Owner.OwnedWorkshops.Count == 1)
             {
                 result *= 1.15f;
@@ -104,7 +136,7 @@ namespace BannerKings.Models.Vanilla
 
         public ExplainedNumber GetBuyingCostExplained(Workshop workshop, Hero buyer, bool descriptions = false)
         {
-            ExplainedNumber result = new ExplainedNumber(base.GetCostForPlayer(workshop), descriptions, 
+            ExplainedNumber result = new ExplainedNumber(base.GetCostForPlayer(workshop), descriptions,
                 new TextObject("{=LiC18pJC}Equipment costs"));
             result.Add((int)(GetDailyExpense(workshop).ResultNumber * 15f * CampaignTime.DaysInYear),
                 new TextObject("{=hwVR2ej5}Employee wages"));
@@ -148,9 +180,9 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber GetProductionEfficiency(Workshop workshop, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
-            result.Add(BannerKingsConfig.Instance.EconomyModel.CalculateProductionEfficiency(workshop.Settlement, false, workshop.Settlement.PopulationData()).ResultNumber, 
+            result.Add(BannerKingsConfig.Instance.EconomyModel.CalculateProductionEfficiency(workshop.Settlement, false, workshop.Settlement.PopulationData()).ResultNumber,
                 new TextObject("{=2fCjZALt}Local production efficiency"));
-            
+
             if (workshop.Level() > 1)
             {
                 result.AddFactor((workshop.Level() - 1) * 0.08f, GameTexts.FindText("str_level"));
@@ -199,7 +231,7 @@ namespace BannerKings.Models.Vanilla
             {
                 result.AddFactor(data.EconomicData.Mercantilism.ResultNumber * -0.5f);
             }
-            
+
             return result;
         }
     }

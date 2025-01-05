@@ -6,7 +6,9 @@ using BannerKings.Managers.Cultures;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using BannerKings.Settings;
+using BannerKings.Utils;
 using BannerKings.Utils.Extensions;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -25,13 +27,22 @@ namespace BannerKings.Models.Vanilla
             {
                 return baseResult;
             }
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardSkills && BannerKingsSettings.Instance.EnableUsefulPerksFromAllPartyMembers)
+            {
+                var herosStewardSkill = party.MobileParty.GetAllPartyHeros().Where(d => d.HeroObject?.IsActive ?? false).Sum(d => d.GetSkillValue(DefaultSkills.Steward));
+                if (herosStewardSkill > 10)
+                {
+                    baseResult.Add(herosStewardSkill / 10, new TextObject("Party Members Steward Skill"));
+                }
+            }
+
 
             var leader = party.MobileParty.LeaderHero;
             if (leader != null)
             {
-                if (leader.IsClanLeader()) baseResult.AddFactor(BannerKingsSettings.Instance.PartySizes - 1f, 
+                if (leader.IsClanLeader()) baseResult.AddFactor(BannerKingsSettings.Instance.PartySizes - 1f,
                     new TextObject("{=mSLQa207}Party Size Scaling"));
-                else baseResult.AddFactor((BannerKingsSettings.Instance.PartySizes -1f) * 0.5f, 
+                else baseResult.AddFactor((BannerKingsSettings.Instance.PartySizes - 1f) * 0.5f,
                     new TextObject("{=mSLQa207}Party Size Scaling"));
 
                 var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);

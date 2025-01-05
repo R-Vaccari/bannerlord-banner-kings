@@ -28,6 +28,7 @@ using BannerKings.Campaign;
 using TaleWorlds.CampaignSystem.Inventory;
 using BannerKings.Campaign.Economy.Markets;
 using TaleWorlds.CampaignSystem.Party.PartyComponents;
+using BannerKings.Utils;
 
 namespace BannerKings.Patches
 {
@@ -93,24 +94,24 @@ namespace BannerKings.Patches
               .GetType()
               .GetMethod("BuyGoods", BindingFlags.Instance | BindingFlags.NonPublic);
 
-           /* [HarmonyPostfix]
-            [HarmonyPatch("GetTradeScoreForTown", MethodType.Normal)]
-            private static void GetTradeScoreForTownPostfix(ref float __result, MobileParty caravanParty, Town town,
-                    CampaignTime lastHomeVisitTimeOfCaravan,
-                    float caravanFullness, bool distanceCut)
-            {
-                if (BannerKingsConfig.Instance.PopulationManager != null)
-                {
-                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                    if (data != null)
-                    {
-                        if (__result > 0f) __result *= data.EconomicData.CaravanAttraction.ResultNumber;
-                        __result -= data.EconomicData.CaravanFee(caravanParty) / 10f;
-                    }
-                }
+            /* [HarmonyPostfix]
+             [HarmonyPatch("GetTradeScoreForTown", MethodType.Normal)]
+             private static void GetTradeScoreForTownPostfix(ref float __result, MobileParty caravanParty, Town town,
+                     CampaignTime lastHomeVisitTimeOfCaravan,
+                     float caravanFullness, bool distanceCut)
+             {
+                 if (BannerKingsConfig.Instance.PopulationManager != null)
+                 {
+                     var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                     if (data != null)
+                     {
+                         if (__result > 0f) __result *= data.EconomicData.CaravanAttraction.ResultNumber;
+                         __result -= data.EconomicData.CaravanFee(caravanParty) / 10f;
+                     }
+                 }
 
-                if (lastHomeVisitTimeOfCaravan.ElapsedWeeksUntilNow < 1f) __result -= 50f;
-            }*/
+                 if (lastHomeVisitTimeOfCaravan.ElapsedWeeksUntilNow < 1f) __result -= 50f;
+             }*/
 
             [HarmonyPrefix]
             [HarmonyPatch("FindNextDestinationForCaravan", MethodType.Normal)]
@@ -125,30 +126,36 @@ namespace BannerKings.Patches
 
                 CampaignTime lastHomeVisitTimeOfCaravan;
                 dic.TryGetValue(caravanParty, out lastHomeVisitTimeOfCaravan);
-
-                foreach (Town town in Town.AllFiefs)
+                var totalValueOfItemsAtCategory = __instance.GetPrivateFieldValue<Dictionary<ItemCategory, int>>("_totalValueOfItemsAtCategory");
+                if (totalValueOfItemsAtCategory.Count() >= 10)
                 {
-                    if (town.Owner.Settlement != caravanParty.CurrentSettlement && !town.IsUnderSiege && !town.MapFaction.IsAtWarWith(caravanParty.MapFaction) 
-                        && (!town.Settlement.Parties.Contains(MobileParty.MainParty) || !MobileParty.MainParty.MapFaction.IsAtWarWith(caravanParty.MapFaction)) 
-                        && !changedDic[caravanParty].Contains(town.Settlement))
+                    foreach (Town town in Town.AllFiefs)
                     {
-                        float tradeScoreForTown = (float)GetScore.Invoke(__instance, new object[] 
+                        if (town.Owner.Settlement != caravanParty.CurrentSettlement && !town.IsUnderSiege && !town.MapFaction.IsAtWarWith(caravanParty.MapFaction)
+                            && (!town.Settlement.Parties.Contains(MobileParty.MainParty) || !MobileParty.MainParty.MapFaction.IsAtWarWith(caravanParty.MapFaction))
+                            && !changedDic[caravanParty].Contains(town.Settlement))
                         {
-                            caravanParty, 
-                            town, 
-                            lastHomeVisitTimeOfCaravan, 
-                            caravanFullness, 
+                            ExceptionUtils.TryCatch(() =>
+                            {
+                                float tradeScoreForTown = (float)GetScore.Invoke(__instance, new object[]
+                            {
+                            caravanParty,
+                            town,
+                            lastHomeVisitTimeOfCaravan,
+                            caravanFullness,
                             distanceCut
-                        });
-
-                        if (tradeScoreForTown > num)
-                        {
-                            num = tradeScoreForTown;
-                            result = town;
+                            });
+                                if (tradeScoreForTown > num)
+                                {
+                                    num = tradeScoreForTown;
+                                    result = town;
+                                }
+                            },
+                "CaravansCampaignBehaviorPatches",
+                false);
                         }
                     }
                 }
-
                 __result = result;
                 return false;
             }
@@ -249,10 +256,10 @@ namespace BannerKings.Patches
             {
                 float caravans = hero.OwnedCaravans.Count;
                 __result = hero.PartyBelongedTo == null &&
-                    caravans < BannerKingsConfig.Instance.EconomyModel.GetNotableCaravanLimit(hero) && 
+                    caravans < BannerKingsConfig.Instance.EconomyModel.GetNotableCaravanLimit(hero) &&
                     hero.Power > (50f + (caravans * 75f)) &&
-                    (hero.IsFugitive || hero.IsReleased || hero.IsNotSpawned || hero.IsActive) && 
-                    !hero.IsTemplate && 
+                    (hero.IsFugitive || hero.IsReleased || hero.IsNotSpawned || hero.IsActive) &&
+                    !hero.IsTemplate &&
                     hero.CanLeadParty();
                 return false;
             }
@@ -460,11 +467,11 @@ namespace BannerKings.Patches
 
             [HarmonyPrefix]
             [HarmonyPatch("CalculateClanExpensesInternal")]
-            private static bool CalculateClanExpensesInternalPrefix(DefaultClanFinanceModel __instance, Clan clan, 
+            private static bool CalculateClanExpensesInternalPrefix(DefaultClanFinanceModel __instance, Clan clan,
                 ref ExplainedNumber goldChange, bool applyWithdrawals = false, bool includeDetails = false)
             {
                 bool payBudget = clan.Gold > 100000 && clan.Kingdom != null && clan.Leader != Hero.MainHero && !clan.IsUnderMercenaryService;
-                if (payBudget) 
+                if (payBudget)
                 {
                     MethodInfo AddExpensesFromPartiesAndGarrisons = DefaultClanFinanceModel
                         .GetType()
@@ -502,7 +509,7 @@ namespace BannerKings.Patches
                             .GetMethod("AddPaymentForDebts", BindingFlags.Instance | BindingFlags.NonPublic);
                         AddPaymentForDebts.Invoke(__instance, new object[] { clan, goldChange, applyWithdrawals });
                     }
-                    
+
                     if (Clan.PlayerClan == clan)
                     {
                         MethodInfo AddPlayerExpenseForWorkshops = DefaultClanFinanceModel
@@ -510,7 +517,7 @@ namespace BannerKings.Patches
                             .GetMethod("AddPlayerExpenseForWorkshops", BindingFlags.Instance | BindingFlags.NonPublic);
                         AddPlayerExpenseForWorkshops.Invoke(__instance, new object[] { goldChange });
                     }
-                    
+
                     return false;
                 }
 
@@ -575,19 +582,19 @@ namespace BannerKings.Patches
                 foreach (var hero in clan.Lords)
                     foreach (var caravanPartyComponent in hero.OwnedCaravans)
                         list.Add(caravanPartyComponent.MobileParty);
-                        
+
                 foreach (var hero2 in clan.Companions)
                     foreach (var caravanPartyComponent2 in hero2.OwnedCaravans)
-                        list.Add(caravanPartyComponent2.MobileParty);     
+                        list.Add(caravanPartyComponent2.MobileParty);
 
                 foreach (var warPartyComponent in clan.WarPartyComponents)
                     if (warPartyComponent.MobileParty != mainParty)
                         list.Add(warPartyComponent.MobileParty);
-                    
+
                 foreach (Town town in clan.Fiefs)
                     if (town.GarrisonParty != null && town.GarrisonParty.IsActive)
                         list.Add(town.GarrisonParty);
-  
+
                 foreach (var party in list)
                 {
                     int budget = clan.Gold + (int)goldChange.ResultNumber + (int)goldChange.ResultNumber;
@@ -689,7 +696,15 @@ namespace BannerKings.Patches
                         PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.ContentTrades, town, ref explainedNumber2);
                         PerkHelper.AddPerkBonusForTown(DefaultPerks.Crossbow.Steady, town, ref explainedNumber2);
                         PerkHelper.AddPerkBonusForTown(DefaultPerks.Roguery.SaltTheEarth, town, ref explainedNumber2);
-                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.GivingHands, town, ref explainedNumber2);
+                        if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                        {
+                            DefaultPerks.Steward.GivingHands.AddScaledGovernerPerkBonusForTownWithTownHeros(ref explainedNumber2, true, town);
+                        }
+                        else
+                        {
+                            PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.GivingHands, town, ref explainedNumber2);
+                        }
+
                         if (applyWithdrawals)
                         {
                             town.TradeTaxAccumulated -= num;
@@ -764,7 +779,7 @@ namespace BannerKings.Patches
             [HarmonyPatch("GetCurrentMarketData")]
             private static void GetPricePostfix(ref IMarketData __result)
             {
-				Settlement settlement = MobileParty.MainParty.CurrentSettlement;
+                Settlement settlement = MobileParty.MainParty.CurrentSettlement;
                 if (settlement != null && settlement.IsCastle)
                 {
                     __result = settlement.Town.MarketData;
@@ -1034,7 +1049,7 @@ namespace BannerKings.Patches
 
             [HarmonyPostfix]
             [HarmonyPatch(methodName: "DecideBestWorkshopType", MethodType.Normal)]
-            private static void DecideBestWorkshopTypePostfix(ref WorkshopType __result, 
+            private static void DecideBestWorkshopTypePostfix(ref WorkshopType __result,
                 Settlement currentSettlement, bool atGameStart, WorkshopType workshopToExclude = null)
             {
                 if (__result != null && currentSettlement != null && currentSettlement.Town != null)
@@ -1055,7 +1070,7 @@ namespace BannerKings.Patches
                             list.Add(WorkshopType.Find("armorsmithy"));
                             list.Add(WorkshopType.Find("weaponsmithy"));
                             var random = list.GetRandomElement();
-                            if (currentSettlement.Town.Workshops.Any(x => x != null && x.WorkshopType != null && 
+                            if (currentSettlement.Town.Workshops.Any(x => x != null && x.WorkshopType != null &&
                             x.WorkshopType.StringId == random.StringId))
                             {
                                 __result = list.GetRandomElement();
@@ -1337,7 +1352,7 @@ namespace BannerKings.Patches
                             ItemModifier modifier = null;
                             if (modifierGroup != null)
                             {
-                                modifier = modifierGroup.GetRandomModifierWithTarget(data.EconomicData.ProductionQuality.ResultNumber, 
+                                modifier = modifierGroup.GetRandomModifierWithTarget(data.EconomicData.ProductionQuality.ResultNumber,
                                     0.2f);
                             }
 

@@ -8,16 +8,19 @@
 		<Nullable>disable</Nullable>
 		<ModuleId>$(MSBuildProjectName)</ModuleId>
 		<ModuleName>$(MSBuildProjectName)</ModuleName>
+		<OtherTestingMods>$(OTHER_TESTING_MODS)</OtherTestingMods>
 		<GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>
 		<OutputPath>C:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerKings\bin\Win64_Shipping_Client</OutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
 		<DebugType>portable</DebugType>
+		<Optimize>False</Optimize>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
 		<DebugType>portable</DebugType>
+		<Optimize>True</Optimize>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -56,10 +59,6 @@
 		<PackageReference Include="Bannerlord.ButterLib" Version="2.6.3" IncludeAssets="compile" />
 		<PackageReference Include="Bannerlord.UIExtenderEx" Version="2.6.0" IncludeAssets="compile" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" PrivateAssets="all" IncludeAssets="compile" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Patches\" />
 	</ItemGroup>
 
 </Project>

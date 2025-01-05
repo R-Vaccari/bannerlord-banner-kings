@@ -15,6 +15,10 @@ using BannerKings.Managers.Court.Members;
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Titles.Governments;
 using BannerKings.Managers.Titles;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using BannerKings.Settings;
+using BannerKings.Utils;
+using TaleWorlds.Core;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -106,7 +110,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.OwnerClan.Leader);
-            if (settlement.Culture.StringId == "battania" && education.Lifestyle != null && 
+            if (settlement.Culture.StringId == "battania" && education.Lifestyle != null &&
                 education.Lifestyle.Equals(DefaultLifestyles.Instance.Fian))
             {
                 baseResult.Add(1.5f, DefaultLifestyles.Instance.Fian.Name);
@@ -125,11 +129,25 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, 
+            #region DefaultPerks.Steward.SevenVeterans
+            if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+            {
+                if (settlement.IsTown || settlement.IsCastle)
+                {
+                    if (settlement.Town.Governor != null && settlement.Town.Governor.GetPerkValue(DefaultPerks.Steward.SevenVeterans) && settlement.Town.Governor.CurrentSettlement != null && settlement.Town.Governor.CurrentSettlement == settlement)
+                    {
+                        baseResult.Add(-DefaultPerks.Steward.SevenVeterans.SecondaryBonus, DefaultPerks.Steward.SevenVeterans.Name);
+                    }
+                    DefaultPerks.Steward.SevenVeterans.AddScaledGovernerPerkBonusForTownWithTownHeros(ref baseResult, true,settlement.Town);
+                }
+            }
+            #endregion
+
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult,
                 settlement.OwnerClan.Leader,
                 DefaultCouncilPositions.Instance.Marshal,
                 DefaultCouncilTasks.Instance.OrganizeMiltia,
-                1f, 
+                1f,
                 false);
 
             return baseResult;
@@ -156,9 +174,9 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public override float CalculateEliteMilitiaSpawnChance(Settlement settlement) => 
+        public override float CalculateEliteMilitiaSpawnChance(Settlement settlement) =>
             MilitiaSpawnChanceExplained(settlement).ResultNumber;
-        
+
         public ExplainedNumber MilitiaSpawnChanceExplained(Settlement settlement)
         {
             var result =

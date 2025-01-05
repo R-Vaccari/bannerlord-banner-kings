@@ -112,11 +112,13 @@ namespace BannerKings
             campaignStarter.AddModel(new BKMapTrackModel());
             campaignStarter.AddModel(new BKAgentDamageModel());
             campaignStarter.AddModel(new BKAgentStatsModel());
+            campaignStarter.AddModel(new BKBuildingEffectModel());
             campaignStarter.AddModel(new BKPartySpeedModel());
             campaignStarter.AddModel(new BKBattleSimulationModel());
             campaignStarter.AddModel(new BKPartyConsumptionModel());
             campaignStarter.AddModel(new BKWallHitpointModel());
             campaignStarter.AddModel(new BKInventoryCapacityModel());
+            campaignStarter.AddModel(new BKItemDiscardModel());
             campaignStarter.AddModel(new BKMapVisibilityModel());
             campaignStarter.AddModel(new BKPartyImpairmentModel());
             campaignStarter.AddModel(BannerKingsConfig.Instance.CrimeModel);
@@ -131,7 +133,7 @@ namespace BannerKings
             campaignStarter.AddModel(new BKBanditModel());
             campaignStarter.AddModel(new BKPartyTrainningModel());
             campaignStarter.AddModel(new BKDiplomacyModel());
-            //campaignStarter.AddModel(new BKTargetScoreModel());
+            campaignStarter.AddModel(new BKCharacterStatsModel());
             campaignStarter.AddModel(new BKPartyBuyingFoodModel());
             campaignStarter.AddModel(new BKCategorySelector());
             campaignStarter.AddModel(new BKSettlementAccessModel());

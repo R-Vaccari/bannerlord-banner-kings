@@ -7,6 +7,9 @@ using BannerKings.Managers.Items;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Settings;
+using BannerKings.Utils.Models;
+using BannerKings.Utils;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -19,6 +22,7 @@ using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade.Launcher.Library;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
+using static BannerKings.Utils.PerksHelpers;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -272,18 +276,42 @@ namespace BannerKings.Models.Vanilla
 
         public override int GetBoostAmount(Town town)
         {
+            var result = 0;
             if (BannerKingsConfig.Instance.PopulationManager != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 if (data != null)
                 {
                     var craftsmen = data.GetTypeCount(PopType.Craftsmen);
-                    var result = (int)(craftsmen * 0.3f * CRAFTSMEN_CONSTRUCTION);
-                    return MBMath.ClampInt(result, 0, 100);
+                    result = (int)(craftsmen * 0.3f * CRAFTSMEN_CONSTRUCTION);
+                    result = MBMath.ClampInt(result, 0, 100);
+                }
+
+                #region DefaultPerks.Steward.Relocation
+                if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                {
+                    var explainedNumber = new ExplainedNumber(0f, false);
+                    result += (int)(DefaultPerks.Steward.Relocation.AddScaledGovernerPerkBonusForTownWithTownHeros(ref explainedNumber, true,  town) * 100);
+                }
+                else
+                {
+                    if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Steward.Relocation))
+                    {
+                        result += (int)DefaultPerks.Steward.Relocation.SecondaryBonus;
+                    }
+                }
+                #endregion
+
+                if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Trade.SpringOfGold))
+                {
+                    result += (int)DefaultPerks.Trade.SpringOfGold.SecondaryBonus;
                 }
             }
-
-            return base.GetBoostAmount(town);
+            else
+            {
+                result = base.GetBoostAmount(town);
+            }
+            return result;
         }
 
         private float GetWorkforce(Settlement settlement)
@@ -343,7 +371,7 @@ namespace BannerKings.Models.Vanilla
         {
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
             result.Add(GetWorkforce(town.Settlement), new TextObject("{=8EX6VriS}Workforce"));
-           
+
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(town.OwnerClan.Leader);
             if (education.Perks.Contains(BKPerks.Instance.CivilEngineer))
             {
@@ -376,7 +404,7 @@ namespace BannerKings.Models.Vanilla
             {
                 var num = town.IsCastle ? 250 : 500;
                 var num2 = GetBoostAmount(town);
-                var num3 = Math.Min(1f, town.BoostBuildingProcess / (float) num);
+                var num3 = Math.Min(1f, town.BoostBuildingProcess / (float)num);
                 var num4 = 0f;
                 if (town.IsTown && town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Engineering.Clockwork))
                 {
@@ -395,7 +423,23 @@ namespace BannerKings.Models.Vanilla
                 {
                     SkillHelper.AddSkillBonusForTown(DefaultSkills.Engineering,
                         DefaultSkillEffects.TownProjectBuildingBonus, town, ref result);
-                    PerkHelper.AddPerkBonusForTown(DefaultPerks.Steward.ForcedLabor, town, ref result);
+
+                    if (BannerKingsSettings.Instance.EnableUsefulPerks && BannerKingsSettings.Instance.EnableUsefulStewardPerks)
+                    {
+                        if (town?.Settlement?.Party?.PrisonRoster != null && town.Settlement.Party.PrisonRoster.TotalManCount > 4)
+                        {
+                            var factor = (float)(town.Settlement.Party.PrisonRoster.TotalHealthyCount / 5);
+                            DefaultPerks.Steward.GivingHands.AddScaledGovernerPerkBonusForTownWithTownHeros(ref result, true, town, factor);
+                        }
+                    }
+                    else
+                    {
+                        if (town.Governor.GetPerkValue(DefaultPerks.Steward.ForcedLabor) && town.Settlement?.Party?.PrisonRoster?.TotalManCount > 0)
+                        {
+                            float value2 = MathF.Min(0.3f, (float)(town.Settlement.Party.PrisonRoster.TotalManCount / 3) * DefaultPerks.Steward.ForcedLabor.SecondaryBonus);
+                            result.AddFactor(value2, DefaultPerks.Steward.ForcedLabor.Name);
+                        }
+                    }
 
                     if (!town.BuildingsInProgress.IsEmpty())
                     {
@@ -427,7 +471,7 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            var num5 = town.SoldItems.Sum(delegate(Town.SellLog x)
+            var num5 = town.SoldItems.Sum(delegate (Town.SellLog x)
             {
                 if (x.Category.Properties != ItemCategory.Property.BonusToProduction)
                 {
@@ -470,17 +514,17 @@ namespace BannerKings.Models.Vanilla
             switch (town.Loyalty)
             {
                 case >= 75f:
-                {
-                    loyaltyFactor = MBMath.Map(town.Loyalty, 75f, 100f, 0f, 0.12f);
-                    loyaltyText = HighLoyaltyBonusText;
-                    break;
-                }
+                    {
+                        loyaltyFactor = MBMath.Map(town.Loyalty, 75f, 100f, 0f, 0.12f);
+                        loyaltyText = HighLoyaltyBonusText;
+                        break;
+                    }
                 case > 15f and <= 50f:
-                {
-                    loyaltyFactor = MBMath.Map(town.Loyalty, 25f, 50f, -1f, 0f);
-                    loyaltyText = LowLoyaltyPenaltyText;
-                    break;
-                }
+                    {
+                        loyaltyFactor = MBMath.Map(town.Loyalty, 25f, 50f, -1f, 0f);
+                        loyaltyText = LowLoyaltyPenaltyText;
+                        break;
+                    }
                 case <= 15f:
                     loyaltyFactor = -1f;
                     break;
@@ -502,7 +546,7 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            return (int) result.ResultNumber;
+            return (int)result.ResultNumber;
         }
     }
 }
