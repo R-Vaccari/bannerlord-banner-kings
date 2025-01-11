@@ -2,7 +2,6 @@ using BannerKings.Components;
 using BannerKings.Settings;
 using HarmonyLib;
 using Helpers;
-using SandBox.CampaignBehaviors;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -74,11 +73,8 @@ namespace BannerKings.Behaviours
 
         private void OnClanTick(Clan clan)
         {
-            if (!clan.IsBanditFaction)
-            {
-                return;
-            }
-
+            if (!clan.IsBanditFaction) return;
+            
             if (clan.StringId == "caravan_robbers")
             {
                 if (clan.WarPartyComponents.Count > BannerKingsSettings.Instance.BanditPartiesLimit * 0.1f)
@@ -107,28 +103,9 @@ namespace BannerKings.Behaviours
 
         private void OnPartyDailyTick(MobileParty party)
         {
-            if (!party.IsBandit)
-            {
-                return;
-            }
+            if (!party.IsBandit) return;
 
-            if (party.PartyComponent is not BanditHeroComponent)
-            {
-                if (!party.Ai.IsDisabled && MBRandom.RandomFloat < MBRandom.RandomFloat && party.MapEvent == null)
-                {
-                    Settlement town = SettlementHelper.FindNearestFortification(x => 
-                    x.GatePosition.DistanceSquared(party.Position2D) < 50f, party);
-                    if (town != null)
-                    {
-                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town);
-                        if (MBRandom.RandomFloat < data.Stability)
-                        {
-                            DestroyPartyAction.Apply(null, party);
-                        }
-                    }
-                }
-            }
-            else
+            if (party.PartyComponent is  BanditHeroComponent)
             {
                 BanditHeroComponent component = (BanditHeroComponent)party.PartyComponent;
                 component.Tick();
