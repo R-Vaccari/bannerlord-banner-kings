@@ -18,7 +18,7 @@ namespace BannerKings.Models.Vanilla
             float num5 = (1.2f - (hero.Age - 18f) * 0.04f) / (float)(num * num) * 0.12f * num4;
 
             ExplainedNumber explainedNumber = new ExplainedNumber(num5, false, null);
-            if (hero.GetPerkValue(DefaultPerks.Charm.Virile) || hero.Spouse.GetPerkValue(DefaultPerks.Charm.Virile))
+            if (hero.GetPerkValue(DefaultPerks.Charm.Virile) || (hero.Spouse != null && hero.Spouse.GetPerkValue(DefaultPerks.Charm.Virile)))
             {
                 explainedNumber.AddFactor(DefaultPerks.Charm.Virile.PrimaryBonus, DefaultPerks.Charm.Virile.Name);
             }
@@ -31,10 +31,11 @@ namespace BannerKings.Models.Vanilla
             {
                 var spouseRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero.Spouse);
                 if (spouseRel != null && spouseRel.HasDoctrine(DefaultDoctrines.Instance.Childbirth))
-                    explainedNumber.AddFactor(1.15f);
+           explainedNumber.AddFactor(1.15f);
             }
 
             return explainedNumber.ResultNumber;
         }
     }
 }
+         
