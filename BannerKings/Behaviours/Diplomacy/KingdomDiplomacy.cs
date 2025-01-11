@@ -310,9 +310,7 @@ namespace BannerKings.Behaviours.Diplomacy
                 {
                     InterestGroup copy = (InterestGroup)group.GetCopy(this);
                     if (copy.Equals(DefaultInterestGroup.Instance.Zealots))
-                    {
                         copy.SetName(Religion.Faith.GetZealotsGroupName());
-                    }
 
                     Groups.Add(copy);
                 }
@@ -321,12 +319,8 @@ namespace BannerKings.Behaviours.Diplomacy
             }
 
             foreach (var group in DefaultRadicalGroups.Instance.All)
-            {
                 if (!RadicalGroups.Any(x => group.StringId == x.StringId))
-                {
                     RadicalGroups.Add((RadicalGroup)group.GetCopy(this));
-                }
-            }
 
             foreach (var clan in Kingdom.Clans)
             {
@@ -350,19 +344,17 @@ namespace BannerKings.Behaviours.Diplomacy
                 {
                     Hero hero = clan.Leader;
                     if (BannerKingsConfig.Instance.InterestGroupsModel.WillHeroCreateGroup(group, hero, this))
-                    {
                         group.SetupRadicalGroup(hero, null);
-                    }
                 }
             }
 
+            var pactsToDelete = new List<Kingdom>();
             foreach (Kingdom partner in TradePacts)
-            {
                 if (!BannerKingsConfig.Instance.DiplomacyModel.WillAcceptTrade(partner, Kingdom))
-                {
-                    DissolveTradePactForcefully(partner);
-                }
-            }
+                    pactsToDelete.Add(partner);
+  
+            foreach (Kingdom partner in pactsToDelete)
+                DissolveTradePactForcefully(partner);
         }
 
         private void EvaluateJoinAGroup(Hero hero)
