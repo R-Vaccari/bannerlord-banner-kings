@@ -86,7 +86,7 @@ namespace BannerKings.Models.Vanilla
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_encourage"))
             {
-                baseResult.Add(baseGrowth * (1f - 1f * filledCapacity), new TextObject("{=1aq83aPr}Conscription policy"));
+                baseResult.Add((baseGrowth / 3f) * (1f - 1f * filledCapacity), new TextObject("{=1aq83aPr}Conscription policy"));
             }
             else if (filledCapacity > 1f)
             {

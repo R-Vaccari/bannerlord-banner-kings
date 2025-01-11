@@ -119,17 +119,17 @@ namespace BannerKings.Models.Vanilla
             }
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_ration"))
-            {
-                baseResult.Add(town.IsUnderSiege || town.FoodStocks >= town.FoodStocksUpperLimit() * 0.1f ? -2f : -4f, new TextObject("{=w6bLP4DB}Enforce rations decision"));
-            }
+                baseResult.Add(town.IsUnderSiege || town.FoodStocks >= town.FoodStocksUpperLimit() * 0.1f ? -2f : -4f, 
+                    new TextObject("{=w6bLP4DB}Enforce rations decision"));
+
+            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_militia_encourage"))
+                baseResult.Add(-1, new TextObject("{=sOQrvQc9}Encourage militia"));
 
             var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
             if (government == DefaultGovernments.Instance.Republic)
-            {
                 baseResult.Add(1f, new TextObject("{=PSrEtF5L}Government"));
-            }
-
-            baseResult.Add(2f * data.Autonomy, new TextObject("Autonomy"));
+            
+            baseResult.Add(2f * data.Autonomy, new TextObject("{=!}Autonomy"));
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader,
                 DefaultCouncilPositions.Instance.Chancellor,
