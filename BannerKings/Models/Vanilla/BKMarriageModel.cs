@@ -108,10 +108,16 @@ namespace BannerKings.Models.Vanilla
                     CheckReligionSuitability(proposedReligion, proposerReligion, ref result, secondHero, proposer);
                 }
 
-                if (!isConsort && proposer.Spouse != null && proposer.Spouse.IsAlive)
+                if (!isConsort && proposer.HasPrimarySpouse())
                 {
                     result.Add(-1000f, new TextObject("{=!}{HERO} already has a primary spouse")
                         .SetTextVariable("HERO", proposer.Name));
+                }
+
+                if (secondHero.HasPrimarySpouse())
+                {
+                    result.Add(-1000f, new TextObject("{=!}{HERO} already has a primary spouse")
+                                            .SetTextVariable("HERO", secondHero.Name));
                 }
 
                 if (!base.IsCoupleSuitableForMarriage(proposer, secondHero))

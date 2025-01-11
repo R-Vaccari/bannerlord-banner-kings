@@ -1,4 +1,5 @@
-﻿using BannerKings.Extensions;
+﻿using BannerKings.Behaviours.Marriage;
+using BannerKings.Extensions;
 using BannerKings.Managers.Titles;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -21,6 +22,12 @@ namespace BannerKings.Utils.Extensions
         public static bool IsKingdomLeader(this Hero hero)
         {
             return hero.Clan?.Kingdom?.Leader == hero;
+        }
+
+        public static bool HasPrimarySpouse(this Hero hero)
+        {
+            return (hero.Spouse != null && hero.Spouse.IsAlive) ||
+                Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().GetHeroMarriage(hero).PrimarySpouse != null;
         }
 
         public static bool IsCommonBorn(this Hero hero)
