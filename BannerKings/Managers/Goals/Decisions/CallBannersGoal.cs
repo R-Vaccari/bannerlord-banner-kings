@@ -22,8 +22,9 @@ namespace BannerKings.Managers.Goals.Decisions
         List<BannerOption> allBanners = new List<BannerOption>();
         List<InquiryElement> elements = new List<InquiryElement>();
 
-        public CallBannersGoal(Hero fulfiller = null) : base("goal_found_kingdom", fulfiller)
+        public CallBannersGoal(Hero fulfiller = null) : base("goal_call_banners", fulfiller)
         {
+            Refresh();
         }
 
         public override bool TickClanLeaders => true;
@@ -266,17 +267,14 @@ namespace BannerKings.Managers.Goals.Decisions
         public override void DoAiDecision()
         {
             Hero fulfiller = GetFulfiller();
-            if (allBanners.Count < 5 || fulfiller.PartyBelongedTo == null ||
+            if (allBanners.Count < 2 || fulfiller.PartyBelongedTo == null ||
                 fulfiller.PartyBelongedTo.HasUnpaidWages > 0 || fulfiller.PartyBelongedTo.GetNumDaysForFoodToLast() < 10)
             {
                 return;
             }
 
-            if (!IsFulfilled(out List<TextObject> reasons))
-            {
-                return;
-            }
-
+            if (!IsFulfilled(out List<TextObject> reasons)) return;
+            
             float cost = 0f;
             int parties = 0;
             foreach (var banner in allBanners)
@@ -289,11 +287,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
             }
 
-            if (banners.Count < 5)
-            {
-                return;
-            }
-
+            if (banners.Count < 2) return;
             ApplyGoal();
         }
         private class BannerOption

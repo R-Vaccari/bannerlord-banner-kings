@@ -2,16 +2,15 @@
 using BannerKings.Managers.Court.Members.Tasks;
 using BannerKings.Managers.Duties;
 using BannerKings.Managers.Goals.Decisions;
-using BannerKings.Managers.Titles;
 using BannerKings.Models.Vanilla;
 using BannerKings.Settings;
 using HarmonyLib;
-using Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 
 namespace BannerKings.Behaviours
 {
@@ -75,37 +74,25 @@ namespace BannerKings.Behaviours
 
         private void EvaluateCreateArmy(MobileParty party)
         {
-            if (!party.IsLordParty || party.LeaderHero == null || party.LeaderHero.Clan == null)
-            {
+            if (!party.IsLordParty || party.LeaderHero == null || party.LeaderHero.Clan == null || party.Army != null ||
+                party.MapEvent != null)
                 return;
-            }
 
             var leader = party.LeaderHero;
             var kingdom = leader.Clan.Kingdom;
-            if (kingdom == null || leader != leader.Clan.Leader || party.ActualClan == Clan.PlayerClan || leader.Clan.Influence < 100f)
-            {
+            if (kingdom == null || party.ActualClan == Clan.PlayerClan || leader.Clan.Influence < 100f)
                 return;
-            }
 
             bool war = FactionManager.GetEnemyKingdoms(kingdom).Count() > 0;
             if (war)
             {
-                if (!BannerKingsConfig.Instance.ArmyManagementModel.CanCreateArmy(leader)) return;
-
-                CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
-                if (council.GetHeroPositions(leader).Any(x => x.CurrentTask.Equals(DefaultCouncilTasks.Instance.GatherLegion)))
-                {
-                    if (BannerKingsConfig.Instance.ArmyManagementModel.GetMobilePartiesToCallToArmy(party).Count > 3)
-                    {
-                        var decision = new CallBannersGoal(leader);
-                        decision.DoAiDecision();
-                    }
-                }
+                if (!BannerKingsConfig.Instance.ArmyManagementModel.CanCreateArmy(leader) || 
+                    MBRandom.RandomFloat < MBRandom.RandomFloat) return;
 
                 Clan clan = leader.Clan;
                 if (clan.Influence >= BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceCap(clan).ResultNumber * 0.5f &&
                     party.TotalFoodAtInventory > party.MemberRoster.TotalManCount * 0.5f &&
-                    BannerKingsConfig.Instance.ArmyManagementModel.GetMobilePartiesToCallToArmy(party).Count > 3)
+                    BannerKingsConfig.Instance.ArmyManagementModel.GetMobilePartiesToCallToArmy(party).Count > 2)
                 {
                     var decision = new CallBannersGoal(leader);
                     decision.DoAiDecision();
