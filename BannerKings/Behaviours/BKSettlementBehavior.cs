@@ -33,6 +33,7 @@ using System.Reflection;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using BannerKings.Actions;
 using BannerKings.Settings;
+using static BannerKings.Managers.Policies.BKGarrisonPolicy;
 
 namespace BannerKings.Behaviours
 {
@@ -278,137 +279,13 @@ namespace BannerKings.Behaviours
 
         private void TickManagement(Settlement target)
         {
+            if (target.OwnerClan == Clan.PlayerClan) return;
+
             RunWeekly(() =>
             {
-                if (target == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target))
-                {
-                    return;
-                }
-
-                var owner = target.IsVillage ? target.Village.GetActualOwner() : target.OwnerClan.Leader;
-                if (owner.Clan == Clan.PlayerClan)
-                {
-                    return;
-                }
-
-                var kingdom = target.OwnerClan.Kingdom;
-                var currentDecisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(target);
-                var changedDecisions = new List<BannerKingsDecision>();
-
-                var town = target.Town;
-                if (town is { Governor: { } })
-                {
-                    if (town.FoodStocks < town.FoodStocksUpperLimit() * 0.2f && town.FoodChange < 0f)
-                    {
-                        var rationDecision =
-                            (BKRationDecision)currentDecisions.FirstOrDefault(x => x.GetIdentifier() == "decision_ration");
-                        rationDecision.Enabled = true;
-                        changedDecisions.Add(rationDecision);
-                    }
-                    else
-                    {
-                        var rationDecision =
-                            (BKRationDecision)currentDecisions.FirstOrDefault(x => x.GetIdentifier() == "decision_ration");
-                        rationDecision.Enabled = false;
-                        changedDecisions.Add(rationDecision);
-                    }
-
-                    var garrison = town.GarrisonParty;
-                    if (garrison != null)
-                    {
-                        float wage = garrison.TotalWage;
-                        var income = TaleWorlds.CampaignSystem.Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(town).ResultNumber;
-                        if (wage >= income * 0.5f)
-                        {
-                            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target,
-                                new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Dischargement, target));
-                        }
-                        else if (wage <= income * 0.2f)
-                        {
-                            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target,
-                                new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Enlistment, target));
-                        }
-                        else
-                        {
-                            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target,
-                                new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Standard, target));
-                        }
-                    }
-
-                    if (town.LoyaltyChange < 0)
-                    {
-                        UpdateTaxPolicy(1, target);
-                    }
-                    else
-                    {
-                        UpdateTaxPolicy(-1, target);
-                    }
-
-                    if (kingdom != null)
-                    {
-                        var enemies = FactionManager.GetEnemyKingdoms(kingdom);
-                        var atWar = enemies.Any();
-
-                        if (target.Owner.GetTraitLevel(DefaultTraits.Calculating) > 0)
-                        {
-                            var subsidizeMilitiaDecision =
-                                (BKSubsidizeMilitiaDecision)currentDecisions.FirstOrDefault(x =>
-                                    x.GetIdentifier() == "decision_militia_subsidize");
-                            subsidizeMilitiaDecision.Enabled = atWar ? true : false;
-                            changedDecisions.Add(subsidizeMilitiaDecision);
-                        }
-                    }
-
-                    var criminal = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(target, "criminal");
-                    var mercy = target.Owner.GetTraitLevel(DefaultTraits.Mercy);
-                    var targetCriminal = mercy switch
-                    {
-                        > 0 => new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Forgiveness, target),
-                        < 0 => new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Execution, target),
-                        _ => new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Enslavement, target)
-                    };
-
-                    if (targetCriminal.Policy != criminal.Policy)
-                    {
-                        BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, targetCriminal);
-                    }
-
-                    var taxSlavesDecision =
-                        (BKTaxSlavesDecision)currentDecisions.FirstOrDefault(x => x.GetIdentifier() == "decision_slaves_tax");
-                    if (target.Owner.GetTraitLevel(DefaultTraits.Authoritarian) > 0)
-                    {
-                        taxSlavesDecision.Enabled = true;
-                    }
-                    else if (target.Owner.GetTraitLevel(DefaultTraits.Egalitarian) > 0)
-                    {
-                        taxSlavesDecision.Enabled = false;
-                    }
-
-                    changedDecisions.Add(taxSlavesDecision);
-
-                    var workforce = (BKWorkforcePolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(target, "workforce");
-                    var workforcePolicies = new List<ValueTuple<WorkforcePolicy, float>> { (WorkforcePolicy.None, 1f) };
-                    var saturation = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).LandData
-                        .WorkforceSaturation;
-                    if (saturation > 1f)
-                    {
-                        workforcePolicies.Add((WorkforcePolicy.Land_Expansion, 2f));
-                    }
-
-                    if (town.Security < 20f)
-                    {
-                        workforcePolicies.Add((WorkforcePolicy.Martial_Law, 2f));
-                    }
-
-                    BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target,
-                        new BKWorkforcePolicy(MBRandom.ChooseWeighted(workforcePolicies), target));
-
-                    foreach (var dec in changedDecisions)
-                    {
-                        BannerKingsConfig.Instance.PolicyManager.UpdateSettlementDecision(target, dec);
-                    }
-                }
-                else if (target.IsVillage && target.Village.Bound.Town.Governor != null)
+            if (target.IsVillage)
+            {
+                if (target.Village.Bound.Town.Governor != null)
                 {
                     var villageData = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).VillageData;
                     villageData.StartRandomProject();
@@ -423,6 +300,39 @@ namespace BannerKings.Behaviours
                             break;
                     }
                 }
+
+                return;
+            }
+
+            Town town = target.Town;
+            if (town.Governor == null) return;
+
+            float loyalty = town.Loyalty;
+            float taxModifier = 8f * town.Governor.GetTraitLevel(DefaultTraits.Generosity);
+            TaxType tax = TaxType.Standard;
+            if (loyalty > (80 + taxModifier)) tax = TaxType.High;
+            else if (loyalty < (30 + taxModifier)) tax = TaxType.Low;
+            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKTaxPolicy(tax, target));
+
+            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementDecision(target, new BKRationDecision(target,
+                town.FoodStocks < town.FoodStocksUpperLimit() * 0.2f && town.FoodChange < 0f));
+
+            Kingdom kingdom = target.OwnerClan.Kingdom;
+            if (kingdom == null) return;
+
+            bool peace = FactionManager.GetEnemyKingdoms(kingdom).Count() == 0;
+            bool construction = town.CurrentBuilding != null;
+            WorkforcePolicy workforcePolicy = peace ? (construction ? WorkforcePolicy.Construction : WorkforcePolicy.Land_Expansion)
+            : (town.InRebelliousState ? WorkforcePolicy.None : WorkforcePolicy.Martial_Law);
+            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKWorkforcePolicy(workforcePolicy, target));
+
+            GarrisonPolicy garrisonPolicy = GarrisonPolicy.Standard;
+            if (!peace && town.GarrisonChange < 2) garrisonPolicy = GarrisonPolicy.Enlistment;
+
+            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKGarrisonPolicy(garrisonPolicy, target)); 
+
+            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementDecision(target, new BKEncourageMilitiaDecision(target,
+                !peace && !town.InRebelliousState));
             },
             GetType().Name,
             false);
