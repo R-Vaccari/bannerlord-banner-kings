@@ -53,7 +53,11 @@ namespace BannerKings.Managers.Goals.Decisions
             failedReasons = new List<TextObject>();
 
             Hero fulfiller = GetFulfiller();
-            if (!BannerKingsConfig.Instance.ArmyManagementModel.CanCreateArmy(fulfiller))
+            if (fulfiller.MapFaction is not Kingdom)
+            {
+                failedReasons.Add(new TextObject("{=!}No kingdom"));
+            }
+            else if (!BannerKingsConfig.Instance.ArmyManagementModel.CanCreateArmy(fulfiller))
             {
                 if (fulfiller.Clan.Kingdom.HasPolicy(BKPolicies.Instance.LimitedArmyPrivilege))
                 {
