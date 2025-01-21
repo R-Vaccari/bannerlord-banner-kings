@@ -190,6 +190,11 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=!}Armies")]
         public bool ArmyConsistency { get; set; } = true;
 
+        [SettingPropertyFloatingInteger("{=!}Front Focus", minValue: 0f, maxValue: 1f, "#0%", RequireRestart = false,
+            HintText = "{=!}Determine the % bonus for parties to target fiefs that serve as Fronts in wars. Too high setting may make them too deterministic. Default: 10%.")]
+        [SettingPropertyGroup("{=!}Armies")]
+        public float FrontFocus { get; set; } = 0.10f;
+
         [SettingProperty("{=CHVW1U24}De Re Militari Bandits", 
             RequireRestart = false, 
             HintText = "{=bAt2AWmj}If you have De Re Militari (DRM) mod, enabling this allows bandit heroes and parties to use DRM's new bandits. Enabling it without DRM will break your game. Default: false.")]

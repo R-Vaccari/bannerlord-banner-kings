@@ -1,6 +1,7 @@
 ﻿using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.CampaignContent.Traits;
+using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -10,6 +11,7 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKTargetScoreModel : DefaultTargetScoreCalculatingModel
     {
+        public override float RaidingFactor => base.RaidingFactor * (1f + BannerKingsSettings.Instance.RaidIncentive);
         public override float CurrentObjectiveValue(MobileParty mobileParty)
         {
             float result = base.CurrentObjectiveValue(mobileParty);
@@ -59,17 +61,15 @@ namespace BannerKings.Models.Vanilla
 
         public override float GetTargetScoreForFaction(Settlement targetSettlement, Army.ArmyTypes missionType, MobileParty mobileParty, float ourStrength, int numberOfEnemyFactionSettlements = -1, float totalEnemyMobilePartyStrength = -1)
         {
-            float result =  base.GetTargetScoreForFaction(targetSettlement, missionType, mobileParty, ourStrength, numberOfEnemyFactionSettlements, totalEnemyMobilePartyStrength);   
+            float result =  base.GetTargetScoreForFaction(targetSettlement, missionType, mobileParty, ourStrength, numberOfEnemyFactionSettlements, totalEnemyMobilePartyStrength);
+            if (result == 0) return result;
 
             IFaction targetFaction = targetSettlement.MapFaction;
             if (mobileParty.Army != null && targetFaction != mobileParty.MapFaction && targetFaction.IsAtWarWith(mobileParty.MapFaction))
             {
                 War war = TaleWorlds.CampaignSystem.Campaign.Current.GetCampaignBehavior<BKDiplomacyBehavior>()
                     .GetWar(mobileParty.MapFaction, targetFaction);
-                if (war == null)
-                {
-                    return result;
-                }
+                if (war == null) return result;
 
                 CasusBelli justification = war.CasusBelli;
                 if (justification.Fief == targetSettlement)
@@ -85,14 +85,19 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
 
-                if (targetSettlement.Town != null && (targetSettlement.Town == war.DefenderFront || 
-                    targetSettlement.Town == war.AttackerFront))
+                if (targetSettlement.Town != null)
                 {
-                    result *= 1.05f;
+                    if (targetSettlement.Town == war.DefenderFront || targetSettlement.Town == war.AttackerFront)
+                        result *= 1f + BannerKingsSettings.Instance.FrontFocus;
+                    else if (AreSettlementsClose(targetSettlement, war.DefenderFront.Settlement) || AreSettlementsClose(targetSettlement, war.AttackerFront.Settlement))
+                        result *= 1f + (BannerKingsSettings.Instance.FrontFocus / 2f);
                 }
             }
 
             return result;
         }
+
+        private bool AreSettlementsClose(Settlement reference, Settlement target) =>
+            Campaign.Current.Models.MapDistanceModel.GetDistance(reference, target) < Campaign.AverageDistanceBetweenTwoFortifications * 1.1f;
     }
 }
