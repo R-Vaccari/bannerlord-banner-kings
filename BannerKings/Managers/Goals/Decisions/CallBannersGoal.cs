@@ -24,7 +24,6 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public CallBannersGoal(Hero fulfiller = null) : base("goal_call_banners", fulfiller)
         {
-            Refresh();
         }
 
         public override bool TickClanLeaders => true;
@@ -270,9 +269,12 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public override void DoAiDecision()
         {
+            Refresh();
             Hero fulfiller = GetFulfiller();
-            if (allBanners.Count < 2 || fulfiller.PartyBelongedTo == null ||
-                fulfiller.PartyBelongedTo.HasUnpaidWages > 0 || fulfiller.PartyBelongedTo.GetNumDaysForFoodToLast() < 10)
+            if (allBanners.Count < 2 || 
+                fulfiller.PartyBelongedTo == null ||
+                fulfiller.PartyBelongedTo.HasUnpaidWages > 0 || 
+                fulfiller.PartyBelongedTo.GetNumDaysForFoodToLast() < 10)
             {
                 return;
             }

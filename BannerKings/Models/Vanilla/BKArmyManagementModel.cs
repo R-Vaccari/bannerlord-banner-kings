@@ -63,16 +63,8 @@ namespace BannerKings.Models.Vanilla
                     if (kingdomTitle.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyPrivate) && heroTitle != null)
                     {
                         if (kingdom.ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
-                        {
-                            if (heroTitle.TitleType <= TitleType.Dukedom)
-                            {
-                                return true;
-                            }
-                        }
-                        else if (heroTitle.TitleType < TitleType.Lordship)
-                        {
-                            return true;
-                        }
+                            return heroTitle.TitleType <= TitleType.Dukedom;
+                        else return heroTitle.TitleType < TitleType.Lordship;     
                     }
                     else if (kingdomTitle.Contract.IsLawEnacted(DefaultDemesneLaws.Instance.ArmyHorde))
                         return armyLeader.IsClanLeader();
@@ -109,7 +101,7 @@ namespace BannerKings.Models.Vanilla
 
                 foreach (MobileParty p in results)
                 {
-                    if (!CanHeroRecruitMercs(leaderParty.LeaderHero, p.LeaderHero))
+                    if (p.LeaderHero.Clan.IsUnderMercenaryService && !CanHeroRecruitMercs(leaderParty.LeaderHero, p.LeaderHero))
                         toRemove.Add(p);
 
                     if (leaderParty.LeaderHero.Clan.IsUnderMercenaryService && !p.LeaderHero.Clan.IsUnderMercenaryService)

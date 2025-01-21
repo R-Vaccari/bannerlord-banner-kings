@@ -221,14 +221,15 @@ namespace BannerKings.Behaviours
 
             if (BannerKingsSettings.Instance.ArmyConsistency)
             {
-                if (mobileParty != MobileParty.MainParty && mobileParty.Army != null && mobileParty.Army.LeaderParty == mobileParty)
+                if (mobileParty.IsLordParty && mobileParty != MobileParty.MainParty && ((mobileParty.Army != null && mobileParty.Army.LeaderParty == mobileParty) 
+                    || mobileParty.Army == null))
                 {
                     List<AiBehavior> behaviors = new List<AiBehavior>()
-                {
-                    AiBehavior.BesiegeSettlement,
-                    AiBehavior.RaidSettlement,
-                    AiBehavior.DefendSettlement
-                };
+                    {
+                        AiBehavior.BesiegeSettlement,
+                        AiBehavior.RaidSettlement,
+                        AiBehavior.DefendSettlement
+                    };
 
                     if (mobileParty.Ai.HourCounter == 1 && !mobileParty.Ai.IsDisabled && behaviors.Contains(mobileParty.DefaultBehavior))
                     {
