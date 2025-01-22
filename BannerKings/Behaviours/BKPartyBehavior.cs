@@ -141,6 +141,13 @@ namespace BannerKings.Behaviours
 
                 if (eggs > 0) party.ItemRoster.AddToCounts(BKItems.Instance.Egg, eggs);
             }
+
+            if (party.PartyComponent is PopulationPartyComponent)
+            {
+                PopulationPartyComponent component = party.PartyComponent as PopulationPartyComponent;
+                if (component.Trading)
+                    DestroyPartyAction.Apply(null, party);
+            }
         }
 
         private void OnSiegeStarted(SiegeEvent siegeEvent) 
@@ -320,6 +327,7 @@ namespace BannerKings.Behaviours
 
         private void DecideSendTraders(Settlement settlement)
         {
+            return;
             CharacterObject civilian = settlement.Culture.Villager;
             if (civilian == null) return;
 
