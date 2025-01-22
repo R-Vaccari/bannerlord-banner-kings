@@ -42,26 +42,25 @@ namespace BannerKings.Managers.Recruits
 
             foreach (RecruitSpawn spawn in All)
             {
-                if (spawn.FiefStrings.Count > 0)
-                {
-                    if (spawn.FiefStrings.Contains(settlement.StringId) || (settlement.IsVillage &&
-                        spawn.FiefStrings.Contains(settlement.Village.Bound.StringId)))
-                    {
-                        spawns.Add(spawn);
-                    }
-
-                    continue;
-                }
-
                 if (culture != spawn.Culture) continue;
 
-                if (settlement.IsVillage && !spawn.SpawnVillages) continue;
-                if (settlement.IsCastle && !spawn.SpawnCastles) continue;
-                if (settlement.IsTown && !spawn.SpawnTowns) continue;
-
-                if (spawn.Kingdom != null && settlement.MapFaction != spawn.Kingdom)
+                if (settlement != null)
                 {
-                    continue;
+                    if (spawn.FiefStrings.Count > 0)
+                    {
+                        if (spawn.FiefStrings.Contains(settlement.StringId) || (settlement.IsVillage &&
+                            spawn.FiefStrings.Contains(settlement.Village.Bound.StringId)))
+                        {
+                            spawns.Add(spawn);
+                        }
+
+                        continue;
+                    }
+
+                    if (settlement.IsVillage && !spawn.SpawnVillages) continue;
+                    if (settlement.IsCastle && !spawn.SpawnCastles) continue;
+                    if (settlement.IsTown && !spawn.SpawnTowns) continue;
+                    if (spawn.Kingdom != null && settlement.MapFaction != spawn.Kingdom) continue;   
                 }
 
                 spawns.Add(spawn);
