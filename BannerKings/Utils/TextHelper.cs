@@ -17,6 +17,10 @@ namespace BannerKings.Utils
 
         public static string INFLUENCE_ICON = "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">";
         public static string PIETY_ICON = "<img src=\"SPGeneral\\MapOverlay\\Settlement\\icon_morale_big\" extend=\"7\">";
+        public static string MORALE_ICON = "<img src=\"General\\Icons\\Morale@2x\" extend=\"7\">";
+        public static string FOOD_ICON = "<img src=\"General\\Icons\\Food@2x\" extend=\"7\">";
+        public static string PARTY_ICON = "<img src=\"General\\Icons\\Party@2x\" extend=\"7\">";
+        public static string SPEED_ICON = "<img src=\"General\\Icons\\Speed@2x\" extend=\"7\">"; 
 
         public static string GetTraitName(TraitObject trait, int level) =>
             GameTexts.FindText("str_trait_name_" + trait.StringId.ToLower(), (level + MathF.Abs(trait.MinValue)).ToString()).ToString();
