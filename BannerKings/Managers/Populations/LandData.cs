@@ -174,7 +174,14 @@ namespace BannerKings.Managers.Populations
             }
         }
 
-        public int SlavesConstructionForce => Math.Max((int)(data.EconomicData.StateSlaves * 0.5), 0);
+        public int SlavesConstructionForce
+        {
+            get
+            {
+                var slaves = data.GetTypeCount(PopulationManager.PopType.Slaves) * (data.Settlement.IsVillage ? 0.85f : 0.5f) * data.EconomicData.StateSlaves;
+                return Math.Max((int)(slaves * 0.15), 0);
+            }
+        }
 
         public int AvailableWorkForce => AvailableTenantsWorkForce + AvailableSlavesWorkForce + AvailableSerfsWorkForce;
 
