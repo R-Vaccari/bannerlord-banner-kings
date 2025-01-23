@@ -178,7 +178,7 @@ namespace BannerKings.Managers.Populations
         {
             get
             {
-                var slaves = data.GetTypeCount(PopulationManager.PopType.Slaves) * (data.Settlement.IsVillage ? 0.85f : 0.5f) * data.EconomicData.StateSlaves;
+                var slaves = data.GetTypeCount(PopulationManager.PopType.Slaves) * data.EconomicData.StateSlaves;
                 return Math.Max((int)(slaves * 0.15), 0);
             }
         }
