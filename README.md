@@ -18,11 +18,7 @@ Banner Kings is both a mod and a modding framework - it can be modded by other m
 - Suggestions space I actually check
 - Troubleshooting / Bug reporting
 - Player made guides and recommendations
-
-### Trello
-<a href="https://trello.com/b/feKPhEox/banner-kings" target="_blank"><img src="https://logos-download.com/wp-content/uploads/2016/06/Trello_logo.png" alt="Trello" width="240px" height="70px"></a>
-- Roadmap
-- Current progress on planned features   
+- 
 
 ### Patreon
 <a href="https://www.patreon.com/BasilevsModding" target="_blank"><img src="BannerKings/patreon.png" alt="Patreon" width="220px"></a>
@@ -60,7 +56,7 @@ Features are being described in the [wiki](https://github.com/R-Vaccari/bannerlo
 
 
 ## Bug Reporting
-- Support is only provided through [Discord](https://discord.gg/z7DS5R46wC). Bug reporting has a guide that must be followed, otherwise the issue will be terminated.
+- Support is only provided through [Discord](https://discord.gg/z7DS5R46wC) but NOT GUARANTEED. Bug reporting has a guide that must be followed, otherwise the issue will be terminated.
 
 The mod is big, complicated and not perfect. If you have an issue, describe it purposefuly and in an educated manner, if you really want it fixed.
 
