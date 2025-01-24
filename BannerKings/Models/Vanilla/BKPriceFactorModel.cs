@@ -80,52 +80,39 @@ namespace BannerKings.Models.Vanilla
             ItemObject item = itemRosterElement.Item;
             if (item.HasHorseComponent)
             {
+                if (item.HorseComponent.IsRideable)
+                    price = (int)(price * 3f);
+                else if (item.Weight >= 200)
+                    price = (int)(price * 1.5f);
+
                 if (item.HorseComponent.MeatCount > 0)
                 {
                     ItemObject meat = DefaultItems.Meat;
-                    price += (int)(meat.Value * 0.5f * GetPriceFactor(meat, clientParty, merchant, inStoreValue, supply, demand, isSelling));
+                    price += (int)(meat.Value * (float)item.HorseComponent.MeatCount);
                 }
 
                 if (item.HorseComponent.HideCount > 0)
                 {
                     ItemObject hides = DefaultItems.Hides;
-                    price += (int)(hides.Value * 0.5f * GetPriceFactor(hides, clientParty, merchant, inStoreValue, supply, demand, isSelling));
+                    price += (int)(hides.Value * (float)item.HorseComponent.HideCount);
                 }
             }
 
             return price;
         }
 
-        private float GetPriceFactor(ItemObject item, MobileParty tradingParty, PartyBase merchant, float inStoreValue, float supply, float demand, bool isSelling)
-        {
-            float basePriceFactor = GetBasePriceFactor(item.GetItemCategory(), inStoreValue, supply, demand, isSelling, item.Value);
-            float tradePenalty = GetTradePenalty(item, tradingParty, merchant, isSelling, inStoreValue, supply, demand);
-            if (!isSelling)
-            {
-                return basePriceFactor * (1f + tradePenalty);
-            }
-
-            return basePriceFactor * 1f / (1f + tradePenalty);
-        }
-
         public override float GetBasePriceFactor(ItemCategory itemCategory, float inStoreValue, float supply, float demand,
             bool isSelling, int transferValue)
         {
-            if (isSelling)
-            {
+            if (isSelling) 
                 inStoreValue += (float)transferValue;
-            }
-
-            float value = MathF.Pow(demand / (0.1f * supply + inStoreValue * 0.04f + 2f), itemCategory.IsAnimal ? 0.3f : 0.6f);
+ 
+            float value = MathF.Pow(demand / (0.1f * supply + inStoreValue * 0.05f + 2f), itemCategory.IsAnimal ? 0.9f : 0.5f);
             if (itemCategory.Properties == ItemCategory.Property.BonusToFoodStores)
-            {
-                return MathF.Clamp(value, 0.3f, 3f);
-            }
+                return MathF.Clamp(value, 0.5f, 3f);
 
             if (itemCategory.IsTradeGood)
-            {
-                return MathF.Clamp(value, 0.3f, 10f);
-            }
+                return MathF.Clamp(value, 0.5f, 10f);
 
             return MathF.Clamp(value, 0.7f, 1.3f);
         }
