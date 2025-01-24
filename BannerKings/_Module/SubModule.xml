@@ -4,7 +4,7 @@
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/BUTR/Bannerlord.XmlSchemas/master/SubModule.xsd">
 	<Id value="BannerKings" />
 	<Name value="BannerKings" />
-	<Version value="v1.3.0.0" />
+	<Version value="v1.4.0.2" />
 	<Official value="false" />
 	<DefaultModule value="true" />
 	<ModuleCategory value="Singleplayer" />
@@ -49,14 +49,6 @@
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
-            <XmlName path="cultures" id="SPCultures"/>
-            <IncludedGameTypes>
-                <GameType value="Campaign"/>
-                <GameType value="CampaignStoryMode"/>
-                <GameType value="CustomGame"/>
-            </IncludedGameTypes>
-        </XmlNode>
-		<XmlNode>
 			<XmlName id="EquipmentRosters" path="equipment_sets" />
 			<IncludedGameTypes>
 				<GameType value="Campaign" />
@@ -96,6 +88,15 @@
 		</XmlNode>
 		<XmlNode>
 			<XmlName id="ItemModifierGroups" path="item_modifiers_groups" />
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="Items" path="items"/>
+			<IncludedGameTypes>
+				<GameType value="Campaign"/>
+				<GameType value="CampaignStoryMode"/>
+				<GameType value="CustomGame"/>
+				<GameType value="EditorGame"/>
+			</IncludedGameTypes>
 		</XmlNode>
 	</Xmls>
 </Module>
