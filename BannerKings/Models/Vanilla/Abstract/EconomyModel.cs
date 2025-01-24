@@ -2,6 +2,7 @@
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
+using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models.Vanilla.Abstract
 {
@@ -11,6 +12,7 @@ namespace BannerKings.Models.Vanilla.Abstract
         public abstract ExplainedNumber GetCaravanPrice(Settlement settlement, Hero buyer, bool isLarge = false);
         public abstract int GetSettlementMarketGoldLimit(Settlement settlememt);
         public abstract int GetNotableCaravanLimit(Hero notable);
+        public abstract float CalculatePopulationConsumptionDemand(ConsumptionType type, PopType population);
         public abstract ExplainedNumber CalculateTradePower(PopulationData data, bool descriptions = false);
         public abstract ExplainedNumber CalculateTradePower(Settlement settlement, bool descriptions = false);
         public abstract ExplainedNumber CalculateProductionQuality(Settlement settlement);

@@ -1,4 +1,5 @@
 using BannerKings.Behaviours;
+using BannerKings.CampaignContent.Economy.Markets;
 using BannerKings.CampaignContent.Skills;
 using BannerKings.Extensions;
 using BannerKings.Managers.Buildings;
@@ -297,58 +298,70 @@ namespace BannerKings.Models.Vanilla
         public override ExplainedNumber CalculateTradePower(Settlement settlement, bool descriptions = false) =>
             CalculateTradePower(settlement.PopulationData(), descriptions);
 
+
+        public override float CalculatePopulationConsumptionDemand(ConsumptionType type, PopType population)
+        {
+            if (type == ConsumptionType.Food) return 0.1f;
+
+            if (type == ConsumptionType.Luxury)
+            {
+                if (population == PopType.Nobles) return 0.2f;
+                else if (population == PopType.Craftsmen) return 0.05f;
+            }
+
+            if (type == ConsumptionType.Industrial)
+            {
+                if (population == PopType.Craftsmen) return 0.02f;
+                else if (population == PopType.Tenants) return 0.012f;
+                else if (population == PopType.Serfs) return 0.01f;
+                else return 0.015f;
+            }
+
+            if (type == ConsumptionType.General)
+            {
+                if (population == PopType.Nobles) return 0.05f;
+                else if (population == PopType.Craftsmen) return 0.025f;
+                else if (population == PopType.Tenants) return 0.015f;
+            }
+
+            return 0.01f;
+        }
+
         public override float GetDailyDemandForCategory(Town town, ItemCategory category, int extraProsperity)
         {
             var data = town.Settlement.PopulationData();
-            if (data == null)
-            {
-                return base.GetDailyDemandForCategory(town, category, extraProsperity);
-            }
+            if (data == null) return base.GetDailyDemandForCategory(town, category, extraProsperity);
 
             float nobles = data.GetTypeCount(PopType.Nobles);
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             float serfs = data.GetTypeCount(PopType.Serfs);
             float tenants = data.GetTypeCount(PopType.Tenants);
+
             ConsumptionType type = Utils.Helpers.GetTradeGoodConsumptionType(category);
+            float baseResult = CalculatePopulationConsumptionDemand(type, PopType.Nobles) * nobles;
+            baseResult += CalculatePopulationConsumptionDemand(type, PopType.Craftsmen) * craftsmen;
+            baseResult += CalculatePopulationConsumptionDemand(type, PopType.Tenants) * tenants;
+            baseResult += CalculatePopulationConsumptionDemand(type, PopType.Serfs) * serfs;
+            baseResult += ((town.Prosperity / 3f) + extraProsperity) / category.BaseDemand;
 
-            float baseResult = 0f;
-            switch (type)
-            {
-                case ConsumptionType.Luxury:
-                    baseResult += nobles * 0.2f;
-                    baseResult += craftsmen * 0.05f;
-                    break;
-                case ConsumptionType.Industrial:
-                    baseResult += craftsmen * 0.06f;
-                    baseResult += serfs * 0.01f;
-                    baseResult += tenants * 0.02f;
-                    break;
-                default:
-                    baseResult += nobles * 0.05f;
-                    baseResult += craftsmen * 0.04f;
-                    baseResult += serfs * 0.01f;
-                    baseResult += tenants * 0.02f;
-                    break;
-            }
+            baseResult *= MathF.Sqrt(category.BaseDemand / 2f);
+            MarketGroup market = DefaultMarketGroups.Instance.GetMarket(town.Culture);
+            if (market != null)
+                baseResult *= market.GetDemand(category);
 
-            float prosperity = town.Prosperity;
-            float num = MathF.Max(0f, baseResult + (prosperity / 2) + extraProsperity);
-            float num2 = MathF.Max(0f, baseResult + (prosperity));
+            return baseResult / CampaignTime.DaysInYear;
+        }
 
-            float baseDemand = category.BaseDemand;
-            float num3 = baseDemand * num;
-            float num4 = category.LuxuryDemand * num2;
-            float result = num3 + num4;
-            if (baseDemand < 1E-08f)
-            {
-                result = num * 0.01f;
-            }
+        public override (float, float) GetSupplyDemandForCategory(Town town, ItemCategory category, float dailySupply, float dailyDemand, float oldSupply, float oldDemand)
+        {
+            (float, float) result = base.GetSupplyDemandForCategory(town, category, dailySupply, dailyDemand, oldSupply, oldDemand);
+
+            float maxDemand = dailyDemand * CampaignTime.DaysInYear;
+            if (result.Item1 > maxDemand)
+                result.Item1 = maxDemand;
 
             return result;
         }
-
-        public override float GetEstimatedDemandForCategory(Town town, ItemData itemData, ItemCategory category) =>
-            GetDailyDemandForCategory(town, category, 1000);
 
         public override int GetTownGoldChange(Town town) => (int)GetMerchantIncome(town).ResultNumber;
 
