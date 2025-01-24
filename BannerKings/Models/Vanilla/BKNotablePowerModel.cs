@@ -17,9 +17,12 @@ namespace BannerKings.Models.Vanilla
             if (hero.IsPreacher && hero.OwnedWorkshops.Count == 0)
             {
                 result.Add(0.1f);
-                PopulationData data = hero.CurrentSettlement.PopulationData();
-                if (data.ReligionData != null && data.ReligionData.DominantReligion == BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero))
-                    result.Add(0.1f);
+                if (hero.CurrentSettlement != null)
+                {
+                    PopulationData data = hero.CurrentSettlement.PopulationData();
+                    if (data.ReligionData != null && data.ReligionData.DominantReligion == BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero))
+                        result.Add(0.1f);
+                }
             }
 
             return result;
