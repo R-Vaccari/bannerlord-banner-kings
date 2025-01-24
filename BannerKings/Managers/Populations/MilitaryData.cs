@@ -162,15 +162,16 @@ namespace BannerKings.Managers.Populations
         {
             InitManpowers();
             PopType type = GetCharacterManpowerType(troop);
-            Manpowers[type] -= quantity;
+            if (Manpowers.ContainsKey(type))
+                Manpowers[type] -= quantity;
             data.UpdatePopType(type, -quantity);
         }
 
         public void DeduceManpower(PopulationData data, int quantity, PopType type)
         {
             InitManpowers();
-
-            Manpowers[type] -= quantity;
+            if (Manpowers.ContainsKey(type))
+                Manpowers[type] -= quantity;
             data.UpdatePopType(type, -quantity);
         }
 
