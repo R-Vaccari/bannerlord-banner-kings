@@ -75,6 +75,8 @@ namespace BannerKings.Patches
             {
                 if (__instance.Owner != null) return true;
 
+                if (newOwner == null)
+                    newOwner = __instance.Settlement.Owner;
                 AccessTools.Field(__instance.GetType(), "_owner").SetValue(__instance, newOwner);
                 __instance.Owner.AddOwnedWorkshop(__instance);
                 AccessTools.Field(__instance.GetType(), "Capital").SetValue(__instance, capital);
