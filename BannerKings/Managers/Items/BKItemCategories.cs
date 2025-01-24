@@ -22,13 +22,17 @@ namespace BannerKings.Managers.Items
         public ItemCategory Ink { get; private set; }
         public ItemCategory Dyes { get; private set; }
         public ItemCategory Eggs { get; private set; }
+        public ItemCategory Oxen { get; private set; }
 
         public override IEnumerable<ItemCategory> All => throw new NotImplementedException();
 
         public override void Initialize()
         {
+            Oxen = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("Oxen"));
+            Oxen.InitializeObject(true, 7, 0, ItemCategory.Property.None, DefaultItemCategories.Cow, 0.1f, true);
+
             Eggs = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("Eggs"));
-            Eggs.InitializeObject(true, 25, 0, ItemCategory.Property.BonusToFoodStores);
+            Eggs.InitializeObject(true, 25, 0, ItemCategory.Property.BonusToFoodStores, DefaultItemCategories.Meat, 0.1f);
 
             Dyes = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("Dyes"));
             Dyes.InitializeObject(true, 5, 10, ItemCategory.Property.BonusToProsperity);
@@ -46,19 +50,19 @@ namespace BannerKings.Managers.Items
             Book.InitializeObject(false, 0, 0);
 
             Fruit = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("apple"));
-            Fruit.InitializeObject(true, 20, 0, ItemCategory.Property.BonusToFoodStores);
+            Fruit.InitializeObject(true, 20, 0, ItemCategory.Property.BonusToFoodStores, DefaultItemCategories.DateFruit, 0.2f);
 
             Bread = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("bread"));
-            Bread.InitializeObject(true, 140, 5, ItemCategory.Property.BonusToFoodStores);
+            Bread.InitializeObject(true, 100, 5, ItemCategory.Property.BonusToFoodStores, DefaultItemCategories.Grain, 0.3f);
 
             Pie = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("pie"));
-            Pie.InitializeObject(true, 30, 40, ItemCategory.Property.BonusToFoodStores);
+            Pie.InitializeObject(true, 20, 30, ItemCategory.Property.BonusToFoodStores, DefaultItemCategories.Grain, 0.1f);
 
             Honey = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("honey"));
-            Honey.InitializeObject(true, 5, 10, ItemCategory.Property.BonusToFoodStores);
+            Honey.InitializeObject(true, 15, 30, ItemCategory.Property.BonusToFoodStores, DefaultItemCategories.Cheese, 0.1f);
 
             Mead = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("mead"));
-            Mead.InitializeObject(true, 10, 5, ItemCategory.Property.BonusToFoodStores);
+            Mead.InitializeObject(true, 10, 5, ItemCategory.Property.BonusToFoodStores, DefaultItemCategories.Beer, 0.2f);
 
             Garum = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("garum"));
             Garum.InitializeObject(true, 10, 5, ItemCategory.Property.BonusToFoodStores);

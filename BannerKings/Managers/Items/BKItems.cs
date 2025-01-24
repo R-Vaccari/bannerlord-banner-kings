@@ -54,7 +54,7 @@ namespace BannerKings.Managers.Items
         public ItemObject Carpet { get; private set; }
         public ItemObject PurpleDye { get; private set; }
         public ItemObject Egg { get; private set; }
-        
+
         public override IEnumerable<ItemObject> All
         {
             get
@@ -360,17 +360,26 @@ namespace BannerKings.Managers.Items
 
         public void AdjustPrices()
         {
+            var items = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+            InitializeTradeGood(items.First(x => x.StringId == "fur"),
+                new TextObject("{=ADJBbfbQ}Fur{@Plural}packs of fur{\\@}"),
+                "hung_fur_b",
+                DefaultItemCategories.Fur,
+                125,
+                10f,
+                ItemObject.ItemTypeEnum.Goods);
+
+            InitializeTradeGood(items.First(x => x.StringId == "cow"),
+                new TextObject("{=QWqvGa1P}Cow{@Plural}head of cattle{\\@}"),
+                "cow",
+                DefaultItemCategories.Cow,
+                400,
+                200,
+                ItemObject.ItemTypeEnum.Animal);
+
+
             if (BannerKingsSettings.Instance.ExperimentalPrices)
             {
-                var items = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
-                InitializeTradeGood(items.First(x => x.StringId == "fur"),
-                    new TextObject("{=ADJBbfbQ}Fur{@Plural}packs of fur{\\@}"),
-                    "hung_fur_b",
-                    DefaultItemCategories.Fur,
-                    150,
-                    10f,
-                    ItemObject.ItemTypeEnum.Goods);
-
                 InitializeTradeGood(items.First(x => x.StringId == "pottery"),
                     new TextObject("{=awQrcrt2}Pottery{@Plural}crates of pottery{\\@}"),
                     "merchandise_pottery",
