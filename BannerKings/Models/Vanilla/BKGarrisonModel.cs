@@ -118,7 +118,7 @@ namespace BannerKings.Models.Vanilla
                     }
 
                     float num10 = (settlement.Town.IsOwnerUnassigned ? 0.75f : 0.5f);
-                    if (settlement.OwnerClan == mobileParty.LeaderHero.Clan || settlement.OwnerClan == mobileParty.Party.Owner.MapFaction.Leader.Clan)
+                    if (mobileParty != null && settlement.OwnerClan != null && settlement.OwnerClan == mobileParty.MapFaction.Leader.Clan)
                     {
                         num10 = 1f;
                     }
