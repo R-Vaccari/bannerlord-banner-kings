@@ -1,7 +1,9 @@
 ﻿using BannerKings.Behaviours.Diplomacy;
 using BannerKings.Behaviours.Diplomacy.Wars;
 using BannerKings.CampaignContent.Traits;
+using BannerKings.Extensions;
 using BannerKings.Settings;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -12,6 +14,20 @@ namespace BannerKings.Models.Vanilla
     public class BKTargetScoreModel : DefaultTargetScoreCalculatingModel
     {
         public override float RaidingFactor => base.RaidingFactor * (1f + BannerKingsSettings.Instance.RaidIncentive);
+        public override float CalculatePatrollingScoreForSettlement(Settlement settlement, MobileParty mobileParty)
+        {
+            float result = base.CalculatePatrollingScoreForSettlement(settlement, mobileParty);
+            if (result > 0f && BannerKingsSettings.Instance.PatrolIncentive > 0f && settlement.MapFaction == mobileParty.MapFaction)
+            {
+                bool war = settlement.MapFaction.Stances.Any(x => x.IsAtWar);
+                if (settlement.OwnerClan != null && mobileParty.ActualClan != null && settlement.OwnerClan == mobileParty.ActualClan)
+                {
+                    result *= 1f + (settlement.MapFaction.IsKingdomAtWar() ? BannerKingsSettings.Instance.PatrolIncentive / 2f : BannerKingsSettings.Instance.PatrolIncentive);
+                }
+            }
+
+            return result;
+        }
         public override float CurrentObjectiveValue(MobileParty mobileParty)
         {
             float result = base.CurrentObjectiveValue(mobileParty);

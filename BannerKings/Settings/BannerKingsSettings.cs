@@ -177,22 +177,23 @@ namespace BannerKings.Settings
         [SettingPropertyGroup("{=!}Parties")]
         public bool SpawnSizeWar { get; set; } = true;
 
-        [SettingPropertyFloatingInteger("{=!}Raiding incentive", minValue: 0f, maxValue: 0.25f, "#0%", RequireRestart = false,
+        [SettingPropertyFloatingInteger("{=!}Raiding incentive (Parties/Armies)", minValue: 0f, maxValue: 0.25f, "#0%", RequireRestart = false,
             HintText = "{=!}Adds an incentive to parties and armies to raid villages. Higher numbers may make behaviour too deterministic. 0% means unaffected in relation to vanilla. Default: 10%.")]
-        [SettingPropertyGroup("{=P8UecnYf}Balancing")]
+        [SettingPropertyGroup("{=!}Warfare AI")]
         public float RaidIncentive { get; set; } = 0.1f;
 
-        [SettingProperty("{=!}Experimental AI", RequireRestart = true, HintText = "{=!}Alter army decision making based on leader traits, Casus Belli of the war, war Fronts, war target fief, etc. Affects how armies decide to defend, besiege or raid. Default: true.")]
-        [SettingPropertyGroup("{=!}Armies")]
-        public bool ArmyGoal { get; set; } = true;
+        [SettingPropertyFloatingInteger("{=!}Patrol incentive (Parties)", minValue: 0f, maxValue: 1f, "#0%", RequireRestart = false,
+            HintText = "{=!}Adds an incentive for parties to patrol their clan's lands. The incentive applies by half during wars. 0% means unaffected in relation to vanilla. Default: 50%.")]
+        [SettingPropertyGroup("{=!}Warfare AI")]
+        public float PatrolIncentive { get; set; } = 0.5f;
 
         [SettingProperty("{=!}Army Consistent Objectives", RequireRestart = false, HintText = "{=!}Improve consistency of army objectives by forcing them to not change objective every hour. Stops army from going back and forth in the same place due to changing priorities. Default: true.")]
-        [SettingPropertyGroup("{=!}Armies")]
+        [SettingPropertyGroup("{=!}Warfare AI")]
         public bool ArmyConsistency { get; set; } = true;
 
         [SettingPropertyFloatingInteger("{=!}Front Focus", minValue: 0f, maxValue: 1f, "#0%", RequireRestart = false,
             HintText = "{=!}Determine the % bonus for parties to target fiefs that serve as Fronts in wars. Too high setting may make them too deterministic. Default: 10%.")]
-        [SettingPropertyGroup("{=!}Armies")]
+        [SettingPropertyGroup("{=!}Warfare AI")]
         public float FrontFocus { get; set; } = 0.10f;
 
         [SettingProperty("{=CHVW1U24}De Re Militari Bandits", 
