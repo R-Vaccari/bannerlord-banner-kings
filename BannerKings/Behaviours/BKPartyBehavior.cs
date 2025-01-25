@@ -25,15 +25,23 @@ namespace BannerKings.Behaviours
 {
     public class BKPartyBehavior : CampaignBehaviorBase
     {
-        private ItemObject chicken;
-        private ItemObject goose;
+        private ItemObject chicken, goose, cow;
 
         private ItemObject Chicken
         {
             get
             {
-                if (chicken == null) chicken = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObject<ItemObject>("chicken");
+                if (chicken == null) chicken = Campaign.Current.ObjectManager.GetObject<ItemObject>("chicken");
                 return chicken;
+            }
+        }
+
+        private ItemObject Cow
+        {
+            get
+            {
+                if (cow == null) chicken = Campaign.Current.ObjectManager.GetObject<ItemObject>("cow");
+                return cow;
             }
         }
 
@@ -41,7 +49,7 @@ namespace BannerKings.Behaviours
         {
             get
             {
-                if (goose == null) goose = TaleWorlds.CampaignSystem.Campaign.Current.ObjectManager.GetObject<ItemObject>("goose");
+                if (goose == null) goose = Campaign.Current.ObjectManager.GetObject<ItemObject>("goose");
                 return goose;
             }
         }
@@ -140,6 +148,16 @@ namespace BannerKings.Behaviours
                     if (MBRandom.RandomFloat < 0.05f) eggs++;             
 
                 if (eggs > 0) party.ItemRoster.AddToCounts(BKItems.Instance.Egg, eggs);
+            }
+
+            float cattle = party.ItemRoster.GetItemNumber(Cow);
+            if (cattle > 0)
+            {
+                int cheese = 0;
+                for (int i = 0; i < cattle; i++)
+                    if (MBRandom.RandomFloat < 0.02f) cheese++;
+
+                if (cheese > 0) party.ItemRoster.AddToCounts(Campaign.Current.ObjectManager.GetObject<ItemObject>("cheese"), cheese);
             }
 
             if (party.PartyComponent is PopulationPartyComponent)
