@@ -73,14 +73,11 @@ namespace BannerKings.Behaviours.Mercenary
                         copy.MaxLevel, copy.IsAvailable, copy.OnPrivilegeAdded);
                 }
             }
-
-            if (ContractDueDate == CampaignTime.Never && Clan.IsUnderMercenaryService && Kingdom != null) ContractDueDate = CampaignTime.YearsFromNow(1f);
-            else ContractDueDate = CampaignTime.Never;
         }
 
         public void Tick(float progress)
         {
-            if (Clan.IsUnderMercenaryService) AddKingdom(Clan.Kingdom);
+            if (Clan.IsUnderMercenaryService && Kingdom != Clan.Kingdom) AddKingdom(Clan.Kingdom);
             if (!Clan.IsUnderMercenaryService || Kingdom == null) return;
 
             KingdomProgress[Kingdom] += progress;
@@ -397,8 +394,8 @@ namespace BannerKings.Behaviours.Mercenary
         {
             if (Kingdom != kingdom) return;
 
-            float daysLeft = ContractDueDate.RemainingDaysFromNow;
-            if (daysLeft > 0)
+            int daysLeft = (int)ContractDueDate.RemainingDaysFromNow;
+            if (daysLeft > 0 && daysLeft < (CampaignTime.DaysInYear + 1))
             {
                 Hero ruler = kingdom.RulingClan.Leader;
                 float relation = -MBMath.Map(daysLeft, 1, CampaignTime.DaysInYear, 15, 50);
