@@ -76,13 +76,6 @@ namespace BannerKings.Behaviours
             };
         }
 
-        public static List<ConquestAction> GetConquestActions(Hero hero) =>
-            new List<ConquestAction>()
-            {
-
-            };
- 
-
         private void TickSettlementData(Settlement settlement)
         {
             UpdateSettlementPops(settlement);
