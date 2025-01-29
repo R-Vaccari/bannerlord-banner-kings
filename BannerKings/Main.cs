@@ -78,6 +78,7 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKSettlementBehavior());
             campaignStarter.AddBehavior(new BKCaravansBehavior());
             campaignStarter.AddBehavior(new BKMercenaryCompanyBehavior());
+            campaignStarter.AddBehavior(new BKAIVisitSettlementBehavior());
             //campaignStarter.RemoveBehavior(campaignStarter.CampaignBehaviors.First(x => x.GetType() == typeof(CaravansCampaignBehavior)));
 
 
@@ -137,9 +138,8 @@ namespace BannerKings
             campaignStarter.AddModel(new BKCategorySelector());
             campaignStarter.AddModel(new BKSettlementAccessModel());
             campaignStarter.AddModel(BannerKingsConfig.Instance.MarriageModel);
-
-
-            if (BannerKingsSettings.Instance.ArmyGoal) campaignStarter.AddModel(new BKTargetScoreModel());
+            campaignStarter.AddModel(new BKItemValueModel());
+            campaignStarter.AddModel(new BKTargetScoreModel());
 
             BKAttributes.Instance.Initialize();
             BKSkills.Instance.Initialize();
