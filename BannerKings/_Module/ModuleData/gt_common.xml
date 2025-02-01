@@ -167,8 +167,8 @@
 	        text="{=bk_council_description_castellan}The {NAME} oversee castles and their administration. They are responsible for their prosperity, assuring constant growth and development of castle demesnes." />
 	<string id="str_bk_council_description_constable"
 	        text="{=bk_council_description_constable}The {NAME} administrates law enforcement and criminal cases in settlements. Their purpose is to act as a supervisor to guarantee stability of the realm, being a mediator between the crown and governors." />
-	<string id="str_bk_council_description_philosopher"
-	        text="{=bk_council_description_philosopher}The {NAME} is responsible for the advancement of the culture and general education of the family. These studied individuals research into innovations, as well as teach their sponsoring family's members subjects such as reading, writting and history." />
+	<string id="str_bk_council_description_antiquarian"
+	        text="{=bk_council_description_antiquarian}The {NAME} is responsible for the advancement of the culture and general education of the family. These studied individuals research into innovations, as well as teach their sponsoring family's members subjects such as reading, writting and history." />
 	<string id="str_bk_council_description_courtphysician"
 	        text="{=bk_council_description_courtphysician}The {NAME} is responsible for the health of their suzerain's household. Medicine being a scarce skill, noble households will often reward handsomely such an expert, to whom they will trust their lives." />
 	<string id="str_bk_council_description_courtmusician"
