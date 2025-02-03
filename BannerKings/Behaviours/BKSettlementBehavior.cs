@@ -130,16 +130,37 @@ namespace BannerKings.Behaviours
                 int killTotal = (int)(data.TotalPop * shareToKill);
                 if (killTotal < 1) if (killTotal <= 1f) return;
 
-                int toKill = killTotal;
                 var weights = GetDesiredPopTypes(settlement).Select(pair => new ValueTuple<PopType, float>(pair.Key, pair.Value[0])).ToList();
 
-                while (toKill > 0)
+                float totalWeights = weights.Sum(w => w.Item2);
+                var killAllocation = weights.Select(item => (item.Item1, (int)Math.Round(item.Item2 / totalWeights * killTotal))).ToList();
+
+                int unallocatedKills = 0;
+                foreach ( var pair in killAllocation)
                 {
-                    var random = MBRandom.RandomInt(10, 20);
-                    var target = MBRandom.ChooseWeighted(weights);
-                    var finalNum = MBMath.ClampInt(random, 0, data.GetTypeCount(target));
-                    data.UpdatePopType(target, -finalNum);
-                    toKill -= finalNum;
+                    var type = pair.Item1;
+                    var toKill = pair.Item2;
+                    var typeCount = data.GetTypeCount(type);
+
+                    if (typeCount < toKill)
+                    {
+                        data.UpdatePopType(type, 0);
+                        unallocatedKills += toKill - typeCount;
+                        continue;
+                    }
+
+                    data.UpdatePopType(type, -toKill);
+                }
+
+                if (unallocatedKills > 0 && data.TotalPop > 0)
+                {
+                    foreach ( var populationClass in data.Classes)
+                    {
+                        var typeCount = data.GetTypeCount(populationClass.type);
+                        var toKill = (int)Math.Round((float)typeCount / data.TotalPop * unallocatedKills);
+
+                        data.UpdatePopType(populationClass.type, -toKill);
+                    }
                 }
 
                 InformationManager.DisplayMessage(new InformationMessage(
