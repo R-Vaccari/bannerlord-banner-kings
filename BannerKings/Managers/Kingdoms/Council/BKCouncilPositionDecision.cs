@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Kingdoms.Council
             Data = data;
             Position = position;
             Religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(proposerClan.Leader);
-            IsEnforced = true;
+            IsEnforced = Clan.PlayerClan.Kingdom == proposerClan.Kingdom && !Clan.PlayerClan.IsUnderMercenaryService;
             Suggested = suggested;
         }
 
